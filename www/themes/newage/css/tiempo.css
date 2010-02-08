@@ -1,0 +1,586 @@
+/*************************** PIEZA HOME ****************************/
+.cabeceraTiempo
+{
+	margin-left:10px;
+
+	display:inline;
+	float:left;
+	position:relative;
+
+}
+
+.cuerpoTiempo
+{
+	margin-top:10px;
+	width:181px;
+
+	
+	display:inline;
+	float:left;
+	position:relative;
+
+
+	overflow:hidden;
+}
+
+.zonaMapaTiempo
+{
+	width:181px;
+	height:146px;
+	display:inline;
+	float:left;
+	position:relative;
+	text-align: center;	
+
+	/* background-color:#eeeeee; */
+	  
+	overflow:hidden;	
+}
+
+.zonaMapaTiempo img {
+	border: 0;
+}
+
+
+.fuenteTiempo
+{
+	margin-top:8px;
+	width:181px;
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+	font-family:Arial;
+	font-size:9px;
+	/*letter-spacing:-1px;*/
+	color:#004B8E;
+}
+/************************* FIN PIEZA HOME *********************/
+
+
+
+
+
+
+
+/*******************************************************************/
+/************************** PAGINA DEL TIEMPO **********************/
+.CTiempoMargen
+{
+	margin-left:60px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	
+	overflow:hidden;
+}
+
+.firma_tiempo 
+{
+	margin-left:0px;
+	margin-top:20px;
+}
+
+/******************* MAPA DEL TIEMPO *****************/
+.CContenedorMapaYListado
+{
+	margin-left:8px;
+	margin-top:20px;
+	width:600px;
+	display:inline;
+	float:left;
+	position:relative;	
+}
+.contMapaTiempo
+{	width:181px;
+	height:146px;
+	display:inline;
+	float:left;
+	position:relative;	
+}
+.listaEnlacesCiudades
+{
+	margin-left:20px;
+	margin-top:3px;
+	width:171px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+
+	overflow:hidden;
+}
+.enlaceCiudad
+{
+	width:171px;
+	display:inline;
+	float:left;
+	position:relative;
+
+	color:#004B8E;
+	font-family:Arial;
+	font-size:14px;
+}
+/***********************************************************/
+
+/************* TABLA DATOS TIEMPO **********/
+.CTablaResultadoTiempo
+{
+	margin-top:0px;
+	margin-left:0px;
+	width:580px;
+	height:420px;
+	float:left;
+	display:inline;
+	position:relative;
+	
+	background-image:url('../images/tiempo/fondoTablaTiempo.gif');
+	background-repeat:no-repeat;
+	overflow:hidden;
+	
+}
+
+.CListaValoresSemana
+{
+	margin-left:-2px;
+	margin-top:0px;
+
+	
+	position:relative;
+	display:inline;
+	float:left;	
+}
+
+.CValoresTiempoDia
+{
+	margin-left:9px;
+	margin-top:5px;
+	width:63px;
+	height:410px;
+	
+	position:relative;
+	display:inline;
+	float:left;	
+}
+
+.CIconoTiempo
+{
+	width:61px;
+	height:74px;
+	position:relative;
+	display:inline;
+	float:left;
+}
+.CIconoTiempo img
+{
+	margin-top:10px;
+	margin-left:6px;	
+}
+
+
+.CCeldaCabecera
+{
+	width:61px;
+	height:25px;	
+	position:relative;
+	display:inline;
+	float:left;
+	overflow:hidden;
+	
+	font-size:16px;
+	font-weight:700;
+	text-align:center;
+}
+
+.CCeldaLateral
+{
+	width:61px;
+	height:45px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+	
+	text-align:left;
+	font-size:12px;
+
+}
+.CCeldaLateralIconoTiempo
+{
+	height:74px;
+}
+
+
+.CCeldaStandard
+{
+	width:61px;
+	height:45px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+	
+	text-align:center;
+	font-size:18px;
+	font-weight:700;
+}
+
+.CCeldaStandardImg
+{
+	width:61px;
+	height:45px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+		
+	text-align:center;
+}
+
+.CCeldaStandardSupImg
+{
+	width:61px;
+	height:55px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+	
+	text-align:center;
+}
+
+
+.CPosVertTextoTiempo
+{
+	margin-top:12px;
+}
+.CPosVertTextoLatTiempo1
+{
+	margin-top:16px;
+}
+.CPosVertTextoLatTiempo2
+{
+	margin-top:8px;
+}
+
+
+.CPosVertImgTiempo
+{
+	margin-top:6px;
+}
+
+.datoNegro
+{
+	color:#000000;
+}
+.datoRojo
+{
+	color:#941b20;
+}
+.datoAzul
+{
+	color:#004b8d;
+}
+
+.contBannerPublicidadTiempo
+{
+	margin-left:5px;
+	overflow:hidden;
+	text-align:center;
+	width:567px;
+}
+
+.enlaceCiudatTiempo 
+{
+	margin-top:2px;
+	width:171px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	color:#004B8E;
+	
+	font-family:Arial;
+	font-size:14px;
+}
+.enlaceCiudadTiempo img
+ {
+	margin-right:5px;	
+ }
+.enlaceCiudadTiempo a
+ {
+	color:#004B8E;
+	text-decoration:none;
+}
+
+.enlaceCiudadTiempo a:hover
+ {
+	color:#666;
+	text-decoration:none;
+}
+
+/***************** FIN TABLA DATOS TIEMPO ************/
+
+
+
+.menu_derecha_tiempo
+{
+	float:right;
+}
+
+
+
+/* *************************************************************************** */
+table.tabla_datos {
+    background-image: url(/media/weather/fondoTablaTiempo.gif);
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-color: #FFF;
+    
+    margin: 0;
+    padding: 0;
+	
+	float: left;
+	width: 579px;
+}
+
+table.tabla_datos a {
+	display: none;
+}
+
+table.tabla_datos img {
+    border: 0;
+}
+
+table.tabla_datos thead th {
+    font-weight:700;
+    color:#000000;
+    font-family:Arial;
+    text-align: center;
+    font-size: 14px;
+    
+    vertical-align: top;
+    padding-top: 2px;
+}
+
+table.tabla_datos tbody th {
+    padding-left: 4px;
+    font-size: 12px;
+    text-align: left;
+    font-weight: normal;
+}
+
+table.tabla_datos thead tr.cabecera_niv1 th {
+    max-width: 70px;
+    width: 70px;
+    overflow: hidden;
+}
+
+table.tabla_datos thead tr.cabecera_niv2 th {
+    padding-bottom: 16px;
+}
+
+.tabla_datos td {
+    height: 44px;
+    font-size:18px;
+    font-weight:700;
+}
+
+.tabla_datos td, .tabla_datos th {
+    text-align: center;
+    background: transparent;
+}
+
+span.texto_rojo {
+    color: #941B20;
+    font-size:18px;
+    font-weight:700;
+    text-align:center;    
+}
+
+span.texto_azul {
+    color: #004B8D;
+    font-size:18px;
+    font-weight:700;
+    text-align:center;    
+}
+
+.containerTempo {
+    margin-left: 60px;
+}
+
+.containerTempo h2 {
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+/* Radiaciones */
+.raduv_pred_nivel1{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c1_pred.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_pred_nivel2{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c2_pred.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_pred_nivel3{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c3_pred.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_pred_nivel4{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c4_pred.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_pred_nivel5{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c5_pred.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel1{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c1.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel2{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c2.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel3{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c3.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel4{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c4.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel5{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c5.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel6{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c6.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel7{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c7.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel8{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c8.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel9{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c9.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel10{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c10.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+.raduv_nivel11{
+	background-image: url(/media/weather/aemet/radiacionuv/uvi_c11.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+	width: 24px;
+	}
+
+.enlaceCiudad {
+    color:#004B8E;
+    font-family:Arial;
+    font-size:14px;
+    
+    padding-left: 8px;
+    background-image: url(/themes/xornal/images/fotoVideoDia/flechitaAzul.gif);
+    background-position: left center;
+    background-repeat: no-repeat;
+    margin-bottom: 2px;
+}
+
+.CContenedorMapaYListado {
+    /*margin-left: 255px;*/
+	width: auto;
+}
+
+.CContenedorMapaYListado img {
+    margin-right: 0px;
+    border: 0;        
+}
+
+.contMapaTiempo {
+    background-image: url(/themes/xornal/images/tiempo/fondoTablaTiempoMapa.gif);
+    background-repeat: no-repeat;
+    background-position: top left;
+    
+    text-align: center;
+    vertical-align: middle;
+    
+    width: 166px;
+    height: 180px;
+}
+
+.listaEnlacesCiudades {
+    background-image: url(/themes/xornal/images/tiempo/fondoTablaTiempoListado.gif);
+    background-repeat: no-repeat;
+    background-position: top left;
+    
+    width: 147px;
+    height: 180px;
+    padding: 20px;
+    margin-left: -1px;
+}
+
+.contMapaTiempo img {
+    margin: auto;
+    vertical-align: middle;
+    padding: 20px;
+}
+
+.CContenedorMapaYListado .fileteFotoVideoDia {
+    background-image:url(/themes/xornal/images/fotoVideoDia/fileteDashedDeportesXPress.gif);
+    display:inline;
+    float:left;
+    height:1px;
+    margin-top:2px;
+    overflow:hidden;
+    position:relative;
+    width:100px;
+}
+
+.menu_nota_derecha {
+    margin: 20px;
+	margin-left: 440px;
+    float: left;
+}

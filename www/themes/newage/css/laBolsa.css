@@ -1,0 +1,172 @@
+.containerLaBolsa
+{
+	/*width:181px;*/
+	float:left;
+	/*overflow:hidden; --*/
+}
+
+.cabeceraLaBolsa
+{
+	margin-left:10px;
+	display:inline;
+	float:left;
+	position:relative;
+}
+
+.cuerpoLaBolsa
+{
+	margin-top:7px;
+	/*width:181px;
+	height:216px;*/
+	float:left;
+
+	/*background-color:#eeeeee;*/
+	/*overflow:hidden;*/
+}
+
+/* Estilos propios de infobolsa ****************************************** */
+.cuerpoLaBolsa .miniFVPpal {
+background:#FFF;
+width:255px;
+min-width:255px;
+
+border:0;
+padding:0;
+
+margin:0 auto;
+}
+
+.cuerpoLaBolsa h1,.cuerpoLaBolsa h2 {
+display:none;
+}
+
+.cuerpoLaBolsa .miniFV_logo a div {
+background:url(../images/bolsa/MiniFicha_logo.gif) no-repeat 0 0;
+cursor:hand;
+height:37px;
+width:142px;
+margin:0 auto;
+}
+
+.cuerpoLaBolsa .miniFV_logo a:hover div {
+background:url(../images/bolsa/MiniFicha_logoOver.gif) no-repeat 0 0;
+}
+
+.cuerpoLaBolsa .miniFV_valor {
+background:url(../images/bolsa/MiniFicha_Fondo01.gif) repeat-x 0 0;
+border:1px solid #cfcfcf;
+height:17px;
+width:auto;
+margin:0 3px;
+padding:4px 0 0 5px;
+}
+
+.cuerpoLaBolsa .miniFV_valor a {
+color:#666;
+font:bold 11px Arial,Tahoma,Verdana;
+text-decoration:none;
+}
+
+.cuerpoLaBolsa .miniFV_valor a:hover {
+color:#000;
+}
+
+.cuerpoLaBolsa .miniFV_datosPpal {
+width:auto;
+margin:9px 3px 5px;
+}
+
+.cuerpoLaBolsa .miniFV_datosPpal table {
+width:100%;
+margin:0;
+}
+
+.cuerpoLaBolsa .miniFV_tit {
+color:#666;
+font:bold 11px Arial,Verdana,Tahoma;
+width:100%;
+}
+
+.cuerpoLaBolsa .miniFV_DatoDif_Suben {
+color:#197d19;
+font:bold 11px Arial,Verdana,Tahoma;
+text-align:right;
+}
+
+.cuerpoLaBolsa .miniFV_DifFlecha_Suben div {
+background:url(../images/bolsa/sprite04.gif) no-repeat 0 -32px;
+font-size:1px;
+height:6px;
+width:11px;
+}
+
+.cuerpoLaBolsa .miniFV_DatoDif_Bajan {
+color:#dc0000;
+font:bold 11px Arial,Verdana,Tahoma;
+text-align:right;
+}
+
+.cuerpoLaBolsa .miniFV_DifFlecha_Bajan {
+width:100%;
+}
+
+.cuerpoLaBolsa .miniFV_DifFlecha_Bajan div {
+text-align:right;
+background:url(../images/bolsa/sprite04.gif) no-repeat 0 -38px;
+font-size:1px;
+height:6px;
+width:11px;
+margin:0 4px 0 auto;
+}
+
+.cuerpoLaBolsa .miniFV_DifFlecha_Mant div {
+background:url(../images/bolsa/sprite04.gif) no-repeat 0 -44px;
+font-size:1px;
+height:9px;
+width:6px;
+}
+
+.cuerpoLaBolsa .miniFV_graf {
+text-align:center;
+cursor:hand;
+background:url(../images/bolsa/MiniFicha_Fondo02.gif) repeat-x 0 0;
+border:1px solid #b0afaf;
+margin:10px 1px;
+width:250px;
+}
+
+.cuerpoLaBolsa .miniFV_masInfoPpal {
+width:auto;
+margin:3px 3px 5px;
+}
+
+.cuerpoLaBolsa .miniFV_masInfo a {
+float:right;
+background:url(../images/bolsa/MiniFicha_iconoMas.gif) no-repeat;
+color:#666;
+font:11px Arial,Verdana,Tahoma;
+text-decoration:none;
+padding:0 0 0 16px;
+}
+
+.cuerpoLaBolsa .miniFV_masInfo a:hover {
+background:url(../images/bolsa/MiniFicha_iconoMasOver.gif) no-repeat 0 0;
+color:#bfbfbf;
+}
+
+.cuerpoLaBolsa .miniFV_copy {
+float:left;
+color:#002872;
+font:10px Arial,Verdana,Tahoma;
+}
+
+.cuerpoLaBolsa .miniFV_dato,.cuerpoLaBolsa  .miniFV_DatoDif_Mant {
+color:#666;
+font:bold 11px Arial,Verdana,Tahoma;
+text-align:right;
+}
+
+.cuerpoLaBolsa .miniFV_DifFlecha_Suben,.cuerpoLaBolsa .miniFV_DifFlecha_Mant {
+text-align:right;
+padding:0 0 0 50px;
+}

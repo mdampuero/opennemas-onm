@@ -1,0 +1,539 @@
+.CZonaEncuesta
+{
+	margin-top:10px;
+	margin-left:2px;
+	padding-bottom:20px;
+	width:755px;	
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+	background-color:#e4ddc9;		
+}
+
+.CContainerLogoConectaEncuestas
+{
+	width:270px;
+	height:52px;	
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    vertical-align:top;
+    background-image:url('../images/encuestas/logoPlanConectaEncuestas.gif');	
+    background-repeat:no-repeat;
+}
+
+.CVisorMediaEncuesta
+{
+	margin-top:30px;
+	margin-left:30px;
+	width:202px;
+	height:202px;	
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;	
+	background-color:#333;	
+	text-align:center;	
+}
+
+.CVisorInfoMediaEncuesta
+{
+	margin-top:25px;
+	margin-left:23px;
+	/*width:470px;
+	height:278px;*/	
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;	
+	/*background-color:#e4ddc9;*/
+}
+
+.CContainerInfoMediaEncuesta
+{
+	margin:18px;
+	margin-top:10px;	
+	/*width:435px;	*/
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;
+}
+
+
+.COtrosInfoMediaEncuesta
+{
+	margin-left:10px;
+	padding-left:10px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    font-family:Arial;
+    font-size:14px;
+    color:#004b8d;
+    border-left:1px solid #004b8d;  
+}
+
+.COtrosInfoMediaEncuesta a,.COtrosInfoMediaEncuesta a:hover
+{
+    color:#004b8d;
+}
+
+.CSeccionInfoMediaEncuesta
+{
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    font-family:Arial;
+    font-size:14px;
+    color:#004b8d;
+    font-weight:700;   
+    text-transform:uppercase;    
+}
+
+
+.CContainerSeccionVotosInfoMedia
+{
+	width:530px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;
+}
+
+.CTitularEncuesta
+{
+	/*width:450px;*/
+	margin-top:10px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    font-family:Arial;
+    font-size:24px;
+    color:#666;
+    font-weight:700;
+}
+
+.CFirmaInfoMediaEncuesta
+{	
+	width:450px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    font-family:Arial;
+    font-size:14px;
+    color:#333;
+    font-weight:700;
+}
+
+.CZonaRespuestasEncuesta
+{
+	width:450px;
+	margin-top:10px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;
+    font-family:Arial;
+    font-size:16px;
+    color:#000;
+    font-weight:700;
+}
+
+.CRespuestaEncuesta
+{
+	margin-top:10px;
+	margin-left:30px;
+	width:450px;
+	height:35px;
+	font-family:Arial;
+    font-size:24px;
+    line-height:24px;
+    color:#666;
+    clear:both;	
+}
+.CRadioEncuesta
+{
+	position:relative;
+	float:left;
+	display:inline;
+}
+.CRadioEncuesta input
+{
+	height:24px;
+	position:relative;
+	float:left;
+	display:inline;
+	margin:0px;
+	padding:0px;
+}
+.CTextoRespuestaEnc
+{
+	margin-left:5px;
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+/*
+.CRespuestaEncuesta input
+{
+	margin-top:6px;
+	margin-right:5px;
+	position:relative;
+	display:inline;
+	float:left;
+}
+*/
+.separadorHorizontalRespuesta
+{
+	width:350px;
+	height:1px;	
+	display:block;
+	float:left;
+	position:relative;
+    overflow:hidden;   
+    background-color:#999;
+}
+
+.CBotonVotarEncuesta
+{
+	margin-top:20px;
+	margin-left:150px;
+	display:inline;
+	float:left;
+	position:relative;
+    clear:both;
+}
+
+
+.CBotonVotarEncuestaArriba
+{
+	margin-left:35px;	
+	display:inline;
+	float:left;
+	position:relative;
+}
+
+
+/************************ RESULTADO ENCUESTA ************************/
+.CContainerEncuestaRes
+{
+	margin:18px;
+	margin-top:10px;	
+	width:700px;	
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;
+}
+
+.CVisorInfoEncuestaRes
+{
+	margin-top:25px;
+	margin-left:23px;
+	width:710px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;	
+	/*background-color:#e4ddc9;*/
+}
+
+.CTitularEncuestaRespuesta
+{
+	width:670px;
+	margin-top:10px;
+	float:left;
+	display:inline;
+	position:relative;
+    overflow:hidden;    
+    font-family:Arial;
+    font-size:24px;
+    color:#666;
+    font-weight:700;    
+}
+
+
+.CContainerGraficoBarras
+{
+	margin-top:10px;
+	width:675px;
+	height:222px;	
+	position:relative;
+	float:left;
+	display:inline;
+	/*background-color:#eee;*/
+}
+
+.CGraficoBarras
+{
+	margin-left:0px;
+	width:675px;
+	height:200px;	
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+.CSeparadorCero
+{
+	left:20px;
+	bottom:40px;
+	width:600px;
+	height:1px;
+	overflow:hidden;
+	background-color:#acaaa5;	
+	position:absolute;
+}
+
+.CPercentCero
+{
+	left:20px;
+	bottom:40px;	
+	position:absolute;
+	color:#666;
+	font-size:10px;
+}
+
+
+.CSeparadorCincuenta
+{
+	left:20px;
+	/*bottom:102px;*/
+	bottom:90px;
+	width:600px;
+	height:1px;
+	overflow:hidden;
+	background-color:#acaaa5;	
+	position:absolute;
+}
+.CPercentCincuenta
+{
+	left:20px;
+	/* bottom:102px;*/	
+	bottom:90px;
+	position:absolute;
+	color:#666;
+	font-size:10px;
+}
+
+.CSeparadorCien
+{
+	left:20px;
+/*	bottom:164px; */
+	bottom:140px;
+	width:600px;
+	height:1px;
+	overflow:hidden;
+	background-color:#acaaa5;	
+	position:absolute;
+}
+.CPercentCien
+{
+	left:20px;
+/*	bottom:164px; */
+	bottom:140px;
+	position:absolute;
+	color:#666;
+	font-size:10px;
+}
+
+
+/* 124px = 100% */
+.CContenedorBarra1
+{
+	left:100px;
+	bottom:0px;
+	width:46px;
+	position:absolute;		
+}
+.CContenedorBarra2
+{
+	left:200px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+.CContenedorBarra3
+{
+	left:300px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+
+.CContenedorBarra4
+{
+	left:400px;
+	bottom:0px;
+	width:46px;
+	position:absolute;		
+}
+.CContenedorBarra5
+{
+	left:500px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+.CContenedorBarra6
+{
+	left:600px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+.CContenedorBarra7
+{
+	left:700px;
+	bottom:0px;
+	width:46px;
+	position:absolute;		
+}
+.CContenedorBarra8
+{
+	left:800px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+.CContenedorBarra9
+{
+	left:900px;
+	bottom:0px;
+	width:46px;
+	position:absolute;
+}
+
+.CBarra1
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:74px;*/
+	position:absolute;	
+	border:1px solid #d1ccbd;	
+	background-color:#666;
+}
+
+.CBarra2
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:37px;*/	
+	position:absolute;
+	border:1px solid #d1ccbd;
+	background-color:#999;
+}
+
+.CBarra3
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:12px; */
+	position:absolute;	
+	border:1px solid #d1ccbd;
+	background-color:#000;
+}
+.CBarra4
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:74px;*/
+	position:absolute;	
+	border:1px solid #d1ccbd;	
+	background-color:#666;
+}
+
+.CBarra5
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:37px;*/	
+	position:absolute;
+	border:1px solid #d1ccbd;
+	background-color:#999;
+}
+
+.CBarra6
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:12px; */
+	position:absolute;	
+	border:1px solid #d1ccbd;
+	background-color:#000;
+}
+
+.CBarra7
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:74px;*/
+	position:absolute;	
+	border:1px solid #d1ccbd;	
+	background-color:#666;
+}
+
+.CBarra8
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:37px;*/	
+	position:absolute;
+	border:1px solid #d1ccbd;
+	background-color:#999;
+}
+
+.CBarra9
+{
+	left:0px;
+	bottom:40px;
+	width:46px;
+/*	height:12px; */
+	position:absolute;	
+	border:1px solid #d1ccbd;
+	background-color:#000;
+}
+
+.CRespuestaEnc
+{
+	left:0px;
+	bottom:0px;
+	width:50px;
+	height:30px;	
+	position:absolute;
+	text-align:center;
+	font-family:Arial;
+	font-size:24px;
+	color:#666;
+}
+
+.CPercent
+{
+	width:80px;
+	/*width:50px;*/
+	margin-top:-30px;	
+	position:relative;
+	display:inline;
+	float:left;
+	font-family:Arial;
+	font-size:22px;
+	color:#666;
+	text-align:center;
+}
+

@@ -1,0 +1,350 @@
+.zonaVisorVideos
+{
+	display:inline;
+	float:left;
+	position:relative;
+}
+
+
+.cabeceraVisorVideos
+{
+	display:inline;
+	float:left;
+	position:relative;	
+}
+
+.cuerpoVisorVideos
+{
+	margin-top:10px;
+	width:434px;
+	height:399px;
+	
+	display:inline;
+	float:left;
+	position:relative;	
+	
+	overflow:hidden;
+	background-color:#e4ddc9;
+
+	/*text-align:center;*/
+}
+
+
+.contVisorVideo
+{
+	margin-left:33px;
+	margin-top:16px;
+	width:370px;
+	height:268px;
+	background-color:#333;
+	overflow:hidden;
+}
+
+.contFlechaTextoGaleria
+{
+	margin-top:10px;
+	margin-left:36px;
+	width:360px;
+	height:100px;
+	
+	display:inline;
+	float:left;
+	position:relative;	
+	
+	overflow:hidden;
+	text-align:left;
+}
+
+.textoVideoGaleria
+{
+	margin-left:5px;
+	width:348px;
+	
+	display:inline;
+	float:left;
+	position:relative;
+	
+	overflow:hidden;
+	
+	font-family:Arial;
+	font-size:24px;
+	color:#333;
+
+
+}
+
+.flechaVideoGaleria
+{
+	margin-top:8px;
+	width:5px;
+	height:8px;
+
+	display:inline;
+	float:left;
+	position:relative;
+
+	overflow:hidden;
+}
+
+
+
+
+.contNuestraSeleccion
+{
+	width:302px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+}
+
+
+.listaMediaSeleccionada
+{
+	margin-left:15px;
+	margin-top:23px;
+	width:269px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+
+	
+	
+}
+
+.elementoMediaSelec
+{
+	margin-top:6px;
+	width:266px;
+	height:75px;
+	
+	position:relative;
+	overflow:hidden;	
+}
+
+
+.fotoElemMedia
+{
+	width:75px;
+	height:75px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	background-color:#7fcaee;
+}
+
+.contTextoElemMedia
+{
+	width:190px;
+	height:75px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	
+	background-image:url('../images/galeriaVideos/backgroundElemento.gif'); 
+	background-repeat:no-repeat;
+	
+	font-family:Arial;
+	font-size:14px;
+	font-weight:700;
+}
+
+.textoElemMedia
+{
+	margin-top:10px;
+	margin-left:10px;
+	width:170px;
+	height:55px;
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+}
+
+.fondoContainerActualidad
+{
+	background-image:none;	
+}
+
+
+.iconoPlay
+{
+	left:0px;
+	top:0px;
+	width:75px;
+	height:75px;
+	position:absolute;
+	/*border:1px solid red;*/
+	background-image:url('../images/gifs_trans/iconoPlay.png');
+	background-repeat:no-repeat;
+	
+}
+
+/****************** LISTADO PAGINADO *******************/
+.listadoMedia
+{
+	width:760px;
+	margin-top:10px;
+	margin-left:72px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;	
+}
+
+.elementoListadoMediaPag
+{
+
+	margin-top:6px;
+	width:686px;
+	height:96px;
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+
+}
+
+
+.fotoElemMediaListado
+{
+	margin-left:6px;
+	width:78px;
+	height:94px;
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+}
+
+.contSeccionFechaListado
+{
+	margin-left:14px;
+	width:500px;
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	
+	font-family:Arial;
+	font-size:14px;
+	font-weight:700;
+	color:#004b8d;
+
+}
+
+.seccionMediaListado
+{
+	height:20px;
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;	
+
+
+}
+
+.fechaMediaListado
+{
+	margin-left:10px;
+	padding-left:10px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	
+	border-left:1px solid #004b8d;
+	font-weight:500;	
+}
+
+
+.contTextoElemMediaListado
+{
+	width:590px;
+	height:70px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	
+	background-image:url('../images/galeriaVideos/backgroundElementoLista.gif'); 
+	background-repeat:no-repeat;
+	
+}
+
+.textoElemMediaListado
+{
+	margin-top:16px;
+	margin-left:10px;
+	width:570px;
+	
+	
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+
+}
+
+.fileteIntraMedia
+{
+	width:750px;
+	height:2px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	
+	
+	background-image:url('../images/galeriaVideos/fileteIntraMedia.gif'); 
+	background-repeat:no-repeat;	
+}
+
+.posPaginadorGaliciaTitulares
+{
+	width:572px;
+	margin-left:162px;
+	margin-top:15px;
+	float:left;
+	display:inline;
+	position:relative;
+	
+}
+
+/***************** FIN LISTADO PAGINADO ****************/
+
+
+
+/************** PESTANYAS GRANDES ****************/
+.contUnicaPestanyaGrande
+{
+    height:32px;
+    width:295px;
+
+	float:left;
+    overflow:hidden;
+    vertical-align:top;
+
+	/*background-color:red;*/
+    
+	background-image:url('../images/pestanyas/pestanyasListados/contPestanyasList.gif');
+	
+}
+
+.zonaPestanyasMedia
+{   
+	width:760px;
+	margin-top:22px;
+	float:left;
+    overflow:hidden;
+    vertical-align:top;
+    background-image:url('../images/pestanyas/pestanyasListados/contPestanyasList.gif');
+}

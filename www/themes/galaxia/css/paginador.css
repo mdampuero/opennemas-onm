@@ -1,0 +1,40 @@
+.CContenedorPaginado{
+	margin-top:10px;
+	margin-bottom:5px;
+	margin-left:50px;
+	/*width:572px;*/		
+	float:left;		
+	font-size:11px;
+	color:#666666;	
+}
+
+.link_paginador{
+	float:left;
+}
+.CPaginas{
+	margin-left:10px;	
+	float:left;
+}
+
+.numpagina_paginador{
+	float:left;
+}
+
+.separador_pag_paginador{
+	margin-left:5px;
+	margin-right:5px;	
+	width:1px;
+	height:14px;
+	overflow:hidden;	
+	float:left;	
+	background-color:#004b8e;
+}
+
+/*********** MOVER A STYLE.CSS ***************/
+.numpagina_paginador a, .numpagina_paginador a:hover{
+	color:#004b8e;
+}
+
+.link_paginador a, .link_paginador a:hover{
+	color:#666666;
+}

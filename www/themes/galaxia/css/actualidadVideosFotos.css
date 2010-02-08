@@ -1,0 +1,275 @@
+.cabeceraActualidadVideos
+{
+    margin-left:24px;
+    width:252px;
+    height:42px;
+    float:left;
+    position:relative;
+    display:inline;
+}
+
+.zonaVisualizacionVideos
+{
+    margin-top:4px;
+    width:448px;
+    height:315px;
+    overflow:hidden;
+    float:left;
+    background-color:#e4ddc9;
+}
+
+.CZonaVisorVideos
+{
+    margin-left:12px;
+    margin-top:8px;
+    width:250px;
+    height:250px;
+    position:relative;
+    float:left;
+    display:inline;
+    background-color:#666;
+}
+
+.CZonaThumbsVideos
+{
+    margin-top:8px;
+    width:174px;
+    position:relative;
+    float:left;
+    display:inline;
+}
+
+.CThumbVideo
+{
+    margin-left:14px;
+    margin-bottom:6px;
+    width:72px;
+    height:72px;
+    position:relative;
+    float:left;
+    display:inline;
+    cursor:hand;
+    cursor:pointer;
+}
+
+/* el codigo "normal" es igual al usado hasta ahora */
+div.CHolderThumbVideo
+{
+    display: table-cell;
+    width: 72px;
+    height: 72px;
+    text-align: center;
+    vertical-align: middle;
+    background: #000205;
+    overflow:hidden;
+}
+
+/* y aqui es donde se debe establecer el codigo para IE */
+.CEdgeThumbVideo
+{
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    vertical-align: middle;
+}
+.CContainerThumbVideo
+{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.CContainerTituloVideo
+{
+    margin-left:14px;
+    position:relative;
+    float:left;
+    display:inline;
+}
+
+.linkMasMedia
+{
+    width:280px;
+    margin-left:14px;
+    margin-top:10px;
+    float:left;
+    position:relative;
+    display:inline;
+    font-size:10px;
+
+}
+.linkMasMedia a,.linkMasMedia a:hover
+{
+    color:#004B8E;
+}
+
+/************* ACTUALIDAD FOTOS ***************/
+.cabeceraActualidadFotos
+{
+    margin-left:24px;
+    width:246px;
+    height:42px;
+    position:relative;
+    display:inline;
+    float:left;
+}
+
+.zonaVisualizacionFotos
+{
+    margin-top:4px;
+    width:300px;
+    height:315px;
+    float:left;
+    background-color:#e4ddc9;
+    overflow:hidden;
+}
+
+/************* PIEZA HOME *************/
+.CPiezaActualidadFotosHome
+{
+    margin-top:11px;
+    padding-bottom:15px;
+    width:300px;
+    display:inline;
+    float:left;
+    position:relative;
+    background-color:#E4DDC9;
+}
+
+.CContainerFotoActualidadFotos
+{
+    width:252px;
+    display:inline;
+    float:left;
+    overflow:hidden;
+    position:relative;
+    text-align:center;
+    cursor:pointer;
+}
+
+/*Nueva versión 21-07-2009*/
+.zonaVisualizacionVideosNew
+{
+    overflow: hidden;
+    background-color: rgb(217, 227, 237);
+    float: left;
+    margin-top: 4px;
+    width: 295px;
+    margin-left: 10px;
+    height:390px;
+}
+.CZonaThumbsVideosNew
+{
+    display: inline;
+    float: left;
+    margin-top: 8px;
+    position: relative;
+    width: 295px;
+}
+
+.CZonaThumbsFotosNew
+{
+    display: inline;
+    float: left;
+    margin-top: 8px;
+    position: relative;
+    width: 295px;
+}
+
+.ColumnaSepardorVideosFotosNew {
+    overflow: hidden;
+    display: inline;
+    float: left;
+    height: 430px;
+    position: relative;
+    width: 20px;
+}
+
+.zonaVisualizacionFotosNew
+{
+    overflow: hidden;
+    float: left;
+    margin-top: 4px;
+    width: 295px;
+}
+
+.CContainerTituloFotoNew
+{
+    position:relative;
+    float:left;
+    display:inline;
+    margin-left: 4px;
+    overflow:hidden;
+}
+
+.CContainerFotoActualidadFotosNew
+{
+    width:250px;
+    height:250px;
+    display:inline;
+    float:left;
+    overflow:hidden;
+    position:relative;
+    text-align:center;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.CPiezaActualidadFotosHomeNew
+{
+    overflow: hidden;
+    background-color: rgb(217, 227, 237);
+    float: left;
+    margin-left: 10px;
+    width: 295px;
+    height:390px;
+}
+
+.CCuerpoPiezaFotoXornalNew
+{
+    overflow: hidden;
+    display: inline;
+    float: left;
+    margin-left: 12px;
+    position: relative;
+    width: 270px;
+}
+
+.CThumbFotoPrimeraNew
+{
+    overflow: hidden;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 75px;
+    height: 72px;
+    margin-bottom:6px;
+}
+
+.CThumbFotoNew
+{
+    overflow: hidden;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 75px;
+    height: 72px;
+    margin-left: 14px;
+    margin-bottom:6px;
+    font-size:0px;
+}
+
+.separadorVerticalNew {
+    overflow: hidden;
+    display: inline;
+    float: left;
+    height: 430px;
+    position: relative;
+    width: 35px;
+}
+/* -- Fin nueva versión 21-07-2009*/

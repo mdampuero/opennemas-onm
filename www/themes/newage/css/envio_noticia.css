@@ -1,0 +1,569 @@
+.CDestacadoEnvioNoticia
+{
+	width:700px;
+	color:#004B8E;
+	display:block;
+	font-weight:700;
+	font-size:14px;
+}
+
+.CLinksConectaEnvioNoticia
+{
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+.CPunto1EnvioNoticia,.CPunto2EnvioNoticia,.CPunto3EnvioNoticia,.CPunto4EnvioNoticia,.CPunto5EnvioNoticia
+{
+	margin-left:60px;
+	margin-top:10px;
+	margin-bottom:20px;
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+.CCabeceraFormulario1
+{
+	margin-top:10px;
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+.menuZonaEnvioNoticia
+{	
+	width:680px;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-left:30px;
+	
+	color:#004B8D;
+	display:inline;
+	float:left;
+	font-family:Arial;
+	font-size:11px;
+	margin-top:10px;
+	position:relative;
+}
+
+.menuZonaEnvioNoticia a,.menuZonaEnvioNoticia a:hover
+{
+	color:#004B8D;	
+}
+
+/* TIPO ARCHIVO */
+.CZonaRadioButtons
+{
+	margin-left:10px;
+	margin-top:15px;
+	position:relative;
+	float:left;
+	display:inline;
+}
+
+.CContenedorRadioButton
+{
+	margin-right:25px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CContenedorRadioButton input
+{
+	margin-right:10px;
+}
+
+
+/* 1. Adjuntar archivo */
+.CZonaAdjuntarArchivos
+{
+	margin-top:10px;
+	margin-left:5px;
+	width:700px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CBotonExaminar
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CInputBotonExaminar
+{
+	width:100px;
+	height:30px;
+	background-image:url('../images/enviar_noticia/botonExaminar..gif');
+	background-repeat:no-repeat;	
+}
+
+.CInputNombreArchivo
+{
+	margin-left:15px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CInputNombreArchivo input
+{
+	width:204px;
+	border:1px solid #7f7f7f;
+}
+
+.CAdjuntarMas
+{
+	margin-left:10px;
+	margin-top:3px;
+	
+	position:relative;
+	float:left;
+	display:inline;
+	font-size:11px;	
+}
+
+.CAdjuntarMas img
+{
+	margin-right:5px;
+}
+
+.CInfoAttach
+{
+	margin-left:5px;
+	margin-top:10px;
+	position:relative;
+	float:left;
+	display:inline;	
+	
+	color:#666;	
+}
+
+/* DESCRIPCION ENVIO */
+.CZonaDescrEnvio
+{
+	margin-left:20px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CTituloDescrEnvio
+{
+	margin-top:10px;
+	width:700px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CLabelTituloDescrEnvio
+{
+	margin-top:2px;
+	width:140px;
+	position:relative;
+	float:left;
+	display:inline;
+	text-align: right;
+	padding-right: 4px;
+
+	font-weight: bold;	
+}
+
+.CInputTituloDescrEnvio
+{
+	
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CInputTituloDescrEnvio input
+{
+	border:1px solid #7f7f7f;
+}
+
+
+
+.CContenidoDescrEnvio
+{
+	margin-top:10px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CLabelContenidoDescrEnvio
+{
+	margin-top:2px;	
+	width:140px;
+	position:relative;
+	float:left;
+	display:inline;
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+}
+
+.CInputContenidoDescrEnvio
+{
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CInputContenidoDescrEnvio textarea
+{
+	height:100px;
+	border:1px solid #7f7f7f;
+}
+
+
+.CTextoDescrEnvio
+{
+	margin-left:146px;
+	position:relative;
+	float:left;
+	display:inline;	
+	margin-top:4px;
+	color:#666;
+	font-size:11px;	
+}
+
+/* CATEGOR�A DEL ENVIO */
+.CFragmentoFormulario
+{
+	margin-top:15px;
+	margin-left:15px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CTemasPrincipalesEnvio
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CLabelSelecTemas
+{
+	margin-top:2px;	
+	position:relative;
+	float:left;
+	display:inline;
+	
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+}
+
+.CComboSelecTemas
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CComboSelecTemas select
+{
+	border:1px solid #7f7f7f;
+}
+
+.CPalabrasClaveCatEnvio
+{
+	margin-left:40px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+.CLabelPalabrasClave
+{
+	margin-top:2px;	
+	position:relative;
+	float:left;
+	display:inline;
+	
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+}
+
+
+.CZonaTextAreaPalabrasClave
+{
+	width:190px;
+	position:relative;
+	float:left;
+	display:inline;
+
+}
+
+.CTextAreaPalabrasClave
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+.CTextAreaPalabrasClave textarea
+{
+	width:190px;
+	height:100px;
+	border:1px solid #7f7f7f;
+}
+
+.CTextoInfoPalabrasClave
+{
+	margin-left:10px;
+	margin-top:4px;
+	width:150px;
+	position:relative;
+	float:left;
+	display:inline;
+		
+	color:#666;
+	font-size:10px;
+}
+
+/* LUGAR Y FECHA DE LA INFORMACI�N */ 
+
+
+/*pais*/
+.CZonaPaisLugarYFecha
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+.CLabelPaisLugarYFecha
+{
+	margin-top:2px;	
+	position:relative;
+	float:left;
+	display:inline;
+	
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+	width: 80px;
+}
+
+.CComboPaisLugarYFecha
+{
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CComboPaisLugarYFecha select
+{
+	border:1px solid #7f7f7f;
+}
+
+
+/*provincia*/
+.CZonaProvinciaLugarYFecha
+{
+	margin-left:20px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CLabelProvinciaLugarYFecha
+{
+	margin-top:2px;	
+	position:relative;
+	float:left;
+	display:inline;		
+}
+.CComboProvinciaLugarYFecha
+{
+	margin-left:10px;	
+	position:relative;
+	float:left;
+	display:inline;		
+}
+.CComboProvinciaLugarYFecha select
+{
+	border:1px solid #7f7f7f;
+}
+
+/* localidad */
+.CZonaLocalidadLugarYFecha
+{
+	margin-top:15px;
+	width:700px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+.CLabelLocalidadLugarYFecha
+{
+	margin-top:2px;	
+	position:relative;
+	float:left;
+	display:inline;
+	
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+	width: 80px;
+}
+.CInputLocalidadLugarYFecha
+{	
+	position:relative;
+	float:left;
+	display:inline;		
+}
+.CInputLocalidadLugarYFecha input
+{
+	width:200px;
+	border:1px solid #7f7f7f;
+}
+
+/* fecha */
+.CZonaFechaLugarYFecha
+{
+	margin-top:15px;
+	width:700px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+.CLabelFechaLugarYFecha
+{
+	margin-top:2px;
+	position:relative;
+	float:left;
+	display:inline;
+
+	text-align: right;
+	padding-right: 4px;
+	
+	font-weight: bold;
+	width: 80px;
+}
+.CDiaLugarYFecha
+{
+	margin-left:4px;
+	position:relative;
+	float:left;
+	display:inline;	
+}
+.CDiaLugarYFecha select
+{
+	border:1px solid #7f7f7f;	
+}
+
+.CMesLugarYFecha
+{
+	margin-left:4px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CMesLugarYFecha select
+{
+border:1px solid #7f7f7f;
+}
+
+.CAnyoLugarYFecha
+{
+	margin-left:4px;
+	position:relative;
+	float:left;
+	display:inline;		
+}
+
+.CAnyoLugarYFecha select
+{
+	border:1px solid #7f7f7f;
+}
+
+
+/* ACEPTACI�N DE LAS CONDICIONES */
+.CTextoCondiciones
+{
+	color:#000;
+}
+.CTextoAceptoCond
+{
+	font-weight:700;
+}
+.CTextoGarantiasCond
+{
+	color:#004b8d;
+}
+.CTextoGarantiasCond a,.CTextoGarantiasCond a:hover	
+{
+	color:#004b8d;
+}
+
+
+/* BOT�N ENVIAR NOTICIA */
+.CZonaBotonEnviarNoticia
+{
+	margin-top:20px;
+	margin-left:600px;
+	
+	position:relative;
+	float:left;
+	display:inline;	
+}
+
+
+
+
+/* FILETE HORIZONTAL */
+.fileteHorizontalEnvioNota
+{
+	margin-left:50px;
+	width:700px;
+	height:1px;
+		
+	display:inline;
+	float:left;
+	position:relative;
+	overflow:hidden;
+
+	background-image:url('../images/planConecta/portada/fileteHorizontalPC..gif');
+	background-repeat:no-repeat;
+}
+
+.divLabel {
+	width: 140px;
+	display: inline;
+	float: left;
+	margin-top: 2px;
+	position: relative;
+	font-weight: bold;
+}
+
+.divInput {
+	margin-top: 10px;
+	position: relative;
+	float:left;
+	display:inline;
+	width: 450px;
+}
+
+input, select, textarea {
+	background-color: #EEF;
+}
+
+
+

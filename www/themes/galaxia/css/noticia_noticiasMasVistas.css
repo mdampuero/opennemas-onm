@@ -1,0 +1,114 @@
+/******************* LISTA DE NOTICIAS MAS VISTAS Y VALORADAS **************/
+.CListaNoticiasMas
+{
+	margin-top:10px;
+	margin-left:12px;
+	width:280px;
+	
+	float:left;
+	display:inline;
+	position:relative;
+	overflow:hidden;
+}
+
+.CNoticiaMas
+{
+	width:269px;
+	
+	float:left;
+	display:inline;
+	position:relative;
+
+	
+	overflow:hidden;
+}
+
+
+.CContainerIconoTextoNoticiaMas
+{	
+	padding-bottom:10px;
+	float:left;
+	display:inline;
+	position:relative;
+	
+}
+
+.textoNoticiaMas
+{
+	margin-top:5px;
+	margin-left:5px;
+	margin-right:7px;
+
+	width:230px;	
+	float:left;
+	display:inline;
+	position:relative;
+	
+	font-family:Arial;
+	font-size:12px;
+		
+}
+
+.textoNoticiaMas a
+{
+	color:#004b8e;
+	text-decoration:none;	
+}
+
+
+.textoNoticiaMas a:hover
+{
+	color:#004b8e;
+	text-decoration:underline;	
+}
+
+
+.iconoNoticiaMas
+{
+	margin-top:8px;
+	margin-left:8px;
+
+	width:5px;
+	height:18px;
+	
+	float:left;
+	display:inline;
+	position:relative;
+	
+	background-image:url('../images/noticiasRecomendadas/iconoNoticiaMas.gif');
+	background-repeat:no-repeat;
+}
+
+
+.fileteNoticiaMas
+{
+	margin-left:18px;
+	width:240px;
+	height:1px;
+	
+	float:left;
+	display:inline;
+	position:relative;
+	
+}
+
+.posPaginadorNoticiasMas
+{
+	margin-left:10px;
+	margin-top:10px;
+	
+	float:left;
+	display:inline;
+	position:relative;	
+}
+
+.containerNoticiasMasVistasYValoradas
+{
+	overflow:hidden;
+	width:295px;
+	
+	float:left;
+	display:inline;
+	position:relative;		
+
+}

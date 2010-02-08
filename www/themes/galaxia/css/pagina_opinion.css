@@ -1,0 +1,236 @@
+.CContainerCabeceraOpinion
+{
+	width:636px;
+	height:108px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	overflow:hidden;	
+	background-image:url('../images/pagina_opinion/fondoCabeceraPagOpinion.gif');
+}
+
+.CContainerFotoComentarista
+{
+	float:left;
+	display:inline;
+	position:relative;
+}
+
+.CContainerDatosYTitularCabOpinion
+{
+	margin-left:16px;
+	width:490px;
+	float:left;
+	display:inline;
+	position:relative;
+}
+
+.CDatosCabOpinion
+{
+	margin-top:10px;
+	width:470px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	color:#fff;
+	font-size:14px;
+}
+
+.CNombreCabOpinion
+{
+	float:left;
+	display:inline;
+	position:relative;	
+	font-weight:700;
+}
+
+a.CNombreCabOpinionLink
+{
+	float:left;
+	display:inline;
+	position:relative;
+	color:#fff;
+	font-weight:700;	
+}
+
+a.CNombreCabOpinionLink:hover
+{
+	float:left;
+	display:inline;
+	position:relative;
+	color:#fff;
+	font-weight:700;	
+}
+
+.CRolCabOpinion
+{
+	float:left;
+	display:inline;
+	position:relative;	
+}
+
+.CFechaCabOpinion
+{
+	float:left;
+	display:inline;
+	position:relative;		
+}
+
+.CSeparadorVAzulCabOpinion
+{
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:1px;
+	width:1px;
+	height:14px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	overflow:hidden;
+	background-color:#004b8d;
+}
+
+.CTitularCabOpinion
+{
+	margin-top:5px;
+	width:436px;
+	height:88px;	
+	float:left;
+	display:inline;
+	position:relative;
+	overflow:hidden;	
+}
+
+.CTitularCabeceraOpinion h2
+{
+	color:#333;
+}
+
+.CTextoOpinion
+{
+	float:left;
+	display:inline;
+	position:relative;
+}
+
+.CTextoOpinion a {
+	color: #024687;	
+}
+
+.CTextoOpinion a:hover {
+	text-decoration: underline;
+}
+
+.CContainerOtrasOpiniones
+{
+	width:290px;
+	float:left;
+	display:inline;
+	position:relative;
+	overflow:hidden;
+        margin:15px;
+}
+
+.CContainerOtrasOpiniones2
+{
+	width:180px;
+	float:left;
+	display:inline;
+	position:relative;
+	overflow:hidden;
+        margin:10px 0px 10px 0px;
+}
+
+.CCabeceraOtrasOpiniones2
+{
+	width:200px;
+	height:44px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	background-image:url('../images/pagina_opinion/logoCabeceraOpinion.gif');
+	background-repeat:no-repeat;
+}
+
+.CContainerXornalista
+{	
+	float:left;
+	display:inline;
+	position:relative;	
+}
+
+.CXornalista
+{
+	margin-top:5px;
+	width:269px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	overflow:hidden;
+}
+
+.iconoXornalista
+{
+	margin-top:3px;
+	margin-left:8px;
+	width:5px;
+	height:18px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	background-image:url('../images/noticiasRecomendadas/iconoNoticiaMas.gif');
+	background-repeat:no-repeat;
+}
+
+.textoXornalista
+{
+	margin-left:5px;
+	margin-right:7px;
+	width:230px;	
+	float:left;
+	display:inline;
+	position:relative;	
+	font-family:Arial;
+	font-size:12px;		
+}
+
+.textoXornalista a
+{
+	color:#004b8e;
+	text-decoration:none;	
+}
+
+.textoXornalista a:hover
+{
+	color:#004b8e;
+	text-decoration:underline;	
+}
+
+.CListaXornalistas
+{
+	margin-left:15px;
+	margin-top:10px;
+	width:280px;	
+	float:left;
+	display:inline;
+	position:relative;
+}
+
+/******************* PUBLICIDAD *****************/
+.CContainerPublicidadOpinion
+{
+	margin-left:70px;
+	width:572px;
+	float:left;
+	display:inline;
+	position:relative;
+	overflow:hidden;
+}
+
+.contBannerPublicidadOpinion
+{
+	margin-left:5px;
+	width:567px;	
+	text-align:center;
+	overflow:hidden;
+}

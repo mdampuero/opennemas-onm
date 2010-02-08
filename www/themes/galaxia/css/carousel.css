@@ -1,0 +1,257 @@
+.carousel-container {
+    /*margin-top: 2px;*/    
+    width: 976px;
+    height: 104px;
+    line-height: normal;    
+    /*border: 1px solid #EEE;*/
+    text-align: center;
+    font-size: 12px;
+    font-family: Arial, verdana, sans-serif;
+}
+
+.carousel-container strong {
+    color: #024687;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.carousel-pre {
+    width: 125px;
+    height: 96px;
+    float: left;    
+    font-family: Arial;
+    font-size: 12px;
+    /* text-align: center; */
+    
+    /*background-image: url(../images/carousel/director.png);
+    background-position: left center;
+    background-repeat: no-repeat;*/
+}
+
+.carousel-pre span {
+    color: #666666;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.carousel-pre a {
+    color:#000000;
+    text-decoration:underline;
+    font-family:Arial;
+    font-size:12px;
+}
+
+.carousel-pre .foto {    
+    /*url(../images/carousel/fondoFraseOpinion.gif);*/
+    background-image: url(../images/carousel/fondo-carousel.png);
+    background-position: left top;
+    background-repeat: repeat-x;    
+    text-align: center;
+    padding-top: 5px;
+}
+
+.carousel-pre div {
+    text-align: center;
+}
+
+.carousel-pre a:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+
+.carousel-post {
+    background-image: url(../images/carousel/fondo-carousel.png);
+    background-repeat:repeat-x;
+    width: 171px;
+    /*height: 60px;    */
+    padding-top: 5px;
+    text-align: left;    
+    float: right;
+}
+
+.carousel-post select {
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+    max-width: 140px;
+    width: 140px;
+}
+
+.carousel-post .editorial {
+    padding-left: 20px;    
+    height: 60px;
+}
+
+.carousel-post .editorial strong{
+    margin-left: -10px;    
+    height: 60px;
+}
+
+.carousel-post .autores {
+    height: 35px;
+    text-align: center;
+}
+
+.carousel-post a, .carousel-pre a {
+    color:#000000;
+    text-decoration:none;
+    font-family: Arial, verdana, sans-serif;
+    font-size: 12px;    
+}
+
+.carousel-post a:hover, .carousel-pre a:hover {
+    text-decoration: underline;
+}
+
+.carousel-left {
+    /*background-position: center left;
+    background-repeat: no-repeat;
+    background-image: url(../images/carousel/carousel-left.png);
+    cursor: pointer; */
+    
+    width: 20px;
+    height: 60px;
+    
+    /*position: absolute;
+    left: 0;
+    top: 0;*/
+    
+    float: left;    
+}
+
+.carousel-left img, .carousel-right img {
+    margin-top: 20px;
+}
+
+.carousel-right {
+    /* background-position: center right;
+    background-repeat: no-repeat;
+    background-image: url(../images/carousel/carousel-right.png); 
+    cursor: pointer; */
+    
+    width: 20px;
+    height: 60px;
+    
+    /*position: absolute;
+    right: 0;
+    top: 0;*/
+    
+    float: right;    
+}
+
+.carousel-center {
+    background-color: transparent;
+    
+    float: left;
+    width: 640px;
+    height: 60px;
+    border-bottom: 2px solid #024687; /*#FFF*/
+}
+
+.carousel-message {
+    clear: both;
+    margin-top: 0;
+    height: 20px;
+
+    color: #333;
+    /*color: #024687;*/
+    font-size: 12px;
+    font-weight: normal;
+    font-family: Arial, Verdana, sans-serif;
+    
+    
+    padding-top: 4px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.carousel-message a {
+    color: #333;
+    /*color: #024687;*/
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial, Verdana, sans-serif;
+    
+    text-decoration: none;
+}
+
+.carousel-message a:hover {
+    text-decoration: underline;
+}
+
+.carousel {
+    width: 680px;    
+    height: 100px;
+    float: left;
+    /*margin-left: 2px;*/    
+    position: relative;    
+    background-image: url(../images/carousel/fondo-carousel.png);
+    background-repeat: repeat-x;
+    padding-top:10px;
+}
+
+/* Texto de cargando */
+.carousel h2 {
+    margin-top: 25px;
+}
+
+.carousel ul {
+    list-style: none;
+    /* margin: 2px;
+    margin-left: 8px; */
+    padding: 0;
+    
+    background-color: transparent;
+}
+
+/* .carousel ul li a {
+    width:  60px;
+    height: 60px;
+    
+    padding: 0;
+    margin:  0;
+    border:  0;
+    
+    vertical-align: middle;
+} */
+
+.carousel ul li {
+    float: left;
+    list-style: none;
+    display: inline;
+    
+    width: 60px;
+    height: 60px;
+    
+    overflow: hidden;
+    
+    margin: auto 2px;
+    padding: 0;
+    
+    /*border-bottom: 1px solid #CCC;
+    background-color: #FFF;*/
+    
+    /*background-image: url(../images/carousel/fondoFraseOpinion.gif);
+    background-position: top center;
+    background-repeat: repeat-x;*/    
+    
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.carousel ul li img {        
+    border: 0px;
+}
+
+/*.clear {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    clear: both;*/
+/*}*/
+
+.autores {
+    margin-top: 3px;
+    margin-left: -35px;
+}

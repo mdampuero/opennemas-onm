@@ -1,0 +1,345 @@
+{include file="header.tpl"}
+
+
+{* LISTADO ******************************************************************* *}
+{if !isset($smarty.request.action) || $smarty.request.action eq "list"}
+<ul id="tabs">
+<li>
+		<a href="album.php?action=list&category=3#" {if $category==3 } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >ALBUM</a>
+</li>
+{section name=as loop=$allcategorys}
+<li>
+	{assign var=ca value=`$allcategorys[as]->pk_content_category`}
+	<a href="album.php?action=list&category={$ca}#" {if $category==$ca } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >{$allcategorys[as]->title}</a>
+</li>
+{/section}
+  </ul>
+    <br>
+<div style="clear:left;"> 
+{section name=as loop=$allcategorys}
+    <div id="{$allcategorys[as]->name}" style="display:inline "> 
+      <ul id="tabs"> 
+	  {section name=su loop=$subcat[as]}
+	      {if $allcategorys[as]->pk_content_category eq $category }
+		  {assign var=subca value=`$subcat[as][su]->pk_content_category`}
+		  <li>
+		  <a href="album.php?action=list&category={$subcat[as][su]->pk_content_category}#" {if $category==$subca } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if} >
+		    <span style="color:#222 ;margin-left: 12px;margin-right: 12px;">{$subcat[as][su]->title}</span></a> 
+		    </li>
+	      {else}
+		  {if $subcat[as][su]->fk_content_category eq $datos_cat[0]->fk_content_category}
+		      {assign var=subca value=`$subcat[as][su]->pk_content_category`}
+		      <li>
+			    <a href="album.php?action=list&category={$subcat[as][su]->pk_content_category}#" {if $category==$subca } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if} >
+			    <span style="color:#222 ;margin-left: 12px;margin-right: 12px;">{$subcat[as][su]->title}</span></a> 
+		      </li>
+		  {/if} 	
+	      {/if} 	  			   	  
+	  {/section}
+      </ul> 
+    </div>  
+{/section}
+</div>
+<br class="clear"/>
+<br class="clear"/>	
+	{include file="botonera_up.tpl"}
+
+<div>
+<table class="adminheading">
+	<tr>
+		<th nowrap>Albums</th>
+	</tr>	
+</table>
+<div><h2 style="color:#BB1313">{$smarty.request.msg}</h2></div>
+<table class="adminlist">
+	<tr>		
+		<th></th>
+		<th style="padding:10px;" align='left'>T&iacute;tulo</th>		
+		<th>Creada</th>
+                <th>Visto</th>
+		<th align="center">Publicado</th>
+           {if $category==3 }      <th>Favorito</th> {/if}
+		<th>Modificar</th>
+		<th>Eliminar</th>
+	</tr>
+
+{section name=as loop=$albums}
+<tr {cycle values="class=row0,class=row1"}>
+	<td style="padding:10px;font-size: 11px;">
+		<input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+	</td>
+	<td style="padding:10px;font-size: 11px;width:60%;">
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
+		 {$albums[as]->title|clearslash}</a>
+	</td>
+        <td style="padding:10px;font-size: 11px;width:20%;">
+		 {$albums[as]->created}
+	</td>
+         <td style="padding:10px;font-size: 11px;width:20%;">
+		 {$albums[as]->views}
+	</td>
+	<td style="padding:10px;width:10%;" align="center">
+		{if $albums[as]->available == 1}
+			<a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+				<img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicado" /></a>
+		{else}
+			<a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+				<img src="{php}echo($this->image_dir);{/php}publish_r.png" border="0" alt="Pendiente" /></a>
+		{/if}
+	</td>
+        {if $category==3 }
+        <td style="padding:10px;font-size: 11px;width:20%;">
+		{if $albums[as]->favorite == 1}
+                   <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de Portada"></a>
+		{else}
+                    <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
+		{/if}
+	</td>
+        {/if}
+	<td style="padding:10px;width:10%;" align="center">
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="Modificar">
+			<img src="{php}echo($this->image_dir);{/php}edit.png" border="0" /></a>
+	</td>
+
+	<td style="padding:10px;width:10%;" align="center">  
+		<a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}',{$paginacion->_currentPage});" title="Eliminar">
+			<img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
+	</td>
+
+</tr>
+{sectionelse}
+<tr>
+	<td align="center" colspan=5><br><br><p><h2><b>Ning&uacute;n album guardado </b></h2></p><br><br></td>
+</tr>
+{/section}
+{if count($albums) gt 0}
+    <tr>
+      <td colspan="6" style="padding:10px;font-size: 12px;" align="center"><br><br>{$paginacion->links}<br><br></td>
+    </tr>
+{/if}
+</table>
+{/if}
+      {if $smarty.get.alert eq 'ok'}
+         <script type="text/javascript" language="javascript">
+            {literal}
+                   alert('{/literal}{$smarty.get.msgdel}{literal}');
+            {/literal}
+            </script>
+    {/if}
+ 
+
+{* FORMULARIO PARA ENGADIR UN CONTENIDO ALBUM ************************************** *}
+
+{if isset($smarty.request.action) && $smarty.request.action eq "new"}
+
+	{include file="botonera_up.tpl"}
+
+<ul id="tabs">
+	<li>
+		<a href="#edicion-contenido">Nuevo Album</a>
+	</li>
+	
+</ul>
+
+<div class="panel" id="edicion-contenido" style="width:95%">
+<table border="0" cellpadding="2" cellspacing="2" class="fuente_cuerpo" width="96%">
+<tbody>
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="title">Titulo:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+		<input type="text" id="title" name="title" title="Album"
+			size="80" value="" onBlur="javascript:get_metadata(this.value);"  />
+			
+	</td>
+</tr>
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="title">Agencia:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+		<input type="text" id="agency" name="agency" title="Album"
+			size="80" value="" />
+	</td>
+	<td rowspan=3> 
+		<table style='background-color:#F5F5F5; padding:18px; width:99%;'>
+		  {* <tr><td  align="right" nowrap="nowrap">
+					<label for="title">Autor:</label>
+				 </td>
+				 <td nowrap="nowrap" >
+                    <select name="pk_author" id="pk_author" >
+                    <option value="0" name='Xornal de Galicia'> </option>
+                    {section name=as loop=$todos}
+                        <option value="{$todos[as]->pk_author}" name='{$todos[as]->name}'>{$todos[as]->name}</option>
+                    {/section}
+                    </select>
+                    <input type="hidden" id="fk_publisher" name="fk_publisher" title="publisher"
+                    value="{$publisher}" size="10" />
+				</td>
+			</tr> *}
+			<tr>
+				<td valign="top"  align="right" nowrap="nowrap">
+				<label for="title">Secci&oacute;n:</label>
+				</td>
+				<td nowrap="nowrap">
+                    <select name="category" id="category"  >
+                        <option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>                         
+                        {section name=as loop=$allcategorys}                                                 
+                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                            {/section}
+                        {/section}
+				    </select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"  align="right" nowrap="nowrap">
+                    <label for="title"> Disponible: </label>
+				</td>
+				<td valign="top" nowrap="nowrap">
+                    <select name="available" id="available" class="required">
+                    <option value="0">No</option>
+                    <option value="1" selected>Si</option>
+                   </select>
+				</td>
+			</tr>
+			</table>
+	</td>
+</tr>
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="title">Descripci&oacute;n:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+        <textarea name="description" id="description"  title="descripcion" style="width:100%; height:8em;"></textarea>
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="metadata">Palabras clave: </label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap"">
+		<input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="" /><br>
+		<label align='right'><sub>Separadas por comas</sub></label><br>
+	</td>
+</tr>
+{include file="album_images.tpl"}
+
+</tbody>
+</table>
+</div>
+
+
+{/if}
+
+
+{* FORMULARIO PARA ACTUALIZAR UN CONTENIDO*********************************** *}
+{if isset($smarty.request.action) && $smarty.request.action eq "read"}
+
+	{include file="botonera_up.tpl"}
+
+<ul id="tabs">
+	<li>
+		<a href="#edicion-contenido">Edici&oacute;n Album</a>
+	</li>
+	
+</ul>
+
+<div class="panel" id="edicion-contenido" style="width:95%">	
+<table border="0" cellpadding="2" cellspacing="2" class="fuente_cuerpo" width="90%">
+<tbody>
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="title">T&iacute;tulo:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+		<input type="text" id="title" name="title" title="Album"
+			size="80" value="{$album->title|clearslash|escape:"html"}" onBlur="javascript:get_metadata(this.value);" />
+			
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" style="padding:4px;" >
+		<label for="title">Agencia:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+		<input type="text" id="agency" name="agency" title="Album"
+			size="80" value="{$album->agency|clearslash|escape:"html"}" />
+	</td>
+	<td rowspan=3> 
+		<table style='background-color:#F5F5F5; padding:18px; width:99%;'>
+		  {* <tr><td  align="right" nowrap="nowrap">
+					<label for="title">Autor:</label>
+				 </td>
+				 <td nowrap="nowrap" >
+                    <select name="pk_author" id="pk_author" >
+                    <option value="0" name='Xornal de Galicia'> </option>
+                    {section name=as loop=$todos}
+                        <option value="{$todos[as]->pk_author}" name='{$todos[as]->name}'>{$todos[as]->name}</option>
+                    {/section}
+                    </select>
+                    <input type="hidden" id="fk_publisher" name="fk_publisher" title="publisher"
+                    value="{$publisher}" size="10" />
+				</td>
+			</tr> *}
+			<tr>
+				<td valign="top"  align="right" nowrap="nowrap">
+				<label for="title">Secci&oacute;n:</label>
+				</td>
+				<td nowrap="nowrap">
+                    <select name="category" id="category"  >
+                        <option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>                         
+                        {section name=as loop=$allcategorys}                                                 
+                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                            {section name=su loop=$subcat[as]}
+                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                            {/section}
+                        {/section}
+				    </select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"  align="right" nowrap="nowrap">
+                    <label for="title"> Disponible: </label>
+				</td>
+				<td valign="top" nowrap="nowrap">
+                    <select name="available" id="available" class="required">
+                    <option value="0">No</option>
+                    <option value="1" selected>Si</option>
+                   </select>
+				</td>
+			</tr>
+			</table>
+	</td>
+</tr>
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="title">Descripci&oacute;n:</label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap">
+        <textarea name="description" id="description"  title="descripcion" style="width:100%; height:8em;">{$album->description|clearslash|escape:"html"}</textarea>
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" align="right" style="padding:4px;">
+		<label for="metadata">Palabras clave: </label>
+	</td>
+	<td style="padding:4px;" nowrap="nowrap"">
+		<input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$album->metadata}" />
+		<br><label align='right'><sub>Separadas por comas</sub></label>
+	</td>
+</tr>
+{include file="album_images.tpl"}
+</tbody>
+</table>
+</div>
+
+
+{/if}
+
+{include file="footer.tpl"}

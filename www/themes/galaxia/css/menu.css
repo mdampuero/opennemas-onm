@@ -1,0 +1,95 @@
+/********************************* MENU ***********************************/
+.menuCabeceraTexto
+{
+	width:976px;
+	height:27px;
+	/*height:35px;mag 2-10*/	
+	position:relative;
+	display:inline;
+	float:left;
+	overflow:hidden;		
+}
+
+/***************** FIN CABECERA *********************/
+
+
+.CSeparadorMenu
+{
+	margin-top:3px;	
+	width:1px;
+	height:14px;	
+	position:relative;
+	display:inline;
+	float:left;
+	overflow:hidden;
+}
+p
+{
+	margin-top:6px;
+	margin-bottom:6px;
+}
+
+.CSeparadorMenu
+{
+	background-color:#004b8e;
+}
+
+/********************************* FIN MENU *******************************/
+
+/* MENU BAJO BANNER */
+.menuCabeceraSecundario
+{
+	width:462px;
+	height:16px;
+	position:relative;
+	display:inline;
+	float:right;
+}
+
+
+.menuCabeceraSecundario ul
+{
+	list-style-type: none;
+	height:25px;
+	position:relative;
+	float:left;
+}
+
+.menuCabeceraSecundario ul li
+{
+	height:18px;
+	margin-left:14px;
+	position:relative;
+	float:left;
+	display:inline;
+	font-size:12px;
+	overflow:hidden;
+}
+
+.CSeparadorMenuFlecha
+{
+	margin-top:5px;
+	margin-right:3px;
+	width:4px;
+	height:10px;
+	position:relative;
+	float:left;
+	display:inline;
+	background-image:url('../images/flechitaMenu.gif');
+	background-repeat:no-repeat;
+}
+
+
+.menuCabeceraSecundario ul li a
+{
+	/*font-weight:700;*/
+ 	text-decoration:none;
+    color:#808080;
+}
+
+
+.menuCabeceraSecundario ul li a:hover
+{
+ 	text-decoration:underline;
+    color:#808080;
+}

@@ -1,0 +1,54 @@
+.CContainerZonaLinksFooter
+{
+	float:left;
+	position:relative;
+	display:inline;	
+}
+
+.CLinksXornalGalileo
+{
+	width:340px;
+	float:left;
+	position:relative;
+	display:inline;	
+	
+	font-size:12px;
+
+}
+
+.CLinkXornal
+{
+	float:left;
+	position:relative;
+	display:inline;
+	font-weight: bold;
+	margin-left: 6px;
+	
+	color:#004b8e;
+}
+
+.CSeparadorLinkXornal
+{
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:2px;
+	width:1px;
+	height:16px;
+	overflow:hidden;
+	float:left;
+	position:relative;
+	display:inline;	
+	
+	background-color:#004b8e;
+}
+
+.CLinkXornal a,.CLinkXornal a:hover
+{
+	color:#004b8e;
+}
+
+
+.zonaSeccionesPie
+{
+	margin-top:0px;
+}

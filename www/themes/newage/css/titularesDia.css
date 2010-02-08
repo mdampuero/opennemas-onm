@@ -1,0 +1,210 @@
+.logoTitulares
+{
+	width:290px;
+	height:52px;
+	float:left;
+	background-image:url('../images/titularesDia/logoTitularesDia.gif');
+}
+
+.grupoTitularesDia
+{
+      width:315px;
+      float:left;
+      position:relative;
+      display:inline;
+      overflow:hidden;
+      background-color:#fff;
+}
+
+.listaTitularesDia
+{
+      margin:5px 0 5px 5px;
+      float:left;
+      position:relative;
+      display:inline;
+      overflow:hidden;
+}
+
+.contTitularDia
+{
+      margin-top:5px;
+      margin-bottom:5px;
+      width:310px;
+      float:left;
+      position:relative;
+      display:inline;
+      overflow:hidden;
+}
+
+.contHoraLugarTitularDia
+{
+	width:310px;
+	font-family:Georgia,Times New Roman,Times,serif;
+	color:#004B8E;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+
+}
+.horaTitularDia
+{
+	padding-top:1px;
+	font-size:10px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+}
+.lugarTitularDia
+{
+	margin-left:5px;
+	padding-left:5px;
+	font-size:12px;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	border-left:1px solid #004B8E;
+}
+
+.textoTitularDia
+{
+	width:280px;
+	overflow:hidden;
+	font-size:14px;
+	color:#666;
+}
+
+.textoTitularDia a,.textoTitularDia a:hover
+{
+	color:#666;
+}
+
+.linkMasNoticiasTitulares
+{
+	width:180px;
+	margin-top:10px;
+	margin-left:14px;
+	border-bottom:15px solid white;
+	float:left;
+	position:relative;
+	display:inline;
+	overflow:hidden;
+	font-size:10px;
+}
+.linkMasNoticiasTitulares a,.linkMasNoticiasTitulares a:hover
+{
+	color:#004B8E;
+}
+
+/************** pestanyas titulares dia ****************/
+.contPestanyaTitularesDia
+{
+    width:314px;
+    height:26px;
+	float:left;
+    overflow:hidden;
+    vertical-align:top;
+	background-image:url('../images/titularesDia/contPestanyaTitulares.gif');
+}
+
+.pestanyaTitulares
+{
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:8px;
+    float:left;
+    height:26px;
+    overflow:hidden;
+    vertical-align:top;
+    background-image:url('../images/titularesDia/pestanyaTitulares.gif');
+    font-family:Arial;
+    font-size:14px;
+    text-transform:uppercase;
+    font-weight:700;
+    color:#004B8E;
+}
+
+.flechaPestanyaTitulares
+{
+	margin-top:4px;
+	margin-right:5px;
+	width:5px;
+    height:8px;
+    background-image:url('../images/titularesDia/flechitaAzulTitulares.gif');    display:inline;
+    float:left;
+    overflow:hidden;
+    vertical-align:top;
+}
+
+.cierrePestanyaTitulares
+{
+    background-image:url('../images/titularesDia/cierrePestanyaTitulares.gif');
+    float:left;
+    display:inline;
+    height:26px;
+    width:3px;
+    overflow:hidden;
+    vertical-align:top;
+}
+
+
+/************************ OTROS ENLACES DE LA CABECERA DE TITULARES ************************/
+
+.contOtrosEnlacesTitulares
+{
+	margin-left:10px;
+	margin-top:3px;
+	float:left;
+	font-family:Arial;
+	font-size:10px;
+	color:#004B8E;
+	text-transform:uppercase;
+}
+
+.enlaceTitular
+{
+	margin-left:18px;
+	float:left;
+}
+
+.pictoEnlaceTitular
+{
+	float:left;
+}
+
+.textoEnlaceTitular
+{
+	margin-left:8px;
+	margin-top:14px;
+	float:left;
+}
+
+.textoEnlaceTitular a,.textoEnlaceTitular a:hover
+{
+	color:#004B8E;
+}
+
+/************** PIEZA DEPORTES ****************/
+.CPiezaGenteXornal
+ {
+	width:295px;
+    height:315px;
+	background-color:#E4DDC9;
+	display:inline;
+	float:left;
+	position:relative;
+}
+
+/* -- Nueva versión 21-07-2009*/
+.CPiezaGenteXornalNew
+ {
+        background-color:#D9E3ED;
+        display:inline;
+        float:left;
+        height:390px;
+        position:relative;
+        width:295px;
+}
+/* -- Fin nueva versión 21-07-2009*/

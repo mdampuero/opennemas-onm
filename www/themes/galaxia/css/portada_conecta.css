@@ -1,0 +1,408 @@
+.CContainerLogoPortadaConecta
+{
+    width:200px;
+    height:58px;
+    position:relative;
+    display:inline;
+    float:left;
+    overflow:hidden;
+    vertical-align:top;
+    background-image:url('../images/planConecta/portada/logoPlanConectaPortada.gif');
+    background-repeat:no-repeat;
+}
+
+.CContainerPestanyasConectaPC
+{   
+    margin-left:6px;
+    width:550px;
+    float:left;
+    display:inline;
+    position:relative;
+    overflow:hidden;    
+    vertical-align:top;
+    background-image:url('../images/pestanyas/pestanyasListados/contPestanyasList.gif');   
+}
+
+.CContainerLogoConectaYPestanyasPortadaPC
+ {
+    float:left;
+    height:62px;
+    width:760px;
+}
+
+.espacioInterPestanyasGrande_Conecta
+{
+    float:left;
+    display:inline;
+    height:20px;
+    width:20px;
+}
+
+.zonaClasificacionContenidosPortadaPC
+{
+    float:left;
+    display:inline;
+    position:relative;
+}
+
+.listadoEnlacesPlanConecta
+{
+    float:left;
+    display:inline;
+    position:relative;
+}
+.titleContent{
+    color:#004B8D;
+    font-family:Arial;
+    font-size:18px;
+    font-weight:700;
+    margin-left:12px;
+    margin-top:12px;
+    clear:both;
+    float:none;
+}
+.separadorContents{
+    background-color:green;
+    float:left;
+    height:2px;
+    margin:12px;
+    margin-top:2px;
+    overflow:hidden;
+    width:800px;
+}
+.filaPortadaPC
+{
+    width:752px;
+    height:100px;
+    margin-top:12px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    margin:12px;
+}
+
+.contentListado{
+    color:#004B8D;
+    font-family:Verdana;
+    font-size:11px;
+    font-weight:700;
+    display:inline;
+    float:left;
+    margin-left:10px;
+    overflow:hidden;
+    padding-left:10px;
+    position:relative;
+}
+.elementoListadoMediaPagPortadaPC
+{
+    width:363px;
+    height:100px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+}
+
+.fotoElemPC 
+{
+    width:150px;
+    height:100px;
+    overflow:hidden;
+    position:relative;
+    display:inline;
+    float:left;
+    background-color:#7FCAEE;
+}
+
+.contSeccionFechaListadoPortadaPC
+ {
+    margin-top:5px;
+    margin-left:14px;
+    width:198px;
+    overflow:hidden;
+    position:relative;
+    display:inline;
+    float:left;
+    color:#004B8D;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:700;
+}
+.contSeccionFechaListado2PortadaPC
+ {
+    margin-top:5px;
+    margin-left:5px;
+    width:300px;
+    overflow:hidden;
+    position:relative;
+    display:inline;
+    float:left;
+    color:#004B8D;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:700;
+}
+
+
+.contTextoElemMediaListadoPortadaPC 
+{
+    width:212px;
+    height:65px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    background-image:url('../images/galeriaVideos/backgroundElementoLista.gif');
+    background-repeat:no-repeat;
+}
+.contTextoElemMediaListado2PortadaPC 
+{
+    width:352px;
+    height:69px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    background-image:url('../images/planConecta/portada/backgroundElemXornal.gif');
+    background-repeat:no-repeat;
+}
+
+.flechitaTextoPC
+{
+    margin-top:5px;
+    margin-right:3px;
+    width:5px;
+    height:8px;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.textoElemMediaListadoPortadaPC
+{
+    margin-left:10px;
+    margin-top:5px;
+    width:200px;
+    height:56px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    color:#666666;
+    font-family:Arial;
+    font-size:14px;
+    line-height:18px;
+    font-weight:700;
+}
+
+.textoElemMediaListado2PortadaPC
+{
+    margin-left:104px;
+    margin-top:15px;
+    width:200px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    color:#666666;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:700;
+}
+
+.textoElemMediaListadoPortadaPC a,.textoElemMediaListado2PortadaPC a
+{
+    color:#666666;
+    font-family:Arial;
+    font-size:16px;
+    font-weight:700;
+    text-decoration:none;
+}
+
+.textoElemMediaListadoPortadaPC a:hover,.textoElemMediaListado2PortadaPC a:hover
+{
+    text-decoration:underline;
+    color:#666666;
+}
+
+.fileteVerticalIntraMedia
+{
+    margin-left:12px;
+    margin-right:12px;
+    width:1px;
+    height:100px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    background-image:url('../images/planConecta/portada/fileteVerticalPC.gif');
+    background-repeat:no-repeat;
+}
+
+.fileteHorizontalPC
+{
+    width:734px;
+    height:1px;
+    display:inline;
+    float:left;
+    position:relative;
+    overflow:hidden;
+    background-image:url('../images/planConecta/portada/fileteHorizontalPC.gif');
+    background-repeat:no-repeat;
+}
+
+.zonaFAQ
+{
+    width:734px;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.textoConectaXornal
+{
+    margin-top:20px;
+    margin-left:60px;
+    /*width:680px;*/
+    font-family:Arial;
+    font-size:20px;
+    font-weight:700;
+    text-decoration:none;
+    color:#004b8d;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.textoFAQ
+{
+    margin-top:18px;
+    margin-left:60px;
+    width:680px;
+    font-family:Arial;
+    font-size:12px;
+    text-decoration:none;
+    font-weight:700;
+    color:#404040;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.textoFAQ a,.textoFAQ a:hover
+{
+    color:#404040;
+}
+
+.texto2FAQ
+{
+    /*margin-top:18px;*/
+    margin-left:60px;
+    width:680px;
+    /*font-family:Arial;
+    font-size:12px;
+    text-decoration:none;
+    font-weight:700;
+    color:#404040;*/
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.texto2FAQ a, .texto2FAQ a:hover{
+	color:#004B8E;
+}
+
+/*pre {
+color:#000000;
+font-family:Arial;
+font-size:14px;
+}*/
+
+.texto2FAQ ul li {
+	margin-top:20px;
+	margin-left:30px;	
+	list-style-type:none;
+}
+/*.CDestacado {
+	color:#004B8E;
+	display:block;
+	font-weight:700;
+}
+
+.CDestacado img {
+	margin-right:3px;
+}*/
+
+
+/*.enlacesZonaFAQ
+{
+	margin-top:48px;
+	margin-left:60px;
+	width:680px;
+	
+	display:inline;
+	float:left;
+	position:relative;	
+}*/
+
+.enlacesZonaFAQ
+{
+    margin-top:40px;
+    margin-left:60px;
+    width:680px;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.enlaces2ZonaFAQ
+{
+    margin-top:5px;
+    margin-bottom:10px;
+    margin-left:60px;
+    width:680px;
+    display:inline;
+    float:left;
+    position:relative;
+}
+
+.menuZonaFAQ 
+{
+    margin-top:10px;
+    width:680px;
+    color:#004b8d;
+    display:inline;
+    float:left;
+    position:relative;
+    font-family:Arial;
+    font-size:11px;
+}
+
+.menuZonaFAQ a,.menuZonaFAQ a:hover
+{
+    color:#004B8E;
+}
+
+.textoPestanyaSelecListPC
+{
+    color:#004B8E;
+}
+.textoPestanyaNoSelecListPC 
+{
+    color:#666666;
+    cursor:pointer;
+}
+
+.textoPestanyaSelecListPC, .textoPestanyaNoSelecListPC 
+{
+    font-family:Arial;
+    font-size:14px;
+    font-weight:700;
+    text-transform:uppercase;
+    display:inline;
+    float:left;
+    padding-right:10px;
+    position:relative;
+}

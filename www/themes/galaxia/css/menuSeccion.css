@@ -1,0 +1,220 @@
+/********************************* MENU ***********************************/
+.menuCabeceraTexto
+{
+	width:976px;
+	height:22px;
+	position:relative;
+	display:inline;
+	float:left;
+	overflow:hidden;
+}
+
+.opcion
+{
+	position:relative;
+	display:inline;
+	float:left;
+    font-family:Arial;
+    font-size:11px;
+    color:#004b8e;
+	font-weight:700;
+}
+
+.opcion a
+{
+    color:#004b8e;
+    text-decoration:none;
+}
+
+.opcion a:hover
+{
+    color:#888889;
+ 	text-decoration:none;
+}
+
+.menuCabeceraTexto ul li.menuselec a
+{
+	font-family:Arial;
+    font-size:12px;
+	font-weight:700;
+ 	text-decoration:none;
+    color:#82bef8;
+}
+/***************** FIN CABECERA *********************/
+.CSeparadorMenu
+{
+	margin-top:3px;
+	width:1px;
+	height:14px;
+	position:relative;
+	display:inline;
+	float:left;
+	overflow:hidden;
+}
+
+.menuCabeceraTexto ul
+{
+	list-style-type: none;
+	height:24px;
+	position:relative;
+	float:left;
+}
+
+.menuCabeceraTexto ul li
+{
+	margin-left:0px;
+	height:23px;
+	position:relative;
+	float:left;
+	display:inline;
+	overflow:hidden;
+}
+
+.menuCabeceraTexto ul li a
+{
+	padding-top:1px;
+	padding-left:13px;
+	padding-right:13px;
+	position:relative;
+	display:inline;
+	float:left;
+}
+
+.menuCabeceraTexto ul li a:hover
+{
+	padding-top:1px;
+	padding-left:4px;
+	padding-right:4px;
+	position:relative;
+	display:inline;
+	float:left;
+    height:22px;
+}
+
+.menuCabeceraTexto ul li.menuselec
+{
+	position:relative;
+	display:inline;
+	float:left;
+	background:url('../images/menu/seleccion.gif') repeat-x 0 -2px;
+	color:#fff;
+}
+
+p
+{
+	margin-top:6px;
+	margin-bottom:6px;
+}
+
+/*MENU CABECERA TEXTO*/
+
+.menuCabeceraTexto
+{
+	font-family:Arial;
+	color:#004b8e;
+	background:url('../images/menu/opcion.gif') repeat-x 0 -2px;
+}
+
+.menuCabeceraTexto ul li
+{
+}
+
+.menuCabeceraTexto ul li a{
+	color:#fff;
+}
+
+.menuCabeceraTexto ul li a:hover
+{
+	background:url('../images/menu/hover.gif') repeat-x 0 -2px;
+	color:#fff;
+	padding-left:13px;
+	padding-right:13px;
+}
+
+/*FIN MENU CABECERA TEXTO*/
+
+.CSeparadorMenu
+{
+	background-color:#004b8e;
+}
+
+/********************************* FIN MENU *******************************/
+
+/* MENU BAJO BANNER */
+.menuCabeceraSecundario
+{
+	width:370px;
+	height:16px;
+	position:relative;
+	display:inline;
+	float:right;
+}
+
+
+.menuCabeceraSecundario ul
+{
+	list-style-type: none;
+	height:25px;
+	position:relative;
+	float:left;
+}
+
+.menuCabeceraSecundario ul li
+{
+	height:18px;
+	margin-left:10px;
+	position:relative;
+	float:left;
+	display:inline;
+	font-size:12px;
+	overflow:hidden;
+}
+
+.CSeparadorMenuFlecha
+{
+	margin-top:5px;
+	margin-right:3px;
+	width:4px;
+	height:10px;
+	position:relative;
+	float:left;
+	display:inline;
+	background-image:url('../images/fotoVideoDia/flechitaAzul.gif');
+	background-repeat:no-repeat;
+}
+
+.menuCabeceraSecundario ul li a
+{
+	font-weight:700;
+ 	text-decoration:none;
+ 	color:#004B8E;
+}
+
+
+.menuCabeceraSecundario ul li a:hover
+{
+ 	text-decoration:underline;
+    color:#808080;
+}
+
+/* 2-10 ESTO ES SOLO PARA SECCION */
+.zonaBusquedaBarraHoraSec
+{
+	width: 412px;
+}
+.zonaHoraBusquedaSec
+{
+	background-color:#004b8d;
+	color:#fff;
+	font-weight:700;
+}
+
+.elemMenuBarraFechaSec a,.elemMenuBarraFechaSec a:hover
+{
+	color:#fff;
+}
+
+.separadorElemMenuBarraFechaSec
+{
+	background-color:#bfd2e3;
+}
