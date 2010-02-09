@@ -1,0 +1,218 @@
+/* Estilos genéricos */
+body {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	background-color: #FFFFFF;
+}
+
+h2 {
+	vertical-align:bottom;
+}
+
+td, th {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+select.lista {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	width: 150px;
+	overflow: auto;
+	border:1px solid #637F63;
+}
+
+select.destino {
+	font-size:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	width: 90px;
+	border:1px solid #637F63;
+}
+
+select.ubicacion {
+	font-size:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	width: 175px;
+	overflow: auto;
+	border:1px solid #637F63;
+}
+
+
+a {
+	text-decoration:underline;
+	font-size:12px;
+	color:#333333;
+}
+
+a:hover {
+	text-decoration:none;
+	font-size:12px;
+	color:#000000;
+}
+
+div a {
+	text-decoration:none;
+	font-size:11px;
+	color:#333333;
+}
+
+div a:hover {
+	text-decoration:none;
+	font-size:11px;
+	color:#333333;
+}
+
+input[type='text'] {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	border:1px solid #CCCCCC;
+}
+
+input[type='password'] {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	border:1px solid #CCCCCC;
+}
+
+
+textarea {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	border:1px solid #CCCCCC;
+}
+
+fieldset {
+	border:1px solid #637F63;
+	padding: 2px;
+}
+
+legend {
+	font-weight:bold;
+}
+
+label {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	color: #425542;
+	padding: 1px 3px 1px 0px;
+}
+
+/* Evita que los formularios sean bloques ocupando espacio */
+form {
+	padding: 0px;
+	margin: 0px;
+	display: inline;
+}
+
+/* Estilos personalizados */
+/* header block */
+table.adminheading {
+	background-color: #FFF;
+	font-family : Arial, Helvetica, sans-serif;
+	border: 0px;
+	width: 100%;
+	text-align: left;
+	height: 30px;
+	width: 100%;
+	padding-left: 30px;
+	font-size: 28px;
+	border-bottom: 2px solid #000;
+}
+
+table.adminlist {
+	background-color: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+	border: 1px solid #ddd;
+	border-spacing: 0px;
+	width: 100%;
+	border-collapse: collapse;
+
+}
+
+table.adminlist th {
+	margin: 0px;
+	padding: 6px 4px 2px 4px;
+	height: 25px;
+	background-repeat: repeat;
+	font-size: 11px;
+	color: #000;
+}
+
+table.adminlist tr.row0 {
+	background-color: #f5f5f5;
+}
+table.adminlist tr.row1 {
+	background-color: #FFF;
+}
+table.adminlist tr.row2 {
+	background-color: #FFF;
+	border-bottom: 1px;
+	text-align: right;
+}
+table.adminlist tr.row0:hover {
+	background-color: #EEEEEE;
+}
+table.adminlist tr.row1:hover {
+	background-color: #EEEEEE;
+}
+
+td.barra_superior {
+	color:#EAEAEA;
+	width:100%;
+	height:50px;
+	background-image:url(/admin/images/header_middle.png);
+	text-align:left; 
+	font-size:14px;
+	font-weight:bold;
+}
+
+td.barra_tareas {
+	background-image:url(../images/barra_vrd.gif);
+	height:25px;
+	max-height:25px;
+	border:1px solid #CACACA;
+	vertical-align:middle;
+}
+
+.ayuda {
+	border:1px solid #637F63;
+	padding: 2px;
+	color:#425542;
+	background-color:#EAEAEA;
+	text-align:justify;
+	font-size:11px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+
+.info {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	color: #425542;
+}
+
+.campo {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	border:1px solid #CCCCCC;
+}
+
+.boton {
+	color: #666;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	font-family: Helvetica, sans-serif;
+}
+
+ul.enlace_rel {
+	font-size:10px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	list-style-type:square;
+}
+
+.class_preview_img {
+
+}

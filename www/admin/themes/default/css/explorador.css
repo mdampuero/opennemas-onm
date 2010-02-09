@@ -1,0 +1,160 @@
+body {
+	font-family: 'trebuchet ms', Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+    margin: 4px;
+	padding: 0;
+	text-align: center;
+	background-color: #D2D1B3;
+}
+
+table {
+	background-color: #fff;
+}
+
+label {
+	font-size: 10px;
+	font-weight: normal;
+	font-family: 'trebuchet ms', Verdana, Arial, Helvetica, sans-serif;
+}
+
+h2.path {
+	font-size: 10px;
+	font-family: 'trebuchet ms', Verdana, Arial, Helvetica, sans-serif;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	padding: 2px;
+}
+
+.campo {
+	border: 1px solid #ccc;
+	background-color: #fef;
+}
+
+.boton {
+	border-top: 1px solid #999;
+	border-left: 1px solid #999;
+	border-bottom: 1px solid #666;
+	border-right: 1px solid #666;
+	background-color: #ccc;
+	color: #333;
+	cursor: pointer;
+}
+
+#DialogExplorer {
+    width: 420px;
+    overflow: hidden;
+}
+
+#files {
+    float: left;
+    position: relative;
+}
+
+#preview {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #999;
+    margin-left: 4px;
+    text-align: center;
+    vertical-align: middle;
+    float:right;
+
+    background-color: #fef;
+    background-image: url(../images/fondo_preview.gif);
+    background-repeat: no-repeat;
+}
+
+#acciones {
+    text-align: right;
+}
+
+.clearer {
+    clear: both;
+}
+
+/* SWFUpload CSS */
+#filesDisplay {
+	background: #f9f9f9;
+	border: 1px solid #999;
+	padding: 20px;
+	display: none;
+
+	position: absolute;
+	text-align: center;
+
+	top: 0;
+	left: 0;
+}
+
+#SWFUpload {
+	margin: 0px;
+	float: left;
+}
+
+#mmUploadFileListing {
+	margin: 0;
+	padding: 0;
+}
+
+#mmUploadFileListing li {
+	margin: 0 0 10px 0;
+	display: block;
+	float: left;
+	width: 150px;
+	list-style-type: none;
+	font-size: 11px;
+}
+
+.uploading { color: #CCC; }
+.uploadDone { color: #000; }
+
+span.progressBar {
+	width: 100px;
+	background: #000;
+	display: block;
+	font-size: 10px;
+	height: 4px;
+	margin-top: 4px;
+}
+
+
+/*
+#filesDisplay {
+	padding-left: 4px;
+	margin: 0;
+	background: #f9f9f9;
+	border: 1px solid #f3f3f3;
+	float:left;
+	display: none;
+}
+
+#SWFUpload {
+	margin-left: 0px;
+	float:left;
+}
+
+#mmUploadFileListing {
+	margin: 0;
+	padding: 0;
+}
+
+#mmUploadFileListing li {
+	margin: 0 0 10px 0;
+	display: block;
+	float: right;
+	width: 150px;
+	list-style-type: none;
+	font-size: 11px;
+}
+
+.uploading { color: #CCC; }
+.uploadDone { color: #000; }
+
+span.progressBar {
+	width: 100px;
+	background: #000;
+	display: block;
+	font-size: 8px;
+	height: 4px;
+	margin-top: 2px;
+} */
