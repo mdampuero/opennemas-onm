@@ -1,0 +1,153 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule  ^(.+).php3 $1.php
+
+    #Articles artigo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
+    #Articles artigo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ article.php?year=$1&month=$2&day=$3&article_id=$7&action=read [L,NC]
+
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ article.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&article_title=$6&article_id=$7&action=read [L,NC]
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    #RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ article.php?category_name=$4&subcategory_name=$5&article_id=$7&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+
+    # Impresión opinion
+    RewriteRule ^imprimir/[^/]+/([0-9]+).html$ opinion.php?action=print&opinion_id=$1 [L,NC]
+
+    #Listados autores de Opinion
+    RewriteRule ^opinions/listado_xornalistas/([0-9]+)/(.*).html$ opinion_index.php?category_name=opinion&action=list_authors&page=$1 [L,NC]
+    RewriteRule ^opinions/opinions_do_autor/([0-9]+)/(.*)/([0-9]+).html$ opinion_index.php?category_name=opinion&action=authors&author_id=$1&page=$3 [L,NC]
+    RewriteRule ^opinions/opinions_do_autor/([0-9]+)/(.*)/([0-9]+)/$ opinion_index.php?category_name=opinion&action=authors&author_id=$1&page=$3 [L,NC]
+    RewriteRule ^opinions/opinions_do_autor/([0-9]+)/(.*).html$ opinion_index.php?category_name=opinion&action=authors&author_id=$1 [L,NC]
+    RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
+    #Leer una opinion
+    RewriteRule ^seccion/opinions/(.*)/([0-9]+).html$ opinion.php?category_name=opinion&opinion_id=$2&action=read&t=$1 [L,NC]
+    RewriteRule ^opinions/captcha/([0-9]+).jpg$ opinion.php?action=captcha&category_name=opinion [L,NC]
+    RewriteRule ^opinions/(.*)/([0-9]+).html$ opinion.php?opinion_id=$2&category_name=opinion&action=read&t=$1 [L,NC]
+
+    # Impresión artigos
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ article.php?action=print&article_id=$2&category_name=$1 [L,NC]
+
+
+    # HOME
+    RewriteRule ^home/?$ index.php?category_name=home [L,NC]
+
+    # OPINION
+    RewriteRule ^seccion/opinion/([0-9]+)/$ opinion_index.php?category_name=opinion&action=read&pageop=$1 [L,NC]
+    RewriteRule ^seccion/opinion/?$ opinion_index.php?category_name=opinion&action=read$1 [L,NC]
+
+    # SECCIONES
+    RewriteRule ^seccion/([a-z0-9\-]+)/?$ index.php?category_name=$1 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ index.php?category_name=$1&page=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ index.php?category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
+
+    # RSS
+    RewriteRule ^rss/opinion/([0-9]+)/?$ article.php?category_name=opinion&author=$1&action=rss [L,NC]
+    RewriteRule ^rss/([a-z0-9-]+)/([a-z0-9-]+)/?$ article.php?category_name=$1&subcategory_name=$2&action=rss [L,NC]
+    RewriteRule ^rss/([a-z0-9-]+)/?$ article.php?category_name=$1&action=rss [L,NC]
+    RewriteRule ^rss/?$ article.php?action=rss [L,NC]
+
+    # SITEMAP
+    RewriteRule ^sitemapnews.xml?$ sitemap.php?action=news [L,NC]
+    RewriteRule ^sitemapweb.xml?$ sitemap.php?action=web [L,NC]
+    RewriteRule ^sitemap.xml?$ sitemap.php [L,NC]
+
+    # ADVERTISEMENT
+    RewriteRule ^publicidade/([0-9]+).html$ advertisement.php?action=show&publi_id=$1 [L,NC]
+
+    #Album
+    #/album/2008/12/08/foto/200812081741363340.html
+    RewriteRule ^album/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ gallery.php?action=$4&id_album=$5 [L,NC]
+
+    #Video
+    #/video/0/2008/12/08/200812081741363340.html
+    RewriteRule ^video/?$ gallery.php?action=video [L,NC]
+    RewriteRule ^video/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+).html$ gallery.php?action=video&id=$4 [L,NC]
+
+    # FICHEIROS
+    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$4/$5.$6 [L,NC]
+    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$4/$5.$6 [L,NC]
+
+    # HEMEROTECA
+    RewriteRule ^arquivo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ hemeroteca.php?year=$1&month=$2&day=$3&category_name=$4&efecha=$5 [L,NC]
+    RewriteRule ^arquivo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/([0-9]+).html$ hemeroteca.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&efecha=$6 [L,NC]
+
+    #Search
+    RewriteRule ^procura/google/(.*)$ search.php?stringSearch=$1&googleSearch=on [L,NC]
+    RewriteRule ^procura/(.*)$ search.php?stringSearch=$1&xornalSearch=on [L,NC]
+
+    #Conecta
+    RewriteRule ^conecta/$ planconecta.php?category_name=conecta&category_name=conecta&action=list [L,NC]
+    #RewriteRule ^conecta/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1 [L,NC]
+    # RewriteRule ^conecta/foto[\-]dia/$ planconecta.php?category_name=conecta&action=foto-dia [L,NC]
+    # RewriteRule ^conecta/foto[\-]dia/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=foto-dia [L,NC]
+    # RewriteRule ^conecta/foto[\-]denuncia/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=foto-denuncia [L,NC]
+    # RewriteRule ^conecta/foto[\-]denuncia/$ planconecta.php?category_name=conecta&action=foto-denuncia [L,NC]
+    # RewriteRule ^conecta/video[\-]dia/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=$1&action=video-dia [L,NC]
+    # RewriteRule ^conecta/video[\-]dia/$ planconecta.php?category_name=conecta&action=video-dia [L,NC]
+    # RewriteRule ^conecta/video[\-]denuncia/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=$1&action=video-denuncia [L,NC]
+    # RewriteRule ^conecta/video[\-]denuncia/$ planconecta.php?category_name=conecta&action=video-denuncia [L,NC]
+    # RewriteRule ^conecta/cartas[\-]director/$ planconecta.php?category_name=conecta&action=letter [L,NC]
+    # RewriteRule ^conecta/carta/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=letter [L,NC]
+    # RewriteRule ^conecta/opinion[\-]lector/$ planconecta.php?category_name=conecta&action=opinion [L,NC]
+    # RewriteRule ^conecta/opinion/([0-9]+).html$ planconecta.php?category_name=conecta&id=$1&action=opinion [L,NC]
+ 
+    RewriteRule ^conecta/rexistro/([a-z]+)/([a-z]+)/(([0-9]|[a-f])+).html$ planconecta.php?category_name=conecta&action=$1&user=$2&md5code=$3 [L,NC]
+    RewriteRule ^conecta/rexistro/$ planconecta.php?category_name=conecta&action=signin [L,NC]
+    RewriteRule ^conecta/faq/$ planconecta.php?category_name=conecta&action=faq [L,NC]
+    RewriteRule ^conecta/login/$ planconecta.php?category_name=conecta&action=login [L,NC]
+    RewriteRule ^conecta/login/([a-z0-9]+)/$ planconecta.php?category_name=conecta&action=login&redirect=$1 [L,NC]
+    RewriteRule ^conecta/enquisa/$ planconecta.php?category_name=conecta&action=polls [L,NC]
+    RewriteRule ^conecta/enquisa/([0-9]+).html$ planconecta.php?category_name=conecta&action=polls&id=$1 [L,NC]    
+    RewriteRule ^conecta/envio/$ planconecta.php?category_name=conecta&action=send [L,NC]
+    
+    #RewriteRule ^conecta/logout/$ planconecta.php?category_name=conecta&action=logout [L,NC]
+    #RewriteRule ^conecta/perfil/$ planconecta.php?category_name=conecta&action=perfil [L,NC]
+    #RewriteRule ^conecta/olvido/$ planconecta.php?category_name=conecta&action=olvido [L,NC]
+    #RewriteRule ^conecta/cambio/$ planconecta.php?category_name=conecta&action=cambio [L,NC]
+
+    RewriteRule ^conecta/fotografias/([a-z0-9\-]+)/([0-9]+).html$ planconecta.php?category_name=conecta&action=fotografias&name=$1&id=$2 [L,NC]
+    RewriteRule ^conecta/videos/([a-z0-9\-]+)/([0-9]+).html$ planconecta.php?category_name=conecta&action=videos&name=$1&id=$2 [L,NC]
+    RewriteRule ^conecta/opiniones/([a-z0-9\-]+)/([0-9]+).html$ planconecta.php?category_name=conecta&action=opiniones&name=$1&id=$2 [L,NC]
+    RewriteRule ^conecta/cartas/([a-z0-9\-]+)/([0-9]+).html$ planconecta.php?category_name=conecta&action=cartas&name=$1&id=$2 [L,NC]
+    RewriteRule ^conecta/enquisas/enquisa/$ planconecta.php?category_name=conecta&action=polls [L,NC]
+   
+    RewriteRule ^conecta/fotografias/([a-z0-9\-]+)/$ planconecta.php?category_name=conecta&action=fotografias&name=$1 [L,NC]
+    RewriteRule ^conecta/videos/([a-z0-9\-]+)/$ planconecta.php?category_name=conecta&action=videos&name=$1 [L,NC]
+    RewriteRule ^conecta/opiniones/([a-z0-9\-]+)/$ planconecta.php?category_name=conecta&action=opiniones&name=$1 [L,NC]
+    RewriteRule ^conecta/cartas/([a-z0-9\-]+)/$ planconecta.php?category_name=conecta&action=cartas&name=$1 [L,NC]
+    RewriteRule ^conecta/([a-z0-9]+)/$ planconecta.php?category_name=conecta&action=$1 [L,NC]
+
+
+    # POLLS
+    RewriteRule ^conecta/enquisa/([hvp])([0-9]+).png$ poll_graph.php?id=$2&type=$1 [L,NC]
+
+    # STATICS PAGES
+    RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ statics.php?slug=$1 [L,NC]
+
+    # WEATHER
+    RewriteRule ^tempo/?$ playas.php [L,NC]
+    RewriteRule ^tempo/([a-z]+)\.html$ weather.php?l=$1 [L,NC]
+
+    #Portadas
+    RewriteRule ^portadas$ kiosko.php [L,NC]
+    RewriteRule ^portadas/$ kiosko.php [L,NC]
+    RewriteRule ^portadas/([0-9]{4})/([0-9]{1,2})$ kiosko.php?year=$1&month=$2 [L,NC]
+    
+    #Default Rules
+    #RewriteCond %{REQUEST_URI} !^/index.php
+    RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
+
+    ErrorDocument 404 /404.html
+</IfModule>
