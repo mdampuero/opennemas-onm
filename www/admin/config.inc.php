@@ -71,7 +71,7 @@ define ('SITE_URL_ADMIN', $protocol.SITE.'/admin/');
 
 define ('SITE_LIBS_PATH', SITE_PATH.SS."libs".SS);
 define ('SITE_PATH_WEB', "/");
-define ('SITE_TITLE', "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+define ('SITE_TITLE', "OpenNemas - Sistema de xestión de contido");
 define ('SITE_DESCRIPTION', "Noticias de Ultima hora sobre la actualidad xxxxxxx, nacional, economia, deportes, cultura, sociedad. Adema vieos, fotos, graicos, entrevistas y encuestas de opinio. xxxxxxxxxx.com, xxxxxxxxxxxxxxx.");
 define ('SITE_KEYWORDS', "xxxxxxxxxxxx, xxxxxxxxxxxxxxxxx.com, XXXXXXXXXXXXXXXXXXXXX, diario, periodico, prensa, press, daily, newspaper, noticias, news, breaking news, Galicia, Spain, Espana, internacional, titulares, headlines, urgente, albumes, videos, sociedad, cultura, extras, suplementos, opinion, ultimas noticias, deportes, deportivo, celta, sport, encuestas, gente, politica, tendencias, tiempo, weather, buscador, especiales");
 
@@ -173,4 +173,5 @@ define ('MAIL_PASS', "");
 
 }
 
-
+/* [ASSSET SERVERS] *********************************************************  */
+define('ASSET_HOST','assets%02d.opennemas.com');
