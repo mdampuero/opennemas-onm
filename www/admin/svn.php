@@ -83,8 +83,8 @@ if(isset($_REQUEST['action']) ) {
 } else {
         $username = $_SESSION['username'];
         $password = "XXXXXXXXX";
-        $repository = "http://svn.openhost.es/xornal/trunk/www";
-        $destination = "/home/webdev-xornal/public_html";
+        $repository = "http://svn.openhost.es/opennemasdemo/trunk/www";
+        $destination = "/home/opennemas/demo";
         $checkout = "svn info --username $username --password $password $repository";
 
         exec($checkout, $return);
