@@ -28,7 +28,7 @@
 {* LISTADO *********************************************************************** *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 
-<ul class="tabs2" style="margin-bottom: 27px;">
+<ul class="tabs2" style="margin-bottom: 28px;">
     <li>
     <a href="advertisement.php?action=list&category=0" {if $category==0 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
     </li>
