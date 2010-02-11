@@ -28,21 +28,19 @@
 {* LISTADO *********************************************************************** *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 
-<table border=0 cellpadding=0 cellspacing=0><tr><td valign='top' align='right'>
-<ul class="tabs">
-<li>
-	<a href="advertisement.php?action=list&category=0" {if $category==0 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
-	</li>
-	<li>
-	<a href="advertisement.php?action=list&category=4" {if $category==4 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-	</li>
-		<li>
-	<a href="advertisement.php?action=list&category=9" {if $category==9 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>CONECTA</font></a>
-	</li>
+<ul class="tabs2" style="margin-bottom: 27px;">
+    <li>
+    <a href="advertisement.php?action=list&category=0" {if $category==0 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
+    </li>
+    <li>
+    <a href="advertisement.php?action=list&category=4" {if $category==4 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
+    </li>
+    {*<li>
+    <a href="advertisement.php?action=list&category=9" {if $category==9 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>CONECTA</font></a>
+    </li>*}
+    {include file="menu_categorys.tpl" home="advertisement.php?action=list"}
 </ul>
-</td><td>
-{include file="menu_categorys.tpl" home="advertisement.php?action=list"}
-</td></tr></table>
+<br style="clear: both;" />
 
 <div id="{$category}">
 
