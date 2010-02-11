@@ -2,22 +2,17 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tr><td valign="top" align="right" width="60">
-            <ul class="tabs">
-            <li>
-                <a href="article.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</a>
-                </li>
-            </ul>
-        </td><td width="100%">
-            {include file="menu_categorys.tpl" home="article.php?action=list"}
-        </td></tr>
-    </table>
+    <ul class="tabs2" style="margin-bottom: 28px;">
+        <li>
+            <a href="article.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</a>
+        </li>
+        {include file="menu_categorys.tpl" home="article.php?action=list"}
+    </ul>
 
     {* Archivo respuesta cabecera ajax guarda posicion*}
     {* include_php file="cambiapos.php" *}
-    <br />
-    <br />
+    <br style="clear: both;" />
+    
     {include file="botonera_up.tpl"}
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}
     {if $smarty.get.alert eq 'ok'}       

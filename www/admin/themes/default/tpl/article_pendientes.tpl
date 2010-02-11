@@ -1,25 +1,22 @@
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list_pendientes"}
+    <ul class="tabs2" style="margin-bottom: 28px;">
+        <li>
+            <a href="article.php?action=list_pendientes&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
+        </li>
+        <li>
+            <a href="article.php?action=list_pendientes&category=opinion" {if $category=='opinion' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
+        </li>
+        <li>
+            <a href="article.php?action=list_pendientes&category=20" {if $category=='20' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
+        </li>
 
-    <table border=0 cellpadding=0 cellspacing=0>
-        <tr><td valign='top' align='right' style="width:224px;" nowrap  >
-            <ul class="tabs">              
-                <li>
-                    <a href="article.php?action=list_pendientes&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
-                </li>
-                <li>
-                    <a href="article.php?action=list_pendientes&category=opinion" {if $category=='opinion' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-                </li>
-                <li>
-                    <a href="article.php?action=list_pendientes&category=20" {if $category=='20' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
-                </li>
-            </ul>
-         </td><td>
-            {include file="menu_categorys.tpl" home="article.php?action=list_pendientes"}
-        </td></tr>
-    </table>
-    <br /><br />
+        {include file="menu_categorys.tpl" home="article.php?action=list_pendientes"}
+    </ul>
+
+    <br style="clear: both;" />
+
     {if $smarty.get.alert eq 'ok'}
         <script type="text/javascript" language="javascript">
             {literal}

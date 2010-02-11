@@ -1,15 +1,14 @@
 
-<table border=0 cellpadding=0 cellspacing=0>
-<tr><td valign='top' align='right'>
-	<ul class="tabs">
-            <li>
-		<a href="article.php?action=list_hemeroteca&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
-            </li>
-	</ul>
-</td><td>
-	{include file="menu_categorys.tpl" home="article.php?action=list_hemeroteca"}
-</td></tr></table>
-<br><br>
+<ul class="tabs2" style="margin-bottom: 28px;">
+
+    <li>
+        <a href="article.php?action=list_hemeroteca&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
+    </li>
+
+    {include file="menu_categorys.tpl" home="article.php?action=list_hemeroteca"}
+</ul>
+
+<br style="clear: both;" />
  {if $smarty.get.alert eq 'ok'}
 
      <script type="text/javascript" language="javascript">
