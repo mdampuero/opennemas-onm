@@ -22,7 +22,7 @@
         {/acl}
         {* /if *}        
     {/section}
-    {section name=as loop=$allcategorys} 
+    {section name=as loop=$allcategorys}
         {section name=su loop=$subcat[as]}
             {* if $smarty.session.isAdmin || is_array($smarty.session.accesscategories) && in_array($allcategorys[as]->pk_content_category, $smarty.session.accesscategories) *}
             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
