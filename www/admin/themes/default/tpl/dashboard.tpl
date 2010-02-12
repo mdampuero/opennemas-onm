@@ -2,17 +2,13 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "index"}
     {* ZONA MENU CATEGORIAS ******* *}
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tr><td valign="top" align="right" width="60">
-            <ul class="tabs">
-            <li>
-                <a href="dashboard.php?action=index&category=0" {if $category==0 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
-                </li>
-            </ul>
-        </td><td width="100%">
-            {include file="menu_categorys.tpl" home="dashboard.php?action=index"}
-        </td></tr>
-    </table>
+    <ul class="tabs2" style="margin-bottom: 28px;">
+        <li>
+            <a href="dashboard.php?action=index&category=0" {if $category==0 } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
+        </li>
+        {include file="menu_categorys.tpl" home="dashboard.php?action=index"}
+    </ul>
+    <br style="clear: both;" />
 
     {literal}
         <div id="dashboard_enlaces">
