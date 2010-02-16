@@ -65,8 +65,5 @@
   <div style="margin:0 auto; color:#666; font-size:.9em; text-align:center; width:300px;">
 	Un produto de <a href="http://www.openhost.es" title="OpenHost S.L.">OpenHost S.L.</a><br/>&copy; Todos os dereitos reservados
   </div>
-  {*<div style="float: right; padding-left: 50px; padding-right: 100px; margin-top: -50px;">
-      <img src="{$params.IMAGE_DIR}opennemas-logo.jpg"/>
-  </div>*}
 </body>
 </html>
