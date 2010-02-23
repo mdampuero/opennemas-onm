@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.18, created on 2010-01-26 16:50:13
+<?php /* Smarty version 2.6.18, created on 2010-02-15 17:06:23
          compiled from index_column2.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('function', 'renderitems', 'index_column2.tpl', 4, false),array('function', 'renderplaceholder', 'index_column2.tpl', 7, false),array('insert', 'renderbanner', 'index_column2.tpl', 24, false),)), $this); ?>
