@@ -631,10 +631,10 @@ class Content {
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 
-                return;
+                return false;
             }
         }
-        
+      
    //     $GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
     }
 
@@ -667,6 +667,8 @@ class Content {
         }
   
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
+
+        return true;
     }
 
     function set_inhome($status, $last_editor) {
@@ -757,7 +759,7 @@ class Content {
                 }
             }
         }
-        
+      
         if(is_array($status)) {
 
             $stmt = $GLOBALS['application']->conn->
@@ -782,6 +784,8 @@ class Content {
         
         //$GLOBALS['application']->dispatch('onAfterSetInhome', $this);
         Content::refreshHome();
+
+        return true;
     }
 
     function set_numviews($id=null) {

@@ -613,13 +613,13 @@ class ContentManager {
                     AND `contents`.`available` =1
                     AND `contents`.`fk_content_type` =1
                     AND `contents`.`in_litter` =0'.                   
-                ' ORDER BY `created` DESC ';   
+                ' ORDER BY `contents`.`placeholder` ASC, `created` DESC ';
             
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $ccm = ContentCategoryManager::get_instance();
         while(!$rs->EOF) {
         $items[] = array( 'title'=>$rs->fields['title'],
-                           'catName'=> $ccm->get_name($rs->fields['category_id']),
+                          'catName'=> $ccm->get_name($rs->fields['category_id']),
                           'permalink'=> $rs->fields['permalink'],
                           'created'=> $rs->fields['created'],
                           'category_title'=> $ccm->get_title($ccm->get_name($rs->fields['category_id']))
