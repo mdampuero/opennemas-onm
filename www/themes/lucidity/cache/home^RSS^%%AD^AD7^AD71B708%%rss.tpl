@@ -1,0 +1,15 @@
+128
+a:4:{s:8:"template";a:1:{s:7:"rss.tpl";b:1;}s:9:"timestamp";i:1267736829;s:7:"expires";i:1267823229;s:13:"cache_serials";a:0:{}}<br />
+<font size='1'><table dir='ltr' border='1' cellspacing='0' cellpadding='1'>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: Smarty error: unable to read resource: "rss.tpl" in /var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php on line <i>1095</i></th></tr>
+<tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
+<tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
+<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0002</td><td bgcolor='#eeeeec' align='right'>49112</td><td bgcolor='#eeeeec'>{main}(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/article.php' bgcolor='#eeeeec'>../article.php<b>:</b>0</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.0699</td><td bgcolor='#eeeeec' align='right'>1245760</td><td bgcolor='#eeeeec'>Smarty->display(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/article.php' bgcolor='#eeeeec'>../article.php<b>:</b>376</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>3</td><td bgcolor='#eeeeec' align='center'>0.0699</td><td bgcolor='#eeeeec' align='right'>1245760</td><td bgcolor='#eeeeec'>Smarty->fetch(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php' bgcolor='#eeeeec'>../Smarty.class.php<b>:</b>1108</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>4</td><td bgcolor='#eeeeec' align='center'>0.0705</td><td bgcolor='#eeeeec' align='right'>1291092</td><td bgcolor='#eeeeec'>Smarty->_compile_resource(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php' bgcolor='#eeeeec'>../Smarty.class.php<b>:</b>1263</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>5</td><td bgcolor='#eeeeec' align='center'>0.0705</td><td bgcolor='#eeeeec' align='right'>1291092</td><td bgcolor='#eeeeec'>Smarty->_fetch_resource_info(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php' bgcolor='#eeeeec'>../Smarty.class.php<b>:</b>1417</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>6</td><td bgcolor='#eeeeec' align='center'>0.0706</td><td bgcolor='#eeeeec' align='right'>1291220</td><td bgcolor='#eeeeec'>Smarty->trigger_error(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php' bgcolor='#eeeeec'>../Smarty.class.php<b>:</b>1591</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>7</td><td bgcolor='#eeeeec' align='center'>0.0706</td><td bgcolor='#eeeeec' align='right'>1291220</td><td bgcolor='#eeeeec'><a href='http://www.php.net/trigger_error' target='_new'>trigger_error</a>
+(  )</td><td title='/var/www/OpenNemas-demo/trunk/www/libs/smarty/Smarty.class.php' bgcolor='#eeeeec'>../Smarty.class.php<b>:</b>1095</td></tr>
+</table></font>
