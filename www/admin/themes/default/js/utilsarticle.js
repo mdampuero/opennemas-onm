@@ -5,10 +5,7 @@
 getHoles = function(){
     var huecos= $('columns').select('div');
 
-    var _huecos = ['div_no_home','des'];
-    for(var i=0; i<huecos.length; i++) {
-        _huecos.push(huecos[i].id);
-    }
+   
     return huecos;
 }
 
@@ -24,8 +21,13 @@ alertsDiv = function(){
  
 make_sortable_divs_portadas = function() {    
     var huecos = getHoles();
-    
+     var _huecos = ['div_no_home','art'];
     for(var i=0; i<huecos.length; i++) {
+        _huecos.push(huecos[i].id);
+    }
+    huecos.push($('div_no_home'));
+    huecos.push($('art'));
+    for(i=0; i<huecos.length; i++) {
         Sortable.create( huecos[i] ,{
             tag:'table',
             only:'tabla',
@@ -41,13 +43,17 @@ savePositions = function(category) {
    // changedTables(category);
     var huecos = getHoles();
 
+    huecos.push($('div_no_home'));
+    huecos.push($('art'));
+
+
     var places = {};
     var huecos_id = new Array();
 
     for(var i=0; i<huecos.length; i++) {
         huecos_id.push(huecos[i].id);
     }
-
+ 
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
                 $(div_id).select('table').each(function(item) {

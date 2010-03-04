@@ -79,6 +79,7 @@
                      {include file="article_others_articles.tpl"}
                  </div>
             {else}
+                    <div id="art" style="display:none;"> </div>
                 {*
                 <div id="down_menu">
                     {* EN HOME MENU PARA VER EL RESTO D PORTADAS *************** *
