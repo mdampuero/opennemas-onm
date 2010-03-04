@@ -59,7 +59,7 @@
 
                                 {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_0"}
 
-                                <hr class="new-separator"/>
+                                {*<hr class="new-separator"/>*}
 
                                 {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_1"}
 
@@ -72,7 +72,7 @@
                         <div class="layout-column last-column last span-8">
                             {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_0"}
 
-                            <hr class="new-separator"/>
+                            {*<hr class="new-separator"/>*}
 
                             {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_1"}
 
