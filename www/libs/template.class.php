@@ -50,7 +50,7 @@ class Template extends Smarty
 		$this->config_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'config/';
 		$this->cache_dir     = SITE_PATH.SS.'themes'.SS.$theme.SS.'cache/';
 		$this->plugins_dir[] = SITE_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
-        $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
+                $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
 		$this->caching 		 = false;
 
 		// Template variables		
@@ -60,10 +60,10 @@ class Template extends Smarty
 
 		$this->assign('params',
 			array(
-                'LOCALE_DIR'	=>	$this->locale_dir,
-                'CSS_DIR'	    => $this->css_dir,
-                'IMAGE_DIR' 	=> $this->image_dir,
-                'JS_DIR'	    => $this->js_dir )
+                            'LOCALE_DIR' =>    $this->locale_dir,
+                            'CSS_DIR'	 =>    $this->css_dir,
+                            'IMAGE_DIR'  =>    $this->image_dir,
+                            'JS_DIR'	 =>    $this->js_dir )
 		);
 
 		$this->theme = $theme;
