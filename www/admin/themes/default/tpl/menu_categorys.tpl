@@ -22,6 +22,7 @@
         {/acl}
         {* /if *}        
     {/section}
+    <br style="clear:both;"> 
     {section name=as loop=$allcategorys}
         {section name=su loop=$subcat[as]}
             {* if $smarty.session.isAdmin || is_array($smarty.session.accesscategories) && in_array($allcategorys[as]->pk_content_category, $smarty.session.accesscategories) *}
