@@ -59,6 +59,7 @@ foreach($places as $id => $placeholder) {
     if( empty($placeholder) || $placeholder == 'art' || $placeholder == 'div_no_home'){
          $_frontpage[$i] = array(0, $id);
          $_positions[$i] = array('100', '0', $id);
+         $i++;
     }else{
 
           $_frontpage[$i] = array(1, $id);
@@ -68,7 +69,7 @@ foreach($places as $id => $placeholder) {
     }
 }
 
-var_dump($_frontpage);
+ 
 /*
 if( $_GET['category']!='home' ){
     
