@@ -1,4 +1,4 @@
-jQuery(document).ready(function(){
+/* jQuery(document).ready(function(){
 
     jQuery.fn.fadeToggle = function(speed, easing, callback) {
        return this.animate({opacity: 'toggle'}, speed, easing, callback);
@@ -9,4 +9,13 @@ jQuery(document).ready(function(){
         });
     },4000);
 
+});
+*/
+//need jquery.cycle.all.2.72.js
+jQuery(document).ready(function(){
+     $('.slide_cicle').cycle({
+        fx:     'fade',
+        speed:    300,
+        delay:  -4000
+    });
 });
