@@ -111,8 +111,8 @@ $article = new Article();
 // Mostrar mensaxes si a petición ver por Ajax
 if( $isAjax ) {
     if( $ok == 1 ) {        
-        echo('Posiciones guardadas correctamentessssssssssssssss.');
+        echo('Posiciones guardadas correctamente.');
     } else {
-        echo('Hubo errores al guardar las posiciones. Inténtelo de nuevosssssss.');
+        echo('Hubo errores al guardar las posiciones. Inténtelo de nuevos.');
     }
 }
