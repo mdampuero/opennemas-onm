@@ -57,7 +57,7 @@
                         <div class="layout-column middle-column span-8">
                             <div class="border-dotted">
 
-                                {renderplaceholder items=$destaca tpl='frontpage_article_head.tpl' placeholder="placeholder_1_0"}
+                                {renderplaceholder items=$column tpl='frontpage_article_head.tpl' placeholder="placeholder_1_0"}
 
                                 <hr class="new-separator"/>
 
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="layout-column last-column last span-8">
-                            {renderplaceholder items=$destaca tpl='frontpage_article_head.tpl' placeholder="placeholder_2_0"}
+                            {renderplaceholder items=$column tpl='frontpage_article_head.tpl' placeholder="placeholder_2_0"}
 
                             <hr class="new-separator"/>
 
