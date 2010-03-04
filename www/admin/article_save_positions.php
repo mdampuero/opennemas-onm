@@ -68,7 +68,7 @@ foreach($places as $id => $placeholder) {
     }
 }
 
- 
+var_dump($_frontpage);
 /*
 if( $_GET['category']!='home' ){
     
