@@ -31,13 +31,14 @@
                 <div id="{$place}_2" class="seccion" style="min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_2' }
                 </div>
-                <div id="{$place}_3" class="seccion" style="min-height:50px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
-                    {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3' }
-                </div>
-                <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                 <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
                    <tr ><td >  Other content 3</td></tr>
                 </table>
                  
+                <div id="{$place}_3" class="seccion" style="min-height:50px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                    {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3' }
+                </div>
+               
           
        </td>
    </tr>
