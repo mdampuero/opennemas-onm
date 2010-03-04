@@ -127,7 +127,7 @@
 				</button>
 			</li>
 			<li style="margin-right: 20px;">
-				<a href="#" class="admin_add" onClick="javascript:savePos('{$category}');" title="Guardar Positions" alt="Guardar Cambios">
+				<a href="#" class="admin_add" onClick="javascript:savePositions('{$category}');" title="Guardar Positions" alt="Guardar Cambios">
 					<img border="0" src="{php}echo($this->image_dir);{/php}save.gif" title="Guardar Cambios" alt="Guardar Cambios" ><br />Guardar posiciones
 				</a>
 			</li>

@@ -1,101 +1,145 @@
 // JavaScript Document
 //Funciones llamadas en article.tpl
+//
+ //Devuelve los ids de los divs que contienen noticias.
+getHoles = function(){
+    var huecos= $('columns').select('div');
 
-function objetoAjax(){
-    //FIXME: dejar de utilizar y cambiar por ajax.updater o ajax.reponse
-	var xmlhttp=false;
-	try {
-		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-	} catch (e) {
-		try {
-		   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		} catch (E) {
-			xmlhttp = false;
-  		}
-	}
-
-	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-		xmlhttp = new XMLHttpRequest();
-	}
-	return xmlhttp;
+    var _huecos = ['div_no_home','des'];
+    for(var i=0; i<huecos.length; i++) {
+        _huecos.push(huecos[i].id);
+    }
+    return huecos;
 }
 
-var no_home=new Array();
-function  make_sortable_divs_portadas(category)
- {
-    
-     if(category =='home'){
-        var huecos= ['div_no_home','des','even','hole1','hole2','hole3','hole4'];
-        for(var i=0; i<huecos.length; i++) {
-           Sortable.create( huecos[i] ,{
-            tag:'table',
-            only:'tabla',
-            dropOnEmpty: true,
-            containment:['div_no_home','des','even','hole1','hole2','hole3','hole4', 'art','left','right','top', 'art2']
-            });
-        }
-         Sortable.create('art',{
-                               tag:'table',
-                               only:'tabla',
-                               dropOnEmpty: true,
-                               containment:['des','even','odd','hole1','hole2','hole3','hole4', 'art']
-                    });
-     }else{
-      var huecos= ['div_no_home','des','even'];
-        for(var i=0; i<huecos.length; i++) {
-           Sortable.create( huecos[i] ,{
-            tag:'table',
-            only:'tabla',
-            dropOnEmpty: true,
-            containment:['div_no_home','des','even', 'art']
-            });
-        }
-         Sortable.create('art',{
-                               tag:'table',
-                               only:'tabla',
-                               dropOnEmpty: true,
-                               containment:['des','even', 'art']
-                    });
-    }
-     /*
-  Droppables.add('div_no_home', {
-    accept: 'tabla',
-    onDrop: function(element) {
-		 //meter en array
-               
-                var i=no_home.length;
-                no_home[i]=element.getAttribute('value');
-                  console.log(element.getAttribute('value'));
-         
-               
-  	}
-  });
-  
-  //onDrop: function(dragged, dropped, event) {  }
-*/
-
- }
-
 //Mensajes alerta para contenedores de noticias.
-alertsDiv =function(){
-    var Nodes=$('hole1').select('table');
-    if(Nodes.length<1){$('warnings1').update('Debe contener noticias debajo de Express');  $('warnings-validation').update('Recuerde guardar posiciones');}
-    else{$('warnings1').update(' ');}
-    var Nodes=$('hole2').select('table');
-    if(Nodes.length<1){$('warnings2').update('Debe contener noticias debajo de publicidad 1');  $('warnings-validation').update('Recuerde guardar posiciones');}
-    else{$('warnings2').update(' ');}
+alertsDiv = function(){
+
     var Nodes=$('hole3').select('table');
     if(Nodes.length<1){$('warnings3').update('Debe contener noticias debajo de publicidad 2');  $('warnings-validation').update('Recuerde guardar posiciones');}
     else{$('warnings3').update(' ');}
-    var Nodes=$('hole4').select('table');
-    if(Nodes.length<1){$('warnings4').update('Falta una noticia Especial'); $('warnings-validation').update('Recuerde guardar posiciones');}
-    else{$('warnings4').update(' ');}
-    var Nodes=$('even').select('table');   
+    
 }
+
+ 
+make_sortable_divs_portadas = function() {    
+    var huecos = getHoles();
+    
+    for(var i=0; i<huecos.length; i++) {
+        Sortable.create( huecos[i] ,{
+            tag:'table',
+            only:'tabla',
+            dropOnEmpty: true,
+            containment:huecos
+        });
+    }
+ }
+
+
+savePositions = function(category) {
+
+   // changedTables(category);
+    var huecos = getHoles();
+
+    var places = {};
+    var huecos_id = new Array();
+
+    for(var i=0; i<huecos.length; i++) {
+        huecos_id.push(huecos[i].id);
+    }
+
+    huecos.each(function(div_id, i){
+        if( $(div_id) ) {
+                $(div_id).select('table').each(function(item) {
+                        if(item.getAttribute('value')) {
+                                places[ item.getAttribute('value') ] = huecos_id[i];
+                                item.setAttribute('name',"selected_fld[]");
+                        }
+                });
+        }
+    });
+    
+    /*for(var i=0; i<huecos.length; i++) {
+       var div_id =  huecos[i].id;
+       items   = $(div_id).select("table");
+
+       var elements = new Array();
+       for (j = 0; j < items.length;j++) {
+            if(items[j].getAttribute('class') == 'tabla'){
+                elements[j] = items[j].getAttribute('value');
+               // items[j].setAttribute('name',"selected_fld[]");
+            }
+        }
+        places[div_id] = elements;
+*/
+
+        // Form
+	var frm = $('formulario');
+      //  console.log(places);
+	// Send articles positions into 'id' text field
+	frm.id.value =  Object.toJSON(places);
+        frm.category.value = category;
+
+  
+    new Ajax.Request('article_save_positions.php',{
+        method: 'post',
+        parameters: frm.serialize(),
+
+        onLoading: function() {
+
+           $('warnings-validation').update('Guardando posiciones...');
+            // showMsg({'loading':['Guardando posiciones...']},'growl');
+        },
+        onComplete: function(transport) {
+           $('warnings-validation').update( transport.responseText );
+                new Effect.Highlight( $('warnings-validation') );
+
+                // Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
+                if(posicionesIniciales) {
+                        posicionesIniciales = $$('input[type=checkbox]');
+                        posicionesInicialesWarning = false;
+                }
+                //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');      
+        },
+
+        onFailure: function() {
+                $('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
+                new Effect.Highlight( $('warnings-validation') );
+        }
+            
+           
+    })
+        /*
+   //Cambiar iconos
+        items =  $(div_id).getElementsByClassName("minput");
+        for (i = 0; i < items.length; i++) {
+                items[i].setAttribute('name',"selected_fld[]");
+        }
+        items =  $(div_id).getElementsByClassName("noportada");
+        for (i = 0; i < items.length; i++) {
+                items[i].setAttribute('alt',"En portada");
+                items[i].setAttribute('src',"/admin/themes/default/images/publish_g.png");
+                items[i].setAttribute('class',"portada");
+        }
+        items =  $(div_id).getElementsByClassName("noinhome");
+        for (i = 0; i < items.length; i++) {
+                items[i].setAttribute('style','display:inline;');
+                items[i].setAttribute('class',"inhome");
+        }
+        if(category == 'home') {
+          items =  $(div_id).select("img.inhome");
+            for (i = 0; i < items.length; i++) {
+                    items[i].setAttribute('src',"/admin/themes/default/images/gohome.png");
+            }
+        }  
+    } */
+ 
+}
+
 
 changedTables = function(category) {
 // Al arrastrar noticas Visualiza/Oculta la celda class='no_view' (muestra home)
-    var Nodes=$('even').select('td');
+    var Nodes=$('columns').select('td');
     for (i = 0; i < Nodes.length; i++) {
         if(Nodes[i].getAttribute('class') == 'no_view'){
             Nodes[i].innerHTML="";
@@ -105,19 +149,7 @@ changedTables = function(category) {
            Nodes[i].setAttribute('style','width:30px;');
         }
     }
-     if(category =='home'){
-            Nodes=$('odd').select('td');
-            for (i = 0; i < Nodes.length; i++) {
-                if(Nodes[i].getAttribute('class') == 'no_view'){
-                //    Nodes[i].innerHTML="";
-                    Nodes[i].parentNode.removeChild(Nodes[i]);
-                        Nodes[i].setAttribute('style','width:1px;');
-                }
-                if(Nodes[i].getAttribute('class') == 'no_width'){
-                   Nodes[i].setAttribute('style','width:30px;');
-                }
-            }
-     }
+
     Nodes=$('art').select('td');
     for (i = 0; i < Nodes.length; i++) {
         if(Nodes[i].getAttribute('class') == 'un_fecha'){

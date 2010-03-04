@@ -119,10 +119,9 @@ if(isset($_REQUEST['action']) ) {
             $rating = new Rating();
             $comment = new Comment();
           
-            if($_REQUEST['category']=='home') {
-                    $destacado = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1 AND home_placeholder="placeholder_0_0"', 'ORDER BY home_pos ASC');
-                    $evenpublished = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1 AND home_placeholder="placeholder_0_1"', 'ORDER BY home_pos ASC, created DESC');
-                    $oddpublished = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1 AND (home_placeholder="placeholder_1_0" OR home_placeholder="placeholder_1_1" OR home_placeholder="placeholder_1_2"  OR home_placeholder="placeholder_1_3")', 'ORDER BY home_pos ASC, created DESC');
+             if($_REQUEST['category']=='home') {
+                    $frontpage_articles = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1', 'ORDER BY home_pos ASC');
+                    $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND home_placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
 
                     //Sugeridas -
                     list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
@@ -131,13 +130,14 @@ if(isset($_REQUEST['action']) ) {
                     $paginacion=$cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
                     $tpl->assign('paginacion', $paginacion);
                     $tpl->assign('other_category','suggested');
+
             } else {
                     // ContentManager::find_by_category(<TIPO_CONTENIDO>, <CATEGORY>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-                    $destacado = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1  AND placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC' );
-                   $evenpublished= $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY position ASC, created DESC');
+                    $frontpage_articles = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1 ', 'ORDER BY position ASC, created DESC' );
+                //   $evenpublished= $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY position ASC, created DESC');
        //          $oddpublished = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND (placeholder="placeholder_1_0" OR placeholder="placeholder_1_1" OR placeholder="placeholder_1_2" OR placeholder="placeholder_1_3")', 'ORDER BY position ASC, created DESC');
-
-
+ 
+                    $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
 
                     //	$articles = $cm->find_by_category('Article', $_REQUEST['category'], 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1', 'ORDER BY created DESC, title ASC');
                     list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1 ', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
@@ -148,34 +148,20 @@ if(isset($_REQUEST['action']) ) {
                             $tpl->assign('paginacion', " ".$paginacion);
                     }
             }
-				
+
             //Nombres de los publisher y editors
             $aut=new User();
-            foreach ($destacado as $art){
-                 $art->category_name= $art->loadCategoryName($art->id);
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
-            }
 
-            foreach ($evenpublished as $art){              
+            foreach ($frontpage_articles as $art){
                 $art->category_name= $art->loadCategoryName($art->id);
                 $art->publisher=$aut->get_user_name($art->fk_publisher);
                 $art->editor=$aut->get_user_name($art->fk_user_last_editor);
                 $art->rating= $rating->get_value($art->id);
                 $art->comment = $comment->count_public_comments( $art->id );
+              
             }
-        
-            if(!empty($oddpublished)){
-                foreach ($oddpublished as $art){
-                    $art->category_name= $art->loadCategoryName($art->id);
-                    $art->publisher=$aut->get_user_name($art->fk_publisher);
-                    $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                    $art->rating= $rating->get_value($art->id);
-                    $art->comment = $comment->count_public_comments( $art->id );
-                }
-            }
+
+
             foreach ($articles as $art){
                 $art->category_name= $art->loadCategoryName($art->id);
                 $art->publisher=$aut->get_user_name($art->fk_publisher);
@@ -186,12 +172,13 @@ if(isset($_REQUEST['action']) ) {
 
             $tpl->assign('destacado', $destacado);
             $tpl->assign('articles', $articles);
-            $tpl->assign('evenpublished', $evenpublished);
-            $tpl->assign('oddpublished', $oddpublished);
-            
+            $tpl->assign('frontpage_articles', $frontpage_articles);
+
+ 
             $tpl->assign('category', $_REQUEST['category']);
             $_SESSION['desde']='list';
             $_SESSION['_from']=$_REQUEST['category'];
+
 
 // </editor-fold >
         break;

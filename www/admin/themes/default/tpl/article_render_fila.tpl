@@ -3,16 +3,9 @@
         <td style="text-align: left; width:10px;">
             <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$item->id}"  style="cursor:pointer;" />
         </td>
-         <td style="text-align: left;"  onmouseout="UnTip()" onmouseover="Tip('<b>Votos:</b>{$item->rating}<br /><b>Comentarios:</b>{$item->comment}<br /><b>Publisher:</b>{$item->publisher}<br /><b>Last Editor:</b>{$item->editor}<br />{schedule_info item=$item}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
+         <td style="text-align: left;"  onmouseout="UnTip()" onmouseover="Tip('<b>Creado:</b>{$item->created}<br /><b>Vistos:</b>{$item->views}<br /><b>Votos:</b>{$item->rating}<br /><b>Comentarios:</b>{$item->comment}<br /><b>Publisher:</b>{$item->publisher}<br /><b>Last Editor:</b>{$item->editor}<br />{schedule_info item=$item}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
             
             {is_clone item=$item}{$item->title|clearslash}
-        </td>
-        <td style="text-align: center;font-size: 11px;width:30px;">
-            {$item->views}
-        </td>
-
-        <td  class="un_fecha" style="text-align: center;width:60px;font-size: 11px;">
-            {$item->created}
         </td>
         {if $category neq 'home'}
             <td class="un_no_view" style="width:30px;" align="center">
@@ -40,8 +33,9 @@
                 <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
                    <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" /></a>
         </td>
-        <td  align="center"  class="un_width" style="width:30px;">
+        
         {if $category neq 'home'}
+            <td  align="center"  class="un_width" style="width:30px;">
             {if $item->frontpage == 1}
                     <a href="?id={$item->id}&amp;action=frontpage_status&amp;status=0&amp;category={$category}" title="Quitar de portada">
                             <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
@@ -49,12 +43,15 @@
                     <a href="?id={$item->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}" title="Publicar en portada">
                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
             {/if}
-        {else}
-                <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
-        {/if}
-        </td>
-        <td  align="center"  class="un_width"  style="width:30px;">
+             </td>
+            <td  align="center"  class="un_width"  style="width:30px;">
                 <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
-        </td>
+            </td>
+        {else}
+             <td  align="center"  class="un_width" style="width:30px;">
+                <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
+            </td>
+        {/if}
+       
     </tr>
 </table>
