@@ -22,7 +22,7 @@
         {if !empty($categories[$posmenu].subcategories)}
             <ul class="clearfix">
                 {foreach key=k item=v from=$categories[$posmenu].subcategories}
-                    <li {if $category_name eq $v.name} class="active"{/if}><a href="/seccion/{$categories[$posmenu].name}/{$k}/" title="{$v}">{$v}</a></li>
+                    <li {if $subcategory_name eq $v.name} class="active"{/if}><a href="/seccion/{$categories[$posmenu].name}/{$k}/" title="{$v}">{$v}</a></li>
                 {/foreach}
             </ul>
         {/if}
