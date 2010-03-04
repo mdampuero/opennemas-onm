@@ -52,23 +52,23 @@ $_frontpage = array();
 $_positions = array();
 $_suggested_home = array();
 
-var_dump($_REQUEST['category']);
 $pos=1;
 $i=0;
 foreach($places as $id => $placeholder) {
  
-    if( !empty($placeholder)){
-          $_frontpage[$i] = array(1, $tok);
+    if( empty($placeholder) || $placeholder == 'art' || $placeholder == 'div_no_home'){
+         $_frontpage[$i] = array(0, $id);
+         $_positions[$i] = array('100', '0', $id);
+    }else{
+
+          $_frontpage[$i] = array(1, $id);
           $_positions[$i] = array($pos, $placeholder, $id);
           $pos++;
           $i++;
-    }else{
-          $_frontpage[$i] = array(0, $tok);
-          $_positions[$i] = array('100', '0', $id);
     }
 }
 
-
+ 
 /*
 if( $_GET['category']!='home' ){
     
