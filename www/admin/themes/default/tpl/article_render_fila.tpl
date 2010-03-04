@@ -11,12 +11,14 @@
             <td class="un_no_view" style="width:30px;" align="center">
                 <div class="inhome" style="display:inline;">
                     {if $item->in_home == 1}
-                          <img class="inhome" src="{$params.IMAGE_DIR}gohome.png" border="0" alt="Publicado en home" title="Publicado en home"/> 
-                    {elseif $item->in_home == 2}
+                    <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}"  title="No sugerir en home"  alt="No sugerir en home">
+                          <img class="inhome" src="{$params.IMAGE_DIR}gohome.png" border="0" alt="Publicado en home" title="Publicado en home"/>
+                          </a>
+                    {*elseif $item->in_home == 2}
                         <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}"  title="No sugerir en home"  alt="No sugerir en home">
                         <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" title="No sugerir en home" alt="No sugerir en home"/></a>
-                    {else}
-                        <a href="?id={$item->id}&amp;action=inhome_status&amp;status=2&amp;category={$category}" class="go_home" title="Sugerir en home" alt="Sugerir en home"></a>
+                    *}{else}
+                        <a href="?id={$item->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Sugerir en home" alt="Sugerir en home"></a>
                     {/if}
                 </div>
             </td>
