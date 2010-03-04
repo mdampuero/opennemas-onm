@@ -201,7 +201,7 @@ html[xmlns] .clearfix {
     clear:none;
     margin:0;
 }
-#sub_main_menu ul li:hover{
+#sub_main_menu ul li:hover, #sub_main_menu ul li.active{
     background:#ccc;
     cursor:pointer;
 }
