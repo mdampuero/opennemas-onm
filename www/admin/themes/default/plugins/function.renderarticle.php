@@ -19,11 +19,6 @@ $a=1;
       if( $item->{$property} == $placeholder ) {
             $smarty->clear_assign($varname);
             $smarty->assign($varname, $items[$i]);
-        //    $smarty->assign(odd_rating, $odd_rating[$i]);
-      //      $smarty->assign(odd_comment, $odd_comment[$i]);
-       //     $smarty->assign(odd_editors, $odd_editors[$i]);
-        //    $smarty->assign(odd_publishers, $odd_publishers[$i]);
-            
             $smarty->assign('placeholder', $placeholder);
             $smarty->assign('aux', $a);
             $a++;
