@@ -224,25 +224,40 @@ if(isset($_REQUEST['action']) ) {
             }
             
             //******** Modules and containers of Column3
-            //
-            ////Titulares del dia
-            //If $subcategory is empty articles_express are from $category
-            $articles_express = $cm->cache->find_by_category_name('Article', (empty($subcategory_name)?$category_name:$subcategory_name),
-                                                           'contents.frontpage=1 AND contents.fk_content_type=1 AND contents.content_status=1 AND contents.available=1 ',
-                                                           'ORDER BY changed DESC LIMIT 0, 5');          
-            // Filter by scheduled {{{
-            $articles_express = $cm->getInTime($articles_express);
-            // }}}
-            $tpl->assign('articles_express', $articles_express);                        
-            
+             /************************************ ARTICLES EXPRESS **************************************/
+                $now= date('Y-m-d H:m:s',time()); //2009-02-28 21:00:13
+                $articles_home_express = $cm->find('Article', 'content_status=1 AND available=1 AND fk_content_type=1 AND (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 'ORDER BY created DESC LIMIT 0 , 5 ');
 
-            //If $subcategory is empty articles_viewed are from $category
-            $articles_viewed = $cm->getMostViewedContent('Article', true, $article->category);
+                $tpl->assign('articles_home_express', $articles_home_express);
 
-            $pages = $cm->pager;
-            $pages_viewed = $pages->_totalPages;
-            $tpl->assign('pages_viewed', $pages_viewed);
-            $tpl->assign('articles_viewed', $articles_viewed);
+                /************************************ TITULARES DEL DIA  ************************************/
+                require_once ("module_other_headlines.php");
+
+
+
+                /***********************************PHOTO-ALBUM  *********************************************/
+
+                $album_photo = array();
+                $lastAlbum = $cm->find('Album', ' contents.fk_content_type=7 and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 4');
+                /* Don't need. Get crop /album/crops/album_id.jpg
+               foreach($lastAlbum as $album){
+                    $album->photo = $album->get_firstfoto_album($album->id);
+                } */
+                $tpl->assign('lastAlbum', $lastAlbum);
+
+
+                /***********************************  PHOTO-ALBUM  *********************************************/
+
+
+        // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
+        $videos = $cm->find('Video', 'contents.content_status=1', 'ORDER BY created DESC LIMIT 0 , 4');
+
+        foreach($videos as $video){
+            $videos_authors[] = new Author($video->fk_user);
+        }
+
+        $tpl->assign('videos', $videos);
+        $tpl->assign('videos_authors', $videos_authors);
             
         } break;
  
