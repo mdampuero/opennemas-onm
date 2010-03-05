@@ -44,7 +44,9 @@
                                 <p class="nw-subtitle">{$article->summary|clearslash}</p>
 
                                  {if $photoInt->name}
-                                    <img style="float:right;padding:4px;width:300px;" class="nw-image" src="{$MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" title="{$article->title|clearslash|escape:"html"}" alt="{$article->img2_footer|clearslash|escape:"html"}" />
+                                    <img style="float:right;padding:4px;width:300px;" class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" title="{$article->title|clearslash|escape:"html"}" alt="{$article->img2_footer|clearslash|escape:"html"}" />
+                                {elseif $photoExt->name}
+                                    <img style="float:right;padding:4px;width:300px;" class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoExt->path_file}{$photoExt->name}" title="{$article->title|clearslash|escape:"html"}" alt="{$article->img1_footer|clearslash|escape:"html"}" />
                                 {/if}
                                 
                                 <p class="nw-subtitle">{$article->body|clearslash}</p>
