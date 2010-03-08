@@ -224,18 +224,18 @@ if(isset($_REQUEST['action']) ) {
             }
             
             //******** Modules and containers of Column3
-             /************************************ ARTICLES EXPRESS **************************************/
+             /************************************ ARTICLES EXPRESS **************************************
                 $now= date('Y-m-d H:m:s',time()); //2009-02-28 21:00:13
                 $articles_home_express = $cm->find('Article', 'content_status=1 AND available=1 AND fk_content_type=1 AND (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 'ORDER BY created DESC LIMIT 0 , 5 ');
 
                 $tpl->assign('articles_home_express', $articles_home_express);
 
                 /************************************ TITULARES DEL DIA  ************************************/
-                require_once ("module_other_headlines.php");
+              //  require_once ("module_other_headlines.php");
 
 
 
-                /***********************************PHOTO-ALBUM  *********************************************/
+                /***********************************PHOTO-ALBUM  ********************************************
 
                 $album_photo = array();
                 $lastAlbum = $cm->find('Album', ' contents.fk_content_type=7 and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 4');
@@ -246,7 +246,7 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('lastAlbum', $lastAlbum);
 
 
-                /***********************************  PHOTO-ALBUM  *********************************************/
+                /***********************************  PHOTO-ALBUM  *********************************************
 
 
         // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
@@ -258,7 +258,7 @@ if(isset($_REQUEST['action']) ) {
 
         $tpl->assign('videos', $videos);
         $tpl->assign('videos_authors', $videos_authors);
-            
+            */
         } break;
  
         case 'rss': {

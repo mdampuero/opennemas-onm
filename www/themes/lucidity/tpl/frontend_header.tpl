@@ -17,7 +17,12 @@
 <div id="logo" class="clearfix">
 
     <div id="logo-image"class="span-8">
-        <a href="/"><img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="Crónica comarcal" /></a>
+        {if $category_name eq 'deportes'}
+            <img src="{$params.IMAGE_DIR}/main-logo.small.green.png" alt="Crónica comarcal" />
+            <img src="{$params.IMAGE_DIR}/logo-sections/sports.png" alt="Deportes" />
+        {else}
+         <a href="/"><img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="Crónica comarcal" /></a>
+        {/if}
     </div>
 
     <div class="span-16">

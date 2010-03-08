@@ -118,12 +118,7 @@
                             <div class="border-dotted">
                                 {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_3"}
                             </div>
-                            <div id="facebook"> <img src="{$params.IMAGE_DIR}/facebook.png" alt="También en Facebook" />
-                              {*  <!--
-                                <script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/gl_ES"></script>
-                                <script type="text/javascript">FB.init("58331dac9690aded338b54e63a3b5eab");</script>
-                                <fb:fan profile_id="202892939326" stream="0" connections="10" logobar="1" width="300"></fb:fan>
-                                --> *}
+                            {include file="widget_facebook.tpl"}
                             </div>
                         </div>
 
@@ -153,9 +148,7 @@
         <div class="wrapper clearfix">
 
             <div class="container clearfix span-24">
-                <div id="footer" class="">
-
-                </div><!-- fin .footer -->
+                 {include file="frontend_footer.tpl"}
 
             </div><!-- fin .container -->
 
