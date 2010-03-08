@@ -78,13 +78,16 @@
                                 <hr class="new-separator"/>
 
                                 <div class="more-news-bottom-article">
+                                    {if !empty($relacionadas)}
                                         <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
-                                        <ul>
-                                                <li><a href="#">Un gran vendabal entra por Galicia y aplaca las ciudades</a></li>
-                                                <li><a href="#">El Real Madrid C.F. logra su 15ª Copa de Europa</a></li>
-                                                <li><a href="#">En un sólo día se registran tantas explosiones solares como todo el año 2009</a></li>
-                                                <li><a href="#">La moción de censura prospera en el Gobierno y espera ahora el  Senado</a></li>
+                                         <ul>
+                                            {section name=r loop=$relacionadas}
+                                                {if $relacionadas[r]->pk_article neq  $article->pk_article}
+                                                   {renderTypeRelated content=$relacionadas[r]}
+                                                {/if}
+                                            {/section}
                                         </ul>
+                                    {/if}
                                 </div><!--fin more-news-bottom-article -->
 
                                {include file="module_comments.tpl"}
