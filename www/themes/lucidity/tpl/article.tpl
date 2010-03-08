@@ -81,9 +81,9 @@
                                     {if !empty($relacionadas)}
                                         <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
                                          <ul>
-                                            {section name=r loop=$relacionadas}
-                                                {if $relacionadas[r]->pk_article neq  $article->pk_article}
-                                                   {renderTypeRelated content=$relacionadas[r]}
+                                            {section name=r loop=$relationed}
+                                                {if $relationed[r]->pk_article neq  $article->pk_article}
+                                                   {renderTypeRelated content=$relationed[r]}
                                                 {/if}
                                             {/section}
                                         </ul>
