@@ -78,7 +78,7 @@
                                 <hr class="new-separator"/>
 
                                 <div class="more-news-bottom-article">
-                                    {if !empty($relacionadas)}
+                                    {if !empty($relationed)}
                                         <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
                                          <ul>
                                             {section name=r loop=$relationed}

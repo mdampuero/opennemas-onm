@@ -162,7 +162,7 @@ if(isset($_REQUEST['action']) ) {
                 
                 // MUTEXT CODE, DON'T use for performance
                 // Application::getMutex($cache_id);                
-                
+        
                 if( ($tpl->caching == 0) || !$tpl->is_cached('article.tpl', $cache_id) ) {
                     
                     $tpl->assign('article', $article);
@@ -204,8 +204,8 @@ if(isset($_REQUEST['action']) ) {
                     $comments = $comment->get_public_comments($_REQUEST['article_id']);
                     
                     $tpl->assign('num_comments', count($comments));
-                    $tpl->assign('relationed', $relat);                    
-                                
+                    $tpl->assign('relationed', $relat);
+             
                     /******* SUGGESTED CONTENTS *******/
                     $objSearch = cSearch::Instance();                   
                     $arrayResults=$objSearch->SearchSuggestedContents($article->metadata, 'Article', "pk_fk_content_category= ".$article->category." AND contents.available=1 AND pk_content = pk_fk_content", 4);
@@ -244,7 +244,7 @@ if(isset($_REQUEST['action']) ) {
                     $album->photo = $album->get_firstfoto_album($album->id);
                 } */
                 $tpl->assign('lastAlbum', $lastAlbum);
-
+ 
 
                 /***********************************  PHOTO-ALBUM  *********************************************
 
