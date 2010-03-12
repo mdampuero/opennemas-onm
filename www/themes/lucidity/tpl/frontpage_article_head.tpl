@@ -10,7 +10,7 @@
 
     <div class="nw-category-name sports">{$item->subtitle|upper|clearslash}</div>
     <h3 class="nw-title"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
-    <p class="nw-subtitle">{$item->summary|clearslash}</p>
+    <div class="nw-subtitle">{$item->summary|clearslash}</div>
 
     {if !empty($item->related_contents)}
         {assign var='relacionadas' value=$item->related_contents}

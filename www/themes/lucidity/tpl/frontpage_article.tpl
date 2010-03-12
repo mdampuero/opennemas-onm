@@ -12,7 +12,7 @@
     <div class="nw-category-name science">{$item->subtitle|upper|clearslash}</div>
     <h3 class="nw-title"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
     {*if !empty($item->agency)}<h5>{$item->agency|clearslash}</h5>{/if*}
-    <p class="nw-subtitle">{$item->summary|clearslash}</p>
+    <div class="nw-subtitle">{$item->summary|clearslash}</div>
 
     {if !empty($item->related_contents)}
         {assign var='relacionadas' value=$item->related_contents}
