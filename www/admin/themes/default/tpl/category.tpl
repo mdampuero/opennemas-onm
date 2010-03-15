@@ -74,14 +74,18 @@
                                     {assign var=containers value=$categorys[c]->inmenu}
                                 </td>
                                 <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
-                                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$categorys[c]->pk_content_category});" title="Modificar">
-                                        <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" />
-                                    </a>
+                                    {if $categorys[c]->internal_category==1}
+                                        <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$categorys[c]->pk_content_category});" title="Modificar">
+                                            <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" />
+                                        </a>
+                                    {/if}
                                 </td>
                                 <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
-                                    <a href="#" onClick="javascript:confirmar(this, {$categorys[c]->pk_content_category});" title="Eliminar">
-                                        <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" />
-                                    </a>
+                                    {if $categorys[c]->internal_category==1}
+                                        <a href="#" onClick="javascript:confirmar(this, {$categorys[c]->pk_content_category});" title="Eliminar">
+                                            <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" />
+                                        </a>
+                                    {/if}
                                 </td>
                             </tr>
                             <tr>
