@@ -23,7 +23,7 @@ $ccm = new ContentCategoryManager();
 //Los saca para los select.
 // ContentCategoryManager::find( <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-$allcategorys = $ccm->find('(internal_category=1 OR internal_category=2 OR internal_category=3) AND fk_content_category =0', 'ORDER BY posmenu');
+$allcategorys = $ccm->find('internal_category != 0 AND internal_category != 4 AND fk_content_category =0', 'ORDER BY posmenu');
 $tpl->assign('allcategorys', $allcategorys);
 /*foreach( $allcategorys as $prima) {
     $subcat[] = $cc->find(' inmenu=1  AND internal_category=1 AND fk_content_category ='.$prima->pk_content_category, 'ORDER BY posmenu');
@@ -59,7 +59,7 @@ if( isset($_REQUEST['action']) ) {
                         $groups['advertisements'] = $ccm->count_content_by_type_group(2);
             
 			foreach($allcategorys as $cate) {
-                            if($cate->internal_category ==1){
+                            if($cate->internal_category !=0 && $cate->internal_category !=4){
                                 $num_contents[$i]['articles']       = $groups['articles'][$cate->pk_content_category];
 				$num_contents[$i]['photos']         = $groups['photos'][$cate->pk_content_category];
 				$num_contents[$i]['advertisements'] = $groups['advertisements'][$cate->pk_content_category];
@@ -83,9 +83,8 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('num_contents', $num_contents);
 			$tpl->assign('num_sub_contents', $num_sub_contents);
 			$tpl->assign('subcategorys', $subcategorys);
-			$i=0;
-			
-			//$ordercategorys = $cc->find('(internal_category=1 OR internal_category=3) AND fk_content_category =0', 'ORDER BY inmenu DESC, posmenu ASC');
+			$i=0;			
+                       
 			$tpl->assign('ordercategorys', $allcategorys);
                         
 		break;

@@ -30,6 +30,24 @@ if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
 {
     Privileges_check::AccessDeniedAction();
 }
+/* GESTION CATEGORIAS */
+$ccm = new ContentCategoryManager();
+$allcategorys = $ccm->find('(internal_category=1 OR internal_category=5) AND fk_content_category=0', 'ORDER BY internal_category DESC, posmenu');
+//var_dump($allcategorys);
+$i=0;
+foreach( $allcategorys as $prima) {
+    $subcat[$i]=$ccm->find(' inmenu=1  AND internal_category=1 AND fk_content_category ='.$prima->pk_content_category, 'ORDER BY posmenu');
+      $i++;
+}
+
+$datos_cat = $ccm->find('pk_content_category='.$_REQUEST['category'], NULL);
+
+$tpl->assign('subcat', $subcat);
+$tpl->assign('allcategorys', $allcategorys);
+$tpl->assign('datos_cat', $datos_cat);
+
+
+/* GESTION CATEGORIAS  */
 
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {

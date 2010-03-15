@@ -6,8 +6,16 @@ class ContentCategory {
     var $img  = NULL;
     var $name  = NULL; //nombre carpeta
     var $title  = NULL; //titulo seccion
-    var $inmenu=NULL;
-    var $internal_category=NULL; // si 0 es interna no se muestra
+    var $inmenu = NULL; // Flag Ver en el menu.
+     var $posmenu = NULL;
+    var $internal_category=NULL; // flag asignar a un tipo de contenido.
+    /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
+     * $internal_category = 1 categoria generica para todos los tipos de contenidos.
+     * $internal_category = 2 categorias especiales Se ven en el menú pero no se pueden modificar pq son fijas. Opinion, unknown, conecta...
+     * $internal_category = 3 categorias para albums.
+     * $internal_category = 4 categorias para el kiosco
+     * $internal_category = 5 categorias para contenidos video.
+     */
 
     function ContentCategory($id=null) {
         // Si existe id, entonces cargamos los datos correspondientes
@@ -50,7 +58,7 @@ class ContentCategory {
         $this->createDirectory($path);        
         
         $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`) VALUES (?,?,?,?,?)";
-        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],1);
+        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category']);
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -116,10 +124,10 @@ class ContentCategory {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
         $data['name'] = normalize_name( $data['title']);
         
-        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?
+        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?
                     WHERE pk_content_category=".($data['id']);
         
-        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory']);
+        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'], $data['internal_category']);
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -233,9 +241,11 @@ class ContentCategory {
         if($this->pk_content_category == NULL) {
             return(false);
         }
-        
-        $sql = "UPDATE content_categories SET `inmenu`=?
-                    WHERE pk_content_category=".($this->pk_content_category);
+        if($status == 0){
+            $this->posmenu=30;
+        }
+        $sql = "UPDATE content_categories SET `inmenu`=?, `posmenu`=".$this->posmenu.
+                    " WHERE pk_content_category=".($this->pk_content_category);
         $values = array($status);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {

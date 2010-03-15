@@ -20,8 +20,9 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Panel de Control');
 
 $tpl->addScript(array('prototype.js', 'FeedReader.js?cacheburst=1257954926'));
-
+ 
 $xml = simplexml_load_file(SITE_URL . 'rss/');
+
 $result = $xml->xpath('//item');
 
 $news = array();
