@@ -3,9 +3,9 @@
     @theme      Lucidity
 *}
  <div class="article-comments">
-    <div class="title-comments"><h3><span>7 Comentarios<span></h3></div>
+    <div class="title-comments"><h3><span>{insert name="numComments" id=$article->id} Comentarios<span></h3></div>
     <div class="utilities-comments">
-            <div class="num-pages span-6">Página 1 de 6</div>
+            <div class="num-pages span-6">Página 1 de {$paginacion->links}</div>
             <div class="span-9 pagination">
                     <ul>
                             <li class="active"><a href="#">1</a></li>
@@ -17,21 +17,10 @@
                     </ul>
             </div>
     </div><!-- .utilities-comments -->
-    <div class="list-comments span-16">
-            <div class="comment-wrapper">
-                    <div clas="comment-number">9</div>
-                    <div class="comment-content span-14 append-1">
-                            "Es muy buen jugador, no lo voy a descubrir yo. Lleva muchos años a un gran nivel
-                             y no me sorprendió nada de lo que ví ayer".
-                    </div>
-                    <div class="">
-                            <div class="span-5">votos</div>
-                            <div class="span-10">  escrito por
-                                    <span class="comment-author">lenine100@hotmail.com</span>
-                                    hace
-                                    <span class="comment-time">7 horas 59 minutos</span>
-                            </div>
-                    </div>
-            </div>
-    </div>
+
+    {if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME)}
+        {insert name="comments" id=$opinion->id}
+    {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) || (preg_match('/preview_content\.php/',$smarty.server.SCRIPT_NAME)||($smarty.request.action eq "article"))}
+        {insert name="comments" id=$article->id}
+    {/if}
 </div>
