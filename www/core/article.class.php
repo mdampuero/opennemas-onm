@@ -49,6 +49,7 @@ class Article extends Content
     var $with_comment  = null;
     var $columns       = null;
     var $home_columns  = null;
+    var $title_int     = null;
     /**#@-*/
     
     /**
@@ -94,22 +95,22 @@ class Article extends Content
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`, `summary`,`body`,
                                `img1`, `img1_footer`, `img2`, `img2_footer`,
                                 `fk_video`, `fk_video2`, `footer_video2`,
-                               `columns`, `home_columns`, `with_comment`) " .
-                        "VALUES (?,?,?,?,?, ?,?,?,?, ?,?,?, ?,?,?)";
+                               `columns`, `home_columns`, `with_comment`, `title_int`) " .
+                        "VALUES (?,?,?,?,?, ?,?,?,?, ?,?,?, ?,?,?,?)";
         
         $values = array($this->id, $data['subtitle'], $data['agency'],  $data['summary'], $data['body'], 
                     $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
                     $data['fk_video'], $data['fk_video2'],$data['footer_video2'],
-                    $data['columns'], $data['home_columns'], $data['with_comment']);
-        
+                    $data['columns'], $data['home_columns'], $data['with_comment'], $data['title_int']);
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return false;
         }
-        
+ 
         $this->saveRelated($data['ordenArti'], $this->id, 'set_rel_position');        
         $this->saveRelated($data['ordenArtiInt'], $this->id, 'set_rel_position_int');
         
@@ -178,24 +179,24 @@ class Article extends Content
             $sql = "UPDATE articles SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, " .
                 "`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, ".
                 "`fk_video`=?, `fk_video2`=?, `footer_video2`=?, ".
-                "`columns`=?, `with_comment`=? " .
+                "`columns`=?, `with_comment`=?, `title_int`=? " .
                 "WHERE pk_article=".($data['id']);
             
             $values = array(strtoupper($data['subtitle']), $data['agency'], $data['summary'], $data['body'], 
                     $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'], 
                     $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
-                    $data['columns'], $data['with_comment']);
+                    $data['columns'], $data['with_comment'], $data['title_int']);
         } else {
             $sql = "UPDATE articles SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, " .
                 "`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, ".
                 "`fk_video`=?, `fk_video2`=?, `footer_video2`=?, ".
-                "`home_columns`=?, `with_comment`=? " .
+                "`home_columns`=?, `with_comment`=?, `title_int`=? " .
                 "WHERE pk_article=".($data['id']);
             
             $values = array(strtoupper($data['subtitle']), $data['agency'], $data['summary'], $data['body'], 
                     $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'], 
                     $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
-                    $data['home_columns'], $data['with_comment']);
+                    $data['home_columns'], $data['with_comment'], $data['title_int']);
         }
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -286,7 +287,7 @@ class Article extends Content
         if(!is_array($content)) {
             $id = $content;
             
-            $commonProperties = array('title', 'category', 'with_comment', 'in_home', 'metadata',
+            $commonProperties = array('title', 'category', 'with_comment', 'in_home', 'metadata', 'title_int',
                                       'subtitle', 'agency', 'summary', 'body', 'fk_video', 'img1', 'img1_footer',
                                       'img2', 'img2_footer', 'fk_video2', 'footer_video2', 'starttime', 'endtime',
                                       'description', 'fk_publisher');

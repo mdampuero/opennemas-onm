@@ -43,7 +43,16 @@
     </td>
     <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
         <input type="text" id="title" name="title" title="Título de la noticia" tabindex="1"
-            value="{$article->title|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));get_tags(this.value); search_related('{$article->pk_article}',$('metadata').value);"  onkeyup="countWords(this,document.getElementById('counter_title'))"  onkeyup="countWords(this,document.getElementById('counter_title'))"/>
+            value="{$article->title|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));  search_related('{$article->pk_article}',$('metadata').value);"  onkeyup="countWords(this,document.getElementById('counter_title'))"  onkeyup="countWords(this,document.getElementById('counter_title'))"/>
+    </td>
+</tr>
+<tr>
+    <td valign="top" align="right" style="padding:4px;" width="10%">
+        <label for="title">T&iacute;tulo Interior:</label>
+    </td>
+    <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+        <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
+            value="{$article->title_int|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
     </td>
     <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
         <table style='background-color:#F5F5F5; padding:18px; width:99%;'>                
@@ -171,6 +180,15 @@
                 <td nowrap="nowrap"  style="text-align:left;vertical-align:top">
                     <input type="text" id="counter_title" name="counter_title" title="counter_title" tabindex="-1"
                         value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" align="right">
+                    <label for="counter_title">T&iacute;tulo Interior:</label>
+                </td>
+                <td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
+                    <input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int"
+                        value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/>
                 </td>
             </tr>
             <tr>
