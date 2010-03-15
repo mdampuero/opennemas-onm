@@ -23,12 +23,11 @@ class Video extends Content{
     }
 
   function create($data) {
-        $data['category'] = $GLOBALS['application']->conn->
-        	GetOne('SELECT * FROM `content_categories` WHERE name = "'. $this->content_type.'"');
-		parent::create($data);
+ 
+        parent::create($data);
 
-		$sql = "INSERT INTO videos (`pk_video`,`videoid`, `htmlcode`,`author_name`) " .
-				"VALUES (?,?,?,?)";
+        $sql = "INSERT INTO videos (`pk_video`,`videoid`, `htmlcode`,`author_name`) " .
+                        "VALUES (?,?,?,?)";
 
         $values = array($this->id, $data['videoid'],$data['htmlcode'],$data['author_name']);
 
@@ -43,7 +42,7 @@ class Video extends Content{
     }
 
     function read($id) {
-		parent::read($id);
+	parent::read($id);
 
         $sql = 'SELECT * FROM videos WHERE pk_video = '.$id;
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -62,8 +61,8 @@ class Video extends Content{
         $this->author_name = $rs->fields['author_name'];
     }
 
-    function update($data) {  
-    	 parent::update($data);  
+    function update($data) {
+        parent::update($data);
         $sql = "UPDATE videos SET  `videoid`=?, `htmlcode`=?,`author_name`=?  " .
         		" WHERE pk_video=".$data['id'];
 		//echo $sql;

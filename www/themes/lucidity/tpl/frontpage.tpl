@@ -118,7 +118,7 @@
                             <div class="border-dotted">
                                 {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_3"}
                             </div>
-                            {include file="widget_facebook.tpl"}
+                            {*include file="widget_facebook.tpl"*}
                             </div>
                         </div>
 

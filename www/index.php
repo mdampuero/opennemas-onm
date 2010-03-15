@@ -304,20 +304,9 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     
  
     /***********************************  PHOTO-ALBUM  *********************************************/
-
-
-        // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-        $videos = $cm->find('Video', 'contents.content_status=1', 'ORDER BY created DESC LIMIT 0 , 4');
-
-        foreach($videos as $video){
-            $videos_authors[] = new Author($video->fk_user);
-        }
-
-        $tpl->assign('videos', $videos);
-        $tpl->assign('videos_authors', $videos_authors);
-
-        /***********************************  VIDEOS  *********************************************/
-   
+ 
+    /***********************************  VIDEOS  *********************************************/
+    require_once ("widget_videos.php");
     /*******************************  SUPLEMENTOS Column3 ******************************************
     require_once ("index_suplementos.php");
 

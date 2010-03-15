@@ -41,21 +41,35 @@
     <div class="tv-highlighter clearfix">
         <div class="tv-highlighter-header clearfix">
             <img src="{$smarty.const.MEDIA_PATH_URL}/sections/tv.png" alt="" />
-            <form action="#">
-                <select name="asdf">
-                    <option>Deportes</option>
-                    <option>Cotilleo</option>
-                    <option>Política</option>
-                    <option>Otros</option>
-                </select>
-            </form>
+
         </div>
         <div class="tv-highlighter-big clearfix">
-            <img src="{$smarty.const.MEDIA_PATH_URL}/video.futebol.png" alt="" align="center"/>
+            <object width="300" height="225">
+                <param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=8259304&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=b0113A&amp;fullscreen=1" />
+                <embed src="http://vimeo.com/moogaloop.swf?clip_id=8259304&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=b0113A&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="300" height="225"></embed>
+            </object>
             <p>
-                Partido sin complicaciones para los Vascos<br/>
+                 Felix Rodriguez de la Fuente<br/>
                 <img src="{$smarty.const.MEDIA_PATH_URL}/stars.png" alt="" />
             </p>
+            <ul class="div.tv-highlighter">
+            {section name=i loop=$videos}
+                {if $smarty.section.i.first}
+                    <li class="first"><a href="#">
+                        <img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                    </a></li>
+                {elseif $smarty.section.i.last}
+                    <li class="last"><a href="#">
+                        <img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                    </a></li>
+                {else}
+                    <li class="first"><a href="#">
+                        <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                    </a></li>
+                {/if}
+
+            {/section}
+        </ul>
         </div>
 
     </div>
