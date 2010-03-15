@@ -181,178 +181,7 @@ changedTables = function(category) {
             Nodes[i].setAttribute('class',"go_home");
     }
 }
-                
-//Para mover posicion de los articles y guardar posicion nueva (list articles).
-function savePos(category) {
-    var des = "";
-    changedTables();
- 
-    var destaca=$('des');
-    var items = destaca.getElementsByTagName("table");
-	for (i = 0; i < items.length; i++) {	   		
-		if(items[i].getAttribute('class') == 'tabla'){
-			des = des + "," +items[i].getAttribute('value');
-			items[i].setAttribute('name',"selected_fld[]"); 	
-		}	
-	}	
- 
-	var items = destaca.getElementsByClassName("minput");
-	for (i = 0; i < items.length; i++) {	   		
-		items[i].setAttribute('name',"selected_fld[]");
-	} 
-	var items = destaca.getElementsByClassName("noportada");
-	for (i = 0; i < items.length; i++) {	 
-		items[i].setAttribute('alt',"En portada");   		
-		items[i].setAttribute('src',"/admin/themes/default/images/publish_g.png"); 
-		items[i].setAttribute('class',"portada"); 		 
-	}
-	
-	var items = destaca.getElementsByClassName("noinhome");
-	for (i = 0; i < items.length; i++) {	   		
-		items[i].setAttribute('style','display:inline;'); 
-		items[i].setAttribute('class',"inhome"); 
-	}	
-		
-	var pares ="";
-	
-	var even=$('even');
-	var items = even.getElementsByTagName("table");		
-	for (i = 0; i < items.length; i++) {	   		
-		if(items[i].getAttribute('class') == 'tabla'){
-			pares = pares + "," +items[i].getAttribute('value');
-		}			
-	}
-	
-
-         var nopubli ="";
-
-            var nopub=$('div_no_home');
-            var items = nopub.getElementsByTagName("table");
-            for (i = 0; i < items.length; i++) {
-              if(items[i].getAttribute('class') == 'tabla'){
-                nopubli =nopubli + "," +items[i].getAttribute('value');
-              }
-            }
-        
-	if (category !='home'){   //Cambiar los iconos.
-                        /*var nopubli ="";
-                        var nopub=$('art');
-                        items = nopub.getElementsByTagName("table");
-                        for (i = 0; i < items.length; i++) {
-                          if(items[i].getAttribute('class') == 'tabla'){
-                            nopubli =nopubli + "," +items[i].getAttribute('value');
-                          }
-                        }
-        */
-			items = even.getElementsByClassName("minput");
-			for (i = 0; i < items.length; i++) {	   		
-			   items[i].setAttribute('name',"selected_fld[]");
-			} 
-			
-			items = even.getElementsByClassName("noportada");
-			for (i = 0; i < items.length; i++) {	   		
-			  items[i].setAttribute('src',"/admin/themes/default/images/publish_g.png"); 	 
-			  items[i].setAttribute('alt',"En portada"); 	
-			  items[i].setAttribute('name',"selected_fld[]"); 
-			  items[i].setAttribute('class',"portada"); 
-			}
-			items = even.getElementsByClassName("noinhome");
-			for (i = 0; i < items.length; i++) {	   		
-			  items[i].setAttribute('style','display:inline;'); 
-			  items[i].setAttribute('class',"inhome"); 
-			}	
-						
-							
-			items = nopub.getElementsByClassName("minput");
-			for (i = 0; i < items.length; i++) {	   		
-			   items[i].setAttribute('name',"no_selected_fld[]");
-			} 
-			items = nopub.getElementsByClassName("portada");
-			for (i = 0; i < items.length; i++) {	   		
-			  items[i].setAttribute('src',"/admin/themes/default/images/publish_r.png"); 		 
-			  items[i].setAttribute('alt',"No en portada"); 	
-			  items[i].setAttribute('class',"noportada"); 
-			}
-			var items = nopub.getElementsByClassName("inhome");
-			for (i = 0; i < items.length; i++) {	   		
-			  items[i].setAttribute('style','display:none;'); 
-			  items[i].setAttribute('class',"noinhome"); 
-			}
-		
-	}else{
-           	var hole1 ="";
-                var items = $('hole1').getElementsByTagName("table");
-                for (i = 0; i < items.length; i++) {
-                  if(items[i].getAttribute('class') == 'tabla'){
-                    hole1 =hole1 + "," +items[i].getAttribute('value');
-                  }
-                }
-                var hole2 ="";
-                var items = $('hole2').getElementsByTagName("table");
-                for (i = 0; i < items.length; i++) {
-                  if(items[i].getAttribute('class') == 'tabla'){
-                    hole2 =hole2 + "," +items[i].getAttribute('value');
-                  }
-                }
-                var hole3 ="";
-                var items = $('hole3').getElementsByTagName("table");
-                for (i = 0; i < items.length; i++) {
-                  if(items[i].getAttribute('class') == 'tabla'){
-                    hole3 =hole3 + "," +items[i].getAttribute('value');
-                  }
-                }
-                var hole4 ="";
-                var items = $('hole4').getElementsByTagName("table");
-                for (i = 0; i < items.length; i++) {
-                  if(items[i].getAttribute('class') == 'tabla'){
-                    hole4 =hole4 + "," +items[i].getAttribute('value');
-                  }
-                }
-            //Cambio Icono casa.
-            items = $('even').select("img.inhome");
-            for (i = 0; i < items.length; i++) {	   
-                    items[i].setAttribute('src',"/admin/themes/default/images/gohome.png");                   
-            }
-            items = $('odd').select("img.inhome");
-            for (i = 0; i < items.length; i++) {
-                    items[i].setAttribute('src',"/admin/themes/default/images/gohome.png");
-            }
-            items = $('des').select("img.inhome");
-            for (i = 0; i < items.length; i++) {
-                    items[i].setAttribute('src',"/admin/themes/default/images/gohome.png");
-            }
-
-            items = $('art').select("a.no_home");
-            for (i = 0; i < items.length; i++) {
-                //    items[i].setAttribute('src',"/admin/themes/default/images/gosuggesthome.png");             
-                    items[i].setAttribute('class',"no_suggest");
-            }
-        }
-
-	new Ajax.Request(
-		"cambiapos.php?pares=" + pares + "&hole1=" + hole1 + "&hole2=" + hole2 + "&hole3=" + hole3 + "&hole4=" + hole4 + "&des=" + des + "&nopubli=" + nopubli + "&category=" + category,
-		{
-			method: 'get',
-			onLoaded: $('warnings-validation').update('Guardando ...'),
-			onSuccess: function(transport) {
-				$('warnings-validation').update( transport.responseText );
-				new Effect.Highlight( $('warnings-validation') );
-				
-				// Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
-				if(posicionesIniciales) {
-					posicionesIniciales = $$('input[type=checkbox]');
-					posicionesInicialesWarning = false;
-				}
-			},
-			
-			onFailure: function(transport) {
-				$('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
-				new Effect.Highlight( $('warnings-validation') );
-			}
-		}
-	);
-
-}
+  
 
 /**
  * Preview
@@ -364,17 +193,20 @@ function savePos(category) {
 function previewFrontpage() {
 	// Data serialized
 	var serialData = {};
-	
-	// Placeholders
-	var placeholders = ['placeholder_0_0', 'placeholder_0_1',
-						'placeholder_1_0', 'placeholder_1_1',
-						'placeholder_1_2', 'placeholder_1_3'];
-	
-	// Form
+
+
+        var huecos = getHoles();
+
+        var placeholders = new Array();
+
+        for(var i=0; i<huecos.length; i++) {
+            placeholders.push(huecos[i].id);
+        }
+ 	// Form
 	var frm = $('formulario');
 
 	// Containers 
-	['des', 'even', 'hole1', 'hole2', 'hole3', 'hole4'].each(function(idDiv, i){
+	huecos .each(function(idDiv, i){
 		if( $(idDiv) ) {
 			$(idDiv).select('table').each(function(item) {
 				//items.push(item.getAttribute('value'));

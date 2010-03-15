@@ -41,7 +41,10 @@
 
                 <div id="main_content" class="single-article span-24">
                     <div class="in-big-title span-24">
-                        <h1>{$article->title|clearslash}</h1>
+                        {if !empty($article->title_int)} <h1>{$article->title_int|clearslash}</h1>
+                        {else}
+                           <h1>{$article->title|clearslash}</h1>
+                        {/if}
                         <p class="in-subtitle">{$article->subtitle|clearslash}</p>
                         <div class="info-new">
                             <span class="author">{$article->agency|clearslash}</span> - <span class="place">Santiago de Compostela</span> - <span class="publish-date">{articledate article=$article updated=$article->changed}</span>

@@ -112,11 +112,11 @@ list($destaca, $articles_home) = sortArticles($articles_home, $pk2placeholder, $
 
 // Filter by scheduled {{{
 $articles_home = $cm->getInTime($articles_home, $preview_time);
-$destaca = $cm->getInTime($destaca, $preview_time);
+//$dest/aca = $cm->getInTime($destaca, $preview_time);
 // }}}
 
-$tpl->assign('destaca', $destaca);
-$tpl->assign('articles_home', $articles_home);
+//$tpl->assign('destaca', $destaca);
+//$tpl->assign('articles_home', $articles_home);
 
 /**************************************  PHOTOS  ***********************************************/
 $imagenes = array();
@@ -145,126 +145,88 @@ if(count($imagenes)>0) {
 
 $tpl->assign('photos', $photos);
 
+  /************************************ COLUMN1 **************************************************/
 
-/**************************************  PHOTOS  ***********************************************/
+    /***** GET ALL FRONTPAGE'S IMAGES *******/
+    $imagenes = array();
+    foreach($articles_home as $i => $art) {
+        if(isset($art->img1)) {
+            $imagenes[] = $art->img1;
+        }
+    }
 
-/********************************  HEAD ARTICLE -PHOTO OR VIDEO **********************************************/
+    if(count($imagenes)>0) {
+        $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
+    }
+
+    $column = array(); //Contendrá las noticias de la columna
+    $relia  = new Related_content();
+     // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
+
+    for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
+
+        $column[$c] = $articles_home[$aux];
+        /*****  GET IMAGE DATA *****/
+        if(isset($column[$c]->img1)) {
+                // Buscar la imagen
+                if(!empty($imagenes)) {
+                    foreach($imagenes as $img) {
+                        if($img->pk_content == $column[$c]->img1) {
+                         //   $photos[$art->id] = $img->path_file.$img->name;
+
+                            $column[$c]->img1_path = $img->path_file.$img->name;
+                            break;
+                        }
+                    }
+                }
+            }
+         /***** GET OBJECT VIDEO *****/
+        if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
+            $video=$column[$c]->fk_video;
+            if(isset($video)){
+               $video1=new Video($video);
+               $column[$c]->obj_video= $video1;
+            }
+        }
+
+        /***** COLUMN1 RELATED NEWS  ****/
+        $relationes = $relia->get_relations($articles_home[$aux]->id);
+        ////se le pasa el id de cada noticia de la column1
+        // devueve array con los id de las noticias relacionadas
+
+        $relats = array();
+        foreach($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
+
+            $obj = new Content($id_rel);
+            // Filter by scheduled {{{
+            if($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
+               $relats[] =$obj;
+            }
+            // }}}
+        }
+        $column[$c]->related_contents = $relats;
+
+        /***** COLUMN1 COMMENTS *******
+        if($articles_home[$aux]->with_comment) {
+            $comment = new Comment();
+
+            $numcomment1[$articles_home[$aux]->id] = $comment->count_public_comments($articles_home[$aux]->id);
+            $tpl->assign('numcomment1', $numcomment1);
+        }
+
+
+        /******* COLUMN1 RATINGS ********
+        $rating = new Rating($articles_home[$aux]->id);
+        $rating_bar_col1[$articles_home[$aux]->id] = $rating->render('home','vote');
+        /******* END COLUMN1 RATINGS **********/
+    }
+   //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
+   //  $tpl->assign('relationed_c1', $relat_c1);
+    $tpl->assign('column', $column);
  
-if (isset($destaca[0]->fk_video) and ($destaca[0]->fk_video != 0)) {
-    $video=$destaca[0]->fk_video; 
-    if(isset($video)){
-         $video1=new Video($video);
-         $tpl->assign('video_destacada', $video1);
-    }    
-}else{
-    if (isset($destaca[0]->img1)) {
-        $photo_des = new Photo($destaca[0]->img1);
-        $photo_destacada = $photo_des->path_file.$photo_des->name;
-        $tpl->assign('photo_destacada', $photo_destacada);
-    }
-}
+    /************************************ END COLUMN1 **************************************************/
 
-/************************** HEAD ARTICLE - RELATED NEWS ***************************************/
-//related articles  in portada  para Destacado
-$rel= new Related_content();
-$relationes = $rel->get_relations($destaca[0]->id);
-
-$relationes = array_unique($relationes);
-foreach($relationes as $id_rel) {
-    $resul = new Content($id_rel);
-    $losrel[] = $resul;
-}
-
-// Filter by scheduled {{{
-$losrel = $cm->getInTime($losrel);
-// }}}
-
-$losrel = $cm->getAvailable($losrel);
-$tpl->assign('relationed', $losrel);
-
-/***********************************HEAD ARTICLE - COMMENTS *******************************/
-//Comentarios para destacado
-if($destaca[0]->with_comment){
-    $comment    = new Comment();
-    $numcomment = $comment->count_public_comments( $destaca[0]->id );
-
-    $tpl->assign('numcomment', $numcomment);
-}
-/********************************  HEAD ARTICLE  **********************************************/
-
-/************************************ COLUMN1 **************************************************/
-$column = array(); //Contendrá las noticias de la columna
-$relia  = new Related_content();
-$relationed = array();
-$relat_c1   = array(); //Array de elementos relacionados de las noticas de la columna
-$rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
-
-for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
-
-    $column[$c] = $articles_home[$aux];
-    // GET OBJECT VIDEO
-    if (isset($column[$c]->fk_video) and ($column[$c]->fk_video != 0)) {
-        $video=$column[$c]->fk_video;
-        if(isset($video)){
-            $video1=new Video($video);
-            $column[$c]->obj_video= $video1;
-        }
-    }
-
-    /**************** COLUMN1 RELATED NEWS ****************/
-    $relationes = $relia->get_relations($articles_home[$aux]->id); //se le pasa el id de cada noticia de la column1
-    // devueve array con los id de las noticias relacionadas
-
-    foreach($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
-       //se genera un array para cada noticia se incluye todos los contents relacionadas
-        $obj = new Content($id_rel);
-
-        // Filter by scheduled {{{
-        if($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {         
-           $relat_c1[$articles_home[$aux]->id][] = $obj;
-        }
-        // }}}
-    }
-    //se pasa un array multiple con los id de la noticia de la colum1 y  las relacionadas con esta
-    $tpl->assign('relationed_c1', $relat_c1);
-    // var_dump($relat_c1);
-    /**************** COLUMN1 RELATED NEWS ****************/
-
-    /****************** COLUMN1 COMMENTS ******************/
-    if($articles_home[$aux]->with_comment) {
-        $comment = new Comment();
-        /*$todos1[$articles_home[$aux]->id] = $comment->get_public_comments($articles_home[$aux]->id);
-        $numcomment1[$articles_home[$aux]->id] = count($todos1[$articles_home[$aux]->id]);
-        $tpl->assign('numcomment1', $numcomment1);*/
-
-        $numcomment1[$articles_home[$aux]->id] = $comment->count_public_comments($articles_home[$aux]->id);
-        $tpl->assign('numcomment1', $numcomment1);
-    }
-    /****************** COLUMN1 COMMENTS ******************/
-
-    /****************** COLUMN1 RATINGS ******************
-    $rating = new Rating($articles_home[$aux]->id);
-    $rating_bar_col1[$articles_home[$aux]->id] = $rating->render('home','vote');
-    /****************** COLUMN1 RATINGS ******************/
-}
-
-$tpl->assign('column', $column);
-$tpl->assign('rating_bar_col1', $rating_bar_col1);
-/************************************ COLUMN1 **************************************************/
-
-
-
-/*****************************************  Humor Grafico (album) ********************************/
-$humor = new Album();
-$array_humor = array('pepe-carreiro','orballo','rufus');
-
-// FIXME: Correxir para que non xere $humor = new Album();
-$alb      = $cm->find_by_category_name('Album', $array_humor[array_rand($array_humor)],'available=1 ', 'ORDER BY created DESC LIMIT 0 , 1');
-$humores  = $humor->get_firstfoto_album($alb[0]->id);
-
-$tpl->assign('alb_humor', $alb);
-$tpl->assign('humores', $humores);
-
+ 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 $articles_home_express = $cm->find('Article', 'content_status=1 AND available=1 AND fk_content_type=1', 'ORDER BY created DESC LIMIT 0 , 5 ');
 // Filter by scheduled {{{
@@ -332,7 +294,7 @@ require_once ("index_suplementos.php");
 require_once ("index_opinion.php");
 /************************************ OPINION **************************************************/
 
-/**********************************  CONECTA COLUMN3  ******************************************/
+/**********************************  CONECTA COLUMN3  *****************************************
 require_once("index_conecta.php");
 /**********************************  CONECTA COLUMN3  ******************************************/
 $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
@@ -378,4 +340,4 @@ $tpl->assign('lastAlbumContent', $lastAlbum[0]);
 require_once ("index_advertisement.php");
 /********************************* ADVERTISEMENTS  *********************************************/
 
-$tpl->display('index.tpl');
+$tpl->display('frontpage.tpl');
