@@ -170,31 +170,33 @@
                     </div>
                     <div class="layout-column last-column opacity-reduced last span-8">
                         <div class="border-dotted">
-                        	<br/><br/>
-							<img src="images/lastest.png" />
-							
-							<!--
-							<div id="tabs">
+
+                            <div id="tabs" class="inner-video-tabs">
 								<ul>
-									<li><a href="#fragment-1"><span>Últimos</span></a></li>
-									<li><a href="#fragment-2"><span>Novos</span></a></li>
-									<li><a href="#fragment-3"><span></span></a></li>
+									<li><a href="#tab-related"><span>Relacionados</span></a></li>
+									<li><a href="#tab-new"><span>Novos</span></a></li>
 								</ul>
-								<div id="fragment-1">
-									<p>First tab is active by default:</p>
-									<pre><code></code></pre>
+								<div id="tab-related">
+                                    <div class="tab-thumb-video">
+
+                                    </div>
+                                    <div class="tab-thumb-video"></div>
+                                    <div class="tab-thumb-video"></div>
+                                    <div class="tab-thumb-video"></div>
+                                    <div class="tab-thumb-video"></div>
+                                    <div class="tab-thumb-video"></div>
+                                    <div class="tab-thumb-video"></div>
+                                    
 								</div>
-								<div id="fragment-2">
-									
-								</div>
-								<div id="fragment-3">
+								<div id="tab-new">
 									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 								</div>
 							</div>
-							-->
-							
+
+                            
+                            <!--<img src="images/lastest.png" />-->
 							<div id="public_lateral_video">Lugar para PUBLI</div>
 	                    </div>
 						
@@ -321,7 +323,7 @@
 							
 							<div class="interested-video">
 								<div class="capture">
-									<img src="images/video/video-2.jpg" />
+									<img src="images/video/video-4.jpg" />
 									<div class="bar-video-tiny-info"></div>
 									<div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
 								</div>
@@ -356,5 +358,10 @@
     <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
     <script type="text/javascript" src="javascripts/functions.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            $('#tabs').height($('#video-content').height()+15);
+        });
+    </script>
   </body>
 </html>

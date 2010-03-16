@@ -11,7 +11,6 @@ jQuery(document).ready(function(){
 
 
 	$("#tabs").tabs();
-	alert();
 });
 
 var min=8;

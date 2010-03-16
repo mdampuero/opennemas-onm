@@ -188,6 +188,7 @@ div.other-interested-videos h3{
 }
 div.other-interested-videos{
 	text-aling:right;
+    position:relative
 }
 
 div.interested-video { background:#2a2a2a; text-align:center; margin:10px 0; padding:10px 0; width:210px; margin:0 aut0; 	float:right;}
@@ -239,6 +240,47 @@ div.bar-video-tiny-info-image-video{
 	left:5px;
 }
 
+div.featured-videos h3{
+    	font-family:Georgia;
+	color:White;
+	text-align:left;
+}
 
+div#main_content{
+    margin-top:10px;
+}
 
+div.other-interested-videos div.clean-paginator{
+    position:absolute;
+    right:10px;
+    top: 10px;
+}
 
+div.other-interested-videos div.clean-paginator *{
+    font-family:Verdana;
+    font-size:1em;
+}
+div.other-interested-videos div.clean-paginator a{
+    color:White;
+}
+div.portada-videos div.featured-videos h1{
+    font-size:1.5em;
+
+}
+div.portada-videos div.featured-videos h1 img{
+    vertical-align:middle;
+}
+div.ui-tabs-nav, div.ui-helper-reset, .ui-helper-clearfix, .ui-widget-header .ui-corner-all{
+    background:#1c1e1c !important;
+}
+.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom{
+    background:#1c1e1c !important;
+}
+.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all{
+ padding:0;
+ margin:0;
+}
+
+.inner-video-tabs{
+    margin-top:35px;
+}
