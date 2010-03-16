@@ -96,7 +96,7 @@ require_once ("index_sections.php");
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 /******************************  CAROUSEL DE OPINIONES  **************************************/
-require_once ("carousel.php");
+//require_once ("carousel.php");
 /******************************  CAROUSEL DE OPINIONES  **************************************/
 
 //Obtenemos los articulos

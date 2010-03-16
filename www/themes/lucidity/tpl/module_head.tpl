@@ -15,12 +15,30 @@
 
     <link rel="stylesheet" href="{$params.CSS_DIR}/onm-mockup.css" type="text/css" media="screen,projection">
     
-    {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
+    {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
         <title>Crónica comarcal - {$category_real_name|clearslash} - {$article->title|clearslash} </title>
         <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
         <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">
 
         <script defer type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
+
+        {literal}
+        <style type="text/css">
+                #main_menu{
+                        background-color:#009677;
+                }
+        </style>
+        {/literal}
+    {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
+        <link rel="stylesheet" href="stylesheets/video.css" type="text/css" media="screen,projection">
+        <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
+        {literal}
+	<style type="text/css">
+		#main_menu{
+			background-color:#009677;
+		}
+	</style>
+        {/literal}
     {else}
          <title>Crónica comarcal - noticias de España y del mundo </title>
     {/if}

@@ -18,13 +18,7 @@
 
     <body>
         {* Cambiar color del menú segun la section *}
-        {literal}
-        <style type="text/css">
-                #main_menu{
-                        background-color:#009677;
-                }
-        </style>
-        {/literal}
+       
        
         {include file="widget_ad_top.tpl"}
 
