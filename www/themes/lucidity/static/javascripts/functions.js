@@ -9,6 +9,9 @@ jQuery(document).ready(function(){
         });
     },4000);
 
+
+	$("#tabs").tabs();
+	alert();
 });
 
 var min=8;

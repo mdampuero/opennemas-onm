@@ -173,7 +173,7 @@ html[xmlns] .clearfix {
     text-transform:uppercase;
     font-weight: bold;
 }
-#main_menu ul li:hover{
+#main_menu ul li:hover, #main_menu ul li.active{
     background:#900e2f;
     cursor:pointer;
 }
