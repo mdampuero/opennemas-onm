@@ -177,26 +177,29 @@
 									<li><a href="#tab-new"><span>Novos</span></a></li>
 								</ul>
 								<div id="tab-related">
-                                    <div class="tab-thumb-video">
+                                    <?php for( $i = 1; $i <= 10; $i++ ){
+                                        echo '
+                                    <div class="tab-thumb-video clearfix">
+                                        <img src="images/video/thumb-video-'.(rand(1,50)%5+1).'.jpg" />
+                                        <div class="tab-thumb-video-shortitle">Política</div>
+                                        <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                    </div>';
+                                    } ?>
+                                    
 
-                                    </div>
-                                    <div class="tab-thumb-video"></div>
-                                    <div class="tab-thumb-video"></div>
-                                    <div class="tab-thumb-video"></div>
-                                    <div class="tab-thumb-video"></div>
-                                    <div class="tab-thumb-video"></div>
-                                    <div class="tab-thumb-video"></div>
                                     
 								</div>
 								<div id="tab-new">
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-									Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+									<?php for( $i = 1; $i <= 10; $i++ ){
+                                        echo '
+                                    <div class="tab-thumb-video clearfix">
+                                        <img src="images/video/thumb-video-'.rand(1,5).'.jpg" />
+                                        <div class="tab-thumb-video-shortitle">Deporte</div>
+                                        <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                    </div>';
+                                    } ?>
 								</div>
 							</div>
-
-                            
-                            <!--<img src="images/lastest.png" />-->
 							<div id="public_lateral_video">Lugar para PUBLI</div>
 	                    </div>
 						
@@ -361,6 +364,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $('#tabs').height($('#video-content').height()+15);
+            $('#').height($('#video-content').height()+15);
         });
     </script>
   </body>

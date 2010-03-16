@@ -229,7 +229,7 @@ div.interested-video div.bar-video-tiny-info{
 div.interested-video div.bar-video-tiny-info img{
 	vertical-align:center;
 	margin:2px 0 0 5px;
-		filter:alpha(opacity=170);
+	filter:alpha(opacity=170);
 	-moz-opacity:1.7;
 	-khtml-opacity: 1.2;
 	opacity: 1.2;
@@ -275,12 +275,41 @@ div.ui-tabs-nav, div.ui-helper-reset, .ui-helper-clearfix, .ui-widget-header .ui
 }
 .ui-tabs-panel, .ui-widget-content, .ui-corner-bottom{
     background:#1c1e1c !important;
+    padding:0;
+    margin:0;
 }
 .ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all{
- padding:0;
- margin:0;
+    padding:0;
+    margin:0;
+    border:0px !important;
 }
 
 .inner-video-tabs{
     margin-top:35px;
 }
+div#tabs div{
+    margin:0;
+    padding:0;
+}
+div#tabs .tab-thumb-video{
+    width:99%;
+    border-bottom:1px solid #373737;
+}
+
+div#tabs div.ui-tabs-panel{
+    overflow: scroll;
+    overflow-x: hidden;
+    height:320px;
+    border:1px solid #373737 !important;
+}
+.ui-tabs-nav a{color:White !important; font-family:Verdana !important; font-size:.8em !important; text-transform: uppercase}
+.ui-tabs-nav{ border:none !important;}
+.ui-tabs-default{background-color:#292929 !important; }
+.ui-tabs-selected, .ui-tabs-active{
+    background:#1c1e1c !important;
+    border-color:#373737 !important;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: #ccc !important;}
+div#tabs div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div#tabs .tab-thumb-video-shortitle{ text-transform:uppercase; color:#747678; font-size:.9em; margin:0; padding:0}
+div#tabs .tab-thumb-video-title{ font-family:Georgia; color:White; font-size:1.2em; margin:0; padding:0}
