@@ -62,7 +62,7 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
+            $videos = $cm->find_by_category_name('Video',$actual_category, NULL, 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
  var_dump($actual_category);
 var_dump($videos);
            // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
