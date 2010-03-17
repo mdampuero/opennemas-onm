@@ -54,7 +54,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'list':  //Buscar publicidad entre los content
 			$cm = new ContentManager();
 		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-			list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10);				
+			list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
 			$i=0;
 			foreach($videos as $video){
 			
@@ -66,8 +66,8 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('paginacion', $pager);
 			$tpl->assign('videos', $videos);
 			$tpl->assign('authors', $authors);
-		
-			
+
+             
 		break;
 
 		case 'new':
