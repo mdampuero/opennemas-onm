@@ -246,7 +246,36 @@
                                 <div class="article-comments">
                                         <div class="title-comments"><h3><span>Nuevos vídeos</span></h3></div>
                                 </div>
-                                <img src="images/lastest.png" />
+                                <div id="tabs" class="inner-video-tabs">
+                                    <ul>
+                                        <li><a href="#tab-related"><span>Relacionados</span></a></li>
+                                        <li><a href="#tab-new"><span>Novos</span></a></li>
+                                    </ul>
+                                    <div id="tab-related">
+                                        <?php for( $i = 1; $i <= 10; $i++ ){
+                                            echo '
+                                        <div class="tab-thumb-video clearfix">
+                                            <img src="images/video/thumb-video-'.(rand(1,50)%5+1).'.jpg" />
+                                            <div class="tab-thumb-video-shortitle">Política</div>
+                                            <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                        </div>';
+                                        } ?>
+
+
+
+                                    </div>
+                                    <div id="tab-new">
+                                        <?php for( $i = 1; $i <= 10; $i++ ){
+                                            echo '
+                                        <div class="tab-thumb-video clearfix">
+                                            <img src="images/video/thumb-video-'.rand(1,5).'.jpg" />
+                                            <div class="tab-thumb-video-shortitle">Deporte</div>
+                                            <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                        </div>';
+                                        } ?>
+                                    </div>
+                                </div>
+                                <div id="public_lateral_video">Lugar para PUBLI</div>
                             </div>
                             <div class="span-8 last">
                                 <div class="list-comments span-8 opacity-reduced">
@@ -263,6 +292,14 @@
 
                                     <div class="comment-wrapper clearfix">
                                         <div class="comment-number">10</div>
+                                        <div class="comment-content span-6 prepend-2">
+                                            "Es muy buen jugador, no lo voy a descubrir yo. Lleva ...".
+                                        </div>
+
+                                    </div><!--comment-wrapper-->
+
+                                    <div class="comment-wrapper clearfix">
+                                        <div class="comment-number">11</div>
                                         <div class="comment-content span-6 prepend-2">
                                             "Es muy buen jugador, no lo voy a descubrir yo. Lleva ...".
                                         </div>
