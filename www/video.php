@@ -26,21 +26,23 @@ $ccm = new ContentCategoryManager();
 
 //Obtenemos los articulos
 $cm = new ContentManager();
-if (isset ($_GET['category_name'])) {
+
+if (isset($_GET['category_name'])) {
     $category_name = $_GET['category_name'];
 }else{
+ 
      $category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu LIMIT 0,1');
      $category_name = $category_data[0]->name;
+
 }
 
 $actual_category = $category_name;
 
-if (!isset ($_GET['subcategory_name'])) {
+if (isset ($_GET['subcategory_name'])) {
     $subcategory_name = $_GET['subcategory_name'];
-    $actual_category = $_GET['category_name'];
-} else {
     $actual_category = $_GET['subcategory_name'];
 }
+ 
 require_once ("index_sections.php");
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
@@ -60,8 +62,9 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-             $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
- 
+            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
+ var_dump($actual_category);
+var_dump($videos);
            // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
 
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 12');
