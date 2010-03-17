@@ -11,9 +11,13 @@ $tpl->assign('subcategory', $subcategory);
 $tpl->assign('subcategory_name', $subcategory_name);
 $tpl->assign('subcategory_real_name', $ccm->get_title($subcategory_name));
 
-$allcategorys = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 ', 'ORDER BY posmenu');
-
+if( preg_match('/video\.php/',$_SERVER['SCRIPT_NAME'])){
+    $allcategorys = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu');
+}else{
+    $allcategorys = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category < 3 )', 'ORDER BY posmenu');
+}
 $categories = array();
+
 foreach( $allcategorys as $prima) {
     $subcat = $ccm->get_all_subcategories( $prima->pk_content_category );
     

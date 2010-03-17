@@ -23,16 +23,31 @@ $tpl = new Template(TEMPLATE_USER);
 
 $ccm = new ContentCategoryManager();
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-require_once ("index_sections.php");
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //Obtenemos los articulos
 $cm = new ContentManager();
+if (isset ($_GET['category_name'])) {
+    $category_name = $_GET['category_name'];
+}else{
+     $category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu LIMIT 0,1');
+     $category_name = $category_data[0]->name;
+}
+
+$actual_category = $category_name;
+
+if (!isset ($_GET['subcategory_name'])) {
+    $subcategory_name = $_GET['subcategory_name'];
+    $actual_category = $_GET['category_name'];
+} else {
+    $actual_category = $_GET['subcategory_name'];
+}
+require_once ("index_sections.php");
+/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 
-/**************************************  PHOTOS - VIDEOS  ***********************************************/
+/**************************************   VIDEOS  ***********************************************/
 
-// Se borrara cuando se contemple action en la url (comprobar
+ 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
 
@@ -45,23 +60,20 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-            if ( isset ($_REQUEST['id']) && !empty($_REQUEST['id'])){
-		$videos = $cm->find('Video', 'available=1 and pk_content !='.$_REQUEST['id'], 'ORDER BY created DESC LIMIT 0 , 5');
-                $video = new Video( $_REQUEST['id'] );
-            } else {
-            	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
-            	$video = array_shift($videos);  //Extrae el primero
-            }
+             $videos = $cm->find_by_category_name('Article',$actual_category, 'contents.available = 1 and (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) and contents.fk_content_type=1 ', 'ORDER BY content_status DESC, changed DESC, archive DESC '.$_limit);
+
+           // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
+
+           
 
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 6, 39');
-	    $others_videos= $cm->paginate_num_js($others_videos,5, 1, 'get_paginate_articles',"'videos',''");
-            $tpl->assign('video', $video);
+
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);
             $tpl->assign('pages', $cm->pager);
 	break;
 
-	case 'video':
+	case 'inner':
 	        //FIXED: check if there is the album 'id_album' otherwise exit()
             //SECURITY REASONS
             $video = NULL;
@@ -84,6 +96,7 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('videos', $videos);            
             $tpl->assign('others_videos', $others_videos);
             $tpl->assign('pages', $cm->pager);
+            $tpl->assign('action', 'inner');
 	break;
 
         default:

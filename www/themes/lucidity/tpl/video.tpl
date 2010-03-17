@@ -27,7 +27,7 @@
 
                 </div>
                 {if empty($video)}
-                    {include file="video_frontend.tpl"}
+                    {include file="video_frontpage.tpl"}
                 {else}
                     {include file="video_inner.tpl"}
                 {/if}

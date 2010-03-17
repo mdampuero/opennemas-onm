@@ -24,8 +24,8 @@
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
 
             <a href="/" title="Pulse aquí para ir a la portada de Crónica comarcal">
-                    <img src="images/main-logo.small.black.png" alt="Crónica comarcal" />
-                    <img src="images/logo-sections/video.png" alt="Deportes" />
+                    <img src="{$params.IMAGE_DIR}/main-logo.small.black.png" alt="Crónica comarcal" />
+                    <img src="{$params.IMAGE_DIR}/logo-sections/video.png" alt="Video" />
             </a>
 
         {else}
