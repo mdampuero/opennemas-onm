@@ -62,7 +62,8 @@ div.pagination a{
 	font-family: Verdana !important;
 }
 div.pagination ul{
-	margin-bottom:10px
+	margin-bottom:10px;
+        float:right;
 }
 div.pagination ul li{
 	color:#829bb4;
@@ -80,6 +81,7 @@ div.pagination ul li.next{ color:#829bb4; background:#d9e2eb; border:2px solid #
 div.comment-wrapper{
 	margin:5px 0;
 	color:#747678;
+        position:relative;
 }
 div.comment-content{
 	background:#f3f3f3;
