@@ -178,6 +178,12 @@ html[xmlns] .clearfix {
     cursor:pointer;
 }
 
+#main_menu ul a, #main_menu ul a:hover, #main_menu ul a:link, #main_menu ul a:visited {
+    color:White;
+    text-decoration:none;
+    font-family:Verdana,Arial;
+}
+
 #sub_main_menu{
     background:#e6e6e6;
     font-size:.9em;
@@ -195,10 +201,17 @@ html[xmlns] .clearfix {
     clear:none;
     margin:0;
 }
-#sub_main_menu ul li:hover{
+#sub_main_menu ul li:hover, #sub_main_menu ul li.active{
     background:#ccc;
     cursor:pointer;
 }
+
+#sub_main_menu ul a, #sub_main_menu ul a:hover, #sub_main_menu ul a:link, #sub_main_menu ul a:visited {
+    color:#808080;
+    font-family:Verdana,Arial;
+    text-decoration:none;
+}
+
 #sub_main_menu #main-search-form{
     float:right;
     margin-right:10px;
@@ -372,7 +385,15 @@ ul.more-news-section-sectionlist{
 .more-news-section-sectionlist li.last, .more-news-section-sectionlist li.first{
     border:none;
 }
-.more-news-section-sectionlist li:hover{
+
+.more-news-section-sectionlist li a{
+    text-decoration: none;
+    font-family:Verdana, Arial;
+    color:#222222;
+    font-size:11px;
+}
+
+.more-news-section-sectionlist li a:hover{
     text-decoration: underline;
     cursor: pointer
 }
@@ -383,7 +404,7 @@ ul.more-news-section-links li{
     margin:0; padding:0;
     
 }
-div.more-news-section .first a{
+div.more-news-section-links .first a{
     font-size: 1.6em;
 }
 
@@ -553,6 +574,25 @@ div.flickr-highlighter-footer{
     background:#ccc;
     border-bottom:1px solid #818181;
 
+}
+
+div.flickr-highlighter li{
+    float:left;
+    list-style:none;
+    margin:0;
+    padding:3px;
+    cursor:pointer;
+
+}
+
+div.flickr-highlighter li img{
+    width:70px;
+}
+div.flickr-highlighter li.first{
+    padding-left:0;
+}
+div.flickr-highlighter li.selected{
+    color:#d45500;
 }
 
 /*
