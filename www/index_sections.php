@@ -23,9 +23,11 @@ foreach( $allcategorys as $prima) {
     
     $categories[ $prima->posmenu ] = array( 'name' => $prima->name,
                                             'title' => $prima->title,
-                                            'subcategories' => $subcat);
+                                            'subcategories' => $subcat,
+                                            'color' => $prima->color,
+                                            'logo' => 'media/sections/'.$prima->logo_path);
 }
-
+ 
 $tpl->assign('categories', $categories);
 
 if( !is_null($category) ) {
