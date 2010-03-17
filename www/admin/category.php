@@ -68,11 +68,11 @@ if( isset($_REQUEST['action']) ) {
                                 $resul = $ccm->find('internal_category=1 AND fk_content_category ='.$cate->pk_content_category, 'ORDER BY  inmenu DESC, posmenu ASC');
 				$j=0;
 				foreach($resul as $cate) {						
-                                        $num_sub_contents[$i][$j]['articles']       = $groups['articles'][$cate->pk_content_category];
-					$num_sub_contents[$i][$j]['photos']         = $groups['photos'][$cate->pk_content_category];
-					$num_sub_contents[$i][$j]['advertisements'] = $groups['advertisements'][$cate->pk_content_category];
-                
-					$j++;	
+                                    $num_sub_contents[$i][$j]['articles']       = $groups['articles'][$cate->pk_content_category];
+                                    $num_sub_contents[$i][$j]['photos']         = $groups['photos'][$cate->pk_content_category];
+                                    $num_sub_contents[$i][$j]['advertisements'] = $groups['advertisements'][$cate->pk_content_category];
+
+                                    $j++;
 				}
 				$subcategorys[$i]=$resul;                              
                                 $i++;
@@ -90,18 +90,29 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'new':
+                        $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
 			// Nada
 		break;
 
 		case 'read': //habrá que tener en cuenta el tipo
+                        $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
 			$category = new ContentCategory( $_REQUEST['id'] );
 			$tpl->assign('category', $category);
-				$subcategorys = $ccm->find('fk_content_category ='.$_REQUEST['id'], 'ORDER BY fk_content_category,posmenu');
+			$subcategorys = $ccm->find('fk_content_category ='.$_REQUEST['id'], 'ORDER BY fk_content_category,posmenu');
 			$tpl->assign('subcategorys', $subcategorys);
 		break;
 
 		case 'update':
 			$category = new ContentCategory();
+                        $nameFile = $_FILES['logo_path']['name'];
+                        if(!empty($nameFile)){
+                            $uploaddir="../media/sections/".$nameFile;
+                            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                                $_POST['logo_path'] = $nameFile;
+                            }else{
+                                 $_POST['logo_path'] ='';
+                            }
+                        }
 			$category->update( $_REQUEST );
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
@@ -109,8 +120,16 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'create':
 			$category = new ContentCategory();
+                        $nameFile = $_FILES['logo_path']['name'];
+                        $uploaddir="../media/sections/".$nameFile;
+                        if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                            $_POST['logo_path'] = $nameFile;
+                        }else{
+                             $_POST['logo_path'] ='';
+                        }
+
 			if($men=$category->create( $_POST )) {				
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$men);
+			 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$men);
 			} else {
                               $tpl->assign('errors', $category->errors);
 			}

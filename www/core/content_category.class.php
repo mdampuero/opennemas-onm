@@ -3,11 +3,12 @@
 class ContentCategory {
     var $pk_content_category  = NULL;
     var $fk_content_category  = NULL;
-    var $img  = NULL;
+    var $img_path  = NULL;
+    var $color  = NULL;
     var $name  = NULL; //nombre carpeta
     var $title  = NULL; //titulo seccion
     var $inmenu = NULL; // Flag Ver en el menu.
-     var $posmenu = NULL;
+    var $posmenu = NULL;
     var $internal_category=NULL; // flag asignar a un tipo de contenido.
     /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
      * $internal_category = 1 categoria generica para todos los tipos de contenidos.
@@ -55,13 +56,15 @@ class ContentCategory {
         
         // Create media/files/... directory
         $path = "../media/files/".$data['name'];
-        $this->createDirectory($path);        
-        
-        $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`) VALUES (?,?,?,?,?)";
-        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category']);
+        $this->createDirectory($path);
+
+       
+        $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`) VALUES (?,?,?,?,?,?,?)";
+        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category'], $data['logo_path'], $data['color']);
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            var_dump($error_msg);
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             
@@ -123,11 +126,13 @@ class ContentCategory {
     function update($data) {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
         $data['name'] = normalize_name( $data['title']);
-        
-        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?
+        if(empty($data['logo_path'])){
+                $data['logo_path']=$this->logo_path;
+        }
+        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?,`logo_path`=?,`color`=?
                     WHERE pk_content_category=".($data['id']);
         
-        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'], $data['internal_category']);
+        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'], $data['internal_category'],$data['logo_path'],$data['color']);
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
