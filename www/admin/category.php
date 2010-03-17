@@ -108,9 +108,9 @@ if( isset($_REQUEST['action']) ) {
                         if(!empty($nameFile)){
                             $uploaddir="../media/sections/".$nameFile;
                             if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                                $_POST['logo_path'] = $nameFile;
+                                $_REQUEST['logo_path'] = $nameFile;
                             }else{
-                                 $_POST['logo_path'] ='';
+                                 $_REQUEST['logo_path'] ='';
                             }
                         }
 			$category->update( $_REQUEST );

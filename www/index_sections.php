@@ -25,10 +25,18 @@ foreach( $allcategorys as $prima) {
                                             'title' => $prima->title,
                                             'subcategories' => $subcat,
                                             'color' => $prima->color,
-                                            'logo' => 'media/sections/'.$prima->logo_path);
+                                            'logo' =>  $prima->logo_path);
+   if(($category_name == $prima->name) || ($subcategory_name == $prima->name) ) {
+       $category_data=array( 'name' => $prima->name,
+                                            'title' => $prima->title,
+                                            'subcategories' => $subcat,
+                                            'color' => $prima->color,
+                                            'logo' =>  $prima->logo_path);
+   }
 }
  
 $tpl->assign('categories', $categories);
+$tpl->assign('category_data', $category_data);
 
 if( !is_null($category) ) {
     $tpl->assign('posmenu', $ccm->get_pos($category));
