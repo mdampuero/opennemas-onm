@@ -9,40 +9,18 @@
     <hr class="new-separator"/>
     <div class="clean-paginator">1 de 2 | <a href="#" title="Ir al siguiente">Siguiente »</a></div>
 
-    <div class="interested-video opacity-reduced">
-        <div class="capture">
-            <img src="images/video/video-3.jpg" alt=""/>
-            <div class="bar-video-tiny-info"></div>
-            <div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
-        </div>
-        <div class="info-interested-video">
-            <div class="category">Música</div>
-            <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
-        </div>
-    </div>
-
-    <div class="interested-video opacity-reduced">
-        <div class="capture">
-            <img src="images/video/video-2.jpg" alt="" />
-            <div class="bar-video-tiny-info"></div>
-            <div class="bar-video-tiny-info-image-video"><img alt="" src="images/video/trailersPlayArrow.gif" /></div>
-        </div>
-        <div class="info-interested-video">
-            <div class="category">Música</div>
-            <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
-        </div>
-    </div>
-
-    <div class="interested-video opacity-reduced">
-        <div class="capture">
-            <img alt="" src="images/video/video-1.jpg" />
-            <div class="bar-video-tiny-info"></div>
-            <div class="bar-video-tiny-info-image-video"><img alt="" src="images/video/trailersPlayArrow.gif" /></div>
-        </div>
-        <div class="info-interested-video">
-            <div class="category">Música</div>
-            <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
-        </div>
-    </div>
-
+        {section name=i loop=$videos}             
+             <div class="interested-video opacity-reduced">
+                <div class="capture">
+                    <img src="{$videos[i]->thumbnail_small}" alt="{$videos[i]->title}"/>
+                    <div class="bar-video-tiny-info"></div>
+                    <div class="bar-video-tiny-info-image-video"><img src="{$params.IMAGE_DIR}video/trailersPlayArrow.gif" /></div>
+                </div>
+                <div class="info-interested-video">
+                    <div class="category">{$category_data.title}</div>
+                    <div class="caption">{$videos[i]->title}</div>
+                </div>
+            </div>
+        {/section}
+ 
 </div>

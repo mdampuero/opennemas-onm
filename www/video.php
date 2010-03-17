@@ -48,6 +48,7 @@ require_once ("index_sections.php");
 
 
 /**************************************   VIDEOS  ***********************************************/
+//$_REQUEST['action']='inner';
 
  
 if( isset($_REQUEST['action']) ) {
@@ -62,11 +63,41 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
- 
+            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+            foreach($videos as $video){
+            //$videos_authors[] = new Author($video->fk_user);ç
+            //miramos el fuente youtube o vimeo
+
+                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                $return = curl_exec($curl);
+                $return = unserialize($return);
+                curl_close($curl);
+                $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                $video->thumbnail_small = $return[0]['thumbnail_small'];
+
+            }
+
            // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
 
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 12');
+            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 8');
+            foreach($others_videos as $video){
+            //$videos_authors[] = new Author($video->fk_user);ç
+            //miramos el fuente youtube o vimeo
+
+                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                $return = curl_exec($curl);
+                $return = unserialize($return);
+                curl_close($curl);
+                $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                $video->thumbnail_small = $return[0]['thumbnail_small'];
+
+            }
 
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);

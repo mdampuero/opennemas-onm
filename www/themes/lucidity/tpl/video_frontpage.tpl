@@ -6,8 +6,7 @@
         <h3>Featured vídeos</h3>
         <hr class="new-separator"/>
 
-            {section name=i loop=$videos}
-             
+            {section name=i loop=$videos}             
                 {include file="widget_video_viewer.tpl" video=$videos[i]}
             {/section}
         
