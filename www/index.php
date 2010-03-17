@@ -283,7 +283,7 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     require_once ("module_other_headlines.php");
 
     /************************************ TITULARES GENTE  ************************************/
-    $titular_gente = $cm->find_by_category_name('Article','gente', 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1 AND  (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY position ASC LIMIT 0 , 6');
+    $titular_gente = $cm->find_by_category_name('Article','tendencias', 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1 AND  (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY position ASC LIMIT 0 , 6');
 
     foreach ($titular_gente as $gente) {
         $img = new Photo($gente->img2);
