@@ -20,6 +20,14 @@
         {if $category_name eq 'deportes'}
             <img src="{$params.IMAGE_DIR}/main-logo.small.green.png" alt="Crónica comarcal" />
             <img src="{$params.IMAGE_DIR}/logo-sections/sports.png" alt="Deportes" />
+
+        {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
+
+            <a href="/" title="Pulse aquí para ir a la portada de Crónica comarcal">
+                    <img src="images/main-logo.small.black.png" alt="Crónica comarcal" />
+                    <img src="images/logo-sections/video.png" alt="Deportes" />
+            </a>
+
         {else}
          <a href="/"><img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="Crónica comarcal" /></a>
         {/if}

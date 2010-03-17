@@ -97,9 +97,9 @@ if( isset($_REQUEST['action']) ) {
 
 
  /********************************* ADVERTISEMENTS  *********************************************/
-require_once ("gallery_advertisement.php");
+//require_once ("gallery_advertisement.php");
 /********************************* ADVERTISEMENTS  *********************************************/
 
 /******************************************************************************************************/
 // Visualizar
-$tpl->display('video-frontpage.tpl');
+$tpl->display('video.tpl');

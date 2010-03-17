@@ -21,7 +21,7 @@
                 <li><img src="{$params.IMAGE_DIR}/utilities/e-star.png" alt="Email" /></li>
                 <li><img src="{$params.IMAGE_DIR}/utilities/e-star.png" alt="Email" /></li>
         </ul>
-         - <span>{insert name="numComments" id=$article->id}  Comentarios<span>
+         - <span>{insert name="numComments" id=$video->id}  Comentarios<span>
     </div>
 </div><!-- /vote-bloc -->
  

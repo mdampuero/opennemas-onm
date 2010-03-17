@@ -29,9 +29,13 @@
                 }
         </style>
         {/literal}
-    {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
-        <link rel="stylesheet" href="stylesheets/video.css" type="text/css" media="screen,projection">
-        <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
+    {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
+        <title>Crónica comarcal - Videos - {$category_real_name|clearslash} - {$article->title|clearslash} </title>
+        <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
+        <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">
+
+        <link rel="stylesheet" href="{$params.CSS_DIR}video.css" type="text/css" media="screen,projection">
+        <link rel="stylesheet" href="{$params.CSS_DIR}jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
         {literal}
 	<style type="text/css">
 		#main_menu{
