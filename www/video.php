@@ -60,17 +60,15 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-             $videos = $cm->find_by_category_name('Article',$actual_category, 'contents.available = 1 and (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) and contents.fk_content_type=1 ', 'ORDER BY content_status DESC, changed DESC, archive DESC '.$_limit);
-
+             $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 4 ');
+ 
            // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
 
-           
-
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 6, 39');
+            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 12');
 
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);
-            $tpl->assign('pages', $cm->pager);
+            
 	break;
 
 	case 'inner':
