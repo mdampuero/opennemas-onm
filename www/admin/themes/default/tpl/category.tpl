@@ -304,6 +304,26 @@
                     <input type="checkbox" id="inmenu" name="inmenu"  value="1" 
                         {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>* Activado, ver en el menú de portada.
                 </td>
+            </tr>             
+             <tr>
+                <td valign="top" style="padding:4px;text-align:left; width:100px;">
+                    <label for="inmenu">Logo en Portada:</label>
+                </td>
+                <td style="padding:4px;" nowrap="nowrap" >
+                    <input type="file" id="logo_path" name="logo_path"  />
+                </td>
+                 <td style="padding:4px;" nowrap="nowrap" rowspan="2" >
+                     {if !empty($category->logo_path)}<img src="../media/sections/{$category->logo_path}" >{/if}
+                 </td>
+            </tr>
+            <tr>
+                <td valign="top" style="padding:4px;text-align:left; width:100px;">
+                    <label for="inmenu">Color:</label>
+                </td>
+                <td style="padding:4px;" nowrap="nowrap" colspan="2" >
+                    {literal}<script>initPicker('color','{/literal}{$category->color}{literal}',24);</script>{/literal}
+                   
+                </td>
             </tr>
 
             {if !empty($subcategorys)}

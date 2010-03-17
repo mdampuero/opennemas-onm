@@ -79,7 +79,10 @@
 
 {/if}    
 {if preg_match('/category\.php/',$smarty.server.SCRIPT_NAME)}        
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
+    {if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
+        <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
+    {/if}
 {/if}
 {if preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspolls.js"></script>
