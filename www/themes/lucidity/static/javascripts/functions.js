@@ -46,3 +46,8 @@ function sendbyemail(title,url) {
 alert("holas");
   window.location="mailto:insert_here@your_friend.mail?subject=See this article '"+title+"' from Mabishu Studio&body=Please take a look at: "+url+" from Mabishu Blog.";
 }
+
+function showCommentForm(){
+    $('.auth-selector').slideToggle();
+    $('.form-comments .form').slideToggle();
+}
