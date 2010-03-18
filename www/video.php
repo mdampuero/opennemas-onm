@@ -71,7 +71,7 @@ if( isset($_REQUEST['action']) ) {
                 $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
                 $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                curl_setopt($curl, CURLOPT_TIMEOUT, 50);
                 $return = curl_exec($curl);
                 $return = unserialize($return);
                 curl_close($curl);
@@ -80,8 +80,7 @@ if( isset($_REQUEST['action']) ) {
 
             }
 
-           // 	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
-
+           
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 8');
             foreach($others_videos as $video){
             //$videos_authors[] = new Author($video->fk_user);ç

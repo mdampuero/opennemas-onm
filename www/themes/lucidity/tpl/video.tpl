@@ -42,12 +42,12 @@
               {include file="frontend_footer.tpl"}
         </div><!-- fin .container -->
     </div>
-{literal}
-    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
-    <script type="text/javascript" src="javascripts/functions.js"></script>
 
-{/literal}  {if !empty($video)} {literal}
+    <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
+    <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
+
+  {if !empty($video)} {literal}
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $('#tabs').height($('#video-content').height()+15);

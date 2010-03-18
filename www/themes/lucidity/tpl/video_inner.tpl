@@ -56,8 +56,8 @@
                         </div>
 
                         <div class="layout-column last-column opacity-reduced last span-8">
-                            {include file="widget_most_videos.tpl"}
-						
+                            {include file="widget_videos_lastest.tpl"}
+			 </div>
                     </div>
                 </div><!-- span-24 -->
                 <div class="span-24">

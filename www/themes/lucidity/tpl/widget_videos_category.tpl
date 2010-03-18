@@ -12,7 +12,7 @@
         {section name=i loop=$videos}             
              <div class="interested-video opacity-reduced">
                 <div class="capture">
-                    <img src="{$videos[i]->thumbnail_small}" alt="{$videos[i]->title}"/>
+                    <img src="{$videos[i]->thumbnail_medium}" alt="{$videos[i]->title}"/>
                     <div class="bar-video-tiny-info"></div>
                     <div class="bar-video-tiny-info-image-video"><img src="{$params.IMAGE_DIR}video/trailersPlayArrow.gif" /></div>
                 </div>
