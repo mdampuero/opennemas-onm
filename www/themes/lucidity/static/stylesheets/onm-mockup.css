@@ -13,7 +13,7 @@
 
 
 body {background:#f7f7f7; font-family:Verdana,Arial; font-size:11px; text-align:center}
-a, a:hover, a:link, a:visited {color:#005689; text-decoration: none; font-family: Times;}
+a, a:hover, a:link, a:visited {color:#005689; text-decoration: none; font-family: Times; outline:none}
 a:hover {text-decoration: underline;}
 .clearfix:after {
 	content: ".";
@@ -360,6 +360,55 @@ div.more-resources ul li.res-video {
 
 }
 
+div.nw-big-img-lateral img.nw-image{
+    max-width:100px;
+    float:left;
+    margin:10px 10px 10px 0;
+}
+
+div.nw-just-image{
+    position:relative;
+
+    display:block;
+    float:right;
+    margin-bottom:5px;
+}
+div.nw-just-image div.nw-title {
+    font-size:1.5em;
+    font-family:Georgia;
+    background:#a5a5a5;
+    margin:0;
+    height:25px;
+    line-height:25px;
+    padding-left:5px
+}
+
+div.nw-just-image div.nw-title a {
+    color:White;
+}
+div.nw-just-image:hover div.nw-subtitle{
+    display:block;
+}
+
+div.nw-just-image div.nw-subtitle{
+    float:left;
+    display:none;
+    margin:0 auto;
+    background:url(../images/utilities/back-gray-dimmed.png) top right repeat;
+    color:Black;
+    position:absolute;
+    top:25px;
+    left:0;
+}
+div.nw-just-image div.nw-subtitle div{
+    padding:5px;
+}
+
+div.nw-just-image img.nw-image{
+    float:left;
+    width:100%;
+}
+
 /*
     Widget more news definition
 */
@@ -651,8 +700,111 @@ div.tv-highlighter li.selected{
     color:#d45500;
 }
 
+/*
+    Widget tv definition
+*/
 
 
+
+div.widget-lastest-tab div.content{
+    margin:10px;
+}
+
+div.widget-lastest-tab,
+div.widget-lastest-tab .ui-tabs-panel,
+div.widget-lastest-tab .ui-widget-content,
+div.widget-lastest-tab .ui-corner-bottom,
+div.widget-lastest-tab div.ui-tabs-nav,
+div.widget-lastest-tab div.ui-helper-reset,
+div.widget-lastest-tab .ui-helper-clearfix,
+div.widget-lastest-tab .ui-widget-header .ui-corner-all{
+    background:White !important;
+    padding:0;
+    margin:0;
+}
+
+div.widget-lastest-tab .ui-tabs,
+div.widget-lastest-tab .ui-widget,
+div.widget-lastest-tab .ui-widget-content,
+div.widget-lastest-tab .ui-corner-all{
+    padding:0;
+    margin:0;
+    border:0px !important;
+}
+
+div.widget-lastest-tab .inner-video-tabs{
+    margin-top:35px;
+}
+div.widget-lastest-tab div{
+    margin:0;
+    padding:0;
+}
+div.widget-lastest-tab .tab-lastest{
+    width:99%;
+    margin:0 auto;
+    background:url(../images/horiz-separator.png) bottom right repeat-x;
+}
+
+div.widget-lastest-tab .explanation{
+    color:#ff8614;
+    margin:0px 5px;
+    font-size:.9em
+}
+
+div.widget-lastest-tab div.ui-tabs-panel{
+    overflow-x: hidden;
+    border:1px solid #373737 !important;
+    margin:10px;
+    border:0px !important;
+    padding-bottom:20px;
+}
+div.widget-lastest-tab .ui-tabs-nav a{
+    color:Black !important;
+    font-family:Verdana !important;
+    font-size:.8em !important;
+}
+div.widget-lastest-tab .ui-tabs-nav{ 
+    border:none !important;
+    background: #f3f3f3 !important;
+}
+div.widget-lastest-tab .ui-tabs-default{
+    background-color:White !important;
+        border: none !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #f3f3f3 !important;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+
+}
+div.widget-lastest-tab .ui-tabs-selected, .ui-tabs-active{
+    background:White !important;
+    border: none !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border: 1px solid #f3f3f3 !important;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: Black !important;}
+div.widget-lastest-tab div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div.widget-lastest-tab .tab-lastest-title a{ font-family:Georgia; color:#005689; font-size:.9em; margin:0; padding:0}
+div.widget-lastest-tab .tab-lastest-title{ margin:5px 10px; }
+
+div.widget-lastest-tab{
+    border-top: 10px solid #dedede !important;
+    background-color: #f3f3f3 !important;
+}
+
+div.widget-lastest-tab .title{
+    font-family: Georgia;
+    font-size:1.6em;
+    margin:10px
+}
 /***********************************************************
     Footer content definition
 ************************************************************/
