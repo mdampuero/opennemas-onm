@@ -13,7 +13,7 @@
              <div class="tab-thumb-video clearfix">
                 <img src="{$others_videos[i]->thumbnail_small}" />
                 <div class="tab-thumb-video-shortitle">{$videos[i]->category_name}</div>
-                <div class="tab-thumb-video-title">{$videos[i]->title}</div>
+                <div class="tab-thumb-video-title">{$videos[i]->title|clearslash|escape:'html'}</div>
             </div>
         {/section}
 
@@ -25,7 +25,7 @@
              <div class="tab-thumb-video clearfix">
                 <img src="{$others_videos[i]->thumbnail_small}" />
                 <div class="tab-thumb-video-shortitle">{$others_videos[i]->category_name}</div>
-                <div class="tab-thumb-video-title">{$others_videos[i]->title}</div>
+                <div class="tab-thumb-video-title">{$others_videos[i]->title|clearslash|escape:'html'}</div>
             </div>
         {/section}
     </div>
