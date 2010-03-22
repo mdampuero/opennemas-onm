@@ -27,7 +27,7 @@ html, body{
 
 div.article-comments h3{
 	color:#565656;
-	background: url(../images/sections/back-comments-black.png) bottom right no-repeat;
+	background: url(/themes/lucidity/images/sections/back-comments-black.png) bottom right no-repeat;
 }
 
 div.opacity-reduced{
@@ -98,7 +98,7 @@ div#main_menu{
     Video re-definitions
 ************************************************************/
 #video-content{
-	background:#292929 url(../images/back-video.png) center center no-repeat;
+	background:#292929 url(/themes/lucidity/images/back-video.png) center center no-repeat;
 	text-align:center;
 	padding:10px 0;
 	margin-bottom:10px;
@@ -127,7 +127,7 @@ div.video-explanation h1{
     Utilities re-definitions
 ************************************************************/
 .vert-separator{
-	background:url(../images/vert-separator.png) bottom right repeat-y;
+	background:url(/themes/lucidity/images/vert-separator.png) bottom right repeat-y;
 	margin-bottom:10px;
 	height:100%;
 }
@@ -313,3 +313,13 @@ div.ui-tabs-selected a, div.ui-tabs-active a{color: #ccc !important;}
 div#tabs div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
 div#tabs .tab-thumb-video-shortitle{ text-transform:uppercase; color:#747678; font-size:.9em; margin:0; padding:0}
 div#tabs .tab-thumb-video-title{ font-family:Georgia; color:White; font-size:1.2em; margin:0; padding:0}
+
+div.form-comments .auth-selector{ color:#747678;}
+div.form-comments{
+    background:#2A2A2A url(/themes/lucidity/images/utilities/back-form-comments.png) bottom right no-repeat;
+}
+div.form-comments .submit-button, div.form-comments a.show-commment-form{
+    background:#1C1E1C;
+    border-color:#1C1E1C;
+    color:#6a6a6a;
+}
