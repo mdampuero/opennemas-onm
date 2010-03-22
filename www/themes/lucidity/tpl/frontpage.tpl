@@ -57,7 +57,7 @@ Smarty template: frontpage.tpl
                     <div class="layout-column middle-column span-8">
                         <div class="border-dotted">
 
-                            {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_0"}
+                            {renderplaceholder items=$column tpl='frontpage_article_head.tpl' placeholder="placeholder_1_0"}
 
                             {*<hr class="new-separator"/>*}
 
@@ -79,7 +79,7 @@ Smarty template: frontpage.tpl
 
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_2"}
                         
-                        {include file="widget_last_news.tpl"}
+                        {include file="widget_headlines.tpl"}
 
                         {include file="widget_ad_lateral.tpl"}
 
@@ -158,5 +158,12 @@ Smarty template: frontpage.tpl
         </div><!-- fin .container -->
 
     </div>
+   {literal}
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                $("#tabs2").tabs();
+            });
+        </script>
+    {/literal}
 </body>
 </html>

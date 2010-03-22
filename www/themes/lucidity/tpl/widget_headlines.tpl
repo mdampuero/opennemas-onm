@@ -1,32 +1,43 @@
-{*
+ {*
     OpenNeMas project
 
     @theme      Lucidity
 *}
 
-<div class="lastest-news clearfix">
-    <span style="float:left;"><strong>Últimas noticias</strong>: </span>
-    <ul class="slide_cicle" style="width:300px;margin:0;margin-left:4px;padding:0">
-        {section name=exp loop=$articles_home_express}
-            <li class="teaser" id="teaser-{$smarty.section.exp.iteration}" style="margin:0; padding:0;  ">
-                {$articles_home_express[exp]->created|date_format:"%H:%M"}
-                <a href="{$articles_home_express[exp]->permalink}">{$articles_home_express[exp]->title|clearslash}</a>
-            </li>
-        {/section}
-    </ul>
-</div>
+ <div class="span-8 layout-column last widget-lastest-tab">
+    <div class="title">
+        Temas calientes...
+    </div>
+    <div id="tabs2" class="content">
+            <ul>
+                <li><a href="#tab-more-views"><span>+Visto</span></a></li>
+                <li><a href="#tab-more-comments"><span>+Comentado</span></a></li>
 
+            </ul>
+            <div id="tab-more-views">
+               {* <div class="explanation">Noticias, vídeos y comentarios</div> *}
+                {section name=a loop=$articles_viewed}
+                <div class="tab-lastest clearfix">
+                    <div class="tab-lastest-title">
+                        <a href="{$articles_viewed[a]->permalink}" title="{$articles_viewed[a]->metadata}">
+                            {$articles_viewed[a]->title|clearslash}
+                        </a>
+                    </div>
+                </div>
+                {/section}
+            </div>
+            <div id="tab-more-comments">
+                {*<div class="explanation">Noticias, vídeos y comentarios</div> *}
+               {section name=a loop=$articles_comments}
+                <div class="tab-lastest clearfix">
+                    <div class="tab-lastest-title">
+                        <a href="{$articles_comments[a]->permalink}" title="{$articles_comments[a]->metadata}">
+                            {$articles_comments[a]->title|clearslash}
+                        </a>
+                    </div>
+                </div>
+                {/section}
+            </div>
 
-{*
-<div class="lastest-news clearfix">
-    <ul style="margin:0; padding:0">
-        <li><strong>Últimas noticias</strong>:</li>
-      <li id="teaser-0" style="margin:0; padding:0">
-          Titular de noticia relacionada con las últimas declaraciones del gobierno.
-      </li>
-      <li id="teaser-1" style="margin:0; padding:0; display:none">
-          Y esta es la respuesta de la oposición al titular de noticia relacionada con las últimas declaraciones del gobierno.
-      </li>
-    </ul>
-</div>
-*}
+        </div>
+ </div>

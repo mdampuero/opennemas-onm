@@ -111,7 +111,8 @@ if(isset($_REQUEST['action']) ) {
         case 'read': {            
             // Load config
             $tpl->setConfig('articles');
-            
+
+             /******************************  BREADCRUB *********************************/
             /*$article = new Article($_REQUEST['article_id']);*/                        
             $str = new String_Utils();
             $title = $str->get_title($article->title);
@@ -145,9 +146,9 @@ if(isset($_REQUEST['action']) ) {
             /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
             require_once ("index_sections.php");
             /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-            
+
             $tpl->assign('category_name', $_GET['category_name']);
-            
+
             $cm = new ContentManager();
             
             //checking if the article is available for INTERNET
@@ -163,24 +164,32 @@ if(isset($_REQUEST['action']) ) {
                 // MUTEXT CODE, DON'T use for performance
                 // Application::getMutex($cache_id);                
         
-                if( ($tpl->caching == 0) || !$tpl->is_cached('article.tpl', $cache_id) ) {
+                if( true || ($tpl->caching == 0) || !$tpl->is_cached('article.tpl', $cache_id) ) {
                     
                     $tpl->assign('article', $article);
                     /**************** PHOTOs ****************/
-                    if(isset($article->img1) and ($article->img1 != 0)){
+                 /*   if(isset($article->img1) and ($article->img1 != 0)){
                         $photoExt = new Photo($article->img1);
                         $tpl->assign('photoExt', $photoExt);
-                    }
 
-                    if(isset($article->img2) and ($article->img2 != 0) and ($article->img1 != $article->img2) ){
+                    } */
+ 
+                    if(isset($article->img2) and ($article->img2 != 0) ) {
                         $photoInt = new Photo($article->img2);
                         $tpl->assign('photoInt', $photoInt);
+
                     }
                     
-                    if(isset($article->fk_video2) and ($article->fk_video2 != 0)){
+                    if(isset($article->fk_video2) and ($article->fk_video2 != 09)){
                         $videoInt = new Video($article->fk_video2);
-                        $tpl->assign('videoInt', $videoInt->videoid);
+                        $tpl->assign('videoInt', $videoInt);
+
+                    }else{
+                        $video = $cm->find_by_category_name('Video',  $category_name, 'contents.content_status=1', 'ORDER BY created DESC LIMIT 0 , 1');
+                        $tpl->assign('videoInt', $video[0]);
+                      
                     }
+                       
                     /**************** PHOTOs ****************/
                     
                     /******* RELATED  CONTENT *******/
@@ -210,12 +219,40 @@ if(isset($_REQUEST['action']) ) {
                     $objSearch = cSearch::Instance();                   
                     $arrayResults=$objSearch->SearchSuggestedContents($article->metadata, 'Article', "pk_fk_content_category= ".$article->category." AND contents.available=1 AND pk_content = pk_fk_content", 4);
                    // $arrayResults= $cm->getInTime($arrayResults);
-                    $tpl->assign('suggested', $arrayResults);                                                          
+                    $tpl->assign('suggested', $arrayResults);
+                  
                 } // end if $tpl->is_cached
                 
                 // END MUTEXT
                 // Application::releaseMutex();
+
+                /************* COLUMN-LAST *******************************/
+                $relia  = new Related_content();
+                $other_news = $cm->find_by_category_name('Article', $category_name, 'contents.frontpage=1 AND contents.content_status=1 AND contents.available=1  AND contents.fk_content_type=1  AND contents.pk_content != '.$_REQUEST['article_id'].'', 'ORDER BY views DESC, placeholder ASC, position ASC, created DESC LIMIT 1,3');
+                /*foreach($other_news as $art) {
+
+                    $image = new Photo($art->img1);
+                    $art->img1_path = $image->path_file.$image->name;
+                    $relationes = $relia->get_relations($articles_home[$aux]->id);
+                    $relats = array();
+                    foreach($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
+                        $obj = new Content($id_rel);
+                        // Filter by scheduled {{{
+                        if($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
+                           $relats[] =$obj;
+                        }
+                        // }}}
+                    }
+                    $art->related_contents = $relats;
+                } */
+                $tpl->assign('other_news', $other_news);
+
+                require_once('widget_headlines_past.php');
+               // require_once('widget_media.php');
                 
+                
+                 /************* END COLUMN-LAST *******************************/
+
                 // Advertisements for single article NO CACHE
                 require_once('article_advertisement.php');
                 

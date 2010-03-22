@@ -44,7 +44,7 @@
         *}
         
     </div>
-
+    {include file="widget_headlines_past.tpl"}
     {include file="widget_ad_lateral.tpl"}
 
     <hr class="new-separator">

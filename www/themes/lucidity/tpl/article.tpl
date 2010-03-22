@@ -105,5 +105,13 @@ Smarty template: frontpage.tpl
         </div><!-- fin .container -->
 
     </div>
+   
+    {literal}
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                $("#tabs").tabs();
+            });
+        </script>
+    {/literal}
 </body>
 </html>

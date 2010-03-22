@@ -127,8 +127,9 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
 
     if ($_GET['category_name'] == 'home') {
         //$destaca = $cm->find('Article', ' home_pos=1 AND in_home=1 AND frontpage=1  AND available=1 AND content_status=1 AND fk_content_type=1', 'ORDER BY home_pos ASC, created DESC');
-        $articles_home = $cm->find('Article', 'contents.in_home=1 AND contents.frontpage=1 AND contents.available=1 AND contents.content_status=1 AND contents.fk_content_type=1', 'ORDER BY home_pos ASC, created DESC');
-
+   //     $articles_home = $cm->find('Article', 'contents.in_home=1 AND contents.frontpage=1 AND contents.available=1 AND contents.content_status=1 AND contents.fk_content_type=1', 'ORDER BY home_pos ASC, created DESC');
+        $articles_home = $cm->find_all('Article', 'contents.in_home=1 AND contents.frontpage=1 AND contents.available=1 AND contents.content_status=1 AND contents.fk_content_type=1', 'ORDER BY home_pos ASC, created DESC');
+//var_dump($articles_home);
         // Filter by scheduled {{{
         $articles_home = $cm->getInTime($articles_home);
         // }}}
@@ -213,6 +214,8 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
 
         $column[$c] = $articles_home[$aux];
+        $column[$c]->category_name = $column[$c]->loadCategoryName($articles_home[$aux]->id);
+        $column[$c]->category_title = $column[$c]->loadCategoryTitle($articles_home[$aux]->id);
         /*****  GET IMAGE DATA *****/
         if(isset($column[$c]->img1)) {
                 // Buscar la imagen
@@ -270,7 +273,7 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
    //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
    //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
-   
+  
     /************************************ END COLUMN1 **************************************************/
 
     /************************************ ARTICLES EXPRESS **************************************/
@@ -282,7 +285,7 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     /************************************ TITULARES DEL DIA  ************************************/
     require_once ("module_other_headlines.php");
 
-    /************************************ TITULARES GENTE  ************************************/
+    /************************************ TITULARES TENDENCIAS  ************************************/
     $titular_gente = $cm->find_by_category_name('Article','tendencias', 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1 AND  (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY position ASC LIMIT 0 , 6');
 
     foreach ($titular_gente as $gente) {
@@ -314,7 +317,8 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     require_once ("index_opinion.php");
     /************************************ OPINION **************************************************/
 
-     
+    require_once('widget_headlines.php');
+    require_once('widget_headlines_past.php');
 
 
 } // $tpl->is_cached('index.tpl') (1)

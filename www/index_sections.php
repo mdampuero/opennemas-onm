@@ -27,19 +27,43 @@ foreach( $allcategorys as $prima) {
                                             'color' => $prima->color,
                                             'logo' =>  $prima->logo_path);
    if(($category_name == $prima->name) || ($subcategory_name == $prima->name) ) {
-       $category_data=array( 'name' => $prima->name,
-                                            'title' => $prima->title,
-                                            'subcategories' => $subcat,
-                                            'color' => $prima->color,
-                                            'logo' =>  $prima->logo_path);
+       $category_data=array('id' => $prima->pk_content_category,
+                            'name' => $prima->name,
+                            'title' => $prima->title,
+                            'subcategories' => $subcat,
+                            'color' => $prima->color,
+                            'logo' =>  $prima->logo_path);
    }
 }
- 
+// var_dump($category_data);
 $tpl->assign('categories', $categories);
 $tpl->assign('category_data', $category_data);
 
 if( !is_null($category) ) {
     $tpl->assign('posmenu', $ccm->get_pos($category));
 }
+
+// Styles to print each category's new
+$styles='';
+foreach($allcategorys as $the_category) {
+
+    if(!empty($the_category->color)){
+        $the_category->color ='#B0113A';
+    }
+
+    $styles.= 'div.nw-big div.'.$the_category->name.'{
+                background:url(/themes/lucidity/images/bullets/green.png) center right no-repeat !important;
+                color:'.$the_category->color.';
+                }
+            ';
+     $styles.= '#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
+                   background-color:'.$the_category->color.';
+                }
+            ';
+
+}
+
+ $tpl->assign('categories_styles', $styles);
+ 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
