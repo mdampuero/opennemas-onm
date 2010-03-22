@@ -47,7 +47,7 @@ Smarty template: frontpage.tpl
                     <div class="layout-column first-column span-16">
                         <div class="border-dotted">
                             <div class="span-16 toolbar">
-                                {include file="widget_votes.tpl"}
+                                {include file="widget_ratings.tpl"}
 
                                 {include file="widget_utilities.tpl"}
 
@@ -56,16 +56,17 @@ Smarty template: frontpage.tpl
                                 <div class="main-photo">
                                      {if $photoInt->name}
                                          <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" title="{$article->img2_footer|clearslash|escape:"html"}" alt="{$article->img2_footer|clearslash|escape:"html"}" />
+                                    
+                                        <div class="photo-subtitle">
+                                               {$article->img2_footer|clearslash|escape:"html"}
+                                                <span class="photo-autor">FOTO: CHEMA REY | MARCA</span>
+                                        </div>
                                      {/if}
-                                    <div class="photo-subtitle">
-                                           {$article->img2_footer|clearslash|escape:"html"}
-                                            <span class="photo-autor">FOTO: CHEMA REY | MARCA</span>
-                                    </div>
                                 </div>
                                 <p>{$article->body|clearslash}</p>
                             </div><!-- /content-article -->
 
-                            {include file="widget_votes.tpl"}
+                            {include file="widget_ratings.tpl"}
                             <hr class="new-separator"/>
 
                             {include file="widget_utilities_bottom.tpl"}

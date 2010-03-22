@@ -23,4 +23,5 @@
     {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) || (preg_match('/preview_content\.php/',$smarty.server.SCRIPT_NAME)||($smarty.request.action eq "article"))}
         {insert name="comments" id=$article->id}
     {/if}
+    {include file="widget_form_comments.tpl"}
 </div>

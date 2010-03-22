@@ -32,7 +32,7 @@ Smarty template: frontpage.tpl
 
             <div id="main_content" class="span-24">
 
-                {include file="widget_headlines.tpl"}
+                {include file="widget_breaking_news.tpl"}
 
                 <div class="span-24">
                     <div class="layout-column first-column span-8">
@@ -67,6 +67,7 @@ Smarty template: frontpage.tpl
 
                             {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_2"}
 
+                            {include file="widget_ocio.tpl"}
                         </div>
                     </div>
                     <div class="layout-column last-column last span-8">
@@ -76,9 +77,13 @@ Smarty template: frontpage.tpl
 
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_1"}
 
+                        {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_2"}
+                        
+                        {include file="widget_last_news.tpl"}
+
                         {include file="widget_ad_lateral.tpl"}
 
-                        {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_2"}
+                        
                     </div>
 
                 </div>
@@ -97,7 +102,7 @@ Smarty template: frontpage.tpl
 
                             {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_0_3"}
 
-                            {include file="widget_express.tpl"}
+                            
 
                         </div>
 
@@ -127,7 +132,7 @@ Smarty template: frontpage.tpl
 
                 <div class="span-24">
                     <div class="layout-column first-column span-8">
-                        {include file="widget_video.tpl" type_video="youtube"}
+                        {include file="widget_video.tpl" }
                     </div>
                     <div class="layout-column middle-column span-8">
                         {include file="widget_galery.tpl"}

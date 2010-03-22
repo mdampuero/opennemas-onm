@@ -17,20 +17,16 @@
 <div id="logo" class="clearfix">
 
     <div id="logo-image" class="span-8" style="width:700px;">
-        {if $category_name eq 'deportes'}
-            <img src="{$params.IMAGE_DIR}/main-logo.small.green.png" alt="Crónica comarcal" />
-            <img src="{$params.IMAGE_DIR}/logo-sections/sports.png" alt="Deportes" />
+        {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
 
-        {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
-
-            <a href="/" title="Pulse aquí para ir a la portada de Crónica comarcal">
-                    <img src="{$params.IMAGE_DIR}/main-logo.small.black.png" alt="Crónica comarcal" />
+            <a href="/" title="Pulse aquí para ir a la portada de {$smarty.const.SITE_TITLE}">
+                    <img src="{$params.IMAGE_DIR}/main-logo.small.black.png" alt="{$smarty.const.SITE_TITLE}" />
                     <img src="{$params.IMAGE_DIR}/logo-sections/video.png" alt="Video" />
             </a>
 
         {else}
          <a href="/">
-            <img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="Crónica comarcal" />
+            <img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
             {if !empty($category_data.logo)}
                 <img src="/media/sections/{$category_data.logo}" alt="{$category_data.title}"  />
             {/if}

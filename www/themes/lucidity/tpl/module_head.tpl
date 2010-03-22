@@ -28,7 +28,7 @@
             </style>
             {/literal}
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>Crónica comarcal - {$category_real_name|clearslash} - {$article->title|clearslash} </title>
+            <title>Crónica comarcal - {$category_data->title|clearslash} - {$article->title|clearslash} </title>
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">
 
@@ -38,7 +38,7 @@
             <script defer type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
 
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>Crónica comarcal - Videos - {$category_real_name|clearslash} - {$article->title|clearslash} </title>
+            <title>Crónica comarcal - Videos - {$category_data->title|clearslash} - {$article->title|clearslash} </title>
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">
 
