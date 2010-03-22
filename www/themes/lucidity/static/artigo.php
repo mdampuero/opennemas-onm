@@ -145,7 +145,7 @@
 				                			<li><img src="images/utilities/e-star.png" alt="Email" /></li>
 				                			<li><img src="images/utilities/e-star.png" alt="Email" /></li>
 				                		</ul>
-										- <span>7 Comentarios<span>
+										- <span>7 Comentarios</span>
 				                	</div>
 		                    	</div><!-- /vote-bloc -->
 		                    	
@@ -458,9 +458,9 @@
                             </div>
                         </div>
 
-                        </div><!-- fin #layout-column last-column last span-8 -->
+                    </div><!-- fin #layout-column last-column last span-8 -->
 
-                </div><!-- fin #span24-->
+                </div><!-- fin #span-24-->
             </div><!-- fin #main_content -->
 
         </div><!-- fin .container -->
