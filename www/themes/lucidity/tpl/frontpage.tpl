@@ -97,37 +97,17 @@ Smarty template: frontpage.tpl
                 <hr class="news-separator">
 
                 <div class="span-24">
-                    <div class="layout-column first-column span-8">
-                        <div>
-
-                            {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_0_3"}
-
-                            
-
-                        </div>
-
+                    <div class="span-12 layout-column">
+                         {renderplaceholder items=$column tpl='frontpage_article_lateral.tpl' placeholder="placeholder_0_3"}
                     </div>
-                    <div class="layout-column middle-column span-8">
-                        <div class="border-dotted">
-                            <div class="layout-column last-column last span-8">
-                                <div class="border-dotted">
-
-                                    {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_3"}
-
-                                </div>
-                            </div>
-
-                        </div>
+                    <div class="span-4 layout-column">
+                       {renderplaceholder items=$column tpl='frontpage_article_image.tpl' placeholder="placeholder_1_3"}
                     </div>
-                    <div class="layout-column last-column last span-8">
-                        <div class="border-dotted">
-                            {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_3"}
-                        </div>
-                        {*include file="widget_facebook.tpl"*}
-                        </div>
-                    </div>
+                    
+                    {include file="widget_headlines_past.tpl"}
 
                 </div>
+
                 <hr class="news-separator" />
 
                 <div class="span-24">
@@ -161,6 +141,7 @@ Smarty template: frontpage.tpl
    {literal}
         <script type="text/javascript">
             jQuery(document).ready(function(){
+                $("#tabs").tabs();
                 $("#tabs2").tabs();
             });
         </script>

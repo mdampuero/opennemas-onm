@@ -5,7 +5,7 @@
 *}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
  
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<html  lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
@@ -16,17 +16,10 @@
         <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print">
         <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" media="screen, projection"><![endif]-->
 
-        <link rel="stylesheet" href="{$params.CSS_DIR}/onm-mockup.css" type="text/css" media="screen,projection">
+        <link rel="stylesheet" href="{$params.CSS_DIR}onm-mockup.css" type="text/css" media="screen,projection">
         <link rel="stylesheet" href="{$params.CSS_DIR}jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
 
-        {literal}
-            <style type="text/css">
-                    #main_menu{
-                            background-color:{/literal}{$category_data.color}{literal};
-                    }
-                     {/literal}  {$categories_styles}{literal}
-            </style>
-            {/literal}
+        
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
             <title>Crónica comarcal - {$category_data->title|clearslash} - {$article->title|clearslash} </title>
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
@@ -56,13 +49,20 @@
         {else}
              <title>Crónica comarcal - noticias de España y del mundo </title>
 
-            <script defer type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
-            <script defer type="text/javascript" src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
-            <script defer type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
-            <script defer type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
-            <script defer type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
+            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>            
+            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>            
+            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
+            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
 
         {/if}
+        {literal}
+            <style type="text/css">
+                    #main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
+                            background-color:{/literal}{$category_data.color}{literal};
+                    }
+                     {/literal}  {$categories_styles}{literal}
+            </style>
+        {/literal}
 
     </head>
     <body> 

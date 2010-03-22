@@ -56,11 +56,6 @@ foreach($allcategorys as $the_category) {
                 color:'.$the_category->color.';
                 }
             ';
-     $styles.= '#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
-                   background-color:'.$the_category->color.';
-                }
-            ';
-
 }
 
  $tpl->assign('categories_styles', $styles);
