@@ -8,8 +8,8 @@
          <img style="width:300px;" class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash} title="{$item->img_footer|clearslash}"/>
     {/if}
 
-    <div class="nw-category-name sports">{$item->subtitle|upper|clearslash}</div>
-    <h3 class="nw-title"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
+    <div class="nw-category-name">{$item->subtitle|upper|clearslash}</div>
+    <h3 class="nw-title-head"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
     <div class="nw-subtitle">{$item->summary|clearslash}</div>
 
     {if !empty($item->related_contents)}
