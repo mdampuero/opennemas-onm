@@ -373,15 +373,15 @@
                         </div>
                     </div>
                     <div class="span-4 layout-column">
-                        <div class="nw-just-image">
-                            <div class="nw-title"><a href="#">US Elections</a></div>
-                            <div class="nw-subtitle"><div>Despues de un escándalo que ni los analistas podrían cuantificar</div></div>
-                            <img class="nw-image" src="images/news/climate.jpg" alt=""/>
+                        <div class="nw-just-image  span-4">
+                            <div class="nw-title  span-4"><a href="#">US Elections</a></div>
+                            <div class="nw-subtitle  span-4"><div>Despues de un escándalo que ni los analistas podrían cuantificar</div></div>
+                            <img class="nw-image span-4" src="images/news/climate.jpg" alt="" />
                         </div>
-                        <div class="nw-just-image">
-                            <div class="nw-title"><a href="#">US Elections</a></div>
-                            <div class="nw-subtitle"><div>Despues de un escándalo que ni los analistas podrían cuantificar</div></div>
-                            <img class="nw-image" src="images/news/climate.jpg" alt=""/>
+                        <div class="nw-just-image  span-4">
+                            <div class="nw-title  span-4"><a href="#">US Elections</a></div>
+                            <div class="nw-subtitle  span-4"><div>Despues de un escándalo que ni los analistas podrían cuantificar</div></div>
+                            <img class="nw-image span-4" src="images/news/climate.jpg" alt=""/>
                         </div>
                     </div>
                     <div class="span-8 layout-column last widget-lastest-tab">
