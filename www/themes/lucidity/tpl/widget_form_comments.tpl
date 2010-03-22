@@ -15,7 +15,7 @@
             </p>
             <div>
                 <a href="#" onclick="showCommentForm(); return false;" class="show-commment-form">Ver formulario »</a>
-                <a href="" class="facebook-login"><img src="images/utilities/login-facebook.gif.png" /></a>
+                <a href="" class="facebook-login"><img src="{$params.IMAGE_DIR}utilities/login-facebook.gif.png" /></a>
             </div>
         </div>
         <div class="form span-14">
