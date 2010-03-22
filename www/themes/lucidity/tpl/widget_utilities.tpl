@@ -27,7 +27,7 @@
 
 
 {literal}  <script type="text/javascript">
-jQuery(document).share(function(){
+jQuery(document).ready(function(){
 
   $lock=false;
   jQuery("div.actions").hover(
@@ -46,6 +46,6 @@ jQuery(document).share(function(){
       $lock=false;
     }
   );
-}
+});
     </script>
 {/literal}
