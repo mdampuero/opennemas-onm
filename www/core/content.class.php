@@ -187,6 +187,20 @@ class Content {
         
         return $ccm->get_name($this->category);
     }
+
+    function loadCategoryTitle($pk_content) {
+        require_once( dirname(__FILE__).'/content_category_manager.class.php' );
+        $ccm = ContentCategoryManager::get_instance();
+
+        if(empty($this->category_name)) {
+            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
+            $this->category = $rs;
+            $this->loadCategoryName( $this->category );
+        }
+
+        return $ccm->get_title($this->category_name);
+    }
     
     // FIXME: check funcionality
     function load($properties) {

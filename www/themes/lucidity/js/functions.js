@@ -1,4 +1,4 @@
-jQuery(document).ready(function(){
+/*jQuery(document).ready(function(){
 
     jQuery.fn.fadeToggle = function(speed, easing, callback) {
        return this.animate({opacity: 'toggle'}, speed, easing, callback);
@@ -12,6 +12,7 @@ jQuery(document).ready(function(){
 
 	$("#tabs").tabs();
 });
+*/
 
 var min=8;
 var max=18;
@@ -47,4 +48,9 @@ function decreaseFontSize() {
 function sendbyemail(title,url) {
 alert("holas");
   window.location="mailto:insert_here@your_friend.mail?subject=See this article '"+title+"' from Mabishu Studio&body=Please take a look at: "+url+" from Mabishu Blog.";
+}
+
+function showCommentForm(){
+    $('.auth-selector').slideToggle();
+    $('.form-comments .form').slideToggle();
 }

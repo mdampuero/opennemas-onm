@@ -23,6 +23,7 @@
                     #main_menu{
                             background-color:{/literal}{$category_data.color}{literal};
                     }
+                     {/literal}  {$categories_styles}{literal}
             </style>
             {/literal}
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
@@ -46,7 +47,7 @@
             <style type="text/css">
                     #main_menu{
                             background-color:#009677;
-                    }
+                    }                 
             </style>
             {/literal}
         {else}
@@ -59,4 +60,4 @@
         {/if}
 
     </head>
-    <body>
+    <body> 
