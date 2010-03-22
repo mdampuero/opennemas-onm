@@ -43,49 +43,6 @@ div.info-new span.author{
 }
 div.info-new *{	margin:0; padding:0}
 
-
-/***********************************************************
-    Toolbar, Voting and Utilities
-************************************************************/
-
-div.toolbar{
-    background:url(../../images/horiz-separator.png) top right repeat-x;
-    margin:0;
-    padding-top:5px;
-    margin-bottom:5px
-}
-
-ul.voting{
-	margin-top:5px;
-}
-
-div.utilities{
-
-}
-
-div.utilities ul,
-div.utilities ul li{
-	margin:0;
-	padding:0;
-}
-
-div.utilities ul li{
-	display:inline;
-	list-style:none;
-}
-div.utilities{
-	text-align:right;
-}
-
-ul.voting, ul.voting li{
-	display:inline;
-	margin:0;
-	padding:0;
-}
-div.utilities ul li img{
-	cursor:pointer;
-}
-
 /***********************************************************
     Content inner articler
 ************************************************************/

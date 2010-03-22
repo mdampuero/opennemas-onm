@@ -108,9 +108,7 @@ div.comment-body{
 }
 
 
-/***********************************************************
-    Comment voting
-************************************************************/
+
 div.comment-utilities{
 	color:#747678;
 }
@@ -142,52 +140,12 @@ span.comment-author{
 	color:#000;
 }
 
-
 /***********************************************************
     Form comments
 ************************************************************/
 
 div.form-comments{
-    background:#f9f9f9 url(../../images/utilities/back-form-comments.png) bottom right no-repeat;
-    margin-top:20px;
-    padding:10px 0 30px 0;
-}
-
-div.form-comments-content h4{
-    font-family: Georgia;
-    color:#838383;
-    font-size:1.7em;
-}
-
-div.auth-selector p{
-    color:Black
-}
-div.form-comments input, div.form-comments textarea{
-    padding:5px
-}
-div.form-comments label{ color:#6a6a6a; font-size:1.1em; font-weight: normal; }
-div.form-comments .submit-button, div.form-comments a.show-commment-form{
-    padding:6px 10px;
-    background:#d2d2d2;
-    border:1px solid #f9f9f9;
-    color:Black;
-    font-family: Verdana;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-}
-div.form-comments .information{ margin-top:30px; color:#6a6a6a; font-size:.95em}
-div.form-comments .facebook-login{margin:0; padding:0;}
-div.form-comments .facebook-login img{ vertical-align: middle;}
-div.form-comments .form { display:none;}
-div.form-comments div.form-comments-content{ margin:0 auto; width:80%}
-div.form-comments div.static-form a{ font-family:Verdana; font-size:1em; color:#6a6a6a; }
-
-/***********************************************************
-    Form comments
-************************************************************/
-
-div.form-comments{
-    background:#f9f9f9 url(../../images/utilities/back-form-comments.png) bottom right no-repeat;
+    background:#f9f9f9 url(/themes/lucidity/images/utilities/back-form-comments.png) bottom right no-repeat;
     margin-top:20px;
     padding:10px 0 30px 0;
 }
