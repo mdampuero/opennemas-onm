@@ -477,9 +477,9 @@
 
 
     </div>
-    <script defer type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
-    <script defer type="text/javascript" src="javascripts/functions.js"></script>
+    <script type="text/javascript" src="javascripts/functions.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $("#tabs").tabs();
