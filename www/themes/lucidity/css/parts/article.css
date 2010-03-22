@@ -70,7 +70,8 @@ div.main-photo {
 	margin:0 0 10px 10px;
 }
 div.photo-subtitle{
-	max-width:310px
+	max-width: 600px;
+            /*310px */
 }
 
 div.photo-author {
