@@ -150,8 +150,21 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="publi_310 clearfix">
+                                <a href="http://www.puntogal.org"><img src="images/publi/eu.gal.png" alt="" /></a>
+                            </div>
                             <hr class="new-separator"/>
-                            <div class="more-little-news-section">
+                             <div class="nw-big">
+                                <div class="nw-category-name">Economía</div>
+                                <h3 class="nw-title"><a href="#">La Justicia paraliza la fusión de cajas impulsada por la Xunta</a></h3>
+                                <p class="nw-subtitle">El Gobierno recurrió al Constitucional la norma que debe permitir la unión de Caixanova y Caixa Galicia</p>
+                                <div class="more-resources">
+                                    <ul>
+                                        <li class="res-file"><a href="#">Las cajas de ahorros logran poner freno a la morosidad</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--*<div class="more-little-news-section">
                                 <h4>Más noticias</h4>
                                 <hr class="more-news-little-separator" />
                                 <ul class="more-news-little-section-links">
@@ -159,7 +172,7 @@
                                     <li><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
                                     <li class="last"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="layout-column middle-column span-8">
@@ -198,6 +211,22 @@
                                 <h3 class="nw-title"><a href="#">El Real Madrid C.F. logra su 15 Copa de Europa</a></h3>
                                 <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
                             </div>
+                             <div class="more-ocio">
+                            <h4>Ocio</h4>
+                            <ul class="more-ocio-sections clearfix">
+                                <li class="selected first">Noticias</li>
+                                <li>Televisión</li>
+                                <li>Cine</li>
+                                <li>Radio</li>
+                            </ul>
+                            <ul class="more-ocio-little-section-links">
+                                <li class="level-1 first"><a href="#">Estreno Cine 3D: Avatar 2</a></li>
+                                <li class="level-2"><a href="#">Fama a bailar, Cuatro estrena nueva edición</a></li>
+                                <li class="level-3"><a href="#">"Memorias de Curros Enríquez", 8ª edición</a></li>
+                                <li class="level-4"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
+                                <li class="level-5 last"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
+                            </ul>
+                        </div>
                         </div>
                     </div><!-- fin -->
                     <div class="layout-column last-column last span-8">
@@ -218,21 +247,49 @@
                             </div>
                         </div>
                         <hr class="new-separator"/>
-                        <div class="more-ocio">
-                            <h4>Ocio</h4>
-                            <ul class="more-ocio-sections clearfix">
-                                <li class="selected first">Noticias</li>
-                                <li>Televisión</li>
-                                <li>Cine</li>
-                                <li>Radio</li>
-                            </ul>
-                            <ul class="more-ocio-little-section-links">
-                                <li class="level-1 first"><a href="#">Estreno Cine 3D: Avatar 2</a></li>
-                                <li class="level-2"><a href="#">Fama a bailar, Cuatro estrena nueva edición</a></li>
-                                <li class="level-3"><a href="#">"Memorias de Curros Enríquez", 8ª edición</a></li>
-                                <li class="level-4"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
-                                <li class="level-5 last"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
-                            </ul>
+                         <div class="nw-big">
+                                <div class="nw-category-name">Política</div>
+                                <h3 class="nw-title"><a href="#">La Justicia paraliza la fusión de cajas impulsada por la Xunta</a></h3>
+                                <p class="nw-subtitle">El Gobierno recurrió al Constitucional la norma que debe permitir la unión de Caixanova y Caixa Galicia</p>
+                                <div class="more-resources">
+                                    <ul>
+                                        <li class="res-file"><a href="#">Las cajas de ahorros logran poner freno a la morosidad</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                         <div class="span-8 layout-column last widget-lastest-tab">
+                            <div class="title">
+                                Temas calientes...
+                            </div>
+                            <div id="tabs2" class="content">
+                                    <ul>
+                                        <li><a href="#tab-more-views"><span>+Visto</span></a></li>
+                                        <li><a href="#tab-more-comments"><span>+Comentado</span></a></li>
+
+                                    </ul>
+                                    <div id="tab-more-views">
+                                        <div class="explanation">Noticias, vídeos y comentarios</div>
+                                        <?php for( $i = 1; $i <= 4; $i++ ){
+                                            echo '
+                                        <div class="tab-lastest clearfix">
+                                            <div class="tab-lastest-title"><a href="">Bla Bla Bla Bla</a></div>
+                                        </div>';
+                                        } ?>
+                                    </div>
+                                    <div id="tab-more-comments">
+                                        <div class="explanation">Noticias, vídeos y comentarios</div>
+                                        <?php for( $i = 1; $i <= 4; $i++ ){
+                                            echo '
+                                        <div class="tab-lastest clearfix">
+                                            <div class="tab-lastest-title"><a href="">Bla Bla Bla Bla</a></div>
+                                        </div>';
+                                        } ?>
+                                    </div>
+
+                                </div>
+                         </div>
+                          <div class="publi_310 clearfix">
+                            <a href="http://www.puntogal.org"><img src="images/publi/eu.gal.png" alt="" /></a>
                         </div>
 
                         
@@ -368,8 +425,8 @@
                     </div>
                     
                 </div>
-                <hr class="new-separator">
-                <div class="span-24">
+                <!--<hr class="new-separator">
+               {* <div class="span-24">
                     <div class="layout-column first-column span-8">
                         <div>
                             <div class="nw-big">
@@ -443,16 +500,13 @@
                             </div>
                         </div>
                         <div id="facebook">
-                            <!--
-                            <script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/gl_ES"></script>
-                            <script type="text/javascript">FB.init("58331dac9690aded338b54e63a3b5eab");</script>
-                            <fb:fan profile_id="202892939326" stream="0" connections="10" logobar="1" width="300"></fb:fan>
-                            -->
+
                         </div>
                     </div>
                     
                 </div>
                 <hr class="news-separator" />
+                        -->
                 <div class="span-24">
 
                     <div class="layout-column first-column span-8">
@@ -630,6 +684,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $("#tabs").tabs();
+             $("#tabs2").tabs();
         });
     </script>
   </body>
