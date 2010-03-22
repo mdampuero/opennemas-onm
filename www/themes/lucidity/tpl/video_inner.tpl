@@ -15,7 +15,7 @@
 	                    <div class="span-16 toolbar">
                                 <div class="vote-block span-10 clearfix">
                                         <div class="vote">
-                                                {include file="widget_votes.tpl"}
+                                                {include file="widget_ratings.tpl"}
                                         </div>
                                 </div><!-- /vote-block -->
 
