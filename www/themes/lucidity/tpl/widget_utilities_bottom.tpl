@@ -10,6 +10,10 @@
             <li class="span-4 last" onclick="increaseFontSize()" ><img src="{$params.IMAGE_DIR}/utilities/increase-text.png" alt="Increase text" /> Ampliar el texto</li>
             <li class="span-3"><img src="{$params.IMAGE_DIR}/utilities/print.png" alt="Print" /> Imprimir</li>
             <li class="span-4 last" onclick="decreaseFontSize()" ><img src="{$params.IMAGE_DIR}/utilities/decrease-text.png" alt="Decrease text" /> Reducir el texto</li>
+<li class="span-3"><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a> Reducir texto</li>
+<li class="span-4 last"><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
+<li class="span-3" onclick="increaseFontSize()" ><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
+<li class="span-4 last" onclick="decreaseFontSize()" ><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> Compartir</li>
 
         </ul>
     </div><!-- /utilities -->

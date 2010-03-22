@@ -26,6 +26,7 @@
 
         {else}
          <a href="/">
+     <img class="transparent-logo" src="{$params.IMAGE_DIR}main-logo.small.png" alt="Crónica comarcal" />
             <img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
             {if !empty($category_data.logo)}
                 <img src="/media/sections/{$category_data.logo}" alt="{$category_data.title}"  />
