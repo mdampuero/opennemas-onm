@@ -164,7 +164,7 @@ if(isset($_REQUEST['action']) ) {
                 // MUTEXT CODE, DON'T use for performance
                 // Application::getMutex($cache_id);                
         
-                if( true || ($tpl->caching == 0) || !$tpl->is_cached('article.tpl', $cache_id) ) {
+                if(  ($tpl->caching == 0) || !$tpl->is_cached('article.tpl', $cache_id) ) {
                     
                     $tpl->assign('article', $article);
                     /**************** PHOTOs ****************/
