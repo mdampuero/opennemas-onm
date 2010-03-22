@@ -13,13 +13,14 @@
     <link rel="stylesheet" href="stylesheets/onm-mockup.css" type="text/css" media="screen,projection">
     <link rel="stylesheet" href="stylesheets/parts/article.css" type="text/css" media="screen,projection">
     <link rel="stylesheet" href="stylesheets/parts/comments.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="stylesheets/parts/utilities.css" type="text/css" media="screen,projection">
      <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
 
 
  
 	<style type="text/css">
-		#main_menu{
-			background-color:#009677;
+		#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
+			background-color:#8e258d;
 		}
 	</style>
   </head>
@@ -61,7 +62,7 @@
 
                     <div id="logo-image"class="span-8">
                         <a href="#" title="Pulse aquí para ir a la portada de Crónica comarcal">
-                        	<img src="images/main-logo.small.green.png" alt="Crónica comarcal" />
+                        	<img class="transparent-logo" src="images/main-logo.small.png" alt="Crónica comarcal" />
                         	<img src="images/logo-sections/sports.png" alt="Deportes" />  
                         </a>
                     </div>
@@ -151,15 +152,15 @@
 		                    	
 		                    	<div class="utilities span-6 last">
 		                    		<ul>
-		                    			<li><img src="images/utilities/send-to-email.png" alt="Email" /></li>
-		                    			<li><img src="images/utilities/separator.png" alt="Email" onclick="javascript:sendbyemail('Show nicer file listings with Apache autoindex module','http://www.mabishu.com/blog/2010/02/17/show-nicer-file-listings-with-apache-autoindex-module/')"/></li>
-		                    			<li><img src="images/utilities/print.png" alt="Print" onclick="javascript:window.print()"/></li>
+		                    			<li><a href="" class="utilities-send-by-email" title="Enviar por email a un amigo"><span>Enviar por email</span></a></li>
+		                    			<li><img src="images/utilities/separator.png" alt="Email" onclick="javascript:sendbyemail('Título da nova')"/></li>
+		                    			<li><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><img src="images/utilities/increase-text.png" alt="Increase text" onclick="increaseFontSize()"  /></li>
+		                    			<li><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><img src="images/utilities/decrease-text.png" alt="Decrease text" onclick="decreaseFontSize()"  /></li>
+		                    			<li><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><img src="images/utilities/share.png" alt="Share" /></li>
+		                    			<li><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a></li>
 		                    		</ul>
 		                    	</div><!-- /utilities -->
 		                    	
@@ -240,11 +241,20 @@
 		                    	
 		                    	<div class="span-7">
 		                    		<ul>
-		                    			<li class="span-3"><img src="images/utilities/share.png" alt="Share" /> Compartir</li>
-	                        			<li class="span-4 last" onclick="increaseFontSize()" ><img src="images/utilities/increase-text.png" alt="Increase text" /> Ampliar el texto</li>
-		                    			<li class="span-3"><img src="images/utilities/print.png" alt="Print" /> Imprimir</li>
-	                        			<li class="span-4 last" onclick="decreaseFontSize()" ><img src="images/utilities/decrease-text.png" alt="Decrease text" /> Reducir el texto</li>
+		                    			<li class="span-3"><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a> Reducir texto</li>
+	                        			
+		                    			<li class="span-4 last"><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
+		                    			<li class="span-3" onclick="increaseFontSize()" ><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
+	                        			<li class="span-4 last" onclick="decreaseFontSize()" ><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> Compartir</li>
 
+
+		                    			<li></li>
+		                    			<li></li>
+		                    			<li></li>
+		                    			<li></li>
+		                    			
+		                    			
+		                    			
 		                    		</ul>
 		                    	</div><!-- /utilities -->
 		                    	
