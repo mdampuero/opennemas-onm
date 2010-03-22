@@ -20,7 +20,7 @@
  
 	<style type="text/css">
 		#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
-			background-color:#8e258d;
+			background-color:#ffbc21;
 		}
 	</style>
   </head>
