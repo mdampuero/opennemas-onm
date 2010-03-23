@@ -47,10 +47,10 @@
         {else}
              <title> {$smarty.const.SITE_TITLE} </title>
 
-            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>            
-            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>            
-            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
-            <script defer="defer" type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
 
         {/if}
         {literal}
