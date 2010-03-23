@@ -187,16 +187,27 @@ div.other-interested-videos h3{
 	text-align:left;
 }
 div.other-interested-videos{
-	text-aling:right;
+    text-align:right;
     position:relative
 }
 
-div.interested-video { background:#2a2a2a; text-align:center; margin:10px 0; padding:10px 0; width:210px; margin:0 aut0; 	float:right;}
+div.interested-video { 
+    background:#2a2a2a;
+    text-align:center;
+    margin:10px 0;
+    padding:10px 0;
+    width:210px;
+    margin:0 auto;
+    float:right;
+}
+
 div.interested-video .capture{ 
 	margin-left:10px;
 	width:190px;
 	display:block;
 	position:relative;
+        height:126px;
+        overflow: hidden;
 }
 div.interested-video .info-interested-video { 
 	font-family:Georgia; 
@@ -205,13 +216,15 @@ div.interested-video .info-interested-video {
 	margin:0; 
 	padding:0 10px;
 	width:190px;
-	margin:0 auto;
+	margin:0 auto;       
 }
-div.interested-video img{
+div.interested-video .image {
 	border:none;
+        width:190px;
+        
 }
 div.interested-video .category{ color:#aaaaaa; text-transform:uppercase; margin:0; padding:0; font-size:.9em}
-div.interested-video .caption{ color:#cccccc; margin:0; padding:0}
+div.interested-video .caption, div.interested-video a.video-link{ color:#cccccc; margin:0; padding:0}
 div.interested-video div.bar-video-tiny-info{
 	background:Black;
 	filter:alpha(opacity=40);
@@ -267,6 +280,10 @@ div.portada-videos div.featured-videos h1{
     font-size:1.5em;
 
 }
+div.portada-videos div.featured-videos a{
+    color:#CCCCCC;
+
+}
 div.portada-videos div.featured-videos h1 img{
     vertical-align:middle;
 }
@@ -310,7 +327,15 @@ div#tabs div.ui-tabs-panel{
     border-color:#373737 !important;
 }
 div.ui-tabs-selected a, div.ui-tabs-active a{color: #ccc !important;}
-div#tabs div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div#tabs div.ui-tabs-panel img{ 
+    float:left;
+    margin:0 5px 10px;
+    width:75px;
+    height:50px;
+}
+div#tabs div.ui-tabs-panel a{
+    color:#CCCCCC;
+}
 div#tabs .tab-thumb-video-shortitle{ text-transform:uppercase; color:#747678; font-size:.9em; margin:0; padding:0}
 div#tabs .tab-thumb-video-title{ font-family:Georgia; color:White; font-size:1.2em; margin:0; padding:0}
 

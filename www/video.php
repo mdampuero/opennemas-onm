@@ -31,7 +31,7 @@ if (isset($_GET['category_name'])) {
     $category_name = $_GET['category_name'];
 }else{
  
-     $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu LIMIT 0,1');
+     $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu ASC LIMIT 0,1');
      $category_name = $this_category_data[0]->name;
 
 }
@@ -67,40 +67,44 @@ if( isset($_REQUEST['action']) ) {
             foreach($videos as $video){
             //$videos_authors[] = new Author($video->fk_user);ç
             //miramos el fuente youtube o vimeo
-
-                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                $return = curl_exec($curl);
-                $return = unserialize($return);
-                curl_close($curl);
-                $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                $video->thumbnail_small = $return[0]['thumbnail_small'];
-
+                if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                }
+                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
             }
 
            
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 4, 8');
+            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 6');
             foreach($others_videos as $video){
             //$videos_authors[] = new Author($video->fk_user);ç
             //miramos el fuente youtube o vimeo
-
-                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                $return = curl_exec($curl);
-                $return = unserialize($return);
-                curl_close($curl);
-                $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                $video->thumbnail_small = $return[0]['thumbnail_small'];
-
+                 if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];                   
+                 }
+                 $video->category_name = $video->loadCategoryName($video->id);
+                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
 
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);
-            
+
 	break;
 
 	case 'inner':
@@ -117,11 +121,28 @@ if( isset($_REQUEST['action']) ) {
                 $video = new Video( $_REQUEST['id'] );
             } else {
             	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');			            	            	          
-            	$video = array_shift($videos);  //Extrae el primero            
+            	$video = array_shift($videos);  //Extrae el primero
+                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
             }
             
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 6, 39');
-	    $others_videos= $cm->paginate_num_js($others_videos,5, 1, 'get_paginate_articles',"'videos',''");
+            foreach($others_videos as $video){
+                if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                }
+                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
+            }
+	   // $others_videos= $cm->paginate_num_js($others_videos,5, 1, 'get_paginate_articles',"'videos',''");
             $tpl->assign('video', $video);
             $tpl->assign('videos', $videos);            
             $tpl->assign('others_videos', $others_videos);

@@ -40,11 +40,7 @@
               {include file="frontend_footer.tpl"}
         </div><!-- fin .container -->
     </div>
-
-    <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
-    <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
-    <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
-
+ 
   {if !empty($video)} {literal}
   
     <script type="text/javascript">
@@ -52,6 +48,15 @@
             $("#tabs").tabs();
             $('#tabs').height($('#video-content').height()+15);
             $('#').height($('#video-content').height()+15);
+        });
+    </script>
+    {/literal}
+  {else}
+    {literal}
+     <script type="text/javascript">
+        jQuery(document).ready(function(){
+            $("#tabs").tabs();
+             
         });
     </script>
     {/literal}

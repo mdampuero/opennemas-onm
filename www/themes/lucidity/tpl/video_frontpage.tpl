@@ -16,7 +16,7 @@
     </div>
     <div class="layout-column last-column last span-16 ">
         <div class="span-16">
-           {include file="widget_videos_category.tpl"}
+           {include file="widget_video_incategory.tpl"}
 
         </div>
         <div class="span-16">

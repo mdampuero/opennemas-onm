@@ -34,9 +34,10 @@
 
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
             <title>{$video->title|clearslash|default:''}  Videos - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
-            <link rel="stylesheet" href="{$params.CSS_DIR}video.css" type="text/css" media="screen,projection">
+            
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">            
+            <link rel="stylesheet" href="{$params.CSS_DIR}video.css" type="text/css" media="screen,projection">
             {literal}
             <style type="text/css">
                     #main_menu{
@@ -44,6 +45,8 @@
                     }                 
             </style>
             {/literal}
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
         {else}
              <title> {$smarty.const.SITE_TITLE} </title>
 
