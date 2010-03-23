@@ -6,7 +6,7 @@
 
   <div class="span-8 layout-column last widget-lastest-tab">
         <div class="title">
-            Temas calientes...
+            Lo último en {$category_data.title|capitalize}
         </div>
         <div id="tabs" class="content">
                 <ul>

@@ -87,20 +87,22 @@ div.comment-content{
 	background:#f3f3f3;
 	min-height:60px;
 	position:relative; /* I do it for allow position:absolute over content-number*/
+        padding-top:15px;
 }
 div.comment-content:hover{
 	color:#333;
 }
 div.comment-number{
-	color:#d3d3d3;
+	color:#747678;
 	position:absolute;
 	top:0px;
 	left:10px;
 	font-family:Georgia;
-	font-size:2.7em;
+	font-size:3.5em;
 	font-style:italic;
 	margin:0;
 	padding:0;
+        z-index:9999;
 }
 
 div.comment-body{

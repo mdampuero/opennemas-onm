@@ -198,11 +198,11 @@ class Vote
     // Render imgs without vote's links.
     private function renderImg($i)
     {
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/noticia/";
-        $imageTpl = '<img src="%s%s_18.png" style="vertical-align:middle;" alt="%s" title="%s" /> %s ( %d ) ';
+        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
+        $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
 
-        return sprintf($imageTpl, $imgPath, ($i%2==0) ? "vote_neg" : "vote_pos", $this->messages[$i], $this->messages[$i],
-                                 $this->messages[$i], ($i%2==0)? $this->value_neg : $this->value_pos);
+        return sprintf($imageTpl, $imgPath, ($i%2==0) ? "vote-down" : "vote-up", $this->messages[$i], $this->messages[$i],
+                                 ($i%2==0)? $this->value_neg : $this->value_pos);
     }
 
 
@@ -217,20 +217,19 @@ class Vote
             </a>
         */
 
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/noticia/";
+        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC
             <a href="#votar" onclick="javascript:vote_comment('%s', '%s', '%s'); return false;" title="%s">
                 <img id="%s_%s" style="vertical-align:middle;"
-                     src="{$imgPath}%s_18.png"
-                     alt="%s" /> %s ( %d )
-            </a>
+                     src="{$imgPath}%s.png"
+                     alt="%s" /> </a>   ( %d )
+            
 LINKTPLDOC;
 
         return sprintf($linkTpl, $_SERVER['REMOTE_ADDR'], $i, $pk_vote,   $this->messages[$i],
                                 // $pk_vote, $i,
                                  $i, $pk_vote,
-                                 ($i%2==0)? "vote_neg" : "vote_pos",
-                                 $this->messages[$i],
+                                 ($i%2==0)? "vote-down" : "vote-up",                                
                                  $this->messages[$i], ($i%2==0)? $this->value_neg : $this->value_pos);
     }
 

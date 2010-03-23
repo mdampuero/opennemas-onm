@@ -25,24 +25,25 @@
                 </ul>
             </div>
         </div><!-- fin nw-big -->
-    </div>*}
+   *}
 
-    <hr class="new-separator"/>
+        <hr class="new-separator"/>
 
-    <div class="news-highliter">
-       <h3>Destacadas en {$category_data.title|capitalize}</h3>
-        {include file="frontpage_article.tpl" item=$other_news[0]}
-        {include file="frontpage_article.tpl" item=$other_news[1]}
-     {*  <div class="nw-big">
-            <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
-            <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
+        <div class="news-highliter">
+           <h3>Destacadas en {$category_data.title|capitalize}</h3>
+            {include file="frontpage_article.tpl" item=$other_news[0]}
+            {include file="frontpage_article.tpl" item=$other_news[1]}
+         {*  <div class="nw-big">
+                <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
+                <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
+            </div>
+           <div class="nw-big">
+                <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
+                <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
+            </div>
+            *}
+
         </div>
-       <div class="nw-big">
-            <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
-            <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
-        </div>
-        *}
-        
     </div>
     {include file="widget_headlines_past.tpl"}
     {include file="widget_ad_lateral.tpl"}

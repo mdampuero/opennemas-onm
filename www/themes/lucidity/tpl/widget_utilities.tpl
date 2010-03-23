@@ -13,12 +13,10 @@
     <li><img src="{$params.IMAGE_DIR}utilities/separator.png" alt="Email" /></li>
     <li><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize();return false;" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
     <li><img src="{$params.IMAGE_DIR}utilities/separator.png" alt="Email" /></li>
-    <li><div style="display: inline;" class="actions"><a href="" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a>     
+    <li><div style="display: inline;" class="share-actions"><a href="" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a>
                 <ul style="display: none;">
-                  <li><img alt="Send by email to your friends" src="{$params.IMAGE_DIR}icons/tools_email.gif"> <a title="Send by email this article" onclick="sendbyemail('Show nicer file listings with Apache autoindex module','http://www.mabishu.com/blog/2010/02/17/show-nicer-file-listings-with-apache-autoindex-module/')" href="#"> Send by email</a></li>
-                  <li><img alt="Print this post" src="{$params.IMAGE_DIR}icons/tools_print.gif"> <a title="Print this article with your printer" href="javascript:window.print()">Print this article</a></li>
-                  <li><img alt="Share this post on Twitter" src="{$params.IMAGE_DIR}icons/toolsicon_anim.gif"> <a target="_blank" href="http://twitter.com/home?status=Show nicer file listings with Apache autoindex module%20http://ir.pe/1i9x">Send to Twitter</a></li>                           
-                  <li><img alt="Share on Facebook" src="{$params.IMAGE_DIR}icons/facebook-share.gif"> <a title="Click here to share on Facebook" href="http://www.facebook.com/sharer.php?u=http://www.mabishu.com/blog/2010/02/17/show-nicer-file-listings-with-apache-autoindex-module/&amp;t=Show nicer file listings with Apache autoindex module">Share on Facebook</a></li>
+                  <li><img alt="Share this post on Twitter" src="{$params.IMAGE_DIR}utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home">Send to Twitter</a></li>
+                  <li><img alt="Share on Facebook" src="{$params.IMAGE_DIR}utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php">Share on Facebook</a></li>
                 </ul>
             </div>
         </li>
@@ -30,7 +28,7 @@
 jQuery(document).ready(function(){
 
   $lock=false;
-  jQuery("div.actions").hover(
+  jQuery("div.share-actions").hover(
     function () {
       if (!$lock){
         $lock=true;
