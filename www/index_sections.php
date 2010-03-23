@@ -47,7 +47,7 @@ if( !is_null($category) ) {
 $styles='';
 foreach($allcategorys as $the_category) {
 
-    if(!empty($the_category->color)){
+    if(empty($the_category->color)){
         $the_category->color ='#B0113A';
     }
 
@@ -57,7 +57,10 @@ foreach($allcategorys as $the_category) {
                 }
             ';
 }
-
+    $styles.='#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
+                            background-color:'.$the_category->color.';
+                    }';
+ 
  $tpl->assign('categories_styles', $styles);
  
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/

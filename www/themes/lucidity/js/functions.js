@@ -46,8 +46,6 @@ function showCommentForm(){
 
 function rating(ip,value,page,id) {
 
-
-
 	$('.vota'+id).html( '<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
 
 	var url='/article.php?action=rating&i='+ip+'&v='+value+'&p='+page+'&a='+id;
@@ -71,6 +69,17 @@ function change_rating(num,pk_rating) {
 	}
 }
 
+function vote_comment(ip,value,id) {
+
+        $('.vota'+id).html( '<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+
+	var url='/article.php?action=vote&i='+ip+'&v='+value+'&p='+page+'&a='+id;
+
+        $.ajax({ url: url, context: document.body, success: function(result){
+            $('.vota'+id).html( result);
+            }
+        });
+}
 /*
 //prototype Ajax vote comments
 

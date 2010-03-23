@@ -100,7 +100,7 @@ Smarty template: frontpage.tpl
                                 {/if}
                             </div><!--fin more-news-bottom-article -->
 
-                           {include file="module_comments.tpl"}
+                           {include file="module_comments.tpl" content=$article}
                         </div>
                     </div>
 

@@ -54,10 +54,7 @@
 
         {/if}
         {literal}
-            <style type="text/css">
-                    #main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
-                            background-color:{/literal}{$category_data.color}{literal};
-                    }
+            <style type="text/css">                   
                      {/literal}  {$categories_styles}{literal}
             </style>
         {/literal}

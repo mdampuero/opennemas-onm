@@ -19,11 +19,13 @@
             </div>
         </div>
         <div class="form span-14">
-            <form action="" method="POST">
+            <form action="" name="comentar" id="comentar" onSubmit="return false;">
                 <div class="static-form span-8">
+                    <input type="hidden" id="id" name="id" value="{$content->id}"/>
+                    <input type="hidden" id="category" name="category" value="{$content->category}"/>
                     <textarea col="5"  tabindex="1" class="span-8"></textarea>
                     <input type="submit" tabindex="4" name="Submit" class="submit-button" value="Enviar »"/> o
-                <a href="#" onclick="showCommentForm(); return false;">volver</a>
+                    <a href="#" onclick="showCommentForm(); return false;">volver</a>
                 </div>
                 <div class="variable span-6 last">
                     <div>
