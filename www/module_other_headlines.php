@@ -7,11 +7,11 @@
 $titulares = $cm->find_headlines();
 
 $i=1;
-foreach($categories as $category_data) {
+foreach($categories as $this_category) {
     $category_titulares = array();
     foreach ($titulares as $titul) {
 
-        if($category_data['name'] == $titul['catName']){
+        if($this_category['name'] == $titul['catName']){
             $category_titulares[] = $titul;
         }
 

@@ -31,8 +31,8 @@ if (isset($_GET['category_name'])) {
     $category_name = $_GET['category_name'];
 }else{
  
-     $category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu LIMIT 0,1');
-     $category_name = $category_data[0]->name;
+     $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu LIMIT 0,1');
+     $category_name = $this_category_data[0]->name;
 
 }
 

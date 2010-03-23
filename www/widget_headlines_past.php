@@ -9,11 +9,10 @@ $articles_24h = $cm->find_by_category_name('Article', $category_data['name'], 'c
 $articles_3day = $cm->find_by_category_name('Article', $category_data['name'], 'content_status=1 AND available=1 AND fk_content_type=1 AND created>='.$ago3day.' (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY ORDER BY views DESC, position ASC LIMIT 0 , 6');
 $articles_1sem = $cm->find_by_category_name('Article', $category_data['name'], 'content_status=1 AND available=1 AND fk_content_type=1 AND created>='.$ago1sem.' AND (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY ORDER BY views DESC, position ASC LIMIT 0 , 6');
 */
-$articles_24h = $cm->getMostViewedContent('Article', true, $category_data['id'],'',1);
-$articles_3day = $cm->getMostViewedContent('Article', true, $category_data['id'],'',3);
-$articles_1sem = $cm->getMostViewedContent('Article', true, $category_data['id'],'',7);
+$articles_24h = $cm->getMostViewedContent('Article', true, $category_data['id'],'',1, 5);
+$articles_3day = $cm->getMostViewedContent('Article', true, $category_data['id'],'',3, 5);
+$articles_1sem = $cm->getMostViewedContent('Article', true, $category_data['id'],'',7, 5);
 $tpl->assign('articles_24h', $articles_24h);
 $tpl->assign('articles_3day', $articles_3day);
 $tpl->assign('articles_1sem', $articles_1sem);
 
- 

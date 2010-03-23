@@ -26,7 +26,7 @@ foreach( $allcategorys as $prima) {
                                             'subcategories' => $subcat,
                                             'color' => $prima->color,
                                             'logo' =>  $prima->logo_path);
-   if(($category_name == $prima->name) || ($subcategory_name == $prima->name) ) {
+   if(($category == $prima->pk_content_category) || ($subcategory == $prima->pk_content_category) ) {
        $category_data=array('id' => $prima->pk_content_category,
                             'name' => $prima->name,
                             'title' => $prima->title,
@@ -35,7 +35,7 @@ foreach( $allcategorys as $prima) {
                             'logo' =>  $prima->logo_path);
    }
 }
-// var_dump($category_data);
+ 
 $tpl->assign('categories', $categories);
 $tpl->assign('category_data', $category_data);
 

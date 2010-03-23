@@ -6,7 +6,7 @@
 
   <div class="span-8 layout-column last widget-lastest-tab">
         <div class="title">
-            Lo último en {$category_data.title|capitalize}
+            Lo último en {$category_data.title|default:'Portada'|capitalize}
         </div>
         <div id="tabs" class="content">
                 <ul>
