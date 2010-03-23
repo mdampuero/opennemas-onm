@@ -58,7 +58,9 @@ if( isset($_REQUEST['action']) ) {
 			$i=0;
 			foreach($videos as $video){
 			
-				$authors[$i]=new Author($video->fk_user);
+				$authors[$i] = new Author($video->fk_user);
+                $video->category_name = $video->loadCategoryName($video->pk_content);
+                
 				$i++;
 			}
 		

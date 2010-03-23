@@ -17,29 +17,49 @@
 
         <table class="adminlist">
             <tr>
-                <th class="title"></th>
-                <th >Título</th>
-                <th align="center">Visto</th>
+                <th class="title" style="width:35px;"></th>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Secci&oacute;n</th>
+                <th align="center" style="width:35px;">Visto</th>
                 <th align="center">Fecha</th>
-                <th align="center">Estado</th>
-                <th align="center">Modificar</th>
-                <th align="center">Eliminar</th>
-            </tr>
+                <th align="center" style="width:35px;">Estado</th>
+                <th align="center" style="width:35px;">Modificar</th>
+                <th align="center" style="width:35px;">Eliminar</th>
+            </tr>           
             {section name=c loop=$videos}
                 <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
-                    <td style="padding:10px;font-size: 11px;">
+                    <td style="padding:1px; font-size:11px;">
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
                     </td>	
-                    <td style="padding:10px;font-size: 11px;width:50%;"  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+                    <td style="padding:10px;font-size: 11px;"  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}
                     </td>
-                    <td style="padding:1px;font-size: 11px;width:10%;" align="center">
+                    <td style="padding:10px;font-size: 11px;">
+                        {$videos[c]->author_name|upper|clearslash}
+                    </td>
+                    
+                    <td style="padding:10px;font-size: 11px;">
+                        {section name=as loop=$allcategorys}
+                            {if $videos[c]->category eq $allcategorys[as]->pk_content_category}
+                                {$allcategorys[as]->title}
+                            {/if}
+                                
+                            {section name=su loop=$subcat[as]}
+                                {if $videos[c]->category eq $subcat[as][su]->pk_content_category}
+                                    &rarrow; {$subcat[as][su]->title}
+                                {/if}
+                            {/section}
+                        {/section}
+                    </td>
+                    
+                    <td style="padding:1px; font-size:11px;" align="center">
                         {$videos[c]->views}
                     </td>
-                    <td style="padding:1px;width:10%;font-size: 11px;" align="center">
-                                {$videos[c]->created}
+                    <td style="padding:1px; font-size:11px;" align="center">
+                        {$videos[c]->created}
                     </td>
-                    <td style="padding:10px;font-size: 11px;width:10%;" align="center">
+                    <td style="padding:1px; font-size:11px;" align="center">
                         {if $videos[c]->content_status == 1}
                                 <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
                                         <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicado" /></a>
@@ -48,11 +68,11 @@
                                         <img src="{php}echo($this->image_dir);{/php}publish_r.png" border="0" alt="Pendiente" /></a>
                         {/if}
                     </td>
-                    <td style="padding:10px;font-size: 11px;width:10%;" align="center">
+                    <td style="padding:1px; font-size:11px;" align="center">
                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
                                 <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" /></a>
                     </td>
-                    <td style="padding:10px;font-size: 11px;width:10%;" align="center">
+                    <td style="padding:1px; font-size:11px;" align="center">
                         <a href="#" onClick="javascript:delete_videos('{$videos[c]->id}',{$paginacion->_currentPage});" title="Eliminar">
                                 <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
                     </td>
@@ -60,12 +80,12 @@
 
             {sectionelse}
                 <tr>
-                        <td align="center" colspan=5><br><br><p><h2><b>Ningun video guardado</b></h2></p><br><br></td>
+                    <td align="center" colspan="8"><br><br><p><h2><b>Ningun video guardado</b></h2></p><br><br></td>
                 </tr>
             {/section}
             {if count($videos) gt 0}
                 <tr>
-                    <td colspan="3" align="center">{$paginacion->links}</td>
+                    <td colspan="8" align="center">{$paginacion->links}</td>
                 </tr>
             {/if}
         </table>
