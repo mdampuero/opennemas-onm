@@ -16,13 +16,13 @@ OpenNeMas.tinyMceConfig = {
         mode : "exact",
         theme : "advanced",                
         language: "es",
-        plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe",
+        plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator",
 
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
         
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-        theme_advanced_buttons2_add : "styleprops,|,media,iframe,spellchecker,xornalautolink",
+        theme_advanced_buttons2_add : "styleprops,|,media,iframe,spellchecker,gtranslator,xornalautolink",
         theme_advanced_buttons2_add_before: "visualaid,charmap,sub,sup,|,cut,copy,pastetext,|,removeformat,cleanup,code,|,search,replace,|",
         theme_advanced_buttons3 : "",  
         theme_advanced_toolbar_location : "top",
@@ -78,12 +78,12 @@ OpenNeMas.tinyMceConfig = {
         mode : "exact",
         theme : "advanced",                
         language: "es",
-        plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe",
+        plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe,gtranslator",
 
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
                 
-        theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,copy,pastetext,|,undo,redo,|,removeformat,cleanup,code,|,link,unlink,|,image,media,iframe,spellchecker,xornalautolink",
+        theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,copy,pastetext,|,undo,redo,|,removeformat,cleanup,code,|,link,unlink,|,image,media,iframe,spellchecker,gtranslator,xornalautolink",
         theme_advanced_buttons2 : "",
         theme_advanced_buttons3 : "",                
 
