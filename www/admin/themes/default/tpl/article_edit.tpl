@@ -53,6 +53,19 @@
     <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
         <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
             value="{$article->title_int|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
+        
+        {literal}
+        <script type="text/javascript">
+        /* <![CDATA[ */
+        $('title').observe('blur', function(evt) {
+            var tituloInt = $('title_int').value.strip();
+            if( tituloInt.length == 0 ) {
+                $('title_int').value = $F('title');
+            }
+        });
+        /* ]]> */
+        </script>
+        {/literal}
     </td>
     <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
         <table style='background-color:#F5F5F5; padding:18px; width:99%;'>                
@@ -86,23 +99,24 @@
             </tr>
             <tr>
                 <td valign="top"  align="right" nowrap="nowrap">
-                    <label for="in_home"> Sugerir en Home: </label>
+                    <label for="in_home"> En portada: </label>
                 </td>
                 <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                   {if $article->in_home eq 1}
                    
                        <select name="in_home" id="in_home" class="required" tabindex="8" disabled="disabled">
                             <option value="1" disabled="disabled" {if $article->in_home eq 1} selected="selected"{/if}>SI</option>
-                             <option value="0" {if $article->in_home eq 0} selected="selected"{/if}>No</option>
+                            <option value="0" {if $article->in_home eq 0} selected="selected"{/if}>No</option>
                        </select>
                         <img class="inhome" src="{$params.IMAGE_DIR}gohome.png" border="0" alt="En home" align="top" />
                   {else}
                        <select name="in_home" id="in_home" class="required" tabindex="8">
                             <option value="0" {if $article->in_home eq 0}selected="selected"{/if}>No</option>
-                            <option value="2" {if $article->in_home eq 2}selected="selected"{/if}>Si</option>
+                            <option value="1" {if $article->in_home eq 1}selected="selected"{/if}>Si</option>
+                            {* <option value="2" {if $article->in_home eq 2}selected="selected"{/if}>Si</option> *}
                        </select>
-                       <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" alt="En home" align="top" />
-
+                       {* <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" alt="En home" align="top" /> *}
+                        
                   {/if}
                 </td>
             </tr>
@@ -120,7 +134,7 @@
             </tr>
             {* Hai que ter en conta o placeholder, non a posición *}
             {* if ($article->position) eq 1 && ($_from neq 'home') *}            
-            {if ($article->placeholder eq 'placeholder_0_0') && ($_from neq 'home')}
+            {* if ($article->placeholder eq 'placeholder_0_0') && ($_from neq 'home')}
             <tr>
                 <td valign="top"  align="right" nowrap="nowrap">
                     <label for="columns"> Columnas: </label>
@@ -132,11 +146,11 @@
                    </select>
                 </td>
             </tr>
-            {/if}
+            {/if *}
             
             {* Hai que ter en conta o placeholder, non a posición *}
             {* if ($article->home_pos) eq 1 && ($_from eq 'home') *}
-            {if ($article->home_placeholder eq 'placeholder_0_0') && ($_from eq 'home')}
+            {* if ($article->home_placeholder eq 'placeholder_0_0') && ($_from eq 'home')}
             <tr>
                 <td valign="top"  align="right" nowrap="nowrap">
                     <label for="home_columns"> Home Columnas: </label>
@@ -148,7 +162,7 @@
                    </select>
                 </td>
             </tr>
-            {/if}
+            {/if *}
             
             {else} {* else if not list_hemeroteca *}
             

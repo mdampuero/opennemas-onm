@@ -39,6 +39,22 @@
         <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
             <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
                 value="" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
+            
+            
+            {* input#title.onblur() cando title perda o foco copiar en título interior *}
+            {literal}
+            <script type="text/javascript">
+            /* <![CDATA[ */
+            $('title').observe('blur', function(evt) {
+                var tituloInt = $('title_int').value.strip();
+                if( tituloInt.length == 0 ) {
+                    $('title_int').value = $F('title');
+                }
+            });
+            /* ]]> */
+            </script>
+            {/literal}
+            
         </td>
         <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
             
@@ -84,14 +100,15 @@
                 </tr>
                 <tr>
                     <td valign="top"  align="right" nowrap="nowrap">
-                        <label for="in_home"> Sugerir en Home: </label>
+                        <label for="in_home"> En portada: </label>
                     </td>
                     <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                         <select name="in_home" id="in_home" class="required" tabindex="8">
-                            <option value="0" {if $article->in_home eq 1}selected="selected"{/if}>No</option>
-                            <option value="2" {if $article->in_home eq 2}selected="selected"{/if}>Si</option>
+                            <option value="0" {if $article->in_home eq 0}selected="selected"{/if}>No</option>
+                            <option value="1" {if $article->in_home eq 1}selected="selected"{/if}>Si</option>
+                            {* <option value="2" {if $article->in_home eq 2}selected="selected"{/if}>Si</option> *} 
                        </select>
-                       <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" alt="En home" align="top" />
+                       {* <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" alt="En home" align="top" /> *}
                     </td>
                </tr>
                 <tr>
