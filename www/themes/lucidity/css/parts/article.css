@@ -117,6 +117,10 @@ div.more-news-bottom-article ul li{
 	margin:0;
 	padding:0;
 }
+
+div.more-news-bottom-article li a{
+    font-family:Verdana;
+}
 /***********************************************************
    Widget of news highlighter on inner article
 ************************************************************/
