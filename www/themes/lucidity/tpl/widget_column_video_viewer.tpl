@@ -26,7 +26,7 @@
 
                 <p>
                     {$video->title|clearslash|escape:'html'}<br/>
-                    <img src="images/stars.png" alt="" />
+                    <img src="{$params.IMAGE_DIR}stars.png" alt="" />
                 </p>
             </div>
         </div>

@@ -205,13 +205,13 @@ class Rating
             </a>            
         */
         
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/home_noticias/semaforo";        
+        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC
             <a href="#votar" onclick="javascript:rating('%s', %d, '%s', '%s'); return false;" title="%s">
                 <img id="%s_%d"
                      onmouseover="change_rating(%d, '%s')"
                      onmouseout="change_rating(%d, '%s')"
-                     src="{$imgPath}%s.gif"
+                     src="{$imgPath}%s.png"
                      alt="%s" />
             </a>
 LINKTPLDOC;
@@ -220,16 +220,16 @@ LINKTPLDOC;
                                  $pk_rating, $i,
                                  $i, $pk_rating,
                                  $value, $pk_rating,
-                                 ($value>=$i)? "Azul": "Gris",
+                                 ($value>=$i)? "f-star" : "e-star",
                                  $this->messages[$i]);
     }
     
     private function renderImg($i, $value)
     {
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/home_noticias/semaforo";
-        $imageTpl = '<img src="%s%s.gif" alt="%s" title="%s" />';        
+        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
+        $imageTpl = '<img src="%s%s.png" alt="%s" title="%s" />';
         
-        return sprintf($imageTpl, $imgPath, ($value>=$i) ? "Azul" : "Gris", $this->messages[$i], $this->messages[$i]);
+        return sprintf($imageTpl, $imgPath, ($value>=$i) ? "f-star" : "e-star", $this->messages[$i], $this->messages[$i]);
     }
     
     function render($page, $type, $ajax=0) {
@@ -272,27 +272,27 @@ LINKTPLDOC;
             $results .= " ".$this->total_votes." voto/s";
                 
             if($type=="vote") {
+               
                 $html_out .= "  <div class=\"CVotos\">";
-                $html_out .= $results;
-                $html_out .= "  </div>";
-                $html_out .= "  <div class=\"separadorVotos\"></div>";
-                $html_out .= "  <div class=\"CVotos\">";
-                $html_out .= "  Vota ";
-                
+                $html_out .= "  Vota ";                
                 // Render links
                 for($i=1; $i <= 5; $i++) {
                     $html_out .= $this->renderLink($i, 'article', $this->pk_rating, $value);
-                }                                
-                
+                }                                                
                 $html_out .= "  </div>";
+                $html_out .= "  <div class=\"CVotos\"> Resultados ";
+                $html_out .= $results;
+                $html_out .= "  </div>";
+                $html_out .= "  ";
             } elseif($type==="result") {
+               
+                $html_out .= "  <div class=\"CVotos\">";
+                $html_out .= "  ¡Gracias por su participación! ";
+                $html_out .= "  </div> ";
                 $html_out .= "  <div class=\"CVotos\">";
                 $html_out .= $results;
                 $html_out .= "  </div>";
-                $html_out .= "  <div class=\"separadorVotos\"></div>";
-                $html_out .= "  <div class=\"CVotos\">";
-                $html_out .= "  ¡Gracias por tu participación!";
-                $html_out .= "  </div>";
+                $html_out .= "  <div class=\"separadorVotos\"> </div>";
             }
             if (!$ajax) {
                 $html_out = "<div class=\"CVotos_nota\" id=\"vota".$this->pk_rating."\">".$html_out;

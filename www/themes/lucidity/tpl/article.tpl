@@ -58,28 +58,40 @@ Smarty template: frontpage.tpl
                                          <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" title="{$article->img2_footer|clearslash|escape:"html"}" alt="{$article->img2_footer|clearslash|escape:"html"}" />
                                     
                                         <div class="photo-subtitle">
-                                               {$article->img2_footer|clearslash|escape:"html"}
-                                                <span class="photo-autor">FOTO: CHEMA REY | MARCA</span>
+                                               <span class="photo-autor">{$article->img2_footer|clearslash|escape:"html"}</span>
                                         </div>
                                      {/if}
                                 </div>
-                                <p>{$article->body|clearslash}</p>
+                                <p>
+                                <div style="width:180px;float:left;border:1px solid #333;">
+                                    {if !empty($relationed)}
+                                    Relacionadas:
+                                     <ul>
+                                        {section name=r loop=$relationed}
+                                            {if $relationed[r]->pk_article neq  $article->pk_article}
+                                               {renderTypeRelated content=$relationed[r]}
+                                            {/if}
+                                        {/section}
+                                    </ul>
+                                {/if}
+                                </div> {$article->body|clearslash}
+                                </p>
                             </div><!-- /content-article -->
 
-                            {include file="widget_ratings.tpl"}
+                            {*include file="widget_ratings.tpl"*}
                             <hr class="new-separator"/>
 
                             {include file="widget_utilities_bottom.tpl"}
 
                             <hr class="new-separator"/>
 
-                            <div class="more-news-bottom-article">
-                                {if !empty($relationed)}
+                            <div class="more-news-bottom-article">                                                          
+                                {if !empty($suggested)}
                                     <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
                                      <ul>
-                                        {section name=r loop=$relationed}
-                                            {if $relationed[r]->pk_article neq  $article->pk_article}
-                                               {renderTypeRelated content=$relationed[r]}
+                                        {section name=r loop=$suggested}
+                                            {if $suggested[r].pk_article neq  $article->pk_article}
+                                               <li><a href="{$suggested[r].permalink}">{$suggested[r].title|clearslash}</a></li>
                                             {/if}
                                         {/section}
                                     </ul>
