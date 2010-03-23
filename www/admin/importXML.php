@@ -124,15 +124,18 @@ function createArticle($elementXML,$numCategories,$check='1')
     foreach ($elementXML->autor_nombre as $texto) {
        $data['agency'].= $texto ;
     }
-    // Cambiar "Redacción" o "Agencias", REDACCIÓN/AGENCIAS  por Xornal.com
+    
     $texto=trim($data['agency']);
     substr_replace($texto ,'',-1);
-    $data['agency']=mb_strtoupper($texto,'UTF-8');
+    $data['agency'] = mb_strtoupper($texto,'UTF-8');
 
-    if(strlen($data['agency'])==0) {
-        $data['agency']="Xornal.com"; 
-    }elseif( $data['agency']=='REDACCIÓN' ||  $data['agency']=='AGENCIAS' ||  $data['agency']=='REDACCIÓN/AGENCIAS'  ||  $data['agency']=='AXENCIAS' ||  $data['agency']=='REDACCIÓN/AXENCIAS') {
-         $data['agency']="Xornal.com"; 
+    if(strlen($data['agency']) == 0) {
+        $data['agency'] = "Agencias";
+        
+    } elseif( $data['agency']=='REDACCIÓN' ||  $data['agency']=='AGENCIAS' ||
+             $data['agency']=='REDACCIÓN/AGENCIAS'  ||  $data['agency']=='AXENCIAS' ||
+             $data['agency']=='REDACCIÓN/AXENCIAS') {        
+        $data['agency'] = "Agencias"; 
     }
     $elementXML->autor_nombre= $elementXML->autor_nombre.' ('.  $data['agency'].')';
 

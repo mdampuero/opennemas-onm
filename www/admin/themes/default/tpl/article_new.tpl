@@ -168,7 +168,7 @@
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
             <input type="text" id="agency" name="agency" title="Agencia"
-                value="Xornal.com" class="required" size="100" tabindex="3"
+                value="Agencias" class="required" size="100" tabindex="3"
 {literal}onblur="setTimeout(function(){tinyMCE.get('summary').focus();}, 200);"{/literal} />
         </td>
     </tr>

@@ -29,9 +29,12 @@ if( isset($_REQUEST['action'])){
             if ($result === true) { // must be same type (===)
                 
                 if( isset($_REQUEST['rememberme']) ) {
-                    // FIXME: recomendable esta outra configuración para o servidor, é máis segura
-                    /* setcookie("login", $_REQUEST['login'], time()+3600, "/admin/", ".xornal.com", TRUE, TRUE);
-                    setcookie("password", $_REQUEST['password'], time()+3600, "/admin/", ".xornal.com", TRUE, TRUE); */
+                    // Use long expression of setcookie to have more security
+                    /*
+                      setcookie("login", $_REQUEST['login'], time()+3600, "/admin/", ".dominio.com", TRUE, TRUE);
+                      setcookie("password", $_REQUEST['password'], time()+3600, "/admin/", ".dominio.com", TRUE, TRUE);
+                    */
+                    
                     $app->setcookie_secure("login_username", $_REQUEST['login'],    time()+60*60*24*30, '/admin/');
                     $app->setcookie_secure("login_password", $_REQUEST['password'], time()+60*60*24*30, '/admin/');
                     

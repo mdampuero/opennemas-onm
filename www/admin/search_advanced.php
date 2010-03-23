@@ -430,13 +430,13 @@ function send_notify( $destinatario, $htmlcontent ) {
 
         // FIXME: Eliminar las cadenas y poner constantes Ó implementar una clase especializada para envíos
 		$mail->From = $destinatario;
-		$mail->FromName = utf8_decode("Xornal de Galicia");
+		$mail->FromName = utf8_decode("OpenNemas");
 		$mail->IsHTML(true);
 
 
 		$mail->AddAddress($destinatario, $destinatario);
 
-                $mail->Subject  = utf8_decode("Xornal de Galicia").' NOTIFY ';
+                $mail->Subject  = utf8_decode("OpenNemas").' NOTIFY ';
 
 		/* $this->HTML = preg_replace('/>[^<]*"[^<]*</', '&#34;', $this->HTML);
 		$this->HTML = preg_replace("/>[^<]*'[^<]*</", '&#39;', $this->HTML); */

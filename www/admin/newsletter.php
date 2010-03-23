@@ -118,7 +118,7 @@ switch($action) {
             'mail_user' => MAIL_USER,
             'mail_pass' => MAIL_PASS,
             'mail_from' => MAIL_USER,
-            'mail_from_name' => 'Xornal de Galicia',
+            'mail_from_name' => 'OpenNemas Newsletter System',
         );
         
         // Render page using "PUSH HTTP" technology
