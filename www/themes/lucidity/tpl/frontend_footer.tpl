@@ -24,6 +24,6 @@
             Calle Lisboa, 13D 4A, 28003.<br/>
             OpenHost Media Press S.L.
         </div>
-        <div class="span-12 last developed-by">Desarrollado por:<br/><img src="images/logo-onm-small.png" /></div>
+        <div class="span-12 last developed-by">Desarrollado por:<br/><img src="{$params.IMAGE_DIR}/logo-onm-small.png" alt="OpenNemas Framework" /></div>
     </div>
 </div><!-- fin .footer -->
