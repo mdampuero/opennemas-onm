@@ -57,8 +57,12 @@ foreach($allcategorys as $the_category) {
                 }
             ';
 }
+ if(empty($category_data['color'])){
+        $category_data['color'] ='#B0113A';
+    }
+
     $styles.='#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
-                            background-color:'.$the_category->color.';
+                            background-color:'.$category_data['color'].';
                     }';
  
  $tpl->assign('categories_styles', $styles);

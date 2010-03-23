@@ -104,7 +104,7 @@ Smarty template: frontpage.tpl
                        {renderplaceholder items=$column tpl='frontpage_article_image.tpl' placeholder="placeholder_1_3"}
                     </div>
                     
-                    {*include file="widget_headlines_past.tpl"*}
+                    {include file="widget_headlines_past.tpl"}
 
                 </div>
 

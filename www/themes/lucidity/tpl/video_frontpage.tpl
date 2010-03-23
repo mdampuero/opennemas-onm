@@ -30,7 +30,7 @@
                {include file="widget_videos_lastest.tpl"}
             </div>
             <div class="span-8 last">
-                {include file="module_video_comments.tpl"}
+                {*include file="module_video_comments.tpl"*}
             </div>
 
         </div>
