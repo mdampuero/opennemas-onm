@@ -806,6 +806,36 @@ div.widget-lastest-tab .title{
 ************************************************************/
 
 
-div#footer{
-    
+
+#footer{
+    color:#9b9da0;
+}
+div#footer li{
+
+}
+div#footer a{
+    color:#9b9da0 !important;
+}
+div#footer div.publi-footer{
+    background:#ccc;
+    margin-bottom:5px;
+    background:#ccc;
+}
+div#footer hr.new-separator{ margin:0; padding:0; height:2px; }
+
+div#footer ul{
+    margin:0;
+    padding:0;
+    margin-bottom:3px;
+}
+div#footer ul li{
+    display:inline;
+    margin:0;
+    padding:0;
+    padding-right:5px;
+}
+div#footer ul li.last{ border:none;}
+
+div#footer .developed-by{
+    text-align:right
 }
