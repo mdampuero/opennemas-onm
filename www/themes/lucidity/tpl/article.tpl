@@ -62,23 +62,25 @@ Smarty template: frontpage.tpl
                                         </div>
                                      {/if}
                                 </div>
-                                <p>
-                                <div style="width:180px;float:left;border:1px solid #333;">
-                                    {if !empty($relationed)}
-                                    Relacionadas:
-                                     <ul>
-                                        {section name=r loop=$relationed}
-                                            {if $relationed[r]->pk_article neq  $article->pk_article}
-                                               {renderTypeRelated content=$relationed[r]}
-                                            {/if}
-                                        {/section}
-                                    </ul>
+                                  {if !empty($relationed)}
+                                    <div style="width:180px;margin:10px;float:left;border:1px solid #333;">
+                                        Relacionadas:
+                                         <ul>
+                                            {section name=r loop=$relationed}
+                                                {if $relationed[r]->pk_article neq  $article->pk_article}
+                                                   {renderTypeRelated content=$relationed[r]}
+                                                {/if}
+                                            {/section}
+                                        </ul>
+                                     </div>
                                 {/if}
-                                </div> {$article->body|clearslash}
+                                <p>{$article->body|clearslash}
                                 </p>
+                              
+                               
                             </div><!-- /content-article -->
 
-                            {*include file="widget_ratings.tpl"*}
+                            {include file="widget_ratings.tpl"}
                             <hr class="new-separator"/>
 
                             {include file="widget_utilities_bottom.tpl"}

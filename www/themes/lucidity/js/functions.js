@@ -40,3 +40,75 @@ function showCommentForm(){
     $('.auth-selector').slideToggle();
     $('.form-comments .form').slideToggle();
 }
+
+
+ 
+
+function rating(ip,value,page,id) {
+
+
+
+	$('.vota'+id).html( '<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+
+	var url='/article.php?action=rating&i='+ip+'&v='+value+'&p='+page+'&a='+id;
+	  
+        $.ajax({ url: url, context: document.body, success: function(result){
+            $('.vota'+id).html( result);
+            }
+        });
+}
+
+
+function change_rating(num,pk_rating) {
+  
+	for(i=1; i<=5; i++) {
+		if (i<=num) {                       
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/f-star.png');
+
+		} else {
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/e-star.png');
+		}
+	}
+}
+
+/*
+//prototype Ajax vote comments
+
+function vote_comment(ip,value,id) {
+var page='Article';
+ 
+ new Ajax.Updater('vota'+id, '/article.php?action=vote&i='+ip+'&v='+value+'&p='+page+'&a='+id,
+        {
+
+             onLoading: function() {
+                $('vota'+id).update('<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+                console.log('/article.php?action=vote&i='+ip+'&v='+value+'&p='+page+'&a='+id);
+             },
+             onComplete: function(transport) {
+
+               $('vota'+id).update(transport.responseText);
+
+            }
+        } );
+}
+
+
+
+
+function get_paginate_comments(id, page) {
+
+    var url = '/comments.php?action=paginate_comments&id='+id+'&page='+page;
+    new Ajax.Request(url, {
+        'method': 'get',
+        onLoading: function() {
+            $('div_comments').update('<div class="loading_container" style="height:400px;"></div>');
+        },
+        'onSuccess': function(transport) {
+            $('div_comments').update(transport.responseText);
+             $('COpina').scrollTo();
+            // ($'id_eleto').scrollTo() ó location.href
+        }
+    });
+
+}
+*/

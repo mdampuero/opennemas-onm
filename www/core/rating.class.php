@@ -207,13 +207,13 @@ class Rating
         
         $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC
-            <a href="#votar" onclick="javascript:rating('%s', %d, '%s', '%s'); return false;" title="%s">
-                <img id="%s_%d"
+           <li> <a href="#votar" onclick="javascript:rating('%s', %d, '%s', '%s'); return false;" title="%s">
+                <img class="%s_%d"
                      onmouseover="change_rating(%d, '%s')"
                      onmouseout="change_rating(%d, '%s')"
                      src="{$imgPath}%s.png"
                      alt="%s" />
-            </a>
+            </a></li>
 LINKTPLDOC;
         
         return sprintf($linkTpl, $_SERVER['REMOTE_ADDR'], $i, 'home', $pk_rating,  $this->messages[$i],
@@ -259,7 +259,7 @@ LINKTPLDOC;
                 
             }
             if (!$ajax) {
-                $html_out = "<div class=\"CVotos CComentariosNotaDestacada\" id=\"vota".$this->pk_rating."\">".$html_out;
+                $html_out = "<div class=\"vota".$this->pk_rating."\">".$html_out;
                 $html_out .= "</div>";
             }
         } elseif($page=="article") {
@@ -273,30 +273,30 @@ LINKTPLDOC;
                 
             if($type=="vote") {
                
-                $html_out .= "  <div class=\"CVotos\">";
-                $html_out .= "  Vota ";                
+                $html_out .= " ";
+                $html_out .= "  Vota <ul class='voting'>";
                 // Render links
                 for($i=1; $i <= 5; $i++) {
                     $html_out .= $this->renderLink($i, 'article', $this->pk_rating, $value);
                 }                                                
-                $html_out .= "  </div>";
-                $html_out .= "  <div class=\"CVotos\"> Resultados ";
+                $html_out .= "  </ul>";
+                $html_out .= "    Resultados <ul class='voting'>";
                 $html_out .= $results;
-                $html_out .= "  </div>";
+                $html_out .= "  </ul>";
                 $html_out .= "  ";
             } elseif($type==="result") {
                
-                $html_out .= "  <div class=\"CVotos\">";
+                $html_out .= "  <span class=\"CVotos\">";
                 $html_out .= "  ¡Gracias por su participación! ";
-                $html_out .= "  </div> ";
-                $html_out .= "  <div class=\"CVotos\">";
+                $html_out .= "  </span> ";
+                $html_out .= "  <span class=\"CVotos\">";
                 $html_out .= $results;
-                $html_out .= "  </div>";
-                $html_out .= "  <div class=\"separadorVotos\"> </div>";
+                $html_out .= "  </span>";
+                $html_out .= "  ";
             }
             if (!$ajax) {
-                $html_out = "<div class=\"CVotos_nota\" id=\"vota".$this->pk_rating."\">".$html_out;
-                $html_out .= "</div>";
+                $html_out = "<span class=\"vota".$this->pk_rating."\">".$html_out;
+                $html_out .= "</span>";
             }
         }
    
