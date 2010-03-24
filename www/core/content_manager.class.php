@@ -99,7 +99,7 @@ class ContentManager {
      * @param boolean $all Get all the content regardless of content status.
      * @return array of objects $content_type
      */
-    function getMostViewedContent($content_type, $not_empty = false, $category = 0, $author=0, $days=2, $num=8, $all=false) {
+    function getMostViewedContent($content_type, $not_empty = false, $category = 0, $author=0, $days=2, $num=6, $all=false) {
         $this->init($content_type);
 
         $items = array();
@@ -156,7 +156,7 @@ class ContentManager {
      * @param boolean $all Get all the content regardless of content status and endtime.
      * @return array
      */
-    function getMostComentedContent($content_type, $not_empty = false, $category = 0, $days=2, $num=8, $all=false) {
+    function getMostComentedContent($content_type, $not_empty = false, $category = 0, $days=2, $num=6, $all=false) {
         $this->init($content_type);
         $items = array();
 
