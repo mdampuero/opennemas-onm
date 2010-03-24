@@ -20,7 +20,7 @@
 
         </div>
         <div class="span-16">
-           {include file="widget_other_videos.tpl"}
+           {include file="widget_video_more.tpl"}
         </div>
         <div class="span-16">
             <div class="span-8 opacity-reduced">

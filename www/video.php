@@ -81,7 +81,6 @@ if( isset($_REQUEST['action']) ) {
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
-
            
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 6');
             foreach($others_videos as $video){
@@ -121,11 +120,26 @@ if( isset($_REQUEST['action']) ) {
                 $video = new Video( $_REQUEST['id'] );
             } else {
             	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');			            	            	          
-            	$video = array_shift($videos);  //Extrae el primero
+            	$video = array_shift($videos);  //Extrae el primero               
+            }
+            $video->category_name = $video->loadCategoryName($video->id);
+            $video->category_title = $video->loadCategoryTitle($video->id);
+
+            foreach($videos as $video){
+                if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                }
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
-            
             $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 6, 39');
             foreach($others_videos as $video){
                 if($video->author_name =='vimeo'){

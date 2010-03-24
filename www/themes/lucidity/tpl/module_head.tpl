@@ -38,6 +38,8 @@
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">            
             <link rel="stylesheet" href="{$params.CSS_DIR}video.css" type="text/css" media="screen,projection">
+            <link rel="stylesheet" href="{$params.CSS_DIR}parts/utilities.css" type="text/css" media="screen,projection">
+        
             {literal}
             <style type="text/css">
                     #main_menu{

@@ -9,208 +9,85 @@
 
     Smarty template: frontpage.tpl
 *}
-                <div id="main_content" class="single-article span-24">
-                    <div class="span-24">
-                        <div class="layout-column first-column span-16">
-	                    <div class="span-16 toolbar">
-                                <div class="vote-block span-10 clearfix">
-                                        <div class="vote">
-                                                {include file="widget_ratings.tpl"}
-                                        </div>
-                                </div><!-- /vote-block -->
-
-                                <div class="utilities span-6 last">
-                                    <ul>
-                                        <li><img src="{$params.IMAGE_DIR}utilities/share-black.png" alt="Share" /></li>
-                                    </ul>
-                                </div><!-- /utilities -->
-
-                            </div><!--fin toolbar -->
-
-                            <div id="main-video">
-		                <div id="video-content" class="clearfix span-16">
-                                 {if $video->author_name eq 'youtube'}
-                                     <object width="601" height="338">
-                                        <param value="http://www.youtube.com/v/{$video->videoid}" name="movie" />
-                                        <param value="true" name="allowFullScreen" />
-                                        <param value="always" name="allowscriptaccess">
-                                        <embed width="601" height="338" src="http://www.youtube.com/v/{$video->videoid}" />
-                                    </object>
-                                  {else}
-                                    <object width="601" height="338">
-                                        <param name="allowfullscreen" value="true" />
-                                        <param name="allowscriptaccess" value="always" />
-                                        <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
-                                        <embed src="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="601" height="338"></embed>
-                                    </object>
-                                  {/if}
-                                </div>
-                                <div class="video-explanation">
-                                    <h1>  {$video->title|clearslash|escape:'html'}</h1>
-                                    <p class="in-subtitle">{$video->description|clearslash|escape:'html'} </p>
-                                </div>
-							
-							
-                            </div><!-- .main-video -->
-	                    	                    
+<div id="main_content" class="single-article span-24">
+    <div class="span-24">
+        <div class="layout-column first-column span-16">
+            <div class="span-16 toolbar">
+                <div class="vote-block span-10 clearfix">
+                        <div class="vote">
+                                {include file="widget_ratings.tpl"}
                         </div>
+                </div><!-- /vote-block -->
 
-                        <div class="layout-column last-column opacity-reduced last span-8">
-                            {include file="widget_videos_lastest.tpl"}
-			 </div>
-                    </div>
-                </div><!-- span-24 -->
-                <div class="span-24">
-        		    <hr class="new-separator"/>
-                    <div class="span-24 toolbar-bottom ">
-                    	
-                    	<div class="span-7 utilities-bottom vert-separator">
-                    		<ul>
-                    			<li class="span-3"><img src="images/utilities/share-black.png" alt="Share" /> Compartir</li>
-                    			<li class="span-4 last" onclick="increaseFontSize()" ><img src="images/utilities/increase-text-black.png" alt="Increase text" /> Ampliar el texto</li>
-                    			<li class="span-3"><img src="images/utilities/print-black.png" alt="Print" /> Imprimir</li>
-                    			<li class="span-4 last" onclick="decreaseFontSize()" ><img src="images/utilities/decrease-text-black.png" alt="Decrease text" /> Reducir el texto</li>
+                <div class="utilities span-6 last">
+                    <ul>
+                        <li><img src="{$params.IMAGE_DIR}utilities/share-black.png" alt="Share" /></li>
+                    </ul>
+                </div><!-- /utilities -->
 
-                    		</ul>
-                    	</div><!-- /utilities -->
-                    	
-                    	<div class=" span-7">
-                            <div class="vote-black">
-                                <div class="vote vert-separator">
-                                        Vote
-                                        <ul class="voting">
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                        </ul><br/><br/>
-                                        Resultados
-                                        <ul class="voting">
-                                                <li><img src="images/utilities/f-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/f-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/s-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                                <li><img src="images/utilities/e-star-black.png" alt="Email" /></li>
-                                        </ul>
-                                        <br/>
-                                </div>
-                            </div><!-- /vote-bloc -->
-                    	</div><!-- /utilities -->
-                    	<div class="span-9 last ">
-                            {include file="widget_ad_button.tpl"}
-                    	</div><!-- /utilities -->
-                    	
-                    </div><!--fin toolbar-bottom -->
+            </div><!--fin toolbar -->
 
-					<hr class="new-separator"/>
+            <div id="main-video">
+                <div id="video-content" class="clearfix span-16">
+                     {if $video->author_name eq 'youtube'}
+                         <object width="601" height="338">
+                            <param value="http://www.youtube.com/v/{$video->videoid}" name="movie" />
+                            <param value="true" name="allowFullScreen" />
+                            <param value="always" name="allowscriptaccess">
+                            <embed width="601" height="338" src="http://www.youtube.com/v/{$video->videoid}" />
+                        </object>
+                      {else}
+                        <object width="601" height="338">
+                            <param name="allowfullscreen" value="true" />
+                            <param name="allowscriptaccess" value="always" />
+                            <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
+                            <embed src="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="601" height="338"></embed>
+                        </object>
+                      {/if}
                 </div>
-                <div class="span-24 opacity-reduced">
-                    <div class="layout-column first-column span-16">
-                        <div class="border-dotted">
-							<div class="article-comments">
-								<div class="title-comments"><h3><span>7 Comentarios<span></h3></div>
-								<div class="utilities-comments">
-									<div class="num-pages span-7">Página 1 de 6</div>
-									<div class="span-9 pagination last clearfix">
-										<ul>
-											<li class="active"><a href="#">1</a></li>				
-											<li><a href="#">2</a></li>
-											<li><a href="#">3</a></li>
-										...
-											<li><a href="#">9</a></li>
-											<li class="next"><a href="#">Siguiente</a></li>
-										</ul>
-									</div>
-								</div><!-- .utilities-comments -->
-							<div class="list-comments span-16">
-								<div class="comment-wrapper clearfix">
-									<div class="comment-number">9</div>
-									<div class="comment-content span-14 prepend-2">
-										"Es muy buen jugador, no lo voy a descubrir yo. Lleva muchos años a un gran nivel 
-										 y no me sorprendió nada de lo que ví ayer".
-									</div>
-									<div class="">
-										<div class="span-5"> <img src="images/vote-down-black.png" />&nbsp;<img src="images/vote-up-black.png" /> 6 votos</div>
-										<div class="span-10">
-											escrito por 
-											<span class="comment-author">lenine100@hotmail.com</span> 
-											hace 
-											<span class="comment-time">7 horas 59 minutos</span>
-										</div>
-									</div>
-								</div><!--comment-wrapper-->
-								
-								<div class="comment-wrapper clearfix">
-									<div class="comment-number">10</div>
-									<div class="comment-content span-14 prepend-2">
-										"Es muy buen jugador, no lo voy a descubrir yo. Lleva muchos años a un gran nivel 
-										 y no me sorprendió nada de lo que ví ayer".
-									</div>
-									<div class="">
-										<div class="span-5"> <img src="images/vote-down-black.png" />&nbsp;<img src="images/vote-up-black.png" /> 6 votos</div>
-										<div class="span-10">
-											escrito por 
-											<span class="comment-author">lenine100@hotmail.com</span> 
-											hace 
-											<span class="comment-time">7 horas 59 minutos</span>
-										</div>
-									</div>
-								</div><!--comment-wrapper-->
-							</div>
-							</div>
-						  <div class="form-comments span-16">
-                                                    <div class="span-14 prepend-1 form-comments-content" style="margin:0 auto;">
-                                                        <h4>Escribe tu comentario</h4>
-                                                        <div class="auth-selector">
-
-                                                            <p>
-                                                                Para dejar un comentario debes acceder a XXXX.com. Si usas
-                                                                Facebook puedes hacer click en el botón de la derecha o
-                                                                también puedes publicar un comentario directamente.
-                                                            </p>
-                                                            <div>
-                                                                <a href="#" onclick="showCommentForm(); return false;" class="show-commment-form">Ver formulario »</a>
-                                                                <a href="" class="facebook-login"><img src="images/utilities/login-facebook.gif.png" /></a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form span-14">
-                                                            <form action="" method="POST">
-                                                                <div class="static-form span-8">
-                                                                    <textarea col="5"  tabindex="1" class="span-8"></textarea>
-                                                                    <input type="submit" tabindex="4" name="Submit" class="submit-button" value="Enviar »"/> o
-                                                                    <a href="#" onclick="showCommentForm(); return false;">volver</a>
-                                                                </div>
-                                                                <div class="variable span-6 last">
-                                                                    <div>
-                                                                        <label for="name">Nombre:</label>
-                                                                        <input tabindex="2" type="text" name="name" />
-                                                                    </div>
-
-                                                                    <div>
-                                                                        <label for="mail">Correo electrónico:</label>
-                                                                        <input tabindex="3" type="text" name="mail" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="information span-6 last">
-                                                                    <p>No está permitido verter comentarios contrarios
-                                                                    a las leyes españolas o injuriantes.</p>
-
-                                                                    <p>Nos reservamos el derecho a eliminar los
-                                                                    comentarios que consideremos fuera de tema.</p>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                    <div class="layout-column last-column last span-8">
-                        {include file="widget_other_videos.tpl"}
-                    </div>
-                    
+                <div class="video-explanation">
+                    <h1>{$video->title|clearslash|escape:'html'}</h1>
+                    <p class="in-subtitle">{$video->description|clearslash|escape:'html'} </p>
                 </div>
+            </div><!-- .main-video -->
 
-            </div><!-- fin #main_content -->
+        </div>
+
+        <div class="layout-column last-column opacity-reduced last span-8">
+            {include file="widget_videos_lastest.tpl"}
+        </div>
+    </div><!-- span-24 -->
+
+    <div class="span-24">
+        <hr class="new-separator"/>
+        <div class="span-24 toolbar-bottom ">
+            {include file="widget_utilities_bottom_black.tpl"}
+            <div class=" span-7">
+                <div class="vote-black">
+                    <div class="vote vert-separator">
+                           {include file="widget_ratings.tpl"}
+                    </div>
+                </div><!-- /vote-bloc -->
+            </div><!-- /utilities -->
+            <div class="span-9 last ">
+                {include file="widget_ad_button.tpl"}
+            </div><!-- /utilities -->
+
+        </div><!--fin toolbar-bottom -->
+
+        <hr class="new-separator"/>
+    </div>
+    <div class="span-24 opacity-reduced">
+        <div class="layout-column first-column span-16">
+            <div class="border-dotted">
+
+                  {include file="module_comments.tpl" content=$video}
+            </div>
+        </div>
+        <div class="layout-column last-column last span-8">
+            {include file="widget_video_most.tpl"}
+        </div>
+
+    </div>
+
+</div><!-- fin #main_content -->
