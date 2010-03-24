@@ -61,6 +61,7 @@
             var tituloInt = $('title_int').value.strip();
             if( tituloInt.length == 0 ) {
                 $('title_int').value = $F('title');
+                get_tags($('title_int').value);
             }
         });
         /* ]]> */
@@ -68,7 +69,8 @@
         {/literal}
     </td>
     <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
-        <table style='background-color:#F5F5F5; padding:18px; width:99%;'>                
+         <div class="utilities-conf">
+           <table style="width:99%;">
            <tr>
                 <td valign="top"  align="right" nowrap="nowrap">
                 <label for="category">Secci&oacute;n:</label>
@@ -233,6 +235,7 @@
                 </td>
             </tr>
             </table>
+         </div>
     </td>
 </tr>
 <tr>

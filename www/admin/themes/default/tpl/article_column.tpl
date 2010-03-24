@@ -16,29 +16,43 @@
    </tr>
    <tr>
        <td colspan="10">
+                <table width="100%" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:4px;">
+                    <tr height="30" style="background-color:#EEF;"><td > Destacada </td></tr>
+                </table>
                 <div id="{$place}_0" class="seccion" style="min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_0' }
                 </div>
                 <table width="100%" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:4px;">                    
-                    <tr height="30" style="background-color:#EEF;"><td > Other content 1</td></tr>
+                    <tr height="3" style="background-color:#EEF;"><td > </td></tr>
                 </table>
                 <div id="{$place}_1" class="seccion" style="min-height:120px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_1' }                    
                 </div>
-                <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;padding-bottom:4px;">
-                   <tr ><td >  Other content 2</td></tr>
-                </table>
-                <div id="{$place}_2" class="seccion" style="min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
-                    {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_2' }
-                </div>
-                 <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
-                   <tr ><td >  Other content 3</td></tr>
-                </table>
-                 
-                <div id="{$place}_3" class="seccion" style="min-height:50px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
-                    {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3' }
-                </div>
+                 {if $place eq 'placeholder_1'}
+                    <table width="100%" height="50" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                        <tr ><td >  Widget Ocio </td></tr>
+                    </table>
+                {else}
+                    <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;padding-bottom:4px;">
+                       <tr ><td >  Widget Publicidad  </td></tr>
+                    </table>
                
+                    <div id="{$place}_2" class="seccion" style="min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                        {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_2' }
+                    </div>
+                 {/if}
+                 <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                   <tr ><td >  Widget Social </td></tr>
+                </table>
+                {if $place eq 'placeholder_2'}
+                    <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                        <tr ><td >  Widget Titulares </td></tr>
+                    </table>
+                {else}
+                    <div id="{$place}_3" class="seccion" style="min-height:50px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                        {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3' }
+                    </div>
+                {/if}
           
        </td>
    </tr>

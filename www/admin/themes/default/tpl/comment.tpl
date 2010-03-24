@@ -3,27 +3,21 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list"}
 
-<table border=0 cellpadding=0 cellspacing=0>
-    <tr><td  valign='top' align='left' style="width:292px;" nowrap>
-           <ul class="tabs">
-               <li>
-                        <a href="comment.php?action=list&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
-                </li>
-                <li>
-                        <a href="comment.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
-                </li>
-                <li>
-                        <a href="comment.php?action=list&category=4" {if $category==4 } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
-                </li>
-                 <li>
-                        <a href="comment.php?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
-                </li>
-            </ul>
-    </td>
-    <td valign='top' align='right'>
-        {include file="menu_categorys.tpl" home="comment.php?action=list"}
-    </td></tr>
-</table>
+
+    <ul class="tabs2" style="margin-bottom: 28px;">
+       <li>
+                <a href="comment.php?action=list&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
+        </li>
+        <li>
+                <a href="comment.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
+        </li>
+
+         <li>
+                <a href="comment.php?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
+        </li>
+        {include file="menu_categorys.tpl" home="video.php?action=list"}
+    </ul>
+
 <br />
 {if $category neq "todos"}
     <ul class="tabs">

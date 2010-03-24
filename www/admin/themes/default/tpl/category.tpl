@@ -267,33 +267,33 @@
                 {* TODO: gestionar dinamicamente, con tabla content_type *}
                 <td valign="top" style="padding:10px;text-align:left; width:340px;">
                     <h3>Contenido al que pertenece: </h3>
-                    <table style="padding:24px; margin-left:30px; background-color:#ccc;">
-                        <tr>
-                            <td> Todos:</td>
-                            <td>
-                                <input type="checkbox" id="internal_category" name="internal_category"  value="1"
-                                {if empty($category->fk_content_category) || $category->internal_category eq 1} checked="checked"{/if}>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Álbumes:</td>
-                            <td> <input type="checkbox" id="internal_category" name="internal_category"  value="3"
-                                {if $category->internal_category eq 3} checked="checked"{/if}>
-                            </td>
-                        </tr>
-                         <tr>
-                            <td> Vídeos:</td>
-                            <td> <input type="checkbox" id="internal_category" name="internal_category"  value="5"
-                                {if $category->internal_category eq 5} checked="checked"{/if}>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> Kiosco:</td>
-                            <td> <input type="checkbox" id="internal_category" name="internal_category"  value="4"
-                                {if $category->internal_category eq 4} checked="checked"{/if}>
-                            </td>
-                        </tr>
-                    </table>
+                     <div class="utilities-conf" style="width:60%;">
+                        <table style="padding:4px; margin-left:10px;">
+                            <tr>
+                                <td  style="padding:4px;"> Global:</td>
+                                <td>
+                                    <input type="checkbox" id="internal_category" name="internal_category"  value="1"
+                                    {if empty($category->fk_content_category) || $category->internal_category eq 1} checked="checked"{/if}>
+                                </td>
+                                 <td  style="padding:4px;"> </td>
+                                <td  style="padding:4px;"> Álbumes:</td>
+                                <td> <input type="checkbox" id="internal_category" name="internal_category"  value="3"
+                                    {if $category->internal_category eq 3} checked="checked"{/if}>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td  style="padding:4px;"> Vídeos:</td>
+                                <td> <input type="checkbox" id="internal_category" name="internal_category"  value="5"
+                                    {if $category->internal_category eq 5} checked="checked"{/if}>
+                                </td>
+                               <td  style="padding:4px;"> </td>
+                                <td style="padding:4px;" > Kiosco: </td>
+                                <td> <input type="checkbox" id="internal_category" name="internal_category"  value="4"
+                                    {if $category->internal_category eq 4} checked="checked"{/if}>
+                                </td>
+                            </tr>
+                        </table>
+                     </div>
                 </td>
             </tr>
             <tr>
