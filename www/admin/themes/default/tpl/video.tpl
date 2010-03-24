@@ -129,6 +129,7 @@
                         <sub>Separadas por comas</sub>
                 </td>
                 <td rowspan="5" valign="top">
+                  <div class="utilities-conf"  >
                     <table style='background-color:#F5F5F5; padding:18px; width:99%;'>
 			<tr>
                             <td valign="top"  align="right" nowrap="nowrap">
@@ -157,6 +158,7 @@
                             </td>
                         </tr>
                     </table>
+                    </div>
                 </td>
             </tr>
             <tr>

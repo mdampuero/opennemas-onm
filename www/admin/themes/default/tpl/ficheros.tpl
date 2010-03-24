@@ -15,22 +15,18 @@
 </ul>
 *}
 
-<table border=0 cellpadding=0 cellspacing=0>
-<tr><td valign='top' align='right'>
-	<ul class="tabs">
-	 <li>		
-		<a href="ficheros.php?action=list&category=0" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>GLOBAL</a>
-	</li>
-	<li>
-		<a href="ficheros.php?action=list&category=8" {if $category=='8' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-            PORTADAS</a>
-		</li>	
-	</ul>
-</td><td>
-{include file="menu_categorys.tpl" home="ficheros.php?action=list"}
-</td></tr></table>
 
-<br><br>
+<ul class="tabs">
+    <li>
+        <a href="ficheros.php?action=list&category=0" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>GLOBAL</a>
+    </li>
+    <li>
+        <a href="ficheros.php?action=list&category=8" {if $category=='8' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+        PORTADAS</a>
+    </li>
+        {include file="menu_categorys.tpl" home="ficheros.php?action=list"}
+</ul>
+ <br />
 
 <div id="{$category}">
 	{if $category eq 0}
