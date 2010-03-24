@@ -3,7 +3,7 @@
         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
             <li>
                 {assign var=ca value=`$allcategorys[as]->pk_content_category`}
-                <a class="links" {if $home} href="{$home}&category={$ca}#" {else} id="link_{$ca}" {/if} {if $category==$ca } style="color:#000000; font-weight:bold; background-color:#BFD9BF;cursor:pointer;" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF;cursor:pointer;" {else} style="cursor:pointer;" {/if}{/if} >{$allcategorys[as]->title}</a>
+                <a class="links" {if $home} href="{$home}&category={$ca}#" {else} id="link_{$ca}" {/if} {if $category==$ca } style="color:#000000; font-weight:bold; background-color:{$allcategorys[as]->color};cursor:pointer;" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:{$allcategorys[as]->color};cursor:pointer;" {else} style="cursor:pointer;" {/if}{/if} >{$allcategorys[as]->title}</a>
             </li>
             {if !$home}
             <script type="text/javascript">

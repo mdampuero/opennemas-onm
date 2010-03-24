@@ -5,9 +5,9 @@
         <li>
             <a href="article.php?action=list_pendientes&category=todos" {if $category=='todos' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
         </li>
-        <li>
+       {* <li>
             <a href="article.php?action=list_pendientes&category=opinion" {if $category=='opinion' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-        </li>
+        </li>*}
         <li>
             <a href="article.php?action=list_pendientes&category=20" {if $category=='20' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
         </li>
@@ -28,7 +28,7 @@
     <div id="{$category}">
         <table border=0 style="width:100%">
             <tr>
-                <td><strong>Noticias y Opiniones Pendientes</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
+                <td><strong>Noticias {* y Opiniones *} Pendientes</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
                 <td align='right'>Ir a secci&oacute;n:
                     <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
                         {if $category eq "todos"}
@@ -50,7 +50,7 @@
             </tr>
         </table>
         <br />
-        <table class="adminlist" >
+        <table class="adminlist">
             <tr style="border-bottom: 2px solid #000;">
                 <th style="width:50px;"></th>
                 <th align="left" style="padding:5px;font-size: 11px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
@@ -132,7 +132,7 @@
     {else}
         {if $category neq 'opinion'}
             <tr>
-                <td align="center" colspan="9"><br><br><p><h2><b>Ninguna noticia pendiente de publicar.</b></h2></p></td>
+                <td align="center" colspan="9" style="height:280px;" ><br><br><p><h2><b>Ninguna noticia pendiente de publicar.</b></h2></p></td>
             </tr>
         {/if}
     {/if}
@@ -209,9 +209,9 @@
             </tr>
         {/if}
         </table>
-        {if $category eq 'todos' }
+
              <br />
             {include file="botonera_up.tpl"}
-        {/if}
+        
     </div>
 {/if}

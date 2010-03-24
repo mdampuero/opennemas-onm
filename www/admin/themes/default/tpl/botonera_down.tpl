@@ -12,7 +12,7 @@
                         {if $category eq 'home'}
                                  <li>
                                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);" name="submit_mult" value="no Sugeridas" title="no Sugeridas">
-                                            <img border="0" src="{php}echo($this->image_dir);{/php}home_no50.png" title="No sugeridas" alt="No sugeridas" ><br />No sugeridas
+                                            <img border="0" src="{php}echo($this->image_dir);{/php}home_no50.png" title="No home" alt="No home" ><br />No home
                                     </a>
                             </li>
                         {else}

@@ -8,7 +8,7 @@ $menuXml = <<<MENUSTRING
         <node title="Gestor de Portada" link="article.php" target="centro" privilege="ARTICLE_FRONTPAGE" />
         <node title="Gestor de Pendientes" link="article.php?action=list_pendientes" target="centro" privilege="ARTICLE_ADMINPEND" />
         <node title="Gestor de Comentarios" link="comment.php" target="centro" privilege="COMMENT_ADMIN" />
-        <node title="Gestor de Opinión" link="opinion.php" target="centro" privilege="OPINION_ADMIN" />
+       <!--  <node title="Gestor de Opinión" link="opinion.php" target="centro" privilege="OPINION_ADMIN" /> -->
         <node title="Gestor de Publicidad" link="advertisement.php" target="centro" privilege="ADVERTISEMENT_ADMIN" />
         <node title="Hemeroteca" link="article.php?action=list_hemeroteca" target="centro" privilege="ARCHIVE_ADMIN" />
         <node title="Páginas Estáticas" link="static_pages.php" target="centro" privilege="STATIC_ADMIN" />
