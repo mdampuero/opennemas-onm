@@ -228,3 +228,11 @@ div#menu-acciones-admin li.separator {
 	height:70px;
 	width:20px;
 }
+
+div.utilities-conf{
+    padding:10px;
+    background-color:#F5F5F5;
+    border:1px solid #F5F5F5;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
