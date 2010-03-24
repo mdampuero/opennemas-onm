@@ -77,7 +77,7 @@ function buildFilter()
     }
     
     if(isset($_REQUEST['type']) && !empty($_REQUEST['type'])) {
-        $regexp = array('frontpages' => '%index\.tpl$', 'opinions' => '%opinion\.tpl$', 'articles' => '%article\.tpl$', 'rss' => '\^RSS[0-9]*\^', 'mobilepages' => '%mobile\.index\.tpl$');
+        $regexp = array('frontpages' => '%frontpage\.tpl$', 'opinions' => '%opinion\.tpl$', 'articles' => '%article\.tpl$', 'rss' => '\^RSS[0-9]*\^', 'mobilepages' => '%mobile\.index\.tpl$');
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
     }
