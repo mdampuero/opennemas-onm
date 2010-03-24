@@ -316,6 +316,19 @@ if(isset($_REQUEST['action']) ) {
             }
             //Listado videos
             list($videos, $pages)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],20);
+            foreach($videos as $video){
+                if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                }
+            }
             $tpl->assign('videos', $videos);
             $params='0';
             $paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);
@@ -386,7 +399,19 @@ if(isset($_REQUEST['action']) ) {
             
             //Listado videos
             list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],20);
-            
+             foreach($videos as $video){
+                if($video->author_name =='vimeo'){
+                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                    $return = curl_exec($curl);
+                    $return = unserialize($return);
+                    curl_close($curl);
+                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                }
+            }
             $tpl->assign('videos', $videos);
             $pages = $pager;
             $params = '0';

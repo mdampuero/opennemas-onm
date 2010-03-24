@@ -64,10 +64,10 @@ if( isset($_REQUEST['action']) ) {
 			$i=0;
 			foreach($videos as $video){
 			
-				$authors[$i] = new Author($video->fk_user);
-                $video->category_name = $video->loadCategoryName($video->pk_content);
+                            $authors[$i] = new Author($video->fk_user);
+                            $video->category_name = $video->loadCategoryName($video->pk_content);
                 
-				$i++;
+                            $i++;
 			}
 		
 			/* Ponemos en la plantilla la referencia al objeto pager */
@@ -87,7 +87,17 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'read': //habrá que tener en cuenta el tipo
 			$video = new Video( $_REQUEST['id'] );
-			
+			if($video->author_name =='vimeo'){
+                            $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                            $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+                            $return = curl_exec($curl);
+                            $return = unserialize($return);
+                            curl_close($curl);
+                            $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                            $video->thumbnail_small = $return[0]['thumbnail_small'];
+                        }
 			$elauthor = new Author( $video->fk_user );
 			$tpl->assign('video', $video);
 			$tpl->assign('elauthor', $elauthor->name);

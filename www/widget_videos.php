@@ -8,8 +8,8 @@
             //$videos_authors[] = new Author($video->fk_user);ç
             //miramos el fuente youtube o vimeo
             if($video->author_name =='vimeo'){
-                $url="  http://vimeo.com/api/v2/video/9637547.php";
-                $curl = curl_init( 'http://vimeo.com/api/v2/video/9637547.php');
+                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($curl, CURLOPT_TIMEOUT, 30);
                 $return = curl_exec($curl);

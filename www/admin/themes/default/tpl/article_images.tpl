@@ -108,9 +108,14 @@
                             {assign var=num value='1'}
                             {section name=n loop=$videos}
                             {if $videos[n]->content_status eq 1 }
-                              <li><div style="float: left;"> <a>
-                                    <img class="video" width="67" name="{$videos[n]->pk_video}" id="draggable_video{$num}"  alt="{$videos[n]->title}" qlicon="{$videos[n]->videoid}" src="http://i4.ytimg.com/vi/{$videos[n]->videoid}/default.jpg" title="{$videos[n]->title}" de:created="{$videos[n]->created}"  de:description="{$videos[n]->description|clearslash|escape:'html'}" de:tags="{$videos[n]->metadata}" {* onmouseover="return escape('Desc:{$videos[n]->description}<br>Tags:{$videos[n]->metadata}');" *} title="Desc:{$videos[n]->description|clearslash|escape:'html'} - Tags:{$videos[n]->metadata}" />
-                                </a> </div>
+                              <li><div style="float: left;"> <a>                                   
+                                    {if $videos[n]->author_name eq 'youtube'}
+                                        <img class="video"  width="67" id="draggable_video{$num}" name="{$videos[n]->pk_video}" alt="{$videos[n]->title}" qlicon="{$videos[n]->videoid}" src="http://i4.ytimg.com/vi/{$videos[n]->videoid}/default.jpg" title="{$videos[n]->title} - {$videos[n]->author_name}" de:created="{$videos[n]->created}" de:description="{$videos[n]->description|clearslash|escape:'html'}" de:tags="{$videos[n]->metadata}"  {* onmouseover="return escape('Desc:{$videos[n]->description|clearslash|escape:'html'}<br>Tags:{$videos[n]->metadata}');" *} title="Desc:{$videos[n]->description|clearslash|escape:'html'} - Tags:{$videos[n]->metadata}" />
+                                    {else}
+                                         <img class="video"  width="67" id="draggable_video{$num}" name="{$videos[n]->pk_video}" alt="{$videos[n]->title}" qlicon="{$videos[n]->videoid}" src="{$videos[n]->thumbnail_medium}" title="{$videos[n]->title} - {$videos[n]->author_name}" de:created="{$videos[n]->created}" de:description="{$videos[n]->description|clearslash|escape:'html'}" de:tags="{$videos[n]->metadata}"  {* onmouseover="return escape('Desc:{$videos[n]->description|clearslash|escape:'html'}<br>Tags:{$videos[n]->metadata}');" *} title="Desc:{$videos[n]->description|clearslash|escape:'html'} - Tags:{$videos[n]->metadata}" />
+                                    {/if}
+                                 </a>
+                                </div>
                                 <script type="text/javascript">
                                     new Draggable('draggable_video{$num}', {literal}{ revert:true, scroll: window, ghosting:true }{/literal}  );
                                 </script>
