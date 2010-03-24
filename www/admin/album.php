@@ -62,7 +62,7 @@ if( isset($_REQUEST['action']) ) {
 			list($albums, $pager)= $cm->find_pages('Album', 'fk_content_type=7 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']); 
                         $favorito = $cm->find_by_category('Album', 3, 'fk_content_type=7 and available=1 and favorite=1', 'ORDER BY created DESC LIMIT 0 , 1');
                         if(!$favorito[0]){                          
-                           $album=new Album($albums[0]->id);
+                            $album=new Album($albums[0]->id);
                             $album->set_favorite($status);
                             $albums[0]->favorite=1;
                         }

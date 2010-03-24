@@ -32,6 +32,11 @@ if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
 }
 /* GESTION CATEGORIAS */
 $ccm = new ContentCategoryManager();
+if (!isset($_REQUEST['category'])) {
+    $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu ASC LIMIT 0,1');
+    $_REQUEST['category'] = $this_category_data[0]->pk_content_category;
+}
+
 $allcategorys = $ccm->find('(internal_category=1 OR internal_category=5) AND fk_content_category=0', 'ORDER BY internal_category DESC, posmenu');
 //var_dump($allcategorys);
 $i=0;
@@ -42,6 +47,7 @@ foreach( $allcategorys as $prima) {
 
 $datos_cat = $ccm->find('pk_content_category='.$_REQUEST['category'], NULL);
 
+$tpl->assign('category', $_REQUEST['category']);
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $allcategorys);
 $tpl->assign('datos_cat', $datos_cat);
