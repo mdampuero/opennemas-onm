@@ -46,12 +46,12 @@
                 </div>
                 <div class="variable span-6 last">
                     <div>
-                        <label for="name">Nombre:</label>
+                        <label for="name">Nombre:</label><br />
                         <input tabindex="3" type="text" name="nombre" id="nombre" />
                     </div>
 
                     <div>
-                        <label for="mail">Correo electrónico:</label>
+                        <label for="mail">Correo electrónico:</label><br />
                         <input tabindex="4" type="text" name="email" id="email" />
                     </div>
                     
