@@ -14,7 +14,7 @@
 
             <p>
                 Para dejar un comentario pulsa en <em>Ver formulario</em>. Si usas
-                Facebook puedes hacer click en el botón de la derecha o
+                Facebook puedes identificarte con tu cuenta o
                 también puedes publicar un comentario directamente.
             </p>
             <div>
