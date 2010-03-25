@@ -35,7 +35,9 @@
                      <img src="http://i4.ytimg.com/vi/{$others_videos[i]->videoid}/default.jpg" alt="{$others_videos[i]->title|clearslash|escape:'html'}" title="{$others_videos[i]->title|clearslash|escape:'html'}"  />
                 {/if}
                 <div class="tab-thumb-video-shortitle">{$others_videos[i]->category_title}</div>
-                <div class="tab-thumb-video-title">{$others_videos[i]->title|clearslash|escape:'html'}</div>
+                <div class="tab-thumb-video-title">
+                     <a href="{$others_videos[i]->permalink}" title="{$others_videos[i]->title|clearslash|escape:'html'}">{$others_videos[i]->title|clearslash|escape:'html'}</a>
+                 </div>
             </div>
         {/section}
     </div>

@@ -48,8 +48,6 @@ require_once ("index_sections.php");
 
 
 /**************************************   VIDEOS  ***********************************************/
-//$_REQUEST['action']='inner';
-
  
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
@@ -115,16 +113,16 @@ if( isset($_REQUEST['action']) ) {
 			
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 			
-            if ( isset ($_REQUEST['id']) && !empty($_REQUEST['id'])){
+            if ( isset ($_REQUEST['id']) && !empty($_REQUEST['id'])){              
 		$videos = $cm->find('Video', 'available=1 and pk_content !='.$_REQUEST['id'], 'ORDER BY created DESC LIMIT 0 , 5');			            	
-                $video = new Video( $_REQUEST['id'] );
+                $thisvideo = new Video( $_REQUEST['id'] );
             } else {
             	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');			            	            	          
-            	$video = array_shift($videos);  //Extrae el primero               
+            	$thisvideo = array_shift($videos);  //Extrae el primero
             }
-            $video->category_name = $video->loadCategoryName($video->id);
-            $video->category_title = $video->loadCategoryTitle($video->id);
-
+            $thisvideo->category_name = $thisvideo->loadCategoryName($video->id);
+            $thisvideo->category_title = $thisvideo->loadCategoryTitle($video->id);
+ 
             foreach($videos as $video){
                 if($video->author_name =='vimeo'){
                     $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
@@ -157,7 +155,7 @@ if( isset($_REQUEST['action']) ) {
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
 	   // $others_videos= $cm->paginate_num_js($others_videos,5, 1, 'get_paginate_articles',"'videos',''");
-            $tpl->assign('video', $video);
+            $tpl->assign('video', $thisvideo);
             $tpl->assign('videos', $videos);            
             $tpl->assign('others_videos', $others_videos);
             $tpl->assign('pages', $cm->pager);
