@@ -60,20 +60,21 @@
 
     <div class="span-24">
         <hr class="new-separator"/>
-        <div class="span-24 toolbar-bottom ">
+        <div class="span-8 toolbar-bottom ">
             {include file="widget_utilities_bottom_black.tpl"}
-            <div class=" span-7">
+             </div><!--fin toolbar-bottom -->
+            <div class=" span-9">
                 <div class="vote-black">
                     <div class="vote vert-separator">
                            {include file="widget_ratings.tpl"}
                     </div>
                 </div><!-- /vote-bloc -->
             </div><!-- /utilities -->
-            <div class="span-9 last ">
-                {include file="widget_ad_button.tpl"}
+            <div class="span-7 last ">
+              {include file="widget_ad_video_button.tpl"}
             </div><!-- /utilities -->
-
-        </div><!--fin toolbar-bottom -->
+ 
+       
 
         <hr class="new-separator"/>
     </div>

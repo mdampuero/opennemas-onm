@@ -42,8 +42,9 @@
         
             {literal}
             <style type="text/css">
-                    #main_menu{
-                            background-color:#009677;
+              
+                    #main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
+                            background-color:#373737;
                     }                 
             </style>
             {/literal}
@@ -59,11 +60,13 @@
             <script  type="text/javascript" src="{$params.JS_DIR}onm-mockup.js"></script>
 
         {/if}
-        {literal}
-            <style type="text/css">                   
-                     {/literal}  {$categories_styles}{literal}
-            </style>
-        {/literal}
+        {if !preg_match('/video\.php/',$smarty.server.SCRIPT_NAME)}
+            {literal}
+                <style type="text/css">
+                         {/literal}  {$categories_styles}{literal}
+                </style>
+            {/literal}
+        {/if}
 
     </head>
     <body> 
