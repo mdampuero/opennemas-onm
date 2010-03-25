@@ -70,7 +70,7 @@ function saveComment($data)
 
 if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) {
     
-    if( $_SESSION['security_code'] == $_POST['security_code'] && !empty($_SESSION['security_code'] ) ) {
+    if( isset($_POST['security_code']) && empty($_POST['security_code']) ) {
         /*  Anonymous comment ************************* */
         $data = array();
         $data['body']     = $_POST['textareacomentario'];
@@ -78,19 +78,6 @@ if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) 
         $data['title']    = $_POST['title'];
         $data['category'] = $_POST['category'];
         $data['email']    = $_POST['email'];        
-        
-        echo saveComment($data);
-        
-        unset($_SESSION['security_code']);
-        
-    } elseif(isset($_SESSION['nick']) && isset($_SESSION['email'])) {
-        /*  Connecta user comment ************************* */
-        $data = array();
-        $data['body']     = $_POST['textareacomentario'];
-        $data['author']   = $_SESSION['nick'];
-        $data['title']    = $_POST['title'];
-        $data['category'] = $_POST['category'];
-        $data['email']    = $_SESSION['email'];        
         
         echo saveComment($data);
         
