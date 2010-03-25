@@ -9,7 +9,7 @@
      {if !empty($item->img1_path)}
          <img style="width:300px;" class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash}" title="{$item->img_footer|clearslash}"/>
      {/if}
-    <div class="nw-category-name {$item->category_name}">{$item->category_title|upper|clearslash}</div>
+    <div class="nw-category-name {$item->category_name}">{$item->category_title|upper|clearslash} <span>&nbsp;</span></div>
     <h3 class="nw-title"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
     {*if !empty($item->agency)}<h5>{$item->agency|clearslash}</h5>{/if*}
     <div class="nw-subtitle">{$item->summary|clearslash}</div>
