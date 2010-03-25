@@ -15,6 +15,12 @@
     <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
     <script type="text/javascript" src="javascripts/functions.js"></script>
+
+	<style type="text/css">
+		div.nw-category-name span{
+			background-color:Blue;
+		}
+	</style>
     
   </head>
   <body>
@@ -126,7 +132,7 @@
                         <div>
                             <div class="nw-big">
                                 <img class="nw-image" src="images/news/sun-big.png" alt=""/>
-                                <div class="nw-category-name science">Ciencia</div>
+                                <div class="nw-category-name science">Ciencia<span>&nbsp;</span></div>
                                 <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
                                 <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
                                 <div class="more-resources">

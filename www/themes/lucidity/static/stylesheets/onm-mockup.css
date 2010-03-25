@@ -318,8 +318,18 @@ div.nw-category-name{
     text-transform: uppercase;
     display:block;
     width:auto;
-    background:url(../images/bullets/red.png) center right no-repeat;
+	position:relative;
 }
+div.nw-category-name span{
+	display:block;
+	width:15.5px;
+	height:8.5px;
+	position:absolute;
+	right:0;
+	top:0;
+    background:#b0113a url(../images/bullets/transparent.png) center right no-repeat;
+}
+
 div.nw-big div.sports{
     background:url(../images/bullets/green.png) center right no-repeat !important;
     color:Green;
