@@ -24,7 +24,7 @@
 *}
 
         {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
-            {insert name="rating" id=$video->id page="article" type="vote"}
+            {insert name="rating" id=$video->id page="video" type="vote"}
         {else}
             {insert name="rating" id=$article->id page="article" type="vote"}
         {/if}

@@ -193,7 +193,7 @@ class Rating
     }
     
     
-    private function renderLink($i, $type, $pk_rating, $value)
+    private function renderLink($i, $page, $pk_rating, $value)
     {
         /*
             <a href="javascript:rating('".$_SERVER['REMOTE_ADDR']."',1,'home','".$this->pk_rating."')" title="Sin interés">
@@ -206,17 +206,22 @@ class Rating
         */
         
         $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
+        if($page=='video'){
+             $sufijo='-black';
+        }else{
+            $sufijo='';
+        }
         $linkTpl = <<< LINKTPLDOC
            <li> <a href="#votar" onclick="javascript:rating('%s', %d, '%s', '%s'); return false;" title="%s">
                 <img class="%s_%d"
-                     onmouseover="change_rating(%d, '%s')"
-                     onmouseout="change_rating(%d, '%s')"
-                     src="{$imgPath}%s.png"
+                     onmouseover="change_rating(%d, '%s','{$sufijo}')"
+                     onmouseout="change_rating(%d, '%s','{$sufijo}')"
+                     src="{$imgPath}%s{$sufijo}.png"
                      alt="%s" />
             </a></li>
 LINKTPLDOC;
         
-        return sprintf($linkTpl, $_SERVER['REMOTE_ADDR'], $i, 'home', $pk_rating,  $this->messages[$i],
+        return sprintf($linkTpl, $_SERVER['REMOTE_ADDR'], $i, $page, $pk_rating,  $this->messages[$i],
                                  $pk_rating, $i,
                                  $i, $pk_rating,
                                  $value, $pk_rating,
@@ -224,12 +229,18 @@ LINKTPLDOC;
                                  $this->messages[$i]);
     }
     
-    private function renderImg($i, $value)
+    private function renderImg($i, $value, $page='article')
     {
         $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" alt="%s" title="%s" />';
+        if($page=='video'){
+             $sufijo='-black';
+        }else{
+            $sufijo='';
+        }
+        return sprintf($imageTpl, $imgPath, ($value>=$i) ? "f-star".$sufijo : "e-star".$sufijo, $this->messages[$i], $this->messages[$i]);
         
-        return sprintf($imageTpl, $imgPath, ($value>=$i) ? "f-star" : "e-star", $this->messages[$i], $this->messages[$i]);
+
     }
     
     function render($page, $type, $ajax=0) {
@@ -252,7 +263,7 @@ LINKTPLDOC;
                 
                 // Render images
                 for($i=1; $i <= 5; $i++) {
-                    $html_out .= $this->renderImg($i, $value);
+                    $html_out .= $this->renderImg($i, $value, $page);
                 }                
                 
                 $html_out .= " ".$this->total_votes." voto/s";
@@ -266,7 +277,7 @@ LINKTPLDOC;
             
             // Render images
             for($i=1; $i <= 5; $i++) {
-                $results .= $this->renderImg($i, $value);
+                $results .= $this->renderImg($i, $value, $page);
             }
             
             $results .= " ".$this->total_votes." voto/s";
@@ -277,7 +288,7 @@ LINKTPLDOC;
                 $html_out .= "  Vota <ul class='voting'>";
                 // Render links
                 for($i=1; $i <= 5; $i++) {
-                    $html_out .= $this->renderLink($i, 'article', $this->pk_rating, $value);
+                    $html_out .= $this->renderLink($i, $page, $this->pk_rating, $value);
                 }                                                
                 $html_out .= "  </ul>";
                 $html_out .= "    Resultados <ul class='voting'>";
@@ -286,6 +297,42 @@ LINKTPLDOC;
                 $html_out .= "  ";
             } elseif($type==="result") {
                
+                $html_out .= "  <span class=\"CVotos\">";
+                $html_out .= "  ¡Gracias por su participación! ";
+                $html_out .= "  </span> ";
+                $html_out .= "  <span class=\"CVotos\">";
+                $html_out .= $results;
+                $html_out .= "  </span>";
+                $html_out .= "  ";
+            }
+            if (!$ajax) {
+                $html_out = "<span class=\"vota".$this->pk_rating."\">".$html_out;
+                $html_out .= "</span>";
+            }
+        }elseif($page=="video") {
+
+            // Render images
+            for($i=1; $i <= 5; $i++) {
+                $results .= $this->renderImg($i, $value, $page);
+            }
+
+            $results .= " ".$this->total_votes." voto/s";
+
+            if($type=="vote") {
+
+                $html_out .= " ";
+                $html_out .= "  Vota <ul class='voting'>";
+                // Render links
+                for($i=1; $i <= 5; $i++) {
+                    $html_out .= $this->renderLink($i, $page, $this->pk_rating, $value);
+                }
+                $html_out .= "  </ul>";
+                $html_out .= "    Resultados <ul class='voting'>";
+                $html_out .= $results;
+                $html_out .= "  </ul>";
+                $html_out .= "  ";
+            } elseif($type==="result") {
+
                 $html_out .= "  <span class=\"CVotos\">";
                 $html_out .= "  ¡Gracias por su participación! ";
                 $html_out .= "  </span> ";

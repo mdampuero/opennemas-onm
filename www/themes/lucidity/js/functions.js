@@ -57,14 +57,14 @@ function rating(ip,value,page,id) {
 }
 
 
-function change_rating(num,pk_rating) {
+function change_rating(num,pk_rating,sufijo) {
   
 	for(i=1; i<=5; i++) {
 		if (i<=num) {                       
-			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/f-star.png');
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/f-star'+sufijo+'.png');
 
 		} else {
-			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/e-star.png');
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/e-star'+sufijo+'.png');
 		}
 	}
 }
