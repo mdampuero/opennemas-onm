@@ -51,10 +51,10 @@ foreach($allcategorys as $the_category) {
         $the_category->color ='#B0113A';
     }
 
-    $styles.= 'div.nw-big div.'.$the_category->name.'{                
+    $styles.= 'div.nw-big div.'.$the_category->name.', div.nw-big-img-lateral div.'.$the_category->name.'{
                 color:'.$the_category->color.';
                 }
-                div.nw-big div.'.$the_category->name.' span{
+                div.nw-big div.'.$the_category->name.' span, div.nw-big-img-lateral div.'.$the_category->name.' span{
                     background-color:'.$the_category->color.';
 		}
             ';
@@ -66,10 +66,7 @@ foreach($allcategorys as $the_category) {
     $styles.='#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
                             background-color:'.$category_data['color'].';
                     }
-             div.nw-category-name span{
-			background-color:'.$category_data['color'].';
-		}
-
+            
     ';
  
  $tpl->assign('categories_styles', $styles);

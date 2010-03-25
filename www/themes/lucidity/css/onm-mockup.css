@@ -324,13 +324,13 @@ div.nw-category-name{
     position:relative;
 }
 div.nw-category-name span{
-	display:block;
-	width:15.5px;
-	height:8.5px;
-	position:absolute;
-	right:0;
-	top:0;
-    background:#b0113a url(/themes/lucidity/images/bullets/transparent.png) center right no-repeat;
+    display:block;
+    width:15.5px;
+    height:8.5px;
+    position:absolute;
+    right:0;
+    top:0;
+    background: url(/themes/lucidity/images/bullets/transparent.png) center right no-repeat;
 }
 
 
