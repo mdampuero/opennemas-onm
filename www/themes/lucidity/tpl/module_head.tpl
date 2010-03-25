@@ -49,8 +49,9 @@
             {/literal}
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
+            <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
         {else}
-             <title> {$category_data.title|clearslash|default:Portada} - {$smarty.const.SITE_TITLE} </title>
+             <title> {$category_data.title|clearslash|default:'Portada'} - {$smarty.const.SITE_TITLE} </title>
 
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
