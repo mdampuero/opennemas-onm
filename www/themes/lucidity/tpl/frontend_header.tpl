@@ -26,10 +26,10 @@
 
         {else}
          <a href="/">
-            {if ($category_data.name eq 'home')}
-             <img class="transparent-logo" src="{$params.IMAGE_DIR}main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
+            {if ($category_name eq 'home')}
+                <img src="{$params.IMAGE_DIR}main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
             {else}
-                <img class="transparent-logo" alt="{$smarty.const.SITE_TITLE}" src="images/main-logo.small.png" >
+                <img class="transparent-logo" alt="{$smarty.const.SITE_TITLE}" src="{$params.IMAGE_DIR}main-logo.small.png" >
                 {if !empty($category_data.logo)}
                     <img src="/media/sections/{$category_data.logo}" alt="{$category_data.title}"  />
                 {/if}
