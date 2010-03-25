@@ -190,6 +190,8 @@ class Application {
     {
         $isMobileDevice = false;
         
+        /*
+        
         // Browscap library
         require dirname(__FILE__) . '/../libs/Browscap.php';
         
@@ -204,6 +206,8 @@ class Application {
                 $isMobileDevice = true;
             }
         }
+        
+        */
         
         return $isMobileDevice;
     }

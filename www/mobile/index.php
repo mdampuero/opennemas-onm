@@ -105,6 +105,8 @@ class MobileRouter {
     }
 }
 
-$router = new URLDispatcher( $routes ); 
-$router->run(); 
+//$router = new URLDispatcher( $routes ); 
+//$router->run();
 
+header('Location: /');
+exit(0);
