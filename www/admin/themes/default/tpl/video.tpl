@@ -167,9 +167,9 @@
                 </td>
                 <td style="padding:4px;" nowrap="nowrap" >
                     <select name="author_name" id="author_name" title="fuente">
-                       <option  value="vimeo" {if $video->author_name eq 'vimeo'} selected {/if} >Vimeo </option/>
-                       <option  value="youtube" {if $video->author_name eq 'youtube'} selected {/if}>Youtube </option/>
-                       <option  value="otro" {if $video->author_name eq 'otro'} selected {/if}>Otro </option/>
+                       <option  value="vimeo" {if $video->author_name eq 'vimeo'} selected {/if} >Vimeo </option>
+                       <option  value="youtube" {if $video->author_name eq 'youtube'} selected {/if}>Youtube </option>
+                       <option  value="otro" {if $video->author_name eq 'otro'} selected {/if}>Otro </option>
                     </select>
 
                 </td>
@@ -179,10 +179,18 @@
                         <label for="title">Video ID:</label>
                 </td>
                 <td style="padding:4px;" nowrap="nowrap" >
-                        <input type="text" id="videoid" name="videoid" value="{$video->videoid}" size="70" title="Video ID" class="required" value="" />
+                        <input type="text" id="videoid" name="videoid" value="{$video->videoid}" size="70" title="Video ID" class="required"  />
                 </td>
             </tr>
             {if !empty($video->videoid)}
+             <tr>
+                <td valign="top" align="right" style="padding:4px;" >
+                        <label for="title">Enlace:</label>
+                </td>
+                <td style="padding:4px;" nowrap="nowrap" >
+                       <a href="{$smarty.const.SITE_URL}{$video->permalink}" target="_blank"   />{$smarty.const.SITE_URL}{$video->permalink}</a>
+                </td>
+            </tr>
             <tr>
                 <td valign="top" align="right" style="padding:4px;" >
 
@@ -199,9 +207,26 @@
                                                 <param name="movie" value="http://www.youtube.com/v/{$video->videoid}&hl=es&fs=1"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param>
                                                 <embed src="http://www.youtube.com/v/{$video->videoid}&hl=es&fs=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="416" height="150"></embed></object>
                                              *}
-                                             {$video->htmlcode|clearslash}
+                                               {if $video->author_name eq 'youtube'}
+
+                                                    <div id="video-content" class="clearfix span-8">
+                                                            <object width="290" height="163">
+                                                                <param value="http://www.youtube.com/v/{$video->videoid}" name="movie" />
+                                                                <param value="true" name="allowFullScreen" />
+                                                                <param value="always" name="allowscriptaccess">
+                                                                <embed width="290" height="163" src="http://www.youtube.com/v/{$video->videoid}" />
+                                                            </object>
+                                                    </div>
+                                                {else}
+                                                    <div id="video-content" class="clearfix span-8">
+                                                        <object width="290" height="163"><param name="allowfullscreen" value="true" />
+                                                            <param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=9851483&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" />
+                                                            <embed src="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="290" height="163"></embed>
+                                                        </object>
+                                                    </div>
+                                                {/if}
                                              <br>
-                                             * Tamaño recomendado 290x225
+
                                     </div>
                                     <br>
 
@@ -213,6 +238,7 @@
                     </div>
                 </td>
             </tr>
+
             {/if}
            
             <tr>
