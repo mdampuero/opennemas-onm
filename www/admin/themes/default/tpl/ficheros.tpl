@@ -20,10 +20,10 @@
     <li>
         <a href="ficheros.php?action=list&category=0" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>GLOBAL</a>
     </li>
-    <li>
+   {* <li>
         <a href="ficheros.php?action=list&category=8" {if $category=='8' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
         PORTADAS</a>
-    </li>
+    </li>*}
         {include file="menu_categorys.tpl" home="ficheros.php?action=list"}
 </ul>
  <br />

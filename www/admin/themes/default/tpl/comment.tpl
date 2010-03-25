@@ -12,9 +12,9 @@
                 <a href="comment.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
         </li>
 
-         <li>
+       {*  <li>
                 <a href="comment.php?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
-        </li>
+        </li>*}
         {include file="menu_categorys.tpl" home="video.php?action=list"}
     </ul>
 
@@ -34,20 +34,7 @@
     </ul>
     <br /> <br />
 {/if}
-{*
-{literal}
-<script type="text/javascript" language="javascript">
-//reload_comments();
-</script>
-{/literal}
- <label>
-  	 <input type="submit" value="Play" onClick="reload_comments(1,{$category}); return false;"/>
-  </label>
-
- <label>
-  	 <input type="submit" value="Pause" onClick="reload_comments(0,{$category}); return false;"/>
-  </label>
-*}
+ 
 <br>
 
 <div id="{$category}">

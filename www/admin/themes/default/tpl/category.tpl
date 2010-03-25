@@ -36,51 +36,61 @@
         <table class="adminlist" id="tabla"  width="100%">
             <tr>
 		<th  style="padding:10px" class="title">T&iacute;tulo</th>
-		<th style="padding:10px;width:100px;" align="center">Nº Art&iacute;culos</th>
-		<th style="padding:10px;width:100px;" align="center">Nº Fotos</th>
-		<th style="padding:10px;width:100px;" align="center">Nº Publicidades</th>
-		<th align="center" style="padding:10px;width:100px;">Ver En menu</th>
-		<th align="center" style="padding:10px;width:100px;">Modificar</th>
-		<th align="center" style="padding:10px;width:100px;">Eliminar</th>
+                <th style="padding:10px;width:100px;" align="center">Tipo</th>
+		<th style="padding:10px;width:80px;" align="center">Nº Art&iacute;culos</th>
+		<th style="padding:10px;width:80px;" align="center">Nº Fotos</th>
+		<th style="padding:10px;width:80px;" align="center">Nº Publicidades</th>
+		<th align="center" style="padding:10px;width:80px;">Ver En menu</th>
+		<th align="center" style="padding:10px;width:80px;">Modificar</th>
+		<th align="center" style="padding:10px;width:80px;">Eliminar</th>
             </tr>
             <tr>
-            <td colspan="7">
+            <td colspan="9">
                 {assign var=containers value=1}
                 <div id="ctes" class="seon" style="float:left;width:100%;border:1px solid gray;"> <br>
                     {section name=c loop=$categorys}
                         {if $containers neq $categorys[c]->inmenu} <hr> {/if}
-                        <table width="100%" cellpadding=0 cellspacing=0  id="{$categorys[c]->pk_content_category}">
+                        <table width="100%" cellpadding="0" cellspacing="0" id="{$categorys[c]->pk_content_category}">
                             <tr {cycle values="class=row0,class=row1"}>
                                 <td style="padding: 0px 10px; height: 40px;font-size: 11px;">
                                      <b> {$categorys[c]->title|clearslash|escape:"html"}</b>
                                 </td>
                                 <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:100px;" align="center">
-                                    {$num_contents[c].articles|default:0}</a>
+                                  {if $categorys[c]->internal_category eq 3}
+                                     <img style="width:20px;" src="{php}echo($this->image_dir);{/php}album.png" border="0" alt="Sección de Album" />
+                                  {elseif $categorys[c]->internal_category eq 5}
+                                     <img  style="width:20px;" src="{php}echo($this->image_dir);{/php}video.png" border="0" alt="Sección de Videos" />
+                                  {else}
+                                      <img  style="width:20px;" src="{php}echo($this->image_dir);{/php}advertisement.png" border="0" alt="Sección Global" />
+                                  {/if}
                                 </td>
-                                <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:100px;" align="center">
-                                    {$num_contents[c].photos|default:0}</a>
+                                 <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+                                    {$num_contents[c].articles|default:0}
                                 </td>
-                                <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:100px;" align="center">
-                                    {$num_contents[c].advertisements|default:0}</a>
+                                <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+                                    {$num_contents[c].photos|default:0}
                                 </td>
-                                <td style="padding:10px;font-size: 11px;width:100px;" align="center">
+                                <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+                                    {$num_contents[c].advertisements|default:0} 
+                                </td>
+                                <td style="padding:10px;font-size: 11px;width:80px;" align="center">
                                     {if $categorys[c]->inmenu==1}
-                                            <a href="?id={$categorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
-                                                    <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicado" /></a>
+                                        <a href="?id={$categorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
+                                            <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicado" /></a>
                                     {else}
-                                            <a href="?id={$categorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
-                                                    <img src="{php}echo($this->image_dir);{/php}publish_r.png" border="0" alt="Pendiente" /></a>
+                                        <a href="?id={$categorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
+                                            <img src="{php}echo($this->image_dir);{/php}publish_r.png" border="0" alt="Pendiente" /></a>
                                     {/if}
                                     {assign var=containers value=$categorys[c]->inmenu}
                                 </td>
-                                <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
+                                <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
                                     {if $categorys[c]->internal_category==1}
                                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$categorys[c]->pk_content_category});" title="Modificar">
                                             <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" />
                                         </a>
                                     {/if}
                                 </td>
-                                <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
+                                <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
                                     {if $categorys[c]->internal_category==1}
                                         <a href="#" onClick="javascript:confirmar(this, {$categorys[c]->pk_content_category});" title="Eliminar">
                                             <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" />
@@ -89,23 +99,26 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan=7>
+                                <td colspan="9">
                                     {section name=su loop=$subcategorys[c]}
-                                        <table width="100%" cellpadding=0 cellspacing=0 id="{$subcategorys[c][su]->pk_content_category}" class="tabla">
+                                        <table width="100%" cellpadding="0" cellspacing="0" id="{$subcategorys[c][su]->pk_content_category}" class="tabla">
                                             <tr {cycle values="class=row0,class=row1"}>
                                                 <td style="padding: 0px 10px 0px 40px; height: 30px; font-size: 11px; ">
                                                     <b>{$subcategorys[c][su]->title} </b>
                                                 </td>
-                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:100px;">
-                                                    {$num_sub_contents[c][su].articles|default:0}</a>
+                                                 <td align="center" style="padding:10px;font-size: 11px;width:80px;">
+                                                       
                                                 </td>
-                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:100px;">
+                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
+                                                    {$num_sub_contents[c][su].articles|default:0}</a>
+                                                </td>                                                
+                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
                                                     {$num_sub_contents[c][su].photos|default:0}</a>
                                                 </td>
-                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:100px;">
+                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
                                                     {$num_sub_contents[c][su].advertisements|default:0}</a>
                                                 </td>
-                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:100px;">
+                                                <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
                                                     {if $subcategorys[c][su]->inmenu==1}
                                                         <a href="?id={$subcategorys[c][su]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
                                                             <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicado" /></a>
@@ -115,12 +128,12 @@
                                                     {/if}
                                                     {assign var=containers2 value=$subcategorys[c][su]->inmenu}
                                                 </td>
-                                                <td style="padding: 0px 10px; height: 30px;width:100px" align="center">
+                                                <td style="padding: 0px 10px; height: 30px;width:80px" align="center">
                                                     <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$subcategorys[c][su]->pk_content_category});" title="Modificar">
                                                         <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" />
                                                     </a>
                                                 </td>
-                                                <td style="padding: 0px 10px; height: 30px;width:100px;" align="center">
+                                                <td style="padding: 0px 10px; height: 30px;width:80px;" align="center">
                                                     <a href="#" onClick="javascript:confirmar(this, {$subcategorys[c][su]->pk_content_category});" title="Eliminar">
                                                         <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" />
                                                     </a>
@@ -152,8 +165,8 @@
 
         <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
             <tr>
-                <th width="30%" class="title">T&iacute;tulo</th>
-                <th width="30%" align="center">Nombre interno</th>
+                <th width="25%" class="title">T&iacute;tulo</th>
+                <th width="25%" align="center">Nombre interno</th>
                 <th align="center" width="10%">Ver En menu</th>
                 <th align="center" width="15%">Modificar</th>
                 <th align="center" width="25%">Eliminar</th>
@@ -163,16 +176,15 @@
                 <td colspan="5">
                     <div id="cates" class="seccion" style="float:left;width:100%;border:1px solid gray;"> <br />
                         {section name=c loop=$ordercategorys}
-                            {if $ordercategorys[c]->pk_content_category neq "20"}
+                            {if $ordercategorys[c]->pk_content_category neq "25"}
                                 <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >
                                     <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;border:0px; padding:0px;margin:0px;">
-                                        <td style="padding:10px;font-size: 11px;width:30%;">
+                                        <td style="padding:10px;font-size: 11px;width:20%;">
                                             {$ordercategorys[c]->title}
                                         </td>
-                                        <td align="center" style="padding:10px;font-size: 11px;width:30%;">
+                                        <td align="center" style="padding:10px;font-size: 11px;width:25%;">
                                             {$ordercategorys[c]->name|clearslash}</a>
-                                        </td>
-
+                                        </td>                                        
                                         <td align="center" style="padding:10px;font-size: 11px;width:10%;">
                                             {if $ordercategorys[c]->inmenu==1}
                                                 <a href="?id={$ordercategorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
