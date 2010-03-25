@@ -197,8 +197,9 @@ CommentFormClass.prototype = {
                 '<p><br /><fb:prompt-permission perms="email">'+
                 '¿Permitir a demo.opennemas.com enviar mensajes a mi cuenta?</fb:prompt-permission></p>' +
                 '<div class="rightSide"><a href="#" onclick="commentForm.logoutFb(); return false;">' +
-                '<img src="/themes/lucidity/images/sair.gif" border="0" align="absmiddle" /> Cerrar sesión</a>' +
+                '[Cerrar sesión]</a>' +
                 '</div></div>';
+            // <img src="/themes/lucidity/images/sair.gif" border="0" align="absmiddle" />
             
             this.elem.html(content);
             
@@ -212,6 +213,8 @@ CommentFormClass.prototype = {
         this.waiting(this.elem);
         
         FB.Connect.logout( $.proxy(this, "logout") );
+        
+        this.redrawForm();
     },
     
     redrawForm: function() {
