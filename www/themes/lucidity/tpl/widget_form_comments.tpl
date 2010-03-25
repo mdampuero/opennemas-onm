@@ -13,7 +13,7 @@
         <div class="auth-selector">
 
             <p>
-                Para dejar un comentario debes acceder a XXXX.com. Si usas
+                Para dejar un comentario pulsa en <em>Ver formulario</em>. Si usas
                 Facebook puedes hacer click en el botón de la derecha o
                 también puedes publicar un comentario directamente.
             </p>
@@ -38,7 +38,7 @@
                     
                     <textarea id="textareacomentario" name="textareacomentario" col="5" tabindex="2" class="span-8"></textarea>
                     
-                    {*  *}
+                    {* SPAM detector *}
                     <input type="text" class="hide" id="security_code" name="security_code" value=""/>
                     
                     <input type="submit" tabindex="5" name="Submit" class="submit-button" value="Enviar »"/> o
@@ -55,7 +55,13 @@
                         <input tabindex="4" type="text" name="email" id="email" />
                     </div>
                     
-                    <fb:login-button onlogin="commentForm.updateFbStatus();"></fb:login-button>
+                    <hr class="space" />
+                    
+                    <div>                        
+                        <fb:login-button onlogin="commentForm.updateFbStatus();" v="2">
+                            <fb:intl>Identificarse con Facebook</fb:intl>
+                        </fb:login-button>
+                    </div>
                 </div>
                 <div class="information span-6 last">                    
                     <p>No está permitido verter comentarios contrarios
@@ -76,8 +82,6 @@
                     'form': jQuery('#comentar').get(0),
                     'fbAppKey': fbAppKey
                 });
-                
-                //commentForm = jQuery.commentform.getInstance();
             });
             {/literal}
             /* ]]> */

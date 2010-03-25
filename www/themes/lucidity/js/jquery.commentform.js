@@ -1,7 +1,11 @@
 /*jslint debug: true, eqeqeq: false, browser: true, on: true, indent: 4, plusplus: false, white: false */
+
 /**
-  * @see http://www.jslint.com/lint.html
-  */
+ * commentform jQuery plugin
+ *
+ * @param options {fbAppKey: '...', form: HTMLFormElement}
+ * @returns CommentFormClass    instance of CommentFormClass
+ */
 (function($){
 
     $.fn.commentform = function(options) {
@@ -44,9 +48,8 @@ CommentFormClass = function(options) {
 
 CommentFormClass.prototype = {
     
-    init: function() {
-        
-        // Attach submit event
+    init: function() {        
+        // Attach submit event to form
         $(this.form).submit(
             $.proxy(this, "send")
         );
@@ -105,9 +108,13 @@ CommentFormClass.prototype = {
                 'context': this,
                 'success': this.onSuccessSend,
                 'error': function() {
-                    this.showMessage('Su comentario <strong>no</strong> ha sido guardado.<br />Asegúrese de cumplimentar correctamente el formulario.');
+                    this.showMessage('Su comentario <strong>no</strong> ha sido guardado.<br />' +
+                                     'Asegúrese de cumplimentar correctamente el formulario.', 'error');
                 }
             });
+            
+        } else {
+            this.showMessage('Por favor, cumplimente correctamente los campos del formulario.', 'error');
         }
     },
     
@@ -125,14 +132,18 @@ CommentFormClass.prototype = {
                 'context': this,
                 'success': this.onSuccessSend,
                 'error': function() {
-                    this.showMessage('Su comentario <strong>no</strong> ha sido guardado.<br />Asegúrese de cumplimentar correctamente el formulario.');
+                    this.showMessage('Su comentario <strong>no</strong> ha sido guardado.<br />' +
+                                     'Asegúrese de cumplimentar correctamente el formulario.', 'error');
                 }
             });
+            
+        } else {
+            this.showMessage('Por favor, cumplimente correctamente los campos del formulario.', 'error');
         }
     },    
     
     onSuccessSend: function(data, status, xhr) {
-        if(status == '200') {
+        if(status == 'success') {
             // save these values before reset form
             var category = $('#category').val();
             var id       = $('#id').val();
@@ -146,7 +157,7 @@ CommentFormClass.prototype = {
         }
         
         // show message
-        this.showMessage(data);
+        this.showMessage(data, 'notice');
     },
     
     resetStyles: function(fields) {        
@@ -184,9 +195,8 @@ CommentFormClass.prototype = {
                 '<div class="profile-info"><fb:name uid="loggedinuser" useyou="false"></fb:name><br />' +
                 info[0].first_name + ' ' + info[0].last_name + '<br /></div><div class="clearer"></div>' +
                 '<p><br /><fb:prompt-permission perms="email">'+
-                '¿Permitir a Xornal.com enviar mensajes a mi cuenta?</fb:prompt-permission></p>' +
-                '<div class="clearer"></div>'+
-                '<div class="rightSide"><br /><a href="#" onclick="commentForm.logoutFb(); return false;">' +
+                '¿Permitir a demo.opennemas.com enviar mensajes a mi cuenta?</fb:prompt-permission></p>' +
+                '<div class="rightSide"><a href="#" onclick="commentForm.logoutFb(); return false;">' +
                 '<img src="/themes/lucidity/images/sair.gif" border="0" align="absmiddle" /> Cerrar sesión</a>' +
                 '</div></div>';
             
@@ -205,9 +215,12 @@ CommentFormClass.prototype = {
     },
     
     redrawForm: function() {
-        var form = '<div><label for="name">Nombre:</label><input tabindex="3" type="text" name="nombre" id="nombre" /></div>' + 
+        var htmlForm = '<div><label for="name">Nombre:</label><input tabindex="3" type="text" name="nombre" id="nombre" /></div>' + 
             '<div><label for="mail">Correo electrónico:</label><input tabindex="4" type="text" name="email" id="email" /></div> ' +
-            '<fb:login-button onlogin="commentForm.updateFbStatus();"></fb:login-button>';
+            '<hr class="space" /><div><fb:login-button onlogin="commentForm.updateFbStatus();" v="2">'+
+            '<fb:intl>Identificarse con Facebook</fb:intl></fb:login-button></div>';
+        
+        this.elem.html( htmlForm );
         
         this.type = 'static';
         
@@ -220,9 +233,13 @@ CommentFormClass.prototype = {
         container.html(content);
     },
     
-    showMessage: function(msg) {
-        $('#form-messages').html(msg).addClass('highlight').fadeOut(5000, function() {
-            $(this).html('').removeClass('highlight');
-        });
+    showMessage: function(msg, level) {
+        $('#form-messages').html(msg)
+                           .addClass(level)
+                           .show()
+                           .animate({opacity: 1.0}, 5000)
+                           .fadeOut(2000, function() {
+                                $(this).html('').removeClass();
+                           });
     }
 };
