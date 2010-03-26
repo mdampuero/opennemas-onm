@@ -692,11 +692,11 @@
 					<img border="0" src="{php}echo($this->image_dir);{/php}checkout.png" title="Checkout" alt="Checkout"><br />Checkout
 				</a>
 			</li>
-			<li>
+			{* <li>
 				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'info', 0);" onmouseover="return escape('<u>I</u>nfo');" accesskey="N" tabindex="1">
 					<img border="0" src="{php}echo($this->image_dir);{/php}info.png" title="Info" alt="Info"><br />Info
 				</a>
-			</li>
+			</li> *}
             <li>
 				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>L</u>ist');" accesskey="N" tabindex="1">
 					<img border="0" src="{php}echo($this->image_dir);{/php}list.png" title="List" alt="List"><br />List
