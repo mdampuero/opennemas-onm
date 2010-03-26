@@ -8,6 +8,6 @@
 
 </div>
 <div class="last span-8">
-      {insert name="renderbanner" type=6 cssclass="banner340x30"}
-      {insert name="renderbanner" type=7 cssclass="banner340x30"}
+      {insert name="renderbanner" type=6 cssclass="banner310x45"}
+      {insert name="renderbanner" type=7 cssclass="banner310x45"}
 </div>
