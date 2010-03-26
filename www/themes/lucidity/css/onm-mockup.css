@@ -860,3 +860,19 @@ div#footer ul li.last{ border:none;}
 div#footer .developed-by{
     text-align:right
 }
+
+
+/***********************************************************
+    Actions
+************************************************************/
+
+.share-actions { display:inline; position:relative;  padding:5px 0; }
+.share-actions a { color:#333; text-decoration:none; margin:0; padding:0;}
+.share-actions img { vertical-align:middle; }
+.share-actions ul {
+	background:#fff; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
+    border-color:#fafafa #eae8e9 #eae8e9 #fafafa; border-style:solid; border-width:1px 3px 3px 1px; list-style:none !important;
+	}
+.share-actions ul > li { text-align:left; border-bottom:1px solid #eae8e9; list-style:none; display:block !important; float:none; width:100%; background:none !important; }
+.share-actions ul > li > a{ background:none !important; color:Black !important; margin:0; padding:0; text-indent:1em !important; width:auto;}
+.share-actions ul > li > a:hover{ text-decoration:underline}
