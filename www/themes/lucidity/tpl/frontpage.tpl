@@ -15,7 +15,8 @@ Smarty template: frontpage.tpl
 
 {include file="module_head.tpl"}
 
-    {* publicidad insert name="intersticial" type="50" *}
+    {* publicidad *}
+    {insert name="intersticial" type="50"}
 
     {include file="widget_ad_top.tpl"}
 

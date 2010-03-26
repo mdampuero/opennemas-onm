@@ -95,5 +95,11 @@
             {/literal}
         {/if}
 
+
+        {* Intersticial banner dependencies *}
+        <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection">
+        <script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
+        <script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
+        
     </head>
     <body> 
