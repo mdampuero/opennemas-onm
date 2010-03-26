@@ -174,7 +174,9 @@ html[xmlns] .clearfix {
     font-weight: bold;
 }
 #main_menu ul li:hover, #main_menu ul li.active{
-    background:#900e2f;
+    background:#ccc;
+    opacity:0.4;
+	filter:alpha(opacity=40);
     cursor:pointer;
 }
 
