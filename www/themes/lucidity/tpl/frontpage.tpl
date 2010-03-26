@@ -128,7 +128,7 @@ Smarty template: frontpage.tpl
                 </div>
                 {if $category_name eq 'home'}
                     {include file="module_other_headlines.tpl"}
-                    {include file="widget_ad_lateral.tpl"}
+                   
                 {/if}
             </div><!-- fin #main_content -->
 

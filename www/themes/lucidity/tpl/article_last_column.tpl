@@ -8,7 +8,9 @@
     <div class="border-dotted">
 
        {include file="widget_ad_column.tpl" type='103'}
-         
+
+       <hr class="new-separator"/>
+       
        {include file="widget_column_video_viewer.tpl" video=$videoInt}
 
        {* <div class="nw-big">
@@ -46,7 +48,8 @@
         </div>
     </div>
     {include file="widget_headlines_past.tpl"}
-      {include file="widget_ad_column.tpl" type='105'}
+    <hr class="new-separator"/>
+    {include file="widget_ad_column.tpl" type='105'}
 
     <hr class="new-separator">
 

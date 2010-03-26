@@ -4,9 +4,8 @@
     @theme      Lucidity
 *}
 
-<div class="publi_310">
+<div class="publi_lateral">
 
-         {insert name="renderbanner"  cssclass="" type=8  width="270" height="*"
-            beforeHTML='<div class="textoBannerPublicidad">publicidad</div>'}
-   
+         {insert name="renderbanner"  cssclass="" type=8  width="260" height="*" }
 </div>
+

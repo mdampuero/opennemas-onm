@@ -55,6 +55,8 @@ html[xmlns] .clearfix {
 #publis{
     text-align:left;
     margin:10px 0 10px 0;
+    height:94px;
+    background:#ccc;
 }
 .publi { background:#ececec url(/themes/lucidity/images/publi/back-publi.png) 40px 20px no-repeat;}
 .publi_1{
@@ -66,11 +68,38 @@ html[xmlns] .clearfix {
     display:block;
 }
 
+.publi_banner{
+   background:#ccc;
+   overflow:hidden;
+   border:1px solid #ccc;
+   width:728px;
+   height:90px;
+   float:left;
+   position:relative;
+}
+
+.publi_corta{
+   background:#ccc;
+   overflow:hidden;
+   float:right;
+   width:234px;
+   height:90px;
+   position:relative;
+}
+
 .publi_310{
    background:#ccc;
    display:block;
    margin-bottom:15px
 }
+
+.publi_lateral{
+   background:#ccc;
+   display:block;
+   margin-bottom:15px;
+   padding:6px;
+}
+
 
 .publi_310 img{
     border:5px solid White;

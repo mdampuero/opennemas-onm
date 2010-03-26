@@ -21,6 +21,8 @@
     </div>
     <div class="span-7 more-promotions-from-diary">
             {include file="widget_other_info.tpl"}
+            <hr class="new-separator"/>
+            {include file="widget_ad_lateral.tpl"}
     </div>
 </div>
 
