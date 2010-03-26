@@ -93,8 +93,10 @@
                 </style>
             {/literal}
         {/if}
-
-
+        
+        {* /rss/ *}
+        <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />
+        
         {* Intersticial banner dependencies *}
         <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection">
         <script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
