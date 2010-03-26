@@ -25,14 +25,15 @@
 
         {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
             {insert name="rating" id=$video->id page="video" type="vote"}
+             - <span>{insert name="numComments" id=$video->id}  Comentarios<span>
+         {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME) }
+            {insert name="rating" id=$album->id page="video" type="vote"}
+             - <span>{insert name="numComments" id=$album->id}  Comentarios<span>
         {else}
             {insert name="rating" id=$article->id page="article" type="vote"}
+               - <span>{insert name="numComments" id=$article->id}  Comentarios<span>
         {/if}
 
-       {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
-           - <span>{insert name="numComments" id=$video->id}  Comentarios<span>
-       {else}
-           - <span>{insert name="numComments" id=$article->id}  Comentarios<span>
-       {/if}
+        
     </div>
 </div><!-- /vote-bloc -->

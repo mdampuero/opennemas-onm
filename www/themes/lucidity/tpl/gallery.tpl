@@ -63,7 +63,7 @@ Smarty template: gallery.tpl
 
                 <div class="vote-block span-5">
                   <div class="vote">
-			{*include file="widget_ratings.tpl"*}
+			{include file="widget_ratings.tpl"}
                   </div>
                 </div><!-- /utilities -->
                 <div class=" span-3 last">
@@ -81,8 +81,8 @@ Smarty template: gallery.tpl
           <div class="span-24">
             <div class="layout-column first-column span-16">
               <div class="border-dotted">
-            {php} require_once('themes/lucidity/static/comments.php') {/php}
-                {*include file="module_comments.tpl" content=$gallery*}
+          
+                {include file="module_comments.tpl" content=$album}
               </div>
             </div>
            {include file="widget_headlines_past.tpl"}

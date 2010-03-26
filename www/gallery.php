@@ -63,11 +63,11 @@ if( isset($_REQUEST['action']) ) {
 	            
                     $i++;
                     }
-                    
+                    $tpl->assign('album', $thisalbum);
             $tpl->assign('albumPhotos', $albumPhotos);
             //FIXED: check if there is the album 'id_album' otherwise exit()
             //SECURITY REASONS
-            if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
+      /*      if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
                 
                 $category_name = $ccm->get_father($cm->get_categoryName_by_contentId($_REQUEST['id_album']));
                 $tpl->assign('category_name', $category_name);
@@ -91,7 +91,7 @@ if( isset($_REQUEST['action']) ) {
 	            $tpl->assign('albumDescrip', $albumDescrip);
                 }
                
-               /*  
+                
              	if ($category_name != 'humor-grafico') {					  
                     $list_albums = $cm->find_by_category('Album', 3, 'available=1', 'ORDER BY created DESC LIMIT 0 , 30');
              	} else {
@@ -100,11 +100,9 @@ if( isset($_REQUEST['action']) ) {
                 
              	$list_albums = $cm->paginate_num_js($list_albums, 5, 1, 'get_paginate_articles',"'albums',''");
                 $tpl->assign('list_albums', $list_albums);
-                $tpl->assign('pages', $cm->pager); */
-					
-            } else {
+                $tpl->assign('pages', $cm->pager);     } else {
            //     Application::forward301('/');
-            }
+            } */
 	break;
 
 
