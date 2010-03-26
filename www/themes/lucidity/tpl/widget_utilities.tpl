@@ -13,37 +13,15 @@
     <li><img src="{$params.IMAGE_DIR}utilities/separator.png" alt="Email" /></li>
     <li><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize();return false;" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
     <li><img src="{$params.IMAGE_DIR}utilities/separator.png" alt="Email" /></li>
-    <li><div style="display: inline;" class="share-actions"><a href="" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a>
-                <ul style="display: none;">
-                  <li><img alt="Share this post on Twitter" src="{$params.IMAGE_DIR}utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home">Send to Twitter</a></li>
-                  <li><img alt="Share on Facebook" src="{$params.IMAGE_DIR}utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php">Share on Facebook</a></li>
-                </ul>
-            </div>
-        </li>
-    </ul>
+    <li>
+      <div style="display: inline;" class="share-actions">
+            <a href="#" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a>
+            <ul style="display:none;">
+              <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li>
+              <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li>
+            </ul>
+      </div>
+    </li>
+</ul>
 </div><!-- /utilities -->
 
-
-{literal}  <script type="text/javascript">
-jQuery(document).ready(function(){
-
-  $lock=false;
-  jQuery("div.share-actions").hover(
-    function () {
-      if (!$lock){
-        $lock=true;
-        jQuery(this).children("ul").fadeIn("fast");
-      }
-      $lock=false;
-    },
-    function () {
-      if (!$lock){
-        $lock=true;
-        jQuery(this).children("ul").fadeOut("fast");
-      }
-      $lock=false;
-    }
-  );
-});
-    </script>
-{/literal}
