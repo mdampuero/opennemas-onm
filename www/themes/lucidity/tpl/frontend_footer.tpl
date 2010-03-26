@@ -5,13 +5,13 @@
 *}
     {include file="widget_ad_bottom.tpl"}
     <hr class="new-separator" />
-    <ul class="public-footer">
-        <li><a href="">Quienes Somos</a></li>|
-        <li><a href="">Contacto</a></li>|
-        <li><a href="">Publicidad</a></li>|
-        <li><a href="">Términos de uso</a></li>|
-        <li><a href="">Versión móvil</a></li>|
-        <li class="last"><a href="">Subscripción RSS</a></li>
+    <ul class="public-footer">        
+        <li><a href="/estaticas/quen.html">Quienes Somos</a></li>|
+        <li><a href="/estaticas/contacto.html">Contacto</a></li>|
+        <li><a href="/estaticas/publicidade.html">Publicidad</a></li>|
+        <li><a href="/estaticas/aviso-legal.html">Términos de uso</a></li>|
+        {* <li><a href="">Versión móvil</a></li>| *}
+        <li class="last"><a href="/rss/">Subscripción RSS</a></li>
     </ul>
     <hr class="new-separator" />
     <div>
