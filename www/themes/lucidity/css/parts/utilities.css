@@ -12,7 +12,7 @@
 ************************************************************/
 
 div.toolbar{
-    background:url(../../images/horiz-separator.png) top right repeat-x;
+    background:url(/themes/lucidity/images/horiz-separator.png) top right repeat-x;
     margin:0;
     padding-top:5px;
     margin-bottom:5px
@@ -53,12 +53,16 @@ div.utilities a, div.toolbar-bottom a{
 	width:18px;
 	text-indent:-9999px;
 	line-height:-9999px;
-	background-image:url(../../images/utilities/mask-buttons.png);
+	background-image:url(/themes/lucidity/images/utilities/mask-buttons.png);
 	background-repeat:no-repeat;
 	background-color:#009677; 
 	display:inline-block;
 }
 
+div.video div.utilities-bottom a, div.share-actions a, div.toolbar-bottom a{
+	background-image:url(/themes/lucidity/images/utilities/mask-buttons-black.png);
+	background-color:#343534;
+}
 div.utilities a span{ display:none; }
 
 a.utilities-send-by-email{ background-position: -1px -1px; }

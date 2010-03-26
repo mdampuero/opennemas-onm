@@ -25,7 +25,7 @@ div.article-comments h3{
 	font-weight:bold;
 	margin:0;
 	padding:0;
-	background: url(../../images/sections/back-comments.png) bottom right no-repeat;
+	background: url(/themes/lucidity/images/sections/back-comments.png) bottom right no-repeat;
 	width:100%;
 	height:40px;
 	vertical-align:bottom;
@@ -34,7 +34,7 @@ div.article-comments h3 span{padding-top:20px; display:block; }
 
 div.article-comments div.title-comments{
     border:none;
-    background:url(../../images/horiz-separator.png) bottom right repeat-x;
+    background:url(/themes/lucidity/images/horiz-separator.png) bottom right repeat-x;
 	padding-bottom:1px
 }
 div.article-comments hr.new-separator{
