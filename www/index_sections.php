@@ -21,9 +21,11 @@ $categories = array();
 foreach( $allcategorys as $prima) {
     $subcat = $ccm->get_all_subcategories( $prima->pk_content_category );
     
-    $categories[ $prima->posmenu ] = array( 'name' => $prima->name,
+    $categories[ $prima->posmenu ] = array( 'id' => $prima->pk_content_category,
+                                            'name' => $prima->name,
                                             'title' => $prima->title,
                                             'subcategories' => $subcat,
+                                            'posmenu' => $prima->posmenu,
                                             'color' => $prima->color,
                                             'logo' =>  $prima->logo_path);
    if(($category == $prima->pk_content_category) || ($subcategory == $prima->pk_content_category) ) {
@@ -31,6 +33,7 @@ foreach( $allcategorys as $prima) {
                             'name' => $prima->name,
                             'title' => $prima->title,
                             'subcategories' => $subcat,
+                            'posmenu' => $prima->posmenu,
                             'color' => $prima->color,
                             'logo' =>  $prima->logo_path);
    }
