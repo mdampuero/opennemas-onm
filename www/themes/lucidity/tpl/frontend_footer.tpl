@@ -3,11 +3,7 @@
 
     @theme      Lucidity
 *}
-<div id="footer" class="">
-    <div class="publi-footer">
-        <div class="span-16 publi-footer-1">publi 1</div>
-        <div class="span-8 last publi-footer-2">publi 2</div>
-    </div>
+    {include file="widget_ad_bottom.tpl"}
     <hr class="new-separator" />
     <ul class="public-footer">
         <li><a href="">Quienes Somos</a></li>|

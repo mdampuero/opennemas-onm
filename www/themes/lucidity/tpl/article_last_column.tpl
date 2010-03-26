@@ -7,7 +7,7 @@
 <div class="layout-column last-column last span-8">
     <div class="border-dotted">
 
-       {include file="widget_ad_lateral.tpl"}
+       {include file="widget_ad_column.tpl" type='103'}
          
        {include file="widget_column_video_viewer.tpl" video=$videoInt}
 
@@ -46,7 +46,7 @@
         </div>
     </div>
     {include file="widget_headlines_past.tpl"}
-    {include file="widget_ad_lateral.tpl"}
+      {include file="widget_ad_column.tpl" type='104'}
 
     <hr class="new-separator">
 

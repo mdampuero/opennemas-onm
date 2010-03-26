@@ -47,7 +47,7 @@ Smarty template: frontpage.tpl
 
                             {*<hr class="new-separator"/>*}
 
-                            {include file="widget_ad_button.tpl"}
+                            {include file="widget_ad_button.tpl" type='3'}
 
                             {*<hr class="new-separator"/>*}
 
@@ -82,7 +82,7 @@ Smarty template: frontpage.tpl
                         
                         {include file="widget_headlines.tpl"}
 
-                        {include file="widget_ad_lateral.tpl"}
+                        {include file="widget_ad_button.tpl" type='4'}
 
                         
                     </div>
@@ -110,7 +110,9 @@ Smarty template: frontpage.tpl
                 </div>
 
                 <hr class="news-separator" />
-
+                <div class="span-24">
+                       {include file="widget_ad_separator.tpl"}
+                </div>
                 <div class="span-24">
                     <div class="layout-column first-column span-8">
                         {include file="widget_video.tpl" }
@@ -118,7 +120,7 @@ Smarty template: frontpage.tpl
                     <div class="layout-column middle-column span-8">
                         {include file="widget_galery.tpl"}
 
-                        {include file="widget_ad_button.tpl"}
+
                     </div>
                     <div class="layout-column last-column last span-8">
                         {include file="widget_video.tpl"}
@@ -126,6 +128,7 @@ Smarty template: frontpage.tpl
                 </div>
                 {if $category_name eq 'home'}
                     {include file="module_other_headlines.tpl"}
+                    {include file="widget_ad_lateral.tpl"}
                 {/if}
             </div><!-- fin #main_content -->
 

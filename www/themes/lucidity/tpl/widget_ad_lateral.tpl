@@ -5,5 +5,8 @@
 *}
 
 <div class="publi_310 clearfix">
-    <a href="http://www.puntogal.org"><img src="{$smarty.const.MEDIA_PATH_URL}/publi/eu.gal.png" alt="" /></a>
+
+         {insert name="renderbanner"  cssclass="" type=8  width="270" height="*"
+            beforeHTML='<div class="textoBannerPublicidad">publicidad</div>'}
+   
 </div>
