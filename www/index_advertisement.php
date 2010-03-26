@@ -27,7 +27,7 @@ $advertisement = Advertisement::getInstance();
 
 // Load 1-16 banners and use cache to performance
 //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-$banners = $advertisement->getAdvertisements(array(1,2,3, 5,6, 7,8, 10,12, 11,13, 14,15,16), $category);
+$banners = $advertisement->getAdvertisements(array(1,2, 3,4, 5,6,7, 8, 9,10), $category);
 
 //$advertisement->render($banners, &$tpl);
 $advertisement->render($banners, &$advertisement);

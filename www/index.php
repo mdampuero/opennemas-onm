@@ -329,6 +329,6 @@ Application::releaseMutex();
 //} // $tpl->is_cached('index.tpl') (2)
 
 /********************************* ADVERTISEMENTS  *********************************************/
-//require_once ("index_advertisement.php");
+require_once ("index_advertisement.php"); 
 /********************************* ADVERTISEMENTS  *********************************************/
 $tpl->display('frontpage.tpl', $cache_id);
