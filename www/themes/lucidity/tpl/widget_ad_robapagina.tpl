@@ -4,8 +4,8 @@
     @theme      Lucidity
 *}
 
-<div class="publi_310 clearfix">
+<div class="span-16 publi">
 
-         {insert name="renderbanner"  cssclass="" type=8  width="400" height="*"}
+         {insert name="renderbanner"  cssclass="" type=104  width="630" height="*"}
 
 </div>
