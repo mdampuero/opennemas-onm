@@ -24,6 +24,8 @@ Smarty template: article.tpl
             
             <div id="main_content" class="single-article span-24">
                 
+                <hr class="space"/>
+                
                 <div class="in-big-title span-24">
                     <h1>{$page->title|clearslash}</h1>                
                 </div>
