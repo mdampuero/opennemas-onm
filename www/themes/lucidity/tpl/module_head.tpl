@@ -56,8 +56,7 @@
             {/literal}
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
-            <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
-
+          
 
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
             <title>{$video->title|clearslash|default:''}  Videos - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
