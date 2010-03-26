@@ -11,11 +11,13 @@
     <div id="tab-related">
         {section name=i loop=$videos}
              <div class="tab-thumb-video clearfix">
-                {if $videos[i]->author_name eq 'vimeo'}
-                    <img src="{$videos[i]->thumbnail_small}" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" />
-                {else}
-                     <img src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}"  />
-                {/if}
+                <a class="video-link" title="{$videos[i]->title|clearslash|escape:'html'}" href="{$videos[i]->permalink}">
+                    {if $videos[i]->author_name eq 'vimeo'}
+                        <img src="{$videos[i]->thumbnail_small}" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" />
+                    {else}
+                         <img src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}"  />
+                    {/if}
+                </a>
                 <div class="tab-thumb-video-shortitle">{$videos[i]->category_title}</div>
                 <div class="tab-thumb-video-title">
                     <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">{$videos[i]->title|clearslash|escape:'html'}</a>
@@ -29,11 +31,13 @@
         <div id="tab-new">
         {section name=i loop=$others_videos}
              <div class="tab-thumb-video clearfix">
-                {if $others_videos[i]->author_name eq 'vimeo'}
-                    <img src="{$others_videos[i]->thumbnail_small}" alt="{$others_videos[i]->title|clearslash|escape:'html'}" title="{$others_videos[i]->title|clearslash|escape:'html'}" />
-                {else}
-                     <img src="http://i4.ytimg.com/vi/{$others_videos[i]->videoid}/default.jpg" alt="{$others_videos[i]->title|clearslash|escape:'html'}" title="{$others_videos[i]->title|clearslash|escape:'html'}"  />
-                {/if}
+                <a class="video-link" title="{$others_videos[i]->title|clearslash|escape:'html'}" href="{$others_videos[i]->permalink}">
+                    {if $others_videos[i]->author_name eq 'vimeo'}
+                        <img src="{$others_videos[i]->thumbnail_small}" alt="{$others_videos[i]->title|clearslash|escape:'html'}" title="{$others_videos[i]->title|clearslash|escape:'html'}" />
+                    {else}
+                         <img src="http://i4.ytimg.com/vi/{$others_videos[i]->videoid}/default.jpg" alt="{$others_videos[i]->title|clearslash|escape:'html'}" title="{$others_videos[i]->title|clearslash|escape:'html'}"  />
+                    {/if}
+                </a>
                 <div class="tab-thumb-video-shortitle">{$others_videos[i]->category_title}</div>
                 <div class="tab-thumb-video-title">
                      <a href="{$others_videos[i]->permalink}" title="{$others_videos[i]->title|clearslash|escape:'html'}">{$others_videos[i]->title|clearslash|escape:'html'}</a>
