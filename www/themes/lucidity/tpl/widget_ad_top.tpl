@@ -10,7 +10,7 @@
                 {insert name="renderbanner" type=1 width="728" height="*" cssclass=""}
             </div>
             <div id="publi_2" class="publi_corta">
-                {insert name="renderbanner" type=2 width="234" height="*" cssclass=""}
+                {insert name="renderbanner" type=2 width="234" height="90" cssclass=""}
             </div>
         </div>
 
