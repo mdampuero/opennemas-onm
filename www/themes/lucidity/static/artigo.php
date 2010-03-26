@@ -152,15 +152,23 @@
 		                    	
 		                    	<div class="utilities span-6 last">
 		                    		<ul>
-		                    			<li><a href="" class="utilities-send-by-email" title="Enviar por email a un amigo"><span>Enviar por email</span></a></li>
-		                    			<li><img src="images/utilities/separator.png" alt="Email" onclick="javascript:sendbyemail('Título da nova')"/></li>
-		                    			<li><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a></li>
+		                    			<li><a href="#"  class="utilities-send-by-email" onclick="javascript:sendbyemail('Título da nova', 'url da nova'); return false" title="Enviar por email a un amigo"><span>Enviar por email</span></a></li>
+		                    			<li><img src="images/utilities/separator.png" alt="Email" onclick="javascript:sendbyemail('Título da nova', 'url da nova')"/></li>
+		                    			<li><a href="#" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a></li>
+		                    			<li><a href="#" class="utilities-increase-text"  onclick="increaseFontSize(); return false;" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
+		                    			<li><a href="#" class="utilities-decrease-text"  onclick="decreaseFontSize(); return false;" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a></li>
+		                    			<li>
+										  <div style="display: inline;" class="share-actions">
+											<a href="#" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> 
+											<ul style="display:none;"> 
+											  <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li> 
+											  <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li> 
+											</ul> 
+										  </div> 
+										</li>
 		                    		</ul>
 		                    	</div><!-- /utilities -->
 		                    	
@@ -241,19 +249,10 @@
 		                    	
 		                    	<div class="span-7">
 		                    		<ul>
-		                    			<li class="span-3"><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a> Reducir texto</li>
-	                        			
-		                    			<li class="span-4 last"><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
-		                    			<li class="span-3" onclick="increaseFontSize()" ><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
-	                        			<li class="span-4 last" onclick="decreaseFontSize()" ><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> Compartir</li>
-
-
-		                    			<li></li>
-		                    			<li></li>
-		                    			<li></li>
-		                    			<li></li>
-		                    			
-		                    			
+		                    			<li class="span-3" onclick="decreaseFontSize(); return false" ><a href="" class="utilities-decrease-text" title="Decrementar el tamaño del texto">Reducir texto</a> Reducir texto</li>
+	                        			<li class="span-4 last"  onclick="javascript:window.print()" ><a href="#" class="utilities-print"title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
+		                    			<li class="span-3" onclick="increaseFontSize(); return false"><a href="#" class="utilities-increase-text"  title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
+	                        			<li class="span-4 last" onclick="javascript:sendbyemail('Título da nova', 'url da nova')"><a href="" class="utilities-send-by-email" title="Enviar por email a un amigo"><span>Enviar por correo</span></a> Enviar por correo</li>
 		                    			
 		                    		</ul>
 		                    	</div><!-- /utilities -->
@@ -493,6 +492,23 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $("#tabs").tabs();
+			$lock=false;
+			jQuery("div.share-actions").hover(
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeIn("fast");
+				}
+				$lock=false;
+			  },
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeOut("fast");
+				}
+				$lock=false;
+			  }
+			);
         });
     </script>
   </body>
