@@ -68,3 +68,17 @@ function change_rating(num,pk_rating,sufijo) {
 		}
 	}
 }
+
+
+vote_comment = function (ip, value, id) {
+   $('#vota'+id).html('<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+   
+   var url = '/article.php?action=vote&i='+ip+'&v='+value+'&a='+id;
+   
+   $.ajax({
+      url: url,
+      success: function(result) {
+         $('#vota'+id).html( result );
+      }
+   });
+}
