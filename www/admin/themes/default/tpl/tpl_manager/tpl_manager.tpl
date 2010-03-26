@@ -2,7 +2,8 @@
 
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
     
-<div id="menu-acciones-admin">        
+<div id="menu-acciones-admin">
+     <div style="float:left;"><h2>{$titulo_barra}</h2></div>
     <ul>
         <li>
 			<a href="#delete" onclick="{literal}if(confirm('¿Está seguro de querer eliminar las cachés seleccionadas?')){sendForm('delete');}return false;{/literal}" title="Eliminar la caché">

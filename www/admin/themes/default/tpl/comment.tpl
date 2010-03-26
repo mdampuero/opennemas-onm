@@ -15,7 +15,7 @@
        {*  <li>
                 <a href="comment.php?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
         </li>*}
-        {include file="menu_categorys.tpl" home="video.php?action=list"}
+        {include file="menu_categorys.tpl" home="comment.php?action=list"}
     </ul>
 
 <br />
@@ -194,9 +194,15 @@
 	</tr>
 
 	{sectionelse}
-	<tr>
-		<td align="center" colspan=10><br><br><p><h2><b>Ningun commentario guardado</b></h2></p><br><br></td>
-	</tr>
+             {if $category eq 'todos' }
+                 <tr>
+                        <td align="center" colspan=10><br><br><p><h2><b>Ningun commentario pendiente</b></h2></p><br><br></td>
+                </tr>
+             {else}
+                <tr>
+                        <td align="center" colspan=10><br><br><p><h2><b>Ningun commentario guardado</b></h2></p><br><br></td>
+                </tr>
+             {/if}
 	{/section}
  	<tr>
 	    <td colspan="8" align="center">{$paginacion->links}</td>

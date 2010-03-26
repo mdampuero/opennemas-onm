@@ -34,9 +34,9 @@
     <td valign="top" align="left"><!-- INICIO: Tabla contenedora -->
 
     <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
-    <tr>
+   {* <tr>
         <td class="barra_superior" style="height:50px;background-image:url(/admin/images/header_middle.png);">
             &nbsp;&nbsp;{$titulo_barra}</td>
-    </tr>
+    </tr> *}
     <tr>
         <td style="padding:10px;" align="left" valign="top">
