@@ -46,7 +46,7 @@
         </div>
     </div>
     {include file="widget_headlines_past.tpl"}
-      {include file="widget_ad_column.tpl" type='104'}
+      {include file="widget_ad_column.tpl" type='105'}
 
     <hr class="new-separator">
 
