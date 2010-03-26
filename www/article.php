@@ -45,12 +45,6 @@ $tpl = new Template(TEMPLATE_USER);
 
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
-/*********************************  CLASSIC.XORNAL.COM  **************************************/
-if ($_REQUEST["sid"]) {
-    Application::forward301('http://clasica.xornal.com/article.php?sid='.$_REQUEST["sid"]);
-}
-/*********************************  CLASSIC.XORNAL.COM  **************************************/
-
 
 /**************************************  SECURITY  *******************************************/
 //Is category initialized redirect the user to /
