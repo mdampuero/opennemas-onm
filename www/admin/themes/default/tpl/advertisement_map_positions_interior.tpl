@@ -5,7 +5,7 @@
     padding: 0;    
     position: relative;
     width: 240px;
-    height: 393px;
+    height: 548px;
 }
 
 #advertisement-mosaic-interior-frame {
@@ -23,19 +23,30 @@
 
 <div id="advertisement-mosaic-interior" style="display: none;">
     <div id="advertisement-mosaic-interior-frame"></div>
-    <img src="images/advertisement/positions-interior.jpg" width="240" height="393" border="0" usemap="#mapInterior" />
+    <img src="images/advertisement/positions-interior.jpg" width="240" height="548" border="0" usemap="#mapInterior" />
 </div>
 
 <map name="mapInterior">
-<!-- #$-:Image map file created by GIMP Image Map plug-in -->
-<!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
-<!-- #$-:Please do not edit lines starting with "#$" -->
-<!-- #$VERSION:2.3 -->
-<!-- #$AUTHOR:Tomás Vilariño -->
-<area shape="rect" coords="1,298,159,321" alt="Banner Noticia Interior" 
+
+<area shape="rect" coords="0,2,181,23" alt="Big Banner Superior Izquierdo (Int.)" title="Big Banner Superior Izquierdo (Int.)" 
     href="javascript:adPositionInterior.selectPosition(101);" />
-<area shape="rect" coords="162,103,237,183" alt="Banner Columna Interior 1"
+
+<area shape="rect" coords="183,2,238,23" alt="Banner Superior Derecho (Int.)" title="Banner Superior Derecho (Int.)"
     href="javascript:adPositionInterior.selectPosition(102);" />
-<area shape="rect" coords="162,275,238,357" alt="Banner Columna Interior 2"
+
+<area shape="rect" coords="160,94,232,153" alt="Banner Columna Derecha 1 (Int.)" title="Banner Columna Derecha 1 (Int.)"
     href="javascript:adPositionInterior.selectPosition(103);" />
+
+<area shape="rect" coords="6,323,154,341" alt="Robapágina (Int.)" title="Robapágina (Int.)"
+    href="javascript:adPositionInterior.selectPosition(104);" />
+
+<area shape="rect" coords="161,357,233,416" alt="Banner Columna Derecha 2 (Int.)" title="Banner Columna Derecha 2 (Int.)"
+    href="javascript:adPositionInterior.selectPosition(105);" />
+
+<area shape="rect" coords="3,505,180,521" alt="Big Banner Inferior Izquierdo (Int.)" title="Big Banner Inferior Izquierdo (Int.)"
+    href="javascript:adPositionInterior.selectPosition(106);" />
+
+<area shape="rect" coords="182,505,236,521" alt="Banner Inferior Derecho (Int.)" title="Banner Inferior Derecho (Int.)"
+    href="javascript:adPositionInterior.selectPosition(107);" />
+    
 </map>

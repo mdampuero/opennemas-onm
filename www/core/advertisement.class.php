@@ -21,41 +21,43 @@ class Advertisement extends Content
 {
 
     const ADVERTISEMENT_CATEGORY = 2;
-    // FIXME: replace with this array into template
+    // FIXME: modificado para versión demo
     public static $map = array(        
         /* Intersticial banners frontpages */
         50 => 'Banner Interticial en portadas',
         
         /* Frontpages banners < 100 */
         1 => 'Big banner superior izquierdo',
-        2 => 'Big banner superior derecho',
-        3 => 'Banner cabecera',
-        4 => 'Banner flotante derecho',
-        5 => 'Botón 1º en Columna',
-        6 => 'Banner lateral 1º derecho',
+        2 => 'Banner superior derecho',
         
-        7 => 'Separador horizontal',
+        3 => 'Botón Columna 1',
         
-        8 => 'Banner mini 1º derecho',
-        9 => 'Banner mini 2º derecho',
+        4 => 'Botón Columna 3',
         
-        10 => 'Banner inferior 1º izquierda',
-        11 => 'Banner inferior 2º izquierda',
+        5 => 'Separador horizontal',
         
-        12 => 'Banner inferior 1ª columna',
-        13 => 'Banner inferior 2ª columna',
+        6 => 'Mini 1º derecho',
+        7 => 'Mini 2º derecho',
         
-        14 => 'Botón 2º en columna',
-        15 => 'Banner lateral 2º derecho',
-        16 => 'Botón 3º en columna',                
+        8 => 'Botón Inferior Derecho',
+        
+        9 => 'Big Banner Inferior Izquierdo',        
+        10 => 'Banner Inferior Derecho',
+        
         
         /* Intersticial banners interior */
-        150 => 'Banner Interticial Interior',
+        150 => 'Banner Interticial (Int.)',
         
         /* Interior banners > 100 */
-        101 => 'Robapágina noticia interior',
-        102 => 'Banner lateral 1º noticia interior',
-        103 => 'Banner lateral 2º noticia interior',
+        101 => 'Big banner superior izquierdo (Int.)',
+        102 => 'Banner superior derecho (Int.)',
+        
+        103 => 'Banner Columna Derecha 1 (Int.)',
+        104 => 'Robapágina (Int.)',
+        105 => 'Banner Columna Derecha 2 (Int.)',
+        
+        106 => 'Big Banner Inferior Izquierdo (Int.)',        
+        107 => 'Banner Inferior Derecho (Int.)',
     );
 
     /**

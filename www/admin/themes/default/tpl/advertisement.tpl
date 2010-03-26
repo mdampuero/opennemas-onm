@@ -486,8 +486,8 @@ function testScript(frm)  {
         <ul id="tabs">            
             <li><a href="#publi-portada">Portada</a></li>
             <li><a href="#publi-interior">Interior</a></li>
-            <li><a href="#publi-opinion">Portada Opinión</a></li>
-            <li><a href="#publi-opinion-interior">Interior Opinión</a></li>
+            {* <li><a href="#publi-opinion">Portada Opinión</a></li>
+            <li><a href="#publi-opinion-interior">Interior Opinión</a></li> *}
         </ul>
 
         <div id="publi-portada" class="panel-ads">
@@ -498,13 +498,13 @@ function testScript(frm)  {
             {include file="advertisement_positions_interior.tpl"}
         </div>
         
-        <div id="publi-opinion" class="panel-ads">
+        {* <div id="publi-opinion" class="panel-ads">
             {include file="advertisement_positions_opinion.tpl"}
         </div>
         
         <div id="publi-opinion-interior" class="panel-ads">
             {include file="advertisement_positions_opinion_interior.tpl"}
-        </div>
+        </div> *}
 	</td>
     <td>&nbsp;</td>
 </tr>
@@ -522,13 +522,13 @@ Fabtabs.addMethods({
         this.show( elm );
         this.menu.without(elm).each(this.hide.bind(this));
         
-        if(['publi-opinion', 'publi-opinion-interior'].indexOf(id)==-1) {
+        /*if(['publi-opinion', 'publi-opinion-interior'].indexOf(id)==-1) {
             this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: 'none'});
             this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: ''});
         } else {
             this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: 'none'});
             this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: ''});
-        }
+        }*/
     },
     
     changePropertyTabs: function(tabSelector, style) {
@@ -541,8 +541,12 @@ Fabtabs.addMethods({
 		var elm = Event.findElement(ev, "a");
         var id = elm.getAttribute('href').gsub(/#(.*?)$/, '#{1}');
         
-		Event.stop(ev);        
-        if( $F('category') == '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1)) {
+		Event.stop(ev);
+        
+        this.show(elm);
+        this.menu.without(elm).each(this.hide.bind(this));
+        
+        /* if( $F('category') == '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1)) {
             this.show(elm);
             this.menu.without(elm).each(this.hide.bind(this));
         }
@@ -550,32 +554,32 @@ Fabtabs.addMethods({
         if( $F('category') != '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)==-1)) {
             this.show(elm);
             this.menu.without(elm).each(this.hide.bind(this));
-        }
+        }*/
 	}
 });
 
-$('category').observe('change', function() {
-    if(this.value == '4') {
-        $fabtabs.exhibit('publi-opinion');
-    } else {
-        $fabtabs.exhibit('publi-portada');        
-    }
-});
+//$('category').observe('change', function() {
+//    if(this.value == '4') {
+//        $fabtabs.exhibit('publi-opinion');
+//    } else {
+//        $fabtabs.exhibit('publi-portada');        
+//    }
+//});
 {/literal}
 document.observe('dom:loaded', function() {ldelim}
-{if $category ne '4'}
+{* if $category ne '4' *}
     {if $advertisement->type_advertisement lt 100}
         $fabtabs.exhibit('publi-portada');
     {else}
         $fabtabs.exhibit('publi-interior');    
     {/if}
-{else}
+{* else}
     {if $advertisement->type_advertisement ne 101 && $advertisement->type_advertisement ne 5}
         $fabtabs.exhibit('publi-opinion');
     {else}
         $fabtabs.exhibit('publi-opinion-interior');    
     {/if}
-{/if}
+{/if *}
 {rdelim});
 
 {literal}
