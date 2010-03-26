@@ -194,13 +194,14 @@ class Comment extends Content
     }
     
     function count_public_comments($id_content) {
-        $related = array();
+        $rs = 0;
         
-        if($id_content) {   
-            $sql = 'SELECT count(pk_comment) FROM comments, contents WHERE fk_content = ' .($id_content).
+        if( !empty($id_content) )
+        {   
+            $sql = 'SELECT count(pk_comment) FROM comments, contents WHERE comments.fk_content = ?' .
                 ' AND content_status=1 AND in_litter=0 AND pk_content=pk_comment';
             
-            $rs = $GLOBALS['application']->conn->GetOne($sql);                   
+            $rs = $GLOBALS['application']->conn->GetOne($sql, array($id_content));                   
         }
         
         return intval($rs);        
