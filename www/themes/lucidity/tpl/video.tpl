@@ -43,11 +43,29 @@
  
   {if !empty($video)} {literal}
   
-    <script type="text/javascript">
+      <script defer="defer" type="text/javascript">
         jQuery(document).ready(function(){
             $("#tabs").tabs();
             $('#tabs').height($('#video-content').height()+15);
             $('#').height($('#video-content').height()+15);
+            $lock=false;
+
+            jQuery("div.share-actions").hover(
+              function () {
+                    if (!$lock){
+                      $lock=true;
+                      jQuery(this).children("ul").fadeIn("fast");
+                    }
+                    $lock=false;
+              },
+              function () {
+                    if (!$lock){
+                      $lock=true;
+                      jQuery(this).children("ul").fadeOut("fast");
+                    }
+                    $lock=false;
+              }
+            );
         });
     </script>
     {/literal}

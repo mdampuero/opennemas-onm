@@ -33,7 +33,8 @@ Smarty template: frontpage.tpl
 
             <div id="main_content" class="single-article span-24">
                 <div class="in-big-title span-24">
-                    {if !empty($article->title_int)} <h1>{$article->title_int|clearslash}</h1>
+                    {if !empty($article->title_int)}
+                        <h1>{$article->title_int|clearslash}</h1>
                     {else}
                        <h1>{$article->title|clearslash}</h1>
                     {/if}
@@ -62,9 +63,9 @@ Smarty template: frontpage.tpl
                                         </div>
                                      {/if}
                                 </div>
-                                  {if !empty($relationed)}
-                                    <div style="width:180px;margin:10px;float:left;border:1px solid #333;">
-                                        Relacionadas:
+                                  {if !empty($relationed)}                                
+                                      <div class="related-news-embebed span-5">
+                                         <p class="title">Noticias relacionadas:</p>
                                          <ul>
                                             {section name=r loop=$relationed}
                                                 {if $relationed[r]->pk_article neq  $article->pk_article}

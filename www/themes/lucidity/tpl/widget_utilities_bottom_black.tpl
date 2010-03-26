@@ -4,10 +4,11 @@
 *}
 <div class="span-7 utilities-bottom vert-separator">
         <ul>
-            <li class="span-3"><a href="" class="utilities-decrease-text"  onclick="decreaseFontSize()" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a> Reducir texto</li>
-            <li class="span-4 last"><a href="" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
-            <li class="span-3" onclick="increaseFontSize()" ><a href="" class="utilities-increase-text"  onclick="increaseFontSize()" title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
-            <li class="span-4 last" onclick="decreaseFontSize()" ><a href="" class="utilities-share"  onclick="share()" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> Compartir</li>
-        </ul>
+              <li class="span-3" onclick="decreaseFontSize(); return false" ><a href="" class="utilities-decrease-text" title="Decrementar el tamaño del texto">Reducir texto</a> Reducir texto</li>
+              <li class="span-4 last"  onclick="javascript:window.print()" ><a href="#" class="utilities-print"title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
+              <li class="span-3" onclick="increaseFontSize(); return false"><a href="#" class="utilities-increase-text"  title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
+              <li class="span-4 last" onclick="javascript:sendbyemail('Título da nova', 'url da nova')"><a href="" class="utilities-send-by-email" title="Enviar por email a un amigo"><span>Enviar por correo</span></a> Enviar por correo</li>
+
+      </ul>
     </div><!-- /utilities -->
  
