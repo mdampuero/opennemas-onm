@@ -46,18 +46,18 @@ class Advertisement extends Content
         
         
         /* Intersticial banners interior */
-        150 => 'Banner Interticial (Int.)',
+        150 => '[I]Banner Interticial',
         
         /* Interior banners > 100 */
-        101 => 'Big banner superior izquierdo (Int.)',
-        102 => 'Banner superior derecho (Int.)',
+        101 => '[I]Big banner superior izquierdo',
+        102 => '[I]Banner superior derecho',
         
-        103 => 'Banner Columna Derecha 1 (Int.)',
-        104 => 'Robapágina (Int.)',
-        105 => 'Banner Columna Derecha 2 (Int.)',
+        103 => '[I]Banner Columna Derecha 1',
+        104 => '[I]Robapágina',
+        105 => '[I]Banner Columna Derecha 2',
         
-        106 => 'Big Banner Inferior Izquierdo (Int.)',        
-        107 => 'Banner Inferior Derecho (Int.)',
+        106 => '[I]Big Banner Inferior Izquierdo',        
+        107 => '[I]Banner Inferior Derecho',
     );
 
     /**
