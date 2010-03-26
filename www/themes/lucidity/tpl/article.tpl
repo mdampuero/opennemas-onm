@@ -124,6 +124,23 @@ Smarty template: frontpage.tpl
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 $("#tabs").tabs();
+                $lock=false;
+			jQuery("div.share-actions").hover(
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeIn("fast");
+				}
+				$lock=false;
+			  },
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeOut("fast");
+				}
+				$lock=false;
+			  }
+			);
             });
         </script>
     {/literal}
