@@ -12,6 +12,12 @@ Smarty template: article.tpl
  
 {include file="module_head.tpl"}
 
+    {* Cambiar color del menú segun la section *}
+    
+    {* publicidad interstitial interior *}
+    {insert name="intersticial" type="150"}
+
+
     {include file="widget_ad_top.tpl"}
 
     <div class="wrapper clearfix">
