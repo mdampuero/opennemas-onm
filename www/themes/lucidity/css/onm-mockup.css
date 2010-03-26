@@ -914,6 +914,9 @@ div#footer div.publi-footer{
     background:#ccc;
     margin-bottom:5px;
     background:#ccc;
+    margin-bottom:6px;
+    height:90px;
+    overflow:hidden;
 }
 div#footer hr.new-separator{ margin:0; padding:0; height:2px; }
 
