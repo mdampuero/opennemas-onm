@@ -734,6 +734,11 @@ div.tv-highlighter-big p{
     padding:5px;
     margin:0;
 }
+
+div.tv-highlighter-big a{
+    color: White;
+    font-family:Verdana;
+}
 div.tv-highlighter li{
     float:left;
     list-style:none;

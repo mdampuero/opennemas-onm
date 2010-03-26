@@ -7,7 +7,7 @@
  <div id="info-top" class="clearfix span-24">
 
     <div id="current-day">
-        19:35 del Jueves, 18 de Febrero de 2010
+         {insert name="time"} 
     </div>
 
      {include file="widget_weather.tpl"}
@@ -20,14 +20,14 @@
         {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
 
             <a href="/" title="Pulse aquí para ir a la portada de {$smarty.const.SITE_TITLE}">
-                    <img src="{$params.IMAGE_DIR}/main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
+                    <img  class="transparent-logo" src="{$params.IMAGE_DIR}/main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
                     <img src="{$params.IMAGE_DIR}/logo-sections/video.png" alt="Video" />
             </a>
 
         {else}
          <a href="/">
             {if ($category_name eq 'home')}
-                <img src="{$params.IMAGE_DIR}main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
+                <img  class="transparent-logo" src="{$params.IMAGE_DIR}main-logo.big.png" alt="{$smarty.const.SITE_TITLE}" />
             {else}
                 <img class="transparent-logo" alt="{$smarty.const.SITE_TITLE}" src="{$params.IMAGE_DIR}main-logo.small.png" >
                 {if !empty($category_data.logo)}

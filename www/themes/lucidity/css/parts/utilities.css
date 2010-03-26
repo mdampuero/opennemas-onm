@@ -59,7 +59,7 @@ div.utilities a, div.toolbar-bottom a{
 	display:inline-block;
 }
 
-div.video div.utilities-bottom a, div.share-actions a, div.toolbar-bottom a{
+div.video div.utilities-bottom a, div.video div.share-actions a, div.video div.toolbar-bottom a{
 	background-image:url(/themes/lucidity/images/utilities/mask-buttons-black.png);
 	background-color:#343534;
 }

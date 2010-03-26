@@ -25,8 +25,8 @@
                 {/if}
 
                 <p>
-                    {$video->title|clearslash|escape:'html'}<br/>
-                    <img src="{$params.IMAGE_DIR}stars.png" alt="" />
+                   <a href="{$video->permalink}"> {$video->title|clearslash|escape:'html'} </a><br/>
+                   
                 </p>
             </div>
         </div>
