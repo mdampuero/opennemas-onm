@@ -107,7 +107,7 @@ Smarty template: frontpage.tpl
                     {include file="article_last_column.tpl"}
                 </div>
             </div><!-- fin #main_content -->
-
+  
         </div><!-- fin .container -->
     </div><!-- fin .wrapper -->
 

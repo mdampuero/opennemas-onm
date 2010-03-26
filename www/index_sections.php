@@ -51,7 +51,7 @@ $styles='';
 foreach($allcategorys as $the_category) {
 
     if(empty($the_category->color)){
-        $the_category->color ='#B0113A';
+        $the_category->color ='#638F38';
     }
 
     $styles.= 'div.nw-big div.'.$the_category->name.', div.nw-big-img-lateral div.'.$the_category->name.'{
@@ -63,7 +63,7 @@ foreach($allcategorys as $the_category) {
             ';
 }
  if(empty($category_data['color'])){
-        $category_data['color'] ='#B0113A';
+        $category_data['color'] ='#638F38';
     }
 
     $styles.='#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{

@@ -283,8 +283,9 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     $tpl->assign('articles_home_express', $articles_home_express);
     
     /************************************ TITULARES DEL DIA  ************************************/
-    require_once ("module_other_headlines.php");
-
+    if ($_GET['category_name'] == 'home') {
+        require_once ("module_other_headlines.php");
+    }
     /************************************ TITULARES TENDENCIAS  ************************************/
     $titular_gente = $cm->find_by_category_name('Article','tendencias', 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1 AND  (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))', 'ORDER BY position ASC LIMIT 0 , 6');
 

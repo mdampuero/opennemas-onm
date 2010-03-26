@@ -123,8 +123,9 @@ Smarty template: frontpage.tpl
                         {include file="widget_video.tpl"}
                     </div>
                 </div>
-
-                {include file="module_other_headlines.tpl"}
+                {if $category_name eq 'home'}
+                    {include file="module_other_headlines.tpl"}
+                {/if}
             </div><!-- fin #main_content -->
 
         </div><!-- fin .container -->

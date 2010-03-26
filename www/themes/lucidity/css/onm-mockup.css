@@ -152,7 +152,7 @@ html[xmlns] .clearfix {
 */
 
 #main_menu{
-    background:#b0113a;
+    background:#638F38;
     margin:0;
     padding:0;
 }
@@ -254,7 +254,7 @@ div.lastest-news{
     height:20px
 }
 div.lastest-news strong{
-    color:#b0113a;
+    color:#638F38;
 }
 div.lastest-news ul{
     display:inline;
@@ -310,13 +310,13 @@ div.lastest-news ul li{
 }
 
 .nw-image {
-    
+    width:310px;
 }
 div.nw-category-name{
     margin:0;
     margin-bottom:5px;
     font-weight: bold;
-    color:#b0113a;
+    color:#638F38;
     padding:0 18px 0 0;
     text-transform: uppercase;
     display:block;
@@ -330,6 +330,7 @@ div.nw-category-name span{
     position:absolute;
     right:0;
     top:0;
+    margin-top:3px;
     background: url(/themes/lucidity/images/bullets/transparent.png) center right no-repeat;
 }
 
@@ -431,7 +432,7 @@ div.nw-just-image img.nw-image{
 
 div.more-news h4, div.more-promotions-from-diary h4{
     font-family:Times, Georgia;
-    color:#b0113a;
+    color:#638F38;
     font-size:1.6em;
     font-variant: small-caps;
     margin:0;
