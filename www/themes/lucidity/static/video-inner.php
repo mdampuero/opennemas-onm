@@ -398,9 +398,7 @@
     <div class="wrapper clearfix">
 
         <div class="container clearfix span-24">
-            <div id="footer" class="">
-
-            </div><!-- fin .footer -->
+            <?php require('footer.php'); ?>
 
         </div><!-- fin .container -->
 
