@@ -87,7 +87,8 @@ Smarty template: article.tpl
                             {include file="widget_utilities_bottom.tpl"}
 
                             <hr class="new-separator"/>
-
+                            {include file="widget_ad_robapagina.tpl"}
+                             <hr class="new-separator"/>
                             <div class="more-news-bottom-article">                                                          
                                 {if !empty($suggested)}
                                     <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
