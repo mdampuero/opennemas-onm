@@ -33,13 +33,14 @@ function smarty_insert_numComments($params, &$smarty) {
     $numComments = 0;
     if($params['where']=='pc'){
         $comment = new PC_Comment();
-        $comments = $comment->count_public_comments($params['id']);
-
-    }else{
+        
+    } else {
         $comment = new Comment();
-        $cm = new ContentManager();
-        $numComments = $comment->count_public_comments($params['id']);
+        
     }
-     
+    
+    $numComments = $comment->count_public_comments($params['id']);
+    
+    
     return $numComments;
 }

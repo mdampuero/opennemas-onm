@@ -71,6 +71,7 @@ div.pagination ul li{
 	display:inline;
 	background:#e6ebf1;
 	border:2px solid #d7dfe7;
+	margin-left: 0.4em;
 }
 div.pagination ul li.active{ color:#d45500; background:#da9046; border:2px solid #d45500}
 div.pagination ul li.next{ color:#829bb4; background:#d9e2eb; border:2px solid #829bb4}

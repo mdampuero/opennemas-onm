@@ -24,7 +24,7 @@ function smarty_insert_comments($params, &$smarty) {
         return;
     }
     
-    // Check it's clone article {{{
+    // Check if it's clone article {{{
     if(Article::isClone($params['id'])) {
         $params['id'] = Article::getOriginalPk($params['id']);
     }
@@ -42,10 +42,7 @@ function smarty_insert_comments($params, &$smarty) {
         $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments',"'".$params['id']."'");
         $smarty->assign('num_comments', count($comments));
         $smarty->assign('paginacion', $cm->pager);
-    }
-
-  
-    
+    }      
 
     $smarty->assign('comments', $comments);
     
