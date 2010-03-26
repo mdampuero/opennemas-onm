@@ -86,7 +86,7 @@ div#main_menu{
 }
 #main_menu ul li:hover, #main_menu ul li.active{
 	border:1px solid #444444;
-	border-bottom-size:0;
+	border-bottom:none;
 	background:none;
 }
 #main_search_form{
@@ -135,10 +135,10 @@ div.video-explanation h1{
 
 div.toolbar{
 	margin:5px 0;
-	background:none;
+	background:none !important;
 }
 div.vote-block{ font-family:Georgia; font-size:.95em}
-div.vote-block img{ vertical-align:center; }
+div.vote-block img{ vertical-align:middle; }
 
 /***********************************************************
     Comments re-definitions
@@ -322,4 +322,16 @@ div.form-comments .submit-button, div.form-comments a.show-commment-form{
     background:#1C1E1C;
     border-color:#1C1E1C;
     color:#6a6a6a;
+}
+
+.share-actions ul {
+	background:#373737; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
+	list-style:none !important; border:none !important;
+	}
+.share-actions li{
+	border:none !important;
+}
+.share-actions ul > li > a{
+	color:White !important;
+	font-family:Verdana;
 }

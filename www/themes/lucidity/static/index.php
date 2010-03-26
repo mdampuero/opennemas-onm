@@ -20,6 +20,9 @@
 		div.nw-category-name span{
 			background-color:Blue;
 		}
+		#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
+			background-color:#ffbc21;
+		}
 	</style>
     
   </head>
@@ -60,7 +63,7 @@
                 <div id="logo" class="clearfix">
 
                     <div id="logo-image"class="span-8">
-                        <a href="#"><img src="images/main-logo.big.png" alt="Crónica comarcal" /></a>
+                        <a href="#"><img src="images/main-logo.big.png" class="transparent-logo" alt="Crónica comarcal" /></a>
                     </div>
 
                     <div class="span-16">

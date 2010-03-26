@@ -143,9 +143,13 @@
 		                    	</div><!-- /vote-block -->
 		                    	
 		                    	<div class="utilities span-6 last">
-		                    		<ul>
-		                    			<li><img src="images/utilities/share-black.png" alt="Share" /></li>
-		                    		</ul>
+								  <div style="display: inline;" class="share-actions">
+									<a href="#" class="utilities-share" onclick="return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> 
+									<ul style="display:none;"> 
+									  <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li> 
+									  <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li> 
+									</ul> 
+								  </div> 
 		                    	</div><!-- /utilities -->
 		                    	
 		                    </div><!--fin toolbar -->
@@ -211,13 +215,13 @@
                     <div class="span-24 toolbar-bottom ">
                     	
                     	<div class="span-7 utilities-bottom vert-separator">
-                    		<ul>
-                    			<li class="span-3"><img src="images/utilities/share-black.png" alt="Share" /> Compartir</li>
-                    			<li class="span-4 last" onclick="increaseFontSize()" ><img src="images/utilities/increase-text-black.png" alt="Increase text" /> Ampliar el texto</li>
-                    			<li class="span-3"><img src="images/utilities/print-black.png" alt="Print" /> Imprimir</li>
-                    			<li class="span-4 last" onclick="decreaseFontSize()" ><img src="images/utilities/decrease-text-black.png" alt="Decrease text" /> Reducir el texto</li>
-
-                    		</ul>
+						  <ul>
+							  <li class="span-3" onclick="decreaseFontSize(); return false" ><a href="" class="utilities-decrease-text" title="Decrementar el tamaño del texto">Reducir texto</a> Reducir texto</li>
+							  <li class="span-4 last"  onclick="javascript:window.print()" ><a href="#" class="utilities-print"title="Imprimir"><span>Imprimir</span></a> Imprimir</li>
+							  <li class="span-3" onclick="increaseFontSize(); return false"><a href="#" class="utilities-increase-text"  title="Incrementar el tamaño del texto"><span>Incrementar el tamaño del texto</span></a> Ampliar texto</li>
+							  <li class="span-4 last" onclick="javascript:sendbyemail('Título da nova', 'url da nova')"><a href="" class="utilities-send-by-email" title="Enviar por email a un amigo"><span>Enviar por correo</span></a> Enviar por correo</li>
+							  
+						  </ul>
                     	</div><!-- /utilities -->
                     	
                     	<div class=" span-7">
@@ -406,12 +410,29 @@
     <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
     <script type="text/javascript" src="javascripts/functions.js"></script>
-    <script type="text/javascript">
+    <script defer type="text/javascript">
 
         jQuery(document).ready(function(){
             $("#tabs").tabs();
             $('#tabs').height($('#video-content').height()+15);
-            $('#').height($('#video-content').height()+15);
+			$lock=false;
+			
+			jQuery("div.share-actions").hover(
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeIn("fast");
+				}
+				$lock=false;
+			  },
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeOut("fast");
+				}
+				$lock=false;
+			  }
+			);
         });
     </script>
   </body>

@@ -463,7 +463,42 @@ div.more-news-section-links .first a{
     font-size: 1.6em;
 }
 
+/*
+    widget related news embebed into article
+*/
 
+div.related-news-embebed{
+	border:1px solid #ddd;
+	margin:5px 10px 5px 0;
+}
+div.related-news-embebed .title{
+	font-family:Verdana, Arial;
+	font-size:.9em;
+	background:#F2F1EF;
+	padding:5px;
+	border-bottom:1px solid #ddd
+}
+div.related-news-embebed ul{
+	padding:0;
+	margin:0 auto;
+	margin-bottom:20px;
+	width:90%;
+	line-height:.95em !important;
+}
+div.related-news-embebed ul li{
+	border-bottom:1px solid #ddd;
+	list-style:none;
+	
+	padding:3px 0;
+}
+div.related-news-embebed ul li.last{
+	border:none;
+}
+
+div.related-news-embebed a{
+	font-family:Verdana, Arial ;
+	font-size:.8em;
+}
 /*
     Widget more little news definition
 */
@@ -854,7 +889,7 @@ div#footer .developed-by{
     Actions
 ************************************************************/
 
-.share-actions { display:inline; position:relative;  padding:5px 0; }
+.share-actions { display:inline; position:relative;  padding:5px 0; z-index:9999; }
 .share-actions a { color:#333; text-decoration:none; margin:0; padding:0;}
 .share-actions img { vertical-align:middle; }
 .share-actions ul {

@@ -58,7 +58,10 @@ div.utilities a, div.toolbar-bottom a{
 	background-color:#009677; 
 	display:inline-block;
 }
-
+div.video div.utilities-bottom a, div.share-actions a, div.toolbar-bottom a{
+	background-image:url(../../images/utilities/mask-buttons-black.png);
+	background-color:#343534; 
+}
 div.utilities a span{ display:none; }
 
 a.utilities-send-by-email{ background-position: -1px -1px; }

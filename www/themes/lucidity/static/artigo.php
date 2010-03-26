@@ -207,7 +207,16 @@
 								<p>En cuanto a la polémica generada y a las versiones que se dieron al respecto, 
 								Xabi prefirió mantenerse al margen. "No quiero entrar en ese tema. Ví una 
 								versión que era la buena y otra que no", sentenció.</p>
-
+								<div class="related-news-embebed span-5">
+								  <p class="title">Noticias relacionadas:</p>
+								  <ul>
+									<li><a href="#">Un gran vendabal entra por Galicia y aplaca las ciudades</a></li>
+									<li><a href="#">El Real Madrid C.F. logra su 15ª Copa de Europa</a></li>
+									<li><a href="#">En un sólo día se registran tantas explosiones solares como todo el año 2009</a></li>
+									<li class="last"><a href="#">La moción de censura prospera en el Gobierno y espera ahora el  Senado</a></li>
+								  </ul>
+								</div><!--fin related-news-embebed -->
+								
 								<p>Destacó la calidad de Ribéry y de Higuaín Xabi se mostró satisfecho con la 
 								victoria ante Francia de la selección aunque ya está pensando en la Liga. 
 								"Tenemos que cambiar el chip. Estamos confiados tras el resultado contra Francia
@@ -476,16 +485,11 @@
     </div><!-- fin .wrapper -->
 
     <div class="wrapper clearfix">
-
-        <div class="container clearfix span-24">
-            <div id="footer" class="">
-
-            </div><!-- fin .footer -->
-
-        </div><!-- fin .container -->
-
-
+      <div class="container clearfix span-24">
+        <?php require('footer.php'); ?>
+      </div><!-- fin .container -->
     </div>
+	
     <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
     <script type="text/javascript" src="javascripts/functions.js"></script>
