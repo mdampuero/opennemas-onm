@@ -17,8 +17,8 @@
       <div style="display: inline;" class="share-actions">
             <a href="#" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a>
             <ul style="display:none;">
-              <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li>
-              <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li>
+              <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status={if !empty($article->title_int)}{$article->title_int|clearslash}{else}{$article->title|clearslash}{/if} {$smarty.const.SITE_URL}{$article->permalink}">Send to Twitter</a></li>
+              <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u={$smarty.const.SITE_URL}{$article->permalink}&t={if !empty($article->title_int)}{$article->title_int|clearslash}{else}{$article->title|clearslash}{/if}">Share on Facebook</a></li>
             </ul>
       </div>
     </li>
