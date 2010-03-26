@@ -12,7 +12,7 @@
             
                 {foreach key=k item=v from=$categories_data} 
                      {if !empty($titulares_cat[$k])}
-                        {include file="widget_more_news.tpl" category_data="$v" index="$k"}
+                        {include file="widget_more_news.tpl" category_hdata="$v" index="$k"}
                         <hr class="more-news-inner-separator" />
                     {/if}
                 {/foreach}

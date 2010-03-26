@@ -5,13 +5,13 @@
     
 <div class="more-news-section">
     <ul class="more-news-section-sectionlist clearfix">
-        <li class="first"><strong><a href="/seccion/{$category_data.name}/" title="Sección:{$category_data.title}">{$category_data.title}</strong>:</a></li>
-         {if !empty($category_data.subcategories)}
-             {foreach name=s key=k item=sub from=$category_data.subcategories}
+        <li class="first"><strong><a href="/seccion/{$category_hdata.name}/" title="Sección:{$category_hdata.title}">{$category_hdata.title}</strong>:</a></li>
+         {if !empty($category_hdata.subcategories)}
+             {foreach name=s key=c item=subcat from=$category_hdata.subcategories}
                 {if $smarty.foreach.s.last}
-                    <li class="last"><a href="/seccion/{$category_data.name}/{$k}/" title="Seccion:{$sub}">{$sub}</a></li>
+                    <li class="last"><a href="/seccion/{$category_hdata.name}/{$c}/" title="Seccion:{$subcat}">{$subcat}</a></li>
                 {else}
-                    <li ><a href="/seccion/{$category_data.name}/{$k}/" title="Seccion:{$sub}">{$sub}</a></li>
+                    <li ><a href="/seccion/{$category_hdata.name}/{$c}/" title="Seccion:{$subcat}">{$subcat}</a></li>
                 {/if}
              {/foreach}
         {/if}
