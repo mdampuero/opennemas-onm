@@ -30,7 +30,34 @@
             <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
             <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
            
-            
+        {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME) }
+            <title>{$gallery->title|clearslash|default:''}  Album   {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
+
+
+            <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">
+            <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection">
+            <link rel="stylesheet" href="{$params.CSS_DIR}parts/utilities.css" type="text/css" media="screen,projection">
+
+            <link rel="stylesheet" href="{$params.CSS_DIR}gallerific/galleriffic-3.css" type="text/css" />
+            <link rel="stylesheet" href="{$params.CSS_DIR}gallerific/black.css" type="text/css" />
+            <link rel="stylesheet" href="{$params.CSS_DIR}gallery.css" type="text/css" media="screen,projection">
+            {literal}
+                <style type="text/css">
+                  #main_menu, .transparent-logo {
+                    background-color:#ffbc21;
+                  }
+                  div.toolbar-bottom a, div.utilities a{
+                    background-color:#373737;
+                  }
+                </style>            
+                <script type="text/javascript">
+                    document.write('<style>.noscript { display: none; }</style>');
+                </script>
+            {/literal}
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
+            <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
+            <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
+
 
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
             <title>{$video->title|clearslash|default:''}  Videos - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>

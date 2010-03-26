@@ -68,6 +68,7 @@
 
     #Album
     #/album/2008/12/08/foto/200812081741363340.html
+    RewriteRule ^album/$ gallery.php?action=foto [L,NC]
     RewriteRule ^album/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ gallery.php?action=$4&id_album=$5 [L,NC]
 
     #Video

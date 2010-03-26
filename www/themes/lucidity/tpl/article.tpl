@@ -7,16 +7,10 @@ OpenNeMas project
 
 @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
 
-Smarty template: frontpage.tpl
+Smarty template: article.tpl
 *}
-
-
-
+ 
 {include file="module_head.tpl"}
-
-
-    {* Cambiar color del menú segun la section *}
-
 
     {include file="widget_ad_top.tpl"}
 

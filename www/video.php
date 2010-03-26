@@ -120,8 +120,8 @@ if( isset($_REQUEST['action']) ) {
             	$videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');			            	            	          
             	$thisvideo = array_shift($videos);  //Extrae el primero
             }
-            $thisvideo->category_name = $thisvideo->loadCategoryName($video->id);
-            $thisvideo->category_title = $thisvideo->loadCategoryTitle($video->id);
+            $thisvideo->category_name = $thisvideo->loadCategoryName($thisvideo->id);
+            $thisvideo->category_title = $thisvideo->loadCategoryTitle($thisvideo->id);
  
             foreach($videos as $video){
                 if($video->author_name =='vimeo'){
