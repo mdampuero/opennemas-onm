@@ -61,9 +61,9 @@ if( isset($_REQUEST['action']) ) {
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
-
-//            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
-            list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],3, $_REQUEST['category']);
+var_dump($category_name);var_dump($category);
+            $videos = $cm->find_by_category_name('Video',$category_name, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+       //     list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],3, $category);
             foreach($videos as $video){
             //$videos_authors[] = new Author($video->fk_user);
             //miramos el fuente youtube o vimeo
@@ -82,7 +82,7 @@ if( isset($_REQUEST['action']) ) {
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
            
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 6');
+            $others_videos = $cm->find('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` IS NOT  '.$category.'', 'ORDER BY created DESC LIMIT 0, 6');
             foreach($others_videos as $video){
             //$videos_authors[] = new Author($video->fk_user);ç
             //miramos el fuente youtube o vimeo
