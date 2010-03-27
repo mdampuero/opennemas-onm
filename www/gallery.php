@@ -59,6 +59,7 @@ if( isset($_REQUEST['action']) ) {
             $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisvideo->id);
             $_albumArray = $thisalbum->get_album($thisalbum->id);
              $i=0;
+             var_dump($thisalbum);
              foreach($_albumArray as $ph){
                       $albumPhotos[$i]['photo'] = new Photo($ph[0]);
                       $albumPhotos[$i]['description']=$ph[2];
@@ -67,6 +68,7 @@ if( isset($_REQUEST['action']) ) {
                     }
                     $tpl->assign('album', $thisalbum);
             $tpl->assign('albumPhotos', $albumPhotos);
+            var_dump($albumPhotos);
             //FIXED: check if there is the album 'id_album' otherwise exit()
             //SECURITY REASONS
       /*      if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
