@@ -51,7 +51,7 @@
     <hr class="new-separator"/>
     {include file="widget_ad_column.tpl" type='105'}
 
-    <hr class="new-separator">
+    <hr class="new-separator" />
 
 
 

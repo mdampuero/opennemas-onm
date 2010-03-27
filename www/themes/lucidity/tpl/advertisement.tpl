@@ -7,7 +7,7 @@
 <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
 
 {* Intersticial banner dependencies *}
-<link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection">
+<link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection" />
 <script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
 <script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
 

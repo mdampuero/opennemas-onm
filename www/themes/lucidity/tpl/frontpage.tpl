@@ -88,14 +88,14 @@ Smarty template: frontpage.tpl
                     </div>
 
                 </div>
-                <hr class="new-separator">
+                <hr class="new-separator" />
                 <div id="quick-news" class="span-24">
 
                     {include file="widget_social.tpl"}
 
                 </div>
 
-                <hr class="news-separator">
+                <hr class="news-separator" />
 
                 <div class="span-24">
                     <div class="span-12 layout-column">

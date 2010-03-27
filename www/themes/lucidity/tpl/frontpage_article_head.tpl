@@ -5,7 +5,7 @@
 *}
 <div class="nw-big">
     {if !empty($item->img1_path)}
-         <img  class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash} title="{$item->img_footer|clearslash}"/>
+         <img  class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash}" title="{$item->img_footer|clearslash}" />
     {/if}
 
     {if $category_name eq 'home'}

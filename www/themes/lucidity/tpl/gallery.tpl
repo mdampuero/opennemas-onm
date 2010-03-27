@@ -25,7 +25,7 @@ Smarty template: gallery.tpl
 
         </div>
 
-    <div id="main_content" class="single-article span-24">
+    <div id="main_content" class="video single-article span-24">
         <div class="content-gallery span-24 clearfix">
             <div class="wrapper-gallery span-22">
                     <!-- Start Advanced Gallery Html Containers -->
@@ -61,7 +61,7 @@ Smarty template: gallery.tpl
 
                 {include file="widget_utilities_bottom_black.tpl"}
 
-                <div class="vote-block span-5">
+                <div class="vote-block span-4">
                   <div class="vote">
 			{include file="widget_ratings.tpl"}
                   </div>

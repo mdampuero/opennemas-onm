@@ -49,7 +49,6 @@
              <b>Videos</b>
         </div>
         <div class="tv-highlighter-minis">
-
                 {section name=i loop=$videos}
                     {if $smarty.section.i.first}
                         <div   class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
@@ -81,9 +80,22 @@
                 {$videos[0]->title|clearslash|escape:'html'}
                </a>
             </p>
-          </div>
-        
-        
+            
+            <ul class="div.tv-highlighter">
+            {section name=i loop=$videos}
+                {if $smarty.section.i.first}
+                    <li class="first">
+                        <a href="#"><img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
+                    </li>
+                {elseif $smarty.section.i.last}
+                    <li class="last">
+                        <a href="#"><img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
+                    </li>
+                {else}
+                    <li class="first">
+                        <a href="#"><img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
+                    </li>
+                {/if}
 
     </div>
  

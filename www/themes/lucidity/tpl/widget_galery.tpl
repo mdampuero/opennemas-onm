@@ -9,7 +9,8 @@
        <b>Fotogalerias</b>
     </div>
     <div class="flickr-highlighter-big clearfix">
-          {section name=i loop=$lastAlbum }
+          <ul>
+            {section name=i loop=$lastAlbum }
                 {if $smarty.section.i.first}
                     <li class="first"><a href="{$lastAlbum[i]->permalink}" title="{$lastAlbum[i]->title|clearslash|escape:'html'}" >
                         <img alt="{$lastAlbum[i]->title|clearslash|escape:'html'}" title="{$lastAlbum[i]->title|clearslash|escape:'html'}" src="{$smarty.const.MEDIA_IMG_PATH_WEB}album/crops/{$lastAlbum[i]->id}.jpg" />
