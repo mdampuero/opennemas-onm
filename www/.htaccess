@@ -48,6 +48,7 @@
 
     # SECCIONES
     RewriteRule ^seccion/([a-z0-9\-]+)/?$ index.php?category_name=$1 [L,NC]
+    RewriteRule ^seccion/xgn2010/?$ index.php?category_name=xgn2010 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ index.php?category_name=$1&page=$2 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ index.php?category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
