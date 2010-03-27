@@ -19,7 +19,7 @@
                          <div class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                     {/if}
                     {if $videos[i]->author_name eq 'youtube'}
-                         <img width="60" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
+                         <img alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
                     {else}
                           <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
                     {/if}
@@ -50,6 +50,7 @@
                 <p class="span-6"> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
                         {$videos[0]->title|clearslash|escape:'html'} </a>
                 </p>
+                <br />
                  <ul class="div.tv-highlighter">
                     {section name=i loop=$videos}
                         {if $smarty.section.i.first}
