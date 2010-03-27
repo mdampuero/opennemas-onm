@@ -62,7 +62,7 @@ if( isset($_REQUEST['action']) ) {
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 var_dump($actual_category);
 
-            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+            $videos = $cm->find_by_category_name('Video',$actual_category, ' NULL ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
 var_dump($videos);
 foreach($videos as $video){
             //$videos_authors[] = new Author($video->fk_user);ç
