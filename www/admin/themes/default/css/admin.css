@@ -2,11 +2,22 @@
 body {
 	font-size:12px;
 	font-family:Arial, Helvetica, sans-serif;
-	background-color: #FFFFFF;
+	background-color: #f9f9f9;
+}
+html{
+	background-color: #f9f9f9;
 }
 
 h2 {
+	color:#464646;
+	font-size:1.5em;
 	vertical-align:bottom;
+	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	font-style:italic;
+	font-weight:normal;
+	margin:0;
+	padding:14px 15px 3px 0;
+	text-shadow:0 1px 0 #FFFFFF;
 }
 
 td, th {
@@ -63,15 +74,22 @@ div a:hover {
 }
 
 input[type='text'] {
-	font-size:12px;
+	font-size:1em;
 	font-family:Arial, Helvetica, sans-serif;
 	border:1px solid #CCCCCC;
+	padding:5px;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
+	margin-right:5px;
+	vertical-align:middle
 }
 
 input[type='password'] {
-	font-size:12px;
+	font-size:1em;
 	font-family:Arial, Helvetica, sans-serif;
 	border:1px solid #CCCCCC;
+	-moz-border-radius: 6px 6px 6px 6px;
+	-webkit-border-radius: 6px 6px 6px 6px;
 }
 
 
@@ -108,27 +126,39 @@ form {
 /* Estilos personalizados */
 /* header block */
 table.adminheading {
+	margin:0 auto;
+	margin-top:3px;
 	background-color: #FFF;
-	font-family : Arial, Helvetica, sans-serif;
-	border: 0px;
+	font-family:Georgia !important;
 	width: 100%;
 	text-align: left;
 	height: 30px;
 	width: 100%;
 	padding-left: 30px;
 	font-size: 28px;
-	border-bottom: 2px solid #000;
+	border: 1px solid #ccc;
+	
+	-moz-border-radius: 6px 6px 0 0;
+	-webkit-border-radius: 6px 6px 0 0;
+	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
+text-shadow:0 1px 0 #FFFFFF;
 }
-
+table.adminheading img{
+	vertical-align:middle;
+}
 table.adminlist {
 	background-color: #FFFFFF;
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #ddd;
+	border-top:none;
 	border-spacing: 0px;
 	width: 100%;
-	border-collapse: collapse;
-        border-spacing: 0;
+    border-spacing: 0;
+	border: 1px solid #ccc;
+	
+	-moz-border-radius: 0 0 6px 6px;
+	-webkit-border-radius: 0 0 6px 6px;
 }
 
 table.adminlist th {
@@ -140,7 +170,10 @@ table.adminlist th {
 	color: #000;
         padding: 1px;
 }
-
+table.adminlist img{
+	vertical-align:middle;
+	height:16px;
+}
 table.adminlist tr.row0 {
 	background-color: #f5f5f5;
 }
@@ -203,6 +236,9 @@ td.barra_tareas {
 	font-size:12px;
 	font-family:Arial, Helvetica, sans-serif;
 	border:1px solid #CCCCCC;
+}
+#frontpages{
+	
 }
 
 .boton {
@@ -296,29 +332,29 @@ div.iframecont {
 a.go_home {
 	background-image: url("../images/home_no.png");
 	display: block;
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 }
 
 a.go_home:hover {
 	text-decoration:none;
 	background-image: url("../images/gohome.png");
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 }
 
 a.no_home {
 	background-image: url("../images/gohome.png");
 	display: block;
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 }
 
 a.no_home:hover {
 	text-decoration:none;
 	background-image: url("../images/home_no.png");
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 }
 
 a.no_suggest {
@@ -331,8 +367,8 @@ a.no_suggest {
 a.no_suggest:hover {
 	text-decoration:none;
 	background-image: url("../images/home_no.png");
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 }
 
 
@@ -397,10 +433,10 @@ a.unpublishing:hover {
 
 
 #warnings-validation {
-	font-weight: bold;
+	text-transform:capitalize;
 	font-size: 16px;
-	color: #996633;
 	padding: 2px 10px;
+	margin:5px 0;
 }
 
 #warnings-validation a {
@@ -422,4 +458,52 @@ a.unpublishing:hover {
 
 .scheduled_R {
 	background-color: #FDD !important;
+}
+
+.rot0 {
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	rotation: 0deg;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+}
+.rot90 {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	rotation: 90deg;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
+.rot180 {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	rotation: 180deg;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+.rot270 {
+	-webkit-transform: rotate(270deg);
+	-moz-transform: rotate(270deg);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	height:40px !important;
+	text-align:left !important;
+	width:10px !important;
+	color:#666 !important;
+	font-size:.85em !important;
+}
+#boton_subir{
+	-moz-border-radius:10px 10px 10px 10px;
+	background-color:#bbb;
+	border:1px solid #b3b3b3;
+	color:#333;
+	float:left;
+	margin-left:0;
+	margin-bottom:16px;
+	padding:5px 8px;
+	text-decoration:none;
+	text-shadow:0 0 3px white;
+	float:right;
+}
+#boton_subir:hover{
+	background-color:#aaa;
+}
+#boton_subir img{
+	vertical-align:middle;
 }

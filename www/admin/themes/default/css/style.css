@@ -1,7 +1,7 @@
 .panel {
 	clear: both;
 	display: none;
-	border: 2px solid #CCC;
+	border: 1px solid #CCC;
 	padding: 1em;
 	width: 800px;
 	margin-bottom: 10px;
@@ -41,13 +41,19 @@
 	padding: 5px 8px;
 	margin-left: 0px;
 	margin-right: 6px;
-	background-color: #F2F2F2;
-	text-decoration: none;
-	color: #999999;
+	border: 1px solid #ccc;
+	border-bottom:none;
+	
+	-moz-border-radius: 6px 6px 0 0;
+	-webkit-border-radius: 6px 6px 0 0;
+	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
+	text-shadow:0 1px 0 #FFFFFF;
+	text-decoration:underline !important; 
 }
 
 #tabs a.active-tab {
-	/*background-color: #CCC;
+	background-color: White !important;
+	/*
 	border-top: 2px solid #999;
 	padding-top: 3px;
 	color: #000;*/
@@ -127,12 +133,18 @@
 }
 
 
+
 /* BEGIN: .tabs2 added by vifito ********************** */
 .tabs2 {
 	list-style: none;
 	margin-left: 0;
 	padding-left: 0;
-	border: 0 solid #fff;
+	border: 0 solid #ccc;
+}
+
+.tabs2 a:hover{
+	background:#ccc !important;
+	color:Black;
 }
 
 .tabs2 li {
@@ -147,13 +159,13 @@
 	padding: 5px 8px;
 	margin-left: 0px;
 	margin-right: 6px;
-	background-color: #F2F2F2;
+	background-color: #e1e1e1;
 	text-decoration: none;
-	color: #999999;
+	color: #888;
 	border:1px solid #F2F2F2;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
-	text-shadow: white 0px 0px 3px;
+	text-shadow: White 1px 1px 0px;
 }
 
 .tabs2 a.active-tab {
