@@ -28,15 +28,17 @@
                 {/section}            
         </div>
         <div class="youtube-highlighter-big clearfix">
-            <object width="330" height="220">
-                <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
-                <param value="true" name="allowFullScreen" />
-                <param value="always" name="allowscriptaccess">
-                <embed width="330" height="220" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
-            </object>
+            <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                <object width="330" height="220">
+                    <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
+                    <param value="true" name="allowFullScreen" />
+                    <param value="always" name="allowscriptaccess">
+                    <embed width="330" height="220" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
+                </object>
+            </a>
         </div>
-        <p> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}"></a>
-                {$videos[0]->title|clearslash|escape:'html'}<br/>
+        <p> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                {$videos[0]->title|clearslash|escape:'html'} </a>
         </p>
     </div>
    
@@ -67,15 +69,17 @@
 
          </div>
         <div class="tv-highlighter-big clearfix">
+            <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
             <object width="330" height="220">
                 <param name="allowfullscreen" value="true" />
                 <param name="allowscriptaccess" value="always" />
                 <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
                 <embed src="http://vimeo.com/moogaloop.swf?clip_id={$video->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="330" height="220"></embed>
             </object>
-            <p> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}"></a>
-                {$videos[0]->title|clearslash|escape:'html'}<br/>
-               
+            </a>
+            <p> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                {$videos[0]->title|clearslash|escape:'html'}
+               </a>
             </p>
           </div>
         

@@ -27,7 +27,7 @@
             {/section}        
     </div>
     <div class="flickr-highlighter-footer">
-        <a href="{$lastAlbum[i]->permalink}" title="{$lastAlbum[i]->title|clearslash|escape:'html'}" >
+        <a href="{$lastAlbum[0]->permalink}" title="{$lastAlbum[0]->title|clearslash|escape:'html'}" >
             <img alt="{$lastAlbum[0]->title|clearslash|escape:'html'}" title="{$lastAlbum[0]->title|clearslash|escape:'html'}" src="{$smarty.const.MEDIA_IMG_PATH_WEB}album/crops/{$lastAlbum[0]->id}.jpg" />
         </a>
     </div>
