@@ -29,11 +29,11 @@
         <div class="tv-highlighter-big span-8 clearfix">
             {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
-                   <object width="330" height="220">
+                   <object width="320" height="220">
                         <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
                         <param value="true" name="allowFullScreen" />
                         <param value="always" name="allowscriptaccess">
-                        <embed width="330" height="220" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
+                        <embed width="320" height="220" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
                     </object> 
                 </a>
              {else}
