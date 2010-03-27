@@ -27,7 +27,7 @@ Smarty template: gallery.tpl
 
     <div id="main_content" class="video single-article span-24">
         <div class="content-gallery span-24 clearfix">
-            <div class="wrapper-gallery span-22">
+             <div class="wrapper-gallery span-22">
                     <!-- Start Advanced Gallery Html Containers -->
                     <div id="gallery" class="content span-14">
                         <div id="controls" class="controls"></div>
@@ -46,47 +46,44 @@ Smarty template: gallery.tpl
                         </ul>
                     </div>
                     <!-- End Advanced Gallery Html Containers -->
-                </div>
-                
-            
-
-
-
+             </div>               
 
             <div class="wrapper-gallery-utilities">
 
-              <hr class="new-separator"/>
+                <hr class="new-separator"/>
 
-              <div class="span-16 toolbar-bottom">
+                <div class="span-8  vert-separator toolbar-bottom ">
 
-                {include file="widget_utilities_bottom_black.tpl"}
-
-                <div class="vote-block span-4">
-                  <div class="vote">
-			{include file="widget_ratings.tpl"}
+                    {include file="widget_utilities_bottom_black.tpl"}
+                </div><!--fin toolbar-bottom -->
+                <div class="vote-block  vert-separator span-12">
+                   <div class="vote">
+                        {include file="widget_ratings.tpl"}
                   </div>
-                </div><!-- /utilities -->
-                <div class=" span-3 last">
+                </div>
+                <div class=" span-4 last">
+                     
+                </div>
 
-                </div><!-- /utilities -->
 
-              </div><!--fin toolbar-bottom -->
+               
 
-              <hr class="new-separator"/>
+                <hr class="new-separator"/>
             </div>
 
 
-          </div><!-- fin content-gallery -->
+        </div><!-- fin content-gallery -->
 
-          <div class="span-24">
+        <div class="span-24">
             <div class="layout-column first-column span-16">
               <div class="border-dotted">
           
                 {include file="module_comments.tpl" content=$album}
               </div>
             </div>
-           {include file="widget_headlines_past.tpl"}
-
+            <div class="layout-column last span-8">
+                {include file="widget_headlines_past.tpl"}
+            </div>
           </div><!-- fin #span-24-->
         </div><!-- fin #main_content -->
 
