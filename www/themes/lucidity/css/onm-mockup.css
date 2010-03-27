@@ -93,6 +93,9 @@ html[xmlns] .clearfix {
    margin-bottom:15px
 }
 
+div.video .publi_310{
+	background:#333;
+}
 .publi_lateral{
    background:#ccc;
    display:block;
@@ -104,6 +107,9 @@ html[xmlns] .clearfix {
 .publi_310 img{
     border:5px solid White;
     margin:08px;
+}
+div.video .publi_310 img{
+	border-color:#222;
 }
 
 /***********************************************************
@@ -880,6 +886,17 @@ div.widget-lastest-tab .ui-tabs-nav a{
 div.widget-lastest-tab .ui-tabs-nav{
     border:none !important;
     background: #f3f3f3 !important;
+}
+div.video .ui-tabs-nav li a{
+	background-color:#333 !important;
+}
+div.video .ui-tabs-nav li.ui-tabs-selected a,
+div.video .ui-tabs-nav li.ui-state-active a{
+	background-color:#1c1e1c !important;
+}
+div.video .ui-tabs-nav li{
+	border:1px solid #373737 !important;
+	border-bottom:none !important;
 }
 div.widget-lastest-tab .ui-tabs-default{
     background-color:White !important;
