@@ -19,9 +19,9 @@
                          <div class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                     {/if}
                     {if $videos[i]->author_name eq 'youtube'}
-                         <img width="100" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
+                         <img style="width:90px;" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
                     {else}
-                          <img width="100" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                          <img style="width:90px;"  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
                     {/if}
                         </a></div>
                 {/section}
@@ -51,7 +51,7 @@
                         {$videos[0]->title|clearslash|escape:'html'} </a>
                 </p>
                 <br />
-                 <ul class="div.tv-highlighter">
+                 <ul class="div.tv-highlighter" style="clear:both;">
                     {section name=i loop=$videos}
                         {if $smarty.section.i.first}
                             <li class="first">
