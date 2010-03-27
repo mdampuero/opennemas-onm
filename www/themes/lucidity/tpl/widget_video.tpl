@@ -29,12 +29,12 @@
         <div class="tv-highlighter-big clearfix">
             {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
-                   <!-- <object width="330" height="220">
+                   <object width="330" height="220">
                         <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
                         <param value="true" name="allowFullScreen" />
                         <param value="always" name="allowscriptaccess">
                         <embed width="330" height="220" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
-                    </object>-->
+                    </object> 
                 </a>
              {else}
               <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
@@ -59,11 +59,11 @@
                             <li class="last">
 
                         {else}
-                            <li class="first">
+                            <li class="">
                          {/if}
                             <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                              {if $videos[i]->author_name eq 'youtube'}
-                                    <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
+                                   <img width="60" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
                                {else}
                                   <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
                             {/if}  
