@@ -26,6 +26,8 @@ div.loader {
 }
 div.slideshow img {
 	border-color: #333;
+        max-width:540px;
+        max-height:500px;
 }
 ul.thumbs li.selected a.thumb {
 	background: #fff;

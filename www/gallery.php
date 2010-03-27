@@ -35,7 +35,7 @@ require_once ("index_sections.php");
 
 //Obtenemos los articulos
 $cm = new ContentManager();
-
+ 
 
 /**************************************  PHOTOS - VIDEOS  ***********************************************/
 
@@ -44,15 +44,17 @@ if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
 
 	case 'foto':
-            
+        
             if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])){
 		$albums = $cm->find('Album', 'available=1 and pk_content !='.$_REQUEST['id'], 'ORDER BY created DESC LIMIT 0 , 5');
-                $thisalbum = new Album( $_REQUEST['id'] );
+                $thisalbum = new Album( $_REQUEST['id_album'] );
+
             } else {
             	$albums = $cm->find('Album', 'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
             	$thisalbum = array_shift($albums);  //Extrae el primero
                 $_REQUEST['id_album']=$thisalbum->id;
             }
+
             $thisalbum->category_name = $thisalbum->loadCategoryName($thisvideo->id);
             $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisvideo->id);
             $_albumArray = $thisalbum->get_album($thisalbum->id);
