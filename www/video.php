@@ -60,12 +60,11 @@ if( isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-var_dump($actual_category);
 
-            $videos = $cm->find_by_category_name('Video',$actual_category, ' NULL ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
-var_dump($videos);
-foreach($videos as $video){
-            //$videos_authors[] = new Author($video->fk_user);ç
+
+            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+            foreach($videos as $video){
+            //$videos_authors[] = new Author($video->fk_user);
             //miramos el fuente youtube o vimeo
                 if($video->author_name =='vimeo'){
                     $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
