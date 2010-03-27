@@ -26,7 +26,7 @@
                         </a></div>
                 {/section}
         </div>
-        <div class="tv-highlighter-big clearfix">
+        <div class="tv-highlighter-big span-8 clearfix">
             {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
                    <object width="330" height="220">
@@ -38,7 +38,7 @@
                 </a>
              {else}
               <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
-                <object width="330" height="220">
+                <object width="320" height="220">
                     <param name="allowfullscreen" value="true" />
                     <param name="allowscriptaccess" value="always" />
                     <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id={$videos[0]->videoid}&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
