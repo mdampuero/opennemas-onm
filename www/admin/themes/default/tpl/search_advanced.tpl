@@ -7,17 +7,22 @@
     {if !isset($smarty.request.action) ||
         $smarty.request.action eq "load"}
 
-        <table class="adminheading" style="margin:0 auto; float:none; width:50%">
+        <table class="adminheading" style="margin:0 auto; margin-top:30px; float:none; width:70%">
             <tr>
                 <th nowrap>Busqueda Avanzada</th>
             </tr>
         </table>       
-        <table class="adminlist" style="margin:0 auto; float:none; width:50%">
+        <table class="adminlist" style="margin:0 auto; float:none; width:70%">
+           
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="25%">
-
+                <td colspan="2" style="padding:20px;" nowrap="nowrap" colspan='3'>
+                    <label for="title" >Busqueda en el catálogo de información:</label><br/><br/>
+                <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                        class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
                 </td>
-                <td style="padding:4px;vertical-align:middle" nowrap="nowrap" width="50%" colspan='3'>
+            </tr>
+            <tr>
+                <td style="padding:20px; padding-top:0; vertical-align:middle" nowrap="nowrap">
                     {foreach name=contentTypes item=type from=$arrayTypes}
                       {if $type[0] != 5 && $type[0] != 10 }
                         {if $type[0] == 1 || $type[0] == 4 }
@@ -25,23 +30,14 @@
                         {else}
                             <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center"/>{$type[2]|capitalize:true}
                         {/if}
-                        {/if}
+                {/if}
                     {/foreach}
                 </td>
             </tr>
-            <tr>
-                <td colspan="2"style="padding:4px;" nowrap="nowrap" width="70%" colspan='3'>
-                    <label for="title" >Busqueda en el catálogo de información:</label><brd              <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
-                        class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
-                </td>
-            </tr>
-            <tr><td colspan="2"><br />
-
-            </td></tr>
         </table>
         
     {elseif $smarty.request.action eq "search"}
-        <div>
+        <div style="margin:20px auto; width:70%">
             <table class="adminheading">
                 <tr>
                     <th nowrap>Busqueda Avanzada</th>
@@ -58,7 +54,7 @@
                 </tr>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;" width="25%">
-                        <label for="title" >Busqueda en Xornal de Galicia:</label>
+                        <label for="title" >Buscar en el cátalogo:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="70%" colspan='3'>
                         <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
@@ -92,9 +88,9 @@
             </table>
             
             {if count($arrayResults) gt 0}
-                <table align="center">
+                <table align="right">
                     <tr>
-                        <td style="font-size: 12px;" align="center"><br><br>{$pagination}<br><br></td>
+                        <td style="font-size: 12px;" align="center">{$pagination}</td>
                     </tr>
                 </table>
              {/if}
@@ -104,7 +100,7 @@
                {include file=search_advanced_list.tpl}
             
             {if count($arrayResults) gt 0}
-                <table align="center">
+                <table align="right">
                     <tr>
                         <td colspan="4" style="padding:10px;font-size: 12px;" align="center"><br><br>{$pagination}<br><br></td>
                     </tr>
