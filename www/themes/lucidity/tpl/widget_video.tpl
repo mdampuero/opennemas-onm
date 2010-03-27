@@ -47,7 +47,7 @@
                 </a>
               {/if}
 
-                <p> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                <p class="span-6"> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
                         {$videos[0]->title|clearslash|escape:'html'} </a>
                 </p>
                  <ul class="div.tv-highlighter">
