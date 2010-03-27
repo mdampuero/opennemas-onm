@@ -3,7 +3,7 @@
 $menuXml = <<<MENUSTRING
 <?xml version="1.0"?>
 <menu>
-    <submenu title="Contenidos" link="inicio.php" target="centro">
+    <submenu title="Contenidos" link="index.php" target="centro">
         <node title="Inicio" link="index.php" target="centro" />
         <node title="Gestor de Portada" link="article.php" target="centro" privilege="ARTICLE_FRONTPAGE" />
         <node title="Gestor de Pendientes" link="article.php?action=list_pendientes" target="centro" privilege="ARTICLE_ADMINPEND" />
