@@ -58,17 +58,17 @@ if( isset($_REQUEST['action']) ) {
             $thisalbum->category_name = $thisalbum->loadCategoryName($thisvideo->id);
             $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisvideo->id);
             $_albumArray = $thisalbum->get_album($thisalbum->id);
-             $i=0;
-             var_dump($thisalbum);
+             $i=0;           
+
              foreach($_albumArray as $ph){
                       $albumPhotos[$i]['photo'] = new Photo($ph[0]);
                       $albumPhotos[$i]['description']=$ph[2];
 	            
                     $i++;
                     }
-                    $tpl->assign('album', $thisalbum);
-            $tpl->assign('albumPhotos', $albumPhotos);
-            var_dump($albumPhotos);
+             $tpl->assign('album', $thisalbum);
+             $tpl->assign('albumPhotos2', $albumPhotos);
+
             //FIXED: check if there is the album 'id_album' otherwise exit()
             //SECURITY REASONS
       /*      if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
@@ -104,7 +104,8 @@ if( isset($_REQUEST['action']) ) {
                 
              	$list_albums = $cm->paginate_num_js($list_albums, 5, 1, 'get_paginate_articles',"'albums',''");
                 $tpl->assign('list_albums', $list_albums);
-                $tpl->assign('pages', $cm->pager);     } else {
+                $tpl->assign('pages', $cm->pager);
+       * } else {
            //     Application::forward301('/');
             } */
 	break;
@@ -156,5 +157,5 @@ $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 /******************************************************************************************************/
 // Visualizar
 require_once('widget_headlines_past.php');
-    
+ 
 $tpl->display('gallery.tpl');

@@ -37,12 +37,12 @@ Smarty template: gallery.tpl
                             </div>
                         <div id="caption" class="caption-container"></div>
                     </div>
-                    <div id="thumbs" class="navigation span-8">
+                    <div id="thumbs" class="navigation span-8"> minis
                         <ul class="thumbs noscript">
-                            {foreach key=k item=photo from=$albumPhotos}
-                                {include file="widget_gallery_mini.tpl" photoData=$photo.photo}
+                            {foreach key=k item=photo from=$albumPhotos2}
+                                 {include file="widget_gallery_mini.tpl" photoData=$photo.photo}
                             {/foreach}
-                     
+                    
                         </ul>
                     </div>
                     <!-- End Advanced Gallery Html Containers -->

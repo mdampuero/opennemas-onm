@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="{$params.CSS_DIR}onm-mockup.css" type="text/css" media="screen,projection" />
         <link rel="stylesheet" href="{$params.CSS_DIR}jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection" />
 
-        <script type="text/javascript" src="{$params.JS_DIR}swfobject.js"></script>
+       {* <script type="text/javascript" src="{$params.JS_DIR}swfobject.js"></script> *}
         <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" media="screen, projection" /><![endif]-->
         
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
