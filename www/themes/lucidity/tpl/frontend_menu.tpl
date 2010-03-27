@@ -25,13 +25,14 @@
     </div>
 
     <div id="sub_main_menu" class="span-24">
+        {if !preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
         {if !empty($categories[$posmenu].subcategories)}
             <ul class="clearfix">
                 {foreach key=s item=v from=$categories[$posmenu].subcategories}
                     <li {if $subcategory_name eq $s} class="active"{/if}><a href="{$section_url}{$categories[$posmenu].name}/{$s}/" title="{$v}">{$v}</a></li>
                 {/foreach}
             </ul>
-        {/if}
+        {/if}{/if}
         {include file="widget_search.tpl" }
 
     </div>
