@@ -1,17 +1,17 @@
 <table class="adminlist">
     <tr>
          <th align="center"> </th>
-        <th align="center">T&iacute;tulo</th>
+        <th align="center" style="width:200px">T&iacute;tulo</th>
         {if $category neq 'home'}
-            <th align="center" style="width:30px;">Home</th>
+            <th align="center" style="width:30px;" class="rot270">Home</th>
         {else}
             <th align="center" style="width:50px;">Secci&oacute;n</th>
         {/if}
-        <th align="center" style="width:30px;">Edit</th>
-        <th align="center" style="width:30px;">Arch</th>
-        <th align="center" style="width:30px;">Des</th>
+        <th align="center" style="width:20px;" class="rot270">Edit</th>
+        <th align="center" style="width:20px;" class="rot270">Arch</th>
+        <th align="center" style="width:10px;" class="rot270">Desp</th>
         {if $category neq 'home'}
-            <th align="center" style="width:30px;">El</th>
+            <th align="center" style="width:20px;"class="rot270">Borr</th>
         {/if}
    </tr>
    <tr>
@@ -19,7 +19,7 @@
                 <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
                     <tr height="20"><td > Destacada </td></tr>
                 </table>
-                <div id="{$place}_0" class="seccion" style="min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                <div id="{$place}_0" class="seccion" style=min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_0' }
                 </div>                
                     <table width="100%" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
@@ -30,11 +30,11 @@
                     {renderarticle items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_1' }                    
                 </div>
                  {if $place eq 'placeholder_1'}
-                    <table width="100%" height="110" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                    <table width="100%" height="110" class="aa" style="text-shadow: Gray 1px 1px 0px; background:#EEF url({php}echo($this->image_dir);{/php}oblicual-background.png) top right repeat;  text-align:center;padding:0px;">
                         <tr ><td >  Widget Ocio </td></tr>
                     </table>
                  {else}
-                    <table width="100%" height="50" class="aa" style="background-color:#EEF;text-align:center;padding:0px;padding-bottom:4px;">
+                    <table width="100%" height="50" class="aa" style="text-shadow: Gray 1px 1px 0px; background:#EEF url({php}echo($this->image_dir);{/php}oblicual-background.png) top right repeat; text-align:center;padding:0px;padding-bottom:4px;">
                        <tr ><td >  Widget Publicidad  </td></tr>                   
                         {if $place eq 'placeholder_2'}
                             <tr ><td >  Widget Titulares </td></tr>                       
@@ -45,11 +45,11 @@
                     </div>
                    
                  {/if}
-                 <table width="100%" height="30" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                 <table width="100%" height="30" class="aa" style="text-shadow: Gray 1px 1px 0px; background:#EEF url({php}echo($this->image_dir);{/php}oblicual-background.png) top right repeat; background-color:#EEF;text-align:center;padding:0px;">
                    <tr ><td >  Widget Social </td></tr>
                 </table>
                 {if $place eq 'placeholder_2'}
-                    <table width="100%" height="70" class="aa" style="background-color:#EEF;text-align:center;padding:0px;">
+                    <table width="100%" height="70" class="aa" style="text-shadow: Gray 1px 1px 0px; background:#EEF url({php}echo($this->image_dir);{/php}oblicual-background.png) top right repeat; background-color:#EEF;text-align:center;padding:0px;">
                         <tr ><td >  Widget Titulares </td></tr>
                     </table>
                 {else}

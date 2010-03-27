@@ -7,17 +7,17 @@
     {if !isset($smarty.request.action) ||
         $smarty.request.action eq "load"}
 
-        <table class="adminheading">
+        <table class="adminheading" style="margin:0 auto; float:none; width:50%">
             <tr>
                 <th nowrap>Busqueda Avanzada</th>
             </tr>
         </table>       
-        <table class="adminlist">
+        <table class="adminlist" style="margin:0 auto; float:none; width:50%">
             <tr>
                 <td valign="top" align="right" style="padding:4px;" width="25%">
 
                 </td>
-                <td style="padding:4px;vertical-align:middle" nowrap="nowrap" width="70%" colspan='3'>
+                <td style="padding:4px;vertical-align:middle" nowrap="nowrap" width="50%" colspan='3'>
                     {foreach name=contentTypes item=type from=$arrayTypes}
                       {if $type[0] != 5 && $type[0] != 10 }
                         {if $type[0] == 1 || $type[0] == 4 }
@@ -30,12 +30,9 @@
                 </td>
             </tr>
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="25%">
-                    <label for="title" >Busqueda en Xornal de Galicia:</label>
-                </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%" colspan='3'>
-                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
-                        class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
+                <td colspan="2"style="padding:4px;" nowrap="nowrap" width="70%" colspan='3'>
+                    <label for="title" >Busqueda en el catálogo de información:</label><brd              <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                        class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
                 </td>
             </tr>
             <tr><td colspan="2"><br />

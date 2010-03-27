@@ -40,7 +40,7 @@
 <div id="{$category}">
 
  {include file="botonera_up.tpl"}
- 
+ <br /><br />
     <table class="adminheading">
 	    <tr>
 		    <th nowrap>Comentarios pendientes de publicar</th>
@@ -196,11 +196,11 @@
 	{sectionelse}
              {if $category eq 'todos' }
                  <tr>
-                        <td align="center" colspan=10><br><br><p><h2><b>Ningun commentario pendiente</b></h2></p><br><br></td>
+                        <td align="center" colspan=10><h2 style="margin:50px">No hai ningun comentario <br/>pendiente de moderación</h2></td>
                 </tr>
              {else}
                 <tr>
-                        <td align="center" colspan=10><br><br><p><h2><b>Ningun commentario guardado</b></h2></p><br><br></td>
+                        <td align="center" colspan=10><br><br><p><h2><b>No hain ningún comentario guardado</b></h2></p><br><br></td>
                 </tr>
              {/if}
 	{/section}
@@ -209,7 +209,7 @@
 	</tr>
 
     </table>
-
+<br /><br />
 {include file="botonera_down.tpl"}
 
 

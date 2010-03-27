@@ -1,6 +1,6 @@
  <br style="clear:both;" />
-            <table class="adminlist" id="tabla"  style="width:99%;">
-                <tr>
+                 <table class="adminheading" style="width:99%; float:left">
+                    <tr>
                     <th class="title" align="left">Título</th>
                     <th style="width:100px" align="left">Total jpg</th>
                     <th style="width:100px" align="left">Total gif</th>
@@ -11,6 +11,9 @@
                     <th style="width:100px" align="left">Total Size (MB)</th>
                     <th style="width:100px" align="left">Nº Fotos</th>
                 </tr>
+                </table>
+            <table class="adminlist" id="tabla"  style="width:99%;">
+                
 
                 <tr>
                     <td colspan="9">

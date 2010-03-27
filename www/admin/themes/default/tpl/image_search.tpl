@@ -1,9 +1,9 @@
 <br />
-<div id="nifty" style="margin-left:200px;  width:800px;">
-    <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
+<div id="nifty" style="margin:0 auto;  width:800px; background:#dedede; padding:5px; -moz-border-radius:10px 10px 10px 10px; border:1px solid #CCCCCC;">
+    
         <table border='0' width="96%">
             <tr>
-                <td style="width:200px;" align='right'> <b>Imagen: </b></td>
+                <td style="width:200px;" align='right'> <b>Nombre de la imagen: </b></td>
                 <td align='left'>
                         <input type="text" id="stringSearch" name="stringSearch" size="60" value="{$smarty.request.stringSearch}" />
                     <br />
@@ -99,7 +99,7 @@
        </table>
 
    
-<b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
+
 </div>
 
 

@@ -8,7 +8,7 @@
             {is_clone item=$item}{$item->title|clearslash}
         </td>
         {if $category neq 'home'}
-            <td class="un_no_view" style="width:30px;" align="center">
+            <td class="un_no_view" style="width:20px;" align="center">
                 <div class="inhome" style="display:inline;">
                     {if $item->in_home == 1}
                     <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}"  title="No sugerir en home"  alt="No sugerir en home">
@@ -27,17 +27,17 @@
                 {$item->category_name}
             </td>
         {/if}
-        <td  align="center"  class="un_width" style="text-align: center;width:30px;">
+        <td  align="center"  class="un_width" style="text-align: center;width:20px;">
                 <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$item->id}');" title="Editar">
                         <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" /></a>
         </td>
-        <td  align="center"  class="un_width" style="width:30px;">
+        <td  align="center"  class="un_width" style="width:20px;">
                 <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
                    <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" /></a>
         </td>
         
         {if $category neq 'home'}
-            <td  align="center"  class="un_width" style="width:30px;">
+            <td  align="center"  class="un_width" style="width:20px;">
             {if $item->frontpage == 1}
                     <a href="?id={$item->id}&amp;action=frontpage_status&amp;status=0&amp;category={$category}" title="Quitar de portada">
                             <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
@@ -46,11 +46,11 @@
                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
             {/if}
              </td>
-            <td  align="center"  class="un_width"  style="width:30px;">
+            <td  align="center"  class="un_width"  style="width:20px;">
                 <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
             </td>
         {else}
-             <td  align="center"  class="un_width" style="width:30px;">
+             <td  align="center"  class="un_width" style="width:25px;">
                 <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
             </td>
         {/if}

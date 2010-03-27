@@ -30,12 +30,13 @@
 
 <div id="{$category}">
 	{if $category eq 0}
-		
-			<table class="adminlist" id="tabla"  style="width:90%;">
+		<table class="adminheading" style="width:99%; margin-left:0;">
 			<tr>
 				<th width="300" class="title" align="left">T&iacute;tulo</th>		
 				<th width="10%" align="left">Nº Ficheros</th>
-			  </tr>
+			</tr>
+        </table>
+			<table class="adminlist" id="tabla"  style="width:99%;">
 			  <tr><td colspan="2">
 				  {section name=c loop=$categorys}
 					  <table width="100%" cellpadding=0 cellspacing=0  id="{$categorys[c]->pk_content_category}">
@@ -81,13 +82,11 @@
 				</tr>					
 			 </table>	
 	{else}
+	<a id="boton_subir" href="#" onclick="new Effect.toggle($('adjunt'),'blind')"> <img src='images/iconos/examinar.gif' border='0'> Subir nuevos Archivos </a>
 		<div><h2 style="color:#BB1313">{$smarty.request.msg}</h2></div>
                         <table class="adminheading">
 				<tr>
 					<th nowrap>Ficheros relacionados con noticias</th>
-					<th style="align:right">
-						 <a href="#" onclick="new Effect.toggle($('adjunt'),'blind')"> <img src='images/iconos/examinar.gif' border='0'> Subir nuevos Archivos </a>
-				    </th>	
 				</tr>
 				<tr>
 			        <td colspan="2">
@@ -138,9 +137,8 @@
                             {sectionelse}
                             <tr>
                                     <td align="center" colspan="5">
-                                    <h2>Ningún archivo guardado</h2>
-                                </td>
-                            </tr>
+                                    <h2 style="margin:50px">No hai ningún archivo guardado</h2>
+                                </td>                            </tr>
 			{/section}
 			{if count($attaches) gt 0}
 			

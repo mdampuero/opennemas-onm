@@ -1,7 +1,7 @@
 {include file="header.tpl"}
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-    {* ZONA MENU CATEGORIAS ******* *}
+        {* ZONA MENU CATEGORIAS ******* *}
     <ul class="tabs2" style="margin-bottom: 28px;">
         <li>
             <a href="article.php?action=list&category=home" {if $category=='home' } style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</a>
@@ -11,9 +11,10 @@
 
     {* Archivo respuesta cabecera ajax guarda posicion*}
     {* include_php file="cambiapos.php" *}
-    <br style="clear: both;" />
     
     {include file="botonera_up.tpl"}
+    
+
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}
     {if $smarty.get.alert eq 'ok'}       
      <script type="text/javascript" language="javascript">
@@ -29,7 +30,7 @@
     <div id="{$category}">
         <table class="adminheading">
             <tr>
-                <th>Articulos en Portada <img  border="0" style="cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
+                <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
             </tr>
         </table>
         <div id="pagina">
@@ -60,19 +61,27 @@
                 </tr>
             </table>             
 
-            <table class="adminlist" border=0>
-                <tr><td width="100%">
-                    <div id="div_no_home" style="width:100%;min-height:80px;background-color:#F5F5F5;overflow:auto;">
-                      {if $category eq 'home'} NO EN HOME {else} NO EN PORTADA DE {$datos_cat[0]->title} {/if}
-                    </div>
-                </td>
-              </tr>
-            </table>
+            <div id="no_en_home" style="margin:10px 0">
+                <table class="adminheading">
+                    <tr>
+                        <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="http://demo.opennemasweb.es/admin/themes/default/images/iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
+                    </tr>
+                </table>
+                <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
+                    <tr><td width="100%">
+                        <div id="div_no_home" style="width:100%;min-height:80px;padding:5px;overflow:auto;">
+                          {if $category eq 'home'} NO EN HOME {else} NO EN PORTADA DE {$datos_cat[0]->title} {/if}
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+            
             {* CONTENEDOR INFERIOR  otros articulos  o en HOME articulos sugeridos u otras portadas ******* *}
             {if $category neq 'home'}
                 <table class="adminheading">
                     <tr>
-                        <td><b>Otros art&iacute;culos</b></td><td style="font-size: 10px;" align="right"><em>(estos art&iacute;culos <b>NO</b> apareceran en la portada. )</em></td>
+                        <td colspan="2"align="center"><b>Otros art&iacute;culos</b> - <em>(estos art&iacute;culos <b>NO</b> apareceran en la portada. )</em></td>
                     </tr>
                 </table>
                  <div id="frontpages" class="seccion" style="width:100%;clear:both;">
