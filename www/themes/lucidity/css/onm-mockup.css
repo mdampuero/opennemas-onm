@@ -922,7 +922,9 @@ div.widget-lastest-tab .title{
 /***********************************************************
     Footer content definition
 ************************************************************/
-
+#wrapper-footer{
+	margin:10px 0 !important;
+}
 
 
 #footer{

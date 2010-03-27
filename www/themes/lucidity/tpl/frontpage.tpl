@@ -131,7 +131,7 @@ Smarty template: frontpage.tpl
         </div><!-- fin .container -->
     </div><!-- fin .wrapper -->
 
-    <div class="wrapper clearfix">
+    <div id="wrapper-footer" class="wrapper clearfix">
 
         <div class="container clearfix span-24">
              {include file="frontend_footer.tpl"}

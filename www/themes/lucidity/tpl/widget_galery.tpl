@@ -25,7 +25,8 @@
                     </a></li>
                 {/if}
 
-            {/section}        
+            {/section}
+            </ul>
     </div>
     <div class="flickr-highlighter-footer">
         <a href="{$lastAlbum[0]->permalink}" title="{$lastAlbum[0]->title|clearslash|escape:'html'}" >
