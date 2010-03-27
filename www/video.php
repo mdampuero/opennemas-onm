@@ -31,7 +31,7 @@ if (isset($_GET['category_name'])) {
     $category_name = $_GET['category_name'];
 }else{
  
-     $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu ASC LIMIT 0,1');
+     $this_category_data = $ccm->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu ASC LIMIT 0,1');
      $category_name = $this_category_data[0]->name;
 
 }
@@ -60,7 +60,6 @@ if( isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
 
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-
  
             //$videos = $cm->find_by_category_name('Video',$category_name, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
             $videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` ='.$category.'', 'ORDER BY created DESC LIMIT 0, 3');
