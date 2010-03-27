@@ -27,7 +27,7 @@
                 {/section}
         </div>
         <div class="tv-highlighter-big clearfix">
-            {if $videos[i]->author_name eq 'youtube'}
+            {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
                    <!-- <object width="330" height="220">
                         <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
@@ -54,23 +54,23 @@
                     {section name=i loop=$videos}
                         {if $smarty.section.i.first}
                             <li class="first">
-                                <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                                    <img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
-                               </a>
-                            </li>
+                               
                         {elseif $smarty.section.i.last}
                             <li class="last">
-                                <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                                    <img   alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
-                                </a>
-                            </li>
+
                         {else}
                             <li class="first">
-                                <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                         {/if}
+                            <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                             {if $videos[i]->author_name eq 'youtube'}
                                     <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" /></a>
+                               {else}
+                                  <img  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                            {/if}  
+
                                 </a>
                             </li>
-                        {/if}
+                       
                     {/section}
                 </ul>
         </div>
