@@ -689,24 +689,34 @@ div.youtube-highlighter li.selected{
 
 div.flickr-highlighter{
     border-top:1px solid #e6e6e6;
+    background:#333333;
+    min-height:355px;
     
 }
 
 div.flickr-highlighter-header{
     border-bottom:1px solid #818181;
+    color:#AAAAAA;
+    padding:10px 5px 0;
 }
 div.flickr-highlighter-header img{
     margin:4px 0 0 4px;
 }
 
 div.flickr-highlighter-big{
-    margin:10px 0 5px 0px;/* chanchullada padre HOYGA*/
+    margin:10px 5px 5px 5px;/* chanchullada padre HOYGA*/
     cursor: pointer;
 }
 
 div.flickr-highlighter-footer{
-    background:#ccc;
+    background:#333333;
     border-bottom:1px solid #818181;
+    text-align:center;
+    padding:1px 0 5px;
+}
+
+div.flickr-highlighter-footer img{
+    max-height:200px;
 
 }
 
@@ -734,12 +744,15 @@ div.flickr-highlighter li.selected{
 */
 div.tv-highlighter{
     background:Black;
+    min-height:355px;
 }
 
 
 div.tv-highlighter-header{
-    background:#222;
+   /* background:#222; */
     width:310px;
+    color:#AAAAAA;
+    padding:10px 5px 0;
 
 }
 div.tv-highlighter form{
@@ -749,7 +762,12 @@ div.tv-highlighter form{
 div.tv-highlighter-header img{
     margin:4px 0 0 4px;
 }
-
+div.tv-highlighter-minis{
+    float:right;width:110px;padding:10px;
+}
+div.tv-highlighter-minis div{
+    background-color:#333;padding:2px;text-align:center;
+}
 div.tv-highlighter ul{
     margin:0;
     padding:0;

@@ -299,7 +299,7 @@ if(($tpl->caching == 0) || !$tpl->is_cached('index.tpl', $cache_id)) { // (2)
     /***********************************PHOTO-ALBUM  *********************************************/
 
     $album_photo = array();
-    $lastAlbum = $cm->find('Album', ' contents.fk_content_type=7 and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 4');
+    $lastAlbum = $cm->find('Album', ' contents.fk_content_type=7 and contents.available=1', 'ORDER BY favorite DESC, created DESC LIMIT 0 , 6');
     /* Don't need. Get crop /album/crops/album_id.jpg
    foreach($lastAlbum as $album){
         $album->photo = $album->get_firstfoto_album($album->id);

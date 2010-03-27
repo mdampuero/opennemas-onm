@@ -114,17 +114,13 @@ Smarty template: frontpage.tpl
                        {include file="widget_ad_separator.tpl"}
                 </div>
                 <div class="span-24">
-                    <div class="layout-column first-column span-8">
+                    <div class="layout-column first-column span-12">
                         {include file="widget_video.tpl" }
                     </div>
-                    <div class="layout-column middle-column span-8">
+                    <div class="layout-column last-column last span-12">
                         {include file="widget_galery.tpl"}
-
-
                     </div>
-                    <div class="layout-column last-column last span-8">
-                        {include file="widget_video.tpl"}
-                    </div>
+                     
                 </div>
                 {if $category_name eq 'home'}
                     {include file="module_other_headlines.tpl"}
