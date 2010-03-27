@@ -60,7 +60,7 @@ Smarty template: frontpage.tpl
 
                             {renderplaceholder items=$column tpl='frontpage_article_head.tpl' placeholder="placeholder_1_0"}
 
-                            {*<hr class="new-separator"/>*}
+                            <hr class="new-separator"/>
 
                             {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_1_1"}
 
@@ -74,13 +74,15 @@ Smarty template: frontpage.tpl
                     <div class="layout-column last-column last span-8">
                         {renderplaceholder items=$column tpl='frontpage_article_head.tpl' placeholder="placeholder_2_0"}
 
-                        {*<hr class="new-separator"/>*}
+                        <hr class="new-separator"/>
 
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_1"}
 
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_2"}
                         
                         {include file="widget_headlines.tpl"}
+                        
+                        <hr class="news-separator" />
 
                         {include file="widget_ad_button.tpl" type='4'}
 
