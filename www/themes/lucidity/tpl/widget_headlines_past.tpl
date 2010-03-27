@@ -8,7 +8,7 @@
         <div class="title">
             Lo último en {$category_data.title|default:'Portada'|capitalize}
         </div>
-        <div id="tabs" class="content">
+        <div id="tabs" class="content" style="width:290px;">
                 <ul>
                     <li><a href="#tab-last-day"><span>Último día</span></a></li>
                     <li><a href="#tab-last-3-days"><span>Últimos 3 días</span></a></li>
