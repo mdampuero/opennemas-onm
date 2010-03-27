@@ -62,7 +62,8 @@ if( isset($_REQUEST['action']) ) {
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
 
 
-            $videos = $cm->find_by_category('Video',$category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+//            $videos = $cm->find_by_category_name('Video',$actual_category, 'contents.available = 1 ', 'ORDER BY content_status DESC, created DESC LIMIT 0 , 3 ');
+            list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],3, $_REQUEST['category']);
             foreach($videos as $video){
             //$videos_authors[] = new Author($video->fk_user);
             //miramos el fuente youtube o vimeo
