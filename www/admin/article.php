@@ -1383,13 +1383,18 @@ if(isset($_REQUEST['action']) ) {
 
         case 'update_title':
             $filter = '`pk_content` = ' . $_REQUEST['id'];
-            $fields = array('title','fk_user_last_editor');
+
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
+             $content= new Content($_REQUEST['id']);
+            $content_type = $GLOBALS['application']->conn->
+            GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
+            $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $_REQUEST['title'], $content->category) ;
+            $fields = array('title','permalink','fk_user_last_editor');
             SqlHelper::bindAndUpdate('contents', $fields, $_REQUEST, $filter);
             Application::ajax_out('ok');
-        break;
+         break;
 
-          case 'update_agency':
+        case 'update_agency':
             $filter1 = '`pk_content` = ' . $_REQUEST['id'];
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
             $fields1 = array('fk_user_last_editor');
@@ -1405,7 +1410,11 @@ if(isset($_REQUEST['action']) ) {
         case 'update_category':
             $filter1 = '`pk_content` = ' . $_REQUEST['id'];
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
-            $fields1 = array('fk_user_last_editor');
+            $content= new Content($_REQUEST['id']);
+            $content_type = $GLOBALS['application']->conn->
+            GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $content->content_type.'"');
+            $_REQUEST['permalink'] = $content->put_permalink($content->id, $content_type, $content->title, $_REQUEST['pk_fk_content_category']) ;
+            $fields1 = array('fk_user_last_editor','permalink');
             SqlHelper::bindAndUpdate('contents', $fields1, $_REQUEST, $filter1);
 
             $filter2 = '`pk_fk_content` = ' . $_REQUEST['id'];
