@@ -296,6 +296,7 @@ div.lastest-news strong{
 div.lastest-news ul{
     display:inline;
     float:left;
+    width:100%;
 }
 
 div.lastest-news ul li{
@@ -303,6 +304,11 @@ div.lastest-news ul li{
     float:left;
     margin-right:5px;
 }
+
+div.lastest-news a {
+    font-family:verdana;
+}
+
 
 /*
     Miscelaneous definitions
