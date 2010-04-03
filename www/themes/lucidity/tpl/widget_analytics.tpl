@@ -1,3 +1,4 @@
+{literal}
 <!-- Piwik -->
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.openhost.es/admin/" : "http://piwik.openhost.es/admin/");
@@ -10,3 +11,4 @@ piwikTracker.enableLinkTracking();
 } catch( err ) {}
 </script><noscript><p><img src="http://piwik.openhost.es/admin/piwik.php?idsite=10" style="border:0" alt=""/></p></noscript>
 <!-- End Piwik Tag -->
+{/literal}
