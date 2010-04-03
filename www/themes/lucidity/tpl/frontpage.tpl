@@ -149,5 +149,6 @@ Smarty template: frontpage.tpl
             });
         </script>
     {/literal}
+    {include file="widget_analytics.tpl"}
 </body>
 </html>
