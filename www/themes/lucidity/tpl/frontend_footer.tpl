@@ -17,8 +17,9 @@
     <div>
         <div class="span-12 contact-dates">
             &copy; <strong>Diario Retrincos Times</strong><br/>
-            Progreso, 64 4A
+            Progreso, 64 4A<br/>
             32003, Ourense (Spain)<br/>
+            +34 655172329<br/>
             OpenHost Media Press S.L.
         </div>
  
