@@ -70,7 +70,7 @@
               
                     #main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo{
                             background-color:#373737;
-                    }                 
+                    }
             </style>
             {/literal}
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>

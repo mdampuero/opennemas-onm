@@ -209,10 +209,8 @@ div.video .publi_310 img{
     font-weight: bold;
 }
 #main_menu ul li:hover, #main_menu ul li.active{
-    background:#ccc;
-    opacity:0.4;
-	filter:alpha(opacity=40);
-    cursor:pointer;
+    background:rgba(204,204,204,0.5);
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CCCCCC00', EndColorStr='#CCCCCC00');
 }
 
 #main_menu ul a, #main_menu ul a:hover, #main_menu ul a:link, #main_menu ul a:visited {
