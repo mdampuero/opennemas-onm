@@ -17,7 +17,8 @@
     <div>
         <div class="span-12 contact-dates">
             &copy; <strong>Diario Retrincos Times</strong><br/>
-            Progreso, 64 4A, 32003.<br/>
+            Progreso, 64 4A
+            32003, Ourense (Spain)<br/>
             OpenHost Media Press S.L.
         </div>
  
