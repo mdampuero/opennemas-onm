@@ -1,14 +1,14 @@
 <?php
-require('config.inc.php');
-require_once('core/application.class.php');
+require('./config.inc.php');
+require_once('./core/application.class.php');
 
 Application::import_libs('*');
 $app = Application::load();
 
-require_once('core/content.class.php');
-require_once('core/content_category.class.php');
-require_once('core/content_manager.class.php');
-require_once('core/content_category_manager.class.php');
+require_once('./core/content.class.php');
+require_once('./core/content_category.class.php');
+require_once('./core/content_manager.class.php');
+require_once('./core/content_category_manager.class.php');
 
 $tpl = new Template(TEMPLATE_USER);
 
@@ -62,8 +62,6 @@ if(isset($_REQUEST['action']) ) {
 
         }
     }
-
-    
     
     $tpl->assign('SITE', SITE);
     $tpl->assign('allcategorys', $allcategorys);
