@@ -54,60 +54,64 @@ if( isset($_REQUEST['action']) ) {
             	$thisalbum = array_shift($albums);  //Extrae el primero
                 $_REQUEST['id_album']=$thisalbum->id;
             }
+            if(!empty($thisalbum->id)){
+                $thisalbum->category_name = $thisalbum->loadCategoryName($thisvideo->id);
+                $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisvideo->id);
+                $_albumArray = $thisalbum->get_album($thisalbum->id);
+                 $i=0;
 
-            $thisalbum->category_name = $thisalbum->loadCategoryName($thisvideo->id);
-            $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisvideo->id);
-            $_albumArray = $thisalbum->get_album($thisalbum->id);
-             $i=0;           
+                 foreach($_albumArray as $ph){
+                          $albumPhotos[$i]['photo'] = new Photo($ph[0]);
+                          $albumPhotos[$i]['description']=$ph[2];
 
-             foreach($_albumArray as $ph){
-                      $albumPhotos[$i]['photo'] = new Photo($ph[0]);
-                      $albumPhotos[$i]['description']=$ph[2];
-	            
-                    $i++;
+                        $i++;
+                        }
+                 $tpl->assign('album', $thisalbum);
+                 $tpl->assign('albumPhotos2', $albumPhotos);
+
+                //FIXED: check if there is the album 'id_album' otherwise exit()
+                //SECURITY REASONS
+          /*      if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
+
+                    $category_name = $ccm->get_father($cm->get_categoryName_by_contentId($_REQUEST['id_album']));
+                    $tpl->assign('category_name', $category_name);
+
+                    $album = new Album( $_REQUEST['id_album'] );
+                    Content::set_numviews($_REQUEST['id_album']);
+                    if($album->available){
+                        $tpl->assign('album', $album);
+
+                        $albumArray=array();
+                        $_albumArray = $album->get_album($_REQUEST['id_album']);
+
+                        $tpl->assign('_albumArray', $_albumArray);
+
+                        // FIXME: evitar ne Photo
+                        foreach($_albumArray as $ph){
+                            $albumArray[] = new Photo($ph[0]);
+                            $albumDescrip[]=$ph[2];
+                        }
+                        $tpl->assign('albumArray', $albumArray);
+                        $tpl->assign('albumDescrip', $albumDescrip);
                     }
-             $tpl->assign('album', $thisalbum);
-             $tpl->assign('albumPhotos2', $albumPhotos);
 
-            //FIXED: check if there is the album 'id_album' otherwise exit()
-            //SECURITY REASONS
-      /*      if ( isset ($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])) {
-                
-                $category_name = $ccm->get_father($cm->get_categoryName_by_contentId($_REQUEST['id_album']));
-                $tpl->assign('category_name', $category_name);
-                
-                $album = new Album( $_REQUEST['id_album'] );
-                Content::set_numviews($_REQUEST['id_album']);
-                if($album->available){
-                    $tpl->assign('album', $album);
-                    
-	            $albumArray=array();
-	            $_albumArray = $album->get_album($_REQUEST['id_album']);
-                    
-	            $tpl->assign('_albumArray', $_albumArray);
-                    
-                    // FIXME: evitar ne Photo
-	            foreach($_albumArray as $ph){
-                        $albumArray[] = new Photo($ph[0]);
-                        $albumDescrip[]=$ph[2];
-	            }
-	            $tpl->assign('albumArray', $albumArray);
-	            $tpl->assign('albumDescrip', $albumDescrip);
-                }
-               
-                
-             	if ($category_name != 'humor-grafico') {					  
-                    $list_albums = $cm->find_by_category('Album', 3, 'available=1', 'ORDER BY created DESC LIMIT 0 , 30');
-             	} else {
-                   $list_albums = $cm->find('Album', 'available=1', 'ORDER BY pk_album DESC LIMIT 0 , 30');
-             	}
-                
-             	$list_albums = $cm->paginate_num_js($list_albums, 5, 1, 'get_paginate_articles',"'albums',''");
-                $tpl->assign('list_albums', $list_albums);
-                $tpl->assign('pages', $cm->pager);
-       * } else {
-           //     Application::forward301('/');
-            } */
+
+                    if ($category_name != 'humor-grafico') {
+                        $list_albums = $cm->find_by_category('Album', 3, 'available=1', 'ORDER BY created DESC LIMIT 0 , 30');
+                    } else {
+                       $list_albums = $cm->find('Album', 'available=1', 'ORDER BY pk_album DESC LIMIT 0 , 30');
+                    }
+
+                    $list_albums = $cm->paginate_num_js($list_albums, 5, 1, 'get_paginate_articles',"'albums',''");
+                    $tpl->assign('list_albums', $list_albums);
+                    $tpl->assign('pages', $cm->pager);
+           *
+           */
+       
+            } else {
+
+               Application::forward301('/album/');
+            }
 	break;
 
 
