@@ -5,7 +5,7 @@
 *}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
  
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="es">
+<html xmlns:fb="http://www.facebook.com/2008/fbml" lang="es">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="generator" content="OpenNeMaS - Open Source News Management System" />
@@ -13,13 +13,13 @@
         <meta name="keywords" content="{$smarty.const.SITE_KEYWORDS}" />
         <meta name="description" content="{$smarty.const.SITE_DESCRIPTION}" />
         <meta name="google-site-verification" content="ryT9siqC-qAlYTjfaoeCUnxhvtisvrLFGgoKXcFPjlE" />
-
+        
         <meta name="author" content="OpenHost, SL" />
         <meta name="revisit-after" content="1 days" />
         <meta http-equiv="robots" content="index,follow" />
         <meta http-equiv="expires" content="0" />
         <meta http-equiv="last-modified" content="0" />
-
+        
         <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print" />
         <link rel="stylesheet" href="{$params.CSS_DIR}onm-mockup.css" type="text/css" media="screen,projection" />
