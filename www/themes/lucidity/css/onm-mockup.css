@@ -201,22 +201,24 @@ div.video .publi_310 img{
 #main_menu ul li{
     float:left;
     display:block;
-    padding:4px 10px;
     clear:none;
     margin:0;
+    padding:0;
     color:White;
     text-transform:uppercase;
     font-weight: bold;
 }
 #main_menu ul li:hover, #main_menu ul li.active{
     background:rgba(204,204,204,0.5);
-	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CCCCCC00', EndColorStr='#CCCCCC00');
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CCCCCC00', EndColorStr='#CCCCCC00');
 }
 
 #main_menu ul a, #main_menu ul a:hover, #main_menu ul a:link, #main_menu ul a:visited {
     color:White;   
     text-decoration:none;
     font-family:Verdana,Arial;
+    padding:4px 10px;
+    display:block;
 }
 
 #sub_main_menu{
@@ -982,10 +984,12 @@ div#footer ul li{
     padding:0;
     padding-right:5px;
 }
+div#footer ul li img{vertical-align:middle}
 div#footer ul li.last{ border:none;}
 
 div#footer .developed-by{
-    text-align:right
+    text-align:right;
+    margin-top:30px;
 }
 
 
