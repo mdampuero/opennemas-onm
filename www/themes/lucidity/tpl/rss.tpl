@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
 	<channel>
-		<title>RSS XORNAL DE GALICIA :: {$title_rss}</title>
+		<title> {$smarty.const.SITE_NAME} RSS :: {$title_rss}</title>
 		<link>{$RSS_URL}</link>
-		<description>Noticias de xornal.com	</description>
+		<description>{$smarty.const.SITE_NAME} Articles	</description>
 		<lastBuildDate>{php} echo date("D, j M Y H:i:s", gmmktime()) . ' GMT'; {/php}</lastBuildDate>
-		<generator>Xornal.com Web</generator>
-		<category>{$title_rss}</category>
-		
+		<generator>{$smarty.const.SITE_NAME} Web</generator>
+		<category>{$title_rss}</category>		
 		
 		<image>
-			<url>{$SITE_URL}themes/xornal/images/xornal-logo.jpg</url>
-			<title>Xornal.com - RSS</title>
+                        <url>{$params.IMAGE_DIR}logo-onm-small.png</url>
+			<title>{$smarty.const.SITE_NAME} RSS</title>
 			<link>{$SITE_URL}</link>
 		</image>
 		{if preg_match('/OPINION/',$title_rss) }
@@ -47,4 +46,3 @@
 	    {/if}
 	</channel>
 </rss>
-
