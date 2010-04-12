@@ -2,5 +2,5 @@ User-Agent: *
 Disallow: /admin/
 Allow: /
 
-Sitemap: http://www.xornal.com/sitemapnews.xml
-Sitemap: http://www.xornal.com/sitemapweb.xml
+Sitemap: http://demo.opennemas.com/sitemapnews.xml
+Sitemap: http://demo.opennemas.com/sitemapweb.xml
