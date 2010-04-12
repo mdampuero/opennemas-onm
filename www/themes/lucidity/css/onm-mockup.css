@@ -423,6 +423,9 @@ div.more-resources ul li.res-link {
 div.more-resources ul li.res-video {
 
 }
+div.nw-big-img-lateral{
+   clear:both;
+}
 
 div.nw-big-img-lateral img.nw-image{
     max-width:100px;
@@ -464,13 +467,14 @@ div.nw-just-image div.nw-subtitle{
     top:25px;
     left:0;
 }
-div.nw-just-image div.nw-subtitle div{
-    padding:5px;
+div.nw-just-image div.nw-subtitle{
+    padding-left:5px;
 }
 
 div.nw-just-image img.nw-image{
     float:left;
-    width:100%;
+   /* width:100%;  div.nw-just-image con padding-left:5px*/
+    width:155px;
 }
 
 /*
