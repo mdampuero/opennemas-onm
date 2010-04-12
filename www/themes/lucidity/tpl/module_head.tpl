@@ -11,6 +11,7 @@
 
         <meta name="keywords" content="" />
         <meta name="description" content="" />
+        <meta name="google-site-verification" content="ryT9siqC-qAlYTjfaoeCUnxhvtisvrLFGgoKXcFPjlE" />
 
         <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print" />
@@ -32,7 +33,6 @@
            
         {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME) }
             <title>{$gallery->title|clearslash|default:''}  Album   {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
-
 
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
