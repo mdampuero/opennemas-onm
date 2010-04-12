@@ -19,6 +19,7 @@
         <meta http-equiv="robots" content="index,follow" />
         <meta http-equiv="expires" content="0" />
         <meta http-equiv="last-modified" content="0" />
+        <meta http-equiv="Refresh" content="900; url={$smarty.const.SITE_URL}" />
         
         <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection" />
         <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print" />
