@@ -516,62 +516,39 @@
                 </div>
                 <hr class="news-separator" />
                         -->
-                <div class="span-24">
-
-                    <div class="layout-column first-column span-8">
-                        <div class="youtube-highlighter clearfix">
-                            <div class="youtube-highlighter-header"><img src="images/sections/youtube.png" alt=""/></div>
-                            <div class="youtube-highlighter-big clearfix">
-                                <img src="images/video.flash.png" alt="" align="center"/>
-                            </div>
-                            <ul class="youtube-highligher-little-section-links">
-                                <li class="first"><a href="#"><img src="images/video.flash.png" alt=""/></a></li>
-                                <li class=""><a href="#"><img src="images/video.flash.png" alt=""/></a></li>
-                                <li class=""><a href="#"><img src="images/video.flash.png" alt=""/></a></li>
-                                <li class="last"><a href="#"><img src="images/video.flash.png" alt=""/></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="layout-column middle-column span-8">
-                        <div class="flickr-highlighter clearfix">
-                            <div class="flickr-highlighter-header"><img src="images/sections/flickr.png" alt=""/></div>
-                            <div class="flickr-highlighter-big clearfix">
-                                <img src="images/flickr-images.png" alt=""/>
-                                <a href="#">Envíanos tu careto, y te pondremos aquí...</a>
-                            </div>
-                            <div class="flickr-highlighter-footer">&nbsp;</div>
-                        </div>
-                        <div class="publi_310 clearfix">
-                            <a href="http://www.puntogal.org"><img src="images/publi/eu.gal.png" alt="" /></a>
-                        </div>
-                    </div>
-
-                    <div class="layout-column last-column last span-8">
-                        <div class="tv-highlighter clearfix">
-                            <div class="tv-highlighter-header clearfix">
-                                <img src="images/sections/tv.png" alt="" />
-                                <form action="#">
-                                    <select name="asdf">
-                                        <option>Deportes</option>
-                                        <option>Cotilleo</option>
-                                        <option>Política</option>
-                                        <option>Otros</option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div class="tv-highlighter-big clearfix">
-                                <img src="images/video.futebol.png" alt="" align="center"/>
-                                <p>
-                                    Partido sin complicaciones para los Vascos<br/>
-                                    <img src="images/stars.png" alt="" />
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <div class="span-24"> 
+ 
+                    <div class="layout-column first-column span-12"> 
+                        <div class="photos-highlighter clearfix span-12 last"> 
+                            <div class="photos-header"><img src="images/widgets/photos-highlighter-header.png" alt=""/></div> 
+                            <div class="photos-highlighter-big clearfix"> 
+                                <img src="images/news/gallery-big.png" width="300" alt="" align="center"/> 
+				<div class="info">Lorem ipsum dolor sit amet,</div> 
+                            </div> 
+                            <ul class="photos-highligher-little-section-links"> 
+                                <li class="first"><a href="#"><img src="images/news/2288110287_c369e10054_t.jpg"  alt=""/></a></li> 
+                                <li class=""><a href="#"><img src="images/news/4081090108_7c644a5d4a_t.jpg" alt=""/></a></li> 
+                            </ul> 
+                        </div> 
+                    </div> 
+					
+                    <div class="layout-column last-column span-12 last"> 
+                        <div class="photos-highlighter clearfix span-12"> 
+                            <div class="photos-header"><img src="images/widgets/videos-highlighter-header.png" alt=""/></div> 
+                            <div class="photos-highlighter-big clearfix"> 
+                                <img src="images/news/gallery-big.png" width="300" alt="" align="center"/> 
+								<div class="info">Lorem ipsum dolor sit amet,</div> 
+                            </div> 
+                            <ul class="photos-highligher-little-section-links"> 
+                                <li class="first"><a href="#"><img src="images/news/2288110287_c369e10054_t.jpg"  alt=""/></a></li> 
+                                <li class=""><a href="#"><img src="images/news/4081090108_7c644a5d4a_t.jpg" alt=""/></a></li> 
+                            </ul> 
+                        </div> 
+                    </div> 
+ 
+                </div> 
                 <hr class="new-separator" />
+		
                 <div class="span-24">
                     <div class="layout-column first-column span-16">
                         <div class="more-news">

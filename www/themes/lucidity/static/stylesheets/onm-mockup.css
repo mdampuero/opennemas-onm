@@ -887,6 +887,61 @@ div#footer .developed-by{
     text-align:right
 }
 
+/*
+    Widget photos definition
+*/
+
+div.photos-highlighter{
+    background:#ececec;
+}
+
+div.photos-highlighter div.photos-header{
+	margin-top:-10px;
+	margin-left:-10px;
+}
+div.photos-highlighter-header img{
+}
+
+div.photos-highlighter ul{
+    margin:0;
+    padding:0;
+}
+div.photos-highlighter-big{
+	margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
+	cursor: pointer;
+	width:310px;
+	float:left;
+	text-align:left;
+	color:#808080;
+	font-size:1.3em;
+	
+}
+div.photos-highligher-little-section-links{
+	float:right;
+	padding-left:10px !important;
+
+	display:block;
+	border:1px solid Red !important;
+}
+div.photos-highlighter li{
+    float:left;
+    list-style:none;
+    margin:0;
+    padding-top:10px;
+    color:White;
+    cursor:pointer;
+}
+
+div.photos-highlighter li img{
+    width:100px;
+}
+div.photos-highlighter li.first{
+    padding-left:0;
+}
+div.photos-highlighter li.selected{
+    color:#d45500;
+}
+
 /***********************************************************
     Actions
 ************************************************************/

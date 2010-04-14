@@ -946,6 +946,42 @@ div.widget-lastest-tab .title{
     font-size:1.6em;
     margin:10px
 }
+
+/*
+    Widget photos definition
+*/
+
+div.photos-highlighter{
+    background:#ececec;
+}
+
+div.photos-highlighter div.photos-header{
+	margin-top:-10px;
+	margin-left:-10px;
+}
+div.photos-highlighter-header img{
+}
+
+div.photos-highlighter ul{
+    margin:0;
+    padding:0;
+}
+div.photos-highlighter-big{
+}
+div.photos-highligher-little-section-links{
+
+}
+div.photos-highlighter li{
+}
+
+div.photos-highlighter li img{
+}
+div.photos-highlighter li.first{
+}
+div.photos-highlighter li.selected{
+    color:#d45500;
+}
+
 /***********************************************************
     Footer content definition
 ************************************************************/
