@@ -12,6 +12,7 @@ $menuXml = <<<MENUSTRING
         <node title="Gestor de Publicidad" link="advertisement.php" target="centro" privilege="ADVERTISEMENT_ADMIN" />
         <node title="Hemeroteca" link="article.php?action=list_hemeroteca" target="centro" privilege="ARCHIVE_ADMIN" />
         <node title="Páginas Estáticas" link="static_pages.php" target="centro" privilege="STATIC_ADMIN" />
+        <node title="Gestor Widgets" link="widget.php" target="centro" privilege="WIDGET_ADMIN" />
         <node title="Portadas papel" link="kiosko.php" target="centro" privilege="FILE_ADMIN" />
     </submenu>
 
@@ -39,13 +40,14 @@ $menuXml = <<<MENUSTRING
     <submenu title="Utiles" link="#" target="centro" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN">
         <node link="search_advanced.php" target="centro" title="Busqueda Avanzada" privilege="SEARCH_ADMIN" />
         <node link="pclave.php" target="centro" title="Palabras clave" privilege="PCLAVE_ADMIN" />
-        <node link="link_control.php" target="centro" title="Control link" privilege="BACKEND_ADMIN" />";
+        <node link="link_control.php" target="centro" title="Control link" privilege="BACKEND_ADMIN" />
         <node link="litter.php" target="centro" title="Papelera" privilege="TRASH_ADMIN" />
         <node link="http://piwik.xornal.com" target="centro" title="Webstats" privilege="BACKEND_ADMIN" />
         <node link="dashboard.php" target="centro" title="Dashboard" privilege="BACKEND_ADMIN" />
     </submenu>
     
     <submenu title="Configuración" link="#" target="centro" privilege="BACKEND_ADMIN,CACHE_ADMIN">
+        <node link="configurator.php" target="centro" title="Config Manager" privilege="BACKEND_ADMIN" />
         <node link="tpl_manager.php" target="centro" title="Cache Manager" privilege="CACHE_ADMIN" />
         <node link="apc.php" target="centro" title="APC" privilege="CACHE_ADMIN" />
         <node link="svn.php" target="centro" title="SVN" privilege="BACKEND_ADMIN" />

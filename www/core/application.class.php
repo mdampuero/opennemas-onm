@@ -213,6 +213,16 @@ class Application {
     }
     
     /**
+     * Check if current request is from backend
+     *
+     * @return boolean  
+    */
+    static public function isBackend()
+    {
+        return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) == 0 ;
+    }
+    
+    /**
      * Perform a permnently redirection (301)
      *
      * @param string $url
@@ -342,9 +352,11 @@ HTMLCODE;
 }
 
 /* Others commons functions */
-function clearslash($string) {
-    $string = stripslashes($string);
-    $string = str_replace("\\", '', $string);
-    return stripslashes($string);
+if (!function_exists('clearslash')) {
+    function clearslash($string) {
+        $string = stripslashes($string);
+        $string = str_replace("\\", '', $string);
+        
+        return stripslashes($string);
+    }
 }
-
