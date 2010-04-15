@@ -146,6 +146,9 @@ text-shadow:0 1px 0 #FFFFFF;
 table.adminheading img{
 	vertical-align:middle;
 }
+table.adminheading th, table.adminheading td{
+	font-size:11px !important;
+}
 table.adminlist {
 	background-color: #FFFFFF;
 	margin: 0px;
