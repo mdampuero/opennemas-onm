@@ -79,6 +79,8 @@ Smarty template: frontpage.tpl
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_1"}
 
                         {renderplaceholder items=$column tpl='frontpage_article.tpl' placeholder="placeholder_2_2"}
+
+                        {include file="widget_facebook_iframe.tpl"}
                         
                         {include file="widget_headlines.tpl"}
                         
