@@ -7,7 +7,7 @@
 {literal}
 <style>
 label {
-    width: 200px;
+    width: 180px;
     display: block;
     
     float: left;
@@ -72,7 +72,7 @@ div.spacer {
     
     {foreach key=k item=v from=$items}
       {php}
-      $this->_tpl_vars['len'] = min( (strlen($this->_tpl_vars['v']['value'])+4), 86);
+      $this->_tpl_vars['len'] = min( (strlen($this->_tpl_vars['v']['value'])+4), 75);
       {/php}
         
       <label for="{$k}">{$v.title}:</label>
@@ -97,7 +97,7 @@ document.observe('dom:loaded', function() {
 
 
 {* LIST BACKUPS ************************************************************** *}
-{if !isset($smarty.request.action) || $smarty.request.action eq "listfiles"}
+{if $smarty.request.action eq "listfiles"}
 
 {literal}
 <script type="text/javascript">
