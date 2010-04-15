@@ -48,6 +48,22 @@ class Message {
         $_SESSION['messages'][$this->type][] = $this->text;
     }
     
+    /**
+     * Helper to simplify add messages to the board
+     * 
+     * @static
+     * @param string $text
+     * @param string $type
+     */
+    static public function add($text, $type='info')
+    {
+        if(!isset($_SESSION['messages'][$type])) {
+            $_SESSION['messages'][$type] = array();
+        }
+        
+        $_SESSION['messages'][$type][] = $text;
+    }
+    
     /*
      * Desde js genera el html para printarlo en la pagina
      * MessageBoard es la clase js de prototype
