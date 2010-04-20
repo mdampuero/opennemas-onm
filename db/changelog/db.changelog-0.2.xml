@@ -68,10 +68,20 @@
         
     </changeSet>
     
+    
     <changeSet author="vifito" id="1271781664">
         <dropColumn tableName="pages" columnName="visible"/>
         <addColumn tableName="pages">
             <column name="status" type="enum('PENDING','AVAILABLE','REMOVED')"/>
+        </addColumn>
+    </changeSet>
+    
+    
+    <changeSet author="vifito" id="1271781863">
+        <dropColumn tableName="pages" columnName="type"/>
+        <addColumn tableName="pages">
+            <column name="type" type="enum('STANDARD','EXTERNAL','SHORTCUT','NOT_IN_MENU')"/>
+            <!-- TODO: add MOUNT_POINT to future version -->
         </addColumn>
     </changeSet>
 
