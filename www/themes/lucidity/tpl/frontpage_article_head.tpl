@@ -20,7 +20,7 @@
             <ul>
                 {section name=r loop=$relacionadas}
                     {if $relacionadas[r]->pk_article neq  $item->pk_article}
-                       {renderTypeRelated content=$relacionadas[r]}
+                       <li>{renderTypeRelated content=$relacionadas[r]}</li>
                     {/if}
                 {/section}
             </ul>

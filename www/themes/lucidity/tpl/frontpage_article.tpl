@@ -22,7 +22,7 @@
             <ul>
                 {section name=r loop=$relacionadas}
                     {if $relacionadas[r]->pk_article neq  $item->pk_article}
-                       {renderTypeRelated content=$relacionadas[r]}
+                        <li>{renderTypeRelated content=$relacionadas[r]}</li>
                     {/if}
                 {/section}
             </ul>
@@ -31,19 +31,4 @@
 </div>
 
 <hr class="new-separator"/>
-
- {* <div class="nw-big">
-    <img class="nw-image" src="{$smarty.const.MEDIA_PATH_URL}news/sun-big.png" alt=""/>
-    <div class="nw-category-name science">Ciencia</div>
-    <h3 class="nw-title"><a href="#">En un sólo día se registran tantas explosiones solares como en todo el año 2009</a></h3>
-    <p class="nw-subtitle">Investigadores apuntan a la desaparición de la especie humana en 1 semana</p>
-    <div class="more-resources">
-        <ul>
-            <li class="res-file"><a href="#">El viaje al sol, un sueño olvidado (PDF)</a></li>
-            <li class="res-image"><a href="#">Fototeca: El viaje al sol, un sueño olvidado</a></li>
-            <li class="res-link"><a href="#">Los grandes pelígros de la humanidad</a></li>
-            <li class="res-video"><a href="#">Descubre el sistema planetario en este vídeo</a></li>
-        </ul>
-    </div>
-</div>
-*}
+ 

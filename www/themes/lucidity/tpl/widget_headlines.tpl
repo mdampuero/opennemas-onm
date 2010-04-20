@@ -19,9 +19,10 @@
                 {section name=a loop=$articles_viewed}
                     <div class="tab-lastest clearfix">
                         <div class="tab-lastest-title">
-                            <a href="{$articles_viewed[a]->permalink}" title="{$articles_viewed[a]->metadata}">
+                             {renderTypeRelated content=$articles_viewed[a]}
+                           {* <a href="{$articles_viewed[a]->permalink}" title="{$articles_viewed[a]->metadata}">
                                 {$articles_viewed[a]->title|clearslash}
-                            </a>
+                            </a> *}
                         </div>
                     </div>
                 {/section}
@@ -37,6 +38,20 @@
                         </div>
                     </div>
                 {/foreach}
+
+                {*
+
+                 {section name=a loop=$articles_comments}
+                    <div class="tab-lastest clearfix">
+                        <div class="tab-lastest-title">
+                            <a href="{$articles_comments[a]->permalink}" title="{$articles_comments[a]->metadata}">
+                                {$articles_comments[a]->title|clearslash}
+                            </a>
+                        </div>
+                    </div>
+                {/section}
+
+                    *}
             </div>
 
         </div>

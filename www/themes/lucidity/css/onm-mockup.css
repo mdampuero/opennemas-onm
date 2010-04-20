@@ -409,22 +409,44 @@ div.more-resources ul{
     padding:0
 }
 div.more-resources ul li{
-    list-style-type: disc;
     color:#bbb;
     list-style-position: inside;
-}
-
-div.more-resources ul li.res-file {
-}
-div.more-resources ul li.res-image {
-
-}
-div.more-resources ul li.res-link {
+    background-repeat:no-repeat;
+    padding-left: 10px;
+    background-color:#FFF;
+    display:block;
 
 }
-div.more-resources ul li.res-video {
-
+div.more-resources ul li span{
+    background-image:url(/themes/lucidity/images/bullets/res-sprite.png);
+    display:inline-block;;
+    width:13px;
+    height:13px;
+   
 }
+
+div.more-resources ul li span.res-file {
+    background-position: -81px -33px !important;
+}
+
+div.more-resources ul li span.res-link {
+    background-position: -160px -49px !important;
+}
+div.more-resources ul li span.res-image {
+    background-position: -130px -49px !important;
+}
+
+div.more-resources ul li span.res-video {
+    background-position: -113px -49px !important;
+}
+div.more-resources ul li span.res-opinion {
+    background-position: -111px -32px !important;
+}
+
+div.more-resources ul li span.res-article {
+    background-position: -161px -32px !important;
+}
+
 div.nw-big-img-lateral{
    clear:both;
 }
@@ -945,6 +967,39 @@ div.widget-lastest-tab .title{
     font-family: Georgia;
     font-size:1.6em;
     margin:10px
+}
+
+ 
+div.widget-lastest-tab .tab-lastest-title span{
+    background-image:url(/themes/lucidity/images/bullets/res-sprite.png);
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:13px;
+    height:13px;
+
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-file {
+    background-position: -81px -33px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-link {
+    background-position: -160px -49px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-image {
+    background-position: -130px -49px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-video {
+    background-position: -113px -49px !important;
+}
+div.widget-lastest-tab .tab-lastest-title span.res-opinion {
+    background-position: -111px -32px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-article {
+    background-position: -161px -32px !important;
 }
 
 /*

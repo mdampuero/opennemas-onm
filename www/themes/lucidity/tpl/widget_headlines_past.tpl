@@ -15,38 +15,29 @@
                     <li><a href="#tab-last-week"><span>Última semana</span></a></li>
                 </ul>
                 <div id="tab-last-day">
-                    {* <div class="explanation">Noticias, vídeos y comentarios</div> *}
                     {section name=a loop=$articles_24h}
                         <div class="tab-lastest clearfix">
                             <div class="tab-lastest-title">
-                                <a href="{$articles_24h[a]->permalink}" title="{$articles_24h[a]->metadata}">
-                                    {$articles_24h[a]->title|clearslash}
-                                </a>
+                                {renderTypeRelated content=$articles_24h[a]}
                             </div>
                         </div>
                     {/section}
 
                 </div>
                 <div id="tab-last-3-days">
-                    {* <div class="explanation">Noticias, vídeos y comentarios</div> *}
                      {section name=a loop=$articles_3day}
                         <div class="tab-lastest clearfix">
                             <div class="tab-lastest-title">
-                                <a href="{$articles_3day[a]->permalink}" title="{$articles_3day[a]->metadata}">
-                                    {$articles_3day[a]->title|clearslash}
-                                </a>
+                                 {renderTypeRelated content=$articles_3day[a]}
                             </div>
                         </div>
                     {/section}
                 </div>
                 <div id="tab-last-week">
-                    {* <div class="explanation">Noticias, vídeos y comentarios</div> *}
                     {section name=a loop=$articles_1sem}
                         <div class="tab-lastest clearfix">
                             <div class="tab-lastest-title">
-                                <a href="{$articles_1sem[a]->permalink}" title="{$articles_1sem[a]->metadata}">
-                                    {$articles_1sem[a]->title|clearslash}
-                                </a>
+                                 {renderTypeRelated content=$articles_1sem[a]}
                             </div>
                         </div>
                     {/section}
