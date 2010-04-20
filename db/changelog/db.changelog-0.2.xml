@@ -8,8 +8,65 @@
             <column name="weight" type="int" defaultValueNumeric="0" />
         </addColumn>
         
-    </changeSet>    
+    </changeSet>
     
+    
+    <changeSet author="vifito" id="1271765397">
+        <comment>Initial users/groups</comment>                
+        
+        <insert tableName="user_groups">
+            <column name="pk_user_group" valueNumeric="1"/>
+            <column name="name" value="Administrador"/>
+        </insert>
+        
+        <dropColumn tableName="users" columnName="online"/>
+        
+        <insert tableName="users">
+            <column name="pk_user" valueNumeric="1"/>
+            <column name="login" value="admin"/>
+            <column name="password" value="b7592fd66feb65282791ab64685e4af4"/>
+            <column name="email" value="admin@openhost.es"/>
+            <column name="name" value="Administrador"/>            
+            <column name="fk_user_group" valueNumeric="1"/>
+        </insert>
+        
+        <insert tableName="users">
+            <column name="pk_user" valueNumeric="2"/>
+            <column name="login" value="macada"/>
+            <column name="password" value="e9e423467af0d1742ef1cc2f3e240b56"/>
+            <column name="email" value="macada@openhost.es"/>
+            <column name="name" value="David"/>            
+            <column name="fk_user_group" valueNumeric="1"/>
+        </insert>
+        
+        <insert tableName="users">
+            <column name="pk_user" valueNumeric="3"/>
+            <column name="login" value="sandra"/>
+            <column name="password" value="bd80e7c35b56dccd2d1796cf39cd05f6"/>
+            <column name="email" value="sandra@openhost.es"/>
+            <column name="name" value="Sandra"/>            
+            <column name="fk_user_group" valueNumeric="1"/>
+        </insert>
+        
+        <insert tableName="users">
+            <column name="pk_user" valueNumeric="4"/>
+            <column name="login" value="fran"/>
+            <column name="password" value="6d87cd9493f11b830bbfdf628c2c4f08"/>
+            <column name="email" value="fran.dieguez@openhost.es"/>
+            <column name="name" value="Fran"/>            
+            <column name="fk_user_group" valueNumeric="1"/>
+        </insert>
+        
+        <insert tableName="users">
+            <column name="pk_user" valueNumeric="5"/>
+            <column name="login" value="vifito"/>
+            <column name="password" value="243fc9136f3284371b4826b905417964"/>
+            <column name="email" value="vifito@openhost.es"/>
+            <column name="name" value="Tomás"/>            
+            <column name="fk_user_group" valueNumeric="1"/>
+        </insert>
+        
+    </changeSet>
 
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
