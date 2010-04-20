@@ -351,8 +351,227 @@ class ContentManager
         $items = $this->load_obj($rs, $content_type);
         return $items;
     }
-    
-    
+ 
+/*****************************************************************************/
+     /**
+     * This function returns an array of objects all types of the most viewed in the last few days indicated.
+     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num Number of objects that the function returns. For default is 8.
+     * @param boolean $all Get all the content regardless of content status.
+     * @return array of objects
+     */
+    function getAllMostViewed( $not_empty = false, $category = 0,  $days=2, $num=6, $all=false) {
+        $this->init($content_type);
+
+
+        $items = array();
+        $_tables = '`contents`  ';
+        $_where = '`contents`.`in_litter`=0 AND `fk_content_type` IN (1,3,4,7,9,11) ';
+        if(!$all) {
+            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
+        }
+        $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
+
+        if( intval($category) > 0 ) {
+            $_category = 'AND pk_fk_content_category='.$category.'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
+            $_tables .= ', `contents_categories` ';
+        } else {
+            $_category = '';
+        }
+
+
+
+        $sql = 'SELECT * FROM '.$_tables .
+                'WHERE '.$_where.$_category.$_days.
+                $_order_by;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if($rs->_numOfRows<$num && $not_empty) {
+          /*  while($rs->_numOfRows<$num && $days<30){
+                $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+
+                $sql = 'SELECT * FROM '.$_tables .
+                        'WHERE '.$_where.$_category. $_days.
+                        ' '.$_order_by;
+                $rs = $GLOBALS['application']->conn->Execute($sql);
+            } */
+            
+        }
+
+
+        $items = $this->load_obj($rs, 'content');
+
+        return $this->getInTime($items);
+
+    }
+
+     /**
+     * This function returns an array of objects all types of the most voted in the last few days indicated.
+     * Objects only have covered the fields pk_content, title, and total_value total_votes
+     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num Number of objects that the function returns. For default is 8.
+     * @param boolean $all Get all the content regardless of content status.
+     * @return array of objects
+     */
+    public function getAllMostVoted($not_empty = false, $category = 0, $days=2, $num=6, $all=false) {
+
+        $items = array();
+
+        $_tables = '`contents`, `ratings` ';
+      //  $_fields = '`contents`.pk_content, `contents`.title, `contents`.permalink, `ratings`.total_votes, `ratings`.total_value ';
+        $_fields = '*';
+        $_where = '`contents`.in_litter=0 ';
+        if(!$all) {
+            $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
+        }
+        $_days = 'AND  `contents`.changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
+        $_order_by = 'ORDER BY `ratings`.total_votes DESC ';
+        $_limit = 'LIMIT 0 , '.$num;
+
+        if (intval($category)>0) {
+            $_tables .= ', `contents_categories` ';
+            $_tables_relations .= ' AND  `contents_categories`.pk_fk_content = `contents`.pk_content ' .
+                                  'AND `contents_categories`.pk_fk_content_category=' . $category . ' ';
+        }
+
+        $sql = 'SELECT ' . $_fields . ' FROM ' . $_tables . ' WHERE ' . $_where . $_days . $_tables_relations . $_order_by . $_limit;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if($rs->_numOfRows<=$num && $not_empty) {
+            while($rs->_numOfRows<$num && $days<30){
+                  $days+=2;
+
+                $sql = 'SELECT ' . $_fields . ' FROM ' . $_tables . ' WHERE ' . $_where . $_tables_relations . $_order_by . $_limit;
+                $rs = $GLOBALS['application']->conn->Execute($sql);
+            }
+        }
+
+        $items = $this->load_obj($rs, 'content');
+   
+        return $items;
+    }
+
+   /**
+     * This function returns an array of objects $content_type of the most commented in the last few days indicated.
+     * @param string $content_type type of content
+     * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
+     * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
+     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $num Number of objects that the function returns. For default is 8.
+     * @param boolean $all Get all the content regardless of content status and endtime.
+     * @return array
+     */
+    function getAllMostComented($not_empty = false, $category = 0, $days=2, $num=6, $all=false) {
+
+        $items = array();
+
+        $_where_slave = '';
+        $_days = 'changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        if(!$all) {
+            $_where_slave = ' content_status=1 AND available=1 ';
+            $_days = 'AND changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        }
+
+        $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
+        $_limit = 'LIMIT 0 , '.$num;
+        $_order_by = 'ORDER BY changed DESC';
+
+        $_where=$_where_slave.$_days.$_comented;
+        if (intval($category)>0) {
+           
+            // $pks = $this->find_by_category($content_type, $category,$_where_slave.$_days.$_comented);
+            $sql = 'SELECT * FROM contents_categories, contents '.
+               'WHERE '.$_where.' AND `contents_categories`.`pk_fk_content_category`=' .$pk_fk_content_category.
+               '` AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ' . $_order_by;
+        } else {
+             $sql = 'SELECT * FROM   contents '.
+               'WHERE '.$_where.'  ' . $_order_by;
+        }
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $pks = $this->load_obj($rs, 'content');
+       
+        if(!$all) {
+                $pks = $this->getInTime($pks);
+        }
+
+        if(count($pks)<6 && $not_empty) {
+            //En caso de que existan menos de 6 contenidos, lo hace referente a los 200 últimos contenidos
+           /*  $pks = $this->getInTime($this->find($content_type,$_where_slave.$_comented,
+                            'ORDER BY changed DESC LIMIT 0,200','pk_content, starttime, endtime')); */
+            $sql = 'SELECT * FROM   contents '.
+               'WHERE '.$_where_slave.$_comented.'  ' . $_order_by;
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+            $pks = $this->load_obj($rs, 'content');
+            $pks = $this->getInTime($pks);
+
+            if(!$all) {
+                $pks = $this->getInTime($pks);
+            }
+        }
+
+
+        $pk_list = '';
+        foreach ($pks as $pk) {
+            $pk_list .= ' '.$pk->id.',';
+        }
+        if (strlen($pk_list)==0) {
+            return array();
+        }
+        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
+        $sql = 'SELECT fk_content, count(pk_comment) AS num FROM   contents, comments '.
+               'WHERE available=1 AND fk_content IN ('.$pk_list.') GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8';
+
+     /*   $comments = $this->find('Comment','available=1 AND fk_content IN ('.$pk_list.')',
+                            ' GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 8',
+                            ' fk_content, count(pk_comment) AS num');
+       */
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $comments = $this->load_obj($rs, 'Comment');
+ 
+        $pk_list = '';
+        foreach ($comments as $comment) {
+            $pk_list .= ' '.$comment->fk_content.',';
+        }
+        if (strlen($pk_list)==0) {
+            return array();
+        }
+        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
+
+       // $items = $this->find($content_type,'pk_content IN('.$pk_list.')',null,'`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
+        $sql = 'SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`permalink` FROM   contents, comments WHERE available=1 AND pk_content IN('.$pk_list.')';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $items = $this->load_obj($rs, 'content');
+        if (empty($items)) {
+            return array();
+        }
+        foreach($items as $item) {
+            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'num'=>0,'title'=>$item->title,'permalink'=>$item->permalink);
+        }
+        foreach($comments as $comment) {
+            if (array_key_exists($comment->fk_content, $articles)) {
+                $articles[$comment->fk_content]['num'] = $comment->num;
+            }
+        }
+
+        function cmp($a, $b) {
+            if ($a['num'] == $b['num']) {
+                return 0;
+            }
+            return ($a['num'] > $b['num']) ? -1 : 1;
+        }
+        uasort($articles,'cmp');
+
+        return $articles;
+    }
+
+
+    /**********************************************************************************************/
     /**
      * Filter content objects by starttime and endtime
      *

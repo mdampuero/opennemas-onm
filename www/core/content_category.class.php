@@ -28,35 +28,49 @@ class ContentCategory {
     function __construct($id=null) {
         $this->ContentCategory($id);
     }
+    
+// TODO: Move to other class, Filesystem or similar
+// No se necesita hacer aquí ahora va por fecha.s
+    /**
+     * Create directories each content, if it don't exists
+     * /images/ /files/, /ads/, /opinion/
+    
+     */
+    public function createAllDirectories() {
+        $dir_date = date("Y/m/d/");
+        // /images/, /files/, /ads/, /opinion/
+        // /media/images/año/mes/dia/
+        //
+        $dirs = array( MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR );
+
+        foreach($dirs as $dir) {
+            $path = MEDIA_PATH.$dir.'/'.$dir_date ;
+            $this->createDirectory($path);
+        }
+    }
+
+    /**
+     * Create a new directory, if it don't exists
+     *
+     * @param string $dir Directory to create
+     */
+    public function createDirectory($path) {
+
+        $created =  @mkdir($path, 0777, true);
+        if(!$created) {
+            // Register a critical error
+            echo '<br> error'.$path;
+            $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
+        }
+    }
 
     function create($data) {
-        if($data['subcategory']){
-            $cat = $this->read($data['subcategory']);      
-            $padre = $cat['name'];
-        }
-        $sub = '';
-        
+
         //if($data['subcategory']!=0){$sub="-".$data['subcategory'];}
         $data['name'] = strtolower($data['name']);
         $data['name'] = normalize_name( $data['title']);
         
-        $path = "../media/images/".$data['name'];
-        if(file_exists($path)) {
-            $i = 1;
-            while(file_exists($path)){
-                $name = $data['name'].$i;
-                $path = "../media/images/".$name;
-                $i++;
-            }
-            $data['name'] = $name;
-        }
         
-        // Create media/images/... directory
-        $this->createDirectory($path);
-        
-        // Create media/files/... directory
-        $path = "../media/files/".$data['name'];
-        $this->createDirectory($path);
 
        
         $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`) VALUES (?,?,?,?,?,?,?)";
@@ -92,19 +106,7 @@ class ContentCategory {
         $this->load($rs->fields);
     }
     
-    /**
-     * Create a new directory, if it don't exists
-     *
-     * @param string $dir Directory to create
-     * @todo Move to other class, Filesystem or similar
-     */
-    public function createDirectory($dir) {
-        $created = @mkdir($path, 0775, true);
-        if(!$created) {
-            // Register a critical error
-            $GLOBALS['application']->logger->emerg("Error creating directory: " . $dir);
-        }
-    }
+    
     
     function load($properties) {
         if(is_array($properties)) {
@@ -154,21 +156,6 @@ class ContentCategory {
             }
         }
         
-        if($this->title != $data['title']) {
-            $data['name'] = normalize_name( $data['title']);
-            
-            //Mantenemos las antiguas y se crea una nueva carpeta pa si rename las antiguas dejan de funcionar
-            $path = "../media/images/".$data['name'];
-            if(!file_exists($path)) {
-                $this->createDirectory($path);
-            }
-            
-            $path = "../media/files/".$data['name'];
-            if(!file_exists($path)) {
-                $this->createDirectory($path);
-            }
-            
-        }
     }
 
     function isDirEmpty($path){
@@ -197,17 +184,7 @@ class ContentCategory {
                 $cat   = $this->read($data['subcategory']);
                 $padre = $cat['name'];
             }
-            
-            $path = "../media/images/".$this->name;
-        
-            if($this->isDirEmpty($path)) {
-                @rmdir($path);
-            }
-            $path = "../media/files/".$this->name;
-            if($this->isDirEmpty($path)) {
-                @rmdir($path);
-            }
-        
+             
             return("SI");
         } else {
             return("NO");
@@ -262,26 +239,6 @@ class ContentCategory {
         }
     }
 
-    // FIXME: eliminar 
-    /*public static function GetCategories()
-    {
-        $types = array();
-        $sql = 'SELECT pk_content_category  FROM content_categories WHERE fk_content_category = 0';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        while(!$rs->EOF)
-        {
-            $types[] = new ContentCategory($rs->fields['pk_content_category']);           
-            $subSql = 'SELECT pk_content_category  FROM content_categories WHERE fk_content_category <> 0 AND fk_content_category = ' . intval($rs->fields['pk_content_category']);
-        	$subRs = $GLOBALS['application']->conn->Execute($subSql);
-            while(!$subRs->EOF)
-            {
-                $types[] = new ContentCategory($subRs->fields['pk_content_category']);
-                $subRs->MoveNext();
-            }
-          	$rs->MoveNext();
-        }
-        return( $types );
-    }*/
     
 }
 

@@ -56,6 +56,7 @@ class Content {
     var $placeholder = null;
     var $home_placeholder = null;
     var $paper_page = null;
+    var $slug = null;
     
     function Content($id=null) {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
@@ -106,6 +107,10 @@ class Content {
         } else {
             $data['permalink'] = $this->put_permalink($this->id, $this->content_type, $data['title'], $data['category']) ;
         }
+ 
+        $this->slug = String_Utils::get_title($title);
+
+       // $this->permalink =$this->get_permalink();
 
         $data['views'] = 1;
         $data['created'] = date("Y-m-d H:i:s");
@@ -152,7 +157,17 @@ class Content {
         return true;
     }
     
-    
+    /*
+     * get_permalink -
+     * 
+     */
+
+    function get_permalink() {
+        $fecha = date("Y/m/d",$this->created);
+        $this->permalink = "/".$this->content_type."/". $fecha."/". $catName."/".$this->slug ."/".$this->id.'.html';
+
+    }
+
     function read($id) {
         // Fire event onBeforeXxx
         $GLOBALS['application']->dispatch('onBeforeRead', $this);

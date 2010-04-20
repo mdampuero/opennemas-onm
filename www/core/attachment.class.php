@@ -39,13 +39,13 @@ class Attachment extends Content  {
     /**
      * category name text
     */
-    var $category_name   = null;
+//    var $category_name   = null;
     
     var $cache = null;
     
-    var $categories_name = array(); // el índice será el id de categoría para recuperar el name o title
+  /*  var $categories_name = array(); // el índice será el id de categoría para recuperar el name o title
                                     //array( 10 => array('name' => 'galicia', 'title' => 'Galicia') )
-
+ */
     public function Attachment($id=NULL)
     {
         $this->content_type = 'attachment';
@@ -55,7 +55,7 @@ class Attachment extends Content  {
         
         if( !is_null($id) ) {
             // FIXED: use a registry pattern to have a global repository 
-            $this->getCategoriesName();            
+           // $this->getCategoriesName();
             $this->read($id);
         }
         
@@ -74,7 +74,10 @@ class Attachment extends Content  {
     {
         //Si es portada renovar cache
         $GLOBALS['application']->dispatch('onBeforeCreateAttach', $this);
-        
+
+        $dir_date = date("/Y/m/d/");
+      //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
+
         if( $this->exists($data['path'], $data['category']) ) {
             $msg = new Message('Un fichero con el mismo nombre ya existe en esta categoria.<br />' .
                                'Para subir un fichero con el mismo nombre elimine el existente de la papelera.', 'error');
@@ -101,7 +104,10 @@ class Attachment extends Content  {
         
         // Check if exist thumbnail for this PDF
         if( preg_match('/\.pdf$/', $data['path']) ) {
-            $media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($data['category']);
+            //$media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($data['category']);
+            $dir_date =date("/Y/m/d/");
+            $media_path = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
+                 
             $img_name   = basename($data['path'], ".pdf") . '.jpg';
             
             if(file_exists($media_path . '/' . $img_name)) {
@@ -146,11 +152,6 @@ class Attachment extends Content  {
         }
         
         $this->load($rs->fields);
-        /*$this->pk_attachment = $rs->fields['pk_attachment'];
-        $this->title = $rs->fields['title'];
-        $this->path = $rs->fields['path'];
-        $this->category = $rs->fields['category'];*/
-        //  $this->category_name = $this->categories_name[ $this->category ]['name'];
     }
     
     public function update($data)
@@ -171,7 +172,11 @@ class Attachment extends Content  {
     
     public function remove($id)
     {
-        $media_path = MEDIA_PATH.'/files/'.$this->getCategoryName($this->category);
+        //$media_path = MEDIA_PATH.'/files/'.$this->getCategoryName($this->category);
+
+         $dir_date =date("/Y/m/d/",$this->created);
+         $media_path = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
+
         $filename   = $media_path . '/' . $this->path;
         if(file_exists($filename)) {
             unlink($filename);
@@ -261,21 +266,24 @@ class Attachment extends Content  {
         $img_name = null;
         
         if( preg_match('/\.pdf$/', $obj->path) ) {
-            $media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($cat);
+          //  $media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($cat);
+            $dir_date =date("/Y/m/d/");
+            $media_path = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
+
             $img_name   = basename($obj->path, ".pdf") . '.jpg';
             $tmp_name   = '/tmp/' . basename($obj->path, ".pdf") . '.png';
             
             if(!file_exists($media_path . '/' . $img_name)) {
                 // Check if exists media_path
                 if( !file_exists($media_path) ) {
-                    mkdir($media_path, 0775);
+                    createDirectory($media_path);
                 }
                 
+                $file_path = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
                 // Thumbnail first page (see [0])
-                if ( file_exists(MEDIA_PATH . '/files/'.$this->getCategoryName($cat).'/'. $obj->path)) {
+                if ( file_exists($file_path. $obj->path)) {
                     try {
-                        $imagick = new Imagick(MEDIA_PATH . '/files/'.$this->getCategoryName($cat).'/'.
-                                               $obj->path . '[0]');
+                        $imagick = new Imagick($file_path.$obj->path . '[0]');
                         $imagick->thumbnailImage(180, 0);
                         
                         // First, save to PNG (*.pdf => /tmp/xxx.png)  
@@ -362,7 +370,9 @@ class Attachment extends Content  {
             );
         }
     }
-    
+
+
+    // TODO: eliminar ya no existe directorios por categorias
     private function getCategoryName($category_id)
     {
         $ccm = ContentCategoryManager::get_instance();
