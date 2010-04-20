@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">        
+    
+    <changeSet author="vifito" id="1271757474">
+        <comment>Add column to pages</comment>                
+        
+        <addColumn tableName="pages">
+            <column name="weight" type="int" defaultValueNumeric="0" />
+        </addColumn>
+        
+    </changeSet>    
+    
+
+    <!-- Uncomment once this changeset is over -->
+    <!-- changeSet author="vifito" id="">
+        <tagDatabase tag="0.2"/>
+    </changeSet -->
+</databaseChangeLog>
