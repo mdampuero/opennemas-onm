@@ -67,6 +67,13 @@
         </insert>
         
     </changeSet>
+    
+    <changeSet author="vifito" id="1271781664">
+        <dropColumn tableName="pages" columnName="visible"/>
+        <addColumn tableName="pages">
+            <column name="status" type="enum('PENDING','AVAILABLE','REMOVED')"/>
+        </addColumn>
+    </changeSet>
 
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
