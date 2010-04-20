@@ -111,13 +111,13 @@ if( isset($_REQUEST['action']) ) {
 			$video = new Video();			
 			$video->update( $_REQUEST );
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 
 		case 'create':
 			$video = new Video();
 			if($video->create( $_POST )) {
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 			} else {
 				$tpl->assign('errors', $video->errors);
 			}
@@ -179,7 +179,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'set_position':
 			$video = new Video($_REQUEST['id']);
 			$video->set_position($_REQUEST['posicion'],$_SESSION['userid']);
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 
 		case 'change_status':
@@ -189,7 +189,7 @@ if( isset($_REQUEST['action']) ) {
 			//$video->set_status($status,$_SESSION['userid']);
 			$video->set_available($status, $_SESSION['userid']);
 			
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 	
 		case 'mfrontpage':		
@@ -240,7 +240,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 		
 		default:
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 	}
 } else {

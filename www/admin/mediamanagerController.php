@@ -171,17 +171,17 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $photo->metadata_utf = html_entity_decode($photo->metadata);
             $extension = strtolower($photo->type_img);
             
-            if( (!file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . '140x100-' . $photo->name))
-                && file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
+            if( (!file_exists(dirname(__FILE__)  . $photo->path_file . '140x100-' . $photo->name))
+                && file_exists(dirname(__FILE__)  . $photo->path_file . $photo->name)){
                 
                 if(preg_match('/^(jpeg|jpg|gif|png)$/i', $extension)) {
-                    if(is_readable(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
-                        $thumb = new Imagick(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name);
+                    if(is_readable(dirname(__FILE__) .MEDIA_IMG_PATH. $photo->path_file . $photo->name)){
+                        $thumb = new Imagick(dirname(__FILE__)  .MEDIA_IMG_PATH. $photo->path_file . $photo->name);
                         
                         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
                         
                         // Write the new image to a file
-                        $thumb->writeImage(dirname(__FILE__) . '/../www/media/images' .
+                        $thumb->writeImage(dirname(__FILE__) .
                                            $photo->path_file . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT .
                                            '-' . $photo->name);                    
                     }
@@ -207,18 +207,18 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $photo->description_utf = html_entity_decode(($photo->description));
             $photo->metadata_utf = html_entity_decode($photo->metadata);
             
-            if((!file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . '140x100-' . $photo->name))
-               && file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
+            if((!file_exists(dirname(__FILE__) .  $photo->path_file . '140x100-' . $photo->name))
+               && file_exists(dirname(__FILE__) .  $photo->path_file . $photo->name)){
                 
                 if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)){
-                    if(is_readable(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
-                        $thumb = new Imagick(dirname(__FILE__) . '/../www/media/images' .
+                    if(is_readable(dirname(__FILE__) . $photo->path_file . $photo->name)){
+                        $thumb = new Imagick(dirname(__FILE__) .
                                              $photo->path_file . $photo->name);
                         
                         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
                         
                         //Write the new image to a file
-                        $thumb->writeImage(dirname(__FILE__) . '/../www/media/images' .
+                        $thumb->writeImage(dirname(__FILE__) . 
                                            $photo->path_file . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT .
                                            '-' . $photo->name);
                         //logMessage( $photo[0]->path_file.' -> ' . $photo[0]->name);                        
@@ -275,12 +275,13 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             if(!empty($nameFile)) {
                 $data['fk_category'] = $this->category;
                 $data['category'] = $this->category;
-                $nameCat = $this->category_name;
-                $uploaddir = MEDIA_IMG_PATH . "/" . $nameCat . "/" . date("Ymd") . "/";
+
+               // Check upload directory
+                $dir_date =date("/Y/m/d/");
+                $uploaddir = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
                 
                 if(!is_dir($uploaddir)) {
-                    mkdir($uploaddir, 0775);
-                    @chmod($uploaddir, 0775); //Permisos de lectura y escritura del fichero
+                    ContentCategory::createDirectory($path);
                 }                
                 $datos = pathinfo($nameFile);     //sacamos infor del archivo
                 
@@ -291,21 +292,20 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 $name = date("YmdHis") . $micro . "." . $extension;
                 
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
-                    chmod($uploaddir . $name, 0777); //Permisos de lectura y escritura del fichero
                     $data['title'] = $nameFile;
                     $data['name'] = $name;
-                    $data['path_file'] = "/".$nameCat ."/".date("Ymd")."/";
+                    $data['path_file'] = $dir_date;
                     
                     $data['nameCat'] = $this->category_name; //nombre de la category
                     
                     $infor  = new MediaItem( $uploaddir.$name ); 	//Para sacar todos los datos de la imag
-                    
-                    $data['created'] = $infor->atime;
+           
+                    $data['created'] = date("Y-m-d H:i:s");
                     $data['changed'] = $infor->mtime;
-                    $data['date'] = $infor->mtime;
-                    $data['size'] = round($infor->size/1024, 2);
-                    $data['width'] = $infor->width;
-                    $data['height'] = $infor->height;
+                    $data['date']    = $infor->mtime;
+                    $data['size']    = round($infor->size/1024, 2);
+                    $data['width']   = $infor->width;
+                    $data['height']  = $infor->height;
                     $data['type_img'] = $extension;
                     $data['media_type'] = $_REQUEST['media_type'];
                     
@@ -404,6 +404,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         return $foto->name;
     }
 
+    // TODO: cambiar: no hacer así los where para mantener condiciones de búsqueda en paginaciones.
     public function action_searchResult()
     {
         $cm = new ContentManager();
@@ -451,18 +452,18 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $photo->description_utf = html_entity_decode(($photo->description));
             $photo->metadata_utf = html_entity_decode($photo->metadata);
 
-            if((!file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . '140x100-' . $photo->name))
-               && file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
+            if((!file_exists(dirname(__FILE__) .  $photo->path_file . '140x100-' . $photo->name))
+               && file_exists(dirname(__FILE__) . $photo->path_file . $photo->name)){
 
                 if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)){
-                    if(is_readable(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
+                    if(is_readable(dirname(__FILE__) .$photo->path_file . $photo->name)){
                         $thumb = new Imagick(dirname(__FILE__) . '/../www/media/images' .
                                              $photo->path_file . $photo->name);
 
                         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
 
                         //Write the new image to a file
-                        $thumb->writeImage(dirname(__FILE__) . '/../www/media/images' .
+                        $thumb->writeImage(dirname(__FILE__) .
                                            $photo->path_file . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT .
                                            '-' . $photo->name);
                         //logMessage( $photo[0]->path_file.' -> ' . $photo[0]->name);
@@ -470,9 +471,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 }
             }
         }
-
-
-      
+ 
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $items_page,

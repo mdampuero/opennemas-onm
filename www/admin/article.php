@@ -10,9 +10,9 @@ $app = Application::load();
 
 // Register events
 require_once('articles_events.php');
-
+ 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-
+ 
 require_once('libs/Pager/Pager.php');
 require_once('core/content_manager.class.php');
 require_once('core/content.class.php');
