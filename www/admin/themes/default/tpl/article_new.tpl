@@ -25,18 +25,18 @@
     <tbody>
     <tr>
         <td valign="top" align="right" style="padding:4px;" width="10%">
-            <label for="title">T&iacute;tulo Portada:</label>
+            <label for="title">{t}Title Frontpage{/t}:</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+        <td style="padding:4px;" nowrap="nowrap" valign="center" width="50%">
             <input type="text" id="title" name="title" title="Título de la noticia en portada"
                 value="" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));" onkeyup="countWords(this,document.getElementById('counter_title'))" tabindex="1"/>
         </td>
     </tr>
     <tr>
          <td valign="top" align="right" style="padding:4px;" width="10%">
-            <label for="title">T&iacute;tulo Interior:</label>
+            <label for="title">{t}Title Inner{/t}:</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+        <td style="padding:4px;" nowrap="nowrap" valign="center" width="50%">
             <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
                 value="" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
             
@@ -45,24 +45,34 @@
             {literal}
             <script type="text/javascript">
             /* <![CDATA[ */
+            function print_slug(){
+                var slug=$('title_int').value;
+                var final = slug.split(" ").join("-"); // Provisional cambiar por funcion crea slug.
+                $('slug').value = final;
+            }
             $('title').observe('blur', function(evt) {
                 var tituloInt = $('title_int').value.strip();
                 if( tituloInt.length == 0 ) {
                     $('title_int').value = $F('title');
                     get_tags($('title_int').value);
+                    print_slug();
                 }                
+            });
+            $('title_int').observe('blur', function(evt) {
+                    print_slug();
+
             });
             /* ]]> */
             </script>
             {/literal}
             
         </td>
-        <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
+        <td valign="top" align="right" style="padding:4px;" rowspan="6" width="40%">
             <div class="utilities-conf">
             <table style="width:99%;">
                 <tr>
                     <td valign="top" align="right" nowrap="nowrap">
-                    <label for="category">Secci&oacute;n:</label>
+                    <label for="category">{t}Section{/t}:</label>
                     </td>
                     <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                         <select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="6">
@@ -161,9 +171,17 @@
             </div>
         </td>
     </tr>
+     <tr>
+        <td valign="top" align="right" style="padding:4px;" width="30%">
+            <label for="metadata">{t}Slug{/t}: </label>
+        </td>
+        <td style="padding:4px;" nowrap="nowrap" width="70%">
+            <input type="text" id="slug" name="slug" size="70" title="Slug" value="" tabindex="1"/>
+        </td>
+    </tr>
     <tr>
         <td valign="top" align="right" style="padding:4px;" width="30%">
-            <label for="metadata">Palabras clave: </label>
+            <label for="metadata">{t}Metadata{/t}: </label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" width="70%">
             <input type="text" id="metadata" name="metadata" size="70" title="Metadatos" value="" tabindex="1"/>
@@ -174,7 +192,7 @@
         <td valign="top" align="right" style="padding:4px;">
             <label for="subtitle">Antet&iacute;tulo:</label>
         </td>
-        <td style="padding:4px;" valign="top" nowrap="nowrap" >
+        <td style="padding:4px;" valign="center" nowrap="nowrap" >
             <input type="text" id="subtitle" name="subtitle" title="antetítulo"
                 value="" class="required" size="100" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
         </td>
@@ -182,9 +200,9 @@
     
     <tr>
         <td valign="top" align="right" style="padding:4px;">
-            <label for="agency">Agencia:</label>
+            <label for="agency">Agencia/Firma:</label>
         </td>
-        <td style="padding:4px;" valign="top" nowrap="nowrap" >
+        <td style="padding:4px;" valign="center" nowrap="nowrap" >
             <input type="text" id="agency" name="agency" title="Agencia"
                 value="Agencias" class="required" size="100" tabindex="3"
 {literal}onblur="setTimeout(function(){tinyMCE.get('summary').focus();}, 200);"{/literal} />

@@ -41,7 +41,7 @@
     <td valign="top" align="right" style="padding:4px;" width="10%">
         <label for="title">T&iacute;tulo:</label>
     </td>
-    <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+    <td style="padding:4px;" nowrap="nowrap" valign="center" width="50%">
         <input type="text" id="title" name="title" title="Título de la noticia" tabindex="1"
             value="{$article->title|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));  search_related('{$article->pk_article}',$('metadata').value);"  onkeyup="countWords(this,document.getElementById('counter_title'))"  onkeyup="countWords(this,document.getElementById('counter_title'))"/>
     </td>
@@ -50,25 +50,35 @@
     <td valign="top" align="right" style="padding:4px;" width="10%">
         <label for="title">T&iacute;tulo Interior:</label>
     </td>
-    <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+    <td style="padding:4px;" nowrap="nowrap" valign="center" width="50%">
         <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
             value="{$article->title_int|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
         
         {literal}
         <script type="text/javascript">
         /* <![CDATA[ */
+        function print_slug(){
+                var slug=$('title_int').value;
+                var final = slug.split(" ").join("-"); // Provisional cambiar por funcion crea slug.
+                $('slug').value = final;
+        }
         $('title').observe('blur', function(evt) {
             var tituloInt = $('title_int').value.strip();
             if( tituloInt.length == 0 ) {
                 $('title_int').value = $F('title');
                 get_tags($('title_int').value);
+                print_slug();
             }
+        });
+
+         $('title_int').observe('blur', function(evt) {
+                  print_slug();
         });
         /* ]]> */
         </script>
         {/literal}
     </td>
-    <td valign="top" align="right" style="padding:4px;" rowspan="5" width="40%">
+    <td valign="top" align="right" style="padding:4px;" rowspan="6" width="40%">
          <div class="utilities-conf">
            <table style="width:99%;">
            <tr>
@@ -134,37 +144,7 @@
                         <img class="inhome" src="{$params.IMAGE_DIR}available.png" border="0" alt="Disponible" align="top" />
                 </td>
             </tr>
-            {* Hai que ter en conta o placeholder, non a posición *}
-            {* if ($article->position) eq 1 && ($_from neq 'home') *}            
-            {* if ($article->placeholder eq 'placeholder_0_0') && ($_from neq 'home')}
-            <tr>
-                <td valign="top"  align="right" nowrap="nowrap">
-                    <label for="columns"> Columnas: </label>
-                </td>
-                <td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                    <select name="columns" id="columns" class="required" tabindex="10">
-                    <option value="1" {if $article->columns eq 1} selected {/if}>1</option>
-                    <option value="2" {if $article->columns eq 2} selected {/if}>2</option>
-                   </select>
-                </td>
-            </tr>
-            {/if *}
-            
-            {* Hai que ter en conta o placeholder, non a posición *}
-            {* if ($article->home_pos) eq 1 && ($_from eq 'home') *}
-            {* if ($article->home_placeholder eq 'placeholder_0_0') && ($_from eq 'home')}
-            <tr>
-                <td valign="top"  align="right" nowrap="nowrap">
-                    <label for="home_columns"> Home Columnas: </label>
-                </td>
-                <td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                    <select name="home_columns" id="home_columns" class="required" tabindex="11">
-                    <option value="1" {if $article->home_columns eq 1}selected="selected"{/if}>1</option>
-                    <option value="2" {if $article->home_columns eq 2}selected="selected"{/if}>2</option>
-                   </select>
-                </td>
-            </tr>
-            {/if *}
+         
             
             {else} {* else if not list_hemeroteca *}
             
@@ -238,6 +218,14 @@
          </div>
     </td>
 </tr>
+ <tr>
+        <td valign="top" align="right" style="padding:4px;" width="30%">
+            <label for="metadata">{t}Slug{/t}: </label>
+        </td>
+        <td style="padding:4px;" nowrap="nowrap" width="70%">
+            <input type="text" id="slug" name="slug" size="70" title="slug" value="" tabindex="1"/>
+        </td>
+    </tr>
 <tr>
     <td valign="top" align="right" style="padding:4px;" width="30%">
         <label for="metadata">Palabras clave: </label>
