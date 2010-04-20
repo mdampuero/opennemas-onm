@@ -53,7 +53,7 @@ class SqlHelper
         
         $conn = (!is_null($conn))? $conn: $GLOBALS['application']->conn;
         if($conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $error_msg = $conn->ErrorMsg();
             
             throw new Exception($error_msg);
         }
@@ -89,4 +89,64 @@ class SqlHelper
         
         SqlHelper::update($table, $merged, $filter, $conn);
     }
+    
+    /**
+     * Build "insert" query using $fields array to write "values" sentence
+     *
+     * @see SqlHelper::bindAndUpdate
+     * @param string $table
+     * @param array $fields Array with name of fields to update ($colname => $value)
+     * @param object|null $conn ADOConnection instance 
+     */
+    public function insert($table, $fields, $conn=null)
+    {
+        $sql = 'INSERT INTO `%s` (%s) VALUES (%s)';
+        
+        $set = array();
+        $values = array();
+        foreach($fields as $k => $field) {
+            $set[]    = '`' . $k . '`';
+            $values[] = $field;
+        }
+        
+        $marks = implode(', ', array_fill(0, count($set), '?'));
+        $sql = sprintf($sql, $table, implode(', ', $set), $marks);
+        
+        $conn = (!is_null($conn))? $conn: $GLOBALS['application']->conn;
+        if($conn->Execute($sql, $values) === false) {
+            $error_msg = $conn->ErrorMsg();
+            
+            throw new Exception($error_msg);
+        }
+    }
+    
+    /**
+     * Search into $data values that match with keys into $fields to build
+     * new array for use SqlHelper::insert
+     * Also check if values isset and not empty
+     *
+     * <code>
+     *  $fields = array('starttime', 'endtime', 'content_status', 'available',
+     *                   'fk_user_last_editor', 'frontpage', 'in_home', 'permalink');
+     *  SqlHelper::bindAndInsert('contents', $fields, $_POST);
+     * </code>
+     * 
+     * @uses SqlHelper::insert
+     * @param string $table
+     * @param array $fields Array with name of fields to update
+     * @param array $data Array keyField => valueField, equals to POST
+     * @param object|null $conn ADOConnection instance 
+     */
+    public function bindAndInsert($table, $fields, $data, $conn=null)
+    {
+        $merged = array();
+        foreach($fields as $field) {
+            if(isset($data[$field])) {
+                $merged[ $field ] = $data[$field];
+            }
+        }
+        
+        SqlHelper::insert($table, $merged, $conn);
+    }
+    
 }
