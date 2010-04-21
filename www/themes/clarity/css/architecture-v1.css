@@ -1,0 +1,831 @@
+/* 
+    Document   : onm-mockup
+    Created on : Feb 18, 2010, 11:13:09 AM
+    Author     : Francisco Diéguez fran.dieguez@mabishu.com
+    Description:
+        CSS to newspaper mockup page
+*/
+
+
+/***********************************************************
+    General definitions
+************************************************************/
+
+
+body {background:#fff; color:Black; font-family:Georgia,Arial; font-size:11px; text-align:center; border-top:7px solid black;}
+a, a:hover, a:link, a:visited {color:#aa0000; text-decoration: none; font-family: Times; outline:none}
+a:hover {text-decoration: underline;}
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+
+.container{
+    background:White;
+    border:none;
+    text-align:left;
+    padding:10px;
+}
+.wrapper {
+    margin:0 auto !important;
+    text-align:center;   
+}
+
+ul{
+	margin:0;
+}
+li{
+    list-style-image:url(../images/bullets/black-bullet.png);
+    list-style-position: outside;
+}
+/***********************************************************
+    ADS definition
+************************************************************/
+
+
+#publis{
+    text-align:left;
+    margin:10px 0 10px 0;
+}
+.publi { background:#ececec url(../images/publi/back-publi.png) 40px 20px no-repeat;}
+.publi_1{
+    min-height:90px;
+    display:block
+}
+.publi_2{
+    min-height:90px;
+    display:block;
+}
+
+.publi_310{
+   background:#ccc;
+   display:block;
+   margin-bottom:15px;
+   width:100%;
+}
+
+.publi_310 img{
+    border:5px solid White;
+    margin:08px;
+}
+
+.publi-footer-1, .publi-footer-2{
+	background:#ececec;
+	height:80px;
+	margin-bottom:10px;
+}
+
+/***********************************************************
+    Header definition
+************************************************************/
+
+#header{
+	
+}
+
+span.red{
+	color:#aa0000;
+}
+
+/*
+    Weather and time information definition
+*/
+
+#info-top{
+    color:#000;
+    position:absolute;
+	top:20px;
+	right:20px;
+	font-size:.9em;
+}
+#info-top ul{
+	float:right;
+	background:White;
+	padding:5px;
+}
+
+#info-top ul li{
+	display:inline;
+	border-right:1px solid Black;
+	padding:0 5px;
+}
+#info-top ul li.last{
+	border:none;
+}
+#info-top a{
+	color:Black;
+}
+
+/*
+    Logo section definition
+*/
+
+#logo{
+	background:url(../images/back-header.png) left bottom no-repeat;
+	position:relative;
+	height:354px;
+	min-height:354px;
+}
+#logo-image{
+	position:absolute;
+	top:30px;
+	left:50px;
+}
+
+#logo div#description, #logo div#description-category{
+	position:absolute;
+	bottom:30px;
+	right:30px;
+	text-align:right;
+}
+#logo div#description ul li, #logo div#description-category ul li{
+	font-size:1.5em;
+	background-color:White;
+	line-height:2em;
+	padding:0 10px;
+	margin-top:10px;
+	display:block;
+	list-style:none;
+	
+}
+
+#description-category ul li{
+	font-family:Droid Sans, Georgia;
+	font-size:2.5em !important;
+	padding-left:90px !important;
+	background-image:url(../images/back-category-header.png);
+	background-position: 10px 13px;
+	background-repeat:no-repeat;
+	font-size:2.5em !important;
+	font-weight:bold;
+}
+
+/*
+    Main menues definition
+*/
+
+#main_menu{
+    background:Black;
+    margin:0;
+    padding:0;
+	height:22px;
+}
+
+#main_menu ul, #sub_main_menu ul{
+    margin:0;
+    padding:0;
+}
+
+
+#main_menu ul li{
+    float:left;
+    display:block;
+    padding:4px 20px 2px 20px;
+	height:18px;
+    clear:none;
+    margin:0;
+    color:White;
+	font-size:.87em;
+    text-transform:uppercase;
+    font-weight: bold;
+}
+#main_menu ul#menu > li:hover, #main_menu ul#menu > li.active{
+    background:url(../images/back-menu.png) top right repeat-x;
+    cursor:pointer;
+}
+
+#main_menu ul a, #main_menu ul a:hover, #main_menu ul a:link, #main_menu ul a:visited {
+    color:White;
+    text-decoration:none;
+    font-family:Verdana,Arial;
+}
+
+#sub_main_menu{
+    font-size:.9em;
+    color:#808080;
+    margin:0;
+    padding:0;
+}
+#sub_main_menu ul{
+    margin:0;
+}
+#sub_main_menu ul li{
+    float:left;
+    display:block;
+    padding:4px 10px;
+    clear:none;
+    margin:0;
+}
+#sub_main_menu ul li:hover, #sub_main_menu ul li.active{
+    background:#ccc;
+    cursor:pointer;
+}
+
+#sub_main_menu ul a, #sub_main_menu ul a:hover, #sub_main_menu ul a:link, #sub_main_menu ul a:visited {
+    color:#808080;
+    font-family:Verdana,Arial;
+    text-decoration:none;
+}
+
+#main-search-form{
+	background:#ccc;
+    padding:20px 0;
+	margin-bottom:10px;
+}
+#main-search-form div{
+	padding:0 10px;
+}
+#main-search-form h3{
+	font-size:1.3em;
+	margin:0;
+	padding:0;
+	width:250px;
+	margin-bottom:10px;
+}
+#main-search-form *{
+    padding:0;
+    margin:0;
+}
+#main-search-form form{
+    margin:0;
+    padding:0;
+	margin-left:10px;
+}
+#main-search-form input{
+	padding:3px 10px;
+}
+#main-search-form input[type="text"]{
+    padding:5px 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #999;
+	font-style:italic;
+}
+
+
+/***********************************************************
+    Main content definition
+************************************************************/
+
+/*
+    Widget slideshow of lastest news definition
+*/
+
+div.lastest-news{
+    display:block;
+    margin:10px 0;
+    overflow:hidden;
+    height:20px
+}
+div.lastest-news strong{
+    color:#aa0000;
+	font-weight:normal;
+}
+div.lastest-news ul{
+    display:inline;
+    float:left;
+	margin-top:5px;
+}
+
+div.lastest-news ul li{
+    list-style:none;
+    float:left;
+    margin-right:5px;
+	margin-top:10px;
+}
+
+/*
+    Miscelaneous definitions
+*/
+
+#teaser-main h2{ color: #444; font-family: "Warnock Pro","Goudy Old Style","Palatino","Book Antiqua", Georgia, serif; font-weight: normal; }
+#teaser2{ display:none;}
+
+.border-dotted{
+	background:url(../images/bullets/border-dotted.png) top left repeat-y;
+}
+div.border-dotted h3{
+	color:#aa0000;
+}
+div.border-dotted div.content-new{
+	margin:0 !important;
+	padding:0 10px;
+}
+
+div.middle-column-frontpage h3.nw-title a{
+	color:#aa0000 !important;
+}
+
+.new-separator{
+    border:none;
+    background:url(../images/horiz-separator.png) top right repeat-x;
+    height:10px;
+    margin:5px 0;
+    border:1px
+}
+
+/*
+    Separators definition
+*/
+
+.more-news-separator{
+    border-bottom:3px solid Black;
+}
+.more-news-inner-separator{
+    border-bottom:1px solid #ddd;
+}
+.more-news-little-separator{
+    border-bottom:1px solid Black;
+    margin:3px 0;
+}
+
+/*
+    New definition
+*/
+
+
+.nw-big, .nw-little{
+    margin-bottom:10px;
+	position:relative;
+}
+
+.nw-image {
+	width:100%;   
+}
+div.nw-category-name{
+    margin:0;
+    margin-bottom:5px;
+    color:#aa0000;
+    padding:0 18px 0 0;
+    text-transform: uppercase;
+    display:block;
+    width:auto;
+	position:relative;
+	padding-left:35px;
+	font-size:1.2em;
+	width:100%;
+}
+div.nw-category-name span.spacer{
+	width:30px;
+	height:12px;
+	display:block;
+	position:absolute;
+	top:0;
+	left:0;
+    background:url(../images/bullets/bars.png) top right no-repeat;
+}
+div.nw-category-name span.pubdate{
+	text-transform:lowercase !important;
+}
+div.nw-big div.content-new, div.nw-little div.content-new{
+	margin-left:22px;
+}
+div.nw-big div.sports{
+    background:url(../images/bullets/green.png) center right no-repeat !important;
+    color:Green;
+}
+.nw-title {
+	font-size:1.3em;
+    margin:0;
+    margin-bottom:5px;
+}
+.nw-title-big{
+	font-size:1.6em;
+	color:Black;
+}
+.nw-title a, .nw-title-big a{
+	color:black !important;
+}
+.nw-subtitle {
+    color:#4d4d4d;
+}
+div.nw-little .nw-subtitle{
+	font-size:.95em;
+}
+.more-resources {
+
+}
+div.more-resources ul{
+    margin:0;
+    padding:0
+}
+div.more-resources ul li{
+    list-style-image:url(../images/bullets/black-bullet.png);
+    color:#bbb;
+    list-style-position: inside;
+}
+
+div.more-resources ul li.res-file {
+}
+div.more-resources ul li.res-image {
+
+}
+div.more-resources ul li.res-link {
+
+}
+div.more-resources ul li.res-video {
+
+}
+
+div.comments-information{
+	position:absolute;
+	right:0;
+	top:5px;
+}
+div.comments-information a{
+	padding:0 3px 0 18px;
+	background:url(../images/bullets/comment.png) top left no-repeat;
+	color:Black;
+	font-size:1.1em;
+	height:11px;
+	max-height:12px;
+	display:block;
+}
+div.comments-information a:hover{
+	text-decoration:none;
+	background-position:0 -11px;
+}
+
+div.nw-big-img-lateral img.nw-image{
+    max-width:100px;
+    float:left;
+    margin:10px 10px 10px 0;
+}
+
+div.nw-just-image{
+    position:relative;
+
+    display:block;
+    float:right;
+    margin-bottom:5px;
+}
+div.nw-just-image div.nw-title {
+    font-size:1.5em;
+    font-family:Georgia;
+    background:#a5a5a5;
+    margin:0;
+    height:25px;
+    line-height:25px;
+    padding-left:5px
+}
+
+div.nw-just-image div.nw-title a {
+    color:White;
+}
+div.nw-just-image:hover div.nw-subtitle{
+    display:block;
+}
+
+div.nw-just-image div.nw-subtitle{
+    float:left;
+    display:none;
+    margin:0 auto;
+    background:url(../images/utilities/back-gray-dimmed.png) top right repeat;
+    color:Black;
+    position:absolute;
+    top:25px;
+    left:0;
+}
+div.nw-just-image div.nw-subtitle div{
+    padding:5px;
+}
+
+div.nw-just-image img.nw-image{
+    float:left;
+}
+
+/*
+	Widget Highlighted Authors
+*/
+
+.author-highlighted h3{
+	color:White !important;
+	background:Black;
+	font-size:1.3em;
+	padding:6px 10px;
+}
+
+div.author-highlighted div.author {
+	display:block;
+	clear:both;
+	width:100%;
+	padding:0 10px;
+	margin-bottom:5px;
+}
+div.author-highlighted div.author div.info{
+	display:block;
+	float:left;
+	margin:0;
+	padding:0;
+	width:87%;
+}
+div.author-highlighted div.author img{
+	float:left;
+	margin-right:5px;
+	margin-top:5px;
+}
+div.author-highlighted div.author h4.author-name{
+	margin:0 !important;
+	padding:0 !important;
+}
+div.author-highlighted h4.author-name a{
+	color:Black;
+}
+div.author-highlighted div.author div.info div.title{
+	font-family:Verdana;
+	font-size:.9em;
+}
+
+/*
+    Widget more news definition
+*/
+
+div.more-news h4, div.more-promotions-from-diary h4{
+    font-family:Times, Georgia;
+    color:#aa0000;
+    font-size:1.6em;
+    font-variant: small-caps;
+    margin:0;
+}
+
+ul.more-news-section-sectionlist{
+    margin:0; padding:0;
+}
+.more-news-section-sectionlist li{
+    list-style:none;
+    float:left;
+    clear:none;
+    border-right:1px solid #ccc;
+    padding:0 10px;
+}
+.more-news-section-sectionlist li.last, .more-news-section-sectionlist li.first{
+    border:none;
+}
+
+.more-news-section-sectionlist li a{
+    text-decoration: none;
+    font-family:Verdana, Arial;
+    color:#222222;
+    font-size:11px;
+}
+
+.more-news-section-sectionlist li a:hover{
+    text-decoration: underline;
+    cursor: pointer
+}
+.more-news-section-links {
+    list-style-image:url(../image/bullets/arrow.png);
+}
+ul.more-news-section-links li{
+    margin:0; padding:0;
+    
+}
+div.more-news-section-links .first a{
+    font-size: 1.6em;
+}
+
+/*
+    widget related news embebed into article
+*/
+
+div.related-news-embebed{
+	border:1px solid #ddd;
+	margin:5px 10px 5px 0;
+}
+div.related-news-embebed .title{
+	font-family:Verdana, Arial;
+	font-size:.9em;
+	background:#F2F1EF;
+	padding:5px;
+	border-bottom:1px solid #ddd
+}
+div.related-news-embebed ul{
+	padding:0;
+	margin:0 auto;
+	margin-bottom:20px;
+	width:90%;
+	line-height:.95em !important;
+}
+div.related-news-embebed ul li{
+	border-bottom:1px solid #ddd;
+	list-style:none;
+	
+	padding:3px 0;
+}
+div.related-news-embebed ul li.last{
+	border:none;
+}
+
+div.related-news-embebed a{
+	font-family:Verdana, Arial ;
+	font-size:.8em;
+}
+/*
+    Widget more little news definition
+*/
+
+
+div.more-little-news-section ul{
+    margin:0;
+    padding:0;
+    margin-bottom:10px
+}
+
+div.more-little-news-section h4 {
+    font-size:1em;
+    font-family:Verdana;
+    font-weight: bold;
+    margin:0;
+}
+div.more-little-news-section li{
+    list-style:none;
+    margin:0;
+    padding:1px 7px;
+    border-bottom:1px dotted #ccc;
+}
+div.more-little-news-section li.last{
+    border:none;
+}
+div.more-little-news-section li a{
+    color:Black;
+    font-size: 1.1em;
+}
+
+
+/*
+    Widget photos definition
+*/
+
+div.photos-highlighter{
+    background:#ececec;
+}
+
+div.photos-highlighter div.photos-header{
+	margin-top:-10px;
+	margin-left:-10px;
+}
+div.photos-highlighter-header img{
+}
+
+div.photos-highlighter ul{
+    margin:0;
+    padding:0;
+}
+div.photos-highlighter-big{
+    margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
+    cursor: pointer;
+	width:300px;
+	float:left;
+	text-align:right;
+	color:#808080;
+	font-size:1.3em;
+}
+div.photos-highligher-little-section-links{
+	float:right;
+	padding-left:10px;
+	margin-left:0;
+	display:block;
+}
+div.photos-highlighter li{
+    float:left;
+    list-style:none;
+    margin:0;
+    color:White;
+    cursor:pointer;
+}
+
+div.photos-highlighter li img{
+    width:100px;
+}
+div.photos-highlighter li.first{
+    padding-left:0;
+}
+div.photos-highlighter li.selected{
+    color:#d45500;
+}
+
+
+
+/***********************************************************
+    Footer content definition
+************************************************************/
+
+
+
+#footer{
+    color:#9b9da0;
+}
+div#footer li{
+
+}
+div#footer a{
+    color:#9b9da0 !important;
+}
+div#footer div.publi-footer{
+    background:#ccc;
+    margin-bottom:5px;
+    background:#ccc;
+}
+div#footer hr.new-separator{ margin:0; padding:0; height:2px; }
+
+div#footer ul{
+    margin:0;
+    padding:0;
+    margin-bottom:3px;
+}
+div#footer ul li{
+    display:inline;
+    margin:0;
+    padding:0;
+    padding-right:5px;
+}
+div#footer ul li.last{ border:none;}
+
+div#footer .developed-by{
+    text-align:right
+}
+
+/***********************************************************
+    Menu
+************************************************************/
+
+/* Root = Horizontal, Secondary = Vertical */
+ul#menu {
+  margin: 0;
+  padding: 0;
+}
+
+ul#menu li {
+  margin: 0;
+  border: 0 none;
+  display: inline;
+  list-style: none;
+  position: relative;
+}
+
+ul#menu li:hover ul{
+	display:block;
+	background:Black;
+}
+ul#menu  ul {
+	margin: 0;
+	padding: 0;
+	display: none;
+	position: absolute;
+	top: 20px;
+	left: 0px;
+	z-index:9999;
+}
+
+ul#menu ul:after /*From IE 7 lack of compliance*/{
+	clear: both;
+	display: block;
+	font: 1px/0px serif;
+	content: ".";
+	height: 0;
+	visibility: hidden;
+}
+
+ul#menu ul li {
+	float: left; /*For IE 7 lack of compliance*/
+	display: block !important;
+	display: inline; /*For IE*/
+	margin:5px;
+}
+
+/* Root Menu */
+ul#menu ul li a:hover {
+	text-decoration:underline;
+}
+
+/***********************************************************
+    Actions
+************************************************************/
+
+.share-actions { display:inline; position:relative;  padding:5px 0; z-index:9999; }
+.share-actions a { color:#333; text-decoration:none; margin:0; padding:0;}
+.share-actions img { vertical-align:middle; }
+.share-actions ul {
+	background:#fff; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
+    border-color:#fafafa #eae8e9 #eae8e9 #fafafa; border-style:solid; border-width:1px 3px 3px 1px; list-style:none !important;
+	}
+.share-actions ul > li { text-align:left; border-bottom:1px solid #eae8e9; list-style:none; display:block !important; float:none; width:100%; background:none !important; }
+.share-actions ul > li > a{ background:none !important; color:Black !important; margin:0; padding:0; text-indent:1em !important; width:auto;}
+.share-actions ul > li > a:hover{ text-decoration:underline}

@@ -1,0 +1,31 @@
+div.inner-news-highligther .widget-title{
+    background:Black;
+    font-family:Georgia;
+    color:White;
+    vertical-align:middle;
+    padding:5px 10px;
+}
+
+div.inner-news-highligther div.nw-big{
+    padding:0 10px;
+}
+
+div.inner-news-highligther h3.nw-title a{
+    font-size:1.5em;
+    color:#aa0000 !important;
+}
+div.inner-news-highligther h3.nw-title{
+    font-family:Verdana;
+}
+
+div.video-preview .widget-title{
+    background:Black;
+    font-family:Georgia;
+    color:White;
+    vertical-align:middle;
+    padding:5px 10px;
+    margin-bottom:0;
+}
+div.video-preview h3{
+    margin-bottom:0;
+}
