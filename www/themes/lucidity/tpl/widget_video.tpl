@@ -1,40 +1,21 @@
 {*
     OpenNeMas project
 
-    @theme      Lucidity
+    @theme      Clarity
 *}
- 
 
-    <div class="tv-highlighter clearfix">
-        <div class="tv-highlighter-header">
-             <b>Videos</b>
-        </div>
-       <div class="tv-highlighter-minis">
-                {section name=i loop=$videos start=0}
-                    {if $smarty.section.i.first}
-                        <div  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                    {elseif $smarty.section.i.last}
-                        <div class="last"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                    {else}
-                         <div class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                    {/if}
-                    {if $videos[i]->author_name eq 'youtube'}
-                         <img style="width:90px;" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
-                    {else}
-                          <img style="width:90px;"  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
-                    {/if}
-                        </a></div>
-                {/section}
-        </div>
-        <div class="tv-highlighter-big span-8 clearfix">
-            {if $videos[0]->author_name eq 'youtube'}
+<div class="layout-column last-column span-12 last">
+    <div class="photos-highlighter clearfix span-12">
+        <div class="photos-header"><img src="images/widgets/videos-highlighter-header.png" alt=""/></div>
+        <div class="photos-highlighter-big clearfix">
+             {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
                    <object width="300" height="210">
                         <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
                         <param value="true" name="allowFullScreen" />
                         <param value="always" name="allowscriptaccess">
                         <embed width="300" height="210" src="http://www.youtube.com/v/{$videos[0]->videoid}" />
-                    </object> 
+                    </object>
                 </a>
              {else}
               <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
@@ -46,36 +27,24 @@
                 </object>
                 </a>
               {/if}
-
-                <p class="span-6"> <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
-                        {$videos[0]->title|clearslash|escape:'html'} </a>
-                </p>
-                <br />
-                 <ul class="div.tv-highlighter" style="clear:both;">
-                    {section name=i loop=$videos}
-                        {if $smarty.section.i.first}
-                            <li class="first">
-                               
-                        {elseif $smarty.section.i.last}
-                            <li class="last">
-
-                        {else}
-                            <li class="">
-                         {/if}
-                            <a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
-                             {if $videos[i]->author_name eq 'youtube'}
-                                   <img width="60" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
-                               {else}
-                                  <img width="60" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
-                            {/if}  
-
-                                </a>
-                            </li>
-                       
-                    {/section}
-                </ul>
+              <div class="info"><a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                   {$videos[0]->title|clearslash|escape:'html'} </a>
+              </div>
         </div>
-
+        <ul class="photos-highligher-little-section-links">
+            {if $smarty.section.i.first}
+                <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                    {elseif $smarty.section.i.last}
+                        <li class="last"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                    {else}
+                         <li class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                    {/if}
+                        {if $videos[i]->author_name eq 'youtube'}
+                             <img style="width:90px;" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
+                        {else}
+                              <img style="width:90px;"  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                        {/if}
+                    </a></li>
+        </ul>
     </div>
-
-
+</div> 

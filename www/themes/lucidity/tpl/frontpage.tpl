@@ -122,7 +122,7 @@ Smarty template: frontpage.tpl
                         {include file="widget_video.tpl" }
                     </div>
                     <div class="layout-column last-column last span-12">
-                        {include file="widget_galery.tpl"}
+                        {include file="widget_gallery.tpl"}
                     </div>
                      
                 </div>
