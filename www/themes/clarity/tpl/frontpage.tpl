@@ -67,9 +67,10 @@ Smarty template: frontpage.tpl
                             <div class="middle-column-frontpage">
                                 {renderplaceholder items=$column tpl='frontpage_article_middle_big.tpl' placeholder="placeholder_2_1"}
 
-                                {renderplaceholder items=$column tpl='frontpage_article_middle_little.tpl' placeholder="placeholder_2_2"}
-
                                 {include file="widget_ad_adsense.tpl"}
+
+                                {renderplaceholder items=$column tpl='frontpage_article_middle_little.tpl' placeholder="placeholder_2_2"}
+                                
                             </div>
 
                         </div>
@@ -77,15 +78,20 @@ Smarty template: frontpage.tpl
                     <div class="layout-column last-column last span-7">
                       {include file="widget_search.tpl"}
 
-                      {include file="widget_frontend_video.tpl"}
+                      {include file="widget_frontend_video.tpl" video=$video[1]}
                        
                       {include file="widget_ad_lateral.tpl" type='3'}
 
+                      {include file="widget_headlines.tpl"}
                     </div>
 
                 </div>
  
                 <hr class="new-separator">
+
+                <div class="span-24">
+                       {include file="widget_ad_separator.tpl"}
+                </div>
 
                 <div class="span-24">
                     <div class="layout-column first-column span-12">

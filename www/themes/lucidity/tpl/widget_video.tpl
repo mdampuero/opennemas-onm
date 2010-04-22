@@ -32,7 +32,7 @@
               </div>
         </div>
         <ul class="photos-highligher-little-section-links">
-            {section name=i loop=$videos}
+            {section name=i loop=$videos max=3}
                 {if $smarty.section.i.first}
                 <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                     {elseif $smarty.section.i.last}

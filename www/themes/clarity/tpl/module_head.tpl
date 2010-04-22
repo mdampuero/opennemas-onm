@@ -11,6 +11,7 @@
 
         <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection">
         <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print">
+        <link rel="stylesheet" href="{$params.CSS_DIR}advertisement.css" type="text/css" media="screen,projection">
         <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" media="screen, projection"><![endif]-->
 
         <link rel="stylesheet" href="{$params.CSS_DIR}architecture-v1.css" type="text/css" media="screen,projection">
@@ -67,8 +68,8 @@
             {/literal}
  
         {/if}
-         
-        
+
+
         {* /rss/ 
         <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />
         *}

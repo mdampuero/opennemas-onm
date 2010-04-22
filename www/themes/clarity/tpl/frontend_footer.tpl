@@ -3,6 +3,7 @@
 
     @theme      Clarity
 *}
+    <hr class="new-separator" />
     {include file="widget_ad_bottom.tpl"}
     <hr class="new-separator" />
     <div class="span-24">

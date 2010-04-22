@@ -6,7 +6,7 @@
 
 <div class="layout-column last-column span-12 last">
     <div class="photos-highlighter clearfix span-12">
-        <div class="photos-header"><img src="images/widgets/videos-highlighter-header.png" alt=""/></div>
+        <div class="photos-header"><img src="{$params.IMAGE_DIR}/widgets/videos-highlighter-header.png" alt=""/></div>
         <div class="photos-highlighter-big clearfix">
              {if $videos[0]->author_name eq 'youtube'}
                 <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
@@ -32,8 +32,9 @@
               </div>
         </div>
         <ul class="photos-highligher-little-section-links">
-            {if $smarty.section.i.first}
-                <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+            {section name=i loop=$videos max=3}
+                {if $smarty.section.i.first}
+                    <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                     {elseif $smarty.section.i.last}
                         <li class="last"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
                     {else}
@@ -45,6 +46,7 @@
                               <img style="width:90px;"  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
                         {/if}
                     </a></li>
+            {/section}
         </ul>
     </div>
 </div> 

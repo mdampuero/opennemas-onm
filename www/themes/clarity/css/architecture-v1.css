@@ -55,42 +55,6 @@ li{
     list-style-image:url(../images/bullets/black-bullet.png);
     list-style-position: outside;
 }
-/***********************************************************
-    ADS definition
-************************************************************/
-
-
-#publis{
-    text-align:left;
-    margin:10px 0 10px 0;
-}
-.publi { background:#ececec url(../images/publi/back-publi.png) 40px 20px no-repeat;}
-.publi_1{
-    min-height:90px;
-    display:block
-}
-.publi_2{
-    min-height:90px;
-    display:block;
-}
-
-.publi_310{
-   background:#ccc;
-   display:block;
-   margin-bottom:15px;
-   width:100%;
-}
-
-.publi_310 img{
-    border:5px solid White;
-    margin:08px;
-}
-
-.publi-footer-1, .publi-footer-2{
-	background:#ececec;
-	height:80px;
-	margin-bottom:10px;
-}
 
 /***********************************************************
     Header definition
@@ -591,7 +555,7 @@ ul.more-news-section-sectionlist{
     cursor: pointer
 }
 .more-news-section-links {
-    list-style-image:url(../image/bullets/arrow.png);
+    list-style-image:url(/themes/clarity/images/bullets/arrow.png);
 }
 ul.more-news-section-links li{
     margin:0; padding:0;
@@ -675,6 +639,8 @@ div.more-little-news-section li a{
 
 div.photos-highlighter{
     background:#ececec;
+    margin-bottom:10px;
+    min-height:300px;
 }
 
 div.photos-highlighter div.photos-header{
@@ -689,7 +655,7 @@ div.photos-highlighter ul{
     padding:0;
 }
 div.photos-highlighter-big{
-    margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
+    margin:10px 10px 5px 40px; /* chanchullada padre HOYGA*/
     cursor: pointer;
 	width:300px;
 	float:left;
@@ -829,3 +795,154 @@ ul#menu ul li a:hover {
 .share-actions ul > li { text-align:left; border-bottom:1px solid #eae8e9; list-style:none; display:block !important; float:none; width:100%; background:none !important; }
 .share-actions ul > li > a{ background:none !important; color:Black !important; margin:0; padding:0; text-indent:1em !important; width:auto;}
 .share-actions ul > li > a:hover{ text-decoration:underline}
+
+
+/***********************************************************
+    Tabs
+************************************************************/
+
+
+div.widget-lastest-tab div.content{
+    margin:10px;
+}
+
+div.widget-lastest-tab,
+div.widget-lastest-tab .ui-tabs-panel,
+div.widget-lastest-tab .ui-widget-content,
+div.widget-lastest-tab .ui-corner-bottom,
+div.widget-lastest-tab div.ui-tabs-nav,
+div.widget-lastest-tab div.ui-helper-reset,
+div.widget-lastest-tab .ui-helper-clearfix,
+div.widget-lastest-tab .ui-widget-header .ui-corner-all{
+    background:White !important;
+    padding:0;
+    margin:0;
+}
+
+div.widget-lastest-tab .ui-tabs,
+div.widget-lastest-tab .ui-widget,
+div.widget-lastest-tab .ui-widget-content,
+div.widget-lastest-tab .ui-corner-all{
+    padding:0;
+    margin:0;
+    border:0px !important;
+}
+
+div.widget-lastest-tab .inner-video-tabs{
+    margin-top:35px;
+}
+div.widget-lastest-tab div{
+    margin:0;
+    padding:0;
+}
+div.widget-lastest-tab .tab-lastest{
+    width:99%;
+    margin:0 auto;
+    background:url(/themes/lucidity/images/horiz-separator.png) bottom right repeat-x;
+}
+
+div.widget-lastest-tab .explanation{
+    color:#ff8614;
+    margin:0px 5px;
+    font-size:.9em
+}
+
+div.widget-lastest-tab div.ui-tabs-panel{
+    overflow-x: hidden;
+    border:1px solid #373737 !important;
+    margin:10px;
+    border:0px !important;
+    padding-bottom:20px;
+}
+div.widget-lastest-tab .ui-tabs-nav a{
+    color:Black !important;
+    font-family:Verdana !important;
+    font-size:.8em !important;
+}
+div.widget-lastest-tab .ui-tabs-nav{
+    border:none !important;
+    background: #f3f3f3 !important;
+}
+div.video .ui-tabs-nav li a{
+	background-color:#333 !important;
+}
+div.video .ui-tabs-nav li.ui-tabs-selected a,
+div.video .ui-tabs-nav li.ui-state-active a{
+	background-color:#1c1e1c !important;
+}
+div.video .ui-tabs-nav li{
+	border:1px solid #373737 !important;
+	border-bottom:none !important;
+}
+
+div.widget-lastest-tab .ui-tabs-default{
+    background-color:White !important;
+        border: none !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #f3f3f3 !important;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+
+}
+div.widget-lastest-tab .ui-tabs-selected, .ui-tabs-active{
+    background:White !important;
+    border: none !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border: 1px solid #f3f3f3 !important;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: Black !important;}
+div.widget-lastest-tab div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div.widget-lastest-tab .tab-lastest-title a{ font-family:Georgia; color:#111; font-size:.9em; margin:0; padding:0}
+div.widget-lastest-tab .tab-lastest-title{ margin:2px 4px; }
+
+div.widget-lastest-tab{
+    border-top: 10px solid #dedede !important;
+    background-color: #f3f3f3 !important;
+}
+
+div.widget-lastest-tab .title{
+    font-family: Georgia;
+    font-size:1.6em;
+    margin:10px
+}
+
+
+div.widget-lastest-tab .tab-lastest-title span{
+    background-image:url(/themes/lucidity/images/bullets/res-sprite.png);
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:13px;
+    height:13px;
+
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-file {
+    background-position: -81px -33px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-link {
+    background-position: -160px -49px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-image {
+    background-position: -130px -49px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-video {
+    background-position: -113px -49px !important;
+}
+div.widget-lastest-tab .tab-lastest-title span.res-opinion {
+    background-position: -111px -32px !important;
+}
+
+div.widget-lastest-tab .tab-lastest-title span.res-article {
+    background-position: -161px -32px !important;
+}

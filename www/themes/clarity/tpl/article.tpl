@@ -10,24 +10,22 @@ OpenNeMas project
 Smarty template: article.tpl
 *}
  
+
 {include file="module_head.tpl"}
 
-    {* Cambiar color del menú segun la section *}
-    
-    {* publicidad interstitial interior *}
-    {insert name="intersticial" type="150"}
-
+    {* publicidad interstitial *}
+    {insert name="intersticial" type="50"}
 
     {include file="widget_ad_top.tpl"}
 
     <div class="wrapper clearfix">
         <div class="container clearfix span-24">
 
-            <div id="header" class="">
+            <div id="header" class="clearfix span-24">
 
-               {include file="frontend_header.tpl"}
+                {include file="frontend_logo.tpl"}
 
-               {include file="frontend_menu.tpl"}
+                {include file="frontend_menu.tpl"}
 
             </div>
 
@@ -46,7 +44,7 @@ Smarty template: article.tpl
 
                 <div class="span-24">
                     <div class="layout-column first-column span-16">
-                        <div class="border-dotted">
+
                             <div class="span-16 toolbar">
                                 {include file="widget_ratings.tpl"}
 
@@ -103,7 +101,7 @@ Smarty template: article.tpl
                             </div><!--fin more-news-bottom-article -->
 
                            {include file="module_comments.tpl" content=$article}
-                        </div>
+                        
                     </div>
 
                     {include file="article_last_column.tpl"}
