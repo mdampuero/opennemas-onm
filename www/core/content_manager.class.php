@@ -390,14 +390,15 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if($rs->_numOfRows<$num && $not_empty) {
-          /*  while($rs->_numOfRows<$num && $days<30){
+            while($rs->_numOfRows<$num && $days<30){
                 $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
 
                 $sql = 'SELECT * FROM '.$_tables .
                         'WHERE '.$_where.$_category. $_days.
                         ' '.$_order_by;
                 $rs = $GLOBALS['application']->conn->Execute($sql);
-            } */
+                $days+=1;
+            }  
             
         }
 
