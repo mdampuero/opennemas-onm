@@ -7,7 +7,7 @@
 <div id="logo" class="clearfix span-24">
 
     <div id="logo-image" class="span-8 clearfix">
-        <a href="#"><img src="{$params.IMAGE_DIR}main-logo.big.png" class="transparent-logo" alt="También Arquitectura" /></a>
+        <a href="/"><img src="{$params.IMAGE_DIR}main-logo.big.png" class="transparent-logo" alt="También Arquitectura" /></a>
     </div>
 
     <div id="info-top" class="span-16">

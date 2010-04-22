@@ -687,7 +687,10 @@ div.photos-highlighter li.selected{
     color:#d45500;
 }
 
-
+div.photos-highlighter-big a{
+    color:#808080;
+    font-family:Georgia, Arial;
+}
 
 /***********************************************************
     Footer content definition
@@ -915,7 +918,7 @@ div.widget-lastest-tab .title{
 }
 
 
-div.widget-lastest-tab .tab-lastest-title span{
+div.widget-lastest-tab .tab-lastest-title span, div.related-news-embebed span{
     background-image:url(/themes/lucidity/images/bullets/res-sprite.png);
     background-repeat:no-repeat;
     display:inline-block;
@@ -924,25 +927,25 @@ div.widget-lastest-tab .tab-lastest-title span{
 
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-file {
+div.widget-lastest-tab .tab-lastest-title span.res-file, div.related-news-embebed span.res-file {
     background-position: -81px -33px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-link {
+div.widget-lastest-tab .tab-lastest-title span.res-link,div. related-news-embebed span.res-link {
     background-position: -160px -49px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-image {
+div.widget-lastest-tab .tab-lastest-title span.res-image, div.related-news-embebed span.res-image {
     background-position: -130px -49px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-video {
+div.widget-lastest-tab .tab-lastest-title span.res-video, div.related-news-embebed span.res-video {
     background-position: -113px -49px !important;
 }
-div.widget-lastest-tab .tab-lastest-title span.res-opinion {
+div.widget-lastest-tab .tab-lastest-title span.res-opinion, div.related-news-embebed span.res-opinion {
     background-position: -111px -32px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-article {
+div.widget-lastest-tab .tab-lastest-title span.res-article, div.related-news-embebed span.res-article {
     background-position: -161px -32px !important;
 }

@@ -17,22 +17,22 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
 
     switch ($content->fk_content_type){
         case 1:
-            $class='class="res-link" ';
+            $class='class="res-article" ';
         break;
         case 3: //    /.+\.(jpeg|jpg|gif)/
             if ((preg_match("/.+\.jpeg|jpg|gif/", $ext))) {
                  $class='class="res-image" ';
             }elseif ((preg_match("/.+\.doc/", $ext))) {
-                $class='class="res-link" ';
+                $class='class="res-file" ';
             }elseif ((preg_match("/.+\.pdf/", $ext))) {
-                 $class='class="res-link" ';
+                 $class='class="res-file" ';
             }else{
-                $class='class="res-link" ';
+                $class='class="res-file" ';
             }
 
         break;
         case 4://Opinion
-             $class='class="res-link" ';
+             $class='class="res-opinion" ';
         break;
         case 7:
              $class='class="res-image" ';
@@ -47,11 +47,10 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
              $class='class="res-link" ';
          break;
     }
-    $html='   <a title="Related: '.clearslash($content->title).'" href="'.$content->permalink.'"';
+    $html='<a title="Related: '.clearslash($content->title).'" href="'.$content->permalink.'"';
                 if(($content->fk_content_type==3)) { $html.='target="_blank"'; }
     $html.='   ><span '.$class.'>&nbsp;</span>'.clearslash($content->title).'</a>';
 
- 
 
     return $html;
     

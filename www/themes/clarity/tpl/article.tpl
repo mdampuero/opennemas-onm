@@ -67,7 +67,7 @@ Smarty template: article.tpl
                                          <ul>
                                             {section name=r loop=$relationed}
                                                 {if $relationed[r]->pk_article neq  $article->pk_article}
-                                                   {renderTypeRelated content=$relationed[r]}
+                                                  <li> {renderTypeRelated content=$relationed[r]}</li>
                                                 {/if}
                                             {/section}
                                         </ul>
@@ -92,7 +92,7 @@ Smarty template: article.tpl
                                     <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
                                      <ul>
                                         {section name=r loop=$suggested}
-                                            {if $suggested[r].pk_article neq  $article->pk_article}
+                                            {if $suggested[r].pk_content neq $article->pk_article}
                                                <li><a href="{$suggested[r].permalink}">{$suggested[r].title|clearslash}</a></li>
                                             {/if}
                                         {/section}

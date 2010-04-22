@@ -80,7 +80,7 @@ Smarty template: frontpage.tpl
 
                       {include file="widget_frontend_video.tpl" video=$video[1]}
                        
-                      {include file="widget_ad_lateral.tpl" type='3'}
+                      {include file="widget_ad_button.tpl" type='3'}
 
                       {include file="widget_headlines.tpl"}
                     </div>
