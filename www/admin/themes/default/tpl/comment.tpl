@@ -50,104 +50,47 @@
 
     <table class="adminlist" border=0>
 	<tr>  
-		<th  style='width:4%;'></th>
-		<th  style='width:16%;'>Titulo</th>
-		<th  style='width:25%;'>Comentario(50carac)</th>
-		<th  style='width:25%;'>Contenido(50carac)</th>
-		<th  style='width:10%;'>Autor</th>
-		<th  style='width:6%;' align="center">IP</th>
+		<th  style='width:5px;'></th>
+		<th  style='width:120px;'>Titulo</th>
+		<th  style='width:200px;'>Comentario(50carac)</th>
+                <th  style='width:100px;'>Tipo Comentado</th>
+		<th  style='width:120px;'>Contenido Comentado</th>
+		<th  style='width:100px;;'>Autor</th>
+		<th  style='width:50px;' align="center">IP</th>
 		{if $category eq 'todos' || $category eq 'home'}
-			<th align="center" style="width:5%;">Secci&oacute;n</th>
+			<th align="center" style="width:50px;">Secci&oacute;n</th>
 		{/if}
-		<th  style='width:6%;' align="center">Fecha</th>
+		<th  style='width:120px;' align="center">Fecha</th>
                 <th style='width:100px;' align="center">Votos Pos/Neg</th>
-		<th style='width:100px;' align="center">Publicar</th>
-		<th style='width:60px;' align="center">Editar</th>
-		<th style='width:60px;' align="center">Eliminar</th>
+		<th style='width:40px;' align="center">Publicar</th>
+		<th style='width:40px;' align="center">Editar</th>
+		<th style='width:40px;' align="center">Eliminar</th>
 	  </tr>		
   
      <div class='fisgona' id='fisgona' name='fisgona'></div>
-        {* Provisional - comentarios en encuestas en la solapa todos *}
-        {if $category eq 'todos' }
-            {section name=c loop=$ecomments}
-            <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                    <td style="font-size: 11px;width:4%;">
-                            <input type="checkbox" class="minput"  id="selected_e{$smarty.section.c.iteration}" name="selected_fld[]" value="{$ecomments[c]->id}"  style="cursor:pointer;">
-                    </td>
-                    <td style="padding:2px; font-size: 11px;width:16%;" onmouseout="UnTip()" onmouseover="Tip('{$ecomments[c]->body|nl2br|regex_replace:"/[\r\t\n]+/":" "|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_e{$smarty.section.c.iteration}').click();">
-                            {$ecomments[c]->title|strip_tags|clearslash|truncate:50}
-                    </td>
-                    <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$ecomments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-                            {$ecomments[c]->body|strip_tags|clearslash|truncate:50}
-                    </td>
-                    <td style="padding:10px;font-size: 11px;width:25%;">
-                            <a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$ecomments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
-                            {$polls[c]->title|strip_tags|clearslash}
-                            </a>
-                    </td>
-                    <td style="font-size: 11px;width:10%;">
-                        {$ecomments[c]->author|strip_tags} <br>
-                        {if preg_match('/@proxymail\.facebook\.com$/i', $ecomments[c]->email)}
-                            <span title="{$ecomments[c]->email}">via facebook</span>
-                        {else}
-                            {$ecomments[c]->email}
-                        {/if}
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                                    {$ecomments[c]->ip}
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                            Encuesta
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                            {$ecomments[c]->created}
-                    </td>
-                    <td style="width:100px;font-size: 11px;" align="center">
-                           {$votes_polls[c]->value_pos} /  {$votes_polls[c]->value_pos}
-                    </td>
-                    <td style="font-size: 11px;width:100px;" align="center">
-                        {if $category eq 'todos' || $ecomments[c]->content_status eq 0 }
-                            <a href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;tipo=encuesta&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                    <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicar" /></a>
-                            <a href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;tipo=encuesta&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                    <img src="{php}echo($this->image_dir);{/php}publish_r.png" border="0" alt="Rechazar" /></a>
-                        {elseif $ecomments[c]->content_status eq 2}
-                                <a class="unpublishing" href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                       </a>
-                        {else}
-                                <a class="publishing" href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                       </a>
-                        {/if}
-                    </td>
-                    <td style="font-size: 11px;width:60px;" align="center">
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$ecomments[c]->id}');" title="Modificar">
-                                    <img src="{php}echo($this->image_dir);{/php}edit.png" border="0" /></a>
-                    </td>
-                    <td style="font-size: 11px;width:60px;" align="center">
-                            <a href="#" onClick="javascript:confirmar(this, '{$ecomments[c]->id}');" title="Eliminar">
-                                    <img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
-                    </td>
-            </tr>
-
-            {/section}
-         {/if}
 	{section name=c loop=$comments}
 	<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-		<td style="font-size: 11px;width:4%;">
+		<td style="font-size: 11px;width:5px;">
 			<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
 		</td>
-		<td style="padding:2px; font-size: 11px;width:16%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+		<td style="padding:2px; font-size: 11px;width:120px;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
 			{$comments[c]->title|strip_tags|clearslash|truncate:50}
 		</td>
-		<td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
+		<td style="font-size: 11px;width:120px;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
 			{$comments[c]->body|strip_tags|clearslash|truncate:50}
 		</td>
-		<td style="padding:10px;font-size: 11px;width:25%;">
-			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;"> 
-			{$articles[c]->title|strip_tags|clearslash}	
+                <td style="padding:10px;font-size: 11px;width:100px;">
+			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('content-info'); return false;">
+			{assign var="type" value=`$contents[c]->content_type`}
+                        {$content_types.$type}
+			</a>
+		</td>
+		<td style="padding:10px;font-size: 11px;width:120px;">
+			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('content-info'); return false;">
+			{$contents[c]->title|strip_tags|clearslash}
 			</a>					
 		</td>
-		<td style="font-size: 11px;width:10%;">
+		<td style="font-size: 11px;width:100px;">
 			{$comments[c]->author|strip_tags} <br>
             {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
                 <span title="{$comments[c]->email}">via facebook</span>
@@ -155,21 +98,21 @@
                 {$comments[c]->email}
             {/if}
 		</td>
-		<td style="width:6%;font-size: 11px;" align="center">							
+		<td style="width:50px;font-size: 11px;" align="center">
 				{$comments[c]->ip}
 		</td> 
 		{if $category eq 'todos' || $category eq 'home'}
-		<td style="width:6%;font-size: 11px;" align="center">			
-		 	{$articles[c]->category_name} {if $articles[c]->content_type==4 }Opini&oacute;n{/if}
+		<td style="width:50px;font-size: 11px;" align="center">
+		 	{$contents[c]->catName}
 		</td>
 		{/if}
-		<td style="width:6%;font-size: 11px;" align="center">
+		<td style="width:100px;font-size: 11px;" align="center">
 			{$comments[c]->created} 		
 		</td>
                 <td style="width:100px;font-size: 11px;" align="center">
                            {$votes[c]->value_pos} /  {$votes[c]->value_pos}
                     </td>
-		<td style="font-size: 11px;width:100px;" align="center">
+		<td style="font-size: 11px;width:40px;" align="center">
                     {if $category eq 'todos' || $comments[c]->content_status eq 0 }
                         <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
                                 <img src="{php}echo($this->image_dir);{/php}publish_g.png" border="0" alt="Publicar" /></a>
@@ -183,11 +126,11 @@
                                    </a>
                     {/if}
 		</td>
-		<td style="font-size: 11px;width:60px;" align="center">
+		<td style="font-size: 11px;width:40px;" align="center">
 			<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
 				<img src="{php}echo($this->image_dir);{/php}edit.png" border="0" /></a>
 		</td>
-		<td style="font-size: 11px;width:60px;" align="center">
+		<td style="font-size: 11px;width:40px;" align="center">
 			<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
 				<img src="{php}echo($this->image_dir);{/php}trash.png" border="0" /></a>
 		</td>
@@ -236,7 +179,7 @@
 		<label for="title">Noticia:</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">		
-			<h2><a style="cursor:pointer;"  onClick="new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">{$article->title|clearslash}</a> <span style="font-size:9px;">(* Pinche sobre el titulo para ver la noticia.)</span></h2> 	
+			<h2><a style="cursor:pointer;"  onClick="new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('content-info'); return false;">{$content->title|clearslash}</a> <span style="font-size:9px;">(* Pinche sobre el titulo para ver la noticia.)</span></h2>
 	
 	</td>
 </tr>
@@ -248,7 +191,7 @@
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
 		<input type="text" id="title" name="title" title="Título de la noticia" onkeyup="countWords(this,document.getElementById('counter_title'))"
 			value="{$comment->title|clearslash|escape:"html"}" class="required" size="100" />
-		<input type="hidden" id="fk_content" name="fk_content" title="pk_article"
+		<input type="hidden" id="fk_content" name="fk_content" title="pk_content"
 			value="{$comment->fk_content}" />
 	</td>
 	
@@ -330,12 +273,12 @@
 
 </div>
 
-	<div id="article-info" style="width:95%;display:none;">
+	<div id="content-info" style="width:95%;display:none;">
 	 <table border="0" cellpadding="3" cellspacing="0">
 			<tbody>
 			<tr><td><label for="title">Comentario: </label></td>
 			<td> 	
-				<h2> <a style="cursor:pointer;"  onClick="new Effect.BlindDown('edicion-contenido'); new Effect.BlindUp('article-info'); return false;">
+				<h2> <a style="cursor:pointer;"  onClick="new Effect.BlindDown('edicion-contenido'); new Effect.BlindUp('content-info'); return false;">
 			 	{$comment->title|clearslash}</a></h2>
 			</td></tr> 	
 			<tr><td></td>
@@ -343,20 +286,20 @@
 				 <table border="0" width="60%" style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
 				<tbody>			
 				<tr><td> 	
-	 		 		<h3>{$article->subtitle|clearslash}</h3>
-	 		 		 <h3 > {$article->agency|clearslash} - {$article->created|date_format:"%d/%m/%y "}</h3>
+	 		 		<h3>{$content->subtitle|clearslash}</h3>
+	 		 		 <h3 > {$content->agency|clearslash} - {$content->created|date_format:"%d/%m/%y "}</h3>
 				
-					<h2>{$article->title|clearslash}</h2>
-					 <p>  <span style="float:left;"><img src="{$photo1->path_file}/{$photo1->name}" id="change1" name="{$article->img1}" border="0" width="180px" /></span>
-					 {$article->summary|clearslash}							  
+					<h2>{$content->title|clearslash}</h2>
+					 <p>  <span style="float:left;"><img src="{$photo1->path_file}/{$photo1->name}" id="change1" name="{$content->img1}" border="0" width="180px" /></span>
+					 {$content->summary|clearslash}
 					    </p>
 								
 				 </td></tr> 	
 				 <tr><td> 				
 						<p>
 							 <span style="float:right;">
-							  <img src="{$photo2->path_file}/{$photo2->name}" id="change1" name="{$article->img2}" border="0" width="300px" /></span>
-							{$article->body|clearslash} 
+							  <img src="{$photo2->path_file}/{$photo2->name}" id="change1" name="{$content->img2}" border="0" width="300px" /></span>
+							{$content->body|clearslash}
 						</p>
 						
 				

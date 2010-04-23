@@ -43,10 +43,9 @@ require_once './core/content_category.class.php';
 require_once './core/comment.class.php';
 require_once './core/content_category.class.php';
 require_once './core/content_category_manager.class.php';
-require_once './core/article.class.php';
-require_once './core/photo.class.php';
+require_once './core/content.class.php';
 require_once './core/vote.class.php';
-require_once './core/poll.class.php';
+
 
 if(!isset($_REQUEST['category'])) {
     $_REQUEST['category'] = 'todos';
@@ -67,7 +66,7 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('subcat', $subcat);
             $tpl->assign('allcategorys', $parentCategories);
             $tpl->assign('datos_cat', $datos_cat);
-            
+         
             $cm = new ContentManager();
             if (!isset($_REQUEST['comment_status'])) {
                 $_REQUEST['comment_status'] = 0;
@@ -76,7 +75,8 @@ if(isset($_REQUEST['action'])) {
 
             $tpl->assign('comment_status', $_REQUEST['comment_status']);
             $filter="content_status = ".$_REQUEST['comment_status'];
-
+            $content_types=$cm->get_types();
+            $tpl->assign('content_types', $content_types);
             if($_REQUEST['category'] == 'home') {
                 $comment = new Comment();
                 //Comentarios de las noticias in_home
@@ -107,26 +107,23 @@ if(isset($_REQUEST['action'])) {
 
             }
 
-            $articles = array();
+            $content = array();
             $i = 0;  //Sacamos los articulos para el titulo
             if($comments) {
-                // sql sobre article y content * IN ($prima->fk_content1, $prima->fk_content2, ...)
+                // sql sobre content y content * IN ($prima->fk_content1, $prima->fk_content2, ...)
                 $ids = array();
                
                 foreach($comments as $prima){
-                    $articles[$i] = new Content( $prima->fk_content );
-                    $cat=$articles[$i]->loadCategoryName($prima->fk_content );
-                    if (!$cat) {
-                        $articles[$i]->category_name = 'Opinion';
-                    }
-                    $articles[$i]->category_name = $articles[$i]->loadCategoryName($prima->fk_content);
+                    $contents[$i] = new Content( $prima->fk_content );
+                     
+                    $content[$i]->category_name = $contents[$i]->loadCategoryName($prima->fk_content);
                     $votes[$i] =new Vote( $prima->pk_comment );
                      $i++;
                 }
             }
-            $tpl->assign('articles', $articles);
+            $tpl->assign('contents', $contents);
             $tpl->assign('votes', $votes);
-
+ 
         } break;
         
         case 'new': {
@@ -139,8 +136,8 @@ if(isset($_REQUEST['action'])) {
 
             $tpl->assign('comment', $comment);
 
-            $article = new Article( $comment->fk_content );
-            $tpl->assign('article', $article);
+            $content = new Content( $comment->fk_content );
+            $tpl->assign('content', $content);
 
         } break;
         
@@ -149,9 +146,9 @@ if(isset($_REQUEST['action'])) {
 
             $comment->update( $_REQUEST );
             if($_REQUEST['content_status'] == 1) {
-                $article=new Article($comment->fk_content);
+                $content=new content($comment->fk_content);
                 //Para que cambie la fecha changed.
-                $article->set_status($article->content_status, $article->fk_user_last_editor);
+                $content->set_status($content->content_status, $content->fk_user_last_editor);
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
@@ -187,9 +184,9 @@ if(isset($_REQUEST['action'])) {
             } else {
                 // Ya se cambia en el set_available    $comment->set_status($status,$_SESSION['userid']);
                 $comment->set_available($_REQUEST['status'], $_SESSION['userid']);
-                $article=new Article($comment->fk_content);
+                $content=new content($comment->fk_content);
                 //Para que cambie la fecha changed.
-                $article->set_status($article->content_status, $article->fk_user_last_editor);
+                $content->set_status($content->content_status, $content->fk_user_last_editor);
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
@@ -208,10 +205,10 @@ if(isset($_REQUEST['action'])) {
                         $comment = new Comment($i);
                         //Se reutiliza el id para pasar el estatus
                         $comment->set_available($status, $_SESSION['userid']);
-                        $article = new Article($comment->fk_content);
+                        $content = new content($comment->fk_content);
 
                         //Para que cambie la fecha changed.
-                        $article->set_status($article->content_status, $article->fk_user_last_editor);
+                        $content->set_status($content->content_status, $content->fk_user_last_editor);
 
                     }
                 }

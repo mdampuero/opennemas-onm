@@ -1416,11 +1416,12 @@ class ContentManager
     public function get_types()
     {
         $items = array();
-        $sql = 'SELECT name FROM content_types ';
+        $sql = 'SELECT pk_content_type, name, title FROM content_types ';
         
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while(!$rs->EOF) {
-            $items[] = $rs->fields['name'];
+            $pk_content_type = $rs->fields['pk_content_type'];
+            $items[$pk_content_type] = $rs->fields['title'];
             $rs->MoveNext();
         }
         

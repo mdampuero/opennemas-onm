@@ -5,15 +5,15 @@ require_once('core/application.class.php');
 Application::import_libs('*');
 $app = Application::load();
 require_once('core/method_cache_manager.class.php');
-require_once('core/pc_content_manager.class.php');
-require_once('core/pc_content.class.php');
-require_once('core/pc_content_category.class.php');
+require_once('core/content_manager.class.php');
+require_once('core/content.class.php');
+require_once('core/content_category.class.php');
 
-require_once('core/pc_poll.class.php');
+require_once('core/poll.class.php');
 require_once('core/pollgraph.class.php');
 
 // 2009022522002234689 prueba
-$poll = new PC_Poll( $_GET['id'] );
+$poll = new Poll( $_GET['id'] );
 $items = $poll->get_items( $_GET['id'] );
 
 foreach( $items as $item ) {

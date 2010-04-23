@@ -39,8 +39,7 @@ require('./core/photo.class.php');
 require('./core/author.class.php');
 require('./core/content_category.class.php');
 require('./core/content_category_manager.class.php');
-require('./core/pc_content_manager.class.php');
-
+ 
 /**************************************  TEMPLATE CACHE  *******************************************/
 
 //$filters = array('output' => array('fix_object_tags'));

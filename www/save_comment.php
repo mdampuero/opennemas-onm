@@ -30,22 +30,19 @@ $app = Application::load();
 require_once './core/content_manager.class.php';
 require_once './core/content.class.php';
 require_once './core/comment.class.php';
-require_once './core/pc_content.class.php';
-require_once './core/pc_comment.class.php';
+
 
 /**
- * Helper function to save comment into PC_Comment or Comment
+ * Helper function to save comment into Comment
  *
  * @param array $data
  * @return string Message
  */
 function saveComment($data)
 {
-    if($_POST['where'] == 'pc') {
-        $comment = new PC_Comment();        
-    } else {
-        $comment = new Comment();
-    }
+
+    $comment = new Comment();
+
     
     // Check it's clone article {{{
     if(Article::isClone($_POST['id'])) {
