@@ -906,7 +906,7 @@
     <div id="menu-acciones-admin">
         <ul>
             <li>
-                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva portada');" accesskey="N" tabindex="1">
+                <a href="#" class="admin_add" onclick="javascript:enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva portada');" accesskey="N" tabindex="1">
                     <img border="0" src="{php}echo($this->image_dir);{/php}add_kiosko.gif" title="Nueva" alt="Nueva"><br />Nueva Portada
                 </a>
             </li>
@@ -931,5 +931,66 @@
             </li>
         </ul>
     </div>
+{elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list") }
+	<div id="menu-acciones-admin">
+		<ul>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+					<img border="0" src="{php}echo($this->image_dir);{/php}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+					<img border="0" src="{php}echo($this->image_dir);{/php}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
+					<img border="0" src="{php}echo($this->image_dir);{/php}publish.gif" title="Frontpage" alt="Frontpage" ><br />Publicar
+				</a>
+			</li>
+                         <li>
+				<a href="#" class="admin_add" onClick="javascript:confirmar_hemeroteca(this,{$category}, 1);" name="submit_mult" value="Archivar" title="Archivar">
+					<img border="0" src="{php}echo($this->image_dir);{/php}archive.gif" title="Archivar" alt="Archivar" ><br />Archivar
+				</a>
+			</li>
+			<li>
+				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; height: 70px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+					<img id="select_button" class="icon" src="{php}echo($this->image_dir);{/php}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo">
+				</button>
+			</li>
+			<li>
+				<a class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva opinion');" accesskey="N" tabindex="1">
+					<img border="0" src="{php}echo($this->image_dir);{/php}advertisement.png" title="Nuevo" alt="Nuevo"><br />Nuevo
+				</a>
+			</li>
+		</ul>
+	</div>
+
+{elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read")) }
+
+	<div id="menu-acciones-admin">
+		<ul>
+		    <li>
+				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$poll->pk_poll}', 'formulario');" value="Validar" title="Validar">
+					<img border="0" src="{php}echo($this->image_dir);{/php}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+				</a>
+		    </li>
+			<li>
+				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
+					<img border="0" src="{php}echo($this->image_dir);{/php}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				</a>
+			</li>
+			<li>
+			{if isset($poll->pk_poll) }
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$poll->pk_poll}', 'formulario');">
+			{else}
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
+			{/if}
+					<img border="0" src="{php}echo($this->image_dir);{/php}advertisement.png" title="Guardar" alt="Guardar"><br />Guardar
+				</a>
+			</li>
+		</ul>
+	</div>
 {/if}
 

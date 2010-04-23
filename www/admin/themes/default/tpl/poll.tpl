@@ -1,4 +1,4 @@
-{include file="pc_header.tpl"}
+{include file="header.tpl"}
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -6,7 +6,7 @@
 <div>
 
 
-{include file="pc_botonera_up.tpl"}
+{include file="botonera_up.tpl"}
 	
 	
 	
@@ -24,8 +24,8 @@
 		<th align="center">Votos</th>
 		<th align="center">Visto</th>
 		<th align="center">Fecha</th>
-	{*	<th align="center">Favorito</th> *}
-		<th align="center">Ver en columna</th>
+                <th align="center">Favorito</th>
+		<th align="center">Ver en columna</th>                
 		<th align="center">Publicado</th>	
 		<th align="center">Archivar</th>
 		<th align="center">Modificar</th>
@@ -53,14 +53,14 @@
 	    <td style="padding:1px;width:10%;font-size: 11px;" align="center">		    
 			    {$polls[c]->created}
 	    </td>	 
-	{*    <td style="padding:10px;font-size: 11px;width:6%;" align="center">
+	    <td style="padding:10px;font-size: 11px;width:6%;" align="center">
 		{if $polls[c]->favorite == 1}
 			<a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado"></a>
 		{else}
 			<a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente"></a>
 		{/if}
             </td>
-            *}
+
              <td style="padding:10px;font-size: 11px;width:6%;" align="center">
                     {if $polls[c]->view_column == 1}
                             <a href="?id={$polls[c]->id}&amp;action=set_view_column&amp;status=0&amp;category={$category}" class="no_home" title="Publicado"></a>
@@ -105,111 +105,17 @@
 	{/if}
     </table>
 <br />
-{include file="pc_botonera_down.tpl"}
+{include file="botonera_down.tpl"}
 </div>
 {/if}
 
  {dialogo script="print"}
 {* FORMULARIO PARA ENGADIR ************************************** *}
 
-{if isset($smarty.request.action) && $smarty.request.action eq "new"}
+{if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 
-{include file="pc_botonera_up.tpl"}
-
-<!-- <div class="panel" id="edicion-contenido" style="width:720px">-->
-<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="900">
-<tbody>
-    <tr>
-        <td> </td><td > </td>
-        <td rowspan="6" valign="top" style="padding:4px;border:0px;">
-            <div align='center'>
-                <table style='background-color:#F5F5F5; padding:18px; width:69%;' cellpadding="8">
-                    <tr>
-                        <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                        <label for="title"> Disponible: </label>
-                        </td>
-                        <td valign="top" style="padding:4px;" nowrap="nowrap">
-                            <select name="content_status" id="content_status" class="required">
-                                <option value="0" >No</option>
-                                <option value="1" selected>Si</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                            <label for="title"> Favorito: </label>
-                        </td>
-                        <td valign="top" style="padding:4px;" nowrap="nowrap">
-                            <select name="favorite" id="favorte" class="required">
-                                <option value="0" selected>No</option>
-                                <option value="1" >Si</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                            <label for="title"> Ver en columna: </label>
-                        </td>
-                        <td valign="top" style="padding:4px;" nowrap="nowrap">
-                            <select name="view_column" id="view_column" class="required">
-                                <option value="0" selected>No</option>
-                                <option value="1" >Si</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </td>
-    </tr>
-    <tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="title">T&iacute;tulo:</label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="title" name="title" title="Título" value=""  onBlur="javascript:get_tags(this.value);" class="required" size="80" />
-			<input type="hidden" id="fk_pc_content_category" name="fk_pc_content_category" title="categoria" value="7">				
-	</td>	
-    </tr>
-    <tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="title">Subtitulo:</label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="subtitle" name="subtitle" title="subTitulo de la noticia" 
-			value="" class="required" size="80" />		
-	</td>
-    </tr>
-    <tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="metadata">Palabras clave: </label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="metadata" name="metadata" size="70" title="Metadatos" value="" />
-		<sub>Separadas por comas</sub>
-	</td>
-    </tr>
-    <tr>
-	<td valign="top"  align="right" style="padding:4px;" nowrap="nowrap">						  
-	</td>
-	<td valign="top" style="padding:4px;" nowrap="nowrap">	
-		<a onClick="add_item_poll(0)" style="cursor:pointer;"><img src="{php}echo($this->image_dir);{/php}add.png" border="0" /> Añadir </a> &nbsp;
-		<a onclick="del_item_poll()" style="cursor:pointer;"><img src="{php}echo($this->image_dir);{/php}del.png" border="0"   /> Eliminar</a>
-		<div id="items" name="items">		
-		</div>		
-	</td>
-    </tr>
-
-</tbody>
-</table>
-
-{/if}
-
-
-{* FORMULARIO PARA ACTUALIZAR *********************************** *}
-{if isset($smarty.request.action) && $smarty.request.action eq "read"}
-
-{include file="pc_botonera_up.tpl"}
-
+{include file="botonera_up.tpl"}
+ 
 <div class="panel" id="edicion-contenido" style="width:95%;display:block;"> 
     <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">
     <tbody>
@@ -220,7 +126,7 @@
                     <table style='background-color:#F5F5F5; padding:18px; width:69%;' cellpadding="8">
                         <tr>
                             <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                <label for="title"> Disponible: </label>
+                                <label for="title"> {t}Available{/t}:</label>
                             </td>
                             <td valign="top" style="padding:4px;" nowrap="nowrap">
                                 <select name="content_status" id="content_status" class="required">
@@ -231,7 +137,7 @@
 			</tr> 	
 			<tr>
                            <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                               <label for="title"> Favorito: </label>
+                               <label for="title"> {t}Favorite{/t}: </label>
                             </td>
                             <td valign="top" style="padding:4px;" nowrap="nowrap">
                                 <select name="favorite" id="favorite" class="required">
@@ -242,7 +148,7 @@
 			</tr> 	
 			<tr>
                             <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-			    	<label for="title"> Ver en columna: </label>  
+			    	<label for="title"> {t}View in column{/t}: </label>
 			    </td>
                             <td valign="top" style="padding:4px;" nowrap="nowrap">
                                 <select name="view_column" id="view_column" class="required">
@@ -257,17 +163,17 @@
         </tr>
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                    <label for="title">T&iacute;tulo:</label>
+                    <label for="title">{t}Title{/t}:</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                     <input type="text" id="title" name="title" title="Titulo de la noticia"
                             value="{$poll->title|clearslash|escape:"html"}" class="required" size="80" onChange="javascript:get_metadata(this.value);"  />
-                    <input type="hidden" id="fk_pc_content_category" name="fk_pc_content_category" title="categoria" value="7">
+                    <input type="hidden" id="fk_content_category" name="fk_content_category" title="categoria" value="7">
             </td>
         </tr>
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                    <label for="title">Subtitulo:</label>
+                    <label for="title">{t}Subtitle{/t}:</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                     <input type="text" id="subtitle" name="subtitle" title="subTitulo de la noticia"
@@ -276,7 +182,7 @@
         </tr>
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                    <label for="title">Palabras Clave:</label>
+                    <label for="title">{t}Keywords{/t}:</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                     <input type="text" id="metadata" name="metadata" title="Titulo de la noticia"
@@ -285,7 +191,7 @@
         </tr>
         <tr>
             <td valign="top"  align="right" style="padding:4px;" nowrap="nowrap">
-                    <label for="title"> Respuestas: </label>
+                    <label for="title"> {t}Poll Options{/t}: </label>
             </td>
 	    <td valign="top" style="padding:4px;" nowrap="nowrap">
 	   	 

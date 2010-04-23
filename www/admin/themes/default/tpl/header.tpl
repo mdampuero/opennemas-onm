@@ -85,7 +85,7 @@
     {/if}
 {/if}
 {if preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspolls.js"></script>
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspoll.js"></script>
 {/if}    
 {if preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME)}
     {if !isset($smarty.post.action) || $smarty.post.action eq "list"}

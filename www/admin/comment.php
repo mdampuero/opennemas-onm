@@ -35,7 +35,7 @@ if(!Acl::_('COMMENT_ADMIN')) {
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-$tpl->assign('titulo_barra', 'Gestión de Comentarios');
+$tpl->assign('titulo_barra', 'Comments Manager');
 
 require_once './core/content_manager.class.php';
 require_once './core/content.class.php';
@@ -46,10 +46,7 @@ require_once './core/content_category_manager.class.php';
 require_once './core/article.class.php';
 require_once './core/photo.class.php';
 require_once './core/vote.class.php';
-
-require_once './core/pc_comment.class.php';
-require_once './core/pc_content.class.php';
-require_once './core/pc_poll.class.php';
+require_once './core/poll.class.php';
 
 if(!isset($_REQUEST['category'])) {
     $_REQUEST['category'] = 'todos';
@@ -79,100 +76,57 @@ if(isset($_REQUEST['action'])) {
 
             $tpl->assign('comment_status', $_REQUEST['comment_status']);
             $filter="content_status = ".$_REQUEST['comment_status'];
-            
-           if($_REQUEST['category'] == 'encuesta') {
-                $ccm = new PC_ContentManager();
-             //   $comments = $ccm->find('PC_Comment', '  '.$filter.' ', 'ORDER BY content_status, created DESC ');
-             //   $comments = $ccm->paginate($comments);
-                 list($comments, $pager)= $cm->find_pages('PC_Comment',' '.$filter.' ', 'ORDER BY content_status, created DESC ',$_GET['page'],10);
-                    //$comments = $cm->paginate($comments);
-                    $tpl->assign('paginacion', $pager);
-          //      $pager = $ccm->pager;
+
+            if($_REQUEST['category'] == 'home') {
+                $comment = new Comment();
+                //Comentarios de las noticias in_home
+                $comments = $comment->get_home_comments($filter);
+                if($comments) {
+                    $comments = $cm->paginate_num($comments,10);
+                    $tpl->assign('paginacion', $cm->pager);
+                    $tpl->assign('comments', $comments);
+                }
+
+            } elseif($_REQUEST['category'] == 'todos') {
+                $comment = new Comment();
+                // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
+                list($comments, $pager)= $cm->find_pages('Comment', 'content_status = 0',
+                                                         'ORDER BY  created DESC ',
+                                                         $_REQUEST['page'], 10);
                 $tpl->assign('paginacion', $pager);
                 $tpl->assign('comments', $comments);
-                
-                $i = 0;
-                $polls = array();
-                foreach( $comments as $prima){
-                    $polls[$i] = new PC_Poll( $prima->fk_pc_content );
-                    $votes[$i] =new Vote( $prima->pk_pc_comment );
 
-                    $i++;
-                }
-                    
-                $tpl->assign('articles', $polls);
-                $tpl->assign('votes', $votes);
-                
+                 
             } else {
-                if($_REQUEST['category'] == 'home') {
-                    $comment = new Comment();
-                    
-                    //Comentarios de las noticias in_home
-                    $comments = $comment->get_home_comments($filter);
-                    if($comments) {
-                        $comments = $cm->paginate_num($comments,10);
-                        $tpl->assign('paginacion', $cm->pager);
-                        $tpl->assign('comments', $comments);
-                    }
-                    
-                } elseif($_REQUEST['category'] == 'todos') {
-                    $comment = new Comment();
-                    // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-                    list($comments, $pager)= $cm->find_pages('Comment', 'content_status = 0',
-                                                             'ORDER BY  created DESC ',
-                                                             $_REQUEST['page'], 10);
-                    $tpl->assign('paginacion', $pager);
-                    $tpl->assign('comments', $comments);
-                    
-                    if(!$_REQUEST['page'] || ($_REQUEST['page'] == 1)) {
-                        $ccm = new PC_ContentManager(); 
-                        $ecomments = $ccm->find('PC_Comment', ' content_status = 0 ', 'ORDER BY created DESC ');
-                        $tpl->assign('ecomments', $ecomments);
-                        
-                        $i = 0;
-                        $polls = array();
-                        foreach( $ecomments as $prima){
-                            $polls[$i] = new PC_Poll( $prima->fk_pc_content );
-                            $votes_polls[$i] =new Vote( $prima->pk_comment );
-                            $i++;
-                        }
-                        
-                        $tpl->assign('polls', $polls);
-                        $tpl->assign('votes_polls', $votes_polls);
-                    }
-                } else {
-                    // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-                    list($comments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
-                                                              'ORDER BY content_status, created DESC ',
-                                                              $_REQUEST['page'], 10, $_REQUEST['category']);
-                    $tpl->assign('paginacion', $pager);
-                    $tpl->assign('comments', $comments);
-                    
-                }
-                
-                $articles = array();
-                $i = 0;  //Sacamos los articulos para el titulo
-                if($comments) {
-                    // sql sobre article y content * IN ($prima->fk_content1, $prima->fk_content2, ...)
-                    $ids = array();
-                   /* foreach($comments as $prima) {
-                        $ids[] = $prima->fk_content;
-                    }
-                    */
-                    foreach($comments as $prima){
-                        $articles[$i] = new Content( $prima->fk_content );
-                        $cat=$articles[$i]->loadCategoryName($prima->fk_content );
-                        if (!$cat) {
-                            $articles[$i]->category_name = 'Opinion';
-                        }
-                        $articles[$i]->category_name = $articles[$i]->loadCategoryName($prima->fk_content);
-                        $votes[$i] =new Vote( $prima->pk_comment );
-                         $i++;
-                    }
-                }
-                $tpl->assign('articles', $articles);
-                $tpl->assign('votes', $votes);
+                // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
+                list($comments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
+                                                          'ORDER BY content_status, created DESC ',
+                                                          $_REQUEST['page'], 10, $_REQUEST['category']);
+                $tpl->assign('paginacion', $pager);
+                $tpl->assign('comments', $comments);
+
             }
+
+            $articles = array();
+            $i = 0;  //Sacamos los articulos para el titulo
+            if($comments) {
+                // sql sobre article y content * IN ($prima->fk_content1, $prima->fk_content2, ...)
+                $ids = array();
+               
+                foreach($comments as $prima){
+                    $articles[$i] = new Content( $prima->fk_content );
+                    $cat=$articles[$i]->loadCategoryName($prima->fk_content );
+                    if (!$cat) {
+                        $articles[$i]->category_name = 'Opinion';
+                    }
+                    $articles[$i]->category_name = $articles[$i]->loadCategoryName($prima->fk_content);
+                    $votes[$i] =new Vote( $prima->pk_comment );
+                     $i++;
+                }
+            }
+            $tpl->assign('articles', $articles);
+            $tpl->assign('votes', $votes);
+
         } break;
         
         case 'new': {
@@ -182,50 +136,22 @@ if(isset($_REQUEST['action'])) {
         case 'read': {
             //habrá que tener en cuenta el tipo
             $comment = new Comment( $_REQUEST['id'] );
-            if(is_null($comment->pk_comment)) {                                  
-                $comment = new PC_Comment($_REQUEST['id']);
-                
-                $tpl->assign('comment', $comment);
-                $poll = new PC_Poll( $comment->fk_pc_content );
-                $tpl->assign('article', $poll);
-                
-            } else {
-                $tpl->assign('comment', $comment);
-                
-                $article = new Article( $comment->fk_content );
-                $tpl->assign('article', $article);
-                
-                // ¿?¿?¿?
-                $img1 = $article->img1;
-                if(isset($img1)){
-                    //Buscar foto where pk_foto=img1
-                    $photo1 = new Photo($img1);
-                }
-                $tpl->assign('photo1', $photo1);
-                
-                $img2 = $article->img2;                
-                if(isset($img2)) {
-                    //Buscar foto where pk_foto=img2
-                    $photo2 = new Photo($img2);
-                }                
-                $tpl->assign('photo2', $photo2);
-                
-            }
+
+            $tpl->assign('comment', $comment);
+
+            $article = new Article( $comment->fk_content );
+            $tpl->assign('article', $article);
+
         } break;
         
         case 'update': {
             $comment = new Comment($_REQUEST['id']);
-            
-            if(!is_null($comment->pk_comment)) {
-                $comment->update( $_REQUEST );
-                if($_REQUEST['content_status'] == 1) {
-                    $article=new Article($comment->fk_content);
-                    //Para que cambie la fecha changed.
-                    $article->set_status($article->content_status, $article->fk_user_last_editor);
-                }
-            } else {
-                $comment = new PC_Comment();
-                $comment->update( $_REQUEST );
+
+            $comment->update( $_REQUEST );
+            if($_REQUEST['content_status'] == 1) {
+                $article=new Article($comment->fk_content);
+                //Para que cambie la fecha changed.
+                $article->set_status($article->content_status, $article->fk_user_last_editor);
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
@@ -243,36 +169,27 @@ if(isset($_REQUEST['action'])) {
         } break;
         
         case 'delete': {            
-            
-            if($_REQUEST['category'] == 'encuesta'){
-                $comment = new PC_Comment();
-                $comment->delete($_REQUEST['id']);
-            } else {
-                $comment = new Comment();
-                $comment->delete($_POST['id'], $_SESSION['userid']);
-            }
-            
+
+            $comment = new Comment();
+            $comment->delete($_POST['id'], $_SESSION['userid']);
+
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                                  $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
         } break;
         
         case 'change_status': {
-            if(($_REQUEST['tipo'] == 'encuesta') || ($_REQUEST['category'] == 'encuesta')){
-                $comment = new PC_Comment($_REQUEST['id']);                     
+
+            $comment = new Comment($_REQUEST['id']);
+
+            //Publicar o no,
+            if($_REQUEST['status'] == 2) {
                 $comment->set_status($_REQUEST['status'], $_SESSION['userid']);
             } else {
-                $comment = new Comment($_REQUEST['id']);
-                
-                //Publicar o no,
-                if($_REQUEST['status'] == 2) {
-                    $comment->set_status($_REQUEST['status'], $_SESSION['userid']);                               
-                } else {
-                    // Ya se cambia en el set_available    $comment->set_status($status,$_SESSION['userid']);
-                    $comment->set_available($_REQUEST['status'], $_SESSION['userid']);
-                    $article=new Article($comment->fk_content);
-                    //Para que cambie la fecha changed.
-                    $article->set_status($article->content_status, $article->fk_user_last_editor);
-                }
+                // Ya se cambia en el set_available    $comment->set_status($status,$_SESSION['userid']);
+                $comment->set_available($_REQUEST['status'], $_SESSION['userid']);
+                $article=new Article($comment->fk_content);
+                //Para que cambie la fecha changed.
+                $article->set_status($article->content_status, $article->fk_user_last_editor);
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
@@ -289,19 +206,13 @@ if(isset($_REQUEST['action'])) {
                 if(is_array($fields)) {
                     foreach($fields as $i ) {
                         $comment = new Comment($i);
-                        
-                        if(!is_null($comment->pk_comment)) {
-                            // Ya se cambia en el set_available  $comment->set_status($status,$_SESSION['userid']);
-                            //Se reutiliza el id para pasar el estatus
-                            $comment->set_available($status, $_SESSION['userid']);
-                            $article = new Article($comment->fk_content);
-                            
-                            //Para que cambie la fecha changed.
-                            $article->set_status($article->content_status, $article->fk_user_last_editor);
-                        } else {
-                            $comment = new PC_Comment($i);                                                   
-                            $comment->set_status($status, $_SESSION['userid']);
-                        }
+                        //Se reutiliza el id para pasar el estatus
+                        $comment->set_available($status, $_SESSION['userid']);
+                        $article = new Article($comment->fk_content);
+
+                        //Para que cambie la fecha changed.
+                        $article->set_status($article->content_status, $article->fk_user_last_editor);
+
                     }
                 }
             }
@@ -317,12 +228,8 @@ if(isset($_REQUEST['action'])) {
                 if(is_array($fields)) {
                     foreach($fields as $i ) {
                         $comment = new Comment($i);
-                        if(!is_null($comment->pk_comment)) {
-                            $comment->delete( $i, $_SESSION['userid'] );
-                        } else {
-                            $comment = new PC_Comment($i);
-                            $comment->delete( $i, $_SESSION['userid'] ); 
-                        }
+                        $comment->delete( $i, $_SESSION['userid'] );
+
                     }
                 }
             }
@@ -340,7 +247,5 @@ if(isset($_REQUEST['action'])) {
     Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                          $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
 }
-
-
-
+ 
 $tpl->display('comment.tpl');

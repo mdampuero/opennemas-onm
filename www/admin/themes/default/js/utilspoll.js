@@ -72,22 +72,4 @@ function del_this_item(div){
 	
 }
 
-
-function get_tags(title)
-{
-        var tags= $('metadata').value;
-        new Ajax.Request( "utils_content.php?action=get_tags&title="+ title +"&tags=" + tags,
-        {
-                'method': 'get',
-		'encoding': 'UTF-8',
-           	'onSuccess': function(transport) {
-			try {
-                            $('metadata').value=transport.responseText;
-                        } catch(e) {
-				alert(e);
-			}
-                }
-        } );
-
-
-}
+ 
