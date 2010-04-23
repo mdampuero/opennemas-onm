@@ -33,7 +33,7 @@ class Poll extends Content {
 		$i=1;
 		if($data['item']){
 			foreach($data['item'] as $item){
-				$sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?,)';
+				$sql='INSERT INTO poll_items (`fk_pk_poll`, `item`, `metadata`) VALUES (?,?,?)';
 	        	$values = array($this->id,$item, $tags[$i]);
 				$i++;
 				if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -230,8 +230,8 @@ class Poll extends Content {
 
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
-    	$sql = "UPDATE pc_polls SET `view_column`=?
-                    WHERE pk_pc_poll=".$this->id;
+    	$sql = "UPDATE polls SET `view_column`=?
+                    WHERE pk_oll=".$this->id;
         $values = array($status);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -244,4 +244,4 @@ class Poll extends Content {
         return(true);
     }
 }
-?>
+ 
