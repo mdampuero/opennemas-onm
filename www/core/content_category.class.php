@@ -29,50 +29,12 @@ class ContentCategory {
         $this->ContentCategory($id);
     }
     
-// TODO: Move to other class, Filesystem or similar
-// No se necesita hacer aquí ahora va por fecha.s
-    /**
-     * Create directories each content, if it don't exists
-     * /images/ /files/, /ads/, /opinion/
-    
-     */
-    public function createAllDirectories() {
-        $dir_date = date("Y/m/d/");
-        // /images/, /files/, /ads/, /opinion/
-        // /media/images/año/mes/dia/
-        //
-        $dirs = array( MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR );
-
-        foreach($dirs as $dir) {
-            $path = MEDIA_PATH.$dir.'/'.$dir_date ;
-            $this->createDirectory($path);
-        }
-    }
-
-    /**
-     * Create a new directory, if it don't exists
-     *
-     * @param string $dir Directory to create
-     */
-    public function createDirectory($path) {
-
-        $created =  @mkdir($path, 0777, true);
-        if(!$created) {
-            // Register a critical error
-            echo '<br> error'.$path;
-            $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
-        }
-    }
-
     function create($data) {
 
         //if($data['subcategory']!=0){$sub="-".$data['subcategory'];}
         $data['name'] = strtolower($data['name']);
         $data['name'] = normalize_name( $data['title']);
-        
-        
-
-       
+         
         $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`) VALUES (?,?,?,?,?,?,?)";
         $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category'], $data['logo_path'], $data['color']);
         
@@ -158,15 +120,7 @@ class ContentCategory {
         
     }
 
-    function isDirEmpty($path){
-        $eliminar = true;
-        foreach(glob($path."/*") as $archivos) {
-            $eliminar = false;//tiene archivos o dirs que no son /. o /..
-        }
-        
-        return $eliminar;
-    }
-
+   
     function delete($id) {
         //Eliminar si está vacia.
         if(ContentCategoryManager::is_Empty($id)) {

@@ -276,7 +276,7 @@ class Attachment extends Content  {
             if(!file_exists($media_path . '/' . $img_name)) {
                 // Check if exists media_path
                 if( !file_exists($media_path) ) {
-                    createDirectory($media_path);
+                    FilesManager::createDirectory($media_path);
                 }
                 
                 $file_path = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;

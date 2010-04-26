@@ -76,6 +76,7 @@ if( isset($_POST['op']) && ($_POST['op'] == "Adjuntar") ) {
     $dateStamp = date('Ymd');
     
     $ruta = "../media/files/".$cat."/";
+
     $nombre_archivo = $HTTP_POST_FILES['path']['name'];
     $tipo_archivo   = $HTTP_POST_FILES['path']['type'];
     $tamano_archivo = $HTTP_POST_FILES['path']['size'];
@@ -95,10 +96,14 @@ if( isset($_POST['op']) && ($_POST['op'] == "Adjuntar") ) {
     $data['fk_publisher'] = $_SESSION['userid'];
     
     // Create folder if it doesn't exist
-    if( !file_exists($ruta) ) {
-        mkdir($ruta, 0777, true);
+
+    $dir_date =date("/Y/m/d/");
+    $ruta = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
+
+    if(!is_dir($ruta)) {
+        FilesManager::createDirectory($ruta);
     }
-    
+    $datos = pathinfo($nameFile);     //sacamos infor del archivo
     // Move uploaded file
     $uploadStatus = @move_uploaded_file($_FILES['path']['tmp_name'], $ruta.$nombre_archivo);
     

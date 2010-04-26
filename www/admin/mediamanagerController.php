@@ -281,7 +281,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 $uploaddir = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
                 
                 if(!is_dir($uploaddir)) {
-                    ContentCategory::createDirectory($path);
+                    FilesManager::createDirectory($uploaddir);
                 }                
                 $datos = pathinfo($nameFile);     //sacamos infor del archivo
                 
