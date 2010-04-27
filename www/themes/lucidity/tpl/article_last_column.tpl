@@ -3,7 +3,6 @@
 
     @theme      Lucidity
 *}
-
 <div class="layout-column last-column last span-8">
     <div class="border-dotted">
 
@@ -21,9 +20,10 @@
             {include file="frontpage_article.tpl" item=$other_news[1]}
         </div>
     </div>
+    {include file="widget_facebook_iframe.tpl"}
+    <hr class="new-separator" />
     {include file="widget_headlines_past.tpl"}
     <hr class="new-separator"/>
     {include file="widget_ad_column.tpl" type='105'}
-
     <hr class="new-separator" />
 </div>
