@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <!-- User routes {{{ -->
+        <user-login type="Zend_Controller_Router_Route">
+            <route>user/login/</route>
+            <defaults>
+                <controller>user</controller>
+                <action>login</action>
+            </defaults>
+        </user-login>
+        
+        <user-logout>
+            <route>user/logout/</route>
+            <defaults>
+                <controller>user</controller>
+                <action>logout</action>
+            </defaults>
+        </user-logout>
+        <!-- }}} -->
+        
+        
+        <!-- Panel routes {{{ -->
+        <panel-index type="Zend_Controller_Router_Route">
+            <route>panel/</route>
+            <defaults>
+                <controller>panel</controller>
+                <action>index</action>
+            </defaults>
+        </panel-index>
+        
+        <panel-rss type="Zend_Controller_Router_Route">
+            <route>panel/rss/*</route>
+            <defaults>
+                <controller>panel</controller>
+                <action>rss</action>
+            </defaults>
+        </panel-rss>
+        <!-- }}} -->
+        
+        
+        <!-- Pages routes {{{ -->
+        <page-index type="Zend_Controller_Router_Route">
+            <route>pages/index/*</route>
+            <defaults>
+                <controller>page</controller>
+                <action>index</action>
+            </defaults>
+        </page-index>
+        <!-- }}} -->
+        
+        
+    </production>
+    
+    <development extends="production"></development>
+
+</routes>
+
