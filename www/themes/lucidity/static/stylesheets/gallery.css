@@ -22,8 +22,8 @@
 #gallery{
 	max-width:900px;
 	background:#eee;
-	padding:10px 30px 10px 30px;
-	margin:0px auto !important;
+	padding:0px 30px 10px 30px;
+	margin:10px auto !important;
 	margin-bottom:15px;
 }
 
@@ -31,4 +31,6 @@
 .title-gallery h1{
 	padding-top:0px;
 	margin-top:0;
+	font-family:Georgia;
+	font-size:1.6em;
 }

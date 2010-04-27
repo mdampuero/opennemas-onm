@@ -52,12 +52,14 @@
 
         <div id="main_content" class="single-article span-24">
             <div class="content-gallery span-24">
-              <div class="in-big-title title-gallery span-24">
-                  <h1>Xabi Alonso: "Mi relación con CR9 es fantástica"</h1>
-              </div><!-- fin lastest-news -->
-              
               <div class="span-24 clearfix">
+                
+                
                 <div id="gallery" class="ad-gallery ">
+                  <div class="title-gallery">
+                  <h1>Xabi Alonso: "Mi relación con CR9 es fantástica"</h1>
+                  <hr class="news-separator"/>
+                </div><!-- fin lastest-news -->
                  <div class="ad-image-wrapper">
                  </div>
                  <div class="ad-controls">
