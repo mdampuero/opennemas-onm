@@ -37,7 +37,7 @@ make_sortable_divs_portadas = function() {
     }
  }
 
-
+// Old version
 savePositions = function(category) {
 
    // changedTables(category);
@@ -140,7 +140,57 @@ savePositions = function(category) {
         }  
     } */
  
-}
+};
+
+savePositions = function(category) {
+	var url = '?action=savePositions&category=' + category;
+	
+	var data = {};
+	$('columns').select('div[role=wairole:gridcell]').each(function(v, k) {
+		v.select('input[type=checkbox]').each(function(chk) {
+			if(!data[ v.id ]) {
+				data[ v.id ] = [];
+			}
+			
+			data[ v.id ].push( chk.getAttribute('value') );
+		});
+	});
+	
+	var g = new k.Growler();
+				g.growl('Espere por favor...',
+					{'location': 'tr',
+					'life' : '5',
+					'header': 'Guardando las posiciones'}
+					);
+	new Ajax.Request(url, {
+		method: 'post',
+		
+		postBody: 'data=' + encodeURIComponent( Object.toJSON(data) ),
+		
+		onSuccess: function(transport) {
+			try{
+				var g = new k.Growler();
+				g.growl(transport.responseText,
+					{'location': 'tr',
+					'life' : '5',
+					'header': 'Solicitud exitosa'}
+					);
+			}catch (e){
+				console.log(e);
+			}
+
+		},
+		
+		onFailure: function(transport) {
+			var g = new k.Growler();
+				g.growl("Error al guardar las pocisiones.",
+					{'location': 'tr',
+					'life' : '5',
+					'header' : 'Error!'}
+					);
+		}
+	}); 
+};
 
 
 changedTables = function(category) {

@@ -29,29 +29,6 @@ function checkAll(field,img)
 }
 
 
-function get_height(my) {
-
-my.height=(window.innerHeight-60);
-}
-
-function objetoAjax(){
-	var xmlhttp=false;
-	try {
-		xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-	} catch (e) {
-		try {
-		   xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		} catch (E) {
-			xmlhttp = false;
-  		}
-	}
-
-	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
-		xmlhttp = new XMLHttpRequest();
-	}
-	return xmlhttp;
-}
-
 //Para articles
 function get_tags(title)
 {
@@ -347,4 +324,10 @@ function change_dashboard(div,category) {
         get_dashboard_box(div,category,30,div+'_most_1m');
     }
     
+}
+
+function salir() {
+    if(confirm('¿Desea salir del panel de administración?')) {
+        location.href = '/admin/user/logout';
+    }
 }
