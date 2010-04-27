@@ -600,3 +600,48 @@ div.submenus a:hover {
 	text-decoration:underline;
 }
 
+body {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+#user_activity {
+    background:transparent url(<?=$RESOURCES_PATH?>images/users_activity.png) top right no-repeat;
+    cursor: pointer;
+    text-align: right;
+    padding:2px 20px 2px 2px ;
+    float: left;
+	margin:0 5px;
+	color:#ccc;
+}
+
+#user_mailbox {    
+    text-align: right;
+    padding:2px 20px 2px 2px ;
+    float: left;
+	margin:0 5px;
+	color:#ccc;
+    padding: 2px;
+}
+
+#user_box {    
+    color: #0B55C4;
+    font-size: 12px;
+    font-weight: bold;
+    float: right;
+    margin-right: 4px;
+}
+
+#user_live {
+    float: left;
+    border-right:  1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    background-color: inherit;
+
+    width: 20px;
+    padding: 2px 2px 2px 2px;
+}
+
+#user_live:hover {
+    background-color: #FFF;
+}
