@@ -16,8 +16,7 @@
     <link rel="stylesheet" href="stylesheets/parts/utilities.css" type="text/css" media="screen,projection">
     <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
 
-    <link rel="stylesheet" href="stylesheets/gallerific/galleriffic-3.css" type="text/css" />
-    <link rel="stylesheet" href="stylesheets/gallerific/black.css" type="text/css" />
+    <link rel="stylesheet" href="javascripts/jquery.ad-gallery.1.2.2/jquery.ad-gallery.css" type="text/css" media="screen,projection">
     <link rel="stylesheet" href="stylesheets/gallery.css" type="text/css" media="screen,projection">
 
     <style type="text/css">
@@ -30,7 +29,7 @@
     </style>
     
     <script type="text/javascript">
-        document.write('<style>.noscript { display: none; }</style>');
+        //document.write('<style>.noscript { display: none; }</style>');
     </script>
         
   </head>
@@ -52,89 +51,97 @@
         <?php require('header.php');?>
 
         <div id="main_content" class="single-article span-24">
-            <div class="content-gallery span-24 clearfix">
-            
-            
-            
-            
-				<div class="wrapper-gallery span-22">
-                    <!-- Start Advanced Gallery Html Containers -->
-                    <div id="gallery" class="content span-14">
-                        <div id="controls" class="controls"></div>
-                            <div class="slideshow-container">
-                                <div id="loading" class="loader"></div>
-                                <div id="slideshow" class="slideshow"></div>
-                            </div>
-                        <div id="caption" class="caption-container"></div>
-                    </div>
-                    <div id="thumbs" class="navigation span-8">
-                        <ul class="thumbs noscript">
- 
-                        <?php for($i=1;$i<5;$i++){ ?>
-                            
-                            <li>
-                                <a class="thumb" href="http://farm3.static.flickr.com/2375/2538172432_3343a47341.jpg" title="Title #19">
-                                    <img src="http://farm3.static.flickr.com/2375/2538172432_3343a47341_s.jpg" alt="Title #19" />
-                                </a>
-                                <div class="caption">
-                                    <!--<div class="download">-->
-                                    <!--    <a href="http://farm3.static.flickr.com/2375/2538172432_3343a47341_b.jpg">Download Original</a>-->
-                                    <!--</div>-->
-                                    <div class="image-title">Title #19</div>
-                                    <div class="image-desc">Description</div>
-                                </div>
-                            </li>
-    
-                            <li>
-                                <a class="thumb" href="http://farm3.static.flickr.com/2353/2083476642_d00372b96f.jpg" title="Title #20">
-                                    <img src="http://farm3.static.flickr.com/2353/2083476642_d00372b96f.jpg" alt="Title #20" />
-                                </a>
-                                <div class="caption">
-                                    <div class="image-title">Title #20</div>
-                                    <div class="image-desc">Description</div>
-                                </div>
-                            </li>
-    
-                            <li>
-                                <a class="thumb" href="http://farm3.static.flickr.com/2201/1502907190_7b4a2a0e34.jpg" title="Title #21">
-                                    <img src="http://farm3.static.flickr.com/2201/1502907190_7b4a2a0e34_s.jpg" alt="Title #21" />
-                                </a>
-                                <div class="caption">
-                                    <div class="image-title">Title #21</div>
-                                    <div class="image-desc">Description</div>
-                                </div>
-                            </li>
-    
-                            <li>
-                                <a class="thumb" href="http://farm2.static.flickr.com/1116/1380178473_fc640e097a.jpg" title="Title #22">
-                                    <img src="http://farm2.static.flickr.com/1116/1380178473_fc640e097a_s.jpg" alt="Title #22" />
-                                </a>
-                                <div class="caption">
-                                    <div class="image-title">Title #22</div>
-                                    <div class="image-desc">Description</div>
-                                </div>
-                            </li>
-    
-                            <li>
-                                <a class="thumb" href="http://farm2.static.flickr.com/1260/930424599_e75865c0d6.jpg" title="Title #23">
-                                    <img src="http://farm2.static.flickr.com/1260/930424599_e75865c0d6_s.jpg" alt="Title #23" />
-                                </a>
-                                <div class="caption">
-                                    <div class="image-title">Title #23</div>
-                                    <div class="image-desc">Description</div>
-                                </div>
-                            </li>
-                        <?php } ?>
-                        </ul>
-                    </div>
-                    <!-- End Advanced Gallery Html Containers -->
-                </div>
+            <div class="content-gallery span-24">
+              <div class="in-big-title title-gallery span-24">
+                  <h1>Xabi Alonso: "Mi relación con CR9 es fantástica"</h1>
+              </div><!-- fin lastest-news -->
+              
+              <div class="span-24 clearfix">
+                <div id="gallery" class="ad-gallery ">
+                 <div class="ad-image-wrapper">
+                 </div>
+                 <div class="ad-controls">
+                 </div>
+                 <div class="ad-nav">
+                   <div class="ad-thumbs">
+                     <ul class="ad-thumb-list">
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/1.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/1.jpg" class="image0">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/10.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/10.jpg" title="A title for 10.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 10.jpg" class="image1">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/11.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/11.jpg" title="A title for 11.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 11.jpg" class="image2">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/12.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/12.jpg" title="A title for 12.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 12.jpg" class="image3">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/13.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/13.jpg" title="A title for 13.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 13.jpg" class="image4">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/14.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/14.jpg" title="A title for 14.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 14.jpg" class="image5">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/2.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/2.jpg" title="A title for 2.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 2.jpg" class="image6">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/3.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/3.jpg" title="A title for 3.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 3.jpg" class="image7">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/4.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/4.jpg" title="A title for 4.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 4.jpg" class="image8">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/5.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/5.jpg" title="A title for 5.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 5.jpg" class="image9">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/6.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/6.jpg" title="A title for 6.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 6.jpg" class="image10">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/7.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/7.jpg" title="A title for 7.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 7.jpg" class="image11">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/8.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/8.jpg" title="A title for 8.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 8.jpg" class="image12">
+                         </a>
+                       </li>
+                       <li>
+                         <a href="/themes/lucidity/static/images/gallery/images/9.jpg">
+                           <img src="/themes/lucidity/static/images/gallery/images/9.jpg" title="A title for 9.jpg" longdesc="This is a nice, and incredibly descriptive, description of the image 9.jpg" class="image13">
+                         </a>
+                       </li>
+                     </ul>
+                   </div>
+                 </div>
+           
+               </div>
+              </div>
                 
-            
-
-
-
-
             <div class="wrapper-gallery-utilities">
 
               <hr class="new-separator"/>
@@ -241,105 +248,24 @@
         <?php require('footer.php'); ?>
       </div><!-- fin .container -->
     </div>
-
-    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
-    <script type="text/javascript" src="javascripts/functions.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.galleriffic.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.opacityrollover.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script> 
+        <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
+        <script type="text/javascript" src="javascripts/jquery.ad-gallery.1.2.2/jquery.ad-gallery.pack.js"></script> 
+            
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
                 $('#tabs').tabs();
-				// We only want these styles applied when javascript is enabled
-				$('div.navigation').css({'width' : '300px', 'float' : 'right'});
-				$('div.content').css('display', 'block');
-
-				// Initially set opacity on thumbs and add
-				// additional styling for hover effect on thumbs
-				var onMouseOutOpacity = 0.67;
-				$('#thumbs ul.thumbs li').opacityrollover({
-					mouseOutOpacity:   onMouseOutOpacity,
-					mouseOverOpacity:  1.0,
-					fadeSpeed:         'fast',
-					exemptionSelector: '.selected'
-				});
-				
-				// Initialize Advanced Galleriffic Gallery
-				var gallery = $('#thumbs').galleriffic({
-					delay:                     2500,
-					numThumbs:                 15,
-					preloadAhead:              10,
-					enableTopPager:            true,
-					enableBottomPager:         true,
-					maxPagesToShow:            7,
-					imageContainerSel:         '#slideshow',
-					controlsContainerSel:      '#controls',
-					captionContainerSel:       '#caption',
-					loadingContainerSel:       '#loading',
-					renderSSControls:          true,
-					renderNavControls:         true,
-					playLinkText:              'Reproducir',
-					pauseLinkText:             'Pausar',
-					prevLinkText:              '&lsaquo; Anterior foto',
-					nextLinkText:              'Siguiente foto &rsaquo;',
-					nextPageLinkText:          'Siguientes &rsaquo;',
-					prevPageLinkText:          '&lsaquo; Anteriores',
-					enableHistory:             true,
-					autoStart:                 false,
-					syncTransitions:           true,
-					defaultTransitionDuration: 900,
-					onSlideChange:             function(prevIndex, nextIndex) {
-						// 'this' refers to the gallery, which is an extension of $('#thumbs')
-						this.find('ul.thumbs').children()
-							.eq(prevIndex).fadeTo('fast', onMouseOutOpacity).end()
-							.eq(nextIndex).fadeTo('fast', 1.0);
-					},
-					onPageTransitionOut:       function(callback) {
-						this.fadeTo('fast', 0.0, callback);
-					},
-					onPageTransitionIn:        function() {
-						this.fadeTo('fast', 1.0);
-					}
-				});
-
-				/**** Functions to support integration of galleriffic with the jquery.history plugin ****/
-
-				// PageLoad function
-				// This function is called when:
-				// 1. after calling $.historyInit();
-				// 2. after calling $.historyLoad();
-				// 3. after pushing "Go Back" button of a browser
-				function pageload(hash) {
-					// alert("pageload: " + hash);
-					// hash doesn't contain the first # character.
-					if(hash) {
-						$.galleriffic.gotoImage(hash);
-					} else {
-						gallery.gotoIndex(0);
-					}
-				}
-
-				// Initialize history plugin.
-				// The callback is called at once by present location.hash. 
-				$.historyInit(pageload, "advanced.html");
-
-				// set onlick event for buttons using the jQuery 1.3 live method
-				$("a[rel='history']").live('click', function(e) {
-					if (e.button != 0) return true;
-					
-					var hash = this.href;
-					hash = hash.replace(/^.*#/, '');
-
-					// moves to a new page. 
-					// pageload is called at once. 
-					// hash don't contain "#", "?"
-					$.historyLoad(hash);
-
-					return false;
-				});
-
-				/****************************************************************************************/
+                var galleries = $('.ad-gallery').adGallery(
+                                                           {'effect' : 'fade'}
+                                                           )
+                $('#toggle-slideshow').click(
+                  function() {
+                    galleries[0].slideshow.toggle();
+                    return false;
+                  }
+                );
 			});
 		</script>
+
   </body>
 </html>

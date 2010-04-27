@@ -11,44 +11,24 @@
     Slideshow
 ************************************************************/
 
-div.content-gallery{
-	background:#1c1e1c !important;
-	color:#747678;
-	margin:10px 0;
+.ad-thumb-list img{
+	width:90px;
+	height:80px
 }
 
-div.caption{
+.ad-gallery{
+	margin:15px auto;
 }
-div.wrapper-gallery{
-	float:none;
-	margin:0 auto;
-	margin:20px 0 0 40px;
-}
-div.caption {color:#666;}
-div.caption div.image-title{ font-family:Georgia; font-weight:normal; font-size:2.2em; color:White;}
-
-div.top-navigation *{
-	border:none;
+#gallery{
+	max-width:900px;
+	background:#eee;
+	padding:10px 30px 10px 30px;
+	margin:0px auto !important;
+	margin-bottom:15px;
 }
 
-div.image-wrapper{ background:#ccc; padding:15px;}
-
-.thumb{ border:1px solid #222 !important; }
-
-a.thumb img{
-	width:80px !important;
-	height:80px !important;
+.title-gallery{ padding: 10px 0 !important;}
+.title-gallery h1{
+	padding-top:0px;
+	margin-top:0;
 }
-div.nav-controls{
-	width:150px;
-}
-div.nav-controls * { display:inline-block !important; margin:0; clear:none;}
-div.nav-controls a{ display:inline;}
-
-div#thumbs div.pagination{
-	margin:10px 0 !important;
-}
-div.pagination a, div.pagination a:hover{ border:none !important; background:none;}
-div.pagination a:hover{text-decoration:underline}
-
-
