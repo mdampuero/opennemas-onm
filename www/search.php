@@ -32,6 +32,12 @@ require_once ("index_sections.php");
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 require_once ("search_advertisement.php");
-               
+
+require_once 'Zend/Search/Lucene.php';
+$index = new Zend_Search_Lucene('/tmp/opennemas_index');
+$hits   = $index->find(strtolower($search));
+
+$tpl->assign('hits', $hits);
+
 // Visualizar
 $tpl->display('search.tpl');

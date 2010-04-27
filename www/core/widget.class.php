@@ -11,7 +11,6 @@ CREATE TABLE `widgets` (
 `pk_widget` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ,
 `content` TEXT NOT NULL ,
 `renderlet` VARCHAR( 20 ) NOT NULL DEFAULT 'html',
-`tpl_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 PRIMARY KEY ( `pk_widget` )
 ) ENGINE = MYISAM 
 
@@ -37,7 +36,6 @@ class Widget extends Content {
     
     public $content = null;
     public $renderlet = null;
-    public $tpl_timestamp = null;
     
     /**
      * @var MethodCacheManager Handler to call method cached
