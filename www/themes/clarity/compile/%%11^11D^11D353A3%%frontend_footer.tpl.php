@@ -1,5 +1,6 @@
-<?php /* Smarty version 2.6.18, created on 2010-04-21 13:34:01
+<?php /* Smarty version 2.6.18, created on 2010-04-22 11:31:29
          compiled from frontend_footer.tpl */ ?>
+    <hr class="new-separator" />
     <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "widget_ad_bottom.tpl", 'smarty_include_vars' => array()));
 $this->_tpl_vars = $_smarty_tpl_vars;

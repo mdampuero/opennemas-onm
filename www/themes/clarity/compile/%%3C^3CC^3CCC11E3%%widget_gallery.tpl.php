@@ -1,10 +1,11 @@
-<?php /* Smarty version 2.6.18, created on 2010-04-21 23:57:09
+<?php /* Smarty version 2.6.18, created on 2010-04-22 12:22:10
          compiled from widget_gallery.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('modifier', 'clearslash', 'widget_gallery.tpl', 10, false),array('modifier', 'escape', 'widget_gallery.tpl', 10, false),)), $this); ?>
 <div class="layout-column first-column span-12">
     <div class="photos-highlighter clearfix span-12">
-        <div class="photos-header"><img src="images/widgets/photos-highlighter-header.png" alt=""/></div>
+        <div class="photos-header"><img src="<?php echo $this->_tpl_vars['params']['IMAGE_DIR']; ?>
+widgets/photos-highlighter-header.png" alt=""/></div>
         <div class="photos-highlighter-big clearfix">
             <a href="<?php echo $this->_tpl_vars['lastAlbum'][0]->permalink; ?>
 " title="<?php echo ((is_array($_tmp=((is_array($_tmp=$this->_tpl_vars['lastAlbum'][0]->title)) ? $this->_run_mod_handler('clearslash', true, $_tmp) : clearslash($_tmp)))) ? $this->_run_mod_handler('escape', true, $_tmp, 'html') : smarty_modifier_escape($_tmp, 'html')); ?>
@@ -24,12 +25,14 @@ album/crops/<?php echo $this->_tpl_vars['lastAlbum'][0]->id; ?>
             <?php unset($this->_sections['i']);
 $this->_sections['i']['name'] = 'i';
 $this->_sections['i']['loop'] = is_array($_loop=$this->_tpl_vars['lastAlbum']) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
+$this->_sections['i']['max'] = (int)3;
 $this->_sections['i']['show'] = true;
-$this->_sections['i']['max'] = $this->_sections['i']['loop'];
+if ($this->_sections['i']['max'] < 0)
+    $this->_sections['i']['max'] = $this->_sections['i']['loop'];
 $this->_sections['i']['step'] = 1;
 $this->_sections['i']['start'] = $this->_sections['i']['step'] > 0 ? 0 : $this->_sections['i']['loop']-1;
 if ($this->_sections['i']['show']) {
-    $this->_sections['i']['total'] = $this->_sections['i']['loop'];
+    $this->_sections['i']['total'] = min(ceil(($this->_sections['i']['step'] > 0 ? $this->_sections['i']['loop'] - $this->_sections['i']['start'] : $this->_sections['i']['start']+1)/abs($this->_sections['i']['step'])), $this->_sections['i']['max']);
     if ($this->_sections['i']['total'] == 0)
         $this->_sections['i']['show'] = false;
 } else

@@ -1,4 +1,4 @@
-<?php /* Smarty version 2.6.18, created on 2010-04-21 23:39:42
+<?php /* Smarty version 2.6.18, created on 2010-04-22 23:40:21
          compiled from frontpage.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
 smarty_core_load_plugins(array('plugins' => array(array('insert', 'intersticial', 'frontpage.tpl', 19, false),array('function', 'renderplaceholder', 'frontpage.tpl', 38, false),)), $this); ?>
@@ -86,14 +86,15 @@ unset($_smarty_tpl_vars);
                                 <?php echo smarty_function_renderplaceholder(array('items' => $this->_tpl_vars['column'],'tpl' => 'frontpage_article_middle_big.tpl','placeholder' => 'placeholder_2_1'), $this);?>
 
 
-                                <?php echo smarty_function_renderplaceholder(array('items' => $this->_tpl_vars['column'],'tpl' => 'frontpage_article_middle_little.tpl','placeholder' => 'placeholder_2_2'), $this);?>
-
-
                                 <?php $_smarty_tpl_vars = $this->_tpl_vars;
 $this->_smarty_include(array('smarty_include_tpl_file' => "widget_ad_adsense.tpl", 'smarty_include_vars' => array()));
 $this->_tpl_vars = $_smarty_tpl_vars;
 unset($_smarty_tpl_vars);
  ?>
+
+                                <?php echo smarty_function_renderplaceholder(array('items' => $this->_tpl_vars['column'],'tpl' => 'frontpage_article_middle_little.tpl','placeholder' => 'placeholder_2_2'), $this);?>
+
+                                
                             </div>
 
                         </div>
@@ -106,22 +107,35 @@ unset($_smarty_tpl_vars);
  ?>
 
                       <?php $_smarty_tpl_vars = $this->_tpl_vars;
-$this->_smarty_include(array('smarty_include_tpl_file' => "widget_frontend_video.tpl", 'smarty_include_vars' => array()));
+$this->_smarty_include(array('smarty_include_tpl_file' => "widget_frontend_video.tpl", 'smarty_include_vars' => array('video' => $this->_tpl_vars['video'][1])));
 $this->_tpl_vars = $_smarty_tpl_vars;
 unset($_smarty_tpl_vars);
  ?>
                        
                       <?php $_smarty_tpl_vars = $this->_tpl_vars;
-$this->_smarty_include(array('smarty_include_tpl_file' => "widget_ad_lateral.tpl", 'smarty_include_vars' => array('type' => '3')));
+$this->_smarty_include(array('smarty_include_tpl_file' => "widget_ad_button.tpl", 'smarty_include_vars' => array('type' => '3')));
 $this->_tpl_vars = $_smarty_tpl_vars;
 unset($_smarty_tpl_vars);
  ?>
 
+                      <?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "widget_headlines.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
                     </div>
 
                 </div>
  
                 <hr class="new-separator">
+
+                <div class="span-24">
+                       <?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "widget_ad_separator.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+                </div>
 
                 <div class="span-24">
                     <div class="layout-column first-column span-12">

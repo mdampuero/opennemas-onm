@@ -1,7 +1,7 @@
-<?php /* Smarty version 2.6.18, created on 2010-04-21 13:42:52
+<?php /* Smarty version 2.6.18, created on 2010-04-22 13:00:14
          compiled from module_head.tpl */ ?>
 <?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
-smarty_core_load_plugins(array('plugins' => array(array('modifier', 'clearslash', 'module_head.tpl', 37, false),)), $this); ?>
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'clearslash', 'module_head.tpl', 38, false),)), $this); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
@@ -12,6 +12,8 @@ smarty_core_load_plugins(array('plugins' => array(array('modifier', 'clearslash'
 screen.css" type="text/css" media="screen, projection">
         <link rel="stylesheet" href="<?php echo $this->_tpl_vars['params']['CSS_DIR']; ?>
 print.css" type="text/css" media="print">
+        <link rel="stylesheet" href="<?php echo $this->_tpl_vars['params']['CSS_DIR']; ?>
+advertisement.css" type="text/css" media="screen,projection">
         <!--[if lt IE 8]><link rel="stylesheet" href="<?php echo $this->_tpl_vars['params']['CSS_DIR']; ?>
 ie.css" type="text/css" media="screen, projection"><![endif]-->
 
@@ -83,7 +85,7 @@ droid.js"></script>
 
  
         <?php endif; ?>
-         
-        
+
+
                     </head>
     <body> 
