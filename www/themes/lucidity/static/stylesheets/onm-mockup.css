@@ -692,6 +692,7 @@ div.flickr-highlighter li.selected{
 */
 div.tv-highlighter{
     background:Black;
+    min-height:225px;
 }
 
 
