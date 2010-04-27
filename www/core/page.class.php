@@ -1,316 +1,464 @@
 <?php
-require_once('content_manager.class.php');
-require_once('content.class.php');
-require_once('article.class.php');
-require_once('pagelet.class.php');
+/* -*- Mode: PHP; tab-width: 4 -*- */
+/**
+ * OpenNeMas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNeMas
+ * @package    OpenNeMas
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+ 
+/**
+ * Page
+ * 
+ * @package    Onm
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: page.class.php 1 2010-04-20 11:14:52Z vifito $
+ */
+class Page 
+{
+    
+    private $pk_page;
+    private $fk_page;
+    private $title;
+    private $slug;
+    private $description;
+    private $keywords;
+    private $status;
+    private $type;
+    private $grid;
+    private $theme;
+    private $color;
+    private $params;
+    private $weight;    
+    
+    public  $cache = null;
 
-
-class Page {
-
-	var $id_category = null;
-	var $id_content = null;
-	var $zones = null;
-	var $id_template = null;
-	var $source_template = null;
-
-
-    function Page($id_category, $id_content = null) {
-        $this->id_category = $id_category;
-        $this->id_content = $id_content;
+    // Constructor
+    public function __construct($pk_page=null)
+    {
+        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        
+        // Load page if pk_page is not null
+        if(!is_null($pk_page)) {
+            $this->read($pk_page);
+        }                
     }
-
-    function __construct($id_category, $id_content = null){
-        $this->Page($id_category, $id_content);
+    
+    // Getters & Setters
+    public function __get($name)
+    {
+        if(property_exists($this, $name)) {
+            return $this->{$name};
+        }
+        
+        return null;
     }
-
-	function show(){
-		if(is_null($this->id_content) && !is_null($this->id_category)){
-			$this->show_front();
-		}else{
-
-			$this->show_detail();
-		}
-	}
-
-    private function show_front() {
-    	//Se obtienen los contenidos de todas las zonas ordenados
-        $sql = 'select t1.fk_template_front as id_template,
-       t1.name as name,
-       t1.description as description,
-       t2.pk_fk_zone as id_zone,
-       t2.pk_fk_content as id_content,
-       t2.position as position,
-       t2.fk_template_content as id_template_content,
-       t3.fk_content_type as id_content_type,
-       t4.source as source,
-       t5.source as source_content,
-       t6.name as name_zone,
-       t7.name as name_content_type,
-       t6.mode as mode_zone,
-       t8.fk_template_default,
-       t9.source as source_default
-       from content_categories as t1
-              inner join category_zones_contents as t2 on t1.fk_template_front = t2.pk_fk_template
-                         and t1.pk_content_category = t2.pk_fk_content_category
-              inner join contents as t3 on t2.pk_fk_content = t3.pk_content
-              inner join templates as t4 on t2.pk_fk_template = t4.pk_template
-              left join templates as t5 on t2.fk_template_content = t5.pk_template
-              inner join zones as t6 on t2.pk_fk_zone = t6.pk_zone and t2.pk_fk_template = t6.pk_fk_template
-              inner join content_types as t7 on t3.fk_content_type = t7.pk_content_type
-              left join zones_content_types as t8 on
-                   t1.fk_template_front = t8.pk_fk_template and
-                   t2.pk_fk_zone = t8.pk_fk_zone and
-                   t3.fk_content_type = t8.pk_fk_content_type
-              left join templates as t9 on  t8.fk_template_default = t9.pk_template
-		where
-      			t1.pk_content_category = ' .intval($this->id_category) .'
-		order by t2.pk_fk_zone, t2.position';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
+    
+    public function __set($name, $value)
+    {
+        if(property_exists($this, $name)) {
+            $this->{$name} = $value;
         }
-        $this->zones = array();
-        //Esta array se utiliza para acumular los contenidos que se pasan como un conjunto a una platilla
-        //de una zona con modo m(multiple)
-        $array_contents = array();
-        $template_zone_m = null;
-        $name_zone_m = null;
-        while(!$rs->EOF) {
-        	if(is_null($this->id_template)){
-        		$this->id_template = $rs->fields['id_template'];
-        		$this->source_template = $s->fields['source'];
-        	}
-        	$id_content = $rs->fields['id_content'];
-        	$name_content_type = $rs->fields['name_content_type'];
-        	$template_source_content = $rs->fields['source_content'];
-        	if(is_null($template_source_content)){
-        		$template_source_content = $rs->fields['source_default'];
-        	}
-        	$template_source = $rs->fields['source'];
-        	$name_zone = $rs->fields['name_zone'];
-        	$mode_zone = $rs->fields['mode_zone'];
-        	if(!is_null($id_content) && !is_null($name_content_type) && !is_null($template_source_content) && !is_null($name_zone) && !is_null($template_source)){
-        		if($mode_zone != 'm'){
-        			if((count($array_contents) > 0)&&(!is_null($template_zone_m))){
-        				$tpl_temp = new Template();
-        				$tpl_temp->assign('content', $array_contents);
-        				$tpl_temp->assign('id_content', null);
-        				$tpl_temp->assign('id_category', $this->id_category);
-        				$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-        				$array_contents = array();
-        				$name_zone_m = null;
-        				$template_zone_m = null;
-        			}
-        		$content = new $name_content_type( $id_content );
-        		$tpl = new Template();
-        		$tpl->assign('content', $content);
-        		$tpl->assign('id_content', $id_content);
-        		$tpl->assign('id_category', $this->id_category);
-        		$this->zones[$name_zone] = $this->zones[$name_zone] . $tpl->fetch($template_source_content);
-        		}else{
-        			if((count($array_contents) > 0)&&(!is_null($template_zone_m)) && ($name_zone_m != $name_zone)){
-        				$tpl_temp = new Template();
-        				$tpl_temp->assign('content', $array_contents);
-        				$tpl_temp->assign('id_content', null);
-        				$tpl_temp->assign('id_category', $this->id_category);
-        				$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-        				$array_contents = array();
-        				$name_zone_m = null;
-        				$template_zone_m = null;
-        			}
-					$array_contents[] = new $name_content_type( $id_content );
-					$name_zone_m = $name_zone;
-					$template_zone_m = $template_source_content;
-        		}
-        	}else{
-        		//print'ummm:';
-        	}
-        	$rs->MoveNext();
-        }
-
-		if((count($array_contents) > 0)&&(!is_null($template_zone_m))){
-			$tpl_temp = new Template();
-			$tpl_temp->assign('content', $array_contents);
-			$tpl_temp->assign('id_content', null);
-			$tpl_temp->assign('id_category', $this->id_category);
-			$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-			$array_contents = array();
-			$name_zone_m = null;
-			$template_zone_m = null;
-       	}
-        //Para cada zona, se le asigna el contenido
-        $tpl_front = new Template();
-        foreach ($this->zones as $key => $value){
-        	$tpl_front->assign($key,$value);
-        }
-
-        //Esto es temporal hasta que se decida el tipo de contenido
-        $tpl_front->assign('accordion', array(array('image' => 'media/images/opinion01.jpg',
-                                      'text'=> '"Esta es mi opinión, si no le gusta tengo otras." - Groucho Marx'),
-                                array('image' => 'media/images/opinion02.jpg',
-                                      'text'=> '"Esta es mi opinión, si no le gusta tengo otras." - Groucho Marx'),
-                                array('image' => 'media/images/opinion03.jpg',
-                                      'text'=> '"Esta es mi opinión, si no le gusta tengo otras." - Groucho Marx') ));
-        //Se genera el contenido
-        $tpl_front->display($template_source);
     }
-
-
-
-    private function show_detail() {
-    	//Se obtienen los contenidos de todas las zonas ordenados
-        $sql = 'select t1.fk_template_detail as id_template,
-       t1.name as name,
-       t1.description as description,
-       t2.pk_fk_zone as id_zone,
-       t2.pk_fk_content as id_content,
-       t2.position as position,
-       t2.fk_template_content as id_template_content,
-       t3.fk_content_type as id_content_type,
-       t4.source as source,
-       t5.source as source_content,
-       t6.name as name_zone,
-       t7.name as name_content_type,
-       t6.mode as mode_zone,
-       t8.fk_template_default,
-       t9.source as source_default
-       from content_categories as t1
-              inner join category_zones_contents as t2 on t1.fk_template_detail = t2.pk_fk_template
-                         and t1.pk_content_category = t2.pk_fk_content_category
-              inner join contents as t3 on t2.pk_fk_content = t3.pk_content
-              inner join templates as t4 on t2.pk_fk_template = t4.pk_template
-              left join templates as t5 on t2.fk_template_content = t5.pk_template
-              inner join zones as t6 on t2.pk_fk_zone = t6.pk_zone and t2.pk_fk_template = t6.pk_fk_template
-              inner join content_types as t7 on t3.fk_content_type = t7.pk_content_type
-              left join zones_content_types as t8 on
-                   t1.fk_template_front = t8.pk_fk_template and
-                   t2.pk_fk_zone = t8.pk_fk_zone and
-                   t3.fk_content_type = t8.pk_fk_content_type
-              left join templates as t9 on  t8.fk_template_default = t9.pk_template
-		where
-      			t1.pk_content_category = ' .intval($this->id_category) .'
-		order by t2.pk_fk_zone, t2.position';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
-        }
-        $this->zones = array();
-        //Esta array se utiliza para acumular los contenidos que se pasan como un conjunto a una platilla
-        //de una zona con modo m(multiple)
-        $array_contents = array();
-        $template_zone_m = null;
-        $name_zone_m = null;
-        while(!$rs->EOF) {
-        	if(is_null($this->id_template)){
-        		$this->id_template = $rs->fields['id_template'];
-        		$this->source_template = $s->fields['source'];
-        	}
-        	$id_content = $rs->fields['id_content'];
-        	$name_content_type = $rs->fields['name_content_type'];
-        	$template_source_content = $rs->fields['source_content'];
-        	if(is_null($template_source_content)){
-        		$template_source_content = $rs->fields['source_default'];
-        	}
-        	$template_source = $rs->fields['source'];
-        	$name_zone = $rs->fields['name_zone'];
-        	$mode_zone = $rs->fields['mode_zone'];
-        	if(!is_null($id_content) && !is_null($name_content_type) && !is_null($template_source_content) && !is_null($name_zone) && !is_null($template_source)){
-        		if($mode_zone != 'm'){
-        			if((count($array_contents) > 0)&&(!is_null($template_zone_m))){
-        				$tpl_temp = new Template();
-        				$tpl_temp->assign('content', $array_contents);
-        				$tpl_temp->assign('id_content', null);
-        				$tpl_temp->assign('id_category', $this->id_category);
-        				$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-        				$array_contents = array();
-        				$name_zone_m = null;
-        				$template_zone_m = null;
-        			}
-        		$content = new $name_content_type( $id_content );
-        		$tpl = new Template();
-        		$tpl->assign('content', $content);
-        		$tpl->assign('id_content', $id_content);
-        		$tpl->assign('id_category', $this->id_category);
-        		$this->zones[$name_zone] = $this->zones[$name_zone] . $tpl->fetch($template_source_content);
-        		}else{
-        			if((count($array_contents) > 0)&&(!is_null($template_zone_m)) && ($name_zone_m != $name_zone)){
-        				$tpl_temp = new Template();
-        				$tpl_temp->assign('content', $array_contents);
-        				$tpl_temp->assign('id_content', null);
-        				$tpl_temp->assign('id_category', $this->id_category);
-        				$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-        				$array_contents = array();
-        				$name_zone_m = null;
-        				$template_zone_m = null;
-        			}
-					$array_contents[] = new $name_content_type( $id_content );
-					$name_zone_m = $name_zone;
-					$template_zone_m = $template_source_content;
-        		}
-        	}else{
-        		//print'ummm:';
-        	}
-        	$rs->MoveNext();
-        }
-
-		if((count($array_contents) > 0)&&(!is_null($template_zone_m))){
-			$tpl_temp = new Template();
-			$tpl_temp->assign('content', $array_contents);
-			$tpl_temp->assign('id_content', null);
-			$tpl_temp->assign('id_category', $this->id_category);
-			$this->zones[$name_zone_m] = $tpl_temp->fetch($template_zone_m);
-			$array_contents = array();
-			$name_zone_m = null;
-			$template_zone_m = null;
-       	}
-        //Para cada zona, se le asigna el contenido
-        $tpl_detail = new Template();
-        foreach ($this->zones as $key => $value){
-        	$tpl_detail->assign($key,$value);
-        }
-
-        //Se obtiene el contenido principal
-        $sql = 'select t1.fk_content_type as id_content_type,
-       		t2.name as name_content_type,
-       		t2.fk_template_default as id_template_default,
-       		t3.source as source
-		from contents as t1
-     		inner join content_types as t2 on t1.fk_content_type = t2.pk_content_type
-     		inner join templates as t3 on t2.fk_template_default = t3.pk_template
-		where t1.pk_content = ' . $this->id_content ;
-
-		$rs = $GLOBALS['application']->conn->Execute( $sql );
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
-        }
-        $name_content_type = $rs->fields['name_content_type'];
-        $template_content_source = $rs->fields['source'];
-        $content = new $name_content_type( $this->id_content );
-        $tpl_temp = new Template();
-        				$tpl_temp->assign('content', $content);
-        				$tpl_temp->assign('id_content', $this->id_content);
-        				$tpl_temp->assign('id_category', $this->id_category);
-        				$contenido  = $tpl_temp->fetch($template_content_source);
-        $tpl_detail->assign('content', $contenido);
-        //Se genera el contenido
-        $tpl_detail->display($template_source);
-
-
+    
+    public function create($data)
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $fields = array('fk_page', 'title', 'slug', 'description',
+                        'keywords', 'status', 'type', 'grid',
+                        'theme', 'color', 'params', 'weight');
+        
+        $id = SqlHelper::bindAndInsert('pages', $fields, $data, $conn);
+        
+        return $id;
     }
-
-
+    
+    public function read($pk_page)
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $sql = 'SELECT * FROM `pages` WHERE `pk_page`=?';
+        $rs  = $conn->Execute($sql, array($pk_page));        
+        
+        if(($rs !== false) && (!$rs->EOF)){
+            $this->_loadProperties($rs->fields);
+        }                
+    }
+    
+    public function getRoot()
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $sql = 'SELECT pk_page FROM `pages` WHERE `fk_page` = 0 ORDER BY weight';
+        $pk_page  = $conn->GetOne($sql);        
+        
+        if($pk_page === false) {
+            return null;
+        }
+        
+        return new Page($pk_page);
+    }
+    
+    public function update($data, $pk_page)
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $filter = '`pk_page` = ' . $pk_page;
+        $fields = array('fk_page', 'title', 'slug', 'description',
+                        'keywords', 'status', 'type', 'grid',
+                        'theme', 'color', 'params', 'weight');
+        
+        SqlHelper::bindAndUpdate('pages', $fields, $data, $filter, $conn);        
+    }
+    
+    /**
+     * Delete a page,
+     * page must not to have child pages
+     *
+     * @pre Page::hasChildPages($pk_page) == false
+     * 
+     * @param int $pk_page
+     * @return boolean  Return true if page was removed
+     */ 
+    public function delete($pk_page)
+    {
+        if(!$this->hasChildPages()) {
+            $sql = 'DELETE FROM `pages` WHERE `pk_page` = ?';
+            
+            // Get connection
+            // $conn = Zend_Registry::get('conn');
+            $conn = $GLOBALS['application']->conn;
+            
+            $rs = $conn->Execute($sql, array($pk_page));
+            if($rs === false) {
+                throw new Exception( $conn->ErrorMsg() );
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get a tree representation of pages 
+     *
+     * <code>
+     * array
+     *  'element' => 
+     *     object(Page)[34]
+     *       private 'pk_page' => string '7' (length=1)
+     *       private 'fk_page' => string '0' (length=1)
+     *       private 'title' => string 'HOME' (length=4)
+     *       ...
+     *   'childNodes' => 
+     *     array
+     *       0 => 
+     *         array
+     *           'element' =>
+     *              object(Page)[37]
+     *              ...
+     * </code>
+     * @param int $parent   Page Id to recovery subtree
+     * @return array
+     */
+    public function getTree($parent=null)
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        // O pai
+        $sql = 'SELECT * FROM `pages` WHERE `pk_page` = ?';
+        $rs  = $conn->Execute($sql, array($parent));
+        
+        // Added parent 
+        $page = new Page();
+        $this->_loadProperties($rs->fields, $page);
+        
+        $tree = array();
+        $tree['element'] = $page;        
+        
+        $sql = 'SELECT * FROM `pages` WHERE `fk_page` = ? ORDER BY weight';
+        $rs  = $conn->Execute($sql, array($parent));
+        
+        while(!$rs->EOF) {            
+            $tree['childNodes'][] = $this->getTree($rs->fields['pk_page']);
+            
+            $rs->MoveNext();
+        }
+        
+        return $tree;
+    }
+    
+    /**
+     * Get a page by slug property
+     *
+     * @param string $slug
+     * @return Page
+     */
+    public function getPageBySlug($slug)
+    {
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $sql = 'SELECT * FROM `pages` WHERE `slug` = ?';
+        $rs  = $conn->Execute($sql, array($slug));
+        
+        if( ($rs !== false) && (!$rs->EOF) ) {
+            $page = new Page();
+            $page->_loadProperties($rs->fields);
+            
+            return $page;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * hasChildPages, Check if a page has children
+     *
+     * @param int $pk_page  Page Id
+     * @return boolean      Return true if has children, otherwise false
+     */
+    public function hasChildPages($pk_page=null)
+    {
+        // Check for static call with param pk_page 
+        if(is_null($pk_page) && isset($this->pk_page)) {
+            $pk_page = $this->pk_page;
+        }
+        
+        // Get connection
+        // $conn = Zend_Registry::get('conn');
+        $conn = $GLOBALS['application']->conn;
+        
+        $sql = 'SELECT count(*) AS num_children FROM `pages` WHERE `fk_page` = ?';
+        $rs = $conn->GetOne($sql, array($pk_page));
+        
+        if($rs === false) {
+            throw new Exception( $conn->ErrorMsg() );
+        }
+        
+        return $rs > 0;
+    }
+    
+    /**
+     * Load values in associative array to current object ($this)
+     * 
+     * @param array $assocProps     Associative array 
+     */
+    private function _loadProperties($assocProps, $object=null)
+    {
+        if(is_null($object)) {
+            $object = $this;
+        }
+        
+        foreach($assocProps as $prop => $val) {
+            if(property_exists($object, $prop)) {
+                $object->{$prop} = $val;
+            }
+        }        
+    }    
+    
+    public function render($slug)
+    {
+        
+    }
+    
+    /**
+     * Generate a HTML representatio for a tree of pages
+     *
+     * @param array $tree
+     * @param string|null   $id
+     * @param string $role  WAI-ARIA role
+     * @param boolean $isRoot   Flag to control recursive generation
+     * @return string   Tree HTML representation
+     */
+    public static function tree2html($tree, $id=null, $role='tree', $isRoot=true)
+    {
+        $html = '';
+        
+        if($isRoot) {
+            if(is_null($id)) {
+                $id = uniqid($aria . '-');
+            }
+            
+            // Role menu|tree
+            $html = '<ul role="' . $aria . '">';
+            
+            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $aria . 'item"
+                          rel="root">';
+            $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
+            $html .= $tree['element']->title;
+            $html .= '</a>';
+        } else {
+            $html = '<ul role="group">';
+            
+            // Role menuitem|treeitem
+            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $aria . 'item"
+                          rel="' . strtolower($tree['element']->type) .'">';                
+            $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
+            $html .= $tree['element']->title;
+            $html .= '</a>';            
+        }        
+        
+        if(isset($tree['childNodes'])) {            
+            foreach($tree['childNodes'] as $item) {
+                $html .= Page::tree2html($item, null, $aria, false);                
+            }
+        }
+        
+        $html .= '</li>';
+        $html .= '</ul>';
+        
+        return $html;
+    }
 
 }
-?>
+
+
+// Test
+//require_once('../config.inc.php');
+//require_once('./application.class.php');
+//require_once('./sql_helper.class.php');
+//require_once('./method_cache_manager.class.php');
+//
+//Application::import_libs('*');
+//$app = Application::load();
+
+/* $data = array(
+    'fk_page' => 0,
+    'weight'  => 0,
+    'title'   => 'HOME',
+    'slug'    => 'home',
+    'description' => 'Página principal',
+    'keywords'    => 'home,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 0
+);
+$home = Page::create($data);
+
+$data = array(
+    'fk_page' => $home,
+    'weight'  => 0,
+    'title'   => 'Galicia',
+    'slug'    => 'galiza',
+    'description' => 'Página de galicia',
+    'keywords'    => 'galicia,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 1
+);
+$galicia = Page::create($data);
+
+$data = array(
+    'fk_page' => $home,
+    'weight'  => 0,
+    'title'   => 'Outra páxina',
+    'slug'    => 'paxina',
+    'description' => 'Página outra',
+    'keywords'    => 'outra,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 0
+);
+Page::create($data); 
+
+$data = array(
+    'fk_page' => $root->pk_page,
+    'weight'  => 0,
+    'title'   => 'Mundo',
+    'slug'    => 'mundo',
+    'description' => 'Página de mundo',
+    'keywords'    => 'mundo,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 1
+);
+$mundo = Page::create($data);
+
+$data = array(
+    'fk_page' => $mundo,
+    'weight'  => 0,
+    'title'   => 'Mundo 1',
+    'slug'    => 'mundo-1',
+    'description' => 'Página de mundo 1',
+    'keywords'    => 'mundo,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 1
+);
+$mundo_1 = Page::create($data);
+
+$data = array(
+    'fk_page' => $mundo_1,
+    'weight'  => 0,
+    'title'   => 'Mundo 1_1',
+    'slug'    => 'mundo-1-1',
+    'description' => 'Página de mundo 1_1',
+    'keywords'    => 'mundo,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 1
+);
+$mundo_1_1 = Page::create($data);
+
+$data = array(
+    'fk_page' => $mundo_1_1,
+    'weight'  => 0,
+    'title'   => 'Mundo 1_1_1',
+    'slug'    => 'mundo-1-1-1',
+    'description' => 'Página de mundo 1_1_1',
+    'keywords'    => 'mundo,opennemas',
+    'status'  => 'AVAILABLE',
+    'type'    => 'STANDARD',
+    'weight'  => 1
+);
+Page::create($data); */
+
+//$page = new Page();
+//$root = $page->getRoot();
+//$tree = $page->getTree($root->pk_page);
+//echo Page::tree2html($tree);  // Static
+//
+//
+//$mundo = $page->getPageBySlug('mundo');
+//$tree = $page->getTree($mundo->pk_page);
+//echo Page::tree2html($tree); 
+//
+//$mundo = $page->getPageBySlug('home');
+//$tree = $page->getTree($mundo->pk_page);
+//
+//var_dump($tree);
+//die();
+//
+//
+//echo Page::tree2html($tree, 'menuId', 'menu');
+//
+//$pageToDelete = $page->getPageBySlug('mundo-1-1-1');
+//$page->delete($pageToDelete->pk_page);
+
+//$root = new Page(7);
+

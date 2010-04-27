@@ -1,5 +1,6 @@
 <?php
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
+
 require_once('./config.inc.php');
 require_once('./core/application.class.php');
 require_once('./core/user.class.php');

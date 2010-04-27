@@ -1,11 +1,34 @@
 <?php
-// TODO: mover a config.inc.php ¿?¿?¿?
-define('OPENNEMAS_BACKEND_SESSIONS',  '/var/lib/opennemas/xornal/sessions/backend/');
-define('OPENNEMAS_FRONTEND_SESSIONS', '/var/lib/opennemas/xornal/sessions/frontend/');
-
-// En un .htaccess php_value session.save_path /var/lib/.../
-
-class SessionManager implements ArrayAccess {
+/* -*- Mode: PHP; tab-width: 4 -*- */
+/**
+ * OpenNeMas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNeMas
+ * @package    OpenNeMas
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+ 
+/**
+ * SessionManager
+ * 
+ * @package    Onm
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: sessionmanager.class.php 1 2010-04-26 12:02:24Z vifito $
+ */
+class SessionManager implements ArrayAccess
+{
     // Directorio por defecto de sesiones de PHP5 por defecto
     protected $dirSess = '/var/lib/php5/';
     
@@ -30,7 +53,7 @@ class SessionManager implements ArrayAccess {
             $lifetime = intval($_COOKIE['default_expire']);
         }
         
-        // Set session_save_path
+        /* // Set session_save_path
         session_save_path( $this->dirSess );
         
         // set the cache expire to $lifetime minutes
@@ -41,7 +64,16 @@ class SessionManager implements ArrayAccess {
         session_cache_limiter('nocache');
         
         // Now we can call to session_start
-        session_start();
+        session_start(); */
+        
+        $options = array(
+            'save_path'     => $this->dirSess,
+            'cache_expire'  => $lifetime,
+            'cache_limiter' => 'nocache',            
+        );
+        
+        Zend_Session::setOptions($options);
+        Zend_Session::start();
     }
     
     function __set($name, $value) {

@@ -26,8 +26,10 @@ require_once('./core/method_cache_manager.class.php');
 require_once('./core/proxy.class.php');
 
 if(filter_has_var(INPUT_GET, 'url')) {    
-    $proxy = new Proxy($_REQUEST['url']);
+    $proxy = new Proxy();
+    $proxy->cache->set_cache_life(60*60); // 1 hour
     
-    // get content and return to browser 
-    $proxy->get()->dump();    
+    // get content and return to browser
+    $url = filter_input(INPUT_GET, 'url', FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED);
+    $proxy->cache->get($url)->dump();    
 }

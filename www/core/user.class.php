@@ -59,6 +59,8 @@ class User
     var $authMethod = null;
     var $clientLoginToken = null;
     
+    public $cache = null;
+    
     /**
      * Compatible PHP4 constructor
      *
@@ -285,6 +287,34 @@ class User
         }
         
         return $result;
+    }
+    
+    
+    /**
+     * Load instance values in session
+     */
+    public function loadSession()
+    {
+        $_SESSION = array(); // Clear before to load
+        
+        $_SESSION['userid']     = $this->id;
+        $_SESSION['username']   = $this->login;
+        $_SESSION['email']      = $this->email;
+        
+        // SYS_NAME_GROUP_ADMIN defined into config.inc.php
+        $_SESSION['isAdmin']    = ( User_group::getGroupName($this->fk_user_group)==SYS_NAME_GROUP_ADMIN );
+        
+        $_SESSION['privileges'] = Privilege::get_privileges_by_user($this->id);
+        $_SESSION['accesscategories'] = $this->get_access_categories_id();
+        
+        // Method authentication: database|google_clientlogin
+        $_SESSION['authMethod'] = $this->authMethod;
+        if($user->authMethod == 'google_clientlogin') {
+            $_SESSION['authGmail']  = base64_encode($this->login.':'.$this->password);
+        }
+        
+        //Carga en la varible de _SESSION expire el tiempo de expiración del usuario la sesión.
+        $_SESSION['default_expire'] = $this->sessionexpire;
     }
     
     /**

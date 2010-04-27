@@ -118,6 +118,8 @@ class SqlHelper
             
             throw new Exception($error_msg);
         }
+        
+        return $conn->Insert_ID();
     }
     
     /**
@@ -146,7 +148,7 @@ class SqlHelper
             }
         }
         
-        SqlHelper::insert($table, $merged, $conn);
+        return SqlHelper::insert($table, $merged, $conn);
     }
     
 }

@@ -1,4 +1,5 @@
 {include file="header.tpl"}
+
 <table class="adminform">
     <tbody>
         <tr>
@@ -288,4 +289,5 @@ document.observe('dom:loaded', function() {
 });
 </script>
 {/literal}
+
 {include file="footer.tpl"}

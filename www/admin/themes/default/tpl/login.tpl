@@ -7,28 +7,34 @@
     <link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css" type="text/css" />
     
     {scriptsection name="head"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
-    {/scriptsection}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery.color.js"></script>    
+    {/scriptsection}    
 </head>
 
 <body class="login">
   <div id="topbar">
-  	<a href="/" title="Estas perdido?">&larr; Voltar á páxina principal</a>
+  	<a href="/" title="Estás perdido?">&larr; Voltar á páxina principal</a>
   </div>
+  
   <div id="login">
     <h1><a href=""><img src="{$params.IMAGE_DIR}logo-opennemas-big.png"></a></h1>
     
     {if isset($message)}
         <div id="message" align="middle">{$message}</div>
-        <script type="text/javascript">{literal}
-        document.observe('dom:loaded', function() {
-            new Effect.Highlight('message', { startcolor: '#ffff99', endcolor: '#ffffff'});
-        });{/literal}
+        {literal}
+        <script type="text/javascript">        
+        /* <![CDATA[ */
+        jQuery(document).ready(function() {
+            jQuery('#message').css({backgroundColor: '#ffff99'})
+                .animate({backgroundColor: '#ffffff'}, 2000);
+        });
+        /* ]]> */
         </script>
+        {/literal}
     {/if}    
     
-    <form method="post" action="login.php" id="loginform" name="loginform">
+    <form method="post" action="{$smarty.const.SITE_URL_ADMIN}user/login" id="loginform" name="loginform">
         <p>
             <label>Nome de Usuario<br/>
             <input tabindex="10" size="20" class="input" name="login" id="user_login" type="text"

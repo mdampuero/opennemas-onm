@@ -1,7 +1,4 @@
 <?php
-require_once('core/application.class.php');
-
-// TODO: documentar
 
 class Privileges_check
 {    
@@ -58,7 +55,7 @@ class Privileges_check
     }
 
     private static function SessionExpireTimeAction() {
-        Application::forwardTargetParent("/admin/login.php");
+        Application::forwardTargetParent("/admin/user/login");
     }
 
     public static function AccessDeniedAction() {

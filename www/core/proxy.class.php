@@ -86,11 +86,17 @@ class Proxy {
     /**
      *
      */
-    public function get()
-    {
-        if(!is_null($this->url)) {
-            list($this->content, $this->contentType) = $this->exec($this->url);
+    public function get($url=null)
+    {        
+        if(!is_null($url)) {
+            $this->url = $url;
         }
+        
+        if(is_null($this->url)) {
+            throw new Exception("ERROR: You must to provide a URI");
+        }
+        
+        list($this->content, $this->contentType) = $this->exec($this->url);        
         
         return $this; // Chaining methods
     }
