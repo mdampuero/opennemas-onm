@@ -465,11 +465,11 @@ class Advertisement extends Content
             
             // Perform operations for each advertisement type
             foreach($advertisements as $type_advertisement => $advs) {
-                /*// Select a random banner
-                $banners[] = $advs[ array_rand($advs) ];*/
+                // Select a random banner
+                $banners[] = $advs[ array_rand($advs) ];
                 
                 // Previous behavior changed to only fetch first banner
-                $banners[] = array_shift($advs);
+                //$banners[] = array_shift($advs);
             }
         }
         
@@ -478,6 +478,8 @@ class Advertisement extends Content
     
     public function getIntersticial($type, $category='home')
     {
+        $interstitial = null;
+        
         if(in_array($type, array(50, 150)) && ADVERTISEMENT_ENABLE) {
             $category = (empty($category) || ($category=='home'))? 0: $category;
             
@@ -486,12 +488,15 @@ class Advertisement extends Content
                                                      `available`=1 AND
                                                      `fk_content_categories`='.$category,
                                         'ORDER BY type_advertisement, created LIMIT 0, 1');
-            if(count($rsBanner) == 1) {
-                return $rsBanner[0];
-            }            
+            
+            //if(count($rsBanner) == 1) {
+            //    $interstitial = $rsBanner[0];
+            //}
+            
+            $interstitial = array_rand($rsBanner);
         }
         
-        return null;
+        return $interstitial;
     }
 
     /**
