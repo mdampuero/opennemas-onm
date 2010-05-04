@@ -81,7 +81,7 @@ function confirmar(elto, id) {
  
 <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" height="100%">
 <tr><td valign="top" align="left"><!-- INICIO: Tabla contenedora -->
-<form action="#" method="post" name="formulario" id="formulario"> 
+<form action="/admin/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario"> 
 <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
 <tr>
     <td class="barra_superior" style="height:50px;background-image:url(/admin/images/header_middle.png);">&nbsp;&nbsp;{$titulo_barra}</td>

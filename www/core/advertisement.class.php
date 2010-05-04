@@ -487,7 +487,7 @@ class Advertisement extends Content
             $rsBanner = $cm->find('Advertisement', ' `type_advertisement`=' . $type . ' AND
                                                      `available`=1 AND
                                                      `fk_content_categories`='.$category,
-                                        'ORDER BY type_advertisement, created LIMIT 0, 1');
+                                        'ORDER BY type_advertisement, created');
             
             //if(count($rsBanner) == 1) {
             //    $interstitial = $rsBanner[0];

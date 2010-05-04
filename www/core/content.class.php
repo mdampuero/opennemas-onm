@@ -58,6 +58,9 @@ class Content {
     var $paper_page = null;
     var $slug = null;
     
+    var $mask = null;
+    var $home_mask = null;
+    
     function Content($id=null) {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
         
@@ -68,7 +71,7 @@ class Content {
 
     function __construct($id=null){
         $this->Content($id);
-    }        
+    }
     
     function create( $data ) {
         // Fire event
@@ -1015,25 +1018,12 @@ class Content {
         
         return true;
     }
-
-}
-
-// FIXME: mover a un novo script que cargue todo o sistema por defecto "bootstrap"
-function __autoload($className) {
-    $filename = strtolower($className);
-    if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-        require dirname(__FILE__).'/'.$filename.'.class.php';
-        
-    } else{
-        
-        // Try convert MethodCacheManager to method_cache_manager
-        $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
-        
-        if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-            require dirname(__FILE__).'/'.$filename.'.class.php';
-        }
-    }
     
+    
+    public function __toString()
+    {
+        return $this->title;
+    }
     
 }
 

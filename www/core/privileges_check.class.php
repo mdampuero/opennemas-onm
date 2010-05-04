@@ -73,11 +73,11 @@ class Privileges_check
     }
 
     private static function CheckSessionExpireTime() {    
-        if(time() > $_SESSION['expire']) {
-            session_destroy(); 
-            unset($_SESSION);
-            return true;
-        }
+        //if(time() > $_SESSION['expire']) {
+        //    session_destroy(); 
+        //    unset($_SESSION);
+        //    return true;
+        //}
         //Actuliza la sesion
         Privileges_check::LoadSessionExpireTime();
         return false;

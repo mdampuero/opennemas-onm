@@ -68,7 +68,7 @@ class SessionManager implements ArrayAccess
         
         $options = array(
             'save_path'     => $this->dirSess,
-            'cache_expire'  => $lifetime,
+            /*'cache_expire'  => $lifetime,*/
             'cache_limiter' => 'nocache',            
         );
         

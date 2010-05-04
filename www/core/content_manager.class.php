@@ -104,6 +104,57 @@ class ContentManager
         return $items;
     }
     
+    /**
+     * Para buscador
+     * TODO: implementar
+     */
+    public function searchAny($q, $fields)
+    {
+        $sql = 'SELECT * FROM `contents` WHERE MATCH(title, description, metadata) AGAINST(?)';
+        
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($q));
+        
+        
+        
+    }
+    
+    
+    /**
+     * Para principal
+     */
+    public function findInGrid($positions, $category=null)
+    {
+        $where = 'content_status=1 AND available=1';
+        
+        if(!is_null($category)) {
+            $sql = 'SELECT * FROM contents_categories, contents ' .
+                   'WHERE '.$where.' AND frontpage=1 AND `contents_categories`.`pk_fk_content_category`=' . $category .
+                   ' AND placeholder IN ("' . implode('","', $positions) . '") ' .
+                   ' AND `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ' .
+                   'ORDER BY placeholder, position';
+        } else {
+            $sql = 'SELECT pk_content FROM `contents` ' .
+                   'WHERE ' . $where . ' AND in_home=1 ' .
+                   ' AND home_placeholder IN ("' . implode('","', $positions) . '") ' .
+                   ' ORDER BY home_placeholder, home_pos ASC';
+        }
+        
+        
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $contents = array();
+        
+        if($rs !== false) {
+            while(!$rs->EOF) {
+                $o = Content::get($rs->fields['pk_content']);
+                $contents[] = $o;
+                
+                $rs->MoveNext();
+            }
+        }
+        
+        return $contents;
+    }
+    
     
     public function find_all($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
     {

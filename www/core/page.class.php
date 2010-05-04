@@ -45,11 +45,13 @@ class Page
     private $weight;    
     
     public  $cache = null;
+    private $conn  = null;
 
     // Constructor
     public function __construct($pk_page=null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        $this->conn  = Zend_Registry::get('conn');
         
         // Load page if pk_page is not null
         if(!is_null($pk_page)) {
@@ -158,6 +160,40 @@ class Page
         }
         
         return false;
+    }
+    
+    public function generateSlug($title)
+    {
+        $filter = new Onm_Filter_Slug();
+        $slugs  = $this->_getSlugs();
+        
+        $slug = $filter->filter($title);
+        
+        if(in_array($slug, $slugs)) {
+            
+            $i = 1;            
+            $new = $slug . '-' . $i;
+            
+            while( in_array($new, $slugs) ) {
+                $i++;
+                $new = $slug . '-' . $i;
+            }
+            
+            return $new;
+        }
+        
+        return $slug;
+    }
+    
+    /**
+     * 
+     */
+    private function _getSlugs()
+    {        
+        $sql   = 'SELECT `slug` FROM `pages`';
+        $slugs = $this->conn->GetCol($sql);
+        
+        return $slugs;
     }
     
     /**
@@ -279,7 +315,61 @@ class Page
                 $object->{$prop} = $val;
             }
         }        
-    }    
+    }
+    
+    /**
+     *
+     */
+    public function moveNode($pk_page, $fk_page, $weight)
+    {
+        $sql = 'UPDATE `pages` SET `fk_page`=?, `weight`=? WHERE `pk_page`=?';        
+        $rs = $this->conn->Execute($sql, array($fk_page, $weight, $pk_page));
+        if($rs === false) {
+            // log
+        }
+        
+        $sql = 'UPDATE `pages` SET `weight` = `weight` + 1 WHERE `weight` >= ? AND `fk_page`=? AND `pk_page` <> ?';
+        $rs = $this->conn->Execute($sql, array($weight, $fk_page, $pk_page));
+        if($rs === false) {
+            // log
+        }
+        
+        $sql = 'SELECT `pk_page`,`fk_page` FROM `pages` WHERE `fk_page`=? ORDER BY `fk_page`, `weight` ASC';
+        $rs = $this->conn->Execute($sql, array($fk_page));
+        
+        $stmt = $this->conn->Prepare('UPDATE `pages` SET `weight` = ? WHERE `pk_page` = ?');
+        if($rs !== false) {
+            
+            $fkPage = null;
+            $i = 0;
+            
+            while(!$rs->EOF) {
+                
+                if($fkPage != $rs->fields['fk_page']) {
+                    $fkPage = $rs->fields['fk_page'];
+                    $i = 0;
+                }
+                
+                $this->conn->Execute($stmt, array($i, $rs->fields['pk_page']));
+                $i++;
+                
+                $rs->MoveNext();
+            }
+        }
+    }
+    
+    /**
+     *
+     *
+     */
+    public function renameNode($pk_page, $title)
+    {
+        $sql = 'UPDATE `pages` SET `title`=? WHERE `pk_page`=?';        
+        $rs = $this->conn->Execute($sql, array($title, $pk_page));
+        if($rs === false) {
+            // log
+        }        
+    }
     
     public function render($slug)
     {
@@ -295,37 +385,40 @@ class Page
      * @param boolean $isRoot   Flag to control recursive generation
      * @return string   Tree HTML representation
      */
-    public static function tree2html($tree, $id=null, $role='tree', $isRoot=true)
+    /* public static function tree2html($tree, $id=null, $role='tree', $isRoot=true)
     {
         $html = '';
         
         if($isRoot) {
             if(is_null($id)) {
-                $id = uniqid($aria . '-');
+                $id = uniqid($role . '-');
             }
             
             // Role menu|tree
-            $html = '<ul role="' . $aria . '">';
+            $html = '<ul role="' . $role . '">';
             
-            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $aria . 'item"
+            $html .= '<li id="node-' . $tree['element']->pk_page .'" class="open"
+                          role="' . $role . 'item"
                           rel="root">';
             $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
+            $html .= '<ins>&nbsp;</ins>';
             $html .= $tree['element']->title;
             $html .= '</a>';
         } else {
             $html = '<ul role="group">';
             
             // Role menuitem|treeitem
-            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $aria . 'item"
+            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $role . 'item"
                           rel="' . strtolower($tree['element']->type) .'">';                
             $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
+            $html .= '<ins>&nbsp;</ins>';
             $html .= $tree['element']->title;
             $html .= '</a>';            
         }        
         
         if(isset($tree['childNodes'])) {            
             foreach($tree['childNodes'] as $item) {
-                $html .= Page::tree2html($item, null, $aria, false);                
+                $html .= Page::tree2html($item, null, $role, false);                
             }
         }
         
@@ -333,7 +426,61 @@ class Page
         $html .= '</ul>';
         
         return $html;
+    } */
+    
+    /**
+     * Generate a HTML representatio for a tree of pages
+     *
+     * @param array $tree
+     * @param string $role  WAI-ARIA role
+     * @return string   Tree HTML representation
+     */
+    public static function tree2html($root, $role='tree') {
+        $html = '';
+        
+        if(!isset($root['element'])) {
+            // is a childNodes array            
+            $html .= '<ul role="group">';            
+            foreach($root as $tree) {                
+                
+                $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $role . 'item"
+                          rel="' . strtolower($tree['element']->type) .'">';                
+                $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
+                $html .= '<ins>&nbsp;</ins>';
+                $html .= $tree['element']->title;
+                $html .= '</a>';
+                
+                if(isset($tree['childNodes'])) {
+                    $html .= Page::tree2html($tree['childNodes'], $role);
+                }                
+                
+                $html .= '</li>';
+                
+            }            
+            $html .= '</ul>';
+            
+        } else {
+            // isRoot
+            $html .= '<ul role="' . $role . '">';
+            
+            $html .= '<li id="node-' . $root['element']->pk_page .'" class="open"
+                          role="' . $role . 'item"
+                          rel="root">';
+            $html .= '<a href="/pages/' . $root['element']->slug .'/">';
+            $html .= '<ins>&nbsp;</ins>';
+            $html .= $root['element']->title;
+            $html .= '</a>';
+            
+            if(isset($root['childNodes'])) {
+                $html .= Page::tree2html($root['childNodes'], $role);
+            }
+            
+            $html .= '</li></ul>';
+        }
+        
+        return $html;
     }
+
 
 }
 

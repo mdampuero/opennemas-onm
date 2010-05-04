@@ -131,7 +131,8 @@ $router->addConfig( new Zend_Config_Xml('../configs/routes-backend.xml', APPLICA
 
 // Load plugins
 $front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
-$front->registerPlugin( new Onm_Controller_Plugin_Locale()  ); 
+$front->registerPlugin( new Onm_Controller_Plugin_Locale() );
+$front->registerPlugin( new Onm_Controller_Plugin_Template() );
 
 // No render by default
 $front->setParam('noViewRenderer', true);
