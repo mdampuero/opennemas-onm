@@ -16,11 +16,8 @@
     <script type="text/javascript" src="javascripts/functions.js"></script>
 
 	<style type="text/css">
-		#main_menu, div.toolbar-bottom a, div.utilities a, .transparent-logo {
+		div.toolbar-bottom a, div.utilities a, .transparent-logo {
 			background-color:#aa0000;
-		}
-		#main_menu{
-		  background-color:Black;
 		}
 	</style>
     
@@ -70,48 +67,33 @@
 
                 </div>
 
-                <div id="menus" class="">
+                <div>
 
-                    <div id="main_menu" class="span-24 clearfix">
-                        <div>
-                            <ul id="menu" class="clearfix">
-							  <li>
-								<a href="#" title="Ir a la sección --">Diseño</a>
-								<ul>
-								  <li><a title="Acceder a  Datos de la empresa" href="#">Galicia</a></li>
-								  <li><a title="Acceder a  Descargas" href="#">Cataluña</a></li>
-								</ul>
-							  </li>
-							  <li><a href="#" title="Ir a la sección --">Rincón profesional</a></li>
-							  <li><a href="#" title="Ir a la sección --">Interiorismo</a></li>
-							  <li><a href="#" title="Ir a la sección --">Exposiciones</a></li>
-							  <li><a href="#" title="Ir a la sección --">Directorio</a></li>
-							  <li><a href="#" title="Ir a la sección --">Viajar</a></li>
-							  <li><a href="#" title="Ir a la sección --">Sostenible</a></li>
-							  <li><a href="#" title="Ir a la sección --">Internacional</a></li>
-                            </ul>
-                        </div>
-                        
+                    <div id="main_menu" class="span-24">
+					  <ul>
+						<li><a href="#" title="Ir a la sección --">Diseño</a></li>
+						<li><a href="#" title="Ir a la sección --">Rincón profesional</a></li>
+						<li><a href="#" title="Ir a la sección --">Interiorismo</a></li>
+						<li><a href="#" title="Ir a la sección --">Exposiciones</a></li>
+						<li><a href="#" title="Ir a la sección --">Directorio</a></li>
+						<li><a href="#" title="Ir a la sección --">Viajar</a></li>
+						<li><a href="#" title="Ir a la sección --">Sostenible</a></li>
+						<li><a href="#" title="Ir a la sección --">Internacional</a></li>
+					  </ul>
                     </div>
 
                     <div id="sub_main_menu" class="span-24">
-					  
-					<!--  <div class="lastest-news clearfix span-19">-->
-					<!--	  -->
-					<!---->
-					<!--	  <ul style="margin:0; padding:0">-->
-					<!--		  <li><strong>Últimas noticias</strong>:</li>-->
-					<!--		<li id="teaser-0" style="margin:0; padding:0">-->
-					<!--			Titular de noticia relacionada con las últimas declaraciones del gobierno.-->
-					<!--		</li>-->
-					<!--		<li id="teaser-1" style="margin:0; padding:0; display:none">-->
-					<!--			Y esta es la respuesta de la oposición al titular de noticia relacionada con las últimas declaraciones del gobierno.-->
-					<!--		</li>-->
-					<!--	  </ul>-->
-					<!--  </div>-->
-					&nbsp;
-
-                    </div>
+						<ul class="menu clearfix span-24 ">
+						  <li><a href="#" title="Ir a la sección --">Diseño</a></li>
+						  <li><a href="#" title="Ir a la sección --">Rincón profesional</a></li>
+						  <li><a href="#" title="Ir a la sección --">Interiorismo</a></li>
+						  <li><a href="#" title="Ir a la sección --">Exposiciones</a></li>
+						  <li><a href="#" title="Ir a la sección --">Directorio</a></li>
+						  <li><a href="#" title="Ir a la sección --">Viajar</a></li>
+						  <li><a href="#" title="Ir a la sección --">Sostenible</a></li>
+						  <li><a href="#" title="Ir a la sección --">Internacional</a></li>
+						</ul>
+					  </div>
 
                 </div>
 
