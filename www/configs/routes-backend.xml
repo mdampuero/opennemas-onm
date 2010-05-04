@@ -22,6 +22,17 @@
         <!-- }}} -->
         
         
+        <!-- Webdav routes {{{ -->
+        <webdav-index type="Zend_Controller_Router_Route">
+            <route>webdav/*</route>
+            <defaults>
+                <controller>webdav</controller>
+                <action>index</action>
+            </defaults>
+        </webdav-index>
+        <!-- }}} -->
+        
+        
         <!-- Panel routes {{{ -->
         <panel-index type="Zend_Controller_Router_Route">
             <route>panel/</route>
@@ -42,6 +53,57 @@
         
         
         <!-- Pages routes {{{ -->
+        <widget-index type="Zend_Controller_Router_Route">
+            <route>widget/index/*</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>index</action>
+            </defaults>
+        </widget-index>
+        
+        <widget-create type="Zend_Controller_Router_Route">
+            <route>widget/create/</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>create</action>
+            </defaults>
+        </widget-create>
+        
+        <widget-read type="Zend_Controller_Router_Route">
+            <route>widget/read/:id/</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>read</action>
+            </defaults>
+        </widget-read>
+        
+        <widget-update type="Zend_Controller_Router_Route">
+            <route>widget/update/:id/</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>update</action>
+            </defaults>
+        </widget-update>
+        
+        <widget-delete type="Zend_Controller_Router_Route">
+            <route>widget/delete/:id/</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>delete</action>
+            </defaults>
+        </widget-delete>
+        
+        <widget-toggle type="Zend_Controller_Router_Route">
+            <route>widget/toggle/:id/</route>
+            <defaults>
+                <controller>widget</controller>
+                <action>toggle</action>
+            </defaults>
+        </widget-toggle>
+        <!-- }}} -->
+        
+        
+        <!-- Pages routes {{{ -->
         <page-index type="Zend_Controller_Router_Route">
             <route>pages/index/*</route>
             <defaults>
@@ -49,6 +111,38 @@
                 <action>index</action>
             </defaults>
         </page-index>
+        
+        <page-ajax-move type="Zend_Controller_Router_Route">
+            <route>pages/ajax/move/:pk_page/:fk_page/:weight/</route>
+            <defaults>
+                <controller>page</controller>
+                <action>move</action>
+            </defaults>
+        </page-ajax-move>
+        
+        <page-ajax-create type="Zend_Controller_Router_Route">
+            <route>pages/ajax/create/:fk_page/:weight/:title/</route>
+            <defaults>
+                <controller>page</controller>
+                <action>create</action>
+            </defaults>
+        </page-ajax-create>
+        
+        <page-ajax-rename type="Zend_Controller_Router_Route">
+            <route>pages/ajax/rename/:pk_page/:title/</route>
+            <defaults>
+                <controller>page</controller>
+                <action>rename</action>
+            </defaults>
+        </page-ajax-rename>
+        
+        <page-ajax-delete type="Zend_Controller_Router_Route">
+            <route>pages/ajax/delete/:pk_page/</route>
+            <defaults>
+                <controller>page</controller>
+                <action>delete</action>
+            </defaults>
+        </page-ajax-delete>
         <!-- }}} -->
         
         
