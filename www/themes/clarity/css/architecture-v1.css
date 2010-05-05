@@ -55,6 +55,42 @@ li{
     list-style-image:url(../images/bullets/black-bullet.png);
     list-style-position: outside;
 }
+/***********************************************************
+    ADS definition
+************************************************************/
+
+
+#publis{
+    text-align:left;
+    margin:10px 0 10px 0;
+}
+.publi { background:#ececec url(../images/publi/back-publi.png) 40px 20px no-repeat;}
+.publi_1{
+    min-height:90px;
+    display:block
+}
+.publi_2{
+    min-height:90px;
+    display:block;
+}
+
+.publi_310{
+   background:#ccc;
+   display:block;
+   margin-bottom:15px;
+   width:100%;
+}
+
+.publi_310 img{
+    border:5px solid White;
+    margin:08px;
+}
+
+.publi-footer-1, .publi-footer-2{
+	background:#ececec;
+	height:80px;
+	margin-bottom:10px;
+}
 
 /***********************************************************
     Header definition
@@ -104,8 +140,7 @@ span.red{
 #logo{
 	background:url(../images/back-header.png) left bottom no-repeat;
 	position:relative;
-	height:354px;
-	min-height:354px;
+	min-height:324px;
 }
 #logo-image{
 	position:absolute;
@@ -146,10 +181,12 @@ span.red{
 */
 
 #main_menu{
-    background:Black;
-    margin:0;
-    padding:0;
-	height:22px;
+    background:Black !important;
+}
+
+#sub_main_menu{
+	border-bottom:1px solid #d4d4d4;
+	margin-bottom:10px;
 }
 
 #main_menu ul, #sub_main_menu ul{
@@ -157,55 +194,48 @@ span.red{
     padding:0;
 }
 
-
-#main_menu ul li{
-    float:left;
-    display:block;
-    padding:4px 20px 2px 20px;
-	height:18px;
-    clear:none;
-    margin:0;
-    color:White;
-	font-size:.87em;
-    text-transform:uppercase;
-    font-weight: bold;
-}
-#main_menu ul#menu > li:hover, #main_menu ul#menu > li.active{
-    background:url(../images/back-menu.png) top right repeat-x;
-    cursor:pointer;
-}
-
-#main_menu ul a, #main_menu ul a:hover, #main_menu ul a:link, #main_menu ul a:visited {
-    color:White;
-    text-decoration:none;
-    font-family:Verdana,Arial;
-}
-
-#sub_main_menu{
-    font-size:.9em;
-    color:#808080;
+#main_menu ul li, #sub_main_menu ul li{
     margin:0;
     padding:0;
+	list-style:none;
+	display:inline;
+	float:left;
 }
-#sub_main_menu ul{
-    margin:0;
-}
-#sub_main_menu ul li{
-    float:left;
-    display:block;
-    padding:4px 10px;
-    clear:none;
-    margin:0;
-}
-#sub_main_menu ul li:hover, #sub_main_menu ul li.active{
-    background:#ccc;
-    cursor:pointer;
+#main_menu ul a,
+#main_menu ul a:hover,
+#main_menu ul a:link,
+#main_menu ul a:visited {
+	display:block;
+	padding:3px 20px;
+	color:White;
+	text-decoration:none;
+	font-family:Verdana,Arial;
+	color:White;
+	font-size:.87em;
+	text-transform:uppercase;
+	font-weight: bold;
 }
 
-#sub_main_menu ul a, #sub_main_menu ul a:hover, #sub_main_menu ul a:link, #sub_main_menu ul a:visited {
-    color:#808080;
-    font-family:Verdana,Arial;
-    text-decoration:none;
+#sub_main_menu ul a,
+#sub_main_menu ul a:hover,
+#sub_main_menu ul a:link,
+#sub_main_menu ul a:visited {
+	display:block;
+	padding:3px 20px;
+	color:Gray !important;
+	text-decoration:none;
+	font-family:Verdana,Arial;
+	color:White;
+	font-size:.87em;
+	text-transform:uppercase;
+}
+
+#main_menu ul li:hover, #main_menu ul li.active{
+    background:#4d4d4d top right repeat-x;
+    cursor:pointer;
+}
+#sub_main_menu ul a:hover{
+	color:Black;
 }
 
 #main-search-form{
@@ -282,7 +312,10 @@ div.lastest-news ul li{
 #teaser-main h2{ color: #444; font-family: "Warnock Pro","Goudy Old Style","Palatino","Book Antiqua", Georgia, serif; font-weight: normal; }
 #teaser2{ display:none;}
 
+
 .border-dotted{
+	border-top:none;
+	border-bottom:none;
 	background:url(../images/bullets/border-dotted.png) top left repeat-y;
 }
 div.border-dotted h3{
@@ -379,6 +412,7 @@ div.nw-big div.sports{
 }
 .nw-subtitle {
     color:#4d4d4d;
+	font-family:Verdana
 }
 div.nw-little .nw-subtitle{
 	font-size:.95em;
@@ -555,7 +589,7 @@ ul.more-news-section-sectionlist{
     cursor: pointer
 }
 .more-news-section-links {
-    list-style-image:url(/themes/clarity/images/bullets/arrow.png);
+    list-style-image:url(../image/bullets/arrow.png);
 }
 ul.more-news-section-links li{
     margin:0; padding:0;
@@ -639,8 +673,6 @@ div.more-little-news-section li a{
 
 div.photos-highlighter{
     background:#ececec;
-    margin-bottom:10px;
-    min-height:300px;
 }
 
 div.photos-highlighter div.photos-header{
@@ -655,7 +687,7 @@ div.photos-highlighter ul{
     padding:0;
 }
 div.photos-highlighter-big{
-    margin:10px 10px 5px 40px; /* chanchullada padre HOYGA*/
+    margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
     cursor: pointer;
 	width:300px;
 	float:left;
@@ -687,10 +719,7 @@ div.photos-highlighter li.selected{
     color:#d45500;
 }
 
-div.photos-highlighter-big a{
-    color:#808080;
-    font-family:Georgia, Arial;
-}
+
 
 /***********************************************************
     Footer content definition
@@ -731,58 +760,7 @@ div#footer .developed-by{
     text-align:right
 }
 
-/***********************************************************
-    Menu
-************************************************************/
 
-/* Root = Horizontal, Secondary = Vertical */
-ul#menu {
-  margin: 0;
-  padding: 0;
-}
-
-ul#menu li {
-  margin: 0;
-  border: 0 none;
-  display: inline;
-  list-style: none;
-  position: relative;
-}
-
-ul#menu li:hover ul{
-	display:block;
-	background:Black;
-}
-ul#menu  ul {
-	margin: 0;
-	padding: 0;
-	display: none;
-	position: absolute;
-	top: 20px;
-	left: 0px;
-	z-index:9999;
-}
-
-ul#menu ul:after /*From IE 7 lack of compliance*/{
-	clear: both;
-	display: block;
-	font: 1px/0px serif;
-	content: ".";
-	height: 0;
-	visibility: hidden;
-}
-
-ul#menu ul li {
-	float: left; /*For IE 7 lack of compliance*/
-	display: block !important;
-	display: inline; /*For IE*/
-	margin:5px;
-}
-
-/* Root Menu */
-ul#menu ul li a:hover {
-	text-decoration:underline;
-}
 
 /***********************************************************
     Actions
@@ -798,7 +776,6 @@ ul#menu ul li a:hover {
 .share-actions ul > li { text-align:left; border-bottom:1px solid #eae8e9; list-style:none; display:block !important; float:none; width:100%; background:none !important; }
 .share-actions ul > li > a{ background:none !important; color:Black !important; margin:0; padding:0; text-indent:1em !important; width:auto;}
 .share-actions ul > li > a:hover{ text-decoration:underline}
-
 
 /***********************************************************
     Tabs

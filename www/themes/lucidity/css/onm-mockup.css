@@ -1022,27 +1022,26 @@ div.photos-highlighter ul{
     padding:0;
 }
 div.photos-highlighter-big{
-	margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
-	cursor: pointer;
-	width:310px;
+    margin:10px 0 5px 40px; /* chanchullada padre HOYGA*/
+    cursor: pointer;
+	width:320px;
 	float:left;
-	text-align:left;
+	text-align:right;
 	color:#808080;
 	font-size:1.3em;
-
+	border:1px solid Red !important;
 }
 div.photos-highligher-little-section-links{
-	float:right;
-	padding-left:10px !important;
-
+	float:left;
+	padding-left:10px;
+	margin-left:0;
+	display:block;
 	display:block;
 	border:1px solid Red !important;
 }
 div.photos-highlighter li{
-    float:left;
     list-style:none;
     margin:0;
-    padding-top:10px;
     color:White;
     cursor:pointer;
 }
