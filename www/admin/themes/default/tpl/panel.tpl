@@ -6,12 +6,24 @@
             <td colspan="2">
                 <div id="cpanel" >
                     
+                    {acl isAllowed="FRONTPAGE_ADMIN"}
+                	<div style="float: left;">
+                        <div class="icon">                            
+                            <a href="/admin/{url route="page-index"}">
+                                <img alt="" src="{$params.IMAGE_DIR}tree.png"/>
+                                <span>{t}Page Manager{/t}</span>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    {/acl}
+                    
                     {acl isAllowed="ARTICLE_CREATE"}
                 	<div style="float: left;">
                         <div class="icon">                            
                             <a href="/admin/article.php?action=new&category=221">
                                 <img alt="" src="{$params.IMAGE_DIR}article_add.gif"/>
-                                <span>Nuevo Articulo</span>
+                                <span>{t}New Article{/t}</span>
                             </a>
                             
                         </div>
@@ -23,7 +35,7 @@
                         <div class="icon">
                             <a href="/admin/opinion.php?action=new">
                                 <img alt="" src="{$params.IMAGE_DIR}opinion.png"/>
-                                <span>Nueva Opini&oacute;n</span>
+                                <span>{t}New Opinion{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -34,7 +46,7 @@
                         <div class="icon">
                             <a href="/admin/advertisement.php?action=new&category=0">
                                 <img alt="" src="{$params.IMAGE_DIR}advertisement.png"/>
-                                <span>Nueva Publicidad</span>
+                                <span>{t}New Advertisement{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -45,7 +57,7 @@
                         <div class="icon">
                             <a href="/admin/mediamanager.php">
                                 <img alt="" src="{$params.IMAGE_DIR}add_photo.png"/>
-                                <span>Subir Foto</span>
+                                <span>{t}Upload Media{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -56,7 +68,7 @@
                         <div class="icon">
                             <a href="/admin/article.php?action=list&category=home">
                                 <img alt="" src="{$params.IMAGE_DIR}iconos/frontpage_manager.png"/>
-                                <span>Gestor Portada</span>
+                                <span>{t}Frontpage manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -67,7 +79,7 @@
                         <div class="icon">
                             <a href="/admin/article.php?action=list_pendientes&category=todos">
                                 <img alt="" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
-                                <span>Gestor Pendientes</span>
+                                <span>{t}Pending{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -78,7 +90,7 @@
                         <div class="icon">
                             <a href="/admin/opinion.php?action=list">
                                 <img alt="" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
-                                <span>Gestor Opini&oacute;n</span>
+                                <span>{t}Opinion manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -89,7 +101,7 @@
                         <div class="icon">
                             <a href="/admin/comment.php?action=list&category=todos">
                                 <img alt="" src="{$params.IMAGE_DIR}comments_manager.png"/>
-                                <span>Gestor Comentarios</span>
+                                <span>{t}Comment manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -100,22 +112,11 @@
                         <div class="icon">
                             <a href="/admin/newsletter.php">
                                 <img alt="" src="{$params.IMAGE_DIR}newsletter/mail_message_new.png"/>
-                                <span>Envío Boletín</span>
+                                <span>{t}Newsletter{/t}</span>
                             </a>
                         </div>
                     </div>
                     {/acl}  
-                    
-                    {acl isAllowed="XML_IMPORT"}
-                    <div style="float: left;">
-                        <div class="icon">
-                             <a href="importXML.php">
-                                <img border="0" src="{$params.IMAGE_DIR}xml.png">
-                                <span>Importar XML</span>
-                            </a>
-                        </div>
-                    </div>
-                    {/acl}
                     
                 </div>
             </td>
@@ -158,7 +159,7 @@
                 {literal}
                 <script type="text/javascript">
                 /* <![CDATA[ */
-                    jQuery('#rssCorreo').feedreader('http://www.elcorreogallego.es/rss/rss.php?idWeb=1&idIdioma=1&idMenuTipo=1&sinEdicion=false&idMenu=1&txtTitulo=%DAltima+Hora', {theme: 'correo', timeout: 8000});
+                    //jQuery('#rssCorreo').feedreader('http://www.elcorreogallego.es/rss/rss.php?idWeb=1&idIdioma=1&idMenuTipo=1&sinEdicion=false&idMenu=1&txtTitulo=%DAltima+Hora', {theme: 'correo', timeout: 8000});
                 /* ]]> */                            
                 </script>
                 {/literal}
@@ -213,7 +214,7 @@
                         {literal}
                         <script type="text/javascript">
                         /* <![CDATA[ */
-                            jQuery('#rssXornal').feedreader('http://www.xornal.com/rss/', {timeout: 20000});
+                            //jQuery('#rssXornal').feedreader('http://www.xornal.com/rss/', {timeout: 20000});
                         /* ]]> */                            
                         </script>
                         {/literal}
@@ -248,7 +249,7 @@
                         </script>
                         {/literal*}
                         
-                    </div>
+                    </div>                                        
             </td>
         </tr>
     </tbody>
@@ -263,5 +264,20 @@ jQuery(document).ready( function() {
 });
 </script>
 {/literal}
+
+{*<div id="feedControl"></div>
+<script  type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("feeds", "1");
+
+  function initialize() {
+    var feedControl = new google.feeds.FeedControl();
+    feedControl.addFeed("http://www.xornal.com/rss/", "Xornal");
+    feedControl.addFeed("http://www.elpais.com/rss.html", "El Pais");
+    feedControl.draw(document.getElementById("feedControl"));
+  }
+  google.setOnLoadCallback(initialize);
+</script>
+*}
 
 {include file="footer.tpl"}

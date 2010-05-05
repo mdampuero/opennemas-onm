@@ -24,31 +24,22 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
 {
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-		$lang = $this->_getLang($request);
+		list($lang, $dirname) = $this->_getLang($request);
+        
+        $writer = new Zend_Log_Writer_Firebug();
+        $logger = new Zend_Log($writer);        
+        
+		$moFile = SITE_ADMIN_PATH . 'themes/default/locale/' . $dirname . '/messages.mo';
+        $logger->log($moFile, Zend_Log::INFO);
+        $logger->log(file_exists($moFile), Zend_Log::INFO);
 		
-		//$writer = new Zend_Log_Writer_Firebug();
-		//$logger = new Zend_Log($writer);
-		//$logger->log($lang, Zend_Log::INFO);
-		
-		$moFile = SITE_ADMIN_PATH . 'themes/default/locale/' . $lang . '/LC_MESSAGES/messages.mo';
-		if(file_exists($moFile)) {
+        if(file_exists($moFile)) {
 			$translate = new Zend_Translate('gettext', $moFile, $lang);
-			Zend_Registry::set('translate', $translate);			
-		}
-		
-		//$logger->log($translate, Zend_Log::INFO);
-        
-		// Gettext
-		$language = $lang . '.UTF-8';
-        putenv('LANG=' . $language);
-        setlocale(LC_ALL, $language);
-        
-        $domain = 'messages';
-        bind_textdomain_codeset($domain, 'UTF-8');
-		
-		// FIXME: fix path to locale 
-        bindtextdomain($domain, SITE_ADMIN_PATH . 'themes/default/locale');
-        textdomain($domain); 
+            
+            $logger->log($translate, Zend_Log::INFO);
+            
+			Zend_Registry::set('Zend_Translate', $translate);			
+		}        		
     }
 
 	/**
@@ -73,23 +64,9 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
             $locale = new Zend_Locale();
         }
         
-        $lang = strtolower( $locale->getLanguage() );
-		
-		// FIXME
-		switch($lang) {
-			case 'gl':
-				$lang = 'gl_ES';
-			break;
-			
-			case 'es':
-				$lang = 'es_ES';
-			break;
-			
-			case 'en':
-				$lang = 'en_GB';
-			break;
-		}
+        $lang    = strtolower( $locale->getLanguage() );
+        $dirname = strtolower( $locale->getTranslation($lang, 'language', 'en') );
         
-        return $lang;
+        return array($lang, $dirname);
     }
 }
