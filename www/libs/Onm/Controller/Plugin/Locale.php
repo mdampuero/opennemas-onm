@@ -26,17 +26,10 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
     {
 		list($lang, $dirname) = $this->_getLang($request);
         
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger = new Zend_Log($writer);        
-        
 		$moFile = SITE_ADMIN_PATH . 'themes/default/locale/' . $dirname . '/messages.mo';
-        $logger->log($moFile, Zend_Log::INFO);
-        $logger->log(file_exists($moFile), Zend_Log::INFO);
-		
+        
         if(file_exists($moFile)) {
 			$translate = new Zend_Translate('gettext', $moFile, $lang);
-            
-            $logger->log($translate, Zend_Log::INFO);
             
 			Zend_Registry::set('Zend_Translate', $translate);			
 		}        		

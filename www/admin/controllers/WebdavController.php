@@ -24,31 +24,31 @@ class WebdavController extends Onm_Controller_Action
     
     public function init()
     {        
-        require_once 'Sabre/autoload.php';    
-        
-        $auth = new Sabre_HTTP_BasicAuth();        
-        $result = $auth->getUserPass();
-        
-        $authSuccess = false;
-        
-        // Authenticate using table of users from database
-        if( ($result !== false) && Zend_Registry::isRegistered('conn') ) {
-            $conn = Zend_Registry::get('conn');
-            
-            $u = $result[0];
-            
-            $sql = 'SELECT `password` FROM `users` WHERE `login` = ?';
-            $pass = $conn->GetOne($sql, array($u));            
-            
-            if( !empty($pass) ) {
-                $authSuccess = md5($result[1]) == $pass;
-            } 
-        }
-        
-        if( !$authSuccess ) {
-            $auth->requireLogin();
-            exit(0);
-        }
+        //require_once 'Sabre/autoload.php';    
+        //
+        //$auth = new Sabre_HTTP_BasicAuth();        
+        //$result = $auth->getUserPass();
+        //
+        //$authSuccess = false;
+        //
+        //// Authenticate using table of users from database
+        //if( ($result !== false) && Zend_Registry::isRegistered('conn') ) {
+        //    $conn = Zend_Registry::get('conn');
+        //    
+        //    $u = $result[0];
+        //    
+        //    $sql = 'SELECT `password` FROM `users` WHERE `login` = ?';
+        //    $pass = $conn->GetOne($sql, array($u));            
+        //    
+        //    if( !empty($pass) ) {
+        //        $authSuccess = md5($result[1]) == $pass;
+        //    } 
+        //}
+        //
+        //if( !$authSuccess ) {
+        //    $auth->requireLogin();
+        //    exit(0);
+        //}
     }
     
     
@@ -68,13 +68,13 @@ class WebdavController extends Onm_Controller_Action
         
         $method = strtolower( $server->httpRequest->getMethod() );
         
-        if(isset($_SESSION['userid'])) {
-            $plugin = new Sabre_DAV_Browser_Plugin();
-            $server->addPlugin($plugin);
-        } elseif($method == 'get') {
-            $this->redirector->gotoRoute(array(), 'user-login');
-            $this->redirector->redirectAndExit();
-        }
+        //if(isset($_SESSION['userid'])) {
+        //    $plugin = new Sabre_DAV_Browser_Plugin();
+        //    $server->addPlugin($plugin);
+        //} elseif($method == 'get') {
+        //    $this->redirector->gotoRoute(array(), 'user-login');
+        //    $this->redirector->redirectAndExit();
+        //}
         
         $server->exec();
     }

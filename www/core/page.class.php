@@ -97,7 +97,7 @@ class Page
         // $conn = Zend_Registry::get('conn');
         $conn = $GLOBALS['application']->conn;
         
-        $sql = 'SELECT * FROM `pages` WHERE `pk_page`=?';
+        $sql = 'SELECT * FROM pages WHERE pk_page=?';
         $rs  = $conn->Execute($sql, array($pk_page));        
         
         if(($rs !== false) && (!$rs->EOF)){
@@ -111,7 +111,7 @@ class Page
         // $conn = Zend_Registry::get('conn');
         $conn = $GLOBALS['application']->conn;
         
-        $sql = 'SELECT pk_page FROM `pages` WHERE `fk_page` = 0 ORDER BY weight';
+        $sql = 'SELECT pk_page FROM pages WHERE fk_page = 0 ORDER BY weight';
         $pk_page  = $conn->GetOne($sql);        
         
         if($pk_page === false) {
@@ -127,7 +127,7 @@ class Page
         // $conn = Zend_Registry::get('conn');
         $conn = $GLOBALS['application']->conn;
         
-        $filter = '`pk_page` = ' . $pk_page;
+        $filter = 'pk_page = ' . $pk_page;
         $fields = array('fk_page', 'title', 'slug', 'description',
                         'keywords', 'status', 'type', 'grid',
                         'theme', 'color', 'params', 'weight');
@@ -147,7 +147,7 @@ class Page
     public function delete($pk_page)
     {
         if(!$this->hasChildPages()) {
-            $sql = 'DELETE FROM `pages` WHERE `pk_page` = ?';
+            $sql = 'DELETE FROM pages WHERE pk_page = ?';
             
             // Get connection
             // $conn = Zend_Registry::get('conn');
@@ -190,7 +190,7 @@ class Page
      */
     private function _getSlugs()
     {        
-        $sql   = 'SELECT `slug` FROM `pages`';
+        $sql   = 'SELECT slug FROM pages';
         $slugs = $this->conn->GetCol($sql);
         
         return $slugs;
@@ -225,7 +225,7 @@ class Page
         $conn = $GLOBALS['application']->conn;
         
         // O pai
-        $sql = 'SELECT * FROM `pages` WHERE `pk_page` = ?';
+        $sql = 'SELECT * FROM pages WHERE pk_page = ?';
         $rs  = $conn->Execute($sql, array($parent));
         
         // Added parent 
@@ -235,7 +235,7 @@ class Page
         $tree = array();
         $tree['element'] = $page;        
         
-        $sql = 'SELECT * FROM `pages` WHERE `fk_page` = ? ORDER BY weight';
+        $sql = 'SELECT * FROM pages WHERE fk_page = ? ORDER BY weight';
         $rs  = $conn->Execute($sql, array($parent));
         
         while(!$rs->EOF) {            
@@ -259,7 +259,7 @@ class Page
         // $conn = Zend_Registry::get('conn');
         $conn = $GLOBALS['application']->conn;
         
-        $sql = 'SELECT * FROM `pages` WHERE `slug` = ?';
+        $sql = 'SELECT * FROM pages WHERE slug = ?';
         $rs  = $conn->Execute($sql, array($slug));
         
         if( ($rs !== false) && (!$rs->EOF) ) {
@@ -289,7 +289,7 @@ class Page
         // $conn = Zend_Registry::get('conn');
         $conn = $GLOBALS['application']->conn;
         
-        $sql = 'SELECT count(*) AS num_children FROM `pages` WHERE `fk_page` = ?';
+        $sql = 'SELECT count(*) AS num_children FROM pages WHERE fk_page = ?';
         $rs = $conn->GetOne($sql, array($pk_page));
         
         if($rs === false) {
@@ -322,22 +322,29 @@ class Page
      */
     public function moveNode($pk_page, $fk_page, $weight)
     {
-        $sql = 'UPDATE `pages` SET `fk_page`=?, `weight`=? WHERE `pk_page`=?';        
+        $sql = 'UPDATE pages SET fk_page=?, weight=? WHERE pk_page=?';
+        $writer = new Zend_Log_Writer_Firebug();
+        $logger = new Zend_Log($writer);
+        $logger->log(array($fk_page, $weight, $pk_page), Zend_Log::INFO);
+        
+        
         $rs = $this->conn->Execute($sql, array($fk_page, $weight, $pk_page));
         if($rs === false) {
-            // log
+            $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
         }
         
-        $sql = 'UPDATE `pages` SET `weight` = `weight` + 1 WHERE `weight` >= ? AND `fk_page`=? AND `pk_page` <> ?';
+        $sql = 'UPDATE pages SET weight = weight + 1 WHERE fk_page=? AND weight >= ? AND pk_page <> ?';
+        $logger->log(array($weight, $fk_page, $pk_page), Zend_Log::INFO);
+        
         $rs = $this->conn->Execute($sql, array($weight, $fk_page, $pk_page));
         if($rs === false) {
-            // log
+            $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
         }
         
-        $sql = 'SELECT `pk_page`,`fk_page` FROM `pages` WHERE `fk_page`=? ORDER BY `fk_page`, `weight` ASC';
-        $rs = $this->conn->Execute($sql, array($fk_page));
+        $sql = 'SELECT pk_page,fk_page,weight FROM pages ORDER BY fk_page, weight';
+        $rs = $this->conn->Execute($sql);
         
-        $stmt = $this->conn->Prepare('UPDATE `pages` SET `weight` = ? WHERE `pk_page` = ?');
+        $stmt = $this->conn->Prepare('UPDATE pages SET weight = ? WHERE pk_page = ?');
         if($rs !== false) {
             
             $fkPage = null;
@@ -351,10 +358,13 @@ class Page
                 }
                 
                 $this->conn->Execute($stmt, array($i, $rs->fields['pk_page']));
+                $logger->log($i . ' ' . $rs->fields['pk_page'], Zend_Log::INFO);
                 $i++;
                 
                 $rs->MoveNext();
             }
+        } else {
+            $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
         }
     }
     
@@ -364,7 +374,7 @@ class Page
      */
     public function renameNode($pk_page, $title)
     {
-        $sql = 'UPDATE `pages` SET `title`=? WHERE `pk_page`=?';        
+        $sql = 'UPDATE pages SET title=? WHERE pk_page=?';        
         $rs = $this->conn->Execute($sql, array($title, $pk_page));
         if($rs === false) {
             // log

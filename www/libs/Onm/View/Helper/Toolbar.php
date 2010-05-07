@@ -21,40 +21,72 @@
  
 
 class Onm_View_Helper_Toolbar
-{
+{    
+    private static $toolbarInstances = array();
+    
     private $buttons = array();
+    private $name    = null;
     
     private $theme = array(
-        'openToolbar'  => '<ul class="toolbar">',
+        'openToolbar'  => '<ul class="toolbar" id="%s">',
         'closeToolbar' => '</ul>',
         
         'openItemToolbar'  => '<li>',
         'closeItemToolbar' => '</li>',
     );
     
-    public function appendButton(Onm_View_Helper_Button $button)
+    private function __construct($name)
     {
-        $this->buttons[] = $button;
+        $this->name = $name;
     }
     
-    public function prependButton(Onm_View_Helper_Button $button)
+    public static function getInstance($name)
+    {
+        if(!isset(self::$toolbarInstances[$name])) {
+            self::$toolbarInstances[$name] = new Onm_View_Helper_Toolbar($name);
+        }
+        
+        return self::$toolbarInstances[$name];
+    }
+    
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    public function appendButton(Onm_View_Helper_Toolbar_Item $button)
+    {
+        $this->buttons[] = $button;
+        return $this;
+    }
+    
+    public function prependButton(Onm_View_Helper_Toolbar_Item $button)
     {
         array_unshift($this->buttons, $button);
+        return $this;
     }
     
     public function changeTheme($theme)
     {
         $this->theme = $theme;
+        return $this;
     }
     
-    
+    public function getButtons()
+    {
+        return $this->buttons;
+    }    
     
     public function render()
     {
-        $output = $this->theme['openToolbar'];
+        $output = sprintf($this->theme['openToolbar'], $this->name);
         
-        foreach($this->buttons as $i => $btn) {
+        foreach($this->buttons as $i => $btn) {                        
             $output .= $this->theme['openItemToolbar'];
+            
+            // Set tabindex
+            $btn->setTabindex($i + 1);
+            
             $output .= $btn->render();
             $output .= $this->theme['closeItemToolbar'];
         }
