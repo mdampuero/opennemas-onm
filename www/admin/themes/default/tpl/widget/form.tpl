@@ -101,7 +101,7 @@ editAreaLoader.init({
 
 // FIXME: fix toolbar
 submitForm = function() {
-    $('content').value = editAreaLoader.getValue('content');
+    $('#content').get(0).value = editAreaLoader.getValue('content');
     enviar($('formulario'), '_self', 'save', $('id').value);
 };
 /* ]]> */

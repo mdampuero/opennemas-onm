@@ -1,8 +1,6 @@
-{include file="header.tpl"
-    assets_js="jquery-validate/jquery.validate.min.js"
-    assets_css=""}
+{include file="header.tpl"}
 
-<form action="/admin/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario">
+<form action="{baseurl}/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario">
 
 <table class="adminform" border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
 <tr>

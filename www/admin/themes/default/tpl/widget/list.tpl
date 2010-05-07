@@ -8,17 +8,29 @@ div#pagina td, div#pagina th {
 </style>
 {/literal}
 
+{toolbar_link toolbar="toolbar-top"
+    name="add" text="Google" href="http://google.com" target="_blank"}
+
+{toolbar_route toolbar="toolbar-top"
+    name="new" route="widget-create" text="New Widget" query='"id":1,"name":"bla bla"'}
+
+{toolbar_javascript toolbar="toolbar-top"
+    name="cancel" text="Cancel" click="alert('ola')" mouseover="console.log('ja')"}
+    
+{toolbar_link toolbar="toolbar-top"
+    name="save" text="Google" href="http://openhost.es" target="_blank"}
+    
+{toolbar_button toolbar="toolbar-top"
+    name="save" text="Google" type="submit"}
+
+{toolbar_button toolbar="toolbar-top"
+    name="save" text="Google" type="button" click="alert(':-P')"}
+    
 <div id="menu-acciones-admin">
-<div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Widget Manager{/t}</h2></div>
-<ul>
-    <li>
-        <a href="#" class="admin_add" onClick="enviar($('formulario'), '_self', 'new', -1);"
-           title="{t}New widget{/t}">
-            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
-            <br />{t}New{/t}
-        </a>
-    </li>    
-</ul>
+    <div style="float: left; margin-left: 10px; margin-top: 10px;">
+        <h2>{t}Widget Manager{/t}</h2>
+    </div>
+    {toolbar name="toolbar-top"}
 </div>
 
 <table class="adminheading">
@@ -87,16 +99,3 @@ div#pagina td, div#pagina th {
 </table>
 
 </div>
-
-{* Ajax button to change availability *}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
-<script type="text/javascript" language="javascript">
-/* <![CDATA[ */
-{literal}
-document.observe('dom:loaded', function() {
-    $('pagina').select('a.switchable').each(function(item){
-        new SwitcherFlag(item);
-    });
-});
-{/literal}
-</script>

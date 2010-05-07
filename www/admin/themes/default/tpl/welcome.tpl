@@ -4,7 +4,7 @@
     <tbody>
         <tr>
             <td colspan="2">
-                <div id="cpanel" >
+                <div id="cpanel" >                                        
                     
                     {acl isAllowed="ARTICLE_CREATE"}
                 	<div style="float: left;">

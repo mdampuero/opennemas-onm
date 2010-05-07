@@ -19,7 +19,7 @@
 <![endif]-->
 
 {stylesection name="head"}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}toolbar.css"/>
 {/stylesection}
 
 <script type="text/javascript" language="javascript">
