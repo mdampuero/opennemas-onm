@@ -1,0 +1,124 @@
+/* toolbar.css */
+
+#menu-acciones-admin {
+	margin: 0px;
+    
+	width: 99%;
+	height: 75px;
+    
+	background-color: #ddd;
+	padding:4px;
+	border:1px solid #ccc;
+    
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#menu-acciones-admin ul.toolbar {
+    float: right;
+}
+
+ul.toolbar {    
+	list-style: none;
+    
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom:0px;
+	margin-top: 0px;
+	
+    padding: 0px;
+}
+
+ul.toolbar li {
+    padding: 0.2em;
+    margin-left: 2px;
+    
+    width: 75px;
+    
+    border-top: 1px solid #EEE;
+    border-left: 1px solid #EEE;
+    border-bottom: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    
+    float: left;
+}
+
+ul.toolbar li:hover {
+    border-top:    1px solid #CCC;
+    border-left:   1px solid #CCC;
+    border-bottom: 1px solid #EEE;
+    border-right:  1px solid #EEE;
+}
+
+ul.toolbar li a {
+    display: block;
+    
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    
+    height: 71px;
+    line-height: 2em;
+    
+    text-decoration: none;
+}
+
+ul.toolbar li a span {        
+    display: block;
+    margin: 0 auto;
+    
+    width: 48px;
+    height: 48px;
+    
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+
+ul.toolbar li button {
+    display: block;
+    margin: 0 auto;
+    
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;    
+    
+    border: hidden;
+    background:transparent;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+ul.toolbar li button span {        
+    display: block;
+    margin: 0 auto;
+    
+    width: 48px;
+    height: 48px;    
+    
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+
+ul.toolbar li span.add {
+    background-image: url(../images/add.png);
+}
+
+ul.toolbar li span.cancel {
+    background-image: url(../images/cancel.png);    
+}
+
+ul.toolbar li span.save {
+    background-image: url(../images/save.png);    
+}
+
+ul.toolbar li span.new {
+    background-image: url(../images/new.png);    
+}
+
+/*ul.toolbar li span.new {*/
+/*    background-image: url(../images/new.png);    */
+/*}*/
