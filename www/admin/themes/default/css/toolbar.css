@@ -1,5 +1,4 @@
 /* toolbar.css */
-
 #menu-acciones-admin {
 	margin: 0px;
     
@@ -31,9 +30,7 @@ ul.toolbar {
 
 ul.toolbar li {
     padding: 0.2em;
-    margin-left: 2px;
-    
-    width: 75px;
+    margin-left: 2px;    
     
     border-top: 1px solid #EEE;
     border-left: 1px solid #EEE;
@@ -52,27 +49,23 @@ ul.toolbar li:hover {
 
 ul.toolbar li a {
     display: block;
+    margin: 0 auto;
     
     text-align: center;
     font-size: 11px;
     font-weight: bold;
     color: #666;
     
-    height: 71px;
-    line-height: 2em;
+    min-width: 70px;
     
+    padding-top: 50px;
+    
+    line-height: 2em;    
     text-decoration: none;
-}
 
-ul.toolbar li a span {        
-    display: block;
-    margin: 0 auto;
-    
-    width: 48px;
-    height: 48px;
-    
     background-position: center top;
     background-repeat: no-repeat;
+    white-space: nowrap;
 }
 
 
@@ -83,42 +76,152 @@ ul.toolbar li button {
     text-align: center;
     font-size: 11px;
     font-weight: bold;
-    color: #666;    
+    color: #666;
     
-    border: hidden;
-    background:transparent;
+    width: 70px;
+    
+    padding-top: 50px;
+    height: 71px;
+    
+    border: hidden;    
     text-decoration: none;
     cursor: pointer;
-}
-
-ul.toolbar li button span {        
-    display: block;
-    margin: 0 auto;
     
-    width: 48px;
-    height: 48px;    
-    
+    background-color: transparent;
     background-position: center top;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;    
 }
 
 
-ul.toolbar li span.add {
-    background-image: url(../images/add.png);
+/* Sort alphabetically */
+ul.toolbar li .add {
+    background-image: url(../images/toolbar/add.png);
 }
 
-ul.toolbar li span.cancel {
-    background-image: url(../images/cancel.png);    
+ul.toolbar li .apply {
+    background-image: url(../images/toolbar/apply.png);
 }
 
-ul.toolbar li span.save {
-    background-image: url(../images/save.png);    
+ul.toolbar li .attach {
+    background-image: url(../images/toolbar/attach.png);
 }
 
-ul.toolbar li span.new {
-    background-image: url(../images/new.png);    
+ul.toolbar li .back {
+    background-image: url(../images/toolbar/back.png);
 }
 
-/*ul.toolbar li span.new {*/
-/*    background-image: url(../images/new.png);    */
-/*}*/
+ul.toolbar li .calendar {
+    background-image: url(../images/toolbar/calendar.png);
+}
+
+ul.toolbar li .close {
+    background-image: url(../images/toolbar/close.png);    
+}
+
+ul.toolbar li .configure {
+    background-image: url(../images/toolbar/configure.png);    
+}
+
+ul.toolbar li .default {
+    background-image: url(../images/toolbar/default.png);    
+}
+
+ul.toolbar li .delete {
+    background-image: url(../images/toolbar/delete.png);    
+}
+
+ul.toolbar li .edit {
+    background-image: url(../images/toolbar/edit.png);    
+}
+
+ul.toolbar li .forward {
+    background-image: url(../images/toolbar/forward.png);    
+}
+
+ul.toolbar li .inbox {
+    background-image: url(../images/toolbar/inbox.png);    
+}
+
+ul.toolbar li .info {
+    background-image: url(../images/toolbar/info.png);    
+}
+
+ul.toolbar li .logout {
+    background-image: url(../images/toolbar/logout.png);    
+}
+
+ul.toolbar li .mail {
+    background-image: url(../images/toolbar/mail.png);    
+}
+
+ul.toolbar li .new {
+    background-image: url(../images/toolbar/new.png);    
+}
+
+ul.toolbar li .open {
+    background-image: url(../images/toolbar/open.png);    
+}
+
+ul.toolbar li .redo {
+    background-image: url(../images/toolbar/redo.png);    
+}
+
+ul.toolbar li .refresh {
+    background-image: url(../images/toolbar/refresh.png);    
+}
+
+ul.toolbar li .restart {
+    background-image: url(../images/toolbar/restart.png);    
+}
+
+ul.toolbar li .save_all {
+    background-image: url(../images/toolbar/save_all.png);    
+}
+
+ul.toolbar li .saveas {
+    background-image: url(../images/toolbar/saveas.png);    
+}
+
+ul.toolbar li .save {
+    background-image: url(../images/toolbar/save.png);    
+}
+
+ul.toolbar li .search {
+    background-image: url(../images/toolbar/search.png);    
+}
+
+ul.toolbar li .start {
+    background-image: url(../images/toolbar/start.png);    
+}
+
+ul.toolbar li .stop {
+    background-image: url(../images/toolbar/stop.png);    
+}
+
+ul.toolbar li .trash {
+    background-image: url(../images/toolbar/trash.png);    
+}
+
+ul.toolbar li .undo {
+    background-image: url(../images/toolbar/undo.png);    
+}
+
+ul.toolbar li .up {
+    background-image: url(../images/toolbar/up.png);    
+}
+
+ul.toolbar li .user {
+    background-image: url(../images/toolbar/user.png);    
+}
+
+ul.toolbar li .user_properties {
+    background-image: url(../images/toolbar/user_properties.png);    
+}
+
+ul.toolbar li .zoom_in {
+    background-image: url(../images/toolbar/zoom_in.png);    
+}
+
+ul.toolbar li .zoom_out {
+    background-image: url(../images/toolbar/zoom_out.png);    
+}

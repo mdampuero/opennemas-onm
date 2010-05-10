@@ -8,30 +8,35 @@ div#pagina td, div#pagina th {
 </style>
 {/literal}
 
-{toolbar_link toolbar="toolbar-top"
-    name="add" text="Google" href="http://google.com" target="_blank"}
+{toolbar_link toolbar="toolbar-top" id="linkGoogle" rel="no-follow"
+    icon="add" text="Google" href="http://google.com" target="_blank"}
+
+{* toolbar_link toolbar="toolbar-top"
+    icon="add" text="Google" href="http://google.com" target="_blank"}
 
 {toolbar_route toolbar="toolbar-top"
-    name="new" route="widget-create" text="New Widget" query='"id":1,"name":"bla bla"'}
+    icon="new" route="widget-create" text="New Widget" query='"id":1,"name":"bla bla"'}
 
 {toolbar_javascript toolbar="toolbar-top"
-    name="cancel" text="Cancel" click="alert('ola')" mouseover="console.log('ja')"}
+    icon="close" text="Cancel" click="alert('ola')" mouseover="console.log('ja')"}
     
 {toolbar_link toolbar="toolbar-top"
-    name="save" text="Google" href="http://openhost.es" target="_blank"}
+    icon="save" text="Google" href="http://openhost.es" target="_blank"}
     
 {toolbar_button toolbar="toolbar-top"
-    name="save" text="Google" type="submit"}
+    icon="save" text="Google" type="submit"}
 
 {toolbar_button toolbar="toolbar-top"
-    name="save" text="Google" type="button" click="alert(':-P')"}
+    icon="save" text="Google" type="button" click="alert(':-P')" *}
     
 <div id="menu-acciones-admin">
     <div style="float: left; margin-left: 10px; margin-top: 10px;">
         <h2>{t}Widget Manager{/t}</h2>
     </div>
-    {toolbar name="toolbar-top"}
+    {* toolbar name="toolbar-top" *}
 </div>
+
+{toolbar name="toolbar-top"}
 
 <table class="adminheading">
     <tbody>
