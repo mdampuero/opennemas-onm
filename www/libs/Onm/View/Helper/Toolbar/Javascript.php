@@ -56,13 +56,23 @@ class Onm_View_Helper_Toolbar_Javascript extends Onm_View_Helper_Toolbar_Item
     public $target = null;
     
     
-    public function __construct($name, $text, $properties=array())
+    /**
+     * Construct
+     *
+     * @param string $text  Text of item
+     * @param string $icon  Name of css class
+     * @param array  $properties    Properties of item
+     */
+    public function __construct($text, $icon, $properties=array())
     {
-        parent::__construct('Javascript', $name, $text, $properties);                
+        parent::__construct('Javascript', $text, $icon, $properties);                
     }
     
+    
     /**
-     * 
+     * Return a HTML representation to link with javascript events
+     *
+     * @return string
      */
     public function render()
     {
@@ -85,7 +95,7 @@ class Onm_View_Helper_Toolbar_Javascript extends Onm_View_Helper_Toolbar_Item
         // Check and build javascript attributes onXxx
         $html .= $this->_buildEvents();
         
-        $html .= '> <span class="' . $this->name . '">&nbsp;</span> ' . $this->text . ' </a>';
+        $html .= ' class="' . $this->icon . '"> ' . $this->text . ' </a>';
         
         return $html;
 

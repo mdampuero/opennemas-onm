@@ -24,7 +24,6 @@
  * Onm_View_Helper_Toolbar_Link
  * 
  * @package    Onm
- * @subpackage 
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: Button.php 1 2010-05-03 21:08:49Z vifito $
@@ -34,14 +33,22 @@ class Onm_View_Helper_Toolbar_Link extends Onm_View_Helper_Toolbar_Item
     public $href   = null;    
     public $target = null;
     
-    
-    public function __construct($name, $text, $properties=array())
+    /**
+     * Construct
+     *
+     * @param string $text  Text of item
+     * @param string $icon  Name of css class
+     * @param array  $properties    Properties of item
+     */
+    public function __construct($text, $icon, $properties=array())
     {
-        parent::__construct('Link', $name, $text, $properties);                
+        parent::__construct('Link', $text, $icon, $properties);                
     }        
     
     /**
-     * 
+     * Return HTML representation for this item
+     *
+     * @return string
      */
     public function render()
     {
@@ -52,7 +59,7 @@ class Onm_View_Helper_Toolbar_Link extends Onm_View_Helper_Toolbar_Item
         
         $html .= $this->_buildAttrs(array('target'));                
         
-        $html .= '> <span class="' . $this->name . '">&nbsp;</span> ' . $this->text . ' </a>';
+        $html .= ' class="' . $this->icon . '"> ' . $this->text . ' </a>';
         
         return $html;
     }

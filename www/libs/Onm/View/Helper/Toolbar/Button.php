@@ -31,17 +31,33 @@
  */
 class Onm_View_Helper_Toolbar_Button extends Onm_View_Helper_Toolbar_Item
 {
+    /**#@+
+     * optional properties
+     * 
+     * @access public
+     * @var string
+     */
     public $type   = null;    
     public $events = array();
+    /**#@-*/
     
     
-    public function __construct($name, $text, $properties=array())
+    /**
+     * Construct
+     *
+     * @param string $text  Text of item
+     * @param string $icon  Name of css class
+     * @param array  $properties    Properties of item
+     */    
+    public function __construct($text, $icon=null, $properties=array())
     {
-        parent::__construct('Button', $name, $text, $properties);                
+        parent::__construct('Button', $text, $icon, $properties);                
     }        
     
     /**
-     * 
+     * Return a HTML representation of a button
+     *
+     * @return string 
      */
     public function render()
     {
@@ -54,7 +70,7 @@ class Onm_View_Helper_Toolbar_Button extends Onm_View_Helper_Toolbar_Item
         
         $html .= $this->_buildEvents();
         
-        $html .= '> <span class="' . $this->name . '">&nbsp;</span> ' . $this->text . ' </button>';
+        $html .= ' class="' . $this->icon . '"> ' . $this->text . ' </button>';
         
         return $html;
     }

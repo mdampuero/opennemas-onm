@@ -36,10 +36,16 @@ class Onm_View_Helper_Toolbar_Route extends Onm_View_Helper_Toolbar_Item
     
     public $target = null;
     
-    
-    public function __construct($name, $text, $properties=array())
+    /**
+     * Construct
+     *
+     * @param string $text  Text of item
+     * @param string $icon  Name of css class
+     * @param array  $properties    Properties of item
+     */
+    public function __construct($text, $icon, $properties=array())
     {
-        parent::__construct('Route', $name, $text, $properties);                
+        parent::__construct('Route', $text, $icon, $properties);                
     }        
     
     /**
@@ -55,7 +61,7 @@ class Onm_View_Helper_Toolbar_Route extends Onm_View_Helper_Toolbar_Item
         
         $html .= $this->_buildAttrs(array('target'));                
         
-        $html .= '> <span class="' . $this->name . '">&nbsp;</span> ' . $this->text . ' </a>';
+        $html .= ' class="' . $this->icon . '"> ' . $this->text . ' </a>';
         
         return $html;
     }

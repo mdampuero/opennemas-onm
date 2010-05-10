@@ -35,17 +35,17 @@ class Onm_View_Helper_Toolbar_Item
     /**#@+
      * Mandatory properties
      * 
-     * @access private
+     * @access protected
      * @var string
      */
-    protected $name  = null;
+    protected $icon  = null; // Css class name
     protected $text  = null;
     /**#@-*/
     
     /**#@+
      * Optional properties
      * 
-     * @access private
+     * @access protected
      * @var string
      */
     protected $title     = null;
@@ -57,13 +57,20 @@ class Onm_View_Helper_Toolbar_Item
     protected $rel       = null;
     /**#@-*/
     
-    
-    public function __construct($type,  $name, $text, $properties=array())
+    /**
+     * Construct
+     *
+     * @param string $type  Type of toolbar item
+     * @param string $text  Text of item
+     * @param string $icon  Name of css class
+     * @param array  $properties    Properties of item
+     */
+    public function __construct($type,  $text, $icon, $properties=array())
     {
         $this->type = $type;
         $this->loadProperties($properties);
         
-        $this->name = $name; // used for attribute css class
+        $this->icon = (is_null($icon))? 'default': $icon; // used for attribute css class
         $this->text = $text;
     }
     
@@ -86,6 +93,12 @@ class Onm_View_Helper_Toolbar_Item
         }
     }
     
+    /**
+     * Translate properties using Zend_Translate
+     * 
+     * @uses Zend_Translate::_()
+     * @param array $properties
+     */
     public function translateProperties($properties=array())
     {
         if( empty($properties) ) {
@@ -111,14 +124,21 @@ class Onm_View_Helper_Toolbar_Item
         }
     }
     
-    
-    public static function _($type, $name, $properties=array())
+    /**
+     * Shortcut to create a new button
+     *
+     * @param string $type
+     * @param string $text
+     * @param string $icon
+     * @param array $properties
+     * @return Onm_View_Helper_Toolbar_Item
+     */
+    public static function _($type, $text, $icon, $properties=array())
     {
         $klass = 'Onm_View_Helper_Toolbar_' . ucfirst($type);
-        $instance = new $klass($name);
-        $instance->loadProperties($properties);
+        $instance = new $klass($text, $icon, $properties);
         
-        return $instance->render();
+        return $instance;
     }
     
     /**
@@ -167,7 +187,7 @@ class Onm_View_Helper_Toolbar_Item
     
     
     /**
-     * 
+     * Return a html attributes representation of valid javascript events
      * 
      * @return string
      */
@@ -197,10 +217,7 @@ class Onm_View_Helper_Toolbar_Item
     }
     
     
-    // Getters & Setters    
-    /**
-     *
-     */
+    /* Getters & Setters  {{{ */
     public function getTitle()
     {
         return $this->title;
@@ -270,5 +287,6 @@ class Onm_View_Helper_Toolbar_Item
     {
         $this->rel = $rel;
     }
+    /* }}} */
     
 }
