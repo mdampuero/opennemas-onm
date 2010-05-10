@@ -27,14 +27,13 @@ function smarty_function_toolbar_javascript($params, &$smarty)
         return;
     }
     
-    if(!isset($params['name'])) {
-        $smarty->_trigger_fatal_error('[plugin] toolbar_javascript needs a "name" param');
-        return;
-    }
-    
     if(!isset($params['text'])) {
         $smarty->_trigger_fatal_error('[plugin] toolbar_javascript needs a "text" param');
         return;
+    }
+    
+    if(!isset($params['icon'])) {
+        $$params['icon'] = null;
     }
     
     if(isset($params['query'])) {       
@@ -44,8 +43,8 @@ function smarty_function_toolbar_javascript($params, &$smarty)
     $toolbar = Onm_View_Helper_Toolbar::getInstance($params['toolbar']);    
     unset($params['toolbar']);
     
-    $name = $params['name'];
-    unset($params['name']);
+    $icon = $params['icon'];
+    unset($params['icon']);
     
     $text = $params['text'];
     unset($params['text']);
@@ -59,6 +58,6 @@ function smarty_function_toolbar_javascript($params, &$smarty)
     }
     $params['events'] = $events;
     
-    $button = new Onm_View_Helper_Toolbar_Javascript($name, $text, $params);
-    $toolbar->appendButton($button);
+    $button = new Onm_View_Helper_Toolbar_Javascript($text, $icon, $params);
+    $toolbar->append($button);
 }

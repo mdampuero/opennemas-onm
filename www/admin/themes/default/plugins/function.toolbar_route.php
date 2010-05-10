@@ -25,12 +25,7 @@ function smarty_function_toolbar_route($params, &$smarty)
     if(!isset($params['toolbar'])) {
         $smarty->_trigger_fatal_error('[plugin] toolbar_route needs a "toolbar" param');
         return;
-    }
-    
-    if(!isset($params['name'])) {
-        $smarty->_trigger_fatal_error('[plugin] toolbar_route needs a "name" param');
-        return;
-    }
+    }    
     
     if(!isset($params['text'])) {
         $smarty->_trigger_fatal_error('[plugin] toolbar_route needs a "text" param');
@@ -42,6 +37,11 @@ function smarty_function_toolbar_route($params, &$smarty)
         return;
     }
     
+    
+    if(!isset($params['icon'])) {
+        $params['icon'] = null;
+    }
+    
     if(!isset($params['query'])) {
         $params['query'] = array();
     } else {
@@ -51,12 +51,12 @@ function smarty_function_toolbar_route($params, &$smarty)
     $toolbar = Onm_View_Helper_Toolbar::getInstance($params['toolbar']);    
     unset($params['toolbar']);
     
-    $name = $params['name'];
-    unset($params['name']);
+    $icon = $params['icon'];
+    unset($params['icon']);
     
     $text = $params['text'];
     unset($params['text']);
     
-    $button = new Onm_View_Helper_Toolbar_Route($name, $text, $params);
-    $toolbar->appendButton($button);
+    $button = new Onm_View_Helper_Toolbar_Route($text, $icon, $params);
+    $toolbar->append($button);
 }
