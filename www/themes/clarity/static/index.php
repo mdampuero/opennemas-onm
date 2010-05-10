@@ -4,16 +4,16 @@
 <html lang="en">
   <head>
 	<?php include('meta.php'); ?>
-    <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print">
-    <!--[if lt IE 8]><link rel="stylesheet" href="stylesheets/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="css/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen, projection"><![endif]-->
 
-    <link rel="stylesheet" href="stylesheets/architecture-v1.css" type="text/css" media="screen,projection">
-    <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/architecture-v1.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
     
-    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
-    <script type="text/javascript" src="javascripts/functions.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
 
 	<style type="text/css">
 		div.toolbar-bottom a, div.utilities a, .transparent-logo {

@@ -1,0 +1,54 @@
+/* 
+    Document   : onm-mockup article page
+    Created on : Feb 18, 2010, 11:13:09 AM
+    Author     : Francisco Diéguez fran.dieguez@mabishu.com
+    Description:
+        CSS to article page for newspaper mockup page
+*/
+
+
+/***********************************************************
+    Slideshow
+************************************************************/
+
+div.content-gallery{
+	background:#1c1e1c !important;
+	color:#747678;
+	margin:10px 0;
+}
+
+div.caption{
+}
+div.wrapper-gallery{
+	float:none;
+	margin:0 auto;
+	margin:20px 0 0 40px;
+}
+div.caption {color:#666;}
+div.caption div.image-title{ font-family:Georgia; font-weight:normal; font-size:2.2em; color:White;}
+
+div.top-navigation *{
+	border:none;
+}
+
+div.image-wrapper{ background:#ccc; padding:15px;}
+
+.thumb{ border:1px solid #222 !important; }
+
+a.thumb img{
+	width:80px !important;
+	height:80px !important;
+}
+div.nav-controls{
+	width:150px;
+}
+div.nav-controls * { display:inline-block !important; margin:0; clear:none;}
+div.nav-controls a{ display:inline;}
+
+div#thumbs div.pagination{
+	margin:10px 0 !important;
+}
+div.pagination a, div.pagination a:hover{ border:none !important; background:none;}
+div.pagination a:hover{text-decoration:underline}
+
+

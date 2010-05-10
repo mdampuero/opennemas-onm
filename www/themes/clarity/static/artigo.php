@@ -4,25 +4,24 @@
 <html lang="en">
   <head>
 	<?php include('meta.php'); ?>
-    <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen, projection">
-    <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print">
-    <!--[if lt IE 8]><link rel="stylesheet" href="stylesheets/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="css/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen, projection"><![endif]-->
 
-    <link rel="stylesheet" href="stylesheets/architecture-v1.css" type="text/css" media="screen,projection">
-    <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
-        <link rel="stylesheet" href="stylesheets/parts/article.css" type="text/css" media="screen,projection">
-    <link rel="stylesheet" href="stylesheets/parts/comments.css" type="text/css" media="screen,projection">
-    <link rel="stylesheet" href="stylesheets/parts/utilities.css" type="text/css" media="screen,projection">
-    <link rel="stylesheet" href="stylesheets/parts/widgets.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/architecture-v1.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
+        <link rel="stylesheet" href="css/parts/article.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/parts/comments.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/parts/utilities.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="css/parts/widgets.css" type="text/css" media="screen,projection">
 	  
-    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
-    <script type="text/javascript" src="javascripts/functions.js"></script>
-	<script type="text/javascript" src="javascripts/cufon-yui.js"></script>
-	<script type="text/javascript" src="javascripts/droid.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/cufon-yui.js"></script>
+	<script type="text/javascript" src="js/droid.js"></script>
 	<script type="text/javascript">
-	  Cufon.replace('#description-category ul li', {
-	  });
+	  Cufon.replace('#description-category ul li', {});
 
 	</script>
 	
@@ -159,6 +158,15 @@
 		                    	
 		                    	<div class="utilities span-6 last">
 		                    		<ul>
+										<li>
+										  <div style="display: inline;" class="share-actions">
+											<a href="#" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir</span></a> 
+											<ul style="display:none;"> 
+											  <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li> 
+											  <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li> 
+											</ul> 
+										  </div> 
+										</li>
 		                    			<li><a href="#"  class="utilities-send-by-email" onclick="javascript:sendbyemail('Título da nova', 'url da nova'); return false" title="Enviar por email a un amigo"><span>Enviar por email</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" onclick="javascript:sendbyemail('Título da nova', 'url da nova')"/></li>
 		                    			<li><a href="#" class="utilities-print" onclick="javascript:window.print()" title="Imprimir"><span>Imprimir</span></a></li>
@@ -167,15 +175,7 @@
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
 		                    			<li><a href="#" class="utilities-decrease-text"  onclick="decreaseFontSize(); return false;" title="Decrementar el tamaño del texto"><span>Reducir el tamaño del texto</span></a></li>
 		                    			<li><img src="images/utilities/separator.png" alt="Email" /></li>
-		                    			<li>
-										  <div style="display: inline;" class="share-actions">
-											<a href="#" class="utilities-share" onclick="share();return false;" title="Compartir en las redes sociales"><span>Compartir en las redes sociales</span></a> 
-											<ul style="display:none;"> 
-											  <li><img alt="Share this post on Twitter" src="/themes/lucidity/images/utilities/toolsicon_anim.gif"> <a title="Compartir en Twiter" target="_blank" href="http://twitter.com/home?status=TITULO_ARTIGO URL_DO_ARTIGO">Send to Twitter</a></li> 
-											  <li><img alt="Share on Facebook" src="/themes/lucidity/images/utilities/facebook-share.gif"> <a title="Compartir en Facebook" href="http://www.facebook.com/sharer.php?u=URL_DO_ARTIGO&t=TITULO_ARTIGO">Share on Facebook</a></li> 
-											</ul> 
-										  </div> 
-										</li>
+		                    			
 		                    		</ul>
 		                    	</div><!-- /utilities -->
 		                    	
@@ -428,8 +428,26 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
             $("#tabs").tabs();
-             $("#tabs2").tabs();
-        });
+            $("#tabs2").tabs();
+			$lock=false;
+			jQuery("div.share-actions").hover(
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeIn("fast");
+				}
+				$lock=false;
+			  },
+			  function () {
+				if (!$lock){
+				  $lock=true;
+				  jQuery(this).children("ul").fadeOut("fast");
+				}
+				$lock=false;
+			  }
+			);
+		});
+
     </script>
   </body>
 </html>
