@@ -78,7 +78,7 @@
         </widget-read>
         
         <widget-update type="Zend_Controller_Router_Route">
-            <route>widget/update/:id/</route>
+            <route>widget/update/*</route>
             <defaults>
                 <controller>widget</controller>
                 <action>update</action>

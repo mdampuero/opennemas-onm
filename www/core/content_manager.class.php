@@ -34,22 +34,17 @@ class ContentManager
     public $table = null;
     public $pager = null;
     
+    private $conn = null;
+    public $cache = null;
     
     public function __construct($content_type=null)
     {
-        $this->ContentManager($content_type);
-    }
-    
-    
-    public function ContentManager($content_type=null)
-    {
-        // Nombre de la tabla en minusculas y
-        // tipo de contenido con la sintaxis del nombre de la clase
+        $this->conn = Zend_Registry::get('conn');
+        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        
         if(!is_null($content_type)) {
             $this->init($content_type);
         }
-        
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
     }
     
     
@@ -85,20 +80,18 @@ class ContentManager
         $this->init($content_type);
         $items = array();
         
-        $_where = '`contents`.`in_litter`=0';
-        
-        if( !is_null($filter) ) {
-            if( $filter == 'in_litter=1') { //se busca desde la litter.php
-                $_where = $filter;
-            } else {
-                $_where = ' `contents`.`in_litter`=0 AND '.$filter;
-            }
+        // FIXME: rewrite this condition into a method
+        if($filter != null) {
+            $filter .= ' AND';
+        } else {
+            $filter = '';
         }
         
         $sql = 'SELECT '.$fields.' FROM `contents`, `'.$this->table.'` ' .
-                'WHERE '.$_where.' AND `contents`.`pk_content`= `'.$this->table.'`.`pk_'.strtolower($content_type).'` '.$_order_by;
+                'WHERE '.$filter.' `contents`.`pk_content`= `'.$this->table.'`.`pk_'.strtolower($content_type).'` '.$_order_by;
         
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $this->conn->Execute($sql);
+        
         $items = $this->load_obj($rs, $content_type);
         
         return $items;

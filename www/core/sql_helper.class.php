@@ -51,9 +51,17 @@ class SqlHelper
         
         $sql = sprintf($sql, $table, implode(', ', $set), $filter);
         
-        $conn = (!is_null($conn))? $conn: $GLOBALS['application']->conn;
+        if(is_null($conn)) {
+            if( Zend_Registry::isRegistered('conn') ) {
+                $conn = Zend_Registry::get('conn');
+            } else {
+                throw new Exception('Zend_Registry not found entry: "conn".');
+            }
+        }
+        
         if($conn->Execute($sql, $values) === false) {
             $error_msg = $conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             throw new Exception($error_msg);
         }
@@ -96,7 +104,8 @@ class SqlHelper
      * @see SqlHelper::bindAndUpdate
      * @param string $table
      * @param array $fields Array with name of fields to update ($colname => $value)
-     * @param object|null $conn ADOConnection instance 
+     * @param object|null $conn ADOConnection instance
+     * @return int  Insert ID
      */
     public function insert($table, $fields, $conn=null)
     {
@@ -112,14 +121,24 @@ class SqlHelper
         $marks = implode(', ', array_fill(0, count($set), '?'));
         $sql = sprintf($sql, $table, implode(', ', $set), $marks);
         
-        $conn = (!is_null($conn))? $conn: $GLOBALS['application']->conn;
+        if(is_null($conn)) {
+            if( Zend_Registry::isRegistered('conn') ) {
+                $conn = Zend_Registry::get('conn');
+            } else {
+                throw new Exception('Zend_Registry not found entry: "conn".');
+            }
+        }
+        
         if($conn->Execute($sql, $values) === false) {
             $error_msg = $conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             throw new Exception($error_msg);
         }
         
-        return $conn->Insert_ID();
+        $id = $conn->Insert_ID();
+        
+        return $id;
     }
     
     /**

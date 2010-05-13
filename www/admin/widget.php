@@ -82,6 +82,10 @@ switch($action) {
         //$widgets = $cm->find_by_category('Widget', 3, 'fk_content_type=12 ', 'ORDER BY created DESC');
         $widgets = $cm->find('Widget', 'fk_content_type=12', 'ORDER BY created DESC ');
         
+        var_dump($widgets);
+        die();
+        
+        
         /*$items_page = 25;
         $page = (!isset($_REQUEST['page']))? 1: intval($_REQUEST['page']);
         
