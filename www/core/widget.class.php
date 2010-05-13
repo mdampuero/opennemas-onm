@@ -28,19 +28,15 @@ VALUES (
 /**
  * Widget
  */
-class Widget extends Content {
+class Widget extends Content
+{
     /**
      * @var int Identifier of class
      */
     public $pk_widget = null;
     
     public $content = null;
-    public $renderlet = null;
-    
-    /**
-     * @var MethodCacheManager Handler to call method cached
-     */
-    public $cache = null;
+    public $renderlet = null;    
     
     /**
      * constructor
@@ -49,47 +45,43 @@ class Widget extends Content {
      */
     public function __construct($id=null)
     {
-        parent::Content($id);
+        parent::__construct();
         
-        if(!is_null($id)) {
+        // FIXME: use reflexion to recover content name
+        $this->content_type = 'Widget';
+        
+        if(!is_null($id)) {            
             $this->read($id);
         }
         
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-        $this->content_type = 'Widget';
+        $this->cache = new MethodCacheManager($this, array('ttl' => 30));        
     }
     
-    
+    /**
+     * Create a new widget
+     * 
+     * @param array $data
+     * @return boolean  True if operation is successful, otherwise false
+     */
     public function create($data)
     {
         // Clear  magic_quotes
         String_Utils::disabled_magic_quotes( &$data );
-        $data['category'] = 0;
         
-        // Start transaction
-        $GLOBALS['application']->conn->BeginTrans();
-        parent::create($data);
+        $pk_content = parent::create($data);
         
-        $sql = 'INSERT INTO widgets (`pk_widget`, `content`, `renderlet`)
-                VALUES (?, ?, ?)';
-        
-        // Sort values
-        $values = array($this->id,
-                        $data['content'],
-                        $data['renderlet']);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
-            $GLOBALS['application']->conn->RollbackTrans();
-            
+        if($pk_content === false) {
             return false;
-        }        
+        }
         
-        // Commit transaction
-        $GLOBALS['application']->conn->CommitTrans();
+        $fields = array('pk_widget', 'content', 'renderlet');
+        $data['pk_widget'] = $pk_content;
+        
+        try {
+            SqlHelper::bindAndInsert('widgets', $fields, $data);
+        } catch(Exception $e) {
+            return false;
+        }
         
         return true;
     }
@@ -103,6 +95,7 @@ class Widget extends Content {
     public function read($id)
     {        
         parent::read($id);
+        
         $this->id = $id;
         
         $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
@@ -150,31 +143,19 @@ class Widget extends Content {
      * @return boolean
      */
     public function update($data) {
-        // Clear  magic_quotes
+        // Clear magic_quotes
         String_Utils::disabled_magic_quotes( &$data );
-        $data['category'] = 0;
-        
-        // Start transaction
-        $GLOBALS['application']->conn->BeginTrans();
         
         parent::update($data);
         
-        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=?, `tpl_timestamp`=? WHERE `pk_widget`=?";
+        $fields = array('content', 'renderlet');
+        $where  = '`pk_widget` = ' . $data['pk_content'];
         
-        $values = array($data['content'], $data['renderlet'], time(), $data['id']);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
-            $GLOBALS['application']->conn->RollbackTrans(); 
-            
+        try {
+            SqlHelper::bindAndUpdate('widgets', $fields, $data, $where);
+        } catch(Exception $e) {
             return false;
         }
-        
-        // Commit transaction
-        $GLOBALS['application']->conn->CommitTrans();
         
         return true;        
     }

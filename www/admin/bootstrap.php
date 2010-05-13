@@ -68,6 +68,21 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Onm');
 // }}}
 
+/* *************************************************************************** */
+// Zend_Log config {{{
+if( APPLICATION_ENV == 'development' ) {
+    $writer = new Zend_Log_Writer_Firebug();
+} else {
+    $writer = new Zend_Log_Writer_Stream(SYS_LOG);
+}
+
+$logger = new Zend_Log($writer);
+Zend_Registry::set('logger', $logger);
+
+unset($writer);
+unset($logger);
+// }}}
+
 
 /* *************************************************************************** */
 // Zend_Db config and connect {{{
@@ -89,7 +104,9 @@ unset($db); */
 // ADOConnection config {{{
 $conn = &ADONewConnection(BD_TYPE);
 $conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);            
-if( defined('ADODB_LOG_ENABLE') && (ADODB_LOG_ENABLE == 1) ) {
+
+// Log queries if environment equals than development
+if( APPLICATION_ENV == 'development' ) {
     $conn->LogSQL();
 }
 
