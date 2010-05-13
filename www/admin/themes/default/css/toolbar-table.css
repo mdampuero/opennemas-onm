@@ -1,0 +1,227 @@
+/* toolbar.css */
+#menu-acciones-admin {
+	margin: 0px;
+    
+	width: 99%;
+	height: 75px;
+    
+	background-color: #ddd;
+	padding:4px;
+	border:1px solid #ccc;
+    
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#menu-acciones-admin table.toolbar {
+    float: right;
+}
+
+table.toolbar {	
+    border: 0;
+    
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom:0px;
+	margin-top: 0px;
+	
+    padding: 0px;
+}
+
+table.toolbar td {
+    padding: 0.1em;
+    margin: 0;
+    
+    border-top: 1px solid #EEE;
+    border-left: 1px solid #EEE;
+    border-bottom: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+}
+
+table.toolbar td:hover {
+    border-top:    1px solid #CCC;
+    border-left:   1px solid #CCC;
+    border-bottom: 1px solid #EEE;
+    border-right:  1px solid #EEE;
+}
+
+table.toolbar td a {
+    display: block;
+    margin: 0 auto;
+    
+    border-width: 0 !important;
+    
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    
+    min-width: 70px;
+    
+    padding-top: 50px;
+    
+    line-height: 2em;    
+    text-decoration: none;
+
+    background-position: center top;
+    background-repeat: no-repeat;
+    white-space: nowrap;
+}
+
+
+table.toolbar td button {
+    display: block;
+    margin: 0 auto;
+    
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    
+    width: 70px;
+    
+    padding-top: 50px;
+    height: 71px;
+    
+    border: hidden;    
+    text-decoration: none;
+    cursor: pointer;
+    
+    background-color: transparent;
+    background-position: center top;
+    background-repeat: no-repeat;    
+}
+
+
+/* Sort alphabetically */
+table.toolbar td .add {
+    background-image: url(../images/toolbar/add.png);
+}
+
+table.toolbar td .apply {
+    background-image: url(../images/toolbar/apply.png);
+}
+
+table.toolbar td .attach {
+    background-image: url(../images/toolbar/attach.png);
+}
+
+table.toolbar td .back {
+    background-image: url(../images/toolbar/back.png);
+}
+
+table.toolbar td .calendar {
+    background-image: url(../images/toolbar/calendar.png);
+}
+
+table.toolbar td .close {
+    background-image: url(../images/toolbar/close.png);    
+}
+
+table.toolbar td .configure {
+    background-image: url(../images/toolbar/configure.png);    
+}
+
+table.toolbar td .default {
+    background-image: url(../images/toolbar/default.png);    
+}
+
+table.toolbar td .delete {
+    background-image: url(../images/toolbar/delete.png);    
+}
+
+table.toolbar td .edit {
+    background-image: url(../images/toolbar/edit.png);    
+}
+
+table.toolbar td .forward {
+    background-image: url(../images/toolbar/forward.png);    
+}
+
+table.toolbar td .inbox {
+    background-image: url(../images/toolbar/inbox.png);    
+}
+
+table.toolbar td .info {
+    background-image: url(../images/toolbar/info.png);    
+}
+
+table.toolbar td .logout {
+    background-image: url(../images/toolbar/logout.png);    
+}
+
+table.toolbar td .mail {
+    background-image: url(../images/toolbar/mail.png);    
+}
+
+table.toolbar td .new {
+    background-image: url(../images/toolbar/new.png);    
+}
+
+table.toolbar td .open {
+    background-image: url(../images/toolbar/open.png);    
+}
+
+table.toolbar td .redo {
+    background-image: url(../images/toolbar/redo.png);    
+}
+
+table.toolbar td .refresh {
+    background-image: url(../images/toolbar/refresh.png);    
+}
+
+table.toolbar td .restart {
+    background-image: url(../images/toolbar/restart.png);    
+}
+
+table.toolbar td .save_all {
+    background-image: url(../images/toolbar/save_all.png);    
+}
+
+table.toolbar td .saveas {
+    background-image: url(../images/toolbar/saveas.png);    
+}
+
+table.toolbar td .save {
+    background-image: url(../images/toolbar/save.png);    
+}
+
+table.toolbar td .search {
+    background-image: url(../images/toolbar/search.png);    
+}
+
+table.toolbar td .start {
+    background-image: url(../images/toolbar/start.png);    
+}
+
+table.toolbar td .stop {
+    background-image: url(../images/toolbar/stop.png);    
+}
+
+table.toolbar td .trash {
+    background-image: url(../images/toolbar/trash.png);    
+}
+
+table.toolbar td .undo {
+    background-image: url(../images/toolbar/undo.png);    
+}
+
+table.toolbar td .up {
+    background-image: url(../images/toolbar/up.png);    
+}
+
+table.toolbar td .user {
+    background-image: url(../images/toolbar/user.png);    
+}
+
+table.toolbar td .user_properties {
+    background-image: url(../images/toolbar/user_properties.png);    
+}
+
+table.toolbar td .zoom_in {
+    background-image: url(../images/toolbar/zoom_in.png);    
+}
+
+table.toolbar td .zoom_out {
+    background-image: url(../images/toolbar/zoom_out.png);    
+}
