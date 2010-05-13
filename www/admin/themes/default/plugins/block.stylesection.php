@@ -1,7 +1,7 @@
 <?php
 /**
  * Smarty plugin
- * Parse link type="text/stylesheet" tags
+ * Parse link tags
  *
 */
 function smarty_block_stylesection($params, $content, &$smarty, $open) {
@@ -9,39 +9,67 @@ function smarty_block_stylesection($params, $content, &$smarty, $open) {
         // NADA
     } else {
         $output = '';
-        $matches = array();
-        preg_match_all( '@<link .*?href="([^"]+)".*?>@si', $content, $matches );
         
+        // Create internal array if it doesn't exists
         $section = (!isset($params['name']))? 'head': $params['name'];
         if( !isset( $smarty->css_includes[ $section ] ) ) {
-            $smarty->css_includes[ $section ] = array();
+            $smarty->css_includes[ $section ] = array(
+                'attrs' => array(),
+                'deny' => array(),
+            );
         }
         
-        $sources = array();
-        if( isset($matches[1]) ) {
-            foreach($matches[1] as $src) {                
-                $source = preg_replace('@'.$smarty->css_dir.'@', '', $src);
-                if( !in_array($source, $smarty->css_includes[ $section ]) &&
-                    !in_array('@-'.$source, $smarty->css_includes[ $section ]) )
-                {                    
-                    $sources[] = $source;
-                }                
+        // Parse content block
+        $matches = array();
+        preg_match_all( '@<link(?P<attrs>.*?)[/]?>@si', $content, $matches );                
+        
+        // Parse attributes and cdata
+        $tags = array();
+        foreach($matches['attrs'] as $element) {
+            $attributes = array();
+            preg_match_all('@(?P<k>[a-z][a-z0-9\:_\-]+)="(?P<v>[^"]+)"@si', $element, $attributes);                        
+            
+            $tmp = array();
+            foreach($attributes['k'] as $i => $attr) {
+                $tmp[$attr] = $attributes['v'][$i];
+            }            
+            
+            if(isset($tmp['href'])) {
+                $href = $tmp['href'];
+                unset($tmp['href']);
+                
+                $tags[] = array('href' => $href, 'attrs' => $tmp);
             }
         }
         
+        // Merge arrays
+        if(!isset($smarty->css_includes[ $section ]['tags'])) {
+            $smarty->css_includes[ $section ]['tags'] = array();
+        }
+        $smarty->css_includes[ $section ]['tags'] = array_merge($tags, $smarty->css_includes[ $section ]['tags']);        
         
-        foreach($smarty->css_includes[ $section ] as $css) {
-            if( !preg_match('/^@\-/', $css) ){
-                $output .= '<link rel="stylesheet" type="text/css" href="'.$smarty->css_dir.$css.'" />'."\n";
+        foreach($smarty->css_includes[ $section ]['tags'] as $tag) {
+            $source = preg_replace('@'.$smarty->css_dir.'@', '', $tag['href']);
+            
+            if( !isset($smarty->css_includes[ $section ]['deny']) ||
+                !in_array($source, $smarty->css_includes[ $section ]['deny']) ) {
+                
+                $output .= '<link href="'.$smarty->css_dir.$source.'"';
+                $output .= smarty_block_scriptstyle_render_attributes($tag['attrs']) . ' />'."\n";
             }
         }
-
-        
-        foreach($sources as $css) {
-            $output .= '<link rel="stylesheet" type="text/css" href="'.$smarty->css_dir.$css.'" />'."\n";
-        }
-    
         
         return( $output );
     }
+}
+
+function smarty_block_scriptstyle_render_attributes($attrs) {
+    $output = '';            
+    if(!isset($attrs['type'])) $attrs['type'] = 'text/css';            
+    if(!isset($attrs['rel']))  $attrs['rel']  = 'stylesheet';
+    
+    foreach($attrs as $a => $v) {
+        $output .= ' ' . $a . '="' . $v . '"';
+    }            
+    return $output;
 }
