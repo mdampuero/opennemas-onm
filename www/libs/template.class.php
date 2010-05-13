@@ -78,34 +78,38 @@ class Template extends Smarty
     
     
     // TODO: documentation  
-    function addScript($js_path, $section='head')
+    function addScript($js_path, $section='head', $attrs=array())
     {
-        $this->_addResource( $js_path, $this->js_includes, $section );
+        $js_path = $this->js_dir . $js_path;
+        $this->js_includes[ $section ]['tags'][]  = array('src' => $js_path, 'attrs' => $attrs); 
     }
     
     function removeScript($js_path, $section='head')
     {
-        $this->_removeResource($js_path, $this->js_includes, $section);              
+        $this->js_includes[ $section ]['deny'][] = $js_path;
     }    
     
-    public function addStyle($css_path, $section='head')
+    public function addStyle($css_path, $section='head', $attrs=array())
     {
-        $this->_addResource( $css_path, $this->css_includes, $section );
+        $css_path = $this->css_dir . $css_path;
+        $this->css_includes[ $section ]['tags'][]  = array('href' => $css_path, 'attrs' => $attrs);
     }
     
     public function removeStyle($css_path, $section='head')
     {
-        $this->_removeResource($css_path, $this->css_includes, $section);
+        $this->css_includes[ $section ]['deny'][] = $css_path;
     }
     
     /**
      * Add a resource to resources array (js_includes or css_includes)
+     * 
+     * @deprecated
      * @param Mixed $res,
      * @param Array $resources
      * @param String $section
     */
     private function _addResource($res, &$resources, $section)
-    {
+    {        
         $res = (is_array($res))? $res: array($res);
         
         if( !isset($resources[$section]) ) {
@@ -123,6 +127,10 @@ class Template extends Smarty
         }        
     }
     
+    /**
+     *
+     * @deprecated
+     */
     private function _removeResource($res, &$resources, $section)
     {        
         $res = (is_array($res))? $res: array($res);

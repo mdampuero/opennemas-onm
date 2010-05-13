@@ -1,19 +1,14 @@
+{toolbar_button toolbar="toolbar-top"
+    icon="save" type="submit" text="Save"}
+
+{toolbar_route toolbar="toolbar-top"
+    icon="close" route="widget-index" text="Cancel"}    
+    
 <div id="menu-acciones-admin">
-<ul>
-    <li>
-        <a href="#" class="admin_add" onClick="javascript:submitForm();"
-           value="Guardar" title="Guardar">
-            <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />
-            {t}Save{/t}
-        </a>
-    </li>
-    <li>
-        <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-            <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
-            {t}Cancel{/t}
-        </a>
-    </li>
-</ul>
+    <div style="float: left; margin-left: 10px; margin-top: 10px;">
+        <h2>{t}Widget Manager{/t}</h2>
+    </div>
+    {toolbar name="toolbar-top"}
 </div>
 
 <div id="warnings-validation"></div>
@@ -82,6 +77,10 @@
 
 </tbody>
 </table>
+
+{if ($request->getActionName() eq "update")}
+<input type="hidden" id="pk_content" name="pk_content" value="{$widget->pk_content}" />    
+{/if}
 
 {literal}        
 <script language="Javascript" type="text/javascript">

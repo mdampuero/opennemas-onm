@@ -5,11 +5,9 @@
 
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}general.css" />
 
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery-1.4.2.min.js"></script>
-
 {scriptsection name="head"}
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery-1.4.2.min.js"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}ypSlideOutMenus-jquery.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
 {/scriptsection}
 
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
@@ -21,12 +19,6 @@
 {stylesection name="head"}
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}toolbar.css"/>
 {/stylesection}
-
-<script type="text/javascript" language="javascript">
-/* <![CDATA[ */
-sinFrames();
-/* ]]> */
-</script>
 
 </head>
 

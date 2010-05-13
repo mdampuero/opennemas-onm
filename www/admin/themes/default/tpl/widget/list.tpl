@@ -8,35 +8,15 @@ div#pagina td, div#pagina th {
 </style>
 {/literal}
 
-{toolbar_link toolbar="toolbar-top" id="linkGoogle" rel="no-follow"
-    icon="add" text="Google" href="http://google.com" target="_blank"}
-
-{* toolbar_link toolbar="toolbar-top"
-    icon="add" text="Google" href="http://google.com" target="_blank"}
-
 {toolbar_route toolbar="toolbar-top"
-    icon="new" route="widget-create" text="New Widget" query='"id":1,"name":"bla bla"'}
-
-{toolbar_javascript toolbar="toolbar-top"
-    icon="close" text="Cancel" click="alert('ola')" mouseover="console.log('ja')"}
-    
-{toolbar_link toolbar="toolbar-top"
-    icon="save" text="Google" href="http://openhost.es" target="_blank"}
-    
-{toolbar_button toolbar="toolbar-top"
-    icon="save" text="Google" type="submit"}
-
-{toolbar_button toolbar="toolbar-top"
-    icon="save" text="Google" type="button" click="alert(':-P')" *}
+    icon="new" route="widget-create" text="New Widget"}
     
 <div id="menu-acciones-admin">
     <div style="float: left; margin-left: 10px; margin-top: 10px;">
         <h2>{t}Widget Manager{/t}</h2>
     </div>
-    {* toolbar name="toolbar-top" *}
+    {toolbar name="toolbar-top"}
 </div>
-
-{toolbar name="toolbar-top"}
 
 <table class="adminheading">
     <tbody>
@@ -79,11 +59,12 @@ div#pagina td, div#pagina th {
 	</td>	
 	
 	<td width="24">
-		<a href="#" onClick="javascript:enviar($('formulario'), '_self', 'read', '{$widgets[wgt]->pk_widget}');" title="{t}Edit{/t}">
+		<a href="{baseurl}/{url route="widget-update" id=$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 	</td>
 	<td width="24">
-		<a href="#" onClick="javascript:confirmar($('formulario'), '{$widgets[wgt]->pk_widget}');" title="{t}Delete{/t}">
+		<a href="{baseurl}/{url route="widget-delete" id=$widgets[wgt]->pk_widget}"
+           onclick="" title="{t}Delete{/t}">
 			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 	</td>
 </tr>

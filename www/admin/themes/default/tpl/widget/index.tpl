@@ -1,3 +1,6 @@
+{* Define link_javascript before blocks scriptsection *}
+{tag_script src="edit_area/edit_area_full.js" section="head"}
+
 {include file="header.tpl"}
 
 <form action="{baseurl}/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario">
@@ -20,8 +23,11 @@
 
 </td></tr>
 </table>
+
+<script type="text/javascript">
+console.log("Action: {$request->getActionName()}");
+</script>
     
-<input type="hidden" id="id" name="id" value="{$id}" />    
 </form>
 
 {include file="footer.tpl"}

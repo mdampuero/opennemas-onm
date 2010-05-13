@@ -134,11 +134,15 @@ jQuery(function () {
                     case 'after':                        
                         parent_id = $(NODE).parent().parent().attr('id').replace(/node\-/, '');
                         var items = $(NODE).parent().children('li');
+                        console.log(items);
                         
                         while(items.get(weight) &&
                               items.get(weight).id != $(NODE).attr('id')) {
                             weight++;
-                        }                        
+                        }
+                        
+                        console.log(TYPE + ' w:' + weight + ' p:' + parent_id);
+                        console.log(NODE);
                     break;
                 }
                 
@@ -165,7 +169,9 @@ jQuery(function () {
                         while(items.get(weight) &&
                               items.get(weight) != NODE) {
                             weight++;
-                        }                        
+                        }
+                        
+                        console.log(TYPE + ' w:' + weight + ' p:' + parent_id + ' NODE:' + NODE);
                     break;
                 }
                 
