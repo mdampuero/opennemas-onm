@@ -18,13 +18,14 @@
 
 {stylesection name="head"}
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}toolbar.css"/>
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}flashmessenger.css"/>
 {/stylesection}
 
 </head>
 
 <body margin="0" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 
-<table style="border: 1px solid rgb(0, 75, 142); width: 100%;" width="100%" height="100%" cellpadding="0" cellspacing="0">
+<table width="100%" height="100%" cellpadding="0" cellspacing="0">
 <tbody>
 	<tr>
 		<td id="ocultar" height="100%" valign="top">

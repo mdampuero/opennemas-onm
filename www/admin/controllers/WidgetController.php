@@ -35,7 +35,7 @@ class WidgetController extends Onm_Controller_Action
     public function indexAction()
     {
         $cm = new ContentManager();
-        $widgets = $cm->find('Widget', 'fk_content_type=12', 'ORDER BY created DESC ');        
+        $widgets = $cm->find('Widget', 'fk_content_type=12 AND status <> "REMOVED"', 'ORDER BY created DESC ');        
         
         // TODO: pagination        
         $this->tpl->assign('widgets', $widgets);
@@ -94,18 +94,32 @@ class WidgetController extends Onm_Controller_Action
         $widget = new Widget();
         
         if($this->getRequest()->isPost()) {            
-            $data = $this->getRequest()->getPost();            
-            $widget->update($data);
+            $data = $this->getRequest()->getPost();
             
-            $this->flashMessenger->addMessage(array('notice' => 'Widget added successfully.'));
-            $this->redirector->gotoRoute( array(), 'widget-index' );            
+            try {
+                $widget->update($data);
+                
+                $this->flashMessenger->addMessage(
+                    array('notice' => 'Widget updated successfully.')
+                );
+            } catch(OptimisticLockingException $e) {
+                $this->flashMessenger->addMessage(
+                    array('warning' => 'Data values was not updated. Other user has done changes.')
+                );
+            } catch(Exception $e) {
+                $this->flashMessenger->addMessage(
+                    array('error' => $e->getMessage())
+                );
+            }
+            
+            $this->redirector->gotoRoute( array(), 'widget-index' );
+            
         } else {
             // Load data & show form
             $id = $this->_getParam('id', 0);            
-            $widget = $widget->read($id);
+            $widget->read($id);
             
-            $this->tpl->assign('widget', $widget);
-            
+            $this->tpl->assign('widget', $widget);            
             $this->tpl->display('widget/index.tpl');
         }
     }
@@ -120,20 +134,24 @@ class WidgetController extends Onm_Controller_Action
         $id = $this->_getParam('id', 0);
         
         $widget = new Widget();
-        $widget->delete($id);
+        $widget->changeStatus($id, 'REMOVED');
         
+        
+        $this->flashMessenger->addMessage(
+            array('notice' => 'Widget was sended to trash.')
+        );
         $this->redirector->gotoRoute( array(), 'widget-index' );        
     }
     
     
     /**
      * Route: widget-changestatus
-     *  /widget/toggle/:id/:status
+     *  /widget/changestatus/:id/:status
      */
-    public function changeStatusAction()
+    public function changestatusAction()
     {
         $id = $this->_getParam('id', 0);
-        $status = $this->_getParam('status', 0);
+        $status = $this->_getParam('status', "PENDING");
         
         $widget = new Widget();        
         $widget->changeStatus($id, $status);

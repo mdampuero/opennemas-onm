@@ -1,8 +1,7 @@
                 
                 </td>
             </tr>
-            </table><!--#topbar-admin-->
-
+            </table><!--#topbar-admin-->                       
 		</td>
 	</tr>
 </tbody>
@@ -18,6 +17,5 @@ new YpSlideOutMenuHelper();
 {/literal}
 
 {scriptsection name="footer"}{/scriptsection}
-
 </body>
 </html>

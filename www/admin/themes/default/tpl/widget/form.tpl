@@ -11,8 +11,6 @@
     {toolbar name="toolbar-top"}
 </div>
 
-<div id="warnings-validation"></div>
-
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
 <tbody>
 <tr>
@@ -47,12 +45,12 @@
 
 <tr>
     <td valign="top" align="right" style="padding:4px;">
-        <label for="available">{t}Publicado{/t}:</label>
+        <label for="status">{t}Status{/t}:</label>
     </td>
     <td>
-        <select name="available" id="available">
-            <option value="1" {if $widget->available == 1}selected="selected"{/if}>Si</option>
-            <option value="0" {if $widget->available == 0}selected="selected"{/if}>No</option>
+        <select name="status" id="status">
+            <option value="1" {if $widget->status == "AVAILABLE"}selected="selected"{/if}>{t}Available{/t}</option>
+            <option value="0" {if $widget->status == "PENDING"}selected="selected"{/if}>{t}Pending{/t}</option>
         </select>
     </td>
 </tr>
@@ -79,7 +77,8 @@
 </table>
 
 {if ($request->getActionName() eq "update")}
-<input type="hidden" id="pk_content" name="pk_content" value="{$widget->pk_content}" />    
+<input type="hidden" name="pk_content" value="{$widget->pk_content}" />
+<input type="hidden" name="version" value="{$widget->version}" />
 {/if}
 
 {literal}        

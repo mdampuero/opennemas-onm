@@ -39,6 +39,8 @@ class Onm_View_Helper_Toolbar_Button extends Onm_View_Helper_Toolbar_Item
      */
     public $type   = null;    
     public $events = array();
+    public $name   = null;
+    public $value  = null;
     /**#@-*/
     
     
@@ -66,7 +68,7 @@ class Onm_View_Helper_Toolbar_Button extends Onm_View_Helper_Toolbar_Item
         
         $html = '<button ' ;
         
-        $html .= $this->_buildAttrs(array('type'));
+        $html .= $this->_buildAttrs(array('type', 'name', 'value'));
         
         $html .= $this->_buildEvents();
         

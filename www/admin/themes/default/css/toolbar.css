@@ -78,7 +78,7 @@ ul.toolbar li button {
     font-weight: bold;
     color: #666;
     
-    width: 70px;
+    min-width: 70px;
     
     padding-top: 50px;
     height: 71px;
@@ -89,7 +89,8 @@ ul.toolbar li button {
     
     background-color: transparent;
     background-position: center top;
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
+    white-space: nowrap;
 }
 
 
@@ -189,6 +190,27 @@ ul.toolbar li .save {
 ul.toolbar li .search {
     background-image: url(../images/toolbar/search.png);    
 }
+
+ul.toolbar li .svncheckout {
+    background-image: url(../images/toolbar/svncheckout.png);    
+}
+
+ul.toolbar li .svninfo {
+    background-image: url(../images/toolbar/svninfo.png);    
+}
+
+ul.toolbar li .svnlist {
+    background-image: url(../images/toolbar/svnlist.png);    
+}
+
+ul.toolbar li .svnstatus {
+    background-image: url(../images/toolbar/svnstatus.png);    
+}
+
+ul.toolbar li .svnupdate {
+    background-image: url(../images/toolbar/svnupdate.png);    
+}
+
 
 ul.toolbar li .start {
     background-image: url(../images/toolbar/start.png);    

@@ -93,13 +93,13 @@
             </defaults>
         </widget-delete>
         
-        <widget-toggle type="Zend_Controller_Router_Route">
-            <route>widget/toggle/:id/</route>
+        <widget-changestatus type="Zend_Controller_Router_Route">
+            <route>widget/changestatus/:id/:status/</route>
             <defaults>
                 <controller>widget</controller>
-                <action>toggle</action>
+                <action>changestatus</action>
             </defaults>
-        </widget-toggle>
+        </widget-changestatus>
         <!-- }}} -->
         
         
@@ -145,6 +145,16 @@
         </page-ajax-delete>
         <!-- }}} -->
         
+        
+        <!-- Svn routes {{{ -->
+        <svn-index type="Zend_Controller_Router_Route">
+            <route>svn/*</route>
+            <defaults>
+                <controller>svn</controller>
+                <action>index</action>
+            </defaults>
+        </svn-index>        
+        <!-- }}} -->
         
     </production>
     

@@ -190,6 +190,26 @@ table.toolbar td .search {
     background-image: url(../images/toolbar/search.png);    
 }
 
+table.toolbar td .svncheckout {
+    background-image: url(../images/toolbar/svncheckout.png);    
+}
+
+table.toolbar td .svninfo {
+    background-image: url(../images/toolbar/svninfo.png);    
+}
+
+table.toolbar td .svnlist {
+    background-image: url(../images/toolbar/svnlist.png);    
+}
+
+table.toolbar td .svnstatus {
+    background-image: url(../images/toolbar/svnstatus.png);    
+}
+
+table.toolbar td .svnupdate {
+    background-image: url(../images/toolbar/svnupdate.png);    
+}
+
 table.toolbar td .start {
     background-image: url(../images/toolbar/start.png);    
 }
