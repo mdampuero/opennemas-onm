@@ -84,6 +84,12 @@
             <!-- TODO: add MOUNT_POINT to future version -->
         </addColumn>
     </changeSet>
+    
+    <changeSet author="vifito" id="1273837344">        
+        <addColumn tableName="contents">
+            <column name="version" type="int" defaultValueNumeric="0"/>
+        </addColumn>
+    </changeSet>
 
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
