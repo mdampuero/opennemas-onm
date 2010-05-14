@@ -29,7 +29,9 @@
  */
 class Content
 {
-    
+    /**#@+
+     * Content properties
+    */
     public $pk_content = null;
     public $fk_content_type = null;
     public $title = null;
@@ -46,10 +48,27 @@ class Content
     public $status = null;
     public $published = null;
     public $slug = null;
+    /**#@-*/
     
+    /**
+     * @var int Number of version of content
+     */
+    public $version = null;
+    
+    /**
+     * @var MethodCacheManager
+     */
     public $cache = null;
+    
+    /**
+     * @var ADOConnection
+     */
     public $conn  = null;
     
+    /**
+     * @var array   Array of valid status
+     * @static
+     */
     public static $validStatus = array('PENDING', 'AVAILABLE', 'REMOVED');
     
     /**
@@ -93,48 +112,12 @@ class Content
         return $pk_content;
     }
     
-    /**
-     * Attach content to category
-     *
-     * @param int $pk_content
-     * @param int $pk_category
-     */
-    public function attachCategory($pk_content, $pk_category)
-    {        
-        $catName = $conn->GetOne('SELECT `name` FROM `categories` WHERE `pk_content_category` = ?',
-                                 array($pk_category));
-        
-        $sql = 'INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `catName`)
-                    VALUES (?, ?, ?)';
-        $values = array($pk_content, $pk_category, $catName);
-        
-        if($this->conn->Execute($sql, $values) === false) {
-            $error_msg = $this->conn->ErrorMsg();
-            Zend_Registry::get('logger')->emerg($error_msg);
-        }
-    }
     
-    /**
-     * Detach content to category
-     *
-     * @param int $pk_content
-     * @param int $pk_category
-     */
-    public function detachCategory($pk_content, $pk_category)
-    {        
-        $sql = 'DELETE FROM `categories` `pk_fk_content` = ? AND `pk_fk_content_category` = ?';
-        $values = array($pk_content, $pk_category);
-        
-        if($this->conn->Execute($sql, $values) === false) {
-            $error_msg = $this->conn->ErrorMsg();
-            Zend_Registry::get('logger')->emerg($error_msg);
-        }
-    }
     
     /**
      * Set init values
      *
-     * @param array $data
+     * @param array &$data  Reference to associative array with values
      */
     private function prepareData($data)
     {
@@ -195,10 +178,10 @@ class Content
         return in_array($status, Content::$validStatus);
     }
     
-    public function read($id)
+    public function read($pk_content)
     {        
         $sql = 'SELECT * FROM `contents` WHERE `pk_content` = ?';
-        $rs = $this->conn->Execute( $sql, array($id) );
+        $rs = $this->conn->Execute( $sql, array($pk_content) );
         
         if ( false === $rs) {
             $error_msg = $this->conn->ErrorMsg();
@@ -209,34 +192,7 @@ class Content
         
         // Load object properties
         $this->load( $rs->fields );
-    }
-    
-    
-    function loadCategoryName($pk_content) {
-        $ccm = ContentCategoryManager::get_instance();
-        
-        if(empty($this->category)) {
-            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
-            $this->category = $rs;
-        }
-        
-        return $ccm->get_name($this->category);
-    }
-
-
-    function loadCategoryTitle($pk_content) {
-        $ccm = ContentCategoryManager::get_instance();
-        
-        if(empty($this->category_name)) {
-            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
-            $this->category = $rs;
-            $this->loadCategoryName( $this->category );
-        }
-        
-        return $ccm->get_title($this->category_name);
-    }
+    }    
     
     /**
      * Load properties for "this" object from $properties
@@ -264,17 +220,45 @@ class Content
     
     /**
      *
+     * @throws OptimisticLockingException
+     * @param array $data
      */
     public function update($data)
     {
         // Prepare array data with default values if it's necessary
         $this->prepareData(&$data);
         
+        // Check optimistic locking
+        if( isset($data['version']) ) {
+            if( !$this->isLastVersion($data['version'], $data['pk_content']) ) {
+                throw new OptimisticLockingException();
+            } else {
+                // Increment version
+                $data['version'] += 1;
+            }
+        }
+        
         $fields = array('title', 'slug', 'description', 'metadata',
                         'starttime', 'endtime', 'changed', 'published',
-                        'fk_user_last_editor', 'status');
+                        'fk_user_last_editor', 'status', 'version');
         
         SqlHelper::bindAndUpdate('contents', $fields, $data, 'pk_content = ' . $data['pk_content']);
+    }
+    
+    
+    /**
+     * Use field version for optimistic locking
+     *
+     * @param int $version
+     * @param int $pk_content
+     * @return boolean
+     */
+    public function isLastVersion($version, $pk_content)
+    {
+        $sql = 'SELECT version FROM `contents` WHERE `pk_content` = ' . intval($pk_content);
+        $currentVersion = $this->conn->GetOne($sql);
+        
+        return $currentVersion == $version;
     }
     
     /**
@@ -296,55 +280,36 @@ class Content
         }
     }
     
-    //Elimina de la BD
-    function remove($id) {       
-        $sql = 'DELETE FROM contents WHERE pk_content='.($id);
-
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;
-        }
     
-        $sql = 'DELETE FROM contents_categories WHERE pk_fk_content='.($id);
-
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
-        }
-    }
-    
-    //Envia a la papelera
-    function delete($id, $last_editor) {
-        $changed = date("Y-m-d H:i:s");
-        
-        $data = array(0, 0, $last_editor, $changed, $id);
-        $this->set_available(array($data), $last_editor);
-        
-        $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, `fk_user_last_editor`=? 
-          WHERE pk_content='.($id);
-        
-        $values = array(1, $changed, $last_editor);
+    /**
+     * Remove content of database
+     * for logic delete you must use Content::changeStatus($pk_content, 'REMOVED');
+     *
+     * @see Content::changeStatus()
+     * @param int $pk_content
+     * @return boolean
+    */
+    public function delete($pk_content)
+    {
+        $sql = 'DELETE FROM `contents` WHERE `pk_content` = ?';
            
-        if($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if( $this->conn->Execute($sql, array($pk_content)) === false ) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return false;
+        }
         
-             return;
-         }
+        return true;
     }
-
-
     
     
     /**
      * Check if a content is in time for publishing
      *
+     * @param string $starttime
+     * @param string $endtime
+     * @param string $time
      * @return boolean
     */
     public function isInTime($starttime=null, $endtime=null, $time=null)
@@ -438,86 +403,39 @@ class Content
         return ((!empty($this->starttime) && !preg_match('/0000\-00\-00 00:00:00/', $this->starttime)) ||
                 (!empty($this->endtime) && !preg_match('/0000\-00\-00 00:00:00/', $this->endtime)));
     }
-  
-
-
-    function set_numviews($id=null) {
-
-        if(is_null($id) && $this->id != null ) {
-            $id = $this->id;
-        } elseif (is_null ($id)) {
+    
+    
+    /**
+     * 
+     * TODO: review if it's neccessary static and multiple pk_contents
+     * @param int|array $pk_contents
+     * @return boolean
+    */
+    public static function incrementViews($pk_contents)
+    {
+        $conn = Zend_Registry::get('conn');
+        
+        if(is_int($pk_contents)) {
+            $pk_contents = array($pk_contents);
+        }
+        
+        if( !is_array($pk_contents) ) {
+            throw new Exception('Illegal argument exception');
+        }
+        
+        $sql = 'UPDATE `contents` SET `views` = `views` + 1
+                WHERE `pk_content` IN (' . implode(',', $pk_contents) . ')';
+        
+        if($conn->Execute($sql) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
             return false;
         }
         
-        // Multiple exec SQL
-        if(is_array($id) && count($id)>0) {
-            // Recuperar todos los IDs a actualizar
-            $ids = array();
-            foreach($id as $item) {
-                if(isset($item->pk_content) && !empty($item->pk_content)) {
-                    $ids[] = $item->pk_content;
-                }
-            }
-
-            $sql = 'UPDATE `contents` SET `views`=`views`+1 WHERE `available`=1 AND `pk_content` IN ('.implode(',', $ids).')';
-        } else {
-            $sql = 'UPDATE `contents` SET `views`=`views`+1 WHERE `available`=1 AND `pk_content`='.$id;
-        }
-
-	if($GLOBALS['application']->conn->Execute($sql) === false) {
-	  $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-	  $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-	  $GLOBALS['application']->errors[] = 'Error: '.$error_msg;	  
-
-	  return;
-        }
+        return true;
     }
-   
-    function put_permalink($end, $type, $title, $cat) {
-        //Definimos el permalink para la url.
-        // Ejemplo: http://xornaldegalicia.com/2008/09/29/deportes/premio/Singapur/Alonso/proclama/campeon/2008092917564334523.html
-        //artigo/2008/11/18/galicia/santiago/encuentran-tambre-cadaver-santiagues-desaparecido-lunes/2008111802293425694.html
-        
-        $fecha=date("Y/m/d");                    
-        //Miramos el type.
-        $tipo = $GLOBALS['application']->conn->GetOne('SELECT title FROM `content_types` WHERE name = "'. $type.'"');
-
-        //Miramos la categoria y si eso padre.
-        $cats = $GLOBALS['application']->conn->
-            Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $cat.'"');
-
-        $namecat=strtolower($cats->fields['name']);
-
-        if($namecat){
-            $padre=$cats->fields['fk_content_category'];
-            if(($padre != 0) && ($tipo!="ficheiro")){ //Es subcategoria
-                      $cats = $GLOBALS['application']->conn->
-                  GetOne('SELECT name FROM `content_categories` WHERE pk_content_category = "'. $padre.'"');
-                  $namecat = strtolower($cats)."/".$namecat;
-            }
-        }else{
-            $namecat=$type;
-        } //Para que no ponga //
-
-        //funcion quita los sencillos al titulo
-        $stringutils=new String_Utils();
-        $titule=$stringutils->get_title($title);
-
-        // $permalink=SITE_URL ."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
-        if($tipo=="album"){
-                // /album/YYYY/MM/DD/foto/fechaIDlargo.html Ejem: /album/2008/11/28/foto/2008112811271251594.html
-                $permalink="/".$tipo."/". $fecha."/foto/".$this->id.'.html';
-        }elseif($tipo=="video"){
-                $permalink="/".$tipo."/". $fecha."/".$this->id.'.html';
-        }elseif($tipo=="ficheiro"){
-                $permalink="/".$tipo."/". $fecha."/". $namecat."/".$end; //En el end esta pasando el nombre del pdf
-        }elseif($tipo=="imaxe"){
-                $permalink="/media/images" .$end . $title;
-        }else{
-                $permalink="/".$tipo."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
-        }        
-        return $permalink;
-    }
+    
     
     /**
      * Abstract factory method getter
@@ -527,22 +445,132 @@ class Content
     */
     public static function get($pk_content)
     {
-        $sql  = 'SELECT `content_types`.name FROM `contents`, `content_types` WHERE pk_content=? AND fk_content_type=pk_content_type';
-        $type = $GLOBALS['application']->conn->GetOne($sql, array($pk_content));
+        $sql = 'SELECT `content_types`.name FROM `contents`, `content_types`
+                    WHERE `pk_content` = ? AND fk_content_type = pk_content_type';
+        $type = $this->conn->GetOne($sql, array($pk_content));
         
         if($type === false) {
             return null;
         }
         
         $type = ucfirst( $type );
-        try {
-            return new $type($pk_content);
-        } catch(Exception $e) {
-            return null;
+        
+        return new $type($pk_content);        
+    }
+
+    
+    /**
+     * Attach content to category
+     *
+     * @param int $pk_content
+     * @param int $pk_category
+     * @return boolean
+     */
+    public function attachCategory($pk_content, $pk_category)
+    {        
+        $catName = $this->conn->GetOne('SELECT `name` FROM `categories` WHERE `pk_category` = ?',
+                                 array($pk_category));
+        
+        $sql = 'INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_category`, `catName`)
+                    VALUES (?, ?, ?)';
+        $values = array($pk_content, $pk_category, $catName);
+        
+        if($this->conn->Execute($sql, $values) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return false;
         }
+        
+        return true;
     }
     
+    /**
+     * Bulk insert into categories to attach content
+     *
+     * @param int $pk_content
+     * @param array $categories  Array of pk_category
+     * @return boolean
+     */
+    public function attachCategories($pk_content, $categories)
+    {
+        $sql = 'SELECT `pk_category`, `name` FROM `categories`
+                    WHERE `pk_category` IN (' . implode(',', $categories) . ')';
+        
+        $rs = $this->conn->Execute($sql);        
+        if($rs === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return false;
+        }
+        
+        $data = array();
+        while(!$rs->EOF) {
+            $data[] = array($pk_content, $rs->fields['pk_category'], $rs->fields['name']);
+            
+            $rs->MoveNext();
+        }                
+        
+        $sql = 'INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_category`, `catName`)
+                    VALUES (?, ?, ?)';
+        $rs = $this->conn->Execute($sql, $data);
+        
+        return $rs !== false;
+    }
+
     
+    /**
+     * Detach content to a specific category
+     *
+     * @param int $pk_content
+     * @param int $pk_category
+     * @return boolean
+     */
+    public function detachCategory($pk_content, $pk_category)
+    {        
+        $sql = 'DELETE FROM `categories` WHERE
+                    `pk_fk_content` = ? AND `pk_fk_content_category` = ?';
+        $values = array($pk_content, $pk_category);
+        
+        if($this->conn->Execute($sql, $values) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return false;
+        }
+        
+        return true;
+    }
+
+
+    /**
+     * Detach content to categories (all categories)
+     *
+     * @param int $pk_content
+     * @return boolean
+     */    
+    public function detachCategories($pk_content)
+    {
+        $sql = 'DELETE FROM `categories` WHERE `pk_fk_content` = ?';
+        $values = array($pk_content);
+        
+        if($this->conn->Execute($sql, $values) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return false;
+        }
+        
+        return true;
+    }    
+    
+    
+    /**
+     * Magic method toString
+     *
+     * @return string
+    */
     public function __toString()
     {
         return $this->title;

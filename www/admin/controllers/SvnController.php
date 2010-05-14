@@ -28,7 +28,7 @@ class SvnController extends Onm_Controller_Action
         $this->cfg = array(
             'username'    => $_SESSION['username'],
             'repository'  => 'http://svn.openhost.es/opennemasdemo/trunk/www',
-            'destination' => '/home/opennemas/demo',
+            'destination' => '/home/opennemas/webdev',
         );
         
         $fields = array('username', 'password', 'repository', 'destination');

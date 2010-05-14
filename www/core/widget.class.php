@@ -1,32 +1,31 @@
 <?php
+/* -*- Mode: PHP; tab-width: 4 -*- */
 /**
- * widget.class.php
- * 
- * 28/07/2009 15:57:57
- * vifito  <vifito@openhost.es> 
+ * OpenNeMas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNeMas
+ * @package    OpenNeMas
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-/* *****************************************************************************
-CREATE TABLE `widgets` (
-`pk_widget` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ,
-`content` TEXT NOT NULL ,
-`renderlet` VARCHAR( 20 ) NOT NULL DEFAULT 'html',
-PRIMARY KEY ( `pk_widget` )
-) ENGINE = MYISAM 
-
-INSERT INTO `content_types` (
-`pk_content_type` ,
-`name` ,
-`title` ,
-`fk_template_default`
-)
-VALUES (
-'12', 'widget', 'widget', NULL
-);   
-*****************************************************************************  */
-
+ 
 /**
  * Widget
+ * 
+ * @package    Onm
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: widget.class.php 1 2010-05-14 18:31:58Z vifito $
  */
 class Widget extends Content
 {
@@ -89,29 +88,25 @@ class Widget extends Content
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param int $pk_content Object ID
      * @return Widget Return instance to chaining method
      */
-    public function read($id)
+    public function read($pk_content)
     {        
-        parent::read($id);
-        
-        $this->id = $id;
+        parent::read($pk_content);
         
         $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
         
-        $values = array($id);
-        
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $this->conn->Execute($sql, array($pk_content));
         if($rs === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             return null;
         }
         
-        $this->load( $rs->fields );        
+        $this->load( $rs->fields );
+        return $this;
     }
     
     /**
@@ -160,51 +155,27 @@ class Widget extends Content
         return true;        
     }
     
+    
     /**
-     * @deprecated
+     * Delete
+     *
+     * @param int $pk_content Identifier
+     * @return boolean
      */
-    public function setPlaceholder($placeholder, $id)
-    {
-        // Insert placeholder manually
-        $sql = 'UPDATE `contents` SET `placeholder`=? WHERE pk_content=?';
-        $values = array($placeholder, $id);
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;                        
+    public function delete($pk_content)
+    {        
+        parent::delete($pk_content); 
+        
+        $sql = "DELETE FROM `widgets` WHERE `pk_widget` = ?";
+        
+        if($this->conn->Execute($sql, array($pk_content)) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             return false;
         }
         
         return true;
-    }        
-    
-    /**
-     * Delete
-     *
-     * @param int $id Identifier
-     * @return boolean
-     */
-    public function delete($id) {        
-        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
-        
-        parent::remove($id); // Delete from database, don't use trash
-        
-        $values = array($id);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
-           return false;
-        }
-        
-        return true;        
-    }
-    
-    public function put_permalink() {
-        return '';
     }
     
     
@@ -214,11 +185,23 @@ class Widget extends Content
         return $this->$method();
     }
     
-    private function _renderlet_html() {
+    /**
+     * Only return $this->content
+     * 
+     * @return string
+     */
+    private function _renderlet_html()
+    {
         return $this->content;
     }
     
-    private function _renderlet_php() {
+    /**
+     * Eval PHP content
+     * 
+     * @return string
+     */
+    private function _renderlet_php()
+    {
         ob_start();
         
         eval($this->content);
@@ -233,11 +216,11 @@ class Widget extends Content
      *
      * SEE resource.string.php Smarty plugin
      * SEE resource.widget.php Smarty plugin
+     *
+     * @return string
      */
-    private function _renderlet_smarty() {
-        // Deprecated
-        //$resource = 'string:' . $this->content;
-        
+    private function _renderlet_smarty()
+    {        
         Template::$registry['widget'][$this->pk_widget] = $this->content;
         $resource = 'widget:' . $this->pk_widget;
         
