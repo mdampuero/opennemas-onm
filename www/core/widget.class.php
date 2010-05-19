@@ -82,7 +82,7 @@ class Widget extends Content
             return false;
         }
         
-        return true;
+        return $pk_content;
     }
     
     /**

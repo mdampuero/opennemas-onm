@@ -101,6 +101,36 @@ class Menu extends ParserXML{
     {
         return $this->printMenu();
     }
+    
+    /**
+     * Support to assemble Zend_Controller_Router_Route routes
+     *
+     * @param array $attrs  Attributes array from parse xml
+     * @return string|null
+     */
+    public function assembleRoute($attrs)
+    {
+        if(isset($attrs['route'])) {
+            $route = $attrs['route'];
+            
+            $front = Zend_Controller_Front::getInstance();
+            $router = $front->getRouter();
+            
+            if($router->hasRoute($route)) {
+                $querystring = (isset($attrs['querystring']))
+                    ? json_decode('{' . $attrs['querystring'] . '}')
+                    : array();
+                    
+                $route = $router->getRoute($route);                
+                $urlMvc = $route->assemble($querystring, $reset=true, $encode=true);        
+                
+                $link =  $front->getBaseUrl() . '/' . $urlMvc;
+                return $link;
+            }
+        }
+        
+        return null;
+    }
 
 	// -- Manejadores para el fichero de configuración --------------------------//
 	function _menues_open($attrs) {

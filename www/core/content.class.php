@@ -552,7 +552,7 @@ class Content
      */    
     public function detachCategories($pk_content)
     {
-        $sql = 'DELETE FROM `categories` WHERE `pk_fk_content` = ?';
+        $sql = 'DELETE FROM `contents_categories` WHERE `pk_fk_content` = ?';
         $values = array($pk_content);
         
         if($this->conn->Execute($sql, $values) === false) {
@@ -563,7 +563,29 @@ class Content
         }
         
         return true;
-    }    
+    }
+    
+    
+    /**
+     * Get categories to which this content belongs
+     * 
+     * @return array
+    */
+    public function belongsToCategories()
+    {
+        $sql = 'SELECT `pk_fk_category` FROM `contents_categories` WHERE `pk_fk_content` = ' . $this->pk_content;
+        
+        $pks = $this->conn->GetCol($sql);
+        
+        if($pks === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            return array();
+        }
+        
+        return $pks;
+    }
     
     
     /**

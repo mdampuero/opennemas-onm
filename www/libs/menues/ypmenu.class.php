@@ -81,7 +81,14 @@ class YpMenu extends Menu
     
     function _submenu_open($attrs)
     {
-        $link = (isset($attrs['link']))? $attrs['link']: '#';
+        $link  = (isset($attrs['link']))? $attrs['link']: '#';
+        
+        // Support to Zend_Controller_Router_Route
+        $route = $this->assembleRoute($attrs);
+        if($route != null) {
+            $link = $route;
+        }
+        
         $target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
         
         $this->paintSubmenu = !isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']);        
@@ -111,6 +118,13 @@ class YpMenu extends Menu
     {
         if(($this->paintSubmenu) && (!isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']))) {
             $link = (isset($attrs['link']))? $attrs['link']: '#';
+            
+            // Support to Zend_Controller_Router_Route
+            $route = $this->assembleRoute($attrs);
+            if($route != null) {
+                $link = $route;
+            }
+            
             $target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
             
             $this->submenuStr .= '<tr><td><a href="'.$link.'"'.$target.'>'.$attrs['title'].'</a></td></tr>' . PHP_EOL;
