@@ -1,8 +1,15 @@
-{* Define link_javascript before blocks scriptsection *}
-{tag_script src="edit_area/edit_area_full.js" section="head"}
+{* declare tag_* before header.tpl *}
+{tag_script src="edit_area/edit_area_full.js"}
+
+{tag_script src="jquery.localisation-min.js"}
+{tag_script src="jquery.scrollTo-min.js"}
+{tag_script src="ui.multiselect.js"}
+
+
+{tag_link href="ui.multiselect.css"}
+
 
 {include file="header.tpl"}
-
 
 <form action="{baseurl}/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario">
 
@@ -26,10 +33,6 @@
 
 </td></tr>
 </table>
-
-<script type="text/javascript">
-console.log("Action: {$request->getActionName()}");
-</script>
     
 </form>
 

@@ -73,6 +73,19 @@
     </td>
 </tr>
 
+<tr>
+    <td valign="top" align="right" style="padding:4px;">
+        <label for="categories">{t}Categories{/t}:</label>
+    </td>
+    <td>
+        {if ($request->getActionName() eq "update")}
+            {assign var="selected_categories" value=$widget->belongsToCategories()}
+        {/if}
+        
+        {category_multiselect id="categories" selected=$selected_categories}
+    </td>
+</tr>
+
 </tbody>
 </table>
 

@@ -34,7 +34,7 @@ function smarty_function_tag_link($params, &$tpl)
     }
     
     $href = $params['href'];
-    unset($href);
+    unset($params['href']);
     
     $section = (!isset($params['section']))? 'head': $params['section'];
     unset($params['section']);

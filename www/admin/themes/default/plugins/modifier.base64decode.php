@@ -20,5 +20,3 @@ function smarty_modifier_base64decode($string)
 {
     return base64_decode($string);
 }
-
-?>

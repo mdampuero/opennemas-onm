@@ -7,6 +7,7 @@
 
 {scriptsection name="head"}
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery-1.4.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}jquery-ui-1.8.1.custom.min.js"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}ypSlideOutMenus-jquery.js"></script>
 {/scriptsection}
 
@@ -17,6 +18,7 @@
 <![endif]-->
 
 {stylesection name="head"}
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}ui-lightness/jquery-ui-1.8.1.custom.css"/>
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}toolbar.css"/>
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}flashmessenger.css"/>
 {/stylesection}
