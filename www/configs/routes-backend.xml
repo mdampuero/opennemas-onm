@@ -52,7 +52,7 @@
         <!-- }}} -->
         
         
-        <!-- Pages routes {{{ -->
+        <!-- Widget routes {{{ -->
         <widget-index type="Zend_Controller_Router_Route">
             <route>widget/index/*</route>
             <defaults>
@@ -154,6 +154,41 @@
                 <action>index</action>
             </defaults>
         </svn-index>        
+        <!-- }}} -->
+        
+        
+        <!-- Category routes {{{ -->
+        <category-index type="Zend_Controller_Router_Route">
+            <route>category/index/*</route>
+            <defaults>
+                <controller>category</controller>
+                <action>index</action>
+            </defaults>
+        </category-index>
+        
+        <category-create type="Zend_Controller_Router_Route">
+            <route>category/create/*</route>
+            <defaults>
+                <controller>category</controller>
+                <action>create</action>
+            </defaults>
+        </category-create>
+        
+        <category-update type="Zend_Controller_Router_Route">
+            <route>category/update/*</route>
+            <defaults>
+                <controller>category</controller>
+                <action>update</action>
+            </defaults>
+        </category-update>
+        
+        <category-delete type="Zend_Controller_Router_Route">
+            <route>category/delete/:id/</route>
+            <defaults>
+                <controller>category</controller>
+                <action>delete</action>
+            </defaults>
+        </category-delete>
         <!-- }}} -->
         
     </production>

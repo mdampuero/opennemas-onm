@@ -114,6 +114,7 @@ define ('MAIL_HOST', "localhost");
 define ('MAIL_USER', "");
 define ('MAIL_PASS', "");
 
+define ('APC_PREFIX', 'demo');
 
 /* [ASSSET SERVERS] *********************************************************  */
 define('ASSET_HOST','assets%02d.opennemas.com');

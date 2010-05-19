@@ -72,8 +72,12 @@ class WidgetController extends Onm_Controller_Action
             
             $data = $this->getRequest()->getPost();
             // TODO: Validation
-            $widget = new Widget();
-            $widget->create($data);
+            $widget = new Widget();            
+            $pk_content = $widget->create($data);            
+            
+            if( isset($data['categories']) ) {
+                $widget->attachCategories($pk_content, $data['categories']);
+            }
             
             $this->flashMessenger->addMessage(array('notice' => 'Widget added successfully.'));
             $this->redirector->gotoRoute( array(), 'widget-index' );
@@ -99,6 +103,10 @@ class WidgetController extends Onm_Controller_Action
             try {
                 $widget->update($data);
                 
+                $pk_content = $data['pk_content'];
+                $widget->detachCategories($pk_content);
+                $widget->attachCategories($pk_content, $data['categories']);
+                
                 $this->flashMessenger->addMessage(
                     array('notice' => 'Widget updated successfully.')
                 );
@@ -117,7 +125,7 @@ class WidgetController extends Onm_Controller_Action
         } else {
             // Load data & show form
             $id = $this->_getParam('id', 0);            
-            $widget->read($id);
+            $widget->read($id);            
             
             $this->tpl->assign('widget', $widget);            
             $this->tpl->display('widget/index.tpl');

@@ -25,6 +25,7 @@ class SvnController extends Onm_Controller_Action
     
     public function init()
     {
+        // FIXME: use config file
         $this->cfg = array(
             'username'    => $_SESSION['username'],
             'repository'  => 'http://svn.openhost.es/opennemasdemo/trunk/www',
