@@ -1,12 +1,16 @@
 <?php
-require_once('./config.inc.php');
-require_once('./session_bootstrap.php');
+require_once('../configs/config.inc.php');
+
+require_once 'Zend/Loader/Autoloader.php'; 
+$autoloader = Zend_Loader_Autoloader::getInstance();
+
+require_once( './session_bootstrap.php');
 $sessions = $GLOBALS['Session']->getSessions();
 
 // FIXME: está páxina ten que pasar a ser unha template Smarty
-require_once('core/privileges_check.class.php');
-require_once('core/method_cache_manager.class.php');
-require_once('core/user.class.php');
+require_once( SITE_PATH . 'core/method_cache_manager.class.php');
+require_once( SITE_PATH . 'core/privileges_check.class.php');
+require_once( SITE_PATH . 'core/user.class.php');
 
 $RESOURCES_PATH = 'themes/default/';
 
@@ -161,18 +165,7 @@ function salir() {
     }
 }
 </script>
-<script type="text/javascript" language="javascript">
-//  new ypSlideOutMenu("number menu", "slide position", left, top, width, height)
-    //new ypSlideOutMenu("sub1","down",144,44,190,400)
-    //new ypSlideOutMenu("sub2","down",265,44,150,200)
-    //new ypSlideOutMenu("sub3","down",394,44,150,200)
-    //new ypSlideOutMenu("sub4","down",507,44,160,400)
-    //new ypSlideOutMenu("sub5","down",628,44,150,200)
-    //new ypSlideOutMenu("sub6","down",749,44,150,200)
-    //new ypSlideOutMenu("sub7","down",870,44,150,300)
-    //new ypSlideOutMenu("sub8","down",991,44,160,300)
-    
-</script>
+
 </head>
 
 <body margin="0" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
