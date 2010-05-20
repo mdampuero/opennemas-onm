@@ -36,7 +36,7 @@ class Content
     public $fk_content_type = null;
     public $title = null;
     public $description = null;
-    public $metadata = null;
+    public $keywords = null;
     public $starttime = null;
     public $endtime = null;
     public $created = null;
@@ -101,7 +101,7 @@ class Content
         $this->prepareData(&$data);
         
         $fields = array('fk_content_type',
-                        'title', 'slug', 'description', 'metadata',
+                        'title', 'slug', 'description', 'keywords',
                         'starttime', 'endtime', 'created', 'changed', 'published',
                         'fk_author', 'fk_publisher', 'fk_user_last_editor',
                         'views',
@@ -238,7 +238,7 @@ class Content
             }
         }
         
-        $fields = array('title', 'slug', 'description', 'metadata',
+        $fields = array('title', 'slug', 'description', 'keywords',
                         'starttime', 'endtime', 'changed', 'published',
                         'fk_user_last_editor', 'status', 'version');
         
