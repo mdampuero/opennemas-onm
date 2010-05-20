@@ -24,12 +24,12 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
 {
 	public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-		list($lang, $dirname) = $this->_getLang($request);
+		list($locale, $dirname) = $this->_getLang($request);
         
 		$moFile = SITE_ADMIN_PATH . 'themes/default/locale/' . $dirname . '/messages.mo';
         
         if(file_exists($moFile)) {
-			$translate = new Zend_Translate('gettext', $moFile, $lang);
+			$translate = new Zend_Translate('gettext', $moFile, $locale);
             
 			Zend_Registry::set('Zend_Translate', $translate);			
 		}        		
@@ -60,6 +60,6 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
         $lang    = strtolower( $locale->getLanguage() );
         $dirname = strtolower( $locale->getTranslation($lang, 'language', 'en') );
         
-        return array($lang, $dirname);
+        return array($locale, $dirname);
     }
 }

@@ -37,6 +37,9 @@ class ContentManager
     private $conn = null;
     public $cache = null;
     
+    // TODO: to study implementation singleton for ContentManager?
+    /* private static $instance = null */
+    
     public function __construct($content_type=null)
     {
         $this->conn = Zend_Registry::get('conn');
@@ -95,6 +98,49 @@ class ContentManager
         $items = $this->load_obj($rs, $content_type);
         
         return $items;
+    }
+    
+    
+    /**
+     * Generate a unique slug
+     *
+     * @param string $title
+     * @return string
+     */
+    public function slugIt($title)
+    {
+        $filter = new Onm_Filter_Slug();
+        $slugs  = $this->_getSlugs();
+        
+        $slug = $filter->filter($title);
+        
+        if(in_array($slug, $slugs)) {            
+            $i = 1;            
+            $new = $slug . '-' . $i;
+            
+            while( in_array($new, $slugs) ) {
+                $i++;
+                $new = $slug . '-' . $i;
+            }
+            
+            return $new;
+        }
+        
+        return $slug;
+    }
+    
+    
+    /**
+     * TODO: review performance
+     *
+     * @return array    Array of existent slugs
+     */
+    private function _getSlugs()
+    {        
+        $sql   = 'SELECT `slug` FROM `contents`';
+        $slugs = $this->conn->GetCol($sql);
+        
+        return $slugs;
     }
     
     /**

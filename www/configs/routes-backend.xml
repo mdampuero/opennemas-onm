@@ -3,6 +3,17 @@
     
     <production>
         
+        <!-- Content routes {{{ -->
+        <content-slugit type="Zend_Controller_Router_Route">
+            <route>content/slugit/</route>
+            <defaults>
+                <controller>content</controller>
+                <action>slugit</action>
+            </defaults>
+        </content-slugit>
+        <!-- }}} -->
+        
+        
         <!-- User routes {{{ -->
         <user-login type="Zend_Controller_Router_Route">
             <route>user/login/</route>
