@@ -22,7 +22,7 @@
     {/acl}
 
     <div id="session-actions" style="float:left;">
-      <a href="javascript:salir();" class="logout" title="{t}Logout{/t}">
+      <a href="{baseurl}/{url route="user-logout"}" class="logout" title="{t}Logout{/t}">
           <img src="{$params.IMAGE_DIR}logout.png" border="0" align="absmiddle" alt="" /> {t}Logout{/t}
       </a>
     </div><!--end session-actions -->

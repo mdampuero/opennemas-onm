@@ -144,12 +144,7 @@ var AnyTime =
   	
   	$(document).ready( 
   		function()
-		{
-			//  Ping the server for statistical purposes (remove if offended).
-			
-  			if ( window.location.hostname.length && ( window.location.hostname != 'www.ama3.com' ) )
-  				$(document.body).append('<img src="http://www.ama3.com/anytime/ping/?4.1112'+(AnyTime.utcLabel?".tz":"")+'" width="0" height="0" />');
-			
+		{			
 			//  IE6 doesn't float popups over <select> elements unless an
 			//	<iframe> is inserted between them!  The <iframe> is added to
 			//	the page *before* the popups are moved, so they will appear

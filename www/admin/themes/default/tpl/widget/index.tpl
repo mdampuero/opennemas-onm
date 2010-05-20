@@ -1,12 +1,15 @@
 {* declare tag_* before header.tpl *}
 {tag_script src="edit_area/edit_area_full.js"}
 
+{* Categories pane *}
 {tag_script src="jquery.localisation-min.js"}
 {tag_script src="jquery.scrollTo-min.js"}
 {tag_script src="ui.multiselect.js"}
-
-
 {tag_link href="ui.multiselect.css"}
+
+{* Datetime picker *}
+{tag_script src="anytime.js"}
+{tag_link href="anytime.css"}
 
 
 {include file="header.tpl"}

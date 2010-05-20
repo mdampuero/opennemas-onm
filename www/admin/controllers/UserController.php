@@ -94,7 +94,7 @@ class UserController extends Onm_Controller_Action
             setcookie(session_name(), '', time()-42000, '/');
         }        
         
-        $this->redirector->gotoUrl(SITE_URL);
+        $this->redirector->gotoRoute(array(), 'user-login');
     }
     
 }
