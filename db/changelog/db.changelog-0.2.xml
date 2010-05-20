@@ -90,7 +90,32 @@
             <column name="version" type="int" defaultValueNumeric="0"/>
         </addColumn>
     </changeSet>
+    
+    <changeSet author="vifito" id="1274168334">
+        <comment>Refactoring table categories</comment>
+        
+        <dropColumn tableName="categories" columnName="inmenu"/>        
+        <dropColumn tableName="categories" columnName="internal_category"/>        
+        <dropColumn tableName="categories" columnName="logo_path"/>
+        <dropColumn tableName="categories" columnName="color"/>
+        <dropColumn tableName="categories" columnName="posmenu"/>
+        
+        <dropColumn tableName="categories" columnName="fk_content_category"/>
+        <addColumn tableName="categories">
+            <column name="fk_category" type="int" defaultValueNumeric="0"/>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="vifito" id="1274195863">
+        <addAutoIncrement tableName="categories" columnName="pk_category" columnDataType="int"/>
+    </changeSet>
 
+    <changeSet author="vifito" id="1274347817">
+        <comment>Change column name "metadata" field to "keywords"</comment>
+        
+        <renameColumn tableName="contents"
+            oldColumnName="metadata" newColumnName="keywords" columnDataType="varchar(255)"/>
+    </changeSet>
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
         <tagDatabase tag="0.2"/>
