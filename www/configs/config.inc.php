@@ -9,8 +9,6 @@ define ('APP_NAME', $_SERVER['SERVER_NAME']);
 define ('APP_DIR', '/var/lib/opennemas/' . APP_NAME);
 
 define ('SITE', APP_NAME);
-
-define ('SITE', "demo-opennemas.vifito.eu");
 define ('SITE_PATH',  realpath(dirname(__FILE__) . '/../') . '/' );
 define ('SITE_ADMIN_DIR', "admin");
 define ('SITE_ADMIN_TMP_DIR', "tmp");
