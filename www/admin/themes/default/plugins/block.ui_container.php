@@ -23,12 +23,22 @@
 function smarty_block_ui_container($params, $content, &$smarty)
 {
     $title = (isset($params['title']))? $params['title']: '';
-    $prepend = '
-        <div class="ui-widget">
-            <div class="ui-widget-header ui-corner-top">
+    
+    $hidden = (isset($params['hidden']))? $params['hidden']: false;
+    
+    $prepend = '<div class="ui-widget">';
+        
+    if($hidden) {        
+        $prepend .= '<div class="ui-widget-header ui-corner-all">
+                <h2>' . $title . '</h2>
+            </div>
+            <div class="ui-widget-content ui-corner-bottom ui-helper-hidden">';
+    } else {
+        $prepend .= '<div class="ui-widget-header ui-corner-top">
                 <h2>' . $title . '</h2>
             </div>
             <div class="ui-widget-content ui-corner-bottom">';
+    }
     
     
     $append = '</div></div>';
