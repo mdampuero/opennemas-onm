@@ -5,6 +5,11 @@ if (eregi('config.inc.php', $_SERVER['PHP_SELF'])) {
 
 define ('SS', "/");
 
+define ('APP_NAME', $_SERVER['SERVER_NAME']);
+define ('APP_DIR', '/var/lib/opennemas/' . APP_NAME);
+
+define ('SITE', APP_NAME);
+
 define ('SITE', "demo-opennemas.vifito.eu");
 define ('SITE_PATH',  realpath(dirname(__FILE__) . '/../') . '/' );
 define ('SITE_ADMIN_DIR', "admin");
@@ -52,8 +57,7 @@ define ('SYS_LOG_DEBUG', "1");
 define ('SYS_LOG_VERBOSE', "0");
 define ('SYS_LOG_INFO', "1");
 
-//define ('SYS_LOG', SITE_ADMIN_PATH."/log.txt");
-define ('SYS_LOG', '/var/lib/opennemas/xornal/log/application.log');
+define ('SYS_LOG', APP_DIR . '/log/application.log');
 define ('LOG_ENABLE', 0);
 
 define ('SYS_SESSION_TIME', "15");
@@ -61,8 +65,8 @@ define ('SYS_LOG_EMAIL', 'desarrollo@openhost.es');
 define ('SYS_NAME_GROUP_ADMIN', 'Administrador');
 
 // session.save_path
-define('OPENNEMAS_BACKEND_SESSIONS',  '/var/lib/opennemas/xornal/sessions/backend/');
-define('OPENNEMAS_FRONTEND_SESSIONS', '/var/lib/opennemas/xornal/sessions/frontend/');
+define('OPENNEMAS_BACKEND_SESSIONS',  APP_DIR . '/sessions/backend/');
+define('OPENNEMAS_FRONTEND_SESSIONS', APP_DIR . '/sessions/frontend/');
 
 /* [ MEDIA CONFIGURATION ] ********************************************************* */
 define ('MEDIA_UPLOAD', "0");
