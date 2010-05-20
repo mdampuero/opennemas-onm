@@ -45,7 +45,7 @@ function smarty_function_category_multiselect($params, &$smarty)
     $jsCode = '<script type="text/javascript">$(function(){ $("#' . $id . '").multiselect(); });</script>';
     
     // TODO: evaluate to implement $params['size'] ?
-    $html = '<select class="multiselect" name="' . $name . '" id="' . $id . '" multiple="multiple" style="width: 380px; height: 250px;">';
+    $html = '<select class="multiselect" name="' . $name . '" id="' . $id . '" multiple="multiple" style="width: 400px; height: 250px;">';
     
     foreach($categories as $cat) {
         $html .= '<option value="' . $cat->pk_category . '"';
