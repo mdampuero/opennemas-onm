@@ -17,37 +17,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Items/page:"
-msgstr ""
+msgstr "Items/page:"
 
 msgid "Page Manager"
-msgstr ""
+msgstr "Page Manager"
 
 msgid "New Article"
-msgstr ""
+msgstr "New Article"
 
 msgid "New Opinion"
-msgstr ""
+msgstr "New Opinion"
 
 msgid "New Advertisement"
-msgstr ""
+msgstr "New Advertisement"
 
 msgid "Upload Media"
-msgstr ""
+msgstr "Upload Media"
 
 msgid "Frontpage manager"
-msgstr ""
+msgstr "Frontpage manager"
 
 msgid "Pending"
-msgstr ""
+msgstr "Pending"
 
 msgid "Opinion manager"
-msgstr ""
+msgstr "Opinion manager"
 
 msgid "Comment manager"
-msgstr ""
+msgstr "Comment manager"
 
 msgid "Newsletter"
-msgstr ""
+msgstr "Newsletter"
 
 msgid "unread emails"
-msgstr ""
+msgstr "unread emails"
