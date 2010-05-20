@@ -31,15 +31,13 @@
  * @return string
  */
 function smarty_function_pane_info($params, &$smarty)
-{
-    if(!isset($params['content'])) {
-        $smarty->_trigger_fatal_error('[plugin] pane_info needs a "content" param');
-        return;
-    }
-    
+{    
     // Don't use $smarty to prevent assign values to "$content" variable
-    $tpl = new TemplateAdmin(TEMPLATE_ADMIN);    
-    $tpl->assign('content', $params['content']);
+    $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+    
+    if(isset($params['content'])) {
+        $tpl->assign('content', $params['content']);
+    }
     
     if(isset($params['legend'])) {
         $tpl->assign('legend', $params['legend']);

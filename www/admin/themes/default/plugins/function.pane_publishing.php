@@ -32,14 +32,12 @@
  */
 function smarty_function_pane_publishing($params, &$smarty)
 {
-    if(!isset($params['content'])) {
-        $smarty->_trigger_fatal_error('[plugin] pane_publishing needs a "content" param');
-        return;
-    }
-    
     // Don't use $smarty to prevent assign values to "$content" variable
     $tpl = new TemplateAdmin(TEMPLATE_ADMIN);    
-    $tpl->assign('content', $params['content']);
+
+    if(isset($params['content'])) {
+        $tpl->assign('content', $params['content']);
+    }
     
     if(isset($params['legend'])) {
         $tpl->assign('legend', $params['legend']);
