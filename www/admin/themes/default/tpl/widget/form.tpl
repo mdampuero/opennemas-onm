@@ -50,14 +50,14 @@
 </table>
 </div>
 
-<div style="float: right; width: 520px;">
-    {ui_container title="Categories"}
-        {pane_categories content=$widget}
+<div style="float: right; width: 560px;">
+    {ui_container title="Publishing"}
+        {pane_publishing content=$widget}
     {/ui_container}
     
-    {ui_container title="Publishing" hidden=true}
-        {pane_publishing content=$widget}
-    {/ui_container}        
+    {ui_container title="Categories"}
+        {pane_categories content=$widget}
+    {/ui_container}            
     
     {ui_container title="SEO" hidden=true}
         {pane_seo content=$widget}
