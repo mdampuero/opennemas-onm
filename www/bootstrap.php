@@ -20,18 +20,20 @@
  */
 
 /* *****************************************************************************
- ______      ___      _____     _  __    _____     _  _    _____    
-|      \\   / _ \\   / ____||  | |/ //  |  ___||  | \| || |  __ \\  
-|  --  //  / //\ \\ / //---`'  | ' //   | ||__    |  ' || | |  \ || 
-|  --  \\ |  ___  ||\ \\___    | . \\   | ||__    | .  || | |__/ || 
-|______// |_||  |_|| \_____||  |_|\_\\  |_____||  |_|\_|| |_____//  
-`------`  `-`   `-`   `----`   `-` --`  `-----`   `-` -`   -----`
+  ______    ____       ___      _  _     ______    _____     _  _    _____    
+ /_____//  |  _ \\    / _ \\   | \| ||  /_   _//  |  ___||  | \| || |  __ \\  
+ `____ `   | |_| ||  | / \ ||  |  ' ||  `-| |,-   | ||__    |  ' || | |  \ || 
+ /___//    | .  //   | \_/ ||  | .  ||    | ||    | ||__    | .  || | |__/ || 
+ `__ `     |_|\_\\    \___//   |_|\_||    |_||    |_____||  |_|\_|| |_____//  
+ /_//      `-` --`    `---`    `-` -`     `-`'    `-----`   `-` -`   -----`   
+ `-`      
 ****************************************************************************** */
 
+// APPLICATION_ENV (production|development)
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development')); 
 
-require_once '../configs/config.inc.php';
+require_once './configs/config.inc.php';
 
 /* *************************************************************************** */
 // Autoload {{{
@@ -117,7 +119,7 @@ unset($conn);
 /* *************************************************************************** */
 // Session config {{{
 Zend_Session::setOptions( array('strict'=>false) );
-$session = SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
+$session = SessionManager::getInstance(OPENNEMAS_FRONTEND_SESSIONS);
 $session->bootstrap();
 
 Zend_Registry::set('session', $session);
@@ -127,7 +129,7 @@ unset($session);
 
 /* *************************************************************************** */
 // Template {{{
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new Template(TEMPLATE_USER);
 Zend_Registry::set('tpl', $tpl);
 unset($tpl);
 
@@ -139,16 +141,19 @@ $front = Zend_Controller_Front::getInstance();
 // Routes
 $router = $front->getRouter();
 $router->removeDefaultRoutes();
-$router->addConfig( new Zend_Config_Xml('../configs/routes-backend.xml', APPLICATION_ENV) );
+$router->addConfig( new Zend_Config_Xml('./configs/routes-frontend.xml', APPLICATION_ENV) );
 
 // Load plugins
-$front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
 $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
 $front->registerPlugin( new Onm_Controller_Plugin_Template() );
 
 // No render by default
 $front->setParam('noViewRenderer', true);
 $front->setControllerDirectory('./controllers');
+
+var_dump($front);
+die();
+
 
 // Dispatch
 $front->dispatch();

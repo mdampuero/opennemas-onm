@@ -46,7 +46,7 @@
         
         <!-- Panel routes {{{ -->
         <panel-index type="Zend_Controller_Router_Route">
-            <route>panel/</route>
+            <route>/</route>
             <defaults>
                 <controller>panel</controller>
                 <action>index</action>
@@ -204,7 +204,20 @@
         
     </production>
     
-    <development extends="production"></development>
+    
+    
+    
+    <development extends="production">
+        
+        <devel-loadcontents type="Zend_Controller_Router_Route">
+            <route>devel/load-contents/</route>
+            <defaults>
+                <controller>devel</controller>
+                <action>loadcontents</action>
+            </defaults>
+        </devel-loadcontents>        
+        
+    </development>
 
 </routes>
 
