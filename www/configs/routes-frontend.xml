@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <!-- Index routes -->
+        <index-home type="Zend_Controller_Router_Route">
+            <route>/</route>
+            <defaults>
+                <controller>index</controller>
+                <action>home</action>
+            </defaults>
+        </index-home>
+        
+        <!-- Pages routes {{{ -->
+        <page-index type="Zend_Controller_Router_Route">
+            <route>pages/*</route>
+            <defaults>
+                <controller>page</controller>
+                <action>index</action>
+            </defaults>
+        </page-index>
+        <!-- }}} -->
+        
+        
+    </production>
+    
+    <development extends="production"></development>
+
+</routes>
+

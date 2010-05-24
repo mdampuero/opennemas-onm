@@ -1,11 +1,16 @@
 SetEnv APPLICATION_ENV development
 
-php_value  include_path         ".:/usr/share/php:../libs" 
+php_value  include_path         ".:/usr/share/php:../libs"
+php_flag   magic_quotes_gpc     Off
 php_flag   display_errors       On
+php_flag   display_startup_errors On
+php_flag   magic_quotes_sybase  Off
+php_flag   register_globals     Off
+php_value  error_reporting      6143
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
-RewriteRule ^.*$ bootstrap.php [NC,L]
+RewriteRule ^.*$ index.php [NC,L]

@@ -19,6 +19,15 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+/* *****************************************************************************
+ ______      ___      _____     _  __    _____     _  _    _____    
+|      \\   / _ \\   / ____||  | |/ //  |  ___||  | \| || |  __ \\  
+|  --  //  / //\ \\ / //---`'  | ' //   | ||__    |  ' || | |  \ || 
+|  --  \\ |  ___  ||\ \\___    | . \\   | ||__    | .  || | |__/ || 
+|______// |_||  |_|| \_____||  |_|\_\\  |_____||  |_|\_|| |_____//  
+`------`  `-`   `-`   `----`   `-` --`  `-----`   `-` -`   -----`
+****************************************************************************** */
+
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
@@ -86,7 +95,7 @@ unset($logger);
 
 /* *************************************************************************** */
 // Zend_Db config and connect {{{
-/* $params = array(
+$params = array(
     'host'     => BD_HOST,
     'username' => BD_USER,
     'password' => BD_PASS,
@@ -96,7 +105,7 @@ $db = Zend_Db::factory('Pdo_Mysql', $params);
 Zend_Db_Table::setDefaultAdapter($db);
 
 Zend_Registry::set('db', $db);
-unset($db); */
+unset($db);
 // }}}
 
 
@@ -111,10 +120,6 @@ if( APPLICATION_ENV == 'development' ) {
 }
 
 Zend_Registry::set('conn', $conn);
-
-// FIXME: dejar mientras desarrollo
-$GLOBALS['application']->conn = $conn;
-
 unset($conn);
 // }}}
 
