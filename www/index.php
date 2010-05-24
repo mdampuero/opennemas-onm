@@ -71,17 +71,17 @@ $autoloader->registerNamespace('Onm');
 
 /* *************************************************************************** */
 // Zend_Log config {{{
-//if( APPLICATION_ENV == 'development' ) {
-//    $writer = new Zend_Log_Writer_Firebug();
-//} else {
-//    $writer = new Zend_Log_Writer_Stream(SYS_LOG);
-//}
-//
-//$logger = new Zend_Log($writer);
-//Zend_Registry::set('logger', $logger);
-//
-//unset($writer);
-//unset($logger);
+if( APPLICATION_ENV == 'development' ) {
+    $writer = new Zend_Log_Writer_Firebug();
+} else {
+    $writer = new Zend_Log_Writer_Stream(SYS_LOG);
+}
+
+$logger = new Zend_Log($writer);
+Zend_Registry::set('logger', $logger);
+
+unset($writer);
+unset($logger);
 // }}}
 
 
