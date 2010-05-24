@@ -116,6 +116,14 @@
         <renameColumn tableName="contents"
             oldColumnName="metadata" newColumnName="keywords" columnDataType="varchar(255)"/>
     </changeSet>
+    
+    <changeSet author="vifito" id="1274701070">
+        <comment>Remove columns and home_columns. Use mask template now.</comment>
+        
+        <dropColumn tableName="articles" columnName="columns"/>        
+        <dropColumn tableName="articles" columnName="home_columns"/>
+    </changeSet>
+    
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
         <tagDatabase tag="0.2"/>
