@@ -19,7 +19,7 @@
         <dd>
             <div id="status">                
                 <input type="radio" name="status" id="status-available" value="AVAILABLE"
-                        {if $value->status == 'AVAILABLE'}checked="checked"{/if}/>
+                        {if !isset($value->status) || $value->status == 'AVAILABLE'}checked="checked"{/if}/>
                 <label for="status-available">{t}Available{/t}</label>
                 
                 

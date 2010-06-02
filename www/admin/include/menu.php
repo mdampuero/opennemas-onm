@@ -3,9 +3,9 @@
 $menuXml = <<<MENUSTRING
 <?xml version="1.0"?>
 <menu>
-    <submenu title="Frontpage" link="index.php" target="centro">
-        <node title="Home" link="index.php" />
-        <node title="Frontpage Manager" link="article.php" privilege="ARTICLE_FRONTPAGE" />
+    <submenu title="Frontpage">
+        <node title="Home" route="panel-index" />
+        <node title="Page Manager" route="page-index" privilege="ARTICLE_FRONTPAGE" />
         <node title="Widget Manager" route="widget-index" privilege="WIDGET_ADMIN" />
         <node title="Templates Manager" link="index.php" privilege="ARTICLE_FRONTPAGE" />
     </submenu>

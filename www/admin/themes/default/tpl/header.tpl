@@ -30,11 +30,12 @@
 <table width="100%" height="100%" cellpadding="0" cellspacing="0">
 <tbody>
 	<tr>
-		<td id="ocultar" height="100%" valign="top">
-				<table id="topbar-admin" cellpadding="0" cellspacing="0">
+		<td valign="top">
+				<table id="cuadromenu" cellpadding="0" cellspacing="0">
 				<tr>
 					<td id="logoonm">
-						<a href="index.php"  class="logout" title="Ir a la página principal de administración">
+						<a href="{baseurl}/{url route="panel-index"}" class="logout"
+                           title="Ir a la página principal de administración">
 							<img src="{$params.IMAGE_DIR}/logo-opennemas.png" border="0" align="absmiddle" alt="Inicio" width="136" height=30"" />&nbsp;
 						</a>
 					</td>
@@ -50,5 +51,5 @@
 				</tr>
 
 				<tr>
-					<td valign="top" align="left" width="100%" height="100%" colspan="4">
+					<td valign="top" align="left" width="100%" height="100%" colspan="3">
                         

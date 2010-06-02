@@ -59,10 +59,7 @@
                         <label for="fk_page">{t}Parent page{/t}</label>
                     </dt>
                     <dd>
-                        <select name="fk_page" id="fk_page">
-                            {if $page->fk_page == 0}
-                            <option value="0">{t}ROOT{/t}</option>
-                            {/if}
+                        <select name="fk_page" id="fk_page">                            
                             {page_select selected=$page->fk_page disableRecursive=$page->pk_page}
                         </select>
                         

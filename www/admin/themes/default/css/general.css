@@ -345,9 +345,9 @@ table.admintable td.key.vtop { vertical-align: top; }
 
 table.adminform {
 	background-color: #f9f9f9;
-	border: solid 1px #d5d5d5;
+	/*border: solid 1px #d5d5d5;
 
-	margin: 8px 0 10px 0;
+	margin: 8px 0 10px 0; */
 	margin-bottom: 15px;
 	width: 100%;
 }

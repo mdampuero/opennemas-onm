@@ -158,6 +158,11 @@ class PageManager
     }
     
     
+    public function existsRoot()
+    {
+        return $this->getRoot() != null;
+    }
+    
     /**
      * Get page by $pk_page
      *
