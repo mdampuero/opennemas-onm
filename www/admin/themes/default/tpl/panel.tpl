@@ -12,11 +12,11 @@
     <tbody>
         <tr>
             <td colspan="2">
-                <div id="cpanel" >
+                <div id="cpanel">
                     
                     {toolbar name="toolbar-top"}
                     
-                    
+                    {flashmessenger}
                     
                     {* acl isAllowed="FRONTPAGE_ADMIN"}
                 	<div style="float: left;">

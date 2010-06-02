@@ -47,8 +47,8 @@ class DevelController extends Onm_Controller_Action
         
         
         
-        $page = new Page();
-        $page = $page->getPageBySlug('home');
+        $pageMgr = PageManager::getInstance();
+        $page = $pageMgr->getRoot();
         
         $placeholders = array('content-center', 'content-right', 'content-left');
         
