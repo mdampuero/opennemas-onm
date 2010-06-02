@@ -64,7 +64,7 @@ class DevelController extends Onm_Controller_Action
         
         $placeholders = array('content-center', 'content-right', 'content-left');
         
-        for($i=40; $i <= $total; $i++) {
+        for($i=0; $i <= $total; $i++) {
             $q = sprintf($content, $i, $i, $i);
             $rs = $this->conn->Execute($q);
             if($rs === false) {
