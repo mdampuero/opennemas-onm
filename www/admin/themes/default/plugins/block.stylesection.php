@@ -54,7 +54,12 @@ function smarty_block_stylesection($params, $content, &$smarty, $open) {
             if( !isset($smarty->css_includes[ $section ]['deny']) ||
                 !in_array($source, $smarty->css_includes[ $section ]['deny']) ) {
                 
-                $output .= '<link href="'.$smarty->css_dir.$source.'"';
+                $cssDir = '';
+                if(!preg_match('|^http://|', $source)) {
+                    $cssDir = $smarty->css_dir;
+                }
+                
+                $output .= '<link href="'.$cssDir.$source.'"';
                 $output .= smarty_block_scriptstyle_render_attributes($tag['attrs']) . ' />'."\n";
             }
         }

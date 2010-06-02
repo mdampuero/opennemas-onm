@@ -116,12 +116,44 @@
         
         <!-- Pages routes {{{ -->
         <page-index type="Zend_Controller_Router_Route">
-            <route>pages/index/*</route>
+            <route>page/index/*</route>
             <defaults>
                 <controller>page</controller>
                 <action>index</action>
             </defaults>
         </page-index>
+        
+        <page-slugit type="Zend_Controller_Router_Route">
+            <route>page/slugit/</route>
+            <defaults>
+                <controller>page</controller>
+                <action>slugit</action>
+            </defaults>
+        </page-slugit>
+        
+        <page-create type="Zend_Controller_Router_Route">
+            <route>page/create/*</route>
+            <defaults>
+                <controller>page</controller>
+                <action>create</action>
+            </defaults>
+        </page-create>
+        
+        <page-update type="Zend_Controller_Router_Route">
+            <route>page/update/*</route>
+            <defaults>
+                <controller>page</controller>
+                <action>update</action>
+            </defaults>
+        </page-update>
+        
+        <page-delete type="Zend_Controller_Router_Route">
+            <route>page/delete/:id</route>
+            <defaults>
+                <controller>page</controller>
+                <action>delete</action>
+            </defaults>
+        </page-delete>
         
         <page-ajax-move type="Zend_Controller_Router_Route">
             <route>pages/ajax/move/:pk_page/:fk_page/:weight/</route>
@@ -154,6 +186,25 @@
                 <action>delete</action>
             </defaults>
         </page-ajax-delete>
+        <!-- }}} -->
+        
+        
+        <!-- Frontpage {{{ -->
+        <frontpage-edit type="Zend_Controller_Router_Route">
+            <route>frontpage/edit/:pk_page/</route>
+            <defaults>
+                <controller>frontpage</controller>
+                <action>edit</action>
+            </defaults>
+        </frontpage-edit>   
+        
+        <frontpage-savepositions type="Zend_Controller_Router_Route">
+            <route>frontpage/savepositions/</route>
+            <defaults>
+                <controller>frontpage</controller>
+                <action>savepositions</action>
+            </defaults>
+        </frontpage-savepositions>
         <!-- }}} -->
         
         
@@ -200,6 +251,25 @@
                 <action>delete</action>
             </defaults>
         </category-delete>
+        <!-- }}} -->
+        
+        
+        <!-- Keyword routes {{{ -->
+        <keyword-index type="Zend_Controller_Router_Route">
+            <route>keyword/index/*</route>
+            <defaults>
+                <controller>keyword</controller>
+                <action>index</action>
+            </defaults>
+        </keyword-index>        
+        
+        <keyword-service type="Zend_Controller_Router_Route">
+            <route>keyword/service/*</route>
+            <defaults>
+                <controller>keyword</controller>
+                <action>service</action>
+            </defaults>
+        </keyword-service>
         <!-- }}} -->
         
     </production>

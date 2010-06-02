@@ -23,7 +23,7 @@
  * Pane with categories form
  * 
  * <code>
- * {pane_categories content=$widget legend="Legend title"}
+ * {pane_categories value=$widget legend="Legend title"}
  * {pane_categories selected=$scategories_selected}
  * </code>
  * @param array $params
@@ -34,12 +34,12 @@ function smarty_function_pane_categories($params, &$smarty)
 {    
     $selected = array();
     
-    if( isset($params['content']) ) {
+    if( isset($params['value']) ) {
         // Get categories of content
         $request = $smarty->get_template_vars('request');
         
         if($request->getActionName() == "update") {
-            $selected =  $params['content']->belongsToCategories();
+            $selected =  $params['value']->belongsToCategories();
         }
         
     } elseif(isset($params['selected'])) {

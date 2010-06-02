@@ -23,8 +23,8 @@
  * Pane with seo form
  * 
  * <code>
- * {pane_seo content=$widget legend="Legend title"}
- * {pane_seo content=$widget}
+ * {pane_seo value=$widget legend="Legend title" route_slugit="content-index" route_keywords="keyword-service"}
+ * {pane_seo value=$widget}
  * </code>
  * @param array $params
  * @param Smarty $smarty
@@ -35,12 +35,16 @@ function smarty_function_pane_seo($params, &$smarty)
    // Don't use $smarty to prevent assign values to "$content" variable
     $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
     
-    if(isset($params['content'])) {
-        $tpl->assign('content', $params['content']);
+    if(!isset($params['route_slugit'])) {
+        $tpl->assign('route_slugit', 'content-slugit');        
     }
     
-    if(isset($params['legend'])) {
-        $tpl->assign('legend', $params['legend']);
+    if(!isset($params['route_keywords'])) {
+        $tpl->assign('route_keywords', 'keyword-service');        
+    }    
+    
+    foreach($params as $k => $v) {
+        $tpl->assign($k, $v);
     }
     
     return $tpl->fetch('panes/seo.tpl');

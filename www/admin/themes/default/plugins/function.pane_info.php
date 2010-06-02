@@ -23,8 +23,8 @@
  * Pane with information of content
  * 
  * <code>
- * {pane_info content=$widget legend="Legend title"}
- * {pane_info content=$widget}
+ * {pane_info value=$widget legend="Legend title"}
+ * {pane_info value=$widget}
  * </code>
  * @param array $params
  * @param Smarty $smarty
@@ -35,8 +35,10 @@ function smarty_function_pane_info($params, &$smarty)
     // Don't use $smarty to prevent assign values to "$content" variable
     $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
     
-    if(isset($params['content'])) {
-        $tpl->assign('content', $params['content']);
+    if(isset($params['value']) && !empty($params['value'])) {
+        $tpl->assign('value', $params['value']);
+    } else {
+        return '';
     }
     
     if(isset($params['legend'])) {
