@@ -72,11 +72,11 @@ function smarty_function_page_select($params, &$smarty)
     
     // Check if it's the first node
     if(!$pageMgr->existsRoot()) {
-        $html .= '<option value="0"> &oplus; </option>';
+        $html .= '<option value="0"> + </option>';
     } elseif(isset($params['selected'])) {
         $page = $pageMgr->get($params['selected']);
         if(!empty($page) && $page->fk_page == 0) {
-            $html .= '<option value="0" selected="selected"> &oplus; </option>';
+            $html .= '<option value="0" selected="selected"> + </option>';
         }
     }
     
