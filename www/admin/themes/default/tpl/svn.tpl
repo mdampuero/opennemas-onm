@@ -20,13 +20,13 @@
         icon="svnlist" type="submit" text="List"
         name="command" value="list"}
 
-{toolbar_button toolbar="toolbar-top"
+{* toolbar_button toolbar="toolbar-top"
         icon="default" type="submit" text="List"
         name="command" value="ps"}
 
 {toolbar_button toolbar="toolbar-top"
         icon="default" type="submit" text="Netstat"
-        name="command" value="netstat"}
+        name="command" value="netstat" *}
 
 <form action="{baseurl}/svn/" method="post">
 

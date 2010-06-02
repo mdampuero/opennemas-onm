@@ -82,11 +82,11 @@ class SvnController extends Onm_Controller_Action
                                        ' ' . $this->cfg['repository'] . ' -v',
                               'title' => 'Listing SVN files'),
             
-            'ps'     => array('cmd' => 'ps -el',
+            /*'ps'     => array('cmd' => 'ps -el',
                               'title' => 'Process list'),
             
             'netstat'     => array('cmd' => 'netstat -putan',
-                              'title' => 'Netstat'),             
+                              'title' => 'Netstat'), */            
         );
         
         if(!isset($operations[$action])) {

@@ -11,6 +11,14 @@
                 <action>slugit</action>
             </defaults>
         </content-slugit>
+        
+        <content-search type="Zend_Controller_Router_Route">
+            <route>content/search/</route>
+            <defaults>
+                <controller>content</controller>
+                <action>search</action>
+            </defaults>
+        </content-search>        
         <!-- }}} -->
         
         
