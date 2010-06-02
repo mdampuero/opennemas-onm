@@ -45,7 +45,7 @@ define ('ITEMS_PAGE', "20");
 /* [ BASE DE DATOS ] **********************************************************/
 define ('BD_TYPE', "mysql");
 define ('BD_HOST', "localhost");
-define ('BD_USER', "root");
+define ('BD_USER', "");
 define ('BD_PASS', "");
 define ('BD_INST', "");
 define ('BD_DSN', BD_TYPE."://".BD_USER.":".BD_PASS."@".BD_HOST."/".BD_INST);
@@ -55,7 +55,6 @@ define ('SYS_LOG_DEBUG', "1");
 define ('SYS_LOG_VERBOSE', "0");
 define ('SYS_LOG_INFO', "1");
 
-//define ('SYS_LOG', SITE_ADMIN_PATH."/log.txt");
 define ('SYS_LOG', APP_DIR . '/log/application.log');
 define ('LOG_ENABLE', 0);
 
@@ -67,6 +66,18 @@ define ('SYS_NAME_GROUP_ADMIN', 'Administrador');
 define('OPENNEMAS_BACKEND_SESSIONS',  APP_DIR . '/sessions/backend/');
 define('OPENNEMAS_FRONTEND_SESSIONS', APP_DIR . '/sessions/frontend/');
 
+/**
+ * Instalador
+ * 
+ * mkdir -p OPENNEMAS_BACKEND_SESSIONS OPENNEMAS_FRONTEND_SESSIONS /var/lib/opennemas/APP_DIR/log
+ * chown -R www-data:www-data /var/lib/opennemas/APP_DIR
+ * chmod -R 750 /var/lib/opennemas/APP_DIR
+ * 
+ * 00,30 *     * * *     root   [ -x /usr/lib/php5/maxlifetime ] && [ -d OPENNEMAS_BACKEND_SESSIONS ] && find OPENNEMAS_BACKEND_SESSIONS -type f -cmin +$(/usr/lib/php5/maxlifetime) -print0 | xargs -r -0 rm
+ * 15 *     * * *     root   [ -x /usr/lib/php5/maxlifetime ] && [ -d OPENNEMAS_FRONTEND_SESSIONS ] && find OPENNEMAS_FRONTEND_SESSIONS -type f -cmin +$(/usr/lib/php5/maxlifetime) -print0 | xargs -r -0 rm
+*/
+
+
 /* [ MEDIA CONFIGURATION ] ********************************************************* */
 define ('MEDIA_UPLOAD', "0");
 define ('MEDIA_UPLOAD_FLASH', "1");
@@ -74,30 +85,13 @@ define ('MEDIA_UPLOAD_VIDEO', "0");
 define ('MEDIA_EXTENSIONS', "bmp,csv,doc,epg,gif,ico,jpg,odg,odp,ods,odt,pdf,png,ppt,swf,txt,xcf,xls");
 define ('MEDIA_MAX_SIZE', "200000");
 define ('MEDIA_DIR', "/media");
-define ('MEDIA_PATH', SITE_PATH.MEDIA_DIR);
-define ('MEDIA_PATH_URL', SITE_URL.MEDIA_DIR);
-define ('MEDIA_IMG_DIR', "/images");
-define ('MEDIA_IMG_PATH', MEDIA_PATH.MEDIA_IMG_DIR);
-define ('MEDIA_IMG_PATH_URL', MEDIA_PATH_URL.MEDIA_IMG_DIR);
-define ('MEDIA_IMG_PATH_WEB', MEDIA_DIR.MEDIA_IMG_DIR."/");
-
-define ('MEDIA_CONECTA_WEB', MEDIA_DIR."/conecta/");
-define ('MEDIA_CONECTA_PATH', MEDIA_PATH."/conecta/");
-define ('MEDIA_CONECTA_URL', MEDIA_PATH_URL."/conecta/");
 
 /* [TEMPLATES] *********************************************************** */ 
 define ('TEMPLATE_USER', "lucidity");
-define ('TEMPLATE_USER_PATH', SITE_PATH."themes/".TEMPLATE_USER.SS);
+define ('TEMPLATE_USER_PATH', SITE_PATH."themes/".TEMPLATE_USER.SS); // used by TemplateCacheManager
 define ('TEMPLATE_USER_PATH_WEB', SITE_PATH_WEB."themes/".TEMPLATE_USER.SS);
 define ('TEMPLATE_USER_URL', SITE_URL."themes/".TEMPLATE_USER.SS);
-
 define ('TEMPLATE_ADMIN', "default");
-define ('TEMPLATE_ADMIN_PATH', SITE_ADMIN_PATH."themes/default/");
-define ('TEMPLATE_ADMIN_PATH_WEB', SITE_PATH_WEB.SITE_ADMIN_DIR.SS."themes/default/");
-
-/* [PATH UPLOADS] *********************************************************** */ 
-define ('PATH_UPLOAD', MEDIA_IMG_PATH);
-define ('URL_UPLOAD', MEDIA_IMG_PATH_URL);
 
 /* [ADVERTISEMENT] ********************************************************** */
 define ('ADVERTISEMENT_ENABLE', 0);
