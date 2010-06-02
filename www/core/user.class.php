@@ -38,7 +38,8 @@ class User
      * @access public
      * @var string
      */
-    var $id               = null;
+    var $id               = null; // deprecated
+    var $pk_user          = null;
     var $login            = null;
     var $password         = null;
     var $sessionexpire    = null;
@@ -48,7 +49,7 @@ class User
     var $lastname         = null;
     var $address          = null;
     var $phone            = null;
-    var $id_user_group    = null;
+    var $id_user_group    = null; // deprecated
     var $accesscategories = null;
     var $fk_user_group    = null;
     /**#@-*/
@@ -57,20 +58,36 @@ class User
      * @var string
      */
     var $authMethod = null;
+    
+    /**
+     *
+     */
     var $clientLoginToken = null;
     
+    /**
+     * @var MethodCacheManager
+     */
     public $cache = null;
     
     /**
-     * Compatible PHP4 constructor
+     * @var ADOConnection
+     */
+    private $conn = null;
+    
+    /**
+     * Constructor
      *
      * @see MethodCacheManager
      * @param int $id User Id
      */
-    public function User($id=null)
+    public function __construct($id=null)
     {
         if(!is_null($id)) {
             $this->read($id);
+        }
+        
+        if(Zend_Registry::isRegistered('conn')) {
+            $this->conn = Zend_Registry::get('conn');
         }
         
         // Use MethodCacheManager
@@ -81,13 +98,6 @@ class User
         }
     }
     
-    /**
-     * PHP5 constructor
-     */
-    public function __construct($id=null)
-    {
-        $this->User($id);
-    }
     
     public function create($data)
     {
@@ -102,14 +112,14 @@ class User
                         $data['id_user_group']);   
                         
         
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if($this->conn->Execute($sql, $values) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             
             return(false);
         }        
-        $this->id = $GLOBALS['application']->conn->Insert_ID();
+        $this->id = $this->conn->Insert_ID();
         
         //Insertar las categorias de acceso.
         if(isset($data['ids_category'])) {
@@ -122,17 +132,18 @@ class User
     public function read($id)
     {
         $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $this->conn->Execute( $sql );
         
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             
             return;
         }
         
-        $this->id               = $rs->fields['pk_user'];
+        // Deprecated {{{
+        /* $this->id               = $rs->fields['pk_user'];
         $this->login            = $rs->fields['login'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
@@ -142,14 +153,45 @@ class User
         $this->lastname         = $rs->fields['lastname'];
         $this->address          = $rs->fields['address'];
         $this->phone            = $rs->fields['phone'];
-        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->id_user_group    = $rs->fields['fk_user_group']; */
+        // }}}
+        $this->loadProperties($rs->fields);
+        
         $this->accesscategories = $this->readAccessCategories();
     }
-
+    
+    
+    /**
+     * Load properties on object
+     *
+     * <code>
+     * 
+     * </code>
+     *
+     * @param array $assocProps
+     * @return mixed
+     */
+    public function loadProperties($assocProps, $object=null)
+    {
+        if(is_null($object)) {
+            $object = $this;
+        }
+        
+        foreach($assocProps as $prop => $val) {
+            if(property_exists($object, $prop)) {
+                $object->{$prop} = $val;
+            }
+        }
+        
+        return $object;
+    }
+    
+    
+    
     public function update($data)
     {
         // Init transaction
-        $GLOBALS['application']->conn->BeginTrans();
+        $this->conn->BeginTrans();
         
         if(isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users SET `login`=?, `password`= ?, `sessionexpire`=?,
@@ -173,13 +215,13 @@ class User
                          $data['address'], $data['phone'], $data['id_user_group'] );
         }
         
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if($this->conn->Execute($sql, $values) === false) {
             // Rollback
-            $GLOBALS['application']->conn->RollbackTrans();
+            $this->conn->RollbackTrans();
             
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             
             return;
         }
@@ -190,17 +232,17 @@ class User
         }
         
         // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
+        $this->conn->CommitTrans();
     }
 
     public function delete($id)
     {
         $sql = 'DELETE FROM users WHERE pk_user='.intval($id);
         
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if($this->conn->Execute($sql)===false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             
             return false;
         }
@@ -220,12 +262,12 @@ class User
             }
             
             // bulk insert
-            if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                $GLOBALS['application']->conn->RollbackTrans();
+            if($this->conn->Execute($sql, $values) === false) {
+                $this->conn->RollbackTrans();
                 
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $error_msg = $this->conn->ErrorMsg();
+                Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+                
                 
                 return false;
             }
@@ -240,12 +282,12 @@ class User
     {
         $id = (!is_null($id))? $id: $this->id;
         $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = ?';
-        $rs = $GLOBALS['application']->conn->Execute( $sql, $id );
+        $rs = $this->conn->Execute( $sql, $id );
         
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             
             return null;
         }
@@ -265,12 +307,12 @@ class User
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user='.intval($this->id);
         
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $GLOBALS['application']->conn->RollbackTrans();
+        if($this->conn->Execute($sql)===false) {
+            $this->conn->RollbackTrans();
             
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             return false;
         }
         return true;
@@ -302,9 +344,9 @@ class User
         $_SESSION['email']      = $this->email;
         
         // SYS_NAME_GROUP_ADMIN defined into config.inc.php
-        $_SESSION['isAdmin']    = ( User_group::getGroupName($this->fk_user_group)==SYS_NAME_GROUP_ADMIN );
+        $_SESSION['isAdmin']    = ( UserGroup::getGroupName($this->fk_user_group)==SYS_NAME_GROUP_ADMIN );
         
-        $_SESSION['privileges'] = Privilege::get_privileges_by_user($this->id);
+        $_SESSION['privileges'] = Privilege::getPrivilegesByUser($this->id);
         $_SESSION['accesscategories'] = $this->get_access_categories_id();
         
         // Method authentication: database|google_clientlogin
@@ -323,9 +365,8 @@ class User
      * @param string $email
      * @return boolean
      */
-    public function isValidEmail($email) {
-        // TODO: restrict accounts to @xornaldegalicia.com
-        // return preg_match('/.+@xornaldegalicia.com/', $email);
+    public function isValidEmail($email)
+    {
         return preg_match('/.+@.+\..+/', $email);
     }
     
@@ -339,12 +380,12 @@ class User
     public function authDatabase($login, $password)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $this->conn->Execute( $sql );
         
         if(!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             return false;
         }
         
@@ -372,11 +413,7 @@ class User
      * @return boolean|array
      */
     public function authGoogleClientLogin($email, $passwd, $loginToken=null, $loginCaptcha=null)
-    {
-        require_once 'Zend/Loader.php';
-        Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
-        Zend_Loader::loadClass('Zend_Gdata');
-        
+    {        
         try {
             $client = Zend_Gdata_ClientLogin::getHttpClient($email, $passwd, 'xapi', null, 'Zend-ZendFramework',
                                                             $loginToken, $loginCaptcha);
@@ -418,12 +455,12 @@ class User
     public function getPwd($login)
     {
         $sql = 'SELECT password FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $this->conn->Execute( $sql );
         
         if(!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             return false;
         }
         
@@ -440,12 +477,12 @@ class User
     public function getUserDataByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
+        $rs  = $this->conn->Execute($sql, array($email));
         
         if(!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             return null;
         }
         
@@ -549,7 +586,7 @@ class User
     public function users_online()
     {
         $sql = 'SELECT COUNT (*) FROM users WHERE online=1';
-        return( $GLOBALS['application']->conn->Execute($sql));
+        return( $this->conn->Execute($sql));
     }
     
     public function get_users($filter=null, $_order_by='ORDER BY 1')
@@ -559,7 +596,7 @@ class User
         
         $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $_order_by;
         
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $this->conn->Execute($sql);
         if($rs !== false) {
             while(!$rs->EOF) {
                 $user = new User();
@@ -607,11 +644,11 @@ class User
     public function get_user_name($id)
     {
         $sql = 'SELECT name, login FROM users WHERE pk_user='.$id;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $this->conn->Execute($sql);
          if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg('Error: '.$error_msg);
+            
             return false;
         }
         //Se cambia name por login.

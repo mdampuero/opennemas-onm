@@ -1,47 +1,53 @@
-{* panes/publishing.tpl *}
+{* *****************************************************************************
+ * {include file="panes/publishing.tpl" value=$content legend="Publishing"}
+ * Pane name:
+ *    panes/publishing.tpl
+ *    
+ * Params:
+ *    $value
+ *    $legend (optional)
+ ***************************************************************************** *}
 
-<fieldset id="pane-publishing">
+<fieldset id="pane-publishing" class="{$className}">
     
-    {if isset($legend)}<legend>{$legend}</legend>{/if}
+    {if isset($legend)}<legend>{t}{$legend}{/t}</legend>{/if}
     
     <dl>
         <dt>
             <label>{t}Status{/t}</label>
         </dt>
         <dd>
-            {* TODO: enhance with button switcher with iphone style *}
-            <label for="status-available">
-                {t}Available{/t}
+            <div id="status">                
                 <input type="radio" name="status" id="status-available" value="AVAILABLE"
-                    {if $content->status == 'AVAILABLE'}checked="checked"{/if}/>
-            </label>
-            
-            <label for="status-pending">
-                {t}Pending{/t}
+                        {if $value->status == 'AVAILABLE'}checked="checked"{/if}/>
+                <label for="status-available">{t}Available{/t}</label>
+                
+                
                 <input type="radio" name="status" id="status-pending" value="PENDING"
-                    {if $content->status == 'PENDING'}checked="checked"{/if}/>
-            </label>
+                        {if $value->status == 'PENDING'}checked="checked"{/if}/>
+                <label for="status-pending">{t}Pending{/t}</label>
+            </div>
         </dd>
         
         <dt>
             <label for="starttime">{t}Start publishing{/t}</label>
         </dt>
         <dd>
-            <input type="text" name="starttime" id="starttime" value="{$content->starttime}"/>
+            <input type="text" name="starttime" id="starttime" value="{$value->starttime}"/>
         </dd>
         
         <dt>
             <label for="endtime">{t}End publishing{/t}</label>
         </dt>
         <dd>
-            <input type="text" name="endtime" id="endtime" value="{$content->endtime}"/>
+            <input type="text" name="endtime" id="endtime" value="{$value->endtime}"/>
         </dd>
         
         <dt>
             <label for="published">{t}Published date{/t}</label>
         </dt>
         <dd>
-            <input type="text" name="published" id="published" value="{$content->published}"/>
+            <input type="text" name="published" id="published" value="{$value->published}"/>
         </dd>
     </dl>
 </fieldset>
@@ -58,6 +64,8 @@ $(document).ready(function() {
     $("#starttime").AnyTime_picker(dtOptions);    
     $("#endtime").AnyTime_picker(dtOptions);    
     $("#published").AnyTime_picker(dtOptions);
+    
+    $("#status").buttonset();
 });
 /* ]]> */
 </script>

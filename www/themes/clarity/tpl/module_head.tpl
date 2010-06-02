@@ -35,7 +35,7 @@
         <meta name="description" content="También arquitectura - su portal de noticias sobre arquitectura, interiorismo y decoración." />
         
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>{$article->title|clearslash} - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE} </title>
+            <title>{$article->title} - {$category_data.title} - {$smarty.const.SITE_TITLE} </title>
 
 
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection">

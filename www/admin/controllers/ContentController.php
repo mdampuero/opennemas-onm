@@ -39,9 +39,10 @@ class ContentController extends Onm_Controller_Action
         // Check if it's a request was performed via XmlHttpRequest
         if( $this->getRequest()->isXmlHttpRequest() ) {
             $title = $this->_getParam('title', '');
+            $pk_content = $this->_getParam('pk_content', -1);
             
             $contMgr = new ContentManager();            
-            echo $contMgr->slugIt($title);            
+            echo $contMgr->slugIt($title, $pk_content);            
         }
     }
     

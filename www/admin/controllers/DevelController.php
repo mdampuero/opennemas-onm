@@ -33,26 +33,26 @@ class DevelController extends Onm_Controller_Action
     public function loadcontentsAction()
     {
         $queries = array();
-        $total = $this->_getParam('total', 30);
+        $total = $this->_getParam('total', 50);
         
-        $this->conn->Execute('DELETE FROM `contents` WHERE `pk_content` IN (' . implode(',', range(0, $total)) . ')');
-        $this->conn->Execute('DELETE FROM `articles` WHERE `pk_article` IN (' . implode(',', range(0, $total)) . ')');
-        $this->conn->Execute('DELETE FROM `contents_pages` WHERE `pk_fk_content` IN (' . implode(',', range(0, $total)) . ')');
+        $this->conn->Execute('DELETE FROM `contents` WHERE `pk_content` IN (' . implode(',', range(40, $total)) . ')');
+        $this->conn->Execute('DELETE FROM `articles` WHERE `pk_article` IN (' . implode(',', range(40, $total)) . ')');
+        $this->conn->Execute('DELETE FROM `contents_pages` WHERE `pk_fk_content` IN (' . implode(',', range(40, $total)) . ')');
         
         $content = "INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`, `keywords`, `starttime`, `endtime`, `created`, `changed`, `fk_author`, `fk_publisher`, `fk_user_last_editor`, `views`, `status`, `published`, `slug`, `version`) VALUES (%d, '1', 'Article %d', 'Description description description description description description description description description description description description description description description', 'description', NULL, NULL, NULL, NULL, '1', '1', '1', NULL, 'AVAILABLE', NULL, 'article-%d', '0')";
         
         $article = "INSERT INTO `articles` (`pk_article`, `summary`, `body`, `img1`, `subtitle`, `img1_footer`, `img2`, `img2_footer`, `agency`, `fk_video`, `with_comment`, `fk_video2`, `footer_video2`, `footer_video1`, `title_int`) VALUES ('%d', 'summary summary summary summary ', 'body body body body body body ', NULL, 'subtitle', NULL, NULL, NULL, NULL, NULL, '1', NULL, NULL, NULL, '');";
         
-        $contents_pages = "INSERT INTO `contents_pages` (`pk_fk_page`, `pk_fk_content`, `pk_placeholder`, `pk_weight`, `mask`, `params`) VALUES ('%d', '%d', '%s', '%d', NULL, NULL);";
+        $contents_pages = "INSERT INTO `contents_pages` (`pk_fk_page`, `pk_fk_content`, `pk_placeholder`, `pk_weight`, `mask`, `params`) VALUES ('%d', '%d', '%s', '%d', 'frontpage_article_lateral', NULL);";
         
         
         
         $page = new Page();
-        $page = $page->getPageBySlug('home');
+        $page = $page->getPageBySlug('galiza');
         
-        $placeholders = array('content-left', 'content-center', 'content-right','content-long');
+        $placeholders = array('content-center', 'content-right');
         
-        for($i=1; $i <= $total; $i++) {
+        for($i=40; $i <= $total; $i++) {
             $q = sprintf($content, $i, $i, $i);
             $this->conn->Execute($q);
             

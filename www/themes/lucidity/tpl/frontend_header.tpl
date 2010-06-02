@@ -4,24 +4,24 @@
     @theme      Lucidity
 *}
 
- <div id="info-top" class="clearfix span-24">
+<div id="info-top" class="clearfix span-24">
 
     <div id="current-day">
          {insert name="time"} 
     </div>
 
-     {include file="widget_weather.tpl"}
+    {include file="widget_weather.tpl"}
 
 </div>
 
 <div id="logo" class="clearfix">
 
     <div id="logo-image" class="span-8" style="width:700px;">
-        {if preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
+        {if $request->getControllerName() == 'video' }
 
             <a href="/" title="Pulse aquí para ir a la portada de {$smarty.const.SITE_TITLE}">
-                    <img src="{$params.IMAGE_DIR}/main-logo.big-black.png" alt="{$smarty.const.SITE_TITLE}" />
-                    <img src="{$params.IMAGE_DIR}/logo-sections/video.png" alt="Video" />
+                <img src="{$params.IMAGE_DIR}/main-logo.big-black.png" alt="{$smarty.const.SITE_TITLE}" />
+                <img src="{$params.IMAGE_DIR}/logo-sections/video.png" alt="Video" />
             </a>
 
         {else}
@@ -39,7 +39,7 @@
     </div>
 
     <div class="span-16">
-
+        
     </div>
 
 </div>

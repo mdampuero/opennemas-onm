@@ -40,9 +40,22 @@ class Page
     private $type;
     private $grid;
     private $theme;
-    private $color;
+    private $inline_styles;
     private $params;
-    private $weight;    
+    private $weight;
+    
+    private $fk_author;
+    private $fk_publisher;
+    private $fk_user_last_editor;
+    private $hits;
+    private $starttime;
+    private $endtime;
+    private $created;
+    private $changed;
+    private $published;
+    private $menu_title;
+    private $short_url;
+    private $version;
     
     public  $cache = null;
     private $conn  = null;
@@ -77,42 +90,77 @@ class Page
     }
     
     public function create($data)
-    {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
+    {        
+        // Prepare array data with default values if it's necessary
+        $this->prepareData(&$data);
         
-        $fields = array('fk_page', 'title', 'slug', 'description',
-                        'keywords', 'status', 'type', 'grid',
-                        'theme', 'color', 'params', 'weight');
+        $fields = array(
+            'fk_page', 'title', 'menu_title', 'short_url',
+            'slug', 'description', 'keywords',
+            'grid', 'theme', 'params', 'weight', 'status', 'type',
+            'inline_styles',
+            'fk_author', 'fk_publisher', 'fk_user_last_editor',
+            'hits', 'starttime', 'endtime',
+            'created', 'changed', 'published', 
+        );
         
-        $id = SqlHelper::bindAndInsert('pages', $fields, $data, $conn);
+        $data['params'] = serialize($data['params']);
+        
+        $id = SqlHelper::bindAndInsert('pages', $fields, $data, $this->conn);
         
         return $id;
     }
     
-    public function read($pk_page)
+    
+    /**
+     * Prepare default values
+     *
+     * @param array $data
+     */
+    public function prepareData($data)
     {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
+        $pageMgr = PageManager::getInstance();
         
-        $sql = 'SELECT * FROM pages WHERE pk_page=?';
-        $rs  = $conn->Execute($sql, array($pk_page));        
+        $defaults = array(
+            'fk_page' => $pageMgr->getRoot()->pk_page,  
+            'weight'  => 0,
+            'status'  => 'PENDING',
+            'type'    => 'STANDARD',
+            'hits'    => 0,
+            
+            'starttime' => '0000-00-00 00:00:00',
+            'endtime'   => '0000-00-00 00:00:00',
+            
+            'created'   => date('Y-m-d H:i:s'),
+            'changed'   => date('Y-m-d H:i:s'),
+            'published' => date('Y-m-d H:i:s'),
+            
+            // TODO: remove $_SESSION['userid'] by object to manage session, $sess->getUserId()
+            'fk_author'    => $_SESSION['userid'],
+            'fk_publisher' => $_SESSION['userid'],
+            'fk_user_last_editor' => $_SESSION['userid'],
+            
+            'version'=> 0,
+        );
+        
+        $data = $data + $defaults;
+    }
+    
+    
+    public function read($pk_page)
+    {        
+        $sql = 'SELECT * FROM `pages` WHERE `pk_page` = ?';
+        $rs  = $this->conn->Execute($sql, array($pk_page));        
         
         if(($rs !== false) && (!$rs->EOF)){
-            $this->_loadProperties($rs->fields);
+            $this->loadProperties($rs->fields);
         }                
     }
     
     public function getRoot()
-    {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
-        
+    {        
         $sql = 'SELECT pk_page FROM pages WHERE fk_page = 0 ORDER BY weight';
-        $pk_page  = $conn->GetOne($sql);        
+        $pk_page  = $this->conn->GetOne($sql);        
         
         if($pk_page === false) {
             return null;
@@ -123,16 +171,35 @@ class Page
     
     public function update($data, $pk_page)
     {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
-        
+        // TODO: validation
         $filter = 'pk_page = ' . $pk_page;
-        $fields = array('fk_page', 'title', 'slug', 'description',
-                        'keywords', 'status', 'type', 'grid',
-                        'theme', 'color', 'params', 'weight');
+        $fields = array(
+            'fk_page', 'title', 'menu_title', 'short_url',
+            'slug', 'description', 'keywords',
+            'grid', 'theme', 'params', 'weight', 'status', 'type',
+            'inline_styles',
+            'fk_publisher', 'fk_user_last_editor',
+            'starttime', 'endtime',
+            'changed', 'published',
+            'version',
+        );
         
-        SqlHelper::bindAndUpdate('pages', $fields, $data, $filter, $conn);        
+        $this->prepareData(&$data);
+        
+        // TODO: implement class Params
+        $data['params'] = serialize($data['params']);
+        
+        // Check optimistic locking
+        if( isset($data['version']) ) {
+            if( !$this->isLastVersion($data['version'], $data['pk_page']) ) {
+                throw new OptimisticLockingException();
+            } else {
+                // Increment version
+                $data['version'] += 1;
+            }
+        }
+        
+        SqlHelper::bindAndUpdate('pages', $fields, $data, $filter, $this->conn);        
     }
     
     /**
@@ -149,11 +216,7 @@ class Page
         if(!$this->hasChildPages()) {
             $sql = 'DELETE FROM pages WHERE pk_page = ?';
             
-            // Get connection
-            // $conn = Zend_Registry::get('conn');
-            $conn = $GLOBALS['application']->conn;
-            
-            $rs = $conn->Execute($sql, array($pk_page));
+            $rs = $this->conn->Execute($sql, array($pk_page));
             if($rs === false) {
                 throw new Exception( $conn->ErrorMsg() );
             }
@@ -162,15 +225,41 @@ class Page
         return false;
     }
     
-    public function generateSlug($title)
+    
+    /**
+     * Use field version for optimistic locking
+     *
+     * @param int $version
+     * @param int $pk_page
+     * @return boolean
+     */
+    public function isLastVersion($version, $pk_page)
+    {
+        $sql = 'SELECT version FROM `pages` WHERE `pk_page` = ' . intval($pk_page);
+        $currentVersion = $this->conn->GetOne($sql);
+        
+        return $currentVersion == $version;
+    }    
+    
+    
+    /**
+     * Generate a unique slug 
+     *
+     * @use Onm_Filter_Slug
+     * @param string $title
+     * @param int $excludeId
+     * @return string
+     */
+    public function generateSlug($title, $excludeId=null)
     {
         $filter = new Onm_Filter_Slug();
-        $slugs  = $this->_getSlugs();
+        $slug   = $filter->filter($title);
         
-        $slug = $filter->filter($title);
+        // TODO: evaluate performance
+        // Get all slugs in database
+        $slugs = $this->_getSlugs($excludeId);
         
-        if(in_array($slug, $slugs)) {
-            
+        if(in_array($slug, $slugs)) {            
             $i = 1;            
             $new = $slug . '-' . $i;
             
@@ -185,16 +274,70 @@ class Page
         return $slug;
     }
     
+    
     /**
-     * 
+     * Assemble route for this page
+     * IMPORTANT: use only from FrontEnd, otherwise
+     * FIXME: solve problem if this method called from backend
+     *
+     * @return string
      */
-    private function _getSlugs()
-    {        
-        $sql   = 'SELECT slug FROM pages';
+    public function getPermalink()
+    {
+        $front = Zend_Controller_Front::getInstance();
+        $router = $front->getRouter();
+        
+        $urlRoute = null;
+        
+        if($router->hasRoute('page-index')) {
+            $route = $router->getRoute('page-index');        
+            $urlRoute = $route->assemble(array('slug' => $this->slug), true);
+        }
+        
+        return $urlRoute;
+    }
+    
+    
+    /**
+     * Get all slugs from database (table `pages`)
+     *
+     * @param int|null $excludeId
+     * @return array    Array of strings with slugs
+     */
+    private function _getSlugs($excludeId=null)
+    {
+        if(is_null($excludeId) || !is_numeric($excludeId)) {
+            $excludeId = -1;
+        }
+        
+        $sql   = 'SELECT `slug` FROM `pages` WHERE `pk_page` <> ' . $excludeId;
         $slugs = $this->conn->GetCol($sql);
         
         return $slugs;
     }
+    
+    
+    /**
+     * Get a page by slug property
+     *
+     * TODO: evaluate to implement this method only in PageManager
+     * @param string $slug
+     * @return Page
+     */
+    public function getPageBySlug($slug)
+    {        
+        $sql = 'SELECT * FROM pages WHERE slug = ?';
+        $rs  = $this->conn->Execute($sql, array($slug));
+        
+        $page = new Page();
+        
+        if( ($rs !== false) && (!$rs->EOF) ) {            
+            $page->loadProperties($rs->fields);                        
+        }
+        
+        return $page;
+    }    
+    
     
     /**
      * Get a tree representation of pages 
@@ -220,23 +363,19 @@ class Page
      */
     public function getTree($parent=null)
     {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
-        
         // O pai
         $sql = 'SELECT * FROM pages WHERE pk_page = ?';
-        $rs  = $conn->Execute($sql, array($parent));
+        $rs  = $this->conn->Execute($sql, array($parent));
         
         // Added parent 
         $page = new Page();
-        $this->_loadProperties($rs->fields, $page);
+        $this->loadProperties($rs->fields, $page);
         
         $tree = array();
-        $tree['element'] = $page;        
+        $tree['element'] = $page;
         
         $sql = 'SELECT * FROM pages WHERE fk_page = ? ORDER BY weight';
-        $rs  = $conn->Execute($sql, array($parent));
+        $rs  = $this->conn->Execute($sql, array($parent));
         
         while(!$rs->EOF) {            
             $tree['childNodes'][] = $this->getTree($rs->fields['pk_page']);
@@ -247,30 +386,6 @@ class Page
         return $tree;
     }
     
-    /**
-     * Get a page by slug property
-     *
-     * @param string $slug
-     * @return Page
-     */
-    public function getPageBySlug($slug)
-    {
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
-        
-        $sql = 'SELECT * FROM pages WHERE slug = ?';
-        $rs  = $conn->Execute($sql, array($slug));
-        
-        if( ($rs !== false) && (!$rs->EOF) ) {
-            $page = new Page();
-            $page->_loadProperties($rs->fields);
-            
-            return $page;
-        }
-        
-        return null;
-    }
     
     /**
      * hasChildPages, Check if a page has children
@@ -285,26 +400,23 @@ class Page
             $pk_page = $this->pk_page;
         }
         
-        // Get connection
-        // $conn = Zend_Registry::get('conn');
-        $conn = $GLOBALS['application']->conn;
-        
         $sql = 'SELECT count(*) AS num_children FROM pages WHERE fk_page = ?';
-        $rs = $conn->GetOne($sql, array($pk_page));
+        $rs = $this->conn->GetOne($sql, array($pk_page));
         
         if($rs === false) {
             throw new Exception( $conn->ErrorMsg() );
         }
         
-        return $rs > 0;
+        return intval($rs) > 0;
     }
+    
     
     /**
      * Load values in associative array to current object ($this)
      * 
      * @param array $assocProps     Associative array 
      */
-    private function _loadProperties($assocProps, $object=null)
+    public function loadProperties($assocProps, $object=null)
     {
         if(is_null($object)) {
             $object = $this;
@@ -317,28 +429,41 @@ class Page
         }        
     }
     
+    
+    /**
+     * Utility method to recover filter condition to recover this object by ajax
+     *
+     * <code>
+     * echo $content->getFilterStr();
+     * // return: pk_page=5
+     * </code>
+     *
+     * @return string
+     */
+    public function getFilterStr()
+    {
+        return 'pk_page=' . $this->pk_page;
+    }
+    
+    
     /**
      *
      */
     public function moveNode($pk_page, $fk_page, $weight)
     {
-        $sql = 'UPDATE pages SET fk_page=?, weight=? WHERE pk_page=?';
-        $writer = new Zend_Log_Writer_Firebug();
-        $logger = new Zend_Log($writer);
-        $logger->log(array($fk_page, $weight, $pk_page), Zend_Log::INFO);
-        
-        
+        // FIXME: review funcionalities
+        $sql = 'UPDATE pages SET fk_page=?, weight=? WHERE pk_page=?';                
         $rs = $this->conn->Execute($sql, array($fk_page, $weight, $pk_page));
+        
         if($rs === false) {
-            $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
+            
         }
         
         $sql = 'UPDATE pages SET weight = weight + 1 WHERE fk_page=? AND weight >= ? AND pk_page <> ?';
-        $logger->log(array($weight, $fk_page, $pk_page), Zend_Log::INFO);
         
         $rs = $this->conn->Execute($sql, array($weight, $fk_page, $pk_page));
         if($rs === false) {
-            $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
+            
         }
         
         $sql = 'SELECT pk_page,fk_page,weight FROM pages ORDER BY fk_page, weight';
@@ -358,7 +483,7 @@ class Page
                 }
                 
                 $this->conn->Execute($stmt, array($i, $rs->fields['pk_page']));
-                $logger->log($i . ' ' . $rs->fields['pk_page'], Zend_Log::INFO);
+
                 $i++;
                 
                 $rs->MoveNext();
@@ -367,6 +492,7 @@ class Page
             $logger->log($this->conn->ErrorMsg(), Zend_Log::INFO);
         }
     }
+    
     
     /**
      *
@@ -381,10 +507,170 @@ class Page
         }        
     }
     
-    public function render($slug)
+    
+    /**
+     * Process the page considering your type and status
+     */
+    public function dispatch()
     {
+        // Check page status
+        if($this->status != 'AVAILABLE') {
+            throw new PageNotAvailableException('Page ' . $this->title . ' is not available.');
+        }
         
+        $type = ucfirst(strtolower($this->type));
+        $method = '_dispatch' . $type;
+        
+        if(method_exists($this, $method)) {
+            $result = $this->{$method}();
+        } else {
+            throw new Exception('Not exists a valid mapping for type: ' . $type);
+        }
+        
+        return $result;
+    }    
+    
+    
+    /**
+     * Dispatch a page of standard type
+     *
+     * @uses Page::render()
+     * @return string
+     */
+    public function _dispatchStandard()
+    {        
+        return $this->render();
     }
+    
+    
+    /**
+     * Dispatch a page of external type
+     *
+     */
+    public function _dispatchExternal()
+    {
+        $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+        
+        $url = $this->getParam('url');
+        
+        if($url == null) {
+            throw new Exception('Param «url» do not exists.');
+        }
+        
+        $redirector->gotoUrl($url);
+    }
+    
+    
+    /**
+     *
+     * type == SHORTCUT
+     *
+     */
+    public function _dispatchShortcut()
+    {
+        $pk_page = $this->getParam('pk_page');
+        
+        $pageMgr = PageManager::getInstance();
+        $page = $pageMgr->get($pk_page);
+        
+        if($page == null) {
+            // TODO: custom exception
+            throw new Exception('Param «pk_page» do not exists.');
+        }                
+        
+        $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
+        $redirector->gotoRoute(
+            array('slug' => $page->slug),
+            'page-index'
+        );
+    }
+    
+    
+    /**
+     * Dispatch a page 
+     * type == NOT_IN_MENU
+     * 
+     * @uses Page::render()
+     * @return string
+     */
+    public function _dispatchNot_in_menu()
+    {
+        return $this->_dispatchStandard();
+    }
+    
+    
+    /**
+     * Get param name
+     *
+     * @param string $paramName
+     * @return mixed|null   Return param if exists otherwise return null
+     */
+    public function getParam($paramName)
+    {
+        $params = $this->getParams();
+        
+        if(isset($params[$paramName])) {
+            return $params[$paramName];
+        }
+        
+        return null;
+    }
+    
+    
+    /**
+     * Get params for this page
+     * 
+     * @return array    Array of params
+     */
+    public function getParams()
+    {
+        $params = array();
+        if($this->params != null) {
+            $params = unserialize($this->params);
+        }        
+        
+        return $params;
+    }
+    
+    
+    /**
+     * Render $this page
+     *
+     * @return string
+     */
+    public function render()
+    {
+        if(!is_null($this->theme) && ($this->theme != TEMPLATE_USER)) {
+            $tpl =& Zend_Registry::get('tpl');
+            $tpl->setTheme($this->theme);
+        }
+        
+        //$grid = Grid::getInstance(SITE_PATH. 'themes/lucidity/grids/frontpage-3col.xml');
+        $grid = Grid::getInstance($this);        
+        //$positions = $grid->getPositions();
+        
+        
+        $pageMgr = PageManager::getInstance();        
+        $items   = $pageMgr->getContentsByPage( $this->pk_page );        
+        
+        $contents = array();
+        foreach($items as $placeholder => $cts) {
+            
+            $contents[$placeholder] = array();
+            
+            foreach($cts as $it) {
+                $content = Content::get($it['pk_content']);
+                $box = new ContentBox($content, $it['mask'], $it['params']);
+                
+                $contents[$placeholder][] =& $box;
+            }
+        }
+        
+        $output = $grid->render($contents);
+        
+        return $output;
+    }
+    
     
     /**
      * Generate a HTML representatio for a tree of pages

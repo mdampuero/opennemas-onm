@@ -26,32 +26,34 @@ class Template extends Smarty
     
     static $registry = array();
 
-    function __construct($theme, $filters=array())
-    {
-        $this->Template($theme, $filters);
-    }
-
-    function Template($theme, $filters=array())
-    {
+    public function __construct($theme, $filters=array())
+    {        
         // Call the parent constructor
         parent::Smarty();
         
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
-        $this->setFilters($filters);
+        $this->setFilters($filters);       
         
-        // Register db resource
-        /*$this->register_resource("db",
-            array("smarty_get_db_template", "smarty_get_db_timestamp",
-                  "smarty_get_db_secure", "smarty_get_db_trusted"));*/
-
+        $this->setTheme($theme);
+    }
+    
+    
+    /**
+     * Set theme
+     * 
+     * @param string $theme
+     * @return Template
+    */
+    public function setTheme($theme)
+    {
         // Parent variables
         $this->template_dir  = SITE_PATH.SS.'themes'.SS.$theme.SS.'tpl/';
         $this->compile_dir   = SITE_PATH.SS.'themes'.SS.$theme.SS.'compile/';
         $this->config_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'config/';
         $this->cache_dir     = SITE_PATH.SS.'themes'.SS.$theme.SS.'cache/';
         $this->plugins_dir[] = SITE_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
-                $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
-        $this->caching          = false;
+        $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
+        $this->caching       = false;
 
         // Template variables        
         $this->css_dir    = SITE_PATH_WEB.'themes'.SS.$theme.SS.'css/';
@@ -60,17 +62,19 @@ class Template extends Smarty
 
         $this->assign('params',
             array(
-                            'LOCALE_DIR' =>    $this->locale_dir,
-                            'CSS_DIR'     =>    $this->css_dir,
-                            'IMAGE_DIR'  =>    $this->image_dir,
-                            'JS_DIR'     =>    $this->js_dir )
+                'LOCALE_DIR' =>    $this->locale_dir,
+                'CSS_DIR'     =>    $this->css_dir,
+                'IMAGE_DIR'  =>    $this->image_dir,
+                'JS_DIR'     =>    $this->js_dir
+            )
         );
-
+        
         $this->theme = $theme;
         $this->assign('THEME', $theme);
     }
     
-    function setFilters( $filters=array() )
+    
+    public function setFilters( $filters=array() )
     {
         $this->filters = $filters;
         $this->autoload_filters = $filters;        
@@ -150,6 +154,10 @@ class Template extends Smarty
         }        
     }
     
+    
+    /**
+     * @deprecated
+    */
     public function generateCacheId($seccion, $subseccion=null, $resource=null)
     {
         $cacheId = '';
@@ -272,41 +280,49 @@ class Template extends Smarty
 }
 
 
-class TemplateAdmin extends Template {
+class TemplateAdmin extends Template
+{
 
-    function __construct($theme) {
-        $this->TemplateAdmin($theme);
-    }
-
-    function TemplateAdmin($theme) {
-        // Call the parent constructor
-        parent::Template($theme);
-
-        // Parent variables
-        $this->template_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'tpl/';
-        $this->compile_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'compile/';
-        $this->config_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'config/';
-        $this->cache_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'cache/';
-        $this->plugins_dir[]    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
-        $this->caching        = false;
-
-        // Template variables
-        $this->locale_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'locale/';
-        $this->css_dir        = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'css/';
-        $this->image_dir    = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'images/';
-        $this->js_dir        = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'js/';
+    public function __construct($theme)
+    {
+        parent::__construct($theme);
         
+        $this->setTheme($theme);
+    }
+    
+    /**
+     * Set theme
+     * 
+     * @param string $theme
+     * @return Template
+    */
+    public function setTheme($theme)
+    {
+        // Parent variables
+        $this->template_dir  = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'tpl/';
+        $this->compile_dir   = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'compile/';
+        $this->config_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'config/';
+        $this->cache_dir     = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'cache/';
+        $this->plugins_dir[] = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
+        $this->locale_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'locale/';
+        $this->caching       = false;
+
+        // Template variables        
+        $this->css_dir    = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'css/';
+        $this->image_dir  = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'images/';
+        $this->js_dir     = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'js/';
+
         $this->assign('params',
-            array('LOCALE_DIR'    =>    $this->locale_dir,
-            'CSS_DIR'    => $this->css_dir,
-            'IMAGE_DIR'     => $this->image_dir,
-            'JS_DIR'    => $this->js_dir)
+            array(
+                'LOCALE_DIR' =>    $this->locale_dir,
+                'CSS_DIR'     =>    $this->css_dir,
+                'IMAGE_DIR'  =>    $this->image_dir,
+                'JS_DIR'     =>    $this->js_dir
+            )
         );
         
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-        
-        // $this->setUpLocale();
     }
 }
 

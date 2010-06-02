@@ -105,12 +105,13 @@ class ContentManager
      * Generate a unique slug
      *
      * @param string $title
+     * @param int $excludeId
      * @return string
      */
-    public function slugIt($title)
+    public function slugIt($title, $excludeId=null)
     {
         $filter = new Onm_Filter_Slug();
-        $slugs  = $this->_getSlugs();
+        $slugs  = $this->_getSlugs($excludeId);
         
         $slug = $filter->filter($title);
         
@@ -133,25 +134,48 @@ class ContentManager
     /**
      * TODO: review performance
      *
+     * @param int $excludeId    Exclude this pk_content
      * @return array    Array of existent slugs
      */
-    private function _getSlugs()
-    {        
-        $sql   = 'SELECT `slug` FROM `contents`';
+    private function _getSlugs($excludeId=null)
+    {
+        if(is_null($excludeId) || !is_numeric($excludeId)) {
+            $excludeId = -1;
+        }
+        
+        $sql   = 'SELECT `slug` FROM `contents` WHERE `pk_content` <> ' . $excludeId;
         $slugs = $this->conn->GetCol($sql);
         
         return $slugs;
     }
     
     /**
-     * Para buscador
-     * TODO: implementar
+     * 
+     * 
+     * <code>
+     * 
+     * </code>
+     * @param array $q
+     * @param string $format
+     * @return string
      */
-    public function searchAny($q, $fields)
+    public function search($q, $format='html')
     {
-        $sql = 'SELECT * FROM `contents` WHERE MATCH(title, description, metadata) AGAINST(?)';
+        $from = array();
+        $from[] = '`contents`';
         
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($q));
+        $where = array();
+        
+        
+        if(!empty($q['category'])) {
+            $from[] = '`contents_categories`';
+            $where[] = '';
+        }
+        
+        
+        $sql = 'SELECT `contents`.* FROM  WHERE MATCH(title, description, keywords) AGAINST(? IN BOOLEAN MODE)';
+        
+        $rs = $this->conn->Execute($sql);
         
         
         
@@ -160,6 +184,7 @@ class ContentManager
     
     /**
      * Para principal
+     * @deprecated
      */
     public function findInGrid($positions, $category=null)
     {

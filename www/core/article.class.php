@@ -59,24 +59,15 @@ class Article extends Content
      */
     static $clonesHash = null;
     
-    public function Article($id=null)
-    {
-        parent::Content($id);
-        
-        // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if(is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'Article';
-    }
-
-    /**
-      * Constructor PHP5
-    */
     public function __construct($id=null)
     {
-        $this->Article($id);
+        parent::__construct($id);
+        
+        if($id != null) {
+            $this->read($id);
+        }
+        
+        $this->content_type = 'Article';
     }
 
     public function create($data)
@@ -139,17 +130,18 @@ class Article extends Content
         parent::read($id);
         
         $sql = 'SELECT * FROM articles WHERE pk_article = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs  = $this->conn->Execute( $sql );
         
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($rs === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
-            return;
+            return null;
         }
         
         $this->load( $rs->fields );
+        
+        return $this;
     }   
     
     public function update($data)

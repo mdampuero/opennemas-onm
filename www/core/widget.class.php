@@ -114,7 +114,8 @@ class Widget extends Content
      *
      * @param array $properties Array properties 
      */
-    public function load($properties) {
+    public function load($properties)
+    {
         if(is_array($properties)) {
             foreach($properties as $k => $v) {
                 if(!is_numeric($k)) {
@@ -137,7 +138,8 @@ class Widget extends Content
      * @param array $data Array values
      * @return boolean
      */
-    public function update($data) {
+    public function update($data)
+    {
         // Clear magic_quotes
         String_Utils::disabled_magic_quotes( &$data );
         

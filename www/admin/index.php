@@ -19,14 +19,13 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/* *****************************************************************************
- ______      ___      _____     _  __    _____     _  _    _____    
-|      \\   / _ \\   / ____||  | |/ //  |  ___||  | \| || |  __ \\  
-|  --  //  / //\ \\ / //---`'  | ' //   | ||__    |  ' || | |  \ || 
-|  --  \\ |  ___  ||\ \\___    | . \\   | ||__    | .  || | |__/ || 
-|______// |_||  |_|| \_____||  |_|\_\\  |_____||  |_|\_|| |_____//  
-`------`  `-`   `-`   `----`   `-` --`  `-----`   `-` -`   -----`
-****************************************************************************** */
+/* ********************************************
+ **   _                _                  _  **
+ **  | |__   __ _  ___| | _____ _ __   __| | ** 
+ **  | '_ \ / _` |/ __| |/ / _ \ '_ \ / _` | **
+ **  | |_) | (_| | (__|   <  __/ | | | (_| | **
+ **  |_.__/ \__,_|\___|_|\_\___|_| |_|\__,_| **
+ **********************************************/
 
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
@@ -69,15 +68,19 @@ $autoloader->registerNamespace('Onm');
 
 /* *************************************************************************** */
 // Zend_Log config {{{
+$logger = new Zend_Log();
+
+// TODO: implement priorities
+
+$writer = new Zend_Log_Writer_Stream(SYS_LOG);
+$logger->addWriter($writer);
+
 if( APPLICATION_ENV == 'development' ) {
     $writer = new Zend_Log_Writer_Firebug();
-} else {
-    $writer = new Zend_Log_Writer_Stream(SYS_LOG);
+    $logger->addWriter($writer);
 }
 
-$logger = new Zend_Log($writer);
 Zend_Registry::set('logger', $logger);
-
 unset($writer);
 unset($logger);
 // }}}
@@ -146,8 +149,10 @@ $front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
 $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
 $front->registerPlugin( new Onm_Controller_Plugin_Template() );
 
-// No render by default
-$front->setParam('noViewRenderer', true);
+// FrontController params
+$front->setParam('noViewRenderer', true) // No render by default
+      ->setParam('isBackend', true);
+
 $front->setControllerDirectory('./controllers');
 
 // Dispatch

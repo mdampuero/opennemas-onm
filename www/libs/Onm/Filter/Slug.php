@@ -57,6 +57,7 @@ class Onm_Filter_Slug implements Zend_Filter_Interface
         
         $value = preg_replace('/[ ]+/', '-', $value);
         $value = preg_replace('/[\-]+/', '-', $value);
+        $value = preg_replace('/[\-]$/', '', $value);
         
         return $value;
     }        

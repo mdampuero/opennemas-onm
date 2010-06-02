@@ -61,8 +61,10 @@ class CategoryManager
      */
     private function __construct()
     {
-        // TODO: check if object registered ¿?
-        $this->conn = Zend_Registry::get('conn');
+        // Set ADOConnection
+        if(Zend_Registry::isRegistered('conn')) {
+            $this->conn = Zend_Registry::get('conn');
+        }
         
         // Load all categories to improvement performance using cache
         // $this->cache = new MethodCacheManager($this, array('ttl' => 30));                        

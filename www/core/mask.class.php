@@ -28,20 +28,42 @@
  * @version    $Id: mask.class.php 1 2010-03-30 11:23:23Z vifito $
  */
 class Mask
-{
+{    
     private $_output  = null;
     private $_content = null;
+    private $_mask    = null;
+    
     
     /**
      * 
-     * @param Content|null $content
+     * @param string $mask
      */
-    public function __construct($content=null)
+    public function __construct($mask=null)
     {
-        if( !is_null($content) ) {
-            $this->setContent($content);
+        if( !is_null($mask) ) {
+            $this->setMask($mask);
         }
     }
+    
+    
+    /**
+     * Load values in associative array to current object ($this)
+     * 
+     * @param array $assocProps     Associative array 
+     */
+    public function loadProperties($assocProps, $object=null)
+    {
+        if(is_null($object)) {
+            $object = $this;
+        }
+        
+        foreach($assocProps as $prop => $val) {
+            if(property_exists($object, $prop)) {
+                $object->{$prop} = $val;
+            }
+        }        
+    }
+    
     
     /**
      *
@@ -55,30 +77,73 @@ class Mask
         return $this;
     }
     
+    public function setMask($mask)
+    {
+        $this->_mask = $mask;
+        
+        return $this;
+    }
+    
+    public function setPage($page)
+    {
+        $this->_page = $page;
+        
+        return $this;
+    }
+    
+    public function getPage()
+    {
+        return $this->_page;
+    }
+    
+    // FIXME: implement mechanism to assign mask default
+    public function getDefaultMask($pk_content_type)
+    {
+        return null;
+    }
+    
     /**
      * Apply template to contentbox
      * 
      * @return string
      */
-    public function apply($args=null)
+    public function apply($args=array())
     {
-        $template = 'masks/' . $this->_content->mask . '.tpl';
+        $mask = $this->_mask;
+        if(is_null($mask)) {
+            $mask = $this->getDefaultMask($this->_content->fk_content_type);
+        }
         
-        if(file_exists(TEMPLATE_USER_PATH . '/tpl/' . $template)) {
-            $tpl = new Template(TEMPLATE_USER);
+        if(!is_null($mask)) {
+            
+            // FIXME: arranxar esta chapuza
+            if(isset($args['page'])) {
+                $this->setPage($args['page']);
+            }
+            
+            $template = 'masks/' . $mask . '.tpl';
+            $filename = SITE_PATH . '/themes/' . $this->_page->theme . '/tpl/' . $template;
+            
+            // TODO: improve mask flow
+            if(!isset($args['renderMask']) && file_exists($filename)) {
+                $tpl = new Template($this->_page->theme);                
+            } else {
+                $template = 'masks/' . $args['renderMask'] . '.tpl';
+                $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+            }            
+            
+            if(!empty($args)) {
+                $tpl->assign('args', $args);
+            }        
+            
+            $tpl->assign('mask', $mask);
+            $tpl->assign('item', $this->_content);
+            
+            $this->_output = $tpl->fetch($template);
+            
         } else {
-            $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-        }                
-        
-        
-        if(!is_null($args)) {
-            foreach($args as $k => $v) {
-                $tpl->assign($k, $v);
-            }    
-        }        
-        
-        $tpl->assign('item', $this->_content);
-        $this->_output = $tpl->fetch($template);
+            $this->_output = $this->_content->__toString();
+        }
         
         return $this->_output;
     }

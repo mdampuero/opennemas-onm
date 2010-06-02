@@ -4,18 +4,33 @@ class ContentBox
 {
     private $_html    = null;
     private $_content = null;
+    private $_mask    = null;
     private $_params  = array();
     
     /**
      * @param Content $content
      */
-    public function __construct($content, $params=null)
+    public function __construct($content, $mask=null, $params=null)
     {
         $this->setContent($content);
         
-        if(is_array($params)) {
+        if(!is_null($mask)) {
+            $this->setMask($mask);
+        }
+        
+        if(!is_null($params)) {
             $this->setParams($params);
         }
+    }
+    
+    public function setMask($mask)
+    {
+        $this->_mask = $mask;
+    }
+    
+    public function getMask()
+    {
+        return $this->_mask;
     }
     
     public function setContent($content)
@@ -32,7 +47,7 @@ class ContentBox
     
     public function render($args=array())
     {        
-        $mask = new Mask();
+        $mask = new Mask($this->_mask);
         $mask->setContent($this->_content);
         
         $args = array_merge($this->_params, $args);

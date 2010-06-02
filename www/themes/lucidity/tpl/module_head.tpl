@@ -32,7 +32,7 @@
         <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" media="screen, projection" /><![endif]-->
         
         {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>{$article->title|clearslash} - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE} </title>
+            <title>{$article->title} - {$category_data.title} - {$smarty.const.SITE_TITLE} </title>
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/utilities.css" type="text/css" media="screen,projection" />
@@ -42,7 +42,7 @@
             <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
            
         {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>{$gallery->title|clearslash|default:''}  Album   {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
+            <title>{$gallery->title|default:''}  Album   {$category_data.title} - {$smarty.const.SITE_TITLE}</title>
 
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
@@ -68,7 +68,7 @@
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
 
         {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
-            <title>{$video->title|clearslash|default:''}  Videos - {$category_data.title|clearslash} - {$smarty.const.SITE_TITLE}</title>
+            <title>{$video->title|default:''}  Videos - {$category_data.title} - {$smarty.const.SITE_TITLE}</title>
             
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />            
@@ -87,7 +87,7 @@
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
             <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
         {else}
-            <title> {$category_data.title|clearslash|default:'Portada'} - {$smarty.const.SITE_TITLE}</title>
+            <title> {$category_data.title|default:'Portada'} - {$smarty.const.SITE_TITLE}</title>
 
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>

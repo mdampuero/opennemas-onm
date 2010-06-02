@@ -9,7 +9,7 @@
         <div class="photos-header"><img src="{$params.IMAGE_DIR}/widgets/videos-highlighter-header.png" alt=""/></div>
         <div class="photos-highlighter-big clearfix">
              {if $videos[0]->author_name eq 'youtube'}
-                <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+                <a href="{$videos[0]->permalink}" title="{$videos[0]->title|escape:'html'}">
                    <object width="300" height="210">
                         <param value="http://www.youtube.com/v/{$videos[0]->videoid}" name="movie" />
                         <param value="true" name="allowFullScreen" />
@@ -18,7 +18,7 @@
                     </object>
                 </a>
              {else}
-              <a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
+              <a href="{$videos[0]->permalink}" title="{$videos[0]->title|escape:'html'}">
                 <object width="320" height="220">
                     <param name="allowfullscreen" value="true" />
                     <param name="allowscriptaccess" value="always" />
@@ -27,23 +27,23 @@
                 </object>
                 </a>
               {/if}
-              <div class="info"><a href="{$videos[0]->permalink}" title="{$videos[0]->title|clearslash|escape:'html'}">
-                   {$videos[0]->title|clearslash|escape:'html'} </a>
+              <div class="info"><a href="{$videos[0]->permalink}" title="{$videos[0]->title|escape:'html'}">
+                   {$videos[0]->title|escape:'html'} </a>
               </div>
         </div>
         <ul class="photos-highligher-little-section-links">
             {section name=i loop=$videos max=3}
                 {if $smarty.section.i.first}
-                    <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                    <li  class="first"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|escape:'html'}">
                     {elseif $smarty.section.i.last}
-                        <li class="last"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                        <li class="last"><a href="{$videos[i]->permalink}" title="{$videos[i]->title|escape:'html'}">
                     {else}
-                         <li class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|clearslash|escape:'html'}">
+                         <li class=""><a href="{$videos[i]->permalink}" title="{$videos[i]->title|escape:'html'}">
                     {/if}
                         {if $videos[i]->author_name eq 'youtube'}
-                             <img style="width:90px;" alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
+                             <img style="width:90px;" alt="{$videos[i]->title|escape:'html'}" title="{$videos[i]->title|escape:'html'}" src="http://i4.ytimg.com/vi/{$videos[i]->videoid}/default.jpg" />
                         {else}
-                              <img style="width:90px;"  alt="{$videos[i]->title|clearslash|escape:'html'}" title="{$videos[i]->title|clearslash|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
+                              <img style="width:90px;"  alt="{$videos[i]->title|escape:'html'}" title="{$videos[i]->title|escape:'html'}" src="{$videos[i]->thumbnail_small}" />
                         {/if}
                     </a></li>
             {/section}

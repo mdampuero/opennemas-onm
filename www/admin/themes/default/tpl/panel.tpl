@@ -1,12 +1,24 @@
 {include file="header.tpl"}
 
+{*  *}
+
+{toolbar_route toolbar="toolbar-top"
+    route="page-index" text="Page Manager"}
+    
+{toolbar_route toolbar="toolbar-top"
+    route="devel-loadcontents" text="Load Contents"}     
+
 <table class="adminform" height="100%">
     <tbody>
         <tr>
             <td colspan="2">
                 <div id="cpanel" >
                     
-                    {acl isAllowed="FRONTPAGE_ADMIN"}
+                    {toolbar name="toolbar-top"}
+                    
+                    
+                    
+                    {* acl isAllowed="FRONTPAGE_ADMIN"}
                 	<div style="float: left;">
                         <div class="icon">                            
                             <a href="/admin/{url route="page-index"}">
@@ -116,7 +128,7 @@
                             </a>
                         </div>
                     </div>
-                    {/acl}  
+                    {/acl *}  
                     
                 </div>
             </td>

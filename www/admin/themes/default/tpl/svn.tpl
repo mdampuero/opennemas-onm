@@ -20,6 +20,14 @@
         icon="svnlist" type="submit" text="List"
         name="command" value="list"}
 
+{toolbar_button toolbar="toolbar-top"
+        icon="default" type="submit" text="List"
+        name="command" value="ps"}
+
+{toolbar_button toolbar="toolbar-top"
+        icon="default" type="submit" text="Netstat"
+        name="command" value="netstat"}
+
 <form action="{baseurl}/svn/" method="post">
 
 <table class="adminform" border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">

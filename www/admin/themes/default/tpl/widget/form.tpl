@@ -52,20 +52,23 @@
 
 <div style="float: right; width: 560px;">
     {ui_container title="Publishing"}
-        {pane_publishing content=$widget}
+        {pane_publishing value=$widget}
     {/ui_container}
     
     {ui_container title="Categories"}
-        {pane_categories content=$widget}
-    {/ui_container}            
-    
-    {ui_container title="SEO" hidden=true}
-        {pane_seo content=$widget}
+        {pane_categories value=$widget}
     {/ui_container}
     
-    {ui_container title="Information" hidden=true}
-        {pane_info content=$widget}
+    {ui_container title="Publishing" hidden=true}
+        {pane_seo value=$widget route_slugit="content-slugit" route_keywords="keyword-service"}
     {/ui_container}
+    
+    {if ($request->getActionName() eq "update")}
+        {ui_container title="Publishing" hidden=true}    
+            {pane_info value=$widget}
+        {/ui_container}
+    {/if}
+    
 </div>
 
 {if ($request->getActionName() eq "update")}

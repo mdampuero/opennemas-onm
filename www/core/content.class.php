@@ -142,7 +142,7 @@ class Content
             'fk_user_last_editor' => $_SESSION['userid'],
             
             'views'  => 0,
-            'status' => 'PENDING',
+            'status' => 'PENDING',            
         );                
         
         // Dont use array_merge. Use "+" operator for arrays to preserve keys.
@@ -243,6 +243,23 @@ class Content
                         'fk_user_last_editor', 'status', 'version');
         
         SqlHelper::bindAndUpdate('contents', $fields, $data, 'pk_content = ' . $data['pk_content']);
+    }
+    
+    
+    /**
+     * Utility method to recover filter condition to this object
+     * using in ajax method
+     *
+     * <code>
+     * echo $content->getFilterStr();
+     * // return: pk_content=5
+     * </code>
+     *
+     * @return string
+     */
+    public function getFilterStr()
+    {
+        return 'pk_content=' . $this->pk_content;
     }
     
     
@@ -445,11 +462,17 @@ class Content
     */
     public static function get($pk_content)
     {
+        $conn = Zend_Registry::get('conn');
+        
         $sql = 'SELECT `content_types`.name FROM `contents`, `content_types`
-                    WHERE `pk_content` = ? AND fk_content_type = pk_content_type';
-        $type = $this->conn->GetOne($sql, array($pk_content));
+                    WHERE `contents`.`pk_content` = ? AND
+                          `contents`.`fk_content_type` = `content_types`.`pk_content_type`';
+        $type = $conn->GetOne($sql, array($pk_content));
         
         if($type === false) {
+            $error_msg = $conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
             return null;
         }
         

@@ -13,10 +13,13 @@
   </pre>
 
   <h3>Request Parameters:</h3>
-  <pre>
     {php}
         var_dump( $this->_tpl_vars['request']->getParams() );
     {/php}
-  </pre>
+  
+  <h3>Request URI:</h3>
+    {php}
+        var_dump( $this->_tpl_vars['request']->getRequestUri() );
+    {/php}
   {/if}
 

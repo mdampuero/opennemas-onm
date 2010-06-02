@@ -14,7 +14,7 @@
 
 <body class="login">
   <div id="topbar">
-  	<a href="/" title="Estás perdido?">&larr; Voltar á páxina principal</a>
+  	<a href="/" title="{t}Are you lost?{/t}">&larr; {t}Go to home site{/t}</a>
   </div>
   
   <div id="login">
@@ -56,10 +56,7 @@
             <input type="checkbox" tabindex="90" value="forever" id="rememberme" name="rememberme" {if isset($smarty.cookies.login_username)}checked="checked" {/if}/> Lembrar</label>
         </p>
         <p class="submit">
-            <input type="submit" tabindex="100" value="Acceder" id="wp-submit" name="wp-submit"/>
-            
-            <input type="hidden" id="action" name="action" value="login" />
-            <input type="hidden" name="testcookie" value="1" />            
+            <input type="submit" tabindex="100" value="Acceder" />          
             
             {if isset($token)}
                 {* Google token to identify captcha challenge *}
@@ -69,7 +66,8 @@
     </form>
   </div>
   <div style="margin:0 auto; color:#666; font-size:.9em; text-align:center; width:300px;">
-	Un produto de <a href="http://www.openhost.es" title="OpenHost S.L.">OpenHost S.L.</a><br/>&copy; Todos os dereitos reservados
+    OpenNemas Framework <br />
+	<a href="http://www.openhost.es" title="OpenHost S.L.">OpenHost S.L.</a> &copy; {$smarty.now|date_format:"%Y"}
   </div>
 </body>
 </html>
