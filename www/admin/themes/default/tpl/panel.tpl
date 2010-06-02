@@ -11,12 +11,13 @@
 <table class="adminform" height="100%">
     <tbody>
         <tr>
+            <td colspan="2">{flashmessenger}</td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <div id="cpanel">
                     
-                    {toolbar name="toolbar-top"}
-                    
-                    {flashmessenger}
+                    {toolbar name="toolbar-top"}                                        
                     
                     {* acl isAllowed="FRONTPAGE_ADMIN"}
                 	<div style="float: left;">
