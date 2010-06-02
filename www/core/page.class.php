@@ -659,10 +659,9 @@ class Page
             $contents[$placeholder] = array();
             
             foreach($cts as $it) {
-                $content = Content::get($it['pk_content']);
-                $box = new ContentBox($content, $it['mask'], $it['params']);
-                
-                $contents[$placeholder][] =& $box;
+                $content = Content::get($it['pk_content']);                
+                $box = new ContentBox($content, $it['mask'], $it['params']);                
+                $contents[$placeholder][] = $box;
             }
         }
         

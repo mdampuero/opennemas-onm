@@ -126,10 +126,13 @@ class Mask
             
             // TODO: improve mask flow
             if(!isset($args['renderMask']) && file_exists($filename)) {
-                $tpl = new Template($this->_page->theme);                
-            } else {
+                
+                $tpl = new Template($this->_page->theme);
+                
+            } elseif(isset($args['renderMask'])) {
+                
                 $template = 'masks/' . $args['renderMask'] . '.tpl';
-                $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+                $tpl = new TemplateAdmin(TEMPLATE_ADMIN);                
             }            
             
             if(!empty($args)) {
