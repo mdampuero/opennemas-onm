@@ -3,5 +3,5 @@
     @theme      Lucidity
 *}
 <div class="nw-big">
-    {$item->render()}    
+    {$item->title}    
 </div>
