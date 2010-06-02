@@ -123,6 +123,88 @@
         <dropColumn tableName="articles" columnName="columns"/>        
         <dropColumn tableName="articles" columnName="home_columns"/>
     </changeSet>
+
+
+    <changeSet author="vifito" id="1275044449">
+        <comment>Create table keywords.</comment>
+        
+        <createTable tableName="keywords">
+            <column name="pk_keyword" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="word" type="varchar(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="value" type="varchar(255)"/>
+            <column name="type" type="enum('EMAIL','SEARCH','URL')"/>
+        </createTable>
+        
+    </changeSet>
+    
+    <changeSet author="vifito" id="1275295673">
+        <comment>New fields for "pages" table and rename "color" field to "inline_styles"</comment>
+        
+        <dropColumn tableName="pages" columnName="color"/>
+        <addColumn tableName="pages">
+            <column name="inline_styles" type="text"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="fk_author" remarks="User foreign key" type="int unsigned"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="fk_publisher" remarks="User foreign key" type="int unsigned"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="fk_user_last_editor" remarks="User foreign key" type="int unsigned"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="hits" remarks="Stats of visitors" type="int unsigned"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="starttime" type="DATETIME"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="endtime" type="DATETIME"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="created" type="DATETIME"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="changed" type="DATETIME"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="published" type="DATETIME"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="menu_title" type="varchar(255)"/>
+        </addColumn>
+        
+        <addColumn tableName="pages">
+            <column name="short_url" remarks="Use by short url services (bit.ly)" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="vifito" id="1275326820">
+        <comment>Support to version on pages table</comment>
+        <addColumn tableName="pages">
+            <column name="version" type="int" defaultValueNumeric="0"/>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="vifito" id="1275473187">
+        <comment>Add support to fulltext searchs</comment>
+        <sql>ALTER TABLE contents ADD FULLTEXT(title,description,keywords);</sql>
+    </changeSet>
     
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
