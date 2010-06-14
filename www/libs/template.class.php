@@ -29,7 +29,7 @@ class Template extends Smarty
     public function __construct($theme, $filters=array())
     {        
         // Call the parent constructor
-        parent::Smarty();
+        parent::__construct();
         
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);       
@@ -54,6 +54,7 @@ class Template extends Smarty
         $this->plugins_dir[] = SITE_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
         $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
         $this->caching       = false;
+        $this->allow_php_tag = true;
 
         // Template variables        
         $this->css_dir    = SITE_PATH_WEB.'themes'.SS.$theme.SS.'css/';
@@ -277,6 +278,11 @@ class Template extends Smarty
         
         return in_array($name, $valuesHttpEquiv);
     }
+    
+    public function get_template_vars($varname=null)
+    {
+        return $this->getTemplateVars($varname, $_ptr = null, $search_parents=true);
+    }
 }
 
 
@@ -306,6 +312,7 @@ class TemplateAdmin extends Template
         $this->plugins_dir[] = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
         $this->locale_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'locale/';
         $this->caching       = false;
+        $this->allow_php_tag = true;
 
         // Template variables        
         $this->css_dir    = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'css/';
