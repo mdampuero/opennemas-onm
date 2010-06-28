@@ -47,12 +47,22 @@ Smarty template: frontpage.tpl
 
                 <div class="span-24">
                     <div class="layout-column first-column span-12">
-                        {include file="widget_gallery.tpl" }
+                        {include file="widget_gallery.tpl"}
                     </div>
                     <div class="layout-column last-column last span-12">
                         {include file="widget_video.tpl"}
                     </div>
                 </div>
+                
+                {* <div class="span-8">
+                    <input type="text" id="galdic-box" />
+                    <script type="text/javascript" src="{$params.JS_DIR}jquery.galdic.js"></script>
+                    <script type="text/javascript">
+                    /* <![CDATA[ */
+                    jQuery('#galdic-box').galdic();
+                    /* ]]> */
+                    </script>
+                </div> *}
                
             </div><!-- fin #main_content -->
 
@@ -68,14 +78,14 @@ Smarty template: frontpage.tpl
 
 
     </div>
-    {literal}
-        <script type="text/javascript">
-            jQuery(document).ready(function(){
-                $("#tabs").tabs();
-                 $("#tabs2").tabs();
-            });
-        </script>
-    {/literal}
+
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            $("#tabs").tabs();
+             $("#tabs2").tabs();
+        });                
+    </script>
+
   </body>
 </html>
 	

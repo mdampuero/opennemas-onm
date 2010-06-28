@@ -56,8 +56,7 @@ function smarty_function_thumbnail($params, &$smarty)
     $thumbnailFilename = md5($src) . '_' . $width . 'x' . $height . '.' . pathinfo($src, PATHINFO_EXTENSION);            
     
     // Absolute path to thumbnail
-    $thumbnailFile = SITE_PATH . '/' . $cachedir . '/' . $thumbnailFilename;
-    $thumbnailFile = preg_replace('@[/]+@', '/', $thumbnailFile);
+    $thumbnailFile = SITE_PATH . '/' . $cachedir . '/' . $thumbnailFilename;    
     
     if(!file_exists($thumbnailFile)) {
         // Generate thumbnail

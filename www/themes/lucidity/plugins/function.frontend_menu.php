@@ -49,5 +49,5 @@ function smarty_function_frontend_menu($params, &$smarty)
     
     $output = $pageMgr->tree2html($tree, $options);    
     
-    return $output;    
+    return $output;
 }

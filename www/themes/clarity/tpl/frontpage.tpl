@@ -121,14 +121,14 @@ Smarty template: frontpage.tpl
 
 
     </div>
-    {literal}
-        <script type="text/javascript">
-            jQuery(document).ready(function(){
-                $("#tabs").tabs();
-                 $("#tabs2").tabs();
-            });
-        </script>
-    {/literal}
+  
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+            $("#tabs").tabs();
+             $("#tabs2").tabs();
+        });
+    </script>
+
   </body>
 </html>
 	

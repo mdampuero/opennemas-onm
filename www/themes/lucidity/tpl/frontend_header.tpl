@@ -16,8 +16,8 @@
 
 <div id="logo" class="clearfix">
 
-    <div id="logo-image" class="span-8" style="width:700px;">
-        {if $request->getControllerName() == 'video' }
+    <div id="logo-image" class="span-8" style="width:700px;">        
+        {if $request->getControllerName() == 'video'}
 
             <a href="/" title="Pulse aquí para ir a la portada de {$smarty.const.SITE_TITLE}">
                 <img src="{$params.IMAGE_DIR}/main-logo.big-black.png" alt="{$smarty.const.SITE_TITLE}" />

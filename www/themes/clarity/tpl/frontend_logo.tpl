@@ -17,7 +17,7 @@
             <li class="last"><a href="/estaticas/contacto.html">Contacto</a></li>
         </ul>
     </div>
-{if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
+{if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME)}
 <div id="description-category">
     <ul>
         <li class="">INTERIORISMO</li>

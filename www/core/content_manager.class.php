@@ -150,35 +150,73 @@ class ContentManager
     }
     
     /**
-     * 
+     * Search for a content
      * 
      * <code>
-     * 
+     * $q = array(
+     *     'text' => 'text to search',
+     *     'category' => 1, // pk_category
+     *     'content_type' => 1, //pk_content_type
+     * );
      * </code>
      * @param array $q
-     * @param string $format
+     * @param array $options
      * @return string
      */
-    public function search($q, $format='html')
+    public function search($q, $options=array())
     {
+        $select = array('`contents`.*');
+        
         $from = array();
         $from[] = '`contents`';
         
-        $where = array();
-        
+        $where = array();                
         
         if(!empty($q['category'])) {
             $from[] = '`contents_categories`';
-            $where[] = '';
+            $where[] = '`pk_fk_content`=`pk_content` AND `pk_fk_category` = ' . $q['category'];
         }
         
+        if(!empty($q['content_type'])) {
+            $where[] = '`fk_content_type` = ' . $q['content_type'];
+        }
         
-        $sql = 'SELECT `contents`.* FROM  WHERE MATCH(title, description, keywords) AGAINST(? IN BOOLEAN MODE)';
+        if(!empty($q['status'])) {
+            $where[] = '`status` LIKE "' . $q['status'] . '"';
+        }        
+        
+        $q['text'] = trim($q['text']);
+        if(!empty($q['text']) && strlen($q['text']) > 2) {
+            $match = 'MATCH (title,keywords,description) AGAINST (' . $this->conn->Quote($q['text']) .
+                        ' IN BOOLEAN MODE)';
+                        
+            $where[] = $match;
+            $select[] = $match . ' AS score';
+        }
+        
+        $sql = 'SELECT ' . implode(', ', $select) .
+               ' FROM '  . implode(', ', $from);
+        
+        if(count($where) > 0) {
+            $sql .= ' WHERE ' . implode(' AND ', $where);
+        }
+        
+        // TODO: implement more search options
+        $sql .= ' ORDER BY created DESC ' .
+                ' LIMIT 0, 20 ';
         
         $rs = $this->conn->Execute($sql);
         
+        $result = array();
+        if($rs !== false) {            
+            while(!$rs->EOF) {
+                $result[] = $rs->fields;
+                
+                $rs->MoveNext();
+            }
+        }
         
-        
+        return $result;
     }
     
     

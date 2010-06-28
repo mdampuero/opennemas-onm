@@ -31,7 +31,7 @@
        {* <script type="text/javascript" src="{$params.JS_DIR}swfobject.js"></script> *}
         <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" media="screen, projection" /><![endif]-->
         
-        {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
+        {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME)}
             <title>{$article->title} - {$category_data.title} - {$smarty.const.SITE_TITLE} </title>
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
@@ -41,7 +41,7 @@
             <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
             <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
            
-        {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME) }
+        {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
             <title>{$gallery->title|default:''}  Album   {$category_data.title} - {$smarty.const.SITE_TITLE}</title>
 
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
@@ -67,7 +67,7 @@
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
             <script  type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
 
-        {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) }
+        {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME)}
             <title>{$video->title|default:''}  Videos - {$category_data.title} - {$smarty.const.SITE_TITLE}</title>
             
             <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />

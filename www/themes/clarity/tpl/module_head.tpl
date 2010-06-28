@@ -34,7 +34,7 @@
         <meta name="description" content="{$smarty.const.SITE_DESCRIPTION}" /> *}
         <meta name="description" content="También arquitectura - su portal de noticias sobre arquitectura, interiorismo y decoración." />
         
-        {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) }
+        {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME)}
             <title>{$article->title} - {$category_data.title} - {$smarty.const.SITE_TITLE} </title>
 
 
