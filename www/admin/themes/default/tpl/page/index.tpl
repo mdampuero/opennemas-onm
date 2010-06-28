@@ -12,6 +12,8 @@
 {tag_script src="anytime.js"}
 {tag_link href="anytime.css"}
 
+{tag_link href="page.css"}
+
 
 {include file="header.tpl"}
 
@@ -20,7 +22,7 @@
 <table class="adminform" border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
 <tr><td style="padding:10px;" align="left" valign="top">
 
-{flashmessenger}
+<div id="messageboard">{flashmessenger}</div>
 
 {if $request->getActionName() == 'index'}
     {include file="page/list.tpl"}

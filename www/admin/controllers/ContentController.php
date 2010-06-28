@@ -47,4 +47,26 @@ class ContentController extends Onm_Controller_Action
     }
     
     
+    /**
+     * Service to search any content
+     *
+     * Route: content-search
+     *  /content/search/
+     */
+    public function searchAction()
+    {
+        $data = $this->_getAllParams();
+        
+        $filter = new Onm_Filter_Unhyphenate();
+        $data   = $filter->filter($data);
+        
+        $contentMgr = new ContentManager();
+        $result     = $contentMgr->search($data['q']);
+        
+        $this->tpl->display('search/' . '.tpl');        
+        
+        echo $result;
+    }
+    
+    
 }

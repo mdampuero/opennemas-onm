@@ -236,4 +236,14 @@ class Widget extends Content
         
         return $output;
     }
+    
+    
+    /**
+     *
+     * @return String
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
 }

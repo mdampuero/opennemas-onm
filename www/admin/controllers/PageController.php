@@ -21,13 +21,18 @@
 
 class PageController extends Onm_Controller_Action
 {
-    
+    /**
+     *
+     */
     public function init()
     {
         
     }
     
     
+    /**
+     * 
+     */
     public function preDispatch() 
     {
         $translator = Zend_Registry::get('Zend_Translate');
@@ -63,6 +68,10 @@ class PageController extends Onm_Controller_Action
     }
     
     
+    /**
+     * Route: page-create
+     *   /page/create/*
+     */
     public function createAction()
     {
         if($this->getRequest()->isPost()) {            
@@ -145,6 +154,38 @@ class PageController extends Onm_Controller_Action
     }
     
     
+    /**
+     * Route: page-relocate
+     *   /page/relocate/*
+    */
+    public function relocateAction()
+    {
+        $isOK = false;
+        
+        // Catch all params
+        $data   = $this->_getAllParams();
+        $filter = new Onm_Filter_Unhyphenate();
+        $data   = $filter->filter($data);        
+        
+        if(isset($data['pages'])) {
+            // Relocate pages parent
+            $pageMgr = PageManager::getInstance();
+            $isOK    = $pageMgr->relocate($data['pages']);
+        }
+        
+        // REST response
+        if($isOK) {
+            // header("HTTP/1.1 200 OK");
+            header('x', TRUE, 200);
+        } else {
+            // header("HTTP/1.1 503 Service Temporarily Unavailable");
+            header('x', TRUE, 503);
+        }
+        
+        echo ($isOK)? '200 OK': '503 Service Temporarily Unavailable';
+        exit(0);
+    }
+    
     /*
     public function indexAction()
     {
@@ -222,7 +263,7 @@ class PageController extends Onm_Controller_Action
         // Check if it's a request was performed via XmlHttpRequest
         if( $this->getRequest()->isXmlHttpRequest() ) {        
             $title   = $this->_getParam('title', '');
-            $pk_page = $this->_getParam('pk_page', -1);
+            $pk_page = $this->_getParam('pk_page', -1);            
             
             $pageMgr = PageManager::getInstance();
             echo $pageMgr->generateSlug($title, $pk_page);            

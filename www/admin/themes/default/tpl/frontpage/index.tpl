@@ -6,6 +6,8 @@
 {tag_script src="ui.selectmenu.js"}
 {tag_link rel="stylesheet" type="text/css" href="ui.selectmenu.css"}
 
+{tag_script src="jquery.utils.min.js"}
+
 
 {include file="header.tpl"}
 

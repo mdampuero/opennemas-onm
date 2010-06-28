@@ -90,7 +90,7 @@ class PageManager
      */
     public function populate()
     {
-        $sql = 'SELECT * FROM `pages` ORDER BY `fk_page`, `weight` DESC';
+        $sql = 'SELECT * FROM `pages` ORDER BY `fk_page` ASC, `weight` ASC';
         $rs  = $this->conn->Execute( $sql );
         
         if ($rs === false) {            
@@ -205,11 +205,14 @@ class PageManager
                             $innerHTML .= ' class="active"';
                         }
                         
-                        $innerHTML .= '>';
+                        $innerHTML .= '>';                        
                         
                         if(!isset($options['template'])) {
-                            $innerHTML .= '<a href="' . $options['baseurl'] . $tree['element']->getPermalink() .'">';
-                            $innerHTML .= (!empty($tree['element']->menu_title))? $tree['element']->menu_title: $tree['element']->title;
+                            $innerHTML .= '<a href="' . $options['baseurl'] . $tree['element']->getPermalink() .'" ';
+                            $innerHTML .= 'title="' . $tree['element']->title . '">';
+                            
+                            $innerHTML .= (strlen($tree['element']->menu_title)>0) ? $tree['element']->menu_title :$tree['element']->title;
+                            
                             $innerHTML .= '</a>';
                         } else {
                             $tpl = Zend_Registry::get('tpl');
@@ -524,6 +527,39 @@ class PageManager
     
     
     /**
+     * Relocate pages on tree
+     * 
+     * <code>
+     * [data] => Array (
+     * //  [pk_page] => weight
+     *     [7] => 0
+     *     [8] => 0
+     *     [9] => 1
+     *     [10] => 2     
+     * ) 
+     * </code>
+     * 
+     * @param array $data
+     * @return boolean  Return true if action was performed successfully. otherwise false
+    */
+    public function relocate($data)
+    {
+        $sql = 'UPDATE `pages` SET `weight` = ? WHERE `pk_page` = ?';
+        
+        $inputarr = array();
+        if(isset($data['pk'])) {
+            foreach($data['pk'] as $i => $pk) {
+                $inputarr[] = array($data['weight'][$i], $pk);
+            }
+        }
+        
+        $rs = $this->conn->Execute($sql, $inputarr);
+        
+        return $rs !== false;
+    }
+    
+    
+    /**
      * Get all slugs from database (table `pages`)
      *
      * @param int|null $excludeId
@@ -536,7 +572,7 @@ class PageManager
         }
         
         $sql   = 'SELECT `slug` FROM `pages` WHERE `pk_page` <> ' . $excludeId;
-        $slugs = $this->conn->GetCol($sql);
+        $slugs = $this->conn->GetCol($sql);        
         
         return $slugs;
     }

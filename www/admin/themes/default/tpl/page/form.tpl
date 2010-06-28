@@ -129,7 +129,7 @@
     <div id="page-options">
         {pane_publishing value=$page}
         
-        {pane_seo value=$page}
+        {pane_seo value=$page route_slugit="page-slugit"}
     </div>  
 </div><!-- #tabular -->
 
@@ -141,7 +141,7 @@
 {/if}
 
 
-{literal}
+
 <script type="text/javascript">
 /* <![CDATA[ */
 $(document).ready(function() {
@@ -178,10 +178,10 @@ $(document).ready(function() {
         var title = $('input#title').val();
         var slug = $('input#slug').val();
         if(slug.length <= 0) {
-            $.ajax({ {/literal}
+            $.ajax({ 
                 type: 'POST',
-                url: '{baseurl}/page/slugit/',            
-                data: 'title=' + title + '&{$filter}', {literal}            
+                url: '{baseurl}/{url route="page-slugit"}',            
+                data: 'title=' + title + '&{$filter}',          
                 success: function(data) {
                     $('#slug').val(data);
                 }
@@ -198,5 +198,4 @@ $(document).ready(function() {
 });
 /* ]]> */
 </script>
-{/literal}
 

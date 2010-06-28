@@ -245,3 +245,7 @@ table.toolbar td .zoom_in {
 table.toolbar td .zoom_out {
     background-image: url(../images/toolbar/zoom_out.png);    
 }
+
+table.toolbar td .alacarte {
+    background-image: url(../images/toolbar/alacarte.png);    
+}

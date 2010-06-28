@@ -247,3 +247,7 @@ ul.toolbar li .zoom_in {
 ul.toolbar li .zoom_out {
     background-image: url(../images/toolbar/zoom_out.png);    
 }
+
+ul.toolbar li .alacarte {
+    background-image: url(../images/toolbar/alacarte.png);    
+}

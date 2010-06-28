@@ -28,7 +28,7 @@
     </div><!--end session-actions -->
 </div>
 
-{if !is_null($mailbox) }
+{if isset($mailbox)}
 <div id="user_mailbox">                            
     <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email={$smarty.session.email}&continue=https%3A%2f%2fmail.google.com%2fmail"
        title="{t}Goto GMail{/t} &lt;{$smarty.session.email}&gt;" target="_blank">

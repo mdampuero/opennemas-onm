@@ -38,7 +38,7 @@ class WidgetController extends Onm_Controller_Action
         $widgets = $cm->find('Widget', 'fk_content_type=12 AND status <> "REMOVED"', 'ORDER BY created DESC ');        
         
         // TODO: pagination        
-        $this->tpl->assign('widgets', $widgets);
+        $this->tpl->assign('widgets', $widgets);        
         
         $this->tpl->display('widget/index.tpl');
     }

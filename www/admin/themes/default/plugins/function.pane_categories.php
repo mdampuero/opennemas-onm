@@ -36,7 +36,11 @@ function smarty_function_pane_categories($params, &$smarty)
     
     if( isset($params['value']) ) {
         // Get categories of content
-        $request = $smarty->get_template_vars('request');
+        
+        /**
+         * @deprecated Use getTemplateVars
+         */
+        $request = $smarty->get_template_vars('request');                        
         
         if($request->getActionName() == "update") {
             $selected =  $params['value']->belongsToCategories();

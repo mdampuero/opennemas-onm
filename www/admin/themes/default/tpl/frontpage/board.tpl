@@ -26,26 +26,7 @@ div.content-row:hover {
     {$grid_content}
 </div>
 
-<div id="searcher">    
-    <div id="searcher-controls">
-        <input type="text" name="q[text]" id="q-text" value="{$smarty.request.q.text}" />        
-        
-        <select name="q[category]" id="q-category">
-            <option value=""></option>
-            {category_select selected=$smarty.request.q.category}
-        </select>
-        
-        <select name="q[content_type]" id="q-content_type">
-            <option value=""></option>
-            {content_type_select selected=$smarty.request.q.content_type}
-        </select>
-        
-        <button type="button" id="searcher-submit">{t}Search{/t}</button>
-        <button type="button" id="searcher-reset">{t}Reset{/t}</button>
-    </div>
-    
-    <div id="searcher-results"></div>
-</div>
+{include file="panes/searcher.tpl"}
 
 {if ($request->getActionName() eq "edit")}
 <input type="hidden" name="pk_page" id="pk_page" value="{$page->pk_page}" />
@@ -55,7 +36,8 @@ div.content-row:hover {
 {literal}        
 <script language="Javascript" type="text/javascript">
 /* <![CDATA[ */
-var saveGrid = function() {
+var saveGrid = function() {    
+    
     var data = {
         pk_page: $('#pk_page').val(),
         version: $('#version').val(),

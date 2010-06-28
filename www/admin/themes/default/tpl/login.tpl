@@ -63,7 +63,7 @@
                 <input type="hidden" name="token" value="{$token}" />
             {/if}
         </p>
-    </form>
+    </form>    
   </div>
   <div style="margin:0 auto; color:#666; font-size:.9em; text-align:center; width:300px;">
     OpenNemas Framework <br />

@@ -114,7 +114,7 @@ class Mask
             $mask = $this->getDefaultMask($this->_content->fk_content_type);
         }
         
-        if(!is_null($mask)) {
+        if(!is_null($mask) && !empty($mask)) {
             
             // FIXME: arranxar esta chapuza
             if(isset($args['page'])) {

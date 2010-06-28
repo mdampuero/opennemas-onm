@@ -1,13 +1,3 @@
-{literal}
-<style>
-div#pagina td, div#pagina th {
-    font-size:11px;
-    height:24px;
-    padding:0 10px;
-}
-</style>
-{/literal}
-
 {toolbar_route toolbar="toolbar-top"
     icon="new" route="widget-create" text="New Widget"}
     
@@ -18,17 +8,9 @@ div#pagina td, div#pagina th {
     {toolbar name="toolbar-top"}
 </div>
 
-<table class="adminheading">
-    <tbody>
-        <tr>
-            <th>{t}Widgets{/t}</th>
-        </tr>
-    </tbody>
-</table>
 
-<div id="pagina">
-<table border="0" cellpadding="4" cellspacing="0" class="adminlist">    
-<tbody>
+<table border="0" cellpadding="4" cellspacing="0" class="adminlist" id="datagrid">    
+<thead>
 <tr>
     <th class="title">{t}Name{/t}</th>
     <th class="title">{t}Type{/t}</th>
@@ -36,8 +18,9 @@ div#pagina td, div#pagina th {
     <th>&nbsp;</th>
     <th>&nbsp;</th>
 </tr>
+</thead>
 
-
+<tbody>
 {section name=wgt loop=$widgets}
 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
 	<td>
@@ -76,14 +59,14 @@ div#pagina td, div#pagina th {
 </tr>
 {/section}
 </tbody>
-
-<tfoot>
-    <tr>
-        <td colspan="5" align="center">
-            {$pager->links}
-        </td>            
-    </tr>
-</tfoot>
 </table>
 
-</div>
+{literal}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#datagrid').dataTable({
+        "bJQueryUI": true
+    });
+});    
+</script>
+{/literal}

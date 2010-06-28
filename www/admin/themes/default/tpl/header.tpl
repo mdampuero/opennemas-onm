@@ -18,7 +18,7 @@
 <![endif]-->
 
 {stylesection name="head"}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}ui-lightness/jquery-ui-1.8.1.custom.css"/>
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}smoothness/jquery-ui-1.8.2.custom.css"/>
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}toolbar.css"/>
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}flashmessenger.css"/>
 {/stylesection}

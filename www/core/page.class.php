@@ -176,7 +176,7 @@ class Page
         $fields = array(
             'fk_page', 'title', 'menu_title', 'short_url',
             'slug', 'description', 'keywords',
-            'grid', 'theme', 'params', 'weight', 'status', 'type',
+            'grid', 'theme', 'params', 'status', 'type',
             'inline_styles',
             'fk_publisher', 'fk_user_last_editor',
             'starttime', 'endtime',

@@ -82,7 +82,7 @@ class UserController extends Onm_Controller_Action
                 $this->tpl->assign('message', 'Nome de usuario ou contrasinal incorrecto.');
             }
             
-        } 
+        }
         
         $this->tpl->display('login.tpl');
     }
