@@ -4,13 +4,16 @@
 {toolbar_route toolbar="toolbar-top"
     icon="close" route="page-index" text="Cancel"}
     
-{literal}
+
 <style type="text/css" media="all">
-div.content-row:hover {
-    background-color: #EEF;
+div.content-row {
+    /*background-color: #EEF;*/
+    margin: 0.2em;
 }
 </style>
-{/literal}
+<style type="text/css">
+    @import url(/themes/{$page->theme|lower}/css/onm-mockup.css)
+</style>
     
 <div id="menu-acciones-admin">
     <div style="float: left; margin-left: 10px; margin-top: 10px;">
@@ -33,7 +36,6 @@ div.content-row:hover {
 <input type="hidden" name="version" id="version" value="{$page->version}" />
 {/if}
 
-{literal}        
 <script language="Javascript" type="text/javascript">
 /* <![CDATA[ */
 var saveGrid = function() {    
@@ -62,7 +64,7 @@ var saveGrid = function() {
     });
     
     $.ajax({
-        'url': {/literal}'{baseurl}/{url route="frontpage-savepositions"}'{literal},
+        'url': '{baseurl}/{url route="frontpage-savepositions"}',
         'type': 'post',
         'data': data
     });
@@ -70,14 +72,20 @@ var saveGrid = function() {
 
 $(document).ready(function() {
     $('#board div[role=wairole:gridcell]').each(function(i, container) {
-        $(container).css({minHeight: '100px', border: '1px dotted #999', padding: '1em', margin: '0.2em'});
+        $(container).css({
+            minHeight: '100px', border: '1px dotted #999', padding: '1em', margin: '0.2em'
+        });
         
         /* $(container).hover(
             function() {
-                $(this).css({backgroundColor: '#EEF'});
+                $(this).css({
+                    backgroundColor: '#EEF'
+                });
             },
             function() {
-                $(this).css({backgroundColor: '#F9F9F9'});
+                $(this).css({
+                    backgroundColor: '#F9F9F9'
+                });
             }            
         ); */
         
@@ -98,6 +106,6 @@ $(document).ready(function() {
 });
 /* ]]> */
 </script>
-{/literal}
+
 
 

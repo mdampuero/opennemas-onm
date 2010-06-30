@@ -212,10 +212,7 @@ class Grid
         if(!empty($contents)) {
             foreach($contents as $placeholder => $items) {
                 $output = '';
-                foreach($items as $content) {
-                    // FIXME: arranxar esta chapuza
-                    $args['page'] = $this->getPage();
-                    
+                foreach($items as $content) {                    
                     $output .= $content->render($args);
                 }                
                 

@@ -54,15 +54,7 @@ Smarty template: frontpage.tpl
                     </div>
                 </div>
                 
-                {* <div class="span-8">
-                    <input type="text" id="galdic-box" />
-                    <script type="text/javascript" src="{$params.JS_DIR}jquery.galdic.js"></script>
-                    <script type="text/javascript">
-                    /* <![CDATA[ */
-                    jQuery('#galdic-box').galdic();
-                    /* ]]> */
-                    </script>
-                </div> *}
+                
                
             </div><!-- fin #main_content -->
 
@@ -87,5 +79,4 @@ Smarty template: frontpage.tpl
     </script>
 
   </body>
-</html>
-	
+</html>	

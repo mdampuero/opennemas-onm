@@ -645,8 +645,8 @@ class Page
             $tpl->setTheme($this->theme);
         }
         
+        $grid = Grid::getInstance($this);
         //$grid = Grid::getInstance(SITE_PATH. 'themes/lucidity/grids/frontpage-3col.xml');
-        $grid = Grid::getInstance($this);        
         //$positions = $grid->getPositions();
         
         
@@ -660,7 +660,7 @@ class Page
             
             foreach($cts as $it) {
                 $content = Content::get($it['pk_content']);                
-                $box = new ContentBox($content, $it['mask'], $it['params']);                
+                $box = new ContentBox($content, $it['mask'], $this, $it['params']);                
                 $contents[$placeholder][] = $box;
             }
         }

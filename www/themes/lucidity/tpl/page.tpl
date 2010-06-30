@@ -34,6 +34,7 @@ Smarty template: frontpage.tpl
                 </div>                            
                 
             </div><!-- fin #main_content -->
+            
         </div><!-- fin .container -->
     </div><!-- fin .wrapper -->
 

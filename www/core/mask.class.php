@@ -22,26 +22,27 @@
 /**
  * Mask
  * 
- * @package    Onm
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: mask.class.php 1 2010-03-30 11:23:23Z vifito $
  */
 class Mask
 {    
-    private $_output  = null;
-    private $_content = null;
-    private $_mask    = null;
+    private $name    = null;
+    private $output  = null;
+    private $content = null;    
+    private $page    = null;
     
     
     /**
      * 
      * @param string $mask
      */
-    public function __construct($mask=null)
+    public function __construct($name=null)
     {
-        if( !is_null($mask) ) {
-            $this->setMask($mask);
+        if( !is_null($name) ) {
+            $this->setName($name);
         }
     }
     
@@ -72,32 +73,74 @@ class Mask
      */
     public function setContent($content)
     {
-        $this->_content = $content;
+        $this->content = $content;
         
         return $this;
     }
     
-    public function setMask($mask)
+    
+    /**
+     *
+     * @return Content
+     */
+    public function getContent()
     {
-        $this->_mask = $mask;
+        return $this->content;
+    }
+    
+    
+    /**
+     * Set name of mask
+     * 
+     * @param string $name
+     * @return Mask
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
         
         return $this;
     }
     
+    
+    /**
+     * Get name of mask
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    
+    
+    /**
+     * Set page
+     *
+     * @param Page $page
+     * @return Mask
+     */
     public function setPage($page)
     {
-        $this->_page = $page;
+        $this->page = $page;
         
         return $this;
     }
     
+    
+    /**
+     * Get page
+     *
+     * @return Page
+     */
     public function getPage()
     {
-        return $this->_page;
+        return $this->page;
     }
     
+    
     // FIXME: implement mechanism to assign mask default
-    public function getDefaultMask($pk_content_type)
+    public function getDefaultMask($pkcontent_type)
     {
         return null;
     }
@@ -107,48 +150,92 @@ class Mask
      * 
      * @return string
      */
+    //public function apply($args=array())
+    //{
+    //    $maskName = $this->name;
+    //    
+    //    if(!is_null($maskName) && !empty($maskName)) {            
+    //        $template = 'masks/' . $maskName . '.tpl';
+    //        $filename = SITE_PATH . '/themes/' . $this->page->theme . '/tpl/' . $template;
+    //        
+    //        // TODO: improve mask flow
+    //        if(!isset($args['renderMask']) && file_exists($filename)) {
+    //            
+    //            $tpl = new Template($this->page->theme);
+    //            
+    //        } elseif(isset($args['renderMask'])) {
+    //            
+    //            $template = 'masks/' . $args['renderMask'] . '.tpl';
+    //            $tpl = new TemplateAdmin(TEMPLATE_ADMIN);                
+    //        }            
+    //        
+    //        if(!empty($args)) {
+    //            $tpl->assign('args', $args);
+    //        }        
+    //        
+    //        // Assign object mask
+    //        $tpl->assign('mask', $this);
+    //        
+    //        // Helpers to get objects page and content
+    //        $tpl->assign('content', $this->getContent());
+    //        $tpl->assign('page',    $this->getPage());
+    //        
+    //        $this->output = $tpl->fetch($template);
+    //        
+    //    } else {
+    //        $this->output = $this->content->__toString();
+    //    }
+    //    
+    //    return $this->output;
+    //}
+    
     public function apply($args=array())
-    {
-        $mask = $this->_mask;
-        if(is_null($mask)) {
-            $mask = $this->getDefaultMask($this->_content->fk_content_type);
-        }
+    {        
+        $maskName = $this->name;
         
-        if(!is_null($mask) && !empty($mask)) {
-            
-            // FIXME: arranxar esta chapuza
-            if(isset($args['page'])) {
-                $this->setPage($args['page']);
-            }
-            
-            $template = 'masks/' . $mask . '.tpl';
-            $filename = SITE_PATH . '/themes/' . $this->_page->theme . '/tpl/' . $template;
-            
-            // TODO: improve mask flow
-            if(!isset($args['renderMask']) && file_exists($filename)) {
-                
-                $tpl = new Template($this->_page->theme);
-                
-            } elseif(isset($args['renderMask'])) {
-                
-                $template = 'masks/' . $args['renderMask'] . '.tpl';
-                $tpl = new TemplateAdmin(TEMPLATE_ADMIN);                
-            }            
+        // Frontend
+        if(!is_null($maskName) && !empty($maskName)) {            
+            $template = 'masks/' . $maskName . '.tpl';
+            $filename = SITE_PATH . '/themes/' . $this->page->theme . '/tpl/' . $template;
+            $tpl = new Template($this->page->theme);
             
             if(!empty($args)) {
                 $tpl->assign('args', $args);
             }        
             
-            $tpl->assign('mask', $mask);
-            $tpl->assign('item', $this->_content);
+            // Assign object mask
+            $tpl->assign('mask', $this);
             
-            $this->_output = $tpl->fetch($template);
+            // Helpers to get objects page and content
+            $tpl->assign('content', $this->getContent());
+            $tpl->assign('page',    $this->getPage());
+            
+            $this->output = $tpl->fetch($template);
             
         } else {
-            $this->_output = $this->_content->__toString();
+            $this->output = $this->content->__toString();
         }
         
-        return $this->_output;
+        // Backend
+        if(isset($args['renderMask'])) {                
+            $template = 'masks/' . $args['renderMask'] . '.tpl';
+            $tplBe = new TemplateAdmin(TEMPLATE_ADMIN);            
+            
+            // Assign object mask
+            $tplBe->assign('mask', $this);
+            
+            // Helpers to get objects page and content
+            $tplBe->assign('content', $this->getContent());
+            $tplBe->assign('page',    $this->getPage());
+            
+            $args['preview'] = $this->output;
+            if(!empty($args)) {
+                $tplBe->assign('args', $args);
+            }
+            
+            $this->output = $tplBe->fetch($template);
+        }
+        
+        return $this->output;
     }
-    
 }

@@ -1,3 +1,13 @@
+/**
+ *
+ * <input type="text" id="galdic-box" />
+ * <script type="text/javascript" src="{$params.JS_DIR}jquery.galdic.js"></script>
+ * <script type="text/javascript">
+ * jQuery('#galdic-box').galdic();
+ * </script>
+ *
+ */
+
 (function($){
     $.fn.galdic = function(options) {
         var opts = $.extend({}, $.fn.galdic.defaults, options);        

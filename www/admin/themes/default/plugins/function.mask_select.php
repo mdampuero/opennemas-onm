@@ -8,15 +8,15 @@
  */
 function smarty_function_mask_select($params, &$smarty)
 {    
-    if(!isset($params['item'])) {
-        $smarty->_trigger_fatal_error('[plugin] mask_select needs a "item" param');
+    if(!isset($params['item'])) {        
+        $smarty->trigger_error('[plugin] mask_select needs a "item" param');
         return;
     }
     $item = $params['item'];
     unset($params['item']);
     
     if(!isset($params['page'])) {
-        $smarty->_trigger_fatal_error('[plugin] mask_select needs a "page" param');
+        $smarty->trigger_error('[plugin] mask_select needs a "page" param');
         return;
     }
     $page = $params['page'];

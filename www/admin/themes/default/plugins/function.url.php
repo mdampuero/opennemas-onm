@@ -20,7 +20,7 @@
 function smarty_function_url($params, &$smarty)
 {
     if(!isset($params['route'])) {
-        $smarty->_trigger_fatal_error('[plugin] url needs a "name" param');
+        $smarty->trigger_error('[plugin] url needs a "name" param');
         return;
     }
     

@@ -161,6 +161,15 @@ div.video .publi_310 img{
     text-decoration: none;
     font-family: Georgia
 }
+#widget_weather_top .widget-litte-city{
+    color:#005689;
+    text-decoration: none;
+    font-family: Georgia;	
+	width:100px;	
+	text-align:right;
+	padding: 0.2em 0;
+	vertical-align: text-bottom
+}
 
 .max_temperature{
     background-color: #ffd42a;

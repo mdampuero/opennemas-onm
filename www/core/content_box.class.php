@@ -1,16 +1,69 @@
 <?php
-
+/* -*- Mode: PHP; tab-width: 4 -*- */
+/**
+ * OpenNemas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNemas
+ * @package    OpenNemas
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+ 
+/**
+ * ContentBox
+ * 
+ * @package    Core
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: content_box.class.php 1 2010-06-30 10:50:40Z vifito $
+ */
 class ContentBox
 {
-    private $_html    = null;
-    private $_content = null;
-    private $_mask    = null;
-    private $_params  = array();
+    /**
+     * @var string
+     */
+    private $html = null;
     
     /**
-     * @param Content $content
+     * @var Content
      */
-    public function __construct($content, $mask=null, $params=null)
+    private $content = null;
+    
+    /**
+     * @var string
+     */
+    private $mask = null;
+    
+    /**
+     * @var array
+     */
+    private $params = array();
+    
+    /**
+     * @var Page
+     */
+    private $page = null;
+    
+    
+    /**
+     * Contructor
+     * 
+     * @param Content $content
+     * @param string $mask
+     * @param Page $page
+     * @param array $params
+     */
+    public function __construct($content, $mask=null, $page=null, $params=null)
     {
         $this->setContent($content);
         
@@ -18,42 +71,64 @@ class ContentBox
             $this->setMask($mask);
         }
         
+        if(!is_null($page)) {
+            $this->setPage($page);
+        }
+        
         if(!is_null($params)) {
             $this->setParams($params);
         }
     }
+
+    public function getMask()
+    {
+        return $this->mask;
+    }
     
     public function setMask($mask)
     {
-        $this->_mask = $mask;
+        $this->mask = $mask;
     }
     
-    public function getMask()
+    public function getPage()
     {
-        return $this->_mask;
+        return $this->page;
+    }    
+    
+    /**
+     *
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+        
+        return $this;
     }
     
     public function setContent($content)
     {
-        $this->_content = $content;
+        $this->content = $content;
         
         return $this;
     }
     
     public function setParams($params)
     {
-        $this->_params = $params;
+        $this->params = $params;
     }
     
     public function render($args=array())
     {        
-        $mask = new Mask($this->_mask);
-        $mask->setContent($this->_content);
+        $mask = new Mask($this->mask);
         
-        $args = array_merge($this->_params, $args);
+        $mask->setContent($this->content);
+        $mask->setPage($this->page);
         
-        $this->_html = $mask->apply($args);
+        $args = array_merge($this->params, $args);
         
-        return $this->_html;
+        $this->html = $mask->apply($args);
+        
+        return $this->html;
     }
+    
 }

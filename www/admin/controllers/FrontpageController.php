@@ -49,13 +49,12 @@ class FrontpageController extends Onm_Controller_Action
             foreach($cts as $it) {
                 $content = Content::get($it['pk_content']);
                 
-                $contents[$placeholder][] = new ContentBox($content, $it['mask'], $it['params']);
+                $contents[$placeholder][] = new ContentBox($content, $it['mask'], $page, $it['params']);
             }
         }
         
         $args = array(
             'renderMask' => 'content_row_admin',
-            'page' => $page,
         );
         
         $output = $grid->render($contents, $args);        

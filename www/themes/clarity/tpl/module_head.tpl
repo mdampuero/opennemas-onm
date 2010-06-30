@@ -17,7 +17,8 @@
         <link rel="stylesheet" href="{$params.CSS_DIR}architecture-v1.css" type="text/css" media="screen,projection">
         <link rel="stylesheet" href="{$params.CSS_DIR}jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
 
-        <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
+        {* <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script> *}
+        <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.2.js"></script>
         <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
         <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
         {literal}
