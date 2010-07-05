@@ -49,7 +49,17 @@ class FrontpageController extends Onm_Controller_Action
             foreach($cts as $it) {
                 $content = Content::get($it['pk_content']);
                 
-                $contents[$placeholder][] = new ContentBox($content, $it['mask'], $page, $it['params']);
+                $props = array(
+                    'content'     => $content,
+                    'mask'        => $it['mask'],
+                    'page'        => $page,
+                    'params'      => $it['params'],
+                    'weight'      => $it['weight'],
+                    'placeholder' => $it['placeholder'],
+                );
+                
+                $box = new ContentBox($props);                
+                $contents[$placeholder][] = $box;
             }
         }
         
@@ -68,6 +78,35 @@ class FrontpageController extends Onm_Controller_Action
     }
     
     
+    public function repaintAction()
+    {
+        $pk_content = $this->_getParam('pk_content', -1);
+        $pk_page    = $this->_getParam('pk_page', -1);
+        $name       = $this->_getParam('mask', '');
+        
+        $content = Content::get($pk_content);
+        $page = new Page();
+        
+        $output = '';
+        
+        if(($page->read($pk_page) !== null) && ($content !== null)) {            
+            $props = array(
+                'page' => $page,
+                'content' => $content,            
+            );
+            
+            $mask   = new Mask($name, $props);
+            $output = $mask->apply();
+            
+        } elseif($content !== null) {
+            
+            $output = $content->__toString();
+        }
+        
+        echo $output;
+    }
+    
+    
     public function savepositionsAction()
     {
         $request = $this->getRequest();
@@ -83,5 +122,25 @@ class FrontpageController extends Onm_Controller_Action
         }
         
     }
+    
+    public function getmasksAction()
+    {                
+        $this->tpl->loadPlugin('smarty_function_mask_list');
+        
+        $pk_content = $this->_getParam('pk_content', -1);
+        $pk_page    = $this->_getParam('pk_page', -1);
+        
+        $content = Content::get($pk_content);
+        $page    = new Page($pk_page);        
+        
+        $params = array(
+            'item' => $content,
+            'page' => $page,
+        );
+        
+        $output = smarty_function_mask_list($params, $this->tpl);
+        echo $output;
+    }
+    
     
 }

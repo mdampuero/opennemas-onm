@@ -61,11 +61,19 @@ class ContentController extends Onm_Controller_Action
         $data   = $filter->filter($data);
         
         $contentMgr = new ContentManager();
-        $result     = $contentMgr->search($data['q']);
         
-        $this->tpl->display('search/' . '.tpl');        
+        $options = array(
+            'select' => array('pk_content', 'title', 'description', 'slug', 'keywords', 'status')
+        );
         
-        echo $result;
+        $result = $contentMgr->search($data['q'], $options);
+        
+        $data = new Zend_Dojo_Data();
+        $data->setIdentifier('pk_content')
+             ->addItems($result);
+        
+        header('Content-type: application/json');
+        echo $data;
     }
     
     

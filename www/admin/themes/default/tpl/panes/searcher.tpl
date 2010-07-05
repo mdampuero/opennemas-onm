@@ -35,18 +35,35 @@ $(document).ready(function() {
         var data = {};
         $('div#searcher input, div#searcher select').each(function(i, v) {
             data[ $(v).attr('id') ] = $(v).val();
-            $.cookie($(v).attr('id'), $(v).val());
+            $.cookie($(v).attr('id'), $(v).val());            
         });
         
-        console.log(data);
+        // Clear html
+        $('#searcher-results').html("");
+        
+        {literal}
+        var t = $.template('<div class="searcher-item" data-pk_content="${pk_content}">${title}</div>');
+        {/literal}
         
         $.ajax({
             'url': '{baseurl}/{url route="content-search"}',
             'data': data,
             'type': 'post',
-            'success': function(responseText, textStatus, xhr) {
-                console.log(responseText);
-                $('#searcher-results').html(responseText);
+            'success': function(response, textStatus, xhr) {                                
+                $.each(response.items, function(i, content) {
+                    $('#searcher-results').append( t, {
+                        pk_content: content.pk_content,
+                        title: content.title
+                    });
+                });
+                
+                //$('#searcher-results').sortable("destroy");
+                $('#searcher-results').sortable({
+                    items: 'div.searcher-item',
+                    placeholder: 'ui-state-highlight',
+                    dropOnEmpty: true,
+                    connectWith: '#board div[role=wairole:gridcell]'
+                });
             }
         });
     });
@@ -56,8 +73,7 @@ $(document).ready(function() {
         $.cookie('q-content_type', null);
         $.cookie('q-category', null);
         $.cookie('q-status', null);
-    });
-    
+    });    
     
     // Initialize form
     if($.cookie('q-text') != null) {

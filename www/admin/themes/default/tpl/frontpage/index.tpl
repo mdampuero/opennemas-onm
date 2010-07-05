@@ -3,10 +3,13 @@
 {tag_link rel="stylesheet" type="text/css" href="blueprint/liquid.css"}
 
 {* http://www.filamentgroup.com/lab/jquery_ui_selectmenu_an_aria_accessible_plugin_for_styling_a_html_select/ *}
-{tag_script src="ui.selectmenu.js"}
-{tag_link rel="stylesheet" type="text/css" href="ui.selectmenu.css"}
+{* tag_script src="ui.selectmenu.js"}
+{tag_link rel="stylesheet" type="text/css" href="ui.selectmenu.css" *}
 
 {tag_script src="jquery.utils.min.js"}
+{tag_script src="jquery.template.js"}
+
+{tag_script src="jquery.frontmanager.js"}
 
 
 {include file="header.tpl"}
