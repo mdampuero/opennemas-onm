@@ -12,17 +12,53 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * 
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
  
 /**
  * Page
+ *
+ * <code>
+ * $data = array(
+ *    'fk_page' => 0,
+ *   'weight'  => 0,
+ *   'title'   => 'HOME',
+ *   'slug'    => 'home',
+ *   'description' => 'Home page',
+ *   'keywords'    => 'home,opennemas',
+ *   'status'  => 'AVAILABLE',
+ *   'type'    => 'STANDARD',
+ *   'weight'  => 0
+ * );
+ * $home = Page::create($data);
+ *
+ * $data = array(
+ *    'fk_page' => $home, // reference to parent
+ *    'weight'  => 0,
+ *    'title'   => 'Child page',
+ *    'slug'    => 'child',
+ *    'description' => 'Secondary page',
+ *    'keywords'    => 'child,opennemas',
+ *    'status'  => 'AVAILABLE',
+ *    'type'    => 'STANDARD',
+ *    'weight'  => 1
+ * );
+ * $second = Page::create($data);
+ *
+ * $page = new Page();
+ * $root = $page->getRoot();
+ * $tree = $page->getTree($root->pk_page);
+ * echo Page::tree2html($tree);  // Static
  * 
- * @package    Onm
+ * $pageToDelete = $page->getPageBySlug('child');
+ * $page->delete( $pageToDelete->pk_page );
+ * </code>
+ *
+ * @package    Core
+ * @subpackage FrontManager
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: page.class.php 1 2010-04-20 11:14:52Z vifito $
@@ -59,8 +95,15 @@ class Page
     
     public  $cache = null;
     private $conn  = null;
-
-    // Constructor
+    
+    
+    /**
+     * Constructor
+     *
+     * @param int $pk_page|null
+     * @uses MethodCacheManager
+     * @uses Zend_Registry
+     */
     public function __construct($pk_page=null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
@@ -69,10 +112,16 @@ class Page
         // Load page if pk_page is not null
         if(!is_null($pk_page)) {
             $this->read($pk_page);
-        }                
+        }
     }
     
-    // Getters & Setters
+    
+    /**
+     * Getter magic method 
+     *
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
         if(property_exists($this, $name)) {
@@ -82,6 +131,13 @@ class Page
         return null;
     }
     
+    
+    /**
+     * Setter magic method
+     *
+     * @param string $name
+     * @param mixed $value
+     */
     public function __set($name, $value)
     {
         if(property_exists($this, $name)) {
@@ -89,6 +145,16 @@ class Page
         }
     }
     
+    
+    /**
+     * Create a new page
+     * 
+     * @uses Page::prepareData()
+     * @uses SqlHelper::bindAndInsert()
+     * @throws SqlHelperException
+     * @param array $data   Properties, from request, to bind with this object
+     * @return int  Autoincrement ID from database
+     */
     public function create($data)
     {        
         // Prepare array data with default values if it's necessary
@@ -113,7 +179,7 @@ class Page
     
     
     /**
-     * Prepare default values
+     * Prepare default values to insert/update in database
      *
      * @param array $data
      */
@@ -147,20 +213,37 @@ class Page
     }
     
     
+    /**
+     * Read page
+     *
+     * @param int $pk_page
+     * @return Page|null
+     */
     public function read($pk_page)
     {        
         $sql = 'SELECT * FROM `pages` WHERE `pk_page` = ?';
-        $rs  = $this->conn->Execute($sql, array($pk_page));        
+        $rs  = $this->conn->Execute($sql, array($pk_page));
         
         if(($rs !== false) && (!$rs->EOF)){
             $this->loadProperties($rs->fields);
-        }                
+        } else {
+            return null;
+        }
+        
+        return $this;
     }
     
+    
+    /**
+     * Get page root
+     * For better performance use PageManager::getRoot()
+     *
+     * @return Page|null    Return page if found it, otherwise null
+     */
     public function getRoot()
-    {        
+    {
         $sql = 'SELECT pk_page FROM pages WHERE fk_page = 0 ORDER BY weight';
-        $pk_page  = $this->conn->GetOne($sql);        
+        $pk_page  = $this->conn->GetOne($sql);
         
         if($pk_page === false) {
             return null;
@@ -169,6 +252,16 @@ class Page
         return new Page($pk_page);
     }
     
+    
+    /**
+     * Update page values
+     * 
+     * @todo Implement class Params
+     * @uses SqlHelper
+     * @throws OptimisticLockingException
+     * @param array $data
+     * @param int $pk_page
+     */
     public function update($data, $pk_page)
     {
         // TODO: validation
@@ -199,14 +292,16 @@ class Page
             }
         }
         
-        SqlHelper::bindAndUpdate('pages', $fields, $data, $filter, $this->conn);        
+        SqlHelper::bindAndUpdate('pages', $fields, $data, $filter, $this->conn);
     }
+    
     
     /**
      * Delete a page,
      * page must not to have child pages
      *
-     * @pre Page::hasChildPages($pk_page) == false
+     * Precondition:
+     *   Page::hasChildPages($pk_page) == false
      * 
      * @param int $pk_page
      * @return boolean  Return true if page was removed
@@ -245,7 +340,7 @@ class Page
     /**
      * Generate a unique slug 
      *
-     * @use Onm_Filter_Slug
+     * @uses Onm_Filter_Slug
      * @param string $title
      * @param int $excludeId
      * @return string
@@ -259,8 +354,8 @@ class Page
         // Get all slugs in database
         $slugs = $this->_getSlugs($excludeId);
         
-        if(in_array($slug, $slugs)) {            
-            $i = 1;            
+        if(in_array($slug, $slugs)) {
+            $i = 1;
             $new = $slug . '-' . $i;
             
             while( in_array($new, $slugs) ) {
@@ -290,7 +385,7 @@ class Page
         $urlRoute = null;
         
         if($router->hasRoute('page-index')) {
-            $route = $router->getRoute('page-index');        
+            $route = $router->getRoute('page-index');
             $urlRoute = $route->assemble(array('slug' => $this->slug), true);
         }
         
@@ -331,12 +426,12 @@ class Page
         
         $page = new Page();
         
-        if( ($rs !== false) && (!$rs->EOF) ) {            
-            $page->loadProperties($rs->fields);                        
+        if( ($rs !== false) && (!$rs->EOF) ) {
+            $page->loadProperties($rs->fields);
         }
         
         return $page;
-    }    
+    }
     
     
     /**
@@ -426,7 +521,7 @@ class Page
             if(property_exists($object, $prop)) {
                 $object->{$prop} = $val;
             }
-        }        
+        }
     }
     
     
@@ -447,12 +542,18 @@ class Page
     
     
     /**
-     *
+     * Change parent reference of page and weight param
+     * Method used for jstree - http://www.jstree.com/
+     * 
+     * @deprecated
+     * @param int $pk_page
+     * @param int $fk_page
+     * @param int $weight
      */
     public function moveNode($pk_page, $fk_page, $weight)
     {
         // FIXME: review funcionalities
-        $sql = 'UPDATE pages SET fk_page=?, weight=? WHERE pk_page=?';                
+        $sql = 'UPDATE pages SET fk_page=?, weight=? WHERE pk_page=?';
         $rs = $this->conn->Execute($sql, array($fk_page, $weight, $pk_page));
         
         if($rs === false) {
@@ -495,21 +596,29 @@ class Page
     
     
     /**
+     * Rename title of page
+     * Method used for jstree - http://www.jstree.com/
      *
-     *
+     * @deprecated
+     * @param int $pk_page
+     * @param string $title
      */
     public function renameNode($pk_page, $title)
     {
-        $sql = 'UPDATE pages SET title=? WHERE pk_page=?';        
+        $sql = 'UPDATE pages SET title=? WHERE pk_page=?';
         $rs = $this->conn->Execute($sql, array($title, $pk_page));
         if($rs === false) {
             // log
-        }        
+        }
     }
     
     
     /**
      * Process the page considering your type and status
+     * 
+     * @todo implement dispatch method using classes of page, for example PageShortcut
+     * @throws PageNotAvailableException
+     * @return mixed   Return HTML content of page or void
      */
     public function dispatch()
     {
@@ -528,7 +637,7 @@ class Page
         }
         
         return $result;
-    }    
+    }
     
     
     /**
@@ -538,14 +647,14 @@ class Page
      * @return string
      */
     public function _dispatchStandard()
-    {        
+    {
         return $this->render();
     }
     
     
     /**
      * Dispatch a page of external type
-     *
+     * redirect to external resource
      */
     public function _dispatchExternal()
     {
@@ -562,9 +671,10 @@ class Page
     
     
     /**
+     * Dispatch a page of type == SHORTCUT
+     * redirect to other page
      *
-     * type == SHORTCUT
-     *
+     * @throws Exception
      */
     public function _dispatchShortcut()
     {
@@ -576,7 +686,7 @@ class Page
         if($page == null) {
             // TODO: custom exception
             throw new Exception('Param «pk_page» do not exists.');
-        }                
+        }
         
         $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
         $redirector->gotoRoute(
@@ -587,10 +697,9 @@ class Page
     
     
     /**
-     * Dispatch a page 
-     * type == NOT_IN_MENU
+     * Dispatch a page of type == NOT_IN_MENU
      * 
-     * @uses Page::render()
+     * @uses Page::_dispatchStandard()
      * @return string
      */
     public function _dispatchNot_in_menu()
@@ -627,7 +736,7 @@ class Page
         $params = array();
         if($this->params != null) {
             $params = unserialize($this->params);
-        }        
+        }
         
         return $params;
     }
@@ -646,12 +755,9 @@ class Page
         }
         
         $grid = Grid::getInstance($this);
-        //$grid = Grid::getInstance(SITE_PATH. 'themes/lucidity/grids/frontpage-3col.xml');
-        //$positions = $grid->getPositions();
         
-        
-        $pageMgr = PageManager::getInstance();        
-        $items   = $pageMgr->getContentsByPage( $this->pk_page );        
+        $pageMgr = PageManager::getInstance();
+        $items   = $pageMgr->getContentsByPage( $this->pk_page );
         
         $contents = array();
         foreach($items as $placeholder => $cts) {
@@ -659,8 +765,19 @@ class Page
             $contents[$placeholder] = array();
             
             foreach($cts as $it) {
-                $content = Content::get($it['pk_content']);                
-                $box = new ContentBox($content, $it['mask'], $this, $it['params']);                
+                $content = Content::get($it['pk_content']);
+                
+                $props = array(
+                    'content'     => $content,
+                    'mask'        => $it['mask'],
+                    'page'        => $this,
+                    'params'      => $it['params'],
+                    'weight'      => $it['weight'],
+                    'placeholder' => $it['placeholder'],
+                );
+                
+                $box = new ContentBox($props);
+                
                 $contents[$placeholder][] = $box;
             }
         }
@@ -675,58 +792,6 @@ class Page
      * Generate a HTML representatio for a tree of pages
      *
      * @param array $tree
-     * @param string|null   $id
-     * @param string $role  WAI-ARIA role
-     * @param boolean $isRoot   Flag to control recursive generation
-     * @return string   Tree HTML representation
-     */
-    /* public static function tree2html($tree, $id=null, $role='tree', $isRoot=true)
-    {
-        $html = '';
-        
-        if($isRoot) {
-            if(is_null($id)) {
-                $id = uniqid($role . '-');
-            }
-            
-            // Role menu|tree
-            $html = '<ul role="' . $role . '">';
-            
-            $html .= '<li id="node-' . $tree['element']->pk_page .'" class="open"
-                          role="' . $role . 'item"
-                          rel="root">';
-            $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
-            $html .= '<ins>&nbsp;</ins>';
-            $html .= $tree['element']->title;
-            $html .= '</a>';
-        } else {
-            $html = '<ul role="group">';
-            
-            // Role menuitem|treeitem
-            $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $role . 'item"
-                          rel="' . strtolower($tree['element']->type) .'">';                
-            $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
-            $html .= '<ins>&nbsp;</ins>';
-            $html .= $tree['element']->title;
-            $html .= '</a>';            
-        }        
-        
-        if(isset($tree['childNodes'])) {            
-            foreach($tree['childNodes'] as $item) {
-                $html .= Page::tree2html($item, null, $role, false);                
-            }
-        }
-        
-        $html .= '</li>';
-        $html .= '</ul>';
-        
-        return $html;
-    } */
-    
-    /**
-     * Generate a HTML representatio for a tree of pages
-     *
-     * @param array $tree
      * @param string $role  WAI-ARIA role
      * @return string   Tree HTML representation
      */
@@ -734,12 +799,12 @@ class Page
         $html = '';
         
         if(!isset($root['element'])) {
-            // is a childNodes array            
-            $html .= '<ul role="group">';            
-            foreach($root as $tree) {                
+            // is a childNodes array
+            $html .= '<ul role="group">';
+            foreach($root as $tree) {
                 
                 $html .= '<li id="node-' . $tree['element']->pk_page .'" role="' . $role . 'item"
-                          rel="' . strtolower($tree['element']->type) .'">';                
+                          rel="' . strtolower($tree['element']->type) .'">';
                 $html .= '<a href="/pages/' . $tree['element']->slug .'/">';
                 $html .= '<ins>&nbsp;</ins>';
                 $html .= $tree['element']->title;
@@ -747,11 +812,11 @@ class Page
                 
                 if(isset($tree['childNodes'])) {
                     $html .= Page::tree2html($tree['childNodes'], $role);
-                }                
+                }
                 
                 $html .= '</li>';
                 
-            }            
+            }
             $html .= '</ul>';
             
         } else {
@@ -776,131 +841,4 @@ class Page
         return $html;
     }
 
-
-}
-
-
-// Test
-//require_once('../config.inc.php');
-//require_once('./application.class.php');
-//require_once('./sql_helper.class.php');
-//require_once('./method_cache_manager.class.php');
-//
-//Application::import_libs('*');
-//$app = Application::load();
-
-/* $data = array(
-    'fk_page' => 0,
-    'weight'  => 0,
-    'title'   => 'HOME',
-    'slug'    => 'home',
-    'description' => 'Página principal',
-    'keywords'    => 'home,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 0
-);
-$home = Page::create($data);
-
-$data = array(
-    'fk_page' => $home,
-    'weight'  => 0,
-    'title'   => 'Galicia',
-    'slug'    => 'galiza',
-    'description' => 'Página de galicia',
-    'keywords'    => 'galicia,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 1
-);
-$galicia = Page::create($data);
-
-$data = array(
-    'fk_page' => $home,
-    'weight'  => 0,
-    'title'   => 'Outra páxina',
-    'slug'    => 'paxina',
-    'description' => 'Página outra',
-    'keywords'    => 'outra,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 0
-);
-Page::create($data); 
-
-$data = array(
-    'fk_page' => $root->pk_page,
-    'weight'  => 0,
-    'title'   => 'Mundo',
-    'slug'    => 'mundo',
-    'description' => 'Página de mundo',
-    'keywords'    => 'mundo,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 1
-);
-$mundo = Page::create($data);
-
-$data = array(
-    'fk_page' => $mundo,
-    'weight'  => 0,
-    'title'   => 'Mundo 1',
-    'slug'    => 'mundo-1',
-    'description' => 'Página de mundo 1',
-    'keywords'    => 'mundo,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 1
-);
-$mundo_1 = Page::create($data);
-
-$data = array(
-    'fk_page' => $mundo_1,
-    'weight'  => 0,
-    'title'   => 'Mundo 1_1',
-    'slug'    => 'mundo-1-1',
-    'description' => 'Página de mundo 1_1',
-    'keywords'    => 'mundo,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 1
-);
-$mundo_1_1 = Page::create($data);
-
-$data = array(
-    'fk_page' => $mundo_1_1,
-    'weight'  => 0,
-    'title'   => 'Mundo 1_1_1',
-    'slug'    => 'mundo-1-1-1',
-    'description' => 'Página de mundo 1_1_1',
-    'keywords'    => 'mundo,opennemas',
-    'status'  => 'AVAILABLE',
-    'type'    => 'STANDARD',
-    'weight'  => 1
-);
-Page::create($data); */
-
-//$page = new Page();
-//$root = $page->getRoot();
-//$tree = $page->getTree($root->pk_page);
-//echo Page::tree2html($tree);  // Static
-//
-//
-//$mundo = $page->getPageBySlug('mundo');
-//$tree = $page->getTree($mundo->pk_page);
-//echo Page::tree2html($tree); 
-//
-//$mundo = $page->getPageBySlug('home');
-//$tree = $page->getTree($mundo->pk_page);
-//
-//var_dump($tree);
-//die();
-//
-//
-//echo Page::tree2html($tree, 'menuId', 'menu');
-//
-//$pageToDelete = $page->getPageBySlug('mundo-1-1-1');
-//$page->delete($pageToDelete->pk_page);
-
-//$root = new Page(7);
-
+} // END: class Page

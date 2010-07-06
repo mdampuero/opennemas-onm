@@ -48,9 +48,13 @@ GalDicKlass.prototype = {
     
     init: function() {
         // Default properties
-        this.elem.val('Procurar en GalDic...');
+        this.elem.val('Buscar en GalDic...');
         this.elem.attr('title', 'Escriba o termo e prema enter ↵');
         this.elem.attr('maxlength', '40');
+        this.elem.css({
+            'margin-left': '10px',
+            'width': '250px'
+        });
         
         // Event to search
         this.elem.keypress($.proxy(this, "onKeypress"));
@@ -62,8 +66,19 @@ GalDicKlass.prototype = {
         this.enhanceCSS();
         
         // Div results container
-        this.elem.parent().append('<div class="results"></div>');
-        this.rsDiv = this.elem.parent().find('div.results').css('display', '');
+        this.elem.parent().append('<div class="galdic-results"> </div>');
+        this.rsDiv = this.elem.parent().find('div.galdic-results').css({
+            'display': '',
+            'height': '80px',
+            'overflow': 'auto',
+            'padding': '0.8em'
+        });
+        
+        this.elem.parent().append('<div class="galdic-powered"><a href="http://galdic.vifito.eu/" target="_blank" title="Dicionario de galego - GalDic">&raquo; powered by GalDic</a></div>');
+        this.elem.parent().find('div.galdic-powered').css({
+            'text-align': 'right',
+            'padding-right': '0.8em'
+        });
     },
     
     enhanceCSS: function() {
@@ -120,7 +135,7 @@ GalDicKlass.prototype = {
     },
     
     renderResult: function(data) {
-        this.rsDiv.css({'display': 'none'});
+        /* this.rsDiv.css({'display': 'none'}); */
         
         if(data['name'] != undefined) {
             var output = '';
@@ -138,7 +153,7 @@ GalDicKlass.prototype = {
             this.rsDiv.html('<strong>Non se atoparon entradas relacionadas.</strong>');
         }
         
-        this.rsDiv.slideDown('slow', $.proxy(this, "onRenderComplete"));
+        /* this.rsDiv.slideDown('slow', $.proxy(this, "onRenderComplete")); */
     },    
     
     onRenderComplete: function() {

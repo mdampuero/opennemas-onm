@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNemas
- * @package    OpenNemas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,13 +21,17 @@
 /**
  * ContentTypeManager
  * 
- * @package    Onm
+ * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: content_type_manager.class.php 1 2010-06-01 13:28:27Z vifito $
  */
 class ContentTypeManager
-{    
+{
+    /**
+     * @var ContentTypeManager  Singleton instance
+     */
     private static $_instance = null;
 
     /**
@@ -44,6 +47,11 @@ class ContentTypeManager
     private $conn = null;
     
     
+    /**
+     * Constructor
+     *
+     * @uses ContentTypeManager::populate()
+     */
     private function __construct()
     {
         if(Zend_Registry::isRegistered('conn')) {
@@ -54,7 +62,13 @@ class ContentTypeManager
     }
     
     
-    public function getInstance()
+    /**
+     * Get singleton instance
+     *
+     * @static
+     * @return ContentTypeManager
+     */
+    public static function getInstance()
     {
         if(self::$_instance == null) {
             self::$_instance = new self();
@@ -95,7 +109,10 @@ class ContentTypeManager
     
     
     /**
+     * Get ContentType object by $pk_content_type
      *
+     * @param int $pk_content_type
+     * @return ContentType
      */
     public function get($pk_content_type)
     {
@@ -108,7 +125,7 @@ class ContentTypeManager
     
     
     /**
-     * 
+     * populateMasksDb
      * @deprecated 0.8-alpha Load masks from filesystem
      */
     private function populateMasksDb()
@@ -186,20 +203,26 @@ class ContentTypeManager
     }
     
     
+    /**
+     * Get array of content types
+     *
+     * @return array
+     */
     public function getTypes()
     {
         return $this->_types;
     }
     
     
+    /**
+     * Return content types in json format
+     *
+     * @return string
+     */
     public function toJSON()
     {
         return json_encode($this->_types);
     }
     
     
-}
-
-
-
-
+} // END: class ContentTypeManager

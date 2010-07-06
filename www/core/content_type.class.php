@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNemas
- * @package    OpenNemas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,8 +21,8 @@
 /**
  * ContentType
  * 
- * @package    Onm
- * @subpackage 
+ * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: content_type.class.php 1 2010-06-01 13:28:27Z vifito $
@@ -34,14 +33,21 @@ class ContentType
     public $pk_content_type = null;
     public $name  = null;
     public $title = null;
-    public $masks = array();
-    
-    private static $_instance = null;
+    public $masks = array();    
     
     private $_types = null;
     
+    /**
+     * @var ADOConnection
+     */
     private $conn = null;
     
+    
+    /**
+     * Constructor
+     *
+     * @param int $pk_content_type
+     */
     public function __construct($pk_content_type=null)
     {
         if(Zend_Registry::isRegistered('conn')) {
@@ -54,6 +60,13 @@ class ContentType
     }
     
     
+    /**
+     * Get content type object
+     *
+     * @uses ContentTypeManager
+     * @param int $pk_content_type
+     * @return ContentType
+     */
     public function read($pk_content_type)
     {
         // ContentTypeManager
@@ -111,8 +124,4 @@ class ContentType
     }
     
     
-}
-
-
-
-
+} // END: class ContentType

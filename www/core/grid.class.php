@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,8 +21,8 @@
 /**
  * Grid
  * 
- * @package    Onm
- * @subpackage 
+ * @package    Core
+ * @subpackage FrontManager
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: grid.class.php 1 2010-05-24 16:49:40Z vifito $
@@ -41,9 +40,14 @@ class Grid
      */
     static private $_instances = array();
     
+    
     /**
+     * Constructor
+     * Create instance and load file grid (xml), using simplexml_load_file
      *
-     *
+     * @uses Grid::load()
+     * @throws GridNotFoundException
+     * @param string $filename
      */
     private function __construct($filename)
     {
@@ -52,7 +56,7 @@ class Grid
         }
         
         $this->_filename = $filename;
-        $this->load();        
+        $this->load();
     }
     
     
@@ -68,7 +72,7 @@ class Grid
         
         $id = Grid::generateId($filename);
         
-        if(empty(self::$_instances) || !isset(self::$_instances[$id])) {            
+        if(empty(self::$_instances) || !isset(self::$_instances[$id])) {
             self::$_instances[$id] = new Grid($filename);
             
             // Inject page
@@ -98,8 +102,9 @@ class Grid
     
     
     /**
-     *
-     *
+     * Set page
+     * 
+     * @param Page $page
      */
     public function setPage(Page $page)
     {
@@ -107,10 +112,16 @@ class Grid
     }
     
     
+    /**
+     * Get page
+     *
+     * @return Page
+     */
     public function getPage()
     {
         return $this->_page;
     }
+    
     
     /**
      * Get filename
@@ -124,7 +135,8 @@ class Grid
         $filename = '';
         
         if( $it instanceof Page ) {
-            $theme = (!is_null($it->theme))? $it->theme: TEMPLATE_USER;                        
+            // By default use constant TEMPLATE_USER
+            $theme = (!is_null($it->theme))? $it->theme: TEMPLATE_USER;
             
             if(is_null($it->grid)) {
                 throw new GridNotFoundException('Grid file not defined for page: ' . $it->title);
@@ -154,7 +166,7 @@ class Grid
     
     
     /**
-     *
+     * Load grid file
      */
     private function load()
     {
@@ -166,7 +178,6 @@ class Grid
         foreach($xml->positions->children() as $position) {
             $this->_positions[] = (string)$position;
         }
-        
     }
     
     
@@ -186,8 +197,12 @@ class Grid
     
     
     /**
+     * Getter using magic method __call
+     * getFilename returns <code>$this->_filename</code> value
      *
-     *
+     * @param string $name
+     * @param array $args
+     * @return mixed
      */
     public function __call($name, $args=array())
     {
@@ -212,15 +227,15 @@ class Grid
         if(!empty($contents)) {
             foreach($contents as $placeholder => $items) {
                 $output = '';
-                foreach($items as $content) {                    
+                foreach($items as $content) {
                     $output .= $content->render($args);
-                }                
+                }
                 
                 $html = str_replace('<!-- #' . $placeholder . '# -->', $output, $html);
-            }            
+            }
         }
-        
         
         return $html;
     }
-}
+    
+} // END: class Grid

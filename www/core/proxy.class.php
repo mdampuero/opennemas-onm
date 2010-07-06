@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,7 +21,8 @@
 /**
  * Proxy
  * 
- * @package    OpenNeMas
+ * @package    Core
+ * @subpackage Utils
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: proxy.class.php 1 2009-11-09 12:46:48Z vifito $
@@ -61,8 +61,10 @@ class Proxy {
     }
     
     /**
+     * Set URI to request
      *
-     * 
+     * @param string $url
+     * @return Proxy    Reference to this objecto to chain methods
      */
     public function setUrl($url)
     {
@@ -76,6 +78,13 @@ class Proxy {
         return $this; // Chaining methods
     }
     
+    
+    /**
+     * Set content type
+     *
+     * @param string $content_type
+     * @return Proxy    Reference to this objecto to chain methods
+     */
     public function setContentType($content_type)
     {
         $this->contentType = $content_type;
@@ -83,8 +92,12 @@ class Proxy {
         return $this; // Chaining methods
     }
     
+    
     /**
+     * Perform a request HTTP GET action
      *
+     * @param string|null $url
+     * @return Proxy    Reference to this objecto to chain methods
      */
     public function get($url=null)
     {        
@@ -101,6 +114,10 @@ class Proxy {
         return $this; // Chaining methods
     }
     
+    
+    /**
+     * Dump content of http request
+     */
     public function dump()
     {
         if(!is_null($this->contentType) && !is_null($this->content)) {
@@ -111,9 +128,11 @@ class Proxy {
         }
     }
     
+    
     /**
-     * Perform HTTP request
+     * Perform HTTP request, using curl extension
      *
+     * @todo Check curl extension is installed, otherwise use tcp-wrapper
      * @param string $url
      * @return string HTML/XML content response
      */
@@ -137,4 +156,4 @@ class Proxy {
         }
     }
     
-}
+} // END: class Proxy

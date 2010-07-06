@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,7 +21,8 @@
 /**
  * MethodCacheManager
  * 
- * @package    Onm
+ * @package    Core
+ * @subpackage Utils
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: method_cache_manager.class.php 1 2010-05-17 20:25:47Z vifito $
@@ -34,6 +34,14 @@ class MethodCacheManager
     private $methods   = null;
     private $classname = null;
     
+    
+    /**
+     * Constructor
+     * Provide objecto to cache yours methods
+     *
+     * @param mixed $object
+     * @param array $options
+     */
     public function __construct($object, $options=array())
     {
         $this->object = $object;
@@ -43,6 +51,14 @@ class MethodCacheManager
         }
     }
     
+    
+    /**
+     * Proxy call method to object using magic method
+     *
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
     public function __call($method, $args)
     {        
         $class_methods = $this->getInternalObjectMethods();
@@ -66,24 +82,51 @@ class MethodCacheManager
         }
     }
     
+    
+    /**
+     * Set cache life time
+     *
+     * @param int $ttl    Seconds of life time
+     * @return MethodCacheManager   Reference to this object to chain methods
+     */
     public function set_cache_life($ttl)
     {        
         $this->ttl = $ttl;
         return $this;
     }
     
+    
+    /**
+     * Clear value by key
+     *
+     * @param string $key
+     * @return MethodCacheManager   Reference to this object to chain methods
+     */
     public function clear_cache($key)
     {
         apc_delete( $key );
         return $this;
     }
     
+    
+    /**
+     * Clear all APC cache
+     *
+     * @return MethodCacheManager   Reference to this object to chain methods
+     */
     public function clear_all_cache()
     {
         apc_clear_cache('user');
         return $this;
     }
     
+    
+    /**
+     * Get internal methods
+     *
+     * @todo Use new PHP5 Reflexion API 
+     * @return array    Array with name of methods 
+     */
     protected function getInternalObjectMethods()
     {
         if ($this->methods === null && $this->object !== null) {
@@ -91,6 +134,7 @@ class MethodCacheManager
             $this->methods   = get_class_methods($this->classname);
         }
         
-        return( $this->methods );
+        return $this->methods;
     }
-}
+    
+} // END: class MethodCacheManager

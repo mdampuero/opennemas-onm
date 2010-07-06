@@ -1,42 +1,9 @@
-(function($) {
-    
-    $.fn.frontmanager = function(options) {
-        var opts = $.extend({}, $.fn.frontmanager.defaults, options);
-        $this = $(this);
-        opts.elem = $this;
-        
-        // Singleton
-        if($.fn.frontmanager.__instance__ == null) {
-            $.fn.frontmanager.__instance__ = new FrontManagerKlass(opts);
-        }
-        
-        return $.fn.frontmanager.__instance__;
-    };
-    
-    $.fn.frontmanager.defaults = {
-        'savePosURI':  null,
-        'repaintURI':  null,
-        'getMasksURI': null,
-        'pk_page':     $('#pk_page').val(),
-        'version':     $('#version').val(),
-        'confirmText': 'Are you sure?',
-        'waitingText': 'Rendering content...',
-        'connectWith': 'div[role=wairole:gridcell], #searcher-results'
-    };
-    
-    $.fn.frontmanager.__instance__ = null;
-    
-    $.fn.frontmanager.getInstance = function() {
-        return $.fn.frontmanager.__instance__;
-    };
-})(jQuery);
+/*jslint debug: true, undef: true, eqeqeq: false, browser: true, on: true, indent: 4, onevar: true, plusplus: false, white: false */
+/*global jQuery, $*/
 
-
-
-/**
- * FrontManagerKlass
- * 
- */ 
+//
+// FrontManagerKlass
+// 
 var FrontManagerKlass = function(options) {
     // Property options
     this.options = options;
@@ -51,20 +18,20 @@ var FrontManagerKlass = function(options) {
     this.gridCells = this.elem.find('div[role=wairole:gridcell]');
     
     // Template for ContentBox
-    this.templateContentBox = '<div class="ui-widget content-box" data-pk_content="${pk_content}" data-mask="${mask}"> \
-    <div class="ui-widget-header ui-corner-top ui-helper-clearfix"> \
-        <span>${title}</span> \
-        <ul class="ui-helper-reset"> \
-            <li><span data-action="toggle" class="ui-icon ui-icon-minus"></span></li> \
-            <li><span data-action="repaint" class="ui-icon ui-icon-newwin"></span></li> \
-            <li><span data-action="drop" class="ui-icon ui-icon-circle-close"></span></li> \
-        </ul> \
-        <div class="content-box-masks ui-corner-all"></div> \
-    </div> \
-    <div class="ui-widget-content ui-corner-bottom"> \
-        <div class="clearfix"><img src="/admin/images/loading.gif" border="0" /> ' + this.options.waitingText + '</div> \
-    </div>\
-</div>';
+    this.templateContentBox = '<div class="ui-widget content-box" data-pk_content="${pk_content}" data-mask="${mask}">' +
+        '<div class="ui-widget-header ui-corner-top ui-helper-clearfix">' +
+            '<span>${title}</span>' +
+            '<ul class="ui-helper-reset">' +
+                '<li><span data-action="toggle" class="ui-icon ui-icon-minus"></span></li>' +
+                '<li><span data-action="repaint" class="ui-icon ui-icon-newwin"></span></li>' +
+                '<li><span data-action="drop" class="ui-icon ui-icon-circle-close"></span></li>' +
+            '</ul>' +
+            '<div class="content-box-masks ui-corner-all"></div>' +
+        '</div>' +
+        '<div class="ui-widget-content ui-corner-bottom">' +
+            '<div class="clearfix"><img src="/admin/images/loading.gif" border="0" /> ' + this.options.waitingText + '</div>' +
+        '</div>' +
+    '</div>';
     
     // Initialization
     this.init();
@@ -79,6 +46,9 @@ FrontManagerKlass.prototype = {
         
         // Parse all buttons
         this.parseButtons('#' + this.id + ' div.ui-widget-header>ul>li>span');
+        
+        // Close selector opened
+        $(document.body).click( $.proxy(this, 'closeSelector') );
     },
     
     parseGrid: function() {
@@ -93,6 +63,7 @@ FrontManagerKlass.prototype = {
         $(container).sortable({
             items: 'div.content-box',
             placeholder: 'ui-state-highlight',
+            handle: 'div.ui-widget-header',
             forcePlaceholderSize: true,
             dropOnEmpty: true,
             connectWith: this.options.connectWith,
@@ -107,10 +78,21 @@ FrontManagerKlass.prototype = {
     },
     
     onClickMask: function(event) {
+        var contentBox, mask, context, pk_content;
+        
         event.preventDefault();
         event.stopPropagation();
         
-        console.log( $(event.target) );
+        contentBox = $(event.target).parents('div.ui-widget');
+        
+        mask = $(event.target).parents('li').attr('data-mask');
+        contentBox.attr('data-mask', mask);
+        
+        context = contentBox.find('div.ui-widget-content>div');
+        pk_content = contentBox.attr('data-pk_content');
+        
+        this.closeSelector();
+        this.repaintMask(context, pk_content, mask);
     },
     
     // Parse button set
@@ -118,12 +100,13 @@ FrontManagerKlass.prototype = {
         $(selector).click( $.proxy(this, "handlerButtons") );
     },
     
-    /* Handle click buttons of ContentBox */
+    // Handle click buttons of ContentBox 
     handlerButtons: function(event) {
+        var action, pos;
         event.preventDefault();
         event.stopPropagation();
         
-        var action = $(event.target).attr('data-action');
+        action = $(event.target).attr('data-action');
         switch(action) {
             case 'toggle':
                 if($(event.target).hasClass('ui-icon-minus')) {
@@ -132,7 +115,7 @@ FrontManagerKlass.prototype = {
                         .parents("div.ui-widget")
                         .find('div.ui-widget-content')
                         .hide();
-                } else {                
+                } else {
                     $(event.target).removeClass('ui-icon-plus')
                         .addClass('ui-icon-minus')
                         .parents("div.ui-widget")
@@ -143,7 +126,7 @@ FrontManagerKlass.prototype = {
             
             case 'drop':
                 if(confirm( this.options.confirmText )) {
-                    var deletable = $(event.target).parents("div.ui-widget").remove();
+                    $(event.target).parents("div.ui-widget").remove();
                 }
             break;
             
@@ -153,17 +136,13 @@ FrontManagerKlass.prototype = {
                     
                     pos = $(event.target).position();
                     $(event.target).parents("div.ui-widget-header").find('div.content-box-masks').css({
-                        top: (parseInt(pos.top) + 16) + 'px',
-                        left: (parseInt(pos.left) - 134) + 'px',
+                        top: (parseInt(pos.top, 10) + 16) + 'px',
+                        left: (parseInt(pos.left, 10) - 134) + 'px',
                         display: 'block'
                     });
                     
                     this.selectorOpened = $(event.target).parents("div.ui-widget-header").find('div.content-box-masks');
                 } else {
-                    /* $(event.target).parents("div.ui-widget-header").find('div.content-box-masks').css({
-                        display: 'none'
-                    }); */
-                    
                     this.closeSelector();
                 }
             break;
@@ -171,7 +150,7 @@ FrontManagerKlass.prototype = {
     },
     
     closeSelector: function() {
-        if(this.selectorOpened != null) {
+        if(this.selectorOpened !== null) {
             this.selectorOpened.css({
                 display: 'none'
             });
@@ -179,15 +158,17 @@ FrontManagerKlass.prototype = {
         }
     },
     
-    /* Save ContentBox positions and masks */
+    // Save ContentBox positions and masks 
     saveGrid: function() {
-        var data = {
+        var data, obj, placeholder;
+        
+        data = {
             pk_page: this.options.pk_page,
             version: this.options.version,
             contents: {}
         };
         
-        this.gridCells.each(function(i, container) {        
+        this.gridCells.each(function(i, container) {
             placeholder = $(container).attr('id');
             
             $(container).find('div.content-box').each(function(weight, content) {
@@ -204,7 +185,7 @@ FrontManagerKlass.prototype = {
             });
         });
         
-        if(this.options.savePosURI != null) {
+        if(this.options.savePosURI !== null) {
             $.ajax({
                 'url': this.options.savePosURI,
                 'type': 'post',
@@ -225,8 +206,13 @@ FrontManagerKlass.prototype = {
     repaintMask: function(context, pk_content, mask) {
         context.html('<img src="/admin/images/loading.gif" border="0" /> ' + this.options.waitingText);
         
+        var url = this.options.repaintURI + '?pk_page=' + this.options.pk_page + '&pk_content=' + pk_content;
+        if(mask !== undefined) {
+            url += '&mask=' + mask;
+        }
+        
         $.ajax({
-            'url': this.options.repaintURI + '?pk_page=' + this.options.pk_page + '&pk_content=' + pk_content + '&mask=' + mask,
+            'url': url,
             'success': function(data) {
                 $(this).html(data);
             },
@@ -236,38 +222,69 @@ FrontManagerKlass.prototype = {
     
     onReceive: function(event, ui) {
         if(ui.item.hasClass('searcher-item')) {
-            var pk_content = ui.item.attr('data-pk_content');
-            var newContentBox = $.template(this.templateContentBox).apply({
+            var pk_content, newContentBox, context;
+            
+            pk_content = ui.item.attr('data-pk_content');
+            newContentBox = $.template(this.templateContentBox).apply({
                 title: ui.item.text(),
                 pk_content: pk_content,
-                mask: '' // Máscara por defecto
+                mask: '' // default mask
             });
             
-            var context = $(newContentBox).replaceAll(ui.item);
-            //context.find('div.ui-widget-header>ul>li>span').click( $.proxy(this, 'handlerButtons') );
+            context = $(newContentBox).replaceAll(ui.item);
             this.parseButtons( context.find('div.ui-widget-header>ul>li>span') );
             
-            $.ajax({
-                url: this.options.getMasksURI + '?pk_content=' + pk_content + '&pk_page=' + this.options.pk_page,
-                success: $.proxy(this, 'onGetMasks'),
-                context: context.find('div.ui-widget-header>div.content-box-masks')
-            });
+            this.getMasks(pk_content, context);
             
             this.repaintMask(context.find('div.ui-widget-content>div'), pk_content, '');
-            /* $.ajax({
-                'url': this.options.repaintURI + '?pk_page=' + this.options.pk_page + '&pk_content=' + pk_content,
-                'success': function(data) {
-                    $(this).find('div.ui-widget-content>div').html(data);
-                },
-                'context': context
-            }); */
         }
     },
     
-    onGetMasks: function(data) {
-        console.log( $(this) );
-        $(this).html(data);
+    getMasks: function(pk_content, context) {
+        $.ajax({
+            url: this.options.getMasksURI + '?pk_content=' + pk_content + '&pk_page=' + this.options.pk_page,
+            success: function(data) {
+                $(this).html(data);
+                $(this).find('ul>li').each( $.proxy($.fn.frontmanager.getInstance(), 'connectMaskSelector') );
+            },
+            context: context.find('div.ui-widget-header>div.content-box-masks')
+        });
     }
     
     
 }; // FrontManagerKlass.prototype
+
+
+//
+// jQuery plugin
+//
+(function($) {
+    $.fn.frontmanager = function(options) {
+        var opts = $.extend({}, $.fn.frontmanager.defaults, options);
+        opts.elem = $(this);
+        
+        // Singleton
+        if($.fn.frontmanager.instance === null) {
+            $.fn.frontmanager.instance = new FrontManagerKlass(opts);
+        }
+        
+        return $.fn.frontmanager.instance;
+    };
+    
+    $.fn.frontmanager.defaults = {
+        'savePosURI':  null,
+        'repaintURI':  null,
+        'getMasksURI': null,
+        'pk_page':     $('#pk_page').val(),
+        'version':     $('#version').val(),
+        'confirmText': 'Are you sure?',
+        'waitingText': 'Rendering content...',
+        'connectWith': 'div[role=wairole:gridcell], #searcher-results'
+    };
+    
+    $.fn.frontmanager.instance = null;
+    
+    $.fn.frontmanager.getInstance = function() {
+        return $.fn.frontmanager.instance;
+    };
+}(jQuery));

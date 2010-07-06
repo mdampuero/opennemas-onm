@@ -13,17 +13,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 /**
  * ContentManager
- * 
- * @package    Onm
- * @subpackage Core
+ *
+ * @todo Refactor this class for complaint to 0.8.2v
+ * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: content_manager.class.php 1 2010-04-13 11:17:42Z vifito $
@@ -158,6 +158,11 @@ class ContentManager
      *     'category' => 1, // pk_category
      *     'content_type' => 1, //pk_content_type
      * );
+     *
+     * $options = array(
+     *    'select' => 'pk_content, title',
+     *    'from'   => 'articles',
+     * );
      * </code>
      * @param array $q
      * @param array $options
@@ -165,7 +170,12 @@ class ContentManager
      */
     public function search($q, $options=array())
     {
-        $select = array('`contents`.*');
+        $select = array();
+        if(isset($options['select'])) {
+            $select = $options['select'];
+        } else {
+            $select = array('`contents`.*');
+        }
         
         $from = array();
         $from[] = '`contents`';
@@ -210,7 +220,7 @@ class ContentManager
         $result = array();
         if($rs !== false) {            
             while(!$rs->EOF) {
-                $result[] = $rs->fields;
+                $result[] = $rs->GetRowAssoc(false);
                 
                 $rs->MoveNext();
             }
@@ -1725,4 +1735,4 @@ class ContentManager
         return $contentsOrdered;
     }
     
-}
+} // END: class ContentManager

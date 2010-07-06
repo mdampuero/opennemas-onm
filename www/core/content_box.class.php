@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNemas
- * @package    OpenNemas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -23,6 +22,7 @@
  * ContentBox
  * 
  * @package    Core
+ * @subpackage FrontManager
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: content_box.class.php 1 2010-06-30 10:50:40Z vifito $
@@ -45,6 +45,16 @@ class ContentBox
     private $mask = null;
     
     /**
+     * @var int
+     */
+    private $weight = null;
+    
+    /**
+     * @var string
+     */
+    private $placeholder = null;
+    
+    /**
      * @var array
      */
     private $params = array();
@@ -58,45 +68,53 @@ class ContentBox
     /**
      * Contructor
      * 
-     * @param Content $content
-     * @param string $mask
-     * @param Page $page
-     * @param array $params
+     * @param array $properties
      */
-    public function __construct($content, $mask=null, $page=null, $params=null)
+    public function __construct($properties=null)
     {
-        $this->setContent($content);
-        
-        if(!is_null($mask)) {
-            $this->setMask($mask);
-        }
-        
-        if(!is_null($page)) {
-            $this->setPage($page);
-        }
-        
-        if(!is_null($params)) {
-            $this->setParams($params);
+        if(!is_null($properties)) {
+            $this->loadProperties($properties, $this);
         }
     }
 
+    
+    /**
+     * Get mask name
+     *
+     * @return string
+     */
     public function getMask()
     {
         return $this->mask;
     }
     
+    /**
+     * Set mask
+     *
+     * @param string $mask
+     * @return ContentBox
+     */
     public function setMask($mask)
     {
         $this->mask = $mask;
     }
     
+    
+    /**
+     * Get page
+     *
+     * @return Page
+     */
     public function getPage()
     {
         return $this->page;
     }    
     
     /**
+     * Set page
      *
+     * @param Page
+     * @return ContentBox
      */
     public function setPage($page)
     {
@@ -105,30 +123,167 @@ class ContentBox
         return $this;
     }
     
+    
+    /**
+     * Get content in ContentBox
+     *
+     * @return Content
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+    
+    /**
+     * Set content
+     *
+     * @param Content $content
+     * @return ContentBox
+     */
     public function setContent($content)
     {
-        $this->content = $content;
-        
+        $this->content = $content;        
         return $this;
     }
     
+    
+    /**
+     * Get ContentBox params 
+     *
+     * @return array    Array of params
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    
+    /**
+     * Set ContentBox params
+     *
+     * @param array $params
+     * @return ContentBox
+     */
     public function setParams($params)
     {
         $this->params = $params;
+        return $this;
     }
     
+    
+    /**
+     * Get weight of ContentBox into placeholder
+     *
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+    
+    /**
+     * Set weight of ContentBox into placeholder
+     *
+     * @param int $weight
+     * @return ContentBox
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+        return $this;
+    }
+    
+    
+    /**
+     * Get name of placeholder
+     * 
+     * @return string
+     */
+    public function getPlaceholder()
+    {
+        return $this->placeholder;
+    }
+    
+    /**
+     * Set placeholder
+     *
+     * @param string $placeholder
+     * @return ContentBox
+     */
+    public function setPlaceholder($placeholder)
+    {
+        $this->placeholder = $placeholder;
+        return $this;
+    }
+    
+    
+    /**
+     * Get content rendered previously
+     *
+     * @return string
+     */
+    public function getHtml()
+    {
+        return $this->html;
+    }
+    
+    /**
+     * Set ContentBox content
+     *
+     * @param string $html
+     * @return ContentBox
+     */
+    public function setHtml($html)
+    {
+        $this->html = $html;
+        return $this;
+    }
+    
+    
+    /**
+     * Render ContentBox using arguments ($args)
+     *
+     * @param array $args
+     * @return string 
+     */
     public function render($args=array())
     {        
         $mask = new Mask($this->mask);
         
-        $mask->setContent($this->content);
-        $mask->setPage($this->page);
+        $mask->setContentBox($this);
         
-        $args = array_merge($this->params, $args);
+        // Helper properties in Mask instance
+        $mask->setContent($this->content);
+        $mask->setPage($this->page);        
+        
+        if(!is_null($this->params)) {
+            $args = array_merge($this->params, $args);
+        }
         
         $this->html = $mask->apply($args);
         
         return $this->html;
     }
     
-}
+    
+    
+    /* PRIVATE METHODS ******************************************************* */
+    
+    /**
+     * Load values in associative array to current object ($this)
+     * 
+     * @param array $assocProps     Associative array 
+     */
+    private function loadProperties($assocProps, $object=null)
+    {
+        if(is_null($object)) {
+            $object = $this;
+        }
+        
+        foreach($assocProps as $prop => $val) {
+            if(property_exists($object, $prop)) {
+                $object->{$prop} = $val;
+            }
+        }        
+    }
+    
+} // END: class ContentBox

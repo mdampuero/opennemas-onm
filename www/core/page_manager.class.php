@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,7 +21,8 @@
 /**
  * PageManager
  * 
- * @package    Onm
+ * @package    Core
+ * @subpackage FrontManager
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: page_manager.class.php 1 2010-04-30 14:17:39Z vifito $
@@ -63,7 +63,6 @@ class PageManager
             $this->conn = Zend_Registry::get('conn');
         }
         
-        // TODO: evaluate «lazy loading» ¿?
         $this->pages = $this->populate();
     }
     
@@ -142,6 +141,12 @@ class PageManager
     }
     
     
+    /**
+     * Get page root of tree
+     *
+     * @todo Implement support to multiples root
+     * @return Page|null
+     */
     public function getRoot()
     {
         if(is_null($this->pages)) {
@@ -158,16 +163,22 @@ class PageManager
     }
     
     
+    /**
+     * Check if exists root
+     * 
+     * @return boolean
+     */
     public function existsRoot()
     {
         return $this->getRoot() != null;
     }
     
+    
     /**
      * Get page by $pk_page
      *
      * @param int $pk_page
-     * @return Page
+     * @return Page|null
     */
     public function get($pk_page)
     {
@@ -184,7 +195,23 @@ class PageManager
     
     
     /**
+     * HTML representation of tree
+     * Recursive method
      *
+     * <code>
+     * $root = array(
+     *   array(
+     *     'element' => $pageInstance,
+     *     'childNodes' => array() 
+     *   )
+     * );
+     * </code>
+     *
+     * @see PageManager::getTree()
+     * @param array $root
+     * @param array $options
+     * @param int $level
+     * @return string
     */
     public static function tree2html($root, $options, $level=0) {
         $html = '';        
@@ -211,7 +238,8 @@ class PageManager
                             $innerHTML .= '<a href="' . $options['baseurl'] . $tree['element']->getPermalink() .'" ';
                             $innerHTML .= 'title="' . $tree['element']->title . '">';
                             
-                            $innerHTML .= (strlen($tree['element']->menu_title)>0) ? $tree['element']->menu_title :$tree['element']->title;
+                            $innerHTML .= (strlen($tree['element']->menu_title)>0) ? $tree['element']->menu_title :
+                                                                                     $tree['element']->title;
                             
                             $innerHTML .= '</a>';
                         } else {
@@ -236,25 +264,6 @@ class PageManager
         } 
         
         return $html;
-    }
-    
-    
-    /**
-     * 
-     * 
-    */
-    private function _isVisibleItem($conditions, $element)
-    {        
-        if(is_array($conditions)) {
-            foreach($conditions as $prop => $validItems) {
-                if(!in_array($element->{$prop}, $validItems)) {
-                    
-                    return false;
-                }
-            }
-        }
-        
-        return true;
     }
     
     
@@ -326,20 +335,35 @@ class PageManager
     
     
     /**
+     * Get contents by page
+     *
+     * <code>
+     * $contents[ $rs->fields['pk_placeholder'] ][] = array(
+     *   'pk_content'  => $rs->fields['pk_fk_content'],
+     *   'mask'        => $rs->fields['mask'],
+     *   'params'      => $rs->fields['params'],
+     *   'placeholder' => $rs->fields['pk_placeholder'],
+     *   'weight'      => $rs->fields['weight']
+     * );
+     * </code>
      * 
+     * @param int $pk_page
+     * @return array
      */
     public function getContentsByPage($pk_page)
     {                
-        $sql = 'SELECT * FROM `contents_pages` WHERE `pk_fk_page` = ? ORDER BY pk_placeholder, pk_weight ASC';
+        $sql = 'SELECT * FROM `contents_pages` WHERE `pk_fk_page` = ? ORDER BY `pk_placeholder`, `pk_weight` ASC';
         $rs  = $this->conn->Execute($sql, array($pk_page));
         
         $contents = array();
         if($rs !== false) {
             while(!$rs->EOF) {
                 $contents[ $rs->fields['pk_placeholder'] ][] = array(
-                    'pk_content' => $rs->fields['pk_fk_content'],
-                    'mask'       => $rs->fields['mask'],
-                    'params'     => $rs->fields['params'],
+                    'pk_content'  => $rs->fields['pk_fk_content'],
+                    'mask'        => $rs->fields['mask'],
+                    'params'      => $rs->fields['params'],
+                    'placeholder' => $rs->fields['pk_placeholder'],
+                    'weight'      => $rs->fields['pk_weight']
                 );
                 
                 $rs->MoveNext();
@@ -352,6 +376,14 @@ class PageManager
         return $contents;
     }
     
+    
+    /**
+     * Get contents by slug page
+     *
+     * @uses PageManager::getContentsByPage()
+     * @param string $slug
+     * @return array
+    */
     public function getContentsByPageSlug($slug)
     {
         $page = new Page();
@@ -359,12 +391,16 @@ class PageManager
         
         $contents = $this->getContentsByPage( $current->pk_page );
         
-        Zend_Registry::get('logger')->info($contents);
-        
         return $contents;
     }
     
     
+    /**
+     * Get descendants by pk_page
+     *
+     * @param int $pk_page
+     * @return array
+     */
     public function getDescendants($pk_page)
     {
         $descendants = array();
@@ -400,6 +436,14 @@ class PageManager
         return true;
     }
     
+    
+    /**
+     * Attach contents to page
+     * Insert into `contents_pages` table 
+     *
+     * @param int $pk_page
+     * @param array $contents
+     */
     public function attachContents($pk_page, $contents)
     {
         $bulkData = array();
@@ -496,7 +540,7 @@ class PageManager
     /**
      * Generate a unique slug 
      *
-     * @use Onm_Filter_Slug
+     * @uses Onm_Filter_Slug
      * @param string $title
      * @param int $excludeId
      * @return string
@@ -559,6 +603,8 @@ class PageManager
     }
     
     
+    /* PRIVATE METHODS ******************************************************* */
+    
     /**
      * Get all slugs from database (table `pages`)
      *
@@ -576,4 +622,27 @@ class PageManager
         
         return $slugs;
     }
-}
+    
+    /**
+     * 
+     * @todo Review this method
+     * @param array $conditions
+     * @param Page $element
+     * @return boolean
+    */
+    private function _isVisibleItem($conditions, $element)
+    {        
+        if(is_array($conditions)) {
+            foreach($conditions as $prop => $validItems) {
+                if(!in_array($element->{$prop}, $validItems)) {
+                    
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    
+} // END: class PageManager

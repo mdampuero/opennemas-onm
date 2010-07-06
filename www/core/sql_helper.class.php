@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,7 +21,8 @@
 /**
  * SqlHelper
  * 
- * @package    OpenNeMas
+ * @package    Core
+ * @subpackage Utils
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: PHP-1.php 1 2009-11-25 11:37:15Z vifito $
@@ -183,4 +183,4 @@ class SqlHelper
         return SqlHelper::insert($table, $merged, $conn);
     }
     
-}
+} // END: class SqlHelper

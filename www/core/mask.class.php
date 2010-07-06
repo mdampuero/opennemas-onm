@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -23,64 +22,60 @@
  * Mask
  * 
  * @package    Core
+ * @subpackage FrontManager
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: mask.class.php 1 2010-03-30 11:23:23Z vifito $
  */
 class Mask
-{    
-    private $name    = null;
-    private $output  = null;
-    private $content = null;    
-    private $page    = null;
+{
+    /**
+     * @var string
+     */
+    private $name = null;
+    
+    /**
+     * @var string
+     */
+    private $output = null;
+    
+    /**
+     * @var Content
+     */
+    private $content = null;
+    
+    /**
+     * @var Page
+     */
+    private $page = null;
+    
+    /**
+     * @var ContentBox 
+     */
+    private $contentBox = null;
     
     
     /**
+     * Constructor
      * 
-     * @param string $mask
+     * @param string $name  Mask name 
+     * @param array $properties
      */
-    public function __construct($name=null)
+    public function __construct($name=null, $properties=null)
     {
+        if(!is_null($properties)) {
+            $this->loadProperties($properties, $this);
+        }        
+        
         if( !is_null($name) ) {
             $this->setName($name);
         }
-    }
+    }    
     
     
     /**
-     * Load values in associative array to current object ($this)
+     * Get content
      * 
-     * @param array $assocProps     Associative array 
-     */
-    public function loadProperties($assocProps, $object=null)
-    {
-        if(is_null($object)) {
-            $object = $this;
-        }
-        
-        foreach($assocProps as $prop => $val) {
-            if(property_exists($object, $prop)) {
-                $object->{$prop} = $val;
-            }
-        }        
-    }
-    
-    
-    /**
-     *
-     * @param Content $content
-     * @return Mask
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        
-        return $this;
-    }
-    
-    
-    /**
-     *
      * @return Content
      */
     public function getContent()
@@ -88,19 +83,17 @@ class Mask
         return $this->content;
     }
     
-    
     /**
-     * Set name of mask
+     * Set content
      * 
-     * @param string $name
+     * @param Content $content
      * @return Mask
      */
-    public function setName($name)
+    public function setContent(Content $content)
     {
-        $this->name = $name;
-        
+        $this->content = $content;
         return $this;
-    }
+    }        
     
     
     /**
@@ -113,19 +106,17 @@ class Mask
         return $this->name;
     }
     
-    
     /**
-     * Set page
-     *
-     * @param Page $page
+     * Set name of mask
+     * 
+     * @param string $name
      * @return Mask
      */
-    public function setPage($page)
+    public function setName($name)
     {
-        $this->page = $page;
-        
+        $this->name = $name;
         return $this;
-    }
+    }        
     
     
     /**
@@ -138,57 +129,71 @@ class Mask
         return $this->page;
     }
     
-    
-    // FIXME: implement mechanism to assign mask default
-    public function getDefaultMask($pkcontent_type)
+    /**
+     * Set page
+     *
+     * @param Page $page
+     * @return Mask
+     */
+    public function setPage(Page $page)
     {
-        return null;
+        $this->page = $page;
+        return $this;
+    }
+    
+    
+    /**
+     * Get html content rendered previously
+     *
+     * @return string
+     */
+    public function getOutput()
+    {
+        return $this->output;
     }
     
     /**
-     * Apply template to contentbox
+     * Set output mask
+     *
+     * @param string $output
+     * @return Mask
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+        return $this;
+    }
+    
+    
+    /**
+     * Get ContentBox
      * 
+     * @return ContentBox
+     */
+    public function getContentBox()
+    {
+        return $this->contentBox;
+    }
+    
+    /**
+     * Set ContentBox
+     *
+     * @param ContentBox $contentBox
+     * @return Mask
+     */
+    public function setContentBox(ContentBox $contentBox)
+    {
+        $this->contentBox = $contentBox;
+        return $this;
+    }
+    
+    
+    /**
+     * Apply mask to content
+     *
+     * @param array $args
      * @return string
      */
-    //public function apply($args=array())
-    //{
-    //    $maskName = $this->name;
-    //    
-    //    if(!is_null($maskName) && !empty($maskName)) {            
-    //        $template = 'masks/' . $maskName . '.tpl';
-    //        $filename = SITE_PATH . '/themes/' . $this->page->theme . '/tpl/' . $template;
-    //        
-    //        // TODO: improve mask flow
-    //        if(!isset($args['renderMask']) && file_exists($filename)) {
-    //            
-    //            $tpl = new Template($this->page->theme);
-    //            
-    //        } elseif(isset($args['renderMask'])) {
-    //            
-    //            $template = 'masks/' . $args['renderMask'] . '.tpl';
-    //            $tpl = new TemplateAdmin(TEMPLATE_ADMIN);                
-    //        }            
-    //        
-    //        if(!empty($args)) {
-    //            $tpl->assign('args', $args);
-    //        }        
-    //        
-    //        // Assign object mask
-    //        $tpl->assign('mask', $this);
-    //        
-    //        // Helpers to get objects page and content
-    //        $tpl->assign('content', $this->getContent());
-    //        $tpl->assign('page',    $this->getPage());
-    //        
-    //        $this->output = $tpl->fetch($template);
-    //        
-    //    } else {
-    //        $this->output = $this->content->__toString();
-    //    }
-    //    
-    //    return $this->output;
-    //}
-    
     public function apply($args=array())
     {        
         $maskName = $this->name;
@@ -216,7 +221,7 @@ class Mask
             $this->output = $this->content->__toString();
         }
         
-        // Backend
+        // Backend <div> wrapper
         if(isset($args['renderMask'])) {                
             $template = 'masks/' . $args['renderMask'] . '.tpl';
             $tplBe = new TemplateAdmin(TEMPLATE_ADMIN);            
@@ -228,6 +233,7 @@ class Mask
             $tplBe->assign('content', $this->getContent());
             $tplBe->assign('page',    $this->getPage());
             
+            // 
             $args['preview'] = $this->output;
             if(!empty($args)) {
                 $tplBe->assign('args', $args);
@@ -238,4 +244,27 @@ class Mask
         
         return $this->output;
     }
-}
+    
+    
+    
+    /* PRIVATE METHODS ******************************************************* */
+    
+    /**
+     * Load values in associative array to current object ($this)
+     * 
+     * @param array $assocProps     Associative array 
+     */
+    private function loadProperties($assocProps, $object=null)
+    {
+        if(is_null($object)) {
+            $object = $this;
+        }
+        
+        foreach($assocProps as $prop => $val) {
+            if(property_exists($object, $prop)) {
+                $object->{$prop} = $val;
+            }
+        }        
+    }
+    
+} // END: class Mask

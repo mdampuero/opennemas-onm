@@ -1,3 +1,13 @@
+/**
+ *
+ * <input type="text" id="galdic-box" />
+ * <script type="text/javascript" src="{$params.JS_DIR}jquery.galdic.js"></script>
+ * <script type="text/javascript">
+ * jQuery('#galdic-box').galdic();
+ * </script>
+ *
+ */
+
 (function($){
     $.fn.galdic = function(options) {
         var opts = $.extend({}, $.fn.galdic.defaults, options);        
@@ -52,8 +62,12 @@ GalDicKlass.prototype = {
         this.enhanceCSS();
         
         // Div results container
-        this.elem.parent().append('<div class="results"></div>');
-        this.rsDiv = this.elem.parent().find('div.results').css('display', '');
+        this.elem.parent().append('<div class="results"> </div>');
+        this.rsDiv = this.elem.parent().find('div.results').css({
+            'display': '',
+            'height': '80px',
+            'overflow': 'auto'
+        });
     },
     
     enhanceCSS: function() {
@@ -110,7 +124,7 @@ GalDicKlass.prototype = {
     },
     
     renderResult: function(data) {
-        this.rsDiv.css({'display': 'none'});
+        /* this.rsDiv.css({'display': 'none'}); */
         
         if(data['name'] != undefined) {
             var output = '';
@@ -128,7 +142,7 @@ GalDicKlass.prototype = {
             this.rsDiv.html('<strong>Non se atoparon entradas relacionadas.</strong>');
         }
         
-        this.rsDiv.slideDown('slow', $.proxy(this, "onRenderComplete"));
+        /* this.rsDiv.slideDown('slow', $.proxy(this, "onRenderComplete")); */
     },    
     
     onRenderComplete: function() {

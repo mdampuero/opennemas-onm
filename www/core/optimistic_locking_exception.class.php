@@ -14,7 +14,6 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   OpenNeMas
- * @package    OpenNeMas
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -23,6 +22,7 @@
  * OptimisticLockingException
  * 
  * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: optimistic_locking_exception.class.php 1 2010-05-14 14:05:43Z vifito $

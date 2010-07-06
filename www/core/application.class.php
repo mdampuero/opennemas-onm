@@ -1,20 +1,33 @@
 <?php
-// Prevent direct access
-if (eregi('application.class.php', $_SERVER['PHP_SELF'])) {
-    die();
-}
+/* -*- Mode: PHP; tab-width: 4 -*- */
+/**
+ * OpenNemas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNemas
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+ 
 
-function &MonitorContentStatus($db, $sql, $inputarray) {
-    if( preg_match('/content_status/', $sql) && preg_match('/^[ ]*update/i', $sql) ) {
-        $GLOBALS['application']->workflow->log( 'SQL content_status - ' .
-                $_SESSION['username'] . ' - ' . $sql . ' ' . print_r($inputarray, true), PEAR_LOG_INFO );
-    }
-    
-    $a=null;
-	return $a;
-}
-
-
+/**
+ * Application
+ *
+ * @deprecated
+ * @package    Core
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: application.class.php 1 2010-07-06 12:53:08Z vifito $
+ */
 class Application {    
     var $conn        = null;
     var $logger        = null;

@@ -33,7 +33,7 @@ function smarty_function_mask_list($params, &$smarty)
         
         if(count($masks) > 0) {
             foreach($masks as $i => $mask) {
-                $output .= '<li data-value="' . $mask['value'] . '">';        
+                $output .= '<li data-mask="' . $mask['value'] . '">';        
                 $output .= '<img src="' . SITE_URL . 'themes/' . $page->theme . '/tpl/masks/' . $ctype->name .
                     '/' . $mask['title'] . '.png" alt="" /></li>';
             }

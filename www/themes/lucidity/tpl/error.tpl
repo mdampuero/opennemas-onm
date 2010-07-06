@@ -14,9 +14,7 @@
 
   <h3>Request Parameters:</h3>
   <pre>
-    {php}
-        var_dump( $this->_tpl_vars['request']->getParams() );
-    {/php}
+    {$request->getParams()|var_dump}
   </pre>
   {/if}
 

@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,8 +21,8 @@
 /**
  * CategoryManager
  * 
- * @package    Onm
- * @subpackage 
+ * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: category_manager.class.php 1 2010-05-18 11:38:48Z vifito $
@@ -653,6 +652,12 @@ class CategoryManager
     }
     
     
+    /**
+     * Get descendants categories
+     *
+     * @param int $pk_category
+     * @return array
+     */
     public function getDescendants($pk_category)
     {
         $descendants = array();
@@ -669,6 +674,12 @@ class CategoryManager
     }
     
     
+    /**
+     * Get tree of categories
+     *
+     * @param int $parent
+     * @return array
+     */
     public function getTree($parent = 0)
     {
         $tree = array();        
@@ -686,5 +697,4 @@ class CategoryManager
         return $tree;
     }
     
-}
-
+} // END: class CategoryManager

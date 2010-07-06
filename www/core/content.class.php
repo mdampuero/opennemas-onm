@@ -13,8 +13,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category   OpenNeMas
- * @package    OpenNeMas
+ * @package    Core
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -22,7 +21,8 @@
 /**
  * Content
  * 
- * @package    OpenNeMas
+ * @package    Core
+ * @subpackage Content
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: content.class.php 1 2009-11-30 18:16:56Z vifito $
@@ -620,7 +620,6 @@ class Content
     {
         return $this->title;
     }
+
     
-}
-
-
+} // END: class Content
