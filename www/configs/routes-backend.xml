@@ -285,7 +285,6 @@
         </category-delete>
         <!-- }}} -->
         
-        
         <!-- Keyword routes {{{ -->
         <keyword-index type="Zend_Controller_Router_Route">
             <route>keyword/index/*</route>
@@ -304,6 +303,57 @@
         </keyword-service>
         <!-- }}} -->
         
+        
+        <!-- Staticpages routes {{{ -->
+        <staticpage-index type="Zend_Controller_Router_Route">
+            <route>staticpage/index/*</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>index</action>
+            </defaults>
+        </staticpage-index>        
+        
+        <staticpage-create type="Zend_Controller_Router_Route">
+            <route>staticpage/create/</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>create</action>
+            </defaults>
+        </staticpage-create>
+        
+        <staticpage-read type="Zend_Controller_Router_Route">
+            <route>staticpage/read/:pk_content/</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>read</action>
+            </defaults>
+        </staticpage-read>
+        
+        <staticpage-update type="Zend_Controller_Router_Route">
+            <route>staticpage/update/*</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>update</action>
+            </defaults>
+        </staticpage-update>
+        
+        <staticpage-delete type="Zend_Controller_Router_Route">
+            <route>staticpage/delete/:pk_content/</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>delete</action>
+            </defaults>
+        </staticpage-delete>
+        
+        <staticpage-changestatus type="Zend_Controller_Router_Route">
+            <route>staticpage/changestatus/:pk_content/:status/</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>changestatus</action>
+            </defaults>
+        </staticpage-changestatus>        
+        <!-- }}} -->
+        
     </production>
     
     
@@ -317,7 +367,23 @@
                 <controller>devel</controller>
                 <action>loadcontents</action>
             </defaults>
-        </devel-loadcontents>        
+        </devel-loadcontents>
+        
+        <devel-hello>
+            <route>hello/*</route>
+            <defaults>
+                <controller>hello</controller>
+                <action>index</action>
+            </defaults>
+        </devel-hello>
+        
+        <devel-redirect>
+            <route>hello/redirect/:nome</route>
+            <defaults>
+                <controller>hello</controller>
+                <action>redirect</action>
+            </defaults>
+        </devel-redirect>        
         
     </development>
 

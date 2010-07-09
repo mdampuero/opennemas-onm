@@ -206,6 +206,19 @@
         <sql>ALTER TABLE contents ADD FULLTEXT(title,description,keywords);</sql>
     </changeSet>
     
+    <changeSet author="vifito" id="1278581545">
+        <comment>Drop table articles_clone and masks</comment>
+        
+        <dropTable tableName="articles_clone" />
+        <dropTable tableName="masks" />
+    </changeSet>
+    
+    <changeSet author="vifito" id="1278581547">
+        <comment>Modify static_pages</comment>
+        
+        <dropColumn tableName="static_pages" columnName="slug"/>
+    </changeSet>    
+    
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
         <tagDatabase tag="0.2"/>

@@ -51,3 +51,6 @@ msgstr "Newsletter"
 
 msgid "unread emails"
 msgstr "unread emails"
+
+msgid "hello"
+msgstr "hello"

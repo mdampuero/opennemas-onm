@@ -54,12 +54,18 @@
 				<tr>
 					<td valign="top" align="left" width="100%" height="100%" colspan="3">
 					
-					{block name="body-content"}
-						{include file="panel.tpl"}
-					{/block}
+					<table class="adminform" border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
+					<tr><td style="padding:10px;" align="left" valign="top">
+						
+						{block name="body-content"}
+							{include file="panel.tpl"}
+						{/block}
+					
+					</td></tr>
+					</table>
 					
 					</td>
-            </tr>
+				</tr>
             </table><!--#topbar-admin-->                       
 		</td>
 	</tr>

@@ -20,9 +20,6 @@
 {block name="body-content"}
     <form action="{baseurl}/widget/{$request->getActionName()}" method="post" name="formulario" id="formulario">
 
-    <table class="adminform" border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
-    <tr><td style="padding:10px;" align="left" valign="top">
-
     {flashmessenger}
 
     {* LISTADO ******************************************************************* *}
@@ -36,8 +33,6 @@
         {include file="widget/form.tpl"}
     {/if}
     
-    </td></tr>
-    </table>
         
     </form>
 {/block}
