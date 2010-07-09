@@ -44,7 +44,7 @@ class Widget extends Content
      */
     public function __construct($id=null)
     {
-        parent::__construct();
+        parent::__construct($id);
         
         // FIXME: use reflexion to recover content name
         $this->content_type = 'Widget';

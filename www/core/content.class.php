@@ -199,7 +199,7 @@ class Content
      * 
      * @param stdClass|array $properties
      */
-    protected function load($properties)
+    public function load($properties)
     {
         if(is_array($properties)) {
             foreach($properties as $k => $v) {

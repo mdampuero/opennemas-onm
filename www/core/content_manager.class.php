@@ -894,7 +894,7 @@ class ContentManager
                   'WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($content_type).'` ';
         }
         
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        $rs = $this->conn->GetOne($sql);
         
         return $rs;
     }
@@ -951,7 +951,7 @@ class ContentManager
                     ' WHERE '.$_where.' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.strtolower($content_type).'` '.$_order_by.$_limit;
         }
         
-        $rs = $GLOBALS['application']->conn->Execute($sql); 
+        $rs = $this->conn->Execute($sql); 
         
         $items = $this->load_obj($rs, $content_type);
         

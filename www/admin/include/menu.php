@@ -16,7 +16,7 @@ $menuXml = <<<MENUSTRING
         <node title="Comments" link="comment.php" privilege="COMMENT_ADMIN" />
         <node title="Polls" link="poll.php" privilege="POLL_ADMIN" />
         <node title="Advertisements" link="advertisement.php" privilege="ADVERTISEMENT_ADMIN" />        
-        <node title="Static Pages" link="static_pages.php" privilege="STATIC_ADMIN" />
+        <node title="Static Pages" route="staticpage-index" privilege="STATIC_ADMIN" />
         <node title="Library" link="article.php?action=list_hemeroteca" privilege="ARCHIVE_ADMIN" />
         <node title="Sections Manager" route="category-index" privilege="WIDGET_ADMIN" />        
     </submenu>

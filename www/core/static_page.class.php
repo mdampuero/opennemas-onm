@@ -1,19 +1,34 @@
 <?php
+/* -*- Mode: PHP; tab-width: 4 -*- */
 /**
- * static_page.class.php
+ * OpenNemas project
  *
- * Name is static_page to prevent problems with "static" reserved name
- * 
- * 21/07/2009 10:53:35
- * vifito  <vifito@openhost.es>
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @package    Core
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-define('STATIC_PAGE_PATH', 'estaticas/');
 
 /**
- * Static page
+ * Static_Page
+ * 
+ * @package    Core
+ * @subpackage Content
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: static_page.class.php 1 2010-07-08 14:39:59Z vifito $
  */
-class Static_Page extends Content {
+class Static_Page extends Content
+{    
     /**
      * @var pk_static_page Page identifier
      */
@@ -22,8 +37,7 @@ class Static_Page extends Content {
     /**
      * @var string Content of body
      */
-    public $body = null;
-    public $slug = null;
+    public $body = null;    
     
     /**
      * @var MethodCacheManager Handler to call method cached
@@ -33,110 +47,72 @@ class Static_Page extends Content {
     /**
      * constructor
      *
-     * @param int $id 
+     * @param int $pk_content 
      */
-    public function __construct($id=null)
+    public function __construct($pk_content=null)
     {
-        parent::Content($id);
-        
-        if(!is_null($id)) {
-            $this->read($id);
-        }
-        
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-        $this->content_type = 'Static_Page';
+        
+        $this->content_type = 'Static_Page';        
+        parent::__construct($pk_content);
+        
+        if(!is_null($pk_content)) {
+            $this->read($pk_content);
+        }
     }
     
     
+    /**
+     * 
+     *
+     */
     public function create($data)
     {
         // Clear  magic_quotes
-        String_Utils::disabled_magic_quotes( &$data );
+        String_Utils::disabled_magic_quotes( &$data );        
+        $pk_content = parent::create($data);
         
-        $this->commonData(&$data);        
-        parent::create($data);
-        
-        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`, `static_pages`.`body`, `static_pages`.`slug`)
-                VALUES (?, ?, ?)";
-        $values = array('pk_static_page' => $this->id,
-                        'body' => $data['body'],
-                        'slug' => $data['slug']);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+        if($pk_content === false) {
             return false;
         }
         
-        return true;
+        $fields = array('pk_static_page', 'body');
+        $data['pk_static_page'] = $pk_content;
+        
+        try {
+            SqlHelper::bindAndInsert('static_pages', $fields, $data);
+        } catch(Exception $e) {
+            return false;
+        }
+        
+        return $pk_content;
     }
     
-    protected function commonData($data)
-    {
-        // Merda dependencia Content
-        $data['category'] = 0;
-        $data['pk_author'] = $_SESSION['userid'];
-        $data['fk_publisher'] = $_SESSION['userid'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
-        
-        $this->permalink = '/' . STATIC_PAGE_PATH . $data['slug'] . '.html';
-        $data['permalink'] = $this->permalink;
-    }
     
     /**
      * Read, get a specific object
      *
-     * @param int $id Object ID
+     * @param int $pk_content Object ID
      * @return Static Return instance to chaining method
      */
-    public function read($id)
+    public function read($pk_content)
     {
-        parent::read($id);
+        parent::read($pk_content);
         
-        $sql = "SELECT * FROM `static_pages` WHERE `static_pages`.`pk_static_page`=?";
+        $sql = "SELECT * FROM `static_pages` WHERE `pk_static_page`=?";
         
-        $values = $id;
-        
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $this->conn->Execute($sql, array($pk_content));
         if($rs === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             return null;
         }
         
         $this->load( $rs->fields );
-        
         return $this;
-    }
+    }    
     
-    /**
-     * Load properties into this instance
-     *
-     * @param array $properties Array properties 
-     */
-    public function load($properties)
-    {
-        if(is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif(is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-        
-        $this->id = $this->pk_static_page;
-    }
     
     /**
      * Update
@@ -146,23 +122,41 @@ class Static_Page extends Content {
      */
     public function update($data)
     {
-        // Clear  magic_quotes
+        // Clear magic_quotes
         String_Utils::disabled_magic_quotes( &$data );
         
-        $this->commonData(&$data);
         parent::update($data);
         
-        $sql = 'UPDATE `static_pages` SET `static_pages`.`body`=?, `static_pages`.`slug`=?
-                    WHERE `static_pages`.`pk_static_page`=?';
+        $fields = array('body');
+        $where  = '`pk_static_page` = ' . $data['pk_content'];
         
-        $values = array('body' => $data['body'],
-                        'slug' => $data['slug'],
-                        'pk_static_page' => $data['id']);
+        try {
+            SqlHelper::bindAndUpdate('static_pages', $fields, $data, $where);
+        } catch(Exception $e) {
+            return false;
+        }
         
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        return true;
+    }
+    
+    
+    /**
+     * Delete static page
+     *
+     * @see Content::remove()
+     * @param int $pk_content Identifier
+     * @return boolean
+     */
+    public function delete($pk_content)
+    {
+        parent::remove($pk_content);
+        
+        $sql = 'DELETE FROM `static_pages` WHERE `pk_static_page`=?';        
+        $values = array($pk_content);
+        
+        if($this->conn->Execute($sql, array($pk_content)) === false) {
+            $error_msg = $this->conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
             
             return false;
         }
@@ -170,93 +164,38 @@ class Static_Page extends Content {
         return true;        
     }
     
-    public function save($data)
-    {
-        if($data['id']>0) {
-            $this->update($data);
-        } else {
-            $this->create($data);
-        }
-    }
     
     /**
-     * Delete static page
-     *
-     * @see Content::remove()
-     * @param int $id Identifier
-     * @return boolean
+     * Get a Static_Page by slug
+     * 
+     * @param string $slug
+     * @return Content
      */
-    public function delete($id)
+    public function getStaticPageBySlug($slug)
     {
-        parent::remove($id);
-        
-        $sql = 'DELETE FROM `static_pages` WHERE `static_pages`.`pk_static_page`=?';        
-        $values = array($id);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
-           return false;
-        }
-        
-        return true;        
-    }
-    
-    /**
-     *
-     */
-    public function buildSlug($slug, $id, $title=null)
-    {        
-        if(empty($slug) && !empty($title)) {
-            $slug = String_Utils::get_title($title, $useStopList=false); 
-        }
-        
-        $slug = String_Utils::get_title($slug, $useStopList=false);
-        
-        // Get titles to check unique value
-        $slugs = $this->getSlugs('pk_static_page<>"' . $id . '"');
-        
-        $i = 0;
-        $tmp = $slug;
-        while(in_array($tmp, $slugs)) {            
-            $tmp = $slug . '-' . ++$i;
-        }
-        
-        return $tmp;
-    }
-    
-    /**
-     *
-     */
-    public function getPageBySlug($slug)
-    {
+        // Prevent SQL injection
         $slug = preg_replace('/\*%_\?/', '', $slug);
-        $sql = 'SELECT pk_static_page FROM `static_pages` WHERE `static_pages`.`slug` LIKE ?';        
-        $id = $GLOBALS['application']->conn->GetOne($sql, array($slug));        
+        $sql = 'SELECT `pk_content` FROM `contents` WHERE `slug` LIKE ?';        
+        $pk_content = $this->conn->GetOne($sql, array($slug));        
         
-        if($id === false) {
+        if($pk_content === false) {
             return null;
         }
         
-        return new Static_Page($id);
+        return Content::get($pk_content);
     }    
     
+    
+    
     /**
-     *
+     * Magic method __toString()
+     * 
+     * @return String
      */
-    public function getSlugs($filter=null)
+    public function __toString()
     {
-        $titles = array();
-        
-        $cm = new ContentManager();
-        $pages = $cm->find('Static_Page', $filter, 'ORDER BY created DESC ',
-                           'pk_content, pk_static_page, slug');
-        foreach($pages as $p) {
-            $titles[] = $p->slug;
-        }
-        
-        return $titles;
+        // Return HTML
+        return $this->body;
     }
+    
 }
