@@ -41,9 +41,13 @@ class IndexController extends Onm_Controller_Action
         $pageMgr = PageManager::getInstance();        
         $page = $pageMgr->getRoot();        
         
-        $content = $page->dispatch();        
+        if($page != null) {
+            $content = $page->dispatch();            
+            $this->gridContent = $content;
+        } else {
+            $this->gridContent = '<h1>You must create a root page for this site.</h1>';
+        }
         
-        $this->gridContent = $content;
     }
     
     
