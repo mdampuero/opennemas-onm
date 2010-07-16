@@ -149,9 +149,14 @@ $front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
 $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
 $front->registerPlugin( new Onm_Controller_Plugin_Template() );
 
+// viewRenderer action helper
+$view = new Onm_View();
+$viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
+$viewRenderer->setViewSuffix('tpl');
+Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+
 // FrontController params
-$front->setParam('noViewRenderer', true) // No render by default
-      ->setParam('isBackend', true);
+$front->setParam('isBackend', true);
 
 $front->setControllerDirectory('./controllers');
 

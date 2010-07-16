@@ -32,16 +32,18 @@ class SqlHelper
     /**
      * Build "update" query using $fields array to write "set" sentence
      *
-     * @version 20100514142017
+     * @version 20100713143521
      * @throws SqlHelperException
      * @throws Exception
      * @see SqlHelper::bindAndUpdate
+     * @static
      * @param string $table
      * @param array $fields Array with name of fields to update ($colname => $value)
      * @param string $filter String for where sentece
      * @param object|null $conn ADOConnection instance
+     * @return int  Affected rows
      */
-    public function update($table, $fields, $filter, $conn=null)
+    public static function update($table, $fields, $filter, $conn=null)
     {
         $sql = 'UPDATE `%s` SET %s WHERE %s';
         
@@ -54,13 +56,8 @@ class SqlHelper
         
         $sql = sprintf($sql, $table, implode(', ', $set), $filter);
         
-        if(is_null($conn)) {
-            if( Zend_Registry::isRegistered('conn') ) {
-                $conn = Zend_Registry::get('conn');
-            } else {
-                throw new Exception('Zend_Registry not found entry: "conn".');
-            }
-        }
+        // Get connection from Zend_Registry if $conn is null
+        $conn = SqlHelper::getConn($conn);
         
         if($conn->Execute($sql, $values) === false) {
             $error_msg = $conn->ErrorMsg();
@@ -68,6 +65,8 @@ class SqlHelper
             
             throw new SqlHelperException($error_msg);
         }
+        
+        return $conn->Affected_Rows();
     }
     
     /**
@@ -82,7 +81,7 @@ class SqlHelper
      *  SqlHelper::bindAndUpdate('contents', $fields, $_POST, $filter);
      * </code>
      *
-     * @version 20100514142017
+     * @version 20100713143516
      * @throws SqlHelperException
      * @throws Exception
      * @uses SqlHelper::update
@@ -90,9 +89,10 @@ class SqlHelper
      * @param array $fields Array with name of fields to update
      * @param array $data Array keyField => valueField, equals to POST
      * @param string $filter String for where sentece
-     * @param object|null $conn ADOConnection instance 
+     * @param object|null $conn ADOConnection instance
+     * @return int  Affected rows
      */
-    public function bindAndUpdate($table, $fields, $data, $filter, $conn=null)
+    public static function bindAndUpdate($table, $fields, $data, $filter, $conn=null)
     {
         $merged = array();
         foreach($fields as $field) {
@@ -101,13 +101,13 @@ class SqlHelper
             }
         }
         
-        SqlHelper::update($table, $merged, $filter, $conn);
+        return SqlHelper::update($table, $merged, $filter, $conn);
     }
     
     /**
      * Build "insert" query using $fields array to write "values" sentence
      *
-     * @version 20100514142017
+     * @version 20100713143511
      * @throws SqlHelperException
      * @throws Exception
      * @see SqlHelper::bindAndUpdate
@@ -116,7 +116,7 @@ class SqlHelper
      * @param object|null $conn ADOConnection instance
      * @return int|boolean  Insert ID or false
      */
-    public function insert($table, $fields, $conn=null)
+    public static function insert($table, $fields, $conn=null)
     {
         $sql = 'INSERT INTO `%s` (%s) VALUES (%s)';
         
@@ -130,13 +130,8 @@ class SqlHelper
         $marks = implode(', ', array_fill(0, count($set), '?'));
         $sql = sprintf($sql, $table, implode(', ', $set), $marks);
         
-        if(is_null($conn)) {
-            if( Zend_Registry::isRegistered('conn') ) {
-                $conn = Zend_Registry::get('conn');
-            } else {
-                throw new Exception('Zend_Registry not found entry: "conn".');
-            }
-        }
+        // Get connection from Zend_Registry if $conn is null
+        $conn = SqlHelper::getConn($conn);
         
         if($conn->Execute($sql, $values) === false) {
             $error_msg = $conn->ErrorMsg();
@@ -161,7 +156,7 @@ class SqlHelper
      *  SqlHelper::bindAndInsert('contents', $fields, $_POST);
      * </code>
      *
-     * @version 20100514142017
+     * @version 20100713143438
      * @throws SqlHelperException
      * @throws Exception
      * @uses SqlHelper::insert
@@ -171,7 +166,7 @@ class SqlHelper
      * @param object|null $conn ADOConnection instance
      * @return int|boolean  Insert ID or false
      */
-    public function bindAndInsert($table, $fields, $data, $conn=null)
+    public static function bindAndInsert($table, $fields, $data, $conn=null)
     {
         $merged = array();
         foreach($fields as $field) {
@@ -181,6 +176,58 @@ class SqlHelper
         }
         
         return SqlHelper::insert($table, $merged, $conn);
+    }
+    
+    
+    /**
+     * Delete helper method 
+     *
+     * @version 20100713143447
+     * @throws SqlHelperException
+     * @param string $table
+     * @param string $filter
+     * @param ADOConnection|null $conn
+     * @return int
+     */
+    public static function delete($table, $filter, $conn=null)
+    {
+        $sql = 'DELETE FROM `%s` WHERE %s';
+        $sql = sprintf($sql, $table, $filter);
+        
+        // Get connection from Zend_Registry if $conn is null
+        $conn = SqlHelper::getConn($conn);
+        
+        if($conn->Execute($sql) === false) {
+            $error_msg = $conn->ErrorMsg();
+            Zend_Registry::get('logger')->emerg($error_msg);
+            
+            throw new SqlHelperException($error_msg);
+        }
+        
+        return $conn->Affected_Rows();
+    }
+    
+    
+    /**
+     * Return $conn if it is not null, otherwise try to recover connection
+     * from Zend_Registry. 
+     *
+     * @version 20100713143455
+     * @throws Exception
+     * @param ADOConnection|null $conn
+     * @return ADOConnection
+     */
+    public static function getConn($conn)
+    {
+        if(is_null($conn)) {
+            if( Zend_Registry::isRegistered('conn') ) {
+                $conn = Zend_Registry::get('conn');
+            } else {
+                throw new Exception('Zend_Registry not found entry: "conn".');
+            }
+        }
+        
+        return $conn;
     }
     
 } // END: class SqlHelper

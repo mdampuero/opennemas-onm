@@ -19,13 +19,26 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+/**
+ * WidgetController
+ * 
+ * @package    Controllers 
+ * @subpackage Backend
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: WidgetController.php 1 2010-07-13 10:39:26Z vifito $
+ */
 class WidgetController extends Onm_Controller_Action
 {
+    /**
+     * @var array  Array of Widget
+     */
+    public $widgets = null;
     
-    public function init()
-    {
-        
-    }
+    /**
+     * @var Widget
+     */
+    public $widget  = null;    
     
     
     /**
@@ -35,12 +48,11 @@ class WidgetController extends Onm_Controller_Action
     public function indexAction()
     {
         $cm = new ContentManager();
-        $widgets = $cm->find('Widget', 'fk_content_type=12 AND status <> "REMOVED"', 'ORDER BY created DESC ');        
-        
-        // TODO: pagination        
-        $this->tpl->assign('widgets', $widgets);        
-        
-        $this->tpl->display('widget/index.tpl');
+        $this->widgets = $cm->find(
+            'Widget',
+            'status <> "REMOVED"',
+            'ORDER BY created DESC '
+        );
     }
     
     
@@ -52,13 +64,8 @@ class WidgetController extends Onm_Controller_Action
     {        
         $id = $this->_getParam('id', 0);
         
-        $widget = new Widget();
-        $widget->read($id);        
-        
-        $this->tpl->assign('id', $id);
-        $this->tpl->assign('widget', $widget);
-        
-        $this->tpl->display('widget/index.tpl');
+        $this->widget = new Widget();
+        $this->widget->read($id);                
     }
     
     
@@ -68,23 +75,25 @@ class WidgetController extends Onm_Controller_Action
      */    
     public function createAction()
     {
-        if($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             
             $data = $this->getRequest()->getPost();
             // TODO: Validation
-            $widget = new Widget();            
-            $pk_content = $widget->create($data);            
+            $this->widget = new Widget();            
+            $pkContent = $this->widget->create($data);            
             
-            if( isset($data['categories']) ) {
-                $widget->attachCategories($pk_content, $data['categories']);
+            if (isset($data['categories']) ) {
+                $this->widget->attachCategories(
+                    $pkContent,
+                    $data['categories']
+                );
             }
             
-            $this->flashMessenger->addMessage(array('notice' => 'Widget added successfully.'));
-            $this->redirector->gotoRoute( array(), 'widget-index' );
+            $this->flashMessenger->addMessage(
+                array('notice' => 'Widget added successfully.')
+            );
+            $this->redirector->gotoRoute(array(), 'widget-index');
             
-        } else {
-            // Show form
-            $this->tpl->display('widget/index.tpl');
         }
     }
     
@@ -95,41 +104,42 @@ class WidgetController extends Onm_Controller_Action
      */
     public function updateAction()
     {
-        $widget = new Widget();
+        $this->widget = new Widget();
         
-        if($this->getRequest()->isPost()) {            
+        if ($this->getRequest()->isPost()) {            
             $data = $this->getRequest()->getPost();
             
             try {
-                $widget->update($data);
+                $this->widget->update($data);
                 
-                $pk_content = $data['pk_content'];
-                $widget->detachCategories($pk_content);
-                $widget->attachCategories($pk_content, $data['categories']);
+                $pkContent = $data['pk_content'];
+                
+                $this->widget->bindCategories($pk_content, $categories);
                 
                 $this->flashMessenger->addMessage(
                     array('notice' => 'Widget updated successfully.')
                 );
-            } catch(OptimisticLockingException $e) {
+            } catch (OptimisticLockingException $e) {
                 $this->flashMessenger->addMessage(
-                    array('warning' => 'Data values was not updated. Other user has done changes.')
+                    array(
+                        'warning' => 'Data values was not updated.' .
+                                     'Other user has done changes.'
+                    )
                 );
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $this->flashMessenger->addMessage(
                     array('error' => $e->getMessage())
                 );
             }
             
-            $this->redirector->gotoRoute( array(), 'widget-index' );
+            $this->redirector->gotoRoute(array(), 'widget-index');
             
         } else {
             // Load data & show form
             $id = $this->_getParam('id', 0);            
-            $widget->read($id);            
-            
-            $this->tpl->assign('widget', $widget);            
-            $this->tpl->display('widget/index.tpl');
+            $this->widget->read($id);
         }
+        
     }
     
     
@@ -140,15 +150,16 @@ class WidgetController extends Onm_Controller_Action
     public function deleteAction()
     {
         $id = $this->_getParam('id', 0);
+        $this->widget = new Widget($id);
         
-        $widget = new Widget();
-        $widget->changeStatus($id, 'REMOVED');
-        
-        
-        $this->flashMessenger->addMessage(
-            array('notice' => 'Widget was sended to trash.')
-        );
-        $this->redirector->gotoRoute( array(), 'widget-index' );        
+        if ($this->getRequest()->isPost()) {            
+            $this->widget->changeStatus($id, 'REMOVED');            
+            
+            $this->flashMessenger->addMessage(
+                array('notice' => 'Widget was sended to trash.')
+            );
+            $this->redirector->gotoRoute(array(), 'widget-index');
+        }
     }
     
     
@@ -161,10 +172,10 @@ class WidgetController extends Onm_Controller_Action
         $id = $this->_getParam('id', 0);
         $status = $this->_getParam('status', "PENDING");
         
-        $widget = new Widget();        
-        $widget->changeStatus($id, $status);
+        $this->widget = new Widget();        
+        $this->widget->changeStatus($id, $status);
         
-        $this->redirector->gotoRoute( array(), 'widget-index' );
+        $this->redirector->gotoRoute(array(), 'widget-index');
     }
     
 }

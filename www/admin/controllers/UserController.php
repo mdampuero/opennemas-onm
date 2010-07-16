@@ -21,6 +21,7 @@
 
 class UserController extends Onm_Controller_Action
 {
+    public $message = null;
 
     public function init()
     {
@@ -80,11 +81,8 @@ class UserController extends Onm_Controller_Action
                 
                 // $this->flashMessenger->addMessage(array('notice' => 'Login Successful.'));
                 $this->tpl->assign('message', 'Nome de usuario ou contrasinal incorrecto.');
-            }
-            
+            }            
         }
-        
-        $this->tpl->display('login.tpl');
     }
     
     public function logoutAction()

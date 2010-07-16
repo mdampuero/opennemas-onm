@@ -246,9 +246,8 @@ class ContentBox
      * @return string 
      */
     public function render($args=array())
-    {        
-        $mask = new Mask($this->mask);
-        
+    {
+        $mask = new Mask($this->mask);        
         $mask->setContentBox($this);
         
         // Helper properties in Mask instance

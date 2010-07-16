@@ -26,7 +26,8 @@ class PageController extends Onm_Controller_Action
      */
     public function init()
     {
-        
+        $viewRenderer = $this->_helper->getHelper('viewRenderer');
+        $viewRenderer->setNoRender(true);
     }
     
     

@@ -105,7 +105,7 @@
         </widget-update>
         
         <widget-delete type="Zend_Controller_Router_Route">
-            <route>widget/delete/:id/</route>
+            <route>widget/delete/*</route>
             <defaults>
                 <controller>widget</controller>
                 <action>delete</action>

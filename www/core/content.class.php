@@ -80,6 +80,8 @@ class Content
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
         
+        $this->content_type = $this->getNameOfContentType();
+        
         if( Zend_Registry::isRegistered('conn') ) {
             $this->conn  = Zend_Registry::get('conn');
         }        
@@ -304,20 +306,14 @@ class Content
      *
      * @see Content::changeStatus()
      * @param int $pk_content
-     * @return boolean
+     * @return int Affected rows
     */
     public function delete($pk_content)
     {
-        $sql = 'DELETE FROM `contents` WHERE `pk_content` = ?';
-           
-        if( $this->conn->Execute($sql, array($pk_content)) === false ) {
-            $error_msg = $this->conn->ErrorMsg();
-            Zend_Registry::get('logger')->emerg($error_msg);
-            
-            return false;
-        }
+        $pk_content = filter_var($pk_content, FILTER_VALIDATE_INT);
+        $filter     = '`pk_content`=' . $pk_content;
         
-        return true;
+        return SqlHelper::delete('contents', $filter);
     }
     
     
@@ -509,7 +505,7 @@ class Content
     }
     
     /**
-     * Bulk insert into categories to attach content
+     * Bulk insert into categories to attach content 
      *
      * @param int $pk_content
      * @param array $categories  Array of pk_category
@@ -590,6 +586,29 @@ class Content
     
     
     /**
+     * Bind categories to content
+     * 
+     * @uses Content::attachCategories()
+     * @uses Content::detachCategories()
+     * @param int $pk_content
+     * @param array $categories Array of pk_category
+     * @return boolean
+    */
+    public function bindCategories($pk_content, $categories)
+    {
+        $isOk = false;
+        
+        $isOk = $this->detachCategories($pk_content);
+
+        if ($isOk === true) {
+            $isOk = $this->attachCategories($pk_content, $categories);
+        }
+        
+        return $isOk;
+    }
+    
+    
+    /**
      * Get categories to which this content belongs
      * 
      * @return array
@@ -608,6 +627,25 @@ class Content
         }
         
         return $pks;
+    }
+    
+    
+    /**
+     * Get name o f content type
+     * 
+     * @return string
+    */
+    public function getNameOfContentType()
+    {
+        $klass = new ReflectionClass($this);
+        
+        if(method_exists($klass, 'getShortName')) {
+            $nameOfContentType = $klass->getShortName();
+        } else {
+            $nameOfContentType = $klass->getName();
+        }                
+        
+        return $nameOfContentType;
     }
     
     

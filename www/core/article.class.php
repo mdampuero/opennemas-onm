@@ -59,8 +59,6 @@ class Article extends Content
         if($id != null) {
             $this->read($id);
         }
-        
-        $this->content_type = 'Article';
     }
 
     public function create($data)

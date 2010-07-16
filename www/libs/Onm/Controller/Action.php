@@ -54,4 +54,18 @@ class Onm_Controller_Action extends Zend_Controller_Action
         }        
     }
     
-}
+    
+    public function postDispatch()
+    {
+        $reflex = new ReflectionClass($this);        
+        $props  = $reflex->getProperties(ReflectionProperty::IS_PUBLIC);
+        
+        foreach($props as $p) {
+            $value = $p->getValue($this);
+            if( !empty($value) ) {
+                $this->view->assign($p->getName(), $value);
+            }
+        }
+    }
+    
+} // END: class Onm_Controller_Action

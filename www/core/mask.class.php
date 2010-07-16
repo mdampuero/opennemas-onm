@@ -182,7 +182,7 @@ class Mask
      * @return Mask
      */
     public function setContentBox(ContentBox $contentBox)
-    {
+    {        
         $this->contentBox = $contentBox;
         return $this;
     }
@@ -218,6 +218,10 @@ class Mask
             $this->output = $tpl->fetch($template);
             
         } else {
+            $this->content->_invokeArgs = array(
+                'page' => $this->getPage(),
+                'mask' => $this,
+            );
             $this->output = $this->content->__toString();
         }
         

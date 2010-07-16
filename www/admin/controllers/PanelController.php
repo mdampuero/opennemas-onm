@@ -25,22 +25,14 @@ class PanelController extends Onm_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $contextSwitch = $this->_helper->getHelper('contextSwitch');
+        $contextSwitch->addActionContext('rss', 'xml')
+                      ->initContext();
     }
 
     public function indexAction()
-    {
-        //$translate = Zend_Registry::get('translate');
-        //echo $translate->_("Items/page:");
-        
-        // Add javascript
-        $this->tpl->addScript(array('jquery.feedreader.js',
-                                    'jquery.qtip-1.0.0-rc3.min.js'), 'head');
-        
-        // Add style
-        $this->tpl->addStyle('welcomepanel.css', 'head');
-        
-        
-        $this->tpl->display('panel.tpl');
+    {        
+        // render view
     }
     
     

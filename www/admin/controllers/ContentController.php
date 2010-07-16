@@ -24,7 +24,8 @@ class ContentController extends Onm_Controller_Action
     
     public function init()
     {
-        
+        $viewRenderer = $this->_helper->getHelper('viewRenderer');
+        $viewRenderer->setNoRender(true);
     }
     
     
@@ -36,14 +37,11 @@ class ContentController extends Onm_Controller_Action
      */
     public function slugitAction()
     {
-        // Check if it's a request was performed via XmlHttpRequest
-        if( $this->getRequest()->isXmlHttpRequest() ) {
-            $title = $this->_getParam('title', '');
-            $pk_content = $this->_getParam('pk_content', -1);
-            
-            $contMgr = new ContentManager();            
-            echo $contMgr->slugIt($title, $pk_content);            
-        }
+        $title = $this->_getParam('title', '');
+        $pk_content = $this->_getParam('pk_content', -1);
+        
+        $contMgr = new ContentManager();            
+        echo $contMgr->slugIt($title, $pk_content);
     }
     
     
@@ -72,7 +70,7 @@ class ContentController extends Onm_Controller_Action
         $data->setIdentifier('pk_content')
              ->addItems($result);
         
-        header('Content-type: application/json');
+        header('Content-Type: application/json');
         echo $data;
     }
     

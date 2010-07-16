@@ -30,6 +30,12 @@
 class FrontpageController extends Onm_Controller_Action
 {
     
+    public function init()
+    {
+        $viewRenderer = $this->_helper->getHelper('viewRenderer');
+        $viewRenderer->setNoRender(true);
+    }
+    
     public function editAction()
     {
         $pk_page = $this->_getParam('pk_page', -1);

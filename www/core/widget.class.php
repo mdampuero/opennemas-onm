@@ -40,20 +40,15 @@ class Widget extends Content
     /**
      * constructor
      *
-     * @param int $id 
+     * @param int $pkContent 
      */
-    public function __construct($id=null)
+    public function __construct($pkContent=null)
     {
-        parent::__construct($id);
+        parent::__construct($pkContent);        
         
-        // FIXME: use reflexion to recover content name
-        $this->content_type = 'Widget';
-        
-        if(!is_null($id)) {            
-            $this->read($id);
-        }
-        
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));        
+        if (!is_null($pkContent)) {            
+            $this->read($pkContent);
+        }      
     }
     
     /**
@@ -109,34 +104,12 @@ class Widget extends Content
         return $this;
     }
     
-    /**
-     * Load properties into this instance
-     *
-     * @param array $properties Array properties 
-     */
-    public function load($properties)
-    {
-        if(is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif(is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-    }
     
     /**
      * Update
      * 
      * @param array $data Array values
-     * @return boolean
+     * @return int
      */
     public function update($data)
     {
@@ -148,13 +121,15 @@ class Widget extends Content
         $fields = array('content', 'renderlet');
         $where  = '`pk_widget` = ' . $data['pk_content'];
         
+        $affectedRows = 0;
+        
         try {
-            SqlHelper::bindAndUpdate('widgets', $fields, $data, $where);
+            $affectedRows = SqlHelper::bindAndUpdate('widgets', $fields, $data, $where);
         } catch(Exception $e) {
-            return false;
+            return 0;
         }
         
-        return true;        
+        return $affectedRows;        
     }
     
     
@@ -165,19 +140,15 @@ class Widget extends Content
      * @return boolean
      */
     public function delete($pk_content)
-    {        
-        parent::delete($pk_content); 
+    {
+        // Filter var, prevent Sql injection
+        $pk_content = filter_var($pk_content, FILTER_VALIDATE_INT);
         
-        $sql = "DELETE FROM `widgets` WHERE `pk_widget` = ?";
+        parent::delete($pk_content);
         
-        if($this->conn->Execute($sql, array($pk_content)) === false) {
-            $error_msg = $this->conn->ErrorMsg();
-            Zend_Registry::get('logger')->emerg($error_msg);
-            
-            return false;
-        }
+        $filter = '`pk_widget`=' . $pk_content;
         
-        return true;
+        return SqlHelper::delete('widgets', $filter);
     }
     
     
@@ -223,16 +194,16 @@ class Widget extends Content
      */
     private function _renderlet_smarty()
     {        
-        Template::$registry['widget'][$this->pk_widget] = $this->content;
-        $resource = 'widget:' . $this->pk_widget;
+        $tpl = Zend_Registry::get('tpl');
         
-        $wgtTpl = new Template(TEMPLATE_USER);
+        $smarty = $tpl->createTemplate('string:' . $this->content);
+        if(isset($this->_invokeArgs)) {
+            foreach($this->_invokeArgs as $prop => $value) {
+                $smarty->assign($prop, $value);
+            }
+        }
         
-        // no caching
-        $wgtTpl->caching = 0;
-        $wgtTpl->force_compile = true;
-        
-        $output = $wgtTpl->fetch($resource);
+        $output = $smarty->fetch('string:' . $this->content);
         
         return $output;
     }
@@ -246,4 +217,5 @@ class Widget extends Content
     {
         return $this->render();
     }
+    
 }
