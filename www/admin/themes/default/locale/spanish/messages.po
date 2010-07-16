@@ -51,3 +51,6 @@ msgstr "Boletín"
 
 msgid "unread emails"
 msgstr "emails sin leer"
+
+msgid "hello"
+msgstr "hola"

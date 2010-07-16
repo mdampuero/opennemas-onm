@@ -25,6 +25,8 @@
 class PageController extends Onm_Controller_Action
 {
     
+    public $gridContent = null;
+    
     public function init()
     {
         
@@ -47,8 +49,7 @@ class PageController extends Onm_Controller_Action
         try {
             $content = $page->dispatch();
             
-            $this->tpl->assign('grid_content', $content);        
-            $this->tpl->display('page.tpl');
+            $this->gridContent = $content;
             
         } catch(PageNotAvailableException $ex) {
             

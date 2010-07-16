@@ -1,8 +1,11 @@
 <?php
-// TODO: gestión de informes
 
+// TODO: gestión de informes
 class ErrorController extends Onm_Controller_Action
 {
+    public $exception = null;
+    public $request   = null;
+    public $message   = null;
 
     public function errorAction()
     {
@@ -14,19 +17,17 @@ class ErrorController extends Onm_Controller_Action
         
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
-                $this->tpl->assign('message', 'Page not found');
+                $this->message = 'Page not found';
                 break;
             default:
                 // application error 
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->tpl->assign('message', 'Application error');
+                $this->message = 'Application error';
                 break;
         }
         
-        $this->tpl->assign('exception', $errors->exception);
-        $this->tpl->assign('request', $errors->request);
-        
-        $this->tpl->display('error.tpl');
+        $this->exception = $errors->exception;
+        $this->request   = $errors->request;
     }
 
 

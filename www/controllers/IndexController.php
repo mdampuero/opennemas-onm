@@ -21,6 +21,7 @@
 
 class IndexController extends Onm_Controller_Action
 {
+    public $gridContent = null;
     
     public function init()
     {
@@ -42,8 +43,7 @@ class IndexController extends Onm_Controller_Action
         
         $content = $page->dispatch();        
         
-        $this->tpl->assign('grid_content', $content);
-        $this->tpl->display('page.tpl');
+        $this->gridContent = $content;
     }
     
     

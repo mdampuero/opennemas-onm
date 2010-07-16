@@ -8,7 +8,7 @@
 <style type="text/css" media="all">
 div.content-box {
     /*background-color: #EEF; */
-    margin: 0.1em;
+    /*margin: 0.1em;*/
 }
 
 div.content-box > div.ui-widget-header {
