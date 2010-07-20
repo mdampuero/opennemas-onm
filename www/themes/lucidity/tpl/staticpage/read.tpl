@@ -30,7 +30,7 @@ Smarty template: frontpage.tpl
             <div id="main_content" class="span-24">
                 
                 <div class="span-24">
-                    {$gridContent}
+                    {$layoutContent}
                 </div>                            
                 
             </div><!-- fin #main_content -->
