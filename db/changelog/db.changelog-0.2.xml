@@ -217,7 +217,35 @@
         <comment>Modify static_pages</comment>
         
         <dropColumn tableName="static_pages" columnName="slug"/>
-    </changeSet>    
+    </changeSet>
+    
+    <changeSet author="vifito" id="20100719162659">
+        <comment>New fake content type Inner to support inner pages</comment>
+        
+        <insert tableName="content_types">
+            <column name="pk_content_type" valueNumeric="15"/>
+            <column name="name" value="inner"/>
+            <column name="title" value="Inner content"/>
+        </insert>
+        
+        <insert tableName="contents">
+            <column name="fk_content_type" valueNumeric="15"/>
+            <column name="title" value="Container for inner contents"/>            
+            <column name="description" value="Container for inner contents"/>
+            <column name="keywords" value="container,inner"/>
+            <column name="status" value="AVAILABLE"/>
+            <column name="slug" value=""/>
+        </insert>
+        
+    </changeSet>
+    
+    <changeSet author="vifito" id="20100719183527">
+        <comment>Add field "params" to "contents" table</comment>                
+        
+        <addColumn tableName="contents">
+            <column name="params" type="TEXT" />
+        </addColumn>        
+    </changeSet>
     
     <!-- Uncomment once this changeset is over -->
     <!-- changeSet author="vifito" id="">
