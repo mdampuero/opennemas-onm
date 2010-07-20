@@ -25,6 +25,9 @@ class SvnController extends Onm_Controller_Action
     
     public function init()
     {
+        $viewRenderer = $this->_helper->getHelper('viewRenderer');
+        $viewRenderer->setNoRender(true);
+        
         // FIXME: use config file
         $this->cfg = array(
             'username'    => $_SESSION['username'],
