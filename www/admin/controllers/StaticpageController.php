@@ -65,7 +65,7 @@ class StaticpageController extends Onm_Controller_Action
     {
         if($this->getRequest()->isPost()) {
             
-            $data = $this->getRequest()->getPost();
+            $data = $this->getRequest()->getPost();            
             
             // TODO: Validation
             $staticpage = new Static_Page();            
@@ -110,8 +110,7 @@ class StaticpageController extends Onm_Controller_Action
                 $staticpage->update($data);
                 
                 $pk_content = $data['pk_content'];
-                $staticpage->detachCategories($pk_content);
-                $staticpage->attachCategories($pk_content, $data['categories']);
+                $staticpage->bindCategories($pk_content, $data['categories']);
                 
                 $this->flashMessenger->addMessage(
                     array('notice' => 'Static page updated successfully.')

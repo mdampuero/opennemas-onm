@@ -15,7 +15,7 @@
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
 <tbody>
 <tr>
-    <td valign="top" align="right" style="padding:4px;" width="150">
+    <td valign="top" align="right" style="padding:4px;" width="80">
         <label for="title">{t}Page title{/t}:</label>
     </td>
     <td valign="top">
@@ -50,11 +50,16 @@
         {pane_seo value=$staticpage route_slugit="content-slugit" route_keywords="keyword-service"}
     {/ui_container}
     
+    {ui_container title="Inner options" hidden=true}
+        {pane_innerpage content=$staticpage}
+    {/ui_container}
+    
     {if ($request->getActionName() eq "update")}
         {ui_container title="Info" hidden=true}    
             {pane_info value=$staticpage}
         {/ui_container}
-    {/if}    
+    {/if}
+    
 </div>
 
 {if ($request->getActionName() eq "update")}
