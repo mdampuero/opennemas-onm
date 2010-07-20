@@ -21,10 +21,12 @@
 
 class StaticpageController extends Onm_Controller_Action
 {
+    public $layoutContent = null;
     
     public function init()
     {
-        
+        //$viewRenderer = $this->_helper->getHelper('viewRenderer');
+        //$viewRenderer->setNoRender(true);
     }
     
     
@@ -34,8 +36,40 @@ class StaticpageController extends Onm_Controller_Action
      * Route: staticpage-index
      *  /
      */
-    public function indexAction()
+    public function readAction()
     {        
+        $pk_content = $this->getRequest()->getParam('pk_content');
+        $staticPage = new Static_Page($pk_content);
+        
+        $this->layoutContent = PageManager::renderInnerContent($staticPage);        
+        
+        // Get internal page
+        //$pkPage = $staticPage->getParam('innerpage');        
+        //
+        //if($pkPage != null) {
+        //    try {
+        //        $page = new Page($pkPage);
+        //        // Set inner content & mask
+        //        //$page->setInner($staticPage, 'static_page/simple');
+        //        $mask = $staticPage->getParam('innermask');
+        //        $page->setInner($staticPage, $mask);
+        //        
+        //        $content = $page->dispatch();                
+        //        $this->layoutContent = $content;
+        //        
+        //    } catch(PageNotAvailableException $ex) {
+        //        
+        //        if(APPLICATION_ENV == 'production') {
+        //            $this->redirector->gotoRoute( array(), 'index-home' );
+        //            exit();
+        //        } else {
+        //            Zend_Registry::get('logger')->info($ex->getMessage());
+        //        }            
+        //    }
+        //} else {
+        //    $this->layoutContent = $staticPage->__toString();
+        //}
+        
         
     }
     

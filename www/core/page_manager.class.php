@@ -603,6 +603,50 @@ class PageManager
     }
     
     
+    /**
+     * Render page with inner content
+     *
+     * @param Content $content
+     * @param string $mask
+     * @return string
+     */
+    public function renderInnerContent(Content $content, $mask=null)
+    {
+        // Get internal page
+        $pkPage = $content->getParam('innerpage');        
+        
+        if($pkPage != null) {
+            try {
+                $page = new Page($pkPage);
+                
+                
+                if(is_null($mask)) {
+                    $mask = $content->getParam('innermask');
+                }
+                
+                // Set inner content & mask
+                $page->setInner($content, $mask);
+                
+                $output = $page->dispatch();
+                
+            } catch(PageNotAvailableException $ex) {
+                
+                if(APPLICATION_ENV == 'production') {
+                    $this->redirector->gotoRoute( array(), 'index-home' );
+                    exit();
+                } else {
+                    Zend_Registry::get('logger')->info($ex->getMessage());
+                }            
+            }
+            
+        } else {
+            $output = $content->__toString();
+        }
+        
+        return $output;
+    }
+    
+    
     /* PRIVATE METHODS ******************************************************* */
     
     /**

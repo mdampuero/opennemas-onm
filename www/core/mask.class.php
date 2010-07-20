@@ -234,10 +234,11 @@ class Mask
             $tplBe->assign('mask', $this);
             
             // Helpers to get objects page and content
-            $tplBe->assign('content', $this->getContent());
-            $tplBe->assign('page',    $this->getPage());
+            $content = $this->getContent();
+            $tplBe->assign('content', $content);
+            $tplBe->assign('page',    $this->getPage());            
             
-            // 
+            // content of div.ui-widget-content
             $args['preview'] = $this->output;
             if(!empty($args)) {
                 $tplBe->assign('args', $args);

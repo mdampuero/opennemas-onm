@@ -46,25 +46,38 @@ class Template extends Smarty
     */
     public function setTheme($theme)
     {
-        // Parent variables
-        $this->template_dir  = SITE_PATH.SS.'themes'.SS.$theme.SS.'tpl/';
-        $this->compile_dir   = SITE_PATH.SS.'themes'.SS.$theme.SS.'compile/';
-        $this->config_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'config/';
-        $this->cache_dir     = SITE_PATH.SS.'themes'.SS.$theme.SS.'cache/';
-        $this->plugins_dir[] = SITE_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
-        $this->locale_dir    = SITE_PATH.SS.'themes'.SS.$theme.SS.'locale/';
+        $basePath = SITE_PATH . 'themes' . DS . $theme . DS;
+        $this->template_dir  = $basePath . 'tpl' . DS;
+        $this->compile_dir   = $basePath . 'compile' . DS;
+        $this->config_dir    = $basePath . 'config' . DS;
+        $this->cache_dir     = $basePath . 'cache' . DS;
+        $this->locale_dir    = $basePath . 'locale' . DS;
+        
+        // System plugin directory
+        $pluginDir = SITE_PATH . DS . 'themes' . DS . 'system' . DS . 'plugins';
+        if(file_exists($pluginDir)) {
+            $this->plugins_dir[] = $pluginDir;
+        }
+        
+        // Theme plugin directory
+        $pluginDir = $basePath . 'plugins';
+        if(file_exists($pluginDir)) {
+            $this->plugins_dir[] = $pluginDir;
+        }
+        
+        
         $this->caching       = false;
         $this->allow_php_tag = true;
 
         // Template variables        
-        $this->css_dir    = SITE_PATH_WEB.'themes'.SS.$theme.SS.'css/';
-        $this->image_dir  = SITE_PATH_WEB.'themes'.SS.$theme.SS.'images/';
-        $this->js_dir     = SITE_PATH_WEB.'themes'.SS.$theme.SS.'js/';
+        $this->css_dir    = SITE_PATH_WEB.'themes'.DS.$theme.DS.'css/';
+        $this->image_dir  = SITE_PATH_WEB.'themes'.DS.$theme.DS.'images/';
+        $this->js_dir     = SITE_PATH_WEB.'themes'.DS.$theme.DS.'js/';
 
         $this->assign('params',
             array(
                 'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'     =>    $this->css_dir,
+                'CSS_DIR'     =>   $this->css_dir,
                 'IMAGE_DIR'  =>    $this->image_dir,
                 'JS_DIR'     =>    $this->js_dir
             )
@@ -305,24 +318,24 @@ class TemplateAdmin extends Template
     public function setTheme($theme)
     {
         // Parent variables
-        $this->template_dir  = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'tpl/';
-        $this->compile_dir   = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'compile/';
-        $this->config_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'config/';
-        $this->cache_dir     = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'cache/';
-        $this->plugins_dir[] = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'plugins/';
-        $this->locale_dir    = SITE_ADMIN_PATH.SS.'themes'.SS.$theme.SS.'locale/';
+        $this->template_dir  = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'tpl/';
+        $this->compile_dir   = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'compile/';
+        $this->config_dir    = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'config/';
+        $this->cache_dir     = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'cache/';
+        $this->plugins_dir[] = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'plugins/';
+        $this->locale_dir    = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'locale/';
         $this->caching       = false;
         $this->allow_php_tag = true;
 
         // Template variables        
-        $this->css_dir    = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'css/';
-        $this->image_dir  = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'images/';
-        $this->js_dir     = SITE_URL_ADMIN.'themes'.SS.$theme.SS.'js/';
+        $this->css_dir    = SITE_URL_ADMIN.'themes'.DS.$theme.DS.'css/';
+        $this->image_dir  = SITE_URL_ADMIN.'themes'.DS.$theme.DS.'images/';
+        $this->js_dir     = SITE_URL_ADMIN.'themes'.DS.$theme.DS.'js/';
 
         $this->assign('params',
             array(
                 'LOCALE_DIR' =>    $this->locale_dir,
-                'CSS_DIR'     =>    $this->css_dir,
+                'CSS_DIR'    =>    $this->css_dir,
                 'IMAGE_DIR'  =>    $this->image_dir,
                 'JS_DIR'     =>    $this->js_dir
             )

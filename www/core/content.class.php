@@ -48,6 +48,7 @@ class Content
     public $status = null;
     public $published = null;
     public $slug = null;
+    public $params = null;
     /**#@-*/
     
     /**
@@ -107,7 +108,7 @@ class Content
                         'starttime', 'endtime', 'created', 'changed', 'published',
                         'fk_author', 'fk_publisher', 'fk_user_last_editor',
                         'views',
-                        'status');
+                        'status', 'params');
         
         $pk_content = SqlHelper::bindAndInsert('contents', $fields, $data);
         
@@ -144,8 +145,12 @@ class Content
             'fk_user_last_editor' => $_SESSION['userid'],
             
             'views'  => 0,
-            'status' => 'PENDING',            
-        );                
+            'status' => 'PENDING',
+        );
+        
+        if(isset($data['params'])) {
+            $data['params'] = serialize($data['params']);
+        }
         
         // Dont use array_merge. Use "+" operator for arrays to preserve keys.
         $data = $data + $defaults;
@@ -194,7 +199,23 @@ class Content
         
         // Load object properties
         $this->load( $rs->fields );
-    }    
+    }
+    
+    
+    public function getParam($name)
+    {
+        $params = $this->params;
+        
+        if($params != null) {
+            $params = unserialize($params);
+            
+            if(array_key_exists($name, $params)) {
+                return $params[$name];
+            }
+        }
+        
+        return null;
+    }
     
     /**
      * Load properties for "this" object from $properties
@@ -242,7 +263,7 @@ class Content
         
         $fields = array('title', 'slug', 'description', 'keywords',
                         'starttime', 'endtime', 'changed', 'published',
-                        'fk_user_last_editor', 'status', 'version');
+                        'fk_user_last_editor', 'status', 'version', 'params');
         
         SqlHelper::bindAndUpdate('contents', $fields, $data, 'pk_content = ' . $data['pk_content']);
     }

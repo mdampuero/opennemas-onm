@@ -28,6 +28,22 @@
         </page-index>
         <!-- }}} -->        
         
+        
+        <!-- StaticPage routes {{{ -->
+        <staticpage-read type="Zend_Controller_Router_Route_Regex">
+            <route>staticpage/([0-9]+)/([^\.]+).html</route>
+            <defaults>
+                <controller>staticpage</controller>
+                <action>read</action>                
+            </defaults>
+            <map>
+                <pk_content>1</pk_content>
+                <slug>2</slug>
+            </map>
+            <reverse>staticpage/%d/%s.html</reverse>
+        </staticpage-read>
+        <!-- }}} -->
+        
     </production>
     
     <development extends="production"></development>

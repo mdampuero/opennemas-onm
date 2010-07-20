@@ -21,7 +21,7 @@
 
 class IndexController extends Onm_Controller_Action
 {
-    public $gridContent = null;
+    public $layoutContent = null;
     
     public function init()
     {
@@ -43,9 +43,10 @@ class IndexController extends Onm_Controller_Action
         
         if($page != null) {
             $content = $page->dispatch();            
-            $this->gridContent = $content;
+            $this->layoutContent = $content;
         } else {
-            $this->gridContent = '<h1>You must create a root page for this site.</h1>';
+            // TODO: redirect to unavailable page
+            $this->layoutContent = '<h1>You must create a root page for this site.</h1>';
         }
         
     }

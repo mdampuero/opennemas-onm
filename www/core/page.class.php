@@ -96,6 +96,7 @@ class Page
     public  $cache = null;
     private $conn  = null;
     
+    private $_inner = null;
     
     /**
      * Constructor
@@ -742,6 +743,16 @@ class Page
     }
     
     
+    public function setInner($content, $mask=null)
+    {
+        $this->_inner['content'] = $content;
+        
+        if($mask != null) {
+            $this->_inner['mask'] = $mask;
+        }
+    }
+    
+    
     /**
      * Render $this page
      *
@@ -766,19 +777,34 @@ class Page
             
             foreach($cts as $it) {
                 $content = Content::get($it['pk_content']);
-                
-                $props = array(
-                    'content'     => $content,
-                    'mask'        => $it['mask'],
+                $common = array(
                     'page'        => $this,
                     'params'      => $it['params'],
                     'weight'      => $it['weight'],
                     'placeholder' => $it['placeholder'],
                 );
                 
-                $box = new ContentBox($props);
-                
-                $contents[$placeholder][] = $box;
+                if($content instanceof Inner) {
+                    if(isset($this->_inner['content'])) {
+                        $props['content'] = $this->_inner['content'];
+                        $props['mask'] = (isset($this->_inner['mask']))? $this->_inner['mask']: null;
+                        
+                        $props = $props + $common;
+                        $box = new ContentBox($props);  
+                        
+                        $contents[$placeholder][] = $box;
+                    }
+                } else {
+                    $props = array(
+                        'content'     => $content,
+                        'mask'        => $it['mask'],
+                    );
+                    
+                    $props = $props + $common;
+                    $box = new ContentBox($props);
+                    
+                    $contents[$placeholder][] = $box;
+                }
             }
         }
         

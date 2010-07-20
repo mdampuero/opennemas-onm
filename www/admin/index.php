@@ -144,6 +144,11 @@ $router = $front->getRouter();
 $router->removeDefaultRoutes();
 $router->addConfig( new Zend_Config_Xml('../configs/routes-backend.xml', APPLICATION_ENV) );
 
+// Frontend routes
+$routerFrontend = new Zend_Controller_Router_Rewrite();
+$routerFrontend->addConfig(new Zend_Config_Xml('../configs/routes-frontend.xml', APPLICATION_ENV));
+Zend_Registry::set('routerFrontend', $routerFrontend);
+
 // Load plugins
 $front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
 $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
