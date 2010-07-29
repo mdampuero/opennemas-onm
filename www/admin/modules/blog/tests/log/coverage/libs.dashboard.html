@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>libs</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!--[if IE]><script src="excanvas.compressed.js"></script><![endif]-->
+    <script src="RGraph.common.js" ></script>
+    <script src="RGraph.bar.js" ></script>
+    <script src="RGraph.scatter.js" ></script>
+  </head>
+
+  <body>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="title">libs</td></tr>
+      <tr><td><div align="center"><p><a href="/var/www/demo/trunk/www/admin/modules/blog/tests/./log/coverage/libs.html">Back to Code Coverage report</a></p></div></td></tr>
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+    </table>
+
+    <br />
+
+    <center>
+      <table width="90%" cellpadding="2" cellspacing="1" border="0">
+        <tr>
+          <td valign="top">
+            <h2>Class Coverage Distribution</h2>
+            <canvas id="classCoverageDistribution" width="475" height="200"></canvas>
+            <script>
+            var ccd = new RGraph.Bar('classCoverageDistribution', [9,30,7,12,13,8,8,7,4,6,2,13]);
+            ccd.Set('chart.background.barcolor1', 'white');
+            ccd.Set('chart.background.barcolor2', 'white');
+            ccd.Set('chart.colors', ['blue']);
+            ccd.Set('chart.shadow', true);
+            ccd.Set('chart.shadow.offsetx', 3);
+            ccd.Set('chart.shadow.offsety', 3);
+            ccd.Set('chart.labels', ['0%','0-10%','10-20%','20-30%','30-40%','40-50%','50-60%','60-70%','70-80%','80-90%','90-100%','100%']);
+            ccd.Set('chart.text.size', 5);
+            ccd.Draw();
+            </script>
+          </td>
+
+          <td valign="top">
+            <h2>Class Complexity</h2>
+            <canvas id="classComplexity" width="475" height="200"></canvas>
+            <script>
+            var cc = new RGraph.Scatter('classComplexity', [[100,4,"blue","Onm_Application_Module_Bootstrap"],[100,9,"blue","Onm_Controller_Action"],[7.1428571428571,4,"blue","Onm_Controller_Plugin_Auth"],[89.473684210526,6,"blue","Onm_Controller_Plugin_Locale"],[100,2,"blue","Onm_Controller_Plugin_Template"],[41.379310344828,16,"blue","Onm_View"],[0,6,"blue","Pager"],[50.36496350365,55,"blue","Zend_Application"],[52.631578947368,12,"blue","Zend_Application_Bootstrap_Bootstrap"],[61.693548387097,97,"blue","Zend_Application_Bootstrap_BootstrapAbstract"],[100,2,"blue","Zend_Application_Module_Autoloader"],[73.529411764706,11,"blue","Zend_Application_Module_Bootstrap"],[86.363636363636,12,"blue","Zend_Application_Resource_Db"],[29.113924050633,27,"blue","Zend_Application_Resource_Frontcontroller"],[88.888888888889,8,"blue","Zend_Application_Resource_Locale"],[83.333333333333,13,"blue","Zend_Application_Resource_Modules"],[91.428571428571,17,"blue","Zend_Application_Resource_ResourceAbstract"],[41.666666666667,25,"blue","Zend_Cache"],[36.170212765957,40,"blue","Zend_Cache_Backend"],[25.062656641604,153,"blue","Zend_Cache_Backend_File"],[26.568265682657,110,"blue","Zend_Cache_Core"],[40.458015267176,55,"blue","Zend_Config"],[64.356435643564,32,"blue","Zend_Config_Ini"],[35.074626865672,48,"blue","Zend_Config_Xml"],[21.56862745098,64,"blue","Zend_Controller_Action"],[78.260869565217,12,"blue","Zend_Controller_Action_Helper_Abstract"],[28.260869565217,24,"blue","Zend_Controller_Action_Helper_FlashMessenger"],[5.2631578947368,6,"blue","Zend_Controller_Action_Helper_Json"],[2.1739130434783,72,"blue","Zend_Controller_Action_Helper_Redirector"],[63.117870722433,114,"blue","Zend_Controller_Action_Helper_ViewRenderer"],[61.224489795918,38,"blue","Zend_Controller_Action_HelperBroker"],[33.823529411765,29,"blue","Zend_Controller_Action_HelperBroker_PriorityStack"],[33.333333333333,41,"blue","Zend_Controller_Dispatcher_Abstract"],[52.046783625731,55,"blue","Zend_Controller_Dispatcher_Standard"],[51.181102362205,113,"blue","Zend_Controller_Front"],[91.666666666667,10,"blue","Zend_Controller_Plugin_Abstract"],[59.016393442623,52,"blue","Zend_Controller_Plugin_Broker"],[22.972972972973,25,"blue","Zend_Controller_Plugin_ErrorHandler"],[44.067796610169,33,"blue","Zend_Controller_Request_Abstract"],[19.504643962848,177,"blue","Zend_Controller_Request_Http"],[4.6511627906977,21,"blue","Zend_Controller_Request_HttpTestCase"],[5.9071729957806,108,"blue","Zend_Controller_Response_Abstract"],[100,0,"blue","Zend_Controller_Response_Http"],[42.5,17,"blue","Zend_Controller_Response_HttpTestCase"],[22.58064516129,17,"blue","Zend_Controller_Router_Abstract"],[26.666666666667,9,"blue","Zend_Controller_Router_Rewrite"],[29.064039408867,106,"blue","Zend_Controller_Router_Route"],[38.461538461538,6,"blue","Zend_Controller_Router_Route_Abstract"],[9.6153846153846,41,"blue","Zend_Controller_Router_Route_Regex"],[30,12,"blue","Zend_Controller_Router_Route_Static"],[35.135135135135,12,"blue","Zend_Db"],[16.239316239316,136,"blue","Zend_Db_Adapter_Abstract"],[0.81967213114754,46,"blue","Zend_Db_Adapter_Pdo_Abstract"],[1.1764705882353,19,"blue","Zend_Db_Adapter_Pdo_Mysql"],[25,2,"blue","Zend_Db_Expr"],[4.8076923076923,46,"blue","Zend_Db_Profiler"],[3.3333333333333,12,"blue","Zend_Db_Select"],[0.71942446043165,54,"blue","Zend_Db_Statement"],[0.9009009009009,52,"blue","Zend_Db_Statement_Pdo"],[5.5555555555556,7,"blue","Zend_Db_Table"],[3.0172413793103,97,"blue","Zend_Db_Table_Abstract"],[4.1666666666667,11,"blue","Zend_Db_Table_Definition"],[1.8867924528302,21,"blue","Zend_Filter"],[50,64,"blue","Zend_Filter_Inflector"],[86.486486486486,17,"blue","Zend_Filter_PregReplace"],[40,12,"blue","Zend_Filter_StringToLower"],[100,1,"blue","Zend_Filter_Word_CamelCaseToDash"],[75,2,"blue","Zend_Filter_Word_CamelCaseToSeparator"],[66.666666666667,4,"blue","Zend_Filter_Word_Separator_Abstract"],[76.470588235294,8,"blue","Zend_Filter_Word_SeparatorToSeparator"],[100,1,"blue","Zend_Filter_Word_UnderscoreToSeparator"],[1.0416666666667,85,"blue","Zend_Layout"],[36,39,"blue","Zend_Loader"],[32.65306122449,77,"blue","Zend_Loader_Autoloader"],[58.156028368794,52,"blue","Zend_Loader_Autoloader_Resource"],[41.573033707865,73,"blue","Zend_Loader_PluginLoader"],[32.361516034985,123,"blue","Zend_Locale"],[7.046332046332,320,"blue","Zend_Locale_Data"],[100,0,"blue","Zend_Locale_Data_Translation"],[16.666666666667,10,"blue","Zend_Log"],[12.5,3,"blue","Zend_Log_Filter_Abstract"],[5,8,"blue","Zend_Log_Filter_Priority"],[38.888888888889,8,"blue","Zend_Log_Formatter_Simple"],[4.3478260869565,13,"blue","Zend_Log_Writer_Abstract"],[21.951219512195,14,"blue","Zend_Log_Writer_Stream"],[65,17,"blue","Zend_Registry"],[36,19,"blue","Zend_Session"],[12.820512820513,21,"blue","Zend_Session_Abstract"],[7.2368421052632,59,"blue","Zend_Session_Namespace"],[19.789473684211,130,"blue","Zend_Test_PHPUnit_ControllerTestCase"],[40.277777777778,27,"blue","Zend_Translate"],[27.941176470588,25,"blue","Zend_Translate_Adapter"],[69.354838709677,16,"blue","Zend_Translate_Adapter_Gettext"],[0.72992700729927,158,"blue","Zend_Translate_Plural"],[2.4390243902439,20,"blue","Zend_Uri"],[4.7619047619048,10,"blue","Zend_View"],[0.30120481927711,119,"blue","Zend_View_Abstract"],[100,0,"blue","ADOFieldObject"],[0,27,"blue","ADODB_Cache_File"],[0.76419213973799,445,"blue","ADOConnection"],[100,0,"blue","ADOFetchObj"],[0,8,"blue","ADODB_Iterator_empty"],[0,8,"blue","ADORecordSet_empty"],[0,8,"blue","ADODB_Iterator"],[0,159,"blue","ADORecordSet"],[0,40,"blue","ADORecordSet_array"],[4.1139240506329,129,"blue","ADODB_mysql"],[1.0526315789474,54,"blue","ADORecordSet_mysql"],[6.25,7,"blue","ADORecordSet_ext_mysql"],[34.265734265734,58,"blue","Smarty"],[12.80487804878,75,"blue","Smarty_Internal_Data"],[0,5,"blue","Smarty_Data"],[100,1,"blue","Smarty_Variable"],[0,2,"blue","Undefined_Smarty_Variable"],[53.488372093023,17,"blue","Smarty_Internal_Resource_File"],[84.210526315789,7,"blue","Smarty_Internal_Template"],[100,0,"blue","Smarty_Template"],[5.511811023622,46,"blue","Template"],[100,2,"blue","TemplateAdmin"]]);
+            cc.Set('chart.xmax', 100);
+            cc.Set('chart.background.barcolor1', 'white');
+            cc.Set('chart.background.barcolor2', 'white');
+            cc.Set('chart.tickmarks', 'plus');
+            cc.Set('chart.ticksize', 5);
+            cc.Set('chart.text.size', 5);
+            cc.Set('chart.ylabels', false);
+            cc.Draw();
+            </script>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <h2>Top Project Risks</h2>
+            <ul>
+              <li><a href="libs_Zend_Application_Module_Bootstrap.php.html#39">Zend_Application_Module_Bootstrap</a> (13)</li>
+              <li><a href="libs_Zend_Application_Resource_Db.php.html#38">Zend_Application_Resource_Db</a> (12)</li>
+              <li><a href="libs_Zend_Log_Filter_Abstract.php.html#37">Zend_Log_Filter_Abstract</a> (9)</li>
+              <li><a href="libs_Zend_Filter_Word_SeparatorToSeparator.php.html#33">Zend_Filter_Word_SeparatorToSeparator</a> (8)</li>
+              <li><a href="libs_Zend_Application_Resource_Locale.php.html#39">Zend_Application_Resource_Locale</a> (8)</li>
+              <li><a href="libs_smarty_sysplugins_smarty_internal_template.php.html#16">Smarty_Internal_Template</a> (7)</li>
+              <li><a href="libs_Onm_Controller_Plugin_Locale.php.html#23">Onm_Controller_Plugin_Locale</a> (6)</li>
+              <li><a href="libs_smarty_sysplugins_smarty_internal_data.php.html#431">Undefined_Smarty_Variable</a> (6)</li>
+              <li><a href="libs_Zend_Filter_Word_Separator_Abstract.php.html#34">Zend_Filter_Word_Separator_Abstract</a> (4)</li>
+              <li><a href="libs_Zend_Filter_Word_CamelCaseToSeparator.php.html#33">Zend_Filter_Word_CamelCaseToSeparator</a> (2)</li>
+
+            </ul>
+          </td>
+
+          <td valign="top">
+            <h2>Least Tested Methods</h2>
+            <ul>
+              <li><a href="libs_Zend_Session_Namespace.php.html#342">Zend_Session_Namespace::apply</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#299">Zend_Session_Namespace::__set</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#277">Zend_Session_Namespace::anonymous function</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#361">Zend_Session_Namespace::applySet</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#384">Zend_Session_Namespace::__isset</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#475">Zend_Session_Namespace::setExpirationHops</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#427">Zend_Session_Namespace::setExpirationSeconds</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#404">Zend_Session_Namespace::__unset</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#265">Zend_Session_Namespace::unsetAll</a> (0%)</li>
+              <li><a href="libs_Zend_Session_Namespace.php.html#254">Zend_Session_Namespace::isLocked</a> (0%)</li>
+
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </center>
+
+    <br />
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><td class="ruler"><img src="glass.png" width="3" height="3" alt=""></td></tr>
+      <tr><td class="versionInfo">Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 1.0.0RC1</a> using <a href="http://www.php.net/" target="_top">PHP 5.3.2</a> and PHPUnit 3.5.0RC1 at Wed Jul 28 12:27:58 UTC 2010.</td></tr>
+    </table>
+
+    <br/>
+  </body>
+</html>

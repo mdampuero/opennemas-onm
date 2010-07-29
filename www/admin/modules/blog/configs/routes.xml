@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <blog-post-index type="Zend_Controller_Router_Route">
+            <route>blog/post/</route>
+            <defaults>
+                <module>blog</module>
+                <controller>post</controller>
+                <action>index</action>
+            </defaults>
+        </blog-post-index>
+        
+    </production>
+    
+    <development extends="production"></development>
+    
+    <testing extends="production"></testing>
+    
+</routes>
