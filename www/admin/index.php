@@ -27,10 +27,24 @@
  **  |_.__/ \__,_|\___|_|\_\___|_| |_|\__,_| **
  **********************************************/
 
+// Define path to application directory
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__)));
+
+// Define application environment
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 require_once '../configs/config.inc.php';
+
+// Ensure library/ is on include_path
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . '/../libs'),
+    get_include_path(),
+)));
+
+/** Zend_Application */
+require_once 'Zend/Application.php';
 
 /* *************************************************************************** */
 // Autoload {{{
@@ -66,104 +80,12 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Onm');
 // }}}
 
-/* *************************************************************************** */
-// Zend_Log config {{{
-$logger = new Zend_Log();
-
-// TODO: implement priorities
-
-$writer = new Zend_Log_Writer_Stream(SYS_LOG);
-$logger->addWriter($writer);
-
-if( APPLICATION_ENV == 'development' ) {
-    $writer = new Zend_Log_Writer_Firebug();
-    $logger->addWriter($writer);
-}
-
-Zend_Registry::set('logger', $logger);
-unset($writer);
-unset($logger);
-// }}}
-
-
-/* *************************************************************************** */
-// Zend_Db config and connect {{{
-$params = array(
-    'host'     => BD_HOST,
-    'username' => BD_USER,
-    'password' => BD_PASS,
-    'dbname'   => BD_INST
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
 );
-$db = Zend_Db::factory('Pdo_Mysql', $params);
-Zend_Db_Table::setDefaultAdapter($db);
-
-Zend_Registry::set('db', $db);
-unset($db); 
-// }}}
+$application->bootstrap()
+            ->run();
 
 
-/* *************************************************************************** */
-// ADOConnection config {{{
-$conn = &ADONewConnection(BD_TYPE);
-$conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);            
-
-// Log queries if environment equals than development
-if( APPLICATION_ENV == 'development' ) {
-    $conn->LogSQL();
-}
-
-Zend_Registry::set('conn', $conn);
-unset($conn);
-// }}}
-
-
-/* *************************************************************************** */
-// Session config {{{
-Zend_Session::setOptions( array('strict'=>false) );
-$session = SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
-$session->bootstrap();
-
-Zend_Registry::set('session', $session);
-unset($session);
-// }}}
-
-
-/* *************************************************************************** */
-// Template {{{
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-Zend_Registry::set('tpl', $tpl);
-unset($tpl);
-
-
-/* *************************************************************************** */
-// Frontcontroller instance and router initialization
-$front = Zend_Controller_Front::getInstance();
-
-// Routes
-$router = $front->getRouter();
-$router->removeDefaultRoutes();
-$router->addConfig( new Zend_Config_Xml('../configs/routes-backend.xml', APPLICATION_ENV) );
-
-// Frontend routes
-$routerFrontend = new Zend_Controller_Router_Rewrite();
-$routerFrontend->addConfig(new Zend_Config_Xml('../configs/routes-frontend.xml', APPLICATION_ENV));
-Zend_Registry::set('routerFrontend', $routerFrontend);
-
-// Load plugins
-$front->registerPlugin( new Onm_Controller_Plugin_Auth()  );
-$front->registerPlugin( new Onm_Controller_Plugin_Locale() );
-$front->registerPlugin( new Onm_Controller_Plugin_Template() );
-
-// viewRenderer action helper
-$view = new Onm_View();
-$viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
-$viewRenderer->setViewSuffix('tpl');
-Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
-
-// FrontController params
-$front->setParam('isBackend', true);
-
-$front->setControllerDirectory('./controllers');
-
-// Dispatch
-$front->dispatch();

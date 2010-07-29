@@ -39,11 +39,9 @@ Smarty template: frontpage.tpl
     </div><!-- fin .wrapper -->
 
     <div id="wrapper-footer" class="wrapper clearfix">
-
         <div class="container clearfix span-24">
             {include file="frontend_footer.tpl"}
         </div><!-- fin .container -->
-
     </div>
 
 </body>

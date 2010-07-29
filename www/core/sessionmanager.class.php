@@ -38,7 +38,7 @@ class SessionManager implements ArrayAccess
         $this->dirSess = $session_save_path;
     }
     
-    public function getInstance($session_save_path) {
+    public static function getInstance($session_save_path) {
         if( is_null(self::$singleton) ) {
             self::$singleton = new SessionManager($session_save_path);
         }

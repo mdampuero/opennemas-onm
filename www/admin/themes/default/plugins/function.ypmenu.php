@@ -21,12 +21,12 @@
  
 function smarty_function_ypmenu($params, &$smarty=null)
 {
-    require_once( SITE_PATH . 'libs/menu.class.php');
-    $menu = new Menu();    
+    require SITE_PATH . 'libs/menu.class.php';    
+    $menu = new Menu();
     
     // FIXME: recuperar XML con una llamada a un método
-    require SITE_ADMIN_PATH . 'include/menu.php';    
-    $ypMenu = $menu->getMenu('YpMenu', $menuXml, 1);
+    require SITE_PATH . 'admin/include/menu.php';    
+    $ypMenu = $menu->getMenu('YpMenu', $menuXml, 1);    
     
-    return $ypMenu;
+    return $ypMenu->render();
 }

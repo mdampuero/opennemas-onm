@@ -60,5 +60,10 @@ var saveOrder = function() {
         }
     });
 };
+
+// Collapse tree
+$('div#pagetree>ul li>div>img').click(function(evt) {
+  $(this).parent().next().toggle();
+});
 /* ]]> */
 </script>

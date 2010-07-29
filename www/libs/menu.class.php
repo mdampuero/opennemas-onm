@@ -1,5 +1,5 @@
 <?php
-include('parserxml.class.php');
+include(dirname(__FILE__) . '/parserxml.class.php');
 
 define('MENUFILE', 0);
 define('MENUSTRING', 1);
@@ -27,7 +27,7 @@ define('MENUSTRING', 1);
   * echo domMenu->printMenu();
   * </code>
 */
-class Menu extends ParserXML{
+class Menu extends ParserXML {
     /**
       * @var $contenido
     */
@@ -37,14 +37,10 @@ class Menu extends ParserXML{
     var $_infoMenu = array(); // Estructura para llevar cuenta de los menú dentro de una misma página
     var $menues = array();
 
-    function Menu() {
+    public function __construct() {
         $filename = dirname(__FILE__).'/'.'menues.conf';
         $xml = $this->load($filename);
         $this->doParse( $xml );
-    }
-
-    function __construct() {
-        $this->Menu();
     }
 
 	function save($xml, $path) {

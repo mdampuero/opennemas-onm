@@ -47,6 +47,8 @@
     </production>
     
     <development extends="production"></development>
+    
+    <testing extends="production"></testing>
 
 </routes>
 

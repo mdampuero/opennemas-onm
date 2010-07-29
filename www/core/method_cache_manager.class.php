@@ -73,10 +73,10 @@ class MethodCacheManager
                 $result = call_user_func_array(array($this->object, $method), $args);
                 apc_store($key, serialize($result), $this->ttl);
                 
-                return( $result );
+                return $result;
             }
             
-            return( unserialize($result) );
+            return unserialize($result);
         } else {        
             throw new Exception( " Method " . $method . " does not exist in this class " . get_class($this->object) . "." );
         }

@@ -352,7 +352,7 @@
                 <action>changestatus</action>
             </defaults>
         </staticpage-changestatus>        
-        <!-- }}} -->
+        <!-- }}} -->                
         
     </production>
     
@@ -386,6 +386,8 @@
         </devel-redirect>        
         
     </development>
+    
+    <testing extends="production"></testing>
 
 </routes>
 

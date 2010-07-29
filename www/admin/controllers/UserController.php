@@ -34,13 +34,13 @@ class UserController extends Onm_Controller_Action
     }    
     
     public function loginAction()
-    {
+    {        
         $request = $this->getRequest();
-        
+        xdebug_break();
         if($request->isPost()) {                                    
             $frm = $request->getPost(); // Form data
             
-            $user = new User();
+            $user = new User();            
             
             // Google authentication params
             $token   = (isset($frm['token']))?   $frm['token']:   null;
@@ -59,7 +59,7 @@ class UserController extends Onm_Controller_Action
                         setcookie("login_username", '', time()-(60*60) );
                         setcookie("login_password", '', time()-(60*60) );
                     }
-                }            
+                } 
                 
                 // Load instance values into session
                 $user->loadSession();
@@ -70,7 +70,6 @@ class UserController extends Onm_Controller_Action
                 
                 // Redirect to panel
                 $this->redirector->gotoRoute(array(), 'panel-index');
-                exit(0);
                 
             } else {                
                 // Show google captcha

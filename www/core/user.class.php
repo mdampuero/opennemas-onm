@@ -351,12 +351,12 @@ class User
         
         // Method authentication: database|google_clientlogin
         $_SESSION['authMethod'] = $this->authMethod;
-        if($user->authMethod == 'google_clientlogin') {
+        if($this->authMethod == 'google_clientlogin') {
             $_SESSION['authGmail']  = base64_encode($this->login.':'.$this->password);
         }
         
         //Carga en la varible de _SESSION expire el tiempo de expiración del usuario la sesión.
-        $_SESSION['default_expire'] = $this->sessionexpire;
+        $_SESSION['default_expire'] = $this->sessionexpire;        
     }
     
     /**
@@ -379,8 +379,8 @@ class User
      */
     public function authDatabase($login, $password)
     {
-        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        $rs = $this->conn->Execute( $sql );
+        $sql = 'SELECT * FROM users WHERE login=?';
+        $rs = $this->conn->Execute( $sql, array($login) );
         
         if(!$rs) {
             $error_msg = $this->conn->ErrorMsg();
@@ -499,6 +499,7 @@ class User
     {
         if(!empty($data)) {
             $this->id           = $data['pk_user'];
+            $this->pk_user      = $data['pk_user'];
             $this->login        = $data['login'];
             $this->password     = $data['password'];
             $this->sessionexpire= $data['sessionexpire'];
@@ -567,12 +568,16 @@ class User
         }
         
         $categories = $this->accesscategories;
-        function sortInMenu($a, $b) {
-            if ($a->posmenu == $b->posmenu) {
-                return 0;
+        // TODO: implement lambda function (PHP 5.3 only)
+        if(!function_exists('sortInMenu')) {
+            function sortInMenu($a, $b) {
+                if ($a->posmenu == $b->posmenu) {
+                    return 0;
+                }
+                return ($a->posmenu < $b->posmenu) ? -1 : 1;
             }
-            return ($a->posmenu < $b->posmenu) ? -1 : 1;
-        }        
+        }
+        
         usort($categories, 'sortInMenu');
         
         $ids = array();

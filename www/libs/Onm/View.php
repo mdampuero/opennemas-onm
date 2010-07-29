@@ -77,7 +77,12 @@ class Onm_View implements Zend_View_Interface
      */
     public function getScriptPaths()
     {
-        return array($this->_tpl->template_dir);
+        $paths = $this->_tpl->template_dir;
+        if(!is_array($paths)) {
+            $paths = array($paths);
+        }
+        
+        return $paths;
     }
 
     /**

@@ -58,12 +58,16 @@ class Onm_Controller_Action extends Zend_Controller_Action
     public function postDispatch()
     {
         $reflex = new ReflectionClass($this);        
-        $props  = $reflex->getProperties(ReflectionProperty::IS_PUBLIC);
+        $props  = $reflex->getProperties(ReflectionProperty::IS_PUBLIC);        
         
-        foreach($props as $p) {
-            $value = $p->getValue($this);
-            if( !empty($value) ) {
-                $this->view->assign($p->getName(), $value);
+        if(is_array($props) && count($props)>0) {
+            foreach($props as $p) {
+                if($p->class == $reflex->getName()) {
+                    $value = $p->getValue($this);
+                    if( !empty($value) ) {
+                        $this->view->assign($p->getName(), $value);
+                    }
+                }                        
             }
         }
     }
