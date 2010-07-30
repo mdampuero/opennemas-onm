@@ -285,25 +285,7 @@
         </category-delete>
         <!-- }}} -->
         
-        <!-- Keyword routes {{{ -->
-        <keyword-index type="Zend_Controller_Router_Route">
-            <route>keyword/index/*</route>
-            <defaults>
-                <controller>keyword</controller>
-                <action>index</action>
-            </defaults>
-        </keyword-index>        
-        
-        <keyword-service type="Zend_Controller_Router_Route">
-            <route>keyword/service/*</route>
-            <defaults>
-                <controller>keyword</controller>
-                <action>service</action>
-            </defaults>
-        </keyword-service>
-        <!-- }}} -->
-        
-        
+      
         <!-- Staticpages routes {{{ -->
         <staticpage-index type="Zend_Controller_Router_Route">
             <route>staticpage/index/*</route>

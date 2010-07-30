@@ -40,7 +40,7 @@ $menuXml = <<<MENUSTRING
         <node title="Trash" link="litter.php" privilege="TRASH_ADMIN" />
         <node title="Newsstand" link="kiosko.php" privilege="CATEGORY_ADMIN" />
         <node title="Newsletter" link="newsletter.php" privilege="NEWSLETTER_ADMIN" />
-        <node title="Key words" link="pclave.php" privilege="PCLAVE_ADMIN" />
+        <node title="Key words"  route="keyword-keyword-index" privilege="PCLAVE_ADMIN" />
         <node title="Control link" link="link_control.php" privilege="BACKEND_ADMIN" />
         <node title="Dashboard" link="dashboard.php" privilege="BACKEND_ADMIN" />
     </submenu>

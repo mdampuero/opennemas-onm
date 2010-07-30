@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <keyword-keyword-index type="Zend_Controller_Router_Route">
+            <route>keyword/index/</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>index</action>
+            </defaults>
+        </keyword-keyword-index>
+
+        <keyword-keyword-create type="Zend_Controller_Router_Route">
+            <route>keyword/create/</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>create</action>
+            </defaults>
+        </keyword-keyword-create>
+
+        <keyword-keyword-read type="Zend_Controller_Router_Route">
+            <route>keyword/read/:pk_keyword/</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>read</action>
+            </defaults>
+        </keyword-keyword-read>
+
+        <keyword-keyword-update type="Zend_Controller_Router_Route">
+            <route>keyword/update/*</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>update</action>
+            </defaults>
+        </keyword-keyword-update>
+
+        <keyword-keyword-delete type="Zend_Controller_Router_Route">
+            <route>keyword/delete/:pk_keyword/</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>delete</action>
+            </defaults>
+        </keyword-keyword-delete>
+
+        <keyword-keyword-service type="Zend_Controller_Router_Route">
+            <route>keyword/service/*</route>
+            <defaults>
+                <module>keyword</module>
+                <controller>keyword</controller>
+                <action>service</action>
+            </defaults>
+        </keyword-keyword-service>
+
+    </production>
+    
+    <development extends="production"></development>
+    
+    <testing extends="production"></testing>
+    
+</routes>
