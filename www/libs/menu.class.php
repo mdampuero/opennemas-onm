@@ -76,7 +76,7 @@ class Menu extends ParserXML {
 		}
 
 		require_once(dirname(__FILE__).'/'.'menues/'.$this->menues[$tipoMenu]['clase']);
-		return new $tipoMenu(&$this, $fichMenu, $resource_type);
+		return new $tipoMenu($this, $fichMenu, $resource_type);
     }
 
 	/**
