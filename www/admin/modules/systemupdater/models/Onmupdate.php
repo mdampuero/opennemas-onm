@@ -5,19 +5,19 @@ class Systemupdater_Model_Onmupdate
     public $available_scm =  array('svn');
     public $operations = array(
             'co' => array(
-                          'cmd' => 'svn co --username scm_username --password  scm_password scm_repository scm_destination',
+                          'cmd' => 'svn co --non-interactive --username scm_username --password  scm_password scm_repository scm_destination 2>&1',
                           'title' => 'Checking out'),
                     
-            'status' => array('cmd' => 'svn status scm_destination',
+            'status' => array('cmd' => 'svn status scm_destination 2>&1',
                               'title' => 'SVN Status'),
             
-            'update' => array('cmd' => 'svn update --username scm_username --password  scm_password scm_destination/*',
+            'update' => array('cmd' => 'svn update --non-interactive --username scm_username --password  scm_password scm_destination/* 2>&1',
                               'title' => 'Updating SVN'),
             
-            'info'   => array('cmd' => 'svn info  --username scm_username --password  scm_password scm_destination',
+            'info'   => array('cmd' => 'svn info --non-interactive --username scm_username --password  scm_password scm_destination 2>&1',
                               'title' => 'Getting SVN info'),
             
-            'list'   => array('cmd' => 'svn list  --username scm_username --password  scm_password scm_destination -v',
+            'list'   => array('cmd' => 'svn list --non-interactive --username scm_username --password  scm_password scm_destination -v 2>&1',
                               'title' => 'Listing SVN files'),
             
             'ps'  => array('cmd' => 'ps -auxx', 'title' => 'Process information')
@@ -48,9 +48,12 @@ class Systemupdater_Model_Onmupdate
             $cmd = $this->operations[$action]['cmd'];
         }
         
+        //return array($cmd, $cmd, $cmd);
+        
         $output = array();
         exec($cmd, $output, $return_var);
-        
+        //var_dump($return_var);
+        //die();
         return array( $this->operations[$action]['cmd'], implode("\n", $output), $this->operations[$action]['title'] );
     }
 }
