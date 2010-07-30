@@ -55,7 +55,7 @@
                         <label for="title" >{t}User{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
-                        <input type="text" id="username" name="username" title="Username"
+                        <input type="text" id="username" name="scm_username" title="Username"
                             value="{$cfg.scm_username}" class="required" size="100" />
                     </td>
                 </tr>
@@ -64,7 +64,7 @@
                         <label for="title" >{t}Password{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
-                        <input type="password" id="password" name="password" title="Password"
+                        <input type="password" id="password" name="scm_password" title="Password"
                             value="{$cfg.scm_password}" class="required" size="100" />
                     </td>
                 </tr>
@@ -73,7 +73,7 @@
                         <label for="title">{t}Svn repository{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
-                        <input type="text" id="repository" name="repository" title="Svn-server"
+                        <input type="text" id="repository" name="scm_repository" title="Svn-server"
                             value="{$cfg.scm_repository}" class="required" size="100" />
                     </td>
                 </tr>
@@ -82,8 +82,8 @@
                         <label for="title">{t}Folder destination{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
-                        <input type="text" id="destination" name="destination" title="Destination"
-                            value="{$cfg.destination}" class="required" size="100" />
+                        <input type="text" id="destination" name="scm_destination" title="Destination"
+                            value="{$cfg.scm_destination}" class="required" size="100" />
                     </td>
                 </tr>
                 <tr><td colspan="2"><br />
