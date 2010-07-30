@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <systemupdater-index-index type="Zend_Controller_Router_Route">
+            <route>systemupdater/</route>
+            <defaults>
+                <module>systemupdater</module>
+                <controller>index</controller>
+                <action>index</action>
+            </defaults>
+        </systemupdater-index-index>
+        
+    </production>
+    
+    <development extends="production"></development>
+    
+    <testing extends="production"></testing>
+    
+</routes>
