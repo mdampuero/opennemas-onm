@@ -5,22 +5,27 @@ class Systemupdater_Model_Onmupdate
     public $available_scm =  array('svn');
     public $operations = array(
             'co' => array(
-                          'cmd' => 'svn co --non-interactive --username scm_username --password  scm_password scm_repository scm_destination 2>&1',
-                          'title' => 'Checking out'),
-                    
-            'status' => array('cmd' => 'svn status scm_destination 2>&1',
-                              'title' => 'SVN Status'),
+                'cmd' => 'svn co --non-interactive --username scm_username --password  scm_password scm_repository scm_destination 2>&1',
+                'title' => 'Checking out'),
+          
+            'status' => array(
+                'cmd' => 'svn status scm_destination 2>&1',
+                'title' => 'SVN Status'),
             
-            'update' => array('cmd' => 'svn update --non-interactive --username scm_username --password  scm_password scm_destination/* 2>&1',
-                              'title' => 'Updating SVN'),
+            'update' => array(
+                'cmd' => 'svn update --non-interactive --username scm_username --password  scm_password scm_destination/* 2>&1',
+                'title' => 'Updating SVN'),
             
-            'info'   => array('cmd' => 'svn info --non-interactive --username scm_username --password  scm_password scm_destination 2>&1',
-                              'title' => 'Getting SVN info'),
+            'info'   => array(
+                'cmd' => 'svn info --non-interactive --username scm_username --password  scm_password scm_destination 2>&1',
+                'title' => 'Getting SVN info'),
             
-            'list'   => array('cmd' => 'svn list --non-interactive --username scm_username --password  scm_password scm_destination -v 2>&1',
-                              'title' => 'Listing SVN files'),
+            'list'   => array(
+                'cmd' => 'svn list --non-interactive --username scm_username --password  scm_password scm_destination -v 2>&1',
+                'title' => 'Listing SVN files'),
             
-            'ps'  => array('cmd' => 'ps -auxx', 'title' => 'Process information')
+            'ps'  => array(
+                'cmd' => 'ps -auxx', 'title' => 'Process information')
             
             /*'ps'     => array('cmd' => 'ps -el',
                               'title' => 'Process list'),

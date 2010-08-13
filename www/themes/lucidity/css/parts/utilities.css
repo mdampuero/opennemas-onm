@@ -3,7 +3,7 @@
     Created on : Feb 18, 2010, 11:13:09 AM
     Author     : Francisco Diéguez fran.dieguez@mabishu.com
     Description:
-        CSS to article page for newspaper mockup page
+	CSS to article page for newspaper mockup page
 */
 
 
@@ -41,22 +41,21 @@ div.utilities{
 }
 
 ul.voting, ul.voting li{
-	display:inline;
-	margin:0;
-	padding:0;
+    display:inline;
+    margin:0;
+    padding:0;
 }
 
 /* Here is where the magic come true*/
 
 div.utilities a, div.toolbar-bottom a{
-	height:18px;
-	width:18px;
-	text-indent:-9999px;
-	line-height:-9999px;
-	background-image:url(/themes/lucidity/images/utilities/mask-buttons.png);
-	background-repeat:no-repeat;
-	background-color:#009677; 
-	display:inline-block;
+    height:18px;
+    width:18px;
+    text-indent:-9999px;
+    background-image:url(/themes/lucidity/images/utilities/mask-buttons.png);
+    background-repeat:no-repeat;
+    background-color:#009677; 
+    display:inline-block;
 }
 
 div.video div.utilities-bottom a, div.video div.share-actions a, div.video div.toolbar-bottom a{

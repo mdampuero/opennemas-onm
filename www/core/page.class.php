@@ -159,7 +159,7 @@ class Page
     public function create($data)
     {        
         // Prepare array data with default values if it's necessary
-        $this->prepareData(&$data);
+        $this->prepareData($data);
         
         $fields = array(
             'fk_page', 'title', 'menu_title', 'short_url',
@@ -278,7 +278,7 @@ class Page
             'version',
         );
         
-        $this->prepareData(&$data);
+        $this->prepareData($data);
         
         // TODO: implement class Params
         $data['params'] = serialize($data['params']);

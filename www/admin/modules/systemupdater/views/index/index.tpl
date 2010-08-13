@@ -97,9 +97,7 @@
                     <strong>{$cmd}</strong>
                     
                     <blockquote>
-                        <pre style="background:#F7F7F7 none repeat scroll 0 0;border:1px solid #D7D7D7;padding:0.5em;margin:0.5em 1em;overflow:auto;">
-                            {$output|escape:html}
-                        </pre>      
+                        <pre style="background:#F7F7F7 none repeat scroll 0 0;border:1px solid #D7D7D7;padding:0.5em;margin:0.5em 1em;overflow:auto;">{$output|escape:html}</pre>
                     </blockquote>        
                 {/if}
         
