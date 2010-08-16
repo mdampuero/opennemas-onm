@@ -131,6 +131,9 @@ unset($session);
 // Template {{{
 $tpl = new Template(TEMPLATE_USER);
 Zend_Registry::set('tpl', $tpl);
+if( APPLICATION_ENV == 'development' ) {
+    $tpl->force_compile = true;
+}        
 unset($tpl);
 
 

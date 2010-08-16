@@ -33,7 +33,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     protected function _initView()
     {
-        $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+        $tpl = new TemplateAdmin(TEMPLATE_ADMIN);        
+        if( APPLICATION_ENV == 'development' ) {
+            $tpl->force_compile = true;
+        }        
         Zend_Registry::set('tpl', $tpl);
         unset($tpl);
         
@@ -51,9 +54,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $front = $this->getResource('frontController');
         
         // Onm core plugins {{{
-        //if($this->getEnvironment() != 'testing') {
-            $front->registerPlugin( new Onm_Controller_Plugin_Auth() );        
-        //}
+        $front->registerPlugin( new Onm_Controller_Plugin_Auth() );
         $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
         $front->registerPlugin( new Onm_Controller_Plugin_Template() );        
     }
@@ -80,7 +81,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     protected function _initSession()
     {
-        Zend_Session::setOptions( array('strict'=>false) );
+        //Zend_Session::setOptions( array('strict'=>false) );
         $session = SessionManager::getInstance(OPENNEMAS_BACKEND_SESSIONS);
         $session->bootstrap();
         
@@ -95,7 +96,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);
         
         Zend_Registry::set('conn', $conn);
-        unset($conn);    
+        unset($conn);
     }
     
     
@@ -117,6 +118,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $routesPath = realpath(APPLICATION_PATH . '/../configs/routes-frontend.xml');
         $routerFrontend->addConfig(new Zend_Config_Xml($routesPath, APPLICATION_ENV));
         Zend_Registry::set('routerFrontend', $routerFrontend);
+    }
+    
+    protected function _initZFDebug()
+    {
+        $this->bootstrap('frontController');
+        $front = $this->getResource('frontController');
+        
+        $options = array(
+            'plugins' => array(
+                'Variables',
+                'Smarty',
+                'Adodb',
+                'Registry',
+                'File' => array('base_path' => APPLICATION_PATH),
+                'Memory', 
+                'Time', 
+                'Exception',
+                'Html',
+            ),
+            'jquery_path' => '/admin/themes/default/js/jquery-1.4.2.min.js',
+            'image_path'  => '/media/debugbar',
+        );
+        
+        $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
+        $front->registerPlugin($zfdebug);
     }
     
 }
