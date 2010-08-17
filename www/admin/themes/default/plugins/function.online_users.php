@@ -22,7 +22,7 @@
 function smarty_function_online_users($params, &$smarty=null)
 {
     // Sessions
-    $session  = Zend_Registry::get('session');
+    $session  = Zend_Registry::get('session');    
     $sessions = $session->getSessions();    
     $smarty->assign('num_sessions', count($sessions));
     

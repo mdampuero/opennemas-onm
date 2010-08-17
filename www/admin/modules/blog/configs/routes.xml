@@ -12,6 +12,15 @@
             </defaults>
         </blog-post-index>
         
+        <blog-post-show type="Zend_Controller_Router_Route">
+            <route>blog/post/show/</route>
+            <defaults>
+                <module>blog</module>
+                <controller>post</controller>
+                <action>show</action>
+            </defaults>
+        </blog-post-show>
+        
     </production>
     
     <development extends="production"></development>

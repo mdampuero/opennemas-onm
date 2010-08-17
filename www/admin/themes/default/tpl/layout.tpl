@@ -42,7 +42,7 @@
 					</td>
 					<td>
                         {* Smarty plugin to render backend menu *}
-                        {ypmenu}                        
+                        {ypmenu}
 					</td>
 
                     <td style="font-size: 12px;width:100%; color: #666;" nowrap="nowrap">
