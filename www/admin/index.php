@@ -78,6 +78,7 @@ require_once SITE_LIBS_PATH . '/template.class.php';
 
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->registerNamespace('Onm');
+$autoloader->registerNamespace('ZFDebug');
 // }}}
 
 // Create application, bootstrap, and run
