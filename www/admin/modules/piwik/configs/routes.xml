@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <piwik-live-lastvisitors type="Zend_Controller_Router_Route">
+            <route>piwik/live/lastvisits</route>
+            <defaults>
+                <module>piwik</module>
+                <controller>live</controller>
+                <action>lastvisits</action>
+            </defaults>
+        </piwik-live-lastvisitors>        
+        
+    </production>
+    
+    <development extends="production"></development>
+    
+    <testing extends="production"></testing>
+    
+</routes>
