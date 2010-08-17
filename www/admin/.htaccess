@@ -6,7 +6,7 @@ php_flag   display_errors       On
 php_flag   display_startup_errors On
 php_flag   magic_quotes_sybase  Off
 php_flag   register_globals     Off
-php_value  error_reporting      2048
+php_value  error_reporting      6143
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]
