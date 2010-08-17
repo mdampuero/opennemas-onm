@@ -72,7 +72,7 @@ class PageManager
      *
      * @return PageManager
     */
-    public function getInstance()
+    public static function getInstance()
     {
         if(self::$instance == null) {
             self::$instance = new PageManager();
@@ -674,7 +674,7 @@ class PageManager
      * @param Page $element
      * @return boolean
     */
-    private function _isVisibleItem($conditions, $element)
+    private static function _isVisibleItem($conditions, $element)
     {        
         if(is_array($conditions)) {
             foreach($conditions as $prop => $validItems) {

@@ -23,69 +23,137 @@
  * SessionManager
  * 
  * @package    Onm
+ * @subpackage Core
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: sessionmanager.class.php 1 2010-04-26 12:02:24Z vifito $
  */
 class SessionManager implements ArrayAccess
 {
-    // Directorio por defecto de sesiones de PHP5 por defecto
-    protected $dirSess = '/var/lib/php5/';
     
-    protected static $singleton = null;
+    /**
+     * @var string Default path to save session files
+     */
+    protected $_dirSess = '/var/lib/php5/';
     
-    private function __construct($session_save_path) {
-        $this->dirSess = $session_save_path;
-    }
     
-    public static function getInstance($session_save_path) {
-        if( is_null(self::$singleton) ) {
-            self::$singleton = new SessionManager($session_save_path);
+    /**
+     * @var string Zend_Session namespace
+     */
+    protected $_namespace = 'Default';
+    
+    
+    /**
+     * @var SessionManager
+     */
+    protected static $_singleton = null;
+    
+    
+    /**
+     * Constructor for SessionManager
+     *
+     * @param string $sessionSavePath
+     * @throws Exception
+     */
+    private function __construct($sessionSavePath)
+    {
+        // Detect suhosin patch
+        if (extension_loaded('suhosin') &&
+                ini_get('suhosin.session.encrypt') == 1) {
+            throw new Exception('Error: suhosin.session.encrypt is enabled.');
         }
         
-        return( self::$singleton );
+        $this->_dirSess = $sessionSavePath;
     }
     
-    public function bootstrap($lifetime=null) {
-        if(is_null($lifetime) && !isset($_COOKIE['default_expire'])) {
-            $lifetime = 15; // 15 minutes by default
-        } elseif( isset($_COOKIE['default_expire']) ) {
-            $lifetime = intval($_COOKIE['default_expire']);
+    
+    /**
+     * Get singleton instance
+     * 
+     * @todo: implement multiton using $sessionSavePath
+     * @param string $sessionSavePath
+     * @return SessionManager
+     */
+    public static function getInstance($sessionSavePath)
+    {
+        if (is_null(self::$_singleton)) {
+            self::$_singleton = new SessionManager($sessionSavePath);
         }
         
-        /* // Set session_save_path
-        session_save_path( $this->dirSess );
-        
-        // set the cache expire to $lifetime minutes
-        session_cache_expire($lifetime);
-        
-        // public, private, nocache, private_no_expire
-        //  http://cz.php.net/manual/en/function.session-cache-limiter.php 
-        session_cache_limiter('nocache');
-        
-        // Now we can call to session_start
-        session_start(); */
-        
+        return self::$_singleton;
+    }
+    
+    
+    /**
+     * Bootstrap session
+     * 
+     * @todo implement support to life time
+     * @param int $lifetime
+     * @uses Zend_Session::setOptions()
+     * @uses Zend_Session::start()
+     */
+    public function bootstrap($lifetime=null)
+    {
         $options = array(
-            'save_path'     => $this->dirSess,
-            /*'cache_expire'  => $lifetime,*/
-            'cache_limiter' => 'nocache',            
+            'save_path'     => $this->_dirSess,
+            'strict'        => false,
+            'cache_limiter' => 'nocache',
         );
         
         Zend_Session::setOptions($options);
         Zend_Session::start();
     }
     
-    function __set($name, $value) {
-        $_SESSION[$name] = $value;
+    
+    /**
+     * Get namespace for Zend_Session
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->_namespace;
     }
     
-    function __get($name) {
-        if(!isset($_SESSION[$name])) {
+    
+    /**
+     * Set namespace
+     *
+     * @param string $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->_namespace = $namespace;
+    }
+    
+    
+    /**
+     * Magic method __set
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($name, $value)
+    {
+        $session = new Zend_Session_Namespace();
+        $session->{$name} = $value;
+    }
+    
+    
+    /**
+     * Magic method __get
+     *
+     * @param string $name
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        $session = new Zend_Session_Namespace();
+        if (!property_exists($session, $name)) {
             return null;
         }
         
-        return($_SESSION[$name]);
+        return $session->$name;
     }
     
     
@@ -96,9 +164,12 @@ class SessionManager implements ArrayAccess
     * @param mixed value 
     * @return void 
     */ 
-    function offsetSet($key, $value) { 
-        $_SESSION[$key] = $value; 
-    } 
+    public function offsetSet($key, $value)
+    {
+        $session = new Zend_Session_Namespace();
+        $session->{$key} = $value; 
+    }
+    
     
     /** 
     * Defined by ArrayAccess interface 
@@ -106,9 +177,12 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer) 
     * @return mixed value 
     */ 
-    function offsetGet($key) { 
-        return($_SESSION[$key]);
-    } 
+    public function offsetGet($key)
+    {
+        $session = new Zend_Session_Namespace();
+        return $session->{$key};
+    }
+    
     
     /** 
     * Defined by ArrayAccess interface 
@@ -116,41 +190,69 @@ class SessionManager implements ArrayAccess
     * @param mixed key (string or integer) 
     * @return void 
     */ 
-    function offsetUnset($key) { 
-        unset($_SESSION[$key]); 
-    } 
+    public function offsetUnset($key)
+    {
+        $session = new Zend_Session_Namespace();
+        unset($session->{$key}); 
+    }
     
-    /** 
+    
+    /**
     * Defined by ArrayAccess interface 
     * Check value exists, given it's key e.g. isset($A['title']) 
     * @param mixed key (string or integer) 
     * @return boolean 
     */ 
-    function offsetExists($offset) { 
-        return isset($_SESSION[$key]); 
+    public function offsetExists($key)
+    {
+        $session = new Zend_Session_Namespace();
+        return isset($session->{$key}); 
     }
     
     
-    
-    /* Métodos para el control de la sesión y los usuarios activos */        
-    public function getSessions() {
-        $dirSess = $this->dirSess;
-        $sessions = array();            
+    /**
+     * Parse current sessions
+     *
+     * Output:
+     * <code>
+     * array
+     *  0 => 
+     *     array
+     *       'userid' => string '5' (length=1)
+     *       'username' => string 'vifito' (length=6)
+     *       'isAdmin' => boolean true
+     *       'expire' => int 1282046386
+     *       'authMethod' => string 'database' (length=8)
+     *  ...
+     * </code>
+     * 
+     * @return array    Array of sessions
+     */
+    public function getSessions()
+    {
+        $dirSess = $this->_dirSess;
+        $sessions = array();
         
         if (file_exists($dirSess) && is_dir($dirSess)) {
             if ($dh = opendir($dirSess)) {
                 while (($file = readdir($dh)) !== false) {
-                    if( preg_match('/^sess_/', $file) ) {
+                    if (preg_match('/^sess_/', $file)) {
                         $contents = file_get_contents($dirSess.$file);
-                        if(!empty($contents)) {
-                            $session = SessionManager::unserializesession( $contents );
-                       
-                            if( isset($session['userid']) ) {
-                                $sessions[] = array( 'userid'     => $session['userid'],
-                                                     'username'   => $session['username'],
-                                                     'isAdmin'    => $session['isAdmin'],
-                                                     'expire'     => $session['expire'],
-                                                     'authMethod' => $session['authMethod'],);
+                        if (!empty($contents)) {
+                            $session = self::unserializesession($contents);
+                            
+                            if (isset($session[$this->_namespace])) {
+                                $session = $session[$this->_namespace];
+                            }
+                            
+                            if (isset($session['userid'])) {
+                                $sessions[] = array(
+                                    'userid'     => $session['userid'],
+                                    'username'   => $session['username'],
+                                    'isAdmin'    => $session['isAdmin'],
+                                    'expire'     => $session['expire'],
+                                    'authMethod' => $session['authMethod'],
+                                );
                             }
                         }
                     }
@@ -159,36 +261,64 @@ class SessionManager implements ArrayAccess
             }
         }
         
-        return( $sessions );
+        return $sessions;
     }
     
-    public function purgeSession( $userid ) {
-        $dirSess = $this->dirSess;
+    
+    /**
+     * Remove file session for a user specified
+     *
+     * @param int $userid
+     */
+    public function purgeSession($userid)
+    {
+        $dirSess = $this->_dirSess;
         
         if (file_exists($dirSess) && is_dir($dirSess)) {
             if ($dh = opendir($dirSess)) {
                 while (($file = readdir($dh)) !== false) {
-                    if( preg_match('/^sess_/', $file) ) {
+                    if (preg_match('/^sess_/', $file)) {
                         $contents = file_get_contents($dirSess.$file);
-                        if(!empty($contents)) {
-                            $session = SessionManager::unserializesession( $contents );
+                        if (!empty($contents)) {
+                            $session = self::unserializesession($contents);
+                            
+                            if (isset($session[$this->_namespace])) {
+                                $session = $session[$this->_namespace];
+                            }
                            
-                            if( isset($session['userid']) && ($session['userid']==$userid)) {
-                                @unlink( $dirSess.$file );
+                            if (isset($session['userid']) &&
+                                    ($session['userid'] == $userid)) {
+                                @unlink($dirSess.$file);
                             }
                         }
                     }
                 }
                 closedir($dh);
             }
-        }                
+        }
     }
     
-    // http://es2.php.net/manual/en/function.session-decode.php#79244
-    public function unserializesession($data) {
-        $vars=preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
-                  $data,-1,PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        for($i=0; $vars[$i]; $i++) $result[$vars[$i++]]=unserialize($vars[$i]);
+    
+    /**
+     * Utility to unserialize contents of a session file
+     *
+     * @link http://es2.php.net/manual/en/function.session-decode.php#79244 
+     * @param string $data
+     * @return mixed
+     */
+    public static function unserializesession($data)
+    {
+        $vars = preg_split(
+            '/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
+            $data,
+            -1,
+            PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
+        );
+        
+        for ($i=0; $vars[$i]; $i++) {
+            $result[$vars[$i++]] = @unserialize($vars[$i]);
+        }
+        
         return $result;
     }
     

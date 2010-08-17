@@ -752,10 +752,7 @@ class ContentManager
                 if(is_object($item)) {
                     if($item->isInTime(null, null, $time)) {
                         $filtered[] = $item;
-                    } /* elseif($item->isObsolete()) {
-                        // If content  is obsolete then set available a 0
-                        $item->set_available(0, $_SESSION['userid']);
-                    } */
+                    }
                 } else {
                     if(Content::isInTime($item['starttime'], $item['endtime'], $time)) {
                         $filtered[] = $item;

@@ -1,6 +1,6 @@
-{* extends file="layout.tpl"}
+{extends file="layout.tpl"}
 
-{block name="body-content" *}
+{block name="body-content"}
     {$message}
     
     <ul id="list">
@@ -10,4 +10,4 @@
         </li>
         {/for}  
     </ul>
-{* /block *}
+{/block}

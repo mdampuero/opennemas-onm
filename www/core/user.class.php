@@ -337,26 +337,29 @@ class User
      */
     public function loadSession()
     {
-        $_SESSION = array(); // Clear before to load
+        $session = new Zend_Session_Namespace();
+        if (!isset($session->userid)) {
+            Zend_Session::regenerateId();
+        }        
         
-        $_SESSION['userid']     = $this->id;
-        $_SESSION['username']   = $this->login;
-        $_SESSION['email']      = $this->email;
+        $session->userid   = $this->id;
+        $session->username = $this->login;
+        $session->email    = $this->email;
         
         // SYS_NAME_GROUP_ADMIN defined into config.inc.php
-        $_SESSION['isAdmin']    = ( UserGroup::getGroupName($this->fk_user_group)==SYS_NAME_GROUP_ADMIN );
+        $session->isAdmin  = ( UserGroup::getGroupName($this->fk_user_group)==SYS_NAME_GROUP_ADMIN );
         
-        $_SESSION['privileges'] = Privilege::getPrivilegesByUser($this->id);
-        $_SESSION['accesscategories'] = $this->get_access_categories_id();
+        $session->privileges = Privilege::getPrivilegesByUser($this->id);
+        $session->accesscategories = $this->get_access_categories_id();
         
         // Method authentication: database|google_clientlogin
-        $_SESSION['authMethod'] = $this->authMethod;
+        $session->authMethod = $this->authMethod;
         if($this->authMethod == 'google_clientlogin') {
-            $_SESSION['authGmail']  = base64_encode($this->login.':'.$this->password);
+            $session->authGmail  = base64_encode($this->login.':'.$this->password);
         }
         
         //Carga en la varible de _SESSION expire el tiempo de expiración del usuario la sesión.
-        $_SESSION['default_expire'] = $this->sessionexpire;        
+        $session->default_expire = $this->sessionexpire;        
     }
     
     /**
@@ -418,8 +421,6 @@ class User
             $client = Zend_Gdata_ClientLogin::getHttpClient($email, $passwd, 'xapi', null, 'Zend-ZendFramework',
                                                             $loginToken, $loginCaptcha);
             
-            //$_SESSION['logintoken'] = $client->getAuthSubToken();
-            // header('Authorization: AuthSub ' . );
             $this->clientLoginToken = $client->getClientLoginToken();
             
             // Check exists account into database
@@ -588,12 +589,6 @@ class User
         return $ids;
     }
     
-    public function users_online()
-    {
-        $sql = 'SELECT COUNT (*) FROM users WHERE online=1';
-        return( $this->conn->Execute($sql));
-    }
-    
     public function get_users($filter=null, $_order_by='ORDER BY 1')
     {
         $items = array();
@@ -701,4 +696,5 @@ class User
             return false;
         }
     }
+    
 }

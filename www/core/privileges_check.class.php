@@ -4,45 +4,47 @@ class Privileges_check
 {    
 
     public static function CheckAccessCategories($CategoryId)
-        {                
+    {
+        $session = new Zend_Session_Namespace();
         try {
             if(!isset($CategoryId) || empty($CategoryId)) {
-                $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
+                $session->lasturlcategory = $_SERVER['REQUEST_URI'];
                 return true;
             }
             
-            if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
+            if(isset($session->isAdmin) && $session->isAdmin) {
                 return true;
             }
             
-            if( !isset($_SESSION['accesscategories']) || 
-                empty($_SESSION['accesscategories'])  ||
-                !in_array($CategoryId,$_SESSION['accesscategories']))
+            if( !isset($session->accesscategories) || 
+                empty($session->accesscategories)  ||
+                !in_array($CategoryId, $session->accesscategories))
                 return false;
                  
         } catch(Exception $e) {
             return false;
         }
         
-        $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
+        $session->lasturlcategory = $_SERVER['REQUEST_URI'];
         return true;
     }
 
 
     public static function CheckPrivileges($Privilege)
     {
+        $session = new Zend_Session_Namespace();
         try {
-            if( !isset($_SESSION['userid']) || Privileges_check::CheckSessionExpireTime() ) {
+            if( !isset($session->userid) || Privileges_check::CheckSessionExpireTime() ) {
                 Privileges_check::SessionExpireTimeAction();
             }
             
-            if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
+            if(isset($session->isAdmin) && $session->isAdmin) {
                 return true;
             }
             
-            if( !isset($_SESSION['privileges']) ||
-                empty($_SESSION['userid']) ||
-                !in_array($Privilege,$_SESSION['privileges'])) {                
+            if( !isset($session->privileges) ||
+                empty($session->userid) ||
+                !in_array($Privilege, $session->privileges)) {                
                     return false;
             }
             
@@ -50,30 +52,29 @@ class Privileges_check
             return false;
         }
         
-        $_SESSION['lasturl'] = $_SERVER['REQUEST_URI'];
+        $session->lasturl = $_SERVER['REQUEST_URI'];
         return true;
     }
 
     private static function SessionExpireTimeAction() {
-        Application::forwardTargetParent("/admin/user/login");
-    }
-
-    public static function AccessDeniedAction() {
-        Application::forward('/admin/accessdenied.php'.'?action=list_pendientes&category='.$_REQUEST['category']);
-    }
-
-    public static function AccessCategoryDeniedAction() {
-        Application::forward('/admin/accesscategorydenied.php');
+        $fc = Zend_Controller_Front::getInstance();
+        
+        $request = $fc->getRequest();
+        $request->setControllerName('user')
+            ->setActionName('login')
+            ->setDispatched(true);
     }
 
     public static function LoadSessionExpireTime() {
-        if(isset($_SESSION) && isset($_SESSION['default_expire'])) {
-            $_SESSION['expire'] = time()+($_SESSION['default_expire']*60);
+        $session = new Zend_Session_Namespace();
+        if(isset($session->default_expire)) {
+            $session->expire = time()+($session->default_expire *60);
         }
     }
 
-    private static function CheckSessionExpireTime() {    
-        //if(time() > $_SESSION['expire']) {
+    private static function CheckSessionExpireTime() {
+        $session = new Zend_Session_Namespace();
+        //if(time() > $session->expire']) {
         //    session_destroy(); 
         //    unset($_SESSION);
         //    return true;
@@ -94,7 +95,7 @@ class Privileges_check
     }
 
     function InitHandleErrorPrivileges() {
-        set_error_handler('handleError');
+        //set_error_handler('handleError');
     }
 }
 
@@ -140,7 +141,11 @@ class Acl
             $message->push();
         }        
         
-        Application::forward('welcome.php');
+        $fc = Zend_Controller_Front::getInstance();
+        $request = $fc->getRequest();
+        $request->setControllerName('panel')
+					->setActionName('index')
+					->setDispatched(true);
     }
 }
 

@@ -128,6 +128,7 @@ class Content
             throw new Exception(__CLASS__ . '::' . __METHOD__ . ' need content_type property.');
         }
         
+        $session = new Zend_Session_Namespace();
         $defaults = array(
             'fk_content_type' => $this->getContentTypeId(),
             'slug' => String_Utils::get_title($data['title'], false),
@@ -139,10 +140,9 @@ class Content
             'changed'   => date('Y-m-d H:i:s'),
             'published' => date('Y-m-d H:i:s'),
             
-            // TODO: remove $_SESSION['userid'] by object to manage session, $sess->getUserId()
-            'fk_author'    => $_SESSION['userid'],
-            'fk_publisher' => $_SESSION['userid'],
-            'fk_user_last_editor' => $_SESSION['userid'],
+            'fk_author'    => $session->userid,
+            'fk_publisher' => $session->userid,
+            'fk_user_last_editor' => $session->userid,
             
             'views'  => 0,
             'status' => 'PENDING',
