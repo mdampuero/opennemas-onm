@@ -34,8 +34,10 @@ class Onm_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
         
         // FIXME: convert webdav controller in a standalone service
         $controllerName = $request->getControllerName();
-		if( !isset($_SESSION['userid']) && ($controllerName != 'webdav') )
-        {            
+        
+        $session = new Zend_Session_Namespace();
+		if( !isset($session->userid) && ($controllerName != 'webdav') )
+        {
 			$request->setControllerName('user')
 					->setActionName('login')
 					->setDispatched(true);

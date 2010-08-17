@@ -49,28 +49,11 @@ class UserController extends Onm_Controller_Action
             $result = $user->login($frm['login'], $frm['password'], $token, $captcha);
             
             if ($result === true) { // must be same type (===)
-                
-                if( isset($frm['rememberme']) ) {                    
-                    setcookie("login_username", $frm['login'],    time()+60*60*24*30, '/admin/');
-                    setcookie("login_password", $frm['password'], time()+60*60*24*30, '/admin/');
-                } else {
-                    if( isset($frm['login_username']) ) {
-                        // Caducar a cookie
-                        setcookie("login_username", '', time()-(60*60) );
-                        setcookie("login_password", '', time()-(60*60) );
-                    }
-                } 
-                
                 // Load instance values into session
                 $user->loadSession();
                 
-                // FIXME: Session expiration time has problems
-                setcookie('default_expire', $user->sessionexpire, 0, '/admin/');                                
-                Privileges_check::loadSessionExpireTime();                                                            
-                
                 // Redirect to panel
-                $this->redirector->gotoRoute(array(), 'panel-index');
-                
+                $this->redirector->gotoRoute(array(), 'panel-index');                
             } else {                
                 // Show google captcha
                 if(isset($result['token'])) {
@@ -78,7 +61,7 @@ class UserController extends Onm_Controller_Action
                     $this->tpl->assign('captcha', $result['captcha']);
                 }
                 
-                // $this->flashMessenger->addMessage(array('notice' => 'Login Successful.'));
+                // TODO: use Zend_Translate
                 $this->tpl->assign('message', 'Nome de usuario ou contrasinal incorrecto.');
             }            
         }
@@ -87,9 +70,6 @@ class UserController extends Onm_Controller_Action
     public function logoutAction()
     {
         Zend_Session::destroy();
-        if (isset($_COOKIE[session_name()])) {
-            setcookie(session_name(), '', time()-42000, '/');
-        }        
         
         $this->redirector->gotoRoute(array(), 'user-login');
     }

@@ -181,6 +181,17 @@ class Onm_View implements Zend_View_Interface
     {
         return $this->_tpl->clearAllAssign();
     }
+    
+    
+    /**
+     * Get all template vars
+     *
+     * @return array
+     */
+    public function getVars()
+    {
+        return $this->_tpl->get_template_vars();
+    }
 
 
     /**

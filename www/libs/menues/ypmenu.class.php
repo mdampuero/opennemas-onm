@@ -18,13 +18,12 @@ class YpMenu extends Menu
     var $fichMenu;
     var $attrsMenu;
     
-    /**
-      * Contructor de la clase. Carga el fichero y comienza el parseo del fichero. 
-      * @access public
-    */        
-    public function YpMenu($menu, $fichMenu, $resource_type=0)
-    {        
-        $this->Menu = &$menu;
+	/**
+	  * Constructor PHP5
+	*/ 
+	public function __construct($menu, $fichMenu, $resource_type=0)
+    {
+		$this->Menu = &$menu;
         $this->fichMenu = $fichMenu;
         
         if($resource_type == 0) {
@@ -34,14 +33,6 @@ class YpMenu extends Menu
         }
         
         $this->doParse($xml);
-    }
-    
-	/**
-	  * Constructor PHP5
-	*/ 
-	public function __construct($menu, $fichMenu, $resource_type=0)
-    {
-		$this->YpMenu($menu, $fichMenu, $resource_type);
 	}
     
     private function checkAcl($privilege)

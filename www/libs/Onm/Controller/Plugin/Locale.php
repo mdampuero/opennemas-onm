@@ -19,23 +19,63 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-
+/**
+ * Onm_Controller_Plugin_Locale
+ * 
+ * @package    Onm
+ * @subpackage Controller
+ * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Locale.php 1 2010-08-16 12:30:36Z vifito $
+ */
 class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
 {
-	public function preDispatch(Zend_Controller_Request_Abstract $request)
+    
+    /**
+     * preDispatch
+     * 
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-		list($locale, $dirname) = $this->_getLang($request);
+        $translate = null;
         
-		$moFile = SITE_ADMIN_PATH . 'themes/default/locale/' . $dirname . '/messages.mo';
+        // Core translation (default module translations) {{{
+        list($locale, $dirname) = $this->_getLang($request);
+        $moFile = APPLICATION_PATH . '/themes/default/locale/' . $dirname .
+            '/messages.mo';
         
-        if(file_exists($moFile)) {
-			$translate = new Zend_Translate('gettext', $moFile, $locale);
+        if (file_exists($moFile)) {
+            $translate = new Zend_Translate('gettext', $moFile, $locale);
+        }
+        // }}}
+        
+        // Load language file for module {{{
+        $moduleName = $request->getModuleName();
+        if ($moduleName != 'default') {
+            $moFile = APPLICATION_PATH . '/modules/' . $moduleName .
+                '/languages/' . $dirname . '/messages.mo';
             
-			Zend_Registry::set('Zend_Translate', $translate);			
-		}        		
+            if (file_exists($moFile)) {
+                if ($translate != null) {
+                    $translate->addTranslation($moFile, $locale);
+                } else {
+                    $translate = new Zend_Translate(
+                        'gettext', $moFile, $locale
+                    );
+                }
+                
+            }
+        }        
+        // }}}
+        
+        // Set in registry
+        if ($translate != null) {
+            Zend_Registry::set('Zend_Translate', $translate);
+        }
     }
 
-	/**
+    /**
      * Get language name (ex.- galician, spanish, ...)
      *
      * @param Zend_Controller_Request_Abstract $request
@@ -46,20 +86,21 @@ class Onm_Controller_Plugin_Locale extends Zend_Controller_Plugin_Abstract
         // Get :lang from querystring        
         $lang = $request->getParam('lang', false);
         
-        if($lang === false) {
+        if ($lang === false) {
             // Get cookie
             $lang = $request->getCookie('lang', false);
         }
         
-        if(($lang !== false) && (Zend_Locale::isLocale($lang))) {
+        if (($lang !== false) && (Zend_Locale::isLocale($lang))) {
             $locale = new Zend_Locale($lang);
         } else {
             $locale = new Zend_Locale();
         }
         
-        $lang    = strtolower( $locale->getLanguage() );
-        $dirname = strtolower( $locale->getTranslation($lang, 'language', 'en') );
+        $lang    = strtolower($locale->getLanguage());
+        $dirname = strtolower($locale->getTranslation($lang, 'language', 'en'));
         
         return array($locale, $dirname);
     }
+    
 }

@@ -11,6 +11,13 @@ class Blog_PostController extends Onm_Controller_Action
         
         $post = new Blog_Model_Post();
         $this->posts = $post->getPosts();
+        
+    }
+    
+    public function showAction()
+    {
+        $post = new Blog_Model_Post();
+        $this->message = $post->getPost();
     }
     
 }

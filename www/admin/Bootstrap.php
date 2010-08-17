@@ -33,7 +33,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     protected function _initView()
     {
-        $tpl = new TemplateAdmin(TEMPLATE_ADMIN);        
+        $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
         if( APPLICATION_ENV == 'development' ) {
             $tpl->force_compile = true;
         }        
@@ -54,9 +54,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $front = $this->getResource('frontController');
         
         // Onm core plugins {{{
-        $front->registerPlugin( new Onm_Controller_Plugin_Auth() );
-        $front->registerPlugin( new Onm_Controller_Plugin_Locale() );
-        $front->registerPlugin( new Onm_Controller_Plugin_Template() );        
+        $front->registerPlugin(new Onm_Controller_Plugin_Auth());
+        $front->registerPlugin(new Onm_Controller_Plugin_Locale());
+        $front->registerPlugin(new Onm_Controller_Plugin_Template());
+        // }}}
     }
     
     
@@ -122,27 +123,32 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     protected function _initZFDebug()
     {
-        $this->bootstrap('frontController');
-        $front = $this->getResource('frontController');
+        $zfdebugEntry = $this->getOption('zfdebugbar');
         
-        $options = array(
-            'plugins' => array(
-                'Variables',
-                'Smarty',
-                'Adodb',
-                'Registry',
-                'File' => array('base_path' => APPLICATION_PATH),
-                'Memory', 
-                'Time', 
-                'Exception',
-                'Html',
-            ),
-            'jquery_path' => '/admin/themes/default/js/jquery-1.4.2.min.js',
-            'image_path'  => '/media/debugbar',
-        );
-        
-        $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
-        $front->registerPlugin($zfdebug);
+        if(!empty($zfdebugEntry) && isset($zfdebugEntry['enable']) &&
+                ($zfdebugEntry['enable'] === '1')) {
+            $options = array(
+                'plugins' => array(
+                    'Variables',
+                    'Smarty',
+                    'Adodb',
+                    'Registry',
+                    'File' => array('base_path' => APPLICATION_PATH),
+                    'Memory', 
+                    'Time', 
+                    'Exception',
+                    'Html',
+                ),
+                'jquery_path' => '/admin/themes/default/js/jquery-1.4.2.min.js',
+                'image_path'  => '/media/debugbar',
+            );
+            
+            $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);
+            
+            $this->bootstrap('frontController');
+            $front = $this->getResource('frontController');
+            $front->registerPlugin($zfdebug);
+        }
     }
     
 }

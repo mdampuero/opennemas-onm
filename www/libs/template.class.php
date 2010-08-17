@@ -326,7 +326,7 @@ class TemplateAdmin extends Template
         $this->locale_dir    = SITE_ADMIN_PATH.DS.'themes'.DS.$theme.DS.'locale/';
         $this->caching       = false;
         $this->allow_php_tag = true;
-
+        
         // Template variables        
         $this->css_dir    = SITE_URL_ADMIN.'themes'.DS.$theme.DS.'css/';
         $this->image_dir  = SITE_URL_ADMIN.'themes'.DS.$theme.DS.'images/';

@@ -13,19 +13,13 @@ class ParserXML {
     var $etiqueta_actual = '';
 
 	/**
-	  * Constructor de Clase ParserXML
-	*/
-    function ParserXML() {
-        /* Mirar q puede hacer
-        $xml = $this->load($fich);
-        $this->doParse($xml);*/
-    }
-
-	/**
 	  * Constructor de Clase ParserXML v.PHP5
 	*/
-	function __construct() {
-		$this->ParserXML();
+	function __construct()
+    {
+		/* Mirar q puede hacer
+        $xml = $this->load($fich);
+        $this->doParse($xml);*/
 	}
 
     //------------------ Manejadores de la pila --------------//

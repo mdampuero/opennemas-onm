@@ -7,5 +7,8 @@ class Blog_Model_Post
         return array(1,2,3,4);
     }
     
-    
+    public function getPost()
+    {
+        return array('title' => 'Titulín');
+    }
 }

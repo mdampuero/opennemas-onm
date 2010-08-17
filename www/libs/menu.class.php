@@ -38,7 +38,7 @@ class Menu extends ParserXML {
     var $menues = array();
 
     public function __construct() {
-        $filename = dirname(__FILE__).'/'.'menues.conf';
+        $filename = dirname(__FILE__).'/menues.conf';
         $xml = $this->load($filename);
         $this->doParse( $xml );
     }
