@@ -140,7 +140,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     'Html',
                 ),
                 'jquery_path' => '/admin/themes/default/js/jquery-1.4.2.min.js',
-                'image_path'  => '/media/debugbar',
+                'image_path'  => '/admin/images/debugbar',
             );
             
             $zfdebug = new ZFDebug_Controller_Plugin_Debug($options);

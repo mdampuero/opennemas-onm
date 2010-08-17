@@ -142,7 +142,7 @@ if(!function_exists('ZFDebug_CountExecs')) {
     {
         $total = ZFDebug_Controller_Plugin_Debug_Plugin_Adodb::$totalExecSql;
         
-        if (!is_array(inputarray)) {
+        if (!is_array($inputarray)) {
             $total++;
         } elseif (is_array(reset($inputarray))) {
             $total += sizeof($inputarray);
