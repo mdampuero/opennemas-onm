@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    
+    <production>
+        
+        <apcstatus-index-index type="Zend_Controller_Router_Route">
+            <route>apc-status</route>
+            <defaults>
+                <module>apcstatus</module>
+                <controller>index</controller>
+                <action>index</action>
+            </defaults>
+        </apcstatus-index-index>
+        
+        <apcstatus-index-versioncheck type="Zend_Controller_Router_Route">
+            <route>apc-status/version-check</route>
+            <defaults>
+                <module>apcstatus</module>
+                <controller>index</controller>
+                <action>versioncheck</action>
+            </defaults>
+        </apcstatus-index-versioncheck>
+        
+        <apcstatus-index-renderimages type="Zend_Controller_Router_Route">
+            <route>apc-status/render-images/:num</route>
+            <defaults>
+                <module>apcstatus</module>
+                <controller>index</controller>
+                <action>renderimages</action>
+            </defaults>
+        </apcstatus-index-renderimages>
+        
+        <apcstatus-index-hoststatus type="Zend_Controller_Router_Route">
+            <route>apc-status/host-status</route>
+            <defaults>
+                <module>apcstatus</module>
+                <controller>index</controller>
+                <action>hoststatus</action>
+            </defaults>
+        </apcstatus-index-hoststatus>
+        
+    </production>
+    
+    <development extends="production"></development>
+    
+    <testing extends="production"></testing>
+    
+</routes>

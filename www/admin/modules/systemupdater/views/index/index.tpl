@@ -74,7 +74,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
                         <input type="text" id="repository" name="scm_repository" title="Svn-server"
-                            value="{$cfg.scm_repository}" class="required" size="100" />
+                            value="{$cfg.scm_repository}" class="required" size="100" disabled="disabled" />
                     </td>
                 </tr>
                 <tr>
@@ -83,7 +83,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="90%" colspan='3'>
                         <input type="text" id="destination" name="scm_destination" title="Destination"
-                            value="{$cfg.scm_destination}" class="required" size="100" />
+                            value="{$cfg.scm_destination}" class="required" size="100" disabled="disabled" />
                     </td>
                 </tr>
                 <tr><td colspan="2"><br />
