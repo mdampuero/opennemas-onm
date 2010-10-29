@@ -1,6 +1,0 @@
-User-Agent: *
-Disallow: /admin/
-Allow: /
-
-Sitemap: http://demo.opennemas.com/sitemapnews.xml
-Sitemap: http://demo.opennemas.com/sitemapweb.xml
