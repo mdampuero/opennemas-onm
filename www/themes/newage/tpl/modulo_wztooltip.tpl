@@ -1,1 +1,0 @@
-<script type="text/javascript" src="{php}echo($this->js_dir);{/php}wz_tooltip.js"></script>
