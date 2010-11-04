@@ -1,0 +1,465 @@
+/**
+ * Short desc
+ *
+ * Long description first sentence starts here
+ * and continues on this line for a while
+ * finally concluding here at the end of
+ * this paragraph
+ *
+ * Author  : Antonio Jozzolino <info@sgd.com.br>
+ * Site    : http://www.sgd.com.br
+ * Since   : Wed Sep 08 2010 19:08:03 GMT+0200 (CEST)
+ * Version : v 0.25 Mon Sep 13 2010 16:49:50 GMT+0200 (CEST)
+ */
+/* 
+    Document   : onm-mockup
+    Created on : Feb 18, 2010, 11:13:09 AM
+    Author     : Francisco Diéguez fran.dieguez@mabishu.com
+    Description:
+        CSS to newspaper mockup page
+*/
+
+
+/***********************************************************
+    General definitions
+************************************************************/
+
+html, body{
+	background:#1c1e1c;
+	color:#636363;
+}
+
+.publi{
+	background-color:#222;
+}
+div.ads_top,
+div.publi-footer,
+div.publi_310{
+	background-color:#333 !important;
+	background-image:none; /* put here the substitute image for publicidade hint*/
+}
+div.publi_310 img{
+	background:#777;
+    border:1px solid #CCCCCC;
+    padding:3px 5px;
+    vertical-align:middle;
+}
+
+div.publi_310{
+	text-align:center;
+}
+
+.container{
+	background:#1c1e1c;
+	border:1px solid #878787;
+}
+
+div.article-comments h3{
+	color:#565656;
+	background: url(../images/sections/back-comments-black.png) bottom right no-repeat;
+}
+
+div.opacity-reduced{
+	filter:alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+
+}
+
+div.opacity-reduced:hover{
+	filter:alpha(opacity=100);
+	-moz-opacity:1;
+	-khtml-opacity: 1;
+	opacity: 1;
+}
+
+
+/***********************************************************
+    Header re-definitions
+************************************************************/
+div#current-day, div#widget_weather_top *{
+	color:#4a4a4a;
+}
+.max_temperature, .min_temperature{
+	color:White;
+	border:0;
+}
+.max_temperature{
+	background:#353535;
+}
+
+.min_temperature{
+	background:#292929;
+}
+/***********************************************************
+    Main menues re-definitions
+************************************************************/
+div#submenu li a{
+	color:#ccc;
+}
+div#submenu > ul > li{
+	background:#373737 !important;
+}
+div#submenu ul > li.active > a,
+div#submenu ul > li:hover > a{
+	color:#999;
+	background:#434343;
+}
+div#submenu ul.nav a{
+	color:#ddd;
+}
+div#submenu > ul{
+	background:#373737 !important;
+}
+div#submenu li a{
+	color:#999 !important;
+}
+/***********************************************************
+    Video re-definitions
+************************************************************/
+#video-content{
+	background:#292929 url(../images/back-video.png) center center no-repeat;
+	text-align:center;
+	padding:10px 0;
+	margin-bottom:10px;
+	min-height:150px;
+}
+#video-content * 
+#video-content *{
+	margin: 0 auto;
+	text-align:center;
+}
+
+div.video-explanation h1{
+	font-family:Georgia;
+	font-size:2em;
+	color:White;
+	margin-top:10px
+}
+
+/***********************************************************
+    Lastests widget re-definitions
+************************************************************/
+
+
+
+/***********************************************************
+    Utilities re-definitions
+************************************************************/
+.vert-separator{
+	background:url(../images/vert-separator.png) bottom right repeat-y;
+	margin-bottom:10px;
+}
+
+
+div.toolbar{
+	margin:5px 0;
+	background:none !important;
+}
+div.vote-block{ font-family:Georgia; font-size:.95em}
+div.vote-block img{ vertical-align:middle; }
+
+
+/***********************************************************
+    Comments re-definitions
+************************************************************/
+div.commment_wrapper{
+	background:#2a2a2a;
+	margin:20px 0;
+	display:block;
+	position:relative;
+}
+div.comment-content{
+	background:#2a2a2a;
+	color:#cccccc;
+	padding-top:15px;
+	display:block;
+}
+div.comment-content a{
+	background:#2a2a2a;
+	color:#cccccc;
+	padding-top:5px;
+	display:block;
+    font-family:Georgia;
+ 
+}
+
+div.comment-content a.comment{
+	color:#FFF;
+    font-family:Verdana, Arial;
+}
+
+
+div.comment-content:hover{
+	color:White;
+}
+span.comment-author{
+	color:#747678;
+}
+span.commment-author, span.commment-time{
+	color:#747678;
+}
+div.comment-number{
+	color:#d3d3d3;
+	position:absolute;
+	top:0px;
+	left:10px;
+	font-family:Georgia;
+	font-size:2.7em;
+	font-style:italic;
+	margin:0;
+	padding:0;
+	z-index:9999;
+}
+
+div.list-comments .article-comments{
+    margin-bottom: 35px;
+}
+/***********************************************************
+    Sidebar re-definitions
+************************************************************/
+
+div.other-interested-videos h3,
+div.widget-video-most h3{
+	font-family:Georgia;
+	color:White;
+	text-align:left;
+}
+div.other-interested-videos{
+    text-align:right;
+    position:relative
+}
+
+div.interested-video { 
+    background:#2a2a2a;
+    text-align:center;
+    margin:10px 0;
+    padding:10px 0;
+    width:210px;
+    margin:0 auto;
+    float:left;
+}
+
+div.interested-video .capture{ 
+	margin-left:10px;
+	width:190px;
+	display:block;
+	position:relative;
+        height:126px;
+        overflow: hidden;
+}
+div.interested-video .info-interested-video { 
+	font-family:Georgia; 
+	font-size:1.3em; 
+	text-align:left; 
+	margin:0; 
+	padding:0 10px;
+	width:190px;
+	margin:0 auto;       
+}
+div.interested-video .image {
+	border:none;
+        width:190px;
+        
+}
+div.interested-video .category, div.interested-video .category a{ color:#aaaaaa; font-family: Georgia; text-transform:uppercase; margin:0; padding:0; font-size:.9em}
+div.interested-video .caption, div.interested-video a.video-link{ color:#cccccc; margin:0; padding:0}
+div.interested-video div.bar-video-tiny-info{
+	background:Black;
+	filter:alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	text-align:left;
+	height:23px;
+}
+
+div.interested-video div.bar-video-tiny-info img{
+	vertical-align:middle;
+	margin:2px 0 0 5px;
+	filter:alpha(opacity=170);
+	-moz-opacity:1.7;
+	-khtml-opacity: 1.2;
+	opacity: 1.2;
+}
+div.bar-video-tiny-info-image-video{
+	position:absolute;
+	bottom:3px;
+	left:5px;
+}
+
+div.featured-videos h3{
+    	font-family:Georgia;
+	color:White;
+	text-align:left;
+}
+
+div#main_content{
+    margin-top:10px;
+}
+div.other-interested-videos,
+div#videos_more,
+div#videos_incategory{
+	position: relative;
+}
+div.clean-paginator{
+    position:absolute;
+    right: 0;
+    top: 5px;
+    margin-bottom:5px;
+	text-align:right;
+}
+div.clean-paginator div.buttons{
+		float:right;
+}
+div.clean-paginator div.ajax-loading{
+		float:left;
+		margin-right:5px;
+}
+
+div.clean-paginator *{
+    font-family:Verdana;
+    font-size:1em;
+}
+div.other-interested-videos h3{
+	width:50%
+}
+div.other-interested-videos div.clean-paginator a{
+    color:White;
+    margin:0;
+    float:left;
+    filter:alpha(opacity=90);
+    -moz-opacity:0.9;
+    -khtml-opacity: 0.9;
+}
+div.other-interested-videos div.clean-paginator a:hover{
+    filter:alpha(opacity=100);
+    -moz-opacity:1;
+    -khtml-opacity: 1;
+}
+div.portada-videos div.featured-videos h1{
+    font-size:1.5em;
+
+}
+div.portada-videos div.featured-videos a{
+    color:#CCCCCC;
+
+}
+div.portada-videos div.featured-videos h1 img{
+    vertical-align:middle;
+}
+div.ui-tabs-nav, div.ui-helper-reset, .ui-helper-clearfix, .ui-widget-header .ui-corner-all{
+    background:#1c1e1c !important;
+}
+.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom{
+    background:#1c1e1c !important;
+    padding:0;
+    margin:0;
+}
+.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all{
+    padding:0;
+    margin:0;
+    border:0px !important;
+}
+
+.inner-video-tabs{
+    margin-top:35px;
+}
+div#tabs div{
+    margin:0;
+    padding:0;
+}
+div#tabs .tab-thumb-video{
+    width:99%;
+    border-bottom:1px solid #373737;
+}
+
+div#tabs div.ui-tabs-panel{
+    overflow: scroll;
+    overflow-x: hidden;
+    height:320px;
+    border:1px solid #373737 !important;
+}
+.ui-tabs-nav a{color:White !important; font-family:Verdana !important; font-size:.8em !important; text-transform: uppercase}
+.ui-tabs-nav{ border:none !important;}
+.ui-tabs-default{background-color:#292929 !important; }
+.ui-tabs-selected, .ui-tabs-active{
+    background:#1c1e1c !important;
+    border-color:#373737 !important;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: #ccc !important;}
+div#tabs div.ui-tabs-panel img{ 
+    float:left;
+    margin:0 5px 10px;
+    width:75px;
+    height:50px;
+}
+div#tabs div.ui-tabs-panel a{
+    color:#CCCCCC;
+}
+div#tabs .tab-thumb-video-shortitle{ text-transform:uppercase; color:#747678; font-size:.9em; margin:0; padding:0}
+div#tabs .tab-thumb-video-title{ font-family:Georgia; color:White; font-size:1.2em; margin:0; padding:0}
+
+div.form-comments input[type=text],
+div.form-comments textarea{
+	background-color:#333;
+	color:White;
+	border:1px solid #999;
+}
+div.form-comments hr.space{
+	display:none;
+}
+div.form-comments .auth-selector{ color:#747678;}
+div.form-comments{
+    background:#2A2A2A url(../images/utilities/back-form-comments.png) bottom right no-repeat;
+}
+div.form-comments .submit-button, div.form-comments a.show-commment-form{
+    background:#1C1E1C;
+    border-color:#1C1E1C;
+    color:#6a6a6a;
+}
+
+.share-actions ul {
+	background:#373737; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
+	list-style:none !important; border:none !important;
+	}
+.share-actions li{
+	border:none !important;
+}
+.share-actions ul > li > a{
+	color:White !important;
+	font-family:Verdana;
+}
+
+hr.new-separator
+{
+	border:none;
+	background:url(../images/horiz-separator-black.jpg) top right repeat-x !important;
+	height:10px;
+	margin:5px 0;
+	border:1px
+}
+#main-search-form input{ font-size: .9em; background:gray; }
+div.widget-video-most, div.thumb-video { width:100% }
+div.widget-video-most a.video-link{
+		float:left;
+		margin-right:6px;
+}
+div.widget-video-most div.video-shortitle a{
+		color:White !important; font-family:Verdana !important; text-transform: uppercase
+}
+div.widget-video-most div.video-title a{
+		color:White !important; font-family:Verdana !important; font-family:Georgia, Times;
+}
+div.widget-video-most a.video-link img{ width:90px  }
+div.row-video{
+		width:100%;
+}
+div.thumb-video{
+		border-bottom:1px solid #373737;
+}

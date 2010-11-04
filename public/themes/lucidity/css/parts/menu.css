@@ -1,0 +1,93 @@
+/*
+    Main menues definition
+*/
+/*** Menú nuevo ***/
+/** Menú **/
+#header #menu {
+    position:relative;
+    float:left;
+    width:974px;
+    height: 51px;
+    margin:0;
+}
+.jump-to-content{
+    display:none;
+}
+div#submenu {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width:100%;
+    height:auto;
+    padding:0;
+    background: transparent;
+}
+div#submenu ul li:hover ul.nav {
+    display:block;
+}
+div#submenu ul{ margin:0; padding:0;}
+div#submenu > ul {
+    background: #638F38;
+    width:100%
+}
+div#submenu > ul > li >a {
+    text-transform:uppercase;
+}
+div#submenu li {
+    float:left;
+    width: auto;
+    margin: 0;
+    list-style:none;
+}
+div#submenu li a {
+    display:block;
+    padding: 5px 6px;
+    text-align: center;
+    font-size:1em;
+    font-weight:bold;
+    text-decoration:none;
+    color:White;
+    font-family:Verdana, Arial
+}
+div#submenu { position: absolute; top: 0px; left: 0; width:100%; height:auto; padding: 0; background: transparent; }
+div#submenu ul li { padding: 0 !important; margin: 0 !important; }
+div#submenu ul.nav li { background:transparent; }
+
+/* secciones */ 
+div#submenu > ul > li.cat.active > a,
+div#submenu ul > li:hover > a{ color:#fff }
+div#submenu ul.nav li a { color: #333; }
+div#submenu > ul > li:hover,
+div#submenu > ul > li.active {
+    background:none repeat scroll 0 0 rgba(204, 204, 204, 0.5);
+}
+div#submenu ul.nav a { color:#cdcdcd;}
+div#submenu ul.nav li.active a,
+div#submenu ul.nav li a:hover,
+div#submenu ul.nav li.active a:hover
+{ text-decoration:underline; color:#333;}
+
+
+div#submenu li ul.nav { position: absolute; top: 25px; left: auto; z-index: 2; display: none; overflow:visible;}
+div#submenu li.active ul.nav { display: block !important; }
+div#submenu li a:first-letter{ text-transform: uppercase; }
+div#submenu ul.nav li { height: auto; }
+div#submenu li:hover a {  }
+div#submenu li:hover a, div#submenu li.active a { }
+div#submenu li.active ul.nav { display: block !important; white-space:nowrap;}
+div#submenu:hover li.chatafaca ul.nav { display: none !important; }
+div#submenu:hover li.chatafaca:hover ul.nav { display: block !important; }
+div#submenu li:hover ul.nav li a, div#submenu li.chatafaca ul.nav li a { background: none;  }
+div#submenu li.chatafaca ul.nav li a:hover { display: block !important;   }
+div#submenu li:hover ul.nav, div#submenu li:hover ul.nav li a:hover, div#submenu li.chatafaca ul.nav li a:hover { background: none; }
+ul#social-icons-submenu{position:absolute;bottom:4px;right:0px;margin:0;padding:0; width:100px; height:18px; }
+ul#social-icons-submenu ul{margin:0;background:none;}
+ul#social-icons-submenu ul li{float:right; list-style:none;}
+ul#social-icons-submenu ul li img{vertical-align:middle;width:20px;}
+
+#main-search-form *{padding:0; margin:0;}
+
+#main-search-form input{ font-size: .9em; background:white; }
+#main-search-form form{ margin:0; padding:0;
+}
+#main-search-form input[type="text"]{ padding:3px 5px; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius:7px; border: 1px solid #ccc; font-family:.9em}

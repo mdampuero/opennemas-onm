@@ -1,0 +1,273 @@
+/* 
+    Document   : onm-mockup
+    Created on : Feb 18, 2010, 11:13:09 AM
+    Author     : Francisco Diéguez fran.dieguez@mabishu.com
+    Description:
+        CSS to newspaper mockup page
+*/
+
+
+/***********************************************************
+    General definitions
+************************************************************/
+
+
+
+div.opacity-reduced:hover{
+	filter:alpha(opacity=90);
+	-moz-opacity:0.9;
+	-khtml-opacity: 0.9;
+	opacity: 0.9;
+
+}
+
+/***********************************************************
+    Ad Gallery definitions
+************************************************************/
+
+.ad-thumb-list img{
+	width:90px;
+	height:80px
+}
+
+.ad-gallery{
+	margin:15px auto;
+}
+#gallery{
+	max-width:900px;
+	background:#eee;
+	padding:0px 30px 10px 30px;
+	margin:10px auto !important;
+	margin-bottom:15px;
+}
+
+.title-gallery{ padding: 10px 0 !important;}
+.title-gallery h1{
+	padding-top:0px;
+	margin-top:0;
+	font-family:Georgia;
+	font-size:1.6em;
+}
+
+
+/***********************************************************
+    Main menues re-definitions
+************************************************************/
+
+
+/***********************************************************
+    Video re-definitions
+************************************************************/
+#gallery-content{
+	background:#cfcfcf url(../images/back-video.png) center center no-repeat;
+	text-align:center;
+	padding:10px 0;
+	margin-bottom:10px;
+	min-height:150px;
+}
+#gallery-content img{
+	max-width:290px;
+}
+#gallery-content * 
+#gallery-content *{
+	margin: 0 auto;
+	text-align:center;
+}
+
+div.gallery-explanation h1{
+	font-family:Georgia;
+	font-size:2em;
+	margin-top:10px
+}
+
+/***********************************************************
+    Lastests widget re-definitions
+************************************************************/
+
+
+
+/***********************************************************
+    Utilities re-definitions
+************************************************************/
+.vert-separator{
+	background:url(../images/vert-separator.png) bottom right repeat-y;
+	margin-bottom:10px;
+	height:100%;
+}
+
+
+div.toolbar{
+	margin:5px 0;
+	background:none !important;
+}
+div.vote-block{ font-family:Georgia; font-size:.95em}
+div.vote-block img{ vertical-align:middle; }
+
+/***********************************************************
+    Comments re-definitions
+************************************************************/
+
+
+/***********************************************************
+    Sidebar re-definitions
+************************************************************/
+
+div.other-interested-gallerys h3{
+	font-family:Georgia;
+	text-align:left;
+}
+div.other-interested-gallerys{
+	text-aling:right;
+    position:relative
+}
+
+div.interested-gallery { text-align:center; margin:10px 0; padding:10px 0; width:210px; margin:0 aut0; 	float:left;}
+div.interested-gallery .capture{ 
+	margin-left:10px;
+	width:190px;
+	display:block;
+	position:relative;
+}
+div.interested-gallery .info-interested-gallery { 
+	font-family:Georgia; 
+	font-size:1.3em; 
+	text-align:left; 
+	margin:0; 
+	padding:0 10px;
+	width:190px;
+	margin:0 auto;
+	color:Black;
+}
+div.interested-gallery .info-interested-gallery div.category{
+	font-weight:bold;
+	 font-size:.7em;
+	 font-family:Verdana;
+}
+div.interested-gallery img{
+	border:none;
+}
+div.interested-gallery .category{ color:#222; text-transform:uppercase; margin:0; margin-top:5px; padding:0; font-size:.9em}
+div.interested-gallery .caption{ color:#555; margin:0; padding:0}
+div.interested-gallery div.bar-video-tiny-info{
+	background:Black;
+	filter:alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:100%;
+	text-align:left;
+	height:23px;
+}
+
+div.interested-gallery div.bar-video-tiny-info img{
+	vertical-align:center;
+	margin:2px 0 0 5px;
+	filter:alpha(opacity=170);
+	-moz-opacity:1.7;
+	-khtml-opacity: 1.2;
+	opacity: 1.2;
+}
+div.bar-video-tiny-info-image-video{
+	position:absolute;
+	bottom:3px;
+	left:5px;
+}
+
+div.featured-videos h3{
+    	font-family:Georgia;
+	text-align:left;
+}
+
+div#main_content{
+    margin-top:10px;
+}
+
+div.other-interested-gallerys div.clean-paginator{
+    position:absolute;
+    right:10px;
+    top: 10px;
+}
+
+div.other-interested-gallerys div.clean-paginator *{
+    font-family:Verdana;
+    font-size:1em;
+}
+div.other-interested-gallerys div.clean-paginator a{
+}
+div.portada-videos div.featured-videos h1{
+    font-size:1.5em;
+
+}
+div.portada-videos div.featured-videos h1 img{
+    vertical-align:middle;
+}
+div.ui-tabs-nav, div.ui-helper-reset, .ui-helper-clearfix, .ui-widget-header .ui-corner-all{
+    background:#1c1e1c !important;
+}
+.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom{
+    background:#1c1e1c !important;
+    padding:0;
+    margin:0;
+}
+.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all{
+    padding:0;
+    margin:0;
+    border:0px !important;
+}
+
+.inner-video-tabs{
+    margin-top:35px;
+}
+div#tabs div{
+    margin:0;
+    padding:0;
+}
+div#tabs .tab-thumb-video{
+    width:99%;
+    border-bottom:1px solid #373737;
+}
+
+div#tabs div.ui-tabs-panel{
+    overflow: scroll;
+    overflow-x: hidden;
+    height:320px;
+    border:1px solid #373737 !important;
+}
+.ui-tabs-nav a{font-family:Verdana !important; font-size:.8em !important; text-transform: uppercase}
+.ui-tabs-nav{ border:none !important;}
+.ui-tabs-default{background-color:#292929 !important; }
+.ui-tabs-selected, .ui-tabs-active{
+    background:#1c1e1c !important;
+    border-color:#373737 !important;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: #ccc !important;}
+div#tabs div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div#tabs .tab-thumb-video-shortitle{ text-transform:uppercase; color:#747678; font-size:.9em; margin:0; padding:0}
+div#tabs .tab-thumb-video-title{ font-family:Georgia; color:White; font-size:1.2em; margin:0; padding:0}
+
+div.form-comments .auth-selector{ color:#747678;}
+div.form-comments{
+    background:#2A2A2A url(../../images/utilities/back-form-comments.png) bottom right no-repeat;
+}
+div.form-comments .submit-button, div.form-comments a.show-commment-form{
+    background:#1C1E1C;
+    border-color:#1C1E1C;
+    color:#6a6a6a;
+}
+
+.share-actions ul {
+	background:#373737; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
+	list-style:none !important; border:none !important;
+	}
+.share-actions li{
+	border:none !important;
+}
+.share-actions ul > li > a{
+	color:White !important;
+	font-family:Verdana;
+}
+
+

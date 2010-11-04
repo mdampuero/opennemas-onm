@@ -1,0 +1,275 @@
+<?php
+/**
+ * widget.class.php
+ * 
+ * 28/07/2009 15:57:57
+ * vifito  <vifito@openhost.es> 
+ */
+
+/* *****************************************************************************
+CREATE TABLE `widgets` (
+`pk_widget` BIGINT( 20 ) NOT NULL AUTO_INCREMENT ,
+`content` TEXT NOT NULL ,
+`renderlet` VARCHAR( 20 ) NOT NULL DEFAULT 'html',
+`tpl_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+PRIMARY KEY ( `pk_widget` )
+) ENGINE = MYISAM 
+
+INSERT INTO `content_types` (
+`pk_content_type` ,
+`name` ,
+`title` ,
+`fk_template_default`
+)
+VALUES (
+'12', 'widget', 'widget', NULL
+);   
+*****************************************************************************  */
+
+/**
+ * Widget
+ */
+class Widget extends Content {
+    /**
+     * @var int Identifier of class
+     */
+    public $pk_widget = null;
+    
+    public $content = null;
+    public $renderlet = null;
+    public $tpl_timestamp = null;
+    
+    /**
+     * @var MethodCacheManager Handler to call method cached
+     */
+    public $cache = null;
+    
+    /**
+     * constructor
+     *
+     * @param int $id 
+     */
+    public function __construct($id=null)
+    {
+        parent::__construct($id);
+        
+        if(!is_null($id)) {
+            $this->read($id);
+        }
+        
+        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+        $this->content_type = 'Widget';
+    }
+    
+    
+    public function create($data)
+    {
+        // Clear  magic_quotes
+        String_Utils::disabled_magic_quotes( $data );
+        $data['category'] = 0;
+        
+        // Start transaction
+        $GLOBALS['application']->conn->BeginTrans();
+        parent::create($data);
+        
+        $sql = 'INSERT INTO widgets (`pk_widget`, `content`, `renderlet`)
+                VALUES (?, ?, ?)';
+        
+        // Sort values
+        $values = array($this->id,
+                        $data['content'],
+                        $data['renderlet']);
+
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+            $GLOBALS['application']->conn->RollbackTrans();
+            
+            return false;
+        }        
+        
+        // Commit transaction
+        $GLOBALS['application']->conn->CommitTrans();
+        
+        return true;
+    }
+    
+    /**
+     * Read, get a specific object
+     *
+     * @param int $id Object ID
+     * @return Widget Return instance to chaining method
+     */
+    public function read($id)
+    {        
+        parent::read($id);
+        $this->id = $id;
+        
+        $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
+        
+        $values = array($id);
+        
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if($rs === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+            return null;
+        }
+        
+        $this->load( $rs->fields );        
+    }
+    
+    /**
+     * Load properties into this instance
+     *
+     * @param array $properties Array properties 
+     */
+    public function load($properties) {
+        if(is_array($properties)) {
+            foreach($properties as $k => $v) {
+                if(!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
+        } elseif(is_object($properties)) {
+            $properties = get_object_vars($properties);
+            foreach($properties as $k => $v) {
+                if(!is_numeric($k)) {
+                    $this->{$k} = $v;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Update
+     * 
+     * @param array $data Array values
+     * @return boolean
+     */
+    public function update($data) {
+        // Clear  magic_quotes
+        String_Utils::disabled_magic_quotes( $data );
+        $data['category'] = 0;
+        
+        // Start transaction
+        $GLOBALS['application']->conn->BeginTrans();
+        
+        parent::update($data);
+        
+        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=?, `tpl_timestamp`=? WHERE `pk_widget`=?";
+        
+        $values = array($data['content'], $data['renderlet'], time(), $data['id']);
+        
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+            $GLOBALS['application']->conn->RollbackTrans(); 
+            
+            return false;
+        }
+        
+        // Commit transaction
+        $GLOBALS['application']->conn->CommitTrans();
+        
+        return true;        
+    }
+    
+    /**
+     * @deprecated
+     */
+    public function setPlaceholder($placeholder, $id)
+    {
+        // Insert placeholder manually
+        $sql = 'UPDATE `contents` SET `placeholder`=? WHERE pk_content=?';
+        $values = array($placeholder, $id);
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;                        
+            
+            return false;
+        }
+        
+        return true;
+    }        
+    
+    /**
+     * Delete
+     *
+     * @param int $id Identifier
+     * @return boolean
+     */
+    public function delete($id, $editor=null) {        
+        $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
+        
+        parent::remove($id); // Delete from database, don't use trash
+        
+        $values = array($id);
+        
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+           return false;
+        }
+        
+        return true;        
+    }
+    
+    public function put_permalink($end, $type, $title, $cat) {
+        return '';
+    }
+    
+    
+    public function render() {
+        $method = '_renderlet_'.$this->renderlet;
+        //call_user_func_array(array($this, $method), array($smarty));
+        return $this->$method();
+    }
+    
+    private function _renderlet_html() {
+        return $this->content;
+    }
+    
+    private function _renderlet_php() {
+        ob_start();
+        
+        eval($this->content);
+        
+        $output = ob_get_contents();
+        ob_end_clean();
+        
+        return $output;
+    }
+    
+    /**
+     *
+     * SEE resource.string.php Smarty plugin
+     * SEE resource.widget.php Smarty plugin
+     */
+    private function _renderlet_smarty() {
+        // Deprecated
+        //$resource = 'string:' . $this->content;
+        
+        Template::$registry['widget'][$this->pk_widget] = $this->content;
+        $resource = 'widget:' . $this->pk_widget;
+        
+        $wgtTpl = new Template(TEMPLATE_USER);
+        
+        // no caching
+        $wgtTpl->caching = 0;
+        $wgtTpl->force_compile = true;
+        
+        $output = $wgtTpl->fetch($resource);
+        
+        return $output;
+    }
+}

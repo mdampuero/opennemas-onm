@@ -1,0 +1,120 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteBase / 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule  ^(.+).php3 $1.php
+
+    #Articles artigo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
+    #Articles artigo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&article_id=$7&action=read [L,NC]
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&article_title=$6&article_id=$7&action=read [L,NC]
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    #RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&subcategory_name=$5&article_id=$7&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+
+    #Opinion Section
+    RewriteRule ^seccion/opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&pageop=$1 [L,NC]
+    RewriteRule ^seccion/opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
+
+    #Opinion Frontpage
+    RewriteRule ^opinions_autor/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_op_author&author_id=$1 [L,NC]
+    RewriteRule ^opinions_autor/([0-9]+)/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_op_authors&author_id=$1&page=$2 [L,NC]
+
+    #Opinion Inner
+    RewriteRule ^opinions/captcha/([0-9]+).jpg$ controllers/opinion_inner.php?action=captcha&category_name=opinion [L,NC]
+    RewriteRule ^opinions/(.*)/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$2&category_name=opinion&action=read&t=$1 [L,NC]
+
+
+    #Portada de autores  RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ controllers/opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
+    #RewriteRule ^opinions/listado_xornalistas/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_authors&page=$1 [L,NC]
+
+    #Artigos print
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=$1 [L,NC]
+    RewriteRule ^imprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner.php?action=print&opinion_id=$1 [L,NC]
+
+    #Home
+    RewriteRule ^/?$ controllers/index.php?category_name=home [L,NC]
+    RewriteRule ^home/?$ controllers/index.php?category_name=home [L,NC]
+
+    #Sections
+    RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&page=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
+
+    #RSS
+    RewriteRule ^rss/opinion/([0-9]+)/?$ controllers/article.php?category_name=opinion&author=$1&action=rss [L,NC]
+    RewriteRule ^rss/([a-z0-9-]+)/([a-z0-9-]+)/?$ controllers/article.php?category_name=$1&subcategory_name=$2&action=rss [L,NC]
+    RewriteRule ^rss/([a-z0-9-]+)/?$ controllers/article.php?category_name=$1&action=rss [L,NC]
+    RewriteRule ^rss/?$ controllers/article.php?action=rss [L,NC]
+
+    #Sitemap
+    RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
+    RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
+    RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
+
+    #Advertisement
+    RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
+    RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
+    
+
+    #Album
+    #/album/2008/12/08/foto/200812081741363340.html
+    RewriteRule ^albumes/?$ controllers/gallery.php?action=frontpage [L,NC]
+    RewriteRule ^album/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ controllers/gallery.php?action=$4&id_album=$5 [L,NC]
+    #http://retrincos.es/album/solo-album/
+    RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/gallery.php?action=foto&category_name=$1 [L,NC]
+    RewriteRule ^album/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/gallery.php?action=foto&category_name=$1&subcategory_name=$2 [L,NC]
+
+    #Video
+    #/video/0/2008/12/08/200812081741363340.html
+    RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^video/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+).html$ controllers/videos.php?action=inner&id=$4 [L,NC]
+
+    #Files
+    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
+    RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
+
+    #polls
+    #encuesta/2010/09/22/deportes/dsfsdfsf/2010092220475100111.html
+    RewriteRule ^encuesta/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+).html$ controllers/poll.php?action=read&category_name=$4&poll_id=$6 [L,NC]
+    RewriteRule ^encuesta/([a-z0-9\-]+)/$ controllers/poll.php?action=read&category_name=$1 [L,NC]
+    
+    #Article archive Library - Repository
+    RewriteRule ^arquivo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ controllers/hemeroteca.php?year=$1&month=$2&day=$3&category_name=$4&efecha=$5 [L,NC]
+    RewriteRule ^arquivo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/([0-9]+).html$ controllers/hemeroteca.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&efecha=$6 [L,NC]
+
+    #Search
+    RewriteRule ^procura/google/(.*)$ controllers/search.php?stringSearch=$1&googleSearch=on [L,NC]
+    RewriteRule ^procura/(.*)$ controllers/search.php?stringSearch=$1&xornalSearch=on [L,NC]
+
+    #Polls
+    RewriteRule ^conecta/enquisa/([hvp])([0-9]+).png$ controllers/poll_graph.php?id=$2&type=$1 [L,NC]
+
+    #Static pages
+    RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
+
+    #Weather
+    RewriteRule ^tempo/?$ playas.php [L,NC]
+    RewriteRule ^tempo/([a-z]+)\.html$ controllers/weather.php?l=$1 [L,NC]
+
+    #Newspaper stand
+    RewriteRule ^portadas$ controllers/kiosko.php [L,NC]
+    RewriteRule ^portadas/$ controllers/kiosko.php [L,NC]
+    RewriteRule ^portadas/([0-9]{4})/([0-9]{1,2})$ controllers/kiosko.php?year=$1&month=$2 [L,NC]
+    
+    #Default Rules
+    # RewriteCond %{REQUEST_URI} !^/controllers/index.php
+    RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
+    
+    ErrorDocument 404 /controllers/404.html
+</IfModule>

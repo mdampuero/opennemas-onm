@@ -1,0 +1,4 @@
+Options -Indexes -FollowSymLinks -MultiViews
+Order allow,deny
+allow from none
+

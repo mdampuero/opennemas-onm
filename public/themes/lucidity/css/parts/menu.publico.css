@@ -1,0 +1,105 @@
+/*
+    Main menues definition
+*/
+/*** Menú nuevo ***/
+/** Menú **/
+#header #menu {
+    position:relative;
+    float:left;
+    width:974px;
+    height: 51px;
+    margin:0;
+    padding: 0 1px;
+    background: transparent url(../images/sprite-dev.png?r=30) 0px -877px no-repeat;
+}
+.jump-to-content{
+    display:none;
+}
+div#submenu {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width:100%;
+    height:auto;
+    padding:0;
+    background: transparent;
+}
+div#submenu ul li:hover ul.nav {
+    display:block;
+}
+div#submenu ul{ margin:0; padding:0 3px;}
+div#submenu > ul {
+    background: transparent url("../../images/pl.sprite.menu.png") 1px 0 no-repeat;
+    width:100%
+}
+div#submenu > ul > li >a {
+    text-transform:uppercase;
+}
+div#submenu li {
+    float:left;
+    width: auto;
+    margin: 0;
+    list-style:none;
+}
+div#submenu li a {
+    display:block;
+    padding: 5px 6px;
+    text-align: center;
+    font-size:1em;
+    font-weight:bold;
+    text-decoration:none;
+    color:#333;
+    font-family:Verdana, Arial
+}
+div#submenu { position: absolute; top: 0px; left: 0; width:100%; height:auto; padding: 0; background: transparent; }
+div#submenu ul li { background: transparent url("../../images/pl.sprite.menu.png") 0 -610px no-repeat;  padding: 0 !important; margin: 0 !important; }
+div#submenu ul.nav li { background: transparent url("../../../images/pl.sprite.menu.png") 0 -656px no-repeat; }
+
+/* secciones */ 
+div#submenu > ul > li.cat.active > a,
+div#submenu ul > li:hover > a{ color:#fff }
+div#submenu ul.nav li a { color: #333; }
+div#submenu > ul > li:hover,
+div#submenu > ul > li.active {
+    background: transparent url(../../images/pl.sprite.menu.png) center -121px no-repeat;
+}
+div#submenu li.portada.active, div#submenu li.portada:hover { background-position: center -121px !important; }
+div#submenu li.deportes.active, div#submenu li.deportes:hover { background-position: center -161px; }
+div#submenu li.tecnologia.active > a, div#submenu li.tecnologia > a:hover { background-position: center -201px; }
+div#submenu li.espana.active > a, div#submenu li.espana > a:hover { background-position: center -241px; }
+div#submenu li.tendencias.active > a, div#submenu li.tendencias > a:hover { background-position: center -281px; }
+div#submenu li.ocio.active > a, div#submenu li.ocio > a:hover { background-position: center -321px;  }
+div#submenu li.mundo.active > a, div#submenu li.mundo > a:hover { background-position: center -361px;  }
+div#submenu li.ciencia.active > a, div#submenu li.ciencia > a:hover { background-position: center -401px; }
+div#submenu li.cultura.active > a, div#submenu li.cultura > a:hover { background-position:  center -441px; }
+
+div#submenu ul.nav a { color:#333;}
+div#submenu ul.nav li.active a,
+div#submenu ul.nav li a:hover,
+div#submenu ul.nav li.active a:hover
+{ text-decoration:underline; color:#333;}
+
+
+div#submenu li ul.nav { position: absolute; top: 25px; left: auto; z-index: 2; display: none; overflow:visible;}
+div#submenu li.active ul.nav { display: block !important; }
+div#submenu li a:first-letter{ text-transform: uppercase; }
+div#submenu ul.nav li { height: auto; }
+div#submenu li:hover a {  }
+div#submenu li:hover a, div#submenu li.active a { }
+div#submenu li.active ul.nav { display: block !important; white-space:nowrap;}
+div#submenu:hover li.chatafaca ul.nav { display: none !important; }
+div#submenu:hover li.chatafaca:hover ul.nav { display: block !important; }
+div#submenu li:hover ul.nav li a, div#submenu li.chatafaca ul.nav li a { background: none;  }
+div#submenu li.chatafaca ul.nav li a:hover { display: block !important;   }
+div#submenu li:hover ul.nav, div#submenu li:hover ul.nav li a:hover, div#submenu li.chatafaca ul.nav li a:hover { background: none; }
+ul#social-icons-submenu{position:absolute;bottom:4px;right:0px;margin:0;padding:0;}
+ul#social-icons-submenu ul{margin:0;background:none;}
+ul#social-icons-submenu ul li{display:inline-block;}
+ul#social-icons-submenu ul li img{vertical-align:middle;width:20px;}
+
+#main-search-form *{padding:0; margin:0;}
+
+#main-search-form input{ font-size: .9em }
+#main-search-form form{ margin:0; padding:0;
+}
+#main-search-form input[type="text"]{ padding:3px 5px; -moz-border-radius: 7px; -webkit-border-radius: 7px; border: 1px solid #ccc; font-family:.9em}

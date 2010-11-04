@@ -1,0 +1,52 @@
+div.upload {
+    height: 335px;
+}
+
+#dashboard_enlaces {
+    margin-top:20px;
+    font-size: 13px;
+}
+
+#dashboard_enlaces a{
+    text-decoration:underline;
+    font-weight:bold;
+}
+
+#dashboard_enlaces a:hover {
+    text-decoration:underline overline;
+}
+
+div.dashboardBox {
+    background-color: #FFF;
+    background-image: url('../images/dashboardbox_top.jpg');
+    background-repeat: repeat-x;
+    background-position: top;
+    border: 1px solid #014687;
+    margin: 0.5em 0.2em;
+    min-height: 100px;
+}
+
+div.dashboardBox h2 {
+    font-weight: bold;
+    color:white;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 1em;
+}
+
+div.dashboardBox div {
+    padding: 4px;
+    margin-bottom: 2px;
+}
+
+div.dashboardBox div.table {
+    margin: 0px;
+    margin-bottom: 2px;
+    height: 280px;
+    overflow: auto;
+}
+
+
+.clearer {
+    clear: both;
+}

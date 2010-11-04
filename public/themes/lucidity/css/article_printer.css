@@ -1,0 +1,60 @@
+#header{
+    
+}
+
+.logo{
+    width:300px;
+}
+.logo *{
+    display:inline;
+}
+.breadcrub{
+    display:inline;
+    font-family:Arial;
+    font-size:1em;
+    
+}
+.breadcrub a{
+    color:#333;
+    font-style:normal;
+    text-decoration:none;
+}
+.breadcrub ul{
+    margin:0;
+    padding:0;
+}
+
+.new-separator{
+    border:none;
+    background:url(../images/horiz-separator.png) top right repeat-x;
+    height:10px;
+    margin:5px 0;
+    border:1px
+}
+
+div.noticia h1{
+    font-family:Georgia;
+    font-weight:normal;
+    font-size:1.4em;
+}
+
+div.noticia{
+    color:#333;
+    font-size:.85em;
+}
+
+div.contact-dates{
+    font-size:.6em;
+    text-align:center;
+    color:#333;
+}
+#imprimir{
+    font-family:Verdana;
+    color:#333;
+    font-size:.7em;
+    position:absolute;
+    top:10px;
+    right:10px;
+    padding-left:20px;
+    background:url(../images/utilities/print-black.png) left center no-repeat;
+}

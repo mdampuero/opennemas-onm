@@ -1,0 +1,90 @@
+/**
+ * Short desc
+ *
+ * Long description first sentence starts here
+ * and continues on this line for a while
+ * finally concluding here at the end of
+ * this paragraph
+ *
+ * Author  : Antonio Jozzolino <info@sgd.com.br>
+ * Site    : http://www.sgd.com.br
+ * Since   : Mon Sep 06 2010 00:26:55 GMT+0200 (CEST)
+ * Version : v 0.04 Mon Sep 06 2010 00:41:08 GMT+0200 (CEST)
+ */
+@CHARSET "UTF-8";
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+#menu-acciones-admin {
+	margin: 0px;
+	background-color: #ddd;
+	padding:4px;
+    height:65px;
+	border:1px solid #ccc;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#menu-acciones-admin ul {
+	list-style: none;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom:0px;
+	margin-top: 0px;
+	padding: 0px;
+}
+
+#menu-acciones-admin ul li {
+	padding-left: 0px;
+	padding-right: 0px;
+	float: right;
+	margin: 1px;
+	margin-top: 0px;
+	font-size: 9px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+#menu-acciones-admin ul li a {
+	display: block;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-decoration: none;
+	font-weight: bold;
+	color:#464646;
+	background: transparent;
+	width: auto;
+}
+#menu-acciones-admin ul li a img{
+	height:40px !important;
+}
+
+#menu-acciones-admin ul li button img{
+	height:56px !important;
+	 
+}
+
+#menu-acciones-admin ul li a:hover {
+    cursor: pointer;
+    background: #d0d0d0;
+}

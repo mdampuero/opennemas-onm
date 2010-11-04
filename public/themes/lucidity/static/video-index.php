@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Xabi Alonso: "Mi relación con CR9 es fantástica" - Deportes - Crónica comarcal</title>
+    <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]><link rel="stylesheet" href="stylesheets/ie.css" type="text/css" media="screen, projection"><![endif]-->
+
+    <link rel="stylesheet" href="stylesheets/onm-mockup.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="stylesheets/parts/article.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="stylesheets/parts/comments.css" type="text/css" media="screen,projection">
+    <link rel="stylesheet" href="stylesheets/video.css" type="text/css" media="screen,projection">
+    
+    <link rel="stylesheet" href="stylesheets/jquery-ui-custom/jquery-ui.css" type="text/css" media="screen,projection">
+
+	<style type="text/css">
+		#main_menu{
+			background-color:#009677;
+		}
+	</style>
+  </head>
+  <body>
+
+    <div class="wrapper clearfix ">
+        <div id="publis" class="span-24">
+            <div id="publi_1" class="publi span-10">
+                Lugar para PUBLI
+            </div>
+            <div id="publi_2" class="publi public-corta span-14 last">
+                Lugar para PUBLI
+            </div>
+        </div>
+    </div>
+    <div class="wrapper video clearfix">
+        <div class="container clearfix span-24">
+
+            <div id="header" class="">
+                
+                <div id="info-top" class="clearfix span-24">
+
+                    <div id="current-day">
+                        19:35 del Jueves, 18 de Febrero de 2010
+                    </div>
+
+                    <div id="widget_weather_top">
+                        <ul>
+                            <li><a href="#">El tiempo</a> | <a href="#">Santiago de Compostela</a></li>
+                            <li><img src="images/weather-mini.png" alt="Vai chover" /></li>
+                            <li><div class="widget-litte-temperatures max_temperature">14º C</div></li>
+                            <li><div class="widget-litte-temperatures min_temperature">7º C</div></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div id="logo" class="clearfix">
+
+                    <div id="logo-image"class="span-8">
+                        <a href="#" title="Pulse aquí para ir a la portada de Crónica comarcal">
+                        	<img src="images/main-logo.small.black.png" alt="Crónica comarcal" />
+                        	<img src="images/logo-sections/video.png" alt="Deportes" />  
+                        </a>
+                    </div>
+
+                    <div class="span-16">
+                        
+                    </div>
+
+                </div>
+
+                <div id="menus" class="">
+
+                    <div id="main_menu" class="span-24 clearfix">
+                        <div>
+                            <ul class="clearfix">
+                                <li>Portada</li>
+                                <li>Cultura</li>
+                                <li>Galicia</li>
+                                <li>España</li>
+                                <li>Mundo</li>
+                                <li>Economía</li>
+                                <li>Sociedad</li>
+                                <li class="active">Deportes</li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+
+                    <div id="sub_main_menu" class="span-24">
+                        <ul class="clearfix">
+                            <li>Portada</li>
+                            <li>Cultura</li>
+                            <li>Galicia</li>
+                            <li>España</li>
+                            <li>Mundo</li>
+                            <li>Economía</li>
+                            <li>Sociedad</li>
+                            <li>Deportes</li>
+                        </ul>
+                        <div id="main-search-form">
+                            <form action="#">
+                                <input type="text" name="firstname" value="Buscar en la página..."
+                                       onblur="if(this.value=='') this.value='Buscar en la página...';"
+                                       onfocus="if(this.value=='Buscar en la página...') this.value='';" />
+                                <input type="submit" name="lastname" value="Buscar" />
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="main_content" class="single-article span-24 portada-videos">
+
+                <div class="layout-column first-column span-8 featured-videos">
+                        <h3>Featured vídeos</h3>
+                        <hr class="new-separator"/>
+                        <div>
+                            <div id="video-content" class="clearfix span-8">
+                                <object width="290" height="163"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=9851483&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=9851483&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="290" height="163"></embed></object>
+                            </div>
+                            <div class="video-explanation">
+                                <h1><img src="images/utilities/share-black.png" alt="Share" /> Gorillaz lanza su nuevo disco "Plastic Beach"</h1>
+                                <p class="in-subtitle">
+                                Este jueves le han preguntado a Xabi Alonso al respecto y el ex jugador
+                                del Liverpool ha sido tajante: "Cada uno puede ...</p>
+                            </div>
+
+
+                        </div><!-- .main-video -->
+
+                        <div>
+                            <div id="video-content" class="clearfix span-8">
+                                <object width="290" height="163"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=9851483&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=9851483&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="290" height="163"></embed></object>
+                            </div>
+                            <div class="video-explanation">
+                                <h1><img src="images/utilities/share-black.png" alt="Share" /> Gorillaz lanza su nuevo disco "Plastic Beach"</h1>
+                                <p class="in-subtitle">
+                                Este jueves le han preguntado a Xabi Alonso al respecto y el ex jugador
+                                del Liverpool ha sido tajante: "Cada uno puede ...</p>
+                            </div>
+
+
+                        </div><!-- .main-video -->
+	                    
+	                    
+                    </div>
+                    <div class="layout-column last-column last span-16 ">
+                        <div class="span-16">
+                            <div class="other-interested-videos border-dotted">
+                                <h3>Otros vídeos en esta categoría</h3>
+                                <hr class="new-separator"/>
+                                <div class="clean-paginator">1 de 2 | <a href="#" title="Ir al siguiente">Siguiente »</a></div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img src="images/video/video-3.jpg" alt=""/>
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img src="images/video/video-2.jpg" alt="" />
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img alt="" src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img alt="" src="images/video/video-1.jpg" />
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img alt="" src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                        <div class="span-16">
+                            <div class="other-interested-videos border-dotted">
+                                <h3>Otros vídeos interesantes</h3>
+                                <hr class="new-separator"/>
+                                <div class="clean-paginator">1 de 9 | <a href="#" title="Ir al siguiente">Siguiente »</a></div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img alt="" src="images/video/video-4.jpg" />
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img alt="" src="images/video/video-5.jpg" />
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div alt="" class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                                <div class="interested-video opacity-reduced">
+                                    <div class="capture">
+                                        <img alt="" src="images/video/video-6.jpg" />
+                                        <div class="bar-video-tiny-info"></div>
+                                        <div class="bar-video-tiny-info-image-video"><img src="images/video/trailersPlayArrow.gif" /></div>
+                                    </div>
+                                    <div class="info-interested-video">
+                                        <div class="category">Música</div>
+                                        <div class="caption">Gorillaz lanza su nuevo disco Plastic Beach</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="span-16">
+                            <div class="span-8 opacity-reduced">
+                                <div class="article-comments">
+                                        <div class="title-comments"><h3><span>Nuevos vídeos</span></h3></div>
+                                </div>
+                                <div id="tabs" class="inner-video-tabs">
+                                    <ul>
+                                        <li><a href="#tab-related"><span>Relacionados</span></a></li>
+                                        <li><a href="#tab-new"><span>Novos</span></a></li>
+                                    </ul>
+                                    <div id="tab-related">
+                                        <?php for( $i = 1; $i <= 10; $i++ ){
+                                            echo '
+                                        <div class="tab-thumb-video clearfix">
+                                            <img src="images/video/thumb-video-'.(rand(1,50)%5+1).'.jpg" />
+                                            <div class="tab-thumb-video-shortitle">Política</div>
+                                            <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                        </div>';
+                                        } ?>
+
+
+
+                                    </div>
+                                    <div id="tab-new">
+                                        <?php for( $i = 1; $i <= 10; $i++ ){
+                                            echo '
+                                        <div class="tab-thumb-video clearfix">
+                                            <img src="images/video/thumb-video-'.rand(1,5).'.jpg" />
+                                            <div class="tab-thumb-video-shortitle">Deporte</div>
+                                            <div class="tab-thumb-video-title">Bla Bla Bla Bla</div>
+                                        </div>';
+                                        } ?>
+                                    </div>
+                                </div>
+                                <div id="public_lateral_video">Lugar para PUBLI</div>
+                            </div>
+                            <div class="span-8 last">
+                                <div class="list-comments span-8 opacity-reduced">
+                                    <div class="article-comments">
+                                        <div class="title-comments"><h3><span>7 Comentarios</span></h3></div>
+                                    </div>
+                                    <div class="comment-wrapper clearfix">
+                                        <div class="comment-number">9</div>
+                                        <div class="comment-content span-6 prepend-2">
+                                            "Es muy buen jugador, no lo voy a descubrir yo. ..r".
+                                        </div>
+
+                                    </div><!--comment-wrapper-->
+
+                                    <div class="comment-wrapper clearfix">
+                                        <div class="comment-number">10</div>
+                                        <div class="comment-content span-6 prepend-2">
+                                            "Es muy buen jugador, no lo voy a descubrir yo. Lleva ...".
+                                        </div>
+
+                                    </div><!--comment-wrapper-->
+
+                                    <div class="comment-wrapper clearfix">
+                                        <div class="comment-number">11</div>
+                                        <div class="comment-content span-6 prepend-2">
+                                            "Es muy buen jugador, no lo voy a descubrir yo. Lleva ...".
+                                        </div>
+
+                                    </div><!--comment-wrapper-->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- fin #main_content -->
+
+            </div><!-- fin .container -->
+    </div><!-- fin .wrapper -->
+
+    <div class="wrapper clearfix">
+
+        <div class="container clearfix span-24">
+            <div id="footer" class="">
+
+            </div><!-- fin .footer -->
+
+        </div><!-- fin .container -->
+
+
+    </div>
+    
+    <script type="text/javascript" src="javascripts/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/jquery-ui.js"></script>
+    <script type="text/javascript" src="javascripts/functions.js"></script>
+  </body>
+</html>

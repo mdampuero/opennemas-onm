@@ -1,0 +1,83 @@
+.addthis_toolbox .custom_hover
+{
+    position: relative;
+}
+
+.addthis_toolbox .custom_hover .custom_button
+{
+    font-weight: bold;
+    padding: 4px;
+    -moz-border-radius: 5px 5px 0 0;    
+    -webkit-border-radius: 5px 5px 0 0;
+}
+
+.addthis_toolbox .custom_hover .custom_button.active
+{
+    background-color: #eee;
+}
+
+.addthis_toolbox .hover_menu 
+{
+    display: none;
+    position: absolute;
+    background: #fff;
+}
+
+.addthis_toolbox .custom_hover .tower
+{
+    -webkit-border-radius: 0 5px 0 0;   
+    -moz-border-radius-topleft: 0;
+    
+}
+.addthis_toolbox .hover_menu 
+{
+    width: 136px;
+    padding: 10px 0 10px 0;
+    border: 3px solid #eee;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.addthis_toolbox .hover_menu  a
+{
+    width: 102px;
+    padding: 4px 0 4px 34px;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    color: blue;
+}
+
+.addthis_toolbox .hover_menu  a:hover
+{
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    background: #B4D3F8;
+    text-decoration: none;
+}
+
+.addthis_toolbox .hover_menu  span
+{
+    position: absolute;
+    left: 14px;
+    top: 4px;
+}
+
+.addthis_toolbox .hover_menu  .more
+{
+    border-top: solid 1px #eee;
+    padding: 10px 0 0 0;
+    margin: 10px 10px 0 10px;
+    text-align: center;
+}
+
+.addthis_toolbox .hover_menu  .more a
+{
+    padding: 4px 0;
+    margin: 0;
+}
+
+.addthis_toolbox .hover_menu  .more span
+{
+    display: none;
+}

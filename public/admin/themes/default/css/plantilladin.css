@@ -1,0 +1,153 @@
+/* aqui comezamos coa  plantilla por defecto */
+
+#contido-superior .plantilla-superior{
+	float:left;
+	width:626px;
+	border-right:1px dotted #ccc;
+}
+
+.plantilla-superior #columna-superior-esquerda{
+	padding-right:10px;
+	width:170px;
+	border-right:1px dotted #ccc;
+	float:left;
+}
+
+.plantilla-superior #columna-publi-esquerda{
+	margin:10px 5px 0 0;
+	border-top:1px dotted #ccc;
+	width:170px;
+}
+
+.plantilla-superior #columna-publi-esquerda img{
+	width:137px;
+	margin:5px auto;
+}
+
+.plantilla-superior #columna-central{
+	float:left;
+	width:425px;
+	margin:0 10px 0 10px;
+}
+
+.v2 #columna-central{
+	width:615px;
+	margin:0 10px 0 0px;
+}
+
+
+.plantilla-superior #columna-central #noticia-principal{
+	padding-bottom:10px;
+}
+
+.v2 #columna-central #noticia-principal h2{
+	font-size:1.3em;
+}
+
+.plantilla-superior #columna-central #columnas{
+	margin:10px 0 5px 0;
+}
+
+.plantilla-superior #columna-central #columnas .noticia{
+	float:left;
+	width:200px;
+}
+
+.v2 #columna-central #columnas .noticia{
+	width:192px;
+
+}
+
+.plantilla-superior #columna-central #columnas .primeira{
+	margin-right:10px;
+	border-right:1px dotted #ccc;
+	padding-right:5px;
+}
+
+
+.v2 #columna-central #columnas .ultima{
+	margin-left:10px;
+	border-left:1px dotted #ccc;
+	padding-left:10px;
+}
+
+.plantilla-superior #columna-central .publicidade-central{
+	margin-top:10px;
+}
+
+.plantilla-superior #columna-central #noticia-inferior{
+	margin:10px 0;
+}
+
+.v3{
+	border:none !important;
+}
+
+
+.v3 #columna-central{
+	/*width:320px;*/
+	width:280px;
+	margin:0 16px 0 0px;
+	float:left;
+}
+
+.v3 #columna-central .noticia{
+	/*border-bottom:2px solid #ccc;*/
+	padding-bottom:2px;
+        margin-bottom:1px;
+}
+
+.v3 #columna-central #noticia-principal{
+	border:none;
+	padding:0;
+
+}
+
+.v3 #columna-central #noticia-principal h2{
+	font-size:1.2em;
+}
+
+
+.v3 #columnas{
+	/*width:250px;*/
+	margin:0 0 15px 5px;
+	width: 220px;
+	float: left;
+	padding-left: 4px;
+	border-left-width: 1px;
+	border-left-style: dotted;
+	border-left-color: #cfcfcf;
+}
+
+.v3 #columnas .noticia{
+	margin-bottom:4px;
+	width:250px;
+	padding-bottom:3px;
+	/* border-bottom:2px solid #ccc;*/
+
+}
+
+
+.v4 .imaxe{
+	float:left !important;
+	margin:0 10px 0 0 !important;
+}
+
+.v2 #noticia-principal{
+	padding-bottom:10px;
+}
+
+.v2 #noticia-inferior .imaxe{
+	float:left;
+	margin:0 10px 0 0 !important;
+}
+
+.v2 #columnas{
+padding-bottom:10px;
+}
+
+.municipais .noticia{
+	border-bottom:none !important;
+	padding-bottom:0 !important;
+}
+
