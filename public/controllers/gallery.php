@@ -85,7 +85,9 @@ if( isset($_REQUEST['action']) ) {
             }
             if(!empty($thisalbum->id)){
                 
-                $thisalbum->setNumViews($thisalbum->id);
+              //  $thisalbum->setNumViews($thisalbum->id);
+                 Content::setNumViews($thisalbum->id);
+
                 $thisalbum->category_name = $thisalbum->loadCategoryName($thisalbum->id);
                 $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisalbum->id);
                 $_albumArray = $thisalbum->get_album($thisalbum->id);

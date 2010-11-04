@@ -8,4 +8,6 @@ $advertisement = Advertisement::getInstance();
 /* $banners = $advertisement->cache->getAdvertisements(array(1,2,3, 6,7,8, 11,13), $category); */
 $banners = $advertisement->getAdvertisements(array(1, 2, 3, 6, 7, 8, 11, 13), $category);
 //$advertisement->render($banners, &$tpl);
-$advertisement->render($banners, &$advertisement);
+if (!empty($intersticial)) {
+    $advertisement->render($banners, &$advertisement);
+}

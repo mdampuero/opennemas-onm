@@ -117,7 +117,8 @@ if(isset($_REQUEST['action']) ) {
             if(($article->available==1) && ($article->in_litter==0) && ($article->isStarted())) {
                 
                 // Increment numviews if it's accesible
-                $article->setNumViews();
+               // $article->setNumViews();
+                Content::setNumViews($article->pk_article);
                 if(isset($subcategory_name) && !empty($category_name)){
                     $actual_category = $subcategory_name;
                 }else{

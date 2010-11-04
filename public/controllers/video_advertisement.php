@@ -17,4 +17,6 @@ $advertisement->render($banners, $advertisement);
 
 
 $intersticial = $advertisement->getIntersticial(250, '$category');
-$advertisement->render(array($intersticial), $advertisement);
+if (!empty($intersticial)) {
+    $advertisement->render(array($intersticial), $advertisement);
+}

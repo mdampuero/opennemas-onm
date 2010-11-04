@@ -492,10 +492,10 @@ class Advertisement extends Content
             // Perform operations for each advertisement type
             foreach($advertisements as $type_advertisement => $advs) {
                 // Select a random banner
-                $banners[] = $advs[ array_rand($advs) ];
+               // $banners[] = $advs[ array_rand($advs) ];
                 
                 // Previous behavior changed to only fetch first banner
-                //$banners[] = array_shift($advs);
+                $banners[] = array_shift($advs);
             }
         }
         

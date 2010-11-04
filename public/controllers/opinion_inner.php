@@ -36,9 +36,9 @@ if(isset($_REQUEST['action']) ) {
         case 'read': { //Opinion de un autor
 
             $opinion = new Opinion( $_REQUEST['opinion_id'] );
-
-            $content = new Content($opinionID);
-            $content->setNumViews();
+ 
+          //  $content->setNumViews();
+             Content::setNumViews($opinionID);
             
             //$ccm = new ContentCategoryManager();
              $ccm = ContentCategoryManager::get_instance();

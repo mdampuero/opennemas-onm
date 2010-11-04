@@ -14,6 +14,7 @@ if (isset($_REQUEST['action'])) {
             $id = $_GET['id']; // pk_advertisement
             $advertisement = new Advertisement();
             /* $banner = $advertisement->cache->read($id); */
+            $advertisement->setNumClics($id);
             $banner = $advertisement->read($id);
             // Assign to template
             $tpl = new Template(TEMPLATE_USER);
@@ -31,6 +32,7 @@ if (isset($_REQUEST['action'])) {
                 // Application::forward( $url);
                 header("Location: $url");
             } else {
+                 $advertisement->setNumClics($_GET['publi_id']);
                 // Deshabilitado a petición de Xornal.com
                 /* echo '<script type="text/javascript">
                     alert(\'No disponible\');

@@ -12,4 +12,6 @@ $banners = $advertisement->getAdvertisements(array(1,2,3, 10,12, 11,13), $catego
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
-$advertisement->render($banners, &$advertisement);
+if (!empty($intersticial)) {
+    $advertisement->render($banners, &$advertisement);
+}

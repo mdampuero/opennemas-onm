@@ -127,8 +127,8 @@ if (isset($_REQUEST['action'])) {
                 
             }
             $category = $thisvideo->category;
-            $thisvideo->setNumViews();
-            //Content::setNumViews($thisvideo->id);
+            //$thisvideo->setNumViews();
+             Content::setNumViews($thisvideo->id);
             $thisvideo->category_name = $thisvideo->loadCategoryName($thisvideo->id);
             $thisvideo->category_title = $thisvideo->loadCategoryTitle($thisvideo->id);
             $tpl->assign('category', $category);

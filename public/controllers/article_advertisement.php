@@ -20,4 +20,6 @@ $banners = $cm->getInTime($banners);
 }
 // Get intersticial banner,1,2,9,10
 $intersticial = $advertisement->getIntersticial(150, $category);
-$advertisement->render(array($intersticial), $advertisement);
+if (!empty($intersticial)) {
+    $advertisement->render(array($intersticial), $advertisement);
+}

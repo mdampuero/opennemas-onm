@@ -28,7 +28,8 @@ if(isset($slug) ) {
     }
     
     // increment visits for this page
-    $page->setNumViews();
+    //$page->setNumViews();
+    Content::setNumViews($page->pk_static_page);
     
     // Set head metatags for this page
     $tpl->setMeta('keywords', $page->metadata);

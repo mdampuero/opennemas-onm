@@ -898,9 +898,7 @@ class Content {
     }
 
     function setNumViews($id=null) {
-        if(is_null($id) && $this->id != null ) {
-            $id = $this->id;
-        } elseif (is_null($id)) {
+        if(is_null($id) ) {
             return false;
         }
         
@@ -908,23 +906,26 @@ class Content {
         // Multiple exec SQL
         if(is_array($id) && count($id)>0) {
             // Recuperar todos los IDs a actualizar
-            $ids = array();
+            $ads = array();
+        
             foreach($id as $item) {
                 if(is_object($item)
-                   && isset($item->pk_content)
-                   && !empty($item->pk_content)) {
-                    
-                    $ids[] = $item->pk_content;
-                    
+                   && isset($item->pk_advertisement)
+                   && !empty($item->pk_advertisement)) {
+                    $ads[] = $item->pk_advertisement;
+
                 }
             }
-            
-            if(count($ids)>0) {
+        
+            if(empty($ads)  ) {
+                
                 return false;    
             }
+        
 
             $sql =  'UPDATE `contents` SET `views`=`views`+1'
-                    .' WHERE `available`=1 AND `pk_content` IN ('.implode(',', $ids).')';
+                    .' WHERE  `pk_content` IN ('.implode(',', $ads).')';
+            
         } else {
             $sql =  'UPDATE `contents` SET `views`=`views`+1 '
                     .'WHERE `available`=1 AND `pk_content`='.$id;
