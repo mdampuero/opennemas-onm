@@ -86,8 +86,8 @@ if(isset($_REQUEST['action']) ) {
 } else {
         $username = $_SESSION['username'];
         $password = "XXXXXXXXX";
-        $repository = "http://svn.openhost.es/opennemasdemo/branches/v8.1/";
-        $destination = "/home/opennemas/demo";
+        $repository = "http://svn.openhost.es/opennemasdemo/trunk/";
+        $destination = "/home/opennemas/retrincos/code/";
         $checkout = "svn info --username $username --password $password $repository";
 
         exec($checkout, $return);
@@ -100,7 +100,6 @@ if(isset($_REQUEST['action']) ) {
         $tpl->assign('destination', $destination);
         $tpl->assign('action', "info");
 }
-
 
 $tpl->display('svn.tpl');
 ?>
