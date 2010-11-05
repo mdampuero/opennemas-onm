@@ -1,0 +1,9 @@
+config/*
+**/*/*.komodoproject
+public/themes/*/cache/*
+public/themes/*/compile/*
+tmp/logs/*
+tmp/cache/*
+tmp/sessions/backend/*
+tmp/sessions/frontend/*
+
