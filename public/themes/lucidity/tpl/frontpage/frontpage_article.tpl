@@ -7,7 +7,7 @@
 
 <div class="nw-big">
      {if !empty($item->img1_path)}
-         <img class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash}" title="{$item->img_footer|clearslash}"/>
+         <a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}"><img class="nw-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}" alt="{$item->img_footer|clearslash}" title="{$item->img_footer|clearslash}"/></a>
      {/if}
      {if $category_name eq 'home'}
         <div class="nw-category-name {$item->category_name}">{$item->category_title|upper|clearslash} <span>&nbsp;</span></div>
@@ -31,4 +31,3 @@
 </div>
 
 <hr class="new-separator"/>
- 

@@ -13,7 +13,7 @@
 <div id="container" class="span-24">
 
     {include file="ads/widget_ad_top.tpl" type1='1' type2='2'}
-    
+
     <div class="wrapper clearfix">
         <div class="container clearfix span-24 last">
             <div id="header" class="">
@@ -26,11 +26,11 @@
                         {include file="gallery/gallery-slideshow.tpl" gallery=$album galleryPhotos=$albumPhotos2}
                     </div>
                 </div><!-- fin content-gallery -->
-        
+
                 <div class="span-24">
                     <div class="layout-column first-column span-16">
-                      <div class="border-dotted">          
-                        {include file="module_comments.tpl" content=$album}
+                      <div class="border-dotted">
+                        {include file="module_comments.tpl" content=$album nocache}
                       </div>
                     </div>
                     <div class="layout-column last span-8">

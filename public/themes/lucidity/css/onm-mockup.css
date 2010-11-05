@@ -11,7 +11,7 @@
  * Since   : Mon Sep 06 2010 00:48:18 GMT+0200 (CEST)
  * Version : v 0.19 Mon Sep 06 2010 00:59:50 GMT+0200 (CEST)
  */
-/* 
+/*
 	Document   : onm-mockup
 	Created on : Feb 18, 2010, 11:13:09 AM
 	Author	 : Francisco Diéguez fran.dieguez@mabishu.com
@@ -35,7 +35,7 @@ body {
 body {background:#f7f7f7; font-family:Verdana,Arial; font-size:11px;}
 a, a:hover, a:link, a:visited {color:#005689; text-decoration: none; font-family: Times, Times New Roman, Georgia; outline:none}
 a:hover {text-decoration: underline;}
-.clearfix:after 
+.clearfix:after
 {
 	content: ".";
 	display: block;
@@ -45,17 +45,17 @@ a:hover {text-decoration: underline;}
 	height: 0;
 }
 
-.clearfix 
+.clearfix
 {
 	display: inline-block;
 }
 
-html[xmlns] .clearfix 
+html[xmlns] .clearfix
 {
 	display: block;
 }
 
-* html .clearfix 
+* html .clearfix
 {
 	height: 1%;
 }
@@ -68,7 +68,7 @@ html[xmlns] .clearfix
 	text-align:left;
 	padding:10px;
 }
-.wrapper 
+.wrapper
 {
 	margin:0 auto !important;
 	text-align:left;
@@ -137,8 +137,8 @@ html[xmlns] .clearfix
 {
 	color:#005689;
 	text-decoration: none;
-	font-family: Georgia;   
-	width:100px;	
+	font-family: Georgia;
+	width:100px;
 	text-align:right;
 	padding: 0.2em 0;
 	vertical-align: text-bottom
@@ -168,7 +168,7 @@ div.lastest-news
 {
 	display:block;
 	overflow:hidden;
-	height:20px
+	height:20px;
 }
 div.lastest-news strong
 {
@@ -177,8 +177,7 @@ div.lastest-news strong
 div.lastest-news ul
 {
 	display:inline;
-	float:left;
-	width:100%;
+
 }
 
 div.lastest-news ul li
@@ -189,7 +188,7 @@ div.lastest-news ul li
     width:800px;
 }
 
-div.lastest-news a 
+div.lastest-news a
 {
 	font-family:verdana;
 }
@@ -238,12 +237,12 @@ div.lastest-news a
 */
 
 
-.nw-big 
+.nw-big
 {
 	margin-bottom:10px
 }
 
-.nw-image 
+.nw-image
 {
 	width:310px;
 }
@@ -277,7 +276,7 @@ div.nw-big div.sports
 	background:url(../images/bullets/green.png) center right no-repeat !important;
 	color:Green;
 }
-.nw-title 
+.nw-title
 {
 	font-size:1.9em;
 	margin:0;
@@ -290,19 +289,19 @@ div#quick-news .nw-title
 	font-size:1.4em !important;
 	width:152px;
 }
-.nw-title-head 
+.nw-title-head
 {
 	font-size:2.3em;
 	margin:0;
 	margin-bottom:5px
 }
-.nw-subtitle 
+.nw-subtitle
 {
 	color:#666;
 	font-size:1.05em;
 	margin:5px 0;
 }
-.more-resources 
+.more-resources
 {
 
 }
@@ -331,33 +330,33 @@ div.more-resources ul li span
 	display:inline-block;
 	width:13px;
 	height:13px;
-   
+
 }
 
-div.more-resources ul li span.res-file 
+div.more-resources ul li span.res-file
 {
 	background-position: -81px -33px !important;
 }
 
-div.more-resources ul li span.res-link 
+div.more-resources ul li span.res-link
 {
 	background-image:url(../images/bullets/comment_icon.gif);
 }
-div.more-resources ul li span.res-image 
+div.more-resources ul li span.res-image
 {
 	background-position: -130px -49px !important;
 }
 
-div.more-resources ul li span.res-video 
+div.more-resources ul li span.res-video
 {
 	background-image:url(../images/bullets/video_icon.gif);
 }
-div.more-resources ul li span.res-opinion 
+div.more-resources ul li span.res-opinion
 {
 	background-position: -111px -32px !important;
 }
 
-div.more-resources ul li span.res-article 
+div.more-resources ul li span.res-article
 {
 	background-image:url(../images/bullets/comment_icon.gif);
 }
@@ -382,7 +381,7 @@ div.nw-just-image
 	float:right;
 	margin-bottom:5px;
 }
-div.nw-just-image div.nw-title 
+div.nw-just-image div.nw-title
 {
 	font-size:1.1em;
 	background:#a5a5a5;
@@ -393,7 +392,7 @@ div.nw-just-image div.nw-title div
 {
 	padding:5px;
 }
-div.nw-just-image a 
+div.nw-just-image a
 {
 	color:White;
 	font-family:Verdana !important;
@@ -466,7 +465,7 @@ ul.more-news-section-sectionlist
 	text-decoration: underline;
 	cursor: pointer
 }
-.more-news-section-links 
+.more-news-section-links
 {
 	list-style-image:url(../images/bullets/arrow.png);
 }
@@ -474,7 +473,7 @@ ul.more-news-section-links li
 {
 	margin:0; padding:0;
 	padding:3px 0;
-	
+
 }
 ul.more-news-section-links a
 {
@@ -550,7 +549,7 @@ div.more-little-news-section ul
 	margin-bottom:10px
 }
 
-div.more-little-news-section h4 
+div.more-little-news-section h4
 {
 	font-size:1em;
 	font-family:Verdana;
@@ -710,7 +709,7 @@ div.flickr-highlighter
 	border-top:1px solid #e6e6e6;
 	background:#333333;
 	min-height:355px;
-	
+
 }
 
 div.flickr-highlighter-header
@@ -751,7 +750,7 @@ div.flickr-highlighter li
 	margin:0;
 	padding:3px;
 	cursor:pointer;
- 
+
 }
 
 div.flickr-highlighter li img
@@ -774,7 +773,7 @@ div.tv-highlighter
 {
 	background:Black;
     z-index:-9999;
-	/*min-height:355px;*/ 
+	/*min-height:355px;*/
 }
 
 
@@ -1016,7 +1015,7 @@ span.res-article
 	height:13px;
 	margin-right:3px
 }
- 
+
 div.widget-lastest-tab .tab-lastest-title span
 {
 	background-image:url(../images/bullets/res-sprite.png);
@@ -1026,31 +1025,31 @@ div.widget-lastest-tab .tab-lastest-title span
 	height:13px;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-file 
+div.widget-lastest-tab .tab-lastest-title span.res-file
 {
 	background-position: -81px -33px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-link 
+div.widget-lastest-tab .tab-lastest-title span.res-link
 {
 	background-position: -160px -49px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-image 
+div.widget-lastest-tab .tab-lastest-title span.res-image
 {
 	background-position: -130px -49px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-video 
+div.widget-lastest-tab .tab-lastest-title span.res-video
 {
 	background-position: -113px -49px !important;
 }
-div.widget-lastest-tab .tab-lastest-title span.res-opinion 
+div.widget-lastest-tab .tab-lastest-title span.res-opinion
 {
 	background-position: -111px -32px !important;
 }
 
-div.widget-lastest-tab .tab-lastest-title span.res-article 
+div.widget-lastest-tab .tab-lastest-title span.res-article
 {
 	background-position: -161px -32px !important;
 }
@@ -1199,7 +1198,7 @@ div#footer .developed-by
 .share-actions { display:inline; position:relative;  padding:5px 0; }
 .share-actions a { color:#333; text-decoration:none; margin:0; padding:0;}
 .share-actions img { vertical-align:middle; }
-.share-actions ul 
+.share-actions ul
 {
 	background:#fff; /*display:none;*/ position:absolute;  top:20px; right:0px; width:138px; margin:0px; padding:5px !important;
 	border-color:#fafafa #eae8e9 #eae8e9 #fafafa; border-style:solid; border-width:1px 3px 3px 1px; list-style:none !important;

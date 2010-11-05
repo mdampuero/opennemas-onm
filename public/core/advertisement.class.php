@@ -396,7 +396,6 @@ class Advertisement extends Content
     */
     static function setNumClics($id)
     {
-
         $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?";
         $values = array($id);
 
@@ -407,8 +406,10 @@ class Advertisement extends Content
             return;
         }
 
+		$ad = new Advertisement($i);
+
         //No publicado
-        if(($this->type_medida=='CLIC' ) AND ($this->num_clic <= $this->num_clic_count)){
+        if(($ad->type_medida=='CLIC' ) AND ($ad->num_clic <= $ad->num_clic_count)){
             $status = 0;
             parent::set_status($status, 'NULL');
         }
@@ -429,7 +430,6 @@ class Advertisement extends Content
 
         parent::setNumViews($id);
 
-
         if(is_array($id)) {
             foreach($id as $banner) {
 
@@ -441,8 +441,8 @@ class Advertisement extends Content
                 }
             }
         } else {
-			
-            if(($this->type_medida == 'VIEW') AND ($this->num_view <= $this->views)) {
+			$ad = new Advertisement($id);
+            if(($ad->type_medida == 'VIEW') AND ($ad->num_view <= $ad->views)) {
                 parent::set_status($status=0, 'NULL');
             }
         }

@@ -4,9 +4,9 @@
     @theme      Lucidity
 *}
 
-<div class="lastest-news clearfix">
-    <span style="float:left;"><strong>Últimas noticias</strong>: </span>
-    <ul class="slide_cicle">
+<div class="lastest-news span-24clearfix">
+    <span class="span-2"><strong>Últimas noticias</strong>: </span>
+    <ul  class="span-20 last slide_cicle">
         {section name=exp loop=$articles_home_express}
             <li class="teaser" id="teaser-{$smarty.section.exp.iteration}">
                 {$articles_home_express[exp]->created|date_format:"%H:%M"}

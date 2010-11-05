@@ -73,7 +73,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 /**************************************  SECURITY  *******************************************/
 
 if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {        
+    switch($_REQUEST['action']) {
         case 'read': {
             // Load config
             $tpl->setConfig('articles');
@@ -81,9 +81,9 @@ if(isset($_REQUEST['action']) ) {
             /******************************  BREADCRUB *********************************/
             $str = new String_Utils();
             $title = $str->get_title($article->title);
-            
+
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
-            
+
             $breadcrub   = array();
             $breadcrub[] = array('text' => $ccm->get_title($category_name),
                                  'link' => '/seccion/' . $category_name . '/' );
@@ -93,19 +93,19 @@ if(isset($_REQUEST['action']) ) {
                     'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
                 );
                 $print_url .= $subcategory_name . '/';
-            }                        
-            
+            }
+
             $print_url .= $article->pk_content . '.html';
             $tpl->assign('print_url', $print_url);
             $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
                                         $category_name . '&subcategory_name=' . $subcategory_name);
-            
+
             // Check if $section is "in menu" then show breadcrub
             $cat = $ccm->getByName($section);
             if(!is_null($cat) && $cat->inmenu) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
-            
+
             /******************************  CATEGORIES & SUBCATEGORIES  ******/
             require_once ("index_sections.php");
             /******************************  CATEGORIES & SUBCATEGORIES  ******/
@@ -113,11 +113,10 @@ if(isset($_REQUEST['action']) ) {
             $tpl->assign('category_name', $_GET['category_name']);
 
             $cm = new ContentManager();
-            
+
             if(($article->available==1) && ($article->in_litter==0) && ($article->isStarted())) {
-                
+
                 // Increment numviews if it's accesible
-               // $article->setNumViews();
                 Content::setNumViews($article->pk_article);
                 if(isset($subcategory_name) && !empty($category_name)){
                     $actual_category = $subcategory_name;
@@ -127,17 +126,24 @@ if(isset($_REQUEST['action']) ) {
                 $actual_category_id = $ccm->get_id($actual_category);
                 $actual_category_title = $ccm->get_title($actual_category);
                 $tpl->assign('actual_category_title',$actual_category_title);
-                
+
+                /**
+                 * Getting comments for current article
+                 **/
+                $comment = new Comment();
+                $comments = $comment->get_public_comments($_REQUEST['article_id']);
+                $tpl->assign('num_comments', count($comments));
+
 
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['article_id']);
-                
+
                 // Advertisements for single article NO CACHE
                 require_once('article_advertisement.php');
-        
+
                 if (($tpl->caching == 0)
                     || !$tpl->isCached('article/article.tpl', $cache_id) )
                 {
-                    
+
                     $tpl->assign('article', $article);
 
                     if (isset($article->img2)
@@ -146,7 +152,7 @@ if(isset($_REQUEST['action']) ) {
                         $photoInt = new Photo($article->img2);
                         $tpl->assign('photoInt', $photoInt);
                     }
-                    
+
                     if (isset($article->fk_video2)
                        && ($article->fk_video2 != 09))
                     {
@@ -160,33 +166,29 @@ if(isset($_REQUEST['action']) ) {
                                                         'ORDER BY created DESC LIMIT 0 , 1');
                         if(isset($video[0])){ $tpl->assign('videoInt', $video[0]); }
                     }
-                       
+
                     /**************** PHOTOs ****************/
-                    
+
                     /******* RELATED  CONTENT *******/
                     $rel= new Related_content();
-                    
+
                     $relationes =
                         $rel->cache->get_relations_int($_REQUEST['article_id']);
                     $relat = $cm->cache->getContents($relationes);
-              
+
                     // Filter by scheduled {{{
                     $relat = $cm->getInTime($relat);
                     // }}}
                     //Filter availables and not inlitter.
                     $relat = $cm->cache->getAvailable($relat);
 
-                    
+
                     //Nombre categoria correcto.
                     foreach($relat as $ril) {
                         $ril->category_name=$ccm->get_title($ril->category_name);
                     }
-                    $comment = new Comment();
-                    $comments = $comment->get_public_comments($_REQUEST['article_id']);
-                    
-                    $tpl->assign('num_comments', count($comments));
                     $tpl->assign('relationed', $relat);
-             
+
                     /******* SUGGESTED CONTENTS *******/
                     $objSearch = cSearch::Instance();
                     $arrayResults=$objSearch->SearchSuggestedContents($article->metadata,
@@ -196,9 +198,9 @@ if(isset($_REQUEST['action']) ) {
                                                                       4);
                    // $arrayResults= $cm->getInTime($arrayResults);
                     $tpl->assign('suggested', $arrayResults);
-                  
+
                 } // end if $tpl->is_cached
-                
+
 
 
 
@@ -219,8 +221,8 @@ if(isset($_REQUEST['action']) ) {
 
                 require_once('widget_headlines_past.php');
                // require_once('widget_media.php');
-                
-                
+
+
                 /************* END COLUMN-LAST ***************************/
 
 
@@ -229,35 +231,35 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 Application::forward301('/404.html');
             }
-            
-            
+
+
             if(!isset($lastAlbum)){ $lastAlbum=null; }
             $tpl->assign('lastAlbum', $lastAlbum);
 
         } break;
- 
+
         case 'rss': {
             // Load config
             $tpl->setConfig('rss');
-            
+
             $title_rss = "";
             $rss_url = SITE_URL;
-            
+
             if ((strtolower($category_name)=="opinion") && isset($_GET["author"])) {
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS".$_GET["author"]);
             } else {
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS");
-            }                        
-            
+            }
+
             //if (!$tpl->is_cached('rss.tpl', $cache_id) ) { // (1)
             // BEGIN MUTEX
-            Application::getMutex($cache_id);                                    
+            Application::getMutex($cache_id);
             if (!$tpl->isCached('rss.tpl', $cache_id) ) { // (2)
                 if (isset($category_name) && !empty($category_name)) {
                     $category = $ccm->get_id($category_name);
                     $rss_url .= $category_name.SS;
                     $title_rss .= $category_name;
-                    
+
                     if (isset($subcategory_name) && !empty($subcategory_name)) {
                         $subcategory = $ccm->get_id($subcategory_name);
                         $rss_url .= $subcategory_name.SS;
@@ -273,7 +275,7 @@ if(isset($_REQUEST['action']) ) {
                     $articles_home = $cm->find('Article',
                                         'contents.in_home=1 AND contents.frontpage=1 AND contents.fk_content_type=1 AND contents.content_status=1 AND  contents.available=1',
                                         'ORDER BY created DESC');
-                    
+
                     $i = 0;
                     while ($i < count($articles_home)) {
                         if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
@@ -288,7 +290,7 @@ if(isset($_REQUEST['action']) ) {
                         $articles_home = $cm->find_listAuthors('opinions.fk_author='.($_GET['author']).' and  contents.available=1  and contents.content_status=1','ORDER BY created DESC  LIMIT 0,50');
                         $title_rss = strtoupper('OPINION > '.$articles_home[0]['name']);
                     }
-                    
+
                 } else {
                     //If frontpage contains a SUBCATEGORY the SQL request will be diferent
                     if (!isset ($subcategory_name)) {
@@ -300,8 +302,8 @@ if(isset($_REQUEST['action']) ) {
                             $articles_home = $cm->find_by_category_name('Article',
                                                     $category_name, 'contents.content_status=1 AND contents.frontpage=1 AND contents.available=1 AND contents.fk_content_type=1',
                                                     'ORDER BY created DESC LIMIT 0,50');
-                        }                        
-                        
+                        }
+
                         $i=0;
                         while ($i < count($articles_home)) {
                             if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
@@ -309,12 +311,12 @@ if(isset($_REQUEST['action']) ) {
                             }
                             $i++;
                         }
-                        
+
                     } else {
                         $articles_home = $cm->find_by_category_name('Article',
                                                 $subcategory_name, 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1',
                                                 'ORDER BY created DESC');
-                        
+
                         $i = 0;
                         while ($i < count($articles_home)) {
                             if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
@@ -324,86 +326,86 @@ if(isset($_REQUEST['action']) ) {
                         }
                     }
                 }
-                
+
                 // Filter by scheduled {{{
                 $articles_home = $cm->getInTime($articles_home);
                 // }}}
-                
+
                 $tpl->assign('title_rss', strtoupper($title_rss));
                 $tpl->assign('rss', $articles_home);
-                
+
                 // FIXME: correxir isto cando se garda o artigo
                 for($i=0, $total= count($articles_home); $i<$total; $i++) {
-                    if(is_object($articles_home[$i])) { 
+                    if(is_object($articles_home[$i])) {
                         $str = $articles_home[$i]->permalink;
                         $str = mb_strtolower($str, 'UTF-8');
                         $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\-:\?\/\&\. ]', '', $str);
                         $str = mb_ereg_replace('([^:])//', '$1/', $str);
-                        
+
                         $articles_home[$i]->permalink = $str;
                     } else {
                         $str = $articles_home[$i]['permalink'];
                         $str = mb_strtolower($str, 'UTF-8');
                         $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\-:\?\/\&\. ]', '', $str);
                         $str = mb_ereg_replace('([^:])//', '$1/', $str);
-                        
+
                         $articles_home[$i]['permalink'] = $str;
                     }
                 }
-               
+
                 $tpl->assign('photos', $photos);
-                
-                
+
+
                 $tpl->assign('SITE_URL', SITE_URL);
                 $tpl->assign('RSS_URL', $rss_url);
             } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (1)
-            
+
             // END MUTEXT
             Application::releaseMutex();
             // } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (2)
-            
+
             header('Content-type: application/rss+xml; charset=utf-8');
             $tpl->display('rss.tpl', $cache_id);
-        
+
             exit(0); // finish execution for don't disturb cache
         } break;
-        
-        case 'captcha': {            
+
+        case 'captcha': {
             $width  = isset($_GET['width'])  ? $_GET['width']  : '176';
             $height = isset($_GET['height']) ? $_GET['height'] :  '49';
             $characters = isset($_GET['characters']) && $_GET['characters'] > 1 ? $_GET['characters'] : '5';
-            
+
             $captcha = new CaptchaSecurityImages($width, $height, $characters, dirname(__FILE__).'/media/fonts/monofont.ttf');
             exit(0);
         } break;
-        
+
         case 'rating': {
-            
+
             $ip = $_SERVER['REMOTE_ADDR'];
             $ip_from = $_GET['i'];
             $vote_value = intval($_GET['v']);
             $page = $_GET['p'];
             $article_id = $_GET['a'];
-            
+
             if($ip != $ip_from) {
                 Application::ajax_out("Error!");
             }
-            
+
             //Comprobamos que exista el artículo que se quiere votar
             $content = new Content($article_id);
             if(is_null($content->id)) {
                 Application::ajax_out("Error!");
             }
-            
+
             $rating = new Rating($content->id);
             $update = $rating->update($vote_value,$ip);
-            
+
             if($update) {
                 $html_out = $rating->render($page,'result',1);
             } else {
                 $html_out = "Ya ha votado anteriormente esta noticia.";
             }
-            
+
             Application::ajax_out($html_out);
         } break;
 
@@ -413,12 +415,12 @@ if(isset($_REQUEST['action']) ) {
             $ip_from = $_GET['i'];
             $vote_value = intval($_GET['v']); // 1 A favor o 2 en contra
             $page = (!isset($_GET['p']))? 0: intval($_GET['p']);
-          
+
             $comment_id = $_GET['a'];
 
             if($ip != $ip_from) {
                 Application::ajax_out("Error no ip vote!");
-            } 
+            }
 
             $vote = new Vote($comment_id);
             if(is_null($vote)) {
@@ -431,10 +433,10 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 $html_out = "Ya ha votado anteriormente este comentario.";
             }
-  
+
             Application::ajax_out($html_out);
         } break;
-        
+
         case 'get_plus': {
             if($_GET["content"]=="Comment") {
 
@@ -469,7 +471,7 @@ if(isset($_REQUEST['action']) ) {
                     $html_out .= '</div>';
                 }
             }
-            
+
             Application::ajax_out($html_out);
 
         } break;
@@ -477,101 +479,101 @@ if(isset($_REQUEST['action']) ) {
         case 'print': {
             // Article
             $article = new Article($_REQUEST['article_id']);
-            
+
             // Breadcrub/Pathway
             $breadcrub   = array();
             $breadcrub[] = array('text' => $ccm->get_title($category_name),
                                  'link' => '/seccion/' . $category_name . '/' );
-            
+
             // URL impresión
             $str = new String_Utils();
             $title = $str->get_title($article->title);
             $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
-            
+
             if(!empty($subcategory_name)) {
                 $breadcrub[] = array(
                     'text' => $ccm->get_title($subcategory_name),
                     'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
                 );
-                
+
                 $print_url .= $subcategory_name . '/';
-            }            
-            
+            }
+
             $print_url .= $article->pk_content . '.html';
             $tpl->assign('print_url', $print_url);
-            
+
             $cat = $ccm->getByName($section);
             if(!is_null($cat) && $cat->inmenu) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
-            
+
             // Foto interior
             if(isset($article->img2) and ($article->img2 != 0)){
                 $photoInt = new Photo($article->img2);
                 $tpl->assign('photoInt', $photoInt);
-            }            
-            
+            }
+
             $tpl->caching = 0;
             $tpl->assign('article', $article);
             $tpl->display('article/article_printer.tpl');
             exit(0);
         } break;
-        
-        
+
+
         case 'sendform': {
             require_once('session_bootstrap.php');
             $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
-            
+
             //Ya se iniciliza en la linea 50
             //$article = new Article($_REQUEST['article_id']);
             $tpl->assign('article', $article);
-            
+
             $tpl->assign('token', $token);
             $tpl->assign('category_name', $category_name);
             $tpl->assign('subcategory_name', $subcategory_name);
-            
+
             $tpl->caching = 0;
             $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
             exit(0);
         } break;
-        
+
         case 'send': {
             require_once('session_bootstrap.php');
-            
+
             // Check if magic_quotes is enabled and clear globals arrays
             String_Utils::disabled_magic_quotes();
-            
+
             // Check direct access
             if($_SESSION['sendformtoken'] != $_REQUEST['token']) {
                 Application::forward('/');
-            }                        
-            
+            }
+
             // Send article to friend
-            require(dirname(__FILE__)."/libs/phpmailer/class.phpmailer.php");  
-            
-            $mail = new PHPMailer();  
-            
-            $mail->Host     = "localhost";        
+            require(dirname(__FILE__)."/libs/phpmailer/class.phpmailer.php");
+
+            $mail = new PHPMailer();
+
+            $mail->Host     = "localhost";
             $mail->Mailer   = "smtp";
             /*$mail->Username = '';
             $mail->Password = '';*/
-            
+
             $mail->CharSet = 'UTF-8';
             $mail->Priority = 5; // Low priority
             $mail->IsHTML(true);
-            
-            
+
+
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
             $mail->Subject  = substr(strip_tags($_REQUEST['body']), 0, 100);
-            
+
             // Load permalink to embed into content
             $article = new Article($_REQUEST['article_id']);
-            
+
             // Filter tags before send
             $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
             $message = $_REQUEST['body'];
-            
+
             if (empty($article->agency)) {
                 $agency = $article->agency;
             } else {
@@ -608,11 +610,11 @@ if(isset($_REQUEST['action']) ) {
                 ('<a href="'.$permalink.'" target="_blank">Ir al artículo completo</a></div>').
                 ('</td></tr></tbody></table></div></body></html>');
 
-                            
-            $mail->AltBody = strip_tags($message) . "\n" . $permalink;  
-            $mail->AddAddress( $_REQUEST['destination'] );    
-              
-            if( $mail->Send() ) {  
+
+            $mail->AltBody = strip_tags($message) . "\n" . $permalink;
+            $mail->AddAddress( $_REQUEST['destination'] );
+
+            if( $mail->Send() ) {
                 $tpl->assign('message', 'Noticia enviada correctamente.');
             } else {
                 if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
@@ -620,20 +622,19 @@ if(isset($_REQUEST['action']) ) {
                 }
                 $tpl->assign('message', 'La noticia no pudo ser enviada, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
             }
-            
+
             $tpl->caching = 0;
             $tpl->display('article/article_sendform.tpl'); // Don't disturb cache
             exit(0);
         } break;
-        
+
         default: {
             Application::forward301('index.php');
         } break;
     }
-    
+
 } else {
     Application::forward301('index.php');
 }
 
 $tpl->display('article/article.tpl', $cache_id);
-

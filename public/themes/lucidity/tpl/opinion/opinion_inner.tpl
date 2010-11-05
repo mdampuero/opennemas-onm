@@ -1,5 +1,5 @@
 <div class="in-big-title span-24">
- 
+
     <div class="span-3">
         {if $opinion->type_opinion neq 1 and $opinion->path_img}
             <a class="opinion-author" href="/opinions_autor/{$opinion->fk_author}/{$opinion->name|clearslash}.html">
@@ -9,8 +9,8 @@
     </div>
 
     <h1 class="span-20 last">{$opinion->title|clearslash}</h1>
-    
-    
+
+
     {* 0 - autor, 1 - editorial, 2 - director *}
     <div class="info-author span-13">
         por
@@ -24,7 +24,7 @@
           {/if}
         <span class="publish-date">{articledate article=$opinion updated=$opinion->changed nohour='true'}</span>
     </div>
-   
+
 </div><!-- fin lastest-news -->
 
 <div class="span-24">
@@ -35,7 +35,7 @@
 		{include file="utilities/widget_utilities.tpl" long="true"}
 	    </div><!--fin toolbar -->
 	    <div class="content-article">
-		  {if !empty($relationed)}                                
+		  {if !empty($relationed)}
 		      <div class="related-news-embebed span-5">
 			 <p class="title">Noticias relacionadas:</p>
 			 <ul>
@@ -54,7 +54,7 @@
 		{include file="utilities/widget_utilities.tpl" long="true"}
 	    </div><!--fin toolbar -->
 	    <hr class="new-separator"/>
-	    <div class="more-news-bottom-article">                                                          
+	    <div class="more-news-bottom-article">
 		{if !empty($suggested)}
 		    <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
 		     <ul>
@@ -66,10 +66,10 @@
 		    </ul>
 		{/if}
 	    </div><!--fin more-news-bottom-article -->
-	   {include file="module_comments.tpl" content=$opinion}
+	   {include file="module_comments.tpl" content=$opinion nocache}
 	</div>
     </div>
-    
+
     {include file="opinion/opinion_inner_last_column.tpl"}
-  
+
 </div>

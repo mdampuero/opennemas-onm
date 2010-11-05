@@ -9,7 +9,7 @@ Smarty template: article.tpl
 {include file="module_head.tpl"}
 
 <div id="container" class="span-24">
-    
+
     {* Cambiar color del menú segun la section *}
     {* publicidad interstitial interior *}
     {insert name="intersticial" type="150"}
@@ -39,7 +39,7 @@ Smarty template: article.tpl
                                 {include file="utilities/widget_utilities.tpl" long="true"}
                             </div><!--fin toolbar -->
                             <div class="content-article">
- 
+
                                     <div>
                                     <form name="poll" method="post" action="#" >
 
@@ -59,7 +59,7 @@ Smarty template: article.tpl
                                     </form>
 
                                     </div>
-                    
+
                     <script type="text/javascript"> {*EN OPTIONS is3D: true,*}
                     {if $poll->visualization eq '0'}
                         {literal}
@@ -152,18 +152,18 @@ Smarty template: article.tpl
                         {/if}
                         </script>
                         <div id="chart_div"></div>
-                   
+
                  </div><!-- /content-article -->
 
                            {* <hr class="new-separator"/> *}
                             {include file="poll/widget_polls.tpl"}
-                          
-                           {include file="module_comments.tpl" content=$poll}
+
+                           {include file="module_comments.tpl" content=$poll nocache}
                         </div>
                     </div>
                     {include file="article/article_last_column.tpl"}
                 </div>
-            </div><!-- fin #main_content -->  
+            </div><!-- fin #main_content -->
         </div><!-- fin .container -->
     </div><!-- fin .wrapper -->
     <div class="wrapper clearfix">
@@ -174,10 +174,10 @@ Smarty template: article.tpl
             </div><!-- fin .footer -->
         </div><!-- fin .container -->
     </div><!-- .wrapper -->
-    
+
 </div><!-- #container -->
 
-    {literal}   
+    {literal}
         <script type='text/javascript'>
         jQuery(document).ready(function(){
             $("#tabs").tabs();

@@ -33,7 +33,7 @@
 
             <div id="main-video">
                 <div id="video-content" class="clearfix span-16">
-                      
+
                      {include file="video/widget_video_window.tpl" width="630" height="340"}
 
                 </div>
@@ -64,10 +64,10 @@
             </div><!-- /vote-bloc -->
         </div><!-- /utilities -->
         <div class="span-7 last ">
-          
+
         </div><!-- /utilities -->
- 
-       
+
+
 
         <hr class="new-separator"/>
     </div>
@@ -75,7 +75,7 @@
         <div class="layout-column first-column span-16">
             <div class="border-dotted">
                   <a name="module_comments"></a>
-                  {include file="module_comments.tpl" content=$video}
+                  {include file="module_comments.tpl" content=$video nocache}
             </div>
         </div>
         <div class="layout-column last-column last span-8">
