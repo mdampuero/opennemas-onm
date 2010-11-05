@@ -441,6 +441,7 @@ class Advertisement extends Content
                 }
             }
         } else {
+			
             if(($this->type_medida == 'VIEW') AND ($this->num_view <= $this->views)) {
                 parent::set_status($status=0, 'NULL');
             }

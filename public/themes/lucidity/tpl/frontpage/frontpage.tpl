@@ -35,7 +35,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
 
 
 {block name="content"}
-    {include file="ads/widget_ad_top.tpl" type1='1' type2='2'}
+    {include file="ads/widget_ad_top.tpl" type1='1' type2='2' nocache}
     <div class="wrapper clearfix">
         <div class="container clearfix span-24 last">
             <div id="header" class="">
@@ -53,7 +53,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                             <hr class="new-separator"/>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
                             {*<hr class="new-separator"/>*}
-                            {include file="ads/widget_ad_button.tpl" type='3'}
+                            {include file="ads/widget_ad_button.tpl" type='3' nocache}
                             {*<hr class="new-separator"/>*}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_2"}
                         </div>
@@ -77,7 +77,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                         {include file="widget_facebook_iframe.tpl"}
                         {include file="widget_headlines.tpl"}
                         <hr class="news-separator" />
-                        {include file="ads/widget_ad_button.tpl" type='4'}
+                        {include file="ads/widget_ad_button.tpl" type='4' nocache}
                     </div>
                 </div><!-- .span-24 -->
 
@@ -98,7 +98,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                 <hr class="news-separator" />
                 {if !preg_match('/preview\.php/',$smarty.server.SCRIPT_NAME)}
                 <div class="span-24">
-                       {include file="ads/widget_ad_separator.tpl"}
+                       {include file="ads/widget_ad_separator.tpl" nocache}
                 </div>
 
 
@@ -126,7 +126,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
 <div id="wrapper-footer" class="wrapper clearfix">
     <div class="container clearfix span-24 last">
         <div id="footer" class="">
-             {include file="ads/widget_ad_bottom.tpl" type1='9' type2='10'}
+             {include file="ads/widget_ad_bottom.tpl" type1='9' type2='10' nocache}
              {include file="frontpage/frontpage_footer.tpl"}
         </div><!-- fin .footer -->
     </div><!-- fin .container -->

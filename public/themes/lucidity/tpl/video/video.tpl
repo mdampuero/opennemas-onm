@@ -34,13 +34,13 @@
             );
         });
 
-        function share(){            
+        function share(){
             if (jQuery('div.share-actions').children("ul").css('display')=='none'){
                 jQuery('div.share-actions').children("ul").fadeIn("fast");
              }else{
                 jQuery('div.share-actions').children("ul").fadeOut("fast");
              }
-             
+
         }
     </script>
     {/literal}
@@ -57,13 +57,13 @@
 {/block}
 
 
-{block name="content"}  
+{block name="content"}
     {if empty($video)}
-        {insert name="intersticial" type="250"}
-        {include file="ads/widget_ad_top.tpl" type1='201' type2='202'}
+        {insert name="intersticial" type="250" nocache}
+        {include file="ads/widget_ad_top.tpl" type1='201' type2='202' nocache}
     {else}
         {insert name="intersticial" type="350"}
-        {include file="ads/widget_ad_top.tpl" type1='301' type2='302'}
+        {include file="ads/widget_ad_top.tpl" type1='301' type2='302' nocache}
     {/if}
     <div class="wrapper video clearfix">
         <div class="container clearfix span-24 last">

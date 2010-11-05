@@ -48,10 +48,10 @@
 </script>
 {include file="misc_widgets/widget_analytics.tpl"}
 {/block}
-    
+
 {block name="content"}
     {insert name="intersticial" type="150"}
-    {include file="ads/widget_ad_top.tpl" type1='101' type2='102'}
+    {include file="ads/widget_ad_top.tpl" type1='101' type2='102' nocache}
     <div class="wrapper clearfix">
         <div class="container clearfix span-24 last">
             <div id="header" class="">
@@ -86,7 +86,7 @@
                                         </div>
                                      {/if}
                                 </div>
-                                  {if !empty($relationed)}                                
+                                  {if !empty($relationed)}
                                       <div class="related-news-embebed span-5">
                                          <p class="title">Noticias relacionadas:</p>
                                          <ul>
@@ -105,9 +105,9 @@
                                 {include file="utilities/widget_utilities.tpl" long="true"}
                             </div><!--fin toolbar -->
                             <hr class="new-separator"/>
-                            {include file="ads/widget_ad_robapagina.tpl"}
+                            {include file="ads/widget_ad_robapagina.tpl" nocache}
                              <hr class="new-separator"/>
-                            <div class="more-news-bottom-article">                                                          
+                            <div class="more-news-bottom-article">
                                 {if !empty($suggested)}
                                     <p class="title">Si le interesó esta noticia, eche un vistazo a estas:</p>
                                      <ul>
@@ -124,16 +124,16 @@
                     </div>
                     {include file="article/article_last_column.tpl"}
                 </div>
-            </div><!-- fin #main_content -->  
+            </div><!-- fin #main_content -->
         </div><!-- fin .container -->
     </div><!-- fin .wrapper -->
 {/block}
-    
+
 {block name="footer"}
 <div class="wrapper clearfix">
     <div class="container clearfix span-24 last">
         <div id="footer" class="">
-             {include file="ads/widget_ad_bottom.tpl" type1='9' type2='10'}
+             {include file="ads/widget_ad_bottom.tpl" type1='9' type2='10' nocache}
              {include file="frontpage/frontpage_footer.tpl"}
         </div><!-- fin .footer -->
     </div><!-- fin .container -->

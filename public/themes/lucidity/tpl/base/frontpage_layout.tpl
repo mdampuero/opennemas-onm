@@ -44,9 +44,7 @@
 <body>
 
     <div id="container" class="span-24 last">
-    {block name="content"}
-
-    {/block}
+    {block name="content"}{/block}
     </div><!-- #container -->
 
     <div id="container" class="span-24 last">
