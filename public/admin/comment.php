@@ -57,6 +57,10 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('subcat', $subcat);
             $tpl->assign('allcategorys', $parentCategories);
             $tpl->assign('datos_cat', $datos_cat);
+
+              // Assign a content types who have comments
+            $content_types = array(1 => 'Article' , 7 => 'Album', 9 => 'Video', 4 => 'Opinion', 11 => 'Poll');
+            $tpl->assign('content_types', $content_types);
             
             $cm = new ContentManager();
             if (!isset($_REQUEST['comment_status'])) {
@@ -112,23 +116,7 @@ if(isset($_REQUEST['action'])) {
                     $tpl->assign('paginacion', $pager);
                     $tpl->assign('comments', $comments);
                     
-                    if(!$_REQUEST['page'] || ($_REQUEST['page'] == 1)) {
-                        $ccm = new ContentManager(); 
-                        $ecomments = $ccm->find('PC_Comment', ' content_status = 0 ', 'ORDER BY created DESC ');
-                        $tpl->assign('ecomments', $ecomments);
-                        
-                        $i = 0;
-                        $votes_polls =array();
-                        $polls = array();
-                        foreach( $ecomments as $prima){
-                            $polls[$i] = new Poll( $prima->fk_content );
-                            $votes_polls[$i] =new Vote( $prima->pk_comment );
-                            $i++;
-                        }
-                        
-                        $tpl->assign('polls', $polls);
-                        $tpl->assign('votes_polls', $votes_polls);
-                    }
+                   
                 } else {
                     // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
                     list($comments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',

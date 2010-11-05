@@ -67,6 +67,7 @@
 		<th  style='width:4%;'></th>
 		<th  style='width:16%;'>Titulo</th>
 		<th  style='width:25%;'>Comentario(50carac)</th>
+        <th  style='width:10%;'>tipo</th>
 		<th  style='width:25%;'>Contenido(50carac)</th>
 		<th  style='width:10%;'>Autor</th>
 		<th  style='width:6%;' align="center">IP</th>
@@ -82,69 +83,7 @@
   
      <div class='fisgona' id='fisgona' name='fisgona'></div>
         {* Provisional - comentarios en encuestas en la solapa todos *}
-        {if $category eq 'todos'}
-            {section name=c loop=$ecomments}
-            <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                    <td style="font-size: 11px;width:4%;">
-                            <input type="checkbox" class="minput"  id="selected_e{$smarty.section.c.iteration}" name="selected_fld[]" value="{$ecomments[c]->id}"  style="cursor:pointer;">
-                    </td>
-                    <td style="padding:2px; font-size: 11px;width:16%;" onmouseout="UnTip()" onmouseover="Tip('{$ecomments[c]->body|nl2br|regex_replace:"/[\r\t\n]+/":" "|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_e{$smarty.section.c.iteration}').click();">
-                            {$ecomments[c]->title|strip_tags|clearslash|truncate:50}
-                    </td>
-                    <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$ecomments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-                            {$ecomments[c]->body|strip_tags|clearslash|truncate:50}
-                    </td>
-                    <td style="padding:10px;font-size: 11px;width:25%;">
-                            <a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$ecomments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
-                            {$polls[c]->title|strip_tags|clearslash}
-                            </a>
-                    </td>
-                    <td style="font-size: 11px;width:10%;">
-                        {$ecomments[c]->author|strip_tags} <br>
-                        {if preg_match('/@proxymail\.facebook\.com$/i', $ecomments[c]->email)}
-                            <span title="{$ecomments[c]->email}">via facebook</span>
-                        {else}
-                            {$ecomments[c]->email}
-                        {/if}
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                                    {$ecomments[c]->ip}
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                            Encuesta
-                    </td>
-                    <td style="width:6%;font-size: 11px;" align="center">
-                            {$ecomments[c]->created}
-                    </td>
-                    <td style="width:100px;font-size: 11px;" align="center">
-                           {$votes_polls[c]->value_pos} /  {$votes_polls[c]->value_pos}
-                    </td>
-                    <td style="font-size: 11px;width:100px;" align="center">
-                        {if $category eq 'todos' || $ecomments[c]->content_status eq 0}
-                            <a href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;tipo=encuesta&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-                            <a href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;tipo=encuesta&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-                        {elseif $ecomments[c]->content_status eq 2}
-                                <a class="unpublishing" href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                       </a>
-                        {else}
-                                <a class="publishing" href="?id={$ecomments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                       </a>
-                        {/if}
-                    </td>
-                    <td style="font-size: 11px;width:60px;" align="center">
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$ecomments[c]->id}');" title="Modificar">
-                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                    </td>
-                    <td style="font-size: 11px;width:60px;" align="center">
-                            <a href="#" onClick="javascript:confirmar(this, '{$ecomments[c]->id}');" title="Eliminar">
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                    </td>
-            </tr>
 
-            {/section}
-         {/if}
 	{section name=c loop=$comments}
 	<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 		<td style="font-size: 11px;width:4%;">
@@ -156,6 +95,10 @@
 		<td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
 			{$comments[c]->body|strip_tags|clearslash|truncate:50}
 		</td>
+         {assign var=type value=$articles[c]->content_type}
+        <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
+             {$content_types[$type]}
+        </td>
 		<td style="padding:10px;font-size: 11px;width:25%;">
 			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;"> 
 			{$articles[c]->title|strip_tags|clearslash}	
