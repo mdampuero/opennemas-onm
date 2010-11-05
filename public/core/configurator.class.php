@@ -21,9 +21,9 @@
 
 /**
  * Configurator
- * 
+ *
  * @package    Onm
- * @subpackage 
+ * @subpackage
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: PHP-1.php 1 2010-04-15 09:38:59Z vifito $
@@ -34,48 +34,50 @@ class Configurator
      * @var string  Configuration file name
      */
     private $filename = null;
-    
+
     /**
      * @var array   Keys to parse
      */
     private $entries  = array();
-    
+
     /**
      * @var array   Array of strings
      */
     private $lines    = array();
-    
+
     public function __construct($entries=null, $filename=null)
     {
         if(is_null($filename)) {
-            $this->filename = (SITE_PATH.DS.ADMIN_DIR.DS.'config.inc.php');
+            
+            $this->filename = (SITE_PATH . DS . '..' . DS . 'config' . DS.'config.inc.php');
+
         } else {
             $this->filename = $filename;
         }
-        
+
         if(!is_null($entries)) {
             if(!is_array($entries)) {
                 throw new Exception('Param "keys" is not an array.');
             }
-            
+
             // Set entries
             $this->setEntries($entries);
-            
+
             // Load file and values
-            $this->load(); 
+            $this->load();
         }
     }
-    
+
     public function setEntries($entries)
     {
         $this->entries = $entries;
     }
-    
+
     public function getEntries()
     {
         return $this->entries;
     }
-    
+
     /**
      * Get list of configuration files
      *
@@ -87,18 +89,18 @@ class Configurator
      * @static
      * @param string $dir
      * @param string $patternFile
-     * @return array    Array of backup config files with timestamp 
+     * @return array    Array of backup config files with timestamp
      */
     public static function getBackupConfigFiles($dir, $patternFile=null)
     {
         $backups = array();
-        
+
         if(is_dir($dir)) {
-            
+
             if(is_null($patternFile)) {
                 $patternFile = 'config\.inc\-(?P<time>[0-9]{10})\.php';
             }
-            
+
             if ($dh = opendir($dir)) {
                 while (($file = readdir($dh)) !== false) {
                     if(preg_match('/' . $patternFile . '/', $file, $matches)) {
@@ -111,10 +113,10 @@ class Configurator
                 closedir($dh);
             }
         }
-        
+
         return $backups;
     }
-    
+
     /**
      * Backup a config file
      *
@@ -124,14 +126,14 @@ class Configurator
     public function backup($dir, $name=null)
     {
         if(is_null($name)) {
-            $name = $this->generateBackupFileName();            
+            $name = $this->generateBackupFileName();
         }
-        
+
         $name = $dir . '/' . $name;
-        
+
         return @copy($this->filename, $name);
     }
-    
+
     public function setEntry($key, $value)
     {
         foreach($this->entries as $section => $entries) {
@@ -142,10 +144,10 @@ class Configurator
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     public function getEntry($key)
     {
         foreach($this->entries as $section => $entries) {
@@ -155,55 +157,55 @@ class Configurator
                 }
             }
         }
-        
+
         return null;
     }
-    
-    
+
+
     public function save($filename=null)
     {
         if(is_null($filename)) {
             $filename = $this->filename;
         }
-        
+
         // Replace changes into $this->entries to $this->lines
         $this->replaceLines();
-        
+
         $fp = fopen($filename, "w");
         if($fp !== false) {
             foreach($this->lines as $line) {
                 fwrite($fp, $line);
             }
-            
+
             fclose($fp);
-        }                
+        }
     }
-    
+
     private function replaceLines()
     {
         $regexKey = '/^define[\s]*\([\s]*["\'](?P<key>.*?)["\'][\s]*\,/';
-        
+
         foreach($this->lines as $i => $line) {
             if(!preg_match('/^define/', $line)) {
                 continue;
             }
-            
+
             // Retrieve key
-            $matches = array();            
-            preg_match($regexKey, $line, $matches);            
+            $matches = array();
+            preg_match($regexKey, $line, $matches);
             $key = $matches['key'];
-            
+
             // Get value
-            $value = $this->getEntry($key);            
+            $value = $this->getEntry($key);
             if($value !== null) {
                 $regex = '/^(define[\s]*\([\s]*["\']' . preg_quote($key) .
                          '["\'][\s]*\,[\s]*["\']?)(.*?)(["\']?[\s]*\)[\s]*;)/';
-                
+
                 $this->lines[$i] = preg_replace($regex, '${1}' . $value . '${3}', $line);
             }
-        }        
+        }
     }
-    
+
     /**
      * Load
      *
@@ -214,14 +216,14 @@ class Configurator
         if(is_null($this->filename) || !file_exists($this->filename)) {
             throw new Exception('Config file do not exists.');
         }
-        
+
         $this->lines = file($this->filename, FILE_TEXT);
-        
+
         foreach($this->lines as $line) {
             $this->parseLineAndLoadEntry($line);
         }
     }
-    
+
     /**
      * Parse a line of configuration file and load entries array with value
      *
@@ -232,21 +234,21 @@ class Configurator
         if(!preg_match('/^define/', $line)) {
             return;
         }
-        
+
         foreach($this->entries as $section => $entries) {
             foreach($entries as $k => $v) {
                 $regex = '/^define[\s]*\([\s]*["\']' . preg_quote($k) .
                          '["\'][\s]*\,[\s]*["\']?(?P<value>.*?)["\']?[\s]*\)[\s]*;/';
                 $matches = array();
-                
+
                 if(preg_match($regex, $line, $matches)) {
                     $this->entries[$section][$k]['value'] = $matches['value'];
                     return;
                 }
             }
-        }        
-    }    
-    
+        }
+    }
+
     /**
      * Generate a valid path to backup
      *
@@ -255,9 +257,7 @@ class Configurator
     private function generateBackupFileName()
     {
         $filename = 'config.inc-' . time() . '.php';
-        
+
         return $filename;
     }
 }
-
-

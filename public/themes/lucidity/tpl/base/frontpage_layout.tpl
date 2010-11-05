@@ -16,7 +16,8 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="last-modified" content="0" />
     <meta http-equiv="Refresh" content="900; url=http://{$smarty.server.SERVER_NAME}{$smarty.server.REQUEST_URI}" />
-    {block name='meta'}{/block}
+    {block name='meta'}
+	{/block}
     {block name='header-css'}
     <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print">
@@ -42,20 +43,19 @@
 </head>
 <body>
 
-    <div id="container" class="span-24 last">    
+    <div id="container" class="span-24 last">
     {block name="content"}
-    
+
     {/block}
     </div><!-- #container -->
 
-    <div id="container" class="span-24 last">    
+    <div id="container" class="span-24 last">
     {block name="footer"}
     {/block}
     </div>
-    
+
     {block name="footer-js"}
     {/block}
 
 </body>
 </html>
-

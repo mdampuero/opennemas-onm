@@ -8,8 +8,8 @@
 {$subcategory_real_name|clearslash|capitalize} -
 {/if}
 Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
-<meta name="keywords" content="{$article->metadata|clearslash}" />
-<meta name="description" content="{$article->summary|strip_tags|clearslash}" />
+<meta name="keywords" content="{$smarty.const.SITE_DESCRIPTION}" />
+<meta name="description" content="{$smarty.const.SITE_KEYWORDS}" />
 {/block}
 
 {block name='header-css'}

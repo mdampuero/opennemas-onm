@@ -59,7 +59,7 @@ $entries = array(
             'title' => 'Site Keywords'
         ),
     ),
-    
+
     'DatabaseSection' => array(
         'BD_HOST' => array(
             'title' => 'Host'
@@ -74,7 +74,7 @@ $entries = array(
             'title' => 'Database name'
         ),
     ),
-    
+
     'MailSection' => array(
         'MAIL_HOST' => array(
             'title' => 'Host'
@@ -86,7 +86,7 @@ $entries = array(
             'title' => 'Password'
         ),
     ),
-    
+
     'TemplateSection' => array(
         'TEMPLATE_USER' => array(
             'title' => 'Theme'
@@ -95,26 +95,26 @@ $entries = array(
             'title' => 'Asset hosts'
         ),
     ),
-    
+
     'SystemSection' => array(
         'LANG_DEFAULT' => array(
             'title' => 'Default language'
         ),
-        
+
         'SYS_LOG' => array(
             'title' => 'Path to log file'
         ),
         'LOG_ENABLE' => array(
             'title' => 'Enable log <sub>(0=off, 1=on)</sub>'
         ),
-        
+
         'ADVERTISEMENT_ENABLE' => array(
             'title' => 'Enable advertisement <sub>(0=off, 1=on)</sub>'
         ),
         'MUTEX_ENABLE' => array(
             'title' => 'Enable mutext (Experimental!)'
         ),
-        
+
         'FB_APP_APIKEY' => array(
             'title' => 'API key of Facebook application'
         ),
@@ -127,35 +127,35 @@ $entries = array(
 
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: 'form';
 switch($action) {
-    
+
     /* Save changes in configuration form */
     case 'save': {
         $configurator = new Configurator($entries);
-        
+
         if(isset($_REQUEST['entries'])) {
             foreach($_REQUEST['entries'] as $k => $v) {
                 $configurator->setEntry($k, $v);
             }
-            
+
             $configurator->save();
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=form');
     } break;
-    
+
     /* Get list of backup files */
     case 'listfiles': {
         // Scan "backups" directory
-        $files = Configurator::getBackupConfigFiles( './backups/' );
-        
+        $files = Configurator::getBackupConfigFiles( SITE_PATH . DS . 'config' . DS.'./backups/' );
+
         $tpl->assign('files', $files);
     } break;
-    
+
     /* Recovery */
     case 'recover': {
-        $destination = dirname(__FILE__) . '/config.inc.php';
-        $source = './backups/' . $_REQUEST['filename'];
-        
+        $destination = SITE_PATH . DS . 'config' . DS. 'config.inc.php';
+        $source = SITE_PATH . DS . 'config' . DS.'./backups/' . $_REQUEST['filename'];
+
         if(file_exists($source)) {
             if( @copy($source, $destination) ) {
                 Message::add('Backup restored successfully.', 'info');
@@ -165,30 +165,30 @@ switch($action) {
         } else {
             Message::add('Error: file to recover do not exists.', 'error');
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=form');
     } break;
-    
+
     /* Backup current config file */
     case 'backup': {
         $configurator = new Configurator();
-        
+
         // Save backup into "backups" directory
-        if($configurator->backup( './backups/' )) {
+        if($configurator->backup( SITE_PATH . DS . '..' . DS . 'config' . DS.'backups'.DS )) {
             Message::add('Backup save successfully.', 'info');
         } else {
             Message::add('Error saving backup, check permissions.', 'error');
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=form');
     } break;
-    
+
     /* Show configuration form */
     case 'form':
-    default: {                
+    default: {
         $configurator = new Configurator($entries);
-        $entries = $configurator->getEntries();        
-        
+        $entries = $configurator->getEntries();
+
         $tpl->assign('entries', $entries);
     } break;
 }
