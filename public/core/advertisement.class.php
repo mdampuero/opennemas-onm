@@ -396,9 +396,9 @@ class Advertisement extends Content
     */
     static function setNumClics($id)
     {
-        $num_clic_count = $this->num_clic_count+1;
-        $sql = "UPDATE advertisements SET `num_clic_count`=? WHERE `pk_advertisement`=?";
-        $values = array($num_clic_count, $this->id);
+
+        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?";
+        $values = array($id);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
