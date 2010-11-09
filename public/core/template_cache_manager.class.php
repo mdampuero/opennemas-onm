@@ -110,33 +110,45 @@ class TemplateCacheManager
 
         $data = null;
         if( file_exists($this->cacheDir.$cacheFileName) ) {
-            $createTime = filectime($this->cacheDir.$cacheFileName);
-            $fp = fopen($this->cacheDir.$cacheFileName, 'r');
-
-            if ($fp) {
-                if (!feof($fp)) {
-                    // Read first line
-                    $strLen = fgets($fp, 4096);
-                    // Convert to int the length information
-                    $strlen = intval($strLen);
-                }
-
-                if (!feof($fp)) {
-                    // Read second line with smarty information
-                    $data = fgets($fp, $strLen+1);
-                }
-                fclose($fp);
-            }
-
-            if(!is_null($data)) {
-                $data = unserialize($data);
-            }
-
-            $data['timestamp'] = $createTime;
-            $data['expires'] = '';
+            $data = $this->getHeaderInfoFromCacheFile($this->cacheDir.$cacheFileName);
+            $data['timestamp'] = filectime($this->cacheDir.$cacheFileName);
+            $data['expires'] = $data['timestamp'] + $data['cache_lifetime'];
         }
 
         return $data;
+    }
+
+    public $properties = array();
+
+    /**
+    * Decodes information of smarty cache files
+    *
+    * @param mixed $properties, array containing imported properties from cachefile
+    * @return void
+    */
+    public function decodeProperties($properties) {
+        $this->properties['has_nocache_code'] = $properties['has_nocache_code'];
+        $this->properties['nocache_hash'] = $properties['nocache_hash'];
+        if (isset($properties['cache_lifetime'])) {
+            $this->properties['cache_lifetime'] = $properties['cache_lifetime'];
+        }
+        if (isset($properties['file_dependency'])) {
+            $this->properties['file_dependency'] = $properties['file_dependency'];
+        }
+    }
+
+    /**
+    * Obtains the cache information from one Smarty cache file.
+    *
+    * @param string $filename, the path to the cache file where extract info
+    * @return mixed, an array containing information of smarty cache files
+    */
+    public function getHeaderInfoFromCacheFile($file) {
+        $this->properties = array();
+        preg_match_all("/(<\?php \/\*%%SmartyHeaderCode:(.+?)%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\?>\n)/s", file_get_contents($file), $result);
+        $_smarty_tpl = $this;
+        eval($result[3][0]);
+        return $this->properties;
     }
 
     /**
