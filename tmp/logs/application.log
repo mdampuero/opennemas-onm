@@ -1,0 +1,6 @@
+20101105185840 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 /var/www/retrincosv82/public/core/author.class.php 298
+20101105185850 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 /var/www/retrincosv82/public/core/author.class.php 298
+20101105185911 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 /var/www/retrincosv82/public/core/author.class.php 298
+20101105185931 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 /var/www/retrincosv82/public/core/author.class.php 298
+20101105191937 application [debug] Error: Unknown column 'pk_rating' in 'field list' /var/www/retrincosv82/public/core/rating.class.php 90
+20101105192219 application [debug] Error: Unknown column 'pk_rating' in 'field list' /var/www/retrincosv82/public/core/rating.class.php 90
