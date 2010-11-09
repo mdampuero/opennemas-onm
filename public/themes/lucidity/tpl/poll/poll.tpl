@@ -158,7 +158,7 @@ Smarty template: article.tpl
                            {* <hr class="new-separator"/> *}
                             {include file="poll/widget_polls.tpl"}
 
-                           {include file="module_comments.tpl" content=$poll nocache}
+                           {include file="module_comments.tpl" content=$contentId nocache}
                         </div>
                     </div>
                     {include file="article/article_last_column.tpl"}

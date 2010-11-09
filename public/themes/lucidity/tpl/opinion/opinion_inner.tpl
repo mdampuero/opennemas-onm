@@ -66,7 +66,7 @@
 		    </ul>
 		{/if}
 	    </div><!--fin more-news-bottom-article -->
-	   {include file="module_comments.tpl" content=$opinion nocache}
+	   {include file="module_comments.tpl" content=$contentId nocache}
 	</div>
     </div>
 

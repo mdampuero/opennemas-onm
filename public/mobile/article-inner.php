@@ -2,34 +2,67 @@
 
 /**
  * Setup app
-*/
+ **/
 require_once('../bootstrap.php');
 
 /**
  * Setup view
-*/
+ **/
 $tpl = new Template(TEMPLATE_USER);
 
-// Category manager to retrieve category of article
-$ccm = ContentCategoryManager::get_instance();
-$cm = new ContentManager();
-$tpl->assign('ccm', $cm);
-$tpl->assign('ccm', $ccm);
+/**
+ * Setup cache
+ **/
+$tpl->setConfig('articles-mobile');
+$cacheID = $tpl->generateCacheId('mobile','',0);
 
-require('sections.php');
+/**
+ * if cache is enabled and this content has an available cache
+ **/
+if(($tpl->caching == 0)
+    || ! $tpl->isCached('mobile/article-inner.tpl', $cacheID, 'frontpagemobile')) {
 
-$article = new Article($_REQUEST['pk_content']);
-$article->category_name = $ccm->get_name($article->category);
+    $articleID = filter_input(INPUT_GET,'pk_content',FILTER_SANITIZE_STRING);
 
-$tpl->assign('article', $article);
+    // Category manager to retrieve category of article
+    $ccm = ContentCategoryManager::get_instance();
+    $cm = new ContentManager();
+    $tpl->assign('ccm', $cm);
+    $tpl->assign('ccm', $ccm);
 
-$tpl->assign('section', $article->category_name);
+    require('sections.php');
 
-// Photo interior
-if(isset($article->img2) and ($article->img2 != 0)){
-    $photo = new Photo($article->img2);
-    $tpl->assign('photo', $photo->path_file . '140x100-' . $photo->name);
+    $article = new Article($_REQUEST['pk_content']);
+    $article->category_name = $ccm->get_name($article->category);
+
+
+    /******* RELATED  CONTENT *******/
+    $rel= new Related_content();
+
+    $relationes = $rel->cache->get_relations_int($_REQUEST['pk_content']);
+    $relat = $cm->cache->getContents($relationes);
+    $relat = $cm->getInTime($relat);
+    //Filter availables and not inlitter.
+    $relat = $cm->cache->getAvailable($relat);
+
+    //Nombre categoria correcto.
+    foreach($relat as $ril) {
+        $ril->category_name = $ccm->get_title($ril->category_name);
+    }
+
+    $tpl->assign('related_articles', $relat);
+    $tpl->assign('article', $article);
+    $tpl->assign('section', $article->category_name);
+
+    // Photo interior
+    if(isset($article->img2) and ($article->img2 != 0)){
+        $photo = new Photo($article->img2);
+        $tpl->assign('photo', $photo->path_file . '140x100-' . $photo->name);
+    }
+
+}else{
+ echo "cached!";
 }
 
 //TODO: define cache system
-$tpl->display('mobile/article-inner.tpl');
+$tpl->display('mobile/mobile.article-inner.tpl', 'frontpagemobile');

@@ -4,7 +4,7 @@
     @theme      Lucidity
 *}
 
-<div class="lastest-news span-24clearfix">
+<div class="lastest-news span-24 clearfix">
     <span class="span-2"><strong>Últimas noticias</strong>: </span>
     <ul  class="span-20 last slide_cicle">
         {section name=exp loop=$articles_home_express}

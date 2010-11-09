@@ -4,7 +4,7 @@
       <a href="{$smarty.const.BASE_PATH}{$op_colaborador.permalink}">
         {if isset($photos.$id)}
          <img width="60" height="60" alt="{$photos.title}"
-              src="{$smarty.const.MOBILE_MEDIA_PATH}{$photos.$id}">
+              src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/{$photos.$id}">
         {/if}
          <span class="content">
             <span class="category">{$op_colaborador.name}</span>
@@ -22,7 +22,7 @@
       <a href="{$smarty.const.BASE_PATH}{$article->permalink}">
         {if isset($photos.$id)}
          <img width="60" height="60" alt="{$photos.title}"
-              src="{$smarty.const.MOBILE_MEDIA_PATH}{$photos.$id}">
+              src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/images/{$photos.$id}">
         {/if}
          <span class="content">
             <span class="category">{$article->name}</span>

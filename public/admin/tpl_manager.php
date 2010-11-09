@@ -64,11 +64,11 @@ function refreshAction(&$tplManager, $cacheid, $tpl)
             $url = SITE_URL . 'mobile/';
         }
     } elseif(isset($matches['resource'])) {
-        
+
         if(preg_match('/[0-9]{14,19}/', $matches['resource'])) { // 19 digits then it's a pk_content
             $url = SITE_URL . 'controllers/article.php?article_id='.$matches['resource'].'&action=read&category_name='.$matches['category'];
         } else {
-            
+
             if($matches['category']!='home') {
                 $url = SITE_URL . 'seccion/'.$matches['category'].'/'.$matches['resource'];
             } else {
@@ -79,7 +79,7 @@ function refreshAction(&$tplManager, $cacheid, $tpl)
         preg_match('/(?P<category>[^\|]+)\|RSS(?P<resource>[0-9]*)$/', $cacheid, $matches);
         $url = SITE_URL.'rss/'.$matches['category'].'/'.$matches['resource'];
     }
-    
+
     $url = preg_replace('/^https:/', 'http:', $url);
     $tplManager->fetch($url);
 }
@@ -93,34 +93,34 @@ function buildFilter()
         $filter  .= '^'.preg_quote($_REQUEST['section']).'\^.*?';
         $params[] = 'section='.$_REQUEST['section'];
     }
-    
+
     if(isset($_REQUEST['type']) && !empty($_REQUEST['type'])) {
         $regexp = array(
                         'frontpages' => 'frontpage\.tpl\.php$',
                         'opinions' => 'opinion\.tpl\.php$',
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
-                        'mobilepages' => 'mobile\.index\.tpl\.php$'
+                        'mobilepages' => 'mobile\.frontpage\.tpl\.php$'
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
     }
-    
+
     if(isset($_REQUEST['page']) && !empty($_REQUEST['page'])) {
         $params[] = 'page='.$_REQUEST['page'];
         $page = $_REQUEST['page'];
     } else {
         $page = 1;
     }
-    
-    
+
+
     $items_page = $_REQUEST['items_page'] = (isset($_REQUEST['items_page']))? intval($_REQUEST['items_page']): 15;
     $items_page = $_REQUEST['items_page'] = ($_REQUEST['items_page']===0)? 1: $_REQUEST['items_page'];
     $params[] = 'items_page='.$_REQUEST['items_page'];
     if(!empty($filter)) {
         $filter = '@'.$filter.'@';
     }
-    
+
     // return $filter and URI $params
     return array( $filter, implode('&', $params), $page, $items_page);
 }
@@ -138,10 +138,10 @@ switch($action) {
                 $tplManager->update(strtotime($expires), $_REQUEST['cacheid'][$idx], $_REQUEST['tpl'][$idx]);
             }
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&'.$params);
     } break;
-    
+
     case 'delete': {
         if(isset($_REQUEST['selected']) && count($_REQUEST['selected'])>0) {
             foreach($_REQUEST['selected'] as $idx) {
@@ -152,24 +152,24 @@ switch($action) {
                 $tplManager->delete($_REQUEST['cacheid'], $_REQUEST['tpl']);
             }
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&'.$params);
     } break;
-    
+
     case 'refresh': {
-        
+
         /**
          * Fetch request variables
         */
         $selectedElements = filter_input(INPUT_GET,'selected',FILTER_SANITIZE_STRING);
         $cacheElements = filter_input(INPUT_GET,'cacheid',FILTER_SANITIZE_STRING);
         $tplElements = filter_input(INPUT_GET,'tpl',FILTER_SANITIZE_STRING);
-        
+
         /**
          * If the user selected elements to refresh try to process the action
         */
         if (isset($selectedElements)) {
-            
+
             if(count($selectedElements)>0) {
                 /**
                  * The selected elements are stored in one array so clean them separately
@@ -188,11 +188,11 @@ switch($action) {
                 }
             }
         }
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&'.$params);
-        
+
     } break;
-    
+
     case 'config': {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
             $config = array();
@@ -205,27 +205,27 @@ switch($action) {
                     'caching' => $caching,
                     'cache_lifetime' => $cache_lifetime,
                 );
-            }            
+            }
 
             $tplManager->saveConfig($config);
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
         } else {
-            $config = $tplManager->dumpConfig();            
+            $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);
             $tpl->assign('groupName', array(
-                'frontpages'       => 'Portadas',                
+                'frontpages'       => 'Portadas',
                 'frontpage-mobile' => 'Portadas versión móvil',
-                'articles' => 'Artículo interior',                
-                'opinion'  => 'Opinión interior',                
+                'articles' => 'Artículo interior',
+                'opinion'  => 'Opinión interior',
                 'rss' => 'RSS',
             ));
 
             $tpl->assign('groupIcon', array(
-                'frontpages'       => 'home16x16.png',                
+                'frontpages'       => 'home16x16.png',
                 'frontpage-mobile' => 'phone16x16.png',
                 'articles' => 'article16x16.png',
-                'opinion' => 'opinion16x16.png',                
+                'opinion' => 'opinion16x16.png',
                 'rss' => 'rss16x16.png'
             ));
 
@@ -235,9 +235,9 @@ switch($action) {
     } break;
 
     case 'list':
-    default: {            
+    default: {
         $caches = $tplManager->scan($filter);
-        
+
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
@@ -245,11 +245,11 @@ switch($action) {
             'append'      => false,
             'path'        => '',
             'fileName'    => 'javascript:paginate(%d);',
-            'delta'       => 4,            
+            'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => count($caches),
-        );        
+        );
         $pager = Pager::factory($pager_options);
 
         $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
@@ -261,7 +261,7 @@ switch($action) {
 
         list($pk_contents, $pk_authors) = $tplManager->getResources($caches);
 
-        $cm = new ContentManager();        
+        $cm = new ContentManager();
         $articles = $cm->getContents( $pk_contents );
         $articleTitles = array();
         if(count($articles)>0) {
@@ -271,9 +271,9 @@ switch($action) {
         }
 
         $authors = array();
-        $author = new Author();        
+        $author = new Author();
         if(count($pk_authors)>0) {
-            $it = $author->find('pk_author IN ('.implode(',', $pk_authors).')');            
+            $it = $author->find('pk_author IN ('.implode(',', $pk_authors).')');
             foreach($it as $a) {
                 $authors[ 'RSS'.$a->pk_author ] = $a->name;
             }
@@ -291,7 +291,7 @@ switch($action) {
         $tpl->assign('sections', $sections);
         $tpl->assign('ccm', $ccm);
         $tpl->assign('titles', $articleTitles);
-        $tpl->assign('caches', $caches);    
+        $tpl->assign('caches', $caches);
     } break;
 }
 

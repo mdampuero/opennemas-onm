@@ -12,15 +12,15 @@
                 Delete
             </a>
 		</li>
-        
+
 		<li>
 			<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
               title="Elimina caché y genera una nueva con datos actualizados">
 				<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
                 Regenerate
             </a>
-		</li>		
-		
+		</li>
+
         <li>
 			<a href="#update" onclick="sendForm('update');return false;"
               title="Cambia fecha de expiración pero mantiene el contenido de la caché">
@@ -28,7 +28,7 @@
                 Change expiration
             </a>
 		</li>
-        
+
         <li>
 			<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="Configurar cachés">
 				<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
@@ -40,39 +40,39 @@
 
 
 <div>
-	
+
     <table class="adminheading">
         <tr>
             <td>
-                
+
                 <label>
-                    Show 
+                    Show
                     <input type="text" name="items_page" id="items_page" value="{$smarty.request.items_page}"
                         size="2" maxlength="2" style="text-align:right; padding:0 5px" />
-                    items/page with type 
+                    items/page with type
                 </label>
-                
+
                 <select name="type" id="type">
                     <option value="" {if $smarty.request.type eq ''}selected="selected"{/if}>All types</option>
                     <option value="frontpages" {if $smarty.request.type eq 'frontpages'}selected="selected"{/if}>Frontpages</option>
                     <option value="articles" {if $smarty.request.type eq 'articles'}selected="selected"{/if}>Inner notice</option>
                     <option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
                     <option value="mobilepages" {if $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>Mobile frontpages</option>
-                    <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>                
+                    <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>
                 </select>
-                
+
                 and from
-                
+
                 <select name="section" id="section">
                     <option value="">All sections</option>
                     {html_options options=$sections selected=$smarty.request.section}
-                </select>                        
-                
-                <button onclick="javascript:paginate(1);return false;">                
+                </select>
+
+                <button onclick="javascript:paginate(1);return false;">
                     <img src="{$params.IMAGE_DIR}template_manager/reload16x16.png" border="0" align="absmiddle" width="10" />
                     Update list
                 </button>
-                
+
             </td>
         </tr>
     </table>
@@ -86,7 +86,7 @@
                 <th>Category</th>
                 <th>Expire date</th>
                 <th>Creation date</th>
-                <th>Size</th>                        
+                <th>Size</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
             </tr>
@@ -97,30 +97,29 @@
 			<td width="16">
 				<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
 				<input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
-                <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />                                
-			</td>			
+                <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
+			</td>
             <td>
                 {* $titles[ $caches[c].resource ] *}
-                {assign var="resource" value=$caches[c].resource}                
-                
-				{if isset($titles.$resource) && ($caches[c].template == 'article')}
+                {assign var="resource" value=$caches[c].resource}
+			    {if isset($titles.$resource) && ($caches[c].template == 'article')}
                     <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="Caché de artículo interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}"
                         style="text-decoration: underline;" target="_blank">
                         {$titles.$resource|clearslash}</a>
-                        
+
                 {elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
                         {$titles.$resource|clearslash}</a>
-                        
+
                 {elseif isset($authors.$resource)}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS - autor de opinión" />
                     <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"
                         style="text-decoration: underline;" target="_blank">
                         {$authors.$resource|clearslash}</a>
-                        
+
 				{elseif $resource eq "RSS"}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS" />
                     {if $caches[c].category != 'home'}
@@ -131,13 +130,13 @@
                             style="text-decoration: underline;" target="_blank">
                     {/if}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
-                
-                {elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'mobile.index')}
+
+                {elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
                     <img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="Caché de portadas versión móvil" />
                     <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"
                         style="text-decoration: underline;" target="_blank">
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
-                    
+
                 {elseif not isset($titles.$resource) && not isset($authors.$resource)}
                     <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
                     <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"
@@ -148,7 +147,7 @@
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
                     {/if}
                 {/if}
-            </td>            
+            </td>
 			<td width="270">
                 {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
             </td>
@@ -159,14 +158,14 @@
                     <img src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
                 {/if}
                 <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
-                   maxlength="20" style="width: 130px;"/>                                
-            </td>			
+                   maxlength="20" style="width: 130px;"/>
+            </td>
 			<td width="125" align="center">
-                {$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"} 
-            </td>			
+                {$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}
+            </td>
             <td width="70" align="right">
                 {$caches[c].size/1000|string_format:"%d"} KB
-            </td>            
+            </td>
 			<td width="20">
                 <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
                    title="Regenerar la caché">
@@ -180,30 +179,30 @@
         </tr>
         {/section}
     </tbody>
-    
+
     <tfoot>
         <tr>
             <td colspan="8" align="center">
                 <script language="javascript" type="text/javascript">
                 // <![CDATA[
-                function paginate(page) {                    
-                    $('page').value = page;                    
-                    $('formulario').submit();                
+                function paginate(page) {
+                    $('page').value = page;
+                    $('formulario').submit();
                 }
                 // ]]>
                 </script>
                 {$pager->links}
-            </td>            
+            </td>
         </tr>
     </tfoot>
     </table>
     {else}
         <h1>Ninguna caché disponible</h1>
     {/if}
-	
+
 </div>
 
-<input type="hidden" id="page"   name="page"   value="{$smarty.request.page|default:'1'}" />	
+<input type="hidden" id="page"   name="page"   value="{$smarty.request.page|default:'1'}" />
 <input type="hidden" id="action" name="action" value="" />
 </form>
 {/block}
@@ -218,7 +217,7 @@
                     this.up(2).select('input[type=checkbox]')[0].
                         setAttribute('checked', 'checked');
                 });
-                
+
                 new Control.DatePicker(item,{
                     icon: './themes/default/images/template_manager/update16x16.png',
                     locale: 'es_ES',
@@ -226,34 +225,34 @@
                     timePickerAdjacent: true,
                     onSelect: function(fecha, instance) {
                         instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked'); 
+                            setAttribute('checked', 'checked');
                     },
                     onHover: function(fecha, instance) {
                         instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked'); 
+                            setAttribute('checked', 'checked');
                     }
                 });
             });
         }
-        
+
         $$('a[rel=refresh]').each(function(item) {
             item.observe('mouseover', function() {
                 $('adviceRefresh').setStyle({ display: ''});
             });
-            
+
             item.observe('mouseout', function() {
                 $('adviceRefresh').setStyle({ display: 'none'});
             });
         });
     });
-    
+
     function sendForm(actionValue) {
         // FIXME: chequeos de seguridad
         $('action').value = actionValue;
         $('formulario').submit();
     }
-    
-    function selectAll(indicator, checkboxes) {	
+
+    function selectAll(indicator, checkboxes) {
         for(var i=0; i<checkboxes.length; i++) {
             if(indicator) {
                 checkboxes[i].setAttribute('checked', 'checked');

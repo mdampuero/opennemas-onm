@@ -55,7 +55,7 @@ $RESOURCES_PATH = TEMPLATE_ADMIN_PATH_WEB;
 $mailbox = null;
 if(isset($_SESSION['authGmail'])) {
     $user = new User();
-    $mailbox = $user->cache->parseGmailInbox(base64_decode($_SESSION['authGmail']));        
+    $mailbox = $user->cache->parseGmailInbox(base64_decode($_SESSION['authGmail']));
 }
 
 // Control de sesiones de usuarios
@@ -76,7 +76,7 @@ if( Privileges_check::CheckPrivileges('USER_ADMIN') ) {
                     // Volver a actualizar as sesións
                     $sessions = $GLOBALS['Session']->getSessions();
                 }
-            
+
             case 'show_panel':
                 $html = '<table width="90%" align="center"><tr></tr>';
 $tpl_user =<<< TPLUSER
@@ -85,14 +85,14 @@ $tpl_user =<<< TPLUSER
     <td align="center">%s</td>
     <td align="center">
         <a href="user.php?action=read&id=%s" title="Editar usuario" onclick="Modalbox.hide();" target="centro">
-            <img src="{$RESOURCES_PATH}images/users_edit.png" border="0" /></a>  
+            <img src="{$RESOURCES_PATH}images/users_edit.png" border="0" /></a>
         <a href="index.php?action=purge&userid=%s" class="modal" title="Purgar sesión">
             <img src="{$RESOURCES_PATH}images/publish_r.png" border="0" /></a>
     </td>
     <td><img src="{$RESOURCES_PATH}images/iconos/%s.gif" border="0" alt="" title="%s" /></td>
 </tr>
 TPLUSER;
-                
+
 $tpl_admin =<<< TPLADMIN
 <tr>
     <td>%s</td>
@@ -102,7 +102,7 @@ $tpl_admin =<<< TPLADMIN
 </tr>
 TPLADMIN;
                 $authMethodTitles = array('database' => 'Base de datos autenticado', 'google_clientlogin' => 'Google autenticado');
-                foreach($sessions as $session) {                    
+                foreach($sessions as $session) {
                     $authMethod = (isset($session['authMethod']))? $session['authMethod']: 'database';
                     if(($session['userid']!=$_SESSION['userid']) && ($_SESSION['isAdmin'])) {
                         $html .= sprintf($tpl_user, $session['username'],  date(' H:i ', $session['expire']),
@@ -112,17 +112,17 @@ TPLADMIN;
                                          $authMethod, $authMethodTitles[$authMethod]);
                     }
                 }
-                
+
                 $html .= '</table>';
                 echo( $html );
-            break;                                    
-        
+            break;
+
             case 'list':
             default:
-                echo json_encode( $sessions );            
-            break;        
+                echo json_encode( $sessions );
+            break;
         }
-        
+
         exit(0); // Finalizar la petición por Ajax
     }
 }
@@ -137,7 +137,7 @@ $_SESSION['desde']='index_portada';
 <title>..: Panel de Control :..</title>
 <link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/general.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/modalbox.css" media="screen" />
-
+<link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/multilevel-menu.css" media="screen" />
 
 <style type="text/css">
 body {
@@ -155,7 +155,7 @@ body {
 	color:#ccc;
 }
 
-#user_mailbox {    
+#user_mailbox {
     text-align: right;
     padding:2px 20px 2px 2px ;
     float: left;
@@ -164,7 +164,7 @@ body {
     padding: 2px;
 }
 
-#user_box {    
+#user_box {
     color: #0B55C4;
     font-size: 12px;
     font-weight: bold;
@@ -205,18 +205,6 @@ function salir() {
     }
 }
 </script>
-<script type="text/javascript" language="javascript">
-//  new ypSlideOutMenu("number menu", "slide position", left, top, width, height)
-    //new ypSlideOutMenu("sub1","down",144,44,190,400)
-    //new ypSlideOutMenu("sub2","down",265,44,150,200)
-    //new ypSlideOutMenu("sub3","down",394,44,150,200)
-    //new ypSlideOutMenu("sub4","down",507,44,160,400)
-    //new ypSlideOutMenu("sub5","down",628,44,150,200)
-    //new ypSlideOutMenu("sub6","down",749,44,150,200)
-    //new ypSlideOutMenu("sub7","down",870,44,150,300)
-    //new ypSlideOutMenu("sub8","down",991,44,160,300)
-    
-</script>
 <meta name="Revision" content="0.22">
 <meta name="Date" content="Mon Sep 13 2010 17:46:50 GMT+0200 (CEST)">
 <meta name="Author" content="Antonio Jozzolino">
@@ -241,24 +229,24 @@ function salir() {
                             </a>
                         </div>
 					</td>
-					<td>                                                
+					<td>
                         <?php
                             require_once( SITE_LIBS_PATH.'menu.class.php');
                             $menu = new Menu();
-                            require('./include/menu.php');
-                            
+                            require(dirname(__FILE__).'/include/menu.php');
+
                             $ypMenu = $menu->getMenu('YpMenu', $menuXml, 1);
-                            
-                            echo $ypMenu;                             
-                        ?>                            
+
+                            echo $ypMenu;
+                        ?>
 					</td>
 
                     <td style="font-size: 12px;width:100%; color: #666;" nowrap="nowrap">
                         <div id="user_box" style="width:auto;">
-                            
+
                             <div id="name-box" style="float:left; margin-right:5px;">
                               <strong>
-                                Bienvenido 
+                                Bienvenido
                                 <a href="/admin/user.php?action=read&id=<?php echo($_SESSION['userid']); ?>" target="centro">
                                 	<?php echo($_SESSION['username']); ?>
                                 </a>
@@ -268,15 +256,15 @@ function salir() {
                                 <?php endif; ?>
                               </strong>
                             </div><!--end name-box-->
-                            
-                            <?php if(Acl::_('BACKEND_ADMIN')): ?>                        
-                            <div style="padding-right:4px; float:left;" nowrap="nowrap">						
+
+                            <?php if(Acl::_('BACKEND_ADMIN')): ?>
+                            <div style="padding-right:4px; float:left;" nowrap="nowrap">
                                 <div id="user_activity" title="Usuarios activos na sección de administración">
                                     <?php echo count($sessions) ?>
                                 </div>
                             </div>
                             <?php endif; ?>
-                        
+
                             <div id="session-actions" style="float:left;">
                               <a href="javascript:salir();" class="logout" title="Salir del panel de control">
                                   <img src="<?php echo $RESOURCES_PATH?>images/logout.png" border="0"
@@ -284,9 +272,9 @@ function salir() {
                               </a>
                             </div><!--end session-actions -->
                         </div>
-                        
+
                         <?php if(!is_null($mailbox)): ?>
-                        <div id="user_mailbox">                            
+                        <div id="user_mailbox">
                             <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=<?php echo $_SESSION['email'] ?>&continue=https%3A%2f%2fmail.google.com%2fmail"
                                title="Ir a GMail &lt;<?php echo $_SESSION['email'] ?>&gt;"
                                target="_blank">
@@ -309,7 +297,7 @@ function salir() {
                         <iframe onload="get_height(this);" name="centro" width="100%" height="550" src="<?php echo $defaultUri; ?>"
                                 frameborder="0" marginheight="0" marginwidth="0" align="top" scrolling="auto">
                             Para el panel de administración necesita un navegador que soporte iframes</iframe>
-                        
+
                     </td>
 				</tr>
 				</table>

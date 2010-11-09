@@ -21,7 +21,7 @@
 
 /**
  * Comment
- * 
+ *
  * @package    OpenNeMas
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
@@ -44,7 +44,7 @@ class Comment extends Content
 	/**
 	 * Initializes a comment from a given id
 	 *
-	 * 
+	 *
 	 * @access public
 	 * @param integer $id
 	 * @return null
@@ -56,27 +56,27 @@ class Comment extends Content
             $this->read($id);
         }
        	$this->content_type = 'Comment'; //PAra utilizar la funcion find de content_manager
-     
+
     }
-	
+
 
 	/**
 	* Creates a new comment for a given data
 	*
 	* Create a new comment for a given id from content, data regardless the
 	* comment, and the ip that issued that comment.
-	* 
+	*
 	* @access public
 	* @param mixed $params
 	* @return bool, if it is true the comment was created, if it is false
 	* something went wrong
 	*/
     public function create( $params = null ) {
-		
+
 		$fk_content = $params['id'];
 		$data = $params['data'];
 		$ip = $params['ip'];
-		
+
         if(!isset($data['content_status'])) {
             $data['content_status']=0;
         }
@@ -105,7 +105,7 @@ class Comment extends Content
 
 	/**
 	* Gets the information from the database from one comment given its id
-	* 
+	*
 	* @access public
 	* @param integer $id, the id of the comment
 	* @return null
@@ -113,7 +113,7 @@ class Comment extends Content
     function read($id) {
         parent::read($id);
         $sql = 'SELECT * FROM comments WHERE pk_comment = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );        
+        $rs = $GLOBALS['application']->conn->Execute( $sql );
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -121,21 +121,21 @@ class Comment extends Content
 
             return;
         }
-        $this->pk_comment       = $rs->fields['pk_comment'];	
+        $this->pk_comment       = $rs->fields['pk_comment'];
         $this->author       	= $rs->fields['author'];
         $this->body       	= $rs->fields['body'];
-        $this->ciudad        	= $rs->fields['ciudad'];       
+        $this->ciudad        	= $rs->fields['ciudad'];
         $this->ip        	= $rs->fields['ip'];
         $this->email        	= $rs->fields['email'];
         $this->published        = $rs->fields['published'];
-        $this->fk_content     	= $rs->fields['fk_content'];     
+        $this->fk_content     	= $rs->fields['fk_content'];
     }
 
 	/**
 	* Updates the information of a comment with a given $data
 	*
 	* @access public
-	* @param bool,string,integer,double $baz 
+	* @param bool,string,integer,double $baz
 	* @return null
 	*/
     public function update($data) {
@@ -154,7 +154,7 @@ class Comment extends Content
             return;
         }
 	}
-	
+
 	/**
 	* Removes a comment from a given id
 	*
@@ -174,12 +174,12 @@ class Comment extends Content
         }
 
     }
- 
+
  	/**
 	* Delete all comments from a given content id
 	*
 	* WARNING: this is very dangerous, the action can't be undone
-	* 
+	*
 	* @access public
 	* @param  $id_content
 	* @return null
@@ -190,11 +190,11 @@ class Comment extends Content
             $sql = 'DELETE FROM `comments`, `contents` WHERE `fk_content`="' . ($id_content) .
                 '" AND `pk_content`=`pk_comment` ';
 
-            $rs = $GLOBALS['application']->conn->Execute($sql);           
+            $rs = $GLOBALS['application']->conn->Execute($sql);
         }
 
     }
-	
+
 	/**
 	* Return all the comments from a given content's id
 	*
@@ -220,7 +220,7 @@ class Comment extends Content
 
         return( $related );
     }
-    
+
 	/**
 	* Determines if the content of a comment has bad words
 	*
@@ -234,38 +234,37 @@ class Comment extends Content
         if(isset($data['author'])) {
             $text .= ' ' . $data['author'];
         }
-        
+
         $weight = String_Utils::getWeightBadWords($text);
-        
+
         return $weight > 100;
     }
-	
+
 	/**
 	* Gets the public comments from a given content's id.
 	*
 	* @access public
-	* @param integer $id_content 
+	* @param integer $id_content
 	* @return mixed, array of comment's objects
 	*/
-
-    public function get_public_comments($id_content){ //devuelve array con pk_attach que se le relacionan
+    public function get_public_comments($id_content){ //devuelve  con pk_attach que se le relacionan
         $related = array();
-        
-        if($id_content) {   
+
+        if($id_content) {
             $sql = 'SELECT * FROM comments, contents WHERE fk_content = ' .($id_content).
                 ' AND content_status=1 AND in_litter=0 AND pk_content=pk_comment ORDER BY pk_comment DESC';
-            $rs = $GLOBALS['application']->conn->Execute($sql);       
+            $rs = $GLOBALS['application']->conn->Execute($sql);
             while(!$rs->EOF) {
                 $obj = new Comment();
                 $obj->load($rs->fields);
-                
+
                 $related[] = $obj;
-                $rs->MoveNext();        
+                $rs->MoveNext();
             }
         }
         return $related;
     }
-    
+
 	/**
 	* Gets the number of public comments
 	*
@@ -275,28 +274,28 @@ class Comment extends Content
 	*/
     public function count_public_comments($id_content) {
         $rs = 0;
-        
-        if( !empty($id_content) ) {   
+
+        if( !empty($id_content) ) {
             $sql = 'SELECT count(pk_comment) FROM comments, contents WHERE comments.fk_content = ?' .
                 ' AND content_status=1 AND in_litter=0 AND pk_content=pk_comment';
-            
-            $rs = $GLOBALS['application']->conn->GetOne($sql, array($id_content));                   
+
+            $rs = $GLOBALS['application']->conn->GetOne($sql, array($id_content));
         }
-        
-        return intval($rs);        
+
+        return intval($rs);
     }
-    
+
     function get_home_comments($filter=null){ //devuelve array con pk_comment que esta en in_home el articulo al que pertenece
       //  $sql='select fk_content as art, pk_comment as com from comments, contents, articles where comments.in_litter=0 and pk_content=pk_comment ORDER BY created DESC';
         if(is_null($filter)) {
             $filter="1=1";
         }
-        
+
         $items = array();
 
         $related = array();
     	$sql = "select fk_content, pk_comment from comments, contents where ".$filter." and in_litter=0 and pk_content=pk_comment ORDER BY created DESC";
-        $rs = $GLOBALS['application']->conn->Execute($sql);       
+        $rs = $GLOBALS['application']->conn->Execute($sql);
         while(!$rs->EOF) {
             $sql2 = 'select pk_content from contents, articles where in_home=1 and content_status=1 and available=1 and in_litter=0 and pk_content='.$rs->fields['fk_content'].' and pk_content=pk_article ORDER BY created DESC';
             $rs2 = $GLOBALS['application']->conn->Execute($sql2);
@@ -307,11 +306,11 @@ class Comment extends Content
         }
 
         return( $items);
-        
+
     }
 
     public function filterComment($text, $weight)
     {
-        
+
     }
 }

@@ -22,6 +22,7 @@ $cm = new ContentManager();
 */
 $category_name = $_GET['category_name'] = 'opinion';
 $opinionID = filter_input(INPUT_GET,'opinion_id',FILTER_SANITIZE_STRING);
+$tpl->assign('contentId',$opinionID); // Used on module_comments.tpl
 
 
 $tpl->assign('action', $_REQUEST['action']);
@@ -32,24 +33,31 @@ $tpl->assign('action', $_REQUEST['action']);
 require_once ("opinion_inner_advertisement.php");
 
 if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {        
+    switch($_REQUEST['action']) {
         case 'read': { //Opinion de un autor
 
             $opinion = new Opinion( $_REQUEST['opinion_id'] );
- 
+
           //  $content->setNumViews();
              Content::setNumViews($opinionID);
-            
+
             //$ccm = new ContentCategoryManager();
              $ccm = ContentCategoryManager::get_instance();
             require_once ("index_sections.php");
-            
+
+            /**
+             * Fetch comments for this opinion
+            */
+            $com = new Comment();
+            $comments = $com->get_public_comments($opinionID);
+            $tpl->assign('num_comments', count($comments));
+
             if(($opinion->available==1) and ($opinion->in_litter==0 )){
-                
+
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['opinion_id']);
 
                 if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id) ) {
-                    
+
                     // Please SACAR esta broza de aqui {
                     $str = new String_Utils();
                     $title = $str->get_title($opinion->title);
@@ -57,27 +65,22 @@ if(isset($_REQUEST['action']) ) {
                     $tpl->assign('print_url', $print_url);
                     $tpl->assign('sendform_url', '/opinion_inner.php?action=sendform&opinion_id=' . $opinionID );
                     // } Sacar broza
-            
+
                     require_once('widget_headlines_past.php');
-                    
+
                     /**
                      * Fetch rating for this opinion
                     */
                     $rating = new Rating($opinionID);
                     $tpl->assign('rating_bar', $rating->render('article','vote'));
 
-                    /**
-                     * Fetch comments for this opinion
-                    */
-                    $com = new Comment();
-                    $comments = $com->get_public_comments($opinionID);
-                    $tpl->assign('num_comments', count($comments));
+
 
                     // Fetch a list of authors to display the dropdown
                     $aut = new Author();
                     $all_authors = $aut->cache->all_authors(NULL,'ORDER BY name');
                     $tpl->assign('list_all_authors', $all_authors);
-                     
+
                     // Fetch suggested contents
                     $objSearch = cSearch::Instance();
                     $suggestedContents =
@@ -106,39 +109,39 @@ if(isset($_REQUEST['action']) ) {
                                                         .' AND available = 1  AND content_status=1'
                                                         ,' ORDER BY created DESC '
                                                         .' LIMIT 0,9');
-                    
+
                     $tpl->assign('other_opinions', $otherOpinions);
                     $tpl->assign('opinion', $opinion);
-                    
+
                 }
-               
+
                 // Show in Frontpage
                 $tpl->display('opinion/opinion.tpl', $cache_id);
-                
+
             } else {
                 Application::forward301('/404.html');
             }
         } break;
-      
+
         case 'captcha': {
             $width  = isset($_GET['width']) ? $_GET['width'] : '176';
             $height = isset($_GET['height']) ? $_GET['height'] : '49';
             $characters = isset($_GET['characters']) && $_GET['characters'] > 1 ? $_GET['characters'] : '5';
             $captcha    = new CaptchaSecurityImages($width, $height, $characters,
                                                     realpath(dirname(__FILE__).'/media/fonts/monofont.ttf') );
-            
+
             exit(0);
         } break;
 
         case 'print': {
             // Article
             $opinion = new Opinion($_REQUEST['opinion_id']);
-            
+
             $author = new Author($opinion->fk_author);
             $tpl->assign('author', $author->name);
-            
+
             $tpl->assign('opinion', $opinion);
-            
+
             $tpl->caching = 0;
             $tpl->display('opinion/opinion_printer.tpl');
             exit(0);
@@ -232,7 +235,7 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 $tpl->assign('message', 'El artículo de opinión no pudo ser enviado, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
             }
-            
+
             $tpl->caching = 0;
             $tpl->display('opinion/opinion_sendform.tpl'); // Don't disturb cache
             exit(0);
@@ -255,13 +258,12 @@ if(isset($_REQUEST['action']) ) {
 
             Application::ajax_out($html_out);
         } break;
-        
+
         default: {
             Application::forward301('index.php');
         } break;
     }
-    
+
 } else {
     Application::forward301('index.php');
 }
-

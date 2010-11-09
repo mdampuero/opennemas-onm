@@ -11,7 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 { font-size: 1.6em; }
 h2 { font-size: 1.4em; }
-h3 { 
+h3 {
 	margin: 1.5em .3em .2em;
 	font-size: 1.2em;
 }
@@ -29,10 +29,10 @@ li, ul, ol { list-style: none; }
 
 
 #content{
-    padding:10px
+    padding:3px
 }
 
-.clearfix:after 
+.clearfix:after
 {
 	content: ".";
 	display: block;
@@ -42,17 +42,17 @@ li, ul, ol { list-style: none; }
 	height: 0;
 }
 
-.clearfix 
+.clearfix
 {
 	display: inline-block;
 }
 
-html[xmlns] .clearfix 
+html[xmlns] .clearfix
 {
 	display: block;
 }
 
-* html .clearfix 
+* html .clearfix
 {
 	height: 1%;
 }
@@ -147,9 +147,9 @@ html[xmlns] .clearfix
 	border-bottom: 1px solid #DFDFDF;
 }
 
-.post { 
-	margin: 0; padding: .8em 1em; 
-	clear: both; 
+.post {
+	margin: 0; padding: .8em 1em;
+	clear: both;
 }
 	.post p { margin: 0 0 .7em 0; }
 	.post ul {
@@ -165,22 +165,22 @@ html[xmlns] .clearfix
 		border: 1px solid #ccc;
 		background: #eee;
 	}
-	
-li.post { 
-	padding: 0; 
+
+li.post {
+	padding: 0;
 	border-bottom: 1px solid #DFDFDF;
 }
 li.post a {
 	width: auto;
-	overflow: hidden;			
+	overflow: hidden;
 	display: block;
-	padding: .5em; 
+	padding: .5em;
 	text-decoration: none;
 	background-color: inherit;
 	color:#FF7800;
 }
 	li.post a:hover { color: inherit; background-color: #EFEFEF; }
-li.post img { 
+li.post img {
 	width: 60px;	height: 60px;
 	float: right;
 	margin: .3em 0 .3em .4em;
@@ -192,7 +192,7 @@ li.post .title {
 	color: #9F3F00; background-color: inherit;
 }
 	li.post a:hover .title { color: #009AEF; background-color: inherit;  }
-li.post .content { 
+li.post .content {
 	width: auto;
 	overflow: hidden;
 	margin-left: .4em;
@@ -202,7 +202,7 @@ li.post .category {
 	font-weight: bold;
 	font-size: .82em;
 	text-transform: uppercase;
-	color: #666; 
+	color: #666;
 }
 li.post .metadata { font-size: .8em; }
 
@@ -230,7 +230,7 @@ li.post .metadata { font-size: .8em; }
 		color: #fff;	background-color: #dc5b00;
 	}
 		.nav-pages a:hover { color: #fff;	background-color: #dc5b00; text-decoration:underline; }
-	
+
 #related-posts { padding: .8em 1em .5em; }
 	#related-posts li {
 		width: 95%;
@@ -255,7 +255,7 @@ li.post .metadata { font-size: .8em; }
 
 #blog-comments h2 { margin: 0;	padding: .8em 1em; }
 .comments { border-top: 2px solid #ccc; }
-.comment { 
+.comment {
 	border-bottom: 2px solid #ccc;
 	padding: .8em 1em;
 }

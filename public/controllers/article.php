@@ -17,6 +17,11 @@ $tpl = new Template(TEMPLATE_USER);
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
+/**
+ * Getting request params
+ **/
+$articleID = filter_input(INPUT_GET,'article_id',FILTER_SANITIZE_STRING);
+$tpl->assign('contentId',$articleID); // Used on module_comments.tpl
 
 if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
     $category_name = 'home';

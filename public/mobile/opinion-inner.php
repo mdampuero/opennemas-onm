@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Setup app
 */
@@ -26,9 +25,9 @@ $tpl->assign('opinion', $opinion);
 
 $aut = new Author($opinion->fk_author);
 
-$tpl->assign('author_name', $aut->name);
-$tpl->assign('condition', $aut->condition);
-        
+$tpl->assign('author_name', $opinion->name);
+$tpl->assign('condition', $opinion->condition);
+
 $foto = $aut->get_photo($opinion->fk_author_img);
 $tpl->assign('photo', $foto);
 

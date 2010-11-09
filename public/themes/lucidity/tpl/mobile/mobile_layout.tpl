@@ -14,7 +14,7 @@
 		{literal}</style>{/literal}
 </head>
 <body>
-	
+
 	<a name="arriba" id="arriba"></a>
 	<div id="headerwrap">
 		<div id="header">
@@ -25,4 +25,16 @@
 	<div id="ad">
 
 	</div>
-		{include file="mobile/sections.tpl"}
+    {include file="mobile/partials/sections.tpl"}
+    {block name="content"}{/block}
+    <div id="footerwrap">
+		<div id="footer">
+		   <ul class="list-horizontal">
+		      <li><a href="#arriba" title="Arriba">Arriba</a></li>
+		      <li><a href="/mobile/redirect_web/" title="Ver Retricos.info">ver a la versión estándar</a></li>
+		   </ul>
+		   <h2 id="wsl"><a href="http://www.retrincos.com/" title="Weblogs SL"><span></span>Retrincos 2010</a></h2>
+		</div>
+	</div>
+	{include file="mobile/partials/modulo_analytics.tpl"}
+</html>
