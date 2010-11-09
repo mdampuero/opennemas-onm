@@ -100,7 +100,7 @@ function buildFilter()
                         'opinions' => 'opinion\.tpl\.php$',
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
-                        'mobilepages' => 'mobile\.frontpage\.tpl\.php$'
+                        'mobilepages' => 'frontpage-mobile\.tpl\.php$'
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];

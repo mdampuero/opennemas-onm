@@ -133,7 +133,7 @@ class TemplateCacheManager
             }
 
             $data['timestamp'] = $createTime;
-            $data['expires'] = $createTime;
+            $data['expires'] = '';
         }
 
         return $data;
