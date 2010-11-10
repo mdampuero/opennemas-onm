@@ -546,12 +546,8 @@ if(isset($_REQUEST['action']) ) {
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
                 }
-                if($_POST['content_status'] == 1){
-                    $action = 'list';
-                }else{
-                    $action = 'list_pendientes';
-                }
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$action.'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             } else {
                 
                 $tpl->assign('errors', $article->errors);

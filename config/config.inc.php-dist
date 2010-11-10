@@ -60,7 +60,7 @@ define ('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
 define ('SITE_ADMIN_DIR', "admin");
 define ('SITE_ADMIN_TMP_DIR', "tmp");
 define ('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
-define ('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
+define ('SITE_ADMIN_TMP_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'admin'.DS) );
 define ('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS) );
 
 /**

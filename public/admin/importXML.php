@@ -47,14 +47,14 @@ function decompressZIP($file) {
         $dataZIP[$x] = $file['name'];
     }
 
-    $zip->extractTo(SITE_ADMIN_TMP_PATH);
+    $zip->extractTo(SITE_ADMIN_TMP_PATH.DS.'xml'.DS);
     $zip->close();
     return $dataZIP;
 }
 
 function importXML($XMLFile)
 {
-    $XMLstr = file_get_contents($XMLFile);
+    $XMLstr = @file_get_contents($XMLFile);
     $s = simplexml_load_string($XMLstr);   
   
     return $s;
@@ -337,7 +337,7 @@ if(isset($_REQUEST['action']) ) {
 
                     $nameFile = $_FILES["file"]["name"][$i];
 
-                    $uploaddir = SITE_ADMIN_TMP_PATH;
+                    $uploaddir = SITE_ADMIN_TMP_PATH.DS.'xml'.DS;
                     @chmod($uploaddir,0775); //Permisos de lectura y escritura del fichero
 
                     $datos=pathinfo($nameFile);//sacamos info del archivo
@@ -468,7 +468,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
             //Removed all of temp files in SITE_ADMIN_TMP_PATH
-            foreach(glob(SITE_ADMIN_TMP_PATH.'*.*') as $v){unlink($v);}
+            foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
         break;
 
         case 'check':
@@ -481,7 +481,7 @@ if(isset($_REQUEST['action']) ) {
 
                     $nameFile = $_FILES["file"]["name"][$i];
 
-                    $uploaddir = SITE_ADMIN_TMP_PATH;
+                    $uploaddir = SITE_ADMIN_TMP_PATH.DS.'xml'.DS;
                     @chmod($uploaddir,0775); //Permisos de lectura y escritura del fichero
 
                     $datos=pathinfo($nameFile);					 //sacamos inofr del archivo
@@ -531,7 +531,7 @@ if(isset($_REQUEST['action']) ) {
 
             }
             //Removed all of temp files in SITE_ADMIN_TMP_PATH
-            foreach(glob(SITE_ADMIN_TMP_PATH.'*.*') as $v){unlink($v);}
+            foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
         break;
 
 	default:
