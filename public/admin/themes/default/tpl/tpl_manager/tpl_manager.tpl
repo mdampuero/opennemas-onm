@@ -100,26 +100,22 @@
                 <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
 			</td>
             <td>
-                {* $titles[ $caches[c].resource ] *}
                 {assign var="resource" value=$caches[c].resource}
 			    {if isset($titles.$resource) && ($caches[c].template == 'article')}
                     <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="Caché de artículo interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}"
                         style="text-decoration: underline;" target="_blank">
                         {$titles.$resource|clearslash}</a>
-
                 {elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
                         {$titles.$resource|clearslash}</a>
-
                 {elseif isset($authors.$resource)}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS - autor de opinión" />
                     <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"
                         style="text-decoration: underline;" target="_blank">
                         {$authors.$resource|clearslash}</a>
-
 				{elseif $resource eq "RSS"}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS" />
                     {if $caches[c].category != 'home'}
@@ -151,19 +147,19 @@
 			<td width="270">
                 {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
             </td>
-			<td width="170">
+			<td width="190">
                 {if $caches[c].expires < $smarty.now}
-                    <img src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="La caché ya expiró" style="float: left; margin-right: 4px;" />
+                    <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="La caché ya expiró" style="float: left; margin-right: 4px;" />
                 {else}
-                    <img src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
+                    <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
                 {/if}
                 <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
                    maxlength="20" style="width: 130px;"/>
             </td>
-			<td width="125" align="center">
+			<td width="125" align="left">
                 {$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}
             </td>
-            <td width="70" align="right">
+            <td width="70" align="left">
                 {$caches[c].size/1000|string_format:"%d"} KB
             </td>
 			<td width="20">
