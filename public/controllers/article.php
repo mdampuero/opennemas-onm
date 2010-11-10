@@ -111,6 +111,8 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('breadcrub', $breadcrub);
             }
 
+
+
             /******************************  CATEGORIES & SUBCATEGORIES  ******/
             require_once ("index_sections.php");
             /******************************  CATEGORIES & SUBCATEGORIES  ******/

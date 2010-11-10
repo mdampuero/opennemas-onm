@@ -121,10 +121,11 @@ if (isset($_REQUEST['action'])) {
             if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
                 $videos = $cm->find('Video', 'available=1 and pk_content !=' . $_REQUEST['id'], 'ORDER BY created DESC LIMIT 0 , 2');
                 $thisvideo = new Video($_REQUEST['id']);
+                $tpl->assign('contentId', $_REQUEST['id']); // Used on module_comments.tpl
             } else {
                 $videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 2');
                 $thisvideo = array_shift($videos); //Extrae el primero
-                
+
             }
             $category = $thisvideo->category;
             //$thisvideo->setNumViews();
