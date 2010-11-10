@@ -250,15 +250,18 @@ if(isset($_REQUEST['action']) ) {
             $title_rss = "";
             $rss_url = SITE_URL;
 
-            if ((strtolower($category_name)=="opinion") && isset($_GET["author"])) {
-                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS".$_GET["author"]);
+            if ((strtolower($category_name)=="opinion")
+                && isset($_GET["author"]))
+            {
+                $cache_id = $tpl->generateCacheId($category_name,
+                                                  $subcategory_name,
+                                                  "RSS".$_GET["author"]);
             } else {
-                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS");
+                $cache_id = $tpl->generateCacheId($category_name,
+                                                  $subcategory_name,
+                                                  "RSS");
             }
 
-            //if (!$tpl->is_cached('rss.tpl', $cache_id) ) { // (1)
-            // BEGIN MUTEX
-            Application::getMutex($cache_id);
             if (!$tpl->isCached('rss.tpl', $cache_id) ) { // (2)
                 if (isset($category_name) && !empty($category_name)) {
                     $category = $ccm->get_id($category_name);
@@ -360,14 +363,11 @@ if(isset($_REQUEST['action']) ) {
 
                 $tpl->assign('photos', $photos);
 
+                $tpl->assign('buildDate', date("D, j M Y H:i:s") . ' GMT');
 
                 $tpl->assign('SITE_URL', SITE_URL);
                 $tpl->assign('RSS_URL', $rss_url);
-            } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (1)
-
-            // END MUTEXT
-            Application::releaseMutex();
-            // } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (2)
+            } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (2)
 
             header('Content-type: application/rss+xml; charset=utf-8');
             $tpl->display('rss.tpl', $cache_id);
