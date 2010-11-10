@@ -133,84 +133,78 @@ $_SESSION['desde']='index_portada';
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>..: Panel de Control :..</title>
-<link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/general.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/modalbox.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/multilevel-menu.css" media="screen" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>..: Panel de Control :..</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/general.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/modalbox.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $RESOURCES_PATH?>css/multilevel-menu.css" media="screen" />
 
-<style type="text/css">
-body {
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
-}
-
-#user_activity {
-    background:transparent url(<?php echo $RESOURCES_PATH?>images/users_activity.png) top right no-repeat;
-    cursor: pointer;
-    text-align: right;
-    padding:2px 20px 2px 2px ;
-    float: left;
-	margin:0 5px;
-	color:#ccc;
-}
-
-#user_mailbox {
-    text-align: right;
-    padding:2px 20px 2px 2px ;
-    float: left;
-	margin:0 5px;
-	color:#ccc;
-    padding: 2px;
-}
-
-#user_box {
-    color: #0B55C4;
-    font-size: 12px;
-    font-weight: bold;
-    float: right;
-    margin-right: 4px;
-}
-
-#user_live {
-    float: left;
-    border-right:  1px solid #CCC;
-    border-bottom: 1px solid #CCC;
-    background-color: inherit;
-
-    width: 20px;
-    padding: 2px 2px 2px 2px;
-}
-
-#user_live:hover {
-    background-color: #FFF;
-}
-</style>
-
-<script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/prototype.js">;</script>
-<script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/scriptaculous/scriptaculous.js?load=effects"></script>
-<script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/modalbox.js"></script>
-
-<script language="javascript" type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/ypSlideOutMenus.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/utils.js"></script>
-<script language="javascript" type="text/javascript">
-<!-- //
-sinFrames();
-// -->
-</script>
-<script type="text/javascript" language="javascript">
-function salir() {
-    if(confirm('¿Desea salir del panel de administración?')) {
-        location.href = 'logout.php';
+    <style type="text/css">
+    body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:12px;
     }
-}
-</script>
-<meta name="Revision" content="0.22">
-<meta name="Date" content="Mon Sep 13 2010 17:46:50 GMT+0200 (CEST)">
-<meta name="Author" content="Antonio Jozzolino">
-<meta name="Copyright" content="&copy;2010 Solucao Grafica Design">
-<link rev="Made" href="http://www.sgd.com.br">
-<meta name="Content-Language" content="pt-br">
+
+    #user_activity {
+        background:transparent url(<?php echo $RESOURCES_PATH?>images/users_activity.png) top right no-repeat;
+        cursor: pointer;
+        text-align: right;
+        padding:2px 20px 2px 2px ;
+        float: left;
+        margin:0 5px;
+        color:#ccc;
+    }
+
+    #user_mailbox {
+        text-align: right;
+        padding:2px 20px 2px 2px ;
+        float: left;
+        margin:0 5px;
+        color:#ccc;
+        padding: 2px;
+    }
+
+    #user_box {
+        color: #0B55C4;
+        font-size: 12px;
+        font-weight: bold;
+        float: right;
+        margin-right: 4px;
+    }
+
+    #user_live {
+        float: left;
+        border-right:  1px solid #CCC;
+        border-bottom: 1px solid #CCC;
+        background-color: inherit;
+
+        width: 20px;
+        padding: 2px 2px 2px 2px;
+    }
+
+    #user_live:hover {
+        background-color: #FFF;
+    }
+    </style>
+
+    <script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/prototype.js">;</script>
+    <script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/scriptaculous/scriptaculous.js?load=effects"></script>
+    <script type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/modalbox.js"></script>
+
+    <script language="javascript" type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/ypSlideOutMenus.js"></script>
+    <script language="javascript" type="text/javascript" src="<?php echo $RESOURCES_PATH?>js/utils.js"></script>
+    <script language="javascript" type="text/javascript">
+    <!-- //
+    sinFrames();
+    // -->
+    </script>
+    <script type="text/javascript" language="javascript">
+    function salir() {
+        if(confirm('¿Desea salir del panel de administración?')) {
+            location.href = 'logout.php';
+        }
+    }
+    </script>
 </head>
 
 <body margin="0" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -219,88 +213,88 @@ function salir() {
 <tbody>
 	<tr>
 		<td id="ocultar" height="100%" valign="top">
-				<table id="topbar-admin" cellpadding="0" cellspacing="0">
-				<tr>
-					<td>
-                        <div id="logoonm">
-                            <a  href="index.php" title="Ir a la página principal de administración">
-                               <div><img src="<?php echo $RESOURCES_PATH?>images/logo-opennemas-small.png" alt="ONM"/></div>
-                               <div class="site-name"><?php echo SITE_FULLNAME; ?></div>
+            <table id="topbar-admin" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                    <div id="logoonm">
+                        <a  href="index.php" title="Ir a la página principal de administración">
+                           <div><img src="<?php echo $RESOURCES_PATH?>images/logo-opennemas-small.png" alt="ONM"/></div>
+                           <div class="site-name"><?php echo SITE_FULLNAME; ?></div>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <?php
+                        require_once( SITE_LIBS_PATH.'menu.class.php');
+                        $menu = new Menu();
+                        require(dirname(__FILE__).'/include/menu.php');
+
+                        $ypMenu = $menu->getMenu('YpMenu', $menuXml, 1);
+
+                        echo $ypMenu;
+                    ?>
+                </td>
+
+                <td style="font-size: 12px;width:100%; color: #666;" nowrap="nowrap">
+                    <div id="user_box" style="width:auto;">
+
+                        <div id="name-box" style="float:left; margin-right:5px;">
+                          <strong>
+                            Bienvenido
+                            <a href="/admin/user.php?action=read&id=<?php echo($_SESSION['userid']); ?>" target="centro">
+                                <?php echo($_SESSION['username']); ?>
                             </a>
-                        </div>
-					</td>
-					<td>
-                        <?php
-                            require_once( SITE_LIBS_PATH.'menu.class.php');
-                            $menu = new Menu();
-                            require(dirname(__FILE__).'/include/menu.php');
-
-                            $ypMenu = $menu->getMenu('YpMenu', $menuXml, 1);
-
-                            echo $ypMenu;
-                        ?>
-					</td>
-
-                    <td style="font-size: 12px;width:100%; color: #666;" nowrap="nowrap">
-                        <div id="user_box" style="width:auto;">
-
-                            <div id="name-box" style="float:left; margin-right:5px;">
-                              <strong>
-                                Bienvenido
-                                <a href="/admin/user.php?action=read&id=<?php echo($_SESSION['userid']); ?>" target="centro">
-                                	<?php echo($_SESSION['username']); ?>
-                                </a>
-                                <?php if($_SESSION['isAdmin']): ?>
-                                    <img src="<?php echo $RESOURCES_PATH?>images/key.png" border="0" align="absmiddle"
-                                        title="Permisos de administrador" alt="" />
-                                <?php endif; ?>
-                              </strong>
-                            </div><!--end name-box-->
-
-                            <?php if(Acl::_('BACKEND_ADMIN')): ?>
-                            <div style="padding-right:4px; float:left;" nowrap="nowrap">
-                                <div id="user_activity" title="Usuarios activos na sección de administración">
-                                    <?php echo count($sessions) ?>
-                                </div>
-                            </div>
+                            <?php if($_SESSION['isAdmin']): ?>
+                                <img src="<?php echo $RESOURCES_PATH?>images/key.png" border="0" align="absmiddle"
+                                    title="Permisos de administrador" alt="" />
                             <?php endif; ?>
+                          </strong>
+                        </div><!--end name-box-->
 
-                            <div id="session-actions" style="float:left;">
-                              <a href="javascript:salir();" class="logout" title="Salir del panel de control">
-                                  <img src="<?php echo $RESOURCES_PATH?>images/logout.png" border="0"
-                                      align="absmiddle" alt="Salir del Panel de Administración" /> Salir
-                              </a>
-                            </div><!--end session-actions -->
-                        </div>
-
-                        <?php if(!is_null($mailbox)): ?>
-                        <div id="user_mailbox">
-                            <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=<?php echo $_SESSION['email'] ?>&continue=https%3A%2f%2fmail.google.com%2fmail"
-                               title="Ir a GMail &lt;<?php echo $_SESSION['email'] ?>&gt;"
-                               target="_blank">
-                                    <span><?php echo $mailbox['total'] ?></span>
-                                    <img src="<?php echo $RESOURCES_PATH?>images/gmail_ico.png" border="0" align="absmiddle" />
-                            </a>
+                        <?php if(Acl::_('BACKEND_ADMIN')): ?>
+                        <div style="padding-right:4px; float:left;" nowrap="nowrap">
+                            <div id="user_activity" title="Usuarios activos na sección de administración">
+                                <?php echo count($sessions) ?>
+                            </div>
                         </div>
                         <?php endif; ?>
-                    </td>
-				</tr>
 
-				<tr>
-					<td valign="top" align="left" width="100%" height="100%" colspan="4">
-                        <?php
-                        $defaultUri = 'welcome.php';
-                        if(isset($_REQUEST['go'])) {
-                            $defaultUri = $_REQUEST['go'];
-                        }
-                        ?>
-                        <iframe onload="get_height(this);" name="centro" width="100%" height="550" src="<?php echo $defaultUri; ?>"
-                                frameborder="0" marginheight="0" marginwidth="0" align="top" scrolling="auto">
-                            Para el panel de administración necesita un navegador que soporte iframes</iframe>
+                        <div id="session-actions" style="float:left;">
+                          <a href="javascript:salir();" class="logout" title="Salir del panel de control">
+                              <img src="<?php echo $RESOURCES_PATH?>images/logout.png" border="0"
+                                  align="absmiddle" alt="Salir del Panel de Administración" /> Salir
+                          </a>
+                        </div><!--end session-actions -->
+                    </div>
 
-                    </td>
-				</tr>
-				</table>
+                    <?php if(!is_null($mailbox)): ?>
+                    <div id="user_mailbox">
+                        <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email=<?php echo $_SESSION['email'] ?>&continue=https%3A%2f%2fmail.google.com%2fmail"
+                           title="Ir a GMail &lt;<?php echo $_SESSION['email'] ?>&gt;"
+                           target="_blank">
+                                <span><?php echo $mailbox['total'] ?></span>
+                                <img src="<?php echo $RESOURCES_PATH?>images/gmail_ico.png" border="0" align="absmiddle" />
+                        </a>
+                    </div>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td valign="top" align="left" width="100%" height="100%" colspan="4">
+                    <?php
+                    $defaultUri = 'welcome.php';
+                    if(isset($_REQUEST['go'])) {
+                        $defaultUri = $_REQUEST['go'];
+                    }
+                    ?>
+                    <iframe onload="get_height(this);" name="centro" width="100%" height="550" src="<?php echo $defaultUri; ?>"
+                            frameborder="0" marginheight="0" marginwidth="0" align="top" scrolling="auto">
+                        Para el panel de administración necesita un navegador que soporte iframes</iframe>
+
+                </td>
+            </tr>
+            </table>
 
 		</td>
 	</tr>
