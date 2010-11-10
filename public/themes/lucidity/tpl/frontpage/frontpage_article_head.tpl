@@ -30,3 +30,4 @@
         </div>
     {/if}
 </div>
+<hr class="new-separator"/>

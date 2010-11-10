@@ -50,7 +50,6 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                     <div class="layout-column first-column span-8">
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_0"}
-                            <hr class="new-separator"/>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
                             {*<hr class="new-separator"/>*}
                             {include file="ads/widget_ad_button.tpl" type='3' nocache}
