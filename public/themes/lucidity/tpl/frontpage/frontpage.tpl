@@ -60,7 +60,6 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                     <div class="layout-column middle-column span-8">
                         <div class="border-dotted">
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_0"}
-                            <hr class="new-separator"/>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_1"}
                             {*<hr class="new-separator"/>*}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_2"}
@@ -69,7 +68,6 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                     </div>
                     <div class="layout-column last-column last span-8">
                         {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_0"}
-                        <hr class="new-separator"/>
                         {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_1"}
                         {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_2"}
                         {include file="widget_galdic.tpl"}
