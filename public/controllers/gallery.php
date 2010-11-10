@@ -67,6 +67,11 @@ if( isset($_REQUEST['action']) ) {
             require_once('widget_headlines_past.php');
             // Get the needed variables to show the Tab widget
             require_once ("widget_gallerys_lastest.php");
+
+             /**
+             * Fetch information for Static Pages
+            */
+            require_once("widget_static_pages.php");
         
             $tpl->display('gallery/gallery-frontpage.tpl');
             
@@ -111,6 +116,11 @@ if( isset($_REQUEST['action']) ) {
                 
                 // Visualizar
                 require_once('widget_headlines_past.php');
+
+                    /**
+                 * Fetch information for Static Pages
+                */
+                require_once("widget_static_pages.php");
                  
                 $tpl->display('gallery/gallery.tpl');
                  

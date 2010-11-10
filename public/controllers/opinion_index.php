@@ -106,6 +106,10 @@ if (isset($_REQUEST['action'])) {
 
                 require_once ('widget_headlines_past.php');
                 require_once ("index_sections.php");
+                /**
+                 * Fetch information for Static Pages
+                */
+                require_once("widget_static_pages.php");
 
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('director',  $director[0]);
@@ -168,6 +172,10 @@ if (isset($_REQUEST['action'])) {
 
                 require_once ('widget_headlines_past.php');
                 require_once ("index_sections.php");
+                /**
+                 * Fetch information for Static Pages
+                */
+                require_once("widget_static_pages.php");
 
                 $tpl->assign('author_name', $name_author);
                 $tpl->assign('pagination_list', $pagination);
@@ -179,4 +187,4 @@ if (isset($_REQUEST['action'])) {
             $tpl->display('opinion/opinion_author_index.tpl');
         break;
     }
-}
+} 

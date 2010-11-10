@@ -18,18 +18,21 @@ $ccm = ContentCategoryManager::get_instance();
 /* $category_name = $_GET['category_name'];
 $subcategory_name = $_GET['subcategory_name']; */
 
-
+$poll_id = filter_input(INPUT_POST,'poll_id', FILTER_SANITIZE_STRING);
+if(empty($poll_id)) {
+    $poll_id = filter_input(INPUT_GET,'poll_id', FILTER_SANITIZE_STRING);
+}
 if( isset($_REQUEST['op']) ) {
     switch($_REQUEST['op']) {
         case 'votar':
      
         
-            $_REQUEST['poll_id'] = $_POST['id'];
+
      
-            $poll = new Poll($_REQUEST['poll_id']);
+            $poll = new Poll($poll_id);
             
             if(!empty($poll)){
-                $cookie="polls".$_REQUEST['poll_id'];
+                $cookie="polls".$poll_id;
                 if (isset($_COOKIE[$cookie])){
                     $_REQUEST['op']='votar';
                     $tpl->assign('msg','ya ha votado');
@@ -40,10 +43,8 @@ if( isset($_REQUEST['op']) ) {
                     $poll->vote($_POST['respEncuesta'],$ip);
                     $tpl->assign('msg','Gracias por su voto'.$_COOKIE[$cookie]);
                 }
-            }else{
-                
-                $_REQUEST['poll_id'] = '';
             }
+            
             $tpl->assign('op', 'votar'); //conecta_CZonaEncuesta.tpl
         break;
 
@@ -63,7 +64,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
         $subcategory_name = $_REQUEST['subcategory_name'];
     } else {
         if(!empty($_REQUEST['poll_id'])){
-            $poll = new Poll($_REQUEST['poll_id']);
+            $poll = new Poll($poll_id);
          
             $poll->category_name = $poll->loadCategoryName($_REQUEST['poll_id']);
 
@@ -119,7 +120,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
     {
         Application::forward301('/');
     }
-     if(!isset($_REQUEST['poll_id']) || empty($_REQUEST['poll_id'])){
+     if(!isset($poll_id) || empty($poll_id)){
 
          $polls = $cm->find_by_category('Poll',$category, 'available=1  ',
                                         'ORDER BY created DESC LIMIT 0,7');
@@ -130,7 +131,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 
          $category_name = $poll->category_name;
          $subcategory_name = null;
-         $_REQUEST['poll_id'] =$poll->pk_poll;
+         $poll_id = $poll->pk_poll;
          $_REQUEST["action"] = 'read';
         
      }
@@ -188,7 +189,7 @@ if(isset($_REQUEST['action']) ) {
 
             if(($poll->available==1) && ($poll->in_litter==0)) {
 
-                $items=$poll->get_items($_REQUEST['poll_id']);
+                $items=$poll->get_items($poll_id);
                 $tpl->assign('items', $items);
                  $data_rows = array();
                  $max_value = 0;
@@ -278,6 +279,7 @@ if(isset($_REQUEST['action']) ) {
 } else {
     Application::forward301('index.php');
 }
+$tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
 
 $tpl->display('poll/poll.tpl', $cache_id);
 
