@@ -75,7 +75,7 @@
         <div class="layout-column first-column span-16">
             <div class="border-dotted">
                   <a name="module_comments"></a>
-                  {include file="module_comments.tpl" contentid=$video->pk_video nocache}
+                  {include file="module_comments.tpl" contentId=$video->pk_video nocache}
             </div>
         </div>
         <div class="layout-column last-column last span-8">
