@@ -4,3 +4,5 @@
 20101105185931 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1 /var/www/retrincosv82/public/core/author.class.php 298
 20101105191937 application [debug] Error: Unknown column 'pk_rating' in 'field list' /var/www/retrincosv82/public/core/rating.class.php 90
 20101105192219 application [debug] Error: Unknown column 'pk_rating' in 'field list' /var/www/retrincosv82/public/core/rating.class.php 90
+20101110122405 application [debug] Error: Unknown column 'pk_rating' in 'field list' /var/www/retrincosv82/public/core/rating.class.php 90
+20101110123910 application [debug] Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2 /var/www/retrincosv82/public/core/poll.class.php 201
