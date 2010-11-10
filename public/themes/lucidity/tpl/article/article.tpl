@@ -119,7 +119,7 @@
                                     </ul>
                                 {/if}
                             </div><!--fin more-news-bottom-article -->
-                           {include file="module_comments.tpl" content=$articleId nocache}
+                           {include file="module_comments.tpl" contentid=$articleId nocache}
                         </div>
                     </div>
                     {include file="article/article_last_column.tpl"}

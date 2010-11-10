@@ -30,7 +30,7 @@
                 <div class="span-24">
                     <div class="layout-column first-column span-16">
                       <div class="border-dotted">
-                        {include file="module_comments.tpl" content=$album nocache}
+                        {include file="module_comments.tpl" contentid=$album->pk_album nocache}
                       </div>
                     </div>
                     <div class="layout-column last span-8">
