@@ -43,7 +43,10 @@ require_once ("opinion_index_advertisement.php");
  * Generate the ID for use it to fetch caches
 */
 $page = (!isset($_GET['pageop'])) ? $page = 0 : $page = $_GET['pageop']-1;
-$cacheID = $tpl->generateCacheId($category_name, $subcategory_name, $page.$authorID);
+$cacheID = $tpl->generateCacheId($category_name, $authorID, $page);
+
+$cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
+var_dump($cacheID);
 
 
 if (isset($_REQUEST['action'])) {
@@ -127,6 +130,7 @@ if (isset($_REQUEST['action'])) {
             /**
              * Don't execute the app logic if there are caches available
             */
+
             if (!$tpl->isCached('opinion/opinion_author_index.tpl', $cacheID)) {
 
                 $_limit=' LIMIT '.($page*ITEMS_PAGE).', '.(ITEMS_PAGE);
@@ -184,7 +188,7 @@ if (isset($_REQUEST['action'])) {
 
             } // End if isCached
 
-            $tpl->display('opinion/opinion_author_index.tpl');
+            $tpl->display('opinion/opinion_author_index.tpl', $cacheID);
         break;
     }
-} 
+}

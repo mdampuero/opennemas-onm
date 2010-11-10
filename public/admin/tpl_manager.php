@@ -98,6 +98,7 @@ function buildFilter()
         $regexp = array(
                         'frontpages' => 'frontpage\.tpl\.php$',
                         'opinions' => 'opinion\.tpl\.php$',
+                        'frontpage-opinions' => 'opinion_author_index\.tpl\.php$',
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
                         'mobilepages' => 'frontpage-mobile\.tpl\.php$'
@@ -128,6 +129,8 @@ function buildFilter()
 $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH, new Template(TEMPLATE_USER));
 // Get $filter and $params values
 list($filter, $params, $page, $items_page) = buildFilter();
+
+
 // Extract action
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: 'list';
 switch($action) {
@@ -161,7 +164,7 @@ switch($action) {
         /**
          * Fetch request variables
         */
-        $selectedElements = $_REQUEST['selected'];
+        $selectedElements = (isset($_REQUEST['selected']) ? $_REQUEST['selected'] : null );
         $cacheElements = $_REQUEST['cacheid'];
         $tplElements = $_REQUEST['tpl'];
 
@@ -241,7 +244,7 @@ switch($action) {
     case 'list':
     default: {
         $caches = $tplManager->scan($filter);
-
+        
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',

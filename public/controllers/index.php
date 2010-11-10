@@ -17,7 +17,7 @@ $app->mobileRouter();
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if ( !(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
-} 
+}
 
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
 $cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
@@ -34,7 +34,7 @@ $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $cache_page
 /**
  * Fetch information for Advertisements
 */
-require_once("index_advertisement.php"); 
+require_once("index_advertisement.php");
 
 /**
  * Avoid to run the entire app logic if is available a cache for this page
@@ -47,24 +47,24 @@ if(($tpl->caching == 0)
      * Init the Content and Database object
     */
     $ccm = ContentCategoryManager::get_instance();
- 
+
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
     $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
     $section = (is_null($section))? 'home': $section;
 
     $tpl->loadConfigOrDefault('template.conf', $section); // $category_name is a string
     unset($section);
-    
+
     /**
      * If no home   category name
     */
-    if (($category_name != 'home') ) {         
+    if (($category_name != 'home') ) {
         /**
          * Redirect to home page if the desired category doesn't exist or  is empty this is a home page
         */
         if ( empty($category_name) || !$ccm->exists($category_name)) {
             Application::forward301('/home/');
-            
+
         } else {
             /**
              * If there is no any article in a category forward into the first subcategory
@@ -93,7 +93,7 @@ if(($tpl->caching == 0)
                 $subcategory = $ccm->get_id($subcategory_name);
             }
         }
-        
+
     }
 
     $actual_category =
@@ -102,9 +102,9 @@ if(($tpl->caching == 0)
 
     $tpl->assign('actual_category', $actual_category);
     $actual_category_id = $ccm->get_id($actual_category);
-    
+
     require_once ("index_sections.php");
-    
+
     //Obtenemos los articulos
     $cm = new ContentManager();
 
@@ -113,7 +113,7 @@ if(($tpl->caching == 0)
     /************************ FETCHING NEWS ***********************************/
 
     if ($actual_category == 'home') {
-        
+
         /**
          * Get the articles in home page
         */
@@ -123,21 +123,21 @@ if(($tpl->caching == 0)
                             .' AND contents.available=1 AND contents.content_status=1'
                             .' AND contents.fk_content_type=1',
                             'ORDER BY home_pos ASC, created DESC');
-        
+
         /**
          * Filter articles if some of them has time scheduling
         */
         $articles_home = $cm->getInTime($articles_home);
-        
-        $actual_category = 'home';        
+
+        $actual_category = 'home';
         $actual_category_id= 0;
-        
+
     } else {
-        
+
         if($cache_page >= 1) {
-            
+
             $_limit = 'LIMIT '.($cache_page - 1) * $items_page.', '.(ITEMS_PAGE);
-            
+
             $articles_home =
                 $cm->find_by_category_name( 'Article',
                                             $actual_category,
@@ -151,11 +151,11 @@ if(($tpl->caching == 0)
             $total_articles = $cm->cache->count('Article', 'contents.available = 1 AND (contents.content_status = 0 OR (contents.content_status = 1 AND contents.frontpage=0)) AND contents.fk_content_type=1 ', $actual_category_id);
 
         } else {
-            
+
             $articles_home = $cm->find_by_category_name('Article', $actual_category, 'contents.frontpage=1 AND contents.content_status=1 AND contents.available=1  AND contents.fk_content_type=1', 'ORDER BY placeholder ASC, position ASC, created DESC');
-            
+
             $articles_home = $cm->getInTime($articles_home);
-            
+
             $total_articles = $cm->cache->count('Article', 'contents.available = 1 and (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) and contents.fk_content_type=1 ',$actual_category_id);
             $items_page = 20;
         }
@@ -199,7 +199,7 @@ if(($tpl->caching == 0)
     $column = array(); //Contendrá las noticias de la columna
     $relia  = new Related_content();
      // $rating_bar_col1 = array();//Array que contiene las barras de votación de las noticias de la columna1
-    
+
     //for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
     $c = 0;
     $aux = 0;
@@ -227,7 +227,7 @@ if(($tpl->caching == 0)
             if(isset($video)){
                $video1=new Video($video);
                $column[$c]->obj_video= $video1;
-            }            
+            }
         }
 
         /***** COLUMN1 RELATED NEWS  ****/
@@ -249,26 +249,26 @@ if(($tpl->caching == 0)
 
         /***** COLUMN1 COMMENTS *******
         if($articles_home[$aux]->with_comment) {
-            $comment = new Comment();             
+            $comment = new Comment();
 
             $numcomment1[$articles_home[$aux]->id] = $comment->count_public_comments($articles_home[$aux]->id);
             $tpl->assign('numcomment1', $numcomment1);
         }
-      
+
 
         /******* COLUMN1 RATINGS ********
         $rating = new Rating($articles_home[$aux]->id);
         $rating_bar_col1[$articles_home[$aux]->id] = $rating->render('home','vote');
         /******* END COLUMN1 RATINGS **********/
-        
+
         $c++; $aux ++;
     }
-    
+
     //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
     //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
 
-  
+
     /************************************ END COLUMN1 **************************************************/
 
     /************************************ ARTICLES EXPRESS **************************************/
@@ -276,7 +276,7 @@ if(($tpl->caching == 0)
     $articles_home_express = $cm->find('Article', 'content_status=1 AND available=1 AND fk_content_type=1 AND (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 'ORDER BY created DESC LIMIT 0 , 5 ');
 
     $tpl->assign('articles_home_express', $articles_home_express);
-    
+
     /************************************ TITULARES DEL DIA  ************************************/
     if ($category_name == 'home') {
         require_once ("module_other_headlines.php");
@@ -297,7 +297,7 @@ if(($tpl->caching == 0)
         $img = new Photo($gente->img2);
         $gente->path_img = $img->path_file."".$img->name;
     }
-  
+
     $tpl->assign('titulares_gente', $titular_gente);
 
     /**
@@ -309,18 +309,18 @@ if(($tpl->caching == 0)
                            , 'ORDER BY favorite DESC, created DESC'
                            .' LIMIT 0 , 5');
     $tpl->assign('lastAlbum', $lastAlbum);
-    
+
     /**
      * Fetch information for widget videos
     */
     require_once ("widget_videos.php");
-    
+
 
     /**
      * Fetch information for opinion widget
      * require_once ("index_opinion.php");
     */
-    
+
     /**
      * Fetch information for headlines
     */

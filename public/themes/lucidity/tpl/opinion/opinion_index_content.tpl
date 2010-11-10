@@ -1,18 +1,18 @@
 <div class="homepage-opinion-editorial span-16 last">
-	
+
     {if ($smarty.request.action eq "list_opinions") && (!empty($editorial))}
-    
+
         <div class="opinion-listing-editorial span-16 last">
             <h3>Editoriales</h3>
             <div>
                 {section name="ac" loop=$editorial}
                     <a class="post-title" href="{$editorial[ac]->permalink|default:"#"}" >{$editorial[ac]->title|clearslash}</a>
                     {$editorial[ac]->body|clearslash|strip_tags|truncate:500|purify_html}
-                    <a class="opinion-see-more" href="/opinions_autor/2/Editorial.html">[Ver más...]</a>
+                    <a class="opinion-see-more" href="/opinions_autor/1/Editorial.html">[Ver más...]</a>
                 {/section}
             </div>
         </div>
-    
+
     <hr>
     {/if}
 
@@ -29,9 +29,9 @@
             </div>
         </div>
         <hr>
-    
+
     {/if}
-	
+
     <div class="opinion-listing-colaborators  span-16 last">
         <h3>Colaboradores</h3>
         <div class="span-16 clearfix">
@@ -75,7 +75,7 @@
         </div>
 
     </div>
-    {if count($opinions) gt 0}			  
-        <p align="center">{$pagination}</p>        
+    {if count($opinions) gt 0}
+        <p align="center">{$pagination}</p>
     {/if}
 </div>

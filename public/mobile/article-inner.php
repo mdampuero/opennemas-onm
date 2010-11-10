@@ -14,13 +14,13 @@ $tpl = new Template(TEMPLATE_USER);
  * Setup cache
  **/
 $tpl->setConfig('articles-mobile');
-$cacheID = $tpl->generateCacheId('mobile','',0);
+$cacheID = $tpl->generateCacheId('articles-mobile','',$_REQUEST['pk_content']);
 
 /**
  * if cache is enabled and this content has an available cache
  **/
 if(($tpl->caching == 0)
-    || ! $tpl->isCached('mobile/article-inner.tpl', $cacheID, 'frontpagemobile')) {
+    || ! $tpl->isCached('mobile/article-inner.tpl', $cacheID)) {
 
     $articleID = filter_input(INPUT_GET,'pk_content',FILTER_SANITIZE_STRING);
 
@@ -60,9 +60,7 @@ if(($tpl->caching == 0)
         $tpl->assign('photo', $photo->path_file . '140x100-' . $photo->name);
     }
 
-}else{
- echo "cached!";
 }
 
 //TODO: define cache system
-$tpl->display('mobile/mobile.article-inner.tpl', 'frontpagemobile');
+$tpl->display('mobile/mobile-article-inner.tpl', $cacheID);

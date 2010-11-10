@@ -556,7 +556,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
             // Send article to friend
-            require(dirname(__FILE__)."/libs/phpmailer/class.phpmailer.php");
+            require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
 
             $mail = new PHPMailer();
 

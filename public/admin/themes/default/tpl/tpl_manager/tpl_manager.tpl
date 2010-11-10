@@ -56,9 +56,10 @@
                     <option value="" {if $smarty.request.type eq ''}selected="selected"{/if}>All types</option>
                     <option value="frontpages" {if $smarty.request.type eq 'frontpages'}selected="selected"{/if}>Frontpages</option>
                     <option value="articles" {if $smarty.request.type eq 'articles'}selected="selected"{/if}>Inner notice</option>
-                    <option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
                     <option value="mobilepages" {if $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>Mobile frontpages</option>
                     <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>
+					<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>Frontpage opinion</option>
+					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
                 </select>
 
                 and from
@@ -80,69 +81,93 @@
     {if count($caches)>0}
     <table id="tabla" name="tabla" width="100%" class="adminlist">
         <thead>
-            <tr>
+            <tr align="left">
                 <th><input type="checkbox" value="" onclick="selectAll(this.checked, $('tabla').select('tbody input[type=checkbox]'));" /></th>
-                <th>Resource</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resource</th>
                 <th>Category</th>
                 <th>Expire date</th>
                 <th>Creation date</th>
                 <th>Size</th>
                 <th>&nbsp;</th>
-                <th>&nbsp;</th>
             </tr>
         </thead>
-    <tbody>
+	    <tbody>
         {section name="c" loop=$caches}
-        <tr bgcolor="{cycle values="#EEEEEE,#FFFFFF"}">
-			<td width="16">
-				<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
-				<input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
-                <input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
-			</td>
-            <td>
-                {assign var="resource" value=$caches[c].resource}
-			    {if isset($titles.$resource) && ($caches[c].template == 'article')}
+		  <tr bgcolor="{cycle values="#EEEEEE,#FFFFFF"}">
+			   <td width="16">
+					<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
+					<input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
+					<input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
+   			   </td>
+               <td>
+					{assign var="resource" value=$caches[c].resource}
+
+					{* Inner Article *}
+					{if isset($titles.$resource) && ($caches[c].template == 'article')}
                     <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="Caché de artículo interior" />
-                    <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}"
-                        style="text-decoration: underline;" target="_blank">
-                        {$titles.$resource|clearslash}</a>
-                {elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
+                    <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" style="text-decoration: underline;" target="_blank">
+                        Article: {$titles.$resource|clearslash}</a>
+
+					{* Opinion inner *}
+					{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
-                        {$titles.$resource|clearslash}</a>
-                {elseif isset($authors.$resource)}
+                        Opinion inner: {$titles.$resource|clearslash}</a>
+
+					{* RSS opinion *}
+					{elseif isset($authors.$resource)}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS - autor de opinión" />
-                    <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"
+                    <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/" style="text-decoration: underline;" target="_blank">
+                        {$authors.$resource|clearslash}
+					</a>
+
+					{* Opinion author index*}
+					{elseif ($caches[c].template == 'opinion_author_index')}
+                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de portada de autor de opinion" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
-                        {$authors.$resource|clearslash}</a>
-				{elseif $resource eq "RSS"}
-                    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS" />
+                        Opinion Index: author id {$caches[c].resource}</a>
+
+					{* RSS *}
+					{elseif $resource eq "RSS"}
+			   	    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS" />
                     {if $caches[c].category != 'home'}
-                        <a href="{$smarty.const.SITE_URL}rss/{$caches[c].category}/"
-                            style="text-decoration: underline;" target="_blank">
+                        <a href="{$smarty.const.SITE_URL}rss/{$caches[c].category}/" style="text-decoration: underline;" target="_blank">
                     {else}
-                        <a href="{$smarty.const.SITE_URL}rss/"
-                            style="text-decoration: underline;" target="_blank">
+                        <a href="{$smarty.const.SITE_URL}rss/" style="text-decoration: underline;" target="_blank">
                     {/if}
-                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
+                    {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
 
-                {elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
+					{* Frontpage mobile *}
+					{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
                     <img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="Caché de portadas versión móvil" />
-                    <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"
-                        style="text-decoration: underline;" target="_blank">
-                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
+                    <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/" style="text-decoration: underline;" target="_blank">
+                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+					</a>
 
-                {elseif not isset($titles.$resource) && not isset($authors.$resource)}
+					{* Other kind of resources *}
+					{elseif ($caches[c].template == 'frontpage')}
                     <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
-                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"
-                        style="text-decoration: underline;" target="_blank">
+                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}" style="text-decoration: underline;" target="_blank">
+					Frontpage: {if $caches[c].resource gt 0}
+                        {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"} (Pág. {$caches[c].resource})</a>
+                    {else}
+                        {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}</a>
+                    {/if}
+
+					{* Other kind of resources *}
+					{elseif not isset($titles.$resource) && not isset($authors.$resource)}
+                    <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
+                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}" style="text-decoration: underline;" target="_blank">
 					{if $caches[c].resource gt 0}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} (Pág. {$caches[c].resource})</a>
                     {else}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
                     {/if}
-                {/if}
+
+
+				{/if}
             </td>
 			<td width="270">
                 {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
