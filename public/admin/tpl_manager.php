@@ -161,9 +161,9 @@ switch($action) {
         /**
          * Fetch request variables
         */
-        $selectedElements = filter_input(INPUT_GET,'selected',FILTER_SANITIZE_STRING);
-        $cacheElements = filter_input(INPUT_GET,'cacheid',FILTER_SANITIZE_STRING);
-        $tplElements = filter_input(INPUT_GET,'tpl',FILTER_SANITIZE_STRING);
+        $selectedElements = $_REQUEST['selected'];
+        $cacheElements = $_REQUEST['cacheid'];
+        $tplElements = $_REQUEST['tpl'];
 
         /**
          * If the user selected elements to refresh try to process the action
@@ -186,6 +186,10 @@ switch($action) {
                 if(is_string($cacheElements)){
                     refreshAction($tplManager, $cacheElements,  $tplElements);
                 }
+            }
+        } else {
+            if(isset($_REQUEST['cacheid']) && is_string($_REQUEST['cacheid'])){
+                $tplManager->delete($_REQUEST['cacheid'], $_REQUEST['tpl']);
             }
         }
 
