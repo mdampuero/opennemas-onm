@@ -27,8 +27,8 @@
     <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
     <script type="text/javascript"  src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
     
-    {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) ||preg_match('/preview_content\.php/',$smarty.server.SCRIPT_NAME)} 
-        <title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
+    {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) || preg_match('/preview_content\.php/',$smarty.server.SCRIPT_NAME)}
+        <title>{$article->title|clearslash|escape:'html'} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
         <meta name="keywords" content="{$article->metadata|clearslash}" />
         <meta name="description" content="{$article->summary|strip_tags|clearslash}" />
         <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
@@ -45,7 +45,7 @@
             })
         </script>
      {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
-        <title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
+        <title>{$article->title|clearslash|escape:'html'} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
         <meta name="keywords" content="{$article->metadata|clearslash}" />
         <meta name="description" content="{$article->summary|strip_tags|clearslash}" />
         <link rel="stylesheet" href="{$params.CSS_DIR}parts/poll.css" type="text/css" media="screen,projection" />
@@ -65,7 +65,7 @@
         </script>
 
     {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
-        <title>{$album->title|clearslash|default:''} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Álbumes de Galicia - {$smarty.const.SITE_TITLE}</title>
+        <title>{$album->title|clearslash|escape:'html'|default:''} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Álbumes de Galicia - {$smarty.const.SITE_TITLE}</title>
         <meta name="keywords" content="{$album->metadata|clearslash|escape:'html'}" />
         <meta name="description" content="{$album->description|clearslash|escape:'html'}" />
         <link rel="stylesheet" href="{$params.CSS_DIR}gallery.css" type="text/css" media="screen,projection">
