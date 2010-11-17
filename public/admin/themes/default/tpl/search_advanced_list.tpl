@@ -1,14 +1,14 @@
               <table class="adminlist">
                 <tr>
-                    <th class="title">T&iacute;tulo</th>
-                    <th align="center">Tipo de Contenido</th>
-                    <th align="center">Secci&oacute;n</th>
-                    <th align="center">Fecha</th>
+                    <th class="title">Title</th>
+                    <th align="center">Type</th>
+                    <th align="center">Section</th>
+                    <th align="center">Creation date</th>
                     <th align="center">Status</th>
-                    <th align="center">Editar</th>
-                    <th align="center">Recuperar</th>
-                    <th align="center">Visualizar</th>
-                    <th align="center">Notificar</th>
+                    <th align="center">Edit</th>
+                    <th align="center">Restore</th>
+                    <th align="center">View</th>
+                    <th align="center">Notify</th>
                 </tr>
             {section name=c loop=$arrayResults}
                 <tr {cycle values="class=row0,class=row1"}>
@@ -61,7 +61,7 @@
                             <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                         {/if}
                     </td>
-                    
+
                      <td style="padding:10px;width:10%;" align="center">
                          {if ($arrayResults[c].in_litter == 1)}
                                <a href="/admin/litter.php?action=no_in_litter&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="Recuperar de la Papelera">
@@ -90,7 +90,7 @@
                 </tr>
                 {sectionelse}
                 <tr>
-                    <td align="center" colspan=4><br><br><p><h2><b>Ninguna noticia guardada</b></h2></p><br><br></td>
+                    <td align="center" colspan=4><br><br><p><h2><b>There is no type that matches your search criteria</b></h2></p><br><br></td>
                 </tr>
                 {/section}
                 </table>

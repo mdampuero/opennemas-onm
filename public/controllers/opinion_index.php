@@ -43,10 +43,7 @@ require_once ("opinion_index_advertisement.php");
  * Generate the ID for use it to fetch caches
 */
 $page = (!isset($_GET['pageop'])) ? $page = 0 : $page = $_GET['pageop']-1;
-$cacheID = $tpl->generateCacheId($category_name, $authorID, $page);
-
 $cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
-var_dump($cacheID);
 
 
 if (isset($_REQUEST['action'])) {

@@ -9,6 +9,7 @@ require_once('../bootstrap.php');
  * Set up view
 */
 $tpl = new Template(TEMPLATE_USER);
+$tpl->setConfig('video');
 
 /**
  * Set up Category management
@@ -41,6 +42,8 @@ if (isset($_GET['subcategory_name'])) {
     $actual_category = $_GET['subcategory_name'];
 }
 require_once ("index_sections.php");
+require_once ("widget_static_pages.php");
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 if (!isset($_GET['subcategory_name'])) {
     $actual_category = $_GET['category_name'];
@@ -58,9 +61,43 @@ if (isset($_REQUEST['action'])) {
             //SECURITY REASONS
             $video = NULL;
             $cm = new ContentManager();
-            $videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $actual_category_id . '', 'ORDER BY created DESC LIMIT 0, 6');
-            if (count($videos) > 0) {
-                foreach ($videos as $video) {
+
+
+            $cacheID = $tpl->generateCacheId($actual_category, $subcategory_name, '');
+
+            # If is not cached process this action
+            if(($tpl->caching == 0) || !$tpl->isCached('video/video_frontpage.tpl',$cacheID)){
+                $videos = $cm->find_all('Video',
+                                        'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $actual_category_id . '',
+                                        'ORDER BY created DESC LIMIT 0, 6');
+                if (count($videos) > 0) {
+                    foreach ($videos as $video) {
+                        //miramos el fuente youtube o vimeo
+                        if ($video->author_name == 'vimeo') {
+                            $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                            $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                            $return = curl_exec($curl);
+                            $return = unserialize($return);
+                            curl_close($curl);
+                            if (!empty($return)) {
+                                $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                                $video->thumbnail_small = $return[0]['thumbnail_small'];
+                            }
+                        }
+                        $video->category_name = $video->loadCategoryName($video->id);
+                        $video->category_title = $video->loadCategoryTitle($video->id);
+                    }
+                } else {
+                    if (isset($subcategory_name) && !empty($subcategory_name)) {
+                        Application::forward301('/video/' . $category_name . '/');
+                    } else {
+                        Application::forward301('/video/');
+                    }
+                }
+                $others_videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $actual_category_id . '', 'ORDER BY created DESC LIMIT 0, 3');
+                foreach ($others_videos as $video) {
                     //miramos el fuente youtube o vimeo
                     if ($video->author_name == 'vimeo') {
                         $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
@@ -70,108 +107,107 @@ if (isset($_REQUEST['action'])) {
                         $return = curl_exec($curl);
                         $return = unserialize($return);
                         curl_close($curl);
-                        if (!empty($return)) {
-                            $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                            $video->thumbnail_small = $return[0]['thumbnail_small'];
-                        }
+                        $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                        $video->thumbnail_small = $return[0]['thumbnail_small'];
                     }
                     $video->category_name = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
-            } else {
-                if (isset($subcategory_name) && !empty($subcategory_name)) {
-                    Application::forward301('/video/' . $category_name . '/');
-                } else {
-                    Application::forward301('/video/');
-                }
+                $tpl->assign('videos', $videos);
+                $tpl->assign('others_videos', $others_videos);
+                $tpl->assign('page', '1');
+                require_once ('widget_videos_lastest.php');
             }
-            $others_videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $actual_category_id . '', 'ORDER BY created DESC LIMIT 0, 3');
-            foreach ($others_videos as $video) {
-                //miramos el fuente youtube o vimeo
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-            $tpl->assign('videos', $videos);
-            $tpl->assign('others_videos', $others_videos);
-            $tpl->assign('page', '1');
-            //last_comments
-            //$lasts_comments = $cm->find_all('Comment','available=1 AND  content_status=1','ORDER BY created DESC LIMIT 0, 6');
-            $lasts_comments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
-            $tpl->assign('lasts_comments', $lasts_comments);
-            /********************************* ADVERTISEMENTS  *********************************************/
+
+
+
+            // Get last comments to show in video frontpage
+            $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
+            $tpl->assign('lasts_comments', $latestComments);
+
             require_once ("video_advertisement.php");
-            /********************************* ADVERTISEMENTS  *********************************************/
+
+            $tpl->display('video/video_frontpage.tpl', $cacheID);
+
         break;
         case 'inner':
-            //FIXED: check if there is the album 'id_album' otherwise exit()
-            //SECURITY REASONS
             $video = NULL;
             $cm = new ContentManager();
-            if (isset($_REQUEST['id']) && !empty($_REQUEST['id'])) {
-                $videos = $cm->find('Video', 'available=1 and pk_content !=' . $_REQUEST['id'], 'ORDER BY created DESC LIMIT 0 , 2');
-                $thisvideo = new Video($_REQUEST['id']);
-                $tpl->assign('contentId', $_REQUEST['id']); // Used on module_comments.tpl
+
+            $videoID = $_REQUEST['id'];
+
+            if (isset($videoID) && !empty($videoID)) {
+                $videos = $cm->find('Video', 'available=1 and pk_content !=' . $videoID, 'ORDER BY created DESC LIMIT 0 , 2');
+                $thisvideo = new Video($videoID);
+                $tpl->assign('contentId', $videoID); // Used on module_comments.tpl
             } else {
                 $videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 2');
                 $thisvideo = array_shift($videos); //Extrae el primero
+            }
 
-            }
-            $category = $thisvideo->category;
-            //$thisvideo->setNumViews();
-             Content::setNumViews($thisvideo->id);
-            $thisvideo->category_name = $thisvideo->loadCategoryName($thisvideo->id);
-            $thisvideo->category_title = $thisvideo->loadCategoryTitle($thisvideo->id);
-            $tpl->assign('category', $category);
-            $tpl->assign('category_name', $thisvideo->category_name);
-            foreach ($videos as $video) {
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+            $cacheID = $tpl->generateCacheId($actual_category, $subcategory_name, $thisvideo->id);
+
+            /**
+             * Fetch comments for this opinion
+            */
+            $tpl->assign('contentId',$thisvideo->id);
+
+            # If is not cached process this action
+            if(($tpl->caching == 0) || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])){
+
+                $category = $thisvideo->category;
+                //$thisvideo->setNumViews();
+                 Content::setNumViews($thisvideo->id);
+                $thisvideo->category_name = $thisvideo->loadCategoryName($thisvideo->id);
+                $thisvideo->category_title = $thisvideo->loadCategoryTitle($thisvideo->id);
+                $tpl->assign('category', $category);
+                $tpl->assign('category_name', $thisvideo->category_name);
+                foreach ($videos as $video) {
+                    if ($video->author_name == 'vimeo') {
+                        $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                        $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                        $return = curl_exec($curl);
+                        $return = unserialize($return);
+                        curl_close($curl);
+                        $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                        $video->thumbnail_small = $return[0]['thumbnail_small'];
+                    }
+                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->category_title = $video->loadCategoryTitle($video->id);
                 }
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 3');
-            foreach ($others_videos as $video) {
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
+                $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 3');
+                foreach ($others_videos as $video) {
+                    if ($video->author_name == 'vimeo') {
+                        $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
+                        $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($curl, CURLOPT_TIMEOUT, 50);
+                        $return = curl_exec($curl);
+                        $return = unserialize($return);
+                        curl_close($curl);
+                        $video->thumbnail_medium = $return[0]['thumbnail_medium'];
+                        $video->thumbnail_small = $return[0]['thumbnail_small'];
+                    }
+                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->category_title = $video->loadCategoryTitle($video->id);
                 }
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-            $tpl->assign('video', $thisvideo);
-            $tpl->assign('videos', $videos);
-            $tpl->assign('others_videos', $others_videos);
-            $tpl->assign('action', 'inner');
-            /********************************* ADVERTISEMENTS  *********************************************/
-            require_once ("video_inner_advertisement.php");
-            /********************************* ADVERTISEMENTS  *********************************************/
+
+                $tpl->assign('contentId', $videoID);
+                $tpl->assign('video', $thisvideo);
+                $tpl->assign('videos', $videos);
+                $tpl->assign('others_videos', $others_videos);
+                $tpl->assign('action', 'inner');
+
+                require_once ("video_inner_advertisement.php");
+                require_once ('widget_videos_lastest.php');
+
+            } //end iscached
+
+
+            $tpl->display('video/video_inner.tpl', $cacheID);
+
         break;
         case 'videos_incategory':
             $video = NULL;
@@ -261,8 +297,4 @@ if (isset($_REQUEST['action'])) {
 } else {
     Application::forward301('/');
 }
-require_once ("widget_static_pages.php");
-require_once ('widget_videos_lastest.php');
-/******************************************************************************************************/
-// Render
-$tpl->display('video/video.tpl');
+

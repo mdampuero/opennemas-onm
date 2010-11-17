@@ -2,7 +2,7 @@
     OpenNeMas project
     @theme      Lucidity
 *}
-{insert name="numComments" id=$contentId assign="numComments"}
+{insert name="numComments" id=$contentId assign="numComments" nocache}
 
 <div class="article-comments">
     <div class="title-comments">

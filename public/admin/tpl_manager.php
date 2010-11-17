@@ -101,7 +101,8 @@ function buildFilter()
                         'frontpage-opinions' => 'opinion_author_index\.tpl\.php$',
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
-                        'mobilepages' => 'frontpage-mobile\.tpl\.php$'
+                        'mobilepages' => 'frontpage-mobile\.tpl\.php$',
+                        'video' => 'video(.*)\.tpl\.php$'
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
@@ -221,11 +222,14 @@ switch($action) {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);
             $tpl->assign('groupName', array(
-                'frontpages'       => 'Portadas',
-                'frontpage-mobile' => 'Portadas versión móvil',
-                'articles' => 'Artículo interior',
-                'opinion'  => 'Opinión interior',
+                'frontpages'       => 'Frontpages',
+                'frontpage-mobile' => 'Frontpages mobile version',
+                'articles' => 'Inner Article',
+                'articles-mobile' => 'Inner Article mobile version',
+                'opinion'  => 'Inner Opinion',
                 'rss' => 'RSS',
+                'video' => 'Frontpage videos',
+                'video-inner' => 'Inner video',
             ));
 
             $tpl->assign('groupIcon', array(
@@ -233,7 +237,10 @@ switch($action) {
                 'frontpage-mobile' => 'phone16x16.png',
                 'articles' => 'article16x16.png',
                 'opinion' => 'opinion16x16.png',
-                'rss' => 'rss16x16.png'
+                'rss' => 'rss16x16.png',
+                'video'       => 'home16x16.png',
+                'video-inner'       => 'home16x16.png',
+                'articles-mobile'       => 'home16x16.png',
             ));
 
             $tpl->display('tpl_manager/config.tpl');
@@ -244,7 +251,7 @@ switch($action) {
     case 'list':
     default: {
         $caches = $tplManager->scan($filter);
-        
+
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',

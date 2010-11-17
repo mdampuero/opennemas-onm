@@ -7,16 +7,16 @@
     {if !isset($smarty.request.action) ||
         $smarty.request.action eq "load"}
 
-        <table class="adminheading" style="margin-top:30px;">
+        <table class="adminheading" style="">
             <tr>
                 <th nowrap>Busqueda Avanzada</th>
             </tr>
-        </table>       
-        <table class="adminlist" >
-           
+        </table>
+        <table class="adminlist" style="width:100%" >
+
             <tr>
                 <td colspan="2" style="padding:20px;" nowrap="nowrap" colspan='3'>
-                    <label for="title" >Busqueda en el catálogo de información:</label><br/><br/>
+                    <label for="title" >Search in the information catalog:</label><br/><br/>
                 <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                         class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
                 </td>
@@ -35,35 +35,28 @@
                 </td>
             </tr>
         </table>
-        
+
     {elseif $smarty.request.action eq "search"}
-        <div style="margin:20px auto; width:70%">
+        <div style="margin:20px auto;">
             <table class="adminheading">
                 <tr>
                     <th nowrap>Advanced Search</th>
                 </tr>
             </table>
-            <table class="adminlist">
+            <table class="adminlist" style="text-align:center;">
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="25%">
-
-                    </td>
-                    <td style="padding:4px;vertical-align:middle" nowrap="nowrap" width="70%" colspan='3'>
-                        {$htmlCheckedTypes}
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="25%">
-                        <label for="title" >Buscar en el cátalogo:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" width="70%" colspan='3'>
+                    <td colspan=2 style="padding:20px;" nowrap="nowrap" colspan='3'>
+                        <label for="title" >Search string:</label>
                         <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
                             class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
                     </td>
                 </tr>
-                <tr><td colspan="2"><br />
-
-                </td></tr>
+                <tr>
+                    <td colspan=2 style="padding:20px; vertical-align:middle" nowrap="nowrap" colspan='3'>
+                        <strong>Content type:</strong>
+                        {$htmlCheckedTypes}
+                    </td>
+                </tr>
                 </table>
         </div>
         <br/><br/><br/>
@@ -80,13 +73,13 @@
                 </div>
 
             {else}
-           
+
             <table class="adminheading">
                 <tr>
                     <td><b>Resultados de la búsqueda&nbsp&nbsp</b><em>'{$smarty.request.stringSearch|clearslash}'</em></td><td style="font-size: 10px;" align="right"></td>
                 </tr>
             </table>
-            
+
             {if count($arrayResults) gt 0}
                 <table align="right">
                     <tr>
@@ -95,10 +88,10 @@
                 </table>
              {/if}
 
-          
+
 
                {include file="search_advanced_list.tpl"}
-            
+
             {if count($arrayResults) gt 0}
                 <table align="right">
                     <tr>
@@ -371,13 +364,13 @@
 
         <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
         {literal}
-        <script type="text/javascript" language="javascript">		
+        <script type="text/javascript" language="javascript">
             tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
         </script>
-                
-        <script type="text/javascript" language="javascript">    
+
+        <script type="text/javascript" language="javascript">
             OpenNeMas.tinyMceConfig.advanced.elements = "body";
-            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );                        
+            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
         </script>
         {/literal}
 
