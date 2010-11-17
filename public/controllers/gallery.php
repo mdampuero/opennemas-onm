@@ -53,89 +53,95 @@ $tpl->assign('actual_category_id',$actual_category_id);
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //Getting articles
-$cm = new ContentManager(); 
+$cm = new ContentManager();
 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
-		
+
         case 'frontpage':
-            
-            $albums = $cm->find('Album', 'available=1', 'ORDER BY created DESC LIMIT 0 , 11');
-            $tpl->assign('firstalbum',array_shift($albums));
-            $tpl->assign('albums', $albums);
-            
-            require_once('widget_headlines_past.php');
-            // Get the needed variables to show the Tab widget
-            require_once ("widget_gallerys_lastest.php");
 
-             /**
-             * Fetch information for Static Pages
-            */
-            require_once("widget_static_pages.php");
-        
+            if(($tpl->caching == 0)
+			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl'))){
+
+				$albums = $cm->find('Album', 'available=1', 'ORDER BY created DESC LIMIT 0 , 11');
+				$tpl->assign('firstalbum',array_shift($albums));
+				$tpl->assign('albums', $albums);
+
+				/**
+				 * Get info for widgets
+				 **/
+				require_once('widget_headlines_past.php');
+				require_once("widget_gallerys_lastest.php");
+				require_once("widget_static_pages.php");
+			}
             $tpl->display('gallery/gallery-frontpage.tpl');
-            
+
             break;
-        
+
         case 'foto':
-            
-            if ( isset($_REQUEST['id_album']) && !empty($_REQUEST['id_album'])){
-                $albums = $cm->find_by_category('Album', $actual_category_id,  'available=1 and pk_content !='.$_REQUEST['id_album'], 'ORDER BY created DESC LIMIT 0 , 5');
-                $thisalbum = new Album( $_REQUEST['id_album'] );
-    
-            } else {
-                $albums = $cm->find_by_category('Album', $actual_category_id,  'available=1', 'ORDER BY created DESC LIMIT 0 , 6');
-                $thisalbum = array_shift($albums);  //Extrae el primero
-                $_REQUEST['id_album'] = $thisalbum->id;
-            }
-            if(!empty($thisalbum->id)){
-                
-              //  $thisalbum->setNumViews($thisalbum->id);
-                 Content::setNumViews($thisalbum->id);
 
-                $thisalbum->category_name = $thisalbum->loadCategoryName($thisalbum->id);
-                $thisalbum->category_title = $thisalbum->loadCategoryTitle($thisalbum->id);
-                $_albumArray = $thisalbum->get_album($thisalbum->id);
-                $i=0;
-    
-                foreach($_albumArray as $ph){
-                    $albumPhotos[$i]['photo'] = new Photo($ph[0]);
-                    $albumPhotos[$i]['description']=$ph[2];
-                    $i++;
-                 }
-                 $tpl->assign('album', $thisalbum);
-                 $tpl->assign('albumPhotos2', $albumPhotos);
-            
-    
-                 $tpl->assign('gallerys', $albums);
-    
-                require_once ("widget_gallerys_lastest.php");
-                require_once("widget_static_pages.php");
-                
-                require_once ("gallery_advertisement.php");
-                
-                // Visualizar
-                require_once('widget_headlines_past.php');
+			/**
+			 * Redirect to album frontpage if id_album wasn't provided
+			 **/
+			$albumID = $_REQUEST['id_album'];
+			if (empty($albumID)) { Application::forward301('/albumes/'); }
 
-                    /**
-                 * Fetch information for Static Pages
-                */
-                require_once("widget_static_pages.php");
-                 
-                $tpl->display('gallery/gallery.tpl');
-                 
-            } else {
-               Application::forward301('/albumes/');
-            }
-            
+			require_once ("gallery_advertisement.php");
+
+			Content::setNumViews($albumID);
+
+			$cacheID = $albumID;
+			$tpl->assign('contentId', $albumID);
+
+			//if(($tpl->caching == 0) && (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+
+				/**
+				 * Get the album from the id and increment the numviews for it
+				 **/
+				$album = new Album( $albumID );
+				$tpl->assign('album', $album);
+
+				/**
+				 * Get the other albums for the albums widget
+				 **/
+				$otherAlbums = $cm->find_by_category('Album',
+												$actual_category_id,
+												'available=1 and pk_content !='.$albumID,
+												'ORDER BY created DESC LIMIT 0 , 5');
+				$tpl->assign('gallerys', $otherAlbums);
+
+				$album->category_name = $album->loadCategoryName($album->id);
+				$album->category_title = $album->loadCategoryTitle($album->id);
+				$_albumArray = $album->get_album($album->id);
+
+				/**
+				 * Get the photos for the album
+				 **/
+				$i=0;
+				foreach($_albumArray as $ph){
+				   $albumPhotos[$i]['photo'] = new Photo($ph[0]);
+				   $albumPhotos[$i]['description']=$ph[2];
+				   $i++;
+				}
+				$tpl->assign('albumPhotos2', $albumPhotos);
+
+				require_once ("widget_gallerys_lastest.php");
+				require_once("widget_static_pages.php");
+				require_once('widget_headlines_past.php');
+				require_once("widget_static_pages.php");
+
+			//} // end iscached
+
+			$tpl->display('gallery/gallery-inner.tpl', $cacheID);
+
         break;
-     
+
         default:
                 Application::forward301('/');
         break;
 
     }
-    
+
 }else{
     Application::forward301('/');
 }
