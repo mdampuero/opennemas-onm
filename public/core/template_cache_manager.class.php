@@ -68,7 +68,7 @@ class TemplateCacheManager
              }
 
             if(empty($filter) || preg_match($filter, $filename)) {
-                preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/',
+                preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)?\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/',
                        $filename, $matches);
 
                 if(isset($matches['category'])) {

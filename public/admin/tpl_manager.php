@@ -102,7 +102,8 @@ function buildFilter()
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
                         'mobilepages' => 'frontpage-mobile\.tpl\.php$',
-                        'video' => 'video(.*)\.tpl\.php$'
+                        'video-frontpage' => 'video_frontpage\.tpl\.php$',
+                        'video-inner' => 'video_inner\.tpl\.php$'
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];

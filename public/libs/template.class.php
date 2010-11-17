@@ -26,10 +26,10 @@ class Template extends Smarty
     {
         // Call the parent constructor
         parent::__construct();
-        
+
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
-        
+
         // Register db resource
         /*$this->register_resource("db",
                 array("smarty_get_db_template", "smarty_get_db_timestamp",
@@ -59,37 +59,37 @@ class Template extends Smarty
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
-        
+
     }
 
     function setFilters( $filters=array() )
     {
         $this->filters = $filters;
-        $this->autoload_filters = $filters;        
+        $this->autoload_filters = $filters;
     }
-    
-    
-    // TODO: documentation  
+
+
+    // TODO: documentation
     function addScript($js_path, $section='head')
     {
         $this->_addResource($js_path, $this->js_includes, $section);
     }
-    
+
     function removeScript($js_path, $section='head')
     {
-        $this->_removeResource($js_path, $this->js_includes, $section);              
-    }    
-    
+        $this->_removeResource($js_path, $this->js_includes, $section);
+    }
+
     public function addStyle($css_path, $section='head')
     {
         $this->_addResource( $css_path, $this->css_includes, $section );
     }
-    
+
     public function removeStyle($css_path, $section='head')
     {
         $this->_removeResource($css_path, $this->css_includes, $section);
     }
-    
+
     /**
      * Add a resource to resources array (js_includes or css_includes)
      * @param Mixed $res,
@@ -99,60 +99,57 @@ class Template extends Smarty
     private function _addResource($res, &$resources, $section)
     {
         $res = (is_array($res))? $res: array($res);
-        
+
         if ( !isset($resources[$section]) ) {
             $resources[$section] = array();
         }
-        
+
         foreach($res as $item) {
             if ( !in_array($item, $resources[$section] ) ) {
                 $resources[$section][] = $item;
             }
-            
+
             if ( in_array('@-'.$item, $resources[$section] ) ) {
                 $resources[$section] = array_diff($resources[$section], array('@-'.$item) );
             }
         }
     }
-    
+
     private function _removeResource($res, &$resources, $section)
-    {        
+    {
         $res = (is_array($res))? $res: array($res);
-        
+
         if ( !isset($resources[$section]) ) {
             $resources[$section] = array();
-        }        
-        
+        }
+
         foreach($res as $item) {
             if ( !in_array('@-'.$item, $resources[$section]) ) {
                 $resources[$section][] = '@-'.$item;
             }
-            
+
             if ( in_array($item, $resources[$section]) ) {
                 $resources[$section] = array_diff($resources[$section], array($item) );
             }
-        }        
+        }
     }
-    
+
     public function generateCacheId($seccion, $subseccion=null, $resource=null)
     {
         $cacheId = '';
-        
+
         if (!empty($subseccion)) {
-            return($subseccion.'|'.$resource);
+            $cacheId = ($subseccion.'|'.$resource);
+        } elseif (!empty($seccion)) {
+            $cacheId = ($seccion.'|'.$resource);
+        } else {
+            $cacheId = ('home|'.$resource);
         }
-        
-        if (!empty($seccion)) {
-            return($seccion.'|'.$resource);
-        }
-        
-        if (empty($seccion)) {
-            return('home|'.$resource);
-        }        
+        return $cacheId;
     }
 
     function saveConfig($data, $configFile)
-    {                
+    {
         $filename = $this->config_dir . $configFile;
         if ( file_exists($filename) ) {
             $fp = fopen($filename, 'w');
@@ -215,45 +212,45 @@ class Template extends Smarty
         $content = file_get_contents($configFile);
         return preg_match('/\[' . $section . '\]/', $content);
     }
-    
+
     public function setConfig($section)
     {
         $this->configLoad('cache.conf', $section);
         $config = $this->getConfigVars();
-        
+
         $this->caching = $config['caching'];
         $this->cache_lifetime = $config['cache_lifetime'];
     }
-    
+
     public function setMeta($name, $content=null)
     {
         if (is_array($name) && is_null($content)) {
-            
+
             $this->metatags = array_merge($this->metatags, $name);
         } else {
-            
-            $this->metatags[$name] = $content;            
+
+            $this->metatags[$name] = $content;
         }
     }
-    
+
     public function getMeta($name=null)
     {
         if (is_null($name)) {
             return $this->metatags;
         }
-        
+
         return (isset($this->metatags[$name]))? $this->metatags[$name]: null;
     }
-    
+
     public function isHttpEquiv($name)
     {
         $valuesHttpEquiv = array('pragma', 'refresh', 'expires', 'content-type',
                                  'content-language', 'cache-control');
         $name = strtolower($name);
-        
+
         return in_array($name, $valuesHttpEquiv);
     }
-    
+
     public function get_template_vars($varname=null)
     {
         return $this->getTemplateVars($varname, $_ptr = null, $search_parents=true);
@@ -268,7 +265,7 @@ class TemplateAdmin extends Template {
         parent::__construct($theme);
 
         $this->setFilters($filters);
-        
+
         // Parent variables
         $baseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
         $this->template_dir	= $baseDir.'tpl/';
@@ -313,5 +310,3 @@ class TemplateAdmin extends Template {
         /**********************************************************************/
     }
 }
-
-

@@ -60,6 +60,8 @@
                     <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>
 					<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>Frontpage opinion</option>
 					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
+					<option value="video-frontpage" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Video frontpage</option>
+					<option value="video-inner" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Video inner</option>
                 </select>
 
                 and from
@@ -106,20 +108,34 @@
 					{if isset($titles.$resource) && ($caches[c].template == 'article')}
                     <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="Caché de artículo interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" style="text-decoration: underline;" target="_blank">
-                        Article: {$titles.$resource|clearslash}</a>
+                        <strong>Article:</strong> {$titles.$resource|clearslash}</a>
+
+					{* Video inner *}
+					{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="Caché de video interior" />
+                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?id={$caches[c].resource}&action=inner"
+                        style="text-decoration: underline;" target="_blank">
+						 <strong>Video Inner:</strong> {$titles.$resource|clearslash}</a>
+
+					{* Video frontpage *}
+					{elseif ($caches[c].template == 'video_frontpage')}
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="Caché de opinión interior" />
+                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?category_name={$caches[c].category}&action=list"
+                        style="text-decoration: underline;" target="_blank">
+                        <strong>Video Frontpage:</strong> {$caches[c].category}</a>
 
 					{* Opinion inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
-                        Opinion inner: {$titles.$resource|clearslash}</a>
+                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
 
 					{* RSS opinion *}
 					{elseif isset($authors.$resource)}
                     <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS - autor de opinión" />
                     <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/" style="text-decoration: underline;" target="_blank">
-                        {$authors.$resource|clearslash}
+                        <strong>RSS:</strong> {$authors.$resource|clearslash}
 					</a>
 
 					{* Opinion author index*}
@@ -127,7 +143,7 @@
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de portada de autor de opinion" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
-                        Opinion Index: author id {$caches[c].resource}</a>
+                        <strong>Opinion Index:</strong> author id {$caches[c].resource}</a>
 
 					{* RSS *}
 					{elseif $resource eq "RSS"}
@@ -143,14 +159,14 @@
 					{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
                     <img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="Caché de portadas versión móvil" />
                     <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/" style="text-decoration: underline;" target="_blank">
-                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+                        <strong>Mobile Frontpage:</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
 					</a>
 
-					{* Other kind of resources *}
+					{* Frontpages *}
 					{elseif ($caches[c].template == 'frontpage')}
                     <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
                     <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}" style="text-decoration: underline;" target="_blank">
-					Frontpage: {if $caches[c].resource gt 0}
+					<strong>Frontpage:</strong> {if $caches[c].resource gt 0}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"} (Pág. {$caches[c].resource})</a>
                     {else}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}</a>
@@ -170,7 +186,7 @@
 				{/if}
             </td>
 			<td width="270">
-                {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+                {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}
             </td>
 			<td width="190">
                 {if $caches[c].expires < $smarty.now}

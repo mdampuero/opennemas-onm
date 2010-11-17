@@ -63,7 +63,7 @@ if (isset($_REQUEST['action'])) {
             $cm = new ContentManager();
 
 
-            $cacheID = $tpl->generateCacheId($actual_category, $subcategory_name, '');
+            $cacheID = $tpl->generateCacheId($actual_category, null, '');
 
             # If is not cached process this action
             if(($tpl->caching == 0) || !$tpl->isCached('video/video_frontpage.tpl',$cacheID)){
@@ -297,4 +297,3 @@ if (isset($_REQUEST['action'])) {
 } else {
     Application::forward301('/');
 }
-
