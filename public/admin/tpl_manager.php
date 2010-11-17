@@ -63,7 +63,20 @@ function refreshAction(&$tplManager, $cacheid, $tpl)
         } else {
             $url = SITE_URL . 'mobile/';
         }
-    } elseif(isset($matches['resource'])) {
+    } elseif(($tpl == 'video_frontpage.tpl')) { // video frontpage
+
+        $url = SITE_URL . 'controllers/videos.php?category_name='.$cacheid.'&action=list';
+
+    } elseif(($tpl == 'video_inner.tpl') && isset($matches['resource'])) { // video inner
+        $url = SITE_URL . 'controllers/videos.php?id='.$matches['resource'].'&action=inner';
+
+    } elseif(($tpl == 'opinion_index.tpl')) { // opinion frontpage
+        $url = SITE_URL . 'controllers/videos.php?category_name='.$cacheid.'&action=list';
+
+    } elseif(($tpl == 'opinion_inner.tpl') && isset($matches['resource'])) { // opinion inner
+        $url = SITE_URL . 'controllers/opinion.php?category_name=opinion&opinion_id='.$matches['resource'].'&action=read';
+
+    }elseif(isset($matches['resource'])) {
 
         if(preg_match('/[0-9]{14,19}/', $matches['resource'])) { // 19 digits then it's a pk_content
             $url = SITE_URL . 'controllers/article.php?article_id='.$matches['resource'].'&action=read&category_name='.$matches['category'];
@@ -75,7 +88,7 @@ function refreshAction(&$tplManager, $cacheid, $tpl)
                 $url = SITE_URL;
             }
         }
-    } else {
+    }  else {
         preg_match('/(?P<category>[^\|]+)\|RSS(?P<resource>[0-9]*)$/', $cacheid, $matches);
         $url = SITE_URL.'rss/'.$matches['category'].'/'.$matches['resource'];
     }
@@ -194,7 +207,7 @@ switch($action) {
             }
         } else {
             if(isset($_REQUEST['cacheid']) && is_string($_REQUEST['cacheid'])){
-                $tplManager->delete($_REQUEST['cacheid'], $_REQUEST['tpl']);
+                refreshAction($tplManager, $_REQUEST['cacheid'], $_REQUEST['tpl']);
             }
         }
 
