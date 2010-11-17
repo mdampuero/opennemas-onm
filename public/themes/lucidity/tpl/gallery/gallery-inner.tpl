@@ -1,7 +1,7 @@
 {extends file='base/frontpage_layout.tpl'}
 
 
-{block name='header-css'}
+{block name='meta-css'}
     <title>{$album->title|clearslash|escape:'html'|default:''} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Álbumes de Galicia - {$smarty.const.SITE_TITLE}</title>
     <meta name="keywords" content="{$album->metadata|clearslash|escape:'html'}" />
     <meta name="description" content="{$album->description|clearslash|escape:'html'}" />
@@ -33,13 +33,10 @@
     {include file="gallery/gallery_module_script.tpl"}
 {/block}
 
-{insert name="intersticial" type="50"}
-{include file="ads/widget_ad_top.tpl" type1='1' type2='2'}
+
 
 {block name='content'}
-{insert name="intersticial" type="50"}
-
-
+    {insert name="intersticial" type="50"}
     {include file="ads/widget_ad_top.tpl" type1='1' type2='2'}
 
     <div class="wrapper clearfix">
