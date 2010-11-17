@@ -60,8 +60,8 @@
                     <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>
 					<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>Frontpage opinion</option>
 					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
-					<option value="video-frontpage" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Video frontpage</option>
-					<option value="video-inner" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Video inner</option>
+					<option value="video-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>Video frontpage</option>
+					<option value="video-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>Video inner</option>
                 </select>
 
                 and from

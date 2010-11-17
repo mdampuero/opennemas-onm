@@ -236,25 +236,25 @@ switch($action) {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);
             $tpl->assign('groupName', array(
-                'frontpages'       => 'Frontpages',
-                'frontpage-mobile' => 'Frontpages mobile version',
-                'articles' => 'Inner Article',
-                'articles-mobile' => 'Inner Article mobile version',
-                'opinion'  => 'Inner Opinion',
-                'rss' => 'RSS',
-                'video' => 'Frontpage videos',
-                'video-inner' => 'Inner video',
+                'frontpages'        => 'Frontpage',
+                'frontpage-mobile'  => 'Frontpage mobile version',
+                'articles'          => 'Inner Article',
+                'articles-mobile'   => 'Inner Article mobile version',
+                'opinion'           => 'Inner Opinion',
+                'rss'               => 'RSS',
+                'video'             => 'Frontpage videos',
+                'video-inner'       => 'Inner video',
             ));
 
             $tpl->assign('groupIcon', array(
-                'frontpages'       => 'home16x16.png',
-                'frontpage-mobile' => 'phone16x16.png',
-                'articles' => 'article16x16.png',
-                'opinion' => 'opinion16x16.png',
-                'rss' => 'rss16x16.png',
-                'video'       => 'home16x16.png',
-                'video-inner'       => 'home16x16.png',
-                'articles-mobile'       => 'home16x16.png',
+                'frontpages'        => 'home16x16.png',
+                'frontpage-mobile'  => 'phone16x16.png',
+                'articles'          => 'article16x16.png',
+                'articles-mobile'   => 'phone16x16.png',
+                'opinion'           => 'opinion16x16.png',
+                'rss'               => 'rss16x16.png',
+                'video'             => 'video16x16.png',
+                'video-inner'       => 'video16x16.png',
             ));
 
             $tpl->display('tpl_manager/config.tpl');
