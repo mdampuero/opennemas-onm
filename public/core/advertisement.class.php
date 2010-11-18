@@ -406,7 +406,7 @@ class Advertisement extends Content
             return;
         }
 
-		$ad = new Advertisement($i);
+	$ad = new Advertisement($id);
 
         //No publicado
         if(($ad->type_medida=='CLIC' ) AND ($ad->num_clic <= $ad->num_clic_count)){
@@ -441,7 +441,7 @@ class Advertisement extends Content
                 }
             }
         } else {
-			$ad = new Advertisement($id);
+            $ad = new Advertisement($id);
             if(($ad->type_medida == 'VIEW') AND ($ad->num_view <= $ad->views)) {
                 parent::set_status($status=0, 'NULL');
             }

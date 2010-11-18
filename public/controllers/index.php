@@ -13,7 +13,7 @@ $app->mobileRouter();
 /**
  * Fetch HTTP variables
 */
-
+ 
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if ( !(isset($category_name) && !empty($category_name)) ) {
     $category_name = 'home';
