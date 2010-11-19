@@ -468,7 +468,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
             //Removed all of temp files in SITE_ADMIN_TMP_PATH
-            foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
+          //  foreach(glob(SITE_ADMIN_TMP_PATH.DS.'xml'.DS.'*.*') as $v){unlink($v);}
         break;
 
         case 'check':
