@@ -6,4 +6,7 @@ tmp/logs/*
 tmp/cache/*
 tmp/sessions/backend/*
 tmp/sessions/frontend/*
-
+public/media
+*/cache/*
+*/compile/*
+*komodo*

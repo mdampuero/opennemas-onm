@@ -38,6 +38,7 @@
     <script type="text/javascript"  src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
+	<script type="text/javascript" src="{$params.JS_DIR}lazyload/jquery.lazyload.js"></script>
     {/block}
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />
 </head>
@@ -53,6 +54,13 @@
     </div>
 
     {block name="footer-js"}
+	<script type="text/javascript">
+        jQuery(document).ready(function(){
+            if(! navigator.userAgent.toLowerCase().match('ipad')){
+				$('.nw-image').lazyload({ effect:'fadeIn', placeholder:'{$params.JS_DIR}/lazyload/img/blank.png' });
+			}
+        });
+    </script>
     {/block}
 
 </body>
