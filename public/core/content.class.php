@@ -74,10 +74,10 @@ class Content {
         $sql = "INSERT INTO contents (`pk_content`,`fk_content_type`, `title`, `description`,
                                       `metadata`, `starttime`, `endtime`,
                                       `created`, `changed`, `content_status`,
-                                      `views`, `position`,`frontpage`, `placeholder`,`paper_page`,
+                                      `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,`paper_page`,
                                       `fk_author`, `fk_publisher`, `fk_user_last_editor`,
                                       `in_home`, `home_pos`,`available`,`permalink`)".
-                   " VALUES (?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?)";
+                   " VALUES (?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?,?, ?,?,?, ?,?,?,?)";
 
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime']   = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
@@ -85,6 +85,7 @@ class Content {
         $data['available'] = (empty($data['available']))? 0: intval($data['available']);
         $data['frontpage'] = (!isset($data['frontpage']) || empty($data['frontpage']))? 0: intval($data['frontpage']);
         $data['placeholder'] = (!isset($data['placeholder']) || empty($data['placeholder']))? 'placeholder_0_1': $data['placeholder'];
+        $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))? 'placeholder_0_1': $data['home_placeholder'];
         $data['position']  = (empty($data['position']))? '2': $data['position'];
         $data['in_home']   = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos'] = 100;
@@ -120,7 +121,8 @@ class Content {
         $values = array($this->id, $fk_content_type, $data['title'], $data['description'],
                         $data['metadata'], $data['starttime'], $data['endtime'],
                         $data['created'], $data['changed'], $data['content_status'],
-                        $data['views'], $data['position'],$data['frontpage'], $data['placeholder'],$data['paper_page'],
+                        $data['views'], $data['position'],$data['frontpage'],
+                        $data['placeholder'],$data['home_placeholder'],$data['paper_page'],
                         $data['pk_author'], $data['fk_publisher'], $data['fk_user_last_editor'],
                         $data['in_home'], $data['home_pos'],$data['available'],$data['permalink']);
 
@@ -249,7 +251,8 @@ class Content {
 
         $sql = "UPDATE contents SET  `title`=?, `description`=?,
                                       `metadata`=?, `starttime`=?, `endtime`=?,
-                                      `changed`=?, `in_home`=?, `available`=?, `content_status`=?,
+                                      `changed`=?, `in_home`=?, `frontpage`=?, `available`=?, `content_status`=?,
+                                      `placeholder`=?, `home_placeholder`=?, 
                                        `fk_user_last_editor`=?, `permalink`=?
                     WHERE pk_content=".($data['id']);
 
@@ -261,7 +264,11 @@ class Content {
      //        echo  'av '.  $data['available']."- c ".$data['content_status'];
         $data['content_status'] = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
         $data['available'] = (!isset($data['available']))? $this->available: $data['available'];
+        $data['frontpage'] = (!isset($data['frontpage']))? $this->frontpage: $data['frontpage'];
         $data['in_home']   = (empty($data['in_home']))? $this->in_home: $data['in_home'];
+        $data['placeholder'] = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
+        $data['home_placeholder'] = (empty($this->home_placeholder))? 'placeholder_0_1': $this->home_placeholder;
+
         if(empty($data['description'])&& !isset ($data['description'])){$data['description']='';}
 
         if(empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])){$data['fk_user_last_editor']='';}
@@ -281,7 +288,8 @@ class Content {
 
         $values = array( $data['title'], $data['description'],
             $data['metadata'], $data['starttime'], $data['endtime'],
-            $data['changed'], $data['in_home'], $data['available'], $data['content_status'],
+            $data['changed'], $data['in_home'], $data['frontpage'], $data['available'], $data['content_status'],
+            $data['placeholder'],$data['home_placeholder'],
             $data['fk_user_last_editor'], $data['permalink'] );
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {

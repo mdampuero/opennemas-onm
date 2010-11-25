@@ -100,17 +100,27 @@
                        </select>
                         <span style="font-size:9px;">(publicar directamente)</span>
                     </td>
-                </tr>
-               
+                </tr>               
                 <tr>
                     <td valign="top"  align="right" nowrap="nowrap">
-                        <label for="frontpage"> En portada: </label>
+                        <label for="frontpage"> En portada Sección: </label>
                     </td>
                     <td nowrap="nowrap" style="text-align:left;vertical-align:top">
-                        <select name="frontpage" id="in_home" class="required" tabindex="8">
+                        <select name="frontpage" id="frontpage" class="required" tabindex="8">
                             <option value="0" {if $article->frontpage eq 0}selected="selected"{/if}>No</option>
                             <option value="1" {if $article->frontpage eq 1}selected="selected"{/if}>Si</option>                            
                        </select>                       
+                    </td>
+               </tr>
+                <tr>
+                    <td valign="top"  align="right" nowrap="nowrap">
+                        <label for="frontpage"> En Home: </label>
+                    </td>
+                    <td nowrap="nowrap" style="text-align:left;vertical-align:top">
+                        <select name="in_home" id="in_home" class="required" tabindex="8">
+                            <option value="0" {if $article->in_home eq 0}selected="selected"{/if}>No</option>
+                            <option value="1" {if $article->in_home eq 1}selected="selected"{/if}>Si</option>
+                       </select>
                     </td>
                </tr>
                 <tr>

@@ -595,6 +595,8 @@ if(isset($_REQUEST['action']) ) {
             }
             if(isset($_REQUEST['available']) && $_REQUEST['available'] == 1){
                  $_SESSION['desde']='list';
+                 $_SESSION['_from'] =$_REQUEST['category'];
+
             }else{
                 $_SESSION['desde']='list_pendientes';
             }
