@@ -92,15 +92,13 @@ if (isset($_REQUEST['action'])) {
                 /**
                  * Fetch last opinions of contributors and paginate them by ITEM_PAGE
                 */
-                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 '.
+                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 '. 
                                               'AND contents.available=1 '.
+                                              'AND contents.in_home=1 '.
                                               'AND contents.content_status=1',
                                               'ORDER BY in_home DESC, position ASC, created DESC '.$_limit);
 
-                $total_opinions = $cm->cache->count('Opinion',
-                                                'opinions.type_opinion=0 '.
-                                                'AND contents.available=1  '.
-                                                'AND contents.content_status=1');
+
 
                 $paginacion =$cm->create_paginate($total_opinions, ITEMS_PAGE, 4, 'URL', $params);
 
