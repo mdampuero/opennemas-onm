@@ -10,12 +10,10 @@
 <!--[if IE]>
     <link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" />
 <![endif]-->
-{literal}
-<script>
- 
- 
-</script>
-{/literal}
+<script type="text/javascript" src="{$params.JS_DIR}prototype.js" language="javascript"></script>
+<script type="text/javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js" language="javascript"></script>
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+{$script}
 
 </head>
 

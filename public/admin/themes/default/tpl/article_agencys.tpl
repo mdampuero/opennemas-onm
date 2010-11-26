@@ -195,19 +195,19 @@
 
                     <td style="padding:4px;font-size: 11px;" align="center">
                             {if $opinions[c]->content_status == 1}
-                                    <a href="opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
+                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
                                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
                             {else}
-                                    <a href="opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
+                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
                                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
                             {/if}
                     </td>
                     <td style="padding:4px;font-size: 11px;;" align="center">
-                            <a href="opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
+                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                     </td>
                     <td style="padding:4px;font-size: 11px;" align="center">
-                            <a href="opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
+                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                     </td>
                 </tr>

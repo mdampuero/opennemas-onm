@@ -20,7 +20,7 @@
                     {acl isAllowed="OPINION_CREATE"}
                     <div style="float: left;">
                         <div class="icon">
-                            <a href="/admin/opinion.php?action=new">
+                            <a href="/admin/controllers/opinion/opinion.php?action=new">
                                 <img alt="" src="{$params.IMAGE_DIR}opinion.png"/>
                                 <span>Nueva Opini&oacute;n</span>
                             </a>
@@ -75,7 +75,7 @@
                     {acl isAllowed="OPINION_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
-                            <a href="/admin/opinion.php?action=list">
+                            <a href="/admin/controllers/opinion/opinion.php?action=list">
                                 <img alt="" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
                                 <span>Gestor Opini&oacute;n</span>
                             </a>
@@ -86,7 +86,7 @@
                     {acl isAllowed="COMMENTS_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
-                            <a href="/admin/comment.php?action=list&category=todos">
+                            <a href="/admin/controllers/comment.php?action=list&category=todos">
                                 <img alt="" src="{$params.IMAGE_DIR}comments_manager.png"/>
                                 <span>Gestor Comentarios</span>
                             </a>

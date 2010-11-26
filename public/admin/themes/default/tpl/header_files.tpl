@@ -169,7 +169,7 @@ function cancel(action,category,page) {
     if(/index_portada/.test(action)) {
         location.href ='index.php';
     }else if(/opinion/.test(action)) {
-        location.href ='opinion.php';
+        location.href ='controllers/opinion/opinion.php';
     }else if(/advertisement/.test(action)) {
         location.href ='advertisement.php';
     }else{

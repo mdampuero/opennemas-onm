@@ -12,8 +12,8 @@ $menuXml = <<<MENUSTRING
     
     <submenu title="Contents" link="article.php" target="centro">
         <node title="Articles" link="article.php?action=list_pendientes" target="centro" privilege="ARTICLE_LIST_PEND" />
-        <node title="Opinions" link="opinion.php" target="centro" privilege="OPINION_ADMIN" />
-        <node title="Comments" link="comment.php" target="centro" privilege="COMMENT_ADMIN" />
+        <node title="Opinions" link="controllers/opinion/opinion.php" target="centro" privilege="OPINION_ADMIN" />
+        <node title="Comments" link="controllers/comment.php" target="centro" privilege="COMMENT_ADMIN" />
         <node title="Polls" link="poll.php" target="centro" privilege="POLL_ADMIN" />
         <node title="Advertisements" link="advertisement.php" target="centro" privilege="ADVERTISEMENT_ADMIN" />
         <node title="Static Pages" link="static_pages.php" target="centro" privilege="STATIC_ADMIN" />

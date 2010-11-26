@@ -187,3 +187,23 @@ function ckeckName(list, cap){
  	}
  
  }
+
+
+function putMini(pkfoto,imag){
+
+    var ul = parent.document.getElementById('thelist');
+    Nodes = parent.document.getElementById('thelist').getElementsByTagName('li');
+
+    li= document.createElement('li');
+    li.setAttribute('id', pkfoto);
+    li.setAttribute('value', imag);
+    li.setAttribute('class', 'family');
+    li.setAttribute('style', 'cursor: move; list-style-type: none;');
+    min = document.createElement('img');
+    min.id= pkfoto;
+    min.border=1;
+    min.src= imag;
+    li.appendChild(min);
+
+    ul.appendChild(li);
+}

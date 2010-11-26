@@ -7,16 +7,16 @@
 
         <ul class="tabs">
             <li>
-            <a href="opinion.php?action=list&type_opinion=-1" {if $type_opinion==-1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
+            <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" {if $type_opinion==-1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
             </li>
             <li>
-                <a href="opinion.php?action=list&type_opinion=0" {if $type_opinion=='0'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Opini&oacute;n del Autor</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" {if $type_opinion=='0'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Opini&oacute;n del Autor</font></a>
             </li>
             <li>
-                <a href="opinion.php?action=list&type_opinion=1" {if $type_opinion=='1'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Editorial</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" {if $type_opinion=='1'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Editorial</font></a>
             </li>
             <li>
-                <a href="opinion.php?action=list&type_opinion=2" {if $type_opinion=='2'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Opini&oacute;n del Director</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" {if $type_opinion=='2'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>Opini&oacute;n del Director</font></a>
             </li>
         </ul>
         <br />
@@ -37,9 +37,9 @@
         {include file="botonera_up.tpl"}
         <div id="list_opinion">
              {if $type_opinion=='-1'}
-                 {include file="opinion_list_home.tpl"}
+                 {include file="opinion/opinion_list_home.tpl"}
              {else}
-                 {include file="opinion_list.tpl"}
+                 {include file="opinion/opinion_list.tpl"}
              {/if}
         </div>
          {if $smarty.get.msgdelete eq 'ok'}
@@ -59,7 +59,7 @@
 
 {if isset($smarty.request.action) && ($smarty.request.action eq "read" || $smarty.request.action eq "new")}
 
-    {include file="opinion_edit.tpl"}
+    {include file="opinion/opinion_edit.tpl"}
 
     <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
     {literal}

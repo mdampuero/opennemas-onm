@@ -96,7 +96,7 @@ Editable = Class.create({
 
    
     get_list_authors: function(){
-        new Ajax.Request( 'opinion.php?action=get_authors_list',
+        new Ajax.Request( 'controllers/opinion/opinion.php?action=get_authors_list',
         {
             onSuccess:  this.get_response.bind(this)
         });
@@ -227,7 +227,7 @@ Editable = Class.create({
                   }
                  });
          }else if(field =='opinion'){
-            new Ajax.Request( 'opinion.php?action=update_title&id='+itemId+'&title='+data,
+            new Ajax.Request( 'controllers/opinion/opinion.php?action=update_title&id='+itemId+'&title='+data,
                 {
                   onSuccess: function() {
 
@@ -245,7 +245,7 @@ Editable = Class.create({
                   }
                  });
          }else{
-               new Ajax.Request( 'opinion.php?action=update_author&id='+itemId+'&fk_author='+data[0]+'&authorName='+data[1],
+               new Ajax.Request( 'controllers/opinion/opinion.php?action=update_author&id='+itemId+'&fk_author='+data[0]+'&authorName='+data[1],
                 {
                   onSuccess: function() {
 

@@ -139,7 +139,7 @@
 					     {if $type_opinion=='-1' ||  $type_opinion=='0'} 
 					    <td style="padding:4px;font-size: 11px;width:180px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
 						    {if $opinions[c]->type_opinion==1} Editorial{elseif $opinions[c]->type_opinion==2} Director
-						    {else} 	<a href="author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>
+						    {else} 	<a href="controllers/opinion/author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>
 						    Opini&oacute;n: {$names[c]} 	{/if}
 					    </td>
 					    {/if}

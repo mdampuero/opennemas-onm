@@ -41,7 +41,7 @@
 					    </td>
 					     {if  $type_opinion eq '0'} 
 					    <td style="padding:4px;font-size: 11px;width:150px;" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-					    	<a href="author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>					    					    
+					    	<a href="controllers/opinion/author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>
 						     {$names[c]} 					    
 					    </td>
 					    {/if}

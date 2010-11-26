@@ -3,7 +3,7 @@
 
 function changePhotos(fk_author)
 {	
-	new Ajax.Updater('photos', "changephotos.php?fk_author="+fk_author,
+	new Ajax.Updater('photos', "opinion.php?action=change_photos&fk_author="+fk_author,
         {
             evalScripts: true,
             onComplete: function() {
@@ -57,7 +57,8 @@ function show_authors(type_opinion)
           
         }else{
             if(type_opinion==2){
-                fk_author=58; //Director
+              //TODO: get id director not manually
+                  fk_author=58; //Director
                 $('fk_author').value=58;
             }else{
                     fk_author=$('fk_author').options[$('fk_author').selectedIndex].value;
@@ -119,7 +120,7 @@ function changeList(author)
 
 function changepageList(author,page)
 {
-	new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
+	new Ajax.Updater('list_opinion', "controllers/opinion/opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
 }
 
 

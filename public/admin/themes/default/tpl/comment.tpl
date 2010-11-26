@@ -6,10 +6,13 @@
 
     <ul class="tabs2" style="margin-bottom: 28px;">
        <li>
-                <a href="comment.php?action=list&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
         </li>
         <li>
-                <a href="comment.php?action=list&category=home" id="link_home" {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
+        </li>
+         <li>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=7" id="link_home" {if $category=='7'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
         </li>
         <script type="text/javascript">
                 // <![CDATA[
@@ -27,23 +30,23 @@
                 // ]]>
             </script>
        {*  <li>
-                <a href="comment.php?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=encuesta" {if $category=='encuesta' } style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>ENCUESTAS</a>
         </li>*}
-        {include file="menu_categorys.tpl" home="comment.php?action=list"}
+        {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
     </ul>
 
 <br />
 {if $category neq "todos"}
     <ul class="tabs">
 	<li>
-		<a href="comment.php?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
+		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
 	</li>	
 	<li>
-		<a href="comment.php?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
+		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
 	</li>
 	
 	<li>
-		<a href="comment.php?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
+		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
 	</li>		
     </ul>
     <br /> <br />
