@@ -12,7 +12,7 @@
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
         </li>
          <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=7" id="link_home" {if $category=='7'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
         </li>
         <script type="text/javascript">
                 // <![CDATA[
