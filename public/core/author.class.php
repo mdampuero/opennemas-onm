@@ -290,7 +290,7 @@ class Author {
 	
 	//Devuelve todas las fotos que tiene un autor
 	function get_author_photos($id){
-		$sql = 'SELECT author_imgs.pk_img, author_imgs.path_img, author_imgs.description FROM author_imgs WHERE fk_author = '.($id);
+		$sql = 'SELECT author_imgs.fk_author, author_imgs.pk_img, author_imgs.path_img, author_imgs.description FROM author_imgs WHERE fk_author = '.($id);
                 $rs  = $GLOBALS['application']->conn->Execute( $sql );
 
                 if (!$rs) {

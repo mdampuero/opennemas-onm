@@ -53,9 +53,9 @@ if (isset($_REQUEST['action'])) {
             /**
              * Don't execute the app logic if there are caches available
             */
-            echo $cacheID;
+
             if (!$tpl->isCached('opinion/opinion_index.tpl', $cacheID)) {
-echo ' -no- '.$cacheID;
+
                 /**
                  * Fetch last opinions from editorial
                 */
