@@ -4,7 +4,7 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 
- {if $category eq 3 && $totalalbums neq 4}
+ {if $category eq '3' && $totalalbums neq '4'}
         <script type="text/javascript">
             {literal}
                 showMsg({'warn':['Debe tener 4 albums favoritos para portada.<br />  ']},'inline');
@@ -14,9 +14,9 @@
 
     <ul class="tabs2" style="margin-bottom: 28px;">
         <li>
-            <a href="album.php?action=list&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >ALBUM</a>
+            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >WIDGET HOME</a>
         </li>
-       {include file="menu_categorys.tpl" home="album.php?action=list"}
+       {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
     </ul>
 
     <br class="clear"/>
@@ -87,7 +87,7 @@
             </tr>
             {sectionelse}
             <tr>
-                    <td align="center" colspan=5><br><br><p><h2><b>Ning&uacute;n album guardado </b></h2></p><br><br></td>
+                    <td align="center" colspan=5><br><br><h2><b>Ning&uacute;n album guardado </b></h2><br><br></td>
             </tr>
         {/section}
         {if count($albums) gt 0}
