@@ -99,7 +99,7 @@ if (isset($_REQUEST['action'])) {
                                               'AND contents.content_status=1',
                                               'ORDER BY  position ASC, created DESC '.$_limit);
 
-                              
+                              var_dump($opinions);
 
              //   $paginacion =$cm->create_paginate($total_opinions, ITEMS_PAGE, 4, 'URL', $params);
 
