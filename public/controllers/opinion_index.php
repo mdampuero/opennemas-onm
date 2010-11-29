@@ -53,8 +53,9 @@ if (isset($_REQUEST['action'])) {
             /**
              * Don't execute the app logic if there are caches available
             */
+            echo $cacheID;
             if (!$tpl->isCached('opinion/opinion_index.tpl', $cacheID)) {
-
+echo ' -no- '.$cacheID;
                 /**
                  * Fetch last opinions from editorial
                 */
@@ -96,11 +97,11 @@ if (isset($_REQUEST['action'])) {
                                               'AND contents.available=1 '.
                                               'AND contents.in_home=1 '.
                                               'AND contents.content_status=1',
-                                              'ORDER BY in_home DESC, position ASC, created DESC '.$_limit);
+                                              'ORDER BY  position ASC, created DESC '.$_limit);
 
+                              
 
-
-                $paginacion =$cm->create_paginate($total_opinions, ITEMS_PAGE, 4, 'URL', $params);
+             //   $paginacion =$cm->create_paginate($total_opinions, ITEMS_PAGE, 4, 'URL', $params);
 
                 require_once ('widget_headlines_past.php');
                 require_once ("index_sections.php");
