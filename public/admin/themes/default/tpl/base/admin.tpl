@@ -12,6 +12,7 @@
     <meta name="generator" content="OpenNemas - Open Source News Management System" />
 
     {block name="meta"}
+	<title>Test</title>
     {/block}
 
     {block name="header-css"}

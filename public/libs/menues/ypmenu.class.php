@@ -74,7 +74,7 @@ class YpMenu extends Menu
 
     function _submenu_open($attrs)
     {
-        $link = $SITE_ADMIN_PATH ;
+        $link = SITE_URL_ADMIN.'/' ;
 		$link .= (isset($attrs['link']))? $attrs['link']: '#';
 		//$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
 
@@ -104,7 +104,8 @@ class YpMenu extends Menu
     function _node_open($attrs)
     {
         if(($this->paintSubmenu) && (!isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']))) {
-            $link = (isset($attrs['link']))? $attrs['link']: '#';
+			$link = SITE_URL_ADMIN.'/' ;
+			$link .= (isset($attrs['link']))? $attrs['link']: '#';
             //$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
 
             $this->submenuStr .= '<tr><td><a href="'.$link.'"'.$target.'>'.$attrs['title'].'</a></td></tr>' . PHP_EOL;
