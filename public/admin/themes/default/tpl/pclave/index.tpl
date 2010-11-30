@@ -1,4 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -10,7 +13,7 @@
            title="Nueva palabra clave">
             <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />Nueva
         </a>
-    </li>    
+    </li>
 </ul>
 </div>
 
@@ -36,13 +39,13 @@
 	<td width="240">
 		{$pclaves[k]->pclave}
 	</td>
-	<td width="80">		
-        <img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />        
+	<td width="80">
+        <img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
 	</td>
 	<td>
 		{$pclaves[k]->value|default:"-"}
-	</td>	
-	
+	</td>
+
 	<td width="44">
 		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$pclaves[k]->id});" title="Modificar">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
@@ -63,7 +66,7 @@
     <tr>
         <td colspan="5" align="center">
             {$pager->links}
-        </td>            
+        </td>
     </tr>
 </tfoot>
 </table>
@@ -96,7 +99,7 @@
     </td>
     <td style="padding:4px;" nowrap="nowrap" width="60%">
         <input type="text" id="pclave" name="pclave" title="Palabra clave" value="{$pclave->pclave}"
-               class="required" size="30" maxlength="60" />						
+               class="required" size="30" maxlength="60" />
     </td>
 </tr>
 <tr>
@@ -115,7 +118,7 @@
     </td>
     <td style="padding:4px;" nowrap="nowrap" width="60%">
         <input type="text" id="value" name="value" title="Valor" value="{$pclave->value}"
-               size="50" maxlength="240" />						
+               size="50" maxlength="240" />
     </td>
 </tr>
 
@@ -125,7 +128,7 @@
 
 <tr>
     <td valign="top" align="right" style="padding:4px;">
-        <label>Elementos similares ya existentes: </label>		
+        <label>Elementos similares ya existentes: </label>
     </td>
     <td valign="top" style="padding:4px;">
         <div id="similarKeywords" style="border: 1px solid #CCC; padding: 10px; width: 400px; background-color: #EEE;"></div>
@@ -135,8 +138,6 @@
 </tbody>
 </table>
 
-     
-{literal}
 <script type="text/javascript">
 var searching = false;
 
@@ -157,7 +158,10 @@ new Form.Element.Observer(
 );
 
 </script>
-{/literal}
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+
+{/block}

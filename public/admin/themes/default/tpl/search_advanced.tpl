@@ -1,6 +1,8 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
+{block name="content"}
 <div style="margin:0 auto; float:none; width:70%">
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
     {include file="botonera_up.tpl"}
 
@@ -387,7 +389,8 @@
 
 
         {/if}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
 
 </div>
-
-{include file="footer.tpl"}
+{/block}

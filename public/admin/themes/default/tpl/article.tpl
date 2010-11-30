@@ -1,4 +1,14 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="header-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
+    {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    {/if}
+{/block}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}
@@ -19,11 +29,11 @@
 
     {* Archivo respuesta cabecera ajax guarda posicion*}
     {* include_php file="cambiapos.php" *}
-    
+
     {include file="botonera_up.tpl"}
-    
+
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}
-    {if $smarty.get.alert eq 'ok'}       
+    {if $smarty.get.alert eq 'ok'}
     <script type="text/javascript" language="javascript">
         alert('{$smarty.get.msg}');
     </script>
@@ -39,10 +49,10 @@
             </tr>
         </table>
         <div id="pagina">
-            {* NOTICIA DESTACADA ******* 
-            
+            {* NOTICIA DESTACADA *******
+
                        {include file="article_destacada.tpl"}
-                  
+
           *}
             <table class="adminlist">
                  <tr valign="top">
@@ -64,7 +74,7 @@
                           {include  file="article_column.tpl" place='placeholder_2'}
                     </td>
                 </tr>
-            </table>             
+            </table>
 
             <div id="no_en_home" style="margin:10px 0">
                 <table class="adminheading">
@@ -81,7 +91,7 @@
                   </tr>
                 </table>
             </div>
-            
+
             {* CONTENEDOR INFERIOR  otros articulos  o en HOME articulos sugeridos u otras portadas ******* *}
             {if $category neq 'home'}
                 <table class="adminheading">
@@ -117,8 +127,8 @@
                     </div>
                 </div> *}
             {/if}
-           
-             
+
+
             <table style="width:100%">
                     <tr align="right">
                         <td>
@@ -126,7 +136,7 @@
                         </td>
                     </tr>
             </table>
-            
+
         </div> {* div id=pagina *}
         <script type="text/javascript">
             // <![CDATA[
@@ -138,7 +148,7 @@
                 //Provisional repite innecesariamente.
                 {if $category eq 'home'}
                 changedTables({$category});
-                
+
                 {/if}
                 if(!posicionesInicialesWarning) {
                     $$('input[type=checkbox]').each( function(item, idx) {
@@ -152,7 +162,7 @@
             };
 
             document.observe('dom:loaded', function() {
-                posicionesIniciales = $$('input[type=checkbox]');                 
+                posicionesIniciales = $$('input[type=checkbox]');
             });
             make_sortable_divs_portadas('{$category}');
 
@@ -180,24 +190,24 @@
 
         {* This line add a generic images browser to TinyMCE *}
         {* <script type="text/javascript" src="{$params.JS_DIR}/swampy_browser/sb.js"></script> *}
-        
+
         <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
-        {literal}        
-        <script type="text/javascript" language="javascript">        
+        {literal}
+        <script type="text/javascript" language="javascript">
             tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
             {/literal}
-            
+
             {if isset($article) && $article->isClone()}
             OpenNeMas.tinyMceConfig.simple.readonly   = 1;
             OpenNeMas.tinyMceConfig.advanced.readonly = 1;
             {/if}
-        
-            {literal}            
+
+            {literal}
             OpenNeMas.tinyMceConfig.simple.elements = "summary";
             tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-            
+
             OpenNeMas.tinyMceConfig.advanced.elements = "body";
-            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );                        
+            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
         </script>
         {/literal}
 
@@ -221,7 +231,7 @@
     {* FORMULARIO PARA LISTAR PENDIENTES *********************************** *}
 {/if}
 
-{if isset($smarty.request.action) && $smarty.request.action eq "list_hemeroteca"}    
+{if isset($smarty.request.action) && $smarty.request.action eq "list_hemeroteca"}
     {include  file="article_hemeroteca.tpl"}
     {* FORMULARIO PARA LISTAR HEMEROTECA *********************************** *}
 {/if}
@@ -233,11 +243,11 @@
 
 <td valign="top" align="right" style="padding:4px;" width="30%">
 
-<script type="text/javascript" language="javascript">    
+<script type="text/javascript" language="javascript">
 document.observe('dom:loaded', function() {
     if($('title')){
         new OpenNeMas.Maxlength($('title'), {});
-        $('title').focus(); // Set focus first element                
+        $('title').focus(); // Set focus first element
     }
 });
 
@@ -249,7 +259,7 @@ if($('starttime')) {
         timePickerAdjacent: true,
         dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
     });
-    
+
     new Control.DatePicker($('endtime'), {
         icon: './themes/default/images/template_manager/update16x16.png',
         locale: 'es_ES',
@@ -259,4 +269,9 @@ if($('starttime')) {
     });
 }
 </script>
-{include file="footer.tpl"}                            
+
+
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

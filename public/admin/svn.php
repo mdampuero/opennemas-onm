@@ -19,18 +19,23 @@ function test_url($url) {
 
     $headtxt ='';
 
-    if($sock=fsockopen($host,80, $errno, $errstr, 3))
-    {
-        fputs($sock, "HEAD $path HTTP/1.0\r\nHost: $host\r\n\r\n");
-        while(!feof($sock)) $headtxt .= fgets($sock);
-    }
+    try {
+		if($sock=@fsockopen($host,80, $errno, $errstr, 3))
+		{
+			fputs($sock, "HEAD $path HTTP/1.0\r\nHost: $host\r\n\r\n");
+			while(!feof($sock)) $headtxt .= fgets($sock);
+		}
+	}catch(Exception $e){
+		$headtxt = '';
+	}
 
     return (stripos($headtxt, "200 OK") || stripos($headtxt, "401 Authorization Required") === false) ? false:true ;
 }
 
 if(isset($_REQUEST['action']) ) {
-    $username = $_REQUEST['username'];
-    $password = $_REQUEST['password'];
+
+    $username = $_REQUEST['svn_username'];
+    $password = $_REQUEST['svn_password'];
     $repository = $_REQUEST['repository'];
     $destination = $_REQUEST['destination'];
     $action = $_REQUEST['action'];
@@ -67,7 +72,7 @@ if(isset($_REQUEST['action']) ) {
     $tpl->assign('repository', $repository);
     $tpl->assign('destination', $destination);
     $tpl->assign('action', $action);
-    
+
 
     if (test_url($repository) === false) $tpl->assign('return', "svn-server-error");
     else
@@ -90,7 +95,7 @@ if(isset($_REQUEST['action']) ) {
         $destination = "/home/opennemas/retrincos/code/";
         $checkout = "svn info --username $username --password $password $repository";
 
-        exec($checkout, $return);
+		exec($checkout, $return);
 
         $tpl->assign('checkout', $checkout);
         $tpl->assign('return', $return);

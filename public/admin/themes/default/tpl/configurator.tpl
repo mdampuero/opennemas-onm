@@ -1,6 +1,9 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
+{block name="content"}
+{$smarty.block.parent}
 <div style="width:70%; margin:0 auto;">
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* FORM  ********************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "form"}
@@ -11,7 +14,7 @@
         float: left;
         text-align: right;
     }
-    
+
     div.panel input {
         margin: 0;
         margin-left: 0.5em;
@@ -19,15 +22,15 @@
         display: block;
         float: left;
     }
-    
+
     div.spacer {
     }
     </style>
-    
-    <div id="menu-acciones-admin">    
+
+    <div id="menu-acciones-admin">
         <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{$titulo_barra}</h2></div>
-        
-        <ul>        
+
+        <ul>
             <li>
                 <a href="#" class="admin_add" onClick="enviar(this, '_self', 'save', -1);"
                    title="{t}Save configuration{/t}">
@@ -37,7 +40,7 @@
             <li>
                  &nbsp;&nbsp;&nbsp;&nbsp;
             </li>
-            
+
             <li>
                 <a href="#" class="admin_add" onClick="enviar(this, '_self', 'backup', -1);"
                    title="{t}Backup configuration{/t}">
@@ -49,18 +52,18 @@
                    title="{t}Recover configuration{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}clearcache.png" alt="{t}Recover{/t}" /><br />{t}Recover{/t}
                 </a>
-            </li>        
+            </li>
         </ul>
     </div>
-    
+
     <div id="warnings-validation"></div>
-    
+
     <ul id="tabs">
         {foreach key=sect item=no from=$entries}
         <li>
             <a href="#{$sect}">{t}{$sect}{/t}</a>
         </li>
-        {/foreach}    
+        {/foreach}
     </ul>
     {foreach key=sect item=items from=$entries}
     <div id="{$sect}" class="panel" style="width:98%">
@@ -69,11 +72,11 @@
             <label for="{$k}">{$v.title}:</label>
             <input type="text" name="entries[{$k}]" id="{$k}" value="{$v.value}" size="{$len}" />
         {/foreach}
-        <div class="clearer spacer"></div>  
-        
+        <div class="clearer spacer"></div>
+
     </div>
     {/foreach}
-    
+
     <script type="text/javascript">
     /* <![CDATA[ */
     document.observe('dom:loaded', function() {
@@ -84,7 +87,7 @@
     {/if}
     {* LIST BACKUPS ************************************************************** *}
     {if !isset($smarty.request.action) || $smarty.request.action eq "listfiles"}
-    
+
     {literal}
     <script type="text/javascript">
     getCheckedValue = function(radioObj) {
@@ -101,13 +104,13 @@
                 return radioObj[i].value;
             }
         }
-        
+
         return null;
     };
-    
+
     isCheckedFilename = function() {
         var checked = false;
-        
+
         if(getCheckedValue(document.forms[0].filename) != null) {
             enviar($('formulario').childNodes[0], '_self', 'recover', -1);
         } else {
@@ -116,43 +119,44 @@
     };
     </script>
     {/literal}
-    
-    <div id="menu-acciones-admin">    
+
+    <div id="menu-acciones-admin">
         <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{$titulo_barra}</h2></div>
-        
+
         <ul>
             <li>
                 <a href="?action=form" class="admin_add" title="{t}Cancel{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}cancel.png" alt="{t}Cancel{/t}" /><br />{t}Cancel{/t}
                 </a>
             </li>
-            
+
             <li>
                 <a href="#" class="admin_add" onClick="javascript:isCheckedFilename();"
                    title="{t}Recover configuration{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}clearcache.png" alt="{t}Recover{/t}" /><br />{t}Recover{/t}
                 </a>
-            </li>        
+            </li>
         </ul>
     </div>
-    
+
     <div id="warnings-validation"></div>
-    
+
     <h2>Select file to restore:</h2>
-    
+
     <ul>
     {section name="bks" loop=$files}
         <li>
-            <label>            
+            <label>
                 <input type="radio" name="filename" value="{$files[bks].filename}" />
                 {$files[bks].time|date_format:"%d/%m/%Y %H:%M:%S"}
             </label>
         </li>
     {/section}
     </ul>
-    
+
     {/if}
 
 </div><!-- fin wrapper -->
-
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

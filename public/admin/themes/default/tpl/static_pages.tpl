@@ -1,4 +1,8 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -10,7 +14,7 @@
            title="Nueva Página">
             <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva Página" alt="" /><br />Nueva
         </a>
-    </li>    
+    </li>
 </ul>
 </div>
 
@@ -26,16 +30,16 @@ table.adminlist td {
 }
 {/literal}
 </style>
-	
+
 
 <table border="0" class="adminlist">
 {if count($pages)>0}
 <thead>
 <tr>
-    <th>Título</th>	
-	<th>URL</th>	
-	<th class="title">Visitas</th>	
-	<th class="title">Disponible</th>    
+    <th>Título</th>
+	<th>URL</th>
+	<th class="title">Visitas</th>
+	<th class="title">Disponible</th>
     <th>&nbsp;</th>
 </tr>
 </thead>
@@ -44,30 +48,30 @@ table.adminlist td {
 <tbody id="gridPages">
 {section name=k loop=$pages}
 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-	<td>		
+	<td>
 		{$pages[k]->title}
-	</td>	
+	</td>
 	<td>
 		&raquo;
 		<a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="Abrir en nueva ventana">
-			{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>		
+			{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>
 	</td>
-	
+
 	<td width="44" align="right">
 		{$pages[k]->views}
 		&nbsp;&nbsp;
 	</td>
 
 	<td width="44" align="center">
-		<a href="?action=chg_status&id={$pages[k]->id}" class="available">				
-			{if $pages[k]->available == 1}			
+		<a href="?action=chg_status&id={$pages[k]->id}" class="available">
+			{if $pages[k]->available == 1}
 				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="Publicado" />
 			{else}
 				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="Pendiente" />
 			{/if}
 		</a>
 	</td>
-	
+
 	<td width="64" align="center">
 		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$pages[k]->id}');" title="Modificar">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
@@ -87,7 +91,7 @@ table.adminlist td {
     <tr>
         <td colspan="5" align="center">
             {$pager->links}
-        </td>            
+        </td>
     </tr>
 </tfoot>
 </table>
@@ -130,11 +134,11 @@ $('gridPages').select('a.available').each(function(item){
     </td>
     <td style="padding:4px;" nowrap="nowrap" width="60%">
         <input type="text" id="title" name="title" title="Título de la página" value="{$page->title}"
-               class="required" size="60" maxlength="120" tabindex="1" />						
+               class="required" size="60" maxlength="120" tabindex="1" />
     </td>
-	
+
 	<td valign="top" align="right" style="padding:4px;" rowspan="3" width="20%">
-        <table style="background-color:#F5F5F5; padding:18px; width:99%;">                           
+        <table style="background-color:#F5F5F5; padding:18px; width:99%;">
 			<tr>
 				<td valign="middle" align="right">
 					<label for="available">Disponible:</label>
@@ -161,14 +165,14 @@ $('gridPages').select('a.available').each(function(item){
 			</tr>
 		</table>
 	</td>
-	
+
 </tr>
 
 <tr>
     <td valign="top" align="right" style="padding:4px 0 4px 4px;" width="40%">
 		<label for="name">{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}</label>
 	</td>
-    <td style="padding:4px;" nowrap="nowrap" width="60%">		
+    <td style="padding:4px;" nowrap="nowrap" width="60%">
         <input type="text" id="slug" name="slug" title="Palabra clave" value="{$page->slug}"
                class="required" size="56" maxlength="120" tabindex="2" /><label>.html</label>
     </td>
@@ -188,14 +192,14 @@ $('gridPages').select('a.available').each(function(item){
 /* <![CDATA[ */
 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
-OpenNeMas.tinyMceConfig.advanced.elements = "body";	
+OpenNeMas.tinyMceConfig.advanced.elements = "body";
 tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 {literal}
 var previous = null;
 var updateSlug = function() {
 	var slugy = $('slug').value.strip();
 	if(previous!=slugy) {
-		
+
 		new Ajax.Request('?action=build_slug', {
 			method: 'post',
 			postBody: 'slug=' + slugy + '&id=' + $('id').value + '&title=' + $('title').value,
@@ -212,11 +216,11 @@ document.observe('dom:loaded', function() {
 		var slugy = $('slug').value.strip();
 		if(slugy.length <= 0) {
 			updateSlug();
-		}		
+		}
 	});
-	
+
 	$('slug').observe('blur', updateSlug);
-	
+
 	$('metadata').observe('blur', function() {
 		new Ajax.Request('?action=clean_metadata', {
 			method: 'post',
@@ -224,7 +228,7 @@ document.observe('dom:loaded', function() {
 			onSuccess: function(transport) {
 				$('metadata').value = transport.responseText;
 			}
-		});		
+		});
 	});
 });
 {/literal}
@@ -234,4 +238,7 @@ document.observe('dom:loaded', function() {
 <input type="hidden" name="filter[title]" value="{$smarty.request.filter.title}" />
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

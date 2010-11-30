@@ -1,4 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list"}
@@ -22,7 +25,7 @@
                              e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
 
                             });
-                             Event.observe($('link_home'), 'mouseover', function(event) {                              
+                             Event.observe($('link_home'), 'mouseover', function(event) {
                              $('menu_subcats').setOpacity(0);
                              e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
                             });
@@ -40,18 +43,18 @@
     <ul class="tabs">
 	<li>
 		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
-	</li>	
+	</li>
 	<li>
 		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
 	</li>
-	
+
 	<li>
 		<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
-	</li>		
+	</li>
     </ul>
     <br /> <br />
 {/if}
- 
+
 <br>
 
 <div id="{$category}">
@@ -61,12 +64,12 @@
     <table class="adminheading">
 	    <tr>
 		    <th nowrap>Comentarios pendientes de publicar</th>
-	    </tr>	
+	    </tr>
     </table>
 
 
     <table class="adminlist" border=0>
-	<tr>  
+	<tr>
 		<th  style='width:4%;'></th>
 		<th  style='width:16%;'>Titulo</th>
 		<th  style='width:25%;'>Comentario(50carac)</th>
@@ -82,8 +85,8 @@
 		<th style='width:100px;' align="center">Publicar</th>
 		<th style='width:60px;' align="center">Editar</th>
 		<th style='width:60px;' align="center">Eliminar</th>
-	  </tr>		
-  
+	  </tr>
+
      <div class='fisgona' id='fisgona' name='fisgona'></div>
         {* Provisional - comentarios en encuestas en la solapa todos *}
 
@@ -103,9 +106,9 @@
              {$content_types[$type]}
         </td>
 		<td style="padding:10px;font-size: 11px;width:25%;">
-			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;"> 
-			{$articles[c]->title|strip_tags|clearslash}	
-			</a>					
+			<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
+			{$articles[c]->title|strip_tags|clearslash}
+			</a>
 		</td>
 		<td style="font-size: 11px;width:10%;">
 			{$comments[c]->author|strip_tags} <br>
@@ -115,16 +118,16 @@
                 {$comments[c]->email}
             {/if}
 		</td>
-		<td style="width:6%;font-size: 11px;" align="center">							
+		<td style="width:6%;font-size: 11px;" align="center">
 				{$comments[c]->ip}
-		</td> 
+		</td>
 		{if $category eq 'todos' || $category eq 'home'}
-		<td style="width:6%;font-size: 11px;" align="center">			
+		<td style="width:6%;font-size: 11px;" align="center">
 		 	{$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
 		</td>
 		{/if}
 		<td style="width:6%;font-size: 11px;" align="center">
-			{$comments[c]->created} 		
+			{$comments[c]->created}
 		</td>
                 <td style="width:100px;font-size: 11px;" align="center">
                            {$votes[c]->value_pos} /  {$votes[c]->value_pos}
@@ -183,9 +186,9 @@
 {if isset($smarty.post.action) && $smarty.post.action eq "read"}
 
  {include file="botonera_up.tpl"}
- 
 
-<div id="edicion-contenido" style="width:95%;display:inline;"> 
+
+<div id="edicion-contenido" style="width:95%;display:inline;">
 
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="99%">
 <tbody>
@@ -195,9 +198,9 @@
 	<td valign="top" align="right" style="padding:4px;" width="30%">
 		<label for="title">Noticia:</label>
 	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">		
-			<h2><a style="cursor:pointer;"  onClick="new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">{$article->title|clearslash}</a> <span style="font-size:9px;">(* Pinche sobre el titulo para ver la noticia.)</span></h2> 	
-	
+	<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<h2><a style="cursor:pointer;"  onClick="new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">{$article->title|clearslash}</a> <span style="font-size:9px;">(* Pinche sobre el titulo para ver la noticia.)</span></h2>
+
 	</td>
 </tr>
 *}
@@ -211,7 +214,7 @@
 		<input type="hidden" id="fk_content" name="fk_content" title="pk_article"
 			value="{$comment->fk_content}" />
 	</td>
-	
+
 	<td rowspan="5" valign="top"><b>
 			<table style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
 			 <tr>
@@ -221,18 +224,18 @@
 					<td style="padding:4px;" nowrap="nowrap" >
 						<input type="text" id="date" name="date" title="author"
 						value="{$comment->created}" class="required" size="20" readonly /></td>
-				</tr>				
+				</tr>
 			  <tr>
-					<td valign="top" align="right" style="padding:4px;" nowrap="nowrap">			
-			    		<label for="title"> Publicado: </label>  
+					<td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
+			    		<label for="title"> Publicado: </label>
 			    	</td>
-						<td valign="top" style="padding:4px;" nowrap="nowrap">					    	
+						<td valign="top" style="padding:4px;" nowrap="nowrap">
 							<select name="content_status" id="content_status" class="required">
 								<option value="1" {if $comment->content_status eq 1} selected {/if}>Si</option>
-								<option value="0" {if $comment->content_status eq 0} selected {/if}>No</option>						
-					  	   </select>		
+								<option value="0" {if $comment->content_status eq 0} selected {/if}>No</option>
+					  	   </select>
 				</td>
-				</tr> 
+				</tr>
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" nowrap>
 						<label for="title">IP:</label>
@@ -250,7 +253,7 @@
 							value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" nowrap>
 						<label for="title">Nº Palabras cuerpo:</label>
@@ -270,7 +273,7 @@
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
 		<input type="text" id="author" name="author" title="author"
-			value="{$comment->author|clearslash}" class="required" size="40" /> 
+			value="{$comment->author|clearslash}" class="required" size="40" />
 			<label for="title"> Email:</label><input type="text" id="email" name="email" title="email"
 			value="{$comment->email|clearslash}" class="required" size="40" />
 	</td>
@@ -294,32 +297,32 @@
 	 <table border="0" cellpadding="3" cellspacing="0">
 			<tbody>
 			<tr><td><label for="title">Comentario: </label></td>
-			<td> 	
+			<td>
 				<h2> <a style="cursor:pointer;"  onClick="new Effect.BlindDown('edicion-contenido'); new Effect.BlindUp('article-info'); return false;">
 			 	{$comment->title|clearslash}</a></h2>
-			</td></tr> 	
+			</td></tr>
 			<tr><td></td>
-			  <td> 
+			  <td>
 				 <table border="0" width="60%" style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
-				<tbody>			
-				<tr><td> 	
+				<tbody>
+				<tr><td>
 	 		 		<h3>{$article->subtitle|clearslash}</h3>
 	 		 		 <h3 > {$article->agency|clearslash} - {$article->created|date_format:"%d/%m/%y "}</h3>
-				
+
 					<h2>{$article->title|clearslash}</h2>
 					 <p>  <span style="float:left;"><img src="{$photo1->path_file}/{$photo1->name}" id="change1" name="{$article->img1}" border="0" width="180px" /></span>
-					 {$article->summary|clearslash}							  
+					 {$article->summary|clearslash}
 					    </p>
-								
-				 </td></tr> 	
-				 <tr><td> 				
+
+				 </td></tr>
+				 <tr><td>
 						<p>
 							 <span style="float:right;">
 							  <img src="{$photo2->path_file}/{$photo2->name}" id="change1" name="{$article->img2}" border="0" width="300px" /></span>
-							{$article->body|clearslash} 
+							{$article->body|clearslash}
 						</p>
-						
-				
+
+
 					</td>
 				</tr>
 				</tbody>
@@ -328,7 +331,7 @@
 		</tr>
 		</tbody>
 		</table>
-	</div> 
+	</div>
 
 {literal}
 	<script>
@@ -339,16 +342,19 @@
 
 <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
 {literal}
-<script type="text/javascript" language="javascript">		
+<script type="text/javascript" language="javascript">
     tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 </script>
-        
-<script type="text/javascript" language="javascript">    
+
+<script type="text/javascript" language="javascript">
     OpenNeMas.tinyMceConfig.advanced.elements = "body";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );                        
+    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 </script>
 {/literal}
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

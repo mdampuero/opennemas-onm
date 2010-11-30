@@ -1,5 +1,8 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -73,7 +76,7 @@
                                 <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
                             {/if}
                     </td>
-                     
+
                     <td style="padding:10px;width:10%;" align="center">
                             <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
@@ -105,7 +108,7 @@
         {/literal}
     </script>
 {/if}
- 
+
 
 {* FORMULARIO PARA ENGADIR UN CONTENIDO ALBUM ************************************** *}
 
@@ -129,7 +132,7 @@
 	<td style="padding:4px;" nowrap="nowrap">
 		<input type="text" id="title" name="title" title="Album"
 			size="80" value="" onBlur="javascript:get_metadata(this.value);"  />
-			
+
 	</td>
 </tr>
 <tr>
@@ -213,10 +216,10 @@
 	<li>
 		<a href="#edicion-contenido">Edici&oacute;n Album</a>
 	</li>
-	
+
 </ul>
 
-<div class="panel" id="edicion-contenido" style="width:95%">	
+<div class="panel" id="edicion-contenido" style="width:95%">
 <table border="0" cellpadding="2" cellspacing="2" class="fuente_cuerpo" width="90%">
 <tbody>
 <tr>
@@ -226,7 +229,7 @@
 	<td style="padding:4px;" nowrap="nowrap">
 		<input type="text" id="title" name="title" title="Album"
 			size="80" value="{$album->title|clearslash|escape:"html"}" onBlur="javascript:get_metadata(this.value);" />
-			
+
 	</td>
 </tr>
 
@@ -238,7 +241,7 @@
 		<input type="text" id="agency" name="agency" title="Album"
 			size="80" value="{$album->agency|clearslash|escape:"html"}" />
 	</td>
-	<td rowspan=3> 
+	<td rowspan=3>
 		<table style='background-color:#F5F5F5; padding:18px; width:99%;'>
 			<tr>
 				<td valign="top"  align="right" nowrap="nowrap">
@@ -247,7 +250,7 @@
 				<td nowrap="nowrap">
                     <select name="category" id="category"  >
                         {*<option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>             *}
-                        {section name=as loop=$allcategorys}                                                 
+                        {section name=as loop=$allcategorys}
                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
                                 <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
@@ -296,4 +299,7 @@
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

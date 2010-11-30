@@ -1,5 +1,7 @@
-{include file="privilege/header.tpl"}
+{extends file="base/admin.tpl"}
 
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if $smarty.request.action eq "list"}
@@ -12,16 +14,16 @@
             <label>Filter by module:
                 <select name="module" onchange="$('action').value='list';$('formulario').submit();">
                     <option value="">-- ALL --</option>
-                    {section name="mods" loop=$modules}                    
+                    {section name="mods" loop=$modules}
                     <option value="{$modules[mods]}"{if $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
                     {/section}
                 </select>
             </label>
         </th>
-	</tr>	
+	</tr>
 </table>
 
-{literal}    
+{literal}
 <style>
 table.adminlist td,
 table.adminlist th {
@@ -35,7 +37,7 @@ table.adminlist th {
     <th align="left">Grant name</th>
     <th align="left">Description</th>
     <th align="left">Módule</th>
-    
+
     <th align="center">Actions</th>
 </tr>
 {section name=c loop=$privileges}
@@ -50,8 +52,8 @@ table.adminlist th {
 
 	<td>
 		{$privileges[c]->module}
-	</td>    
-    
+	</td>
+
 	<td align="center">
 		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$privileges[c]->id}');" title="Edit grant">
             <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
@@ -103,8 +105,8 @@ div.autocomplete ul li {
     height:32px;
     display:block;
     list-style-type:none;
-    cursor:pointer;    
-} 
+    cursor:pointer;
+}
 {/literal}
 </style>
 
@@ -148,7 +150,7 @@ div.autocomplete ul li {
 </tbody>
 </table>
 </div>
-  
+
 <script type="text/javascript">
 
 var PrivilegeHelper = Class.create({
@@ -156,31 +158,31 @@ var PrivilegeHelper = Class.create({
         this.module  = $(module);
         this.name    = $(name);
         this.modules = options.modules || [];
-        
+
         //<div class="autocomplete" style="display:none"></div>
         divList = new Element('div', { class: 'autocomplete', style: { display: 'none' } });
         this.module.up().insert(divList, { position: 'after' });
-        
+
         new Autocompleter.Local(this.module, divList, this.modules, { ignoreCase: true, partialChars: 3, partialSearch: false });
-        
+
         this._addBehavior();
     },
-    
+
     _addBehavior: function() {
         this.module.observe('keyup', this.updateSpanCallback.bind(this));
         this.module.observe('blur', this.updateSpanCallback.bind(this));
-        this.module.observe('change', this.updateSpanCallback.bind(this));                
+        this.module.observe('change', this.updateSpanCallback.bind(this));
     },
-    
+
     updateSpanCallback: function() {
         // set to uppercase
-        this.module.value = this.module.value.toUpperCase();        
+        this.module.value = this.module.value.toUpperCase();
         if(/.+_/.test(this.name.value)) {
-            this.name.value = this.module.value + '_' + this.name.value.replace(/[^_]+_(.*?)$/, '$1');                        
+            this.name.value = this.module.value + '_' + this.name.value.replace(/[^_]+_(.*?)$/, '$1');
         } else {
             this.name.value = this.module.value + '_' + this.name.value;
         }
-        
+
         this.name.value = this.name.value.replace(/_+/g, '_').toUpperCase();
     }
 });
@@ -189,4 +191,6 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 </script>
 {/if}
 
-{include file="privilege/footer.tpl"}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

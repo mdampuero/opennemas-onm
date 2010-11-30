@@ -1,4 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -50,7 +53,6 @@
             </script>
         {/if}
         <br />
-        {include file="botonera_down.tpl"}
      </div>
 {/if}
 
@@ -74,7 +76,7 @@
     {/literal}
 {/if}
 
-<script type="text/javascript" language="javascript">    
+<script type="text/javascript" language="javascript">
 {literal}
     document.observe('dom:loaded', function() {
         if($('title')){
@@ -84,4 +86,7 @@
 {/literal}
 </script>
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

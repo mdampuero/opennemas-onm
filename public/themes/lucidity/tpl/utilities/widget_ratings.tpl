@@ -1,9 +1,9 @@
 {*
     OpenNeMas project
     @theme      Lucidity
-*}    
+*}
 <div class="vote-block span-10 ">
-    <div class="vote">      
+    <div class="vote">
         {if preg_match('/videos\.php/',$smarty.server.SCRIPT_NAME)}
             {insert name="rating" id=$video->id page="video" type="vote"}
              - <span>{insert name="numComments" id=$video->id}  Comentarios<span>
@@ -19,6 +19,6 @@
         {else}
             {insert name="rating" id=$article->id page="article" type="vote"}
             - <span>{insert name="numComments" id=$article->id}  Comentarios<span>
-        {/if}        
+        {/if}
     </div>
 </div><!-- /vote-bloc -->

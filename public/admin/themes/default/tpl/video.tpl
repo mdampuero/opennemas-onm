@@ -1,13 +1,17 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     <ul class="tabs2" style="margin-bottom: 28px;">
         {include file="menu_categorys.tpl" home="video.php?action=list"}
-    </ul>   
+    </ul>
 
     {include file="botonera_up.tpl"}
-	
+
     <div id="{$category}">
         <table class="adminheading">
             <tr>
@@ -26,25 +30,25 @@
                 <th align="center" style="width:35px;">Estado</th>
                 <th align="center" style="width:35px;">Modificar</th>
                 <th align="center" style="width:35px;">Eliminar</th>
-            </tr>           
+            </tr>
             {section name=c loop=$videos}
                 <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
                     <td style="padding:1px; font-size:11px;">
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
-                    </td>	
+                    </td>
                     <td style="padding:10px;font-size: 11px;"  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}
                     </td>
                     <td style="padding:10px;font-size: 11px;">
                         {$videos[c]->author_name|upper|clearslash}
                     </td>
-                    
+
                     <td style="padding:10px;font-size: 11px;">
                         {section name=as loop=$allcategorys}
                             {if $videos[c]->category eq $allcategorys[as]->pk_content_category}
                                 {$allcategorys[as]->title}
                             {/if}
-                                
+
                             {section name=su loop=$subcat[as]}
                                 {if $videos[c]->category eq $subcat[as][su]->pk_content_category}
                                     &rarr; {$subcat[as][su]->title}
@@ -52,7 +56,7 @@
                             {/section}
                         {/section}
                     </td>
-                    
+
                     <td style="padding:1px; font-size:11px;" align="center">
                         {$videos[c]->views}
                     </td>
@@ -100,9 +104,9 @@
 
 {/if}
 
- 
+
 {* FORMULARIO PARA ENGADIR || ACTUALIZAR *********************************** *}
- 
+
 {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 
     {include file="botonera_up.tpl"}
@@ -116,7 +120,7 @@
                 <td style="padding:4px;" nowrap="nowrap" width="70%">
                         <input type="text" id="title" name="title" title="Título de la noticia"  onChange="javascript:get_metadata(this.value);"
                                 value="{$video->title|clearslash|escape:"html"}" class="required" size="100" />
-                         
+
                 </td>
             </tr>
             <tr>
@@ -134,7 +138,7 @@
                             <td valign="top"  align="right" nowrap="nowrap">
                                 <label for="title">Secci&oacute;n:</label>
                             </td>
-                            <td nowrap="nowrap">  
+                            <td nowrap="nowrap">
                                 <select name="category" id="category"  >
                                     {section name=as loop=$allcategorys}
                                         <option value="{$allcategorys[as]->pk_content_category}" {if $video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
@@ -150,7 +154,7 @@
                                 <label for="title"> Disponible: </label>
                             </td>
                             <td valign="top" nowrap="nowrap">
-                                <select name="available" id="available" class="required">                                     
+                                <select name="available" id="available" class="required">
                                      <option value="1" {if $video->available eq '1'} selected {/if}>Si</option>
                                      <option value="0" {if $video->available eq '0'} selected {/if}>No</option>
                                 </select>
@@ -175,7 +179,7 @@
                 // <![CDATA[
                     {literal}
                              Event.observe($('author_name'), 'change', function(event) {
-                             if($('author_name').value=='otro'){                             
+                             if($('author_name').value=='otro'){
                                  $('htmlcode').setAttribute('class',"required");
                                  $('videoid').setAttribute('class',"norequired");
                              }else{
@@ -259,7 +263,7 @@
             </tr>
 
             {/if}
-           
+
             <tr>
                 <td valign="top" align="right" style="padding:4px;" >
                         <label for="title">Código HTML:</label>
@@ -284,4 +288,7 @@
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

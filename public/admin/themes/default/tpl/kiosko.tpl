@@ -1,6 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
-{* LISTADO ******************************************************************* *}
+{block name="content"}
+<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}
     <ul id="tabs">
@@ -12,7 +13,6 @@
         {/section}
     </ul>
 
-    <br />
     <br />
     {include file="botonera_up.tpl"}
 
@@ -290,12 +290,15 @@
                 </tbody>
             </table>
         </div>
-    
+
 {/if}
 
 {if $smarty.request.action eq "new"}
-        {* Susbtituted by the Control.DatePicker prototype widget *}
+        {* Replaced by the Control.DatePicker prototype widget *}
         {dhtml_calendar inputField="date" button="date" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
 {/if}
 
-{include file="footer.tpl"}                            
+<input type="hidden" id="action" name="action" value="" />
+</form>
+
+{/block}

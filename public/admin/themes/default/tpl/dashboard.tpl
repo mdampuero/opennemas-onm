@@ -1,4 +1,16 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="header-css"}
+    {$smarty.block.parent}
+    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}dashboard.css" />
+{/block}
+
+{block name="header-js"}
+    {$smarty.block.parent}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}swfobject.js"></script>
+{/block}
+
+{block name="content"}
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "index"}
     {* ZONA MENU CATEGORIAS ******* *}
@@ -117,4 +129,6 @@
     {/literal}
 {/if}
 
-{include file="footer.tpl"}                            
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

@@ -2,10 +2,11 @@
 body {
 	font-size:12px;
 	font-family:Arial, Helvetica, sans-serif;
-	background-color: #f9f9f9;
+	background:none;
 }
 html{
-	background-color: #f9f9f9;
+	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
+	min-height:100%;
 }
 
 h2 {
@@ -18,6 +19,10 @@ h2 {
 	margin:0;
 	padding:14px 15px 3px 0;
 	text-shadow:0 1px 0 #FFFFFF;
+}
+
+#content{
+	margin-top: 50px;
 }
 
 td, th {
@@ -105,12 +110,12 @@ form {
 }
 
 .awesome, .awesome:visited {
-	background: #222 url(../images/button-overlay.png) repeat-x; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fff; 
+	background: #222 url(../images/button-overlay.png) repeat-x;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fff;
 	text-decoration: none;
-	-moz-border-radius: 5px; 
+	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -156,7 +161,7 @@ table.adminheading {
 	padding-left: 30px;
 	font-size: 28px;
 	border: 1px solid #ccc;
-	
+
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
 	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
@@ -178,7 +183,7 @@ table.adminlist {
 	width: 100%;
     border-spacing: 0;
 	border: 1px solid #ccc;
-	
+
 	-moz-border-radius: 0 0 6px 6px;
 	-webkit-border-radius: 0 0 6px 6px;
 }
@@ -223,7 +228,7 @@ td.barra_superior {
 	width:100%;
 	height:50px;
 	background-image:url(/admin/images/header_middle.png);
-	text-align:left; 
+	text-align:left;
 	font-size:14px;
 	font-weight:bold;
 }
@@ -260,7 +265,7 @@ td.barra_tareas {
 	border:1px solid #CCCCCC;
 }
 #frontpages{
-	
+
 }
 
 .boton {
@@ -282,11 +287,11 @@ ul.enlace_rel {
 
 
     #thelist2 li { background: #ddedb6; margin:2px; padding: 4px; list-style-type: none;}
-    #thelist3 li { background: #d0d2a5; margin:2px; padding: 4px; list-style-type: none;}     
+    #thelist3 li { background: #d0d2a5; margin:2px; padding: 4px; list-style-type: none;}
     #thelist2int li { background: #d6e3b6; margin:2px; padding: 4px; list-style-type: none;}
     #thelist3int li { background: #c6c89d; margin:2px; padding: 4px; list-style-type: none;}
-    
- 
+
+
 .gallery_list{list-style:none; width:1000px; height:69px; margin:0 auto;}
 .gallery_list li{overflow:hidden; float: left; margin:0 5px 5px 0; width:69px; height:69px; background:#F0F0F0; border:1px double #CBCBCB; }
 .gallery_list li img{cursor:pointer; border:0px; }
@@ -316,41 +321,41 @@ b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px;}
 
 div.overlay {
 	z-index:5;
-	opacity:0.7; 
-	position: fixed; 
-	top: 20%; 
-	left: 20%; 
+	opacity:0.7;
+	position: fixed;
+	top: 20%;
+	left: 20%;
 	width: 1000px;
-	height: 700px; 
-	margin-left: -140px; 
-	margin-top: -80px; 
-	background-color:#000000;	
-	clear:both;  
+	height: 700px;
+	margin-left: -140px;
+	margin-top: -80px;
+	background-color:#000000;
+	clear:both;
 }
 
 div.black {
-	z-index: 7;  
-	clear:both; 
-	opacity:1; 
-	position: fixed; 
-	top: 50%; 
-	left: 50%; 
-	width: 500px; 
-	height: 400px; 
-	margin-left: -240px; 	
-	margin-top: -180px; 
-	background-color:#a00; 
-	overflow:visible; 
+	z-index: 7;
+	clear:both;
+	opacity:1;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	height: 400px;
+	margin-left: -240px;
+	margin-top: -180px;
+	background-color:#a00;
+	overflow:visible;
 	padding:10px;
 	}
 
 div.iframecont {
-	opacity:1;  
-	clear:both;  
+	opacity:1;
+	clear:both;
 	background-color:#FFFFFF;
 	}
 
-	
+
 a.go_home {
 	background-image: url("../images/home_no.png");
 	display: block;
@@ -464,7 +469,7 @@ a.unpublishing:hover {
 #warnings-validation a {
 	font-weight: bold;
 	font-size: 16px;
-	
+
 	color: #024678;
 	text-decoration: underline;
 }
@@ -529,3 +534,45 @@ a.unpublishing:hover {
 #boton_subir img{
 	vertical-align:middle;
 }
+
+
+    #user_activity {
+        background:transparent url(../images/users_activity.png) top right no-repeat;
+        cursor: pointer;
+        text-align: right;
+        padding:2px 20px 2px 2px ;
+        float: left;
+        margin:0 5px;
+        color:#ccc;
+    }
+
+    #user_mailbox {
+        text-align: right;
+        padding:2px 20px 2px 2px ;
+        float: left;
+        margin:0 5px;
+        color:#ccc;
+        padding: 2px;
+    }
+
+    #user_box {
+        color: #0B55C4;
+        font-size: 12px;
+        font-weight: bold;
+        float: right;
+        margin-right: 4px;
+    }
+
+    #user_live {
+        float: left;
+        border-right:  1px solid #CCC;
+        border-bottom: 1px solid #CCC;
+        background-color: inherit;
+
+        width: 20px;
+        padding: 2px 2px 2px 2px;
+    }
+
+    #user_live:hover {
+        background-color: #FFF;
+    }

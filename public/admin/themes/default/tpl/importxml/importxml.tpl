@@ -1,7 +1,10 @@
-{include file="header_files.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 <div>
     <!--form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addFile" method="POST" enctype="multipart/form-data"-->
-    
+
     {include file="botonera_up.tpl"}
     <table class="adminheading">
         <tr>
@@ -22,7 +25,7 @@
                             </div>
                       </p>
                   </div>
-            </div>                  
+            </div>
             <p>&nbsp;</p>
         </td></tr>
     </table><br />
@@ -63,5 +66,8 @@
     </pre>
 {/if}
 </div>
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
 
-{include file="footer.tpl"}
+{/block}

@@ -54,14 +54,14 @@ switch($_REQUEST['action'])
             $Types = getContentTypes();
             $tpl->assign('arrayTypes', $Types);
             break;
-        }        
-        
+        }
+
         $Types = getContentTypes();
         $tpl->assign('arrayTypes', $Types);
-        
+
         $htmlChecks=null;
         $szCheckedTypes = checkTypes($htmlChecks);
-        $szTags  = trim($_REQUEST['stringSearch']);                
+        $szTags  = trim($_REQUEST['stringSearch']);
         $objSearch = cSearch::Instance();
         $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
                                                             $szTags,
@@ -70,11 +70,11 @@ switch($_REQUEST['action'])
                                                             "contents_categories, content_types",
                                                             100);
         $Pager = null;
-       
+
         $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
- 
+
         $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
-        
+
         $tpl->assign('type2res', $type2res);
 
         $tpl->assign('arrayResults', $arrayResults);
@@ -212,7 +212,7 @@ switch($_REQUEST['action'])
          echo $msg;
          exit(0);
     break;
-        
+
     case 'send_notify':
             $article = new Article( $_REQUEST['id'] );
             $article_data=" \n ID -".$article->id;
@@ -231,8 +231,8 @@ switch($_REQUEST['action'])
             $article_data.=" \n fk_publisher -".$article->fk_publisher;
             $article_data.=" \n fk_user_last_editor -".$article->fk_user_last_editor;
 
- 
-   
+
+
             $GLOBALS['application']->workflow->log( '\n NOTIFY - ' .
                               $_SESSION['username'] . ' - ' . $sql . ' ' . print_r($article_data,true), PEAR_LOG_INFO );
             $destinatario="sandra@openhost.es";
@@ -405,7 +405,7 @@ function send_notify( $destinatario, $htmlcontent ) {
 		$mail->IsSMTP();
 		$mail->Host = MAIL_HOST;
 		$mail->SMTPAuth = true;
-    
+
 		$mail->Username = MAIL_USER;
 		$mail->Password = MAIL_PASS;
 

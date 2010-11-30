@@ -1,7 +1,10 @@
-{include file="header_files.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 <div>
     <!--form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addFile" method="POST" enctype="multipart/form-data"-->
-    
+
     {include file="botonera_up.tpl"}
     <table class="adminheading">
         <tr>
@@ -11,14 +14,14 @@
     <table class="adminlist">
         <tr><td colspan="2"><br />
                   <div id="FileContainer">
-              
+
                         <div class="marcoFoto" id="File0">
                             <p style="font-weight: bold;">File #0:
                              <input type="file" name="file[0]" id="fFile0" class="required" size="50" onChange="ckeckName(this,'fileCat[0]');"/> <span style="text-align:right;width:240px;"> Importar a pendientes: <input type="checkbox"  id="check_pendientes[0]" checked="checked" name="check_pendientes[0]" value="1"  style="cursor:pointer;"> </span>
                              <div id="fileCat[0]" name="fileCat[0]" style="display:none;"><table border='0' bgcolor='red'   cellpadding='4'><tr><td>El nombre es incorrecto. Contiene espacios en blanco o caracteres especiales.</td></tr></table></div>
                             </p>
                         </div>
-                  </div>                  
+                  </div>
               <p>&nbsp;</p>
         </td></tr>
     </table><br />
@@ -47,7 +50,7 @@
         {if !empty($article.text)}<tr><td><b>Cuerpo: </b></td><td>{$article.text}</td></tr>{/if}
         {if !empty($article.date)}<tr><td><b>Fecha: </b></td><td>{$article.date}</td></tr>{/if}
         {if !empty($article.category)}<tr><td><b>Sección: </b></td><td>{$article.category}   </td></tr>{/if}
-       
+
     </table>
     {/foreach}
 </pre>
@@ -59,4 +62,8 @@
 {/if}
 </div>
 
-{include file="footer.tpl"}
+
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

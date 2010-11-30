@@ -1,4 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if $smarty.request.action eq "list"}
@@ -8,7 +11,7 @@
 <table class="adminheading">
 	<tr>
 		<th nowrap></th>
-	</tr>	
+	</tr>
 </table>
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 <tr>
@@ -102,4 +105,6 @@
 </div>
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

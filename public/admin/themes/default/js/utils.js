@@ -7,7 +7,7 @@ function sinFrames() {
 }
 
 function checkAll(field,img)
-{		
+{
 	if(field){
 		if( $( img ).getAttribute('status')==0){
 			var status=true;
@@ -18,12 +18,12 @@ function checkAll(field,img)
 			$( img ).src='/admin/themes/default/images/select_button.png';
 			$( img ).setAttribute('status','0');
 		}
-		if(field.length){			
-			for (i = 0; i < field.length; i++) {				
-				$( field[i].id ).checked = status;				
+		if(field.length){
+			for (i = 0; i < field.length; i++) {
+				$( field[i].id ).checked = status;
 			}
-		}else{ //Solo hay un elemento a de/seleccionar			
-			 	$( field ).checked = status;				
+		}else{ //Solo hay un elemento a de/seleccionar
+			 	$( field ).checked = status;
 		}
 	}
 }
@@ -75,15 +75,15 @@ function get_tags(title)
    //como hacemos uso del metodo GET
    //colocamos null
    ajax.send(null)
-   
-	
+
+
 }
 //Para publicidad, opinion y album
 function get_metadata(title)
 {
 	 //instanciamos el objetoAjax
 	   ajax=objetoAjax();
-	 
+
 	   var tags= document.getElementById('metadata').value;
 
 	   //uso del medotod GET
@@ -92,14 +92,14 @@ function get_metadata(title)
 	    if (ajax.readyState==4) {
 		     //mostrar resultados en esta capa
 		     document.getElementById('metadata').value = ajax.responseText
-		
+
 		   }
        }
    //como hacemos uso del metodo GET
    //colocamos null
    ajax.send(null)
-   
-	
+
+
 }
 
 
@@ -115,10 +115,10 @@ function countWords(text,counter){
 }
 
 function counttiny(counter, editor){
-	
+
 	//var codigo = document.getElementById('body_ifr').contentWindow.document.getElementById('tinymce').innerHTML;
 	var codigo = editor.getContent();
-	
+
 	resul=codigo.replace(/<[^>]+>/g,''); //Quitamos html;
 	var y=resul;
 	var r = 0;
@@ -126,12 +126,17 @@ function counttiny(counter, editor){
 	a=a.split(' ');
 	for (z=0; z<a.length; z++) {if (a[z].length > 0) r++;}
 	counter.value=r;
-	
+
 }
 
 function get_images(category,page,action, metadatas)
-{	
+<<<<<<< HEAD
+{
     new Ajax.Updater('photos', "/admin/article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
+=======
+{
+    new Ajax.Updater('photos', "article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
+>>>>>>> First attempt to drop iframe and use template inheritance
         {
             evalScripts: true,
             onComplete: function() {
@@ -160,7 +165,7 @@ function onImageKeyEnter(e, category, metadatas, page)
 function get_search_videos(metadatas, page)
 {
 	action='list_by_metadatas';
-	if(metadatas==0){ 
+	if(metadatas==0){
 		action='list';
 	}
    new Ajax.Updater('videos', "article_change_videos.php?action="+action+"&page="+page+"&metadatas="+metadatas,
@@ -192,7 +197,7 @@ function onVideoKeyEnter(e, metadatas, page)
 function onChangeGroup(evaluateControl, ids)
 {
     if (document.getElementById)
-    {        
+    {
         //se define la variable "el" igual a nuestro div
         if(evaluateControl.options[evaluateControl.selectedIndex].text.toLowerCase() == "administrador")
         {
@@ -217,7 +222,7 @@ function onChangeGroup(evaluateControl, ids)
             for(iIndex=0; iIndex<combo.options.length;  iIndex++)
                 combo.options[iIndex].selected = false;
         }
-            
+
     }
 }
 
@@ -257,7 +262,7 @@ function del_photo(id)
 
 
 function delete_fichero(id,page){
-      
+
       new Ajax.Request( 'ficheros.php?action=delete&id='+id+'&page='+page,
         {
             onSuccess: function(transport) {
@@ -270,8 +275,8 @@ function delete_fichero(id,page){
                    return false;
             }
         });
-       
-       
+
+
  }
 
 
@@ -346,14 +351,19 @@ function change_dashboard(div,category) {
         get_dashboard_box(div,category,14,div+'_most_2s');
         get_dashboard_box(div,category,30,div+'_most_1m');
     }
-    
+
 }
 
 
 function  show_subcat(category,home){
-    
     new Ajax.Updater('menu_subcats', "/admin/controllers/utils_content.php?action=get_subcategories&category="+category+"&home="+home,
     {
           evalScripts: true
     });//
+}
+
+function salir() {
+	if(confirm('¿Desea salir del panel de administración?')) {
+		location.href = 'logout.php';
+	}
 }

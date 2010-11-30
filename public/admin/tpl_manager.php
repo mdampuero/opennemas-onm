@@ -244,6 +244,8 @@ switch($action) {
                 'rss'               => 'RSS',
                 'video'             => 'Frontpage videos',
                 'video-inner'       => 'Inner video',
+                'gallery-frontpage'       => 'Gallery frontpage',
+                'gallery-inner'       => 'Gallery Inner',
             ));
 
             $tpl->assign('groupIcon', array(
@@ -255,6 +257,8 @@ switch($action) {
                 'rss'               => 'rss16x16.png',
                 'video'             => 'video16x16.png',
                 'video-inner'       => 'video16x16.png',
+                'gallery-frontpage'       => 'gallery16x16.png',
+                'gallery-inner'       => 'gallery16x16.png',
             ));
 
             $tpl->display('tpl_manager/config.tpl');
@@ -265,6 +269,7 @@ switch($action) {
     case 'list':
     default: {
         $caches = $tplManager->scan($filter);
+
 
         // Pager
         $pager_options = array(

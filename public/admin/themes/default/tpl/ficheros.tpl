@@ -1,4 +1,9 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -44,7 +49,7 @@
 	{if $category eq 0}
 		<table class="adminheading" style="width:99%; margin-left:0;">
 			<tr>
-				<th width="300" class="title" align="left">T&iacute;tulo</th>		
+				<th width="300" class="title" align="left">T&iacute;tulo</th>
 				<th width="10%" align="left">Nº Ficheros</th>
 			</tr>
         </table>
@@ -55,12 +60,12 @@
 						<tr {cycle values="class=row0,class=row1"}>
 							<td style="padding: 0px 10px; height: 24px;font-size: 11px;width:300;">
 								 <b> {$categorys[c]->title|clearslash|escape:"html"}</b>
-							</td>				
+							</td>
 							<td style="padding: 0px 10px; height: 24px;font-size: 11px;width:10%;" align="left">
 								{$num_photos[c]}</a>
 							</td>
-						 </tr>	
-						 	<tr><td colspan=2>								  
+						 </tr>
+						 	<tr><td colspan=2>
                                                                   {section name=su loop=$subcategorys[c]}
                                                                       <table width="100%" cellpadding=0 cellspacing=0 id="{$subcategorys[c][su]->pk_content_category}" class="tabla">
                                                                                 <tr {cycle values="class=row0,class=row1"}>
@@ -76,23 +81,23 @@
 							</td></tr>
 						</table>
 					{/section}
-				</tr>			
+				</tr>
 				<tr><td colspan="2">
 				  {section name=c loop=$num_especials}
 					  <table width="100%" cellpadding=0 cellspacing=0 >
 						<tr {cycle values="class=row0,class=row1"}>
 							<td style="padding: 0px 10px; height: 24px;font-size: 11px;width:300;">
 								 <b> {$num_especials[c].title|upper|clearslash|escape:"html"}</b>
-							</td>				
+							</td>
 							<td style="padding: 0px 10px; height: 24px;font-size: 11px;width:10%;" align="left">
 								{$num_especials[c].num}</a>
 							</td>
-						 </tr>	
-						 	
+						 </tr>
+
 						</table>
 					{/section}
-				</tr>					
-			 </table>	
+				</tr>
+			 </table>
 	{else}
 	<a id="boton_subir" href="#" onclick="new Effect.toggle($('adjunt'),'blind')"> <img src='images/iconos/examinar.gif' border='0'> Subir nuevos Archivos </a>
 		<div><h2 style="color:#BB1313">{$smarty.request.msg}</h2></div>
@@ -102,12 +107,12 @@
 				</tr>
 				<tr>
 			        <td colspan="2">
-			  
-				
+
+
 			        </td>
-			    </tr>	
+			    </tr>
 			</table>
-			<div id="adjunt" class="adjunt" style="display: none;">	
+			<div id="adjunt" class="adjunt" style="display: none;">
                                 <iframe src="adjuntos.php?category={$category}&amp;desde=fich" width="500" height="220" align="center" frameborder="0" framespacing="0" scrolling="none" border="0">
                                 </iframe>
 			</div>
@@ -119,7 +124,7 @@
                                     <th align="center">Modificar</th>
                                     <th align="center">Eliminar</th>
                               </tr>
-			
+
                             {section name=c loop=$attaches}
                                 <tr {cycle values="class=row0,class=row1"}>
 
@@ -139,7 +144,7 @@
                                         <td style="padding:10px;font-size: 11px;width: 84px;" align="center">
                                                 <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$attaches[c]->id}');" title="Modificar">
                                                         <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                                        </td>                                        
+                                        </td>
                                           <td style="padding:10px;font-size: 11px;width: 84px;" align="center">
                                                 <a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar">
                                                         <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
@@ -153,18 +158,18 @@
                                 </td>                            </tr>
 			{/section}
 			{if count($attaches) gt 0}
-			
+
 			<tr>
 			    <td colspan="5" align="center">{$paginacion->links}</td>
 			</tr>
 			{/if}
 			</table>
-			
+
 			    <div id="adjunto" class="adjunto"></div>
-			
+
 			</div>
-			<br />	
-							
+			<br />
+
 		{/if}
 {/if}
 
@@ -173,7 +178,7 @@
 
 <!-- <div class="panel" id="edicion-contenido" style="width:720px"> -->
 
-<br>	
+<br>
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">
 <tbody>
 <tr>
@@ -187,7 +192,7 @@
 			value="{$attaches->category}" />
 			<input type="hidden" id="fich" name="fich" title="Fichero"
 			value="{$attaches->pk_attachment}" />
-			
+
 	</td>
 </tr>
 <tr>
@@ -205,7 +210,7 @@
 		<label for="title">Metadata:</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="metadata" name="metadata" title="path" 
+		<input type="text" id="metadata" name="metadata" title="path"
 			value="{$attaches->metadata|clearslash}" class="required" size="100" />
 	</td>
 </tr>
@@ -214,7 +219,7 @@
 		<label for="title">Descripcion:</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="description" name="description" title="path" 
+		<input type="text" id="description" name="description" title="path"
 			value="{$attaches->description|clearslash}" class="required" size="100" />
 	</td>
 </tr>
@@ -237,4 +242,7 @@
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

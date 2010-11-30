@@ -1,5 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -9,7 +11,7 @@
 <table class="adminheading">
 	<tr>
 		<th nowrap></th>
-	</tr>	
+	</tr>
 </table>
 
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
@@ -80,8 +82,8 @@ div.autocomplete ul li {
     height:32px;
     display:block;
     list-style-type:none;
-    cursor:pointer;    
-} 
+    cursor:pointer;
+}
 {/literal}
 </style>
 
@@ -128,9 +130,8 @@ div.autocomplete ul li {
 
 <input type="hidden" id="id" name="id" value="{$privilege->id}" />
 
-    
+
 <script type="text/javascript">
-{literal}
 /**
  *
  */
@@ -139,38 +140,39 @@ var PrivilegeHelper = Class.create({
         this.module  = $(module);
         this.name    = $(name);
         this.modules = options.modules || [];
-        
+
         //<div class="autocomplete" style="display:none"></div>
         divList = new Element('div', {class: 'autocomplete', style: {display: 'none'}});
         this.module.up().insert(divList, {position: 'after'});
-        
+
         new Autocompleter.Local(this.module, divList, this.modules, {ignoreCase: true, partialChars: 3, partialSearch: false});
-        
+
         this._addBehavior();
     },
-    
+
     _addBehavior: function() {
         this.module.observe('keyup', this.updateSpanCallback.bind(this));
         this.module.observe('blur', this.updateSpanCallback.bind(this));
-        this.module.observe('change', this.updateSpanCallback.bind(this));                
+        this.module.observe('change', this.updateSpanCallback.bind(this));
     },
-    
+
     updateSpanCallback: function() {
         // set to uppercase
-        this.module.value = this.module.value.toUpperCase();        
+        this.module.value = this.module.value.toUpperCase();
         if(/.+_/.test(this.name.value)) {
-            this.name.value = this.module.value + '_' + this.name.value.replace(/[^_]+_(.*?)$/, '$1');                        
+            this.name.value = this.module.value + '_' + this.name.value.replace(/[^_]+_(.*?)$/, '$1');
         } else {
             this.name.value = this.module.value + '_' + this.name.value;
         }
-        
+
         this.name.value = this.name.value.replace(/_+/g, '_').toUpperCase();
     }
 });
 
-new PrivilegeHelper('module', 'name', {modules: {/literal}{json_encode value=$modules}{literal}});
-{/literal}
+new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} });
 </script>
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

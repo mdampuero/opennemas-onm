@@ -7,7 +7,6 @@ pendiente dividir en tpls pequeños y quitar los ifs*}
     {include file="header.tpl"}
 {/if}
 
-{literal}
 <script type="text/javascript">
 function confirmar(url) {
     if(confirm('¿Está seguro de querer eliminar este fichero?')) {
@@ -15,7 +14,6 @@ function confirmar(url) {
     }
 }
 </script>
-{/literal}
 
 {if !empty($smarty.request.alerta)}
     <script type="text/javascript">
@@ -32,7 +30,7 @@ function confirmar(url) {
         new Effect.Highlight('console-info', {ldelim}startcolor:'#ff99ff', endcolor:'#999999'{rdelim})
     </script>
 {/if}
- 
+
 <div id="contenedor-gral">
     <ul class="tabs2">
         <li>
@@ -51,7 +49,7 @@ function confirmar(url) {
             </li>
         {/if}
         {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
-               
+
     </ul>
 
 
@@ -69,7 +67,7 @@ function confirmar(url) {
         <br style="clear:both;" />
         <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$title_bar} </h2></div>
         <div id="menu-acciones-admin" >
-                <ul>                  
+                <ul>
                      <li>
                         <a class="admin_add" href="{$home}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
                             <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
@@ -102,11 +100,11 @@ function confirmar(url) {
             {include file="media_list_infor.tpl"}
         {/if}
    {else}
- 
-      
-     
+
+
+
     </div>
-    
+
    <br style="clear:both;" />
 
 {* BOTONERA: incluir en botonera_up.tpl*}
@@ -136,63 +134,67 @@ function confirmar(url) {
       {if $action neq 'results'}
         <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
 	<div id="menu-acciones-admin">
-            <ul>
-               {if $action neq 'upload'}
-                   <li>
-                        <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                            <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                            <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />Eliminar
-                        </a>
-                    </li>
-                    <li>
-                        <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                            <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
-                        </button>
-                    </li>
-                {/if}
-                <li>
-                    <a class="admin_add" href="{$home}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
-                        <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
-                    </a>
-                </li>
-                {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
-                    <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Fotos">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Fotos
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Fotos">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Fotos de Hoy">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
-                        </a>
-                    </li>
-                {else}
-                   <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Gráficos
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all#media-browser"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Gráficos">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Gráficos
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today#media-browser"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Gráficos de Hoy">
-                            <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Gráficos de Hoy
-                        </a>
-                    </li>
-                 {/if}
-            </ul>
+        <ul>
+            {if $action neq 'upload'}
+            <li>
+                <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
+                </a>
+            </li>
+            <li>
+                <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />Eliminar
+                </a>
+            </li>
+            <li>
+                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
+                </button>
+            </li>
+            {/if}
+
+            <li>
+                <a class="admin_add" href="{$home}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
+                </a>
+            </li>
+
+            {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
+            <li>
+                <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Fotos">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Fotos
+                </a>
+            </li>
+            <li>
+                <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Fotos">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
+                </a>
+            </li>
+            <li>
+                <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Fotos de Hoy">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
+                </a>
+            </li>
+
+            {else}
+            <li>
+                 <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
+                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Gráficos
+                 </a>
+            </li>
+            <li>
+                 <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all#media-browser"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Gráficos">
+                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Gráficos
+                 </a>
+            </li>
+            <li>
+                 <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today#media-browser"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Gráficos de Hoy">
+                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Gráficos de Hoy
+                 </a>
+            </li>
+            {/if}
+
+        </ul>
 	</div>
     {/if}
 
@@ -200,7 +202,7 @@ function confirmar(url) {
 
    <div id="{$category}" class="categ" style="width:100%; padding: 6px 2px;">
         <br style="clear:both;" />
-       
+
         {* ******************************************************************** *}
         {* UPLOAD ************************************************************* *}
         {if $action == 'upload'}
@@ -218,19 +220,19 @@ function confirmar(url) {
                                                     <img src="{$params.IMAGE_DIR}add.png" border="0" alt="Añadir fichero" width="22px" height="22px" />
                                                 </a>
                                             </td>
-                                            
+
                                             <td style="border: 1px solid #ccc;">
                                                 <a onclick="delFile()" style="cursor:pointer;">
                                                     <img src="{$params.IMAGE_DIR}del.png" border="0" alt="Suprimir fichero" width="22px" height="22px" />
                                                 </a>
                                             </td>
-                                            
+
                                             <td style="border: 1px solid #ccc;">
                                                 <input type="image" src="{$params.IMAGE_DIR}save_all.png" alt="Submit" name="submit" align="middle" width="22px" height="22px" style="cursor:pointer;" />
                                             </td>
                                         </tr>
                                     </table>
-                                    
+
                                     <div id="fotosContenedor">
                                         <div class="marcoFoto" id="foto0">
                                             <input type="hidden" name="MAX_FILE_SIZE" value="307200" />
@@ -246,9 +248,9 @@ function confirmar(url) {
                                                         </tr>
                                                     </table>
                                                 </div>
-                                                
+
                                                 <input type="hidden" name="category" value="{$category}" />
-                                                
+
                                                 {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
                                                     <input type="hidden" name="media_type" value="image" />
                                                 {else}
@@ -261,13 +263,13 @@ function confirmar(url) {
                             </div>
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td>
                             <br />
                             <b>Forma de uso</b>
                             <br /><br />
-                            
+
                             <table>
                                 <tr>
                                     <td>
@@ -277,7 +279,7 @@ function confirmar(url) {
                                         Este signo se utiliza para <b>AÑADIR</b> una foto m&aacute;s al formulario de subida<br />
                                     </td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td>
                                         <img src="{$params.IMAGE_DIR}del.png" border="0" alt="Añadir fichero" width="22px" height="22px" />
@@ -287,7 +289,7 @@ function confirmar(url) {
                                     </td>
                                 </tr>
                             </table>
-                            
+
                             <ul>
                                 <li>El tamaño máximo de la imagen es de 200k</li>
                                 <li><b>SOLO</b> se podrán subir <b>10</b> fotos de una vez</li>
@@ -299,7 +301,7 @@ function confirmar(url) {
                 </tbody>
                 </table>
             </div>
-        
+
         {elseif $action == 'results'}
             {* ******************************************************************** *}
             {* RESULTS ************************************************************ *}
@@ -324,9 +326,9 @@ function confirmar(url) {
                         </li>
                     </ul>
                 </div>
-                
+
                 <div id="media_msg" style="float:right;width:300px;display:none;"> </div>
-                
+
                 {if !empty($smarty.request.mensaje)}
                     {literal}
                     <script type="text/javascript">
@@ -334,18 +336,18 @@ function confirmar(url) {
                     </script>
                     {/literal}
                 {/if}
-                
+
                 <input type="hidden" name="category" value="{$smarty.request.category}" />
-                
+
                 {section name=n loop=$photo}
                     {include file="photo_data.tpl" display="none" photo1=$photo[n]}
                 {/section}
             </form>
-            
+
         {else}
             {if !empty($smarty.request.mensaje)}
                 {literal}
-                <script type="text/javascript">                
+                <script type="text/javascript">
                     showMsgContainer({'warn':['Ocurrió algún error al subir: <br /> {/literal}{$smarty.request.mensaje}. {literal}<br /> Compruebe su tamaño (MAX 300 MB). <br /> ']},'inline','media_msg');
                 </script>
                 {/literal}
@@ -353,8 +355,8 @@ function confirmar(url) {
 
             {include file="media-browser.tpl"}
         {/if}
-        
+
     {/if} {* endif $category eq 'GLOBAL' *}
 </div>
- 
+
 {include file="footer.tpl"}

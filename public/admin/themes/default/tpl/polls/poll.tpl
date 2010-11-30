@@ -1,12 +1,14 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
 
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
    <ul class="tabs2" style="margin-bottom: 28px;">
         {include file="menu_categorys.tpl" home="poll.php?action=list"}
-    </ul>   
-    
+    </ul>
+
     {include file="botonera_up.tpl"}
 
 <br>
@@ -61,7 +63,7 @@
 			<a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente"></a>
 		{/if}
             </td>
- 
+
 	    <td style="padding:10px;font-size: 11px;width:10%;" align="center">
 		    {if $polls[c]->available == 1}
 			    <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
@@ -70,7 +72,7 @@
 			    <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
 				    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
 		    {/if}
-             
+
 	    </td>
 	    	<td style="padding:1px;width:10%;font-size: 11px;" align="center">
 				<a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Archivar a Hemeroteca">
@@ -228,9 +230,12 @@
         </tr>
     </tbody>
     </table>
- 
+
  </div>
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

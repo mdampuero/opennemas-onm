@@ -60,10 +60,24 @@ if( isset($_REQUEST['action']) ) {
 
         case 'frontpage':
 
-            if(($tpl->caching == 0)
-			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl'))){
+			/**
+			 * Setup caching system
+			 **/
+			$tpl->setConfig('gallery-frontpage');
 
+			$cacheID = $tpl->generateCacheId('gallery-frontpage');
+
+			/**
+			 * Don't perform this action if is cached
+			 **/
+            if(($tpl->caching == 0)
+			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl',$cacheID))){
+
+				/**
+				 * Get last 11 albums
+				 **/
 				$albums = $cm->find('Album', 'available=1', 'ORDER BY created DESC LIMIT 0 , 11');
+
 				$tpl->assign('firstalbum',array_shift($albums));
 				$tpl->assign('albums', $albums);
 
@@ -80,6 +94,8 @@ if( isset($_REQUEST['action']) ) {
 
         case 'foto':
 
+			$tpl->setConfig('gallery-inner');
+
 			/**
 			 * Redirect to album frontpage if id_album wasn't provided
 			 **/
@@ -90,10 +106,11 @@ if( isset($_REQUEST['action']) ) {
 
 			Content::setNumViews($albumID);
 
-			$cacheID = $albumID;
+			$cacheID = $tpl->generateCacheId('gallery-inner', null, $albumID);
+
 			$tpl->assign('contentId', $albumID);
 
-			//if(($tpl->caching == 0) && (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+			if(($tpl->caching == 0) && (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
 
 				/**
 				 * Get the album from the id and increment the numviews for it
@@ -115,7 +132,7 @@ if( isset($_REQUEST['action']) ) {
 				$_albumArray = $album->get_album($album->id);
 
 				/**
-				 * Get the photos for the album
+				 * Get the album photos
 				 **/
 				$i=0;
 				foreach($_albumArray as $ph){
@@ -130,7 +147,7 @@ if( isset($_REQUEST['action']) ) {
 				require_once('widget_headlines_past.php');
 				require_once("widget_static_pages.php");
 
-			//} // end iscached
+			} // end iscached
 
 			$tpl->display('gallery/gallery-inner.tpl', $cacheID);
 

@@ -1,7 +1,11 @@
-{extends file="tpl_manager/cache_manager_layout.tpl"}
+{extends file="base/admin.tpl"}
 
 {block name="content"}
 
+<div id="adviceRefresh" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0;">
+    <img src="{$params.IMAGE_DIR}template_manager/messagebox_warning.png" border="0" align="absmiddle" />
+    La accion "Renovar cache" sobre múltiples cachés puede ralentizar el sistema.
+</div>
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 <div id="menu-acciones-admin">
      <div style="float:left;"><h2>{$titulo_barra}</h2></div>
@@ -62,6 +66,8 @@
 					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
 					<option value="video-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>Video frontpage</option>
 					<option value="video-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>Video inner</option>
+					<option value="gallery-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>Video frontpage</option>
+					<option value="gallery-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>Video inner</option>
                 </select>
 
                 and from
@@ -127,6 +133,20 @@
 					{* Opinion inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
+                        style="text-decoration: underline;" target="_blank">
+                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
+
+					{* Gallery frontpage *}
+					{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
+                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="Caché de gallery frontpage" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
+                        style="text-decoration: underline;" target="_blank">
+                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
+
+					{* Gallery inner *}
+					{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-inner')}
+                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="Caché de gallery interior" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
                         style="text-decoration: underline;" target="_blank">
                         <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>

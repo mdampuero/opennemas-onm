@@ -6,7 +6,6 @@
 require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
-
 /**
  * Setup view
 */
@@ -57,48 +56,48 @@ $titulo_barra = 'Newsletter';
 //}
 
 // Actions by XHR
-if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {    
+if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
     $action = (!isset($_POST['action']))? '': $_POST['action'];
-    
+
     switch($action) {
         case 'getArticle':
-            $article = new Article( $_REQUEST['id'] );            
-            
+            $article = new Article( $_REQUEST['id'] );
+
             $data = new stdClass();
             $data->id         = '';
             $data->pk_content = $article->id;
             $data->title      = base64_encode($article->title);
-            $data->subtitle   = base64_encode($article->subtitle);             
+            $data->subtitle   = base64_encode($article->subtitle);
             $data->summary    = base64_encode($article->summary);
-            
+
             //$data->agencia = base64_encode($article->agency_web);
-            
+
             // Data
             $json = new Services_JSON();
             $data = $json->encode( $data );
-            
+
             $tpl->assign('message', $data);
-	    
+
         break;
-    
+
         case 'getOpinion':
             $opinion = new Opinion($_REQUEST['id']);
-            
+
             $data = new stdClass();
             $data->id         = '';
             $data->pk_content = $opinion->id;
             $data->title      = base64_encode( $opinion->title );
-            
+
             $summary          = Bulletin::filterString( $opinion->body ); //String_Utils::str_stop( strip_tags( stripslashes($opinion->body) ), 60);
-            $data->summary    = base64_encode( $summary ); 
-            
+            $data->summary    = base64_encode( $summary );
+
             // Data
             $json = new Services_JSON();
             $data = $json->encode( $data );
-            
+
             $tpl->assign('message', $data);
-        break;    
-    
+        break;
+
         case 'searchNew':
             $cm = new ContentManager();
 			// ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE> c.content t.article, <CLAUSE_ORDER>);
@@ -150,30 +149,30 @@ switch($action) {
         $sin_archivar = null;
         $date_archive = date('W');//to get the number of the present week
         $date_archive = $date_archive + 10;
-        
+
         //Last opinions
         //$opinions = $cm->find('Opinion', $sin_archivar, 'ORDER BY archive DESC LIMIT 0, 30');
         //$opinions = $cm->find('Opinion', "archive >= '$date_archive'", 'ORDER BY archive DESC, pk_content DESC');
         $opinions = $cm->find('Opinion', NULL, 'ORDER BY archive DESC, pk_content DESC LIMIT 0, 30');
         $tpl->assign('opinions', $opinions);
-        
+
         // Últimos artículos
         $articles = $cm->find('Article', 'content_status=1 AND frontpage=1', 'ORDER BY archive DESC, position ASC');
-        
+
         // Agrupa los artículos por categoría y controla si están publicados
         $articles_agrupados = Bulletin::sortArticles($articles);
         $tpl->assign('articles_agrupados', $articles_agrupados);
-        
-        
+
+
         $tpl->assign('titulo_barra', $titulo_barra.': Paso 1/5 - Selección de noticias y opiniones');
-        
+
         // Cargar archivo
         $b = new Bulletin();
         $archs = $b->search('1=1 ORDER BY created DESC LIMIT 0,10');
-        
+
         $content = $tpl->fetch('bulletin/actions/select.tpl');
         $tpl->assign('layout_content', $content );
-        
+
         $tpl->addStyle('bulletin.css');
 	break;
 
@@ -182,7 +181,7 @@ switch($action) {
         $b = new Bulletin();
         $archs = $b->search('1=1 ORDER BY created DESC LIMIT 0,10');
         $tpl->assign('archivos', $archs);
-        
+
         $tpl->assign('titulo_barra', $titulo_barra.': Restaurar bolet&iacute;n desde archivo');
     break;
 
@@ -194,70 +193,70 @@ switch($action) {
         if(isset($_REQUEST['archivos'])) {
             $bulletin = new Bulletin();
             $b = $bulletin->search('pk_bulletin='.$_REQUEST['archivos'].' ORDER BY created DESC');
-            
+
             $_POST['data_bulletin'] = $data = clearslash($b[0]->data); // Hack para $smarty.post.data_bulletin
             $tpl->assign('data', $data);
         }
-        
+
         // En paso anterior seleccionó artículos
-        if(isset($_REQUEST['articles']) && count($_REQUEST['articles'])>0) {            
+        if(isset($_REQUEST['articles']) && count($_REQUEST['articles'])>0) {
             // Save bulletin into database
             //$b = new Bulletin();
             $data = new stdClass();
             $data->news     = Bulletin::prependItems($_REQUEST['articles'], 'Article');
-            $data->opinions = Bulletin::prependItems($_REQUEST['opinions'], 'Opinion');        
-    
+            $data->opinions = Bulletin::prependItems($_REQUEST['opinions'], 'Opinion');
+
             // Data
             $json = new Services_JSON();
             $data = $json->encode( $data );
-    
+
             $_POST['data_bulletin'] = $data = clearslash($data); // Hack para $smarty.post.data_bulletin
             $tpl->assign('data', $data);
         }
-        
+
         // Últimos artículos
         $cm = new ContentManager();
         $articles = $cm->find('Article','content_status=1 AND frontpage=1', 'ORDER BY archive DESC');
         // Agrupa los artículos por categoría y controla si están publicados
         $articles_agrupados = Bulletin::sortArticles($articles);
-        $tpl->assign('articles_agrupados', $articles_agrupados);            
-        
+        $tpl->assign('articles_agrupados', $articles_agrupados);
+
         $tpl->assign('titulo_barra', $titulo_barra.': Paso 2/5 - Noticias');
         //$tpl->assign('footer_javascript', $footer_javascript);
-        
+
         $content = $tpl->fetch('bulletin/actions/news.tpl');
         $tpl->assign('layout_content', $content );
-        
+
         $tpl->addStyle('bulletin.css');
     break;
 
     case 'opinions':
         $tpl->assign('titulo_barra', $titulo_barra.': Paso 3/5 - Opiniones');
         //$tpl->assign('footer_javascript', $footer_javascript);
-        
+
         $_REQUEST['data_bulletin'] = clearslash($_REQUEST['data_bulletin']);
-        
-        $cm = new ContentManager();        
+
+        $cm = new ContentManager();
         // Últimas opiniones
 		$opinions = $cm->find('Opinion', null, 'ORDER BY created DESC LIMIT 0, 5');
         $tpl->assign('opinions', $opinions);
-        
+
         $content = $tpl->fetch('bulletin/actions/opinions.tpl');
         $tpl->assign('layout_content', $content );
-        
+
         $tpl->addStyle('bulletin.css');
     break;
 
     case 'mailboxes':
         $tpl->assign('titulo_barra', $titulo_barra.': Paso 4/5 - Destinatarios');
         $tpl->assign('footer_javascript', $footer_javascript);
-        
+
         $_REQUEST['data_bulletin'] = clearslash($_REQUEST['data_bulletin']);
-        
+
         $content = $tpl->fetch('bulletin/actions/mailboxes.tpl');
         $tpl->assign('layout_content', $content );
-        
-        $tpl->addStyle('bulletin.css');        
+
+        $tpl->addStyle('bulletin.css');
     break;
 
     case 'preview':
@@ -267,10 +266,10 @@ switch($action) {
         $data = $json->decode( clearslash($_REQUEST['data_bulletin']) );
 
         $tpl->assign('data', $data);
-        
+
         $content = $tpl->fetch('bulletin/actions/preview.tpl');
         $tpl->assign('layout_content', $content );
-        
+
         $tpl->addStyle('bulletin.css');
     break;
 
@@ -330,4 +329,3 @@ switch($action) {
 
 
 $tpl->display('bulletin/index.tpl');
-

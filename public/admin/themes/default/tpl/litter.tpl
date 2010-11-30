@@ -1,4 +1,8 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list"}
@@ -28,7 +32,7 @@
 <table class="adminheading">
 	<tr>
 		<th nowrap>Elementos en la papelera</th>
-	</tr>	
+	</tr>
 </table>
 
 <div id="pagina">
@@ -43,11 +47,11 @@
 	<th  style="width:5%;">Recuperar</th>
 	<th  style="width:5%;">Eliminar</th>
   </tr>
-  <tr><td colspan=7> 
+  <tr><td colspan=7>
 	   <div id="even" class="seccion" style="float:left;width:100%; border:1px solid gray;"> <br>
-	   {assign var=aux value='2'}						
+	   {assign var=aux value='2'}
 	{section name=c loop=$litterelems}
-	
+
 		<table id='tabla{$aux}' name='tabla{$aux}' value="{$evenpublished[c]->id}" width="100%" class="tabla" style="text-align:center;padding:0px;">
 		   <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
 			<td style="text-align: left;font-size: 11px;width:2%;">
@@ -60,20 +64,20 @@
 				 {$secciones[c]}
 			</td>
 			<td style="text-align: center;font-size: 11px;width:4%;">
-				{$litterelems[c]->views} 
+				{$litterelems[c]->views}
 			</td>
-			<td style="text-align: center;width:11%;font-size: 11px;">					
-						{$litterelems[c]->created}					
-			</td>			
+			<td style="text-align: center;width:11%;font-size: 11px;">
+						{$litterelems[c]->created}
+			</td>
 
-			<td style="text-align: center;width:5%;">				
+			<td style="text-align: center;width:5%;">
 					<a href="?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
-						<img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="Recuperar" width='24px' /></a>			
+						<img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="Recuperar" width='24px' /></a>
 			</td>
 			<td style="text-align: center;width:5%;">
 				<a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 			</td>
-		</tr> </table>		 
+		</tr> </table>
 	{sectionelse}
 	<tr>
 	<td align="center" colspan=6><br><br><p><h3><b>Ningun elemento en la papelera</b></h3></p><br><br></td>
@@ -84,22 +88,10 @@
 	<tr>
 	    <td colspan="5" align="center">{$paginacion->links}</td>
 	</tr>
-	 
+
 	</table>
 	</div>
      </td></tr>
-  <tr><td colspan=2>
-	<table style="width:100%"		
-	  <tr align='right'>
-	    <td >	
-	    
-			{include file="botonera_down.tpl"}
-			
-	    </td>
-	  </tr>
-	</table>
-    </td>
-  </tr>
 </table>
 
 </div>
@@ -108,6 +100,7 @@
 </div>
 {/if}
 
-{include file="footer.tpl"}
-
-       					 
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

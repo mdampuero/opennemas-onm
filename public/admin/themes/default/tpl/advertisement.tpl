@@ -1,5 +1,8 @@
-    {* ******************************************************************************* *}
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {*
 //Portada
@@ -100,7 +103,7 @@
 function submitFilters(frm) {
     $('action').value='list';
     $('page').value = 1;
-    
+
     frm.submit();
 }
 {/literal}
@@ -112,27 +115,27 @@ function submitFilters(frm) {
             <label>Tipo de banner:
             <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.type_advertisement
-                              selected=$smarty.request.filter.type_advertisement} 
+                              selected=$smarty.request.filter.type_advertisement}
             </select></label>
             &nbsp;&nbsp;&nbsp;
 
             <label>Estado:
             <select name="filter[available]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.available
-                              selected=$smarty.request.filter.available} 
+                              selected=$smarty.request.filter.available}
             </select></label>
             &nbsp;&nbsp;&nbsp;
-            
+
             <label>Tipo:
             <select name="filter[type]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.type
-                              selected=$smarty.request.filter.type} 
-            </select></label>            
-            
+                              selected=$smarty.request.filter.type}
+            </select></label>
+
             {* $_REQUEST['page'] => $_POST['page'] is more important that $_GET['page'], see also php.ini - variables_order *}
             <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
         </th>
-	</tr>	
+	</tr>
 </table>
 
 <table class="adminlist">
@@ -143,7 +146,7 @@ function submitFilters(frm) {
     <th>Título</th>
     <th align="center">Permanencia</th>
     <th align="center">Clicks</th>
-    <th align="center">Visto</th>    
+    <th align="center">Visto</th>
     <th align="center">Tipo</th>
     <th align="center">Publicado</th>
     <th align="center">Modificar</th>
@@ -160,33 +163,33 @@ function submitFilters(frm) {
     </td>
 	<td style="font-size: 11px;">
         <label for="title">
-            {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}            
+            {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
             {$map.$type_advertisement}
-        </label>            
+        </label>
 	</td>
 	<td style="font-size: 11px;">
 		{$advertisements[c]->title|clearslash}
 	</td>
 
     <td style="text-align:center;font-size: 11px;width:80px;" align="center">
-		{if $advertisements[c]->type_medida == 'NULL'} Indefinida {/if} 
-		{if $advertisements[c]->type_medida == 'CLIC'} Clicks: {$advertisements[c]->num_clic} {/if} 
-		{if $advertisements[c]->type_medida == 'VIEW'} Visionados: {$advertisements[c]->num_view} {/if} 
+		{if $advertisements[c]->type_medida == 'NULL'} Indefinida {/if}
+		{if $advertisements[c]->type_medida == 'CLIC'} Clicks: {$advertisements[c]->num_clic} {/if}
+		{if $advertisements[c]->type_medida == 'VIEW'} Visionados: {$advertisements[c]->num_view} {/if}
 		{if $advertisements[c]->type_medida == 'DATE'}
             Fecha: {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
-        {/if}			
+        {/if}
 	</td>
-    
+
 	<td style="text-align:center;font-size: 11px;width:105px;" align="right">
-		{$advertisements[c]->num_clic_count} 
+		{$advertisements[c]->num_clic_count}
 	</td>
 	<td style="text-align:center;font-size: 11px;width:40px;" align="right">
-		 {$advertisements[c]->views}  
+		 {$advertisements[c]->views}
 	</td>
     <td style="text-align:center;font-size: 11px;width:70px;" align="center">
         {if $advertisements[c]->with_script == 1}
             <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
-                 alt="Javascript" title="Javascript" />            
+                 alt="Javascript" title="Javascript" />
         {else}
             <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="Multimedia"
                  title="Elemento multimedia (flash, imagen, gif animado)" />
@@ -262,18 +265,18 @@ function testScript(frm)  {
     frm.action.value = 'test_script';
     frm.target = 'test_script'; // abrir noutra ventá
     frm.submit();
-    
+
     frm.target = ''; // cambiar o target para que siga facendo peticións na mesma ventá
     frm.action.value = '';
 }
 </script>
 {/literal}
 
-{include file="botonera_up.tpl"} 
+{include file="botonera_up.tpl"}
 
 <table border="0" cellpadding="2" cellspacing="2" class="fuente_cuerpo" width="800">
 <tbody>
-    
+
 <tr>
 	<td valign="top" align="right" style="height:20px;padding:4px;" width="30%">
 		<label for="title">Nombre:</label>
@@ -283,11 +286,11 @@ function testScript(frm)  {
 			size="80" value="{$advertisement->title|clearslash|escape:"html"}" class="required" onBlur="javascript:get_metadata(this.value);"/>
 		{* <input type="hidden" id="category" name="category" title="Publicidad" value="advertisement" /> *}
 	</td>
-    
+
     {* begin: PANEL PROPIEDADES *}
     <td rowspan="5" valign="top">
         <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
-        <div style="background-color: #F5F5F5; padding: 18px 9px; width: 400px;">            
+        <div style="background-color: #F5F5F5; padding: 18px 9px; width: 400px;">
             <table width="100%" border="0">
                 <tr>
                     <td valign="top" align="right"><label for="available">Publicado:</label></td>
@@ -298,7 +301,7 @@ function testScript(frm)  {
                         </select>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td valign="top" align="right">
                         <label for="metadata">Palabras clave: </label><br />
@@ -306,10 +309,10 @@ function testScript(frm)  {
                     </td>
                     <td>
                         <textarea id="metadata" name="metadata" cols="20" rows="2" style="width: 100%;"
-                           title="Metadatos" value="">{$advertisement->metadata|strip}</textarea>                        
+                           title="Metadatos" value="">{$advertisement->metadata|strip}</textarea>
                     </td>
-                </tr>                
-                
+                </tr>
+
                 <tr>
                     <td valign="top" align="right">
                         <label for="overlap">Ocultar eventos Flash:</label>
@@ -317,11 +320,11 @@ function testScript(frm)  {
                     <td>
                         <input type="checkbox" name="overlap" id="overlap" value="1" {if $advertisement->overlap == 1}checked="checked"{/if} />
                     </td>
-                </tr>                
-                                
+                </tr>
+
                 <tr>
-                    <td colspan="2" style="border-bottom: 1px solid #CCC;">&nbsp;</td> 
-                </tr>                
+                    <td colspan="2" style="border-bottom: 1px solid #CCC;">&nbsp;</td>
+                </tr>
                 <tr>
                     <td colspan="2" valign="top" align="left">
                         <label>Periodicidad:</label>
@@ -339,18 +342,18 @@ function testScript(frm)  {
                             <label>Nº Visitas<input id="view" type="radio" name="type_medida" value="VIEW"
                                 {if $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" /></label>
                         </span>
-                        
+
                         <label>
                             Por Fechas<input type="radio" id="fecha" name="type_medida" value="DATE"
                                 {if $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
                         </label>
                     </td>
-                </tr>                       
-                
+                </tr>
+
                 <tr>
                     <td valign="top" colspan="2">
-                        
-                        <div id="porfecha" style="width:95%;display:{if $advertisement->type_medida!='DATE'}none{/if};"> 
+
+                        <div id="porfecha" style="width:95%;display:{if $advertisement->type_medida!='DATE'}none{/if};">
                             <table width="95%">
                             <tr>
                                 <td valign="top" align="right" style="padding:4px;" width="40%">
@@ -369,13 +372,13 @@ function testScript(frm)  {
                                 <td style="padding:4px;" nowrap="nowrap" width="60%">
                                     <input type="text" id="endtime" name="endtime" size="16" title="Fecha fin publicacion"
                                         value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
-                                  
+
                                 </td>
                             </tr>
                             </table>
                         </div>
-                        
-                        <div id="porclic" style="width:95%;display:{if $advertisement->type_medida!='CLIC'}none{/if};"> 
+
+                        <div id="porclic" style="width:95%;display:{if $advertisement->type_medida!='CLIC'}none{/if};">
                             <table width="95%">
                                 <tr>
                                     <td valign="top" align="right" style="padding:4px;" width="40%">
@@ -387,7 +390,7 @@ function testScript(frm)  {
 										{if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'CLIC'}
                                                 Actuales: {$advertisement->num_clic_count}
-                                            {/if}                                        
+                                            {/if}
                                             <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
                                                 value="{$advertisement->num_clic_count}" />
                                         {/if}
@@ -395,8 +398,8 @@ function testScript(frm)  {
                                 </tr>
                             </table>
                         </div>
-                        
-                        <div id="porview" style="width:95%;display:{if $advertisement->type_medida!='VIEW'}none{/if};"> 
+
+                        <div id="porview" style="width:95%;display:{if $advertisement->type_medida!='VIEW'}none{/if};">
                             <table width="95%">
                                 <tr>
                                     <td valign="top" align="right" style="padding:4px;" width="40%">
@@ -414,17 +417,17 @@ function testScript(frm)  {
                                 </tr>
                             </table>
                         </div>
-                        
+
                     <td>
-                    
+
                 </tr>
-                
+
                 <tr>
-                    <td valign="top" colspan="2">                        
-                        <div id="timeout_container" style="margin-top: 10px; border-top: 1px solid #CCC;width:95%;display:{if $advertisement->type_advertisement!=50}none{/if};"> 
-                        
+                    <td valign="top" colspan="2">
+                        <div id="timeout_container" style="margin-top: 10px; border-top: 1px solid #CCC;width:95%;display:{if $advertisement->type_advertisement!=50}none{/if};">
+
                         <label for="timeout">Temporizador:</label>
-                        
+
                         <table width="95%">
                         <tr>
                             <td width="40%">&nbsp;</td>
@@ -433,22 +436,22 @@ function testScript(frm)  {
                                     value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
                                 segundos. <sub>( -1 no desaparece )</sub>
                             </td>
-                        </tr>                            
+                        </tr>
                         </table>
-                        
-                        </div>                        
+
+                        </div>
                     </td>
                 </tr>
-                
-            </table>            
+
+            </table>
         </div>
         <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
-        
+
         {if $smarty.request.action eq "read"}
             <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
                 value="{$advertisement->num_clic_count}" />
         {/if}
-        
+
     </td>
     {* end: PANEL PROPIEDADES *}
 </tr>
@@ -460,7 +463,7 @@ function testScript(frm)  {
         </div>
 	</td>
 	<td valign="top" style="height:20px;padding:4px;" nowrap="nowrap" width="70%">
-        <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">	
+        <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">
             <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
                 size="80" value="{$advertisement->url|default:"http://"}" />
         </div>
@@ -471,7 +474,7 @@ function testScript(frm)  {
     <td valign="top" align="right" style="height:20px;padding:4px;">
         <label for="category">Secci&oacute;n:</label>
     </td>
-    <td valign="top" style="height:20px;padding:4px;">                
+    <td valign="top" style="height:20px;padding:4px;">
         <select name="category" id="category" class="required">
             <option value="0">Home</option>
             <option value="4" {if $category eq 4}selected="selected"{/if}>OPINIÓN</option>
@@ -480,20 +483,20 @@ function testScript(frm)  {
                 <option value="{$allcategorys[as]->pk_content_category}"
                     {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
                     {$allcategorys[as]->title}
-                </option>						
+                </option>
                 {section name=su loop=$subcat[as]}
                     <option value="{$subcat[as][su]->pk_content_category}"
                         {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
                         &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
-                    </option>				  					   	     
+                    </option>
                 {/section}
             {/section}
-        </select>                
-    </td> 
+        </select>
+    </td>
 </tr>
 
 <tr>
-	<td valign="top" align="right" style="height:20px;padding:4px;" nowrap="nowrap">		
+	<td valign="top" align="right" style="height:20px;padding:4px;" nowrap="nowrap">
 		<label for="with_script">Publicidad con Javascript:</label>
     </td>
     <td valign="top" style="height:20px;padding:4px;">
@@ -504,21 +507,21 @@ function testScript(frm)  {
 
 <tr>
     <td valign="top" colspan="2">
-        <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if}; text-align: right;">            
+        <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if}; text-align: right;">
             <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
             <br />
-            
+
             <label>Recortes de código Geoip:
                 <span id="geoip_select"></span>
             </label>
-            
+
             <script type="text/javascript" src="{$params.JS_DIR}GeoipHelper.js?cacheburst=1258404035" charset="utf-8"></script>
             <script type="text/javascript">
             {literal}
             new GeoipHelper('geoip_select', 'script');
             {/literal}
             </script>
-            
+
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button onclick="testScript(this.form);return false;">Probar Código JS</button>
 		</div>
@@ -527,14 +530,14 @@ function testScript(frm)  {
 
 {* Selector de imágenes *}
 {include file="advertisement_images.tpl"}
-	
+
 <tr>
 	<td valign="top" style="padding:4px;padding-top: 40px;" colspan="2">
 		<label for="title">Tipo Publicidad: </label>
-        
-        <ul id="tabs">            
+
+        <ul id="tabs">
             <li><a href="#publi-portada">Portada</a></li>
-            <li><a href="#publi-interior">Noticia Interior</a></li>            
+            <li><a href="#publi-interior">Noticia Interior</a></li>
             <li><a href="#publi-video">Portada Video</a></li>
             <li><a href="#publi-video-interior">Video Interior</a></li>
             <li><a href="#publi-opinion">Portada Opinión</a></li>
@@ -545,15 +548,15 @@ function testScript(frm)  {
         <div id="publi-portada" class="panel-ads">
             {include file="tpl_advertisement/advertisement_positions.tpl"}
         </div>
-        
+
         <div id="publi-interior" class="panel-ads">
             {include file="tpl_advertisement/advertisement_positions_interior.tpl"}
         </div>
-        
+
         <div id="publi-opinion" class="panel-ads">
             {include file="tpl_advertisement/advertisement_positions_opinion.tpl"}
         </div>
-        
+
         <div id="publi-opinion-interior" class="panel-ads">
             {include file="tpl_advertisement/advertisement_positions_opinion_interior.tpl"}
         </div>
@@ -567,7 +570,7 @@ function testScript(frm)  {
         <div id="publi-gallery" class="panel-ads">
             {include file="tpl_advertisement/advertisement_positions_gallery.tpl"}
         </div>
-        
+
 	</td>
     <td>&nbsp;</td>
 </tr>
@@ -584,7 +587,7 @@ Fabtabs.addMethods({
         elm = this.element.select("a[href$="+id+"]")[0];
         this.show( elm );
         this.menu.without(elm).each(this.hide.bind(this));
-         
+
         if(['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1) {
             this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: ''});
             this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: 'none'});
@@ -595,7 +598,7 @@ Fabtabs.addMethods({
             this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: 'none'});
             this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: 'none'});
             this.changePropertyTabs('a[href$=publi-gallery]', {display: ''});
-            
+
          } else {
             this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: ''});
             this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: ''});
@@ -605,27 +608,27 @@ Fabtabs.addMethods({
 
 
     },
-    
+
     changePropertyTabs: function(tabSelector, style) {
         this.element.select(tabSelector).each(function(item) {
             item.setStyle(style);
         });
-    },        
-    
+    },
+
     activate :  function(ev) {
 		var elm = Event.findElement(ev, "a");
         var id = elm.getAttribute('href').gsub(/#(.*?)$/, '#{1}');
-        
+
 		Event.stop(ev);
-        
+
         this.show(elm);
         this.menu.without(elm).each(this.hide.bind(this));
-        
+
         if( $F('category') == '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1)) {
             this.show(elm);
             this.menu.without(elm).each(this.hide.bind(this));
         }
- 
+
         if( $F('category') != '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)==-1)) {
             this.show(elm);
             this.menu.without(elm).each(this.hide.bind(this));
@@ -639,7 +642,7 @@ $('category').observe('change', function() {
     } else if(this.value == '3') {
         $fabtabs.exhibit('publi-gallery');
     } else {
-        $fabtabs.exhibit('publi-portada');        
+        $fabtabs.exhibit('publi-portada');
     }
 });
 
@@ -649,13 +652,13 @@ document.observe('dom:loaded', function() {ldelim}
     {if $advertisement->type_advertisement lt 100}
         $fabtabs.exhibit('publi-portada');
     {else}
-        $fabtabs.exhibit('publi-interior');    
+        $fabtabs.exhibit('publi-interior');
     {/if}
 {else}
     {if $advertisement->type_advertisement ne 101 && $advertisement->type_advertisement ne 5}
         $fabtabs.exhibit('publi-opinion');
     {else}
-        $fabtabs.exhibit('publi-opinion-interior');    
+        $fabtabs.exhibit('publi-opinion-interior');
     {/if}
 {/if}
 {rdelim});
@@ -708,7 +711,7 @@ if($('starttime')) {
     <div style="text-align:center; border: 2px dashed #CCC;">
         {$script}
     </div>
-    
+
     <div align="right" style="margin: 10px 10px;">
         <a href="#" style="color: #666; font-size: large;"
             onclick="window.close();" title="Cerrar ventana">[Cerrar]</a>
@@ -717,4 +720,8 @@ if($('starttime')) {
 
 
 {* ******************************************************************************* *}
-{include file="footer.tpl"}
+
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

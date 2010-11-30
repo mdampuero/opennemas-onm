@@ -41,6 +41,7 @@ html[xmlns] .clearfix {
 	border:1px solid #ccc;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+	width:99%;
 }
 
 #menu-acciones-admin ul {
@@ -81,7 +82,7 @@ html[xmlns] .clearfix {
 
 #menu-acciones-admin ul li button img{
 	height:56px !important;
-	 
+
 }
 
 #menu-acciones-admin ul li a:hover {

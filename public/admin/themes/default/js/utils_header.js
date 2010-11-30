@@ -6,6 +6,7 @@ var editores = null;
 
 function enviar(elto, trg, acc, id) {
     var parentEl = elto.parentNode;
+
     while(parentEl.nodeName != "FORM") {
         parentEl = parentEl.parentNode;
     }

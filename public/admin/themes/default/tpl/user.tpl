@@ -1,4 +1,7 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -8,7 +11,7 @@
 <table class="adminheading">
 	<tr>
 		<th nowrap="nowrap" align="right">
-            Filter by 
+            Filter by
             <label for="username">Name:</label>
             <input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name}" />
             &nbsp;&nbsp;&nbsp;
@@ -16,21 +19,21 @@
             <label for="userlogin">Login:</label>
             <input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login}" />
             &nbsp;&nbsp;&nbsp;
-            
-            <label for="usergroup">Group:</label>  
+
+            <label for="usergroup">Group:</label>
             <select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
                 {html_options options=$groupsOptions selected=$smarty.request.filter.group}
-            </select>          
-            
+            </select>
+
             <input type="hidden" name="page" value="{$smarty.request.page}" />
         </th>
-	</tr>	
+	</tr>
 </table>
 
 
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 <thead>
-<tr>    
+<tr>
     <th class="title" align="left" style="width:40%;padding:10px;">Nombre Apellidos  </th>
     <th class="title" style="width:20%;padding:10px;">Login</th>
     <th class="title" style="width:20%;padding:10px;">Grupo</th>
@@ -47,10 +50,10 @@
 		<a href="?action=read&id={$users[c]->id}" title="Editar usuario">
             {$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
 	</td>
-	<td style="padding:10px;"> 
+	<td style="padding:10px;">
 		{$users[c]->login}
 	</td>
-	<td style="padding:10px;"> 
+	<td style="padding:10px;">
 		{section name=u loop=$user_groups}
 			{if $user_groups[u]->id == $users[c]->fk_user_group}
 					{$user_groups[u]->name}
@@ -96,11 +99,11 @@
 .spinner_button {
     width: 18px;
     height: 18px;
-    
+
     color: #204A87;
     font-weight: bold;
     background-color: #DDD;
-    
+
     border-top: 1px solid #CCC;
     border-right: 1px solid #999;
     border-bottom: 1px solid #999;
@@ -109,11 +112,11 @@
 
 .spinner_button:hover {
     background-color: #EEE;
-    
+
     border-top: 1px solid #DDD;
     border-right: 1px solid #CCC;
     border-bottom: 1px solid #CCC;
-    border-left: 1px solid #DDD;    
+    border-left: 1px solid #DDD;
 }
 </style>
 {/literal}
@@ -123,10 +126,10 @@
 	<table  border="0" cellpadding="4" cellspacing="0" class="fuente_cuerpo" width="100%">
 	<tr>
         <td valign="top" width="50%">
-            
+
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
 			<tbody>
-                
+
 			<!-- Login -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -137,7 +140,7 @@
 						value="{$user->login}" class="required"  size="14" maxlength="20" />
 				</td>
 			</tr>
-            
+
 			<!-- Password -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -148,7 +151,7 @@
 						value="" class="{if $smarty.request.action eq "new"}required validate-password{/if}" />
 				</td>
 			</tr>
-            
+
             <!-- Password Confirm-->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -159,23 +162,23 @@
 						value="" autocomplete="off" class="{if $smarty.request.action eq "new"}required{/if} validate-password-confirm" />
 				</td>
 			</tr>
-            
+
             <!-- SessionExpire -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
 					<label for="sessionexpire">Expire session time:</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-                    
+
                     <input type="text" id="sessionexpire" name="sessionexpire" title="Expiraci&oacute;n de Sessi&oacute;n"
 						value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" size="4" />
                     <input id="up" class="spinner_button" type="button" value="+" />
                     <input id="dn" class="spinner_button" type="button" value="-" />
-                    
+
                     <sub>minutes</sub>
 				</td>
 			</tr>
-            
+
 			<!-- Email -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -186,7 +189,7 @@
 						value="{$user->email}" class="required validate-email"  size="50"/>
 				</td>
 			</tr>
-            
+
 			<!-- Nome -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -197,7 +200,7 @@
 						value="{$user->name}" class="required"  size="50"/>
 				</td>
 			</tr>
-            
+
 			<!-- Primeiro apelido -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -208,7 +211,7 @@
 						value="{$user->firstname}" class="required"  size="50"/>
 				</td>
 			</tr>
-            
+
 			<!-- Segundo apelido -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -219,7 +222,7 @@
 						value="{$user->lastname}"  size="50"/>
 				</td>
 			</tr>
-            
+
 			<!-- Direccion -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -230,7 +233,7 @@
 						value="{$user->address}"  size="50"/>
 				</td>
 			</tr>
-            
+
 			<!-- Telefono -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -241,17 +244,17 @@
 						value="{$user->phone}"  size="15"/>
 				</td>
 			</tr>
-            
+
             </tbody>
             </table>
-            
+
         </td>
         <td valign="top" width="50%">
-            
-            
+
+
             <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
             </tbody>
-            
+
 			<!-- User_Group -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -268,7 +271,7 @@
 							{/if}
 						{/section}
 					</select>
-                    
+
                     {* FIXME: separar todo a un fichero js que tenga las funcionalidades de los usuarios *}
                     {literal}
                     <script type="text/javascript">
@@ -278,17 +281,17 @@
                         /*if( confirm('¿Está seguro de querer salir de la edición del usuario?') ) {
                             window.open('user_groups.php?action=read&id=' + $('id_user_group').value, 'centro');
                         }*/
-                        
+
                         Modalbox.show('<iframe width="100%" height="450" src="user_groups.php?action=read&id=' + $('id_user_group').value+'"  frameborder="0" marginheight="0" marginwidth="0"></iframe>', {title: 'Gestión de grupos de usuarios', width: 760});
                     }
                     </script>
                     {/literal}
-                    
+
                     <a href="javascript:void(0);" title="Editar grupo y permisos" onclick="showGroupUsers(this);return false;">
                         <img src="{$params.IMAGE_DIR}users_edit.png" border="0" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
-            
+
             <!-- Categories -->
             <tr>
 				<td valign="top" align="right" style="padding:4px;">
@@ -305,18 +308,18 @@
                                 <option value =""></option>
                             {/if}
                             {foreach item="c_it" from=$content_categories}
-                                
+
                                 <option value="{$c_it->pk_content_category}" {if is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                                    
-                                {if count($c_it->childNodes)>0}                                    
+
+                                {if count($c_it->childNodes)>0}
                                     {foreach item="sc_it" from=$c_it->childNodes}
                                         <option value="{$sc_it->pk_content_category}" {if is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>
                                     &nbsp; &rArr; {$sc_it->title}</option>
-                                        
+
                                     {/foreach}
                                 {/if}
-                            {/foreach}                            
-                            
+                            {/foreach}
+
                             {*section name=category loop=$content_categories}
                                 {if  isset($content_categories_select) &&
                                     !empty($content_categories_select) &&
@@ -334,42 +337,42 @@
                                     {/if}
                                 {/if}
                             {/section*}
-                        </select> 
-                        
+                        </select>
+
                         <!--<select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
                             <option value=""></option>
                             {html_options options=$categories_options selected=$categories_selected}
                         </select>-->
-                        
+
                     </div>
 				</td>
 			</tr>
-			
+
 			</tbody>
 			</table>
-	</td>	
+	</td>
 	</tr>
 	</table>
 
-    {literal}
-    <script type="text/javascript" language="javascript">
-        document.observe('dom:loaded', function(){
-            onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
-            
-            // Refrescar los elementos seleccionados
-            $('ids_category').select('option').each(function(item){
-                if( item.getAttribute('selected') ) {
-                    item.selected=true;
-                    item.setAttribute('selected', 'selected');
-                }
-            });
-            
-            new SpinnerControl('sessionexpire', 'up', 'dn', {interval: 5,  min: 15, max: 250});
-        });
-        
-    </script>
-    {/literal}
-
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}
+
+{block name="footer-js"}
+	document.observe('dom:loaded', function(){
+		onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
+
+		// Refrescar los elementos seleccionados
+		$('ids_category').select('option').each(function(item){
+			if( item.getAttribute('selected') ) {
+				item.selected=true;
+				item.setAttribute('selected', 'selected');
+			}
+		});
+
+		new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
+	});
+
+{/block}

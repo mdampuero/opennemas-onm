@@ -1,4 +1,16 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+
+{block name="header-js"}
+{$smarty.block.parent}
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
+{if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
+    <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
+{/if}
+{/block}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LISTADO ******************************************************************* *}
 {if $smarty.request.action eq "list"}
@@ -51,7 +63,7 @@
             <td colspan="9">
                 {assign var=containers value=1}
                 <div id="ctes" class="seon" style="float:left;width:100%;border:1px solid gray;"> <br>
-                    {section name=c loop=$categorys}                        
+                    {section name=c loop=$categorys}
                         {if $categorys[c]->internal_category neq 4}
                             {if $containers eq 1 && $categorys[c]->inmenu eq 0} <hr> <h2>NO MENU</h2> <hr>   {assign var=containers value=0} {/if}
                             {include file="print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
@@ -60,7 +72,7 @@
                         <h2><b>Ning&uacute;na secci&oacute;n guardada</b></h2>
                     {/section}
                     <hr> <h2>KIOSKO</h2> <hr>
-                    {section name=c loop=$categorys}                        
+                    {section name=c loop=$categorys}
                         {if $categorys[c]->internal_category eq 4}
                             {include file="print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                         {/if}
@@ -107,7 +119,7 @@
                                         </td>
                                         <td align="center" style="padding:10px;font-size: 11px;width:25%;">
                                             {$ordercategorys[c]->name|clearslash}</a>
-                                        </td>                                        
+                                        </td>
                                         <td align="center" style="padding:10px;font-size: 11px;width:10%;">
                                             {if $ordercategorys[c]->inmenu==1}
                                                 <a href="?id={$ordercategorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
@@ -156,7 +168,7 @@
     </div>
 
 {/if}
- 
+
 {* FORMULARIO PARA ENGADIR ************************************** *}
 
 {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
@@ -215,7 +227,7 @@
                                 <td> <input type="radio" id="internal_category" name="internal_category"  value="3"
                                     {if $category->internal_category eq 3} checked="checked"{/if}>
                                 </td>
-                                
+
                             </tr>
                              <tr>
                                 <td  style="padding:4px;"> Vídeos:</td>
@@ -237,10 +249,10 @@
                     <label for="inmenu">Ver en menú:</label>
                 </td>
                 <td style="padding:4px;" nowrap="nowrap" colspan="2" >
-                    <input type="checkbox" id="inmenu" name="inmenu"  value="1" 
+                    <input type="checkbox" id="inmenu" name="inmenu"  value="1"
                         {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>* Activado, ver en el menú de portada.
                 </td>
-            </tr>             
+            </tr>
              <tr>
                 <td valign="top" style="padding:4px;text-align:left; width:100px;">
                     <label for="inmenu">Logo en Portada:</label>
@@ -258,7 +270,7 @@
                 </td>
                 <td style="padding:4px;" nowrap="nowrap" colspan="2" >
                     {literal}<script>initPicker('color','{/literal}{$category->color}{literal}',24);</script>{/literal}
-                   
+
                 </td>
             </tr>
 
@@ -314,7 +326,7 @@
                                                     </td>
                                                 </tr>
                                             </table>
-					{/section}	
+					{/section}
                                     </div>
                                 </td>
                             </tr>
@@ -338,4 +350,7 @@
 
 {/if}
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}

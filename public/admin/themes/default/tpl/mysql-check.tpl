@@ -1,4 +1,6 @@
-{include file="header.tpl"}
+{extends file="base/admin.tpl"}
+
+{block name="content"}
 <div>
     {include file="botonera_up.tpl"}
     <table class="adminheading">
@@ -24,5 +26,4 @@
     </pre>
 {/if}
 </div>
-
-{include file="footer.tpl"}
+{/block}

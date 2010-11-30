@@ -25,7 +25,7 @@
     <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
 {/if}
-    
+
 {scriptsection name="head"}
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
@@ -58,17 +58,17 @@
         <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
         <script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
     {/if}
-    {if preg_match('/pendiente\.php/',$smarty.server.SCRIPT_NAME)}        
+    {if preg_match('/pendiente\.php/',$smarty.server.SCRIPT_NAME)}
         <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
     {/if}
     {if preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME)}
         <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
-    {/if}    
-    {if preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME)}        
+    {/if}
+    {if preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME)}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-    {/if}        
-    {if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME)}        
-        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>        
+    {/if}
+    {if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME)}
+        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
      {/if}
 {/if}
 {if preg_match('/album\.php/',$smarty.server.SCRIPT_NAME)}
@@ -77,8 +77,8 @@
 
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
 
-{/if}    
-{if preg_match('/category\.php/',$smarty.server.SCRIPT_NAME)}        
+{/if}
+{if preg_match('/category\.php/',$smarty.server.SCRIPT_NAME)}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
     {if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
         <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
@@ -86,20 +86,20 @@
 {/if}
 {if preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspoll.js"></script>
-{/if}    
+{/if}
 {if preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME)}
     {if !isset($smarty.post.action) || $smarty.post.action eq "read"}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
     {/if}
 {/if}
-{if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME)}        
+{if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME)}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
-    {/if}    
+    {/if}
 {if preg_match('/dashboard\.php/',$smarty.server.SCRIPT_NAME)}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}swfobject.js"></script>
     <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}dashboard.css" />
 {/if}
-    
+
 {*Move functions js - utils_header.js*}
  <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
 
@@ -108,7 +108,7 @@
 {* scriptsection name="body" *}
 <script type="text/javascript" src="{$params.JS_DIR}wz_tooltip.js"></script>
 {* /scriptsection *}
- 
+
 <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" height="100%">
 <tr><td valign="top" align="left"><!-- INICIO: Tabla contenedora -->
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
