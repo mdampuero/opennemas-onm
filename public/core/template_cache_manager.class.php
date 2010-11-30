@@ -242,33 +242,30 @@ class TemplateCacheManager
             $cachefile = $this->getCacheFileName($cachefile, $tplFilename);
 
             if(is_array($cachefile)) {
-                throw new Exception('TemplateCacheManager::Update operation only support an one cache file.');
+                throw new Exception('TemplateCacheManager::Update operation only supports one cache file at once.');
             }
         }
         $cachefile = $this->cacheDir.$cachefile;
 
-        $data = null;
+
         if( file_exists($cachefile) ) {
-            // Dump content  to lines array
-            $lines = file($cachefile);
 
-            // Length of serialized data
-            $strlen = intval($lines[0]);
+            // Get ctime of the file
+            $ctime = filectime($cachefile);
 
-            // Get and unserialize cache information
-            $data = substr($lines[1], 0, $strlen);
-            $data = unserialize( $data );
+            // Calculate the new expire time
+            $expireTime  = $timestamp - $ctime;
 
-            // Modify expires information
-            $data['expires'] = $timestamp;
+            // modify file contents with the new expireTime
+            $cacheFileConents = file_get_contents($cachefile);
+            preg_match('@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@',$cacheFileConents,$matches);
 
-            // Serialize
-            $data = serialize($data);
-            $line = substr($lines[1], $strlen);
+            $contents = preg_replace( '@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@' ,
+                                      '\'cache_lifetime\' => '.$expireTime.',',
+                                      $cacheFileConents );
 
-            $lines[1] = $data.$line;
-
-            file_put_contents($cachefile, implode('', $lines));
+            // write modified file contents
+            file_put_contents($cachefile, $contents);
 
             return true;
         }

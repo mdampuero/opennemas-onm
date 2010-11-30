@@ -152,7 +152,9 @@ switch($action) {
     case 'update': {
         if(isset($_REQUEST['selected']) && count($_REQUEST['selected'])) {
             foreach($_REQUEST['selected'] as $idx) {
-                $expires = preg_replace('@([0-9]{2}:[0-9]{2}) ([0-9]{2})/([0-9]{2})/([0-9]{4})@', '$1:00 $4-$3-$2', $_REQUEST['expires'][$idx]);
+                $expires = preg_replace('@([0-9]{2}:[0-9]{2}) ([0-9]{2})/([0-9]{2})/([0-9]{4})@',
+                                        '$1:00 $4-$3-$2',
+                                        $_REQUEST['expires'][$idx]);
                 $tplManager->update(strtotime($expires), $_REQUEST['cacheid'][$idx], $_REQUEST['tpl'][$idx]);
             }
         }
