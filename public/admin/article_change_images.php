@@ -13,7 +13,8 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 echo "<br>";
 $cm = new ContentManager();
 
- 
+//TODO: change by functions class utils.
+
 if(isset($_REQUEST['action']) )
 {
 	switch($_REQUEST['action'])
@@ -47,10 +48,10 @@ if(isset($_REQUEST['action']) )
             }
             else
                 $szWhere = "TRUE";
-
+               
             if(!isset($_REQUEST['category']) || $_REQUEST['category'] <= 0) {
               //  $photos = $cm->find('Photo', 'fk_content_type = 8 AND ' . $szWhere, 'ORDER BY created DESC');
-				list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image" and contents.content_status=1 AND '. $szWhere, 'ORDER BY  created DESC ',$_REQUEST['page'],30);
+		list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image" and contents.content_status=1 AND '. $szWhere, 'ORDER BY  created DESC ',$_REQUEST['page'],30);
                 
             } else {         
                // $photos = $cm->find_by_category('Photo', $_REQUEST['category'], 'fk_content_type = 8 AND ' . $szWhere, 'ORDER BY created DESC');
@@ -68,30 +69,31 @@ if( isset($photos) &&
 $cat=$_REQUEST['category'];			
 $pages=$cm->pager;		
 */
-$cat=$_GET['category'];		
-$pages=$pager;	
-
-$paginacion=$cm->makePagesLink($pages, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
-echo $paginacion;
+if(isset($pager) && !empty($pager)) {
+    $cat=$_GET['category'];
+    $pages=$pager;
+    $paginacion = $cm->makePagesLink($pages, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
+    echo $paginacion;
+}
 echo "<ul id='thelist' class='gallery_list' style='width:400px;'> ";
-if($photos){			
+if(isset($photos) && !empty($photos) ){
         $num=1;
-            foreach ($photos as $as) {
-            //	if(!is_file($as->path_file.$as->name)){
-                if(file_exists(MEDIA_IMG_PATH.$as->path_file.$as->name)){                                     
-                    require( dirname(__FILE__).'/themes/default/plugins/function.cssimagescale.php' );
-                    $params = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67);
-                     $params2 = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67, 'getwidth'=>1);
-                    
-                         echo '<li><div style="float: left;"> <a>'.
-                            '<img style="'.smarty_function_cssimagescale($params).'" src="'.MEDIA_IMG_PATH_WEB.$as->path_file.'140x100-'.$as->name.'" de:width="'.smarty_function_cssimagescale($params2).'"  id="draggable'.$cat.'_img'.$num.'" class="draggable" name="'.$as->pk_photo.'" border="0" de:mas="'.$as->name.'" de:ancho="'.$as->width.'" de:alto="'.$as->height.'" de:peso="'.$as->size.'" de:created="'.$as->created.'"  de:description="'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).'"  de:path="'.$as->path_file.'" de:tags="'.$as->metadata.'" title="Desc:'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).' Tags:'.$as->metadata.'" />'.
-                            '</a></div></li>	';
-                        $num++;
-                }else{
-                    $ph=new Photo($as->pk_photo);
-                    $ph->set_status(0,$_SESSION['userid']);
-                }
+        foreach ($photos as $as) {
+        //	if(!is_file($as->path_file.$as->name)){
+            if(file_exists(MEDIA_IMG_PATH.$as->path_file.$as->name)){
+                require( dirname(__FILE__).'/themes/default/plugins/function.cssimagescale.php' );
+                $params = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67);
+                 $params2 = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67, 'getwidth'=>1);
+
+                     echo '<li><div style="float: left;"> <a>'.
+                        '<img style="'.smarty_function_cssimagescale($params).'" src="'.MEDIA_IMG_PATH_WEB.$as->path_file.'140x100-'.$as->name.'" de:width="'.smarty_function_cssimagescale($params2).'"  id="draggable'.$cat.'_img'.$num.'" class="draggable" name="'.$as->pk_photo.'" border="0" de:mas="'.$as->name.'" de:ancho="'.$as->width.'" de:alto="'.$as->height.'" de:peso="'.$as->size.'" de:created="'.$as->created.'"  de:description="'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).'"  de:path="'.$as->path_file.'" de:tags="'.$as->metadata.'" title="Desc:'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).' Tags:'.$as->metadata.'" />'.
+                        '</a></div></li>	';
+                    $num++;
+            }else{
+                $ph=new Photo($as->pk_photo);
+                $ph->set_status(0,$_SESSION['userid']);
             }
+        }
 }
 echo "	 </ul><br>";
 	//No funciona  onmouseover="return escape(\'Desc:'.$as->description.'<br>Tags:'.$as->metadata.'\');"

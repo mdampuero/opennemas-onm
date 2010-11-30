@@ -59,7 +59,7 @@
                             </td>
                             <td align="right">
                                <select id="category_imag" name="category_imag" class="required" onChange="get_images(this.options[this.selectedIndex].value,1, 'list_by_category',0);">
-                                      <option value="3">ALBUM</option>
+                                     
                                     <option value="0">GLOBAL</option>
                                     {section name=as loop=$allcategorys}
                                          <option value="{$allcategorys[as]->pk_content_category}" {if $article->category  eq $allcategorys[as]->pk_content_category} selected {/if}>{$allcategorys[as]->title}</option>

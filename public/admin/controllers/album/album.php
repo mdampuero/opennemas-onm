@@ -1,13 +1,16 @@
 <?php
 
+
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
+
+
 
 // Register events
-require_once('albums_events.php');
+require_once('./albums_events.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Photo Album');
@@ -20,7 +23,7 @@ if (!isset($_REQUEST['page'])) {
 }
 
  
-if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
+if( !Privileges_check::CheckPrivileges('ALBUM_ADMIN'))
 {
     Privileges_check::AccessDeniedAction();
 } 
@@ -40,7 +43,7 @@ $allcategorys = $ccm->find('(internal_category=1 OR internal_category=3) AND fk_
 //var_dump($allcategorys);
 $i=0;
 foreach( $allcategorys as $prima) {
-    $subcat[$i]=$ccm->find(' inmenu=1  AND internal_category=1 AND fk_content_category ='.$prima->pk_content_category, 'ORDER BY posmenu');
+    $subcat[$i]=$ccm->find('  internal_category=1 AND fk_content_category ='.$prima->pk_content_category, 'ORDER BY posmenu');
       $i++;
 }
 
@@ -54,11 +57,6 @@ $tpl->assign('datos_cat', $datos_cat);
 
 
 
-//Para album_images
-//list($othercategorys, $othersubcat, $datos_cat) = $ccm->getArraysMenu();
-
-//$tpl->assign('othercategorys', $othercategorys);
-//$tpl->assign('othersubcat', $othersubcat);
 /******************* GESTION CATEGORIAS  *****************************/
 
 if( isset($_REQUEST['action']) ) {
@@ -82,7 +80,7 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'new':
 			$cm = new ContentManager(); //Por ahora solo se puede subir a album
-            list($photos, $pager)= $cm->cache->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30);
+                        list($photos, $pager)= $cm->cache->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30);
 
 			foreach($photos as $photo){
 				if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)){
@@ -98,12 +96,12 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('MEDIA_IMG_URL', SS.MEDIA_DIR.SS.IMG_DIR);
 			$tpl->assign('photos', $photos);
 
-            $pages=$pager;
-
-            $paginacion=$cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
-            if($pages->_totalPages>1) {
-                    $tpl->assign('paginacion', $paginacion);
-            }
+                        $pages=$pager;
+ 
+                        if($pages->_totalPages>1) {
+                                $paginacion=$cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
+                                $tpl->assign('paginacion', $paginacion);
+                        }
 		break;
 
 		case 'read': //habrá que tener en cuenta el tipo
@@ -166,29 +164,29 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'delete':
 			$album = new Album($_REQUEST['id']);
-            $rel= new Related_content();
-            $relationes=array();
-            $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
-            if(!empty($relationes)){
-                 $msg = "El album  '".$album->title."' , está relacionado con los siguientes articulos:  \n";
-                 $cm= new ContentManager();
-                 $relat = $cm->getContents($relationes);
-                 foreach($relat as $contents) {
-                       $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title.'\n';
-                 }
-                 $msg.="\n \n ¡Ojo! Si lo borra, se eliminar&aacute;n las relaciones del album con los articulos";
-                 $msg.="\n ¿Desea eliminarlo igualmente?";
-               //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-                // $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                 echo $msg;
-                 exit(0);
-            }else{
-                $msg.="¿Está seguro que desea eliminar  '".$album->title."' ?";
-              //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-              //  $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                echo $msg;
-                exit(0);
-            }
+                        $rel= new Related_content();
+                        $relationes=array();
+                        $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
+                        if(!empty($relationes)){
+                             $msg = "El album  '".$album->title."' , está relacionado con los siguientes articulos:  \n";
+                             $cm= new ContentManager();
+                             $relat = $cm->getContents($relationes);
+                             foreach($relat as $contents) {
+                                   $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title.'\n';
+                             }
+                             $msg.="\n \n ¡Ojo! Si lo borra, se eliminar&aacute;n las relaciones del album con los articulos";
+                             $msg.="\n ¿Desea eliminarlo igualmente?";
+                           //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
+                            // $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
+                             echo $msg;
+                             exit(0);
+                        }else{
+                            $msg.="¿Está seguro que desea eliminar  '".$album->title."' ?";
+                          //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
+                          //  $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
+                            echo $msg;
+                            exit(0);
+                        }
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 
@@ -229,7 +227,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'change_favorite':
-			$album = new Album($_REQUEST['id']);
+	    $album = new Album($_REQUEST['id']);
             $msg = '';
              //Publicar o no,
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -309,14 +307,15 @@ if( isset($_REQUEST['action']) ) {
                                         echo $paginacion;
 					echo '</p>';
 				 }
-				 echo "<ul id='thelist'  class='gallery_list' style='width:400px;'> ";				   
+				 echo "<ul id='thelist'  class='gallery_list' style='width:400px;'> ";
+                                 $num=1;
 				 foreach ($photos as $as) {						
                                     if(file_exists(MEDIA_IMG_PATH.$as->path_file.$as->name)){
                                         $ph=new Photo($as->pk_photo);
                                         if(strtolower($as->type_img) !='swf'){
                                             $ph->set_status(1,$_SESSION['userid']);
 
-                                            require( dirname(__FILE__).'/themes/default/plugins/function.cssimagescale.php' );
+                                            require( SITE_ADMIN_PATH.'/themes/default/plugins/function.cssimagescale.php' );
                                             $params = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67);
                                             $params2 = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67, 'getwidth'=>1);
                                             if(strtolower($as->type_img) =='jpg' || strtolower($as->type_img) =='jpg'){
@@ -347,5 +346,5 @@ if( isset($_REQUEST['action']) ) {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
 }
 
-$tpl->display('album.tpl');
+$tpl->display('album/album.tpl');
 

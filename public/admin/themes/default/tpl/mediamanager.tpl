@@ -40,11 +40,11 @@ function confirmar(url) {
                 GLOBAL</a>
         </li>
          {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
-            <li>
+           {* <li>
                 <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     ALBUMS</a>
             </li>
-
+            *}
             <li>
                 <a href="{$home}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     PUBLICIDAD</a>

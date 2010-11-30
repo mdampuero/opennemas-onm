@@ -149,12 +149,15 @@
                         </td>
                         <td nowrap="nowrap">
                             <select name="category" id="category"  >
-                                <option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>
                                 {section name=as loop=$allcategorys}
-                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                                    {section name=su loop=$subcat[as]}
-                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/section}
+                                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                        {section name=su loop=$subcat[as]}
+                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                            {/acl}
+                                        {/section}
+                                    {/acl}
                                 {/section}
                                 </select>
                         </td>
@@ -191,7 +194,7 @@
 		<label align='right'><sub>Separadas por comas</sub></label><br>
 	</td>
 </tr>
-{include file="album_images.tpl"}
+{include file="album/album_images.tpl"}
 
 </tbody>
 </table>
@@ -243,7 +246,7 @@
 				</td>
 				<td nowrap="nowrap">
                     <select name="category" id="category"  >
-                        <option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>                         
+                        {*<option value="3" {if $category eq 3} selected{/if} name="Album" >Album</option>             *}
                         {section name=as loop=$allcategorys}                                                 
                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
@@ -285,7 +288,7 @@
 		<br><label align='right'><sub>Separadas por comas</sub></label>
 	</td>
 </tr>
-{include file="album_images.tpl"}
+{include file="album/album_images.tpl"}
 </tbody>
 </table>
 </div>

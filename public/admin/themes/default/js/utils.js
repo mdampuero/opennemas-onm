@@ -87,7 +87,7 @@ function get_metadata(title)
 	   var tags= document.getElementById('metadata').value;
 
 	   //uso del medotod GET
-	   ajax.open("GET", "utils_content.php?action=get_tags&title="+title+"&tags="+tags);
+	   ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+title+"&tags="+tags);
 	   ajax.onreadystatechange=function() {
 	    if (ajax.readyState==4) {
 		     //mostrar resultados en esta capa
@@ -131,7 +131,7 @@ function counttiny(counter, editor){
 
 function get_images(category,page,action, metadatas)
 {	
-    new Ajax.Updater('photos', "article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
+    new Ajax.Updater('photos', "/admin/article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
         {
             evalScripts: true,
             onComplete: function() {
@@ -352,7 +352,7 @@ function change_dashboard(div,category) {
 
 function  show_subcat(category,home){
     
-    new Ajax.Updater('menu_subcats', "utils_content.php?action=get_subcategories&category="+category+"&home="+home,
+    new Ajax.Updater('menu_subcats', "/admin/controllers/utils_content.php?action=get_subcategories&category="+category+"&home="+home,
     {
           evalScripts: true
     });//
