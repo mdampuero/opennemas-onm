@@ -130,13 +130,8 @@ function counttiny(counter, editor){
 }
 
 function get_images(category,page,action, metadatas)
-<<<<<<< HEAD
 {
     new Ajax.Updater('photos', "/admin/article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
-=======
-{
-    new Ajax.Updater('photos', "article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
->>>>>>> First attempt to drop iframe and use template inheritance
         {
             evalScripts: true,
             onComplete: function() {

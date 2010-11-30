@@ -7,7 +7,7 @@ require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
 // Register events
-require_once('albums_events.php');
+require_once('controllers/album/albums_events.php');
 
 /**
  * Setup view
@@ -18,7 +18,7 @@ $tpl->assign('titulo_barra', 'Portadas del periódico');
 if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
 {
     Privileges_check::AccessDeniedAction();
-} 
+}
 
 if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
 $ccm = new ContentCategoryManager();
@@ -37,7 +37,7 @@ if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
 			$cm = new ContentManager();
-			// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);                        
+			// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
 			list($portadas, $pager)= $cm->find_pages('Kiosko', 'fk_content_type=14 ', 'ORDER BY  date DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
 
                         $aut=new User();
@@ -77,7 +77,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'create':
 
                         $_POST['fk_publisher']=$_SESSION['userid'];
-                        
+
                         //Se crea el nombre del PDF
                         $date = new DateTime($_POST['date']);
                         $_POST['name'] = $date->format('dmy').'.pdf';
@@ -116,7 +116,7 @@ if( isset($_REQUEST['action']) ) {
                         $portada->remove();
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
-		
+
 		case 'change_status':
 			$portada = new Kiosko($_REQUEST['id']);
 
@@ -140,7 +140,7 @@ if( isset($_REQUEST['action']) ) {
                         }
                         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
 		break;
-		
+
 		default:
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
