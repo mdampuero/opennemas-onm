@@ -74,8 +74,9 @@ class YpMenu extends Menu
 
     function _submenu_open($attrs)
     {
-        $link = (isset($attrs['link']))? $attrs['link']: '#';
-        //$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
+        $link = $SITE_ADMIN_PATH ;
+		$link .= (isset($attrs['link']))? $attrs['link']: '#';
+		//$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
 
         $this->paintSubmenu = !isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']);
 

@@ -1,11 +1,8 @@
-{* tpl usado en mediamanager y mediagráficos
-pendiente dividir en tpls pequeños y quitar los ifs*}
+{extends file="base/admin.tpl"}
 
-{if $action eq 'upload'}
-    {include file="header.noform.tpl"}
-{else}
-    {include file="header.tpl"}
-{/if}
+
+{block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 <script type="text/javascript">
 function confirmar(url) {
@@ -359,4 +356,8 @@ function confirmar(url) {
     {/if} {* endif $category eq 'GLOBAL' *}
 </div>
 
-{include file="footer.tpl"}
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
+{/block}
+

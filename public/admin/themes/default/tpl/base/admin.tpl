@@ -4,7 +4,7 @@
 *}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:fb="http://www.facebook.com/2008/fbml" lang="es">
+<html lang="es">
 <head>
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,10 +47,7 @@
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
-    {*Move functions js - utils_header.js*}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
-
-
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
 	<script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
@@ -62,10 +59,6 @@
 	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
 	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
 	<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-
-
-
-
     {/block}
 
 </head>
