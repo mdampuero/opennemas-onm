@@ -1,11 +1,46 @@
 {extends file="base/admin.tpl"}
 
+{block name="admin_menu"}
+	<div id="menu-acciones-admin" class="clearfix">
+        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: &nbsp;{$datos_cat[0]->title}</h2></div>
+		<ul>
+            <li>
+				<a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" value="Cancelar" title="Cancelar">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				</a>
+			</li>
+            <li>
+                <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Check
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Import
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
+                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />Remove File
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />Add File
+                </a>
+            </li>
+		</ul>
+	</div>
+{/block}
+
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
+	 style="max-width:70% !important; margin: 0 auto; display:block;">
 <div>
     <!--form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addFile" method="POST" enctype="multipart/form-data"-->
 
-    {include file="botonera_up.tpl"}
+    {block name="admin_menu"}{/block}
+
     <table class="adminheading">
         <tr>
             <th nowrap>&nbsp;</th>

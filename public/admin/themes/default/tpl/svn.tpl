@@ -1,11 +1,44 @@
 {extends file="base/admin.tpl"}
 
+{block name="admin_menu"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style="float:left;margin-left:15px;margin-top:10px;"><h2>{$titulo_barra}</h2></div>
+        <ul>
+			<li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'status', 0);" onmouseover="return escape('<u>S</u>tatus');" accesskey="S" tabindex="4" title="Get the status of the OpenNeMaS system">
+					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Status" alt="Statis"><br />Status
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'update', 0);" onmouseover="return escape('<u>U</u>pdate');" accesskey="U" tabindex="3">
+					<img border="0" src="{$params.IMAGE_DIR}update-system.png" title="Update" alt="Update OpenNeMas from the update server"><br />Update
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'co', 0);" onmouseover="return escape('<u>C</u>heckout');" accesskey="C" tabindex="2">
+					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Checkout" alt="Fetch the lastest version of OpenNeMas from update server"><br />Checkout
+				</a>
+			</li>
+			{* <li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'info', 0);" onmouseover="return escape('<u>I</u>nfo');" accesskey="N" tabindex="1">
+					<img border="0" src="{$params.IMAGE_DIR}info.png" title="Info" alt="Info"><br />Info
+				</a>
+			</li> *}
+            <li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>L</u>ist');" accesskey="L" tabindex="1">
+					<img border="0" src="{$params.IMAGE_DIR}list.png" title="List" alt="List files in the system"><br />List
+				</a>
+			</li>
+		</ul>
+	</div>
+{/block}
+
 {block name="content"}
 <div style="width:70%; margin:0 auto;">
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
-    {include file="botonera_up.tpl"}
 
+    {block name="admin_menu"}{/block}
     <table class="adminheading" style="margin-top:20px">
         <tr>
             <th nowrap>Please fill the information to connect to the update server and click on the above buttons.</th>

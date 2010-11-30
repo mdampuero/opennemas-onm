@@ -90,8 +90,8 @@
 
 {* Botonera articles -------------------------------------------- *}
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -145,8 +145,8 @@
 
 {* pendientes *}
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list_pendientes")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 		<ul>
 			 <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
@@ -191,8 +191,8 @@
 
 {* agencias *}
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list_agency")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 		<ul>
 			 <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
@@ -226,42 +226,9 @@
 		</ul>
 	</div>
 
-{elseif preg_match('/importAgencyXML\.php/',$smarty.server.SCRIPT_NAME)}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-            <li>
-				<a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-            <li>
-                <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Check
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Import
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />Remove File
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />Add File
-                </a>
-            </li>
-		</ul>
-	</div>
-
-
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list_hemeroteca")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -283,8 +250,8 @@
 
 {* Botonera comentarios ---------------------------------------------------------------------------------- *}
 {elseif preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {if $category==4} OPINION {else} {$category|upper}{/if}{/if}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {if $category==4} OPINION {else} {$category|upper}{/if}{/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -310,8 +277,8 @@
 	</div>
 
 {elseif preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
-	<div style='float:left'><h2>&nbsp;{$datos_cat[0]->title}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left'><h2>&nbsp;{$datos_cat[0]->title}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
@@ -349,8 +316,8 @@
 
 {* Botonera opinion -------------------------------------------- *}
 {elseif preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$accion}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$accion}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);return false;" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -443,10 +410,9 @@
 	</div>
 {* Botonera advertisement -------------------------------------------- *}
 {elseif preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-   <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title} {if $category eq 0}HOME{/if}</h2></div>
-	<div id="menu-acciones-admin" class="clearfix">
+   <div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title} {if $category eq 0}HOME{/if}</h2></div>
 		<ul>
-
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
 					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
@@ -477,7 +443,6 @@
 	</div>
 
 {elseif preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 			 <li>
@@ -500,19 +465,19 @@
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/category\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	{if $type eq "list"}
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<div id="menu-acciones-admin" class="clearfix">
+			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 			<ul>
 				<li>
-					<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva Seccion');" accesskey="N" tabindex="1">
+					<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<b>N</b>ueva Seccion');" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />Nueva Sección
 					</a>
 				</li>
 			</ul>
 		</div>
 	{elseif $type eq "order"}
-		<div style="float:left"><b><em>DRAG &amp; DROP: pinche y arrastre las filas para determinar el orden en el menú de las secciones</em></b></div>
 		<div id="menu-acciones-admin" class="clearfix">
+			<div style="float:left"><b><em>DRAG &amp; DROP: pinche y arrastre las filas para determinar el orden en el menú de las secciones</em></b></div>
 			<ul>
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:savePriority();" title="Guardar Positions" alt="Guardar Cambios">
@@ -556,8 +521,8 @@
 
 {* Botonera autores -------------------------------------------- *}
 {elseif preg_match('/author\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva publicidad');" accesskey="N" tabindex="1">
@@ -581,7 +546,6 @@
 	</div>
 
 {elseif preg_match('/author\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 		    <li>
@@ -614,8 +578,8 @@
 
 {* Botonera usuarios -------------------------------------------- *}
 {elseif preg_match('/user\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<ul>
             <li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -636,7 +600,6 @@
 	</div>
 
 {elseif preg_match('/user\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 		    <li>
@@ -665,8 +628,8 @@
 
 {* Botonera grupos de usuarios -------------------------------------------- *}
 {elseif preg_match('/user_groups\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>uevo grupo de usuarios');" accesskey="N" tabindex="1">
@@ -677,7 +640,6 @@
 	</div>
 
 {elseif preg_match('/user_groups\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 		    <li>
@@ -703,7 +665,6 @@
 	</div>
 
 {elseif preg_match('/privileges\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 		    <li>
@@ -728,44 +689,12 @@
 		</ul>
 	</div>
 
- {* Botonera Subversion -------------------------------------------- *}
- {elseif preg_match('/svn\.php/',$smarty.server.SCRIPT_NAME)}
-	<div style="float:left;margin-left:15px;margin-top:15px;"><h2>{$titulo_barra}</h2></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'status', 0);" onmouseover="return escape('<u>S</u>tatus');" accesskey="S" tabindex="4" title="Get the status of the OpenNeMaS system">
-					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Status" alt="Statis"><br />Status
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'update', 0);" onmouseover="return escape('<u>U</u>pdate');" accesskey="U" tabindex="3">
-					<img border="0" src="{$params.IMAGE_DIR}update-system.png" title="Update" alt="Update OpenNeMas from the update server"><br />Update
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'co', 0);" onmouseover="return escape('<u>C</u>heckout');" accesskey="C" tabindex="2">
-					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Checkout" alt="Fetch the lastest version of OpenNeMas from update server"><br />Checkout
-				</a>
-			</li>
-			{* <li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'info', 0);" onmouseover="return escape('<u>I</u>nfo');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}info.png" title="Info" alt="Info"><br />Info
-				</a>
-			</li> *}
-            <li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>L</u>ist');" accesskey="L" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}list.png" title="List" alt="List files in the system"><br />List
-				</a>
-			</li>
-		</ul>
-	</div>
 
 
 {* Botonera Search_avanced ----------------------------------------------- *}
  {elseif preg_match('/search_advanced\.php/',$smarty.server.SCRIPT_NAME) && ((!isset($smarty.request.action)) || ($smarty.request.action neq "read"))}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'search', 0);" onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
@@ -776,7 +705,6 @@
 	</div>
 
  {elseif preg_match('/search_advanced\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 			<li>
@@ -790,8 +718,8 @@
 
 {* Botonera album -------------------------------------------- *}
 {elseif preg_match('/album\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <div id="menu-acciones-admin" class="clearfix">
+    <div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -822,7 +750,6 @@
 	</div>
 
  {elseif preg_match('/album\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 			<li>
@@ -848,9 +775,9 @@
 	</div>
  {* Botonera video -------------------------------------------- *}
 {elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <div id="menu-acciones-admin" class="clearfix">
-		<ul>
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+        <ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
 					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
@@ -906,9 +833,9 @@
 	</div>
  {* Botonera polls -------------------------------------------- *}
 {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <div id="menu-acciones-admin" class="clearfix">
-		<ul>
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+        <ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
 					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
@@ -938,7 +865,6 @@
 	</div>
 
 {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 		    <li>
@@ -963,56 +889,6 @@
 		</ul>
 	</div>
 
-{* Botonera Papelera -------------------------------------------- *}
-{elseif preg_match('/litter\.php/',$smarty.server.SCRIPT_NAME)}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <ul>
-			 <li>
-                            <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mremove', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                                <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
-                            </a>
-                        </li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'mremove', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'm_no_in_litter', 0);" name="submit_mult" value="Recuperar" title="Recuperar">
-				    <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />Recuperar
-				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
-			</li>
-		</ul>
-    </div>
-
-{* Botonera control link -------------------------------------------- *}
-{elseif preg_match('/link_control\.php/',$smarty.server.SCRIPT_NAME)}
-	<div id="menu-acciones-admin" class="clearfix">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-		<ul>
-			 <li>
-                            <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelFiles', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                                <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
-                            </a>
-                        </li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelFiles', 0);"  onmouseover="return escape('<u>E</u>liminar seleccionados');" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
-				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
-			</li>
-		</ul>
-    </div>
 
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/kiosko\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}

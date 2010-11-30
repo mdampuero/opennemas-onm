@@ -1,9 +1,37 @@
 {extends file="base/admin.tpl"}
 
 
+{block name="admin_menu"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+        <ul>
+			 <li>
+                            <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mremove', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
+                                <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
+                            </a>
+                        </li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'mremove', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'm_no_in_litter', 0);" name="submit_mult" value="Recuperar" title="Recuperar">
+				    <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />Recuperar
+				</a>
+			</li>
+			<li>
+				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+				</button>
+			</li>
+		</ul>
+    </div>
+{/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
+	 style="max-width:70% !important; margin: 0 auto; display:block;">
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list"}
@@ -29,7 +57,8 @@
 </ul>
 
 <br><br><br>
-    {include file="botonera_up.tpl"}
+    {block name="admin_menu"}{/block}
+
 <table class="adminheading">
 	<tr>
 		<th nowrap>Elementos en la papelera</th>
