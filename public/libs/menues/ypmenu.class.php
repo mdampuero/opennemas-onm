@@ -74,10 +74,11 @@ class YpMenu extends Menu
 
     function _submenu_open($attrs)
     {
-        $link = SITE_URL_ADMIN.'/' ;
+		// Add SITE_URL_ADMIN if the link url doesn't have an external link
+		$link = (preg_match('@http\:\/\/@', $attrs['link']) <= 0) ? SITE_URL_ADMIN.'/' : '';
 		$link .= (isset($attrs['link']))? $attrs['link']: '#';
-		//$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
 
+		// Check if logged user has rights to see this menu item
         $this->paintSubmenu = !isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']);
 
         if($this->paintSubmenu) {
@@ -104,7 +105,7 @@ class YpMenu extends Menu
     function _node_open($attrs)
     {
         if(($this->paintSubmenu) && (!isset($attrs['privilege']) || $this->checkAcl($attrs['privilege']))) {
-			$link = SITE_URL_ADMIN.'/' ;
+			$link = (preg_match('@http\:\/\/@', $attrs['link']) <= 0) ? SITE_URL_ADMIN.'/' : '';
 			$link .= (isset($attrs['link']))? $attrs['link']: '#';
             //$target = (isset($attrs['target']))? ' target="'.$attrs['target'].'"': '';
 

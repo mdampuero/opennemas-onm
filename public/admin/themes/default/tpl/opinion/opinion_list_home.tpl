@@ -1,8 +1,17 @@
 <div id="msg"></div>
+    <table class="adminheading">
+        <tr>
+            <td>
+
+                &nbsp;
+
+            </td>
+        </tr>
+    </table>
 <table class="adminlist" border=0>
-	<tr>  
+	<tr>
 		<th class="title"  style="width:40px;"></th>
-		<th class="title"  style="width:180px;">Autor</th> 	
+		<th class="title"  style="width:180px;">Autor</th>
 		<th class="title" style="padding:4px;">T&iacute;tulo</th>
 		<th align="center" style="padding:4px;width:70px;">Visto</th>
 		<th align="center" style="padding:4px;width:70px;">Votaci&oacute;n</th>
@@ -12,9 +21,9 @@
 		<th align="center" style="padding:4px;width:70px;">Publicado</th>
 		<th align="center" style="padding:4px;width:70px;">Modificar</th>
 		<th align="center" style="padding:4px;width:70px;">Eliminar</th>
-	  </tr>	 	  
+	  </tr>
 	   <tr> <td colspan='11'>
-	 	  <div style="float:left;width:100%;border:1px solid gray;"> 
+	 	  <div style="float:left;width:100%;border:1px solid gray;">
 		 {if $num_dir > 0}
 		    <table width="100%" cellpadding=0 cellspacing=0  id="{$director[0]->id}" border=0 >
                         <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
@@ -77,23 +86,23 @@
 					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 					    <td style="padding:4px;font-size: 11px;width:30px;">
 						    <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$editorial[c]->id}"  style="cursor:pointer;" >
-					    </td>					 
+					    </td>
 					    <td style="padding:4px;font-size: 11px;width:180px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
-						    Editorial				    
+						    Editorial
 					    </td>
 					      <td style="padding:4px;font-size: 11px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
 						    {$editorial[c]->title|clearslash}
-					    </td>	    
+					    </td>
 					    <td style="padding:4px;font-size: 11px;width:70px;" align="center">
 						    {$editorial[c]->views}
 					    </td>
-					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">		
+					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">
                                                     {$editorial[c]->ratings}
                                             </td>
 					    <td style="padding:4px;width:74px;font-size: 11px;" align="center">
                                                     {$editorial[c]->comments}
                                             </td>
-					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">		    
+					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">
                                                     {$editorial[c]->created}
 					    </td>
 					    <td style="padding:4px;width:70px" align="center">
@@ -121,7 +130,7 @@
 							    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 					    </td>
 					</tr>
-			</table>		
+			</table>
 			{assign var='cont' value=$cont+1}
 		 {/section}
 		</div>
@@ -136,7 +145,7 @@
 					    <td style="padding:4px;font-size: 11px;width:30px;">
 						   <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;" >
 					    </td>
-					     {if $type_opinion=='-1' ||  $type_opinion=='0'} 
+					     {if $type_opinion=='-1' ||  $type_opinion=='0'}
 					    <td style="padding:4px;font-size: 11px;width:180px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
 						    {if $opinions[c]->type_opinion==1} Editorial{elseif $opinions[c]->type_opinion==2} Director
 						    {else} 	<a href="controllers/opinion/author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>
@@ -145,18 +154,18 @@
 					    {/if}
 					      <td style="padding:4px;font-size: 11px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
 						    {$opinions[c]->title|clearslash}
-					    </td>	    
+					    </td>
 
 					    <td style="padding:4px;font-size: 11px;width:70px;" align="center">
 						    {$opinions[c]->views}
 					    </td>
-					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">		
-                                                   {$op_rating[c]}		
+					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">
+                                                   {$op_rating[c]}
                                             </td>
 					    <td style="padding:4px;width:74px;font-size: 11px;" align="center">
-                                                   {$op_comment[c]}	
+                                                   {$op_comment[c]}
                                             </td>
-					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">		    
+					    <td style="padding:4px;width:70px;font-size: 11px;" align="center">
 						    {$opinions[c]->created}
 					    </td>
 					    <td style="padding:4px;width:70px" align="center">
@@ -184,8 +193,8 @@
 							    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 					    </td>
 					</tr>
-				</table>	
-				{assign var='cont' value=$cont+1}	 
+				</table>
+				{assign var='cont' value=$cont+1}
 			{/section}
 	</div>
 	  </td>
@@ -200,17 +209,17 @@
 {if $type_opinion=='-1'}
 	{literal}
 		<script type="text/javascript">
-		 // <![CDATA[		 
+		 // <![CDATA[
 		  Sortable.create('cates',{
 		   tag:'table',
 		   only:'sortable',
-		   dropOnEmpty: true, 
+		   dropOnEmpty: true,
 		    containment:["cates"],
 		   constraint:false});
 		  Sortable.create('editoriales',{
 		   tag:'table',
 		   only:'edits_sort',
-		   dropOnEmpty: true, 
+		   dropOnEmpty: true,
 		    containment:["editoriales"],
 		   constraint:false});
 		 // ]]>
@@ -220,16 +229,16 @@
 {if $type_opinion eq 0}
     <table class="adminheading">
 	    <tr>
-		    <th nowrap>Articulos de Opini&oacute;n</th> 
+		    <th nowrap>Articulos de Opini&oacute;n</th>
 		    <th> Seleccione autor:
 		    <select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
 		  	<option value="0" {if $author eq "0"} selected {/if}> Todos </option>
 			{section name=as loop=$autores}
 				<option value="{$autores[as]->pk_author}" {if $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
 		    {/section}
-	    </select>	
+	    </select>
 		    </th>
 		    <th  style="padding:10px;width:55%;"></th>
-	    </tr>	
+	    </tr>
     </table>
 {/if}

@@ -1,7 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST"
+	  style="max-width:70% !important; margin: 0 auto; display:block;">
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -17,30 +18,34 @@
 </ul>
 </div>
 
-<div>
-	<label><input type="text" name="filter[pclave]" value="{$smarty.request.filter.pclave}" /></label>
-	<button type="submit" onclick="javascript:$('action').value='list';">Filtrar</button>
-</div>
 
+<table class="adminheading">
+	<tr>
+		<td>
+			Keyworks containing <label><input type="text" name="filter[pclave]" value="{$smarty.request.filter.pclave}" /></label>
+			<button type="submit" onclick="javascript:$('action').value='list';">Filtrer</button>
+		</td>
+	</tr>
+</table>
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 <thead>
 <tr>
-    <th class="title">Palabra clave</th>
-    <th class="title">Tipo</th>
-    <th class="title">Valor</th>
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
+    <th class="title">Type</th>
+    <th class="title">Keyword</th>
+    <th class="title">Replace value</th>
+    <th>Actions</th>
 </tr>
 </thead>
 
 <tbody>
 {section name=k loop=$pclaves}
 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-	<td width="240">
-		{$pclaves[k]->pclave}
-	</td>
-	<td width="80">
+
+	<td align="center">
         <img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
+	</td>
+	<td>
+		{$pclaves[k]->pclave}
 	</td>
 	<td>
 		{$pclaves[k]->value|default:"-"}
@@ -49,8 +54,7 @@
 	<td width="44">
 		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$pclaves[k]->id});" title="Modificar">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-	</td>
-	<td width="44">
+		&nbsp;
 		<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="Eliminar">
 			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 	</td>

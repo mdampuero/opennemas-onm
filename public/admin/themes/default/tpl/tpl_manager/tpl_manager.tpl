@@ -6,7 +6,8 @@
     <img src="{$params.IMAGE_DIR}template_manager/messagebox_warning.png" border="0" align="absmiddle" />
     La accion "Renovar cache" sobre múltiples cachés puede ralentizar el sistema.
 </div>
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST"
+	 style="max-width:70% !important; margin: 0 auto; display:block;">
 <div id="menu-acciones-admin">
      <div style="float:left;"><h2>{$titulo_barra}</h2></div>
     <ul>
@@ -93,10 +94,10 @@
                 <th><input type="checkbox" value="" onclick="selectAll(this.checked, $('tabla').select('tbody input[type=checkbox]'));" /></th>
                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resource</th>
                 <th>Category</th>
-                <th>Expire date</th>
-                <th>Creation date</th>
-                <th>Size</th>
-                <th>&nbsp;</th>
+                <th>Created in</th>
+                <th>Valid until</th>
+                <th>File size</th>
+                <th>Actions</th>
             </tr>
         </thead>
 	    <tbody>
@@ -205,31 +206,34 @@
 
 				{/if}
             </td>
-			<td width="270">
+			<td width="100">
                 {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}
             </td>
-			<td width="190">
-                {if $caches[c].expires < $smarty.now}
-                    <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="La caché ya expiró" style="float: left; margin-right: 4px;" />
-                {else}
-                    <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
-                {/if}
-                <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
-                   maxlength="20" style="width: 130px;"/>
-            </td>
-			<td width="125" align="left">
+
+			<td width="125" align="center">
                 {$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}
             </td>
-            <td width="70" align="left">
+
+			<td width="190" align="center">
+                <div>
+					{if $caches[c].expires < $smarty.now}
+						 <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="La caché ya expiró" style="float: left; margin-right: 4px;" />
+					 {else}
+						 <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
+					 {/if}
+					 <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
+						maxlength="20" style="width: 130px; display:inline"/>
+				</div>
+            </td>
+            <td width="70" align="center">
                 {$caches[c].size/1000|string_format:"%d"} KB
             </td>
-			<td width="20">
-                <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
+			<td width="20" align="center">
+               <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
                    title="Regenerar la caché">
                     <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" /></a>
-            </td>
-            <td width="20">
-                <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
+			   &nbsp;
+			   <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
                     title="Eliminar la caché">
                     <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" border="0" alt="" /></a>
             </td>
@@ -254,7 +258,10 @@
     </tfoot>
     </table>
     {else}
-        <h1>Ninguna caché disponible</h1>
+	 <div style="border:1px solid #ccc; padding:10px; font-size:1.2em; text-align:center">
+		  <p>Ohh, there is <strong>no cache file</strong> in the system.</p>
+		  <p>Visit some pages in <a href="{$smarty.const.SITE_URL}" title="Visit your site">your site</a></p>
+	 </div>
     {/if}
 
 </div>

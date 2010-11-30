@@ -55,8 +55,8 @@ function decompressZIP($file) {
 function importXML($XMLFile)
 {
     $XMLstr = @file_get_contents($XMLFile);
-    $s = simplexml_load_string($XMLstr);   
-  
+    $s = simplexml_load_string($XMLstr);
+
     return $s;
 }
 
@@ -92,11 +92,11 @@ function createArticle($elementXML,$numCategories,$check='1')
     $data['summary']="";
     $data['body']="";
     $data['pk_author']="";
-    
+
     foreach ($elementXML->epigrafe as $texto) {
        $data['subtitle'].= $texto;
     }
-    
+
     //If article does not have antetitulo, the sistem will introduce article section
     if (empty($data['subtitle'])) {
         $data['subtitle'] = strtoupper($elementXML->seccion);
@@ -104,23 +104,23 @@ function createArticle($elementXML,$numCategories,$check='1')
 
     foreach ($elementXML->entradilla as $texto) {
        $data['summary'].= $texto;
-    }    
+    }
 
     foreach ($elementXML->autor_nombre as $texto) {
        $data['agency'].= $texto ;
     }
-    
+
     $texto=trim($data['agency']);
     substr_replace($texto ,'',-1);
     $data['agency'] = mb_strtoupper($texto,'UTF-8');
 
     if(strlen($data['agency']) == 0) {
         $data['agency'] = "Agencias";
-        
+
     } elseif( $data['agency']=='REDACCIÓN' ||  $data['agency']=='AGENCIAS' ||
              $data['agency']=='REDACCIÓN/AGENCIAS'  ||  $data['agency']=='AXENCIAS' ||
-             $data['agency']=='REDACCIÓN/AXENCIAS') {        
-        $data['agency'] = "Agencias"; 
+             $data['agency']=='REDACCIÓN/AXENCIAS') {
+        $data['agency'] = "Agencias";
     }
     $elementXML->autor_nombre= $elementXML->autor_nombre.' ('.  $data['agency'].')';
 
@@ -135,8 +135,8 @@ function createArticle($elementXML,$numCategories,$check='1')
     }
     $elementXML->page =$data['paper_page'];
     $elementXML->num_article=substr($elementXML['nombre'],-2);
- 
-    $stringISO = mb_convert_encoding ($data['title'] , "UTF-8" , "ISO-8859-1");    
+
+    $stringISO = mb_convert_encoding ($data['title'] , "UTF-8" , "ISO-8859-1");
     $stringISO = preg_replace('/â©/', ' ' , $stringISO);
     $data['title'] = mb_convert_encoding ($stringISO,"ISO-8859-1","UTF-8");
 
@@ -156,15 +156,15 @@ function createArticle($elementXML,$numCategories,$check='1')
 
 
     $data['category'] = $ccm->get_id($current_category);
- 
+
     //If the system does not recognize the category, send to unknown category
     if (empty($data['category'])) {
 
         $current_category = 'unknown';
-         
+
         $data['category'] = 20;
     }
- 
+
     $elementXML->seccion =$elementXML->seccion.' ('.$current_category.')';
 
     $numCategories[ $ccm->get_title($current_category) ]+=1;
@@ -212,13 +212,13 @@ function createArticle($elementXML,$numCategories,$check='1')
         }
     }
 
-    $article->create( $data ); 
+    $article->create( $data );
     return $numCategories;
 } #end createArticle
 
 function createOpinion($elementXML,$numCategories,$check='1')
 {
-        
+
             $data['body']="";
             $data['title']="";
             $data['author']="";
@@ -312,7 +312,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
                  $data['in_home']=0;
             }
 
-           
+
             $data['fk_publisher']=$_SESSION['userid'];
             $data['metadata']="";$data['category']="";$data['description']="";
             $data['with_comment']="1";$data['publisher']="3";
@@ -320,7 +320,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $data['metadata'] = str_replace('-',',',$metadata);
             $data['metadata'] = $data['metadata'].', '.$metas_name;
             $opinion = new Opinion();
-            $opinion->create( $data );      
+            $opinion->create( $data );
             $numCategories['opinion']+=1;
             return $numCategories;
 } #end createOpinion
@@ -360,7 +360,7 @@ if(isset($_REQUEST['action']) ) {
                             $dataZIP = decompressZIP($uploaddir.$name);
 
                             @chmod($uploaddir.$name,0775);
-                            sort($dataZIP); 
+                            sort($dataZIP);
                             foreach($dataZIP as $elementZIP) {
                                 @chmod($uploaddir.$elementZIP,0775);
                                 $eltoXML = importXML ($uploaddir.$elementZIP);
@@ -380,7 +380,7 @@ if(isset($_REQUEST['action']) ) {
                             $XMLFile[$j]=$nameFile;
                             if (preg_match("/OPINIÓN|OPINION|opinion|opinión/", $eltoXML->seccion)){
                                 $numCategories=createOpinion($eltoXML,$numCategories);
-                                 
+
                             }else{
                                 $numCategories=createArticle($eltoXML,$numCategories,$check);
                             }
@@ -459,7 +459,7 @@ if(isset($_REQUEST['action']) ) {
                         }
                     }
                 }
-                
+
                 $tpl->assign('numCategories', $numCategories);
                 $tpl->assign('XMLFile', $XMLFile);
                 $tpl->assign('dataXML', $dataXML);
@@ -475,7 +475,9 @@ if(isset($_REQUEST['action']) ) {
 
             $dateStamp = date('Y') . date ('m') . date ('d');
 
-            if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
+            if (count($_FILES["file"]["name"]) >= 1
+                && !isset($_FILES["file"])
+                && !empty($_FILES["file"]["name"][0]) ) {
 
                 for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
 

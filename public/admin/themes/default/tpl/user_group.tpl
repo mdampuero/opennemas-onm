@@ -1,110 +1,124 @@
 {extends file="base/admin.tpl"}
 
+{block name="action_buttons"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+		<ul>
+			<li>
+				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva privilegios');" accesskey="N" tabindex="1">
+					<img border="0" src="{$params.IMAGE_DIR}privilege_add.png" title="Nuevo" alt="Nuevo"><br />Nuevo Privilegio
+				</a>
+			</li>
+		</ul>
+	</div>
+{/block}
+
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
+		  style="max-width:70% !important; margin: 0 auto; display:block;">
 
-{* LISTADO ******************************************************************* *}
-{if $smarty.request.action eq "list"}
+	{* LISTADO ******************************************************************* *}
+	{if $smarty.request.action eq "list"}
 
-{include file="botonera_up.tpl"}
+	{block name="action_buttons"}{/block}
 
-<table class="adminheading">
+	<table class="adminheading">
+		<tr>
+			<th nowrap></th>
+		</tr>
+	</table>
+	<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 	<tr>
-		<th nowrap></th>
+	<th class="title" style="text-align:left; padding-left:10px">Group name </th>
+	<th class="title">Actions</th>
 	</tr>
-</table>
-<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
-<tr>
-<th class="title" style="text-align:left; padding-left:10px">Group name </th>
-<th class="title">Actions</th>
-</tr>
-{section name=c loop=$user_groups}
-<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-	<td style="padding:10px;">
-		{$user_groups[c]->name}
-	</td>
-	<td style="padding:10px;width:75px; text-align:center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="Edit this User group">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-            &nbsp;
-		<a href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="Delete this user group">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-	</td>
-</tr>
-{sectionelse}
-<tr>
-	<td align="center"><b>There isn't any group to list here.</b></td>
-</tr>
-{/section}
-{if count($user_groups) gt 0}
-<tr>
-    <td colspan="3" align="center">{$paginacion->links}</td>
-</tr>
-{/if}
-</table>
-{/if}
+	{section name=c loop=$user_groups}
+	<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
+		<td style="padding:10px;">
+			{$user_groups[c]->name}
+		</td>
+		<td style="padding:10px;width:75px; text-align:center">
+			<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="Edit this User group">
+				<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+				&nbsp;
+			<a href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="Delete this user group">
+				<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+		</td>
+	</tr>
+	{sectionelse}
+	<tr>
+		<td align="center"><b>There isn't any group to list here.</b></td>
+	</tr>
+	{/section}
+	{if count($user_groups) gt 0}
+	<tr>
+		<td colspan="3" align="center">{$paginacion->links}</td>
+	</tr>
+	{/if}
+	</table>
+	{/if}
 
 
-{* FORMULARIO PARA ENGADIR UN USUARIO **************************************** *}
-{if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
+	{* FORMULARIO PARA ENGADIR UN USUARIO **************************************** *}
+	{if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
 
-{include file="botonera_up.tpl"}
+	{include file="botonera_up.tpl"}
 
-<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
-<tbody>
-<!-- Id -->
-<tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="id">{* Id: *}</label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="hidden" id="idReadOnly" name="idReadOnly" title="Id"
-			value="{$user_group->id}" readonly />
-	</td>
-</tr>
-<!-- Nome -->
-<tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="name">Name:</label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="name" name="name" title="Name for the user group"
-			value="{$user_group->name}" class="required"
-            {if $user_group->name eq $smarty.const.NAME_GROUP_ADMIN}disabled="disabled"{/if} />
-	</td>
-</tr>
-<!-- Privileges -->
-<tr>
-	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="privileges">Grants:</label>
-	</td>
-	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
-		<tbody>
-		{section name=privilege loop=$privileges}
-			<tr>
-			<td style="padding:4px;" nowrap="nowrap" width="5%">
+	<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
+	<tbody>
+	<!-- Id -->
+	<tr>
+		<td valign="top" align="right" style="padding:4px;" width="30%">
+			<label for="id">{* Id: *}</label>
+		</td>
+		<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<input type="hidden" id="idReadOnly" name="idReadOnly" title="Id"
+				value="{$user_group->id}" readonly />
+		</td>
+	</tr>
+	<!-- Nome -->
+	<tr>
+		<td valign="top" align="right" style="padding:4px;" width="30%">
+			<label for="name">Name:</label>
+		</td>
+		<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<input type="text" id="name" name="name" title="Name for the user group"
+				value="{$user_group->name}" class="required"
+				{if $user_group->name eq $smarty.const.NAME_GROUP_ADMIN}disabled="disabled"{/if} />
+		</td>
+	</tr>
+	<!-- Privileges -->
+	<tr>
+		<td valign="top" align="right" style="padding:4px;" width="30%">
+			<label for="privileges">Grants:</label>
+		</td>
+		<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+			<tbody>
+			{section name=privilege loop=$privileges}
+				<tr>
+				<td style="padding:4px;" nowrap="nowrap" width="5%">
 
-                {if $user_group->contains_privilege($privileges[privilege]->id)}
-				<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-                {else}
-				<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-                {/if}
-			</td>
-			<td valign="top" align="left" style="padding:4px;" width="95%">
-				{$privileges[privilege]->description}
-			</td>
-			</tr>
-		{/section}
-		</tbody>
-		</table>
-	</td>
-</tr>
-</tbody>
-</table>
-</div>
-{/if}
+					{if $user_group->contains_privilege($privileges[privilege]->id)}
+					<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
+					{else}
+					<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
+					{/if}
+				</td>
+				<td valign="top" align="left" style="padding:4px;" width="95%">
+					{$privileges[privilege]->description}
+				</td>
+				</tr>
+			{/section}
+			</tbody>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+	</div>
+	{/if}
 
-<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
-</form>
+	<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+	</form>
 {/block}

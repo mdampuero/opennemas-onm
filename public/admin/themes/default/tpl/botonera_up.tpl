@@ -217,44 +217,10 @@
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
                 </button>
             </li>
-            
+
             <li>
                 <a href="importAgencyXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
                     <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />Importar Agencia XML
-                </a>
-            </li>
-		</ul>
-	</div>
-
-
-
-{elseif preg_match('/importXML\.php/',$smarty.server.SCRIPT_NAME)}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-            <li>
-				<a href="#" class="admin_add" onClick="cancel('list_pendientes', 'todos', '');" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-            <li>
-                <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Check
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Import
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />Remove File
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />Add File
                 </a>
             </li>
 		</ul>
@@ -678,7 +644,7 @@
 					<img border="0" src="{$params.IMAGE_DIR}user_validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Save and continue
 				</a>
 		    </li>
-            
+
 			<li>
 			{if isset($user->id)}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user->id}, 'formulario');">
@@ -693,7 +659,7 @@
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancel
 				</a>
 			</li>
-			
+
 		</ul>
 	</div>
 
@@ -731,19 +697,6 @@
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
 			{/if}
 					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-				</a>
-			</li>
-		</ul>
-	</div>
-
-{* Botonera privilegios -------------------------------------------- *}
-{elseif preg_match('/privileges\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva privilegios');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}privilege_add.png" title="Nuevo" alt="Nuevo"><br />Nuevo Privilegio
 				</a>
 			</li>
 		</ul>
@@ -1012,9 +965,9 @@
 
 {* Botonera Papelera -------------------------------------------- *}
 {elseif preg_match('/litter\.php/',$smarty.server.SCRIPT_NAME)}
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <div id="menu-acciones-admin" class="clearfix">
-		<ul>
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+        <ul>
 			 <li>
                             <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mremove', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
                                 <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
@@ -1041,7 +994,7 @@
 {* Botonera control link -------------------------------------------- *}
 {elseif preg_match('/link_control\.php/',$smarty.server.SCRIPT_NAME)}
 	<div id="menu-acciones-admin" class="clearfix">
-                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 		<ul>
 			 <li>
                             <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelFiles', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
@@ -1063,9 +1016,10 @@
 
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/kiosko\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-    <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+
     <div id="menu-acciones-admin" class="clearfix">
-        <ul>
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+		<ul>
             <li>
                 <a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva portada');" accesskey="N" tabindex="1">
                     <img border="0" src="{$params.IMAGE_DIR}add_kiosko.gif" title="Nueva" alt="Nueva"><br />Nueva Portada
@@ -1093,4 +1047,3 @@
         </ul>
     </div>
 {/if}
-
