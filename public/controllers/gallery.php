@@ -94,23 +94,21 @@ if( isset($_REQUEST['action']) ) {
 
         case 'foto':
 
-			$tpl->setConfig('gallery-inner');
+			$albumID = $_REQUEST['id_album'];
 
 			/**
 			 * Redirect to album frontpage if id_album wasn't provided
 			 **/
-			$albumID = $_REQUEST['id_album'];
 			if (empty($albumID)) { Application::forward301('/albumes/'); }
+
+			$tpl->setConfig('gallery-inner');
+			$cacheID = $tpl->generateCacheId('gallery-inner', null, $albumID);
+			Content::setNumViews($albumID);
+			$tpl->assign('contentId', $albumID);
 
 			require_once ("gallery_advertisement.php");
 
-			Content::setNumViews($albumID);
-
-			$cacheID = $tpl->generateCacheId('gallery-inner', null, $albumID);
-
-			$tpl->assign('contentId', $albumID);
-
-			if(($tpl->caching == 0) && (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+			//if(($tpl->caching == 0) && (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
 
 				/**
 				 * Get the album from the id and increment the numviews for it
@@ -135,6 +133,7 @@ if( isset($_REQUEST['action']) ) {
 				 * Get the album photos
 				 **/
 				$i=0;
+				$albumPhotos = array();
 				foreach($_albumArray as $ph){
 				   $albumPhotos[$i]['photo'] = new Photo($ph[0]);
 				   $albumPhotos[$i]['description']=$ph[2];
@@ -142,12 +141,12 @@ if( isset($_REQUEST['action']) ) {
 				}
 				$tpl->assign('albumPhotos2', $albumPhotos);
 
-				require_once ("widget_gallerys_lastest.php");
+				require_once("widget_gallerys_lastest.php");
 				require_once("widget_static_pages.php");
 				require_once('widget_headlines_past.php');
 				require_once("widget_static_pages.php");
 
-			} // end iscached
+			//} // end iscached
 
 			$tpl->display('gallery/gallery-inner.tpl', $cacheID);
 

@@ -8,8 +8,8 @@
             {insert name="rating" id=$video->id page="video" type="vote"}
              - <span>{insert name="numComments" id=$video->id}  Comentarios<span>
         {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
-            {insert name="rating" id=$album->id page="video" type="vote"}
-             - <span>{insert name="numComments" id=$album->id}  Comentarios<span>
+            {insert name="rating" id=$contentId page="video" type="vote"}
+             - <span>{insert name="numComments" id=$contentId}  Comentarios<span>
         {elseif preg_match('/opinion(.*)\.php/',$smarty.server.SCRIPT_NAME)}
             {insert name="rating" id=$opinion->id page="video" type="vote"}
              - <span>{insert name="numComments" id=$opinion->id}  Comentarios<span>

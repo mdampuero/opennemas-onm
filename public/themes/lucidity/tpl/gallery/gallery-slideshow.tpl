@@ -35,7 +35,7 @@
 
             <div class="left">
                 <div class="actual-position">
-                    {include file="utilities/widget_ratings.tpl" }
+						{include file="utilities/widget_ratings.tpl"}
                 </div>
             </div>
             <div class="right">

@@ -54,7 +54,9 @@
 
                 <div class="span-24">
                     <div class="layout-column first-column span-16">
-                        <div class="border-dotted">{include file="module_comments.tpl" contentId=$contentId nocache} </div>
+                        <div class="border-dotted">
+                            {include file="module_comments.tpl" contentId=$contentId nocache}
+                        </div>
                     </div>
                     <div class="layout-column last span-8">
                         {include file="gallery/widget_gallerys_lastest.tpl"}
