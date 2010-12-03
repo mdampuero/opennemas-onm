@@ -62,20 +62,20 @@ $tpl->assign('datos_cat', $datos_cat);
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
-			$cm = new ContentManager();
-            if( $_REQUEST['category'] == 3){
-                list($albums, $pager)= $cm->find_pages('Album', 'fk_content_type=7 AND favorite =1', 'ORDER BY  created DESC ',$_REQUEST['page'],10);
-                $totalalbums = count($albums);
+                        $cm = new ContentManager();
+                        if( $_REQUEST['category'] == 3){
+                            list($albums, $pager)= $cm->find_pages('Album', 'fk_content_type=7 AND favorite =1', 'ORDER BY  created DESC ',$_REQUEST['page'],10);
+                            $totalalbums = count($albums);
 
-                $tpl->assign('totalalbums', $totalalbums);
-                $tpl->assign('albums', $albums);
+                            $tpl->assign('totalalbums', $totalalbums);
+                            $tpl->assign('albums', $albums);
 
-            }else{
-                list($albums, $pager)= $cm->find_pages('Album', 'fk_content_type=7 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                        }else{
+                            list($albums, $pager)= $cm->find_pages('Album', 'fk_content_type=7 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
 
-                $tpl->assign('albums', $albums);
-                $tpl->assign('paginacion', $pager);
-            }
+                            $tpl->assign('albums', $albums);
+                            $tpl->assign('paginacion', $pager);
+                        }
 		break;
 
 		case 'new':
@@ -97,10 +97,11 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('photos', $photos);
 
                         $pages=$pager;
- 
-                        if($pages->_totalPages>1) {
-                                $paginacion=$cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
-                                $tpl->assign('paginacion', $paginacion);
+                        if(!empty($pages)){
+                            if($pages->_totalPages>1) {
+                                    $paginacion=$cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
+                                    $tpl->assign('paginacion', $paginacion);
+                            }
                         }
 		break;
 
@@ -137,12 +138,12 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('photos', $photos);
 
                       $pages=$pager;
-
-                        $paginacion=$cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
-                        if($pages->_totalPages>1) {
+                      if(!empty($pages)){
+                          $paginacion = $cm->makePagesLinkjs($pages,'get_images_album','\'album\'');
+                          if($pages->_totalPages>1) {
                                 $tpl->assign('paginacion', $paginacion);
-                        }
-                     
+                          }
+                      }
 
 		break;
 

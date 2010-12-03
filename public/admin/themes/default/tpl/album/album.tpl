@@ -1,5 +1,12 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js"}
+    {$smarty.block.parent}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
+{/block}
+
+
+
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}

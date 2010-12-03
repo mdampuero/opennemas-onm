@@ -60,6 +60,7 @@
 	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
 	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
 	<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
     {/block}
 
 </head>
@@ -190,10 +191,11 @@
         }
     });
     {/if}
-
+ </script>
 	{block name="footer-js"}
 		{if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
-		try {
+                <script type="text/javascript">
+        	try {
 			// Activar la validación
 			new Validation('formulario', { immediate : true });
 			Validation.addAllThese([
@@ -215,9 +217,10 @@
 			// Escondemos los errores
 			//console.log( e );
 		}
+                 </script>
 		{/if}
 	{/block}
-    </script>
+   
 
 </body>
 </html>
