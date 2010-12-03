@@ -11,4 +11,3 @@ function smarty_function_admin_menu($params, &$smarty) {
     $return = $menu->getMenu('YpMenu', $menuXml, 1);
     return($return);
 }
-?>
