@@ -33,26 +33,26 @@
 	{/block}
 
     {block name="header-js"}
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/prototype.js">;</script>
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/scriptaculous/scriptaculous.js?load=effects"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
+    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
     <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/modalbox.js"></script>
     <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/ypSlideOutMenus.js"></script>
     <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/utils.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}control.maxlength.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspoll.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
-	<script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
     {* FIXME: corregir para que pille bien el path *}
     {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
@@ -84,9 +84,9 @@
                   <strong>
                     Bienvenido
                     <a href="/admin/user.php?action=read&id={$_SESSION['userid']}" target="centro">
-                        {$_SESSION['username']}
+                        {$smarty.session.username}
                     </a>
-                    {if isset($_SESSION['isAdmin'])}
+                    {if isset($smarty.session.isAdmin)}
                         <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
                             title="Permisos de administrador" alt="" />
                     {/if}
@@ -96,7 +96,7 @@
                 {if Acl::_('BACKEND_ADMIN') eq true}
                 <div style="padding-right:4px; float:left;" nowrap="nowrap">
                     <div id="user_activity" title="Usuarios activos na sección de administración">
-                        {count($sessions)}
+                        {count_sessions}
                     </div>
                 </div>
                 {/if}
