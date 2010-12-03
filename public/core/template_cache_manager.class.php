@@ -258,7 +258,6 @@ class TemplateCacheManager
 
             // modify file contents with the new expireTime
             $cacheFileConents = file_get_contents($cachefile);
-            preg_match('@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@',$cacheFileConents,$matches);
 
             $contents = preg_replace( '@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@' ,
                                       '\'cache_lifetime\' => '.$expireTime.',',
