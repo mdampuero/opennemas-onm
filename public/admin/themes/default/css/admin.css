@@ -296,7 +296,7 @@ ul.enlace_rel {
 .gallery_list li{overflow:hidden; float: left; margin:0 5px 5px 0; width:69px; height:69px; background:#F0F0F0; border:1px double #CBCBCB; }
 .gallery_list li img{cursor:pointer; border:0px; }
 
-.gallery_list li{ display: table !important; }
+.gallery_list li{ display: inline !important;}
 
 .gallery_list li div {display: table-cell !important; width:69px; height: 69px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
 .gallery_list li a.album {display: table-cell !important; width:69px; height:69px; vertical-align: middle !important; text-align: center; float: none !important;}
