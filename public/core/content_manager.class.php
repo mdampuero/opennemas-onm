@@ -1407,8 +1407,8 @@ class ContentManager
         if($Pager->_totalPages>1) {
             $szPages = '<p align="center">';
             if ($Pager->_currentPage != 1) {
-                $szPages .= '<a style="cursor:pointer;" onClick="get_images(' .
-                        $category.',1, \''.$action.'\', \''.$metadatas.'\');">Primera</a> ... | ';
+                $szPages .= '<a style="cursor:pointer;" onClick="get_images(\'' .
+                        $category.'\',1, \''.$action.'\', \''.$metadatas.'\');">Primera</a> ... | ';
             }
             
             for($iIndex=$Pager->_currentPage-2; $iIndex<=$Pager->_currentPage+2 && $iIndex <= $Pager->_totalPages; $iIndex++) {
@@ -1417,7 +1417,7 @@ class ContentManager
                         break;
                     }
                     
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images('.$category.',' .
+                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
                             ($iIndex+2).',     \''.$action.'\', \''.$metadatas.'\');">';
                     
                     if($Pager->_currentPage == ($iIndex+2)) {
@@ -1431,7 +1431,7 @@ class ContentManager
                         break;
                     }
                     
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images('.$category.',' .
+                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
                             ($iIndex+1).',     \''.$action.'\', \''.$metadatas.'\');">';
                     if($Pager->_currentPage == ($iIndex+1)) {
                         $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
@@ -1440,7 +1440,7 @@ class ContentManager
                     }
                     
                 } else {
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(' . $category.',' .
+                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\'' . $category.'\',' .
                             $iIndex.', \''.$action.'\', \''.$metadatas.'\');">';
                     if($Pager->_currentPage == ($iIndex)) {
                         $szPages .= '<b>' . $iIndex . '</b></a> | ';
@@ -1452,7 +1452,7 @@ class ContentManager
             }
             
             if($Pager->_currentPage != $Pager->_lastPageText) {
-                $szPages .= '... <a style="cursor:pointer;" onClick="get_images('.$category.',' .
+                $szPages .= '... <a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
                         $Pager->_lastPageText.', \''.$action.'\', \''.$metadatas.'\');">Última </a>';
             }
             

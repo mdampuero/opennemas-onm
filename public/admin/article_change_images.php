@@ -19,9 +19,10 @@ if(isset($_REQUEST['action']) )
 {
 	switch($_REQUEST['action'])
     {
-		case 'list_by_category':
+	case 'list_by_category':
+            $category=intval($_REQUEST['category']);
           //  $photos = $cm->find_by_category('Photo', $_REQUEST['category'], 'fk_content_type=8 ', 'ORDER BY created DESC');
-            list($photos, $pager)= $cm->find_pages('Photo', 'fk_content_type=8  and content_status=1 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30, $_REQUEST['category']);
+            list($photos, $pager)= $cm->find_pages('Photo', 'fk_content_type=8  and content_status=1 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30, $category);
  
             break;
 
