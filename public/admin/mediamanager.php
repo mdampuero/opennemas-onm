@@ -30,7 +30,7 @@ require_once(SITE_LIBS_PATH.'utils.functions.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 require('./mediamanagerController.php');
-
+ 
 //????? Parche pq no pasa el action, lo borra en algun sitio
 if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult') { $_REQUEST['action'] = "searchResult";
 
@@ -108,7 +108,7 @@ switch($action) {
         $mmc->action_view_results();
     } break;
 
-    case 'addPhoto': {
+    case 'addPhoto': {        
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
             //Mirar el tema de mensajes en los fallos que deberia devolver.
             $uploads = $mmc->action_addPhoto();

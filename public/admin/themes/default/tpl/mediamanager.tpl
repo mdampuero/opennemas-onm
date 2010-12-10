@@ -2,7 +2,7 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+{*<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}> *}
 
 <script type="text/javascript">
 function confirmar(url) {
@@ -31,7 +31,7 @@ function confirmar(url) {
 <div id="contenedor-gral">
     <ul class="tabs2">
         <li>
-            <a href="{$home}?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+            <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
                 GLOBAL</a>
         </li>
          {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
@@ -41,7 +41,7 @@ function confirmar(url) {
             </li>
             *}
             <li>
-                <a href="{$home}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                <a href="mediamanager.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     PUBLICIDAD</a>
             </li>
         {/if}
@@ -66,12 +66,12 @@ function confirmar(url) {
         <div id="menu-acciones-admin" >
                 <ul>
                      <li>
-                        <a class="admin_add" href="{$home}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
+                        <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
                             <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
                         </a>
                     </li>
                      <li>
-                        <a class="admin_add" href="{$home}?category={$category}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
+                        <a class="admin_add" href="mediamanager.php?category={$category}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
                             <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}icons.png" alt="Información"><br />Información
                         </a>
                     </li>
@@ -128,6 +128,7 @@ function confirmar(url) {
             {assign var='accion' value='Buscar Gráficos'}
         {/if}
      {/if}
+       
       {if $action neq 'results'}
         <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
 	<div id="menu-acciones-admin">
@@ -151,41 +152,41 @@ function confirmar(url) {
             {/if}
 
             <li>
-                <a class="admin_add" href="{$home}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
                 </a>
             </li>
 
             {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
             <li>
-                <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Fotos">
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Fotos">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Fotos
                 </a>
             </li>
             <li>
-                <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Fotos">
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Fotos">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
                 </a>
             </li>
             <li>
-                <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Fotos de Hoy">
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Fotos de Hoy">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
                 </a>
             </li>
 
             {else}
             <li>
-                 <a class="admin_add" href="{$home}?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
+                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
                      <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Gráficos
                  </a>
             </li>
             <li>
-                 <a class="admin_add" href="{$home}?category={$category}&amp;action=list_all#media-browser"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Gráficos">
+                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all#media-browser"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Gráficos">
                      <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Gráficos
                  </a>
             </li>
             <li>
-                 <a class="admin_add" href="{$home}?category={$category}&amp;action=list_today#media-browser"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Gráficos de Hoy">
+                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today#media-browser"   onmouseover="return escape('Fotos de <u>H</u>oy');" name="submit_mult" value="Gráficos de Hoy">
                      <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Gráficos de Hoy
                  </a>
             </li>
@@ -210,6 +211,7 @@ function confirmar(url) {
                         <td align="left">
                             <div>
                                 <form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addPhoto" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" id="action" name="action" title="Título" value="addPhoto" />
                                     <table>
                                         <tr>
                                             <td style="border: 1px solid #ccc;">
