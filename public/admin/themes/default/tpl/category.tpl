@@ -1,12 +1,11 @@
 {extends file="base/admin.tpl"}
 
 
-{block name="header-js"}
-{$smarty.block.parent}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
-{if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
-    <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
-{/if}
+{block name="header-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
+    {if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
+        <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
+    {/if}
 {/block}
 
 {block name="content"}

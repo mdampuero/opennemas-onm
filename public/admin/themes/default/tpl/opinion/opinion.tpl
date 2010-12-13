@@ -1,5 +1,11 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+{/block}
+
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 

@@ -1,74 +1,80 @@
 {extends file="base/admin.tpl"}
 
+ 
+{block name="footer-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+{/block}
+
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-{*
-//Portada
-1- big superior izquierda
-2- banner superior derecha
-3 banner columna1
-4 banner columna3
-5 separador horizontal
-6 mini1 dcha
-7 mini 2 dcha
-8 botoncuadrado columna3
-9 big Inferior Izquierda
-10 Banner Inferior derecha
+    {*
+        //Portada
+        1- big superior izquierda
+        2- banner superior derecha
+        3 banner columna1
+        4 banner columna3
+        5 separador horizontal
+        6 mini1 dcha
+        7 mini 2 dcha
+        8 botoncuadrado columna3
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
 
-//Noticia inner - opinion inner
-101 big superior izquierda
-102 banner superior derecha
-103 banner1 columna
-104 robapagina
-105 banner2 columna
-109 big Inferior Izquierda
-110 Banner Inferior derecha
+        //Noticia inner - opinion inner
+        101 big superior izquierda
+        102 banner superior derecha
+        103 banner1 columna
+        104 robapagina
+        105 banner2 columna
+        109 big Inferior Izquierda
+        110 Banner Inferior derecha
 
-//Portada opinion
-1- big superior izquierda
-2- banner superior derecha
-3 banner columna
-9 big Inferior Izquierda
-10 Banner Inferior derecha
+        //Portada opinion
+        1- big superior izquierda
+        2- banner superior derecha
+        3 banner columna
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
 
-//Gallery
-1- big superior izquierda
-2- banner superior derecha
-9 big Inferior Izquierda
-10 Banner Inferior derecha
+        //Gallery
+        1- big superior izquierda
+        2- banner superior derecha
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
 
-//Video Front
-201- big superior izquierda
-202- banner superior derecha
-209 big Inferior Izquierda
-210 Banner Inferior derecha
+        //Video Front
+        201- big superior izquierda
+        202- banner superior derecha
+        209 big Inferior Izquierda
+        210 Banner Inferior derecha
 
-/Video Inner
-301- big superior izquierda
-302- banner superior derecha
-303- banner columna
-309 big Inferior Izquierda
-310 Banner Inferior derecha
+        /Video Inner
+        301- big superior izquierda
+        302- banner superior derecha
+        303- banner columna
+        309 big Inferior Izquierda
+        310 Banner Inferior derecha
 
-*}
+    *}
 
 {* ******************************************************************************* *}
 {* LISTADO *********************************************************************** *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 
-<ul class="tabs2" style="margin-bottom: 28px;">
-    <li>
-    <a href="advertisement.php?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
-    </li>
-    <li>
-    <a href="advertisement.php?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-    </li>
-    <li>
-    <a href="advertisement.php?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
-    </li>
-      <script type="text/javascript">
+    <ul class="tabs2" style="margin-bottom: 28px;">
+        <li>
+        <a href="advertisement.php?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
+        </li>
+        <li>
+        <a href="advertisement.php?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
+        </li>
+        <li>
+        <a href="advertisement.php?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
+        </li>
+        <script type="text/javascript">
                 // <![CDATA[
                     {literal}
                           Event.observe($('link_home'), 'mouseover', function(event) {
@@ -100,12 +106,12 @@
 
 <script type="text/javascript">
 {literal}
-function submitFilters(frm) {
-    $('action').value='list';
-    $('page').value = 1;
+    function submitFilters(frm) {
+        $('action').value='list';
+        $('page').value = 1;
 
-    frm.submit();
-}
+        frm.submit();
+    }
 {/literal}
 </script>
 

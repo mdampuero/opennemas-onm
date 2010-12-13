@@ -1,4 +1,5 @@
 //Por ahora igual que el mmanager.
+//Photos opinion authors
 var n = 0;
 
 function addFile() {

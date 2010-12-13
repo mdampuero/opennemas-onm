@@ -12,56 +12,47 @@
     <meta name="generator" content="OpenNemas - Open Source News Management System" />
 
     {block name="meta"}
-	<title>OpenNeMaS - Admin section</title>
+        <title>OpenNeMaS - Admin section</title>
     {/block}
 
     {block name="header-css"}
-	<link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
-    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
-    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/multilevel-menu.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
-	<!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}welcomepanel.css?cacheburst=1257955982" />
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/multilevel-menu.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
+        <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}welcomepanel.css?cacheburst=1257955982" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
 	{/block}
 
     {block name="header-js"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/modalbox.js"></script>
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/ypSlideOutMenus.js"></script>
-    <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/utils.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}control.maxlength.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilspoll.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
-    {* FIXME: corregir para que pille bien el path *}
-    {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
-        lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
-	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
-	<script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
-	<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
-    {/block}
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
+        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
+        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/modalbox.js"></script>
+        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/ypSlideOutMenus.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}control.maxlength.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
+        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>        
+        {* FIXME: corregir para que pille bien el path *}
+        {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
+            lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
+        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
+     {/block}
 
 </head>
 <body>
@@ -84,7 +75,7 @@
                 <div id="name-box" style="float:left; margin-right:5px;">
                   <strong>
                     Bienvenido
-                    <a href="/admin/user.php?action=read&id={$_SESSION['userid']}" target="centro">
+                    <a href="/admin/user.php?action=read&id={$smarty.session.userid}" target="centro">
                         {$smarty.session.username}
                     </a>
                     {if isset($smarty.session.isAdmin)}
