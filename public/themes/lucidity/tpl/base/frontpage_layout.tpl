@@ -15,9 +15,9 @@
     <meta http-equiv="robots" content="index,follow" />
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="last-modified" content="0" />
+	<link rel="shorcut icon" href="/favicon.png" />
     <meta http-equiv="Refresh" content="900; url=http://{$smarty.server.SERVER_NAME}{$smarty.server.REQUEST_URI}" />
-    {block name='meta'}
-	{/block}
+    {block name='meta'}{/block}
     {block name='header-css'}
     <link rel="stylesheet" href="{$params.CSS_DIR}screen.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="{$params.CSS_DIR}print.css" type="text/css" media="print">
@@ -27,15 +27,13 @@
     <link rel="stylesheet" href="{$params.CSS_DIR}parts/menu.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="{$params.CSS_DIR}parts/publi.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection" />
-    <style type="text/css">
-        {$categories_styles}
-    </style>
+    <style type="text/css">{$categories_styles}</style>
     {/block}
     {block name="header-js"}
     <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
-    <script type="text/javascript"  src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
+    <script type="text/javascript" src="{$params.JS_DIR}jquery.cycle.all.2.72.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}lazyload/jquery.lazyload.js"></script>
@@ -49,8 +47,7 @@
     </div><!-- #container -->
 
     <div id="container" class="span-24 last">
-    {block name="footer"}
-    {/block}
+    {block name="footer"}{/block}
     </div>
 
     {block name="footer-js"}
