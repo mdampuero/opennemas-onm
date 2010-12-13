@@ -10,8 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="OpenHost,SL" />
     <meta name="generator" content="OpenNemas - Open Source News Management System" />
-    {block name='meta'}
-	{/block}
+    {block name='meta'}{/block}
     {block name='header-css'}
     <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
     <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
@@ -63,12 +62,10 @@
     </div><!-- #container -->
 
     <div id="container" class="span-24 last">
-    {block name="footer"}
-    {/block}
+    {block name="footer"}{/block}
     </div>
 
-    {block name="footer-js"}
-    <script type="text/javascript">
+	<script type="text/javascript">
     /* <![CDATA[ */
     new YpSlideOutMenuHelper();
 
@@ -116,7 +113,7 @@
     <?php endif; ?>
     /* ]]> */
     </script>
-    {/block}
+    {block name="footer-js"}{/block}
 
 </body>
 </html>
