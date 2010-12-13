@@ -272,6 +272,7 @@
 {/block}
 
 {block name="footer-js"}
+    <script type="text/javascript"> 
     var previousValue = null;
     document.observe('dom:loaded', function() {
         if( $('tabla') ) {
@@ -326,5 +327,5 @@
             }
         }
     }
-
+    </script>
 {/block}
