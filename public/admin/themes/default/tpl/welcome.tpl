@@ -31,7 +31,7 @@
                     {acl isAllowed="ADVERTISEMENT_CREATE"}
                 	<div style="float: left;">
                         <div class="icon">
-                            <a href="/admin/advertisement.php?action=new&category=0">
+                            <a href="/admin/controllers/advertisement/advertisement.php?action=new&category=0">
                                 <img alt="" src="{$params.IMAGE_DIR}advertisement.png"/>
                                 <span>Nueva Publicidad</span>
                             </a>

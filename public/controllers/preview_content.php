@@ -148,7 +148,7 @@ if(isset($_REQUEST['action']) ) {
             $pages = $cm->pager;
             $pages_viewed = $pages->_totalPages;
             $tpl->assign('pages_viewed', $pages_viewed);
-            $tpl->assign('articles_viewed', $articles_viewed);                        
+            $tpl->assign('articles_viewed', $articles_viewed);
         } break;
 
 
@@ -162,5 +162,5 @@ if(isset($_REQUEST['action']) ) {
     Application::forward301('index.php');
 }
 
-$tpl->display('article.tpl',$cache_id);
+$tpl->display('article/article.tpl',$cache_id);
 

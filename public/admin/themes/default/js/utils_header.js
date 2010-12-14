@@ -206,9 +206,9 @@ function cancel(action,category,page) {
     if(/index_portada/.test(action)) {
         location.href ='/admin/index.php';
     }else if(/opinion/.test(action)) {
-        location.href ='opinion.php';
+        location.href ='controllers/opinion/opinion.php';
     }else if(/advertisement/.test(action)) {
-        location.href ='advertisement.php';
+        location.href ='controllers/advertisement/advertisement.php';
     }else{
         location.href= 'article.php?action='+action+'&category='+category+'&page='+page;
     }

@@ -171,7 +171,7 @@ function cancel(action,category,page) {
     }else if(/opinion/.test(action)) {
         location.href ='controllers/opinion/opinion.php';
     }else if(/advertisement/.test(action)) {
-        location.href ='advertisement.php';
+        location.href ='controllers/advertisement/advertisement.php';
     }else{
         location.href= 'article.php?action='+action+'&category='+category+'&page='+page;
     }

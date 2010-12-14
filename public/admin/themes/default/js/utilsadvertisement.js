@@ -83,3 +83,52 @@ function  get_advertisements(page) {
          }
    });
 }
+
+
+//////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
+
+//Eliminar y recuperar imagen en articulos.
+ function recuperar_eliminar(field){
+	  var nombre='input_'+field;
+	  if (document.getElementById( nombre ).value ==''){
+	  	 recuperarOpacity(field);
+	  }else{
+	  	 vaciarImg(field);
+	  }
+ }
+
+  //Vaciar foto y meter img_default.
+ function vaciarImg(field){
+ 		var nombre='remove_'+field;   //Icono papelera-recuperar
+		document.getElementById( nombre ).src='/admin/themes/default/images/trash_no.png';
+	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
+	    document.getElementById( nombre ).setAttribute('title','Recuperar');
+
+
+		//Publicidad
+		if(field=='img'){
+			document.getElementById( 'input_img' ).value ='';
+			document.getElementById('change1').setAttribute('style','opacity:0.4;');
+			document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
+			document.getElementById('noinfor').setAttribute('style','opacity:0.4;');
+		}
+
+
+  }
+
+ function recuperarOpacity(field){
+	    var nombre='remove_'+field;
+		document.getElementById( nombre ).src='/admin/themes/default/images/remove_image.png';
+	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
+	    document.getElementById( nombre ).setAttribute('title','Eliminar');
+		if(field=='img'){
+				document.getElementById( 'input_img' ).value =document.getElementById( 'change1' ).name;
+                document.getElementById('change1').setAttribute('style','opacity:1;');
+				document.getElementById('div_img_publi').setAttribute('style','opacity:1;');
+				document.getElementById('informa').setAttribute('style','opacity:1;overflow:auto;width:260px;');
+
+	 	}
+
+
+
+ }

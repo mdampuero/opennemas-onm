@@ -42,18 +42,18 @@ if(isset($_REQUEST['action']) )
     }
             
 }
-
 $type2res = array(
     'article' => 'article.php',
-    'advertisement' => 'advertisement.php',
+    'advertisement' => 'controllers/advertisement/advertisement.php',
     'attachment' => 'ficheros.php',
     'opinion' => 'controllers/opinion/opinion.php',
     'comment' => 'controllers/comment.php',
     'album' => 'controllers/album/album.php',
     'photo' => 'mediamanager.php',
-    'video' => 'video.php',
+    'video' => 'controllers/video/video.php',
     'interviu' => 'interviu.php',
-    'poll' => 'poll.php'
+    'poll' => 'poll.php',
+    'static_page' => 'static_pages.php',
 );
 
 //$Pager = null;

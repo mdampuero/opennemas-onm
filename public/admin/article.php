@@ -388,7 +388,7 @@ if(isset($_REQUEST['action']) ) {
                     }
                     curl_close($curl);
                 }
-            }
+            }  
             $tpl->assign('videos', $videos);
             $params='0';
             $paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);

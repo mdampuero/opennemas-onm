@@ -699,9 +699,9 @@ function previewArticle(id,formID,type){
         onSuccess: function(transport) {
             $('formulario').action.value = '';
             myLightWindow.activateWindow({
-                href: '/preview_content.php?id='+transport.responseText+'&action=article',
+                href: '/controllers/preview_content.php?id='+transport.responseText+'&action=article',
                 title: 'Previsualización',
-                author: 'Xornal.com',
+                author: 'retrincos.info',
                 type: 'external'
             });
         },
