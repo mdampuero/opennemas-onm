@@ -54,7 +54,7 @@
             </ul>
         </ul>
         <div id="main-search-form" style="position:absolute;right:2px;top:2px;">
-            <form action="/search.php">
+            <form action="/search/google/">
                 <input type="text" name="q" value="{$smarty.get.q|default:'Buscar...'}"
                        onblur="if(this.value=='') this.value='Buscar...';"
                        onfocus="if(this.value=='Buscar...') this.value='';" />
