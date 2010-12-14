@@ -7,8 +7,8 @@
 				
 				<a onclick="search_related(0,$('metadata').value,1); divs_hide('search-noticias');" style="cursor:pointer;"><b>Noticias Sugeridas:</b></a><hr>
 				<a onclick="get_div_contents(0,'noticias',' {$article->category}',1); divs_hide('noticias_div');" style="cursor:pointer;"><b>Noticias por Secciones:</b></a><hr>
-                            	<a onclick="get_div_contents(0,'hemeroteca',' {$article->category}',1); divs_hide('hemeroteca_div');" style="cursor:pointer;"><b>Noticias de Hemeroteca:</b></a><hr>
-                            	<a onclick="get_div_contents(0,'pendientes',' {$article->category}',1); divs_hide('pendientes_div');" style="cursor:pointer;"><b>Noticias Pendientes:</b></a><hr>
+                <a onclick="get_div_contents(0,'hemeroteca',' {$article->category}',1); divs_hide('hemeroteca_div');" style="cursor:pointer;"><b>Noticias de Hemeroteca:</b></a><hr>
+                <a onclick="get_div_contents(0,'pendientes',' {$article->category}',1); divs_hide('pendientes_div');" style="cursor:pointer;"><b>Noticias Pendientes:</b></a><hr>
 				<a onclick="get_div_contents(0,'opinions',0,1);  divs_hide('opinions_div');" style="cursor:pointer;"><b>Opiniones:</b></a><hr>
 				<a onclick="get_div_contents(0,'albums',3,1); divs_hide('albums_div');" style="cursor:pointer;"><b>Galerias:</b></a><hr>
 				<a onclick="get_div_contents(0,'videos',0,1);  divs_hide('videos_div');"  style="cursor:pointer;"><b>Videos:</b></a><hr>
@@ -65,7 +65,8 @@
  		<div id='videos_div'  class='div_lists' style="display:none;"><br/>	
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 				<tbody><tr>
-				<td colspan="2">					 
+				<td colspan="2">
+                        {include file="menu_categorys.tpl" home=""}	
 					 	<h2>VIDEOS:</h2>													 
 				</td>
 				</tr>

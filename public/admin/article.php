@@ -1296,17 +1296,12 @@ if(isset($_REQUEST['action']) ) {
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'hemeroteca');
-         /*   $articles = $cm->find_by_category('Article', $category, 'content_status=0 AND available=1  AND fk_content_type=1', 'ORDER BY created DESC  LIMIT 0,100');
-            $params=$_REQUEST['id'].", 'hemeroteca',".$category;
-            $articles = $cm->paginate_num_js($articles,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-            */
-                list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=0 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
-               $params=$_REQUEST['id'].", 'hemeroteca',$category";
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=0 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
+
+            $params=$_REQUEST['id'].", 'hemeroteca',$category";
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
             $html_out = print_lists_related($_REQUEST['id'], $articles, 'hemeroteca_div');
             Application::ajax_out("<h2>Hemeroteca</h2>".$categorys.$html_out.$paginacionV);
 
@@ -1315,23 +1310,17 @@ if(isset($_REQUEST['action']) ) {
          case 'get_pendientes':
             $cm = new ContentManager();
             if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 10;
-                     $datos_cat = $ccm->find('pk_content_category=10', NULL);
+            $category= 10;
+            $datos_cat = $ccm->find('pk_content_category=10', NULL);
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'pendientes');
-           /* $articles = $cm->find_by_category('Article', $category, 'available=0  AND fk_content_type=1', 'ORDER BY created DESC  LIMIT 0,100');
 
-            $params=$_REQUEST['id'].", 'pendientes',".$category;
-            $articles = $cm->paginate_num_js($articles,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-            */
-             list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and available=0', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
+            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and available=0', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
-               $params=$_REQUEST['id'].", 'pendientes',$category";
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            $params=$_REQUEST['id'].", 'pendientes',$category";
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
 
             $html_out = print_lists_related($_REQUEST['id'], $articles, 'pendientes_div');
             Application::ajax_out("<h2>Noticias Pendientes:</h2>".$categorys.$html_out.$paginacionV);
@@ -1343,72 +1332,60 @@ if(isset($_REQUEST['action']) ) {
             if (($_GET['category']) ||($_GET['category'] != 'home') || ($_GET['category'] != 'todos')){
                     $category= $_GET['category'];
             }else{ $category=10; }
-              $tpl->assign('category', $_GET['category']);
-               $tpl->assign('home', '');
-              $html_out=$tpl->fetch('menu_categorys.tpl');
+            $tpl->assign('category', $_GET['category']);
+            $tpl->assign('home', '');
+            $html_out=$tpl->fetch('menu_categorys.tpl');
             Application::ajax_out($html_out);
 
         break;
 
         case 'get_videos':
             $cm = new ContentManager();
-         /*   $videos = $cm->find('Video', ' available=1 ', 'ORDER BY created DESC  LIMIT 0,100');
+            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
+            $category= 10;
+            $datos_cat = $ccm->find('pk_content_category=10', NULL);
+            }else{ $category=$_GET['category']; }
+
+            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'videos');
+
+            list($videos, $pages)= $cm->find_pages('Video', 'available=1', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20, $category);
 
             $params=$_REQUEST['id'].", 'videos',0";
-            $videos = $cm->paginate_num_js($videos,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-          * */
-            list($videos, $pages)= $cm->find_pages('Video', 'available=1', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20);
-
-               $params=$_REQUEST['id'].", 'videos',0";
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
 
             $html_out = print_lists_related($_REQUEST['id'], $videos, 'videos_div');
-            Application::ajax_out("<h2>Videos: </h2>".$html_out.$paginacionV);
+            Application::ajax_out("<h2>Videos: </h2>".$categorys.$html_out.$paginacionV);
 
         break;
 
         case 'get_albums':
-            $cm = new ContentManager();
-            if (($_GET['category']) ||($_GET['category'] != 'home') || ($_GET['category'] != 'todos')) {
-                    $category= $_GET['category'];
-            }else{
-                $category=10;
+           $cm = new ContentManager();
+           if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
+                $category= 10;
+                $datos_cat = $ccm->find('pk_content_category=10', NULL);
+           }else{ $category=$_GET['category']; }
 
-            }
-         /*   $albums = $cm->find_by_category('Album', $category, ' fk_content_type=7  and available=1', 'ORDER BY created DESC  LIMIT 0,100');
-            $params=$_REQUEST['id'].", 'albums',".$category;
-            $albums = $cm->paginate_num_js($albums,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-*/
-             list($albums, $pages)= $cm->find_pages('Album', 'available=1  AND fk_content_type=7', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
+           $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'albums');
 
-               $params=$_REQUEST['id'].", 'albums',".$category;
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+           list($albums, $pages)= $cm->find_pages('Album', 'available=1  AND fk_content_type=7', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
-            $html_out=print_lists_related($_REQUEST['id'], $albums, 'albums_div')	;
-            Application::ajax_out("<h2>Galerias:</h2>".$category.$html_out.$paginacionV);
+           $params=$_REQUEST['id'].", 'albums',".$category;
+           $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+           $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+
+           $html_out=print_lists_related($_REQUEST['id'], $albums, 'albums_div')	;
+           Application::ajax_out("<h2>Galerias:</h2>".$categorys.$html_out.$paginacionV);
 
         break;
         case 'get_opinions':
             $cm = new ContentManager();
-         /*   $opinions = $cm->find('Opinion', ' content_status=1 and available=1 and type_opinion='.$_GET['category'], 'ORDER BY   created DESC  LIMIT 0,100');
             $menu=print_menu_opinion($_GET['category']);
-            $params=$_REQUEST['id'].", 'opinions',".$_GET['category'];
-            $opinions = $cm->paginate_num_js($opinions,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-            */
-             $menu=print_menu_opinion($_GET['category']);
              list($opinions, $pages)= $cm->find_pages('Opinion', 'content_status=1  and available=1 and type_opinion='.$_GET['category'], 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20);
 
-               $params=$_REQUEST['id'].", 'opinions',".$_GET['category'];
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            $params=$_REQUEST['id'].", 'opinions',".$_GET['category'];
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
             $html_out=print_lists_related($_REQUEST['id'], $opinions, 'opinions_div')	;
             Application::ajax_out("<h2>Opiniones:</h2>".$menu.$html_out.$paginacionV);
 
@@ -1422,17 +1399,12 @@ if(isset($_REQUEST['action']) ) {
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'adjuntos');
-          /*  $attaches = $cm->find_by_category('Attachment', $category, 'fk_content_type=3 and content_status=1', 'ORDER BY created DESC LIMIT 0,100');
-            $params=$_REQUEST['id'].", 'adjuntos',".$category;
-            $attaches = $cm->paginate_num_js($attaches,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-*/
-               list($attaches, $pages)= $cm->find_pages('Attachment', 'content_status=1  AND fk_content_type=3', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
+          
+            list($attaches, $pages)= $cm->find_pages('Attachment', 'content_status=1  AND fk_content_type=3', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
-               $params=$_REQUEST['id'].", 'adjuntos',".$category;
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            $params=$_REQUEST['id'].", 'adjuntos',".$category;
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
 
             $html_out=print_lists_related($_REQUEST['id'], $attaches, 'adjuntos_div');
             Application::ajax_out("<h2>Ficheros:</h2>".$categorys.$html_out.$paginacionV);

@@ -136,37 +136,7 @@
                         <img class="inhome" src="{$params.IMAGE_DIR}available.png" border="0" alt="Disponible" align="top" />
                 </td>
             </tr>
-            {* Hai que ter en conta o placeholder, non a posición *}
-            {* if ($article->position) eq 1 && ($_from neq 'home') *}            
-            {* if ($article->placeholder eq 'placeholder_0_0') && ($_from neq 'home')}
-            <tr>
-                <td valign="top"  align="right" nowrap="nowrap">
-                    <label for="columns"> Columnas: </label>
-                </td>
-                <td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                    <select name="columns" id="columns" class="required" tabindex="10">
-                    <option value="1" {if $article->columns eq 1} selected {/if}>1</option>
-                    <option value="2" {if $article->columns eq 2} selected {/if}>2</option>
-                   </select>
-                </td>
-            </tr>
-            {/if *}
-            
-            {* Hai que ter en conta o placeholder, non a posición *}
-            {* if ($article->home_pos) eq 1 && ($_from eq 'home') *}
-            {* if ($article->home_placeholder eq 'placeholder_0_0') && ($_from eq 'home')}
-            <tr>
-                <td valign="top"  align="right" nowrap="nowrap">
-                    <label for="home_columns"> Home Columnas: </label>
-                </td>
-                <td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                    <select name="home_columns" id="home_columns" class="required" tabindex="11">
-                    <option value="1" {if $article->home_columns eq 1}selected="selected"{/if}>1</option>
-                    <option value="2" {if $article->home_columns eq 2}selected="selected"{/if}>2</option>
-                   </select>
-                </td>
-            </tr>
-            {/if *}
+
             
             {else} {* else if not list_hemeroteca *}
             
@@ -380,13 +350,7 @@
         <tr>
             <td>  <a style="cursor:pointer;font-size:14px;" onclick="new Effect.toggle($('{$comments[c]->pk_comment}'),'blind')"> {$comments[c]->body|truncate:30} </a> </td>
             <td> {$comments[c]->author} ({$comments[c]->ip})  <br /> {$comments[c]->email} </td>
-            <td align="right"> {* {if $comments[c]->content_status == 1}
-                    <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}" title="Publicado">
-                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                {else}
-                    <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}" title="Pendiente">
-                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                {/if} *}
+            <td align="right">
              </td>
              <td align="right">     
                  <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->pk_comment}');" title="Eliminar">
@@ -400,10 +364,7 @@
          </td></tr>
     {/section}    
     <td colspan="5">
-    {*     <a href="#" onclick="new Effect.toggle($('comment'),'blind')"> <img src='images/iconos/examinar.gif' border='0'> Añadir comentario </a>
-             <br />    
-        {include file="new_comment.tpl"} 
-        *}
+
      </td>
     </tbody>
     </table>
@@ -412,12 +373,12 @@
 
 <div class="panel" id="opiniones-relacionadas" style="width:95%">
     <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
-    <tbody><tr>
-    <td colspan="2">
-     opiniones
-    </td>
-    </tr>
-    </tbody>
+        <tbody><tr>
+            <td colspan="2">
+
+            </td>
+        </tr>
+        </tbody>
     </table>
 </div>
 
@@ -438,9 +399,7 @@
                     <table  width="99%">
                         <tr>
                             <td>{$losrel[n]->title|clearslash|escape:'html'}</td>
-                            <td width='120'> {* if $losrel[n]->content_type eq 1}Noticia{elseif  $losrel[n]->content_type eq 7} Fotogaleria  
-                                {elseif  $losrel[n]->content_type eq 9} Video {elseif  $losrel[n]->content_type eq 4} Opinion 
-                                {elseif $losrel[n]->content_type eq 3} Archivo {/if *}
+                            <td width='120'>
                                 {assign var="ct" value=$losrel[n]->content_type}
                                 {$content_types.$ct}
                             </td> 

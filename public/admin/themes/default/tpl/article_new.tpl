@@ -276,16 +276,7 @@
                 title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1"></textarea>
         </td>
     </tr>
- {*   <tr>
-        <td valign="top" align="right" style="padding:4px;" width="30%">
-            <label for="metadata">Palabras clave: </label>
-        </td>
-        <td style="padding:4px;" nowrap="nowrap" width="70%">
-            <input type="text" id="metadata" name="metadata" size="70" title="Metadatos" value="" tabindex="-1"/>
-            <sub>Separadas por comas</sub>
-        </td>
-    </tr>
-    *}
+
     </tbody>
     </table>
 </div>
@@ -301,10 +292,7 @@
 	</tr>		
 	<tr>
         <td colspan="5">
-            {* Si o div con $('comment') está dentro de new_comment.tpl, ¿por qué non incluilo en new_comment.tpl? *}
-            {*<a href="#" onclick="new Effect.toggle($('comment'),'blind')"> <img src='images/iconos/examinar.gif' border='0'> Añadir comentario </a>
-            <br />	
-            {include file="new_comment.tpl"} *}
+          
         </td>
 	</tr>
 	</tbody>
