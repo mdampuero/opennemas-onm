@@ -360,7 +360,7 @@ class Content {
     * @return null
     */
 
-    function delete($id, $last_editor) {
+    function delete($id, $last_editor=null) {
         $changed = date("Y-m-d H:i:s");
 
         $data = array(0, 0, $last_editor, $changed, $id);

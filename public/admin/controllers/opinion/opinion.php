@@ -71,6 +71,8 @@ if(isset($_REQUEST['action'])) {
             }
 
             $tpl->assign('algoritm', $algoritm);
+            $comment = new Comment();
+
 
             $cm = new ContentManager();
             if($_REQUEST['type_opinion']!=-1) {
@@ -107,8 +109,7 @@ if(isset($_REQUEST['action'])) {
                 $tpl->assign('num_dir', $num_dir);
 
                 $rating = new Rating();
-                $comment = new Comment();
-
+                
                 foreach($editorial as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
@@ -140,7 +141,7 @@ if(isset($_REQUEST['action'])) {
 
             $op_comment = $names = array();
 
-            $comment = new Comment();
+
             foreach ( $opinions as $opin) {
                 $todos = $comment->get_comments( $opin->id );
                 $aut = new Author($opin->fk_author);

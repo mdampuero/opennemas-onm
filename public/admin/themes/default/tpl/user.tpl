@@ -362,18 +362,19 @@
 {/block}
 
 {block name="footer-js"}
-	document.observe('dom:loaded', function(){
-		onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
+    <script type="text/javascript">
+        document.observe('dom:loaded', function(){
+            onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
 
-		// Refrescar los elementos seleccionados
-		$('ids_category').select('option').each(function(item){
-			if( item.getAttribute('selected') ) {
-				item.selected=true;
-				item.setAttribute('selected', 'selected');
-			}
-		});
+            // Refrescar los elementos seleccionados
+            $('ids_category').select('option').each(function(item){
+                if( item.getAttribute('selected') ) {
+                    item.selected=true;
+                    item.setAttribute('selected', 'selected');
+                }
+            });
 
-		new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
-	});
-
+            new SpinnerControl('sessionexpire', 'up', 'dn', { interval: 5,  min: 15, max: 250 });
+        });
+    </script>
 {/block}

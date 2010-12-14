@@ -160,10 +160,11 @@
 
 {block name="footer-js"}
 {$smarty.block.parent}
-function confirmar(url) {
-	if(confirm('¿Está seguro de querer eliminar este fichero?')) {
-		location.href = url;
-	}
-}
-
+    <script type="text/javascript">
+        function confirmar(url) {
+            if(confirm('¿Está seguro de querer eliminar este fichero?')) {
+                location.href = url;
+            }
+        }
+    </script>
 {/block}

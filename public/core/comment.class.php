@@ -52,14 +52,13 @@ class Comment extends Content
     function __construct($id=null) {
 		parent::__construct($id);
 
-        if(is_numeric($id)) {
+        if(!is_null($id)) {
             $this->read($id);
         }
        	$this->content_type = 'Comment'; //PAra utilizar la funcion find de content_manager
 
     }
-
-
+  
 	/**
 	* Creates a new comment for a given data
 	*
@@ -71,7 +70,7 @@ class Comment extends Content
 	* @return bool, if it is true the comment was created, if it is false
 	* something went wrong
 	*/
-    public function create( $params = null ) {
+    public function create( $params ) {
 
 		$fk_content = $params['id'];
 		$data = $params['data'];
