@@ -7,8 +7,19 @@
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
+     {if $category eq '6' && $totalvideos neq '4'}
+            <script type="text/javascript">
+                {literal}
+                    showMsg({'warn':['Debe tener 4 videos favoritos para portada.<br />  ']},'inline');
+                {/literal}
+            </script>
+     {/if}
+
     <ul class="tabs2" style="margin-bottom: 28px;">
-        {include file="menu_categorys.tpl" home="video.php?action=list"}
+         <li>
+              <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=6" {if $category==6} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >WIDGET HOME</a>
+         </li>
+         {include file="menu_categorys.tpl" home="video.php?action=list"}
     </ul>
 
     {include file="botonera_up.tpl"}
@@ -29,6 +40,7 @@
                 <th align="center" style="width:35px;">Visto</th>
                 <th align="center">Fecha</th>
                 <th align="center" style="width:35px;">Estado</th>
+                <th align="center" style="width:35px;">Favorito</th>
                 <th align="center" style="width:35px;">Modificar</th>
                 <th align="center" style="width:35px;">Eliminar</th>
             </tr>
@@ -73,12 +85,20 @@
                                         <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
                         {/if}
                     </td>
+                    <td style="padding:1px;font-size:11px;" align="center">
+                                {if $videos[c]->favorite == 1}
+                                   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de Portada"></a>
+                                {else}
+                                    <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
+                                {/if}
+                        </td>
+
                     <td style="padding:1px; font-size:11px;" align="center">
                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
                                 <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                     </td>
                     <td style="padding:1px; font-size:11px;" align="center">
-                        <a href="#" onClick="javascript:delete_videos('{$videos[c]->id}',{$paginacion->_currentPage});" title="Eliminar">
+                        <a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                     </td>
                 </tr>

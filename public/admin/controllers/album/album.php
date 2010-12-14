@@ -228,7 +228,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'change_favorite':
-	    $album = new Album($_REQUEST['id']);
+            $album = new Album($_REQUEST['id']);
             $msg = '';
              //Publicar o no,
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores

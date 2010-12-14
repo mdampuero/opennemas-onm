@@ -83,14 +83,13 @@
                                     <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
                                 {/if}
                         </td>
-
                         <td style="padding:10px;width:10%;" align="center">
                                 <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="Modificar">
                                         <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                         </td>
 
                         <td style="padding:10px;width:10%;" align="center">
-                                <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}',{$paginacion->_currentPage});" title="Eliminar">
+                                <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage}');" title="Eliminar">
                                         <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                         </td>
 

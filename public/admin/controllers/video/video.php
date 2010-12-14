@@ -3,8 +3,9 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
+
 
 /**
  * Setup view
@@ -14,25 +15,23 @@ $tpl->assign('titulo_barra', 'Video Management');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
-$fk_publisher=$_SESSION['userid'];
-$tpl->assign('fk_publisher', $fk_publisher);
 
-$publisher = new Author( $fk_publisher );	
-$tpl->assign('author', $publisher->name);
 
-if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
+if( !Privileges_check::CheckPrivileges('VIDEO_ADMIN'))
 {
     Privileges_check::AccessDeniedAction();
 }
 if (!isset($_REQUEST['page'])) {
      $_REQUEST['page'] = 1;
 }
-/* GESTION CATEGORIAS */
+
+/******************* GESTION CATEGORIAS  *****************************/
 $ccm = new ContentCategoryManager();
 if (!isset($_REQUEST['category'])) {
-    $this_category_data = $ccm->cache->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, posmenu ASC LIMIT 0,1');
-    $_REQUEST['category'] = $this_category_data[0]->pk_content_category;
+
+    $_REQUEST['category'] = 6;
 }
+ 
 
 $allcategorys = $ccm->find('(internal_category=1 OR internal_category=5) AND fk_content_category=0', 'ORDER BY internal_category DESC, posmenu');
 //var_dump($allcategorys);
@@ -51,20 +50,27 @@ $tpl->assign('datos_cat', $datos_cat);
 
  
 /* GESTION CATEGORIAS  */
-
+ 
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
 			$cm = new ContentManager();
-		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-			list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
-			$i=0;
-			foreach($videos as $video){
-                            $video->category_name = $video->loadCategoryName($video->pk_content);
+            if( $_REQUEST['category'] == 6){
+                list($videos, $pager)= $cm->find_pages('Video', 'favorite =1', 'ORDER BY  created DESC ',$_REQUEST['page'],10);
+                $totalvideos = count($videos);
+                $tpl->assign('totalvideos', $totalvideos);
                 
-                            $i++;
-			}
-		
+            }else{
+		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
+                list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                $i=0;
+
+                
+            }
+            foreach($videos as $video){
+                $video->category_name = $video->loadCategoryName($video->pk_content);
+                $i++;
+            }
 			/* Ponemos en la plantilla la referencia al objeto pager */
 			$tpl->assign('paginacion', $pager);
 			$tpl->assign('videos', $videos);
@@ -179,6 +185,20 @@ if( isset($_REQUEST['action']) ) {
 			
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$_REQUEST['page']);
 		break;
+
+        case 'change_favorite':
+            $video = new Video($_REQUEST['id']);
+            $msg = '';
+             //Publicar o no,
+            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            if($video->available==1){
+                    $video->set_favorite($status);
+            }else{
+                    $msg="No se puede esta despublicado";
+            }
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+		break;
+
 	
 		case 'mfrontpage':		
 			  if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
@@ -235,5 +255,5 @@ if( isset($_REQUEST['action']) ) {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
 }
 
-$tpl->display('video.tpl');
+$tpl->display('video/video.tpl');
 ?>

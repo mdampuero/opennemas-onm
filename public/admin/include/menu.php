@@ -25,7 +25,7 @@ $menuXml = <<<MENUSTRING
     <submenu title="Media" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
         <node title="Images" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN" />
         <node title="Files" link="ficheros.php" target="centro" privilege="FILE_ADMIN" />
-        <node title="Videos" link="video.php" target="centro" privilege="VIDEO_ADMIN" />
+        <node title="Videos" link="controllers/video/video.php" target="centro" privilege="VIDEO_ADMIN" />
         <node title="Albums" link="controllers/album/album.php" target="centro" privilege="ALBUM_ADMIN" />
     </submenu>
 

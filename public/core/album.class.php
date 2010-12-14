@@ -184,9 +184,9 @@ class Album extends Content{
 	
         function set_favorite($status) {
             $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
-	    if($this->id == NULL) {
-	    	return(false);
-	    }
+            if($this->id == NULL) {
+                return(false);
+            }
             $changed = date("Y-m-d H:i:s");
            // $sql = 'UPDATE albums SET `favorite`=0';
 

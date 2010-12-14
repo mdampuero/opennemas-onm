@@ -38,7 +38,7 @@ class Video extends Content{
     }
 
     function read($id) {
-	parent::read($id);
+        parent::read($id);
 
         $sql = 'SELECT * FROM videos WHERE pk_video = '.$id;
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -87,5 +87,28 @@ class Video extends Content{
         }
 
     }
+
+    function set_favorite($status) {
+            
+            if($this->id == NULL) {
+                return(false);
+            }
+            $changed = date("Y-m-d H:i:s");
+
+            $sql = "UPDATE videos SET `favorite`=? WHERE pk_video=".$this->id;
+            $values = array($status);
+
+            if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+                return;
+            }
+            
+            return(true);
+
+
+        }
 	
 }
