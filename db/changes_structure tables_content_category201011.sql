@@ -82,3 +82,14 @@ CREATE TABLE IF NOT EXISTS `content_categories` (
 -- Estructura de tabla para la tabla `sites`
 --
 -- --------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `sites` (
+  `pk_content_category` int(10) unsigned NOT NULL auto_increment,
+  `title` varchar(255) NOT NULL,
+  `name` varchar(255) default NULL,
+  `description` text character set utf8 collate utf8_spanish_ci,
+  `default_category_id` int(10) default '0' COMMENT ' ',
+  `logo_path` varchar(255) default NULL,
+  `template` varchar(255) default NULL,
+  PRIMARY KEY  (`pk_content_category`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

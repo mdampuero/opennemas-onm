@@ -78,7 +78,7 @@ class Rating
     }
 
     function create($pk_rating) {
-        $sql = "INSERT INTO contents (`pk_rating`,`total_votes`, `total_value`, `ips_count_rating`)
+        $sql = "INSERT INTO ratings (`pk_rating`,`total_votes`, `total_value`, `ips_count_rating`)
                 VALUES (?,?,?,?)";
 
         $values = array($pk_rating,0, 0, serialize(array()));
