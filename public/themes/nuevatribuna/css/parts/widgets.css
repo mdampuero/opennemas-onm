@@ -1,0 +1,139 @@
+/***********************************************************
+   Widget Lastest elements definition definition
+************************************************************/
+
+
+div.widget-most-seeing-voted-commented-content-wrapper {
+    background: #dfdfdf !important;
+    padding:7px !important;
+}
+
+div.widget-most-seeing-voted-commented-content .title
+{
+    font-family: Georgia;
+    font-size:1.6em;
+}
+
+div.widget-most-seeing-voted-commented-content .initially-hidden {
+    display:none;
+}
+
+div.widget-most-seeing-voted-commented-content .ui-tabs,
+div.widget-most-seeing-voted-commented-content .ui-widget,
+div.widget-most-seeing-voted-commented-content .ui-widget-content,
+div.widget-most-seeing-voted-commented-content .ui-corner-all
+{
+    padding:0; margin:0; border:0px !important;
+}
+
+div.widget-most-seeing-voted-commented-content div { margin:0; padding:0; }
+div.widget-most-seeing-voted-commented-content div.ui-tabs-panel { overflow-x: hidden; border:none !important; margin:10px; border:0px !important; padding-bottom:10px; }
+div.widget-most-seeing-voted-commented-content .ui-tabs-nav a
+{
+    color:Black !important; font-family:Verdana !important; font-size:.8em !important; }
+div.widget-most-seeing-voted-commented-content .ui-tabs-nav
+{
+    border:0; border-bottom:1px solid #444 !important; background: White !important;
+    margin:10px;
+}
+
+div.widget-most-seeing-voted-commented-content div.ui-tabs ul.ui-tabs-nav li {
+  margin: 0 2px;
+  padding: 0;
+}
+
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a {
+    cursor:pointer !important;
+}
+
+div.widget-most-seeing-voted-commented-content .ui-tabs-default
+{
+    color:#F3F3F3 !important;
+    background-color:White !important;
+    border: 1px solid #444 !important;
+    border-bottom:1px solid White !important;
+    border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    behavior: url(border-radius.htc);
+
+}
+div.widget-most-seeing-voted-commented-content .ui-tabs-selected, .ui-tabs-active
+{
+    background:White !important;
+    border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    behavior: url(border-radius.htc);
+    border: 1px solid #444 !important;
+    border-bottom:1px solid White !important;
+}
+
+div.widget-most-seeing-voted-commented-content .ui-state-default,
+div.widget-most-seeing-voted-commented-content div.ui-widget-content .ui-state-default {
+  background: #E6E6E6;
+  border: 1px solid #D3D3D3;
+  color: #555555;
+  font-weight: normal;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: Black !important;}
+div.widget-most-seeing-voted-commented-content div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div.widget-most-seeing-voted-commented-content .tab-lastest {
+    border-top: 1px dotted #ccc;
+    margin-bottom:5px;
+    width:100%;
+}
+
+div.widget-most-seeing-voted-commented-content .tab-lastest:first-child { border-top:none; }
+div.widget-most-seeing-voted-commented-content .tab-lastest:last-child {
+    border-bottom: 1px dotted #ccc;
+}
+div.widget-most-seeing-voted-commented-content .tab-lastest-title a
+{
+    color:#005689;
+    font-size:.9em;
+    margin:0;
+    padding:0
+}
+div.widget-most-seeing-voted-commented-content .tab-lastest-title{ margin:5px 10px; }
+
+
+/***********************************************************
+   Widget More news in category definition
+************************************************************/
+
+div.morenews-in-category {
+    background:#ededed;
+    margin-bottom:10px;
+}
+    div.morenews-in-category > div {
+        margin:10px;
+    }
+
+        div.morenews-in-category .title{
+            color:#535050;
+            font-weight:bold;
+            font-family:Arial;
+        }
+        div.morenews-in-category .onm-new-little a{
+            font-size:.75em;
+            line-height:1.2em;
+            color:#3d4f82;
+        }
+
+
+machine-related-contents
+title

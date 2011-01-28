@@ -4,10 +4,7 @@
 <title>{if !empty($category_real_name)}
 {$category_real_name|clearslash|capitalize} -
 {/if}
-{if !empty($subcategory_real_name)}
-{$subcategory_real_name|clearslash|capitalize} -
-{/if}
-Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
+{if !empty($subcategory_real_name)}  {$subcategory_real_name|clearslash|capitalize} - {/if} {$smarty.const.SITE_TITLE} </title>
 <meta name="keywords" content="{$smarty.const.SITE_KEYWORDS}" />
 <meta name="description" content="{$smarty.const.SITE_DESCRIPTION}" />
 {/block}
@@ -30,7 +27,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
             $("#tabs2").tabs();
         });
     </script>
-    {include file="misc_widgets/widget_analytics.tpl"}
+    {include file="internal_widgets/widget_google_analytics.tpl"}
 {/block}
 
 
@@ -51,9 +48,7 @@ Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_0"}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
-                            {*<hr class="new-separator"/>*}
                             {include file="ads/widget_ad_button.tpl" type='3' nocache}
-                            {*<hr class="new-separator"/>*}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_2"}
                         </div>
                     </div>

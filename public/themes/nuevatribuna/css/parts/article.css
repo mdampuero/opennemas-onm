@@ -1,0 +1,92 @@
+/***********************************************************
+   Inner article definition
+************************************************************/
+
+/*<div class="span-16 last title-subtitle-legend">
+    <h1 class="inner-article-title">{$article->title_int|clearslash}</h1>
+    <div class="inner-article-subtitle">{$article->subtitle|clearslash}</div>
+    <div class="inner-article-legend">
+        <span class="inner-article-author">{$article->agency|clearslash}</span> - 
+        <span class="inner-article-place">Madrid</span> - 
+        <span class="inner-article-publish-date">{articledate article=$article updated=$article->changed}</span>
+    </div>
+</div><!--title-subtitle-legend-->*/
+
+
+div.title-subtitle-legend {
+    padding-bottom:5px;
+}
+
+    div.title-subtitle-legend h1.inner-article-title {
+        font-family:Georgia;
+        font-size:2.5em;
+        line-height:1.05em;
+        color:Black;
+        margin:0;
+        margin-bottom:17px;
+    }
+    
+    div.title-subtitle-legend div.inner-article-subtitle {
+        color:#636363;
+        font-size:1.092em;
+        margin-bottom:17px;
+    }
+
+    div.inner-article-legend {
+        font-family:Georgia;
+        color:#747678;
+    }
+        
+        div.inner-article-legend span.inner-article-author { color: Black !important; text-transform:uppercase; }
+        
+div.inner-article-other-contents, div.inner-article-utilities-box { border-top:1px solid #ccc; padding-top:5px;}
+div.inner-article-other-contents { width:480px; margin-right:10px; font-size:1.12em; color:#2d2c2b; }
+    div.inner-article-other-contents div.inner-article-image div.photo-subtitle { color:#535050; font-size:.97em; }
+    
+div.inner-article-other-contents div.inner-article-image { float:right; margin:0 0 10px 10px;}
+    
+div.inner-article-utilities-box  { width:150px; margin-right:0;}
+    div.inner-article-utilities-box > div { border-bottom:1px solid #ccc; padding-bottom:5px; width:100%; margin-bottom:5px}
+    div.inner-article-utilities-box .block{ margin:3px 10px}
+    div.inner-article-utilities-box div.title { font-weight:bold; color:#535050; font-size:1.15em; margin-bottom:5px; }
+
+    div.share-buttons div.block{ margin:8px 10px}
+    div.share-buttons div.more-share-button a,
+        div.share-buttons div.more-share-button img { vertical-align: middle; color:#535050 !important}
+
+    div.utilities {}
+        div.utilities ul { list-style:none; margin:0; padding:0; }
+            div.utilities li { display:block; margin:4px 0; }
+            div.utilities a { padding-left:23px; vertical-align:middle; height:17px; color:#535050; display:block; padding-top:1px;}
+            div.utilities a:hover { text-decoration:underline; }
+            div.utilities a.utilities-print{ background:url(../../images/utilities/utility-print.png) center left no-repeat; }
+            div.utilities a.utilities-send-by-email{ background:url(../../images/utilities/utility-email.png) center left no-repeat; }
+            div.utilities a.utilities-increase-text{ background:url(../../images/utilities/utility-increase-text-size.png) center left no-repeat; }
+            div.utilities a.utilities-decrease-text{ background:url(../../images/utilities/utility-decrease-text-size.png) center left no-repeat; }
+
+    div.related-contents ul { list-style:none; margin:0; padding:0;}
+        div.related-contents ul li { padding:0; margin:0;  padding:7px 3px;}
+        div.related-contents ul li:hover { background:#ededed;}
+            div.related-contents ul a { color:#3d4f82; font-size:1.07em; }
+                div.related-contents ul a span{ display:none; }
+
+    div.vote ul { list-style:none; margin:0; }
+        div.vote ul li { float:left;}
+            div.vote span.num-comments { display:none !important; }      
+    
+div.machine-related-contents {
+    font-size:1.2em;
+    margin-top:10px;
+    color:#3d4f82;
+}
+    div.machine-related-contents div.title{
+        font-size:1.4em;
+        color:#535050;
+        font-family:Arial;
+        font-weight:bold
+    }
+    div.machine-related-contents ul { list-style:circle; margin:5px; }
+    div.machine-related-contents ul li { margin:0 0 5px 15px !important; display:block; }
+        div.machine-related-contents a{
+            color:#3d4f82 !important;
+        }

@@ -6,6 +6,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $items   = $params['items'];
     $tpl     = $params['tpl'];
     $placeholder  = $params['placeholder'];
+    $cssclass = $param['cssclass'];
 
     $category_name = $smarty->get_template_vars('category_name');
     $property = ($category_name=='home')? 'home_placeholder': 'placeholder';
@@ -18,6 +19,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
             if( property_exists($item, $property) && $item->{$property} == $placeholder ) {
                 $smarty->clearAssign($varname);
                 $smarty->assign($varname, $items[$i]);
+                $smarty->assign('cssclass', $cssclass);
                 //$smarty->_tpl_vars[$varname] = $items[$i];
                 $output .= $smarty->fetch( $tpl, md5(serialize($item)) );
                 //echo $smarty->fetch( $tpl );

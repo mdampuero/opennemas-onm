@@ -27,9 +27,6 @@ class Template extends Smarty
         // Call the parent constructor
         parent::__construct();
 
-        // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
-        $this->setFilters($filters);
-
         // Register db resource
         /*$this->register_resource("db",
                 array("smarty_get_db_template", "smarty_get_db_timestamp",
@@ -49,6 +46,11 @@ class Template extends Smarty
         $this->css_dir      = SITE_URL.SS.'themes'.SS.$theme.SS.'css/';
         $this->image_dir    = SITE_URL.SS.'themes'.SS.$theme.SS.'images/';
         $this->js_dir       = SITE_URL.SS.'themes'.SS.$theme.SS.'js/';
+        
+        // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
+        $this->setFilters($filters);
+        
+        //$this->loadFilter("output","indent_html");
 
         $this->assign(  'params',
                         array('LOCALE_DIR' =>    $this->locale_dir,

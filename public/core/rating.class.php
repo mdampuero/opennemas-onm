@@ -249,7 +249,7 @@ LINKTPLDOC;
     
     private function renderImg($i, $value, $page='article') {
         $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
-        $imageTpl = '<img src="%s%s.png" alt="%s" title="%s" />';
+        $imageTpl = '<li> <img src="%s%s.png" alt="%s" title="%s" /></li> ';
         ($page=='video') ? $sufijo='-black' : $sufijo='' ;
         return sprintf($imageTpl, $imgPath, ($value>=$i) ? "f-star".$sufijo : "e-star".$sufijo, $this->messages[$i], $this->messages[$i]);
         
@@ -361,7 +361,7 @@ LINKTPLDOC;
                 $html_out .= "</ul> ";
                 
                 // append the counter of total votes
-                $html_out .= $this->humanizeNumVotes($this->total_votes);
+                //$html_out .= $this->humanizeNumVotes($this->total_votes);
                 
                 // if this request is not an AJAX request wrap it.
                 if (!$ajax) {
