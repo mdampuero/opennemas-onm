@@ -25,8 +25,8 @@ $menuXml = <<<MENUSTRING
     <submenu title="Media" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
         <node title="Images" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN" />
         <node title="Files" link="ficheros.php" target="centro" privilege="FILE_ADMIN" />
-        <node title="Videos" link="controllers/video/video.php" target="centro" privilege="VIDEO_ADMIN" />
-        <node title="Albums" link="controllers/album/album.php" target="centro" privilege="ALBUM_ADMIN" />
+        <!--<node title="Videos" link="controllers/video/video.php" target="centro" privilege="VIDEO_ADMIN" />-->
+        <!--<node title="Albums" link="controllers/album/album.php" target="centro" privilege="ALBUM_ADMIN" />-->
     </submenu>
 
 
@@ -55,7 +55,7 @@ $menuXml = <<<MENUSTRING
         <node title="System settings" link="configurator.php" target="centro"  privilege="BACKEND_ADMIN" />
         <node title="Cache Manager" link="tpl_manager.php" target="centro" privilege="CACHE_ADMIN" />
         <node title="&lt;hr/&gt;" link="javascript:return false;" target="centro" privilege="BACKEND_ADMIN" />
-        <node title="Update System" link="svn.php" target="centro"  privilege="BACKEND_ADMIN" />
+        <node title="Update System" link="update-system.php" target="centro"  privilege="BACKEND_ADMIN" />
         <node title="Information" link="index.php" target="centro" privilege="BACKEND_ADMIN" />
         <node title="Help" link="http://www.openhost.es/en/opennemas" target="centro" privilege="BACKEND_ADMIN" />
         

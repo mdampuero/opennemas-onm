@@ -38,7 +38,7 @@
     <div class="container_ads">
         {include file="ads/ad_in_header.tpl" type1='1' type2='2' nocache}
     </div>
-    <div class="wrapper clearfix static">
+    <div class="wrapper clearfix static-page">
         <div class="container container_with_border">
             
             <div id="header">

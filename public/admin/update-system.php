@@ -79,10 +79,10 @@ if(isset($_REQUEST['action']) ) {
     {
         exec($checkout, $return);
         $tpl->assign('return', $return);
-        exec("chown www-data:www-data $destination/* -R ", $return);
-        exec("find ./ -type d -name .svn -exec chmod 777 {}/ -R \;");
-        exec("find ./ -type d -name .svn -exec chown www-data:www-data {}/ -R \;");
-        exec("chmod 777 $destination/* -R", $return);
+        //exec("chown www-data:www-data $destination/* -R ", $return);
+        //exec("find ./ -type d -name .svn -exec chmod 777 {}/ -R \;");
+        //exec("find ./ -type d -name .svn -exec chown www-data:www-data {}/ -R \;");
+        //exec("chmod 777 $destination/* -R", $return);
 
         exec($checkout, $return);
         $tpl->assign('return', $return);
@@ -90,9 +90,9 @@ if(isset($_REQUEST['action']) ) {
 
 } else {
         $username = $_SESSION['username'];
-        $password = "XXXXXXXXX";
-        $repository = "http://svn.openhost.es/opennemasdemo/trunk/";
-        $destination = "/home/opennemas/retrincos/code/";
+        $password = "";
+        $repository = REPOSITORY_URL;
+        $destination = realpath(SITE_PATH.'../'). '/';
         $checkout = "svn info --username $username --password $password $repository";
 
 		exec($checkout, $return);

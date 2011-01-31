@@ -10,7 +10,7 @@
              <li class="cat home{if $category_name eq "home" || $category_name eq "opinion" || $section_url eq "video"} active{/if}">
                 <a href="/" title="Portada">Portada</a>
                 <ul class="nav{if $subcategory_name eq $subcat_key} active{/if}">
-                    <li class="subcat {if $subcategory_name eq 'opinion' || $category_name eq 'opinion'} active{/if}"><a title="Ver la sección de Opinion" href="/seccion/opinion/">Opinión</a></li>
+                    <!--<li class="subcat {if $subcategory_name eq 'opinion' || $category_name eq 'opinion'} active{/if}"><a title="Ver la sección de Opinion" href="/seccion/opinion/">Opinión</a></li>-->
                     <!--<li class="subcat {if $subcategory_name eq 'videos' || $section_url eq "video"} active{/if}"><a title="Ver la sección de Vídeos" href="/video/">Vídeos</a></li>-->
                     <!--<li class="subcat {if $subcategory_name eq 'album' || $section_url eq "album"  || preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)} active{/if}"><a title="Ver la sección de galerías" href="/albumes/">Galerías</a></li>-->
                     <!--<li class="subcat {if preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)  || $category_name eq 'encuesta'} active{/if}"><a title="Ver  Encuestas" href="/encuesta/deportes/">Encuestas</a></li>-->
