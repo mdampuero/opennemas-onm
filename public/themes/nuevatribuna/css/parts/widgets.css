@@ -23,7 +23,7 @@ div.widget-most-seeing-voted-commented-content .ui-widget,
 div.widget-most-seeing-voted-commented-content .ui-widget-content,
 div.widget-most-seeing-voted-commented-content .ui-corner-all
 {
-    padding:0; margin:0; border:0px !important;
+    padding:0; margin:0; border:1px solid White;
 }
 
 div.widget-most-seeing-voted-commented-content div { margin:0; padding:0; }
@@ -121,6 +121,7 @@ div.morenews-in-category {
 }
     div.morenews-in-category > div {
         margin:10px;
+        display:inline-block !important;
     }
 
         div.morenews-in-category .title{

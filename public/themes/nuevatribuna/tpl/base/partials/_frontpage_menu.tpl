@@ -54,7 +54,7 @@
             <input type="hidden" name="cx" value="015025374634274414484:ykq8y_ayqku" />
             <input type="hidden" name="cof" value="FORID:10" />
             <input type="hidden" name="ie" value="UTF-8" />
-            <script type="text/javascript" defer="defer" src=" http://www.google.es/coop/cse/brand?form=cse-search-box&lang=es"></script>
+            <script type="text/javascript" defer="defer" src="http://www.google.es/coop/cse/brand?form=cse-search-box&lang=es"></script>
         </form>
     </div>
 </div>

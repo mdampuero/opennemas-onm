@@ -22,11 +22,10 @@
         </div>
     </div>
     <div class="span-8 last more-promotions-from-diary">
-            espacio por definir
+            ESPACIO POR DEFINIR
             <hr class="new-separator"/>
             {include file="widgets/facebook_stream_box.tpl"}
-            <hr class="new-separator" />
-            {include file="widgets/last_day-last_3days-last_week.tpl"}
+            
     </div>
 </div>
 

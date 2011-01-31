@@ -3,7 +3,7 @@
 var min=8;
 var max=18;
 function increaseFontSize() {
-   var p = document.getElementsByClassName('content-article');
+   var p = document.getElementsByClassName('inner-article-other-contents');
    for(i=0;i<p.length;i++) {
       if(p[i].style.fontSize) {
          var s = parseInt(p[i].style.fontSize.replace("px",""));
@@ -17,7 +17,7 @@ function increaseFontSize() {
    }
 }
 function decreaseFontSize() {
-   var p = document.getElementsByClassName('content-article');
+   var p = document.getElementsByClassName('inner-article-other-contents');
    for(i=0;i<p.length;i++) {
       if(p[i].style.fontSize) {
          var s = parseInt(p[i].style.fontSize.replace("px",""));
@@ -46,7 +46,7 @@ function showCommentForm(){
 
 function rating(ip,value,page,id) {
 
-	$('.vota'+id).html( '<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+	$('.vota'+id).html( '<img src="/themes/nuevatribuna/images/loading.gif" height="9" border="0"/> Actualizando...');
 
 	var url='/controllers/article.php?action=rating&i='+ip+'&v='+value+'&p='+page+'&a='+id;
 	  
@@ -61,17 +61,17 @@ function change_rating(num,pk_rating,sufijo) {
   
 	for(i=1; i<=5; i++) {
 		if (i<=num) {                       
-			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/f-star'+sufijo+'.png');
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/nuevatribuna/images/utilities/f-star'+sufijo+'.png');
 
 		} else {
-			$('.'+pk_rating+'_'+i).attr('src', '/themes/lucidity/images/utilities/e-star'+sufijo+'.png');
+			$('.'+pk_rating+'_'+i).attr('src', '/themes/nuevatribuna/images/utilities/e-star'+sufijo+'.png');
 		}
 	}
 }
 
 
 vote_comment = function (ip, value, id) {
-   $('#vota'+id).html('<img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...');
+   $('#vota'+id).html('<img src="/themes/nuevatribuna/images/loading.gif" height="9" border="0"/> Actualizando...');
    
    var url = '/controllers/article.php?action=vote&i='+ip+'&v='+value+'&a='+id;
    
@@ -94,7 +94,7 @@ function getEvent (e) {
 }
 
 videos_incategory = function (category, page) {
-   $('#videos_incategory div.clean-paginator div.buttons').prepend('<div class="ajax-loading"><img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...</div>');
+   $('#videos_incategory div.clean-paginator div.buttons').prepend('<div class="ajax-loading"><img src="/themes/nuevatribuna/images/loading.gif" height="9" border="0"/> Actualizando...</div>');
 
    var url = '/controllers/videos.php?action=videos_incategory&category='+category+'&page='+page;
 
@@ -108,7 +108,7 @@ videos_incategory = function (category, page) {
 
 
 videos_more = function (category, page) {
-   $('#videos_more div.clean-paginator div.buttons').prepend('<div class="ajax-loading"><img src="/themes/lucidity/images/loading.gif" height="9" border="0"/> Actualizando...</div>');
+   $('#videos_more div.clean-paginator div.buttons').prepend('<div class="ajax-loading"><img src="/themes/nuevatribuna/images/loading.gif" height="9" border="0"/> Actualizando...</div>');
 
    var url = '/controllers/videos.php?action=videos_more&category='+category+'&page='+page;
 

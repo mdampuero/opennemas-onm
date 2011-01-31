@@ -310,12 +310,8 @@ div#main_content {
 		div#main_content div.third-column {
 				width:310px
 		}
-		
-		div#main_content div.inner-article {
-				border-right:1px solid #ccc;
-				width:640px;
-				padding-right:10px;
-		}
+
+	
 		
 /***********************************************************
    Frontpage article definition
@@ -342,7 +338,6 @@ div.onm-new div.related-content span.res-article { display:none;}
 div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
 div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:15px; font-weight:bold; }
 div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
-
 
 /***********************************************************
    More resources sprite definition

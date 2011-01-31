@@ -13,7 +13,9 @@ function smarty_insert_renderbanner($params, &$smarty) {
     // FIXME: include function into Advertisement static method
     if(!function_exists('render_output')) {
         function render_output($content, $banner) {
-            if((($banner->type_advertisement + 50)%100) == 0) {
+            if( /*is_object($banner)
+                && property_exists($banner,'type_advertisement')
+                && */((($banner->type_advertisement + 50)%100) == 0)) {
                 $content = json_encode($content);
                 
                 $timeout = intval($banner->timeout) * 1000; // convert to ms

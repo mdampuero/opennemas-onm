@@ -5,12 +5,12 @@
  
 {section name=c loop=$comments}
 <a name="{$comments[c]->id}"></a>
-<div class="list-comments span-16">
+<div class="list-comments span-15">
     <div class="comment-wrapper">
         <div class="comment-number">{math x=$smarty.section.c.iteration y=$paginacion->_currentPage equation='x+(y-1)*9'}</div>
-        <div class="comment-content span-14 prepend-2">
+        <div class="comment-content span-13 prepend-2 append-1">
             <strong>{$comments[c]->title|clearslash}</strong>
-            <p style="white-space:pre-wrap">{$comments[c]->body|clearslash}</p>
+            <p>{$comments[c]->body|clearslash}</p>
         </div>
         <div class="">
             <div class="span-5">{insert name="voteComment" id=$comments[c]->id page="article" type="vote"}</div>

@@ -24,9 +24,7 @@
                 </ul>
             </div>
         </div>
-        <hr class="new-separator" />
         <div>
-            
             <div class="span-16 contact-data">
                 <img src="{$params.IMAGE_DIR}/logos/nuevatribuna-footer.png"  alt="Nueva tribuna"/>
                 <div class="info">

@@ -2,16 +2,9 @@
    Inner article definition
 ************************************************************/
 
-/*<div class="span-16 last title-subtitle-legend">
-    <h1 class="inner-article-title">{$article->title_int|clearslash}</h1>
-    <div class="inner-article-subtitle">{$article->subtitle|clearslash}</div>
-    <div class="inner-article-legend">
-        <span class="inner-article-author">{$article->agency|clearslash}</span> - 
-        <span class="inner-article-place">Madrid</span> - 
-        <span class="inner-article-publish-date">{articledate article=$article updated=$article->changed}</span>
-    </div>
-</div><!--title-subtitle-legend-->*/
-
+div.inner-article {
+    border-right:1px solid #ccc;
+}
 
 div.title-subtitle-legend {
     padding-bottom:5px;
@@ -40,8 +33,9 @@ div.title-subtitle-legend {
         div.inner-article-legend span.inner-article-author { color: Black !important; text-transform:uppercase; }
         
 div.inner-article-other-contents, div.inner-article-utilities-box { border-top:1px solid #ccc; padding-top:5px;}
-div.inner-article-other-contents { width:480px; margin-right:10px; font-size:1.12em; color:#2d2c2b; }
-    div.inner-article-other-contents div.inner-article-image div.photo-subtitle { color:#535050; font-size:.97em; }
+div.inner-article-other-contents { width:480px; margin-right:10px; font-size:1.12em; color:#2d2c2b; position:relative;}
+    div.inner-article-other-contents div.inner-article-image { }
+        div.inner-article-other-contents div.inner-article-image div.photo-subtitle { color:#535050; font-size:.97em; }
     
 div.inner-article-other-contents div.inner-article-image { float:right; margin:0 0 10px 10px;}
     

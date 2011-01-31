@@ -2,6 +2,7 @@
 
 define("ASSET_COMPILE_OUTPUT_DIR", TEMPLATE_USER_PATH . '/assets/');
 define("ASSET_COMPILE_URL_ROOT", TEMPLATE_USER_PATH_WEB . '/assets/');
+
 //define("DEBUG", true);
 
 include_once(implode(DIRECTORY_SEPARATOR, array(dirname(__FILE__), 'sacy', 'sacy.php')));

@@ -46,11 +46,17 @@ class Template extends Smarty
         $this->css_dir      = SITE_URL.SS.'themes'.SS.$theme.SS.'css/';
         $this->image_dir    = SITE_URL.SS.'themes'.SS.$theme.SS.'images/';
         $this->js_dir       = SITE_URL.SS.'themes'.SS.$theme.SS.'js/';
-        
+
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
+
+        $this->loadFilter("output","trimwhitespace");
         
-        //$this->loadFilter("output","indent_html");
+        // Only load this plugin if the request comes from frontend, not backend
+        if(get_class() === 'Template') {
+            //$this->loadFilter("output","indent_html");
+        }
+        
 
         $this->assign(  'params',
                         array('LOCALE_DIR' =>    $this->locale_dir,
@@ -263,10 +269,16 @@ class TemplateAdmin extends Template {
 
     function __construct($theme, $filters = array())
     {
+        
         // Call the parent constructor
         parent::__construct($theme);
 
         $this->setFilters($filters);
+
+        // Trying to unload indent_html
+        //$this->loadFilter("output","indent_html");
+        //$this->unregisterFilter("output", "")
+        //unset($smarty->autoload_filters["output"]["indent_html"]);
 
         // Parent variables
         $baseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
@@ -277,6 +289,8 @@ class TemplateAdmin extends Template {
         $this->plugins_dir[]= $baseDir.'plugins/';
         $this->caching	= false;
         $this->allow_php_tag = true;
+
+        
 
         // Template variables
         $this->locale_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'locale/';

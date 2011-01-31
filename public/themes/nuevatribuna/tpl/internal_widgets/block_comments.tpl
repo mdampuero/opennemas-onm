@@ -4,7 +4,7 @@
 *}
 {insert name="numComments" id=$contentId assign="numComments" nocache}
 
-<div class="article-comments clearfix">
+<div id="comentarios" class="article-comments clearfix">
     <div class="title-comments">
         {if $numComments gt 0}
         <h3><span>{$numComments} Comentarios<span></h3>
@@ -35,7 +35,7 @@ get_paginate_comments = function(page) {
     var url = "/comments.php?action=paginate_comments&id=" + pkContent + "&page=" + page;
     var previousContent = $("#list-comments").html();
 
-    $("#list-comments").html('<img src="/themes/lucidity/images/loading.gif" border="0" />');
+    $("#list-comments").html('<img src="/themes/{$smarty.const.TEMPLATE_USER}/images/loading.gif" border="0" />');
 
     jQuery.ajax({
         url: url,

@@ -22,7 +22,7 @@
     <div class="related-content">
         <ul>
             {section name=r loop=$relatedItems}
-                {if $relatedItems[r]->pk_article neq  $item->pk_article}
+                {if $relatedItems[r]->id neq  $item->pk_article}
                    <li>{renderTypeRelated content=$relatedItems[r]}</li>
                 {/if}
             {/section}

@@ -1,7 +1,7 @@
 {extends file='base/frontpage_layout.tpl'}
 
 {block name="meta" append}
-<title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - Noticias de Galicia - {$smarty.const.SITE_TITLE} </title>
+<title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - {$smarty.const.SITE_TITLE} </title>
 <meta name="keywords" content="{$article->metadata|clearslash}" />
 <meta name="description" content="{$article->summary|strip_tags|clearslash}" />
 

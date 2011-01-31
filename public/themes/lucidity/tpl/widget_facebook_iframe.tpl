@@ -1,2 +1,0 @@
-<!--iframe src="http://www.facebook.com/connect/connect.php?id=282535299100&connections=10&locale=es_ES" scrolling="no" frameborder="1" allowtransparency="true" style="width: 300px; height: 270px;"></iframe-->
-<iframe src="http://www.facebook.com/connect/connect.php?id=131738896847070&connections=10&locale=es_ES" scrolling="no" frameborder="1" allowtransparency="true" style="width: 300px; height: 270px;"></iframe>

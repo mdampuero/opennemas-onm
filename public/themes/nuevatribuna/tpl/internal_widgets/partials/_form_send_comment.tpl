@@ -4,8 +4,8 @@
     @theme      Lucidity
 *}
 
-<script defer="defer" type="text/javascript" src="{$params.JS_DIR}jquery.commentform.js"></script>
-<script defer="defer" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/es_ES" type="text/javascript"></script>
+<script type="text/javascript" src="{$params.JS_DIR}jquery.commentform.js"></script>
+<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/es_ES" type="text/javascript"></script>
 
 <div class="form-comments span-16 last">
     <div class="span-14 prepend-1 form-comments-content" style="margin:0 auto;">
@@ -57,7 +57,7 @@
                 </div>
             </form>
 
-            <script type="text/javascript">
+            <script defer="defer" type="text/javascript">
             /* <![CDATA[ */
             var fbAppKey = '{$smarty.const.FB_APP_APIKEY}';
             var commentForm = null;
