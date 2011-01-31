@@ -49,4 +49,4 @@ require_once ("statics_advertisement.php");
 /********************************* ADVERTISEMENTS  *********************************************/
 
 
-$tpl->display('statics.tpl');
+$tpl->display('static_pages/statics.tpl');

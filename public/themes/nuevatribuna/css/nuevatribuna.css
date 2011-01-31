@@ -318,7 +318,7 @@ div#main_content {
 ************************************************************/
 
 div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom:5px; }
-		div.onm-new .onm-new-image { max-width:100%;}
+		div.onm-new .onm-new-image { max-width:100%; min-height:100%; width:100%}
 		div.onm-new .onm-new-category-name { margin:0 0 5px 0; text-transform: uppercase; display:block; width:auto; position:relative; }
 		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:5px 0; font-family:Georgia;}
 				div.onm-new .onm-new-title a { color: Black }		
