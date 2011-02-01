@@ -29,5 +29,5 @@
         </ul>
     </div>
     {/if}
-    <div class="onm-new-comments"><a href="{$item->permalink|clearslash}#comentarios" title="Comentar en la noticia «{$item->title|clearslash|clean_for_html_attributes}»">Comente</a></div>
+    <div class="onm-new-comments"><a href="{$item->permalink|clearslash}#comentarios" title="Comentar en la noticia «{$item->title|clearslash|clean_for_html_attributes}»">Comenta</a></div>
 </div>

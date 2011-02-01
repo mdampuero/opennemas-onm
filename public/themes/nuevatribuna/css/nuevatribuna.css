@@ -172,7 +172,12 @@ div.current-hour, #widget_weather_top
 						#logo-and-pages div.info-pages ul.pages li{
 								display:inline;
 								list-style:none;
+								color:#2D2C2B;
 						}
+								#logo-and-pages div.info-pages ul.pages li a{
+										color:#2D2C2B;
+										margin:0 3px;
+								}
 
 /***********************************************************
     Footer content definition
@@ -318,12 +323,12 @@ div#main_content {
 ************************************************************/
 
 div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom:5px; }
-		div.onm-new .onm-new-image { max-width:100%; width:100%}
-		div.onm-new .onm-new-category-name { margin:0 0 5px 0; text-transform: uppercase; display:block; width:auto; position:relative; }
-		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:5px 0; font-family:Georgia;}
+		div.onm-new .onm-new-image { max-width:100%; width:100%; margin-bottom:10px;}
+		div.onm-new .onm-new-category-name { margin:0 0 4px 0; text-transform: uppercase; display:block; width:auto; position:relative; }
+		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:0; margin-bottom:8px; font-family:Georgia;}
 				div.onm-new .onm-new-title a { color: Black }		
-		div.onm-new .onm-new-subtitle { font-family: Arial; color:#2d2c2b; margin-bottom:5px;}
-		div.onm-new div.related-content { margin:5px 0 10px 0;; }
+		div.onm-new .onm-new-subtitle { font-size:13px; font-family: Arial; color:#2d2c2b; margin-bottom:13px; line-height:1.3em}
+		div.onm-new div.related-content { margin:0 0 8px 0;; }
 				div.onm-new div.related-content ul { margin:0; margin-left:30px }
 						div.onm-new div.related-content ul li { color:#980101 }
 		div.onm-new div.onm-new-comments  { width:100%; text-align:right; }
@@ -336,7 +341,7 @@ div.third-column div.onm-new:last-child,
 div.onm-new.last { border-bottom:none; } /* Drop border for latest */
 div.onm-new div.related-content span.res-article { display:none;}
 div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
-div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:15px; font-weight:bold; }
+div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }
 div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
 
 /***********************************************************

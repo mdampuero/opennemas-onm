@@ -20,8 +20,8 @@
    
        <div class="info-pages">
          <ul class="pages">
-            <li>Contacto</li> 
-            <li>Boletín Diario</li>
+            <li><a href="#">Contacto</a> |</li> 
+            <li><a href="#">Boletín Diario</a></li>
          </ul>
          <img src="{$params.IMAGE_DIR}logos/nuevatribuna-square.png" alt="{$smarty.const.SITE_TITLE}" />
        </div>
