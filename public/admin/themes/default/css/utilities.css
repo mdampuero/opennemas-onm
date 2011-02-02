@@ -1,0 +1,12 @@
+ul.action-buttons {
+  list-style:none;
+  max-height:10px;
+  min-width:100px;
+}
+
+ul.action-buttons li {
+    float:left;
+    display:inline-block;
+    clear:none;
+    margin:0 7px;
+}

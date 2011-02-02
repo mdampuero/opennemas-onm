@@ -286,11 +286,13 @@ class ContentManager
             }
         }
         
-        function cmp($a, $b) {
-            if ($a['num'] == $b['num']) {
-                return 0;
+        if(!function_exists('cmp')) {    
+            function cmp($a, $b) {
+                if ($a['num'] == $b['num']) {
+                    return 0;
+                }
+                return ($a['num'] > $b['num']) ? -1 : 1;
             }
-            return ($a['num'] > $b['num']) ? -1 : 1;
         }
         
         uasort($articles,'cmp');

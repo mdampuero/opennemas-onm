@@ -3,8 +3,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(dirname(__FILE__).'/../../session_bootstrap.php');
 
 /**
  * Setup view
@@ -23,25 +23,32 @@ $cm = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
-switch($action) {        
-    case 'read': {
+
+
+switch($action) {
+    case 'edit': {
         $id = $_REQUEST['id'];                
-        $widget->read($id);        
+        $widget->read($id);
         
         $tpl->assign('id', $id);
         $tpl->assign('widget', $widget);
+        $tpl->display('widget/edit.tpl');
+        break;
     } // Executa tamén new
     
     case 'new': {
-        // ...        
-    } break;
+        $tpl->display('widget/edit.tpl');
+        break;
+    } 
     
     case 'delete': {
         $id = $_REQUEST['id'];
         $widget->delete($id);
         
+        
         Application::forward('?action=list');
-    } break;
+        break;
+    }
     
     case 'save': {
         $data = $_POST;        
@@ -53,7 +60,8 @@ switch($action) {
         }        
         
         Application::forward('?action=list');
-    } break;
+        break;
+    } 
     
     case 'changeavailable': {
         $widget->read($_REQUEST['id']);
@@ -69,7 +77,8 @@ switch($action) {
         }
         
         Application::forward('?action=list');
-    } break;
+        break;
+    }
     
     case 'list':
     default: {
@@ -94,8 +103,7 @@ switch($action) {
         
         $tpl->assign('widgets', $widgets);
         //$tpl->assign('pager', $pager);
-    } break;
+        $tpl->display('widget/index.tpl');
+        break;
+    } 
 }
-
-
-$tpl->display('widget/index.tpl');

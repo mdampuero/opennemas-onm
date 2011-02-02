@@ -6,7 +6,7 @@ $menuXml = <<<MENUSTRING
     <submenu title="Frontpage" link="index.php" target="centro">
         <node title="Inicio" link="index.php" target="centro" />
         <node title="Frontpage Manager" link="article.php" target="centro" privilege="ARTICLE_FRONTPAGE" />
-        <node title="Widget Manager" link="widget.php" target="centro" privilege="WIDGET_ADMIN" />
+        <node title="Widget Manager" link="controllers/widget/widget.php" target="centro" privilege="WIDGET_ADMIN" />
         <!--<node title="Templates Manager" link="index.php" target="centro" privilege="ARTICLE_FRONTPAGE" />-->
     </submenu>
     

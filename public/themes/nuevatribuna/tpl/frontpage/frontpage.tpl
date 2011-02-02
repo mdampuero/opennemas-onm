@@ -46,7 +46,8 @@
                     <div class="layout-column span-8 last third-column">
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_0" cssclass="top-thirdcol"}
-                            {include file="widgets/most-seeing-voted-commented-content.tpl"}
+                            {render_widget id="2011020117251900325"}
+                            {render_widget id="2011020117251900325"}
                             {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_1"}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_2"}

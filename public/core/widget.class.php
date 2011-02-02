@@ -273,4 +273,30 @@ class Widget extends Content {
         
         return $output;
     }
+    
+    private function _renderlet_intelligentwidget() {
+        
+        $output = "Not implemented";
+        
+        $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets').'/';
+        ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
+        
+        $className = 'Widget'.$this->content;
+        $filename = strtolower($className);
+        if( file_exists($path.'/'.$filename.'.class.php') ) {
+            require_once $path.'/'.$filename.'.class.php';
+        } else{
+            $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
+            if( file_exists($path.'/'.$filename.'.class.php') ) {
+                require_once $path.'/'.$filename.'.class.php';
+            }
+        }
+        try {
+            $class = new $className;
+        } catch(Exception $e) {
+            return "Widget {$this->content} not available";
+        }
+        
+        return $class->render();
+    }
 }

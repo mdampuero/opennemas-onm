@@ -137,7 +137,8 @@ div.current-hour, #widget_weather_top
 #logo-and-pages {
 		margin:10px 0 1px 0;
 		vertical-align:middle;
-		width:100%
+		width:100%;
+		position:relative;
 }
 		#logo-and-pages h1{
 				margin:0;
@@ -166,7 +167,9 @@ div.current-hour, #widget_weather_top
 						vertical-align:middle;
 						padding-bottom:10px;
 						margin-right:5px;
-						margin-bottom:-5px;
+						margin-bottom:-9px;
+						position:absolute;
+						bottom:0;
 				}
 				
 						#logo-and-pages div.info-pages ul.pages li{

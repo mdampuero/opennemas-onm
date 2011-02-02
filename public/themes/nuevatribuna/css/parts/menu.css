@@ -91,12 +91,14 @@ div#social-icons-submenu ul li img{vertical-align:middle;width:13px;}
 /***********************************************************
    Menu search form definition
 ************************************************************/
-#main-search-form { z-index:999; position:absolute; right:10px; top:3px }
+#main-search-form { z-index:999; position:absolute; right:10px; top:2px }
 #main-search-form *{ margin:0; }
-#main-search-form input{ height:21px;
+#main-search-form input{
+    height:21px;
     font-size:11px;
-    font-family:Arial; }
-#main-search-form input[type="text"]{ background:url(../../images/forms/form-search-input.png) top right no-repeat; border:none; width:124px; padding-left:20px !important; }
+    font-family:Arial;
+}
+#main-search-form input[type="text"]{ outline:none; background:url(../../images/forms/form-search-input.png) top right no-repeat; border:none; width:104px; padding:0 3px !important; }
 #main-search-form input[type="submit"]{
     background:url(../../images/forms/form-search-submit.png) top left no-repeat;
     width:54px;

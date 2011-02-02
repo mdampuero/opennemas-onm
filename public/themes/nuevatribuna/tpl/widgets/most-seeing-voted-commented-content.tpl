@@ -1,4 +1,4 @@
- {*
+{*
     OpenNeMas project
 
     @theme      Lucidity
