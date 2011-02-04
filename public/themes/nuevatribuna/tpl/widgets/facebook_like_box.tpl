@@ -1,3 +1,1 @@
-<script defer="defer" type="text/javascript">
-    document.write('<iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2Fnuevatribunaes%2F370028714939&amp;width=310&amp;colorscheme=light&amp;show_faces=true&amp;stream=false&amp;header=true&amp;height=290" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:310px; height:290px;"></iframe>');
-</script>
+<iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2Fnuevatribunaes%2F370028714939&amp;width=310&amp;colorscheme=light&amp;show_faces=true&amp;stream=false&amp;header=true&amp;height=290" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:310px; height:290px;"></iframe>

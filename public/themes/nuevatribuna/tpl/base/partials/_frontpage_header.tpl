@@ -11,8 +11,8 @@
 
        <div id="logo-image" class="span-16">
          {*if ($category_name eq 'home')*}
-             <h1><a href="{$smarty.const.BASE_URL}" class="big-text-logo" title="{$smarty.const.SITE_TITLE}">nuevatribuna.es</a></h1>
-             <img src="{$params.IMAGE_DIR}logos/nuevatribuna-phrase.png" alt="Información y análisis para una ciudadanía comprometida" />
+             <h1><a href="{$smarty.const.BASE_URL}" class="big-text-logo" title="{$smarty.const.SITE_TITLE}"><img src="{$params.IMAGE_DIR}logos/nuevatribuna-header.png" alt="nuevatribuna.es" /></a></h1>
+             <span class="colofon"><img src="{$params.IMAGE_DIR}logos/nuevatribuna-phrase.png" alt="Información y análisis para una ciudadanía comprometida" /></span>
          {*else*}
             {*<a href="{$smarty.const.BASE_URL}"><img class="transparent-logo" alt="{$smarty.const.SITE_TITLE}" src="{$params.IMAGE_DIR}logos/nuevatribuna-header.png" ></a>*}
          {*/if*}

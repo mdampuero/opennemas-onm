@@ -89,6 +89,7 @@ html[xmlns] .clearfix
 /*
     Weather and time information definition
 */
+div.current-hour { font-family:Verdana; font-size:1.03em}
 div.current-hour span.hour{ color:#980101; }
 div.current-hour span.day{ color:#2d2c2b; }
 
@@ -132,13 +133,14 @@ div.current-hour, #widget_weather_top
 		}
 		
 		#widget_weather_top  .max_temperature { background-color: #ffa91f; font-weight:bold; }
-		#widget_weather_top  .min_temperature { background-color: #ccc; font-weight:bold; }
+		#widget_weather_top  .min_temperature { background-color: #bdbdbd; font-weight:bold; }
 
 #logo-and-pages {
-		margin:10px 0 1px 0;
+		margin:5px 0 1px 0;
 		vertical-align:middle;
 		width:100%;
 		position:relative;
+		font-family:Verdana;
 }
 		#logo-and-pages h1{
 				margin:0;
@@ -161,26 +163,30 @@ div.current-hour, #widget_weather_top
 		#logo-and-pages div.logo-image{
 				float:left;
 		}
-				#logo-and-pages ul.pages {
-						display:inline;
-						margin:0;
-						vertical-align:middle;
-						padding-bottom:10px;
-						margin-right:5px;
-						margin-bottom:-9px;
+				#logo-and-pages .colofon { margin-left:3px;}
+				#logo-and-pages div.info-pages {
 						position:absolute;
-						bottom:0;
+						bottom:3px;
+						right:0px;
 				}
-				
-						#logo-and-pages div.info-pages ul.pages li{
-								display:inline;
-								list-style:none;
-								color:#2D2C2B;
+						#logo-and-pages div.info-pages > * {
+								float:left
 						}
-								#logo-and-pages div.info-pages ul.pages li a{
+						#logo-and-pages ul.pages {
+								margin:0;
+								vertical-align:middle;
+								margin:7px 5px 0 0;
+						}
+						
+								#logo-and-pages div.info-pages ul.pages li{
+										float:left;
+										list-style:none;
 										color:#2D2C2B;
-										margin:0 3px;
 								}
+										#logo-and-pages div.info-pages ul.pages li a{
+												color:#2D2C2B;
+												margin:0 3px;
+										}
 
 /***********************************************************
     Footer content definition

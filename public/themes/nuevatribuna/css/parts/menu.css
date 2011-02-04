@@ -40,13 +40,13 @@ div#submenu li {
 }
 div#submenu li a {
     display:block;
-    padding: 4px 6px;
+    padding: 5px 6px 3px 6px;
     text-align: center;
     font-size:1em;
     font-weight:bold;
     text-decoration:none;
     color:White;
-    font-family:Verdana, Arial
+    font-family:Arial;
 }
 div#submenu { position: absolute; top: 0px; left: 0; width:100%; height:auto; padding: 0; background: transparent; }
 div#submenu ul li { padding: 0 !important; margin: 0 !important; }

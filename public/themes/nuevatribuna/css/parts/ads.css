@@ -14,7 +14,7 @@
 }
 
 .ad { background:#e6e6e6 url(../../images/ads/put_your_ads_here.png) center center no-repeat; display:block; }
-.ad_vertical_marker { background:url(../../images/ads/ad_marker_vertical.png) 0px center no-repeat; padding-left:10px; display:block !important;}
+.ad_vertical_marker { background:url(../../images/ads/ad_marker_vertical.png) 1px center no-repeat; padding-left:10px; display:block !important;}
 .ad_horizontal_marker{ background:url(../../images/ads/ad_marker_horizontal.png) center 2px no-repeat; padding-top:13px; display:block !important; }
 
 .ad_horizontal_marker a { display: block }
@@ -27,16 +27,18 @@
 
 .ad_in_colum { display:block; margin-bottom:15px; padding:6px; padding-top:8px; /*Cause the background image*/ width:100% }
 
+.ad_with_border img { background:none repeat scroll 0 0 white; border:1px solid #CCCCCC; padding:3px; vertical-align:middle;}
+.ad_with_border { background-color:#ECECEC; }
+.ad_with_border > div { margin:2px 0; }
 
 /***********************************************************
 	Definitions for ads inside HEADER
 ************************************************************/
-div.ads_footer, div.ads_header { width: 100% }
-.ad_728{
+div.ads_footer, div.ads_header { width: 100%; }
+.ad_728 {
     width:728px;
     display:inline;
     float:left;
-    max-height:90px;
 }
 .ad_728 a,
 .ad_244 a,
