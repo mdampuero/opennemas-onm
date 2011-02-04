@@ -36,4 +36,4 @@ require_once ("index_sections.php");
 require_once ("index_advertisement.php");
                
 // Visualizar
-$tpl->display('search_result.tpl');
+$tpl->display('search/search.tpl');
