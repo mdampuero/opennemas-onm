@@ -15,17 +15,9 @@ $ccm = ContentCategoryManager::get_instance();
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-//Getting articles
-$cm = new ContentManager();
-
-if (isset($_GET['category_name'])) {
-    $category_name = $_GET['category_name'];
-}else{
-       $category_name = 'home';
-}
-
+// Get category and subcategory
+$category_name = (isset($_GET['category_name'])) ? $_GET['category_name'] : 'home';
 $actual_category = $category_name;
-
 if (isset ($_GET['subcategory_name'])) {
     $subcategory_name = $_GET['subcategory_name'];
     $actual_category = $_GET['subcategory_name'];

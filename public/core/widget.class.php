@@ -156,21 +156,23 @@ class Widget extends Content {
         // Clear  magic_quotes
         String_Utils::disabled_magic_quotes( $data );
         $data['category'] = 0;
+
+        
         
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
         
         parent::update($data);
         
-        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=?, `tpl_timestamp`=? WHERE `pk_widget`=?";
+        $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
         
-        $values = array($data['content'], $data['renderlet'], time(), $data['id']);
+        $values = array($data['content'], $data['renderlet'], $data['id']);
+        
         
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();            
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
             $GLOBALS['application']->conn->RollbackTrans(); 
             
             return false;
@@ -261,7 +263,8 @@ class Widget extends Content {
         //$resource = 'string:' . $this->content;
         
         Template::$registry['widget'][$this->pk_widget] = $this->content;
-        $resource = 'widget:' . $this->pk_widget;
+        
+        $resource = 'string:' . $this->content;
         
         $wgtTpl = new Template(TEMPLATE_USER);
         

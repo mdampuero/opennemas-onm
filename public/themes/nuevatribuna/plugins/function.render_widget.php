@@ -18,6 +18,10 @@ function smarty_function_render_widget($params, &$smarty) {
 	$widget = new Widget();
 	$widget->read($widgetID);
     
+	if($widget->available) {
+		$output = $widget->render();
+	}
+	
 	// Render its contents
-	return $widget->render();
+	return $output;
 }

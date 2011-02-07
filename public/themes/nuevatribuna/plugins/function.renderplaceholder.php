@@ -10,7 +10,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $placeholder  = $params['placeholder'];
     $cssclass = $params['cssclass'];
     $category_name = $smarty->get_template_vars('category_name');
-    $property = ($category_name=='home')? 'home_placeholder': 'placeholder';
+    $placeholder_property = ($category_name=='home')? 'home_placeholder': 'placeholder';
     $varname = (!isset($params['varname']))? 'item': $params['varname'];
     
     // Doing some checks if this method was called properly
@@ -21,15 +21,23 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $smarty->caching = 0;
     if(isset($items) && count($items>0)){
         foreach($items as $i => $item) {
-            
-            if( property_exists($item, $property) && $item->{$property} == $placeholder ) {
-                $smarty->clearAssign($varname);
-                $smarty->assign($varname, $items[$i]);
-                $smarty->clearAssign('cssclass');
-                $smarty->assign('cssclass', $cssclass);                
-                $outputHTML .= "\n". $smarty->fetch( $tpl, md5(serialize($item)) );
+
+            if( $item->{$placeholder_property } == $placeholder && ($item->available == 1) ) {
+                
+                if(method_exists($item, 'render')){
+                    $outputHTML .= $item->render($params);
+                    
+                } else {
+                    $smarty->clearAssign($varname);
+                    $smarty->assign($varname, $items[$i]);
+                    $smarty->clearAssign('cssclass');
+                    $smarty->assign('cssclass', $cssclass);                
+                    $outputHTML .= "\n". $smarty->fetch( $tpl, md5(serialize($item)) );
+                }
             }
+            
         }
+
     }
     
     $smarty->caching = $caching;    

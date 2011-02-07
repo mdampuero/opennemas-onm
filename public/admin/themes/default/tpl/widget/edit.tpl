@@ -4,11 +4,10 @@
 {/block}
 
 {block name="footer-js" append}
-<script language="Javascript" type="text/javascript" src="{$params.JS_DIR}/jquery/jquery.min.js"></script>
 <script language="Javascript" type="text/javascript">
 // FIXME: fix toolbar
 submitForm = function() {
-    $('formulario').submit();
+    document.getElementById('formulario').submit();
 };
 </script>
 {/block}

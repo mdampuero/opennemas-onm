@@ -129,7 +129,7 @@ div#pagina td, div#pagina th {
         {$widgets[wgt]->renderlet|upper}
     </td>
 
-	<td width="100" align="center">		
+	<td width="100" align="center">
         {if $widgets[wgt]->available == 1}
 			<a href="?id={$widgets[wgt]->pk_widget}&amp;action=changeavailable" class="switchable" title="{t}Published{/t}">
 				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
@@ -141,16 +141,21 @@ div#pagina td, div#pagina th {
 	
 	<td width="24">
 		<ul class="action-buttons clearfix">
-            {if $widgets[$wgt]->renderlet != 'intelligentwidget'}
+            
+            {if ($widgets[wgt]->renderlet != 'intelligentwidget')}
 		    <li>
                 <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
                 <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
             </li>
-            {/if}
+            
 		    <li>
                 <a href="widget.php?action=delete&id={$widgets[wgt]->pk_widget}" onclick="confirmar()" title="{t}Delete{/t}">
                 <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
             </li>
+            {else}
+            <li></li>
+            {/if}
+            
 		</ul>
 	</td>
 </tr>

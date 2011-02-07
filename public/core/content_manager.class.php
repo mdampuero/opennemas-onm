@@ -125,7 +125,120 @@ class ContentManager
     
     
     /**
+    * Fetches all the contents (articles, widgets, etc) for one specific category
+    * with its placeholder and position
+    *
+    * This is used for HomePages, fetches all the contents assigned for it and allows
+    * to render an entire homepage
+    *
+    * @param type $category_id, the id of the category we want to get contents from
+    * @return mixed, array of contents
+    */
+    public function getContentsForHomepageOfCategory($categoryID) {
+        
+        // Initialization of variables
+        $contents = array();
+        
+        $sql = 'SELECT * FROM content_positions '
+              .'WHERE `fk_category`='.$categoryID.' '
+              .'ORDER BY position ASC ';
+              
+        // Fetch the id, placeholder, position, and content_type in this category's frontpage
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        
+        if($rs !== false) {
+            
+            // iterate over all found contents and initialize them
+            while(!$rs->EOF) {
+                
+                $content = new $rs->fields['content_type']($rs->fields['pk_fk_content']);
+                // add all the additional properties related with positions and params
+                
+                $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
+                $content->load(
+                                array(
+                                      $placeholder => $rs->fields['placeholder'],
+                                      'position'    => $rs->fields['position'],
+                                      'params'      => json_decode($rs->fields['params']),
+                                      )
+                               );
+                $contents[] = $content; 
+                
+                $rs->MoveNext();
+            }
+        }
+        
+        // Return all the objects of contents initialized
+        return $contents;
+        
+    }
+    
+    
+    /**
+    * Sort one array of object by one of the object's property
+    *
+    * @param mixed $array, the array of objects
+    * @param mixed $property, the property to sort with
+    * @return mixed, the sorted $array
+    */
+    static public function sortArrayofObjectByProperty( $array, $property )
+    {
+        $cur = 1;
+        $stack[1]['l'] = 0;
+        $stack[1]['r'] = count($array)-1;
+        
+        do
+        {
+            $l = $stack[$cur]['l'];
+            $r = $stack[$cur]['r'];
+            $cur--;
+            
+            do
+            {
+                $i = $l;
+                $j = $r;
+                $tmp = $array[(int)( ($l+$r)/2 )];
+                
+                // split the array in to parts
+                // first: objects with "smaller" property $property
+                // second: objects with "bigger" property $property
+                do
+                {
+                    while( $array[$i]->{$property} < $tmp->{$property} ) $i++;
+                    while( $tmp->{$property} < $array[$j]->{$property} ) $j--;
+
+                    // Swap elements of two parts if necesary
+                    if( $i <= $j)
+                    {
+                        $w = $array[$i];
+                        $array[$i] = $array[$j];
+                        $array[$j] = $w;
+                       
+                        $i++;
+                        $j--;
+                    }
+                
+                } while ( $i <= $j );
+                
+                if( $i < $r ) {
+                    $cur++;
+                    $stack[$cur]['l'] = $i;
+                    $stack[$cur]['r'] = $r;
+                }
+                $r = $j;
+            
+            } while ( $l < $r );
+
+        } while ( $cur != 0 );
+        
+        return $array;
+
+    }
+    
+    
+    /**
      * This function returns an array of objects $content_type of the most viewed in the last few days indicated.
+     * 
      * @param string $content_type type of content
      * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
      * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.

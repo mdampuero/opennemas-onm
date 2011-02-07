@@ -130,9 +130,21 @@ if(($tpl->caching == 0)
         $articles_home = $cm->getInTime($articles_home);
 
         $actual_category = 'home';
-        $actual_category_id= 0;
-
-    } else {
+        $actual_category_id = 0;
+        
+        /// Adding Widgets {{{
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
+        
+        foreach($contentsInHomepage as $content) {
+            $articles_home[] = $content;
+        }
+        
+        $articles_home = $cm->sortArrayofObjectByProperty($articles_home, 'position');
+        // }}}
+        
+    }
+    else
+    {
 
         if($cache_page >= 1) {
 
@@ -147,6 +159,16 @@ if(($tpl->caching == 0)
             // Filter by scheduled {{{
             $articles_home = $cm->getInTime($articles_home);
             // }}}
+            
+            /// Adding Widgets {{{
+            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
+        
+            foreach($contentsInHomepage as $content) {
+                $articles_home[] = $content;
+            }
+            
+            $articles_home = $cm->sortArrayofObjectByProperty($articles_home, 'position');
+            // }}}
 
             $total_articles = $cm->cache->count('Article', 'contents.available = 1 AND (contents.content_status = 0 OR (contents.content_status = 1 AND contents.frontpage=0)) AND contents.fk_content_type=1 ', $actual_category_id);
 
@@ -158,6 +180,16 @@ if(($tpl->caching == 0)
 
             $total_articles = $cm->cache->count('Article', 'contents.available = 1 and (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) and contents.fk_content_type=1 ',$actual_category_id);
             $items_page = 20;
+            
+            /// Adding Widgets {{{
+            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
+        
+            foreach($contentsInHomepage as $content) {
+                $articles_home[] = $content;
+            }
+            
+            $articles_home = $cm->sortArrayofObjectByProperty($articles_home, 'position');
+            // }}}
         }
 
         if($total_articles > 400) {
@@ -267,6 +299,8 @@ if(($tpl->caching == 0)
     //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
     //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
+    
+     
 
 
     /************************************ END COLUMN1 **************************************************/
