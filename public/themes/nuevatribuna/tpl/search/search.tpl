@@ -10,23 +10,14 @@
 <meta property="og:image" content="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" />
 {/block}
 
-{block name='header-css'}
+{block name='header-css' append}
 {$smarty.block.parent}
 <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="{$params.CSS_DIR}parts/utilities.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="{$params.CSS_DIR}video-js.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="{$params.JS_DIR}/facebox/facebox.css" media="screen" type="text/css"/>
-{/block}
-
-{block name='header-js'}
-{$smarty.block.parent}
 {/block}
 
 {block name="footer-js"}
 {$smarty.block.parent}
-<script type="text/javascript" src="{$params.JS_DIR}facebox/facebox.js"></script>
-<script type="text/javascript" src="{$params.JS_DIR}videojs.js"></script>
 <script charset="utf-8" type="text/javascript">
     $(function(){
       VideoJS.setup();
