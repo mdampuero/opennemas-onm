@@ -22,13 +22,13 @@ function smarty_function_is_clone($params, &$smarty)
         $smarty->_trigger_fatal_error('[plugin] is_clone needs a "item" param');
         return;
     }
-    
+
     $item  = $params['item'];
-    
-    if($item->isClone()) {
+
+    if( method_exists($item,'isClone') && $item->isClone()) {
         return '<img src="' . $smarty->_tpl_vars['params']['IMAGE_DIR'] . 'sheep.gif" border="0" align="absmiddle" ' .
                'title="Artículo clon" alt="Artículo clon"/>';
     }
-    
+
     return '';
 }

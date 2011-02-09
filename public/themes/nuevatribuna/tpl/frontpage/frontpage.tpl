@@ -20,12 +20,12 @@
     </div>
     <div class="wrapper clearfix">
         <div class="container container_with_border">
-            
+
             <div id="header">
                {include file="base/partials/_frontpage_header.tpl"}
                {include file="base/partials/_frontpage_menu.tpl"}
             </div><!-- #header -->
-            
+
             <div id="main_content" class="wrapper_content_inside_container span-24">
 
                 <div class="span-24">
@@ -52,11 +52,11 @@
                         </div>
                     </div><!--third-column-->
                 </div><!-- .span-24 -->
-                
+
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols.tpl"}
                 </div>
-                
+
                 <div class="span-24">
                     <div class="layout-column span-9 first-column">
                         <div>
@@ -69,11 +69,11 @@
                         </div>
                     </div> <!--second-column-->
                     <div class="layout-column span-8 last third-column">
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_3"}
+                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_3"}
                     </div><!--third-column-->
                 </div>
-                
-                
+
+
                 {if $category_name eq 'home'}
                     {include file="internal_widgets/frontpage_headlines_all_categories.tpl"}
                 {/if}

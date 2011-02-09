@@ -1,9 +1,12 @@
 {extends file="base/admin.tpl"}
+{block name="header-css" append}
+<link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/utilities.css" />
+{/block}
 
 {block name="header-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
-       
+
     {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
     {/if}
@@ -51,11 +54,7 @@
             </tr>
         </table>
         <div id="pagina">
-            {* NOTICIA DESTACADA *******
 
-                       {include file="article_destacada.tpl"}
-
-          *}
             <table class="adminlist">
                  <tr valign="top">
                     <td colspan="3">
@@ -78,6 +77,26 @@
                 </tr>
             </table>
 
+            <div id="contents-provider">
+                <ul id="tabs">
+                    <li><a href="#available-widgets">Widgets</a></li>
+                    {if $category neq 'home'}
+                    <li><a href="#other-articles">Otros art&iacute;culos</a></li>
+                    {/if}
+                </ul>
+                <div id="available-widgets" class="panel" style="width:100%">
+                    {include file="article/widgets_list_frontpage_admin.tpl"}
+                </div>
+
+                {if $category neq 'home'}
+                <div id="other-articles" class="panel" style="width:100%">
+                    {include file="article_others_articles.tpl"}
+                </div>
+                {else}
+                    <div id="art" style="display:none;"></div>
+                {/if}
+            </div>
+
             <div id="no_en_home" style="margin:10px 0">
                 <table class="adminheading">
                     <tr>
@@ -94,50 +113,8 @@
                 </table>
             </div>
 
-            {* CONTENEDOR INFERIOR  otros articulos  o en HOME articulos sugeridos u otras portadas ******* *}
-            {if $category neq 'home'}
-                <table class="adminheading">
-                    <tr>
-                        <td colspan="2"align="center"><b>Otros art&iacute;culos</b> - <em>(estos art&iacute;culos <b>NO</b> apareceran en la portada. )</em></td>
-                    </tr>
-                </table>
-                 <div id="frontpages" class="seccion" style="width:100%;clear:both;">
-                     {include file="article_others_articles.tpl"}
-                 </div>
-            {else}
-                    <div id="art" style="display:none;"> </div>
-                {*
-                <div id="down_menu">
-                    {* EN HOME MENU PARA VER EL RESTO D PORTADAS *************** *
-                    <ul class="tabs">
-                    <li>
-                        <a id="link_suggested" {if $other_category=='suggested'} style="cursor:pointer;color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>SUGERIDAS </a>
-                        </li>
-                    </ul>
-                     <script type="text/javascript">
-                    // <![CDATA[
-                        {literal}
-                             Event.observe($('link_suggested'), 'click', function(event) {
-                                    get_suggested_articles();
-                                    change_style_link('link_suggested');
-                             });
-                        {/literal}
-                    // ]]>
-                    </script>
-                     <div id="menu_front_category" style="width:100%;margin-bottom:20px;">
-                        {include file="menu_categorys.tpl" home=""}
-                    </div>
-                </div> *}
-            {/if}
 
 
-            <table style="width:100%">
-                    <tr align="right">
-                        <td>
-                            {include file="botonera_down.tpl"}
-                        </td>
-                    </tr>
-            </table>
 
         </div> {* div id=pagina *}
         <script type="text/javascript">
@@ -171,6 +148,10 @@
             Draggables.observers.each(function(item){
                 item.onEnd= avisoGuardarPosiciones;
             });
+
+            // Activate tabs in contents provider
+            $fabtabs = new Fabtabs('tabs');
+
         // ]]>
         </script>
     </div> {* div id=$category *}

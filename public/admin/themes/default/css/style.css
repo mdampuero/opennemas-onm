@@ -2,9 +2,11 @@
 	clear: both;
 	display: none;
 	border: 1px solid #CCC;
-	padding: 1em;
-	width: 800px;
+	width: 100%;
 	margin-bottom: 10px;
+}
+.panel > * {
+	margin: 1em;
 }
 
 
@@ -43,16 +45,17 @@
 	margin-right: 6px;
 	border: 1px solid #ccc;
 	border-bottom:none;
-	
+	color:#aaa;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
 	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
 	text-shadow:0 1px 0 #FFFFFF;
-	text-decoration:underline !important; 
+	text-decoration:none !important;
 }
 
 #tabs a.active-tab {
 	background-color: White !important;
+	color:Black !important
 	/*
 	border-top: 2px solid #999;
 	padding-top: 3px;
@@ -248,4 +251,25 @@ div.utilities-conf{
     border:1px solid #F5F5F5;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
+}
+
+
+table.aa{
+	background:#eFeFeF !important;
+	border:1px solid #ccc;
+}
+table.aa tr {
+	border:none  !important;
+	background:none  !important;
+	height:19px !important;
+
+}
+table.aa tr td {
+	border:none !important;
+	background:none !important;
+	font-variant:small-caps;
+	color:Gray;
+	font-weight:bold;
+	text-transform:uppercase;
+	text-align:center;
 }

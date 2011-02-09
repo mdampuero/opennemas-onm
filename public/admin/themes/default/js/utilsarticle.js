@@ -5,7 +5,7 @@
 getHoles = function(){
     var huecos= $('columns').select('div');
 
-   
+
     return huecos;
 }
 
@@ -15,13 +15,13 @@ alertsDiv = function(){
     var Nodes=$('hole3').select('table');
     if(Nodes.length<1){$('warnings3').update('Debe contener noticias debajo de publicidad 2');  $('warnings-validation').update('Recuerde guardar posiciones');}
     else{$('warnings3').update(' ');}
-    
+
 }
 
- 
-make_sortable_divs_portadas = function() {    
+
+make_sortable_divs_portadas = function() {
     var huecos = getHoles();
-     var _huecos = ['div_no_home','art'];
+    var _huecos = ['div_no_home','art'];
     for(var i=0; i<huecos.length; i++) {
         _huecos.push(huecos[i].id);
     }
@@ -46,25 +46,27 @@ savePositions = function(category) {
     huecos.push($('div_no_home'));
     huecos.push($('art'));
 
-
-    var places = {};
+	var places = {};
     var huecos_id = new Array();
 
     for(var i=0; i<huecos.length; i++) {
         huecos_id.push(huecos[i].id);
     }
- 
+
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
                 $(div_id).select('table').each(function(item) {
                         if(item.getAttribute('value')) {
-                                places[ item.getAttribute('value') ] = huecos_id[i];
-                                item.setAttribute('name',"selected_fld[]");
+							if(item.getAttribute('data')){ $content_type = item.getAttribute('data') } else {
+								$content_type = 'Article';
+							}
+							places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type};
+							item.setAttribute('name',"selected_fld[]");
                         }
                 });
         }
     });
-    
+
 
 
         // Form
@@ -74,7 +76,7 @@ savePositions = function(category) {
 	frm.id.value =  Object.toJSON(places);
         frm.category.value = category;
 
-  
+
     new Ajax.Request('article_save_positions.php',{
         method: 'post',
         parameters: frm.serialize(),
@@ -82,7 +84,7 @@ savePositions = function(category) {
         onLoading: function() {
 
            $('warnings-validation').update('Guardando posiciones...');
-            // showMsg({'loading':['Guardando posiciones...']},'growl');
+           showMsg({'loading':['Guardando posiciones...']},'growl');
         },
         onComplete: function(transport) {
            $('warnings-validation').update( transport.responseText );
@@ -93,15 +95,15 @@ savePositions = function(category) {
                         posicionesIniciales = $$('input[type=checkbox]');
                         posicionesInicialesWarning = false;
                 }
-                //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');      
+                //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
         },
 
         onFailure: function() {
                 $('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
                 new Effect.Highlight( $('warnings-validation') );
         }
-            
-           
+
+
     })
         /*
    //Cambiar iconos
@@ -125,9 +127,9 @@ savePositions = function(category) {
             for (i = 0; i < items.length; i++) {
                     items[i].setAttribute('src',"/admin/themes/default/images/gohome.png");
             }
-        }  
+        }
     } */
- 
+
 }
 
 
@@ -139,7 +141,7 @@ changedTables = function(category) {
             Nodes[i].innerHTML="";
                 Nodes[i].setAttribute('style','width:1px;');
         }
-        if(Nodes[i].getAttribute('class') == 'no_width'){        
+        if(Nodes[i].getAttribute('class') == 'no_width'){
            Nodes[i].setAttribute('style','width:30px;');
         }
     }
@@ -163,13 +165,13 @@ changedTables = function(category) {
             Nodes[i].setAttribute('style','width:1px;');
         }
     }
-     
+
     Nodes=$('div_no_home').select('a.no_home');
     for (i = 0; i < Nodes.length; i++) {
             Nodes[i].setAttribute('class',"go_home");
     }
 }
-  
+
 
 /**
  * Preview
@@ -206,9 +208,7 @@ function previewFrontpage(category) {
         }
     });
 
-
-
-        // Form
+    // Form
 	var frm = $('formulario');
       //  console.log(places);
 	// Send articles positions into 'id' text field
@@ -242,7 +242,7 @@ function previewFrontpage(category) {
 /**
  * Eliminar desde botonera las cachés
  */
-function clearcache(category) {	
+function clearcache(category) {
 	new Ajax.Request('refresh_caches.php?category=' + encodeURIComponent(category), {
 		onSuccess: function(transport) {
 			$('warnings-validation').update(transport.responseText);
@@ -254,130 +254,130 @@ function clearcache(category) {
 ///////////////////////////////////////////////////////////////////////////
 //REVISAR: SE usa???
 function isflash(name) {
-//ojo ruta: 
+//ojo ruta:
 	var posic=name.lastIndexOf('.');
-	var extension= name.substring(posic);	
-	
+	var extension= name.substring(posic);
+
 	if (extension =='.swf')
 	   return true;
 	else
-	   return false;	
+	   return false;
 }
 
 //Checkea el nombre de una imag expresion tipo: 20080512Cervantes.jpg
 
 function isNameOk(name) {
- //ojo con la ruta: 
+ //ojo con la ruta:
 	var posic=name.lastIndexOf('/');
 	posic=posic+1; //Para que coja la barra /
-	var nombre= name.substring(posic);	
+	var nombre= name.substring(posic);
 	var filter=/^[0-9A-Za-z_]+\.[A-Za-z][A-Za-z][A-Za-z]$/;
-	
+
 	if (filter.test(nombre))
 	   return true;
 	else
-	   return false;	
+	   return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //REVISAR: SE usa???
 function show_iframe(){
 
-	$('overlay').setAttribute('style','visibility:visible;'); 
-	$('black').setAttribute('style','visibility:visible;'); 
+	$('overlay').setAttribute('style','visibility:visible;');
+	$('black').setAttribute('style','visibility:visible;');
 	$('iframecont').setAttribute('style','visibility:visible;');
 }
 
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
 
 //Eliminar y recuperar imagen en articulos.
- function recuperar_eliminar(field){  
-	  var nombre='input_'+field; 
+ function recuperar_eliminar(field){
+	  var nombre='input_'+field;
 	  if (document.getElementById( nombre ).value ==''){
 	  	 recuperarOpacity(field);
 	  }else{
 	  	 vaciarImg(field);
 	  }
  }
-  
+
   //Vaciar foto y meter img_default.
- function vaciarImg(field){    
- 		var nombre='remove_'+field;   //Icono papelera-recuperar 		
-		document.getElementById( nombre ).src='themes/default/images/trash_no.png';	
+ function vaciarImg(field){
+ 		var nombre='remove_'+field;   //Icono papelera-recuperar
+		document.getElementById( nombre ).src='themes/default/images/trash_no.png';
 	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
 	    document.getElementById( nombre ).setAttribute('title','Recuperar');
-	
-		if(field=='img1'){				
-				document.getElementById( 'input_img1' ).value ='';		
+
+		if(field=='img1'){
+				document.getElementById( 'input_img1' ).value ='';
 				document.getElementById( 'input_video' ).value ='';
 				document.getElementById('img_portada').setAttribute('style','opacity:0.4;');
-				document.getElementById( nombre ).setAttribute('style','opacity:1;');					
-				document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');		
+				document.getElementById( nombre ).setAttribute('style','opacity:1;');
+				document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
 				document.getElementById('img1_footer').setAttribute('disabled','true');
 		}
-		
-		if(field=='img2'){					
+
+		if(field=='img2'){
 				document.getElementById( 'input_img2' ).value ='';
-				document.getElementById('img_interior').setAttribute('style','opacity:0.4;');			
+				document.getElementById('img_interior').setAttribute('style','opacity:0.4;');
 				document.getElementById(nombre).setAttribute('style','opacity:1;');
-				document.getElementById('informa2').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');					
+				document.getElementById('informa2').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
 				document.getElementById('img2_footer').setAttribute('disabled','true');
 		}
-		//Publicidad 
-		if(field=='img'){		   
-			document.getElementById( 'img' ).value ='';				
-			document.getElementById('preview_img').setAttribute('style','opacity:0.4;');		
+		//Publicidad
+		if(field=='img'){
+			document.getElementById( 'img' ).value ='';
+			document.getElementById('preview_img').setAttribute('style','opacity:0.4;');
 			document.getElementById('informa2').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-			document.getElementById('noinfor2').setAttribute('style','opacity:0.4;');				 
+			document.getElementById('noinfor2').setAttribute('style','opacity:0.4;');
 		}
-		
-		if(field=='video2'){			
-			document.getElementById( 'input_video2' ).value ='';				
-			document.getElementById('video_interior').setAttribute('style','opacity:0.4;');		
+
+		if(field=='video2'){
+			document.getElementById( 'input_video2' ).value ='';
+			document.getElementById('video_interior').setAttribute('style','opacity:0.4;');
 			document.getElementById(nombre).setAttribute('style','opacity:1;');
 			document.getElementById('informa3').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-			document.getElementById('video2_footer').setAttribute('style','opacity:0.4;');				 
+			document.getElementById('video2_footer').setAttribute('style','opacity:0.4;');
 		}
 
   }
-  
- function recuperarOpacity(field){  
-	    var nombre='remove_'+field;   
-		document.getElementById( nombre ).src='themes/default/images/remove_image.png';	
+
+ function recuperarOpacity(field){
+	    var nombre='remove_'+field;
+		document.getElementById( nombre ).src='themes/default/images/remove_image.png';
 	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
 	    document.getElementById( nombre ).setAttribute('title','Eliminar');
-		if(field=='img1'){				
-				document.getElementById( 'input_img1' ).value =document.getElementById( 'change1' ).name;			
+		if(field=='img1'){
+				document.getElementById( 'input_img1' ).value =document.getElementById( 'change1' ).name;
 				document.getElementById( 'input_video' ).value =document.getElementById( 'change1' ).name;
-				document.getElementById('img_portada').setAttribute('style','opacity:1;');			
+				document.getElementById('img_portada').setAttribute('style','opacity:1;');
 				document.getElementById('informa').setAttribute('style','opacity:1;overflow:auto;width:260px;');
 				document.getElementById('img1_footer').removeAttribute('disabled');
 	 	}
-		
-		if(field=='img2'){			   
+
+		if(field=='img2'){
 				document.getElementById( 'input_img2' ).value = document.getElementById( 'change2' ).name;
 				document.getElementById('img_interior').setAttribute('style','opacity:1;');
-				document.getElementById('informa2').setAttribute('style','opacity:1;overflow:auto;width:260px;');			
+				document.getElementById('informa2').setAttribute('style','opacity:1;overflow:auto;width:260px;');
 				document.getElementById('img2_footer').removeAttribute('disabled');
 		}
-	
-		if(field=='video2'){		  
-			
-			document.getElementById('video_interior').setAttribute('style','opacity:1;');		
+
+		if(field=='video2'){
+
+			document.getElementById('video_interior').setAttribute('style','opacity:1;');
 			document.getElementById(nombre).setAttribute('style','opacity:1;');
 			document.getElementById('informa3').setAttribute('style','opacity:1;overflow:auto;width:260px;');
-			document.getElementById('video2_footer').setAttribute('style','opacity:1;');		
-			document.getElementById( 'input_video2' ).value =document.getElementById( 'change3' ).name;				
+			document.getElementById('video2_footer').setAttribute('style','opacity:1;');
+			document.getElementById( 'input_video2' ).value =document.getElementById( 'change3' ).name;
 		}
  }
- 
+
 // Paginacion galeria videos.
  function  get_videos(page)
  {
  	   new Ajax.Updater('videos', "article_change_videos.php?page="+page,
 		{
- 		   	evalScripts: false, 
-	   		onComplete: function() {		   				   			
+ 		   	evalScripts: false,
+	   		onComplete: function() {
 	   			var photos = $('videos').select('img');
 	   			for(var i=0; i<photos.length; i++) {
 	   				//console.log("'" + photos[i].id + "'");
@@ -387,7 +387,7 @@ function show_iframe(){
 	   				//	console.debug( e );
 	   				}
 	   			}
- 			} 		   
+ 			}
 	   	} );
  }
 
@@ -430,7 +430,7 @@ function  get_others_articles(category,page)
                    dropOnEmpty: true,
                    containment:['des','even','odd','hole1','hole2','hole3','hole4', 'art']
                 });
-            
+
         }
     } );
 }
@@ -457,7 +457,7 @@ function  get_frontpage_articles(category)
 {
     new Ajax.Updater('frontpages', "article.php?action=get_frontpage_articles&category="+category,
     {
-        evalScripts: true,      
+        evalScripts: true,
         onLoaded : $('frontpages').update('<h2> Cargando ...</h2>'),
         onComplete: function() {
             make_sortable_divs_portadas('home');
@@ -486,37 +486,37 @@ function  get_frontpage_articles(category)
 //////////////////////////// CONTENIDOS RELACIONADOS //////////////////////////////////////////////////////////
 
 // make sortable las listas para poder ordenarlas
-function mover(){ 
+function mover(){
     Sortable.create('thelist2',{constraint: 'false',scroll:'scroll-container2'});
     Sortable.create('thelist2int',{constraint: 'false',scroll:'scroll-container2int'});
 
 }
- 
+
 // Recoge los li de las listas ver portada, ver interior y los mete en input de relacionados portada o interior
-function recolectar() { 
+function recolectar() {
 		//ordenArti (listado portada)
-		  var resul2 = $('ordenPortada'); 
-		  Nodes= $$('#thelist2 li'); 
-		 // Nodes = document.getElementById('thelist2').getElementsByTagName("li");      		
-		  for (var i=0;i < Nodes.length;i++) {  		
-	  			id= Nodes[i].getAttribute('id'); 
-	  			// mirar si vaciodocument.getElementById('thelist2').getElementsByTagName("li");      		
-	  			if(id){					  			  					  					
-	  				resul2.value = resul2.value + id + ", ";	  					 				  					  			
+		  var resul2 = $('ordenPortada');
+		  Nodes= $$('#thelist2 li');
+		 // Nodes = document.getElementById('thelist2').getElementsByTagName("li");
+		  for (var i=0;i < Nodes.length;i++) {
+	  			id= Nodes[i].getAttribute('id');
+	  			// mirar si vaciodocument.getElementById('thelist2').getElementsByTagName("li");
+	  			if(id){
+	  				resul2.value = resul2.value + id + ", ";
 	  			}
 		 }
-			 
+
 		//ordenArtiInt   (listado interior)
 		  var resul2 = $('ordenInterior');
 		 // Nodes = document.getElementById('thelist2int').getElementsByTagName("li");
-		  Nodes= $$('#thelist2int li'); 
-		  for (var i=0;i < Nodes.length;i++) {  		
-	  			id= Nodes[i].getAttribute('id'); 	  			
-	  			if(id){				  			    
-					   resul2.value = resul2.value + id + ", ";								
+		  Nodes= $$('#thelist2int li');
+		  for (var i=0;i < Nodes.length;i++) {
+	  			id= Nodes[i].getAttribute('id');
+	  			if(id){
+					   resul2.value = resul2.value + id + ", ";
 				 }
 		 }
-			 	   
+
 }
 
 //Contenidos relacionados check - verportada verinterior - generar o borrar en lista.
@@ -525,69 +525,69 @@ function probarArtic(eleto, div, lista){
 	if(lista=="thelist2"){
 		var clase='portada';
 	}else{ var clase='interior';}
-	
+
 	 //alert(clase + lista + div);
 	// alert(eleto.id + eleto.checked + eleto.value);
-	  var ul = document.getElementById(lista);	 
-	  Nodes = document.getElementById(lista).getElementsByTagName("li");	
-	
-	  if(eleto.checked==false){		 		
-		  for (var i=0;i < Nodes.length;i++) {  	
-			  if(Nodes[i].getAttribute('id')==eleto.id) {		  			  
-	  			   ul.removeChild(Nodes[i]);  				  			 
+	  var ul = document.getElementById(lista);
+	  Nodes = document.getElementById(lista).getElementsByTagName("li");
+
+	  if(eleto.checked==false){
+		  for (var i=0;i < Nodes.length;i++) {
+			  if(Nodes[i].getAttribute('id')==eleto.id) {
+	  			   ul.removeChild(Nodes[i]);
 	  			}
-			 
+
 		  }
 		//  Checks = document.getElementById(div).getElementsByTagName("input");
 		  Checks = $$(div+'#'+clase);
-		  for (var i=0;i < Checks.length;i++) {  			 
+		  for (var i=0;i < Checks.length;i++) {
 			  if(Checks[i].getAttribute('id') == eleto.id){
 				  Checks[i].checked=false; //Si es sugerida, desclicamos en su categoria o viceversa
-				  
+
 			  }
-			 
+
 		  }
-	  }else{		
-		    if(eleto.checked==true){	
+	  }else{
+		    if(eleto.checked==true){
 		  		var li = document.createElement('LI');
-				li.setAttribute('id', eleto.id);					
-			    li.setAttribute('style', 'cursor: move; list-style-type: none;');			 
+				li.setAttribute('id', eleto.id);
+			    li.setAttribute('style', 'cursor: move; list-style-type: none;');
 			    var datos ="<td width='120'> " + eleto.getAttribute('tipo') + "</td> <td width='120'> " + eleto.getAttribute('seccion') + "</td> ";
 			    var trash= " <td width='120'> <a href='#' onClick=\"javascript:del_relation('" + eleto.id + "','" + lista + "');\" title='Quitar relacion'> <img src='/admin/themes/default/images/trash.png' border='0' /> </a></td>";
-				li.innerHTML =   " <table width='99%'> <tr> <td>" + eleto.value +"</td>" + datos + trash +" </tr></table> ";				
-				ul.appendChild(li);			
+				li.innerHTML =   " <table width='99%'> <tr> <td>" + eleto.value +"</td>" + datos + trash +" </tr></table> ";
+				ul.appendChild(li);
 				 // Por si esta en sugerida
 				  Checks = $$(div+'#'+clase);
 				//Checks = document.getElementById(div).getElementsByTagName("input");
-				  for (var i=0;i < Checks.length;i++) {  			 
+				  for (var i=0;i < Checks.length;i++) {
 					  if(Checks[i].getAttribute('id') == eleto.id){
 						  Checks[i].checked=true; //Si es sugerida, clicamos en su categoria o viceversa
-						  
+
 					  }
-					 
+
 				  }
-		  	}		
-	}	 
+		  	}
+	}
 }
-	  
+
 //Palelera elimina elemento en lista de organizar relacionados. (habra que quitar el checked de los listados.)
 function del_relation(eleto, lista){
 	if(lista=="thelist2"){
 		var clase='portada';
-	}else{ 
+	}else{
 		var clase='interior';
-	}	
-	var ul = document.getElementById(lista);	 
-	Nodes = document.getElementById(lista).getElementsByTagName("li");		 		
-	for (var i=0;i < Nodes.length;i++) {  	
-		if(Nodes[i].getAttribute('id')==eleto) {		  			  
-  			ul.removeChild(Nodes[i]);  				  			 
-  		}			 
-	}	  
+	}
+	var ul = document.getElementById(lista);
+	Nodes = document.getElementById(lista).getElementsByTagName("li");
+	for (var i=0;i < Nodes.length;i++) {
+		if(Nodes[i].getAttribute('id')==eleto) {
+  			ul.removeChild(Nodes[i]);
+  		}
+	}
 	var Checks = $$('input.'+clase);
-	for (var i=0;i < Checks.length;i++) {  
-		if(Checks[i].getAttribute('id') == eleto){	
-			 Checks[i].checked=false; 
+	for (var i=0;i < Checks.length;i++) {
+		if(Checks[i].getAttribute('id') == eleto){
+			 Checks[i].checked=false;
 		}
 	}
 }
@@ -638,7 +638,7 @@ function  get_div_contents(id,content,category,page)
 {
     var div = content+'_div';
     var action = 'get_'+content;
-	  
+
     new Ajax.Updater(div, "article.php?action="+action+"&category="+category+"&id="+id+"&page="+page,
     {
         onComplete: function() {
@@ -676,12 +676,12 @@ function  get_div_contents(id,content,category,page)
 function  divs_hide(mydiv)
 {
 	var divs=$$('div.div_lists');
-	for (var i=0;i < divs.length;i++) {  	
+	for (var i=0;i < divs.length;i++) {
 		if(divs[i].id!=mydiv){
-			Effect.Fade(divs[i]); 
+			Effect.Fade(divs[i]);
 		}
 	 }
-	 Effect.Appear(mydiv); 
+	 Effect.Appear(mydiv);
 	 return false;
 }
 
@@ -755,4 +755,3 @@ function delete_article(id,category,page){
 
 
  }
-

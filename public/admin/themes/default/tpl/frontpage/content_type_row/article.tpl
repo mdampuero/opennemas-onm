@@ -1,10 +1,10 @@
-<table id='tabla{$aux}' name='tabla{$aux}' value="{$item->id}" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
+<table id='tabla{$aux}' name='tabla{$aux}' value="{$item->id}" data="{$item->content_type}" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
     <tr class="row1{schedule_class item=$item}" style="cursor:pointer;">
         <td style="text-align: left; width:10px;">
             <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$item->id}"  style="cursor:pointer;" />
         </td>
          <td style="text-align: left;"  onmouseout="UnTip()" onmouseover="Tip('<b>Creado:</b>{$item->created}<br /><b>Vistos:</b>{$item->views}<br /><b>Votos:</b>{$item->rating}<br /><b>Comentarios:</b>{$item->comment}<br /><b>Publisher:</b>{$item->publisher}<br /><b>Last Editor:</b>{$item->editor}<br />{schedule_info item=$item}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
-            
+
             {is_clone item=$item}{$item->title|clearslash}
         </td>
         {if $category neq 'home'}
@@ -35,7 +35,7 @@
                 <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
                    <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" /></a>
         </td>
-        
+
         {if $category neq 'home'}
             <td  align="center"  class="un_width" style="width:20px;">
             {if $item->frontpage == 1}
@@ -54,6 +54,6 @@
                 <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
             </td>
         {/if}
-       
+
     </tr>
 </table>

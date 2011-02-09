@@ -1,9 +1,9 @@
 <?php
 /**
  * widget.class.php
- * 
+ *
  * 28/07/2009 15:57:57
- * vifito  <vifito@openhost.es> 
+ * vifito  <vifito@openhost.es>
  */
 
 /* *****************************************************************************
@@ -13,7 +13,7 @@ CREATE TABLE `widgets` (
 `renderlet` VARCHAR( 20 ) NOT NULL DEFAULT 'html',
 `tpl_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 PRIMARY KEY ( `pk_widget` )
-) ENGINE = MYISAM 
+) ENGINE = MYISAM
 
 INSERT INTO `content_types` (
 `pk_content_type` ,
@@ -23,7 +23,7 @@ INSERT INTO `content_types` (
 )
 VALUES (
 '12', 'widget', 'widget', NULL
-);   
+);
 *****************************************************************************  */
 
 /**
@@ -34,48 +34,48 @@ class Widget extends Content {
      * @var int Identifier of class
      */
     public $pk_widget = null;
-    
+
     public $content = null;
     public $renderlet = null;
     public $tpl_timestamp = null;
-    
+
     /**
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
-    
+
     /**
      * constructor
      *
-     * @param int $id 
+     * @param int $id
      */
     public function __construct($id=null)
     {
         parent::__construct($id);
-        
+
         if(!is_null($id)) {
             $this->read($id);
         }
-        
+
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
         $this->content_type = 'Widget';
     }
-    
-    
+
+
     public function create($data)
     {
-        
+
         // Clear  magic_quotes
         String_Utils::disabled_magic_quotes( $data );
         $data['category'] = 0;
-        
+
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
         parent::create($data);
-        
+
         $sql = 'INSERT INTO widgets (`pk_widget`, `content`, `renderlet`)
                 VALUES (?, ?, ?)';
-        
+
         // Sort values
         $values = array($this->id,
                         $data['content'],
@@ -85,18 +85,18 @@ class Widget extends Content {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             $GLOBALS['application']->conn->RollbackTrans();
-            
+
             return false;
-        }        
-        
+        }
+
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
-        
+
         return true;
     }
-    
+
     /**
      * Read, get a specific object
      *
@@ -104,30 +104,30 @@ class Widget extends Content {
      * @return Widget Return instance to chaining method
      */
     public function read($id)
-    {        
+    {
         parent::read($id);
         $this->id = $id;
-        
+
         $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
-        
+
         $values = array($id);
-        
+
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if($rs === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return null;
         }
-        
-        $this->load( $rs->fields );        
+
+        $this->load( $rs->fields );
     }
-    
+
     /**
      * Load properties into this instance
      *
-     * @param array $properties Array properties 
+     * @param array $properties Array properties
      */
     public function load($properties) {
         if(is_array($properties)) {
@@ -145,10 +145,10 @@ class Widget extends Content {
             }
         }
     }
-    
+
     /**
      * Update
-     * 
+     *
      * @param array $data Array values
      * @return boolean
      */
@@ -157,33 +157,33 @@ class Widget extends Content {
         String_Utils::disabled_magic_quotes( $data );
         $data['category'] = 0;
 
-        
-        
+
+
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
-        
+
         parent::update($data);
-        
+
         $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
-        
+
         $values = array($data['content'], $data['renderlet'], $data['id']);
-        
-        
+
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();            
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            $GLOBALS['application']->conn->RollbackTrans(); 
-            
+            $GLOBALS['application']->conn->RollbackTrans();
+
             return false;
         }
-        
+
         // Commit transaction
         $GLOBALS['application']->conn->CommitTrans();
-        
-        return true;        
+
+        return true;
     }
-    
+
     /**
      * @deprecated
      */
@@ -195,64 +195,64 @@ class Widget extends Content {
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;                        
-            
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
             return false;
         }
-        
+
         return true;
-    }        
-    
+    }
+
     /**
      * Delete
      *
      * @param int $id Identifier
      * @return boolean
      */
-    public function delete($id, $editor=null) {        
+    public function delete($id, $editor=null) {
         $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
-        
+
         parent::remove($id); // Delete from database, don't use trash
-        
+
         $values = array($id);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
            return false;
         }
-        
-        return true;        
+
+        return true;
     }
-    
+
     public function put_permalink($end, $type, $title, $cat) {
         return '';
     }
-    
-    
+
+
     public function render() {
         $method = '_renderlet_'.$this->renderlet;
         //call_user_func_array(array($this, $method), array($smarty));
         return $this->$method();
     }
-    
+
     private function _renderlet_html() {
         return $this->content;
     }
-    
+
     private function _renderlet_php() {
         ob_start();
-        
+
         eval($this->content);
-        
+
         $output = ob_get_contents();
         ob_end_clean();
-        
+
         return $output;
     }
-    
+
     /**
      *
      * SEE resource.string.php Smarty plugin
@@ -261,29 +261,29 @@ class Widget extends Content {
     private function _renderlet_smarty() {
         // Deprecated
         //$resource = 'string:' . $this->content;
-        
+
         Template::$registry['widget'][$this->pk_widget] = $this->content;
-        
+
         $resource = 'string:' . $this->content;
-        
+
         $wgtTpl = new Template(TEMPLATE_USER);
-        
+
         // no caching
         $wgtTpl->caching = 0;
         $wgtTpl->force_compile = true;
-        
+
         $output = $wgtTpl->fetch($resource);
-        
+
         return $output;
     }
-    
+
     private function _renderlet_intelligentwidget() {
-        
+
         $output = "Not implemented";
-        
+
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets').'/';
         ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
-        
+
         $className = 'Widget'.$this->content;
         $filename = strtolower($className);
         if( file_exists($path.'/'.$filename.'.class.php') ) {
@@ -299,7 +299,7 @@ class Widget extends Content {
         } catch(Exception $e) {
             return "Widget {$this->content} not available";
         }
-        
+
         return $class->render();
     }
 }

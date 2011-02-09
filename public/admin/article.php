@@ -41,6 +41,7 @@ list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 $tplFrontend = new Template(TEMPLATE_USER);
 $section = $ccm->get_name($_REQUEST['category']);
 $section = (empty($section))? 'home': $section;
+$categoryID = ($_REQUEST['category'] == 'home') ? 0 : $_REQUEST['category'];
 
 $container_noticias_gente = $tplFrontend->readKeyConfig('template.conf', 'container_noticias_gente', $section);
 
@@ -78,42 +79,42 @@ if(isset($_REQUEST['action']) ) {
         } break;
 
         case 'list':
+
+            // Check if the user can edit frontpages
             if(!Acl::_('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
             }
 
             $tpl->assign('titulo_barra', 'Frontpage Manager');
 
-//<editor-fold defaultstate="collapsed" desc="listado frontpages">
             $cm = new ContentManager();
             // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
             $rating = new Rating();
             $comment = new Comment();
 
-             if($_REQUEST['category']=='home') {
-                    $frontpage_articles = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1', 'ORDER BY home_pos ASC');
-                    $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND home_placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
+            // Edit main frontpage or category frontpage
+            if($_REQUEST['category']=='home') {
 
-                    //Sugeridas -
-                    list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
-                    $params="'".$_REQUEST['category']."'";
-                    //$paginacion=$cm->makePagesLinkjs($pages, ' savePos(\''.$_REQUEST['category'].'\'); get_suggested_articles', $params);
-                    $paginacion=$cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
-                    $tpl->assign('paginacion', $paginacion);
-                    $tpl->assign('other_category','suggested');
+                $frontpage_articles = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1', 'ORDER BY home_pos ASC');
+                $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND home_placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
+
+                //Sugeridas -
+                list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
+                $params = "'".$_REQUEST['category']."'";
+                $paginacion=$cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
+
+                $tpl->assign('paginacion', $paginacion);
+                $tpl->assign('other_category','suggested');
+
+                $widgets = $cm->find('Widget', 'fk_content_type=12 && `available`=1 ', 'ORDER BY created DESC ');
+                $tpl->assign('widgets', $widgets);
 
             } else {
-                    // ContentManager::find_by_category(<TIPO_CONTENIDO>, <CATEGORY>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
                     $frontpage_articles = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1 ', 'ORDER BY position ASC, created DESC' );
-                //   $evenpublished= $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY position ASC, created DESC');
-       //          $oddpublished = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND (placeholder="placeholder_1_0" OR placeholder="placeholder_1_1" OR placeholder="placeholder_1_2" OR placeholder="placeholder_1_3")', 'ORDER BY position ASC, created DESC');
-
                     $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
 
-                    //	$articles = $cm->find_by_category('Article', $_REQUEST['category'], 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1', 'ORDER BY created DESC, title ASC');
                     list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1 ', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
                     $params=$_REQUEST['category'];
-                    //$paginacion=$cm->makePagesLinkjs($pages, 'savePos('.$_REQUEST['category'].'); get_others_articles', $params);
                     $paginacion=$cm->makePagesLinkjs($pages, ' get_others_articles', $params);
                     if($pages->_totalPages>1) {
                             $tpl->assign('paginacion', " ".$paginacion);
@@ -141,17 +142,37 @@ if(isset($_REQUEST['action']) ) {
                 $art->comment = $comment->count_public_comments( $art->id );
             }
 
-            if(!isset($destacado)){
-                $destacado = null;
-            }
-            $tpl->assign('destacado', $destacado);
-            $tpl->assign('articles', $articles);
-            $tpl->assign('frontpage_articles', $frontpage_articles);
+        /// Adding Widgets {{{
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($categoryID);
 
+        $contents_excluded_for_proposed = array();
+        foreach($contentsInHomepage as $content) {
+            $frontpage_articles[] = $content;
+            $contents_excluded_for_proposed[] = $content->id;
+        }
 
-            $tpl->assign('category', $_REQUEST['category']);
-            $_SESSION['desde']='list';
-            $_SESSION['_from']=$_REQUEST['category'];
+        $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
+        // }}}
+
+        if(!isset($destacado)){
+            $destacado = null;
+        }
+        $tpl->assign('destacado', $destacado);
+        $tpl->assign('articles', $articles);
+        $tpl->assign('frontpage_articles', $frontpage_articles);
+
+        if(count($contents_excluded_for_proposed) >0) {
+            $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
+            $sql_excluded_elements = '&& `pk_widget` NOT IN ('.$widgets_excluded.')';
+        } else {
+            $sql_excluded_elements = '';
+        }
+        $widgets = $cm->find('Widget', 'fk_content_type=12 && `available`=1 '.$sql_excluded_elements, 'ORDER BY created DESC ');
+        $tpl->assign('widgets', $widgets);
+
+        $tpl->assign('category', $_REQUEST['category']);
+        $_SESSION['desde']='list';
+        $_SESSION['_from']=$_REQUEST['category'];
 
 
 // </editor-fold >
@@ -388,7 +409,7 @@ if(isset($_REQUEST['action']) ) {
                     }
                     curl_close($curl);
                 }
-            }  
+            }
             $tpl->assign('videos', $videos);
             $params='0';
             $paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);
@@ -1399,7 +1420,7 @@ if(isset($_REQUEST['action']) ) {
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'adjuntos');
-          
+
             list($attaches, $pages)= $cm->find_pages('Attachment', 'content_status=1  AND fk_content_type=3', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
             $params=$_REQUEST['id'].", 'adjuntos',".$category;
