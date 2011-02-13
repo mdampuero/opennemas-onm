@@ -6,7 +6,7 @@
 <a href="#main_content" class="jump-to-content">Saltar al contenido</a>
 <div id="menu">
     <div id="submenu">
-        <ul class="clearfix">            
+        <ul class="clearfix">
              <li class="cat home{if $category_name eq "home" || $category_name eq "opinion" || $section_url eq "video"} active{/if}">
                 <a href="/" title="Portada">Portada</a>
                 <ul class="nav{if $subcategory_name eq $subcat_key} active{/if}">
@@ -34,14 +34,14 @@
             </li>
             {/foreach}
         </ul>
-         
+
     </div>
-        
+
     <div id="social-icons-submenu">
         <ul>
             <li><a href="http://twitter.com/nuevatribuna" title="Visita nuestro perfíl en Twitter"><img src="{$params.IMAGE_DIR}/bullets/twitter_32.png" alt="" /></a></li>
             <li><a href="http://www.facebook.com/pages/nuevatribunaes/370028714939" title="Visita nuestro perfíl en Facebook"><img src="{$params.IMAGE_DIR}/bullets/facebook_32.png" alt="" /></a></li>
-            <li><a href="/rss/" title="Siga las noticias con nuestro RSS"><img src="{$params.IMAGE_DIR}/bullets/feed_32.png" alt="" /></a></li>
+            <li><a href="/rss/listado" title="Siga las noticias con nuestro RSS"><img src="{$params.IMAGE_DIR}/bullets/feed_32.png" alt="" /></a></li>
         </ul>
     </div>
     <div id="main-search-form">

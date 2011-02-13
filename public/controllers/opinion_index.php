@@ -90,16 +90,17 @@ if (isset($_REQUEST['action'])) {
 
                 $_limit='LIMIT '.($page*ITEMS_PAGE).', '.(ITEMS_PAGE);
                 $params='/seccion/opinion';
+				
                 /**
                  * Fetch last opinions of contributors and paginate them by ITEM_PAGE
                 */
-                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 '. 
+                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 '.
                                               'AND contents.available=1 '.
                                               'AND contents.in_home=1 '.
                                               'AND contents.content_status=1',
                                               'ORDER BY  position ASC, created DESC '.$_limit);
 
-                             
+
 
              //   $paginacion =$cm->create_paginate($total_opinions, ITEMS_PAGE, 4, 'URL', $params);
 

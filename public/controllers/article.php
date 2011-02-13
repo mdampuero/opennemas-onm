@@ -28,7 +28,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
     $subcategory_name = null;
 // If $action == 'rss' desnormalize process
 }else{
-    if($_REQUEST['action']=='rss' ) {
+    if(preg_match('@rss@',$_REQUEST['action'])) {
         $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
         $subcategory_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
     } else {
@@ -68,7 +68,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
                 $subcategory = $ccm->get_id($subcategory_name);
             }
         }
-    } elseif(isset($_REQUEST["action"]) && ($_REQUEST["action"]=="rss")) {
+    } elseif(isset($_REQUEST["action"]) && (preg_match('@rss@',$_REQUEST['action']))) {
         $_GET['category_name'] = $category_name = 'home';
     } elseif(isset($_REQUEST["action"]) && ($_REQUEST["action"]!="rating" && $_REQUEST["action"]!="vote" && $_REQUEST["action"]!="rss" && $_REQUEST["action"]!="get_plus")) {
         Application::forward301('/');
@@ -245,26 +245,45 @@ if(isset($_REQUEST['action']) ) {
 
         } break;
 
-        case 'rss': {
-            // Load config
-            $tpl->setConfig('rss');
+        case 'index_rss': {
 
+            /******************************  CATEGORIES & SUBCATEGORIES  ******/
+            require_once ("index_sections.php");
+
+            $cacheID = $tpl->generateCacheId('Index', '', "RSS");
+
+            $ccm = ContentCategoryManager::get_instance();
+
+            $categoriesTree = $ccm->getCategoriesTreeMenu();
+            $opinionAuthors = Author::list_authors();
+
+            $tpl->assign('categoriesTree', $categoriesTree);
+            $tpl->assign('opinionAuthors', $opinionAuthors);
+            $tpl->display('rss/index.tpl', $cacheID);
+            exit(0);
+
+        }
+
+        case 'rss': {
+
+            // Initialicing variables
+            $tpl->setConfig('rss');
             $title_rss = "";
             $rss_url = SITE_URL;
 
-            if ((strtolower($category_name)=="opinion")
-                && isset($_GET["author"]))
-            {
-                $cache_id = $tpl->generateCacheId($category_name,
-                                                  $subcategory_name,
-                                                  "RSS".$_GET["author"]);
+            if ((strtolower($category_name)=="opinion") && isset($_GET["author"])) {
+
+                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS".$_GET["author"]);
+
             } else {
-                $cache_id = $tpl->generateCacheId($category_name,
-                                                  $subcategory_name,
-                                                  "RSS");
+
+                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS");
+
             }
 
-            if (!$tpl->isCached('rss.tpl', $cache_id) ) { // (2)
+            if (!$tpl->isCached('rss/rss.tpl', $cache_id) ) { // (2)
+
+                // Setting up some variables to print out in the final rss
                 if (isset($category_name) && !empty($category_name)) {
                     $category = $ccm->get_id($category_name);
                     $rss_url .= $category_name.SS;
@@ -297,12 +316,14 @@ if(isset($_REQUEST['action']) ) {
                     if (!isset ($_GET['author'])) {
                         $articles_home = $cm->find_listAuthors('contents.available=1 and contents.content_status=1', 'ORDER BY created DESC LIMIT 0,50');
                     } else {
-                        $articles_home = $cm->find_listAuthors('opinions.fk_author='.($_GET['author']).' and  contents.available=1  and contents.content_status=1','ORDER BY created DESC  LIMIT 0,50');
-                        $title_rss = strtoupper('OPINION > '.$articles_home[0]['name']);
+
+                        $articles_home = $cm->find_listAuthors('opinions.fk_author='.((int)$_GET['author']).' and  contents.available=1  and contents.content_status=1','ORDER BY created DESC  LIMIT 0,50');
+
+                        $title_rss = 'Opiniones de «'.$articles_home[0]['name'].'»';
                     }
 
                 } else {
-                    //If frontpage contains a SUBCATEGORY the SQL request will be diferent
+                    // If frontpage contains a SUBCATEGORY the SQL request will be diferent
                     if (!isset ($subcategory_name)) {
                         if ($category_name=='cxg') {
                             $articles_home = $cm->find_by_category_name('Article',
@@ -372,7 +393,7 @@ if(isset($_REQUEST['action']) ) {
             } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (2)
 
             header('Content-type: application/rss+xml; charset=utf-8');
-            $tpl->display('rss.tpl', $cache_id);
+            $tpl->display('rss/rss.tpl', $cache_id);
 
             exit(0); // finish execution for don't disturb cache
         } break;

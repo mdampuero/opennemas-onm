@@ -6,7 +6,7 @@ Deny from all
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    RewriteBase / 
+    RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule  ^(.+).php3 $1.php
@@ -55,10 +55,11 @@ Deny from all
     RewriteRule ^seccion/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&subcategory_name=$2&page=$3 [L,NC]
 
     #RSS
+    RewriteRule ^rss/?$ controllers/article.php?action=rss [L,NC]
+    RewriteRule ^rss/listado/?$ controllers/article.php?action=index_rss [L,NC]
     RewriteRule ^rss/opinion/([0-9]+)/?$ controllers/article.php?category_name=opinion&author=$1&action=rss [L,NC]
     RewriteRule ^rss/([a-z0-9-]+)/([a-z0-9-]+)/?$ controllers/article.php?category_name=$1&subcategory_name=$2&action=rss [L,NC]
     RewriteRule ^rss/([a-z0-9-]+)/?$ controllers/article.php?category_name=$1&action=rss [L,NC]
-    RewriteRule ^rss/?$ controllers/article.php?action=rss [L,NC]
 
     #Sitemap
     RewriteRule ^sitemapnews.xml?$ controllers/sitemap.php?action=news [L,NC]
@@ -68,7 +69,7 @@ Deny from all
     #Advertisement
     RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
     RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
-    
+
 
     #Album
     #/album/2008/12/08/foto/200812081741363340.html
@@ -93,7 +94,7 @@ Deny from all
     #encuesta/2010/09/22/deportes/dsfsdfsf/2010092220475100111.html
     RewriteRule ^encuesta/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+).html$ controllers/poll.php?action=read&category_name=$4&poll_id=$6 [L,NC]
     RewriteRule ^encuesta/([a-z0-9\-]+)/$ controllers/poll.php?action=read&category_name=$1 [L,NC]
-    
+
     #Search
     RewriteRule ^search/google/(.*)$ controllers/search.php?stringSearch=$1&googleSearch=on [L,NC]
 
@@ -108,10 +109,10 @@ Deny from all
     RewriteRule ^portadas$ controllers/kiosko.php [L,NC]
     RewriteRule ^portadas/$ controllers/kiosko.php [L,NC]
     RewriteRule ^portadas/([0-9]{4})/([0-9]{1,2})$ controllers/kiosko.php?year=$1&month=$2 [L,NC]
-    
+
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
     RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
-    
+
     ErrorDocument 404 /controllers/404.html
 </IfModule>

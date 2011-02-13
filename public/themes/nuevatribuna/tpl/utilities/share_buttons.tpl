@@ -1,7 +1,6 @@
 <div class="facebook-share-button block">
     <a name="fb_share" type="button_count" share_url="http://{$smarty.const.SITE}{$article->permalink|clearslash}">Compartir</a>
     <script defer="defer" src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
-
 </div>
 <div class="twitter-share-button block">
     <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-lang="es">Tweet</a>
