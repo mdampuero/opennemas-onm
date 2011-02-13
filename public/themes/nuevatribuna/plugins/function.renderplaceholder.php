@@ -22,7 +22,6 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     if(isset($items) && count($items>0)){
         foreach($items as $i => $item) {
 
-
             if( $item->{$placeholder_property } == $placeholder && ($item->available == 1) ) {
 
                 if(method_exists($item, 'render')){
@@ -40,7 +39,6 @@ function smarty_function_renderplaceholder($params, &$smarty) {
             }
 
         }
-
     }
 
     $smarty->caching = $caching;

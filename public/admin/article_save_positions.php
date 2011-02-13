@@ -91,8 +91,8 @@ if( $_REQUEST['category']!='home' ){
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {
     if( $ok == 1 ) {
-        echo('Posiciones guardadas correctamente.');
+        echo('<div class="success">Posiciones guardadas correctamente.</div>');
     } else {
-        echo('Hubo errores al guardar las posiciones. Inténtelo de nuevos.');
+        echo('<div class="success">Hubo errores al guardar las posiciones. Inténtelo de nuevos.</div>');
     }
 }

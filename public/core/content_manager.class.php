@@ -197,21 +197,29 @@ class ContentManager
             // Foreach element setup the sql values statement part
             foreach($elements as $element) {
 
-                $positions[] = "( ".$element['id'].", "
-                                .$categoryID.", "
-                                .$element['position'].", "
-                                ."'".$element['placeholder']."', "
-                                ."'".$element['content_type']."')";
+                //$positions[] = "( ".$element['id'].", "
+                //                .$categoryID.", "
+                //                .$element['position'].", "
+                //                ."'".$element['placeholder']."', "
+                //                ."'".$element['content_type']."')";
+
+                $positions[] = array(
+                                        $element['id'],
+                                        $categoryID,
+                                        $element['position'],
+                                        $element['placeholder'],
+                                        $element['content_type'],
+                                    );
 
             }
-            $sqlValuesToInsert = implode($positions, ', ');
 
             // construct the final sql statement and execute it
-            $sql =  'INSERT INTO content_positions (pk_fk_content, fk_category, position, placeholder, content_type) '
-                    .'VALUES '.$sqlValuesToInsert;
+            $stmt =  'INSERT INTO content_positions (pk_fk_content, fk_category, position, placeholder, content_type) '
+                    .'VALUES (?,?,?,?,?)';
 
+            $sqlPrepared = $GLOBALS['application']->conn->Prepare($stmt);
 
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+            $rs = $GLOBALS['application']->conn->Execute($sqlPrepared,$positions);
 
             // Handling if there were some errors into the execution
             if(!$rs) {
@@ -848,6 +856,25 @@ class ContentManager
         uasort($articles,'cmp');
 
         return $articles;
+    }
+
+    /**
+    * Get suggested Contents for Homepage
+    *
+    * @return mixed, instantiated elements suggested for homepage
+    * @throws ExceptionClass [description]
+    */
+    static public function getSuggestedContentsForHomePage()
+    {
+        $contents = array();
+
+        $cm = new ContentManager();
+        $contents = $cm->find_all('Article',
+                    'content_status=1 AND available=1 AND frontpage=1'.
+                    ' AND in_home=2',
+                    'ORDER BY  created DESC,  title ASC ');
+
+        return $contents;
     }
 
 

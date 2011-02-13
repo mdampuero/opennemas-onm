@@ -56,14 +56,6 @@
         <div id="pagina">
 
             <table class="adminlist">
-                 <tr valign="top">
-                    <td colspan="3">
-                        <div id="warnings1" style="color:#bb1313;font-size:16px;font-weight:bold; padding:2px 10px;"></div>
-                        <div id="warnings2" style="color:#bb1313;font-size:16px;font-weight:bold; padding:2px 10px;"></div>
-                        <div id="warnings3" style="color:#bb1313;font-size:16px;font-weight:bold; padding:2px 10px;"></div>
-                        <div id="warnings4" style="color:#bb1313;font-size:16px;font-weight:bold; padding:2px 10px;"></div>
-                     </td>
-                </tr>
                 <tr id="columns" valign="top">
                     <td width="33%">
                           {include  file="article_column.tpl" place='placeholder_0'}
@@ -78,29 +70,34 @@
             </table>
 
             <div id="contents-provider">
-                <ul id="tabs">
-                    <li><a href="#available-widgets">Widgets</a></li>
-                    {if $category neq 'home'}
-                    <li><a href="#other-articles">Otros art&iacute;culos</a></li>
-                    {/if}
-                </ul>
-                <div id="available-widgets" class="panel" style="width:100%">
-                    {include file="article/widgets_list_frontpage_admin.tpl"}
-                </div>
+                    <ul id="tabs">
+                        <li><a href="#available-widgets">Widgets</a></li>
+                        {if $category neq 'home'}
+                        <li><a href="#other-articles">Otros art&iacute;culos en esta categor&iacute;a</a></li>
+                        {else}
+                        <li><a href="#suggested-elements">Articulos sugeridos</a></li>
+                        {/if}
+                    </ul>
 
-                {if $category neq 'home'}
-                <div id="other-articles" class="panel" style="width:100%">
-                    {include file="article_others_articles.tpl"}
-                </div>
-                {else}
-                    <div id="art" style="display:none;"></div>
-                {/if}
+                    <div id="available-widgets" class="panel tabs-panel" style="width:100%">
+                        {include file="frontpage/blocks/widgets_available.tpl"}
+                    </div>
+
+                    {if $category neq 'home'}
+                    <div id="other-articles" class="panel tabs-panel" style="width:100%">
+                        {include file="frontpage/blocks/others_articles_in_category.tpl"}
+                    </div>
+                    {else}
+                    <div id="suggested-elements" class="panel tabs-panel" style="width:100%">
+                        {include file="frontpage/blocks/articles_suggested.tpl"}
+                    </div>
+                    {/if}
             </div>
 
             <div id="no_en_home" style="margin:10px 0">
                 <table class="adminheading">
                     <tr>
-                        <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="http://demo.opennemasweb.es/admin/themes/default/images/iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
+                        <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
                     </tr>
                 </table>
                 <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
@@ -118,6 +115,7 @@
 
         </div> {* div id=pagina *}
         <script type="text/javascript">
+
             // <![CDATA[
             make_sortable_divs_portadas( '{$category}');
             // Controlar o cambio de posicións para amosar un aviso

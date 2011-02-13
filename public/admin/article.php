@@ -106,8 +106,9 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('paginacion', $paginacion);
                 $tpl->assign('other_category','suggested');
 
-                $widgets = $cm->find('Widget', 'fk_content_type=12 && `available`=1 ', 'ORDER BY created DESC ');
-                $tpl->assign('widgets', $widgets);
+                // Get the suggested articles for homepage
+                $suggestedArticles = $cm->getSuggestedContentsForHomePage();
+                $tpl->assign('suggestedArticles', $suggestedArticles);
 
             } else {
                     $frontpage_articles = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1 ', 'ORDER BY position ASC, created DESC' );
@@ -1069,7 +1070,7 @@ if(isset($_REQUEST['action']) ) {
                 $article->set_available($_available, $_SESSION['userid']);
             }
 
-              $fields = $_REQUEST['no_selected_fld'];
+              $fields = (isset($_REQUEST['no_selected_fld'])) ? ($_REQUEST['no_selected_fld']) : null;
               if(is_array($fields)) {
                 $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
                 //Usa id para pasar el estatus

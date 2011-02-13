@@ -460,16 +460,14 @@ a.unpublishing:hover {
 
 
 #warnings-validation {
-	text-transform:capitalize;
-	font-size: 16px;
-	padding: 2px 10px;
+	/*text-transform:capitalize;*/
+	/*font-size: 12px;*/
 	margin:5px 0;
 }
 
 #warnings-validation a {
 	font-weight: bold;
 	font-size: 16px;
-
 	color: #024678;
 	text-decoration: underline;
 }
@@ -576,3 +574,12 @@ a.unpublishing:hover {
     #user_live:hover {
         background-color: #FFF;
     }
+
+
+.error, .notice, .success {padding:.8em;border:2px solid #ddd;}
+.error {background:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
+.notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
+.success {background:#E6EFC2;color:#264409;border-color:#C6D880;}
+.error a {color:#8a1f11;}
+.notice a {color:#514721;}
+.success a {color:#264409;}

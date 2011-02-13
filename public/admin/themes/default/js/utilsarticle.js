@@ -2,10 +2,14 @@
 //Funciones llamadas en article.tpl
 //
  //Devuelve los ids de los divs que contienen noticias.
-getHoles = function(){
+getFrontpageHoles = function(){
     var huecos= $('columns').select('div');
+    return huecos;
+}
 
-
+getOtherContentsHoles = function() {
+	var huecos= $('contents-provider').select('div.seccion');
+	//console.log(huecos);
     return huecos;
 }
 
@@ -13,21 +17,29 @@ getHoles = function(){
 alertsDiv = function(){
 
     var Nodes=$('hole3').select('table');
-    if(Nodes.length<1){$('warnings3').update('Debe contener noticias debajo de publicidad 2');  $('warnings-validation').update('Recuerde guardar posiciones');}
+    if(Nodes.length<1){
+		$('warnings3').update('Debe contener noticias debajo de publicidad 2');
+		$('warnings-validation').update('<div class="info">Recuerde guardar posiciones</div>');}
     else{$('warnings3').update(' ');}
 
 }
 
 
 make_sortable_divs_portadas = function() {
-    var huecos = getHoles();
-    var _huecos = ['div_no_home','art'];
-    for(var i=0; i<huecos.length; i++) {
-        _huecos.push(huecos[i].id);
+
+	// Retrieve all the placeholder in this frontpage
+	var huecos = getFrontpageHoles();
+	// Fetch all the available contents available for drop in frontpage
+    var otherHuecos = getOtherContentsHoles();
+
+    for(var i=0; i< otherHuecos.length; i++) {
+        huecos.push(otherHuecos[i].id);
     }
-    huecos.push($('div_no_home'));
+	huecos.push($('div_no_home'));
     huecos.push($('art'));
-    for(i=0; i<huecos.length; i++) {
+    //console.log(huecos);
+
+	for(i=0; i<huecos.length; i++) {
         Sortable.create( huecos[i] ,{
             tag:'table',
             only:'tabla',
@@ -41,7 +53,7 @@ make_sortable_divs_portadas = function() {
 savePositions = function(category) {
 
    // changedTables(category);
-    var huecos = getHoles();
+    var huecos = getFrontpageHoles();
 
     huecos.push($('div_no_home'));
     huecos.push($('art'));
@@ -55,26 +67,26 @@ savePositions = function(category) {
 
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
-                $(div_id).select('table').each(function(item) {
-                        if(item.getAttribute('value')) {
-							if(item.getAttribute('data')){ $content_type = item.getAttribute('data') } else {
-								$content_type = 'Article';
-							}
-							places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type};
-							item.setAttribute('name',"selected_fld[]");
-                        }
-                });
+			$(div_id).select('table').each(function(item) {
+				if(item.getAttribute('value')) {
+					if(item.getAttribute('data')){ $content_type = item.getAttribute('data') } else {
+						$content_type = 'Article';
+					}
+					places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type};
+					item.setAttribute('name',"selected_fld[]");
+				}
+			});
         }
     });
 
 
 
-        // Form
+    // Form
 	var frm = $('formulario');
-      //  console.log(places);
+    //  console.log(places);
 	// Send articles positions into 'id' text field
 	frm.id.value =  Object.toJSON(places);
-        frm.category.value = category;
+    frm.category.value = category;
 
 
     new Ajax.Request('article_save_positions.php',{
@@ -83,19 +95,20 @@ savePositions = function(category) {
 
         onLoading: function() {
 
-           $('warnings-validation').update('Guardando posiciones...');
-           showMsg({'loading':['Guardando posiciones...']},'growl');
+           $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
+		   new Effect.Highlight( $('warnings-validation'));
+           //showMsg({'loading':['Guardando posiciones...']},'growl');
         },
         onComplete: function(transport) {
-           $('warnings-validation').update( transport.responseText );
-                new Effect.Highlight( $('warnings-validation') );
+			$('warnings-validation').update( transport.responseText );
+			new Effect.Highlight( $('warnings-validation') );
 
-                // Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
-                if(posicionesIniciales) {
-                        posicionesIniciales = $$('input[type=checkbox]');
-                        posicionesInicialesWarning = false;
-                }
-                //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
+			// Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
+			if(posicionesIniciales) {
+					posicionesIniciales = $$('input[type=checkbox]');
+					posicionesInicialesWarning = false;
+			}
+			//showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
         },
 
         onFailure: function() {
@@ -184,7 +197,7 @@ function previewFrontpage(category) {
 
 
    // changedTables(category);
-    var huecos = getHoles();
+    var huecos = getFrontpageHoles();
 
     huecos.push($('div_no_home'));
     huecos.push($('art'));
@@ -300,8 +313,8 @@ function show_iframe(){
 	  }
  }
 
-  //Vaciar foto y meter img_default.
- function vaciarImg(field){
+//Vaciar foto y meter img_default.
+function vaciarImg(field){
  		var nombre='remove_'+field;   //Icono papelera-recuperar
 		document.getElementById( nombre ).src='themes/default/images/trash_no.png';
 	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
@@ -372,29 +385,27 @@ function show_iframe(){
  }
 
 // Paginacion galeria videos.
- function  get_videos(page)
- {
- 	   new Ajax.Updater('videos', "article_change_videos.php?page="+page,
-		{
- 		   	evalScripts: false,
-	   		onComplete: function() {
-	   			var photos = $('videos').select('img');
-	   			for(var i=0; i<photos.length; i++) {
-	   				//console.log("'" + photos[i].id + "'");
-	   				try {
-	   				//	new Draggable(photos[i].id, { revert:true, scroll: window, ghosting:true }  );
-	   				} catch(e) {
-	   				//	console.debug( e );
-	   				}
-	   			}
- 			}
-	   	} );
- }
+function  get_videos(page) {
+	new Ajax.Updater('videos', "article_change_videos.php?page="+page ,
+	{
+		evalScripts: false,
+		onComplete: function() {
+			var photos = $('videos').select('img');
+			for(var i=0; i<photos.length; i++) {
+				//console.log("'" + photos[i].id + "'");
+				try {
+				//	new Draggable(photos[i].id, { revert:true, scroll: window, ghosting:true }  );
+				} catch(e) {
+				//	console.debug( e );
+				}
+			}
+		}
+	} );
+}
 
 
 //Paginacion otros articulos.
-function  get_suggested_articles(category,page)
-{
+function  get_suggested_articles(category,page) {
    if(!page){page=1;}
    if(!category){category='home';}
    new Ajax.Updater('frontpages', "article.php?action=get_suggested_articles&category="+category+"&page="+page,
@@ -416,8 +427,7 @@ function  get_suggested_articles(category,page)
 }
 
 //Paginacion otros articulos.
-function  get_others_articles(category,page)
-{
+function  get_others_articles(category,page){
     new Ajax.Updater('frontpages', "article.php?action=get_others_articles&category="+category+"&page="+page,
     {
         evalScripts: true,
@@ -434,8 +444,7 @@ function  get_others_articles(category,page)
         }
     } );
 }
-function  change_style_link(link)
-{
+function  change_style_link(link) {
  var Nodes=$('down_menu').select('a');
     for (i = 0; i < Nodes.length; i++) {
         Nodes[i].setAttribute('style','cursor:pointer;background-color:#F2F2F2;color:#999999;float:left;margin-left:0;margin-right:6px;padding:5px 8px;text-decoration:none;');
@@ -731,7 +740,7 @@ function previewArticle(id,formID,type){
             $('savePreview').setStyle({display: ''});
             $('savePreviewText').update('El artículo ha sido guardado tras la previsualización.');
             */
-           showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
+           //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
            setTimeout("hideMsgContainer('msgBox')",6000);
         }
     })

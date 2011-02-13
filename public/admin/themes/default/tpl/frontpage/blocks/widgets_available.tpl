@@ -32,10 +32,8 @@
 
                     {assign var=aux value=$aux+1}
                 {/section}
-
-                </div>
-                <p align="center" style="margin:20px;"> {$paginacion} </p>
-           </div>
+                <br/>
+            </div>
         </td>
    </tr>
 </table>

@@ -32,14 +32,18 @@
                     <div class="layout-column span-9 first-column">
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_0" cssclass="top-firstcol"}
+                            {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
+                            {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_2"}
                         </div>
                     </div><!-- first-column -->
                     <div class="layout-column span-7 second-column ">
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_0" cssclass="top-secondcol"}
+                            {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_1"}
+                            {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_2"}
                         </div>
                     </div> <!--second-column-->
@@ -48,6 +52,7 @@
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_0" cssclass="top-thirdcol"}
                             {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_1"}
+                            {include file="ads/ad_in_column.tpl" type='3' nocache}
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_2"}
                         </div>
                     </div><!--third-column-->

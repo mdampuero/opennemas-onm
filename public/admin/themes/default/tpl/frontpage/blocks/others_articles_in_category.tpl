@@ -5,7 +5,7 @@
         <th align="center" style="width:50px;">Visto</th>
         <th align="center" style="width:50px;">Votos</th>
         <th align="center" style="width:50px;"><img src="{$params.IMAGE_DIR}coment.png" border="0" alt="Numero comentarios" /></th>
-        <th align="center" style="width:70px;">Fecha</th>       
+        <th align="center" style="width:70px;">Fecha</th>
         <th align="center" style="width:110px;">Publisher</th>
         <th align="center" style="width:110px;">Last Editor</th>
         {if $other_category eq 'suggested'}
@@ -24,12 +24,12 @@
                 {assign var=aux value='100'}
                 {section name=d loop=$articles}
                     <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$articles[d]->id}" class="tabla" style="text-align:center;padding:0px;">
-                        <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >                            
+                        <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
                              <td align="left"  style="width:10px;" >
                                 <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}" name="no_selected_fld[]" value="{$articles[d]->id}" style="cursor:pointer;" >&nbsp;
                             </td>
                             <td style="padding:2px;" align="left" onClick="javascript:document.getElementById('selected_fld_art_{$smarty.section.d.iteration}').click();">
-                                
+
                                 {is_clone item=$articles[d]}{$articles[d]->title|clearslash}
                             </td>
                             <td  class='no_width' style="text-align:center;width:50px;"  align="center">
@@ -62,7 +62,7 @@
                                                 </a>
                                             {/if}
                                         {/if}
-                                     </div>                               
+                                     </div>
                                 </td>
                             {/if}
                             <td class='no_view' style="width:110px;" align="center">
@@ -91,9 +91,9 @@
                                          <a href="?id={$articles[d]->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="No en portada">
                                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="No en portada" />
                                         </a>
-                                        
+
                                      {*   <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="No en portada" /> *}
-                                        
+
                                     </td>
                                 {else}
                                      <td class='no_width' style="width:20px;" align="center">
@@ -117,5 +117,3 @@
         </td>
    </tr>
 </table>
-		
-				

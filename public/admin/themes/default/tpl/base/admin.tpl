@@ -1,7 +1,3 @@
-{*
-    OpenNeMas project
-    @theme      Lucidity
-*}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="es">
@@ -16,10 +12,10 @@
     {/block}
 
     {block name="header-css"}
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
+	    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/multilevel-menu.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/level-menu.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
         <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
@@ -47,7 +43,7 @@
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>        
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
         {* FIXME: corregir para que pille bien el path *}
         {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
             lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
@@ -211,7 +207,7 @@
                  </script>
 		{/if}
 	{/block}
-   
+
 
 </body>
 </html>
