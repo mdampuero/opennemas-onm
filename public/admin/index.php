@@ -19,7 +19,7 @@ $RESOURCES_PATH = TEMPLATE_ADMIN_PATH_WEB;
 
 if( Privileges_check::CheckPrivileges('USER_ADMIN') ) {
     // Peticiones por Ajax
-      if( isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+    if( isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && ( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
         $action = (isset($_REQUEST['action']))? $_REQUEST['action']: 'list';
         switch($action) {
@@ -80,8 +80,19 @@ TPLADMIN;
 
         exit(0); // Finalizar la petición por Ajax
     }
+
+// Not authenticated user admin
 }
 
 //Para crear noticia que vuelva a listado de pendientes.
 $_SESSION['desde']='index_portada';
-$tpl->display('base/admin.tpl');
+
+$feeds = array (
+                array('name' => 'El pais', 'url'=> 'http://www.elpais.com/rss/feed.html?feedId=1022'),
+                array('name' => '20 minutos', 'url'=> 'http://20minutos.feedsportal.com/c/32489/f/478284/index.rss'),
+                array('name' => 'Publico.es', 'url'=> 'http://www.publico.es/rss/'),
+                array('name' => 'El mundo', 'url'=> 'http://elmundo.feedsportal.com/elmundo/rss/portada.xml'),
+                );
+
+$tpl->assign('feeds',$feeds);
+$tpl->display('welcome/index.tpl');
