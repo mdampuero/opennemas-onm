@@ -131,7 +131,7 @@ div.current-hour, #widget_weather_top
 				padding: 0.2em 0;
 				vertical-align: text-bottom
 		}
-		
+
 		#widget_weather_top  .max_temperature { background-color: #ffa91f; font-weight:bold; }
 		#widget_weather_top  .min_temperature { background-color: #bdbdbd; font-weight:bold; }
 
@@ -177,7 +177,7 @@ div.current-hour, #widget_weather_top
 								vertical-align:middle;
 								margin:7px 5px 0 0;
 						}
-						
+
 								#logo-and-pages div.info-pages ul.pages li{
 										float:left;
 										list-style:none;
@@ -200,14 +200,14 @@ div.current-hour, #widget_weather_top
 #footer
 {
     color:#9b9da0;
-	
+
 }
 .container_footer { margin-bottom:10px; }
 		div#footer a
 		{
 			color:#9b9da0 !important;
 		}
-		
+
 		div#footer ul
 		{
 			margin:0;
@@ -223,16 +223,16 @@ div.current-hour, #widget_weather_top
 				}
 				div#footer ul li.last{ border:none;}
 						div#footer ul li img{vertical-align:middle}
-		
+
 		div#footer div.footer-categories{
 				background:#980101;
 				width:100%
 		}
-		
+
 		div#footer div.footer-categories ul{
 				width:100%
 		}
-		
+
 				div#footer div.footer-categories li {
 					float:left;
 					width: auto;
@@ -253,31 +253,31 @@ div.current-hour, #widget_weather_top
 							font-family:Arial;
 							text-transform:capitalize;
 						}
-						
+
 						div#footer div.footer-categories li a:hover{
 								background:#fff
 						}
-		
+
 				div#footer div.footer-categories li.last {
 						float:right;
 				}
-		
+
 						div#footer div.footer-categories li.last a {
 								background:url(../images/bullets/arrow_up.png) center left no-repeat;
 								padding-left:15px;
 						}
-		
+
 		div#footer div.main-static-pages {
 				border-bottom:1px solid #ccc;
 				width:100%
 		}
-		
-		
+
+
 		div#footer div.contact-data *{
 				display:inline-block;
 				vertical-align:text-top;
 		}
-		
+
 		div#footer .developed-by
 		{
 			text-align:right;
@@ -307,47 +307,49 @@ div#main_content {
 				div#main_content div.first-column > div {
 						padding-right:10px;
 				}
-		
+
 		div#main_content div.second-column {
 				width:290px;
 				border-right:1px solid #ccc;
 				background:White url(../images/backgrounds/gradient-second-column.png) top right repeat-x;
 		}
-		
+
 				div#main_content div.second-column > div {
 						padding-left:10px;
 						margin-right:10px;
 						padding-top:10px;
 						overflow:hidden;
 				}
-		
+
 		div#main_content div.third-column {
 				width:310px
 		}
 
-	
-		
+
+
 /***********************************************************
    Frontpage article definition
 ************************************************************/
 
 div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom:5px; }
 		div.onm-new .onm-new-image { max-width:100%; width:100%; margin-bottom:10px;}
-		div.onm-new .onm-new-category-name { margin:0 0 4px 0; text-transform: uppercase; display:block; width:auto; position:relative; }
+		div.onm-new .onm-new-category-name { margin:0 0 4px 0; text-transform: uppercase; display:block; width:auto; position:relative; line-height:1.3em; }
 		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:0; margin-bottom:8px; font-family:Georgia;}
-				div.onm-new .onm-new-title a { color: Black }		
-		div.onm-new .onm-new-subtitle { font-size:13px; font-family: Arial; color:#2d2c2b; margin-bottom:13px; line-height:1.3em}
+				div.onm-new .onm-new-title a { color: Black }
+		div.onm-new .onm-new-subtitle { font-size:13px; font-family: Arial; color:#2d2c2b; margin-bottom:10px; line-height:1.28em}
 		div.onm-new div.related-content { margin:0 0 8px 0;; }
-				div.onm-new div.related-content ul { margin:0; margin-left:30px }
-						div.onm-new div.related-content ul li { color:#980101 }
+				div.onm-new div.related-content ul { list-style:square; margin:0; margin-left:15px; }
+						div.onm-new div.related-content ul li { color:#980101;  }
+								div.onm-new div.related-content ul li span { display:none; }
+								div.onm-new div.related-content ul li a { font-size:1.07em }
 		div.onm-new div.onm-new-comments  { width:100%; text-align:right; }
-				div.onm-new div.onm-new-comments a { color:Black; text-transform:uppercase; padding-left:13px; background:url(../images/bullets/comment_icon.png) center left no-repeat; }
+				div.onm-new div.onm-new-comments a { color:Black; text-transform:uppercase; padding-left:23px; background:url(../images/bullets/comment_icon.gif) center left no-repeat; }
 
 /*Exceptions*/
 div.first-column div.onm-new:last-child,
 div.second-column div.onm-new:last-child,
 div.third-column div.onm-new:last-child,
-div.onm-new.last { border-bottom:none; } /* Drop border for latest */
+div.onm-new.last { border-bottom:none; } /* Drop border for latest articles in column */
 div.onm-new div.related-content span.res-article { display:none;}
 div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
 div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }
@@ -370,22 +372,22 @@ div.more-resources ul
 			padding-left: 10px;
 			background-color:#FFF;
 			display:block;
-		
+
 		}
 				div.more-resources ul li span
 				{
-					background-image:url(../images/bullets/res-sprite.png);
+					/*background-image:url(../images/bullets/res-sprite.png);
 					display:inline-block;
 					width:13px;
-					height:13px;
-				
+					height:13px;*/
+
 				}
-				
-						div.more-resources ul li span.res-file
+
+/*						div.more-resources ul li span.res-file
 						{
 							background-position: -81px -33px !important;
 						}
-						
+
 						div.more-resources ul li span.res-link
 						{
 							background-image:url(../images/bullets/comment_icon.gif);
@@ -394,7 +396,7 @@ div.more-resources ul
 						{
 							background-position: -130px -49px !important;
 						}
-						
+
 						div.more-resources ul li span.res-video
 						{
 							background-image:url(../images/bullets/video_icon.gif);
@@ -403,18 +405,18 @@ div.more-resources ul
 						{
 							background-position: -111px -32px !important;
 						}
-						
+
 						div.more-resources ul li span.res-article
 						{
 							background-image:url(../images/bullets/comment_icon.gif);
-						}
-				
+						}*/
+
 				div.more-resources ul li a{
 					font-size:1em !important;
 					font-family:Arial, Verdana;
 				}
 
-span.res-file,
+/*span.res-file,
 span.res-link,
 span.res-image,
 span.res-video,
@@ -427,7 +429,7 @@ span.res-article
     width:13px;
     height:13px;
     margin-right:3px
-}
+}*/
 
 
 /*
@@ -475,7 +477,7 @@ ul.more-news-section-sectionlist
 }
 .more-news-section-links
 {
-    list-style-image:url(../images/bullets/arrow.png);
+    /*list-style-image:url(../images/bullets/arrow.png);*/
 }
 ul.more-news-section-links li
 {
