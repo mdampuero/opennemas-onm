@@ -89,7 +89,8 @@ class Photo extends Content
 
         $sql = 'SELECT * FROM photos WHERE pk_photo = '.$id;
 
-        if (!$GLOBALS['application']->conn->Execute($sql)) {
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
 
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
