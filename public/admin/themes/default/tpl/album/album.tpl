@@ -117,7 +117,7 @@
 
 
     {/if}
-    
+
     {* FORMULARIO PARA ENGADIR UN CONTENIDO ALBUM ************************************** *}
 
     {if isset($smarty.request.action) && $smarty.request.action eq "new"}
@@ -301,7 +301,7 @@
                 </tbody>
             </table>
         </div>
- 
+
     {/if}
 
     <input type="hidden" id="action" name="action" value="" />

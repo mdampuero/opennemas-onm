@@ -1,6 +1,10 @@
 {extends file="base/admin.tpl"}
 
 
+{block name="footer-js"}
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+{/block}
+
 {block name="content"}
 {*<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}> *}
 
@@ -128,7 +132,7 @@ function confirmar(url) {
             {assign var='accion' value='Buscar Gráficos'}
         {/if}
      {/if}
-       
+
       {if $action neq 'results'}
         <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
 	<div id="menu-acciones-admin">
@@ -362,4 +366,3 @@ function confirmar(url) {
 <input type="hidden" name="id" id="id" value="{$id}" />
 </form>
 {/block}
-
