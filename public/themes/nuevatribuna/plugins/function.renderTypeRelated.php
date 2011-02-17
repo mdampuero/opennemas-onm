@@ -18,6 +18,7 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
     switch ($content->fk_content_type){
         case 1:
             $class='class="res-article" ';
+            $content->content_type = 'article';
         break;
         case 3: //    /.+\.(jpeg|jpg|gif)/
             if ((preg_match("/.+\.jpeg|jpg|gif/", $ext))) {
@@ -33,30 +34,38 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
         break;
         case 4://Opinion
              $class='class="res-opinion" ';
+             $content->content_type = 'opinion';
         break;
         case 7:
-             $class='class="res-image" ';
+            $class='class="res-image" ';
+            $content->content_type = 'album';
+
         break;
         case 8:
              $class='class="res-image" ';
+             $content->content_type = 'photo';
+
         break;
         case 9:
              $class='class="res-video" ';
+             $content->content_type = 'video';
         break;
         default:
              $class='class="res-link" ';
          break;
     }
-    
+
     $patterns = array('/"/', '/\'/', '/“/');
     $replace = array('', '','');
-       
+
+
+
     $title_cleaned = preg_replace($patterns,$replace, $content->title);
-    $html=' <a title="Related: '.$title_cleaned.'" href="'.$content->permalink.'"';
+    $html=' <a title="Related: '.$title_cleaned.'" href="'. SITE_URL . $content->uri .'"';
                 if(($content->fk_content_type==3)) { $html.='target="_blank"'; }
     $html.='   ><span '.$class.'>&nbsp;</span>'.clearslash($content->title).'</a>';
 
 
     return $html;
-    
+
 }

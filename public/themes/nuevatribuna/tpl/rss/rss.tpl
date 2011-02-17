@@ -4,7 +4,7 @@
 		<title>{$smarty.const.SITE_FULLNAME} :: {$title_rss}</title>
 		<link>{$RSS_URL}</link>
 		<description>Articulos de {$smarty.const.SITE_FULLNAME} en {$title_rss}</description>
-		<lastBuildDate>{$buildDate}</lastBuildDate>
+		<lastBuildDate>{date("D, j M Y H:i:s \G\M\t")}</lastBuildDate>
 		<generator>Opennemas Framework</generator>
 		<category>{$title_rss}</category>
 
@@ -30,7 +30,7 @@
 			{section name=c loop=$rss}
 			<item>
 				<title>{$rss[c]->title|clearslash}</title>
-				<link>{$smarty.const.SITE_URL}{$rss[c]->permalink}</link>
+				<link>{$smarty.const.SITE_URL}{$rss[c]->uri}</link>
 				<description><![CDATA[{$rss[c]->summary|clearslash}]]></description>
 	           {foreach from=$photos key=myId item=i}
 	              {if $myId == $rss[c]->id}

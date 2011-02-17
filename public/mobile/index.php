@@ -3,7 +3,7 @@ require('../libs/urldispatcher.class.php');
 define('BASE_PATH', '/mobile');
 
 $routes = array(
-    
+
     /* Últimas noticias */
     array(
         'regexp'  => array(
@@ -12,7 +12,7 @@ $routes = array(
                           ),
         'handler' => 'MobileRouter::lastestsNews',
     ),
-    
+
     /* Section opinion */
     array(
         'regexp'  => array(
@@ -21,7 +21,7 @@ $routes = array(
                           ),
         'handler' => 'MobileRouter::frontpage_opinion',
     ),
-    
+
     /* Sections */
     array(
         'regexp'  => array(
@@ -30,25 +30,25 @@ $routes = array(
                           ),
         'handler' => 'MobileRouter::section',
     ),
-    
+
     /* Article */
     array(
-        'regexp'  => '%^artigo/.*?(?P<pk_content>[0-9]+)\.html$%',
+        'regexp'  => '%^articulo/.*?(?P<pk_content>[0-9]+)\.html$%',
         'handler' => 'MobileRouter::article',
     ),
-    
-    
+
+
     /* Opinion */
     array(
         'regexp'  => '%^opinions/.*?(?P<pk_content>[0-9]+)\.html$%',
         'handler' => 'MobileRouter::opinion',
     ),
-    
+
     array(
         'regexp'  => '%^redirect_web/$%',
         'handler' => 'MobileRouter::redirect_web',
     ),
-    
+
     /* Index */
     array(
         'regexp'  => array(
@@ -57,53 +57,52 @@ $routes = array(
                            '%^index\.(php|htm|html)$%',
                           ),
         'handler' => 'MobileRouter::section',
-    ),        
-    
+    ),
+
     /* Otherwise, dispatcher log */
     array(
         'regexp'  => '%^(.*)$%',
-        'handler' => 'MobileRouter::log', 
+        'handler' => 'MobileRouter::log',
     ),
 );
 
 /* HANDLERS DAS PETICIÓNS, código que se vai executar ligado a petición que se faga ************************* */
-class MobileRouter {    
-    
-    static function frontpage_opinion() {        
+class MobileRouter {
+
+    static function frontpage_opinion() {
         require './opinion-index.php';
     }
-    
+
     static function opinion() {
         require './opinion-inner.php';
     }
-    
+
     static function section() {
-        require './frontpage.php'; 
+        require './frontpage.php';
     }
-    
+
     static function article() {
-        require './article-inner.php';        
+        require './article-inner.php';
     }
-    
+
     static function lastestsNews() {
         require './lastest-news.php';
     }
-    
+
     static function redirect_web() {
         require_once('../core/application.class.php');
         setcookie("confirm_mobile", "1", time()+3600, '/');
         Application::forward('/');
     }
-    
-    function log() {
+
+    static function log() {
         require_once('../core/application.class.php');
-        
     }
 }
 
 $router = new URLDispatcher( $routes );
 $router->run();
 
-            
+
 //header('Location: /');
 //exit(0);

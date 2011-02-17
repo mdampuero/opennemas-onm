@@ -192,7 +192,7 @@ if(isset($_REQUEST['action']) ) {
 
                     //Nombre categoria correcto.
                     foreach($relat as $ril) {
-                        $ril->category_name=$ccm->get_title($ril->category_name);
+                        $ril->category_name = $ccm->get_category_name_by_content_id($ril->id);
                     }
                     $tpl->assign('relationed', $relat);
 
@@ -271,7 +271,9 @@ if(isset($_REQUEST['action']) ) {
             $title_rss = "";
             $rss_url = SITE_URL;
 
-            if ((strtolower($category_name)=="opinion") && isset($_GET["author"])) {
+            if ((strtolower($category_name)=="opinion")
+                && isset($_GET["author"]))
+            {
 
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, "RSS".$_GET["author"]);
 
@@ -281,81 +283,97 @@ if(isset($_REQUEST['action']) ) {
 
             }
 
-            if (!$tpl->isCached('rss/rss.tpl', $cache_id) ) { // (2)
+            if (!$tpl->isCached('rss/rss.tpl', $cache_id))
+            {
 
                 // Setting up some variables to print out in the final rss
-                if (isset($category_name) && !empty($category_name)) {
+                if (isset($category_name)
+                    && !empty($category_name))
+                {
                     $category = $ccm->get_id($category_name);
                     $rss_url .= $category_name.SS;
                     $title_rss .= $category_name;
 
-                    if (isset($subcategory_name) && !empty($subcategory_name)) {
+                    if (isset($subcategory_name)
+                        && !empty($subcategory_name))
+                    {
                         $subcategory = $ccm->get_id($subcategory_name);
                         $rss_url .= $subcategory_name.SS;
                         $title_rss .= " > ".$subcategory_name;
                     }
+
                 } else {
                     $rss_url .= "home".SS;
                     $title_rss .= "PORTADA";
                 }
 
-                $photos = array();
-                if ($category_name == 'home') {
-                    $articles_home = $cm->find('Article',
-                                        'contents.in_home=1 AND contents.frontpage=1 AND contents.fk_content_type=1 AND contents.content_status=1 AND  contents.available=1',
-                                        'ORDER BY created DESC');
 
-                    $i = 0;
-                    while ($i < count($articles_home)) {
-                        if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
-                            $photos[$articles_home[$i]->id] = new Photo($articles_home[$i]->img1);
+
+                $photos = array();
+
+                // If is home retrive all the articles available in there
+                if ($category_name == 'home') {
+
+                    // Fetch articles in home
+                    $articles_home = $cm->find( 'Article',
+                                                'contents.in_home=1 AND contents.frontpage=1 AND '
+                                                .'contents.fk_content_type=1 AND contents.content_status=1 '
+                                                .'AND  contents.available=1',
+                                                'ORDER BY created DESC');
+
+
+                    // Fetch the photo and category name for this element
+                    foreach ($articles_home as $i => $article) {
+
+                        if (isset($article->img1) && $article->img1 != 0) {
+                            $photos[$article->id] = new Photo($article->img1);
                         }
-                        $i++;
+
+                        $article->category_name = $article->loadCategoryName($article->id);
                     }
+
+                // If is opinion
                 } elseif ($category_name == 'opinion') {
+
+                    // get all the authors of opinions
                     if (!isset ($_GET['author'])) {
+
                         $articles_home = $cm->find_listAuthors('contents.available=1 and contents.content_status=1', 'ORDER BY created DESC LIMIT 0,50');
+
+                    // get articles for the author in opinion
                     } else {
 
                         $articles_home = $cm->find_listAuthors('opinions.fk_author='.((int)$_GET['author']).' and  contents.available=1  and contents.content_status=1','ORDER BY created DESC  LIMIT 0,50');
 
-                        $title_rss = 'Opiniones de «'.$articles_home[0]['name'].'»';
-                    }
-
-                } else {
-                    // If frontpage contains a SUBCATEGORY the SQL request will be diferent
-                    if (!isset ($subcategory_name)) {
-                        if ($category_name=='cxg') {
-                            $articles_home = $cm->find_by_category_name('Article',
-                                                    $category_name, 'contents.available=1 AND contents.fk_content_type=1',
-                                                    'ORDER BY created DESC LIMIT 0,50');
+                        if (count($articles_home)) {
+                            $title_rss = 'Opiniones de «'.$articles_home[0]['name'].'»';
                         } else {
-                            $articles_home = $cm->find_by_category_name('Article',
-                                                    $category_name, 'contents.content_status=1 AND contents.frontpage=1 AND contents.available=1 AND contents.fk_content_type=1',
-                                                    'ORDER BY created DESC LIMIT 0,50');
-                        }
-
-                        $i=0;
-                        while ($i < count($articles_home)) {
-                            if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
-                                $photos[$articles_home[$i]->id] = new Photo($articles_home[$i]->img1);
-                            }
-                            $i++;
-                        }
-
-                    } else {
-                        $articles_home = $cm->find_by_category_name('Article',
-                                                $subcategory_name, 'content_status=1 AND frontpage=1 AND available=1 AND fk_content_type=1',
-                                                'ORDER BY created DESC');
-
-                        $i = 0;
-                        while ($i < count($articles_home)) {
-                            if (isset($articles_home[$i]->img1) && $articles_home[$i]->img1!=0) {
-                                $aux = new Photo($articles_home[$i]->img1);
-                            }
-                            $i++;
+                            $title_rss = 'Este autor no tiene opiniones todavía.';
                         }
                     }
+
+                // Get the RSS for the rest of categories
+                } else {
+
+                    // If frontpage contains a SUBCATEGORY the SQL request will be diferent
+
+                    if (isset($subcategory_name)) { $category_name = $subcategory_name; }
+
+                    $articles_home = $cm->find_by_category_name('Article',
+                                                                $category_name,
+                                                                'contents.content_status=1 AND contents.frontpage=1 AND '
+                                                                .'contents.available=1 AND contents.fk_content_type=1',
+                                                                'ORDER BY created DESC LIMIT 0,50');
+
+                    foreach ($articles_home as $i => $article) {
+                        if (isset($article->img1) && $article->img1 != 0) {
+                            $photos[$article->id] = new Photo($article->img1);
+                        }
+
+                        $article->category_name = $article->loadCategoryName($article->id);
+                    }
+
+
                 }
 
                 // Filter by scheduled {{{
@@ -365,30 +383,7 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('title_rss', strtoupper($title_rss));
                 $tpl->assign('rss', $articles_home);
 
-                // FIXME: correxir isto cando se garda o artigo
-                for($i=0, $total= count($articles_home); $i<$total; $i++) {
-                    if(is_object($articles_home[$i])) {
-                        $str = $articles_home[$i]->permalink;
-                        $str = mb_strtolower($str, 'UTF-8');
-                        $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\-:\?\/\&\. ]', '', $str);
-                        $str = mb_ereg_replace('([^:])//', '$1/', $str);
-
-                        $articles_home[$i]->permalink = $str;
-                    } else {
-                        $str = $articles_home[$i]['permalink'];
-                        $str = mb_strtolower($str, 'UTF-8');
-                        $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\-:\?\/\&\. ]', '', $str);
-                        $str = mb_ereg_replace('([^:])//', '$1/', $str);
-
-                        $articles_home[$i]['permalink'] = $str;
-                    }
-                }
-
                 $tpl->assign('photos', $photos);
-
-                $tpl->assign('buildDate', date("D, j M Y H:i:s") . ' GMT');
-
-                $tpl->assign('SITE_URL', SITE_URL);
                 $tpl->assign('RSS_URL', $rss_url);
             } // end if(!$tpl->is_cached('rss.tpl', $cache_id)) (2)
 
@@ -437,7 +432,7 @@ if(isset($_REQUEST['action']) ) {
             Application::ajax_out($html_out);
         } break;
 
-         case 'vote': {
+        case 'vote': {
 
             $ip = $_SERVER['REMOTE_ADDR'];
             $ip_from = $_GET['i'];
@@ -605,7 +600,7 @@ if(isset($_REQUEST['action']) ) {
             if (empty($article->agency)) {
                 $agency = $article->agency;
             } else {
-                $agency = 'Retrincos Times';
+                $agency = SITE_FULLNAME;
             }
 
             if (empty($article->summary)) {

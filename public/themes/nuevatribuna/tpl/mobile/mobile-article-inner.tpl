@@ -12,7 +12,7 @@
 
        <div class="post">
        {if isset($photo)}
-            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/images/{$photo}" alt="" {*imageattrs image=$photos*}/>
+            <img class="post-image" src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/images/{$photo}" alt="" {*imageattrs image=$photos*}/>
         {/if}
        <p>{$article->body|clearslash:'<p><br><strong><em><b><i>'}</p>
        </div>
@@ -28,6 +28,11 @@
 	   {/section}
        </ul>
     </div>
+
+	<div id="see-complete">
+	   Ver artículo completo:<br>
+	   <a href="/{$article->uri}">{$article->title}</a>
+	</div>
 
 </div>
 

@@ -1238,9 +1238,9 @@ class ContentManager
 
 
     //this function returns title,catName and permalinks of last headlines from Subcategories of a given category
-    public function find_headlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
+    public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
     {
-        $sql = 'SELECT `contents`.`title` , `contents`.`created` ,  `contents`.`permalink` , `contents`.`starttime` ,
+        $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` , `contents`.`created` ,  `contents`.`permalink` , `contents`.`starttime` ,
                        `contents`.`endtime` , `contents_categories`.`pk_fk_content_category` AS `category_id`
                 FROM `contents`
                     LEFT JOIN contents_categories ON ( `contents`.`pk_content` = `contents_categories`.`pk_fk_content` )
@@ -1262,6 +1262,7 @@ class ContentManager
                 'permalink'=> $rs->fields['permalink'],
                 'created'=> $rs->fields['created'],
                 'category_title'=> $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                'id' =>$rs->fields['pk_content'],
 
                 /* to filter in getInTime() */
                 'starttime' => $rs->fields['starttime'],
@@ -1745,8 +1746,17 @@ class ContentManager
     }
 
 
-    //returns an array with permalinks of the articles in the subsections of a given section
-    public function get_permalinks_by_categoryID($categoryID, $filter=null, $_order_by='ORDER BY 1')
+    /**
+    * Returns a bidimensional array with properties of articles from one category.
+    *
+    * This function is highly optimized for fast quering. Best suitable for
+    * Sitemap generation and RSS
+    *
+    * @param type $categoryID, the ID of the category to search from
+    * @return mixed, array with values of articles. BE AWARE: this doesnt return Objects
+    * @throws ExceptionClass [description]
+    */
+    public function getArrayOfArticlesInCategory($categoryID, $filter=null, $_order_by='ORDER BY 1')
     {
         $items = array();
         $_where = '1=1  AND in_litter=0';
@@ -1759,11 +1769,13 @@ class ContentManager
             $_where = $filter . ' AND in_litter=0';
         }
 
-        $sql= 'SELECT contents.title, contents.permalink, contents.created, contents.changed,
-                      contents.metadata, contents.starttime, contents.endtime FROM contents, contents_categories
-               WHERE contents.pk_content = contents_categories.pk_fk_content
-                     AND contents_categories.pk_fk_content_category=\''.$categoryID.'\'
-                     AND '.$_where.' '.$_order_by;
+        $sql    =   'SELECT contents.pk_content, contents.title, contents.permalink, '
+                    .'      contents_categories.catName, contents.created, contents.changed, '
+                    .'      contents.metadata, contents.starttime, contents.endtime '
+                    .'FROM  contents, contents_categories '
+                    .'WHERE contents.pk_content = contents_categories.pk_fk_content '
+                    .'      AND contents_categories.pk_fk_content_category=\''.$categoryID.'\' '
+                    .'      AND '.$_where.' '.$_order_by;
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);

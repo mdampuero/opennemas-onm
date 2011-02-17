@@ -64,7 +64,7 @@ $.noConflict();
             </a>
         </li>
         <li>
-            <a href="opinion.php?action=new" class="admin_add"
+            <a href="controllers/opinion/opinion.php?action=new" class="admin_add"
                title="{t}Nueva opinion{/t}">
                 <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
                 <br />{t}Crear opinion{/t}

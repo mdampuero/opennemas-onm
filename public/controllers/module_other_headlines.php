@@ -3,7 +3,7 @@
  * headlines group by categorys
 */
 
-$titulares = $cm->find_headlines();
+$titulares = $cm->findHeadlines();
 $i = 1;
 
 foreach ($categories as $this_category) {

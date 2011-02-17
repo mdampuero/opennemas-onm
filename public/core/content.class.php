@@ -65,6 +65,51 @@ class Content {
         }
     }
 
+
+    public function __get($name)
+    {
+
+        switch ($name) {
+
+            case 'uri': {
+                $uri =  Uri::generate( strtolower($this->content_type_name),
+                            array(
+                                'id' => $this->id,
+                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'category' => $this->category_name,
+                                'slug' => $this->slug,
+                            )
+                        );
+
+                return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            }
+            case 'slug': {
+                return String_Utils::get_title($this->title);
+                break;
+            }
+
+            case 'content_type_name': {
+                $contentTypeName = $GLOBALS['application']->conn->
+                    Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
+                    if(isset($contentTypeName->fields['name'])) {
+                        $returnValue = $contentTypeName;
+                    } else {
+                        $returnValue = $this->content_type;
+                    }
+
+                    return $returnValue;
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+    }
+
     function create( $data ) {
         // Fire event
         $GLOBALS['application']->dispatch('onBeforeCreate', $this);
@@ -159,7 +204,7 @@ class Content {
     function read($id) {
         // Fire event onBeforeXxx
         $GLOBALS['application']->dispatch('onBeforeRead', $this);
-        
+
 
         $sql = 'SELECT * FROM contents, contents_categories WHERE pk_content = '.($id).' AND pk_content = pk_fk_content';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -253,7 +298,7 @@ class Content {
         $sql = "UPDATE contents SET  `title`=?, `description`=?,
                                       `metadata`=?, `starttime`=?, `endtime`=?,
                                       `changed`=?, `in_home`=?, `frontpage`=?, `available`=?, `content_status`=?,
-                                      `placeholder`=?, `home_placeholder`=?, 
+                                      `placeholder`=?, `home_placeholder`=?,
                                        `fk_user_last_editor`=?, `permalink`=?
                     WHERE pk_content=".($data['id']);
 

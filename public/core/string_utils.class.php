@@ -2,10 +2,10 @@
 class String_Utils {
 
     var $stringTest = NULL;
-    
+
     /**
     * Constructor for String_Utils class
-    * 
+    *
     * @access public
     * @param string $string
     */
@@ -15,10 +15,10 @@ class String_Utils {
             {$this->stringTest=$string;}
         else {$this->stringTest="";}
     }
-    
+
     /**
     * Delete disallowed chars from a sentence and transform it to a url friendly name
-    * 
+    *
     * @access static
     * @param string $name, the string to clen
     * @return string, the string cleaned
@@ -38,10 +38,10 @@ class String_Utils {
         $name = strtr($name, $trade);
         return $name;
     }
-    
+
     /**
     * Sets the variable string
-    * 
+    *
     * @access public
     * @param string $name
     */
@@ -52,7 +52,7 @@ class String_Utils {
 
     /**
     * Gets the variable string
-    * 
+    *
     * @access public
     * @param string $name
     */
@@ -60,13 +60,13 @@ class String_Utils {
     {
         return $this->stringTest;
     }
-    
+
     /**
     * Clean the special chars into a given string
     *
     * Performs a html_entity_encode, mb_strtolower and mb_ereg_replace
     * disallowed chars
-    * 
+    *
     * @access static
     * @param string $str, the string to clen
     * @return string, the string cleaned
@@ -75,13 +75,13 @@ class String_Utils {
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
         $str = mb_strtolower($str, 'UTF-8');
         $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\- ]', ' ', $str);
-        
+
         return $str;
     }
-    
+
     /**
     * Deletes disallowed chars from a sentence and transform it to a url friendly name
-    * 
+    *
     * @access static
     * @param string $name, the string to clen
     * @return string, the string cleaned
@@ -89,7 +89,7 @@ class String_Utils {
     static function setSeparator($str, $separator='-') {
         $str = trim($str);
         $str = preg_replace('/[ ]+/', $separator, $str);
-        
+
         return $str;
     }
 
@@ -104,25 +104,25 @@ class String_Utils {
         $title = String_Utils::clearSpecialChars($title);
         $title = String_Utils::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
-        
+
         if($useStopList) {
             // Remove stop list
             $titule = String_Utils::remove_shorts($title);
         }
-    
+
         if(empty($titule) || $titule ==" "){ //Si se queda vacio, no quitar shorts.
-            $titule=$title;       
+            $titule=$title;
          }
- 
+
         $titule = String_Utils::setSeparator($titule, '-');
         $titule = preg_replace('/[\-]+/', '-', $titule);
 
         return $titule;
     }
-    
+
     /**
     * Prevent duplicate metadata
-    * 
+    *
     * @access static
     * @param string $metadata
     * @param string $separator By default ','
@@ -131,19 +131,19 @@ class String_Utils {
     static public function normalize_metadata($metadata, $separator=',')
     {
         $items = explode(',', $metadata);
-        
+
         foreach($items as $k => $item) {
             $items[$k] = trim($item);
         }
-        
+
         $items = array_flip($items);
         $items = array_keys($items);
-        
+
         $metadata = implode(',', $items);
-        return $metadata; 
+        return $metadata;
     }
-    
-        
+
+
     /**
     * Generate a string of key words separated by semicolon
     *
@@ -165,27 +165,27 @@ class String_Utils {
         $tags = implode(', ', $tags);
 
         return $tags;
-    }        
-   
+    }
+
     /**
       * Modified from Meneame:
       * @link http://svn.meneame.net/index.cgi/branches/version3/www/libs/uri.php
     */
     static function remove_shorts($string) {
         $shorts = file( dirname(__FILE__).'/string_utils_stoplist.txt');
-        
+
         $size = count($shorts);
-        
-        for($i=0; $i<$size; $i++) {            
+
+        for($i=0; $i<$size; $i++) {
             $short  = preg_replace('/\n/', '', $shorts[$i]);
             $string = preg_replace('/^'.$short.'[\.\, ]/', ' ', $string);
             $string = preg_replace('/[\.\, ]'.$short.'[\.\, ]/', ' ', $string);
             $string = preg_replace("/[\.\, ]$short$/", ' ', $string);
         }
-        
+
         return $string;
     }
-    
+
     static function str_stop($string, $max_length=30, $suffix='...'){
         if (strlen($string) > $max_length) {
             $string = substr($string, 0, $max_length);
@@ -198,7 +198,7 @@ class String_Utils {
             return $string;
         }
     }
-    
+
     static function unhtmlentities($string) {
         // replace numeric entities
         $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
@@ -214,7 +214,7 @@ class String_Utils {
      *
      * @param array $data
      */
-    static function disabled_magic_quotes( &$data=NULL ) {    
+    static function disabled_magic_quotes( &$data=NULL ) {
         if( get_magic_quotes_gpc() ) {
             function stripslashes_deep($value) {
                 $value = is_array($value) ?
@@ -222,25 +222,25 @@ class String_Utils {
                             stripslashes($value);
                 return $value;
             }
-            
+
             if( !is_null($data) ) {
                 $data = array_map('stripslashes_deep', $data);
             } else {
                 $_POST = array_map('stripslashes_deep', $_POST);
                 $_GET = array_map('stripslashes_deep', $_GET);
                 $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-                $_REQUEST = array_map('stripslashes_deep', $_REQUEST);                
+                $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
             }
         }
     }
-    
-    
+
+
     static function clearBadChars($string)
     {
-        $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);        
+        $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
         return $string;
     }
-    
+
     /**
     * Gets "n" first words from a given text
     *
@@ -255,7 +255,7 @@ class String_Utils {
         $description = explode(" ",$no_html,$num_words);
         $sobra = array_pop($description);
         $words = implode(" ",$description).'...';
-    		
+
     	return $words;
     }
 
@@ -265,16 +265,16 @@ class String_Utils {
         $words = array();
         foreach($entries as $entry) {
             if(preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
-                
+
                 $words[] = array('weight' => $matches[1],
                                  'text'   => trim($matches[2])
                                 );
             }
         }
-        
+
         return $words;
     }
-    
+
     /**
     * filterBadWords
     */
@@ -282,18 +282,18 @@ class String_Utils {
     {
         $words = String_Utils::loadBadWords();
         $text = ' ' . $text . ' ';
-        
+
         foreach($words as $word) {
             if($word['weight'] > $weight) {
                 $text = preg_replace('/\W' . $word['text'] . '\W/si', $replaceStr, $text);
             }
         }
-        
+
         $text = trim($text);
-        
+
         return $text;
     }
-    
+
     /**
     * getWeightBadWords
     */
@@ -301,15 +301,15 @@ class String_Utils {
     {
         $words = String_Utils::loadBadWords();
         $text = ' ' . $text . ' ';
-        
+
         $weight = 0;
-        
+
         foreach($words as $word) {
             if(preg_match_all('/' . $word['text'] . '/si', $text, $matches)) {
                 $weight += ($word['weight'] * count($matches[0]));
-            }            
+            }
         }
-        
+
         return $weight;
-    }    
+    }
 }

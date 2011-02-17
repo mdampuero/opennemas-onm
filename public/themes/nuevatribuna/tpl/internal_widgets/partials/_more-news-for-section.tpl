@@ -10,7 +10,7 @@
                 {if $smarty.foreach.s.last}
                     <li class="last"><a href="/seccion/{$category_hdata.name}/{$c}/" title="Seccion:{$subcat.title|clearslash|clean_for_html_attributes}">{$subcat.title|clearslash}</a></li>
                 {else}
-                    <li ><a href="/seccion/{$category_hdata.name}/{$c}/" title="Seccion:{$subcat.title|clearslash|clean_for_html_attributes}">{$subcat.title|clearslash}</a></li>
+                    <li><a href="/seccion/{$category_hdata.name}/{$c}/" title="Seccion:{$subcat.title|clearslash|clean_for_html_attributes}">{$subcat.title|clearslash}</a></li>
                 {/if}
              {/if}
              {/foreach}
@@ -18,12 +18,30 @@
     </ul>
     <ul class="more-news-section-links">
         {foreach name=t key=c item=sub from=$titulares_cat[$index]}
+
             {if $smarty.foreach.t.first}
-                <li class="first"><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
+                <li class="first">
+                    <a href="{$smarty.const.SITE_URL}{generate_uri
+                                                                content_type='article'
+                                                                id=$sub.id
+                                                                date=$sub.created
+                                                                category_name=$category_hdata.name
+                                                                title=$sub.title}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">
+                                    {$sub.title|clearslash}</a></li>
             {elseif $smarty.foreach.t.last}
-                <li class="last"><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
+                <li class="last"><a href="{$smarty.const.SITE_URL}{generate_uri
+                                                                content_type='article'
+                                                                id=$sub.id
+                                                                date=$sub.created
+                                                                category_name=$category_hdata.name
+                                                                title=$sub.title}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
             {else}
-                <li><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
+                <li><a href="{$smarty.const.SITE_URL}{generate_uri
+                                                                content_type='article'
+                                                                id=$sub.id
+                                                                date=$sub.created
+                                                                category_name=$category_hdata.name
+                                                                title=$sub.title}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
             {/if}
         {/foreach}
     </ul>

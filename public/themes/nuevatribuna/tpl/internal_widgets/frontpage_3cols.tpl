@@ -11,8 +11,8 @@
 {/if}
         <div>
             <div class="onm-new last">
-                <img class="onm-image" style="width:152px;height:100px;" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$titulares_gente[g]->path_img}" alt="{$titulares_gente[g]->title|clearslash}"/>
-                <h4 class="onm-title"><a href="{$titulares_gente[g]->permalink}">{$titulares_gente[g]->title|clearslash}</a></h4>
+                <a href="{$titulares_gente[g]->uri}"><img class="onm-image" style="width:152px;height:100px;" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$titulares_gente[g]->path_img}" alt="{$titulares_gente[g]->title|clearslash}"/></a>
+                <h4 class="onm-title"><a href="{$titulares_gente[g]->uri}">{$titulares_gente[g]->title|clearslash}</a></h4>
             </div>
         </div>
     </div>

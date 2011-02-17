@@ -1,5 +1,5 @@
 <li class="post">
-      <a href="{$smarty.const.BASE_PATH}{$article->permalink}">
+      <a href="{$smarty.const.BASE_PATH}/{$article->uri}">
         {if isset($photos_articles[$id])}
          <img width="60" height="60" alt="{$photos->title}"
               src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/images/{$photos_articles[$id]}">

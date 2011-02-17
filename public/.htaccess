@@ -11,17 +11,19 @@ Deny from all
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule  ^(.+).php3 $1.php
 
-    #Articles artigo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
-    #Articles artigo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&article_id=$7&action=read [L,NC]
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&article_title=$6&article_id=$7&action=read [L,NC]
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    #RewriteRule ^artigo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
-    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&subcategory_name=$5&article_id=$7&action=captcha [L,NC]
-    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
-    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
-    RewriteRule ^artigo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
+    #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
+    RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
+    RewriteRule ^articulo/([a-z0-9\-]+)?/.*/([0-9]+).html$ controllers/article.php?category_name=$1&article_id=$2&action=read [L,NC]
+
+    #RewriteRule ^articulo/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&subcategory_name=$5&article_title=$6&article_id=$7&action=read [L,NC]
+    RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+    RewriteRule ^articulo/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z])/(.*)/([0-9]+).html$ controllers/article.php?year=$1&month=$2&day=$3&category_name=$4&article_title=$5&article_id=$6&action=read [L,NC]
+
+    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&subcategory_name=$5&article_id=$7&action=captcha [L,NC]
+    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
+    RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
 
     #Opinion Section
     RewriteRule ^seccion/opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&pageop=$1 [L,NC]
@@ -39,7 +41,7 @@ Deny from all
     #Portada de autores  RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ controllers/opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
     #RewriteRule ^opinions/listado_xornalistas/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_authors&page=$1 [L,NC]
 
-    #Artigos print
+    #articulos print
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$2&category_name=$1 [L,NC]
     RewriteRule ^imprimir/[^/]+/([0-9]+).html$ controllers/opinion_inner.php?action=print&opinion_id=$1 [L,NC]
@@ -84,7 +86,7 @@ Deny from all
     RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^video/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+).html$ controllers/videos.php?action=inner&id=$4 [L,NC]
+    RewriteRule ^video/([a-z0-9\-]*)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6 [L,NC]
 
     #Files
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]

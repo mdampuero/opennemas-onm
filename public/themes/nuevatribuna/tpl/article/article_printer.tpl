@@ -11,54 +11,58 @@
 
 <body>
     <div id="container">
-        
-        <div class="header">        
+
+        <div class="header">
             <div class="logo">
                 <img src="{$params.IMAGE_DIR}logos/nuevatribuna-header.png" alt="" style="height:25px" />
                 <div class="breadcrub">{breadcrub values=$breadcrub}</div>
             </div>
             <a id="imprimir" href="#imprimir" onclick="window.print();return false;" class="imprimir-link">Imprimir</a>
-        </div>    
+        </div>
         <hr class="new-separator" />
         <div class="noticia">
-            
-            <div>  
+
+            <div>
                 <h1>{$article->title|clearslash}</h1>
-                
+
                 <div class="firma_nota">
-                    <div class="firma_nombre"><strong>{if $article->agency|count_words ne '0'}{$article->agency|clearslash}{else}Retrincos Times{/if}</strong> - {articledate article=$article created=$article->created}</div>
+                    <div class="firma_nombre"><strong>{if $article->agency|count_words ne '0'}{$article->agency|clearslash}{else}{$smarty.const.SITE_FULLNAME}{/if}</strong> - {articledate article=$article created=$article->created}</div>
                 </div>
                 <hr class="new-separator" />
-                <div class="resumo">                
+                <div class="resumo">
                     {if $photoInt->name}
                     <div class="onm-new-title-print">
                         <div class="CNoticia_foto">
                             <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" alt="" />
                         </div>
                         <div class="clear"></div>
-                        <div class="creditos_nota">{$article->img2_footer|clearslash}</div>	    
+                        <div class="creditos_nota">{$article->img2_footer|clearslash}</div>
                     </div>
-                    {/if} 
-                    
+                    {/if}
+
                     {$article->summary|clearslash}
                 </div>
             </div>
             <div class="clearer"></div>
-            
-            <div class="cuerpo_article">                                
+
+            <div class="cuerpo_article">
                 {$article->body|clearslash}
             </div>
-            
-            <div>Vea la versión digital de este artículo en nuevatribuna.es: <a href="{$article->permalink|clearslash}" title="{$article->title|clearslash|clean_for_html_attributes}">http://{$smarty.const.SITE}{$article->permalink|clearslash}</a></div>
+
+            <div>
+                <small>Puede ver esta noticia en <a href="{$smarty.const.SITE_URL}">{$smarty.const.SITE}</a>:
+                <a href="/{$article->uri|clearslash}"
+                    title="{$article->title|clearslash|clean_for_html_attributes}">{$smarty.const.SITE_URL}{$article->uri|clearslash}</a></small>
+            </div>
         </div>
-    
+
         <hr class="new-separator" />
         <div>
             <div class="span-12 contact-dates">
                 &copy; medio digital de información general<br/>
                     editado por <strong>Página 7 Comunicación S.L.</strong><br/>
                     C/ Noblejas, 5 Bajo - 28013 Madrid
-            </div>    
+            </div>
         </div>
     </div>
     <script  type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>

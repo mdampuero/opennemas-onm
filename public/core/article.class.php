@@ -66,7 +66,34 @@ class Article extends Content
         }
 
         $this->content_type = 'Article';
+    }
 
+    public function __get($name) {
+
+        parent::__get($name);
+        switch ($name) {
+            case 'uri': {
+                $uri =  Uri::generate( 'article',
+                            array(
+                                'id' => $this->id,
+                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'category' => $this->category_name,
+                                'slug' => $this->slug,
+                            )
+                        );
+
+                 return $uri;
+
+                break;
+            }
+            case 'slug': {
+                return String_Utils::get_title($this->title);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 
     public function create($data)
@@ -112,7 +139,7 @@ class Article extends Content
         $rel = new Related_content();
 
         //Articulos relacionados en portada
-        if(isset($data)) {
+        if (isset($data)) {
             $tok = strtok($data, ",");
             $pos = 1;
             while (($tok !== false) && ($tok != " ")) {
@@ -140,6 +167,16 @@ class Article extends Content
         }
 
         $this->load( $rs->fields );
+
+        $this->permalink = Uri::generate( 'article',
+                            array(
+                                'id' => $this->id,
+                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'category' => $this->category_name,
+                                'slug' => $this->slug,
+                            )
+                        );
+
     }
 
     public function update($data)

@@ -5,7 +5,7 @@
 *}
 <div class="onm-new {$cssclass}">
     {if !empty($item->img1_path)}
-    <a href="{$item->permalink|clearslash}" title="{$item->title|clearslash}">
+    <a href="/{$item->uri|clearslash}" title="{$item->title|clearslash}">
         <img  class="onm-new-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}"
                 alt="{$item->img_footer|clearslash}" title="{$item->img_footer|clearslash|clean_for_html_attributes}" />
     </a>
@@ -14,7 +14,7 @@
     {if $category_name eq 'home'}
         <div class="onm-new-category-name {$item->category_name}">{$item->subtitle|clearslash|clean_for_html_attributes}</div>
     {/if}
-    <h3 class="onm-new-title"><a href="{$item->permalink|clearslash}" title="{$item->title|clearslash|clean_for_html_attributes}">{$item->title|clearslash|escape}</a></h3>
+    <h3 class="onm-new-title"><a href="/{$item->uri|clearslash}" title="{$item->title|clearslash|clean_for_html_attributes}">{$item->title|clearslash|escape}</a></h3>
     <div class="onm-new-subtitle">{$item->summary|clearslash}</div>
 
     {if !empty($item->related_contents)}
@@ -29,5 +29,5 @@
         </ul>
     </div>
     {/if}
-    <div class="onm-new-comments"><a href="{$item->permalink|clearslash}#comentarios" title="Comentar en la noticia «{$item->title|clearslash|clean_for_html_attributes}»">Comenta</a></div>
+    <div class="onm-new-comments"><a href="{$item->uri|clearslash}#comentarios" title="Comentar en la noticia «{$item->title|clearslash|clean_for_html_attributes}»">Comenta</a></div>
 </div>

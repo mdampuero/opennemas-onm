@@ -23,11 +23,11 @@
     <ul class="more-news-section-links">
         {foreach name=t key=c item=sub from=$titulares_cat[$index]}
             {if $smarty.foreach.t.first}
-                <li class="first"><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
+                <li class="first"><a href="{$sub.uri}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
             {elseif $smarty.foreach.t.last}
-                <li class="last"><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
+                <li class="last"><a href="{$sub.uri}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
             {else}
-                <li><a href="{$sub.permalink}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
+                <li><a href="{$sub.uri}" title="{$sub.title|clearslash|escape:"html"}">{$sub.title|clearslash}</a></li>
             {/if}
         {/foreach}
     </ul>

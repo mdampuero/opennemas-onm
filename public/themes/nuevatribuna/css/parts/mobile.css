@@ -288,24 +288,18 @@ li.post .metadata { font-size: .8em; }
 	color: White;	background-color:Black;
 }
 	#footerwrap a {
-		text-decoration: none;
-		color: #fff;	background-color: inherit;
+		color: #fff;
+		background-color: inherit;
 	}
 		#footerwrap a:hover { text-decoration: underline; }
-	#footer h2#wsl, #footer h2#wsl a, #footer h2#wsl span {
-		position: relative;
-		width: 125px;	height: 45px;
-		overflow:hidden;
+
+	#footer h2#wsl a{
 		margin: 0;
+		width:100%;
+		text-align:center;
 		font-size:1.3em;
-		color: #fff;	background-color: inherit;
+		color: #fff;
 		font-size:0.85em;
-	}
-	#footer h2#wsl span {
-		position: absolute;
-		top: 0;	left: 0;
-		display: block;
-		background: url(images/m-wsl.gif) no-repeat 0px 0px;
 	}
 
 #postfoot {
@@ -337,6 +331,15 @@ li.post .metadata { font-size: .8em; }
 	.list-horizontal li:first-child { border: none; }
 
 li.post img.favicon { width: 40px; height: 40px; }
+
+.post-image {
+	float:left;
+	margin:0 10px 10px 0;
+}
+
+#see-complete {
+	margin: 30px 10px;
+}
 
 /* Ads */
 #ad {

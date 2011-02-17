@@ -1,7 +1,3 @@
-{*
-    OpenNeMas project
-    @theme    Lucidity
-*}
 <div class="layout-column span-8 third-column last">
     {include file="ads/ad_in_column.tpl" type='103' nocache}
     <hr class="new-separator"/>
