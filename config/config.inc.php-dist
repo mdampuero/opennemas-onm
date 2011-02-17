@@ -1,9 +1,5 @@
 <?php
 
-if (preg_match('/config\.inc\.php/', $_SERVER['PHP_SELF'])) {
-	die();
-}
-
 if(preg_match('/BLP_bbot/i', $_SERVER['HTTP_USER_AGENT'])) {
     header('Location: /404.html');
     exit(0);
@@ -27,11 +23,12 @@ if(preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
 /**
  * Site Information settings
 */
-define ('SITE_TITLE', "OpenNemas - Testing");                       // Title to use in the frontend
-define ('SITE_DESCRIPTION', "Description of this site");            // Description to use in the frontend
-define ('SITE_KEYWORDS', "keyworks, for, this, site");              // Keyworks to use in the frontend
-define ('SITE_FULLNAME', "Retrincos times");                        // Human readable site name
-define ('SITE_NAME', "retrincos");                                  // Canonical name, should be lowcase and without spaces
+define ('SITE_TITLE', "Diario digital Nueva Tribuna");                       // Title to use in the frontend
+define ('SITE_TITLE_MOBILE', "Nueva Tribuna");                       // Title to use in the frontend
+define ('SITE_DESCRIPTION', "Información continua y análisis para una ciudadanía comprometida con los valores de libertad, igualdad y justicia.");            // Description to use in the frontend
+define ('SITE_KEYWORDS', "nuevatribuna,diario,periodico,medio,digital,progresista,progresismo,izquierdas,españa,internacional,mundo,economia,cajamadrid,gurtel,banif,cultura,sociedad,ultimahora,opinion,analisis");              // Keyworks to use in the frontend
+define ('SITE_FULLNAME', "Nueva Tribuna");                        // Human readable site name
+define ('SITE_NAME', "nuevatribuna");                                  // Canonical name, should be lowcase and without spaces
 
 /**
  * Database settings
@@ -42,15 +39,17 @@ define ('BD_USER', "root");
 define ('BD_PASS', "1234");
 define ('BD_INST', "onmbranch");
 define ('BD_DSN', BD_TYPE."://".BD_USER.":".BD_PASS."@".BD_HOST."/".BD_INST);
-define ('APC_PREFIX', 'retrincos');
+define ('APC_PREFIX', SITE_NAME);
 
 /**
  * Paths settings
 */
 define ('SITE', $_SERVER['SERVER_NAME']);
-define ('SITE_PATH',  realpath(__DIR__.DS.'..'.DS) );
-define ('SITE_LIBS_PATH', SITE_PATH.DS."libs".DS);
-define ('SITE_CORE_PATH', SITE_PATH.DS."core".DS);
+define ('SITE_PATH',  realpath(dirname(__FILE__).DS.'..'.DS."public").DS );
+
+//define ('SITE_PATH',  realpath(__DIR__.DS.'..'.DS) );
+define ('SITE_LIBS_PATH', realpath(SITE_PATH.DS."libs").DS);
+define ('SITE_CORE_PATH', realpath(SITE_PATH.DS."core").DS);
 
 define ('BASE_URL','/');
 define ('ADMIN_DIR', "admin");
@@ -60,7 +59,7 @@ define ('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
 define ('SITE_ADMIN_DIR', "admin");
 define ('SITE_ADMIN_TMP_DIR', "tmp");
 define ('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
-define ('SITE_ADMIN_TMP_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'admin'.DS) );
+define ('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
 define ('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS) );
 
 /**
@@ -90,7 +89,7 @@ define ('MEDIA_UPLOAD_FLASH', "1");
 define ('MEDIA_UPLOAD_VIDEO', "0");
 define ('MEDIA_EXTENSIONS', "bmp,csv,doc,epg,gif,ico,jpg,odg,odp,ods,odt,pdf,png,ppt,swf,txt,xcf,xls");
 define ('MEDIA_MAX_SIZE', "200000");
-define ('MEDIA_URL',"http://demo.opennemas.com/");              // Set this to a external server like http://example.com or keep it blank
+define ('MEDIA_URL',"http://www.retrincos.info/");              // Set this to a external server like http://example.com or keep it blank
 
 define ('MEDIA_DIR', "media");                                  // Set this to a external server like 'media' or write a local dir
 define ('MEDIA_PATH',SITE_PATH);                                // Set this to the local path where write media, like  /path/to/media
@@ -99,15 +98,15 @@ define ('FILE_DIR', "files");
 define ('ADS_DIR', "advertisements");
 define ('OPINION_DIR', "opinions");
 
-//TODO: A Eliminar
-define ('MEDIA_IMG_PATH',  MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR);
+// TODO: A Eliminar
+define ('MEDIA_IMG_PATH',  	  MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR);
 define ('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); //SITE_URL.SS.MEDIA_DIR.SS.IMG_DIR
 define ('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // /SITE_URL.SS.MEDIA_DIR.SS.IMG_DIR
 
 /**
  * Template settings
 */
-define ('TEMPLATE_USER', "lucidity");
+define ('TEMPLATE_USER', "nuevatribuna");
 define ('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
 define ('TEMPLATE_USER_PATH_WEB', SS."themes".SS.TEMPLATE_USER.SS);
 define ('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
@@ -116,12 +115,40 @@ define ('TEMPLATE_ADMIN', "default");
 define ('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.ADMIN_DIR."themes".DS.TEMPLATE_ADMIN);
 define ('TEMPLATE_ADMIN_PATH_WEB', SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
 
+define('',false);
+
+/**
+ * App settings
+*/
+
+define('REFRESH_INTERVAL', '900'); // in seconds
+
+
+/**
+ * Repository settings
+*/
+define ('REPOSITORY_URL', 'http://git.openhost.es/nueva-tribuna.git/');
+
+
+/**
+* Uri settings
+**/
+$GLOBALS['url_configurations'] = array(
+    'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+    'opinion'   =>  array( 'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html' ),
+    'section'   =>  array( 'seccion/_ID_' ),
+    'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+    'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+    'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+    'static_page'=> array( 'static_page/_SLUG_.html' ),
+    'ad'        =>  array( 'publicidad/_ID_.html' ),
+);
 
 /**
  * Facebook settings
 */
 define ('FB_APP_APIKEY', '');
-define ('FB_APP_SECRET', '');
+define ('FB_APP_SECRET', '7c012877eefb97adfebb27457c5ec722');
 
 /**
  * Mail settings
