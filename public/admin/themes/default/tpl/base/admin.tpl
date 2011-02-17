@@ -15,7 +15,6 @@
 	    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/level-menu.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
         <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
