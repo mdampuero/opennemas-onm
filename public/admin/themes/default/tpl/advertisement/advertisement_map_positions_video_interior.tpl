@@ -2,7 +2,7 @@
 <style>
 #advertisement-mosaic-videointerior {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     position: relative;
     width: 240px;
     height: 435px;
@@ -23,7 +23,7 @@
 
 <div id="advertisement-mosaic-videointerior" style="display: none;">
     <div id="advertisement-mosaic-videointerior-frame"></div>
-    <img src="images/advertisement/video_inner_240.png" width="240" height="435" border="0" usemap="#mapVideoInterior" />
+    <img src="/admin/images/advertisement/video_inner_240.png" width="240" height="435" border="0" usemap="#mapVideoInterior" />
 </div>
 
 <map name="mapVideoInterior">

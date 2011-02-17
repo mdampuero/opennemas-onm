@@ -12,7 +12,7 @@
             {include file="advertisement/advertisement_map_positions_interior.tpl"}
         </td>
     </tr>
-    
+
     <tr>
         <td align="right">
             <label>
@@ -20,18 +20,18 @@
                 <input type="radio" name="type_advertisement" value="101" {if $advertisement->type_advertisement == 101}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                  Banner Top Right(I) (728X90)
                 <input type="radio" name="type_advertisement" value="102" {if $advertisement->type_advertisement == 102}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-    
+
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-    
+
     <tr>
         <td align="right" colspan="2">
             <label>
@@ -40,29 +40,29 @@
             </label>
         </td>
     </tr>
-    
-    <tr>    
+
+    <tr>
         <td height="50" align="right" colspan="2">
             <label>
                 Robapágina (650X*)
                 <input type="radio" name="type_advertisement" value="104" {if $advertisement->type_advertisement == 104}checked="checked" {/if}/>
             </label>
         </td>
-    </tr>        
-        
-    <tr>    
-        <td height="50" align="right" colspan="2">	
+    </tr>
+
+    <tr>
+        <td height="50" align="right" colspan="2">
             <label>
                 Banner2 Column Right(I) (300X*)
                 <input type="radio" name="type_advertisement" value="105" {if $advertisement->type_advertisement == 105}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-    
+
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-    
+
     <tr>
         <td align="right">
             <label>
@@ -80,7 +80,7 @@
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 /* <![CDATA[ */{literal}
 var adPositionInterior = null;
 
@@ -106,4 +106,4 @@ document.observe('dom:loaded', function() {
     {literal}
 });
 /* ]]> */{/literal}
-</script> 
+</script>

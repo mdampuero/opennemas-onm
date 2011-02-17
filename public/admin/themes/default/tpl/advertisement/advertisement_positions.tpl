@@ -1,5 +1,5 @@
 <table border="0" cellpadding="4" cellspacing="6" id="ads_type_portada" width="800">
-<tbody>    
+<tbody>
     <tr>
         <td align="right" colspan="2">
             <label>
@@ -10,7 +10,7 @@
         <td rowspan="11" align="right" width="240">
             {include file="advertisement/advertisement_map_positions.tpl"}
         </td>
-    </tr>    
+    </tr>
     <tr>
         <td align="right">
             <label>
@@ -18,7 +18,7 @@
                 <input type="radio" name="type_advertisement" value="1" {if $advertisement->type_advertisement == 1}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                 Banner Top Right  (234X90)
                 <input type="radio" name="type_advertisement" value="2" {if $advertisement->type_advertisement == 2}checked="checked" {/if}/>
@@ -28,7 +28,7 @@
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-    
+
     <tr>
         <td align="right">
             <label>
@@ -36,7 +36,7 @@
                 <input type="radio" name="type_advertisement" value="3" {if $advertisement->type_advertisement == 3}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                 Button Column 3  (300X*)
                 <input type="radio" name="type_advertisement" value="4" {if $advertisement->type_advertisement == 4}checked="checked" {/if}/>
@@ -46,7 +46,7 @@
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-    
+
     <tr>
         <td colspan="2" align="right">
             <label>
@@ -62,7 +62,7 @@
                 <input type="radio" name="type_advertisement" value="6" {if $advertisement->type_advertisement == 6}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                 Banner Mini 2 (300X40)
                 <input type="radio" name="type_advertisement" value="7" {if $advertisement->type_advertisement == 7}checked="checked" {/if}/>
@@ -71,20 +71,20 @@
     </tr>
     <tr>
         <td colspan="2"><hr /></td>
-    </tr>    
-    
+    </tr>
+
     <tr>
-        <td align="right" colspan="2">		
+        <td align="right" colspan="2">
             <label>
                 Button2 column3 (300X*)
                 <input type="radio" name="type_advertisement" value="8" {if $advertisement->type_advertisement == 8}checked="checked" {/if}/>
-            </label>        
+            </label>
         </td>
     </tr>
     <tr>
         <td colspan="2"><hr /></td>
-    </tr>    
-    
+    </tr>
+
     <tr>
         <td align="right">
             <label>
@@ -99,11 +99,11 @@
             </label>
         </td>
     </tr>
-    
+
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 /* <![CDATA[ */{literal}
 var adPositionPortada = null;
 

@@ -11,7 +11,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 // Check ACL
 require_once( SITE_CORE_PATH.'privileges_check.class.php' );
-if(!Acl::_('ADVERTISEMENT_ADMIN')) {    
+if(!Acl::_('ADVERTISEMENT_ADMIN')) {
     Acl::deny();
 }
 
@@ -29,16 +29,16 @@ $tpl->addScript( array('prototype.js', 'scriptaculous/scriptaculous.js', 'AdPosi
 function buildFilter($filter) {
     $filters = array();
     $url = array();
-    
+
     $filters[] = $filter;
-    
+
     if(isset($_REQUEST['filter']['type_advertisement'])
-       && ($_REQUEST['filter']['type_advertisement'] >= 0)) {        
+       && ($_REQUEST['filter']['type_advertisement'] >= 0)) {
         $filters[] = '`type_advertisement`=' . $_REQUEST['filter']['type_advertisement'];
-        
+
         $url[] = 'filter[type_advertisement]=' . $_REQUEST['filter']['type_advertisement'];
     }
-    
+
     if(isset($_REQUEST['filter']['available'])
        && ($_REQUEST['filter']['available'] >= 0)) {
         if($_REQUEST['filter']['available']==1) {
@@ -46,22 +46,22 @@ function buildFilter($filter) {
         } else {
             $filters[] = '(`available`<>1 OR `available` IS NULL)';
         }
-        
+
         $url[] = 'filter[available]=' . $_REQUEST['filter']['available'];
     }
-    
+
     if(isset($_REQUEST['filter']['type'])
        && ($_REQUEST['filter']['type'] >= 0)) {
-        // with_script == 1 => is script banner, otherwise is a media banner        
+        // with_script == 1 => is script banner, otherwise is a media banner
         if($_REQUEST['filter']['type']==1) {
             $filters[] = '`with_script`=1';
         } else {
             $filters[] = '(`with_script`<>1 OR `with_script` IS NULL)';
         }
-        
+
         $url[] = 'filter[type]=' . $_REQUEST['filter']['type'];
     }
-    
+
     return array( implode(' AND ',$filters), implode('&amp;', $url) );
 }
 
@@ -90,18 +90,18 @@ $tpl->assign('query_string', $query_string);
 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
-        case 'list': {                        
+        case 'list': {
             // Advertisement map
             $map = Advertisement::$map;
-            $tpl->assign('map', $map);                        
-            
+            $tpl->assign('map', $map);
+
             // Filters
             $map = array('-1' => '--Todos--') + $map;
             $filter_options['type_advertisement'] = $map;
             $filter_options['available'] = array('-1' => '--Todos--', '0' => 'No publicados', '1' => 'Publicados');
             $filter_options['type']      = array('-1' => '--Todos--', '0' => 'Multimedia', '1' => 'Javascript');
             $tpl->assign('filter_options', $filter_options);
-            
+
             $cm = new ContentManager();
             // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
             list($advertisements, $pager)= $cm->find_pages('Advertisement',
@@ -109,24 +109,24 @@ if( isset($_REQUEST['action']) ) {
                                                            'ORDER BY created DESC ', $_REQUEST['page'], 20);
             $tpl->assign('paginacion', $pager);
             $tpl->assign('advertisements', $advertisements);
-            
+
             $_SESSION['desde'] = 'advertisement';
         } break;
-        
+
         case 'test_script': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             String_Utils::disabled_magic_quotes();
             $tpl->assign('script', $_POST['script']); // ten que vir por POST
         } break;
-        
+
         case 'new':
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             //Noticias relacionadas
             $cm = new ContentManager();
             $photos = $cm->find_by_category('Photo', 2, 'fk_content_type=8 ', 'ORDER BY created DESC');
@@ -142,22 +142,21 @@ if( isset($_REQUEST['action']) ) {
                     $ph->set_status(0,$_SESSION['userid']);
                 }
             }
-            
+
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
-            
+
             $photos = $cm->paginate_num($photos,16);
             $tpl->assign('photos', $photos);
             $pages = $cm->pager;
             $paginacion = "";
-            
+
             for($i=1; $i<=($pages->_totalPages); $i++) {
                 $paginacion .= ' <a style="cursor:pointer;" onClick="get_advertisements('.$i.')">'.$i.'</a> ';
             }
-            
+
             if(($pages->_totalPages)>1) {
                 $tpl->assign('paginacion', $paginacion);
             }
-          echo 'sdfsdfsdfsfdsd';
         break;
 
         case 'read': {
@@ -165,20 +164,20 @@ if( isset($_REQUEST['action']) ) {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement( $_REQUEST['id'] );
             $tpl->assign('advertisement', $advertisement);
-            
+
             $adv = $advertisement->img;
-            
+
             $cm = new ContentManager();
             if(isset($adv)) {
                 //Buscar foto where pk_foto=img1
                 $photo1 = new Photo($adv);
             }
-            
+
             $tpl->assign('photo1', $photo1);
-        
+
             $photos = $cm->find_by_category('Photo',2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo){
                 if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
@@ -192,7 +191,7 @@ if( isset($_REQUEST['action']) ) {
                     $ph->set_status(0,$_SESSION['userid']);
                 }
             }
-            
+
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
             $photos = $cm->paginate_num($photos,16);
             $tpl->assign('photos', $photos);
@@ -200,7 +199,7 @@ if( isset($_REQUEST['action']) ) {
             $paginacion = "";
             for($i=1;$i<=$pages->_totalPages;$i++){
                 $paginacion.=' <a style="cursor:pointer;" onClick="get_advertisements('.$i.')">'.$i.'</a> ';
-            }         
+            }
             if($pages->_totalPages>1) {
                  $tpl->assign('paginacion', $paginacion);
             }
@@ -209,61 +208,61 @@ if( isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             $articules = $cm->find('Article','content_status=1', 'ORDER BY archive DESC');
             // Agrupa los artículos por categoría y controla si están publicados
-            
+
             $articles_agrupados = Related_content::sortArticles($articules);
             $tpl->assign('articles_agrupados', $articles_agrupados);
-                
-    
+
+
             $rel = new Related_content();
             $relationes = $rel->get_relations( $_REQUEST['id'] );
-            $tpl->assign('yarelations', $relationes); 
+            $tpl->assign('yarelations', $relationes);
             if($relationes) {
-                 $tpl->assign('ya', 1); 
+                 $tpl->assign('ya', 1);
             }
-         * 
+         *
          */
         } break;
-        
+
         case 'create': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement();
             $_POST['publisher'] = $_SESSION['userid'];
             if($advertisement->create( $_POST )) {
                 if($_SESSION['desde']=='index_portada') {
                     Application::forward('index.php');
                 }
-                
+
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
             } else {
                 $tpl->assign('errors', $advertisement->errors);
             }
         } break;
-        
+
         case 'update': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-            
+
             $advertisement->update( $_REQUEST );
-            
+
             if($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
             }
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
-        
+
         case 'validate': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = null;
             if(empty($_POST["id"])) {
                 $advertisement = new Advertisement();
@@ -276,18 +275,18 @@ if( isset($_REQUEST['action']) ) {
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
                 $advertisement->update( $_REQUEST );
             }
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$advertisement->id.'&'.$query_string);
         } break;
-        
+
         case 'delete': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement();
             $advertisement->delete( $_POST['id'],$_SESSION['userid'] );
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
 
@@ -295,52 +294,52 @@ if( isset($_REQUEST['action']) ) {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement($_REQUEST['id']);
             //Publicar o no, comprobar num clic
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $advertisement->set_status($status,$_SESSION['userid']);
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
-        
+
         case 'available_status': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             $advertisement = new Advertisement($_REQUEST['id']);
             //Publicar o no, comprobar num clic
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $advertisement->set_available($status, $_SESSION['userid']);
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
-        
+
         case 'mfrontpage': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
-                
+
                 if(is_array($fields)) {
                     foreach($fields as $i ) {
                         $advertisement = new Advertisement($i);
-                        $advertisement->set_available($_REQUEST['id'],$_SESSION['userid']);   //Se reutiliza el id para pasar el estatus 
+                        $advertisement->set_available($_REQUEST['id'],$_SESSION['userid']);   //Se reutiliza el id para pasar el estatus
                     }
                 }
             }
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
-        
+
         case 'mdelete': {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
-            
+
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
                 if(is_array($fields)) {
@@ -350,15 +349,15 @@ if( isset($_REQUEST['action']) ) {
                     }
                 }
             }
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
-        
+
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
         } break;
     }
-    
+
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
 }

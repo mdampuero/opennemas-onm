@@ -1,14 +1,16 @@
 {extends file="base/admin.tpl"}
 
 
-{block name="footer-js"}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
-{/block}
+{block name="footer-js" append}
+<script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+{if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
+    <div class="message" id="console-info">{$smarty.request.message}</div>
+    <script defer="defer" type="text/javascript">
+        new Effect.Highlight('console-info', {ldelim}startcolor:'#ff99ff', endcolor:'#999999'{rdelim})
+    </script>
+{/if}
 
-{block name="content"}
-{*<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}> *}
-
-<script type="text/javascript">
+<script defer="defer" type="text/javascript">
 function confirmar(url) {
     if(confirm('¿Está seguro de querer eliminar este fichero?')) {
         location.href = url;
@@ -24,13 +26,12 @@ function confirmar(url) {
         alert("NO SE PUEDE ELIMINAR {$smarty.request.name} .\n Esta imagen está siendo utilizada en: {$smarty.request.alerta}.");
     </script>
 {/if}
+{/block}
 
-{if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
-    <div class="message" id="console-info">{$smarty.request.message}</div>
-    <script type="text/javascript">
-        new Effect.Highlight('console-info', {ldelim}startcolor:'#ff99ff', endcolor:'#999999'{rdelim})
-    </script>
-{/if}
+{block name="content"}
+{*<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}> *}
+
+
 
 <div id="contenedor-gral">
     <ul class="tabs2">

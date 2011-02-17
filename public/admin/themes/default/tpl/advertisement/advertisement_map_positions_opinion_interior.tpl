@@ -2,7 +2,7 @@
 <style>
 #advertisement-mosaic-opinioninterior {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     position: relative;
     width: 240px;
     height: 508px;
@@ -23,11 +23,11 @@
 
 <div id="advertisement-mosaic-opinioninterior" style="display: none;">
     <div id="advertisement-mosaic-opinioninterior-frame"></div>
-    <img src="images/advertisement/opinion_inner_240.png" width="240" height="508" border="0" usemap="#mapOpinionInterior" />
+    <img src="/admin/images/advertisement/opinion_inner_240.png" width="240" height="508" border="0" usemap="#mapOpinionInterior" />
 </div>
 
 <map name="mapOpinionInterior">
- 
+
 <!-- #$-:Image map file created by GIMP Image Map plug-in -->
 <!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
 <!-- #$-:Please do not edit lines starting with "#$" -->

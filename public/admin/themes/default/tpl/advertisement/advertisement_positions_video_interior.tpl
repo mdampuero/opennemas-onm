@@ -40,7 +40,7 @@
             </label>
         </td>
     </tr>
-    
+
      <tr>
         <td colspan="2"><hr /></td>
     </tr>
@@ -62,7 +62,7 @@
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 /* <![CDATA[ */{literal}
 var adPositionVideoInterior = null;
 
@@ -73,7 +73,7 @@ positions_video_interior[303] = '170,182,64,30';
 positions_video_interior[309] = '2,382,176,24';
 positions_video_interior[310] = '178,382,55,24';
 positions_video_interior[350] = '0,0,240,435';
-  
+
 var options = {'positions': positions_video_interior, 'radios': $('ads_type_interior_video').select('input[name=type_advertisement]') };
 adPositionVideoInterior = new AdPosition('advertisement-mosaic-videointerior', options );
 document.observe('dom:loaded', function() {
@@ -84,4 +84,4 @@ document.observe('dom:loaded', function() {
     {literal}
 });
 /* ]]> */{/literal}
-</script> 
+</script>

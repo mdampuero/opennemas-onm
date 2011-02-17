@@ -30,20 +30,20 @@
 
     {block name="header-js"}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
-        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/modalbox.js"></script>
-        <script type="text/javascript" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}js/ypSlideOutMenus.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}ypSlideOutMenus.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}control.maxlength.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
-        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}lightview.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
+		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
+		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}/modalbox.js"></script>
+
         {* FIXME: corregir para que pille bien el path *}
         {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
             lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}

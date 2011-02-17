@@ -2,7 +2,7 @@
 <style>
 #advertisement-mosaic-video {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     position: relative;
     width: 240px;
     height: 401px;
@@ -23,11 +23,11 @@
 
 <div id="advertisement-mosaic-video" style="display: none;">
     <div id="advertisement-mosaic-frame-video"></div>
-    <img src="images/advertisement/video_front_240.png" width="240" height="401" border="0" usemap="#mapVideo" />
+    <img src="{$params.const.SITE_ADMIN_PATH}images/advertisement/video_front_240.png" width="240" height="401" border="0" usemap="#mapVideo" />
 </div>
 
 <map name="mapVideo">
- 
+
 <!-- #$-:Image map file created by GIMP Image Map plug-in -->
 <!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
 <!-- #$-:Please do not edit lines starting with "#$" -->
@@ -37,6 +37,3 @@
 <area shape="rect" coords="178,1,237,24" href="javascript:adPositionVideo.selectPosition(202);" />
 <area shape="rect" coords="1,348,178,372" href="javascript:adPositionVideo.selectPosition(209);" />
 <area shape="rect" coords="178,348,237,372" href="javascript:adPositionVideo.selectPosition(210);" /></map>
-
-
-

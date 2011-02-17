@@ -1,7 +1,7 @@
 <table border="0" cellpadding="4" cellspacing="6" id="ads_type_gallery" width="800">
 <tbody>
     <tr>
-        <td align="right" colspan="2">		
+        <td align="right" colspan="2">
             <label>
                 Banner Intersticial - Gallery (800X600)
                 <input type="radio" name="type_advertisement" value="50" {if $advertisement->type_advertisement == 50}checked="checked" {/if}/>
@@ -9,7 +9,7 @@
         </td>
         <td rowspan="7" align="right" width="240">
             {include file="advertisement/advertisement_map_positions_gallery.tpl"}
-        </td>            
+        </td>
     </tr>
     <tr>
         <td colspan="2"><hr /></td>
@@ -21,7 +21,7 @@
                 <input type="radio" name="type_advertisement" value="1" {if $advertisement->type_advertisement == 1}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                 Banner Top Right (234X90)
                 <input type="radio" name="type_advertisement" value="2" {if $advertisement->type_advertisement == 2}checked="checked" {/if}/>
@@ -31,8 +31,8 @@
 
     <tr>
         <td colspan="2"><hr /></td>
-    </tr>        
-   
+    </tr>
+
     <tr>
         <td align="right">
             <label>
@@ -40,7 +40,7 @@
                 <input type="radio" name="type_advertisement" value="9" {if $advertisement->type_advertisement == 9}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">		
+        <td align="right">
             <label>
                 Banner Bottom Right (234X90)
                 <input type="radio" name="type_advertisement" value="10" {if $advertisement->type_advertisement == 10}checked="checked" {/if}/>
@@ -50,7 +50,7 @@
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 /* <![CDATA[ */{literal}
 var adPositionGallery = null;
 
@@ -60,7 +60,7 @@ positions_gallery[2] = '178,0,55,24';
 positions_gallery[9] = '2,297,176,24';
 positions_gallery[10] = '178,297,55,24';
 positions_gallery[50] = '0,0,240,352';
- 
+
 
 var options = {'positions': positions_gallery, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
 adPositionGallery = new AdPosition('advertisement-mosaic-gallery', options );

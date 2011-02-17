@@ -2,7 +2,7 @@
 <style>
 #advertisement-mosaic-interior {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     position: relative;
     width: 240px;
     height: 550px;
@@ -23,7 +23,7 @@
 
 <div id="advertisement-mosaic-interior" style="display: none;">
     <div id="advertisement-mosaic-interior-frame"></div>
-    <img src="images/advertisement/article_inner_240.png" width="240" height="550" border="0" usemap="#mapInterior" />
+    <img src="/admin/images/advertisement/article_inner_240.png" width="240" height="550" border="0" usemap="#mapInterior" />
 </div>
 
 <map name="mapInterior">
@@ -54,5 +54,5 @@
 
 <area shape="rect" coords="181,520,235,5431" alt="Banner Inferior Derecho (Int.)" title="Banner Inferior Derecho (Int.)"
     href="javascript:adPositionInterior.selectPosition(110);" />
-    
+
 </map>

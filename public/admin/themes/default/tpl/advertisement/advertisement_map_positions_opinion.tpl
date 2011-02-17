@@ -2,7 +2,7 @@
 <style>
 #advertisement-mosaic-opinion {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     position: relative;
     width: 240px;
     height: 327px;
@@ -23,7 +23,7 @@
 
 <div id="advertisement-mosaic-opinion" style="display: none;">
     <div id="advertisement-mosaic-frame-opinion"></div>
-    <img src="images/advertisement/opinion_front_ads_240.png" width="240" height="327" border="0" usemap="#mapOpinion" />
+    <img src="/admin/images/advertisement/opinion_front_ads_240.png" width="240" height="327" border="0" usemap="#mapOpinion" />
 </div>
 
 <map name="mapOpinion">
@@ -40,6 +40,3 @@
 <area shape="rect" coords="4,276,178,301" title="bigbottombanner"  href="javascript:adPositionOpinion.selectPosition(9);" />
 <area shape="rect" coords="179,276,240,301" title="leftbotombanner" href="javascript:adPositionOpinion.selectPosition(10);"/>
 </map>
-
-
-

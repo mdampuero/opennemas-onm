@@ -1,10 +1,13 @@
 {extends file="base/admin.tpl"}
 
- 
-{block name="content" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
- 
+{block name="footer-js" append}
+    <script defer="defer" defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
+    <script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+{/block}
+
+
+{block name="content"}
+
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
     {*
@@ -71,7 +74,7 @@
         <li>
         <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
         </li>
-        <script type="text/javascript">
+        <script defer="defer" type="text/javascript">
                 // <![CDATA[
                     {literal}
                           Event.observe($('link_home'), 'mouseover', function(event) {
@@ -224,7 +227,7 @@
 {sectionelse}
 <tr>
 	<td align="center" colspan="10">
-        <h2>Ninguna publicidad guardada en esta sección</h2>
+        <h2>No hay ninguna publicidad guardada en esta sección</h2>
     </td>
 </tr>
 {/section}
@@ -250,19 +253,6 @@
 {* ******************************************************************************* *}
 {* FORMULARIO PARA ENGADIR UN CONTENIDO PUBLICIDAD******************************** *}
 {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
-
-{literal}
-<style>
-#tabs a {
-    background-color: #F5F5F5;
-}
-
-#tabs a.active-tab {
-    background-color: #EEE;
-    font-weight: bold;
-}
-</style>
-
 <script language="javascript" type="text/javascript">
 function testScript(frm)  {
     frm.action.value = 'test_script';
@@ -273,7 +263,6 @@ function testScript(frm)  {
     frm.action.value = '';
 }
 </script>
-{/literal}
 
 {include file="botonera_up.tpl"}
 
@@ -519,7 +508,7 @@ function testScript(frm)  {
             </label>
 
             <script type="text/javascript" src="{$params.JS_DIR}GeoipHelper.js?cacheburst=1258404035" charset="utf-8"></script>
-            <script type="text/javascript">
+            <script defer="defer" type="text/javascript">
             {literal}
             new GeoipHelper('geoip_select', 'script');
             {/literal}
@@ -581,7 +570,7 @@ function testScript(frm)  {
 </table>
 
 {* if $smarty.request.action eq "read" *}
-<script type="text/javascript">
+<script defer="defer" type="text/javascript">
 /* <![CDATA[ */
 {literal}
 // Add exhibit method to Fabtabs to can select a tab by id
@@ -677,7 +666,7 @@ document.observe('dom:loaded', function() {ldelim}
 {dhtml_calendar inputField="starttime" button="triggerstart"  ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR"}
 {dhtml_calendar inputField="endtime" button="triggerend"  ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR"}
 *}
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 {literal}
 
 
