@@ -11,6 +11,8 @@ class WidgetMostSeeingVotedCommentedContent extends Widget_Factory {
     }
 
     public function render($params = '') {
+
+        // Retrieve all the required contents
         $articles_viewed = $this->cm->cache->getMostViewedContent('Article', true, $actual_category_id, 0, 7, 6);
         $articles_comments = $this->cm->cache->getMostComentedContent('Article', true, $actual_category_id, 0, 7, 6);
         $articles_voted = $this->cm->cache->getMostVotedContent('Article', true, $actual_category_id, 0, 7, 6);
@@ -25,10 +27,14 @@ class WidgetMostSeeingVotedCommentedContent extends Widget_Factory {
 
             }
         }
+
+        // Assign them to the template object
         $this->tpl->assign('articles_viewed', $articles_viewed);
         $this->tpl->assign('articles_voted', $articles_voted);
         $this->tpl->assign('articles_comments', $arts_commented);
 
+
+        // return the html output
         return $this->tpl->fetch($this->template);
     }
 

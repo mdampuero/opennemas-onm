@@ -58,12 +58,10 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
     $patterns = array('/"/', '/\'/', '/“/');
     $replace = array('', '','');
 
-
-
     $title_cleaned = preg_replace($patterns,$replace, $content->title);
-    $html=' <a title="Related: '.$title_cleaned.'" href="'. SITE_URL . $content->uri .'"';
-                if(($content->fk_content_type==3)) { $html.='target="_blank"'; }
-    $html.='   ><span '.$class.'>&nbsp;</span>'.clearslash($content->title).'</a>';
+    $html=' <a title="Relacionado: '.$title_cleaned.'" href="'. SITE_URL . $content->uri .'"';
+    if(($content->fk_content_type==3)) { $html.='target="_blank"'; }
+    $html.='><span '.$class.'>&nbsp;</span>'.clearslash($content->title).'</a>';
 
 
     return $html;

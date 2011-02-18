@@ -1,8 +1,9 @@
 {if (!$last)}
 <div class="span-16"><!-- inicio headlines -->
 {/if}
+
 <div class="more-news-section span-8 {if ($last)}last{/if}">
-    <ul class="more-news-section-sectionlist clearfix">
+{$last}    <ul class="more-news-section-sectionlist clearfix">
         <li class="first"><a href="/seccion/{$category_hdata.name}/" title="Sección:{$category_hdata.title|clean_for_html_attributes}"><strong>{$category_hdata.title|clearslash}</strong>:</a></li>
          {if !empty($category_hdata.subcategories)}
              {foreach name=s key=c item=subcat from=$category_hdata.subcategories}
@@ -36,12 +37,11 @@
                                                                 category_name=$category_hdata.name
                                                                 title=$sub.title}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
             {else}
-                <li><a href="{$smarty.const.SITE_URL}{generate_uri
-                                                                content_type='article'
-                                                                id=$sub.id
-                                                                date=$sub.created
-                                                                category_name=$category_hdata.name
-                                                                title=$sub.title}" title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a></li>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{generate_uri
+                                                        content_type='article' id=$sub.id date=$sub.created category_name=$category_hdata.name title=$sub.title}"
+                       title="{$sub.title|clearslash|escape:"html"|clean_for_html_attributes}">{$sub.title|clearslash}</a>
+                </li>
             {/if}
         {/foreach}
     </ul>

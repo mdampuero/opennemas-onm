@@ -264,6 +264,7 @@ if(($tpl->caching == 0)
 
         /***** COLUMN1 RELATED NEWS  ****/
         $relationes = $relia->get_relations($articles_home[$aux]->id);
+
         ////se le pasa el id de cada noticia de la column1
         // devueve array con los id de las noticias relacionadas
 
@@ -273,7 +274,8 @@ if(($tpl->caching == 0)
             $obj = new Content($id_rel);
             // Filter by scheduled {{{
             if($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
-               $relats[] =$obj;
+                $obj->category_name = $ccm->get_name($obj->category);
+                $relats[] =$obj;
             }
             // }}}
         }
@@ -330,6 +332,7 @@ if(($tpl->caching == 0)
     foreach ($titular_gente as $gente) {
         $img = new Photo($gente->img2);
         $gente->path_img = $img->path_file."".$img->name;
+        $gente->category_name = $ccm->get_name($gente->category);
     }
 
     $tpl->assign('titulares_gente', $titular_gente);
@@ -343,11 +346,6 @@ if(($tpl->caching == 0)
                            , 'ORDER BY favorite DESC, created DESC'
                            .' LIMIT 0 , 5');
     $tpl->assign('lastAlbum', $lastAlbum);
-
-    /**
-     * Fetch information for widget videos
-    */
-    require_once ("widget_videos.php");
 
 
     /**
