@@ -2,9 +2,11 @@
 
 {block name="content"}
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-{if !isset($smarty.request.action) || $smarty.request.action eq "list"}
+    <div id="content-wrapper" style="width:80% !important; margin:0 auto;">
+
+    {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}
-    <ul id="tabs">
+    <ul id="tabs" style="margin-left:10px;">
         {section name=as loop=$allcategorys}
         <li>
             {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -25,7 +27,9 @@
         <div id="pagina">
             {* NOTICIA DESTACADA ******* *}
             <table class="adminlist" border=0>
-                 <tr>
+
+                {if count($portadas) > 0}
+                <thead>
                     <th align="center" style="width:100px;">Portada</th>
                     <th align="center">T&iacute;tulo</th>
                     <th align="center" style="width:100px;">Fecha</th>
@@ -35,7 +39,8 @@
                     <th align="center" style="width:110px;">Publicado</th>
                     <th align="center" style="width:50px;">Editar</th>
                     <th align="center" style="width:50px;">Elim</th>
-                </tr>
+                </thead>
+                {/if}
 
                 {section name=as loop=$portadas}
                 <tr {cycle values="class=row0,class=row1"}>
@@ -87,20 +92,25 @@
                 </tr>
                 {sectionelse}
                 <tr>
-                    <td align="center" colspan=5><br><br><p><h2><b>Ninguna portada guardada </b></h2></p><br><br></td>
+                    <td align="center" colspan=9 atyle="padding:20px;">{t}There is no stands{/t}</td>
                 </tr>
                 {/section}
 
-                {if count($portadas) gt 0}
-                <tr>
-                  <td colspan="6" style="padding:10px;font-size: 12px;" align="center"><br><br>{$paginacion->links}<br><br></td>
-                </tr>
-                {/if}
+
+                <tfoot>
+                    <tr>
+                        <td colspan="9" style="padding:10px;font-size: 12px;" align="center">
+                            {if count($portadas) gt 0}
+                                {$paginacion->links}
+                            {/if}
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
-{/if}
+    {/if}
 
-{if isset($smarty.request.action) && $smarty.request.action eq "new"}
+    {if isset($smarty.request.action) && $smarty.request.action eq "new"}
 
         {include file="botonera_up.tpl"}
         <ul id="tabs">
@@ -202,9 +212,9 @@
             </table>
         </div>
 
-{/if}
+    {/if}
 
-{if isset($smarty.request.action) && $smarty.request.action eq "read"}
+    {if isset($smarty.request.action) && $smarty.request.action eq "read"}
 
         {include file="botonera_up.tpl"}
         <ul id="tabs">
@@ -291,14 +301,16 @@
             </table>
         </div>
 
-{/if}
+    {/if}
 
-{if $smarty.request.action eq "new"}
+    {if $smarty.request.action eq "new"}
         {* Replaced by the Control.DatePicker prototype widget *}
         {dhtml_calendar inputField="date" button="date" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
-{/if}
+    {/if}
 
-<input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" id="action" name="action" value="" />
+    </div><!--fin content-wrapper-->
+
 </form>
 
 {/block}

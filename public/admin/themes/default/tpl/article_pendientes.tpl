@@ -64,20 +64,21 @@
         </table>
         <br />
         <table class="adminlist">
-            <tr style="border-bottom: 2px solid #000;">
+            <thead>
                 <th style="width:50px;"></th>
                 <th align="left" style="padding:5px;font-size: 11px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
-                {if $category eq 'todos' || $category eq 'opinion'} <th align="left" style="width:170px;">
-                    <img src="themes/default/images/newsletter/editar.gif" border="0">Secci&oacute;n</th>
-                <th  align="left" style="padding:5px;font-size: 11px;width:70px;">Núm Pág</th>{/if}
-                <th  align="left" style="padding:10px;font-size: 11px;width:230px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Agencia/Autor</th>
-                <th align="center" style="padding:5px;font-size: 11px;width:80px;">Creado</th>
+                {if $category eq 'todos' || $category eq 'opinion'}
+                    <th align="left" style="width:170px;"> <img src="themes/default/images/newsletter/editar.gif" border="0">Secci&oacute;n</th>
+                    <th  align="left" style="width:70px;">Núm Pág</th>
+                {/if}
+                <th  align="left" style="width:230px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Agencia/Autor</th>
+                <th align="center" style="width:80px;">Creado</th>
                 {*  <th align="center" style="padding:5px;font-size: 11px;width:50px;">Publisher</th>*}
-                <th align="center" style="padding:5px;font-size: 11px;width:50px;">Last Editor</th>
+                <th align="center" style="width:50px;">Last Editor</th>
                 <th align="center" style="width:40px;">{if $category!=20}Aprobar{/if}</th>
                 <th align="center" style="width:40px;">Editar</th>
                 <th align="center" style="width:40px;">Eliminar</th>
-            </tr>
+            </thead>
         <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
         {if $articles}
             {section name=c loop=$articles}
@@ -145,7 +146,11 @@
     {else}
         {if $category neq 'opinion'}
             <tr>
-                <td align="center" colspan="9" style="height:280px;" ><br><br><p><h2><b>Ninguna noticia pendiente de publicar.</b></h2></p></td>
+                <td align="center" colspan="10" style="height:180px;" >Ninguna noticia pendiente de publicar.</td>
+            </tr>
+        {else}
+            <tr>
+                <td align="center" colspan="10" style="height:180px;" >No hai ningún artículo pendiente de publicar.</td>
             </tr>
         {/if}
     {/if}
@@ -223,8 +228,5 @@
         {/if}
         </table>
 
-             <br />
-            {include file="botonera_up.tpl"}
-        
     </div>
 {/if}

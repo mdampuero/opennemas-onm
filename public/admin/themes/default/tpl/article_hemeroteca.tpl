@@ -33,26 +33,26 @@
 <table class="adminheading">
 	<tr>
 		<td><b>Art&iacute;culos en la hemeroteca</b></td><td style="font-size: 10px;" align="right"><em> </em></td>
-	</tr>	
+	</tr>
 </table>
 
 <table class="adminlist">
-	<tr>
+	<thead>
 <!--<th>ID</th>-->
 		<th class="title">Título</th>
 		<th align="center" style="width:70px;">Fecha de modificación</th>
 		<th align="center" style="width:70px;">Visto</th>
-		<th align="center" style="width:70px;">Comentarios</th>	
-		<th align="center" style="width:70px;">Votaci&oacute;n</th>	
+		<th align="center" style="width:70px;">Comentarios</th>
+		<th align="center" style="width:70px;">Votaci&oacute;n</th>
 		<th style="width:70px;">Publisher</th>
 		<th style="width:70px;">Last Editor</th>
 		<th align="center" style="width:70px;">Recuperar</th>
 		<th align="center" style="width:70px;">Visualizar</th>
 		<th align="center" style="width:70px;">Editar</th>
 		<th align="center" style="width:70px;">Eliminar</th>
-	  </tr>
+	</thead>
 
-<input type="hidden"  id="category" name="category" value="{$category}"> 
+<input type="hidden"  id="category" name="category" value="{$category}">
 
 {section name=c loop=$articles}
 <tr {cycle values="class=row0,class=row1"}>
@@ -61,35 +61,35 @@
 		<a href="#" onClick="javascript:enviar(this, '_self', 'only_read', '{$articles[c]->id}');" title="{$articles[c]->title|clearslash}"> {$articles[c]->title|clearslash}</a>
 	</td>
 	<td style="padding:10px;font-size: 11px;width:10%;" align="center">
-		{$articles[c]->changed} 
+		{$articles[c]->changed}
 	</td>
 	<td style="text-align: center;font-size: 11px;width:5%;">
 		{$articles[c]->views}
 	</td>
-	<td style="padding:1px;width:5%;font-size: 11px;" align="center">		
+	<td style="padding:1px;width:5%;font-size: 11px;" align="center">
 		{$articles[c]->comment}
 	</td>
-	<td style="padding:1px;width:5%;font-size: 11px;" align="center">		
+	<td style="padding:1px;width:5%;font-size: 11px;" align="center">
 		{$articles[c]->rating}
 	</td>
-	<td style="padding:10px;font-size: 11px;width:10%;">	
+	<td style="padding:10px;font-size: 11px;width:10%;">
 		{$articles[c]->publisher}
 	</td>
-	<td style="padding:10px;font-size: 11px;width:10%;">	
+	<td style="padding:10px;font-size: 11px;width:10%;">
 		{$articles[c]->editor}
 	</td>
-	<td style="padding:10px;width:10%;" align="center">		
+	<td style="padding:10px;width:10%;" align="center">
                 <a href="?id={$articles[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
                         <img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Publicar" /></a>
 	</td>
 	<td style="padding:10px;width:10%;" align="center">
 		{* <a href="#" onClick="javascript:enviar(this, '_self', 'only_read', '{$articles[c]->id}');" title="Consultar">
 			<img src="{$params.IMAGE_DIR}visualizar.png" border="0" /></a> *}
-            
+
         {* Previsualizar *}
-        <a href="{$articles[c]->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="UserVoice.PopIn.showPublic('{$articles[c]->permalink}');return false;" >            
+        <a href="{$articles[c]->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="UserVoice.PopIn.showPublic('{$articles[c]->permalink}');return false;" >
             <img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" /></a>
-        
+
 	</td>
 	<td  align="center" style="text-align: center;width:5%;">
 				<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$articles[c]->id}');" title="Editar">
@@ -106,9 +106,9 @@
 </tr>
 {/section}
 {if count($articles) gt 0}
-<tr>
-<td colspan="10" style="padding:10px;font-size: 12px;" align="center"><br><br>{$paginacion->links}<br><br></td>
-</tr>
+<tfoot>
+<td colspan="11" style="padding:10px;font-size: 12px;" align="center" class="pagination">{$paginacion->links}</td>
+</tfoot>
 {/if}
 </table>
 
@@ -123,4 +123,3 @@
 </table>
 
 </div>
-

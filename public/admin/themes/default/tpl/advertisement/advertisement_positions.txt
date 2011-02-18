@@ -1,0 +1,49 @@
+{*
+        //Portada
+        1- big superior izquierda
+        2- banner superior derecha
+        3 banner columna1
+        4 banner columna3
+        5 separador horizontal
+        6 mini1 dcha
+        7 mini 2 dcha
+        8 botoncuadrado columna3
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
+
+        //Noticia inner - opinion inner
+        101 big superior izquierda
+        102 banner superior derecha
+        103 banner1 columna
+        104 robapagina
+        105 banner2 columna
+        109 big Inferior Izquierda
+        110 Banner Inferior derecha
+
+        //Portada opinion
+        1- big superior izquierda
+        2- banner superior derecha
+        3 banner columna
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
+
+        //Gallery
+        1- big superior izquierda
+        2- banner superior derecha
+        9 big Inferior Izquierda
+        10 Banner Inferior derecha
+
+        //Video Front
+        201- big superior izquierda
+        202- banner superior derecha
+        209 big Inferior Izquierda
+        210 Banner Inferior derecha
+
+        /Video Inner
+        301- big superior izquierda
+        302- banner superior derecha
+        303- banner columna
+        309 big Inferior Izquierda
+        310 Banner Inferior derecha
+
+    *}

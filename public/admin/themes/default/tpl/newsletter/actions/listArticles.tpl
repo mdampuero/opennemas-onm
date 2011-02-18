@@ -1,158 +1,177 @@
-{* Botonera *} 
-<div id="menu-acciones-admin">
-	<div class="subtitle">
-		Selección de artículos				
-	</div>
-	
-	<div class="steps">
-		<img src="{$params.IMAGE_DIR}newsletter/1.gif" width="300" height="40" border="0" usemap="#map" />
-		{include file="newsletter/wizard.png.map"}
-	</div>
-	
-	<ul>
-	    <li>
-            <a href="#" class="admin_add" title="Siguiente">
-                <img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
-				Siguiente
-            </a>
-	    </li>
-		
-		<li class="separator"></li>
-		
-		<li>
-			<a href="#" class="admin_add" title="Limpiar contenedor de noticias seleccionadas">
-                <img border="0" src="{$params.IMAGE_DIR}newsletter/editclear.png" alt="" /><br />
-				Limpiar
-            </a>
-		</li>
-		<li>
-			<a href="#" class="admin_add" title="Seleccionar todas las noticias del contenedor superior">
-                <img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
-				Seleccionar todos
-            </a>
-		</li>		
-	</ul>
-</div>
+{extends file="base/admin.tpl"}
 
-<div class="form">
-	<form name="searchForm" id="searchForm" method="post" action="#">
-		<input type="text" id="q" name="filters[q]" value="" />
-		
-		<select id="q_options" name="filters[options]">
-			<option value="in_home">Home</option>
-			<option value="frontpage">Portada</option>
-			<option value="content_status">Hemeroteca</option>
-		</select>
-		
-		<select id="q_category" name="filters[category]">
-			<option value="-1">-- TODAS --</option>
-			{foreach item="c_it" from=$content_categories}
-				{if $c_it->pk_content_category!=4} {* != Opinion *}
-					<option value="{$c_it->pk_content_category}">{$c_it->title}</option>
-						
-					{if count($c_it->childNodes)>0}                                    
-						{foreach item="sc_it" from=$c_it->childNodes}
-							<option value="{$sc_it->pk_content_category}">
-						&nbsp; &rArr; {$sc_it->title}</option>
-							
-						{/foreach}
-					{/if}
-				{/if}
-			{/foreach}
-		</select>
-		
-		<button type="submit">Buscar</button>
-		
-		{* Valores asistente *}
-		<input type="hidden" id="action"     name="action"     value="search" />
-		<input type="hidden" id="source" 	 name="source"     value="Article" />
-		<input type="hidden" id="postmaster" name="postmaster" value="" />
-	</form>
-</div>
+{block name="header-css" append}
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}calendar_date_select.css" />
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css" />
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
+<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
+{/block}
 
-<table class="adminheading" style="margin-top:30px;">
-    <tr style="text-align:center;">
-        <th nowrap>Listado de Noticias (pulse dos veces para incluir un elemento)</th>
-        <th nowrap>Noticias seleccionadas (pulse dos veces para eliminar un elemento)</th>
-    </tr>
-</table>
-<table class="adminlist" style="min-height:500px">
-    <tr>
-        <td width="50%">
-            <div id="container1">
-                <ul id="items-list" style="margin:0; padding:0"></ul>
-            </div>
-        </td>
-        <td width="50%">
-            <div id="container2">
-                {* Items selected *}
-                <ul id="items-selected" style="margin:0; padding:0"></ul>
-            </div>
-        </td>
-    </tr>
-</table>
-                     
-
-
-
+{block name="footer-js" append}
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}newsletter.js?cacheburst=1259855452"></script>
 <script type="text/javascript">
-/* <![CDATA[ */
-var manager = null; // Newsletter.Manager
-var searchEngine = null; // Newsletter.SearchEngine
+	/* <![CDATA[ */
+	var manager = null; // Newsletter.Manager
+	var searchEngine = null; // Newsletter.SearchEngine
 
-var itemsList = {json_encode value=$items};
-var postData  = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
+	var itemsList = {json_encode value=$items};
+	var postData  = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
-{literal}
-document.observe('dom:loaded', function() {
-	var itemsSelected = new Array();
-	if(postData!=null && postData.articles) {
-		itemsSelected = postData.articles;
-	}
-	
-	manager = new Newsletter.Manager('items-selected', {items: itemsSelected});		
-	
-	searchEngine = new Newsletter.SearchEngine('items-list', {
-		'items': itemsList,
-		'manager': manager,
-		'form': 'searchForm'
+	document.observe('dom:loaded', function() {
+		var itemsSelected = new Array();
+		if(postData!=null && postData.articles) {
+			itemsSelected = postData.articles;
+		}
+
+		manager = new Newsletter.Manager('items-selected', { items: itemsSelected });
+
+		searchEngine = new Newsletter.SearchEngine('items-list', {
+			'items': itemsList,
+			'manager': manager,
+			'form': 'searchForm'
+		});
+
+		$('postmaster').value = Object.toJSON(postData); // Binding post-data
+
+		var botonera = $$('div#menu-acciones-admin ul li a');
+		botonera[0].observe('click', function() {
+			manager.serialize('articles');
+
+			searchEngine.form.action.value = 'listOpinions';
+			searchEngine.form.submit();
+		});
+
+		botonera[1].observe('click', function() {
+			manager.clearList();
+		});
+
+		botonera[2].observe('click', function() {
+			searchEngine.selectAll();
+		});
+
+		new Newsletter.UISplitPane('container', 'container1', 'container2', 'separator');
+
+		// Wizard icons step
+		$('map').select('area').each(function(tagArea) {
+			tagArea.observe('click', function(evt) {
+				Event.stop(evt);
+
+				var attr = this.getAttribute('action');
+
+				var form = $('searchForm');
+				manager.serialize('articles'); // global object
+
+				form.action.value = attr;
+				form.submit();
+			});
+		});
 	});
-	
-	$('postmaster').value = Object.toJSON(postData); // Binding post-data	
-	
-	var botonera = $$('div#menu-acciones-admin ul li a');
-    botonera[0].observe('click', function() {
-		manager.serialize('articles');
-		
-		searchEngine.form.action.value = 'listOpinions';
-		searchEngine.form.submit();
-	});
-	
-	botonera[1].observe('click', function() {
-		manager.clearList();
-	});	
-	
-	botonera[2].observe('click', function() {
-		searchEngine.selectAll();
-	});	
-	
-	new Newsletter.UISplitPane('container', 'container1', 'container2', 'separator');
-	
-	// Wizard icons step
-	$('map').select('area').each(function(tagArea) {
-		tagArea.observe('click', function(evt) {
-			Event.stop(evt);
-			
-			var attr = this.getAttribute('action');
-			
-			var form = $('searchForm');
-			manager.serialize('articles'); // global object
-			
-			form.action.value = attr;
-			form.submit();		
-		});						
-	});
-});
-{/literal}
-/* ]]> */
-</script>
+	/* ]]> */
+	</script>
+{/block}
+
+{block name="content"}
+
+<div class="wrapper-content" style="width:80%; margin:0 auto;">
+	{* Botonera *}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Newsletter management{/t}</h2></div>
+
+		<div class="steps">
+			<img src="{$params.IMAGE_DIR}newsletter/1.gif" width="300" height="40" border="0" usemap="#map" />
+			{include file="newsletter/wizard.png.map"}
+		</div>
+
+		<ul>
+			<li>
+				<a href="#" class="admin_add" title="Siguiente">
+					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
+					Siguiente
+				</a>
+			</li>
+
+			<li class="separator"></li>
+
+			<li>
+				<a href="#" class="admin_add" title="Limpiar contenedor de noticias seleccionadas">
+					<img border="0" src="{$params.IMAGE_DIR}newsletter/editclear.png" alt="" /><br />
+					Limpiar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" title="{t}Select all the articles available{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
+					Seleccionar todos
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="form notice">
+		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Article selection{/t}</h3>
+		Please select your desired articles to attach in the newsletter.
+	</div>
+
+	<table class="adminheading">
+		<tr>
+			<td>
+				<form name="searchForm" id="searchForm" method="post" action="#">
+					{t}Articles that contain {/t}
+					<input type="text" id="q" name="filters[q]" value="" />
+					{t}in{/t}
+					<select id="q_options" name="filters[options]">
+						<option value="in_home">{t}Home{/t}</option>
+						<option value="frontpage">{t}Frontpage{/t}</option>
+						<option value="content_status">{t}Library{/t}</option>
+					</select>
+					{t}from category{/t}
+					<select id="q_category" name="filters[category]">
+						<option value="-1">-- {t}ALL{/t} --</option>
+						{foreach item="c_it" from=$content_categories}
+							{if $c_it->pk_content_category!=4} {* != Opinion *}
+								<option value="{$c_it->pk_content_category}">{$c_it->title}</option>
+								{if count($c_it->childNodes)>0}
+									{foreach item="sc_it" from=$c_it->childNodes}
+										<option value="{$sc_it->pk_content_category}">&nbsp; &rArr; {$sc_it->title}</option>
+
+									{/foreach}
+								{/if}
+							{/if}
+						{/foreach}
+					</select>
+
+					<button type="submit">{t}Buscar{/t}</button>
+
+					{* Valores asistente *}
+					<input type="hidden" id="action"     name="action"     value="search" />
+					<input type="hidden" id="source" 	 name="source"     value="Article" />
+					<input type="hidden" id="postmaster" name="postmaster" value="" />
+				</form>
+
+			</td>
+		</tr>
+	</table>
+	<table class="adminlist" >
+		<thead style="text-align:center;">
+			<th nowrap>{t}Available articles (please, double click over one element to send it){/t}</th>
+			<th nowrap>{t}Selected articles (please doucle click over one element to discart it){/t}</th>
+		</thead>
+		<tr>
+			<td width="50%">
+				<div id="container1">
+					<ul id="items-list" style="margin:0; padding:0"></ul>
+				</div>
+			</td>
+			<td width="50%">
+				<div id="container2">
+					{* Items selected *}
+					<ul id="items-selected" style="margin:0; padding:0"></ul>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+</div>
+{/block}

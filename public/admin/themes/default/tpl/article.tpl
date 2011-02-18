@@ -14,6 +14,7 @@
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+    <div id="content-wrapper" style="width:80% !important; margin:0 auto;">
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}
@@ -254,5 +255,6 @@ if($('starttime')) {
 
 <input type="hidden" id="action" name="action" value="" />
 <input type="hidden" name="id" id="id" value="{$id}" />
+    </div>
 </form>
 {/block}

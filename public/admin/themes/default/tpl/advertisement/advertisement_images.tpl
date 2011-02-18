@@ -109,7 +109,7 @@
 								  	{/if}
 							    </li>
 									<script defer="defer" type="text/javascript">
-									  new Draggable('draggable_img{/literal}{$num}{literal}', { revert:true, scroll: window, ghosting:true }  );
+									  new Draggable('draggable_img{$num}', { revert:true, scroll: window, ghosting:true }  );
 									</script>
 								 {assign var=num value=$num+1}
 							 {/if}
@@ -122,7 +122,6 @@
 </tr>
 
 
-{literal}
 
 <script defer="defer" type="text/javascript">
 
@@ -132,7 +131,7 @@
     onDrop: function(element) {
 		    if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
 	    		 var ancho=element.getAttribute('de:ancho');
-		  		 if(element.getAttribute('de:ancho')>300) {ancho=300;}
+		  		 if(element.getAttribute('de:ancho')>300) { ancho=300; }
 		         $('droppable_div1').innerHTML='<object ><param name="movie" value="'+ element.getAttribute('de:url') +'/'+element.getAttribute('de:mas')+ '"><embed src="'+ element.getAttribute('de:url') +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
 		         $('informa').innerHTML=' es un Flash';
 		         $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created');
@@ -140,10 +139,10 @@
 
 		    } else {
 			   		var source=element.src;
-		   			if($('change1')){$('change1').src = source;}
+		   			if($('change1')){ $('change1').src = source; }
 			  		$('input_img').value=element.name;
 			  		var ancho=element.getAttribute('de:ancho');
-			  		if(element.getAttribute('de:ancho')>300) {ancho=300;}
+			  		if(element.getAttribute('de:ancho')>300) { ancho=300; }
 			   		$('droppable_div1').innerHTML='<img src="'+ element.getAttribute('de:url') +'/'+element.getAttribute('de:mas')+ '"  id="change1" border="0" width="'+ancho+'" >';
 			   		$('input_img').value=element.name;
 			   		$('informa').innerHTML=' ';
@@ -154,4 +153,3 @@
 
 
 </script>
-{/literal}

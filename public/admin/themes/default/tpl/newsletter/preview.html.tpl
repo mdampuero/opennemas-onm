@@ -10,7 +10,7 @@
                     {if $smarty.request.action=='send'}
                         <img src="cid:logo-cid" border="0" height="60" width="300" alt="" /></a>
                     {else}
-                        <img src="{$URL_PUBLIC}/themes/lucidity/images/retrincos-big-logo.png" border="0" alt="Boletín de {$smarty.const.SITE_FULLNAME}" /></a>
+                        <img src="{$URL_PUBLIC}/themes/{$smarty.const.THEME}/images/retrincos-big-logo.png" border="0" alt="Boletín de {$smarty.const.SITE_FULLNAME}" /></a>
                     {/if}
                     <br />
                 </td>
@@ -24,8 +24,10 @@
             <tr>
                 <td>
                     <br/>
-                    Hola ###DESTINATARIO###. Esto es lo &uacute;ltimo que esta sucendiendo en Galicia, Espa&ntilde;a y el Mundo y que fue publicado hoy en
-                    <a href="{$URL_PUBLIC}">{$smarty.const.SITE_FULLNAME}</a>:
+                    Hola ###DESTINATARIO###,
+                    <br/>
+                    estas son las &uacute;ltimas noticias y articulos de opinions de hoy  te recordamos que puedes encontra estas y muchsa más visitando la web
+                    {$smarty.const.SITE_FULLNAME} (<a href="{$URL_PUBLIC}">{$URL_PUBLIC}</a>):
                     <br /><br />
                 </td>
             </tr>
@@ -33,14 +35,14 @@
             {if count($data->articles)>0}
                 <tr>
                     <td style="font-family:Georgia; font-size:12px; color:#354b1d;background:#deeccf;padding:3px;border-bottom:1px solid #354b1d;">
-                        <div style="margin-left: 5px">INFORMACI&Oacute;N</div>
+                        <div style="margin-left: 5px">NOTICIAS</div>
                     </td>
                 </tr>
 
                 {section name=n loop=$data->articles}
                 <tr>
                     <td style="font-size:15px;color:#333333;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #a0a0a0;">
-                        <a href="{$URL_PUBLIC}{$data->articles[n]->permalink}" style="color: #354b1d">
+                        <a href="{$URL_PUBLIC}{$data->articles[n]->uri}" style="color: #354b1d">
                             <b>&middot; {$data->articles[n]->category_name}</b>: <span style="color:Black">{$data->articles[n]->title}</span></a>
                     </td>
                 </tr>
@@ -54,7 +56,7 @@
             {if count($data->opinions)>0}
                 <tr>
                     <td style="font-family:Georgia; font-size:12px; color:#354b1d;background:#deeccf;padding:3px;border-bottom:1px solid #354b1d;">
-                        <div style="margin-left:5px">OPINI&Oacute;N</div>
+                        <div style="margin-left:5px">ARTICULOS DE OPINI&Oacute;N</div>
                     </td>
                 </tr>
 
@@ -82,12 +84,13 @@
             </tr>
 
             <tr>
-                <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #d0d0d0;">
-                Usted est&aacute; recibiendo este presente bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
-                <a href="http://www.retrincos.info"><b>RETRINCOS.INFO</b></a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
+                <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #efefef;">
+                Usted est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
+                <a href="{$URL_PUBLIC}">{$smarty.const.SITE_FULLNAME} </a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
                 accediendo a  <a href="{$URL_PUBLIC}/conecta/boletin/"><b>esta direcci&oacute;n</b></a>.
                 <br/><br/><br/>
-                <div align="center"><b>{$smarty.const.SITE_FULLNAME}</b> Informaci&oacute;n con criterio al servicio de Galicia</div>
+                <div align="center"><b>{$smarty.const.SITE_FULLNAME}</b> <br/> {$smarty.const.SITE_DESCRIPTION}</div>
+
                 <br/>
                 </td>
             </tr>

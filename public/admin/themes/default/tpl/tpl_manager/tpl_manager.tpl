@@ -1,86 +1,132 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js"}
+    <script type="text/javascript">
+    var previousValue = null;
+    document.observe('dom:loaded', function() {
+        if( $('tabla') ) {
+            $('tabla').select('tbody input[type=text]').each(function(item) {
+                item.observe('change', function() {
+                    this.up(2).select('input[type=checkbox]')[0].
+                        setAttribute('checked', 'checked');
+                });
+
+                new Control.DatePicker(item,{
+                    icon: './themes/default/images/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    onSelect: function(fecha, instance) {
+                        instance.element.up(2).select('input[type=checkbox]')[0].
+                            setAttribute('checked', 'checked');
+                    },
+                    onHover: function(fecha, instance) {
+                        instance.element.up(2).select('input[type=checkbox]')[0].
+                            setAttribute('checked', 'checked');
+                    }
+                });
+            });
+        }
+    });
+
+    function sendForm(actionValue) {
+        // FIXME: chequeos de seguridad
+        $('action').value = actionValue;
+        $('formulario').submit();
+    }
+
+    function selectAll(indicator, checkboxes) {
+        for(var i=0; i<checkboxes.length; i++) {
+            if(indicator) {
+                checkboxes[i].setAttribute('checked', 'checked');
+                checkboxes[i].selected = true;
+            } else {
+                checkboxes[i].removeAttribute('checked');
+                checkboxes[i].selected = false;
+            }
+        }
+    }
+    </script>
+{/block}
+
+
 {block name="content"}
 
-<div id="adviceRefresh" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0;">
-    <img src="{$params.IMAGE_DIR}template_manager/messagebox_warning.png" border="0" align="absmiddle" />
-    La accion "Renovar cache" sobre múltiples cachés puede ralentizar el sistema.
-</div>
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST"
-	 style="max-width:70% !important; margin: 0 auto; display:block;">
-<div id="menu-acciones-admin">
-     <div style="float:left;"><h2>{$titulo_barra}</h2></div>
-    <ul>
-        <li>
-			<a href="#delete" onclick="{literal}if(confirm('¿Está seguro de querer eliminar las cachés seleccionadas?')){sendForm('delete');}return false;{/literal}" title="Eliminar la caché">
-				<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
-                Delete
-            </a>
-		</li>
+	 style="max-width:70% !important; margin: 10px auto; display:block;">
+	<div id="menu-acciones-admin">
+		 <div style="float:left; margin:8px;"><h2>{t}Cache Manager{/t}</h2></div>
+		<ul>
+			<li>
+				<a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
+					{t}Delete{/t}
+				</a>
+			</li>
 
-		<li>
-			<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
-              title="Elimina caché y genera una nueva con datos actualizados">
-				<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
-                Regenerate
-            </a>
-		</li>
+			<li>
+				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
+				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
+					{t}Regenerate{/t}
+				</a>
+			</li>
 
-        <li>
-			<a href="#update" onclick="sendForm('update');return false;"
-              title="Cambia fecha de expiración pero mantiene el contenido de la caché">
-				<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" border="0" /><br />
-                Change expiration
-            </a>
-		</li>
+			<li>
+				<a href="#update" onclick="sendForm('update');return false;"
+				  title="{t}This changes the expire date but maintains the cache file contents{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" border="0" /><br />
+					{t}Change expiration{/t}
+				</a>
+			</li>
 
-        <li>
-			<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="Configurar cachés">
-				<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
-                Settings
-            </a>
-		</li>
-	</ul>
-</div>
+			<li>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
+					{t}Settings{/t}
+				</a>
+			</li>
+		</ul>
+	</div>
 
 
-<div>
+	<div>
 
     <table class="adminheading">
         <tr>
-            <td>
+            <td align="right">
 
                 <label>
-                    Show
+                    {t}Show{/t}
                     <input type="text" name="items_page" id="items_page" value="{$smarty.request.items_page}"
-                        size="2" maxlength="2" style="text-align:right; padding:0 5px" />
-                    items/page with type
+                        size="2" maxlength="2" style="text-align:right; margin-top:-2px; padding:0 5px" />
+                    {t}items/page with type{/t}
                 </label>
 
                 <select name="type" id="type">
-                    <option value="" {if $smarty.request.type eq ''}selected="selected"{/if}>All types</option>
-                    <option value="frontpages" {if $smarty.request.type eq 'frontpages'}selected="selected"{/if}>Frontpages</option>
-                    <option value="articles" {if $smarty.request.type eq 'articles'}selected="selected"{/if}>Inner notice</option>
-                    <option value="mobilepages" {if $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>Mobile frontpages</option>
-                    <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>RSS pages</option>
-					<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>Frontpage opinion</option>
-					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>Inner opinion</option>
-					<option value="video-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>Video frontpage</option>
-					<option value="video-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>Video inner</option>
-					<option value="gallery-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>Video frontpage</option>
-					<option value="gallery-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>Video inner</option>
+                    <option value="" {if $smarty.request.type eq ''}selected="selected"{/if}>{t}All types{/t}</option>
+                    <option value="frontpages" {if $smarty.request.type eq 'frontpages'}selected="selected"{/if}>{t}Frontpages{/t}</option>
+                    <option value="articles" {if $smarty.request.type eq 'articles'}selected="selected"{/if}>{t}Inner notice{/t}</option>
+                    <option value="mobilepages" {if $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>{t}Mobile frontpages{/t}</option>
+                    <option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>{t}RSS pages{/t}</option>
+					<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>{t}Frontpage opinion{/t}</option>
+					<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Inner opinion{/t}</option>
+					<option value="video-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
+					<option value="video-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
+					<option value="gallery-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
+					<option value="gallery-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
                 </select>
 
-                and from
+                {t}and from{/t}
 
                 <select name="section" id="section">
-                    <option value="">All sections</option>
+                    <option value="">{t}All sections{/t}</option>
                     {html_options options=$sections selected=$smarty.request.section}
                 </select>
 
                 <button onclick="javascript:paginate(1);return false;">
                     <img src="{$params.IMAGE_DIR}template_manager/reload16x16.png" border="0" align="absmiddle" width="10" />
-                    Update list
+                    {t}Update list{/t}
                 </button>
 
             </td>
@@ -92,17 +138,17 @@
         <thead>
             <tr align="left">
                 <th><input type="checkbox" value="" onclick="selectAll(this.checked, $('tabla').select('tbody input[type=checkbox]'));" /></th>
-                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resource</th>
-                <th>Category</th>
-                <th>Created in</th>
-                <th>Valid until</th>
-                <th>File size</th>
-                <th>Actions</th>
+                <th>{t}Resource{/t}</th>
+                <th>{t}Category{/t}</th>
+                <th>{t}Created in{/t}</th>
+                <th>{t}Valid until{/t}</th>
+                <th>{t}File size{/t}</th>
+                <th>{t}Actions{/t}</th>
             </tr>
         </thead>
 	    <tbody>
         {section name="c" loop=$caches}
-		  <tr bgcolor="{cycle values="#EEEEEE,#FFFFFF"}">
+			<tr bgcolor="{cycle values="#EEEEEE,#FFFFFF"}">
 			   <td width="16">
 					<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
 					<input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
@@ -110,83 +156,81 @@
    			   </td>
                <td>
 					{assign var="resource" value=$caches[c].resource}
-
 					{* Inner Article *}
 					{if isset($titles.$resource) && ($caches[c].template == 'article')}
-                    <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="Caché de artículo interior" />
-                    <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" style="text-decoration: underline;" target="_blank">
-                        <strong>Article:</strong> {$titles.$resource|clearslash}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="{t}Caché de artículo interior{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" target="_blank">
+                        <strong>{t}Article{/t}:</strong> {$titles.$resource|clearslash}
+					</a>
 
 					{* Video inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="Caché de video interior" />
-                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?id={$caches[c].resource}&action=inner"
-                        style="text-decoration: underline;" target="_blank">
-						 <strong>Video Inner:</strong> {$titles.$resource|clearslash}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Caché de video interior{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?id={$caches[c].resource}&action=inner" target="_blank">
+						 <strong>{t}Video Inner:{/t}</strong> {$titles.$resource|clearslash}
+					</a>
 
 					{* Video frontpage *}
 					{elseif ($caches[c].template == 'video_frontpage')}
-                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="Caché de opinión interior" />
-                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?category_name={$caches[c].category}&action=list"
-                        style="text-decoration: underline;" target="_blank">
-                        <strong>Video Frontpage:</strong> {$caches[c].category}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Caché de opinión interior{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/videos.php?category_name={$caches[c].category}&action=list" target="_blank">
+                        <strong>{t}Video Frontpage:{/t}</strong> {$caches[c].category}</a>
 
 					{* Opinion inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de opinión interior" />
-                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-                        style="text-decoration: underline;" target="_blank">
-                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Caché de opinión interior{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
+                        <strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
+					</a>
 
 					{* Gallery frontpage *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="Caché de gallery frontpage" />
-                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-                        style="text-decoration: underline;" target="_blank">
-                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Caché de gallery frontpage{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
+                        <strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
+					</a>
 
 					{* Gallery inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-inner')}
-                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="Caché de gallery interior" />
+                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Caché de gallery interior{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-                        style="text-decoration: underline;" target="_blank">
-                        <strong>Opinion inner:</strong> {$titles.$resource|clearslash}</a>
+                         target="_blank">
+                        <strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
+					</a>
 
 					{* RSS opinion *}
 					{elseif isset($authors.$resource)}
-                    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS - autor de opinión" />
-                    <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/" style="text-decoration: underline;" target="_blank">
-                        <strong>RSS:</strong> {$authors.$resource|clearslash}
+                    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}Caché RSS - autor de opinión{/t}" />
+                    <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"  target="_blank">
+                        <strong>{t}RSS:{/t}</strong> {$authors.$resource|clearslash}
 					</a>
 
 					{* Opinion author index*}
 					{elseif ($caches[c].template == 'opinion_author_index')}
-                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="Caché de portada de autor de opinion" />
+                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Caché de portada de autor de opinion{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-                        style="text-decoration: underline;" target="_blank">
-                        <strong>Opinion Index:</strong> author id {$caches[c].resource}</a>
+                         target="_blank">
+                        <strong>{t}Opinion Index:{/t}</strong> author id {$caches[c].resource}</a>
 
 					{* RSS *}
 					{elseif $resource eq "RSS"}
-			   	    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="Caché RSS" />
-                    {if $caches[c].category != 'home'}
-                        <a href="{$smarty.const.SITE_URL}rss/{$caches[c].category}/" style="text-decoration: underline;" target="_blank">
-                    {else}
-                        <a href="{$smarty.const.SITE_URL}rss/" style="text-decoration: underline;" target="_blank">
-                    {/if}
-                    {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
+			   	    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
+
+                    <a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/"{/if} target="_blank">
+						<strong>{t}RSS:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+					</a>
 
 					{* Frontpage mobile *}
 					{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-                    <img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="Caché de portadas versión móvil" />
-                    <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/" style="text-decoration: underline;" target="_blank">
-                        <strong>Mobile Frontpage:</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+                    <img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Caché de portadas versión móvil{/t}" />
+                    <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
+                        <strong>{t}Mobile Frontpage:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
 					</a>
 
 					{* Frontpages *}
 					{elseif ($caches[c].template == 'frontpage')}
-                    <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
-                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}" style="text-decoration: underline;" target="_blank">
+                    <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Caché de portadas sección{/t}" />
+                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
 					<strong>Frontpage:</strong> {if $caches[c].resource gt 0}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"HOME"} (Pág. {$caches[c].resource})</a>
                     {else}
@@ -195,10 +239,10 @@
 
 					{* Other kind of resources *}
 					{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-                    <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="Caché de portadas sección" />
-                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}" style="text-decoration: underline;" target="_blank">
+                    <img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Caché de portadas sección{/t}" />
+                    <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
 					{if $caches[c].resource gt 0}
-                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} (Pág. {$caches[c].resource})</a>
+                        {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} {t}(Pág.{/t} {$caches[c].resource})</a>
                     {else}
                         {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
                     {/if}
@@ -226,41 +270,42 @@
 				</div>
             </td>
             <td width="70" align="center">
-                {$caches[c].size/1000|string_format:"%d"} KB
+                {$caches[c].size/1024|string_format:"%d"} KB
             </td>
 			<td width="20" align="center">
                <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
-                   title="Regenerar la caché">
-                    <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" /></a>
-			   &nbsp;
+                   title="{t}Regenerate cache file{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" />
+			   </a>&nbsp;
 			   <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
-                    title="Eliminar la caché">
-                    <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" border="0" alt="" /></a>
+                    title="{t}Delete cache file{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" border="0" alt="" />
+			   </a>
             </td>
         </tr>
         {/section}
-    </tbody>
+		</tbody>
 
-    <tfoot>
-        <tr>
-            <td colspan="8" align="center">
-                <script language="javascript" type="text/javascript">
-                // <![CDATA[
-                function paginate(page) {
-                    $('page').value = page;
-                    $('formulario').submit();
-                }
-                // ]]>
-                </script>
-                {$pager->links}
-            </td>
-        </tr>
-    </tfoot>
+		<tfoot>
+			<tr>
+				<td colspan="7" class="pagination">
+					<script language="javascript" type="text/javascript">
+					// <![CDATA[
+					function paginate(page) {
+						$('page').value = page;
+						$('formulario').submit();
+					}
+					// ]]>
+					</script>
+					{$pager->links} &nbsp;
+				</td>
+			</tr>
+		</tfoot>
     </table>
     {else}
 	 <div style="border:1px solid #ccc; padding:10px; font-size:1.2em; text-align:center">
-		  <p>Ohh, there is <strong>no cache file</strong> in the system.</p>
-		  <p>Visit some pages in <a href="{$smarty.const.SITE_URL}" title="Visit your site">your site</a></p>
+		  <p>{t escape="no"}Ohh, there is <strong>no cache file</strong> in the system.{/t}</p>
+		  <p>{t escape="no" 1=$smarty.const.SITE_URL}Visit some pages in <a href="%1" title="Visit your site">your site</a>{/t}</p>
 	 </div>
     {/if}
 
@@ -269,63 +314,4 @@
 <input type="hidden" id="page"   name="page"   value="{$smarty.request.page|default:'1'}" />
 <input type="hidden" id="action" name="action" value="" />
 </form>
-{/block}
-
-{block name="footer-js"}
-    <script type="text/javascript"> 
-    var previousValue = null;
-    document.observe('dom:loaded', function() {
-        if( $('tabla') ) {
-            $('tabla').select('tbody input[type=text]').each(function(item) {
-                item.observe('change', function() {
-                    this.up(2).select('input[type=checkbox]')[0].
-                        setAttribute('checked', 'checked');
-                });
-
-                new Control.DatePicker(item,{
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    onSelect: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    },
-                    onHover: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    }
-                });
-            });
-        }
-
-        $$('a[rel=refresh]').each(function(item) {
-            item.observe('mouseover', function() {
-                $('adviceRefresh').setStyle({ display: ''});
-            });
-
-            item.observe('mouseout', function() {
-                $('adviceRefresh').setStyle({ display: 'none'});
-            });
-        });
-    });
-
-    function sendForm(actionValue) {
-        // FIXME: chequeos de seguridad
-        $('action').value = actionValue;
-        $('formulario').submit();
-    }
-
-    function selectAll(indicator, checkboxes) {
-        for(var i=0; i<checkboxes.length; i++) {
-            if(indicator) {
-                checkboxes[i].setAttribute('checked', 'checked');
-                checkboxes[i].selected = true;
-            } else {
-                checkboxes[i].removeAttribute('checked');
-                checkboxes[i].selected = false;
-            }
-        }
-    }
-    </script>
 {/block}

@@ -77,11 +77,11 @@ class Newsletter
         $tpl->assign('data', $data);
 
         // VIERNES 4 DE SEPTIEMBRE 2009
-        $days = array('DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO');
-        $months = array('', 'ENERO', 'FEBRERO', 'MARZO',
-                        'ABRIL', 'MAYO', 'JUNIO',
-                        'JULIO', 'AGOSTO', 'SEPTIEMBRE',
-                        'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
+        $days = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
+        $months = array('', 'Enero', 'Febrero', 'Marzo',
+                        'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre',
+                        'Octubre', 'Noviembre', 'Diciembre');
         $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' DE ' . $months[(int)date('n')] . ' ' . date('Y'));
 
         $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);

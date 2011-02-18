@@ -136,7 +136,6 @@ if( isset($_REQUEST['action']) ) {
                     $ph = new Photo($photo->pk_photo);
                     $ph->set_status(1, $_SESSION['userid']);
                 } else {
-                   echo MEDIA_IMG_PATH.$photo->path_file.$photo->name."<br>";
                     $photo->content_status = 0;
                     $ph = new Photo($photo->pk_photo);
                     $ph->set_status(0,$_SESSION['userid']);

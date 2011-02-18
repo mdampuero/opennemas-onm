@@ -1,257 +1,20 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-    <script defer="defer" defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-    <script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+{block name="header-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
 {/block}
 
 
 {block name="content"}
 
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+    <div id="content-wrapper" style="width:80% !important; margin:0 auto;">
 
-    {*
-        //Portada
-        1- big superior izquierda
-        2- banner superior derecha
-        3 banner columna1
-        4 banner columna3
-        5 separador horizontal
-        6 mini1 dcha
-        7 mini 2 dcha
-        8 botoncuadrado columna3
-        9 big Inferior Izquierda
-        10 Banner Inferior derecha
-
-        //Noticia inner - opinion inner
-        101 big superior izquierda
-        102 banner superior derecha
-        103 banner1 columna
-        104 robapagina
-        105 banner2 columna
-        109 big Inferior Izquierda
-        110 Banner Inferior derecha
-
-        //Portada opinion
-        1- big superior izquierda
-        2- banner superior derecha
-        3 banner columna
-        9 big Inferior Izquierda
-        10 Banner Inferior derecha
-
-        //Gallery
-        1- big superior izquierda
-        2- banner superior derecha
-        9 big Inferior Izquierda
-        10 Banner Inferior derecha
-
-        //Video Front
-        201- big superior izquierda
-        202- banner superior derecha
-        209 big Inferior Izquierda
-        210 Banner Inferior derecha
-
-        /Video Inner
-        301- big superior izquierda
-        302- banner superior derecha
-        303- banner columna
-        309 big Inferior Izquierda
-        310 Banner Inferior derecha
-
-    *}
-
-{* ******************************************************************************* *}
-{* LISTADO *********************************************************************** *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-
-    <ul class="tabs2" style="margin-bottom: 28px;">
-        <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
-        </li>
-        <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-        </li>
-        <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
-        </li>
-        <script defer="defer" type="text/javascript">
-                // <![CDATA[
-                    {literal}
-                          Event.observe($('link_home'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                            });
-                          Event.observe($('link_opinion'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                            });
-                          Event.observe($('link_gallery'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                            });
-
-                    {/literal}
-                // ]]>
-            </script>
-    {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
-</ul>
-<br style="clear: both;" />
-
-<div id="{$category}">
-
-{include file="botonera_up.tpl"}
-
-<script type="text/javascript">
-{literal}
-    function submitFilters(frm) {
-        $('action').value='list';
-        $('page').value = 1;
-
-        frm.submit();
-    }
-{/literal}
-</script>
-
-<table class="adminheading">
-	<tr>
-		<th nowrap="nowrap" align="right">
-            <label>Tipo de banner:
-            <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
-                {html_options options=$filter_options.type_advertisement
-                              selected=$smarty.request.filter.type_advertisement}
-            </select></label>
-            &nbsp;&nbsp;&nbsp;
-
-            <label>Estado:
-            <select name="filter[available]" onchange="submitFilters(this.form);">
-                {html_options options=$filter_options.available
-                              selected=$smarty.request.filter.available}
-            </select></label>
-            &nbsp;&nbsp;&nbsp;
-
-            <label>Tipo:
-            <select name="filter[type]" onchange="submitFilters(this.form);">
-                {html_options options=$filter_options.type
-                              selected=$smarty.request.filter.type}
-            </select></label>
-
-            {* $_REQUEST['page'] => $_POST['page'] is more important that $_GET['page'], see also php.ini - variables_order *}
-            <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
-        </th>
-	</tr>
-</table>
-
-<table class="adminlist">
-<thead>
-<tr>
-    <th></th>
-    <th class="title">Tipo</th>
-    <th>Título</th>
-    <th align="center">Permanencia</th>
-    <th align="center">Clicks</th>
-    <th align="center">Visto</th>
-    <th align="center">Tipo</th>
-    <th align="center">Publicado</th>
-    <th align="center">Modificar</th>
-    <th align="center">Eliminar</th>
-</tr>
-</thead>
-
-<tbody>
-{section name=c loop=$advertisements}
-<tr {cycle values="class=row0,class=row1"}>
-    <td style="text-align:center;font-size: 11px;width:5%;">
-        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
-            value="{$advertisements[c]->pk_advertisement}" />
-    </td>
-	<td style="font-size: 11px;">
-        <label for="title">
-            {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
-            {$map.$type_advertisement}
-        </label>
-	</td>
-	<td style="font-size: 11px;">
-		{$advertisements[c]->title|clearslash}
-	</td>
-
-    <td style="text-align:center;font-size: 11px;width:80px;" align="center">
-		{if $advertisements[c]->type_medida == 'NULL'} Indefinida {/if}
-		{if $advertisements[c]->type_medida == 'CLIC'} Clicks: {$advertisements[c]->num_clic} {/if}
-		{if $advertisements[c]->type_medida == 'VIEW'} Visionados: {$advertisements[c]->num_view} {/if}
-		{if $advertisements[c]->type_medida == 'DATE'}
-            Fecha: {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
-        {/if}
-	</td>
-
-	<td style="text-align:center;font-size: 11px;width:105px;" align="right">
-		{$advertisements[c]->num_clic_count}
-	</td>
-	<td style="text-align:center;font-size: 11px;width:40px;" align="right">
-		 {$advertisements[c]->views}
-	</td>
-    <td style="text-align:center;font-size: 11px;width:70px;" align="center">
-        {if $advertisements[c]->with_script == 1}
-            <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
-                 alt="Javascript" title="Javascript" />
-        {else}
-            <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="Multimedia"
-                 title="Elemento multimedia (flash, imagen, gif animado)" />
-        {/if}
-    </td>
-	<td style="text-align:center;width:70px;" align="center">
-		{if $advertisements[c]->available == 1}
-			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                title="Publicado">
-				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-		{else}
-			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                title="Pendiente">
-				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-		{/if}
-	</td>
-
-	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title="Modificar">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-	</td>
-
-	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="Eliminar">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-	</td>
-
-</tr>
-{sectionelse}
-<tr>
-	<td align="center" colspan="10">
-        <h2>No hay ninguna publicidad guardada en esta sección</h2>
-    </td>
-</tr>
-{/section}
-</tbody>
-
-<tfoot>
-{if count($advertisements) gt 0}
-<tr>
-    <td colspan="10" style="padding:10px;font-size: 12px;" align="center">
-        <br /><br />
-        {$paginacion->links}
-        <br /><br />
-    </td>
-</tr>
-{/if}
-</tfoot>
-
-</table>
+    {include file="advertisement/list.tpl"}
 {/if}
 
-
-
-{* ******************************************************************************* *}
-{* FORMULARIO PARA ENGADIR UN CONTENIDO PUBLICIDAD******************************** *}
 {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 <script language="javascript" type="text/javascript">
 function testScript(frm)  {
@@ -509,9 +272,9 @@ function testScript(frm)  {
 
             <script type="text/javascript" src="{$params.JS_DIR}GeoipHelper.js?cacheburst=1258404035" charset="utf-8"></script>
             <script defer="defer" type="text/javascript">
-            {literal}
+
             new GeoipHelper('geoip_select', 'script');
-            {/literal}
+
             </script>
 
             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -572,7 +335,7 @@ function testScript(frm)  {
 {* if $smarty.request.action eq "read" *}
 <script defer="defer" type="text/javascript">
 /* <![CDATA[ */
-{literal}
+
 // Add exhibit method to Fabtabs to can select a tab by id
 Fabtabs.addMethods({
     exhibit: function(id) {
@@ -581,21 +344,21 @@ Fabtabs.addMethods({
         this.menu.without(elm).each(this.hide.bind(this));
 
         if(['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1) {
-            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: ''});
-            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-gallery]', {display: 'none'});
+            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: '' });
+            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none' });
+            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none' });
+            this.changePropertyTabs('a[href$=publi-gallery]', { display: 'none' });
         } else if(['publi-gallery'].indexOf(id) != -1) {
-            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-gallery]', {display: ''});
+            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
+            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none'});
+            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none' });
+            this.changePropertyTabs('a[href$=publi-gallery]', { display: '' });
 
          } else {
-            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', {display: ''});
-            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', {display: ''});
-            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', {display: 'none'});
-            this.changePropertyTabs('a[href$=publi-gallery]', {display: 'none'});
+            this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: '' });
+            this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: '' });
+            this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
+            this.changePropertyTabs('a[href$=publi-gallery]', { display: 'none' });
         }
 
 
@@ -638,7 +401,7 @@ $('category').observe('change', function() {
     }
 });
 
-{/literal}
+
 document.observe('dom:loaded', function() {ldelim}
 {if $category ne '4'}
     {if $advertisement->type_advertisement lt 100}
@@ -655,9 +418,9 @@ document.observe('dom:loaded', function() {ldelim}
 {/if}
 {rdelim});
 
-{literal}
 
-{/literal}
+
+
 /* ]]> */
 </script>
 {* /if *}
@@ -667,7 +430,7 @@ document.observe('dom:loaded', function() {ldelim}
 {dhtml_calendar inputField="endtime" button="triggerend"  ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR"}
 *}
 <script defer="defer" type="text/javascript" language="javascript">
-{literal}
+
 
 
 if($('starttime')) {
@@ -687,7 +450,7 @@ if($('starttime')) {
         dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
     });
 }
-{/literal}
+
 </script>
 
 <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement}" />
@@ -696,24 +459,25 @@ if($('starttime')) {
 {/if}
 
 
-{* ******************************************************************************* *}
-{* Vista para a proba do script de publicidade, esta tpl abrirase nunha nova ventá *}
-{if isset($smarty.request.action) && $smarty.request.action eq "test_script"}
-    <h1>Prueba script publicidad</h1>
-    <div style="text-align:center; border: 2px dashed #CCC;">
-        {$script}
-    </div>
+    {* ******************************************************************************* *}
+    {* Vista para a proba do script de publicidade, esta tpl abrirase nunha nova ventá *}
+    {if isset($smarty.request.action) && $smarty.request.action eq "test_script"}
+        <h1>Prueba script publicidad</h1>
+        <div style="text-align:center; border: 2px dashed #CCC;">
+            {$script}
+        </div>
 
-    <div align="right" style="margin: 10px 10px;">
-        <a href="#" style="color: #666; font-size: large;"
-            onclick="window.close();" title="Cerrar ventana">[Cerrar]</a>
-    </div>
-{/if}
+        <div align="right" style="margin: 10px 10px;">
+            <a href="#" style="color: #666; font-size: large;"
+                onclick="window.close();" title="Cerrar ventana">[Cerrar]</a>
+        </div>
+    {/if}
 
 
-{* ******************************************************************************* *}
+    {* ******************************************************************************* *}
 
-<input type="hidden" id="action" name="action" value="" />
-<input type="hidden" name="id" id="id" value="{$id}" />
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id}" />
+    </div><!--fin content-wrapper-->
 </form>
 {/block}

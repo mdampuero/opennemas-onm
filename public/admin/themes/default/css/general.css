@@ -457,7 +457,10 @@ table.adminlist tfoot th { background-color: #f3f3f3; border-top: 1px solid #999
 table.adminlist td.order 		{ text-align: center; white-space: nowrap; }
 table.adminlist td.order span { float: left; display: block; width: 20px; text-align: center; }
 
-table.adminlist .pagination { display:table; padding:0;  margin:0 auto;	 }
+table.adminlist .pagination a { border:1px solid #ddd; padding:4px 6px; background:#fafafa;}
+table.adminlist .pagination a:hover { background:#fff;}
+table.adminlist tfoot tr td { padding:10px; }
+
 
 .pagination div.limit {
 	float: left;

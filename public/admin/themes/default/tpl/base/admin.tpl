@@ -15,7 +15,7 @@
 	    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css?cacheburst=1259173764"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
         <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
@@ -29,7 +29,7 @@
 
     {block name="header-js"}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop,controls"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}ypSlideOutMenus.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
@@ -117,23 +117,23 @@
 
 
 
-    <!--<div id="copyright">-->
-    <!---->
-    <!--    <div class="company">-->
-    <!--        <img align="left" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="OpenNeMaS"/>-->
-    <!--        made by OpenHost S.L.<br/>-->
-    <!--        All rights reserved ® 2010-->
-    <!--    </div>-->
-    <!---->
-    <!--    <ul class="support">-->
-    <!--        <li><a href="#">About</a>-->
-    <!--        <li><a href="#">Help</a>-->
-    <!--    </ul>-->
-    <!---->
-    <!--</div>-->
+    {*<div id="copyright">
+
+        <div class="company">
+            <img align="left" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="OpenNeMaS"/>
+            made by OpenHost S.L.<br/>
+            All rights reserved ® 2010
+        </div>
+
+        <ul class="support">
+            <li><a href="#">About</a>
+            <li><a href="#">Help</a>
+        </ul>
+
+    </div>*}
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
     /* <![CDATA[ */
     new YpSlideOutMenuHelper();
 
@@ -156,7 +156,7 @@
     document.observe('dom:loaded', function() {
         if( $('user_activity') ) {
             $('user_activity').observe('click', function() {
-                Modalbox.show('./index.php?action=show_panel', {
+                Modalbox.show('{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/index.php?action=show_panel', {
                     title: 'Usuarios activos',
                     afterLoad: linkToMB,
                     width: 300
@@ -180,7 +180,7 @@
  </script>
 	{block name="footer-js"}
 		{if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
-                <script type="text/javascript">
+            <script type="text/javascript">
         	try {
 			// Activar la validación
 			new Validation('formulario', { immediate : true });
@@ -206,7 +206,6 @@
                  </script>
 		{/if}
 	{/block}
-
 
 </body>
 </html>

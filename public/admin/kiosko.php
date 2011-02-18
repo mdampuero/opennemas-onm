@@ -15,12 +15,11 @@ require_once('controllers/album/albums_events.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Portadas del periódico');
 
-if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
-{
+if( !Privileges_check::CheckPrivileges('MUL_ADMIN')) {
     Privileges_check::AccessDeniedAction();
 }
 
-if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
+if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) { $_REQUEST['page'] = 1;}
 $ccm = new ContentCategoryManager();
 if (!isset($_REQUEST['category'])) {
     $_REQUEST['category'] = $ccm->get_id('kiosko-xornal');
@@ -40,16 +39,14 @@ if( isset($_REQUEST['action']) ) {
 			// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
 			list($portadas, $pager)= $cm->find_pages('Kiosko', 'fk_content_type=14 ', 'ORDER BY  date DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
 
-                        $aut=new User();
-                        foreach ($portadas as $portada){
-                            $portada->publisher=$aut->get_user_name($portada->fk_publisher);
-                            $portada->editor=$aut->get_user_name($portada->fk_user_last_editor);
-                        }
-
-                        $tpl->assign('portadas', $portadas);
+			$aut=new User();
+			foreach ($portadas as $portada){
+				$portada->publisher=$aut->get_user_name($portada->fk_publisher);
+				$portada->editor=$aut->get_user_name($portada->fk_user_last_editor);
+			}
+            $tpl->assign('portadas', $portadas);
 			$tpl->assign('paginacion', $pager);
-
-                        $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
+            $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
 		break;
 
@@ -129,16 +126,16 @@ if( isset($_REQUEST['action']) ) {
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
 		break;
 
-                case 'change_favorite':
+        case 'change_favorite':
 			$portada = new Kiosko($_REQUEST['id']);
 
-                        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-                        if($portada->available==1){
-                                $portada->set_favorite($status,$_SESSION['userid'],$_REQUEST['category']);
-                        }else{
-                                $msg="No se puede esta despublicado";
-                        }
-                        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+			if($portada->available==1){
+					$portada->set_favorite($status,$_SESSION['userid'],$_REQUEST['category']);
+			}else{
+					$msg="No se puede esta despublicado";
+			}
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
 		break;
 
 		default:
@@ -149,5 +146,5 @@ if( isset($_REQUEST['action']) ) {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page'].'&category='.$_REQUEST['category']);
 }
 
-$tpl->display('kiosko.tpl');
+$tpl->display('newsstand/index.tpl');
 ?>

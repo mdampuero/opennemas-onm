@@ -2,9 +2,9 @@ ul#items-list {
 	/*min-height: 200px;
 	overflow: scroll;*/
 	background-color: #FFF;
-	
+
 	list-style: none;
-	margin: 0 4px;	
+	margin: 0 4px;
 }
 
 ul#items-list li {
@@ -19,7 +19,7 @@ ul#items-list li:hover {
 	margin: 8px 0;
 	list-style: none;
 	background-color: #EEF;
-	
+
 	cursor: hand;
 	cursor: pointer;
 }
@@ -28,20 +28,23 @@ ul#items-selected {
 	/*min-height: 200px;
 	overflow: scroll;*/
 	background-color: #FFF;
-	
+
 	list-style: none;
 	margin: 0 4px;
 }
 
 ul#items-selected li {
 	height: 22px;
-	
+
 	padding: 4px;
 	margin: 8px 0;
 	list-style: none;
 	background-color: #DDD;
-	
+
 	cursor: move;
+}
+ul#items-selected li, ul#items-selected li img{
+	vertical-align:middle
 }
 
 ul#items-selected li.account {
@@ -52,7 +55,7 @@ ul#items-selected li:hover {
 	padding: 4px;
 	margin: 8px 0;
 	list-style: none;
-	background-color: #EEF;			
+	background-color: #EEF;
 }
 
 ul#items-selected li strong {
@@ -63,20 +66,19 @@ ul#items-selected li strong {
 ul#items-selected li span {
 	display: block;
 	float: left;
-	
+
 	cursor: pointer;
 }
 
 ul#items-selected li span:hover {
 	padding-right: 18px;
-	
 	background-image: url(../images/newsletter/editar.gif);
 	background-repeat: no-repeat;
-	background-position: right;	
+	background-position: right;
 }
 
 ul#items-selected li.account span:hover, ul#items-selected li.account span {
-	padding: 0;	
+	padding: 0;
 	background-image: none;
 	cursor: auto;
 }
@@ -89,13 +91,11 @@ ul#items-selected li div.actions {
 	display: block;
 	float: left;
 	cursor: pointer;
-	
+	margin:3px;
 	width: 20px;
 	height: 20px;
-	
 	background-image: url(../images/newsletter/close.gif);
 	background-repeat: no-repeat;
-	background-position: center;
 }
 
 /* Container preview */
@@ -115,10 +115,10 @@ strong.failed {
 
 div.mailing {
 	width: 640px;
-	
+
 	margin: 4px;
 	padding: 4px;
-	
+
 	border-bottom: 1px solid #EEE;
 	border-right: 1px solid #EEE;
 }
@@ -133,7 +133,7 @@ div.subtitle {
 }
 
 div.steps {
-	float: left;	
+	float: left;
 	margin:20px 0 0 0;
 }
 
@@ -141,18 +141,18 @@ div.info {
 	position: absolute;
 	right: 0;
 	top: 0;
-	
+
 	/*background-color: #EE9;*/
 	background-color: #FFF;
-	
+
 	background-image: url(../images/ayuda.gif);
 	background-repeat: no-repeat;
-	background-position: left;	
-	
+	background-position: left;
+
 	font-size: 0.8em;
 	font-weight: bold;
 	color: #369;
-	
+
 	padding: 4px 4px 4px 22px;
 	float: right;
 }
@@ -163,10 +163,10 @@ div.form {
 
 div#menu-acciones-admin li.separator {
 	border: 0;
-	
+
 	width: 20px;
 	height: 70px;
-	
+
 	background-image: url(../images/newsletter/separator.gif);
 	background-repeat: no-repeat;
 	background-position: center bottom;
@@ -176,7 +176,7 @@ div#menu-acciones-admin li.separator {
 #container {
 	border: 1px solid #EEE;
 	background-color: #FFF;
-	
+
 	position: relative;
 	height: 500px;
 }
@@ -184,7 +184,7 @@ div#menu-acciones-admin li.separator {
 #container1, #container2 {
 	position: relative;
 	background-color: #FFF;
-	height: 250px;
+	height: 400px;
 	overflow: auto;
 }
 
@@ -192,7 +192,7 @@ div#menu-acciones-admin li.separator {
 	position: relative;
 	border-top: 1px dotted #999;
 	border-left: 1px dotted #999;
-	
+
 	background-color: #CCC;
 	background-image: url(../images/newsletter/splitter.gif);
 	background-repeat: no-repeat;

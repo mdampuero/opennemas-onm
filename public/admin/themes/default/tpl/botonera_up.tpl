@@ -435,7 +435,7 @@
 			</li>
 
 			<li>
-				<a class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva opinion');" accesskey="N" tabindex="1">
+				<a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={php} echo $_REQUEST['category']; {/php}&page={php} echo $_GET['page']; {/php}" class="admin_add" onmouseover="return escape('<u>N</u>ueva opinion');" accesskey="N" tabindex="1">
 					<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nuevo" alt="Nuevo"><br />Nuevo
 				</a>
 			</li>
@@ -446,7 +446,7 @@
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 			 <li>
-				<a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="Cancelar" title="Cancelar">
+				<a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=list&category={php} echo $_REQUEST['category']; {/php}&page={php} echo $_GET['page']; {/php}" class="admin_add"  value="Cancelar" title="Cancelar">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 				</a>
 		    </li>
