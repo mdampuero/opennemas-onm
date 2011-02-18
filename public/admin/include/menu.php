@@ -9,7 +9,7 @@ $menuXml = <<<MENUSTRING
         <node title="Widget Manager" link="controllers/widget/widget.php" target="centro" privilege="WIDGET_ADMIN" />
         <!--<node title="Templates Manager" link="index.php" target="centro" privilege="ARTICLE_FRONTPAGE" />-->
     </submenu>
-    
+
     <submenu title="Contents" link="article.php" target="centro">
         <node title="Articles" link="article.php?action=list_pendientes" target="centro" privilege="ARTICLE_LIST_PEND" />
         <node title="Opinions" link="controllers/opinion/opinion.php" target="centro" privilege="OPINION_ADMIN" />
@@ -32,8 +32,8 @@ $menuXml = <<<MENUSTRING
 
     <submenu title="Users" link="user.php" target="centro" privilege="USER_ADMIN">
         <node title="Users" link="user.php" target="centro" />
-        <node title="Group Users" link="user_groups.php" target="centro" />
-        <node title="Permissions" link="privileges.php" target="centro" />
+        <node title="User Groups" link="user_groups.php" target="centro" />
+        <node title="Priveleges" link="privileges.php" target="centro" />
     </submenu>
 
     <submenu title="Utilities" link="search_advanced.php" target="centro" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN">
@@ -42,8 +42,8 @@ $menuXml = <<<MENUSTRING
         <node title="Newsletter" link="newsletter.php" target="centro" privilege="NEWSLETTER_ADMIN" />
         <node title="Key words" link="pclave.php" target="centro" privilege="PCLAVE_ADMIN" />
         <node title="&lt;hr/&gt;" link="javascript:return false;" target="centro" privilege="BACKEND_ADMIN" />
-        <node title="Trash" link="litter.php" target="centro" privilege="NOT_ADMIN" />
-        <node title="Control link" link="link_control.php" target="centro" privilege="BACKEND_ADMIN" />
+        <node title="Trash" link="controllers/trash.php" target="centro" privilege="NOT_ADMIN" />
+        <node title="Control link" link="controllers/link_control.php" target="centro" privilege="BACKEND_ADMIN" />
         <node title="&lt;hr/&gt;" link="javascript:return false;" target="centro" privilege="BACKEND_ADMIN" />
         <node title="Statistics" link="dashboard.php" target="centro" privilege="BACKEND_ADMIN" />
         <!--<node title="&lt;hr/&gt;" link="javascript:return false;" target="centro" privilege="BACKEND_ADMIN" />
@@ -58,8 +58,7 @@ $menuXml = <<<MENUSTRING
         <node title="Update System" link="update-system.php" target="centro"  privilege="BACKEND_ADMIN" />
         <node title="Information" link="index.php" target="centro" privilege="BACKEND_ADMIN" />
         <node title="Help" link="http://www.openhost.es/en/opennemas" target="centro" privilege="BACKEND_ADMIN" />-->
-        
+
     </submenu>
 </menu>
 MENUSTRING;
-

@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : message_board
     Created on : Jul 16, 2009, 4:42:26 PM
     Author     : toni
@@ -29,6 +29,10 @@
     margin-top: 5px;
     margin-bottom: 5px;
     display: block;
+}
+div.messageboard {
+    position:absolute;
+    top:200px;
 }
 
 ul.messageboard {

@@ -12,7 +12,7 @@
     <li>
         <a href="#" class="admin_add" onClick="enviar(this, '_self', 'new', -1);"
            title="Nueva palabra clave">
-            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />Nueva
+            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
         </a>
     </li>
 </ul>
@@ -21,58 +21,59 @@
 
 <table class="adminheading">
 	<tr>
-		<td>
-			Keyworks containing <label><input type="text" name="filter[pclave]" value="{$smarty.request.filter.pclave}" /></label>
+		<td align="right">
+			{t}Search keyworks containing {/t}
+			<input type="text" name="filter[pclave]" style="margin-top:-2px;" value="{$smarty.request.filter.pclave}" />
 			<button type="submit" onclick="javascript:$('action').value='list';">Filtrer</button>
 		</td>
 	</tr>
 </table>
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
-<thead>
-<tr>
-    <th class="title">Type</th>
-    <th class="title">Keyword</th>
-    <th class="title">Replace value</th>
-    <th>Actions</th>
-</tr>
-</thead>
+	<thead>
+		<tr>
+			<th class="title">{t}Type{/t}</th>
+			<th class="title">{t}Keyword{/t}</th>
+			<th class="title">{t}Replacement value{/t}</th>
+			<th>{t}Actions{/t}</th>
+		</tr>
+	</thead>
 
-<tbody>
-{section name=k loop=$pclaves}
-<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
+	<tbody>
+		{section name=k loop=$pclaves}
+		<tr style="background:{cycle values="#eeeeee,#ffffff"} !important">
 
-	<td align="center">
-        <img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
-	</td>
-	<td>
-		{$pclaves[k]->pclave}
-	</td>
-	<td>
-		{$pclaves[k]->value|default:"-"}
-	</td>
+			<td align="center" weight="15">
+				<img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
+			</td>
+			<td>
+				{$pclaves[k]->pclave}
+			</td>
+			<td>
+				{$pclaves[k]->value|default:"-"}
+			</td>
 
-	<td width="44">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$pclaves[k]->id});" title="Modificar">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-		&nbsp;
-		<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="Eliminar">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-	</td>
-</tr>
-{sectionelse}
-<tr>
-	<td align="center"><b>Ninguna palabra guardada.</b></td>
-</tr>
-{/section}
-</tbody>
+			<td width="44">
+				<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$pclaves[k]->id});" title="Modificar">
+					<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+				&nbsp;
+				<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="Eliminar">
+					<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+			</td>
+		</tr>
+		{sectionelse}
+		<tr>
+			<td align="center"><b>Ninguna palabra guardada.</b></td>
+		</tr>
+		{/section}
+	</tbody>
 
-<tfoot>
-    <tr>
-        <td colspan="5" align="center">
-            {$pager->links}
-        </td>
-    </tr>
-</tfoot>
+	<tfoot class="pagination">
+		<tr>
+			<td colspan="5" align="center">
+				{$pager->links}
+			</td>
+		</tr>
+	</tfoot>
 </table>
 {/if}
 
@@ -132,7 +133,7 @@
 
 <tr>
     <td valign="top" align="right" style="padding:4px;">
-        <label>Elementos similares ya existentes: </label>
+        <label>Existing similar elements yet: </label>
     </td>
     <td valign="top" style="padding:4px;">
         <div id="similarKeywords" style="border: 1px solid #CCC; padding: 10px; width: 400px; background-color: #EEE;"></div>

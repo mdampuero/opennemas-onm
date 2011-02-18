@@ -78,8 +78,8 @@ document.observe('dom:loaded', function() {
 		</ul>
 	</div>
 
-	<div class="margin:0 auto; width:70%">
-		<div class="form">
+	<div class="margin:0 auto; width:70%; text-align:center">
+		<div class="form"  style="margin:0 auto; width:80%; text-align:left">
 			<form name="searchForm" id="searchForm" method="post" action="#">
 				<p>
 					<label>{t}Email subject{/t}:</label>
@@ -91,14 +91,14 @@ document.observe('dom:loaded', function() {
 				<input type="hidden" id="action"     name="action"     value="send" />
 				<input type="hidden" id="postmaster" name="postmaster" value="" />
 			</form>
-		</div>
 
-		<p>
-			<label>{t}Previsualización del boletín:{/t}</label>
-		</p>
-		<div id="preview">
-			{* include file="newsletter/preview.html.tpl" *}
-			{$htmlContent}
+			<p>
+				<label>{t}Newsletter preview:{/t}</label>
+			</p>
+			<div id="preview">
+				{$htmlContent}
+			</div>
+
 		</div>
 	</div>
 

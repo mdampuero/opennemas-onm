@@ -1,0 +1,707 @@
+# Galician translations for PACKAGE package.
+# Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Fran Diéguez <frandieguez@ubuntu.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: onmadmin 0.8\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-02-19 00:12+0100\n"
+"PO-Revision-Date: 2011-02-19 00:26+0100\n"
+"Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
+"Language-Team: Galician <gnome-gl-list@gnome.org>\n"
+"Language: gl_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: locale/extracted_strings.c:2 locale/extracted_strings.c:5
+#: locale/extracted_strings.c:452
+msgid "Edit"
+msgstr "Editar"
+
+#: locale/extracted_strings.c:8
+msgid "Cache Manager"
+msgstr "Xestor de caché"
+
+#: locale/extracted_strings.c:11
+msgid "Are you sure that you want to delete this selected cache files?"
+msgstr "Ten certeza de que quere eliminar o ficheiro de caché seleccionado?"
+
+#: locale/extracted_strings.c:14
+msgid "Delete cache"
+msgstr "Eliminar caché"
+
+#: locale/extracted_strings.c:17 locale/extracted_strings.c:455
+msgid "Delete"
+msgstr "Eliminar"
+
+#: locale/extracted_strings.c:20
+msgid ""
+"Delete and generates a new cache with updated data. BE AWARE: If you apply "
+"this action to multiple files you could slow down the system."
+msgstr ""
+"Elimina e xera un novo ficheiro de caché con datos anovados. TEÑA COIDADO: "
+"se aplica esta acción a múltiples ficheiros podería ralentizar o sistema."
+
+#: locale/extracted_strings.c:23
+msgid "Regenerate"
+msgstr "Rexerar"
+
+#: locale/extracted_strings.c:26
+msgid "This changes the expire date but maintains the cache file contents"
+msgstr ""
+"Esta acción cambia o tempo e expiración pero mantén os contidos do ficheiro "
+"de caché"
+
+#: locale/extracted_strings.c:29
+msgid "Change expiration"
+msgstr "Cambiar expiración"
+
+#: locale/extracted_strings.c:32
+msgid "Configurar cachés"
+msgstr "Configurar cachés"
+
+#: locale/extracted_strings.c:35
+msgid "Settings"
+msgstr "Opcións"
+
+#: locale/extracted_strings.c:38
+msgid "Show"
+msgstr "Mostrar"
+
+#: locale/extracted_strings.c:41
+msgid "items/page with type"
+msgstr "elementos/páxina co tipo"
+
+#: locale/extracted_strings.c:44
+msgid "All types"
+msgstr "Tódolos tipos"
+
+#: locale/extracted_strings.c:47
+msgid "Frontpages"
+msgstr "Portadas"
+
+#: locale/extracted_strings.c:50
+msgid "Inner notice"
+msgstr "Noticia interior"
+
+#: locale/extracted_strings.c:53
+msgid "Mobile frontpages"
+msgstr "Portadas de móbil"
+
+#: locale/extracted_strings.c:56
+msgid "RSS pages"
+msgstr "Páxinas RSS"
+
+#: locale/extracted_strings.c:59
+msgid "Frontpage opinion"
+msgstr "Portadas de opinión"
+
+#: locale/extracted_strings.c:62
+msgid "Inner opinion"
+msgstr "Interior de opinión"
+
+#: locale/extracted_strings.c:65 locale/extracted_strings.c:71
+msgid "Video frontpage"
+msgstr "Portada de vídeo"
+
+#: locale/extracted_strings.c:68 locale/extracted_strings.c:74
+msgid "Video inner"
+msgstr "Vídeo interior"
+
+#: locale/extracted_strings.c:77
+msgid "and from"
+msgstr "e desde"
+
+#: locale/extracted_strings.c:80
+msgid "All sections"
+msgstr "Tódalas seccións"
+
+#: locale/extracted_strings.c:83
+msgid "Update list"
+msgstr "Anovar lista"
+
+#: locale/extracted_strings.c:86
+msgid "Resource"
+msgstr "Recurso"
+
+#: locale/extracted_strings.c:89
+msgid "Category"
+msgstr "Categoría"
+
+#: locale/extracted_strings.c:92
+msgid "Created in"
+msgstr "Creado en"
+
+#: locale/extracted_strings.c:95
+msgid "Valid until"
+msgstr "Válido até"
+
+#: locale/extracted_strings.c:98
+msgid "File size"
+msgstr "Tamaño de ficheiro"
+
+#: locale/extracted_strings.c:101 locale/extracted_strings.c:200
+#: locale/extracted_strings.c:557 locale/extracted_strings.c:692
+msgid "Actions"
+msgstr "Accións"
+
+#: locale/extracted_strings.c:104
+msgid "Inner article cache file"
+msgstr ""
+
+#: locale/extracted_strings.c:107
+msgid "Article"
+msgstr "Artigo"
+
+#: locale/extracted_strings.c:110
+msgid "Inner video cache file"
+msgstr "Ficheiro de caché de vídeo interior"
+
+#: locale/extracted_strings.c:113
+msgid "Video Inner:"
+msgstr "Vídeo interior:"
+
+#: locale/extracted_strings.c:116
+msgid "Video inner cache file"
+msgstr "Ficheiro de caché de vídeo interior"
+
+#: locale/extracted_strings.c:119
+msgid "Video Frontpage:"
+msgstr "Portada de vídeo:"
+
+#: locale/extracted_strings.c:122
+msgid "Opinion inner article file"
+msgstr "Ficheiro de caché de artigo interior de opinión"
+
+#: locale/extracted_strings.c:125 locale/extracted_strings.c:131
+#: locale/extracted_strings.c:137
+msgid "Opinion inner:"
+msgstr ""
+
+#: locale/extracted_strings.c:128
+msgid "Frontpage article caché file"
+msgstr ""
+
+#: locale/extracted_strings.c:134
+msgid "Caché de gallery interior"
+msgstr ""
+
+#: locale/extracted_strings.c:140
+msgid "RSS Opinion author cache file "
+msgstr ""
+
+#: locale/extracted_strings.c:143 locale/extracted_strings.c:155
+msgid "RSS:"
+msgstr "RSS:"
+
+#: locale/extracted_strings.c:146
+msgid "RSS frontpage author of opinion"
+msgstr ""
+
+#: locale/extracted_strings.c:149
+msgid "Opinion Index:"
+msgstr "Índice de opinións:"
+
+#: locale/extracted_strings.c:152
+msgid "Caché RSS"
+msgstr "Caché de RSS"
+
+#: locale/extracted_strings.c:158
+msgid "Caché de portadas versión móvil"
+msgstr ""
+
+#: locale/extracted_strings.c:161
+msgid "Mobile Frontpage:"
+msgstr ""
+
+#: locale/extracted_strings.c:164 locale/extracted_strings.c:167
+msgid "Caché de portadas sección"
+msgstr ""
+
+#: locale/extracted_strings.c:170
+msgid "(Pág."
+msgstr ""
+
+#: locale/extracted_strings.c:173
+msgid "Regenerate cache file"
+msgstr ""
+
+#: locale/extracted_strings.c:176
+msgid "Delete cache file"
+msgstr ""
+
+#: locale/extracted_strings.c:179
+msgid "Ohh, there is <strong>no cache file</strong> in the system."
+msgstr ""
+
+#: locale/extracted_strings.c:182
+msgid ""
+"Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>"
+msgstr ""
+
+#: locale/extracted_strings.c:185 locale/extracted_strings.c:425
+msgid "New"
+msgstr ""
+
+#: locale/extracted_strings.c:188
+msgid "Search keyworks containing "
+msgstr ""
+
+#: locale/extracted_strings.c:191 locale/extracted_strings.c:434
+msgid "Type"
+msgstr ""
+
+#: locale/extracted_strings.c:194
+msgid "Keyword"
+msgstr ""
+
+#: locale/extracted_strings.c:197
+msgid "Replacement value"
+msgstr ""
+
+#: locale/extracted_strings.c:203 locale/extracted_strings.c:224
+#: locale/extracted_strings.c:278 locale/extracted_strings.c:320
+msgid "Newsletter management"
+msgstr ""
+
+#: locale/extracted_strings.c:206 locale/extracted_strings.c:209
+#: locale/extracted_strings.c:227 locale/extracted_strings.c:281
+#: locale/extracted_strings.c:323
+msgid "Next"
+msgstr ""
+
+#: locale/extracted_strings.c:212 locale/extracted_strings.c:215
+msgid "Previous"
+msgstr ""
+
+#: locale/extracted_strings.c:218
+msgid "Email subject"
+msgstr ""
+
+#: locale/extracted_strings.c:221
+msgid "Newsletter preview:"
+msgstr ""
+
+#: locale/extracted_strings.c:230 locale/extracted_strings.c:284
+#: locale/extracted_strings.c:326
+msgid "Next step"
+msgstr ""
+
+#: locale/extracted_strings.c:233 locale/extracted_strings.c:293
+#: locale/extracted_strings.c:335
+msgid "Clean container of selected opinions"
+msgstr ""
+
+#: locale/extracted_strings.c:236 locale/extracted_strings.c:296
+#: locale/extracted_strings.c:338
+msgid "Clean"
+msgstr ""
+
+#: locale/extracted_strings.c:239 locale/extracted_strings.c:299
+#: locale/extracted_strings.c:341
+msgid "Select all the opinions available"
+msgstr ""
+
+#: locale/extracted_strings.c:242 locale/extracted_strings.c:302
+#: locale/extracted_strings.c:344
+msgid "Select all"
+msgstr ""
+
+#: locale/extracted_strings.c:245
+msgid "Article selection"
+msgstr ""
+
+#: locale/extracted_strings.c:248
+msgid "Articles that contain "
+msgstr ""
+
+#: locale/extracted_strings.c:251 locale/extracted_strings.c:353
+msgid "in"
+msgstr ""
+
+#: locale/extracted_strings.c:254 locale/extracted_strings.c:356
+msgid "Home"
+msgstr ""
+
+#: locale/extracted_strings.c:257
+msgid "Frontpage"
+msgstr ""
+
+#: locale/extracted_strings.c:260 locale/extracted_strings.c:359
+msgid "Library"
+msgstr ""
+
+#: locale/extracted_strings.c:263
+msgid "from category"
+msgstr ""
+
+#: locale/extracted_strings.c:266 locale/extracted_strings.c:365
+#: locale/extracted_strings.c:683
+msgid "ALL"
+msgstr ""
+
+#: locale/extracted_strings.c:269
+msgid "Buscar"
+msgstr ""
+
+#: locale/extracted_strings.c:272
+msgid "Available articles (please, double click over one element to send it)"
+msgstr ""
+
+#: locale/extracted_strings.c:275
+msgid "Selected articles (please doucle click over one element to discart it)"
+msgstr ""
+
+#: locale/extracted_strings.c:287 locale/extracted_strings.c:314
+#: locale/extracted_strings.c:329
+msgid "Back"
+msgstr ""
+
+#: locale/extracted_strings.c:290 locale/extracted_strings.c:317
+#: locale/extracted_strings.c:332
+msgid "Previous step"
+msgstr ""
+
+#: locale/extracted_strings.c:305
+msgid "Recipient selection"
+msgstr ""
+
+#: locale/extracted_strings.c:308
+msgid ""
+"Subscriptors available (please double click over a subscritor to add to "
+"recipients)"
+msgstr ""
+
+#: locale/extracted_strings.c:311
+msgid ""
+"Subscriptors selected (please double click over a subscritor to delete from "
+"recipients)"
+msgstr ""
+
+#: locale/extracted_strings.c:347
+msgid "Opinion selection"
+msgstr ""
+
+#: locale/extracted_strings.c:350
+msgid "Opinions that contain "
+msgstr ""
+
+#: locale/extracted_strings.c:362
+msgid "from author"
+msgstr ""
+
+#: locale/extracted_strings.c:368 locale/extracted_strings.c:569
+msgid "Search"
+msgstr ""
+
+#: locale/extracted_strings.c:371 locale/extracted_strings.c:374
+msgid "Save configuration"
+msgstr ""
+
+#: locale/extracted_strings.c:377 locale/extracted_strings.c:467
+#: locale/extracted_strings.c:470 locale/extracted_strings.c:473
+#: locale/extracted_strings.c:476
+msgid "Save"
+msgstr ""
+
+#: locale/extracted_strings.c:380
+msgid "Backup configuration"
+msgstr ""
+
+#: locale/extracted_strings.c:383 locale/extracted_strings.c:386
+msgid "Backup"
+msgstr ""
+
+#: locale/extracted_strings.c:389 locale/extracted_strings.c:410
+msgid "Recover configuration"
+msgstr ""
+
+#: locale/extracted_strings.c:392 locale/extracted_strings.c:395
+#: locale/extracted_strings.c:413 locale/extracted_strings.c:416
+msgid "Recover"
+msgstr ""
+
+#: locale/extracted_strings.c:398
+msgid "Please select a backup to restore"
+msgstr ""
+
+#: locale/extracted_strings.c:401 locale/extracted_strings.c:404
+#: locale/extracted_strings.c:407 locale/extracted_strings.c:479
+#: locale/extracted_strings.c:482 locale/extracted_strings.c:485
+#: locale/extracted_strings.c:488 locale/extracted_strings.c:491
+msgid "Cancel"
+msgstr ""
+
+#: locale/extracted_strings.c:419
+msgid "Widget Manager"
+msgstr ""
+
+#: locale/extracted_strings.c:422
+msgid "New widget"
+msgstr ""
+
+#: locale/extracted_strings.c:428
+msgid "Widgets"
+msgstr ""
+
+#: locale/extracted_strings.c:431
+msgid "Name"
+msgstr ""
+
+#: locale/extracted_strings.c:437 locale/extracted_strings.c:440
+#: locale/extracted_strings.c:443 locale/extracted_strings.c:500
+#: locale/extracted_strings.c:629 locale/extracted_strings.c:632
+#: locale/extracted_strings.c:641 locale/extracted_strings.c:644
+msgid "Published"
+msgstr ""
+
+#: locale/extracted_strings.c:446 locale/extracted_strings.c:449
+msgid "Pending"
+msgstr ""
+
+#: locale/extracted_strings.c:458
+msgid "No widget found"
+msgstr ""
+
+#: locale/extracted_strings.c:461
+msgid "Creating new widget"
+msgstr ""
+
+#: locale/extracted_strings.c:464
+msgid "Editing widget «%1»"
+msgstr ""
+
+#: locale/extracted_strings.c:494
+msgid "Widget data"
+msgstr ""
+
+#: locale/extracted_strings.c:497
+msgid "Widget name"
+msgstr ""
+
+#: locale/extracted_strings.c:503
+msgid "Widget type"
+msgstr ""
+
+#: locale/extracted_strings.c:506
+msgid "Keywords"
+msgstr ""
+
+#: locale/extracted_strings.c:509
+msgid "Description"
+msgstr ""
+
+#: locale/extracted_strings.c:512
+msgid "Content"
+msgstr ""
+
+#: locale/extracted_strings.c:515
+msgid "There is no stands"
+msgstr ""
+
+#: locale/extracted_strings.c:518
+msgid "Articles"
+msgstr ""
+
+#: locale/extracted_strings.c:521
+msgid "Opinions"
+msgstr ""
+
+#: locale/extracted_strings.c:524
+msgid "Ads"
+msgstr ""
+
+#: locale/extracted_strings.c:527
+msgid "Coments"
+msgstr ""
+
+#: locale/extracted_strings.c:530
+msgid "Albums"
+msgstr ""
+
+#: locale/extracted_strings.c:533
+msgid "Photographies"
+msgstr ""
+
+#: locale/extracted_strings.c:536
+msgid "Videos"
+msgstr ""
+
+#: locale/extracted_strings.c:539
+msgid "Files"
+msgstr ""
+
+#: locale/extracted_strings.c:542 locale/extracted_strings.c:674
+msgid "Trash"
+msgstr ""
+
+#: locale/extracted_strings.c:545 locale/extracted_strings.c:605
+msgid "Title"
+msgstr ""
+
+#: locale/extracted_strings.c:548
+msgid "Section"
+msgstr ""
+
+#: locale/extracted_strings.c:551
+msgid "Views"
+msgstr ""
+
+#: locale/extracted_strings.c:554
+msgid "Date"
+msgstr ""
+
+#: locale/extracted_strings.c:560
+msgid "Name:"
+msgstr ""
+
+#: locale/extracted_strings.c:563
+msgid "Login:"
+msgstr ""
+
+#: locale/extracted_strings.c:566
+msgid "Group:"
+msgstr ""
+
+#: locale/extracted_strings.c:572 locale/extracted_strings.c:578
+msgid "Advanced Search"
+msgstr ""
+
+#: locale/extracted_strings.c:575
+msgid "Search in the information catalog:"
+msgstr ""
+
+#: locale/extracted_strings.c:581
+msgid "Search string:"
+msgstr ""
+
+#: locale/extracted_strings.c:584
+msgid "Content types:"
+msgstr ""
+
+#: locale/extracted_strings.c:587
+msgid "We cant find any content with your search criteria."
+msgstr ""
+
+#: locale/extracted_strings.c:590
+msgid "Your search \"<b>%1</b>\" didn't return any element."
+msgstr ""
+
+#: locale/extracted_strings.c:593
+msgid "Sugerencias:"
+msgstr ""
+
+#: locale/extracted_strings.c:596
+msgid "Asegúrese de que todas las palabras estén escritas correctamente."
+msgstr ""
+
+#: locale/extracted_strings.c:599
+msgid "Intente usar otras palabras."
+msgstr ""
+
+#: locale/extracted_strings.c:602
+msgid "Intente usar palabras más generales."
+msgstr ""
+
+#: locale/extracted_strings.c:608
+msgid "Article title"
+msgstr ""
+
+#: locale/extracted_strings.c:611
+msgid "Pretitle:"
+msgstr ""
+
+#: locale/extracted_strings.c:614
+msgid "Signature:"
+msgstr ""
+
+#: locale/extracted_strings.c:617
+msgid "Author:"
+msgstr ""
+
+#: locale/extracted_strings.c:620 locale/extracted_strings.c:623
+msgid "In library"
+msgstr ""
+
+#: locale/extracted_strings.c:626 locale/extracted_strings.c:635
+#: locale/extracted_strings.c:638 locale/extracted_strings.c:647
+#: locale/extracted_strings.c:650
+msgid "In pending"
+msgstr ""
+
+#: locale/extracted_strings.c:653 locale/extracted_strings.c:656
+#: locale/extracted_strings.c:659
+msgid "Restore from trash"
+msgstr ""
+
+#: locale/extracted_strings.c:662
+msgid "Restore from library"
+msgstr ""
+
+#: locale/extracted_strings.c:665
+msgid "There isn't any existent elements that matches your search criteria"
+msgstr ""
+
+#: locale/extracted_strings.c:668
+msgid "ALBUMS"
+msgstr ""
+
+#: locale/extracted_strings.c:671
+msgid "ADS"
+msgstr ""
+
+#: locale/extracted_strings.c:677
+msgid "Priveleges manager"
+msgstr ""
+
+#: locale/extracted_strings.c:680
+msgid "Filter by module:"
+msgstr ""
+
+#: locale/extracted_strings.c:686
+msgid "Privilege name"
+msgstr ""
+
+#: locale/extracted_strings.c:689
+msgid "Módule"
+msgstr ""
+
+#: locale/extracted_strings.c:695
+msgid "Edit privilege"
+msgstr ""
+
+#: locale/extracted_strings.c:698
+msgid "Delete privilege"
+msgstr ""
+
+#: locale/extracted_strings.c:701
+msgid "No available privileges to list here."
+msgstr ""
+
+#: locale/extracted_strings.c:704
+msgid "Welcome to OpenNemas"
+msgstr ""
+
+#: locale/extracted_strings.c:707 locale/extracted_strings.c:710
+msgid "Media manager"
+msgstr ""
+
+#: locale/extracted_strings.c:713 locale/extracted_strings.c:716
+msgid "New opinion"
+msgstr ""
+
+#: locale/extracted_strings.c:719 locale/extracted_strings.c:722
+msgid "New article"
+msgstr ""
+
+#: locale/extracted_strings.c:725
+msgid "New in other online newspapers..."
+msgstr ""
+
+#: locale/extracted_strings.c:728
+msgid "News from %1"
+msgstr ""

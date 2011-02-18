@@ -100,29 +100,27 @@ document.observe('dom:loaded', function() {
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
-					Siguiente
+					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" alt="" /><br />
-					Atrás
+					{t}Previous step{/t}
 				</a>
 			</li>
-
-			<li class="separator"></li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/editclear.png" alt="" /><br />
-					Limpiar
+					{t}Clean{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" title="{t}Select all the opinions available{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
-					Seleccionar todos
+					{t}Select all{/t}
 				</a>
 			</li>
 		</ul>

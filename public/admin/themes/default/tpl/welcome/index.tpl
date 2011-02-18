@@ -51,68 +51,70 @@ $.noConflict();
 {/block}
 
 {block name="content"}
-<div id="menu-acciones-admin" style="width:70%;margin:0 auto;">
-    <div style="float: left; margin-left: 10px; margin-top: 10px;">
-        <h2>{t}Welcome to OpenNemas{/t}</h2>
+<div style="width:70%;margin:0 auto;">
+    <div id="menu-acciones-admin" >
+        <div style="float: left; margin-left: 10px; margin-top: 10px;">
+            <h2>{t}Welcome to OpenNemas{/t}</h2>
+        </div>
+        <ul>
+            <li>
+                <a href="mediamanager.php?category=GLOBAL" class="admin_add"
+                   title="{t}Media manager{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
+                    <br />{t}Media manager{/t}
+                </a>
+            </li>
+            <li>
+                <a href="controllers/opinion/opinion.php?action=new" class="admin_add"
+                   title="{t}New opinion{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
+                    <br />{t}New opinion{/t}
+                </a>
+            </li>
+            <li>
+                <a href="article.php?action=new" class="admin_add"
+                   title="{t}New article{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" title="" alt="" />
+                    <br />{t}New article{/t}
+                </a>
+            </li>
+        </ul>
     </div>
-    <ul>
-        <li>
-            <a href="mediamanager.php?category=GLOBAL" class="admin_add"
-               title="{t}Gestor de imagenes{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
-                <br />{t}Gestor de imagenes{/t}
-            </a>
-        </li>
-        <li>
-            <a href="controllers/opinion/opinion.php?action=new" class="admin_add"
-               title="{t}Nueva opinion{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
-                <br />{t}Crear opinion{/t}
-            </a>
-        </li>
-        <li>
-            <a href="article.php?action=new" class="admin_add"
-               title="{t}Nueva noticia{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" title="" alt="" />
-                <br />{t}Crear noticia{/t}
-            </a>
-        </li>
-    </ul>
-</div>
-<br/>
-<table class="adminheading" style="width:70%;margin:0 auto;">
-    <tbody>
-        <tr>
-            <th>{t}Ahora mismo en otros diarios digitales...{/t}</th>
-        </tr>
-    </tbody>
-</table>
+    <br/>
+    <table class="adminheading">
+        <tbody>
+            <tr>
+                <th>{t}New in other online newspapers...{/t}</th>
+            </tr>
+        </tbody>
+    </table>
 
-<table border="0" cellpadding="4" cellspacing="0" class="adminlist" style="width:70%;margin:0 auto;">
+    <table border="0" cellpadding="4" cellspacing="0" class="adminlist" >
 
-    <tbody>
-    {if $feeds neq null}
+        <tbody>
+        {if $feeds neq null}
             <tr style=" display:block; padding:10px !important;">
 
-        {section name="feed" loop=$feeds}
-            <td style="vertical-align:top">
-                <h3>Noticias en {$feeds[feed].name}:</h3>
-                <div id="feed-{$smarty.section.feed.index}"></div>
-            </td>
-        {sectionelse}
-            <td>No tiene configurado ningún RSS</td>
-        {/section}
-                </tr>
+            {section name="feed" loop=$feeds}
+                <td style="vertical-align:top">
+                    <h3>{t 1=$feeds[feed].name}News from %1{/t}</h3>
+                    <div id="feed-{$smarty.section.feed.index}"></div>
+                </td>
+            {sectionelse}
+                <td>No tiene configurado ningún RSS</td>
+            {/section}
+            </tr>
+        {/if}
+        </tbody>
 
-    {/if}
-    </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" align="center">
+                    &nbsp;
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 
-    <tfoot>
-        <tr>
-            <td colspan="5" align="center">
-                &nbsp;
-            </td>
-        </tr>
-    </tfoot>
-</table>
+</div>
 {/block}

@@ -91,32 +91,35 @@ document.observe('dom:loaded', function() {
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
-					Siguiente
+					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" alt="" /><br />
-					Atrás
+					{t}Previous step{/t}
 				</a>
 			</li>
 
-			<li class="separator"></li>
-
 			<li>
-				<a href="#" class="admin_add" title="{t}Clean selected elements from container{/t}">
+				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/editclear.png" alt="" /><br />
-					Limpiar
+					{t}Clean{/t}
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" title="{t}Select all available elements{/t}">
+				<a href="#" class="admin_add" title="{t}Select all the opinions available{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
-					Seleccionar todos
+					{t}Select all{/t}
 				</a>
 			</li>
 		</ul>
+	</div>
+
+	<div class="form notice">
+		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Recipient selection{/t}</h3>
+		Please select your desired persons to sent the newsletter to.
 	</div>
 
 	<div class="form">
@@ -127,10 +130,10 @@ document.observe('dom:loaded', function() {
 		</form>
 	</div>
 
-	<table class="adminheading" style="margin-top:30px;">
+	<table class="adminheading">
 		<tr style="text-align:center;">
-			<th nowrap>Subscriptores (pulse dos veces para incluir el subscriptor)</th>
-			<th nowrap>Destinatarios seleccionados (pulse dos veces para eliminar un destinatario)</th>
+			<th nowrap>{t}Subscriptors available (please double click over a subscritor to add to recipients){/t}</th>
+			<th nowrap>{t}Subscriptors selected (please double click over a subscritor to delete from recipients){/t}</th>
 		</tr>
 	</table>
 	<table class="adminlist" style="min-height:500px">

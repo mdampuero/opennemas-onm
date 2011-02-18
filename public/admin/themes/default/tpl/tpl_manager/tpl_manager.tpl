@@ -158,34 +158,34 @@
 					{assign var="resource" value=$caches[c].resource}
 					{* Inner Article *}
 					{if isset($titles.$resource) && ($caches[c].template == 'article')}
-                    <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="{t}Caché de artículo interior{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="{t}Inner article cache file{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" target="_blank">
                         <strong>{t}Article{/t}:</strong> {$titles.$resource|clearslash}
 					</a>
 
 					{* Video inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Caché de video interior{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Inner video cache file{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/videos.php?id={$caches[c].resource}&action=inner" target="_blank">
 						 <strong>{t}Video Inner:{/t}</strong> {$titles.$resource|clearslash}
 					</a>
 
 					{* Video frontpage *}
 					{elseif ($caches[c].template == 'video_frontpage')}
-                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Caché de opinión interior{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Video inner cache file{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/videos.php?category_name={$caches[c].category}&action=list" target="_blank">
                         <strong>{t}Video Frontpage:{/t}</strong> {$caches[c].category}</a>
 
 					{* Opinion inner *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Caché de opinión interior{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
                         <strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
 					</a>
 
 					{* Gallery frontpage *}
 					{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Caché de gallery frontpage{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Frontpage article caché file{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
                         <strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
 					</a>
@@ -200,17 +200,17 @@
 
 					{* RSS opinion *}
 					{elseif isset($authors.$resource)}
-                    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}Caché RSS - autor de opinión{/t}" />
+                    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}RSS Opinion author cache file {/t}" />
                     <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"  target="_blank">
                         <strong>{t}RSS:{/t}</strong> {$authors.$resource|clearslash}
 					</a>
 
 					{* Opinion author index*}
 					{elseif ($caches[c].template == 'opinion_author_index')}
-                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Caché de portada de autor de opinion{/t}" />
-                    <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-                         target="_blank">
-                        <strong>{t}Opinion Index:{/t}</strong> author id {$caches[c].resource}</a>
+                    <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
+                    <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
+                        <strong>{t}Opinion Index:{/t}</strong> author id {$caches[c].resource}
+					</a>
 
 					{* RSS *}
 					{elseif $resource eq "RSS"}

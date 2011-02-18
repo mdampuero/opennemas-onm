@@ -13,20 +13,21 @@
 	<tr>
 		<th nowrap="nowrap" align="right">
             Filter by
-            <label for="username">Name:</label>
+            <label for="username">{t}Name:{/t}</label>
             <input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name}" />
             &nbsp;&nbsp;&nbsp;
 
-            <label for="userlogin">Login:</label>
+            <label for="userlogin">{t}Login:{/t}</label>
             <input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login}" />
             &nbsp;&nbsp;&nbsp;
 
-            <label for="usergroup">Group:</label>
+            <label for="usergroup">{t}Group:{/t}</label>
             <select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
                 {html_options options=$groupsOptions selected=$smarty.request.filter.group}
             </select>
 
             <input type="hidden" name="page" value="{$smarty.request.page}" />
+			<input type="submit" value="{t}Search{/t}">
         </th>
 	</tr>
 </table>

@@ -9,8 +9,6 @@ if (file_exists($configFile)) {
     require($configFile);
     require_once(SITE_CORE_PATH.'application.class.php');
 
-    class_exists('Application');
-
     Application::import_libs('*');
     $app = Application::load();
 } else {

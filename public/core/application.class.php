@@ -141,8 +141,35 @@ class Application {
             }
         }
 
+        self::configGettext();
+
         return( $GLOBALS['application'] );
     }
+
+    static public function configGettext(){
+
+
+	    date_default_timezone_set('Europe/Madrid');
+
+	    $locale = "es_ES.UTF-8";
+	    $domain = 'messages';
+
+        if (self::isBackend()) {
+            $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;
+        } else {
+            $localeDir = SITE_PATH.DS.'locale'.DS;
+        }
+
+        if (isset($_GET["locale"])) {
+            $locale = $_GET["locale"].'.UTF-8';
+        }
+
+        putenv("LC_MESSAGES=$locale");
+        setlocale(LC_ALL, $locale);
+        bindtextdomain($domain, $localeDir);
+        textdomain($domain);
+
+	}
 
     /**
     * Loads all the common libraries and the packages passed as argument

@@ -9,98 +9,81 @@
     {if !isset($smarty.request.action) ||
         $smarty.request.action eq "load"}
 
-        <table class="adminheading" style="">
+        <table class="adminheading" style="margin-top:20px; border-top:none !important">
             <tr>
-                <th nowrap>Busqueda Avanzada</th>
+                <th nowrap>{t}Advanced Search{/t}</th>
             </tr>
         </table>
         <table class="adminlist" style="width:100%" >
 
             <tr>
                 <td colspan="2" style="padding:20px;" nowrap="nowrap" colspan='3'>
-                    <label for="title" >Search in the information catalog:</label><br/><br/>
-                <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
-                        class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
+                    <label for="title" >{t}Search in the information catalog:{/t}</label><br/><br/>
+                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                            class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
                 </td>
             </tr>
             <tr>
                 <td style="padding:20px; padding-top:0; vertical-align:middle" nowrap="nowrap">
                     {foreach name=contentTypes item=type from=$arrayTypes}
-                      {if $type[0] != 5 && $type[0] != 10}
-                        {if $type[0] == 1 || $type[0] == 4}
-                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center" checked="true"/>{$type[2]|capitalize:true}
-                        {else}
-                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center"/>{$type[2]|capitalize:true}
+                        {if $type[0] != 5 && $type[0] != 10}
+                            {if $type[0] == 1 || $type[0] == 4}
+                                <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center" checked="true"/>{$type[2]|capitalize:true}
+                            {else}
+                                <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center"/>{$type[2]|capitalize:true}
+                            {/if}
                         {/if}
-                {/if}
                     {/foreach}
                 </td>
             </tr>
         </table>
 
     {elseif $smarty.request.action eq "search"}
-        <div style="margin:20px auto;">
-            <table class="adminheading">
-                <tr>
-                    <th nowrap>Advanced Search</th>
-                </tr>
-            </table>
-            <table class="adminlist" style="text-align:center;">
-                <tr>
-                    <td colspan=2 style="padding:20px;" nowrap="nowrap" colspan='3'>
-                        <label for="title" >Search string:</label>
-                        <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
-                            class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan=2 style="padding:20px; vertical-align:middle" nowrap="nowrap" colspan='3'>
-                        <strong>Content type:</strong>
-                        {$htmlCheckedTypes}
-                    </td>
-                </tr>
-                </table>
-        </div>
-        <br/><br/><br/>
+        <table class="adminheading" style="margin-top:20px; border-top:none !important">
+            <tr>
+                <th nowrap>{t}Advanced Search{/t}</th>
+            </tr>
+        </table>
+        <table class="adminlist" style="text-align:center;">
+            <tr>
+                <td colspan=2 style="padding:20px;" nowrap="nowrap" colspan='3'>
+                    <label for="title" >{t}Search string:{/t}</label>
+                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                        value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
+                        class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=2 style="padding:20px; vertical-align:middle" nowrap="nowrap" colspan='3'>
+                    <strong>{t}Content types:{/t}</strong>
+                    {$htmlCheckedTypes}
+                </td>
+            </tr>
+        </table>
         <div class="resultsSearch" id="resultsSearch" name="resultsSearch">
-            {if !isset($arrayResults) || empty($arrayResults)}
-                <div>
-                    <p>No se encontró ningún contenido con todos los términos de su búsqueda.</p>
-                    <p>Su búsqueda - <b>{$smarty.request.stringSearch|clearslash}</b> - no produjo ningún documento.</p>
-                    <p style="margin-top: 1em;">Sugerencias:</p>
-                    <ul style=""><li>&nbsp&nbsp&nbsp&nbsp Asegúrese de que todas las palabras estén escritas correctamente.</li>
-                        <li>&nbsp&nbsp&nbsp&nbsp Intente usar otras palabras.</li>
-                        <li>&nbsp&nbsp&nbsp&nbsp Intente usar palabras más generales.</li>
-                    </ul>
-                </div>
+            {if !isset($arrayResults)
+                || empty($arrayResults)}
+                <table class="adminlist">
+                    <tr {cycle values="class=row0,class=row1"} style="padding:20xp;">
+                        <td>
+                            <div style="margin:0 auto; width:50%">
+                                <h3>{t}We cant find any content with your search criteria.{/t}</h3>
+                                <p>{t escape="no" 1=$smarty.request.stringSearch|clearslash}Your search "<b>%1</b>" didn't return any element.{/t}</p>
+                                <p style="margin-top: 1em;">{t}Sugerencias:{/t}</p>
+                                <ul>
+                                    <li>{t}Asegúrese de que todas las palabras estén escritas correctamente.{/t}</li>
+                                    <li>{t}Intente usar otras palabras.{/t}</li>
+                                    <li>{t}Intente usar palabras más generales.{/t}</li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
 
             {else}
 
-            <table class="adminheading">
-                <tr>
-                    <td><b>Resultados de la búsqueda&nbsp&nbsp</b><em>'{$smarty.request.stringSearch|clearslash}'</em></td><td style="font-size: 10px;" align="right"></td>
-                </tr>
-            </table>
-
-            {if count($arrayResults) gt 0}
-                <table align="right">
-                    <tr>
-                        <td style="font-size: 12px;" align="center">{$pagination}</td>
-                    </tr>
-                </table>
-             {/if}
-
-
-
-               {include file="search_advanced_list.tpl"}
-
-            {if count($arrayResults) gt 0}
-                <table align="right">
-                    <tr>
-                        <td colspan="4" style="padding:10px;font-size: 12px;" align="center"><br><br>{$pagination}<br><br></td>
-                    </tr>
-                </table>
-             {/if}
+                {include file="search/search_advanced_list.tpl"}
 
             {/if}
         </div>
@@ -112,17 +95,17 @@
         <tbody>
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                <label for="title">T&iacute;tulo:</label>
+                <label for="title">{t}Title{/t}</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
-                <input type="text" id="title" name="title" title="T&iacute;tulo de la noticia"
+                <input type="text" id="title" name="title" title="{t}Article title{/t}"
                     value="{$article->title|clearslash}" readonly size="100" />
             </td>
         </tr>
           {if $article->subtitle}
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                <label for="title">Antet&iacute;tulo:</label>
+                <label for="title">{t}Pretitle:{/t}</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                 <input type="text" id="subtitle" name="subtitle" title="antetítulo"
@@ -133,7 +116,7 @@
             {if $article->agency}
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                <label for="title">Firma:</label>
+                <label for="title">{t}Signature:{/t}</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                 <input type="text" id="agency" name="agency" title="Agencia"
@@ -144,13 +127,13 @@
           {if $article->fk_author}
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="30%">
-                <label for="title">Autor:</label>
+                <label for="title">{t}Author:{/t}</label>
             </td>
             <td style="padding:4px;" nowrap="nowrap" width="70%">
                 <input type="text" id="agency" name="agency" title="Agencia"
                         {section name=as loop=$todos}
-                                         {if $article->fk_author eq $todos[as]->pk_author} value="{$todos[as]->name}" {/if}
-                                {/section}
+                            {if $article->fk_author eq $todos[as]->pk_author} value="{$todos[as]->name}" {/if}
+                        {/section}
                      readonly size="100" />
             </td>
         </tr>

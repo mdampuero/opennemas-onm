@@ -18,7 +18,7 @@ if( !isset($_REQUEST['action']) )
 {
     $Types = getContentTypes();
     $tpl->assign('arrayTypes', $Types);
-    $tpl->display('search_advanced.tpl');
+    $tpl->display('search/search_advanced.tpl');
     return;
 }
 
@@ -113,14 +113,14 @@ switch($_REQUEST['action'])
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
             $htmlPaging = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
-             $tpl->assign('type2res', $type2res);
+            $tpl->assign('type2res', $type2res);
 
             $tpl->assign('pagination', $htmlPaging);
             $tpl->assign('arrayResults',$arrayResults);
 
-            $html_out=$tpl->fetch('search_advanced_list.tpl');
+            $html_out=$tpl->fetch('search/search_advanced_list.tpl');
             $htmlTitle = (isset($htmlTitle)? $htmlTitle : '');
-            Application::ajax_out($htmlTitle.$htmlPaging.$html_out.$htmlPaging);
+            Application::ajax_out($html_out);
 
     break;
 
@@ -231,10 +231,9 @@ switch($_REQUEST['action'])
             $article_data.=" \n fk_publisher -".$article->fk_publisher;
             $article_data.=" \n fk_user_last_editor -".$article->fk_user_last_editor;
 
+            $sql = (isset($sql) ? $sql : 'no_sql_available');
 
-
-            $GLOBALS['application']->workflow->log( '\n NOTIFY - ' .
-                              $_SESSION['username'] . ' - ' . $sql . ' ' . print_r($article_data,true), PEAR_LOG_INFO );
+            $GLOBALS['application']->workflow->log( '\n NOTIFY - ' . $_SESSION['username'] . ' - ' . $sql . ' ' . print_r($article_data,true), PEAR_LOG_INFO );
             $destinatario="sandra@openhost.es";
             $params="";
             $htmlcontent=$article_data;
@@ -252,7 +251,7 @@ switch($_REQUEST['action'])
         return;
 }
 
-$tpl->display('search_advanced.tpl');
+$tpl->display('search/search_advanced.tpl');
 
 
 /*

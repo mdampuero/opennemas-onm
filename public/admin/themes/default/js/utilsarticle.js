@@ -19,8 +19,11 @@ alertsDiv = function(){
     var Nodes=$('hole3').select('table');
     if(Nodes.length<1){
 		$('warnings3').update('Debe contener noticias debajo de publicidad 2');
-		$('warnings-validation').update('<div class="info">Recuerde guardar posiciones</div>');}
-    else{$('warnings3').update(' ');}
+		$('warnings-validation').update('<div class="notice">Recuerde guardar posiciones</div>');
+		new Effect.Highlight( $('warnings-validation'));
+	} else {
+		$('warnings3').update(' ');
+	}
 
 }
 
