@@ -22,10 +22,10 @@ if (isset ($_GET['subcategory_name'])) {
     $subcategory_name = $_GET['subcategory_name'];
     $actual_category = $_GET['subcategory_name'];
 }
-
 require_once ("index_sections.php");
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 require_once ("index_advertisement.php");
-               
+require_once("widget_static_pages.php");
+
 // Visualizar
 $tpl->display('search/search.tpl');

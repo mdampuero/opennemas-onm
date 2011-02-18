@@ -4,7 +4,7 @@
       <ul>
          {section name=r loop=$suggested}
          {if $suggested[r].pk_content neq $article->pk_article}
-         <li><a href="{$suggested[r].permalink}">{$suggested[r].title|clearslash}</a></li>
+         <li><a href="{$suggested[r].uri}">{$suggested[r].title|clearslash}</a></li>
          {/if}
          {/section}
       </ul>

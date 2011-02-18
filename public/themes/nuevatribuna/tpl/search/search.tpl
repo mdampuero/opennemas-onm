@@ -1,7 +1,7 @@
 {extends file='base/frontpage_layout.tpl'}
 
 {block name="meta" append}
-<title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - {$smarty.const.SITE_TITLE} </title>
+<title>Resultados de la búsqueda - {$smarty.const.SITE_TITLE} </title>
 <meta name="keywords" content="{$article->metadata|clearslash}" />
 <meta name="description" content="{$article->summary|strip_tags|clearslash}" />
 
@@ -14,15 +14,11 @@
 {$smarty.block.parent}
 <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="{$params.CSS_DIR}video-js.css" type="text/css" media="screen,projection" />
-{/block}
-
-{block name="footer-js"}
-{$smarty.block.parent}
-<script charset="utf-8" type="text/javascript">
-    $(function(){
-      VideoJS.setup();
-    })
-</script>
+<style type="text/css">
+    #cse-search-results iframe {
+        max-height:auto !important;
+    }
+</style>
 {/block}
 
 {block name="content"}
@@ -31,28 +27,36 @@
     </div>
     <div class="wrapper clearfix">
         <div class="container container_with_border">
-            
+
             <div id="header">
                {include file="base/partials/_frontpage_header.tpl"}
                {include file="base/partials/_frontpage_menu.tpl"}
             </div><!-- #header -->
-            
+
             <div id="main_content" class="wrapper_content_inside_container span-24">
 
                 <div class="span-24 search-results">
+
+                    <div class="inner-article">
+                        <div class=" title-subtitle-legend">
+                            <h1 class="inner-article-title">Resultados de la búsqueda</h1>
+                        </div><!--title-subtitle-legend-->
+                    </div>
+
+
                     <div id="cse-search-results" style="padding:20px"></div>
-    
+
                     <script type="text/javascript">
                         var googleSearchIframeName = "cse-search-results";
                         var googleSearchFormName = "cse-search-box";
-                        var googleSearchFrameWidth = 950;
+                        var googleSearchFrameWidth = 930;
                         var googleSearchDomain = "www.google.es";
                         var googleSearchPath = "/cse";
                     </script>
-    
+
                     <script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
                 </div>
-                 
+
             </div><!-- fin #main_content -->
 
         </div><!-- fin .container -->
