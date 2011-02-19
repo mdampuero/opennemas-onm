@@ -54,7 +54,7 @@ $.noConflict();
 <div style="width:70%;margin:0 auto;">
     <div id="menu-acciones-admin" >
         <div style="float: left; margin-left: 10px; margin-top: 10px;">
-            <h2>{t}Welcome to OpenNemas{/t}</h2>
+            <h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2>
         </div>
         <ul>
             <li>

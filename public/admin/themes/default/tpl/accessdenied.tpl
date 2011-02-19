@@ -56,7 +56,7 @@
   <body>
         <div id="container">
             <div id="bodyCopy">
-                <p class="error">Acceso a seccion denegado.</p>
+                <p class="error">{t}Access to section denied.{/t}</p>
                 <p>Sentimolo, pero vostede non ten permiso para acceder a p&aacute;xina solicitada.</p>
                 <p>Pode voltar a <a href="{$linkReturn}"> p&aacute;xina anterior </a>. Agardamos que atope un xeito de acceder a informaci&oacute;n solicitada.</p>
                 <p>Xornal de Galicia</p>

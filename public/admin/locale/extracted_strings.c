@@ -1,3 +1,129 @@
+/* ./themes/default/tpl//opinion/opinion.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//opinion/opinion.tpl */
+gettext("Author Opinions");
+
+/* ./themes/default/tpl//opinion/opinion.tpl */
+gettext("Editorial");
+
+/* ./themes/default/tpl//opinion/opinion.tpl */
+gettext("Director opinion");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Author name");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Genre");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Politic sign");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Condition");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Photos (#)");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("There is no available authors");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Name");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Author name");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Condition");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Condition");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Political party");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Progresist");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Conservative");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Left-wind");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Right-wind");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Center-wind");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Comunist");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Sex:");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Women");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Men");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Birthday:");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Birthday");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Author photos");
+
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Delete photo");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Opinion articles");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Select an author");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("All");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Author name");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("View");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Ratings");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Comments");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Created in");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("In home");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//opinion/opinion_list.tpl */
+gettext("Actions");
+
 /* ./themes/default/tpl//frontpage/content_type_row/widget.tpl */
 gettext("Edit");
 
@@ -206,7 +332,7 @@ gettext("Active users");
 gettext("Active users");
 
 /* ./themes/default/tpl//base/admin.tpl */
-gettext("'Your password must contain 5 characters and don't contain the word 'password' or your user name.'");
+gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Please check your first password and check again.");
@@ -456,6 +582,42 @@ gettext("Clean cache");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Clean cache");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Opinion Manager :: Author list");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New author");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New author");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New author");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Go to <br/>opinion manager");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Opinion Manager :: New author");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Opinion Manager :: Edit author");
 
 /* ./themes/default/tpl//login.tpl */
 gettext("Panel de Control - %1");
@@ -793,6 +955,9 @@ gettext("Content");
 /* ./themes/default/tpl//newsstand/index.tpl */
 gettext("There is no stands");
 
+/* ./themes/default/tpl//accessdenied.tpl */
+gettext("Access to section denied.");
+
 /* ./themes/default/tpl//trash/trash.tpl */
 gettext("Articles");
 
@@ -980,7 +1145,7 @@ gettext("Delete privilege");
 gettext("No available privileges to list here.");
 
 /* ./themes/default/tpl//welcome/index.tpl */
-gettext("Welcome to OpenNemas");
+gettext("Welcome to %1");
 
 /* ./themes/default/tpl//welcome/index.tpl */
 gettext("Media manager");
