@@ -522,23 +522,23 @@
 {* Botonera autores -------------------------------------------- *}
 {elseif preg_match('/author\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</div>
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Opinion Manager :: Author list{/t}</div>
 		<ul>
 			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva publicidad');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="Nuevo" alt="Nuevo"><br />Nuevo Autor
+				<a href="{$_SERVER['PHP_SELF']}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
+					<img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="{t}New author{/t}" alt="{t}New author{/t}"><br />{t}New author{/t}
 				</a>
 			</li>
-             <li class="separator"> </li>
+            <li class="separator"></li>
             <li>
-				<a href="opinion.php?action=new&desde=author" class="admin_add" name="submit_mult" value="Nueva Opinion" title="Nueva Opinion">
-					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nueva Opinion" alt="Nueva Opinion"><br />Nueva Opinion
+				<a href="opinion.php?action=new&desde=author" class="admin_add" name="submit_mult" value="{t}New opinion{/t}" title="{t}New opinion{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="{t}New opinion{/t}" alt="{t}New opinion{/t}"><br />{t}New opinion{/t}
 				</a>
 			</li>
 
             <li >
 				<a href="opinion.php?action=list&desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
-					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Listado Opiniones" alt="Listado Opiniones"><br />Ver Opiniones
+					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go to <br/>opinion manager{/t}
 				</a>
 			</li>
 		</ul>
@@ -547,6 +547,7 @@
 
 {elseif preg_match('/author\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
 	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{if $smarty.request.action eq "new"}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
 		<ul>
 		    <li>
 				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$author->pk_author}', 'formulario');" value="Validar" title="Validar">
@@ -555,11 +556,11 @@
 		    </li>
 			<li>
 				{if $smarty.session._from eq 'opinion.php'}
-						<a href="#" class="admin_add"  onClick="window.location='opinion.php'">
+						<a href="opinion.php" class="admin_add">
 						<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 					</a>
 				{else}
-					<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
+					<a href="{$_SERVER['PHP_SELF']}?action=list&page=0" class="admin_add" title="Cancelar">
 						<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 					</a>
 				{/if}

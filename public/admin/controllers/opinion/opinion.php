@@ -25,7 +25,7 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
- 
+
 
 /**
  * Check privileges
@@ -109,7 +109,7 @@ if(isset($_REQUEST['action'])) {
                 $tpl->assign('num_dir', $num_dir);
 
                 $rating = new Rating();
-                
+
                 foreach($editorial as $opin) {
                     $todos = $comment->get_comments( $opin->id );
                     $opin->comments = count($todos);
@@ -331,7 +331,7 @@ if(isset($_REQUEST['action'])) {
                 echo $msg;
                 exit(0);
             } else {
-                $msg.=" ¿Está seguro que desea eliminar '" . $opinion->title . "' ?";
+                $msg =" ¿Está seguro que desea eliminar '" . $opinion->title . "' ?";
 
                 echo $msg;
                 exit(0);
@@ -426,7 +426,7 @@ if(isset($_REQUEST['action'])) {
 
         case 'inhome_status': {
             $opinion = new Opinion($_REQUEST['id']);
-
+            $alert='';
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $total = $opinion->count_inhome_type();
@@ -459,6 +459,7 @@ if(isset($_REQUEST['action'])) {
 
         case 'm_inhome_status': {
             $fields = $_REQUEST['selected_fld'];
+            $alert = '';
 
             if(is_array($fields)) {
                 $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
@@ -485,13 +486,13 @@ if(isset($_REQUEST['action'])) {
 
                     } else {
                         $opinion->set_inhome($status, $_SESSION['userid']);
-                        $total--;
-                   }
+                        //$total--;
+                    }
                     if(($opinion->type_opinion == 1) && ($total < 2)) {
-                            $alert = 'Tiene que poner dos opiniones de editorial';
-                     } elseif(($opinion->type_opinion == 2) && ($total < 1)) {
-                         $alert = 'Tiene que poner una opinión del director';
-                     }
+                        $alert = 'Tiene que poner dos opiniones de editorial';
+                    } elseif(($opinion->type_opinion == 2) && ($total < 1)) {
+                        $alert = 'Tiene que poner una opinión del director';
+                    }
                 }
             }
 
@@ -551,14 +552,14 @@ if(isset($_REQUEST['action'])) {
                                                          'ORDER BY  created DESC ', $_REQUEST['page'], 16);
 
                 $params = $_REQUEST['author'];
-                
+
                 if($pager->_totalItems>16){
                     $pager = $cm->create_paginate($pager->_totalItems, 16, 2, 'changepageList', $params);
                     $tpl->assign('paginacion', $pager->links);
                 }
             }
 
-            
+
             $tpl->assign('opinions', $opinions);
             $tpl->assign('type_opinion', 0);
 

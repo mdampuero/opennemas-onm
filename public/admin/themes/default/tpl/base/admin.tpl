@@ -183,7 +183,7 @@
 			new Validation('formulario', { immediate : true });
 			Validation.addAllThese([
 				['validate-password',
-					{t}'Your password must contain 5 characters and don\'t contain the word \'password\' or your user name.'{/t}, {
+					'{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}', {
 					minLength : 6,
 					notOneOf : ['password','PASSWORD','Password'],
 					notEqualToField : 'login'
