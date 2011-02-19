@@ -4,7 +4,7 @@
     <tr>
         <td align="right" colspan="2">
             <label>
-                Banner Intersticial - Opinion Inner (800X600)
+                {t}Banner Intersticial - Opinion Inner (800X600){/t}
                 <input type="radio" name="type_advertisement" value="150" {if $advertisement->type_advertisement == 150}checked="checked" {/if}/>
             </label>
         </td>
@@ -18,13 +18,13 @@
     <tr>
         <td align="right">
             <label>
-                Big Banner Top (728X90)
+                {t}Big Banner Top (728X90){/t}
                 <input type="radio" name="type_advertisement" value="101" {if $advertisement->type_advertisement == 101}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                Banner Top Right (234X90)
+                {t}Banner Top Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="102" {if $advertisement->type_advertisement == 102}checked="checked" {/if}/>
             </label>
         </td>
@@ -35,7 +35,7 @@
     <tr>
         <td align="right"  colspan="2">
             <label>
-               Banner1 Column Right (300X*)
+               {t}Banner1 Column Right (300X*){/t}
                 <input type="radio" name="type_advertisement" value="103" {if $advertisement->type_advertisement == 103}checked="checked" {/if}/>
             </label>
         </td>
@@ -43,7 +43,7 @@
     <tr>
         <td height="50" align="right"  colspan="2">
             <label>
-               Banner2 Column Right (300X*)
+               {t}Banner2 Column Right (300X*){/t}
                 <input type="radio" name="type_advertisement" value="105" {if $advertisement->type_advertisement == 105}checked="checked" {/if}/>
             </label>
         </td>        
@@ -54,13 +54,13 @@
       <tr>
         <td align="right">
             <label>
-                Big Banner Bottom (728X90)
+                {t}Big Banner Bottom (728X90){/t}
                 <input type="radio" name="type_advertisement" value="109" {if $advertisement->type_advertisement == 109}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                Banner Bottom Right (234X90)
+                {t}Banner Bottom Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="110" {if $advertisement->type_advertisement == 110}checked="checked" {/if}/>
             </label>
         </td>

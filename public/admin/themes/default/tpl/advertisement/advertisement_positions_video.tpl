@@ -3,7 +3,7 @@
     <tr>
         <td align="right" colspan="2">
             <label>
-                Banner Intersticial - Video Frontpage (800X600)
+                {t}Banner Intersticial - Video Frontpage (800X600){/t}
                 <input type="radio" name="type_advertisement" value="250" {if $advertisement->type_advertisement == 250}checked="checked" {/if}/>
             </label>
         </td>
@@ -17,13 +17,13 @@
     <tr>
         <td align="right">
             <label>
-                Big Banner Top (728X90)
+                {t}Big Banner Top (728X90){/t}
                 <input type="radio" name="type_advertisement" value="201" {if $advertisement->type_advertisement == 201}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                 Banner Top Right (234X90)
+                 {t}Banner Top Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="202" {if $advertisement->type_advertisement == 202}checked="checked" {/if}/>
             </label>
         </td>
@@ -36,13 +36,13 @@
     <tr>
         <td align="right">
             <label>
-                Big Banner Bottom (728X90)
+                {t}Big Banner Bottom (728X90){/t}
                 <input type="radio" name="type_advertisement" value="209" {if $advertisement->type_advertisement == 209}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                Banner Bottom Right (234X90)
+                {t}Banner Bottom Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="210" {if $advertisement->type_advertisement == 210}checked="checked" {/if}/>
             </label>
         </td>

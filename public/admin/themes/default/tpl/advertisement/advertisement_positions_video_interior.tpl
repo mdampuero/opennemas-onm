@@ -4,7 +4,7 @@
     <tr>
         <td align="right" colspan="2">
             <label>
-                Banner Intersticial - Video Inner (800X600)
+                {t}Banner Intersticial - Video Inner (800X600){/t}
                 <input type="radio" name="type_advertisement" value="350" {if $advertisement->type_advertisement == 350}checked="checked" {/if}/>
             </label>
         </td>
@@ -18,13 +18,13 @@
     <tr>
         <td align="right">
             <label>
-                Big Banner Top (728X90)
+                {t}Big Banner Top (728X90){/t}
                 <input type="radio" name="type_advertisement" value="301" {if $advertisement->type_advertisement == 301}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                 Banner Top Right (234X90)
+                 {t}Banner Top Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="302" {if $advertisement->type_advertisement == 302}checked="checked" {/if}/>
             </label>
         </td>
@@ -35,7 +35,7 @@
     <tr>
         <td align="right"  colspan="2">
             <label>
-                Button Column (265x95)
+                {t}Button Column (265x95){/t}
                 <input type="radio" name="type_advertisement" value="303" {if $advertisement->type_advertisement == 303}checked="checked" {/if}/>
             </label>
         </td>
@@ -47,13 +47,13 @@
       <tr>
         <td align="right">
             <label>
-                Big Banner Bottom (728X90)
+                {t}Big Banner Bottom (728X90){/t}
                 <input type="radio" name="type_advertisement" value="309" {if $advertisement->type_advertisement == 309}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                 Banner Bottom Right (234X90)
+                 {t}Banner Bottom Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="310" {if $advertisement->type_advertisement == 310}checked="checked" {/if}/>
             </label>
         </td>

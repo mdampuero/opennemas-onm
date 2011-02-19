@@ -1,13 +1,13 @@
 
 <ul class="tabs2" style="margin-bottom: 28px;">
         <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
+        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOME{/t}</font></a>
         </li>
         <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
+        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}OPINION{/t}</font></a>
         </li>
         <li>
-        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
+        <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}GALLERIES{/t}</font></a>
         </li>
         <script defer="defer" type="text/javascript">
             // <![CDATA[
@@ -47,21 +47,21 @@
 <table class="adminheading">
 	<tr>
 		<th nowrap="nowrap" align="right">
-            <label>Tipo de banner:
+            <label>{t}Banner type:{/t}
             <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.type_advertisement
                               selected=$smarty.request.filter.type_advertisement}
             </select></label>
             &nbsp;&nbsp;&nbsp;
 
-            <label>Estado:
+            <label>{t}Status:{/t}
             <select name="filter[available]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.available
                               selected=$smarty.request.filter.available}
             </select></label>
             &nbsp;&nbsp;&nbsp;
 
-            <label>Tipo:
+            <label>{t}Type:{/t}
             <select name="filter[type]" onchange="submitFilters(this.form);">
                 {html_options options=$filter_options.type
                               selected=$smarty.request.filter.type}
@@ -77,15 +77,15 @@
 <thead>
 <tr>
     <th></th>
-    <th class="title">Tipo</th>
-    <th>Título</th>
-    <th align="center">Permanencia</th>
-    <th align="center">Clicks</th>
-    <th align="center">Visto</th>
-    <th align="center">Tipo</th>
-    <th align="center">Publicado</th>
-    <th align="center">Modificar</th>
-    <th align="center">Eliminar</th>
+    <th class="title">{t}Type:{/t}</th>
+    <th>{t}Title{/t}</th>
+    <th align="center">{t}Permanence{/t}</th>
+    <th align="center">{t}Clicks{/t}</th>
+    <th align="center">{t}Viewed{/t}</th>
+    <th align="center">{t}Type{/t}</th>
+    <th align="center">{t}Published{/t}</th>
+    <th align="center">{t}Edit{/t}</th>
+    <th align="center">{t}Delete{/t}</th>
 </tr>
 </thead>
 
@@ -107,9 +107,9 @@
 	</td>
 
     <td style="text-align:center;font-size: 11px;width:80px;" align="center">
-		{if $advertisements[c]->type_medida == 'NULL'} Indefinida {/if}
-		{if $advertisements[c]->type_medida == 'CLIC'} Clicks: {$advertisements[c]->num_clic} {/if}
-		{if $advertisements[c]->type_medida == 'VIEW'} Visionados: {$advertisements[c]->num_view} {/if}
+		{if $advertisements[c]->type_medida == 'NULL'} {t}Undefined:{/t} {/if}
+		{if $advertisements[c]->type_medida == 'CLIC'} {t}Clicks:{/t} {$advertisements[c]->num_clic} {/if}
+		{if $advertisements[c]->type_medida == 'VIEW'} {t}Viewed:{/t} {$advertisements[c]->num_view} {/if}
 		{if $advertisements[c]->type_medida == 'DATE'}
             Fecha: {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
         {/if}
@@ -127,28 +127,28 @@
                  alt="Javascript" title="Javascript" />
         {else}
             <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="Multimedia"
-                 title="Elemento multimedia (flash, imagen, gif animado)" />
+                 title="Media element (flash, image, gif)" />
         {/if}
     </td>
 	<td style="text-align:center;width:70px;" align="center">
 		{if $advertisements[c]->available == 1}
 			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                title="Publicado">
+                title={t}"Published"{/t}>
 				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
 		{else}
 			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                title="Pendiente">
+                title={t}"Unresolved"{/t}>
 				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
 		{/if}
 	</td>
 
 	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title="Modificar">
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title={t}"Edit"{/t}>
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 	</td>
 
 	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="Eliminar">
+		<a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title={t}"Delete"{/t}>
 			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 	</td>
 
@@ -156,7 +156,7 @@
 {sectionelse}
 <tr>
 	<td align="center" colspan="10">
-        <h2>No hay ninguna publicidad guardada en esta sección</h2>
+        <h2>{t}There is no advertisement stored in this section{/t}</h2>
     </td>
 </tr>
 {/section}

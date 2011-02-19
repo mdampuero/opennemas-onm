@@ -34,25 +34,25 @@
 <!-- #$AUTHOR:sandra -->
 
 
-<area shape="rect" coords="0,2,180,24" alt="Big Banner Superior Izquierdo (Int.)" title="Big Banner Superior Izquierdo (Int.)"
+<area shape="rect" coords="0,2,180,24" alt="Big Banner Superior Izquierdo (Int.)" title={t}"Big Banner top left (Int.){/t}"
     href="javascript:adPositionInterior.selectPosition(101);" />
 
-<area shape="rect" coords="181,2,236,24" alt="Banner Superior Derecho (Int.)" title="Banner Superior Derecho (Int.)"
+<area shape="rect" coords="181,2,236,24" alt="Banner Superior Derecho (Int.)" title={t}"Banner top right (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(102);" />
 
-<area shape="rect" coords="158,106,234,179" alt="Banner Columna Derecha 1 (Int.)" title="Banner Columna Derecha 1 (Int.)"
+<area shape="rect" coords="158,106,234,179" alt="Banner Columna Derecha 1 (Int.)" title={t}"Banner Column right 1 (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(103);" />
 
-<area shape="rect" coords="4,323,154,344" alt="Robapágina (Int.)" title="Robapágina (Int.)"
+<area shape="rect" coords="4,323,154,344" alt="Robapágina (Int.)" title={t}"Robapágina (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(104);" />
 
-<area shape="rect" coords="158,445,234,507" alt="Banner Columna Derecha 2 (Int.)" title="Banner Columna Derecha 2 (Int.)"
+<area shape="rect" coords="158,445,234,507" alt="Banner Columna Derecha 2 (Int.)" title={t}"Banner Column right 2 (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(105);" />
 
-<area shape="rect" coords="0,520,180,543" alt="Big Banner Inferior Izquierdo (Int.)" title="Big Banner Inferior Izquierdo (Int.)"
+<area shape="rect" coords="0,520,180,543" alt="Big Banner Inferior Izquierdo (Int.)" title={t}"Big Banner bottom left (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(109);" />
 
-<area shape="rect" coords="181,520,235,5431" alt="Banner Inferior Derecho (Int.)" title="Banner Inferior Derecho (Int.)"
+<area shape="rect" coords="181,520,235,5431" alt="Banner Inferior Derecho (Int.)" title={t}"Banner bottom right (Int.)"{/t}
     href="javascript:adPositionInterior.selectPosition(110);" />
 
 </map>
