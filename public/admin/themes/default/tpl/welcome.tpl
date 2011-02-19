@@ -9,8 +9,8 @@
                 	<div style="float: left;">
                         <div class="icon">                            
                             <a href="/admin/article.php?action=new&category=221">
-                                <img alt="" src="{$params.IMAGE_DIR}article_add.gif"/>
-                                <span>Nuevo Articulo</span>
+                                <img alt="{t}New Article{/t}" src="{$params.IMAGE_DIR}article_add.gif"/>
+                                <span>{t}New Article{/t}</span>
                             </a>
                             
                         </div>
@@ -21,8 +21,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/controllers/opinion/opinion.php?action=new">
-                                <img alt="" src="{$params.IMAGE_DIR}opinion.png"/>
-                                <span>Nueva Opini&oacute;n</span>
+                                <img alt="{t}New Opinion{/t}" src="{$params.IMAGE_DIR}opinion.png"/>
+                                <span>{t}New Opinion{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -32,8 +32,8 @@
                 	<div style="float: left;">
                         <div class="icon">
                             <a href="/admin/controllers/advertisement/advertisement.php?action=new&category=0">
-                                <img alt="" src="{$params.IMAGE_DIR}advertisement.png"/>
-                                <span>Nueva Publicidad</span>
+                                <img alt="{t}New Add{/t}" src="{$params.IMAGE_DIR}advertisement.png"/>
+                                <span>{t}New Add{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -43,8 +43,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/mediamanager.php">
-                                <img alt="" src="{$params.IMAGE_DIR}add_photo.png"/>
-                                <span>Subir Foto</span>
+                                <img alt="{t}Upload Photo{/t}" src="{$params.IMAGE_DIR}add_photo.png"/>
+                                <span>{t}Upload Photo{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -54,8 +54,8 @@
                 	<div style="float: left;">
                         <div class="icon">
                             <a href="/admin/article.php?action=list&category=home">
-                                <img alt="" src="{$params.IMAGE_DIR}iconos/frontpage_manager.png"/>
-                                <span>Gestor Portada</span>
+                                <img alt="{t}Frontpage manager{/t}" src="{$params.IMAGE_DIR}iconos/frontpage_manager.png"/>
+                                <span>{t}Frontpage manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -65,8 +65,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/article.php?action=list_pendientes&category=todos">
-                                <img alt="" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
-                                <span>Gestor Pendientes</span>
+                                <img alt="{t}Article manager{/t}" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
+                                <span>{t}Article manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -76,8 +76,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/controllers/opinion/opinion.php?action=list">
-                                <img alt="" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
-                                <span>Gestor Opini&oacute;n</span>
+                                <img alt="{t}Opinion manager{/t}" src="{$params.IMAGE_DIR}iconos/draft_manager.png"/>
+                                <span>{t}Opinion manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -87,8 +87,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/controllers/comment.php?action=list&category=todos">
-                                <img alt="" src="{$params.IMAGE_DIR}comments_manager.png"/>
-                                <span>Gestor Comentarios</span>
+                                <img alt="{t}Comment manager{/t}" src="{$params.IMAGE_DIR}comments_manager.png"/>
+                                <span>{t}Comment manager{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -98,8 +98,8 @@
                     <div style="float: left;">
                         <div class="icon">
                             <a href="/admin/newsletter.php">
-                                <img alt="" src="{$params.IMAGE_DIR}newsletter/mail_message_new.png"/>
-                                <span>Envío Boletín</span>
+                                <img alt="{t}Newsletter{/t}" src="{$params.IMAGE_DIR}newsletter/mail_message_new.png"/>
+                                <span>{t}Newsletter{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -109,8 +109,8 @@
                     <div style="float: left;">
                         <div class="icon">
                              <a href="importXML.php">
-                                <img border="0" src="{$params.IMAGE_DIR}xml.png">
-                                <span>Importar XML</span>
+                                <img alt="{t}XML Import{/t}" border="0" src="{$params.IMAGE_DIR}xml.png">
+                                <span>{t}XML Import{/t}</span>
                             </a>
                         </div>
                     </div>
@@ -125,8 +125,7 @@
                 {if count($messages.entries)>0}
                 <div class="rssBox">
                     <h2 style="cursor: pointer;">
-                        <img src="{$params.IMAGE_DIR}gmail_ico.png" border="0" align="absmiddle" />
-                        {$messages.total} emails sin leer
+                        <img src="{$params.IMAGE_DIR}gmail_ico.png" border="0" align="absmiddle" />{$messages.total} {t}unread mails{/t}
                     </h2>
                     <div id="gmailBox">
                         <ul>

@@ -42,7 +42,7 @@
         updater.stop();
         progress_bar.setProgress(100);
         Element.setStyle('progress_bar', {'border':'0px solid #ccc'});
-        $('upload-status').innerHTML = 'Fichero subido con \u00E9xito';
+        $('upload-status').innerHTML = '{t}File uploaded successfully{/t}';
     }
     
     window.onload = function() {

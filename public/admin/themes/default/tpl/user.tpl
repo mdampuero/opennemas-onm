@@ -4,7 +4,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
 	 style="max-width:70% !important; margin: 0 auto; display:block;">
 
-{* LISTADO ******************************************************************* *}
+{* LIST ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 
 {include file="botonera_up.tpl"}
@@ -32,14 +32,13 @@
 	</tr>
 </table>
 
-
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 <thead>
 <tr>
-    <th class="title" align="left" style="width:40%;padding:10px;">Nombre Apellidos  </th>
-    <th class="title" style="width:20%;padding:10px;">Login</th>
-    <th class="title" style="width:20%;padding:10px;">Grupo</th>
-    <th class="title" style="width:20%;padding:10px;" align="right">Actions</th>
+    <th class="title" align="left" style="width:40%;padding:10px;">{t}Name Surname{/t}</th>
+    <th class="title" style="width:20%;padding:10px;">{t}Login{/t}</th>
+    <th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>
+    <th class="title" style="width:20%;padding:10px;" align="right">{t}Actions{/t}</th>
 </tr>
 </thead>
 
@@ -49,7 +48,7 @@
 
 	<td style="padding:10px;">
                 <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
-		<a href="?action=read&id={$users[c]->id}" title="Editar usuario">
+		<a href="?action=read&id={$users[c]->id}" title="{t}Edit user{/t}">
             {$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
 	</td>
 	<td style="padding:10px;">
@@ -63,16 +62,16 @@
 		{/section}
 	</td>
 	<td style="padding:10px;" align="right">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$users[c]->id});" title="Modificar">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$users[c]->id});" title="{t}Edit user{/t}">
+			<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/></a>
             &nbsp;
-		<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="Eliminar">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+		<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
+			<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/></a>
 	</td>
 </tr>
 {sectionelse}
 <tr colspan="5">
-	<td align="center"><b>There isn't any user to list here.</b></td>
+	<td align="center"><b>{t}There is no users created yet.{/t}</b></td>
 </tr>
 {/section}
 </tbody>
@@ -89,7 +88,7 @@
 {/if}
 
 
-{* FORMULARIO PARA ENGADIR OU MODIFICAR UN CONTENIDO ************************************** *}
+{* FORM FOR ADDING/MODIFY A CONTENT ************************************** *}
 {if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
 <script language="javascript" type="text/javascript" src="{$params.JS_DIR}SpinnerControl.js"></script>
 <script language="javascript" type="text/javascript" src="{$params.JS_DIR}modalbox.js"></script>
@@ -135,7 +134,7 @@
 			<!-- Login -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="login">Login:</label>
+					<label for="login">{t}Login:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
 					<input type="text" id="login" name="login" title="Login del usuario"
@@ -146,7 +145,7 @@
 			<!-- Password -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="password">Password:</label>
+					<label for="password">{t}Password:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
 					<input type="password" id="password" name="password" title="Password"  size="20" autocomplete="off"
@@ -157,7 +156,7 @@
             <!-- Password Confirm-->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="passwordconfirm">Repeat the password:</label>
+					<label for="passwordconfirm">{t}Re-enter password:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
 					<input type="password" id="passwordconfirm" name="passwordconfirm" title="Confirm Password"  size="20"
@@ -168,81 +167,79 @@
             <!-- SessionExpire -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="sessionexpire">Expire session time:</label>
+					<label for="sessionexpire">{t}Session expire time:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-
                     <input type="text" id="sessionexpire" name="sessionexpire" title="Expiraci&oacute;n de Sessi&oacute;n"
 						value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" size="4" />
                     <input id="up" class="spinner_button" type="button" value="+" />
                     <input id="dn" class="spinner_button" type="button" value="-" />
-
-                    <sub>minutes</sub>
+                    <sub>{t}minutes{/t}</sub>
 				</td>
 			</tr>
 
-			<!-- Email -->
+			<!-- Email Adress -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="email">Email:</label>
+					<label for="email">{t}Email adress:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="email" name="email" title="Correo Electr&oacute;nico"
+					<input type="text" id="email" name="email" title="{t}Email adress:{/t}"
 						value="{$user->email}" class="required validate-email"  size="50"/>
 				</td>
 			</tr>
 
-			<!-- Nome -->
+			<!-- Name -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="name">Name:</label>
+					<label for="name">{t}Name:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="name" name="name" title="Nombre del usuario"
+					<input type="text" id="name" name="name" title="{t}Name:{/t}"
 						value="{$user->name}" class="required"  size="50"/>
 				</td>
 			</tr>
 
-			<!-- Primeiro apelido -->
+			<!-- Surname -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="firstname">Surname:</label>
+					<label for="firstname">{t}Surname:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="firstname" name="firstname" title="Primer apellido del usuario"
+					<input type="text" id="firstname" name="firstname" title="{t}Surname:{/t}"
 						value="{$user->firstname}" class="required"  size="50"/>
 				</td>
 			</tr>
 
-			<!-- Segundo apelido -->
+			<!-- Maiden surname -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="lasname">Segundo Apellido:</label>
+					<label for="lasname">{t}Maiden surname:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="lastname" name="lastname" title="Segundo apellido del usuario"
+					<input type="text" id="lastname" name="lastname" title="{t}Maiden surname:{/t}"
 						value="{$user->lastname}"  size="50"/>
 				</td>
 			</tr>
 
-			<!-- Direccion -->
+			<!-- Adress -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="address">Direcci&oacute;n:</label>
+					<label for="address">{t}Address:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="address" name="address" title="Direcci&oacute;n del usuario"
+					<input type="text" id="address" name="address" title="{t}Address:{/t}"
 						value="{$user->address}"  size="50"/>
 				</td>
 			</tr>
 
-			<!-- Telefono -->
+			<!-- Telephone -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="phone">Tel&eacute;fono:</label>
+					<label for="phone">{t}Telephone:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<input type="text" id="phone" name="phone" title="Tel&eacute;fono del usuario" class="validate-digits"
+					<input type="text" id="phone" name="phone" title="{t}Telephone:{/t}" class="validate-digits"
 						value="{$user->phone}"  size="15"/>
 				</td>
 			</tr>
@@ -252,18 +249,17 @@
 
         </td>
         <td valign="top" width="50%">
-
-
+            
             <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
             </tbody>
 
 			<!-- User_Group -->
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<label for="id_user_group">Grupo al que pertenece:</label>
+					<label for="id_user_group">{t}User group:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap" width="60%">
-					<select id="id_user_group" name="id_user_group" title="Grupo de usuario" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
+					<select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
                         <option  value ="" selected="selected"> </OPTION>
 						{section name=user_group loop=$user_groups}
 							{if $user_groups[user_group]->id == $user->id_user_group}
@@ -284,12 +280,12 @@
                             window.open('user_groups.php?action=read&id=' + $('id_user_group').value, 'centro');
                         }*/
 
-                        Modalbox.show('<iframe width="100%" height="450" src="user_groups.php?action=read&id=' + $('id_user_group').value+'"  frameborder="0" marginheight="0" marginwidth="0"></iframe>', {title: 'Gestión de grupos de usuarios', width: 760});
+                        Modalbox.show('<iframe width="100%" height="450" src="user_groups.php?action=read&id=' + $('id_user_group').value+'"  frameborder="0" marginheight="0" marginwidth="0"></iframe>', {title: '{t}User group manager{/t}', width: 760});
                     }
                     </script>
                     {/literal}
 
-                    <a href="javascript:void(0);" title="Editar grupo y permisos" onclick="showGroupUsers(this);return false;">
+                    <a href="javascript:void(0);" title="{t}Edit groups and privileges{/t}" onclick="showGroupUsers(this);return false;">
                         <img src="{$params.IMAGE_DIR}users_edit.png" border="0" style="vertical-align: middle;" /></a>
 				</td>
 			</tr>
@@ -298,7 +294,7 @@
             <tr>
 				<td valign="top" align="right" style="padding:4px;">
                     <div id="labelAccessCategory" name="labelAccessCategory">
-                        <label for="id_user_group">Secciones de acceso:</label>
+                        <label for="id_user_group">{t}Sections:{/t}</label>
                     </div>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap">
