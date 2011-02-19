@@ -180,6 +180,7 @@ if(isset($_REQUEST['action']) ) {
         break;
 
         case 'list_pendientes':
+            
             if( !Privileges_check::CheckPrivileges('ARTICLE_LIST_PEND')) {
                 Privileges_check::AccessDeniedAction();
             }

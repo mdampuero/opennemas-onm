@@ -38,10 +38,12 @@
         </script>
     {/if}
     {include file="botonera_up.tpl"}
+
+
     <div id="{$category}">
-        <table border=0 style="width:100%">
+        <table class="adminheading">
             <tr>
-                <td><strong>Noticias {* y Opiniones *} Pendientes</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
+                <td><strong>Noticias Pendientes</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
                 <td align='right'>Ir a secci&oacute;n:
                     <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
                         {if $category eq "todos"}
@@ -62,7 +64,6 @@
                 </td>
             </tr>
         </table>
-        <br />
         <table class="adminlist">
             <thead>
                 <th style="width:50px;"></th>
@@ -79,8 +80,8 @@
                 <th align="center" style="width:40px;">Editar</th>
                 <th align="center" style="width:40px;">Eliminar</th>
             </thead>
-        <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
-        {if $articles}
+            <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
+            {if $articles}
             {section name=c loop=$articles}
                 <tr {cycle values="class=row1,class=row0"} />
                     <td>
@@ -142,25 +143,25 @@
                             <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                     </td>
                 </tr>
-         {/section}
-    {else}
-        {if $category neq 'opinion'}
-            <tr>
-                <td align="center" colspan="10" style="height:180px;" >Ninguna noticia pendiente de publicar.</td>
-            </tr>
+            {/section}
         {else}
-            <tr>
-                <td align="center" colspan="10" style="height:180px;" >No hai ningún artículo pendiente de publicar.</td>
-            </tr>
+            {if $category neq 'opinion'}
+                <tr>
+                    <td align="center" colspan="10" style="height:180px;" >Ninguna noticia pendiente de publicar.</td>
+                </tr>
+            {else}
+                <tr>
+                    <td align="center" colspan="10" style="height:180px;" >No hai ningún artículo pendiente de publicar.</td>
+                </tr>
+            {/if}
         {/if}
-    {/if}
-    {if $opinions}
-        {if $category eq 'todos'}
-            <tr>
-                <td align="left" colspan="4"><br><br><h2><b>Opiniones:</b></h2></td>
-            </tr>
-        {/if}
-        {section name=c loop=$opinions}
+        {if $opinions}
+            {if $category eq 'todos'}
+                <tr>
+                    <td align="left" colspan="4"><br><br><h2><b>Opiniones:</b></h2></td>
+                </tr>
+            {/if}
+            {section name=c loop=$opinions}
                 <tr {cycle values="class=row0,class=row1"}   >
                     <td style="font-size: 11px;">
                           <input type="checkbox" class="minput"  id="selected_opin_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;">
@@ -218,14 +219,16 @@
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                     </td>
                 </tr>
-        {/section}
+            {/section}
         {/if}
 
-        {if count($articles) gt 0}
-            <tr>
-                <td colspan="3" align="center">{$paginacion->links}</td>
-            </tr>
-        {/if}
+		<tfoot>
+			<tr>
+				<td colspan="10" class="pagination">
+					{$pagination->links}
+				</td>
+			</tr>
+		</tfoot>
         </table>
 
     </div>
