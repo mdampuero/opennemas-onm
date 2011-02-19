@@ -34,10 +34,10 @@ function testScript(frm)  {
 
 <tr>
 	<td valign="top" align="right" style="height:20px;padding:4px;" width="30%">
-		<label for="title">Nombre:</label>
+		<label for="title">{t}Name:{/t}</label>
 	</td>
 	<td valign="top" style="height: 20px;" nowrap="nowrap" width="70%">
-		<input type="text" id="title" name="title" title="Publicidad"
+		<input type="text" id="title" name="title" title={t}"Publicity"{/t}
 			size="80" value="{$advertisement->title|clearslash|escape:"html"}" class="required" onBlur="javascript:get_metadata(this.value);"/>
 		{* <input type="hidden" id="category" name="category" title="Publicidad" value="advertisement" /> *}
 	</td>
@@ -59,8 +59,8 @@ function testScript(frm)  {
 
                 <tr>
                     <td valign="top" align="right">
-                        <label for="metadata">Palabras clave: </label><br />
-                        <sub>Separadas por comas</sub>
+                        <label for="metadata">{t}Keywords:{/t}</label><br />
+                        <sub>{t}Separate by coma{/t}</sub>
                     </td>
                     <td>
                         <textarea id="metadata" name="metadata" cols="20" rows="2" style="width: 100%;"
@@ -70,7 +70,7 @@ function testScript(frm)  {
 
                 <tr>
                     <td valign="top" align="right">
-                        <label for="overlap">Ocultar eventos Flash:</label>
+                        <label for="overlap">{t}Hide Flash events{/t}</label>
                     </td>
                     <td>
                         <input type="checkbox" name="overlap" id="overlap" value="1" {if $advertisement->overlap == 1}checked="checked"{/if} />
@@ -82,24 +82,24 @@ function testScript(frm)  {
                 </tr>
                 <tr>
                     <td colspan="2" valign="top" align="left">
-                        <label>Periodicidad:</label>
+                        <label>{t}Periodicity:{/t}</label>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" align="right">
                         <label>
-                            Indefinida<input type="radio" id="non" name="type_medida" value="NULL"
+                            {t}Undefined{/t}<input type="radio" id="non" name="type_medida" value="NULL"
                             {if !isset($advertisement->type_medida) || $advertisement->type_medida == 'NULL'} checked="checked"{/if} onClick="permanencia(this);"/>
                         </label>
                         <span id="div_permanencia" style="display:{if $advertisement->with_script==1}none{/if};">
-                            <label>Nº Clicks<input type="radio" id="clic" name="type_medida" value="CLIC"
+                            <label>{t}Nº Clicks{/t}<input type="radio" id="clic" name="type_medida" value="CLIC"
                                 {if $advertisement->type_medida == 'CLIC'}checked="checked"{/if} onClick="permanencia(this);"/></label>
-                            <label>Nº Visitas<input id="view" type="radio" name="type_medida" value="VIEW"
+                            <label>{t}Nº Visits{/t}<input id="view" type="radio" name="type_medida" value="VIEW"
                                 {if $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" /></label>
                         </span>
 
                         <label>
-                            Por Fechas<input type="radio" id="fecha" name="type_medida" value="DATE"
+                            {t}By date{/t}<input type="radio" id="fecha" name="type_medida" value="DATE"
                                 {if $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
                         </label>
                     </td>
@@ -112,20 +112,20 @@ function testScript(frm)  {
                             <table width="95%">
                             <tr>
                                 <td valign="top" align="right" style="padding:4px;" width="40%">
-                                    <label for="starttime">Inicio publicación:</label>
+                                    <label for="starttime">{t}Start time publication:{/t}</label>
                                 </td>
                                 <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                    <input type="text" id="starttime" name="starttime" size="16" title="Fecha inicio publicacion"
+                                    <input type="text" id="starttime" name="starttime" size="16" title={t}"Start time publication"{/t}
                                         value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
 
                                 </td>
                             </tr>
                             <tr>
                                 <td valign="top" align="right" style="padding:4px;" width="40%">
-                                    <label for="endtime">Fin publicación:</label>
+                                    <label for="endtime">{t}End time publication:{/t}</label>
                                 </td>
                                 <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                    <input type="text" id="endtime" name="endtime" size="16" title="Fecha fin publicacion"
+                                    <input type="text" id="endtime" name="endtime" size="16" title={t}"End time publication"{/t}
                                         value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
 
                                 </td>
@@ -137,16 +137,16 @@ function testScript(frm)  {
                             <table width="95%">
                                 <tr>
                                     <td valign="top" align="right" style="padding:4px;" width="40%">
-                                        <label for="title">Número de clic:</label>
+                                        <label for="title">{t}Click number:{/t}</label>
                                     </td>
                                     <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                        <input type="text" id="num_clic" name="num_clic" title="Numero de clic"
+                                        <input type="text" id="num_clic" name="num_clic" title={t}"Click number"{/t}
                                             value="{$advertisement->num_clic}" />
 										{if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'CLIC'}
                                                 Actuales: {$advertisement->num_clic_count}
                                             {/if}
-                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
+                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Click number"{/t}
                                                 value="{$advertisement->num_clic_count}" />
                                         {/if}
                                     </td>
@@ -158,10 +158,10 @@ function testScript(frm)  {
                             <table width="95%">
                                 <tr>
                                     <td valign="top" align="right" style="padding:4px;" width="40%">
-                                        <label for="title">Número de visonados:</label>
+                                        <label for="title">{t}Views number{/t}</label>
                                     </td>
                                     <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                        <input type="text" id="num_view" name="num_view" title="Numero de visionados"
+                                        <input type="text" id="num_view" name="num_view" title={t}Views number{/t}
                                             value="{$advertisement->num_view}" />
                                         {if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'VIEW'}
@@ -181,15 +181,15 @@ function testScript(frm)  {
                     <td valign="top" colspan="2">
                         <div id="timeout_container" style="margin-top: 10px; border-top: 1px solid #CCC;width:95%;display:{if $advertisement->type_advertisement!=50}none{/if};">
 
-                        <label for="timeout">Temporizador:</label>
+                        <label for="timeout">{t}Timer{/t}</label>
 
                         <table width="95%">
                         <tr>
                             <td width="40%">&nbsp;</td>
                             <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                <input type="text" id="timeout" name="timeout" size="2" title="Segundos antes de desaparecer"
+                                <input type="text" id="timeout" name="timeout" size="2" title={t}"Seconds before disappear"{/t}
                                     value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
-                                segundos. <sub>( -1 no desaparece )</sub>
+                                {t}seconds.{/t} <sub>{t}( -1 don't disappear ){/t}</sub>
                             </td>
                         </tr>
                         </table>
@@ -203,7 +203,7 @@ function testScript(frm)  {
         <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
 
         {if $smarty.request.action eq "read"}
-            <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
+            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Click number"{/t}
                 value="{$advertisement->num_clic_count}" />
         {/if}
 
@@ -214,12 +214,12 @@ function testScript(frm)  {
 <tr>
 	<td valign="top" align="right" style="height:20px;padding:4px;" width="30%">
         <div id="div_url1" style="display:{if $advertisement->with_script==1}none{/if};">
-            <label for="title">URL:</label>
+            <label for="title">{t}URL:{/t}</label>
         </div>
 	</td>
 	<td valign="top" style="height:20px;padding:4px;" nowrap="nowrap" width="70%">
         <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">
-            <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
+            <input type="text" id="url" name="url" class="validate-url" title={t}"Web advertisement direction"{/t}
                 size="80" value="{$advertisement->url|default:"http://"}" />
         </div>
 	</td>
@@ -227,13 +227,13 @@ function testScript(frm)  {
 
 <tr>
     <td valign="top" align="right" style="height:20px;padding:4px;">
-        <label for="category">Secci&oacute;n:</label>
+        <label for="category">{t}Section{/t}</label>
     </td>
     <td valign="top" style="height:20px;padding:4px;">
         <select name="category" id="category" class="required">
-            <option value="0">Home</option>
-            <option value="4" {if $category eq 4}selected="selected"{/if}>OPINIÓN</option>
-            <option value="3" {if $category eq 3}selected="selected"{/if}>GALERÍAS</option>
+            <option value="0">{t}HOME{/t}</option>
+            <option value="4" {if $category eq 4}selected="selected"{/if}>{t}Opinion{/t}</option>
+            <option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>
             {section name=as loop=$allcategorys}
                 <option value="{$allcategorys[as]->pk_content_category}"
                     {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
@@ -252,7 +252,7 @@ function testScript(frm)  {
 
 <tr>
 	<td valign="top" align="right" style="height:20px;padding:4px;" nowrap="nowrap">
-		<label for="with_script">Publicidad con Javascript:</label>
+		<label for="with_script">{t}JavaScript with advertisement{/t}</label>
     </td>
     <td valign="top" style="height:20px;padding:4px;">
         <input type="checkbox" id="with_script" name="with_script" value="1"
@@ -263,10 +263,10 @@ function testScript(frm)  {
 <tr>
     <td valign="top" colspan="2">
         <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if}; text-align: right;">
-            <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
+            <textarea name="script" id="script" class="validate-script" title={t}"Advertisement script"{/t} style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
             <br />
 
-            <label>Recortes de código Geoip:
+            <label>{t}Geoip code{/t}
                 <span id="geoip_select"></span>
             </label>
 
@@ -278,7 +278,7 @@ function testScript(frm)  {
             </script>
 
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button onclick="testScript(this.form);return false;">Probar Código JS</button>
+            <button onclick="testScript(this.form);return false;">{t}Test JS code{/t}</button>
 		</div>
 	</td>
 </tr>
@@ -288,16 +288,16 @@ function testScript(frm)  {
 
 <tr>
 	<td valign="top" style="padding:4px;padding-top: 40px;" colspan="2">
-		<label for="title">Tipo Publicidad: </label>
+		<label for="title">{t}Advertisement type{/t} </label>
 
         <ul id="tabs">
-            <li><a href="#publi-portada">Portada</a></li>
-            <li><a href="#publi-interior">Noticia Interior</a></li>
-            <li><a href="#publi-video">Portada Video</a></li>
-            <li><a href="#publi-video-interior">Video Interior</a></li>
-            <li><a href="#publi-opinion">Portada Opinión</a></li>
-            <li><a href="#publi-opinion-interior">Opinión Interior</a></li>
-            <li><a href="#publi-gallery">Galerías</a></li>
+            <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
+            <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
+            <li><a href="#publi-video">{t}Video Frontpage{/t}</a></li>
+            <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
+            <li><a href="#publi-opinion">{t}Opinion Frontpage{/t}</a></li>
+            <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+            <li><a href="#publi-gallery">Gallery</a></li>
         </ul>
 
         <div id="publi-portada" class="panel-ads">
