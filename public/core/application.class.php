@@ -151,7 +151,7 @@ class Application {
 
 	    date_default_timezone_set('Europe/Madrid');
 
-	    $locale = "es_ES.UTF-8";
+	    $locale = DEFAULT_LOCALE;
 	    $domain = 'messages';
 
         if (self::isBackend()) {
