@@ -23,7 +23,7 @@ $menuXml = '<?xml version="1.0"?>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
         <node title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN" />
-        <node title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'" link="ficheros.php" target="centro" privilege="FILE_ADMIN" />
+        <node title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'" link="controllers/files/files.php" target="centro" privilege="FILE_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("Videos"), ENT_QUOTES).'" link="controllers/video/video.php" target="centro" privilege="VIDEO_ADMIN" />-->
         <!--<node title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'" link="controllers/album/album.php" target="centro" privilege="ALBUM_ADMIN" />-->
     </submenu>

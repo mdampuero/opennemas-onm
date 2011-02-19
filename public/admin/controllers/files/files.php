@@ -3,8 +3,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 
 /**
  * Setup view
@@ -13,7 +13,7 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Gesti&oacute;n de Ficheros Adjuntos');
 
-require_once('attachments_events.php');
+require_once('../../attachments_events.php');
 
 if(!isset($_REQUEST['category'])) {
     $_REQUEST['category'] = 0; // GLOBAL
@@ -32,16 +32,12 @@ $tpl->assign('datos_cat', $datos_cat);
 
 $name_cat = $ccm->get_name($_REQUEST['category']);
 
-
-//if( !in_array('MUL_ADMIN', $_SESSION['privileges'])) {
-//    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes');
-//}
-
-// TODO: revisar validez de este código
+// Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-    Privileges_check::AccessDeniedAction();
+if( !Acl::check('FILE_ADMIN')){
+    Acl::deny();
 }
+
 
 //if (!isset($_REQUEST['alerta'])) {$_REQUEST['alerta'] = 0;}
 if( isset($_REQUEST['action']) ) {
@@ -49,18 +45,18 @@ if( isset($_REQUEST['action']) ) {
         case 'list': {
             if($_REQUEST['category'] == 0) {
                 $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
-                
+
                 $fullcat = $ccm->order_by_posmenu($ccm->categories);
                 foreach($parentCategories as $k => $v) {
                     $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, 3);
-                
+
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
                             $num_sub_photos[$k][] = $ccm->count_content_by_type($child->pk_content_category, 3);
                         }
                     }
                 }
-                
+
                 //Especiales
                 $j = 0;
                 $especials = array( 8 => 'portadas' );
@@ -69,14 +65,14 @@ if( isset($_REQUEST['action']) ) {
                     $num_especials[$j]['num']   = $ccm->count_content_by_type($key,3);
                     $j++;
                 }
-                
+
                 $tpl->assign('especials', $especials);
                 $tpl->assign('num_especials', $num_especials);
                 $tpl->assign('num_photos', $num_photos);
                 $tpl->assign('num_sub_photos', $num_sub_photos);
                 $tpl->assign('categorys', $parentCategories);
                 $tpl->assign('subcategorys', $subcat);
-                
+
             } else {
                 $cm = new ContentManager();
                 //    $attaches = $cm->find_by_category('Attachment', $_REQUEST['category'] , 'fk_content_type=3 ', 'ORDER BY created DESC');
@@ -85,15 +81,15 @@ if( isset($_REQUEST['action']) ) {
                 list($attaches, $pager)= $cm->find_pages('Attachment', 'fk_content_type=3 ',
                                                          'ORDER BY  created DESC ',$_REQUEST['page'],10,  $_REQUEST['category']);
                 $tpl->assign('paginacion', $pager);
-                
+
                 $i = 0;
-                
+
                 $status = array();
                 if($attaches) {
                     foreach($attaches as $archivo) {
                           $dir_date =preg_replace("/\-/", '/', substr($archivo->created, 0, 10));
                           $ruta = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$archivo->path ;
- 
+
                         if (is_file($ruta)) {
                             $status[$i]='1'; //Si existe
                             $archivo->set_available(1, $_SESSION['userid']);
@@ -104,35 +100,39 @@ if( isset($_REQUEST['action']) ) {
                         $i++;
                     }
                 }
-                
+
                 $alert = (isset($_REQUEST['alerta']))? $_REQUEST['alerta'] : null;
-                
+
                 $tpl->assign('status', $status);
                 $tpl->assign('attaches', $attaches);
                 $tpl->assign('alerta', $alert);
             }
-            
+
             $tpl->assign('category', $_REQUEST['category']);
+
+            $tpl->display('files/list.tpl');
         } break;
 
         case 'read':
             $att = new Attachment();
             $attaches = new Attachment($_REQUEST['id']);
             $tpl->assign('attaches', $attaches);
+
+            $tpl->display('files/form.tpl');
         break;
-        
+
         case 'update':
             $att = new Attachment();
             $att->update(  $_REQUEST );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         break;
 
-        case 'delete': 
+        case 'delete':
             //Mirar si tiene relacion
             $att = new Attachment($_REQUEST['id']);
             $rel= new Related_content();
             $relationes=array();
-            $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada             
+            $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
             if(!empty($relationes)){
                 $msg = "El fichero  '".$att->title."' , está relacionado con los siguientes articulos:  ";
                 $cm= new ContentManager();
@@ -167,6 +167,79 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$att->category.'&page='.$_REQUEST['page']);
          break;
 
+
+        case 'upload':
+
+            // php.ini settings for files upload
+            set_time_limit(0);
+            ini_set('upload_max_filesize',  20 * 1024 * 1024 );
+            ini_set('post_max_size',        20 * 1024 * 1024 );
+            ini_set('file_uploads',         'On'  );
+
+            require_once('../../attachments_events.php');
+
+            if (!isset($_REQUEST['category'])) { $_REQUEST['category'] = 10; }
+            if( !isset($_POST['op']) ) { $op = 'view'; }
+
+            $tpl->assign('filterRegexp', '/^[a-z0-9\-_]+\.[a-z0-9]{2,4}$/i');
+
+
+            if (isset($_POST['op'])) {
+
+                if(isset($_FILES['path']['name'])
+                   && !empty($_FILES['path']['name'])) {
+
+                    $category = (isset($_REQUEST['category'])) ? $_REQUEST['category'] : 0;
+
+                    $dateStamp = date('Ymd');
+                    $directoryDate =date("/Y/m/d/");
+                    $basePath = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.$directoryDate ;
+
+                    $fileName = $_FILES['path']['name'];
+                    $fileType   = $_FILES['path']['type'];
+                    $fileSize = $_FILES['path']['size'];
+                    $fileName = preg_replace('/[^a-z0-9_\-\.]/i', '-', strtolower($fileName));
+
+                    $data['title'] = $_POST['title'];
+                    $data['path'] = $directoryDate.$fileName;
+                    $data['category'] = $category;
+                    $data['available'] = 1;
+                    $data['description'] = $_POST['title'];
+                    $data['metadata'] = String_Utils::get_tags($_POST['title']);
+                    $data['fk_publisher'] = $_SESSION['userid'];
+
+                    // Create folder if it doesn't exist
+
+                    if( !file_exists($basePath) ) {
+                        mkdir($basePath, 0777, true);
+                    }
+
+                    // Move uploaded file
+                    $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
+
+                    if ($uploadStatus !== false) {
+
+                        $attachment = new Attachment();
+                        if ($attachment->create($data)) {
+                            $msg = _("File created successfuly.");
+                            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$_REQUEST['page']);
+                        }
+
+                    } else {
+                        $tpl->assign('message', _('There was an error while uploading the file. <br />Please, contact your system administration'));
+                    }
+
+                } else {
+                    $tpl->assign('message', _('Please select a file before send the form') );
+                }
+
+            }
+            $tpl->assign('category', $_REQUEST['category']);
+
+            $tpl->display('files/new.tpl');
+
+        break;
+
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;
@@ -174,5 +247,3 @@ if( isset($_REQUEST['action']) ) {
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 }
-
-$tpl->display('ficheros.tpl');

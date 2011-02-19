@@ -1,0 +1,73 @@
+{extends file="base/admin.tpl"}
+
+
+{block name="content"}
+<div style="width:70%; margin: 0 auto;">
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+
+		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">
+			<tbody>
+				<tr>
+					<td valign="top" align="right" style="padding:4px;" width="30%">
+						<label for="title">T&iacute;tulo:</label>
+					</td>
+					<td style="padding:4px;" nowrap="nowrap" width="70%">
+						<input type="text" id="title" name="title" title="Título de la noticia"
+							value="{$attaches->title|clearslash}" class="required" size="100" />
+						<input type="hidden" id="category" name="category" title="Fichero"
+							value="{$attaches->category}" />
+							<input type="hidden" id="fich" name="fich" title="Fichero"
+							value="{$attaches->pk_attachment}" />
+
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" align="right" style="padding:4px;" width="30%">
+						<label for="title">Ruta:</label>
+					</td>
+					<td style="padding:4px;" nowrap="nowrap" width="70%">
+						<input type="text" id="path" name="path" title="path" readonly
+							value="{$attaches->path|clearslash}" class="required" size="100" />
+					</td>
+				</tr>
+
+				<tr>
+					<td valign="top" align="right" style="padding:4px;" width="30%">
+						<label for="title">Metadata:</label>
+					</td>
+					<td style="padding:4px;" nowrap="nowrap" width="70%">
+						<input type="text" id="metadata" name="metadata" title="path"
+							value="{$attaches->metadata|clearslash}" class="required" size="100" />
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" align="right" style="padding:4px;" width="30%">
+						<label for="title">Descripcion:</label>
+					</td>
+					<td style="padding:4px;" nowrap="nowrap" width="70%">
+						<input type="text" id="description" name="description" title="path"
+							value="{$attaches->description|clearslash}" class="required" size="100" />
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+
+
+		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
+			<tbody>
+				<tr>
+					<td colspan="2" align="right">
+						<a href="#" onClick="javascript:enviar(this, '_self', 'update', '{$attaches->pk_attachment}');">
+							<img src="{$params.IMAGE_DIR}btn_guardar.gif" border="0" /></a>&nbsp;&nbsp;
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<input type="hidden" id="action" name="action" value="" />
+		<input type="hidden" name="id" id="id" value="{$id}" />
+	</form>
+
+</div>
+{/block}
