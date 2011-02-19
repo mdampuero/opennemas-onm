@@ -80,7 +80,7 @@
                   </strong>
                 </div><!--end name-box-->
 
-                {if Acl::_('BACKEND_ADMIN') eq true}
+                {if Acl::check('BACKEND_ADMIN') eq true}
                 <div style="padding-right:4px; float:left;" nowrap="nowrap">
                     <div id="user_activity" title="Usuarios activos na sección de administración">
                         {count_sessions}
@@ -137,7 +137,7 @@
     /* <![CDATA[ */
     new YpSlideOutMenuHelper();
 
-    {if Acl::_('USER_ADMIN') eq true}
+    {if Acl::check('USER_ADMIN') eq true}
     var users_online = [];
     function linkToMB() {
         $('MB_content').select('td a.modal').each(function(item) {

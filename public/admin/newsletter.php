@@ -27,7 +27,7 @@ error_reporting(E_ALL);
 
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('NEWSLETTER_ADMIN')) {
+if(!Acl::check('NEWSLETTER_ADMIN')) {
     Acl::deny();
 }
 

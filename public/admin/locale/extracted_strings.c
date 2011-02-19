@@ -181,6 +181,27 @@ gettext("Ohh, there is <strong>no cache file</strong> in the system.");
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>");
 
+/* ./themes/default/tpl//article.tpl */
+gettext("Frontpage articles");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("Widgets");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("Other articles in this category");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("NOT IN HOME");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("NOT IN FRONTPAGE OF %1");
+
+/* ./themes/default/tpl//article.tpl */
+gettext("Please, remember save positions after finish.");
+
 /* ./themes/default/tpl//pclave/index.tpl */
 gettext("New");
 
@@ -198,6 +219,213 @@ gettext("Replacement value");
 
 /* ./themes/default/tpl//pclave/index.tpl */
 gettext("Actions");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Library");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Restore");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Restore");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Clone");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Clone");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("No home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("No home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Clean cache");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Clean cache");
 
 /* ./themes/default/tpl//newsletter/actions/preview.tpl */
 gettext("Newsletter management");

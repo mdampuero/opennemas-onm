@@ -31,7 +31,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  * Check privileges
 */
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('OPINION_ADMIN')) {
+if(!Acl::check('OPINION_ADMIN')) {
     Acl::Deny();
 }
 
@@ -233,7 +233,7 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::_('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+            if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                 Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
             }
 
@@ -283,7 +283,7 @@ if(isset($_REQUEST['action'])) {
                 $opinionCheck = new Opinion();
                 $opinionCheck->read($_REQUEST['id']);
 
-                if(!Acl::_('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+                if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                     Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
                 }
 
@@ -306,7 +306,7 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::_('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+            if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                 Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
             }
 

@@ -29,7 +29,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('COMMENT_ADMIN')) {    
+if(!Acl::check('COMMENT_ADMIN')) {    
     Acl::deny();
 }
 

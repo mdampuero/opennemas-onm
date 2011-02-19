@@ -81,7 +81,7 @@ if(isset($_REQUEST['action']) ) {
         case 'list':
 
             // Check if the user can edit frontpages
-            if(!Acl::_('ARTICLE_FRONTPAGE')) {
+            if(!Acl::check('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
             }
 

@@ -3,73 +3,73 @@
 <div id="menu-acciones-admin" class="clearfix">
 	<ul>
 		<li>
-			<a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="Cancelar" title="Cancelar">
-				<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+			<a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+				<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Preview{/t}
 			</a>
 		</li>
 	<li>
-		<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="Validar" title="Validar">
-		<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+		<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
+		<img border="0" src="{$params.IMAGE_DIR}validate.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 		</a>
 	</li>
 	<li>
 		<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'create', 0, 'formulario');" id="button_save">
-		<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
+		<img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
 		</a>
 	</li>
 
 	<li>
 		<a href="{$article->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
-		<img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="Previsualizar" /><br />Previsualizar</a>
+		<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
 		</li>
 	</ul>
 </div>
 
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
 	<div id="menu-acciones-admin" class="clearfix">
-        {if  $article->content_status=='0' && $article->available=='1'}  <div style="float:left;"><h2>HEMEROTECA</h2> </div>  {/if}
+        {if  $article->content_status=='0' && $article->available=='1'}  <div style="float:left;"><h2>{t}Library{/t}</h2> </div>  {/if}
         <ul>
             <li>
                 {if $smarty.session._from eq 'search_advanced'}
                      <a href="#" class="admin_add"  onClick="window.location='search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}'">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                      </a>
                 {else}
-                    <a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    <a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                     </a>
                 {/if}
             </li>
             {if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
                 <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="recuperar"><br />Recuperar
+                    <img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
                 </a>
             </li>
             {/if}
 
 		    <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="Validar" title="Validar">
-                    <img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}validate.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
 		    </li>
             <li>
                 <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id}', 'formulario');" id="button_save">
-                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
+                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
 
             {if !$article->isClone()}
             <li>
                 <a href="#" onclick="recolectar(); sendFormValidate(this, '_blank', 'clone', '{$article->id}', 'formulario');" id="button_clone">
-                    <img border="0" src="{$params.IMAGE_DIR}clone.png" title="Clonar" /><br />Clonar
+                    <img border="0" src="{$params.IMAGE_DIR}clone.png" title="{t}Clone{/t}" /><br />{t}Clone{/t}
                 </a>
             </li>
             {/if}
 
             <li>
                 <a href="{$article->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
-                    <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="Previsualizar" /><br />Previsualizar
+                    <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
                 </a>
             </li>
 		</ul>
@@ -79,8 +79,8 @@
 	<div id="menu-acciones-admin" class="clearfix">
 		<ul>
 			<li>
-				<a href="#" class="admin_add" onClick="cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_GET['category'].'", "'.$_GET['page'].'"';{/php});'" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				<a href="#" class="admin_add" onClick="cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_GET['category'].'", "'.$_GET['page'].'"';{/php});'" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
 				</a>
 			</li>
 
@@ -94,50 +94,50 @@
 	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
 		<ul>
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="noFrontpage" ><br />{t}Unpublish{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:confirmar_hemeroteca(this,{$category}, 0);" name="submit_mult" value="Archivar" title="Archivar">
-					<img border="0" src="{$params.IMAGE_DIR}archive.gif" title="Archivar" alt="Archivar" ><br />Archivar
+					<img border="0" src="{$params.IMAGE_DIR}archive.gif" title="{t}Arquive{/t}" alt="{t}Arquive{/t}" ><br />{t}Arquive{/t}
 				</a>
 			</li>
 			{if $category!='home'}
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
-					<img border="0" src="{$params.IMAGE_DIR}gosuggest50.png" title="Sugerir Home" alt="Sugerir Home" ><br />Sugerir Home
+					<img border="0" src="{$params.IMAGE_DIR}gosuggest50.png" title="{t}Suggest to home{/t}" alt="{t}Suggest to home{/t}" ><br />{t}Suggest to home{/t}
 				</a>
 			</li>
 			{/if}
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="Frontpage" alt="Frontpage" ><br />No Home
+					<img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="Frontpage" ><br />{t}No home{/t}
 				</a>
 			</li>
 			<li>
 				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+					<img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
 				</button>
 			</li>
 			<li style="margin-right: 20px;">
 				<a href="#" class="admin_add" onClick="javascript:savePositions('{$category}');" title="Guardar Positions" alt="Guardar Cambios">
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar Cambios" alt="Guardar Cambios" ><br />Guardar posiciones
+					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
 				</a>
 			</li>
                         <li style="height:70px;">
 				<a href="#" class="admin_add" onClick="javascript:previewFrontpage('{$category}');return false;" title="Previsualizar posiciones en portada">
-					<img border="0" src="{$params.IMAGE_DIR}preview_layout.png" title="Previsualizar" alt="Previsualizar" ><br />Previsualizar
+					<img border="0" src="{$params.IMAGE_DIR}preview_layout.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
 				</a>
 			</li>
             <li style="height:70px;">
                  <a href="#" onclick="clearcache('{$category}'); return false;" id="button_clearcache">
-                     <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="Limpiar caché" alt="" /><br />Limpiar caché
+                     <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                  </a>
             </li>
 		</ul>

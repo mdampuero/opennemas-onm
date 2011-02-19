@@ -51,7 +51,7 @@
     <div id="{$category}">
         <table class="adminheading">
             <tr>
-                <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
+                <th align="center">{t}Frontpage articles{/t} <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
             </tr>
         </table>
         <div id="pagina">
@@ -72,11 +72,11 @@
 
             <div id="contents-provider">
                     <ul id="tabs">
-                        <li><a href="#available-widgets">Widgets</a></li>
+                        <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
                         {if $category neq 'home'}
-                        <li><a href="#other-articles">Otros art&iacute;culos en esta categor&iacute;a</a></li>
+                        <li><a href="#other-articles">{t}Other articles in this category{/t}</a></li>
                         {else}
-                        <li><a href="#suggested-elements">Articulos sugeridos</a></li>
+                        <li><a href="#suggested-elements">{t}Suggested articles{/t}</a></li>
                         {/if}
                     </ul>
 
@@ -104,7 +104,7 @@
                 <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
                     <tr><td width="100%">
                         <div id="div_no_home" style="width:100%;min-height:80px;padding:5px;overflow:auto;">
-                          {if $category eq 'home'} NO EN HOME {else} NO EN PORTADA DE {$datos_cat[0]->title} {/if}
+                          {if $category eq 'home'} {t}NOT IN HOME{/t} {else} {t 1=$datos_cat[0]->title}NOT IN FRONTPAGE OF %1{/t} {/if}
                         </div>
                     </td>
                   </tr>
@@ -131,7 +131,7 @@
                 if(!posicionesInicialesWarning) {
                     $$('input[type=checkbox]').each( function(item, idx) {
                         if(item.value != posicionesIniciales[idx].value) {
-                            $('warnings-validation').update('Recuerde guardar posiciones');
+                            $('warnings-validation').update('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
                             posicionesInicialesWarning = true;
                             $break;
                         }

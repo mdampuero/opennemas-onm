@@ -13,4 +13,4 @@ $banners = $advertisement->getAdvertisements(array(1,2, 9, 10), $category);
 $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
-$advertisement->render($banners, &$advertisement);
+$advertisement->render($banners, $advertisement);

@@ -36,7 +36,7 @@ require_once(SITE_CORE_PATH.'string_utils.class.php');
 
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('PCLAVE_ADMIN')) {    
+if(!Acl::check('PCLAVE_ADMIN')) {    
     Acl::deny();
 }
 

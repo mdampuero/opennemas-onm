@@ -30,7 +30,7 @@ require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('STATIC_ADMIN')) {    
+if(!Acl::check('STATIC_ADMIN')) {    
     Acl::deny();
 }
 

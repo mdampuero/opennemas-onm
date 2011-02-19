@@ -23,7 +23,7 @@ set_time_limit(0);
 /**
  * Check if the user can do Administrative actions
 */
-if(!Acl::_('BACKEND_ADMIN')) {
+if(!Acl::check('BACKEND_ADMIN')) {
     Acl::deny();
 }
 

@@ -50,7 +50,7 @@ if (!isset($_REQUEST['category']) || ($_REQUEST['category'] == 'GLOBAL' && empty
     $_REQUEST['action'] = "list_categorys";
 }
  
-if( !Acl::_('IMAGE_ADMIN')){
+if( !Acl::check('IMAGE_ADMIN')){
     Acl::deny();
 }
 

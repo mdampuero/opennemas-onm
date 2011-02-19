@@ -23,9 +23,7 @@
  {if $smarty.get.alert eq 'ok'}
 
      <script type="text/javascript" language="javascript">
-    {literal}
-           alert('{/literal}{$smarty.get.msg}{literal}');
-    {/literal}
+           alert('{$smarty.get.msg}');
     </script>
   {/if}
 {include file="botonera_up.tpl"}

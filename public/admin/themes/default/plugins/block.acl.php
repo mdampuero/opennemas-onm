@@ -18,7 +18,7 @@ function smarty_block_acl($params, $content, &$smarty, $open) {
         
         if(isset($params['isAllowed'])) {
             $isAllowed = $params['isAllowed'];            
-            $check = $check && Acl::_($isAllowed);            
+            $check = $check && Acl::check($isAllowed);            
         }
         
         if(isset($params['hasCategoryAccess'])) {

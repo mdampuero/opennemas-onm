@@ -1,4 +1,4 @@
-<?php 
+<?php
 // TODO: documentar
 
 /**
@@ -23,7 +23,7 @@ class Acl
      * @param string $module
      * @return boolean
     */
-    public static function _($rule, $module=null)
+    public static function check($rule, $module=null)
     {
         if(!is_null($module)) {
             $rule = strtoupper($module) . '_' . strtoupper($rule);
@@ -56,4 +56,3 @@ class Acl
         Application::forward('welcome.php');
     }
 }
-

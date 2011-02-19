@@ -14,14 +14,10 @@
 {$smarty.block.parent}
 <link rel="stylesheet" href="{$params.CSS_DIR}parts/article.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="{$params.CSS_DIR}parts/comments.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="{$params.CSS_DIR}parts/utilities.css" type="text/css" media="screen,projection" />
-<link rel="stylesheet" href="{$params.CSS_DIR}video-js.css" type="text/css" media="screen,projection" />
+<link rel="stylesheet" href="{$params.CSS_DIR}parts/video-js.css" type="text/css" media="screen,projection" />
 <link rel="stylesheet" href="{$params.JS_DIR}/facebox/facebox.css" media="screen" type="text/css"/>
 {/block}
 
-{block name='header-js'}
-{$smarty.block.parent}
-{/block}
 
 {block name="footer-js"}
 {$smarty.block.parent}
@@ -40,14 +36,14 @@
     </div>
     <div class="wrapper clearfix">
         <div class="container container_with_border">
-            
+
             <div id="header">
                {include file="base/partials/_frontpage_header.tpl"}
                {include file="base/partials/_frontpage_menu.tpl"}
             </div><!-- #header -->
-            
+
             <div id="main_content" class="wrapper_content_inside_container span-24">
-                
+
                 <div class="span-24">
                     <div class="layout-column span-16 inner-article">
                             <div class="span-16 last title-subtitle-legend">
@@ -58,8 +54,8 @@
                                 {/if}
                                 <div class="inner-article-subtitle">{$article->summary|clearslash}</div>
                                 <div class="inner-article-legend">
-                                    <span class="inner-article-author">{$article->agency|clearslash}</span> - 
-                                    <span class="inner-article-place">Madrid</span> - 
+                                    <span class="inner-article-author">{$article->agency|clearslash}</span> -
+                                    <span class="inner-article-place">Madrid</span> -
                                     <span class="inner-article-publish-date">{articledate article=$article updated=$article->changed}</span>
                                 </div>
                             </div><!--title-subtitle-legend-->
@@ -74,7 +70,7 @@
                                                </div>
                                             {/if}
                                         </div>
-                                         
+
                                         <div>{$article->body|clearslash}</div>
                                     </div>
                                     <div class="span-4 inner-article-utilities-box">
@@ -94,11 +90,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {include file="ads/ad_robapagina.tpl" nocache}
                             {include file="article/partials/_other-contents.tpl"}
                             {include file="internal_widgets/block_comments.tpl" contentid=$articleId nocache}
-                            
+
                     </div><!--inner-article-->
                     {include file="article/partials/_last_column.tpl"}
                 </div>

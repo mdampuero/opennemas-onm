@@ -19,7 +19,7 @@ $tpl->assign('titulo_barra', 'Author Opinion Management');
  * Check privileges
 */
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('OPINION_ADMIN')) {
+if(!Acl::check('OPINION_ADMIN')) {
     Acl::Deny();
 }
 

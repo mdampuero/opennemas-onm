@@ -18,7 +18,7 @@ require_once(SITE_CORE_PATH.'user_group.class.php');
 require_once(SITE_CORE_PATH.'privilege.class.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
-if(!Acl::_('USER_ADMIN'))
+if(!Acl::check('USER_ADMIN'))
 {
     Privileges_check::AccessDeniedAction();
 }

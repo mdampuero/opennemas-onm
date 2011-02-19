@@ -27,7 +27,7 @@ require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('BACKEND_ADMIN')) {
+if(!Acl::check('BACKEND_ADMIN')) {
     Acl::deny();
 }
 

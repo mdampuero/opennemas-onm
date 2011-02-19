@@ -12,7 +12,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  * Check privileges
 */
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::_('OPINION_ADMIN')) {
+if(!Acl::check('OPINION_ADMIN')) {
     Acl::Deny();
 }
 

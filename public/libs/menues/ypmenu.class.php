@@ -43,7 +43,7 @@ class YpMenu extends Menu
             $privs = explode(',', $privilege);
             $test = false;
             foreach($privs as $priv) {
-                $test = $test || Acl::_($priv);
+                $test = $test || Acl::check($priv);
             }
 
             return $test;

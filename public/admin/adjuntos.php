@@ -21,7 +21,7 @@
 
 //error_reporting(E_ALL);
 
-// php.ini settings for files upload 
+// php.ini settings for files upload
 set_time_limit(0);
 ini_set('upload_max_filesize',  20 * 1024 * 1024 );
 ini_set('post_max_size',        20 * 1024 * 1024 );
@@ -39,7 +39,7 @@ require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if( !Acl::_('FILE_ADMIN')){
+if( !Acl::check('FILE_ADMIN')){
     Acl::deny();
 }
 
@@ -53,24 +53,24 @@ if (!isset($_REQUEST['category'])) {
 
 if( !isset($_POST['op']) ) {
     $op = 'view';
-}    
+}
 
- 
+
 if( isset($_POST['op']) && ($_POST['op'] == "Adjuntar") ) {
-    
-    $category = $_REQUEST['category'];    
+
+    $category = $_REQUEST['category'];
     $cc = new ContentCategoryManager();
     $cat  = $cc->get_name( $_REQUEST['category'] );
-    $pref = substr($cat, 0, 2); 
+    $pref = substr($cat, 0, 2);
     $pref = strtoupper($pref);
-    
+
     $dateStamp = date('Ymd');
     $dir_date =date("/Y/m/d/");
     $ruta = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.$dir_date ;
     $nombre_archivo = $HTTP_POST_FILES['path']['name'];
     $tipo_archivo   = $HTTP_POST_FILES['path']['type'];
     $tamano_archivo = $HTTP_POST_FILES['path']['size'];
-    
+
     //$nombre_archivo = $pref .$dateStamp .$nombre_archivo;
     //$nombre_archivo = String_Utils::normalize_name( $nombre_archivo ); NON!!!
     $nombre_archivo = strtolower($nombre_archivo);
@@ -80,41 +80,41 @@ if( isset($_POST['op']) && ($_POST['op'] == "Adjuntar") ) {
     $data['category'] = $category;
     $data['available'] = 1;
     $data['description'] = $_POST['title'];
-    
+
     $stringutils = new String_Utils();
     $data['metadata'] = $stringutils->get_tags($_POST['title']);
     $data['fk_publisher'] = $_SESSION['userid'];
-    
+
     // Create folder if it doesn't exist
- 
+
     if( !file_exists($ruta) ) {
         mkdir($ruta, 0777, true);
     }
-    
+
     // Move uploaded file
     $uploadStatus = @move_uploaded_file($_FILES['path']['tmp_name'], $ruta.$nombre_archivo);
-    
+
     if($uploadStatus !== false) {
         $attachment = new Attachment();
-        
+
         if( $attachment->create($data) ) {
             //recuperar id.
             $elid = $GLOBALS['application']->conn->Insert_ID();
             if($_REQUEST['desde'] == 'fich') {
-                $jscode = '<script type="text/javascript"> parent.location.href= \'ficheros.php?action=list&category='.$category.'\'; </script>';                
+                $jscode = '<script type="text/javascript"> parent.location.href= \'ficheros.php?action=list&category='.$category.'\'; </script>';
             } else {
                 $jscode = "<script>
-                             var nuevo =  \" <div id='capa".$elid."' style='display: inline;' ><table border='0' cellpadding='4' cellspacing='0' class='fuente_cuerpo' width='100%'> <tr bgcolor='#ffffff'> <td width='50%'>   <input type='text' id='titles[".$elid."]' name='titles[".$elid."]' class='required' size='70' value='".$_POST['title']."' onChange=cambiarlistas(".$elid.",'titles[".$elid."]'); /> </td><td>".$nombre_archivo."</td>  <td align='center' width='80'> <input name='attach_selectos[]' class='pru' value='".$_POST['title']."' id='por".$elid."' type='checkbox' checked='checked' onClick=javascript:probarAttach('por".$elid."','thelist2');></td><td align='center' width='80'><input type='checkbox' id='int".$elid."' value='".$_POST['title']."' name='att_interior[]' checked='checked' onClick=javascript:probarAttach('int".$elid."','thelist2int');></td><td align='center' width='80'> <a  href='#'  onclick=javascript:ocultar('".$elid."');  title='Desvincular'> <img src='themes/default/images/trash.png' border='0' /> </a> </td></tr></table> </div> \";                           
+                             var nuevo =  \" <div id='capa".$elid."' style='display: inline;' ><table border='0' cellpadding='4' cellspacing='0' class='fuente_cuerpo' width='100%'> <tr bgcolor='#ffffff'> <td width='50%'>   <input type='text' id='titles[".$elid."]' name='titles[".$elid."]' class='required' size='70' value='".$_POST['title']."' onChange=cambiarlistas(".$elid.",'titles[".$elid."]'); /> </td><td>".$nombre_archivo."</td>  <td align='center' width='80'> <input name='attach_selectos[]' class='pru' value='".$_POST['title']."' id='por".$elid."' type='checkbox' checked='checked' onClick=javascript:probarAttach('por".$elid."','thelist2');></td><td align='center' width='80'><input type='checkbox' id='int".$elid."' value='".$_POST['title']."' name='att_interior[]' checked='checked' onClick=javascript:probarAttach('int".$elid."','thelist2int');></td><td align='center' width='80'> <a  href='#'  onclick=javascript:ocultar('".$elid."');  title='Desvincular'> <img src='themes/default/images/trash.png' border='0' /> </a> </td></tr></table> </div> \";
                              parent.document.getElementById( 'adjunto' ).innerHTML = parent.document.getElementById( 'adjunto' ).innerHTML  + nuevo ;
                            parent.document.getElementById('adjunt').style.display = \"none\";
                            meterLista('por".$elid."');
                            meterListaint('int".$elid."');
                             </script>";
             }
-            
+
             $tpl->assign('jscode', $jscode);
         }
-        
+
     } else {
         $tpl->assign('mensaje', '<h3>Ocurrió algún error al subir el fichero y no pudo guardarse. <br />Póngase en contacto con los administradores</h3>');
     }
