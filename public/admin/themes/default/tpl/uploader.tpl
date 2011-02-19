@@ -116,7 +116,7 @@
 		{literal}
 		function redirect_ui() {
 			{/literal}
-			parent.location.href="{$smarty.server.SCRIPT_NAME}?path={$smarty.request.path}&message=Fichero subido"; 
+			parent.location.href="{$smarty.server.SCRIPT_NAME}?path={$smarty.request.path}&message={t}File uploaded{/t}";
 			{literal}
 		}
 		window.setTimeout(redirect_ui, 1000);
@@ -133,7 +133,7 @@
 {if $ACTION_UPLOADER == 'posted-youtube'}
 <html>
 <head>
-    <title>Gestor de ficheros</title>
+    <title>{t}File Manager{/t}</title>
 	<link rel="stylesheet" href="{$params.CSS_DIR}admin.css" type="text/css" />
 </head>
 <body>
@@ -142,7 +142,7 @@
 		{literal}
 		function redirect_ui() {
 			{/literal}
-			parent.location.href="{$smarty.server.SCRIPT_NAME}?path={$smarty.request.path}&message=Video+subido+a+YouTube."; 
+			parent.location.href="{$smarty.server.SCRIPT_NAME}?path={$smarty.request.path}&message={t}Video uploaded to Youtube.{/t}";
 			{literal}
 		}
 		window.setTimeout(redirect_ui, 50);

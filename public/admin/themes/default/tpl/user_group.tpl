@@ -59,7 +59,7 @@
 	{/if}
 
 
-	{* FROM FOR ADDING A GROUP **************************************** *}
+	{* FROM TO ADD A GROUP **************************************** *}
 	{if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
 
 	{include file="botonera_up.tpl"}

@@ -1,10 +1,9 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-{* LISTADO ******************************************************************* *}
+{* LIST ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
 <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 <div id="menu-acciones-admin">
@@ -12,7 +11,7 @@
     <li>
         <a href="#" class="admin_add" onClick="enviar(this, '_self', 'new', -1);"
            title="Nueva Página">
-            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva Página" alt="" /><br />Nueva
+            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New static page{/t}
         </a>
     </li>
 </ul>
@@ -20,7 +19,7 @@
 
 <div style="padding: 5px 0;">
 	<label>Título: <input type="text" name="filter[title]" value="{$smarty.request.filter.title}" /></label>
-	<button type="submit" onclick="javascript:$('action').value='list';">Filtrar</button>
+	<button type="submit" onclick="javascript:$('action').value='list';">{t}Filter{/t}</button>
 </div>
 
 <style>
@@ -38,8 +37,8 @@ table.adminlist td {
 <tr>
     <th>Título</th>
 	<th>URL</th>
-	<th class="title">Visitas</th>
-	<th class="title">Disponible</th>
+	<th class="title">{t}Visits{/t}</th>
+	<th class="title">{t}Published{/t}</th>
     <th>&nbsp;</th>
 </tr>
 </thead>
@@ -51,9 +50,8 @@ table.adminlist td {
 	<td>
 		{$pages[k]->title}
 	</td>
-	<td>
-		&raquo;
-		<a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="Abrir en nueva ventana">
+	<td>&raquo;
+		<a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
 			{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>
 	</td>
 
@@ -65,24 +63,24 @@ table.adminlist td {
 	<td width="44" align="center">
 		<a href="?action=chg_status&id={$pages[k]->id}" class="available">
 			{if $pages[k]->available == 1}
-				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="Publicado" />
+				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
 			{else}
-				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="Pendiente" />
+				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
 			{/if}
 		</a>
 	</td>
 
 	<td width="64" align="center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$pages[k]->id}');" title="Modificar">
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$pages[k]->id}');" title="{t}Modify{t}">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 		&nbsp;&nbsp;
-		<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="Eliminar">
+		<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{t}">
 			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 	</td>
 </tr>
 {sectionelse}
 <tr>
-	<td align="center"><h2>Ninguna página guardada.</h2></td>
+	<td align="center"><h2>{t}There is no static pages.{/t}</h2></td>
 </tr>
 {/section}
 </tbody>
@@ -107,20 +105,18 @@ $('gridPages').select('a.available').each(function(item){
 </script>
 {/if}
 
-
-{* FORMULARIO PARA ENGADIR OU MODIFICAR  ************************************** *}
+{* FORM TO ADD/MODIFY  ************************************** *}
 {if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
 <div id="menu-acciones-admin">
 <ul>
     <li>
-        <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);"
-           value="Guardar" title="Guardar">
-            <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar" /><br />Guardar
+        <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);" value="Guardar" title="{t}Save{/t}">
+            <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
         </a>
     </li>
     <li>
-        <a href="?action=list" class="admin_add" value="Cancelar" title="Cancelar">
-            <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" /><br />Cancelar
+        <a href="?action=list" class="admin_add" value="Cancelar" title="{t}Cancel{/t}">
+            <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />{t}Cancel{/t}
         </a>
     </li>
 </ul>
@@ -133,7 +129,7 @@ $('gridPages').select('a.available').each(function(item){
         <label for="name">Título:</label>
     </td>
     <td style="padding:4px;" nowrap="nowrap" width="60%">
-        <input type="text" id="title" name="title" title="Título de la página" value="{$page->title}"
+        <input type="text" id="title" name="title" title="{t}Page title{/t}" value="{$page->title}"
                class="required" size="60" maxlength="120" tabindex="1" />
     </td>
 
@@ -141,25 +137,24 @@ $('gridPages').select('a.available').each(function(item){
         <table style="background-color:#F5F5F5; padding:18px; width:99%;">
 			<tr>
 				<td valign="middle" align="right">
-					<label for="available">Disponible:</label>
+					<label for="available">{t}Published:{/t}</label>
 				</td>
 				<td>
 					<select name="available" id="available" class="required" tabindex="4">
-						<option value="1"{if $page->available eq 1} selected="selected"{/if}>Si</option>
-						<option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>No</option>
+						<option value="1"{if $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
+						<option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td valign="top" align="left" colspan="2">
-					<label for="available">Descripción:</label> <br />
+					<label for="available">{t}Description:{/t}</label> <br />
 					<textarea name="description" id="description" rows="4" cols="30" tabindex="5">{$page->description}</textarea>
 				</td>
 			</tr>
 			<tr>
 				<td valign="top" align="left" colspan="2">
-					<label for="available">Metadatos:</label>
-					<sub>(separados por coma)</sub> <br />
+					<label for="available">{t}Keywords:{/t}</label><sub>{t}(separated with comas){/t}</sub> <br />
 					<input type="text" name="metadata" id="metadata" size="40" tabindex="6" value="{$page->metadata}" />
 				</td>
 			</tr>
@@ -173,14 +168,14 @@ $('gridPages').select('a.available').each(function(item){
 		<label for="name">{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}</label>
 	</td>
     <td style="padding:4px;" nowrap="nowrap" width="60%">
-        <input type="text" id="slug" name="slug" title="Palabra clave" value="{$page->slug}"
+        <input type="text" id="slug" name="slug" title="{t}Keywords{/t}" value="{$page->slug}"
                class="required" size="56" maxlength="120" tabindex="2" /><label>.html</label>
     </td>
 </tr>
 
 <tr>
     <td valign="top" align="right" style="padding:4px;" colspan="2">
-        <textarea name="body" id="body" tabindex="3" title="Contenido de la página" style="width:100%; height:20em;">{$page->body}</textarea>
+        <textarea name="body" id="body" tabindex="3" title="{t}Page content{/t}" style="width:100%; height:20em;">{$page->body}</textarea>
     </td>
 </tr>
 

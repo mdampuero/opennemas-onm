@@ -88,7 +88,7 @@
 {/if}
 
 
-{* FORM FOR ADDING/MODIFY A CONTENT ************************************** *}
+{* FORM TO ADD/MODIFY A CONTENT ************************************** *}
 {if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
 <script language="javascript" type="text/javascript" src="{$params.JS_DIR}SpinnerControl.js"></script>
 <script language="javascript" type="text/javascript" src="{$params.JS_DIR}modalbox.js"></script>
