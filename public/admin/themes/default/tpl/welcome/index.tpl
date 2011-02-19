@@ -84,7 +84,7 @@ $.noConflict();
     <table class="adminheading">
         <tbody>
             <tr>
-                <th>{t}New in other online newspapers...{/t}</th>
+                <th>{t}News in other online newspapers...{/t}</th>
             </tr>
         </tbody>
     </table>
@@ -97,11 +97,11 @@ $.noConflict();
 
             {section name="feed" loop=$feeds}
                 <td style="vertical-align:top">
-                    <h3>{t 1=$feeds[feed].name}News from %1{/t}</h3>
+                    <h3>{t 1=$feeds[feed].name}News from "%1"{/t}</h3>
                     <div id="feed-{$smarty.section.feed.index}"></div>
                 </td>
             {sectionelse}
-                <td>No tiene configurado ningún RSS</td>
+                <td>{t}You don't have RSS configured to show here{/t}</td>
             {/section}
             </tr>
         {/if}

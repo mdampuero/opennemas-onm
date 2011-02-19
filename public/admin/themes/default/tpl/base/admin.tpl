@@ -57,7 +57,7 @@
 
     <div id="topbar-admin">
         <div id="logoonm">
-			<a  href="index.php" title="Ir a la página principal de administración">
+			<a  href="index.php" title="{t}Go to admin main page{/t}">
 			   <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="ONM"/></div>
 			   <div class="site-name">{$smarty.const.SITE_FULLNAME}</div>
 			</a>
@@ -69,29 +69,26 @@
             <div id="user_box" style="width:auto;">
                 <div id="name-box" style="float:left; margin-right:5px;">
                   <strong>
-                    Bienvenido
-                    <a href="/admin/user.php?action=read&id={$smarty.session.userid}" target="centro">
-                        {$smarty.session.username}
-                    </a>
+                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="/admin/user.php?action=read&id=%1">%2</a>{/t}
                     {if isset($smarty.session.isAdmin)}
                         <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
-                            title="Permisos de administrador" alt="" />
+                            title="{t}Admin privileges{/t}" alt="" />
                     {/if}
                   </strong>
                 </div><!--end name-box-->
 
                 {if Acl::check('BACKEND_ADMIN') eq true}
                 <div style="padding-right:4px; float:left;" nowrap="nowrap">
-                    <div id="user_activity" title="Usuarios activos na sección de administración">
+                    <div id="user_activity" title="{t}Active users in backend{/t}">
                         {count_sessions}
                     </div>
                 </div>
                 {/if}
 
                 <div id="session-actions" style="float:left;">
-                  <a href="javascript:salir();" class="logout" title="Salir del panel de control">
+                  <a href="javascript:salir();" class="logout" title="{t}Logout from control panel{/t}">
                       <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
-                          align="absmiddle" alt="Salir del Panel de Administración" /> Salir
+                          align="absmiddle" alt="Salir del Panel de Administración" /> {t}Log out{/t}
                   </a>
                 </div><!--end session-actions-->
             </div>
@@ -145,7 +142,7 @@
                 Event.stop(event);
 
                 Modalbox.show(this.href, {
-                    title: 'Usuarios activos',
+                    title: '{t}Active users{/t}',
                     afterLoad: linkToMB,
                     width: 300
                 });
@@ -157,7 +154,7 @@
         if( $('user_activity') ) {
             $('user_activity').observe('click', function() {
                 Modalbox.show('{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/index.php?action=show_panel', {
-                    title: 'Usuarios activos',
+                    title: '{t}Active users{/t}',
                     afterLoad: linkToMB,
                     width: 300
                 });
@@ -186,13 +183,13 @@
 			new Validation('formulario', { immediate : true });
 			Validation.addAllThese([
 				['validate-password',
-					'Su password debe contener mas de 5 caracteres y no contener la palabra \'password\' o su nombre de usuario', {
+					{t}'Your password must contain 5 characters and don\'t contain the word \'password\' or your user name.'{/t}, {
 					minLength : 6,
 					notOneOf : ['password','PASSWORD','Password'],
 					notEqualToField : 'login'
 				}],
 				['validate-password-confirm',
-					'Compruebe su primer password, por favor intentelo de nuevo.', {
+					'{t}Please check your first password and check again.{/t}', {
 					equalToField : 'password'
 				}]
 			]);

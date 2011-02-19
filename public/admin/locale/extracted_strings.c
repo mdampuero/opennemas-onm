@@ -181,6 +181,36 @@ gettext("Ohh, there is <strong>no cache file</strong> in the system.");
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>");
 
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Go to admin main page");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Welcome <a title=\"See my user preferences\" href=\"/admin/user.php?action=read&id=%1\">%2</a>");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Admin privileges");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Active users in backend");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Logout from control panel");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Log out");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Active users");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Active users");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("'Your password must contain 5 characters and don't contain the word 'password' or your user name.'");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Please check your first password and check again.");
+
 /* ./themes/default/tpl//article.tpl */
 gettext("Frontpage articles");
 
@@ -426,6 +456,27 @@ gettext("Clean cache");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Clean cache");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("Panel de Control - %1");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("Did you lost?");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("&larr; Go back to main website");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("User name");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("Password");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("Remember me");
+
+/* ./themes/default/tpl//login.tpl */
+gettext("A product of <a href=\"%1\" title=\"%2\">%3</a><br/> %4 &copy; All rights resered");
 
 /* ./themes/default/tpl//newsletter/actions/preview.tpl */
 gettext("Newsletter management");
@@ -950,8 +1001,11 @@ gettext("New article");
 gettext("New article");
 
 /* ./themes/default/tpl//welcome/index.tpl */
-gettext("New in other online newspapers...");
+gettext("News in other online newspapers...");
 
 /* ./themes/default/tpl//welcome/index.tpl */
-gettext("News from %1");
+gettext("News from \"%1\"");
+
+/* ./themes/default/tpl//welcome/index.tpl */
+gettext("You don't have RSS configured to show here");
 
