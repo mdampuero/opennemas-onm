@@ -18,7 +18,7 @@ $menuXml = '<?xml version="1.0"?>
         <node title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'" link="static_pages.php" target="centro" privilege="STATIC_ADMIN" />
         <node title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'" link="article.php?action=list_hemeroteca" target="centro" privilege="ARCHIVE_ADMIN" />
         <node title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'" link="article.php?action=list_agency" target="centro" privilege="ARTICLE_LIST_PEND" />
-        <node title="'.htmlspecialchars(_("Sections Manager"), ENT_QUOTES).'" link="category.php" target="centro" privilege="CATEGORY_ADMIN" />
+        <node title="'.htmlspecialchars(_("Sections Manager"), ENT_QUOTES).'" link="controllers/category/category.php" target="centro" privilege="CATEGORY_ADMIN" />
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="mediamanager.php" target="centro" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">

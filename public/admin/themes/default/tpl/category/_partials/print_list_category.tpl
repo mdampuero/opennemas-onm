@@ -1,9 +1,9 @@
 <table width="100%" cellpadding="0" cellspacing="0" id="{$category->pk_content_category}">
     <tr {cycle values="class=row0,class=row1"}>
-        <td style="padding: 0px 10px; height: 40px;font-size: 11px;">
+        <td style="padding: 0px 10px; height: 40px;">
              <b> {$category->title|clearslash|escape:"html"}</b>
         </td>
-        <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:100px;" align="center">
+        <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
           {if $category->internal_category eq 3}
              <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
           {elseif $categorys->internal_category eq 5}
@@ -12,16 +12,16 @@
               <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
           {/if}
         </td>
-         <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+         <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
             {$num_contents.articles|default:0}
         </td>
-        <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+        <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
             {$num_contents.photos|default:0}
         </td>
-        <td style="padding: 0px 10px; height: 40px;font-size: 11px;width:80px;" align="center">
+        <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
             {$num_contents.advertisements|default:0}
         </td>
-        <td style="padding:10px;font-size: 11px;width:80px;" align="center">
+        <td style="padding:10px;width:80px;" align="center">
             {if $category->inmenu==1}
                 <a href="?id={$category->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
                     <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
@@ -58,10 +58,10 @@
             {section name=su loop=$subcategorys}
                 <table width="100%" cellpadding="0" cellspacing="0" id="{$subcategorys[su]->pk_content_category}" class="tabla">
                     <tr {cycle values="class=row0,class=row1"}>
-                        <td style="padding: 0px 10px 0px 40px; height: 30px; font-size: 11px; ">
+                        <td style="padding: 0px 10px 0px 40px; height: 30px;  ">
                             <b>{$subcategorys[su]->title} </b>
                         </td>
-                         <td align="center" style="padding:10px;font-size: 11px;width:80px;">
+                         <td align="center" style="padding:10px;width:80px;">
                               {if $subcategorys[su]->internal_category eq 3}
                                  <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
                               {elseif $subcategorys[su]->internal_category eq 5}
@@ -70,16 +70,16 @@
                                   <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
                               {/if}
                         </td>
-                        <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
+                        <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
                             {$num_sub_contents[su].articles|default:0}</a>
                         </td>
-                        <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
+                        <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
                             {$num_sub_contents[su].photos|default:0}</a>
                         </td>
-                        <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
+                        <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
                             {$num_sub_contents[su].advertisements|default:0}</a>
                         </td>
-                        <td align="center" style="padding: 0px 10px; height: 30px;font-size: 11px;width:80px;">
+                        <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
                             {if $subcategory[su]->inmenu==1}
                                 <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
                                     <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>

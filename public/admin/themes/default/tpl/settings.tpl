@@ -15,11 +15,10 @@
     <link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" />
 <![endif]-->
 
-<script type="text/javascript" language="javascript" src="{php}echo($this->js_dir);{/php}prototype.js"></script>
+<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
 
 <script type='text/javascript' src='{$params.JS_DIR}fabtabulous.js'></script>
 
-{literal}
 <script language="javascript">
 <!-- //
 var objForm = null;
@@ -44,10 +43,9 @@ function enviar(elto, trg, acc, id) {
 }
 
 </script>
-{/literal}
 </head>
 <body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-<form action="#" method="post" name="formulario" id="formulario"> 
+<form action="#" method="post" name="formulario" id="formulario">
 <table border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
 <tr>
   <td class="barra_superior"><div style="text-align:right; ">Settings&nbsp;<img src="{$params.IMAGE_DIR}admin_contenido.gif" border="0" /></div></td>
@@ -67,7 +65,7 @@ function enviar(elto, trg, acc, id) {
 	</div>
 
 	<div id="1" class="categ" style="margin-left: auto;margin-right: auto;width:930px; padding: 6px 2px;">
-	
+
 	<ul id="tabs">
 	  <li><a href="#site">Site configuration</a></li>
 	  <li><a href="#system">System configuration</a></li>
@@ -77,7 +75,7 @@ function enviar(elto, trg, acc, id) {
 
 	<div id="site" class="panel" style="width:900px;">
 	  <fieldset style="width:340px;height:65px;display:inline;float:left;overflow:hidden;position:relative;"><legend>Status of the environment</legend>
-	    <table width="300px" border=0>	
+	    <table width="300px" border=0>
 	      {foreach from=$config_vbles key=k item=v}
 		{if $k|truncate:6:"" == 'STATUS'}
 		  {if $v == '0' }
@@ -88,21 +86,21 @@ function enviar(elto, trg, acc, id) {
 		    <input name="STATUS" id="offline1" value="1" checked="checked" type="radio"><label for="offline1">ON</label></td></tr>
 		  {/if}
 		{/if}
-	      {/foreach}	
+	      {/foreach}
 	    </table></fieldset>
 	  <fieldset style="width:490px;height:65px;display:inline;float:right;overflow:hidden;position:relative;"><legend>Templates</legend>
-	    <table width="480px" border=0>	
+	    <table width="480px" border=0>
 	      {foreach from=$config_vbles key=k item=v}
 		{if $k|truncate:8:"" == 'TEMPLATE'}
 		    <tr>{if $k == 'TEMPLATE_USER'}<td width='21%'>FRONTEND</td><td with='80%'><input type="text" name='{$k}' value='{$v}'></td>{/if}</tr>
 		    <tr>{if $k == 'TEMPLATE_ADMIN'}<td width='21%'>BACKEND</td><td with='80%'><input type="text" name='{$k}' value='{$v}'></td>{/if}</tr>
 		{/if}
-	      {/foreach}	
+	      {/foreach}
 	    </table></fieldset>
 
 
 	  <fieldset><legend>Site</legend>
-	    <table width="750px" align=center border=0>	
+	    <table width="750px" align=center border=0>
 	      {foreach from=$config_vbles key=k item=v}
 		{if $k == 'SITE'}<tr><td>{$k}</td><td><input type=text name='{$k}' value='{$SITE}' size=70/></td></tr>{/if}
 		{if $k == 'SITE_PATH'}<tr><td>{$k}</td><td><input type=text name='{$k}' value='{$SITE_PATH}' size=70/></td></tr>{/if}
@@ -118,7 +116,7 @@ function enviar(elto, trg, acc, id) {
 		{if $k == 'RELATIVE_PATH'}<input type=hidden style="border: 1px solid #999; background-color:#ddd;" name='{$k}' value='{$RELATIVE_PATH}' size=70 readonly="true" />{/if}
 		{if $k == 'PATH_APP'}<input type=hidden style="border: 1px solid #999; background-color:#ddd;" name='{$k}' value='{$PATH_APP}' size=70 readonly="true" />{/if}
 		{if $k == 'ITEMS_PAGE'}<input type=hidden style="border: 1px solid #999; background-color:#ddd;" name='{$k}' value='{$v}' size=70 readonly="true" />{/if}
-	      {/foreach}	
+	      {/foreach}
 	    </table></fieldset>
 	</div>
 	<div id="system" class="panel" style="width:900px;">
@@ -245,7 +243,7 @@ function enviar(elto, trg, acc, id) {
 	<b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
 	</div>
 
-{* *************************** START FOOTER ***************************** 
+{* *************************** START FOOTER *****************************
    </td>
 </tr>
 </table>

@@ -469,7 +469,7 @@
 			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
 			<ul>
 				<li>
-					<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<b>N</b>ueva Seccion');" accesskey="N" tabindex="1">
+					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />Nueva Sección
 					</a>
 				</li>
@@ -485,7 +485,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva sección');" accesskey="N" tabindex="1">
+					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add"  accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva Sección" alt="Nueva Sección"><br />Nueva Sección
 					</a>
 				</li>
@@ -512,7 +512,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', '{$_SESSION['desde']}', 0);" value="Cancelar" title="Cancelar">
+				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="Cancelar" title="Cancelar">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 				</a>
 			</li>
