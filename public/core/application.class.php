@@ -148,7 +148,6 @@ class Application {
 
     static public function configGettext(){
 
-
 	    date_default_timezone_set('Europe/Madrid');
 
 	    $locale = DEFAULT_LOCALE;
