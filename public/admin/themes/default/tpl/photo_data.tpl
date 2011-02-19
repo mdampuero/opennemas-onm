@@ -7,21 +7,22 @@
                     <img src="{$MEDIA_IMG_URL}{$photo1->path_file}{$photo1->name}" id="change1" border="0" style="padding-left:20px;max-width:440px;max-height:380px;" onload="initialize()" onunload="GUnload()" />
                 </td>
                 <td align='left'>
-                    <b>Archivo: {$photo1->name}</b> <br />
-                    <b>Dimensiones:</b> {$photo1->width} x {$photo1->height} (px) <b>Peso:</b> {$photo1->size} Kb<br>
+                    <b>{t}File:{/t} {$photo1->name}</b> <br />
+                    <b>{t}Resolution:{/t}</b> {$photo1->width} x {$photo1->height} (px)
+                    <b>{t}Size:{/t}</b> {$photo1->size} Kb<br>
                     <label>Autor:</label><input type="text" id="author_name[{$photo1->id}]" name="author_name[{$photo1->id}]"
-                    value='{$photo1->author_name|clearslash|escape:'html'}' size="15"  title="Autor" />
-                    <label>Color:</label><select name="color[{$photo1->id}]" id="color[{$photo1->id}]" />
-                                                <option value="BN" {if $photo1->color eq 'BN'} selected {/if}>B/N</option>
-                                                <option value="color" {if $photo1->color eq 'color'} selected {/if}>Color</option>
+                    value='{$photo1->author_name|clearslash|escape:'html'}' size="15"  title="{t}Author{/t}" />
+                    <label>{t}Color:{/t}</label><select name="color[{$photo1->id}]" id="color[{$photo1->id}]" />
+                                                <option value="{t}B/N{/t}" {if $photo1->color eq 'BN'} selected {/if}>{t}B/N{/t}</option>
+                                                <option value="{t}color{/t}" {if $photo1->color eq 'color'} selected {/if}>{t}Color{/t}</option>
                                             </select>
-                    <br /><label>Fecha:</label><input type="text" size="18" id="fecha[{$photo1->id}]" name="fecha[{$photo1->id}]"
-                    value="{$photo1->date|date_format:"%Y-%m-%d %H:%M:%S"}"  title="Fecha" />
+                    <br /><label>{t}Date:{/t}</label><input type="text" size="18" id="fecha[{$photo1->id}]" name="fecha[{$photo1->id}]"
+                    value="{$photo1->date|date_format:"%Y-%m-%d %H:%M:%S"}"  title="{t}Date:{/t}" />
                     <br />
-                    <label for="title">Metadatos:</label> <br /><textarea id="metadata[{$photo1->id}]" name="metadata[{$photo1->id}]"
+                    <label for="title">{t}Keywords:{/t}</label> <br /><textarea id="metadata[{$photo1->id}]" name="metadata[{$photo1->id}]"
                     title="Metadatos" cols="20" rows="2"  style="width:99%" >{$photo1->metadata|strip}</textarea>
                      <br />
-                    <label>Descripci&oacute;n:</label> <br /><textarea id="description[{$photo1->id}]" name="description[{$photo1->id}]"
+                    <label>{t}Description:{/t}</label> <br /><textarea id="description[{$photo1->id}]" name="description[{$photo1->id}]"
                     title="descripcion" cols="20" rows="2" style="width:99%">{$photo1->description|clearslash|escape:'html'}</textarea>
                     <input type="hidden" name="resolution[{$photo1->id}]" value="{$photo1->resolution}" />
                     <input type="hidden" name="title" value="{$photo1->name}" />
@@ -73,7 +74,7 @@
                  </td>
             </tr><tr>
                   <td align='right' colspan="2">
-                 {if $display eq 'none'}     <a href="#" onclick="new Effect.toggle($('div_datos_{$photo1->id}'),'blind')"><b> +INFOR </b></a>{/if}
+                 {if $display eq 'none'}     <a href="#" onclick="new Effect.toggle($('div_datos_{$photo1->id}'),'blind')"><b> {t}+INFO:{/t} </b></a>{/if}
                  </td>
             </tr>
        </table>
@@ -82,7 +83,7 @@
         {if $photo1->myiptc}
             <div id="iptc" style="margin-left:30px;width:440px;float:left;overflow:auto;background:#F5F5F5 none repeat scroll 0 0;">
               <table style="border:1px solid #000;" class="fuente_cuerpo" width="430">
-                  <tr  style="border:1px solid #000;" ><th colspan="2"><h3>Datos IPTC</h3></th></tr>
+                  <tr  style="border:1px solid #000;" ><th colspan="2"><h3>{t}IPTC Data:{/t}</h3></th></tr>
                   {foreach item="val" key="caption" from=$photo1->myiptc}
                       {if $val}
                              <tr><td style="border:1px solid #666; padding: 2px;" ><b>{$caption}</b> </td>
@@ -95,7 +96,7 @@
         {/if}
         <div id="exif" style="margin-left:30px;width:440px;overflow:auto;background:#F5F5F5 none repeat scroll 0 0;">
           <table style="border:1px solid #000;" width="430">
-            <tr style="border:1px solid #000;"><th colspan="2"><h3>Datos EXIF</h3></th></tr>
+            <tr style="border:1px solid #000;"><th colspan="2"><h3>{t}EXIF Data:{/t}</h3></th></tr>
               {foreach item="value" key="k" from=$photo1->exif}
                  <tr><td colspan="2"  ><b>{$k} </b> </td> </tr>
                       {foreach item="dato" key="d" from=$value}
@@ -109,7 +110,6 @@
     </div>
 <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
 </div>
-
 
 <script type="text/javascript" language="javascript">
 {literal}

@@ -17,10 +17,10 @@
 
 <table border="0" cellpadding="4" cellspacing="0" class="adminlist">
 <tr>
-<th class="title">Nombre del Permiso</th>
-<th class="title">Módulo</th>
-<th class="title">Editar</th>
-<th class="title">Eliminar</th>
+<th class="title">{t}Privilege name{/t}</th>
+<th class="title">{t}Module{/t}</th>
+<th class="title">{t}Edit{/t}</th>
+<th class="title">{t}Delete{/t}</th>
 </tr>
 {section name=c loop=$privileges}
 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
@@ -31,17 +31,17 @@
 		{$privileges[c]->module}
 	</td>
 	<td style="padding:10px;width:75px;">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$privileges[c]->id});" title="Modificar">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$privileges[c]->id});" title="{t}Edit{/t}">
+			<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit{/t}" /></a>
 	</td>
 	<td style="padding:10px;width:75px;">
-		<a href="#" onClick="javascript:confirmar(this, {$privileges[c]->id});" title="Eliminar">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+		<a href="#" onClick="javascript:confirmar(this, {$privileges[c]->id});" title="{t}Delete{/t}">
+			<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete{/t}"/></a>
 	</td>
 </tr>
 {sectionelse}
 <tr>
-	<td colspan="4" align="center"><b>Ning&uacute;n permiso guardado.</b></td>
+	<td colspan="4" align="center"><b>{t}There is no privileges added yet{/t}.</b></td>
 </tr>
 {/section}
 {if count($privileges) gt 0}
@@ -93,13 +93,13 @@ div.autocomplete ul li {
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
 <tbody>
 
-{* Módulo *}
+{* Module *}
 <tr>
 	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="module">Módulo:</label>
+		<label for="module">{t}Module{/t}</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="module" name="module" title="Módulo" size="20" maxlength="40"
+		<input type="text" id="module" name="module" title="{t}Module{/t}" size="20" maxlength="40"
 			value="{$privilege->module}" class="required" />
 	</td>
 </tr>
@@ -107,21 +107,21 @@ div.autocomplete ul li {
 {* Name *}
 <tr>
 	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="description">Nombre:</label>
+		<label for="description">{t}Name{/t}</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
 		<input type="text" id="name" name="name" title="Nombre" value="{$privilege->name}" class="required" />
-        <sub>(recomendación: MODULO_ACCION)</sub>
+        <sub>({t}recomended{/t}: MODULO_ACCION)</sub>
 	</td>
 </tr>
 
-{* Descripcion *}
+{* Description *}
 <tr>
 	<td valign="top" align="right" style="padding:4px;" width="30%">
-		<label for="description">Descripci&oacute;n:</label>
+		<label for="description">{t}Description{/t}</label>
 	</td>
 	<td style="padding:4px;" nowrap="nowrap" width="70%">
-		<input type="text" id="description" name="description" title="Descripci&oacute;n" size="80" maxlength="100"
+		<input type="text" id="description" name="description" title="{t}Description{/t}" size="80" maxlength="100"
 			value="{$privilege->description}" class="required" />
 	</td>
 </tr>
