@@ -110,7 +110,7 @@ switch($action) {
         $tpl = $mmc->tpl;
         $tpl->assign('action', $action);
         $tpl->assign('category', $mmc->category);
-        $tpl->display('mediamanager/mediamanager.tpl');
+        $tpl->display('mediamanager/results.tpl');
 
     } break;
 

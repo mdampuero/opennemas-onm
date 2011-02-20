@@ -130,6 +130,9 @@ gettext("Author photos");
 /* ./themes/default/tpl//opinion/author.tpl */
 gettext("Delete photo");
 
+/* ./themes/default/tpl//opinion/author.tpl */
+gettext("Upload more files");
+
 /* ./themes/default/tpl//opinion/opinion_list.tpl */
 gettext("Opinion articles");
 

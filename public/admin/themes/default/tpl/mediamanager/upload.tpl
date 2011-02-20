@@ -30,12 +30,12 @@
     <ul class="tabs2">
         <li>
             <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-                GLOBAL</a>
+                {t}GLOBAL{/t}</a>
         </li>
 
         <li>
             <a href="mediamanager.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                PUBLICIDAD</a>
+                {t}ADS{/t}</a>
         </li>
 
         {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
@@ -47,23 +47,23 @@
 
 
 	<div id="menu-acciones-admin">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t 1=$datos_cat[0]->title}Image manager :: upload image to %1{/t}</h2></div>
+        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t 1=$datos_cat[0]->title}Image manager :: Upload image to "%1"{/t}</h2></div>
 
         <ul>
 
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
                 </a>
             </li>
 
@@ -92,7 +92,10 @@
                                 <div id="wrapper-form-upload" style="margin:20px auto; width:50%">
 
                                     <div id="fotosContenedor">
-                                        <strong>{t}Files to upload{/t}</strong>
+                                        <div style="text-align:right">
+                                            <input type="button" onclick="addFile();" style="cursor:pointer;" value="{t}Add new image{/t}"></input>
+                                            <input type="button" onclick="delFile();" style="cursor:pointer;" value="{t}Remove last image{/t}"></input>
+                                        </div>
                                         <hr />
                                         <div class="marcoFoto" id="foto0">
                                             <input type="hidden" name="MAX_FILE_SIZE" value="307200" />
@@ -127,9 +130,6 @@
                                         <strong>{t}Actions{/t}</strong><br>
 
                                         <div style="text-align:right">
-                                            <input type="button" onclick="addFile();" style="cursor:pointer;" value="{t}Add new image{/t}"></input>
-                                            <input type="button" onclick="delFile();" style="cursor:pointer;" value="{t}Add new image{/t}"></input>
-                                             -
                                             <input type="submit" name="submit" align="middle" width="22px" height="22px" style="cursor:pointer;" value="{t}Upload files{/t}" />
                                         </div>
 
