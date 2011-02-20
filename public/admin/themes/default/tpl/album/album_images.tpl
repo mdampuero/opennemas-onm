@@ -22,7 +22,7 @@
 
 <tr>
     <td colspan="3">
-        <br><label>	Im&aacute;genes del album (Para seleccionar y recortar la imagen de portada haga doble click)</label><br>
+        <br><label>{t}Album images (Double click to select and cut images){/t}</label><br>
 	 <div id="scroll-album">
 		 <ul class="gallery_list" id="album_list">
             {if $oldphoto}
@@ -30,7 +30,7 @@
 				 {section name=n loop=$oldphoto}	
 				 {if $oldphoto[n]->content_status eq 1}				
 					<li value="{$MEDIA_IMG_URL}{$oldphoto[n]->path_file}{$oldphoto[n]->name}" de:pk_photo="{$oldphoto[n]->pk_photo}"  id="f{$indi}-{$oldphoto[n]->pk_photo}">
-					    <a class="album" onClick="show_image('img{$oldphoto[n]->pk_photo}', 'f{$indi}-{$oldphoto[n]->pk_photo}')" title="Mostrar imagen">
+					    <a class="album" onClick="show_image('img{$oldphoto[n]->pk_photo}', 'f{$indi}-{$oldphoto[n]->pk_photo}')" title={t}"Show image"{/t}>
 					     <img ondblclick="define_crop(this);"  style="{cssimagescale resolution=67 photo=$oldphoto[n]}" src="{$MEDIA_IMG_URL}{$oldphoto[n]->path_file}{$oldphoto[n]->name}"
                             class="draggable2" id="img{$oldphoto[n]->pk_photo}" de:pk_photo="{$oldphoto[n]->pk_photo}"  value="f{$indi}-{$oldphoto[n]->pk_photo}" name="{$oldphoto[n]->name}" de:mas="{$oldphoto[n]->name}"   de:path="{$oldphoto[n]->path_file}"  border="0" de:dimensions="{$oldphoto[n]->width} x {$oldphoto[n]->height} (px)" de:peso="{$oldphoto[n]->size}" de:created="{$oldphoto[n]->created}"  de:description="{$oldphoto[n]->description|escape:"html"}"  de:tags="{$oldphoto[n]->metadata}"   de:footer="{$oldphotos[n][2]|escape:"html"}"/><br>
 					   </a></li>                                          
@@ -80,7 +80,7 @@
                     </table>
                     
                 <div class="photos" id="photos" style="width:430px; height:540px; border:3px double #333333; padding:1px;">
-                        <em>Pinche y arrastre las imagenes para seleccionarlas</em>
+                        <em>{t}Drag and drop images to select{/t}</em>
                         {if count($photos) gt 0}
                                         <p align="center">{$paginacion}</p>
                         {/if}
@@ -117,29 +117,29 @@
 			   <table border="0">
                                <tr><td>
 				   <h2 style="color:#2f6d9d;">
-				   <img src="themes/default/images/tit_img.png" style="margin-bottom:-15px;"/> Imagen 
+				   <img src="themes/default/images/tit_img.png" style="margin-bottom:-15px;"/> {t}Image{/t}
 				   <hr style=" margin:0;border-style: solid; color:#2f6d9d; border-width: 2px;"></h2>
                                 </td>
                                 <td  align='right'>
                                     <a style="cursor:pointer;" id="remove" onclick="">
-                                    <img src="themes/default/images/remove_image.png" id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" /> </a>
+                                    <img src="themes/default/images/remove_image.png" id="remove_img" alt={t}"Delete"{/t} title={t}"Delete"{/t} border="0" align="absmiddle" /> </a>
                                 </td>
                                 </tr>
                                 <tr><td colspan=2>
-                                    <label for="title">Imagen: </label>
+                                    <label for="title">{t}Image:{/t} </label>
                                     <input type="hidden" id="img_des" value="" size="60">
                                     </td></tr><tr><td  style="width:50%" nowrap>
                                      <img src="{$params.IMAGE_DIR}default_img.jpg" id="image_view" name="imag_view" width=300 border="0" />
                                     </td><td style="padding:10px;">
                                     <div id="informa" style="text-align:left;display: inline; width:380px; height:30px;">
-                                            <b>Archivo: default_img.jpg</b> <br><b>Dimensiones:</b> 300 x 208 (px)<br>
-                                            <b>Peso:</b> 4.48 Kb<br><b>Fecha de creaci&oacute;n:</b> 11/06/2008<br>
-                                            <b>Descripcion:</b>  Imagen por defecto.  <br><b>Tags:</b> Imagen<br>
+                                            <b>{t}File:{/t} default_img.jpg</b> <br><b>{t}Dimensions:{/t}</b> 300 x 208 (px)<br>
+                                            <b>{t}Weight:{/t}</b> 4.48 Kb<br><b>{t}Created:{/t}</b> 11/06/2008<br>
+                                            <b>{t}Description:{/t}</b>  {t}Default image:{/t}  <br><b>{t}Tags:{/t}</b> {t}Image{/t}<br>
                                     </div>
                                     <br>
                                 </td></tr>
                                 <tr><td colspan=2>
-                                    <label for="title">Pie imagen:</label>
+                                    <label for="title">{t}Foot image:{/t}</label>
                                     <input type="text" id="img_footer" name="img_footer" title="Imagen" value="" size="60" />
                                 </td></tr></table>
                          <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
@@ -154,12 +154,12 @@
 
 <tr>
     <td colspan="3">
-           Recorte la imagen que se visualiza en portada.(300x250 px)
+        {t}Cut the image that is in frontpage view.(300x250 px){/t}
 
              <div id="testWrap">
-                    <img src="{$params.IMAGE_DIR}default_img.jpg" alt="test image" id="testImage"  width="300" height="208" />
+                    <img src="{$params.IMAGE_DIR}default_img.jpg" alt={t}"test image"{/t} id="testImage"  width="300" height="208" />
             </div>
-             <div id="previewArea"> {if !empty($album->cover)} <img id="crop_img" src="{$MEDIA_IMG_URL}{$album->cover}" alt="Imagen en portada"  style="maxWidth:600px;maxHeight:400px;" /> {/if} </div>
+             <div id="previewArea"> {if !empty($album->cover)} <img id="crop_img" src="{$MEDIA_IMG_URL}{$album->cover}" alt={t}"Frontpage image"{/t}  style="maxWidth:600px;maxHeight:400px;" /> {/if} </div>
              <div id="results">
                       <input type="hidden" name="x1" id="x1" value=""/>
                  <br />
