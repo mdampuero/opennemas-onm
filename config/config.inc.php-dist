@@ -122,7 +122,8 @@ define('',false);
 */
 
 define('REFRESH_INTERVAL', '900'); // in seconds
-
+define('DEFAULT_LOCALE', "es_ES.UTF-8");
+define('GOOGLE_MAPS_API_KEY', 'ABQIAAAAIIMPay5i8oNP5CHI9iX55xSh3kxvKymPAceo7mCCRNEYmKBAgxSRfJ3nbaAs3ZJV5cQyUJuZOZpTlA');
 
 /**
  * Repository settings

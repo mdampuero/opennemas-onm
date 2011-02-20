@@ -73,7 +73,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $this->tpl->assign('allcategorys', $this->parentCategories);
         $this->tpl->assign('datos_cat', $datos_cat);
     }
-    
+
     //List and count photos in categorys.
     public function action_list_categorys()
     {
@@ -88,7 +88,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
 
        // var_dump($photoSet);
         $num_sub_photos = array();
- 
+
         foreach($this->parentCategories as $k => $v) {
             if(isset($photoSet[$v->pk_content_category])) {
                 $num_photos[$k] = $photoSet[$v->pk_content_category];
@@ -235,7 +235,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
 
     public function action_save_data()
     {
-      
+
         $id = $_REQUEST['id'];
         $ph = new Photo($id);
 
@@ -259,7 +259,8 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $foto_data = $foto->read_alldata($_REQUEST['id']);
 
         $image = $this->path_upload . $foto->path_file . $foto->name;
-        $size = getimagesize($image, $info);
+
+		$size = @getimagesize($image, $info);
 
         $this->tpl->assign('photo1', $foto_data);
         $this->tpl->assign('MEDIA_IMG_URL',  $this->img_url );
@@ -278,7 +279,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                  // Check upload directory
                 $dir_date =date("/Y/m/d/");
                 $uploaddir = $this->path_upload.$dir_date ;
-               
+
                 if(!is_dir($uploaddir)) {
                     FilesManager::createDirectory($uploaddir);
                 }
@@ -292,7 +293,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
                 $name = date("YmdHis") . $micro . "." . $extension;
 
-                if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {                    
+                if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
                     $data['title'] = $nameFile;
                     $data['name'] = $name;
                     $data['path_file'] = $dir_date;

@@ -130,8 +130,8 @@ switch($action) {
 
         $html_out = $mmc->action_read_image_data();
         $tpl = $mmc->tpl;
-        $html_out = $tpl->fetch('image_data.tpl');
-        Application::ajax_out($html_out);
+        $tpl->display('mediamanager/image_data.tpl');
+        //Application::ajax_out($html_out);
 
     } break;
 

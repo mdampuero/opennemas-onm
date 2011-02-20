@@ -33,7 +33,7 @@
                 timePickerAdjacent: true,
                 dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
             });
-        
+
         }
         else {
             alert('Not existent');
@@ -73,7 +73,8 @@
         </ul>
 
         <div id="menu-acciones-admin">
-            <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Images Manager{/t}:: {if $action eq 'search'} {t}Search{/t} {elseif $action eq 'searchResult'} {t}Search result{/t} {else} {t}Information{/t} {/if} </h2></div>
+            <div style="float: left; margin-left: 10px; margin-top: 10px;">
+                <h2>{t}Images Manager{/t}:: {if $action eq 'search'} {t}Search{/t} {elseif $action eq 'searchResult'} {t}Search result{/t} {else} {t}Information{/t} {/if} </h2></div>
             <ul>
                 <li>
                     <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
@@ -104,7 +105,7 @@
 
     </div>
 
-    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" id="action" name="action" value="searchResults" />
     <input type="hidden" name="id" id="id" value="{$id}" />
 </form>
 

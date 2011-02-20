@@ -1168,6 +1168,21 @@ gettext("Opinion Manager :: Edit author");
 /* ./themes/default/tpl//mediamanager/index.tpl */
 gettext("Search");
 
+/* ./themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Image manager:: Editing \"%1\"");
+
+/* ./themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Cancel");
+
 /* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
 gettext("Title");
 
@@ -1260,6 +1275,63 @@ gettext("To:");
 
 /* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
 gettext("Search");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Resolution:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Author");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Color:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("B/N");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("B/W");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("color");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Color");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("We can't geolocalize that direction");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("+INFO:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("IPTC Data:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("No available IPTC data.");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("EXIF Data:");
+
+/* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
+gettext("No available EXIF data.");
 
 /* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
 gettext("List of images");
@@ -2109,54 +2181,6 @@ gettext("Delete privilege");
 
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("No available privileges to list here.");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("File:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Resolution:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Size:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Author");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Color:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("B/N");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("B/N");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("color");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Color");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Date:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Date:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Keywords:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("+INFO:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("IPTC Data:");
-
-/* ./themes/default/tpl//photo_data.tpl */
-gettext("EXIF Data:");
 
 /* ./themes/default/tpl//privilege.tpl */
 gettext("Privilege name");
