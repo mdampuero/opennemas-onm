@@ -1,3 +1,45 @@
+/* ./themes/default/tpl//user_group.tpl */
+gettext("New Privilege");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("New Privilege");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("New Privilege");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Group name");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Edit group");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Edit group");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Delete group");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Delete group");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("There is no groups created yet.");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Id");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Group name");
+
+/* ./themes/default/tpl//user_group.tpl */
+gettext("Grants:");
+
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("HOME");
 
@@ -307,6 +349,84 @@ gettext("Ohh, there is <strong>no cache file</strong> in the system.");
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>");
 
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("New static page");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("New static page");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Filter");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Visits");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Open in a new window");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Unpublished");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("There is no static pages.");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Page title");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Published:");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("(separated with comas)");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Keywords");
+
+/* ./themes/default/tpl//static_pages.tpl */
+gettext("Page content");
+
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Go to admin main page");
 
@@ -336,6 +456,432 @@ gettext("Your password must contain 5 characters and dont contain the word <pass
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Please check your first password and check again.");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Banner Intersticial in Frontpage (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Banner Top Right  (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Button Column 1 (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Button Column 3  (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Horizontal Separator   (650X80)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Banner Mini 1  (300X40)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Banner Mini 2 (300X40)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Button2 column3 (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Banner Intersticial - Opinion Frontpage (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Banner Top  Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Banner Column Right (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("OPINION");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("GALLERIES");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Banner type:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Status:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Type:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Type:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Permanence");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Clicks");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Viewed");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Type");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Undefined:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Clicks:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Viewed:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("\"Published\"");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("\"Unresolved\"");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("\"Edit\"");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("\"Delete\"");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("There is no advertisement stored in this section");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+gettext("Banner Intersticial - Video Frontpage (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+gettext("Banner Top Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Banner Intersticial - Opinion Inner (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Banner Top Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Banner1 Column Right (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Banner2 Column Right (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Big banner top left\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Banner top right\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Button column 1\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Button column 3\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Horizontal separator\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Mini right 1\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Mini right 2\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Button bottom right\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Big banner bottom left\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+gettext("\"Banner bottom right\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Banner Intersticial - Inner (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Big  Banner Top(I) (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Banner Top Right(I) (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Banner1 Column Right (I) (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Robapágina (650X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Banner2 Column Right(I) (300X*)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Big Banner Bottom(I) (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+gettext("Banner Bottom Right(I) (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Big Banner top left (Int.)");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Banner top right (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Banner Column right 1 (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Robapágina (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Banner Column right 2 (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Big Banner bottom left (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+gettext("\"Banner bottom right (Int.)\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Advertisement:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("\"Delete\"");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Image");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Dimensions:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Weight:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Create date:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Description");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Default image:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Tags:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Image:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Drag and drop the advertisements to select them, use the logo to use flash");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Pages:");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Banner Intersticial - Video Inner (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Banner Top Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Button Column (265x95)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+gettext("Banner Intersticial - Gallery (800X600)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+gettext("Banner Top Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Publicity\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Separate by coma");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Hide Flash events");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Periodicity:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Undefined");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Nº Clicks");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Nº Visits");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("By date");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Start time publication:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Start time publication\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("End time publication:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"End time publication\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Click number:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Click number\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Click number\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Views number");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Views number");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Timer");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Seconds before disappear\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("seconds.");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("( -1 don't disappear )");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Click number\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("URL:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Web advertisement direction\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Section");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Opinion");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Gallery");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("JavaScript with advertisement");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("\"Advertisement script\"");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Geoip code");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Test JS code");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Advertisement type");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Frontpage");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Inner article");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Video Frontpage");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Inner video");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Opinion Frontpage");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Inner opinion");
 
 /* ./themes/default/tpl//article.tpl */
 gettext("Frontpage articles");
@@ -618,6 +1164,207 @@ gettext("Opinion Manager :: New author");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Opinion Manager :: Edit author");
+
+/* ./themes/default/tpl//mediamanager/index.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("JPG images");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("GIF images");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("PNG images");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("Other formats");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("Color images");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("B/W images");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("Total Size (MB)");
+
+/* ./themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("# photos");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Image name:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Section");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("All");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Max width:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Max height:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Min weight:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Min height:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Max file size:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Min file size:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Type:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext(" - All types - ");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Others");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Color:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext(" - All types - ");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Black and white");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Color");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Author:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("From:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("To:");
+
+/* ./themes/default/tpl//mediamanager/_partials/image_search.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("List of images");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Metadata:");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Type:");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Created:");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("See data");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Zoom");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("No available images to list here");
+
+/* ./themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("No available graphics to list here");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("GLOBAL");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("PUBLICIDAD");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Images Manager");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Search result");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Information");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Search images");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Buscar");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Information");
+
+/* ./themes/default/tpl//mediamanager/search.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Image manager :: upload image to %1");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Uploding an image");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Files to upload");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Photo #0");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Invalid image: the filename name contains spaces or special chars.");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Add new image");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Add new image");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Upload files");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("How I can use this form?");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("This icon ADDS one image to the upload form");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("This icon DELETES one image from the upload form");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("The max size allowed for images is 200 kb.");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("You <strong>ONLY</strong> can upload <strong>10</strong> images at the same time");
+
+/* ./themes/default/tpl//mediamanager/list_today.tpl */
+gettext("Today images in \"%1\"");
+
+/* ./themes/default/tpl//mediamanager/list_all_in_category.tpl */
+gettext("Image manager:: Images for category \"%1\"");
 
 /* ./themes/default/tpl//login.tpl */
 gettext("Panel de Control - %1");
@@ -955,6 +1702,48 @@ gettext("Content");
 /* ./themes/default/tpl//newsstand/index.tpl */
 gettext("There is no stands");
 
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Deleted succesfulySe ha eliminado correctamente.");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Not deleted, the section is not empty.");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("No se ha podido crear, la seccion ya existe.");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Se ha vaciado correctamente.");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Available sections");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Sort sections");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Internal name");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("See in menu");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("NO MENU");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("No available sections");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("No available sections");
+
 /* ./themes/default/tpl//accessdenied.tpl */
 gettext("Access to section denied.");
 
@@ -1011,6 +1800,102 @@ gettext("Group:");
 
 /* ./themes/default/tpl//user.tpl */
 gettext("Search");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Name Surname");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Login");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Group");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Delete user");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Delete user");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("There is no users created yet.");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Login:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Password:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Re-enter password:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Session expire time:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("minutes");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Email adress:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Email adress:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Surname:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Surname:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Maiden surname:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Maiden surname:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Address:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Address:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Telephone:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Telephone:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("User group:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("User group:");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("User group manager");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Edit groups and privileges");
+
+/* ./themes/default/tpl//user.tpl */
+gettext("Sections:");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
 gettext("Advanced Search");
@@ -1117,6 +2002,87 @@ gettext("ADS");
 /* ./themes/default/tpl//link_control/link_control.tpl */
 gettext("Trash");
 
+/* ./themes/default/tpl//svn.tpl */
+gettext("Status");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Get the status of the OpenNemas system");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Status");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Status");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Update");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Update OpenNemas from the update server");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Update");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Checkout");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Fetch the lastest version of OpenNemas from update server");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Checkout");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("List");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("\"List files from repository system");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("List");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Please fill the information to connect to the update server.");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("User Name:");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Username");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Password:");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Password");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Server URL:");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Server URL");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Destination folder:");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Destination");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Download OpenNemas on your server");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Getting information from the server");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Updating OpenNemas to the lastest version");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Listing projects files");
+
+/* ./themes/default/tpl//svn.tpl */
+gettext("Acting performed:");
+
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("Priveleges manager");
 
@@ -1143,6 +2109,234 @@ gettext("Delete privilege");
 
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("No available privileges to list here.");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Resolution:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Author");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Color:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("B/N");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("B/N");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("color");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Color");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("+INFO:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("IPTC Data:");
+
+/* ./themes/default/tpl//photo_data.tpl */
+gettext("EXIF Data:");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Privilege name");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Module");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("There is no privileges added yet");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Module");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Module");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Name");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("recomended");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Description");
+
+/* ./themes/default/tpl//privilege.tpl */
+gettext("Description");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Article");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Article");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Opinion");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Opinion");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Add");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("New Add");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Upload Photo");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Upload Photo");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Frontpage manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Frontpage manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Article manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Article manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Opinion manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Opinion manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Comment manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Comment manager");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Newsletter");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("Newsletter");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("XML Import");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("XML Import");
+
+/* ./themes/default/tpl//welcome.tpl */
+gettext("unread mails");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("GLOBAL");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("File manager :: Overview");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("File manager :: Files in this category");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Upload file");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Upload file");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Files (#)");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("File manager");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Path");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Availability");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//files/list.tpl */
+gettext("There is not files available here.");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("File Manager :: Upload");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("Add a title and attach a file from the form below.");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//files/new.tpl */
+gettext("Upload");
+
+/* ./themes/default/tpl//uploader.tpl */
+gettext("File uploaded successfully");
+
+/* ./themes/default/tpl//uploader.tpl */
+gettext("File uploaded");
+
+/* ./themes/default/tpl//uploader.tpl */
+gettext("File Manager");
+
+/* ./themes/default/tpl//uploader.tpl */
+gettext("Video uploaded to Youtube.");
 
 /* ./themes/default/tpl//welcome/index.tpl */
 gettext("Welcome to %1");
