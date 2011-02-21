@@ -1,10 +1,16 @@
 <br />
 <form action="{$smarty.server.PHP_SELF}" method="get">
-<div id="nifty" style="margin:0 auto; border:1px solid #dedede; padding:5px; -moz-border-radius:5px; border:1px solid #CCCCCC;">
 
-        <table border='0' width="100%">
+    <table class="adminheading">
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+
+    <table class="adminlist" style="padding-top:20px;" >
+        <tbody >
             <tr>
-                <td style="width:200px;" align='right'> <strong>{t}Image name:{/t}</strong></td>
+                <td style="width:35%;" align='right'> <strong>{t}Image name:{/t}</strong></td>
                 <td align='left'>
                         <input type="text" id="stringSearch" name="stringSearch" size="60" value="{$smarty.request.stringSearch}" />
                     <br />
@@ -104,16 +110,19 @@
                  </td>
             </tr>
             <tr>
-                <td colspan='2' align='center'>
+                <td colspan='2' align='center' style="padding:20px 0;">
                      <input type="hidden" name="action"  id="action" value="searchResult" />
                      <input type="hidden" name="acti"  id="acti" value="searchResult" />
-                    <button onclick="javascript:enviar(this, '_self', 'searchResult', 0);">{t}Search{/t}</button>
+                    <input type="submit" value="{t}Search{/t}" />
                 </td>
             </tr>
-       </table>
+        </tbody>
+        <tfoot>
+            <tr class="pagination" >
+                <td colspan=2></td>
+            </tr>
+        </tfoot>
 
-
-</div>
-
+   </table>
     <input type="hidden" id="action" name="action" value="searchResult" />
 </form>

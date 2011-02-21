@@ -116,6 +116,10 @@ switch($action) {
 
     case 'searchResult': {
 
+        var_dump('searchResult');
+        die();
+
+
         $name=$mmc->action_searchResult();
 
         $tpl = $mmc->tpl;

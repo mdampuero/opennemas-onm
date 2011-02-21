@@ -1394,13 +1394,31 @@ gettext("Information");
 gettext("Delete");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
-gettext("Image manager :: upload image to %1");
+gettext("GLOBAL");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("ADS");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Image manager :: Upload image to \"%1\"");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Photo catalog");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Today photos");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
 gettext("Uploding an image");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
-gettext("Files to upload");
+gettext("Add new image");
+
+/* ./themes/default/tpl//mediamanager/upload.tpl */
+gettext("Remove last image");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
 gettext("Photo #0");
@@ -1410,12 +1428,6 @@ gettext("Invalid image: the filename name contains spaces or special chars.");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
 gettext("Actions");
-
-/* ./themes/default/tpl//mediamanager/upload.tpl */
-gettext("Add new image");
-
-/* ./themes/default/tpl//mediamanager/upload.tpl */
-gettext("Add new image");
 
 /* ./themes/default/tpl//mediamanager/upload.tpl */
 gettext("Upload files");
@@ -1821,6 +1833,207 @@ gettext("No available sections");
 
 /* ./themes/default/tpl//accessdenied.tpl */
 gettext("Access to section denied.");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("'Must have 4 favorites albuns to frontpage.<br />  '");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("WIDGET HOME");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Albums");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Created");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Viewed");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Favorite");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Published\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Published\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Pending");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Pending");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Take out from frontpage\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Put in frontpage\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Edit\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("No album saved");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("New Album");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Agency:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Available:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"description\" ");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Separate by coma");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Edit Album");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Available:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"description\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("%1");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Metadata\"");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Separated by coma");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Album images (Double click to select and cut images)");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("\"Show image\"");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Drag and drop images to select");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Image");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("\"Delete\"");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("\"Delete\"");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Image:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Dimensions:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Weight:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Created:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Default image:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Tags:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Image");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Foot image:");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("Cut the image that is in frontpage view.(300x250 px)");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("\"test image\"");
+
+/* ./themes/default/tpl//album/album_images.tpl */
+gettext("\"Frontpage image\"");
 
 /* ./themes/default/tpl//trash/trash.tpl */
 gettext("Articles");
