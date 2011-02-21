@@ -20,19 +20,19 @@
 </ul>
 
 {* Pestaña de edición ******************************************************** *}
-<div class="panel" id="edicion-contenido">
-    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="96%">
+<div class="panel" id="edicion-contenido" style="background:#fff;">
+    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
     <tbody>
     <tr>
-        <td valign="top" align="right" style="padding:4px;" width="10%">
+        <td valign="top" align="right" style="padding:4px;">
             <label for="title">{t}Frontpage title:{/t}</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+        <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input type="text" id="title" name="title" title="Título de la noticia en portada"
-                value="" class="required" size="100" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
-				   onkeyup="countWords(this,document.getElementById('counter_title'))" tabindex="1" width="100%"/>
+                value="" class="required" style="width:95%" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
+				   onkeyup="countWords(this,document.getElementById('counter_title'))" tabindex="1"/>
         </td>
-		<td valign="top" align="right" style="padding:4px;" rowspan="6" width="40%">
+		<td valign="top" align="right" style="padding:4px;" rowspan="6">
             <div class="utilities-conf">
 				<table style="width:99%;">
 					<tr>
@@ -148,12 +148,12 @@
         </td>
     </tr>
     <tr>
-         <td valign="top" align="right" style="padding:4px;" width="10%">
+         <td valign="top" align="right" style="padding:4px;" >
             <label for="title">{t}Inner title:{/t}</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
+        <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
-                value="" class="required" size="100"  maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
+                value="" class="required" style="width:95%"  maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
 
 
             {* input#title.onblur() cando title perda o foco copiar en título interior *}
@@ -174,11 +174,11 @@
         </td>
     </tr>
     <tr>
-        <td valign="top" align="right" style="padding:4px;" width="30%">
+        <td valign="top" align="right" style="padding:4px;" >
             <label for="metadata">{t}Keywords{/t}</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" width="70%">
-            <input type="text" id="metadata" name="metadata" size="70" title="Metadatos" value="" tabindex="1"/>
+        <td style="padding:4px;" nowrap="nowrap" >
+            <input type="text" id="metadata" name="metadata" style="width:70%" title="Metadatos" value="" tabindex="1"/>
             <sub>{t}Separated by commas{/t}</sub>
         </td>
     </tr>
@@ -187,8 +187,8 @@
             <label for="subtitle">{t}Pretitle{/t}</label>
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
-            <input type="text" id="subtitle" name="subtitle" title="antetítulo"
-                value="" class="required" size="100" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
+            <input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:95%"
+                value="" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
         </td>
     </tr>
 
@@ -198,7 +198,7 @@
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
             <input type="text" id="agency" name="agency" title="{t}Agency{/t}"
-                value="{t}Agency{/t}" class="required" size="100" tabindex="3"
+                value="{t}Agency{/t}" class="required" style="width:95%" tabindex="3"
 				onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);" />
         </td>
     </tr>
@@ -210,7 +210,7 @@
                 <img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" /></a>
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap">
-            <textarea name="summary" id="summary" title="Resumen de la noticia" style="width:100%; height:8em;"
+            <textarea name="summary" id="summary" title="Resumen de la noticia" style="width:75%; height:8em;"
                   onChange="countWords(this,document.getElementById('counter_summary'))"
                   onkeyup="countWords(this,document.getElementById('counter_summary'))" tabindex="4"></textarea>
         </td>
@@ -220,25 +220,23 @@
             <label for="body">{t}Body{/t}</label>
         </td>
         <td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
-            <textarea name="body" id="body" title="Cuerpo de la noticia" style="width:100%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));" tabindex="5"></textarea>
+            <textarea name="body" id="body" title="Cuerpo de la noticia" style="width:98%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));" tabindex="5"></textarea>
         </td>
     </tr>
     <tr>
         <td></td>
-        <td valign="top" align="center" colspan="2" >
-            <div id="article_images" style="display:inline;">
+        <td valign="top" align="left" colspan="2" >
+            <div id="article_images" style="width:98%">
                 {include  file="article_images.tpl"}
             </div>
         </td>
     </tr>
-
-    <tr>
-        <td></td>
-        <td valign="top" align="left" colspan="2">
-
-        </td>
-    </tr>
-    </tbody>
+	</tbody>
+	<tfoot>
+		<tr class="pagination">
+			<td></td>
+		</tr>
+	</tfoot>
     </table>
 </div>
 
@@ -247,20 +245,20 @@
     <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
     <tbody>
     <tr>
-        <td valign="top" align="right" style="padding:4px;" width="30%">
+        <td valign="top" align="right" style="padding:4px;" >
             <label for="starttime">Fecha inicio publicaci&oacute;n:</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" width="70%">
+        <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
                 <input type="text" id="starttime" name="starttime" size="18"
                     title="Fecha inicio publicaci&oacute;n" value="" tabindex="-1" /></div>
         </td>
     </tr>
     <tr>
-        <td valign="top" align="right" style="padding:4px;" width="30%">
+        <td valign="top" align="right" style="padding:4px;" >
             <label for="endtime">Fecha fin publicaci&oacute;n:</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" width="70%">
+        <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
                 <input type="text" id="endtime" name="endtime" size="18"
                     title="Fecha fin publicaci&oacute;n" value="" tabindex="-1" /></div>
@@ -269,10 +267,10 @@
         </td>
     </tr>
     <tr>
-        <td valign="top" align="right" style="padding:4px;" width="30%">
+        <td valign="top" align="right" style="padding:4px;" >
             <label for="description">Descripci&oacute;n:</label>
         </td>
-        <td style="padding:4px;" nowrap="nowrap" width="70%">
+        <td style="padding:4px;" nowrap="nowrap" >
             <textarea name="description" id="description"
                 title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1"></textarea>
         </td>
@@ -283,11 +281,11 @@
 </div>
 
 <div class="panel" id="comments" style="width:95%">
-	<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
+	<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" >
 	<tbody>
 	<tr>
-		<th class="title" width="50%">T&iacute;tulo</th>
-		<th class="title" width="20%">Autor</th>
+		<th class="title" >T&iacute;tulo</th>
+		<th class="title" >Autor</th>
 		<th align="right">Publicar</th>
 		<th align="right">Eliminar</th>
 	</tr>
@@ -306,21 +304,22 @@
 
 
 <div class="panel" id="elementos-relacionados" style="width:95%">
-    <br />
-    Listado contenidos relacionados en Portada:  <br />
-    <div style="position:relative;" id="scroll-container2">
-        <ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
-    </div>
-    <br>
-    Listado contenidos relacionados en Interior:  <br />
-    <div style="position:relative;" id="scroll-container2int">
-        <ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
-    </div>
-    <br /><br />
+    <div style="padding:10px; width:90% margin:0 auto;">
+		Listado contenidos relacionados en Portada:  <br />
+		<div style="position:relative;" id="scroll-container2">
+			<ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
+		</div>
+		<br>
+		Listado contenidos relacionados en Interior:  <br />
+		<div style="position:relative;" id="scroll-container2int">
+			<ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
+		</div>
+		<br /><br />
 
-    <div class="p">
-        <input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
-        <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
-    </div>
+		<div class="p">
+			<input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
+			<input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+		</div>
+	</div>
 </div>
 <input type="hidden" name="available"></input>

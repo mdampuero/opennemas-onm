@@ -1,11 +1,11 @@
-<table align="center" cellpadding="15" cellspacing="0" style="border:1px solid #ccc;" width=100%>
+<table align="center" style="border:1px solid #ccc;">
 	<tr>
 		<td colspan=2><h2>{t}Multimedia associated to this article:{/t}</h2></td>
 	</tr>
 	<tr>
 		<td valign=top>
 			<div id="img_portada" style="display:block; width:100%;">
-				<table border='0' style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
+				<table border='0' style="display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
 					<tr>
 						<td style="width:50%">
 							<h2>{t}Frontpage image:{/t}</h2>
@@ -139,12 +139,12 @@
 		<td valign="top" align="left" rowspan="2" style="margin-right:10px;">
 
 			<div onclick="new Effect.toggle($('photos_container'),'blind')"
-				style="cursor:pointer; width:100%; border:1px double #ccc; background-color:#EEE; padding:7px;">
+				style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
 				<strong>{t}Available images{/t}</strong>
 			</div>
 			<div id="photos_container" class="photos"
-				 style="width:100%; border:1px solid #ccc;  padding:7px;">
-				<table width="100%">
+				 style="border:1px solid #ccc;  padding:7px;">
+				<table>
 					<tr>
 						<td align="left">
 							<div class="cajaBusqueda">
@@ -166,7 +166,7 @@
 						</td>
 					</tr>
 				</table>
-				<div id="photos" class="photos" style="width:100%; height:460px; border:0px double #333333; margin:5px; overflow:auto;">
+				<div id="photos" class="photos" style="height:460px; border:0px double #333333; margin:5px; overflow:auto;">
 					<ul id='thelist'  class="gallery_list clearfix" style="width:100%; margin:0; padding:0">
 					   {assign var=num value='1'}
 					   {section name=n loop=$photos}
@@ -203,10 +203,10 @@
 
 
 			<div  onclick="new Effect.toggle($('videos-container'),'blind')"
-				  style="cursor:pointer; width:100%; border:1px double #ccc; background-color:#EEE; padding:7px;">
+				  style="cursor:pointer;  border:1px double #ccc; background-color:#EEE; padding:7px;">
 				<a style="cursor:pointer;" onclick="new Effect.toggle($('videos-container'),'blind')"> <strong>Videos</strong> </a>
 			</div>
-			<div id="videos-container" class="photos" style="width:100%; border:1px solid #ccc;  padding:7px;">
+			<div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
 			   <table>
 					<tr>
 						<td>
