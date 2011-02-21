@@ -555,7 +555,7 @@ class User
             }
             
             if(isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`, `firstname`, `lastname`) AGAINST ("' . $filter['name'] . '")';
+                $parts[] = 'MATCH(`name`, `firstname`, `lastname`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
             }
             
             if(isset($filter['group']) && intval($filter['group'])>0) {
