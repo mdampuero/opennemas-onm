@@ -25,20 +25,21 @@ Deny from all
     RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+\-[a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
     RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
 
-    #Opinion Section
+    #Opinion Frontpage
     RewriteRule ^seccion/opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&pageop=$1 [L,NC]
     RewriteRule ^seccion/opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
 
-    #Opinion Frontpage
-    RewriteRule ^opinions_autor/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_op_author&author_id=$1 [L,NC]
-    RewriteRule ^opinions_autor/([0-9]+)/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_op_authors&author_id=$1&page=$2 [L,NC]
+    #Opinion Autor index
+    RewriteRule ^opinion/autor/([0-9]+)?/(.*)$ controllers/opinion_index.php?category_name=opinion&action=list_op_author&author_id=$1 [L,NC]
+    RewriteRule ^opinion/autor/([0-9]+)?/([0-9]+)/(.*)$ controllers/opinion_index.php?category_name=opinion&action=list_op_authors&author_id=$1&page=$2 [L,NC]
 
     #Opinion Inner
     RewriteRule ^opinions/captcha/([0-9]+).jpg$ controllers/opinion_inner.php?action=captcha&category_name=opinion [L,NC]
-    RewriteRule ^opinions/(.*)/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$2&category_name=opinion&action=read&t=$1 [L,NC]
+    RewriteRule ^opinion/(.*)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
 
 
-    #Portada de autores  RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ controllers/opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
+    #Portada de autores
+    RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ controllers/opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
     #RewriteRule ^opinions/listado_xornalistas/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_authors&page=$1 [L,NC]
 
     #articulos print

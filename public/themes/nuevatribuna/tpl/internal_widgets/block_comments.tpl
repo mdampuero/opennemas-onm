@@ -4,7 +4,7 @@
 *}
 {insert name="numComments" id=$contentId assign="numComments" nocache}
 
-<div id="comentarios" class="article-comments clearfix">
+<div id="comentarios" class="article-comments clearfix span-16 last">
     <div class="title-comments">
         {if $numComments gt 0}
         <h3><span>{$numComments} Comentarios<span></h3>

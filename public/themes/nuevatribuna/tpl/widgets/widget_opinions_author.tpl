@@ -1,0 +1,26 @@
+ {*
+    OpenNeMas project
+
+    @theme      Lucidity
+*}
+<div class='widget-last-opinions-with-face span-8 last clearfix'>
+    <div>
+        {if $other_opinions}
+            {if $opinion->type_opinion eq 1}
+                <div class='title'>Otros art&iacute;culos de la Editorial</div>
+            {elseif $opinion->type_opinion eq 2}
+                <div class='title'>Otros art&iacute;culos del Director</div>
+            {else}
+                <div class='title'>Otros art&iacute;culos de {$opinion->name|clearslash}</div>
+            {/if}
+            <div class='content'>
+                 <ul>
+                        {section name=a loop=$other_opinions}
+                             <li><a href="{$other_opinions[a]->permalink}">{$other_opinions[a]->title|clearslash}</a></li>
+                        {/section}
+                    </ul>
+
+            </div>
+        {/if}
+    </div>
+</div>

@@ -13,7 +13,7 @@
 		margin:2px auto;
 }
 
-.ad { background:#e6e6e6 url(../../images/ads/put_your_ads_here.png) center center no-repeat; display:block; }
+.ad { background:url(../../images/ads/put_your_ads_here.png) center center no-repeat; display:block; }
 .ad_vertical_marker { background:url(../../images/ads/ad_marker_vertical.png) 1px center no-repeat; padding-left:10px; display:block !important;}
 .ad_horizontal_marker{ background:url(../../images/ads/ad_marker_horizontal.png) center 2px no-repeat; padding-top:13px; display:block !important; }
 

@@ -38,11 +38,9 @@ if(isset($_REQUEST['action']) ) {
 
             $opinion = new Opinion( $_REQUEST['opinion_id'] );
 
-          //  $content->setNumViews();
-             Content::setNumViews($opinionID);
+            Content::setNumViews($opinionID);
 
-            //$ccm = new ContentCategoryManager();
-             $ccm = ContentCategoryManager::get_instance();
+            $ccm = ContentCategoryManager::get_instance();
             require_once ("index_sections.php");
 
             /**
@@ -66,11 +64,12 @@ if(isset($_REQUEST['action']) ) {
                     $tpl->assign('sendform_url', '/opinion_inner.php?action=sendform&opinion_id=' . $opinionID );
                     // } Sacar broza
 
-                    require_once('widget_headlines_past.php');
 
-                    /**
-                     * Fetch rating for this opinion
-                    */
+
+                    $opinion->author_name_slug = String_Utils::get_title($opinion->name);
+
+
+                    // Fetch rating for this opinion
                     $rating = new Rating($opinionID);
                     $tpl->assign('rating_bar', $rating->render('article','vote'));
 
@@ -134,10 +133,17 @@ if(isset($_REQUEST['action']) ) {
         } break;
 
         case 'print': {
+
             // Article
             $opinion = new Opinion($_REQUEST['opinion_id']);
+            $opinion->category_name = 'opinion';
+            $opinion->author_name_slug = String_Utils::get_title($opinion->name);
 
             $author = new Author($opinion->fk_author);
+
+
+
+
             $tpl->assign('author', $author->name);
 
             $tpl->assign('opinion', $opinion);
@@ -145,10 +151,12 @@ if(isset($_REQUEST['action']) ) {
             $tpl->caching = 0;
             $tpl->display('opinion/opinion_printer.tpl');
             exit(0);
+
         } break;
 
 
         case 'sendform': {
+
             require_once('session_bootstrap.php');
             $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
@@ -160,9 +168,11 @@ if(isset($_REQUEST['action']) ) {
             $tpl->caching = 0;
             $tpl->display('opinion/opinion_sendform.tpl'); // Don't disturb cache
             exit(0);
+
         } break;
 
         case 'send': {
+
             require_once('session_bootstrap.php');
 
             // Check if magic_quotes is enabled and clear globals arrays

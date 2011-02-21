@@ -9,7 +9,7 @@
         {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
             {insert name="rating" id=$contentId page="video" type="vote"} <span class="num-comments">- {insert name="numComments" id=$contentId}  Comentarios</span>
         {elseif preg_match('/opinion(.*)\.php/',$smarty.server.SCRIPT_NAME)}
-            {insert name="rating" id=$opinion->id page="video" type="vote"} <span class="num-comments">- {insert name="numComments" id=$opinion->id}  Comentarios</span>
+            {insert name="rating" id=$opinion->id page="article" type="vote"} <span class="num-comments">- {insert name="numComments" id=$opinion->id}  Comentarios</span>
         {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
             {insert name="rating" id=$poll->id page="poll" type="vote"} <span class="num-comments">- {insert name="numComments" id=$poll->id}  Comentarios</span>
         {else}

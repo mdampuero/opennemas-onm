@@ -209,14 +209,14 @@
 					{elseif ($caches[c].template == 'opinion_author_index')}
                     <img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
                     <a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
-                        <strong>{t}Opinion Index:{/t}</strong> author id {$caches[c].resource}
+                        <strong>{t}Opinion Author Index:{/t}</strong> {t 1=$caches[c].resource}Author ID %1{/t}
 					</a>
 
 					{* RSS *}
 					{elseif $resource eq "RSS"}
 			   	    <img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
 
-                    <a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/"{/if} target="_blank">
+                    <a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/"{/if}" target="_blank">
 						<strong>{t}RSS:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
 					</a>
 
