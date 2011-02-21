@@ -77,7 +77,7 @@
 <thead>
 <tr>
     <th></th>
-    <th class="title">{t}Type:{/t}</th>
+    <th class="title">{t}Type{/t}</th>
     <th>{t}Title{/t}</th>
     <th align="center">{t}Permanence{/t}</th>
     <th align="center">{t}Clicks{/t}</th>
@@ -111,7 +111,7 @@
 		{if $advertisements[c]->type_medida == 'CLIC'} {t}Clicks:{/t} {$advertisements[c]->num_clic} {/if}
 		{if $advertisements[c]->type_medida == 'VIEW'} {t}Viewed:{/t} {$advertisements[c]->num_view} {/if}
 		{if $advertisements[c]->type_medida == 'DATE'}
-            Fecha: {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
+            {t}Date:{/t} {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
         {/if}
 	</td>
 
@@ -126,29 +126,29 @@
             <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
                  alt="Javascript" title="Javascript" />
         {else}
-            <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="Multimedia"
-                 title="Media element (flash, image, gif)" />
+            <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="{t}Media{/t}"
+                 title="{t}Media element (flash, image, gif){/t}" />
         {/if}
     </td>
 	<td style="text-align:center;width:70px;" align="center">
 		{if $advertisements[c]->available == 1}
 			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
                 title={t}"Published"{/t}>
-				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
+				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
 		{else}
 			<a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
                 title={t}"Unresolved"{/t}>
-				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
+				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}" /></a>
 		{/if}
 	</td>
 
 	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title={t}"Edit"{/t}>
+		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title="{t}Edit{/t}">
 			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 	</td>
 
 	<td style="text-align:center;width:70px;" align="center">
-		<a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title={t}"Delete"{/t}>
+		<a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
 			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 	</td>
 

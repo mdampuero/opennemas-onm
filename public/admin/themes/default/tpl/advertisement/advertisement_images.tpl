@@ -22,8 +22,8 @@
                         </td>
                         <td style="text-align:right;">
                             <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img');">
-	                 		    <img style="cursor:pointer;" src="{$params.IMAGE_DIR}remove_image.png" id="remove_img" alt="Eliminar" title={t}"Delete"{/t} border="0" align="absmiddle" /> </a>
-                            <input type="hidden" id="input_img" name="img" title="Imagen" value="{$advertisement->img}" size="70" />
+	                 		    <img style="cursor:pointer;" src="{$params.IMAGE_DIR}remove_image.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
+                            <input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70" />
                         </td>
 					</tr>
                     <tr>
@@ -41,9 +41,9 @@
                         </td>
                         <td nowrap="nowrap" colspan="2">
 						    <div id="informa" style="display: inline; width:380px; height:30px;">
-								<b>Archivo: {$photo1->name}</b> <br /><b>Dimensiones:</b> {$photo1->width} x {$photo1->height} (px)<br />
-								<b>Peso:</b> {$photo1->size} Kb<br /><b>Fecha de creaci&oacute;n:</b> {$photo1->created}<br />
-								<b>Descripci&oacute;n:</b> {$photo1->description} <br /><b>Tags:</b> {$photo1->metadata}<br />
+								<b>{t}File:{/t} {$photo1->name}</b> <br /><b>{t}Dimensions:{/t}</b> {$photo1->width} x {$photo1->height} (px)<br />
+								<b>{t}Weight:{/t}</b> {$photo1->size} Kb<br /><b>{t}Created:{/t}</b> {$photo1->created}<br />
+								<b>{t}Description:{/t}</b> {$photo1->description} <br /><b>{t}Tags:{/t}</b> {$photo1->metadata}<br />
 							</div>
 							<div id="noimag" style="display: inline; width:380px; height:30px;"></div>
                             <div id="noinfor" style="display: none; width:100%;  height:30px;"></div>
@@ -54,10 +54,10 @@
 		    		<table border="0" width="96%">
 					<tr>
                         <td>
-                            <h2 style="color:#2f6d9d;">Anuncio Publicitario:</h2>
+                            <h2 style="color:#2f6d9d;">{t}Advertisement:{/t}</h2>
                         </td>
 						<td>
-                            <input type="hidden" id="input_img" name="img" title={t}Image{/t} value="{$advertisement->img}" size="70"/>
+                            <input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70"/>
                         </td>
 					</tr>
                     <tr>
@@ -69,7 +69,7 @@
                         <td nowrap="nowrap" colspan="2">
 						    <div id="informa" style="display: inline; width:380px; height:30px;">
 									<b>{t}File:{/t} default_img.jpg</b> <br /><b>{t}Dimensions:{/t}</b> 300 x 208 (px)<br />
-									<b>{t}Weight:{/t}</b> 4.48 Kb<br /><b>{t}Create date:{/t}</b> 11/06/2008<br />
+									<b>{t}Weight:{/t}</b> 4.48 Kb<br /><b>{t}Create:{/t}</b> 11/06/2008<br />
 									<b>{t}Description{/t}</b> {t}Default image:{/t}<br /><b>{t}Tags:{/t}</b>{t}Image:{/t}<br />
 							</div>
 							<div id="noimag" style="display: inline; width:380px; height:30px;"></div>

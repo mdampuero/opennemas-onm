@@ -32,27 +32,27 @@
     <!-- #$-:Please do not edit lines starting with "#$" -->
     <!-- #$VERSION:2.3 -->
     <!-- #$AUTHOR:sandra -->
-    <area shape="rect" coords="1,1,176,26" alt="Big banner superior izquierdo" title={t}"Big banner top left"{/t}
+    <area shape="rect" coords="1,1,176,26" alt="Big banner superior izquierdo" title="{t}Big banner top left{/t}"
           href="javascript:adPositionPortada.selectPosition(1);" />
-    <area shape="rect" coords="177,1,239,26" alt="Banner superior derecho" title={t}"Banner top right"{/t}
+    <area shape="rect" coords="177,1,239,26" alt="Banner superior derecho" title="{t}Banner top right{/t}"
           href="javascript:adPositionPortada.selectPosition(2);" />
-    <area shape="rect" coords="3,277,81,339" alt="Botón columna 1" title={t}"Button column 1"{/t}
+    <area shape="rect" coords="3,277,81,339" alt="Botón columna 1" title="{t}Button column 1{/t}"
           href="javascript:adPositionPortada.selectPosition(3);" />
-    <area shape="rect" coords="160,346,237,410" alt="Botón columna 3" title={t}"Button column 3"{/t}
+    <area shape="rect" coords="160,346,237,410" alt="Botón columna 3" title="{t}Button column 3{/t}"
           href="javascript:adPositionPortada.selectPosition(4);" />
 
-    <area shape="rect" coords="3,553,158,575" alt="Separador horizontal" title={t}"Horizontal separator"{/t}
+    <area shape="rect" coords="3,553,158,575" alt="Separador horizontal" title="{t}Horizontal separator{/t}"
           href="javascript:adPositionPortada.selectPosition(5);" />
-    <area shape="rect" coords="159,553,233,566" alt="Mini derecho 1" title={t}"Mini right 1"{/t}
+    <area shape="rect" coords="159,553,233,566" alt="Mini derecho 1" title="{t}Mini right 1{/t}"
           href="javascript:adPositionPortada.selectPosition(6);" />
-    <area shape="rect" coords="159,566,233,578" alt="Mini derecho 2" title={t}"Mini right 2"{/t}
+    <area shape="rect" coords="159,566,233,578" alt="Mini derecho 2" title="{t}Mini right 2{/t}"
           href="javascript:adPositionPortada.selectPosition(7);" />
 
-    <area shape="rect" coords="159,753,237,812" alt="Botón inferior derecho" title={t}"Button bottom right"{/t}
+    <area shape="rect" coords="159,753,237,812" alt="Botón inferior derecho" title="{t}Button bottom right{/t}"
           href="javascript:adPositionPortada.selectPosition(8);" />
     <area shape="rect" coords="1,826,176,849" alt="Big banner inferior izquierdo"
-        title={t}"Big banner bottom left"{/t} href="javascript:adPositionPortada.selectPosition(9);" />
-    <area shape="rect" coords="177,826,239,849" alt="Banner inferior derecho" title={t}"Banner bottom right"{/t}
+        title="{t}Big banner bottom left{/t}" href="javascript:adPositionPortada.selectPosition(9);" />
+    <area shape="rect" coords="177,826,239,849" alt="Banner inferior derecho" title="{t}Banner bottom right{/t}"
           href="javascript:adPositionPortada.selectPosition(10);" />
 
 </map>

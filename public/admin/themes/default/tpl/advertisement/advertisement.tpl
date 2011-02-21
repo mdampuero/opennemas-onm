@@ -37,7 +37,7 @@ function testScript(frm)  {
 		<label for="title">{t}Name:{/t}</label>
 	</td>
 	<td valign="top" style="height: 20px;" nowrap="nowrap" width="70%">
-		<input type="text" id="title" name="title" title={t}"Publicity"{/t}
+		<input type="text" id="title" name="title" title="{t}Publicity{/t}"
 			size="80" value="{$advertisement->title|clearslash|escape:"html"}" class="required" onBlur="javascript:get_metadata(this.value);"/>
 		{* <input type="hidden" id="category" name="category" title="Publicidad" value="advertisement" /> *}
 	</td>
@@ -48,11 +48,11 @@ function testScript(frm)  {
         <div style="background-color: #F5F5F5; padding: 18px 9px; width: 400px;">
             <table width="100%" border="0">
                 <tr>
-                    <td valign="top" align="right"><label for="available">Publicado:</label></td>
+                    <td valign="top" align="right"><label for="available">{t}Published:{/t}</label></td>
                     <td>
                         <select name="available" id="available">
-                            <option value="1" {if $advertisement->available == 1}selected="selected"{/if}>Si</option>
-                            <option value="0" {if $advertisement->available == 0}selected="selected"{/if}>No</option>
+                            <option value="1" {if $advertisement->available == 1}selected="selected"{/if}>{t}Yes{/t}</option>
+                            <option value="0" {if $advertisement->available == 0}selected="selected"{/if}>{t}No{/t}</option>
                         </select>
                     </td>
                 </tr>
@@ -64,7 +64,7 @@ function testScript(frm)  {
                     </td>
                     <td>
                         <textarea id="metadata" name="metadata" cols="20" rows="2" style="width: 100%;"
-                           title="Metadatos" value="">{$advertisement->metadata|strip}</textarea>
+                           title="{t}Metadata{/t}" value="">{$advertisement->metadata|strip}</textarea>
                     </td>
                 </tr>
 
@@ -161,11 +161,11 @@ function testScript(frm)  {
                                         <label for="title">{t}Views number{/t}</label>
                                     </td>
                                     <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                        <input type="text" id="num_view" name="num_view" title={t}Views number{/t}
+                                        <input type="text" id="num_view" name="num_view" title="{t}Views number{/t}"
                                             value="{$advertisement->num_view}" />
                                         {if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'VIEW'}
-                                                Actuales: {$advertisement->views}
+                                                {t}Currents:{/t} {$advertisement->views}
                                             {/if}
                                         {/if}
                                     </td>
@@ -189,7 +189,7 @@ function testScript(frm)  {
                             <td style="padding:4px;" nowrap="nowrap" width="60%">
                                 <input type="text" id="timeout" name="timeout" size="2" title={t}"Seconds before disappear"{/t}
                                     value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
-                                {t}seconds.{/t} <sub>{t}( -1 don't disappear ){/t}</sub>
+                                {t}seconds.{/t} <sub>( -1 {t}don't disappear{/t} )</sub>
                             </td>
                         </tr>
                         </table>
@@ -203,7 +203,7 @@ function testScript(frm)  {
         <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
 
         {if $smarty.request.action eq "read"}
-            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Click number"{/t}
+            <input type="hidden" id="num_clic_count" name="num_clic_count" title="{t}Click number{/t}"
                 value="{$advertisement->num_clic_count}" />
         {/if}
 
@@ -219,7 +219,7 @@ function testScript(frm)  {
 	</td>
 	<td valign="top" style="height:20px;padding:4px;" nowrap="nowrap" width="70%">
         <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">
-            <input type="text" id="url" name="url" class="validate-url" title={t}"Web advertisement direction"{/t}
+            <input type="text" id="url" name="url" class="validate-url" title="{t}Web advertisement direction{/t}"
                 size="80" value="{$advertisement->url|default:"http://"}" />
         </div>
 	</td>
@@ -263,7 +263,7 @@ function testScript(frm)  {
 <tr>
     <td valign="top" colspan="2">
         <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if}; text-align: right;">
-            <textarea name="script" id="script" class="validate-script" title={t}"Advertisement script"{/t} style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
+            <textarea name="script" id="script" class="validate-script" title="{t}Advertisement script{/t}" style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
             <br />
 
             <label>{t}Geoip code{/t}
@@ -297,7 +297,7 @@ function testScript(frm)  {
             <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
             <li><a href="#publi-opinion">{t}Opinion Frontpage{/t}</a></li>
             <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
-            <li><a href="#publi-gallery">Gallery</a></li>
+            <li><a href="#publi-gallery">{t}Gallery{/t}</a></li>
         </ul>
 
         <div id="publi-portada" class="panel-ads">
@@ -469,7 +469,7 @@ if($('starttime')) {
 
         <div align="right" style="margin: 10px 10px;">
             <a href="#" style="color: #666; font-size: large;"
-                onclick="window.close();" title="Cerrar ventana">[Cerrar]</a>
+                onclick="window.close();" title="{t}Close window{/t}">[{t}Close{/t}]</a>
         </div>
     {/if}
 
