@@ -21,16 +21,16 @@
             <script type="text/javascript">
                 // <![CDATA[
                 {if !$home}
-            
-                    {literal}           
-                            Event.observe($('link_{/literal}{$ca}{literal}'), 'click', function(event) { 
+
+                    {literal}
+                            Event.observe($('link_{/literal}{$ca}{literal}'), 'click', function(event) {
                                 reload_div_menu({/literal}{$ca}{literal});
                                 get_frontpage_articles({/literal}{$ca}{literal});
                                 change_style_link('link_{/literal}{$ca}{literal}');
-                            });                           
+                            });
                     {/literal}
-                
-                {/if}                
+
+                {/if}
                 {literal}
                         var e;
                         Event.observe($('link_{/literal}{$ca}{literal}'), 'mouseover', function(event) {
@@ -38,7 +38,7 @@
                            $('menu_subcats').setOpacity(1);
                            new Effect.Opacity('menu_subcats', {from: 0.0, to: 1.0, duration: 0.5});
                            show_subcat('{/literal}{$ca}','{$home|urlencode}{literal}');
-                         
+
                         });
                          Event.observe($('link_{/literal}{$ca}{literal}'), 'mouseout', function(event) {
                          e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');",4000);
@@ -48,7 +48,7 @@
                 {/literal}
                 // ]]>
             </script>
-            
+
         {/acl}
         {* /if *}        
     {/section}
