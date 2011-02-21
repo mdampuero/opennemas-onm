@@ -1,10 +1,11 @@
 {* Botonera articulos crear/editar -------------------------------------------- *}
 {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "new")}
 <div id="menu-acciones-admin" class="clearfix">
+	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Article manager :: Creating new article{/t}</h2></div>
 	<ul>
 		<li>
-			<a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-				<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Preview{/t}
+			<a href="{$smarty.server.PHP_SELF}?action={if isset($_SESSION['desde'])}{$_SESSION['desde']}{else}list_pendientes{/if}&category={$_REQUEST['category']}&page={$_GET['page']}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+				<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
 			</a>
 		</li>
 	<li>
@@ -19,7 +20,7 @@
 	</li>
 
 	<li>
-		<a href="{$article->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
+		<a href="{$article->permalink}" target="_blank" accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
 		<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
 		</li>
 	</ul>
@@ -91,7 +92,7 @@
 {* Botonera articles -------------------------------------------- *}
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	<div id="menu-acciones-admin" class="clearfix">
-	<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
@@ -150,23 +151,23 @@
 		<ul>
 			 <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />{t}Delete all{/t}
                 </a>
             </li>
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />Eliminar
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             {if $category!=20}
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />Publicar
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />{t}Publish{/t}
                 </a>
             </li>
              <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdirectly_frontpage', 1);" onmouseover="return escape('<u>P</u>ublicar directamente en portada');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_direct.gif" alt="publicar en portada directamente"><br />Publicar a portada
+                    <img border="0" src="{$params.IMAGE_DIR}publish_direct.gif" alt="publicar en portada directamente"><br />{t}Publish to frontpage{/t}
                 </a>
             </li>
             {/if}
@@ -176,13 +177,13 @@
                 </button>
             </li>
             <li>
-                <a  onclick="enviar(this, '_self', 'new', 0);" class="admin_add" onmouseover="return escape('<u>N</u>ueva noticia');">
-                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" alt="Nuevo"><br />Nueva noticia
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" alt="Nuevo"><br />{t}New article{/t}
                 </a>
             </li>
             <li>
                 <a href="importXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
-                    <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />Importar XML
+                    <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />{t}Import XML{/t}
                 </a>
             </li>
 		</ul>

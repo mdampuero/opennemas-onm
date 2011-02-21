@@ -169,6 +169,48 @@ gettext("Published");
 /* ./themes/default/tpl//opinion/opinion_list.tpl */
 gettext("Actions");
 
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Multimedia associated to this article:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Frontpage image:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Weight:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Weight:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Inner video:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Available images");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Search images by title...");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Search video by title...");
+
 /* ./themes/default/tpl//frontpage/content_type_row/widget.tpl */
 gettext("Edit");
 
@@ -926,6 +968,9 @@ gettext("Replacement value");
 gettext("Actions");
 
 /* ./themes/default/tpl//botonera_up.tpl */
+gettext("Article manager :: Creating new article");
+
+/* ./themes/default/tpl//botonera_up.tpl */
 gettext("Cancel");
 
 /* ./themes/default/tpl//botonera_up.tpl */
@@ -938,7 +983,7 @@ gettext("Preview");
 gettext("Cancel");
 
 /* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
+gettext("Cancel");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Save and continue");
@@ -1131,6 +1176,24 @@ gettext("Clean cache");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Clean cache");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete all");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Publish to frontpage");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New article");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Import XML");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Opinion Manager :: Author list");
@@ -2397,6 +2460,96 @@ gettext("Delete privilege");
 
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("No available privileges to list here.");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Frontpage title:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Section:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Desconocida");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Coments");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Disabled");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Enabled");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Available:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("(publish directly)");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Put in section frontpage:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Put in frontpage:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Frontpage title:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Inner title");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Pretitle:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Summary:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Body:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Inner title:");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Keywords");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Separated by commas");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Pretitle");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Agency");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Agency");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Agency");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Summary");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Body");
 
 /* ./themes/default/tpl//privilege.tpl */
 gettext("Privilege name");
