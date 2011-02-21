@@ -22,15 +22,15 @@
 class Uri {
 
     static public $url_configurations = array(
-    'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'opinion_author_frontpage'   =>  array( 'opinions_autor/_ID_/_AUTHOR_.html' ),
-    'section'   =>  array( 'seccion/_ID_' ),
-    'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    'static_page'=> array( 'static_page/_SLUG_.html' ),
-    'ad'        =>  array( 'publicidad/_ID_.html' ),
+        'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+        'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_' ),
+        'section'   =>  array( 'seccion/_ID_' ),
+        'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+        'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+        'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+        'static_page'=> array( 'static_page/_SLUG_.html' ),
+        'ad'        =>  array( 'publicidad/_ID_.html' ),
     );
 
     public function __construct($params = array())

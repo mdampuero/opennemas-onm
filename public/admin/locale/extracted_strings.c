@@ -359,7 +359,10 @@ gettext("RSS:");
 gettext("RSS frontpage author of opinion");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion Index:");
+gettext("Opinion Author Index:");
+
+/* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Author ID %1");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Caché RSS");
@@ -572,7 +575,7 @@ gettext("Status:");
 gettext("Type:");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
-gettext("Type:");
+gettext("Type");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("Title");
@@ -608,16 +611,31 @@ gettext("Clicks:");
 gettext("Viewed:");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Media");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Media element (flash, image, gif)");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
 gettext("\"Published\"");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Published");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("\"Unresolved\"");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
-gettext("\"Edit\"");
+gettext("Pending");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
-gettext("\"Delete\"");
+gettext("Edit");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("There is no advertisement stored in this section");
@@ -659,34 +677,34 @@ gettext("Big Banner Bottom (728X90)");
 gettext("Banner Bottom Right (234X90)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Big banner top left\"");
+gettext("Big banner top left");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Banner top right\"");
+gettext("Banner top right");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Button column 1\"");
+gettext("Button column 1");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Button column 3\"");
+gettext("Button column 3");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Horizontal separator\"");
+gettext("Horizontal separator");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Mini right 1\"");
+gettext("Mini right 1");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Mini right 2\"");
+gettext("Mini right 2");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Button bottom right\"");
+gettext("Button bottom right");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Big banner bottom left\"");
+gettext("Big banner bottom left");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
-gettext("\"Banner bottom right\"");
+gettext("Banner bottom right");
 
 /* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
 gettext("Banner Intersticial - Inner (800X600)");
@@ -713,31 +731,31 @@ gettext("Big Banner Bottom(I) (728X90)");
 gettext("Banner Bottom Right(I) (234X90)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Big Banner top left (Int.)");
+gettext("Big Banner top left (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Banner top right (Int.)\"");
+gettext("Banner top right (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Banner Column right 1 (Int.)\"");
+gettext("Banner Column right 1 (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Robapágina (Int.)\"");
+gettext("Robapágina (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Banner Column right 2 (Int.)\"");
+gettext("Banner Column right 2 (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Big Banner bottom left (Int.)\"");
+gettext("Big Banner bottom left (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
-gettext("\"Banner bottom right (Int.)\"");
+gettext("Banner bottom right (Int.)");
 
 /* ./themes/default/tpl//advertisement/advertisement_images.tpl */
 gettext("Advertisement:");
 
 /* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("\"Delete\"");
+gettext("Delete");
 
 /* ./themes/default/tpl//advertisement/advertisement_images.tpl */
 gettext("Image");
@@ -752,7 +770,31 @@ gettext("Dimensions:");
 gettext("Weight:");
 
 /* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Create date:");
+gettext("Created:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Tags:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Advertisement:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Image");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("File:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Dimensions:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Weight:");
+
+/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+gettext("Create:");
 
 /* ./themes/default/tpl//advertisement/advertisement_images.tpl */
 gettext("Description");
@@ -809,13 +851,25 @@ gettext("Banner Bottom Right (234X90)");
 gettext("Name:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Publicity\"");
+gettext("Publicity");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Published:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("No");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Keywords:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Separate by coma");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Metadata");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Hide Flash events");
@@ -863,6 +917,9 @@ gettext("Views number");
 gettext("Views number");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Currents:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Timer");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
@@ -872,16 +929,16 @@ gettext("\"Seconds before disappear\"");
 gettext("seconds.");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("( -1 don't disappear )");
+gettext("don't disappear");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Click number\"");
+gettext("Click number");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("URL:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Web advertisement direction\"");
+gettext("Web advertisement direction");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Section");
@@ -899,7 +956,7 @@ gettext("Gallery");
 gettext("JavaScript with advertisement");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Advertisement script\"");
+gettext("Advertisement script");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Geoip code");
@@ -927,6 +984,15 @@ gettext("Opinion Frontpage");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Inner opinion");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Gallery");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Close window");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Close");
 
 /* ./themes/default/tpl//article.tpl */
 gettext("Frontpage articles");
@@ -1896,6 +1962,27 @@ gettext("No available sections");
 
 /* ./themes/default/tpl//accessdenied.tpl */
 gettext("Access to section denied.");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Type");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Author");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Date");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//comment.tpl */
+gettext("Delete");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("'Must have 4 favorites albuns to frontpage.<br />  '");
