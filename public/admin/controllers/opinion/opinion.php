@@ -205,6 +205,8 @@ if(isset($_REQUEST['action'])) {
             $opin = new Opinion();
             $_POST['publisher'] = $_SESSION['userid'];
 
+            $alert = '';
+
             if($opin->create($_POST)) {
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
