@@ -232,26 +232,13 @@ function previewFrontpage(category) {
     frm.category.value = category;
    // frm.preview_time.value = 20;
 
-
-    new Ajax.Request('article_save_positions.php',{
-        method: 'post',
-        parameters: frm.serialize(),
-
-        onLoading: function() {
-           showMsg({'loading':['Cargando previsualización...']},'growl');
-        },
-        onComplete: function(transport) {
-            $('formulario').action.value = '';
-            myLightWindow.activateWindow({
-                        href: '/controllers/preview.php?articles='+ Object.toJSON(places) +'&category'+category,
-                        title: 'Previsualización Portada',
-                        author: ' ',
-                        type: 'external'
-                    });
-
-            hideMsgContainer('msgBox');
-        }
-    });
+	$('formulario').action.value = '';
+	myLightWindow.activateWindow({
+		href: '/controllers/preview.php?articles='+ Object.toJSON(places) +'&category'+category,
+		title: 'Previsualización Portada',
+		author: ' ',
+		type: 'external'
+	});
 
 }
 
