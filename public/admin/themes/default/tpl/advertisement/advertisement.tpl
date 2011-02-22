@@ -194,7 +194,7 @@
             <tbody>
 
                 <tr>
-                    <td>
+                    <td align="right">
                         <label for="title">{t}Name:{/t}</label>
                     </td>
                     <td>
@@ -209,7 +209,7 @@
                         <div>
                             <table width="100%" border="0">
                                 <tr>
-                                    <td>
+                                    <td align="right">
                                         <label for="available">{t}Published:{/t}</label>
                                     </td>
                                     <td>
@@ -221,30 +221,26 @@
                                 </tr>
 
                                 <tr>
-                                    <td>
+                                    <td align="right">
                                         <label for="metadata">{t}Keywords:{/t}</label>
                                         <sub>{t}(Separated by comas){/t}</sub>
                                     </td>
                                     <td>
-                                        <textarea id="metadata" name="metadata" style="width: 100%;"
+                                        <textarea id="metadata" name="metadata"
                                            title="{t}Metadata{/t}" value="">{$advertisement->metadata|strip}</textarea>
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td valign="top" align="right">
+                                    <td valign="middle" align="right">
                                         <label for="overlap">{t}Hide Flash events{/t}</label>
                                     </td>
                                     <td>
                                         <input type="checkbox" name="overlap" id="overlap" value="1" {if $advertisement->overlap == 1}checked="checked"{/if} />
                                     </td>
                                 </tr>
-
                                 <tr>
-                                    <td colspan="2" style="border-bottom: 1px solid #CCC;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    <td align="right">
                                         <label>{t}Periodicity:{/t}</label>
                                     </td>
                                     <td>
@@ -273,99 +269,62 @@
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td valign="top" colspan="2">
-
-                                        <div id="porfecha" style="{if $advertisement->type_medida!='DATE'}display:none{/if};">
-                                            <table width="95%">
-                                            <tr>
-                                                <td>
-                                                    <label for="starttime">{t}Start time publication:{/t}</label>
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="starttime" name="starttime" title="{t}Start time publication{/t}"
-                                                        value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
-
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td valign="top" align="right" style="padding:4px;" width="40%">
-                                                    <label for="endtime">{t}End time publication:{/t}</label>
-                                                </td>
-                                                <td>
-                                                    <input type="text" id="endtime" name="endtime" size="16" title="{t}End time publication{/t}"
-                                                        value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
-
-                                                </td>
-                                            </tr>
-                                            </table>
-                                        </div>
-
-                                        <div id="porclic" style="{if $advertisement->type_medida!='CLIC'}display:none{/if};">
-                                            <table width="95%">
-                                                <tr>
-                                                    <td>
-                                                        <label for="title">{t}Click number:{/t}</label>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" id="num_clic" name="num_clic" title={t}"Number of clicks"{/t}
-                                                            value="{$advertisement->num_clic}" />
-                                                        {if $smarty.request.action eq "read"}
-                                                            {if $advertisement->type_medida == 'CLIC'}
-                                                                Actuales: {$advertisement->num_clic_count}
-                                                            {/if}
-                                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Number of clics"{/t}
-                                                                value="{$advertisement->num_clic_count}" />
-                                                        {/if}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-
-                                        <div id="porview" style="{if $advertisement->type_medida!='VIEW'}display:none{/if};">
-                                            <table width="95%">
-                                                <tr>
-                                                    <td>
-                                                        <label for="title">{t}Views number{/t}</label>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" id="num_view" name="num_view" title="{t}Views number{/t}"
-                                                            value="{$advertisement->num_view}" />
-                                                        {if $smarty.request.action eq "read"}
-                                                            {if $advertisement->type_medida == 'VIEW'}
-                                                                {t}Currents:{/t} {$advertisement->views}
-                                                            {/if}
-                                                        {/if}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-
+                                <tr id="porfecha" style="{if $advertisement->type_medida!='DATE'}display:none{/if};">
+                                    <td align="right"></td>
                                     <td>
+                                        <label for="starttime">{t}Start time publication:{/t}</label></td>
+                                        <input type="text" id="starttime" name="starttime" title="{t}Start time publication{/t}"
+                                            value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
 
+
+                                        <label for="endtime">{t}End time publication:{/t}</label>
+                                        <input type="text" id="endtime" name="endtime" size="16" title="{t}End time publication{/t}"
+                                            value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                                    </td>
                                 </tr>
 
-                                <tr>
-                                    <td valign="top" colspan="2">
-                                        <div id="timeout_container" style="{if $advertisement->type_advertisement!=50}display:none{/if};">
 
+                                <tr id="porClic" style="{if $advertisement->type_medida!='CLIC'}display:none{/if};">
+                                    <td>
+                                        <label for="title">{t}Click number:{/t}</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="num_clic" name="num_clic" title={t}"Number of clicks"{/t}
+                                            value="{$advertisement->num_clic}" />
+                                        {if $smarty.request.action eq "read"}
+                                            {if $advertisement->type_medida == 'CLIC'}
+                                                Actuales: {$advertisement->num_clic_count}
+                                            {/if}
+                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Number of clics"{/t}
+                                                value="{$advertisement->num_clic_count}" />
+                                        {/if}
+                                    </td>
+                                </tr>
+                                <tr id="porview" style="{if $advertisement->type_medida!='VIEW'}display:none{/if};">
+                                    <td>
+                                        <label for="title">{t}Views number{/t}</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="num_view" name="num_view" title="{t}Views number{/t}"
+                                            value="{$advertisement->num_view}" />
+                                        {if $smarty.request.action eq "read"}
+                                            {if $advertisement->type_medida == 'VIEW'}
+                                                {t}Currents:{/t} {$advertisement->views}
+                                            {/if}
+                                        {/if}
+                                    </td>
+                                </tr>
 
-                                            <table>
-                                                <tr>
-                                                    <td>&nbsp;</td>
-                                                    <td>
+                                <tr id="timeout_container" style="{if $advertisement->type_advertisement!=50}display:none{/if};">
+                                    <td>&nbsp;</td>
+                                    <td>
 
-                                                        <label for="timeout">{t}Timer{/t}</label>
+                                        <label for="timeout">{t}Timer{/t}</label>
 
-                                                        <input type="text" id="timeout" name="timeout" size="2" title={t}"Seconds before disappear"{/t}
-                                                            value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
-                                                        {t}seconds.{/t} <sub>( -1 {t}don't disappear{/t} )</sub>
+                                        <input type="text" id="timeout" name="timeout" size="2" title={t}"Seconds before disappear"{/t}
+                                            value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
+                                        {t}seconds.{/t} <sub>( -1 {t}don't disappear{/t} )</sub>
 
-                                                    </td>
-                                                </tr>
-                                            </table>
-
-                                        </div>
                                     </td>
                                 </tr>
 
@@ -383,7 +342,7 @@
                 </tr>
 
                 <tr>
-                    <td>
+                    <td align="right">
                         <div id="div_url1" style="display:{if $advertisement->with_script==1}none{/if};">
                             <label for="title">{t}URL:{/t}</label>
                         </div>
@@ -397,7 +356,7 @@
                 </tr>
 
                 <tr>
-                    <td>
+                    <td align="right">
                         <label for="category">{t}Section{/t}</label>
                     </td>
                     <td>
@@ -422,7 +381,7 @@
                 </tr>
 
                 <tr>
-                    <td>
+                    <td align="right">
                         <label for="with_script">{t}Advertisement with JavaScript{/t}</label>
                     </td>
                     <td>
@@ -432,14 +391,12 @@
                 </tr>
 
                 <tr>
-                    <td>
+                    <td align="right">
                         &nbsp;
                     </td>
                     <td>
                         <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if};">
-                            <textarea name="script" id="script" class="validate-script" title="{t}Advertisement script{/t}" style="width:80%; height:100px">
-                                {$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* {t}Place here your JavaScript code{/t} */&lt;/script&gt;'}
-                            </textarea>
+                            <textarea name="script" id="script" class="validate-script" title="{t}Advertisement script{/t}" style="width:80%; height:100px">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* {t}Place here your JavaScript code{/t} */&lt;/script&gt;'}</textarea>
                             <br />
 
                             <label>{t}Geoip code{/t}
@@ -461,16 +418,16 @@
                 {include file="advertisement/partials/advertisement_images.tpl"}
 
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                         <label for="title">{t}Advertisement type{/t} </label>
 
                         <ul id="tabs">
                             <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
                             <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                            <li><a href="#publi-video">{t}Video Frontpage{/t}</a></li>
-                            <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
-                            <li><a href="#publi-opinion">{t}Opinion Frontpage{/t}</a></li>
-                            <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+                            <li><a href="#publi-video">{t}Frontpage Video{/t}</a></li>
+                            <li><a href="#publi-video-interior">{t}Video Inner{/t}</a></li>
+                            <li><a href="#publi-opinion">{t}Frontpage Opinion{/t}</a></li>
+                            <li><a href="#publi-opinion-interior">{t}Opinion Inner{/t}</a></li>
                             <li><a href="#publi-gallery">{t}Gallery{/t}</a></li>
                         </ul>
 

@@ -70,14 +70,14 @@
 							</div>
 						</td>
 						<td colspan="2" style="text-align:left;white-space:normal;">
-							 <div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
+							<div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
 								<p><strong>{t}File:{/t}</strong> default_img.jpg</p>
 								<p><strong>{t}Size:{/t}</strong> 300 x 208 (px)</p>
 								<p><strong>{t}Weight:{/t}</strong> 4.48 Kb<br><strong>Fecha de creaci&oacute;n:</strong> 11/06/2008</p>
 								<p><strong>{t}Description:{/t}</strong>  Imagen por defecto.  <br><strong>Tags:</strong> Imagen</p>
 							</div>
-							 <div id="noimag2" style="display: inline; width:380px; height:30px;">	</div>
-							 <div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
+							<div id="noimag2" style="display: inline; width:380px; height:30px;">	</div>
+							<div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
 						</td>
 					</tr>
 					<tr>

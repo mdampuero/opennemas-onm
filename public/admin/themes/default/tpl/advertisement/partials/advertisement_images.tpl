@@ -11,7 +11,7 @@
 	<td nowrap="nowrap" colspan="2">
 		<div id="div_img_publi"  style="{if $advertisement->with_script == 1} display:none;{else}display:inline;{/if}">
 			{if $photo1->name}
-				<table border="0" width="96%">
+				<table border="0">
 				<tr>
 					<td>
 						<h2>{t}Advertisement:{/t}</h2>
@@ -36,10 +36,18 @@
 						</div>
 					</td>
 					<td nowrap="nowrap" colspan="2">
+						<div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
+							</div>
+							<div id="noimag2" style="display: inline; width:380px; height:30px;">	</div>
+						<div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
+
 						<div id="informa" style="display: inline; width:380px; height:30px;">
-							<b>{t}File:{/t} {$photo1->name}</b> <br /><b>{t}Dimensions:{/t}</b> {$photo1->width} x {$photo1->height} (px)<br />
-							<b>{t}Weight:{/t}</b> {$photo1->size} Kb<br /><b>{t}Created:{/t}</b> {$photo1->created}<br />
-							<b>{t}Description:{/t}</b> {$photo1->description} <br /><b>{t}Tags:{/t}</b> {$photo1->metadata}<br />
+								<p><strong>{t}File:{/t}</strong> {$photo1->name}</p>
+								<p><strong>{t}Size:{/t}</strong> {$photo1->width} x {$photo1->height}</p>
+								<p><strong>{t}Weight:{/t}</strong> {$photo1->size} Kb<br></p>
+								<p><strong>{t}Creation date{/t}</strong> {$photo1->created}</p>
+								<p><strong>{t}Description:{/t}</strong>  {$photo1->description}  <br></p>
+								<p><strong>{t}Tags:{/t}</strong> {$photo1->metadata}</p>
 						</div>
 						<div id="noimag" style="display: inline; width:380px; height:30px;"></div>
 						<div id="noinfor" style="display: none; width:100%;  height:30px;"></div>
@@ -47,10 +55,10 @@
 				</tr>
 				</table>
 			{else}
-				<table border="0" width="96%">
+				<table border="0">
 				<tr>
 					<td>
-						<h2 style="color:#2f6d9d;">{t}Advertisement:{/t}</h2>
+						<h2>{t}Advertisement:{/t}</h2>
 					</td>
 					<td>
 						<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70"/>
@@ -59,14 +67,17 @@
 				<tr>
 					<td align="left">
 						<div id="droppable_div1">
-							<img src="../media/images/default_img.jpg" id="change1" border="0" width="300px" />
+							<img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change1" border="0" width="300px" />
 						</div>
 					</td>
 					<td nowrap="nowrap" colspan="2">
 						<div id="informa" style="display: inline; width:380px; height:30px;">
-								<b>{t}File:{/t} default_img.jpg</b> <br /><b>{t}Dimensions:{/t}</b> 300 x 208 (px)<br />
-								<b>{t}Weight:{/t}</b> 4.48 Kb<br /><b>{t}Create:{/t}</b> 11/06/2008<br />
-								<b>{t}Description{/t}</b> {t}Default image:{/t}<br /><b>{t}Tags:{/t}</b>{t}Image:{/t}<br />
+								<p><strong>{t}File:{/t}</strong> {t}default_img.jpg{/t}</p>
+								<p><strong>{t}Size:{/t}</strong> {t}XX x XX px{/t}</p>
+								<p><strong>{t}Weight:{/t}</strong> {t}XX Kb{/t}<br></p>
+								<p><strong>{t}Creation date{/t}</strong> {t}11/06/2008{/t}</p>
+								<p><strong>{t}Description:{/t}</strong>  {t}Example image{/t}  <br></p>
+								<p><strong>{t}Tags:{/t}</strong> {t}some, words, separated, by, commas{/t}</p>
 						</div>
 						<div id="noimag" style="display: inline; width:380px; height:30px;"></div>
 						<div id="noinfor" style="display: none; width:100%;  height:30px;"></div>
@@ -79,7 +90,12 @@
 
     <td align="center">
 
-        <div id="photos" class="photos" style="border:1px solid #ccc; {if $advertisement->with_script == 1}display:none;" {else} display:block;" {/if} >
+		<div onclick="new Effect.toggle($('photos'),'blind')"
+				style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
+				<strong>{t}Available multimedia for ads{/t}</strong>
+		</div>
+
+        <div id="photos" class="photos clearfix" style="border:1px solid #ccc; {if $advertisement->with_script == 1}display:none;" {else} display:block;" {/if} >
 			<em>{t}Drag and drop the advertisements to select them, use the logo to use flash{/t}</em><br><br>
 			{if $paginacion}
 				<p align="center">{t}Pages:{/t}{$paginacion} </p>
