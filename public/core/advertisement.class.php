@@ -26,62 +26,62 @@ class Advertisement extends Content
     // FIXME: modificado para versión demo
     public static $map = array(
         /* Intersticial banners frontpages */
-        50 => 'Banner Interticial en portada',
+        50 => "Banner Interticial en portada",
 
         /* Frontpages banners < 100 */
-        1 => 'Big banner superior ',
-        2 => 'Banner superior derecho',
+        1 => "zBig banner superior",
+        2 => "Banner superior derecho",
 
-        3 => 'Botón Columna 1',
+        3 => "Botón Columna 1",
 
-        4 => 'Botón Columna 3',
+        4 => "Botón Columna 3",
 
-        5 => 'Separador horizontal',
+        5 => "Separador horizontal",
 
-        6 => 'Mini 1º derecho',
-        7 => 'Mini 2º derecho',
+        6 => "Mini 1º derecho",
+        7 => "Mini 2º derecho",
 
-        8 => 'Botón Inferior Derecho',
+        8 => "Botón Inferior Derecho",
 
-        9 => 'Big Banner Inferior',
-        10 => 'Banner Inferior Derecho',
+        9 => "Big Banner Inferior",
+        10 => "Banner Inferior Derecho",
 
 
         /* Intersticial banner noticia interior */
-        150 => '[I]Banner Interticial noticia interior',
+        150 => "[I] Banner Interticial noticia interior",
 
         /* Noticia Interior banners > 100 */
-        101 => '[I]Big banner superior',
-        102 => '[I]Banner superior Derecho',
+        101 => "[I] Big banner superior",
+        102 => "[I] Banner superior Derecho",
 
-        103 => '[I]Banner Columna Derecha 1',
-        104 => '[I]Robapágina',
-        105 => '[I]Banner Columna Derecha 2',
+        103 => "[I] Banner Columna Derecha 1",
+        104 => "[I] Robapágina",
+        105 => "[I] Banner Columna Derecha 2",
 
-        109 => '[I]Big Banner Inferior',
-        110 => '[I]Banner Inferior Derecho',
+        109 => "[I] Big Banner Inferior",
+        110 => "[I] Banner Inferior Derecho",
 
  	/* Intersticial banner video front */
-        250 => '[V]Banner Interticial',
+        250 => "[V] Banner Interticial",
 
         /* Videos Front banners > 200 */
-        201 => '[V]Big banner superior',
-        202 => '[V]Banner superior derecho',
+        201 => "[V] Big banner superior",
+        202 => "[V] Banner superior derecho",
 
-        209 => '[V]Big Banner Inferior',
-        210 => '[V]Banner Inferior Derecho',
+        209 => "[V] Big Banner Inferior",
+        210 => "[V] Banner Inferior Derecho",
 
 	/* Intersticial banner video inner */
-        350 => '[VI]Banner Interticial',
+        350 => "[VI] Banner Interticial",
 
         /* Video Interior banners > 300 */
-        301 => '[VI]Big banner superior',
-        302 => '[VI]Banner superior Derecho',
+        301 => "[VI] Big banner superior",
+        302 => "[VI] Banner superior Derecho",
 
-        303 => '[VI]Banner Video Button',
+        303 => "[VI] Banner Video Button",
 
-        309 => '[VI]Big Banner Inferior',
-        310 => '[VI]Banner Inferior Derecho',
+        309 => "[VI] Big Banner Inferior",
+        310 => "[VI] Banner Inferior Derecho",
 
     );
 

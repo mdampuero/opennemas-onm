@@ -1,4 +1,4 @@
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_video" width="800">
+<table border="0" cellpadding="4" cellspacing="6" id="ads_type_video">
 <tbody>
     <tr>
         <td align="right" colspan="2">
@@ -8,7 +8,7 @@
             </label>
         </td>
         <td rowspan="7" align="right" width="240">
-            {include file="advertisement/advertisement_map_positions_video.tpl"}
+            {include file="advertisement/partials/advertisement_map_positions_video.tpl"}
         </td>
     </tr>
     <tr>

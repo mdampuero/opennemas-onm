@@ -1,5 +1,5 @@
 
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_interior_video" width="800">
+<table border="0" cellpadding="4" cellspacing="6" id="ads_type_interior_video">
 <tbody>
     <tr>
         <td align="right" colspan="2">
@@ -9,7 +9,7 @@
             </label>
         </td>
         <td align="right" width="240" rowspan="8">
-            {include file="advertisement/advertisement_map_positions_video_interior.tpl"}
+            {include file="advertisement/partials/advertisement_map_positions_video_interior.tpl"}
         </td>
     </tr>
      <tr>

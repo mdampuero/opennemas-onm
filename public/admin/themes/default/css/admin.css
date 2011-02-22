@@ -286,20 +286,23 @@ ul.enlace_rel {
 }
 
 
-    #thelist2 li { background: #ddedb6; margin:2px; padding: 4px; list-style-type: none;}
-    #thelist3 li { background: #d0d2a5; margin:2px; padding: 4px; list-style-type: none;}
-    #thelist2int li { background: #d6e3b6; margin:2px; padding: 4px; list-style-type: none;}
-    #thelist3int li { background: #c6c89d; margin:2px; padding: 4px; list-style-type: none;}
+#thelist2 li { background: #ddedb6; margin:2px; padding: 4px; list-style-type: none;}
+#thelist3 li { background: #d0d2a5; margin:2px; padding: 4px; list-style-type: none;}
+#thelist2int li { background: #d6e3b6; margin:2px; padding: 4px; list-style-type: none;}
+#thelist3int li { background: #c6c89d; margin:2px; padding: 4px; list-style-type: none;}
 
 
-.gallery_list{list-style:none; width:1000px; height:69px; margin:0 auto;}
-.gallery_list li{overflow:hidden; float: left; margin:0 5px 5px 0; width:69px; height:69px; background:#F0F0F0; border:1px double #CBCBCB; }
-.gallery_list li img{cursor:pointer; border:0px; }
-
+.gallery_list {
+	list-style:none; margin:0 auto;
+}
+.gallery_list li {
+	float: left; display:inline-block; margin:0 5px 5px 0;  background:#F0F0F0; border:1px solid #CBCBCB;
+}
+.gallery_list li img { cursor:pointer; border:0px; width:69px; height:69px; }
 .gallery_list li{ display: inline !important;}
 
-.gallery_list li div {display: table-cell !important; width:69px; height: 69px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
-.gallery_list li a.album {display: table-cell !important; width:69px; height:69px; vertical-align: middle !important; text-align: center; float: none !important;}
+.gallery_list li div { display: table-cell !important; width:69px; height: 69px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
+.gallery_list li a.album { display: table-cell !important; width:69px; height:69px; vertical-align: middle !important; text-align: center; float: none !important;}
 
 
 #main_image{margin:0 auto 6px auto;background:#FFF;}

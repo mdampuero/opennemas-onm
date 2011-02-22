@@ -1,4 +1,4 @@
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_portada" width="800">
+<table border="0" cellpadding="4" cellspacing="6" id="ads_type_portada">
 <tbody>
     <tr>
         <td align="right" colspan="2">
@@ -8,7 +8,7 @@
             </label>
         </td>
         <td rowspan="11" align="right" width="240">
-            {include file="advertisement/advertisement_map_positions.tpl"}
+            {include file="advertisement/partials/advertisement_map_positions.tpl"}
         </td>
     </tr>
     <tr>

@@ -96,10 +96,10 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('map', $map);
 
             // Filters
-            $map = array('-1' => '--Todos--') + $map;
+            $map = array('-1' => _("--Todos--")) + $map;
             $filter_options['type_advertisement'] = $map;
-            $filter_options['available'] = array('-1' => '--Todos--', '0' => 'No publicados', '1' => 'Publicados');
-            $filter_options['type']      = array('-1' => '--Todos--', '0' => 'Multimedia', '1' => 'Javascript');
+            $filter_options['available'] = array('-1' => _("-- All --"), '0' => _("No published"), '1' => _("Published"));
+            $filter_options['type']      = array('-1' => _("-- All --"), '0' => _("Multimedia"), '1' => _("Javascript"));
             $tpl->assign('filter_options', $filter_options);
 
             $cm = new ContentManager();
@@ -111,6 +111,8 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('advertisements', $advertisements);
 
             $_SESSION['desde'] = 'advertisement';
+            $tpl->display('advertisement/list.tpl');
+            
         } break;
 
         case 'test_script': {
@@ -120,6 +122,9 @@ if( isset($_REQUEST['action']) ) {
 
             String_Utils::disabled_magic_quotes();
             $tpl->assign('script', $_POST['script']); // ten que vir por POST
+
+            $tpl->display('advertisement/advertisement.tpl');
+
         } break;
 
         case 'new':
@@ -156,6 +161,9 @@ if( isset($_REQUEST['action']) ) {
             if(($pages->_totalPages)>1) {
                 $tpl->assign('paginacion', $paginacion);
             }
+
+            $tpl->display('advertisement/advertisement.tpl');
+
         break;
 
         case 'read': {
@@ -202,24 +210,26 @@ if( isset($_REQUEST['action']) ) {
             if($pages->_totalPages>1) {
                  $tpl->assign('paginacion', $paginacion);
             }
-        /*
-            //Noticias relacionadas
-            $cm = new ContentManager();
-            $articules = $cm->find('Article','content_status=1', 'ORDER BY archive DESC');
-            // Agrupa los artículos por categoría y controla si están publicados
 
-            $articles_agrupados = Related_content::sortArticles($articules);
-            $tpl->assign('articles_agrupados', $articles_agrupados);
+            $tpl->display('advertisement/advertisement.tpl');
+
+            /**
+                //Noticias relacionadas
+                $cm = new ContentManager();
+                $articules = $cm->find('Article','content_status=1', 'ORDER BY archive DESC');
+                // Agrupa los artículos por categoría y controla si están publicados
+
+                $articles_agrupados = Related_content::sortArticles($articules);
+                $tpl->assign('articles_agrupados', $articles_agrupados);
 
 
-            $rel = new Related_content();
-            $relationes = $rel->get_relations( $_REQUEST['id'] );
-            $tpl->assign('yarelations', $relationes);
-            if($relationes) {
-                 $tpl->assign('ya', 1);
-            }
-         *
-         */
+                $rel = new Related_content();
+                $relationes = $rel->get_relations( $_REQUEST['id'] );
+                $tpl->assign('yarelations', $relationes);
+                if($relationes) {
+                    $tpl->assign('ya', 1);
+                }
+            **/
         } break;
 
         case 'create': {
@@ -238,6 +248,9 @@ if( isset($_REQUEST['action']) ) {
             } else {
                 $tpl->assign('errors', $advertisement->errors);
             }
+
+            $tpl->display('advertisement/advertisement.tpl');
+
         } break;
 
         case 'update': {
@@ -360,5 +373,3 @@ if( isset($_REQUEST['action']) ) {
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
 }
-
-$tpl->display('advertisement/advertisement.tpl');

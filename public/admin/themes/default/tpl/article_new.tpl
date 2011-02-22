@@ -32,7 +32,7 @@
                 value="" class="required" style="width:95%" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
 				   onkeyup="countWords(this,document.getElementById('counter_title'))" tabindex="1"/>
         </td>
-		<td valign="top" align="right" style="padding:4px;" rowspan="6">
+		<td valign="top" align="right" style="padding:4px; width:30%" rowspan="6">
             <div class="utilities-conf">
 				<table style="width:99%;">
 					<tr>
@@ -131,7 +131,9 @@
 						</td>
 						<td nowrap="nowrap"  style="text-align:left;vertical-align:top">
 							<input type="text" id="counter_summary" name="counter_summary" title="counter_summary"
-								value="0" class="required" size="5" onChange="countWords(document.getElementById('summary'),this)" onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/>
+								value="0" class="required" size="5"
+								   onChange="countWords(document.getElementById('summary'),this)"
+								   onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/>
 						</td>
 					</tr>
 					<tr>
@@ -204,13 +206,13 @@
     </tr>
 
     <tr>
-        <td valign="top" align="right" style="padding:4px;">
+        <td >
             <label for="summary">{t}Summary{/t}</label><br />
             <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
                 <img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" /></a>
         </td>
-        <td style="padding:4px;" valign="top" nowrap="nowrap">
-            <textarea name="summary" id="summary" title="Resumen de la noticia" style="width:75%; height:8em;"
+        <td >
+            <textarea name="summary" id="summary" title="Resumen de la noticia"
                   onChange="countWords(this,document.getElementById('counter_summary'))"
                   onkeyup="countWords(this,document.getElementById('counter_summary'))" tabindex="4"></textarea>
         </td>

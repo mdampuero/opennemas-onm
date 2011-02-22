@@ -1,5 +1,5 @@
 
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_interior" width="800">
+<table border="0" cellpadding="4" cellspacing="6" id="ads_type_interior">
 <tbody>
     <tr>
         <td height="50" align="right" colspan="2">
@@ -9,7 +9,7 @@
             </label>
         </td>
         <td rowspan="8" align="right" width="240">
-            {include file="advertisement/advertisement_map_positions_interior.tpl"}
+            {include file="advertisement/partials/advertisement_map_positions_interior.tpl"}
         </td>
     </tr>
 

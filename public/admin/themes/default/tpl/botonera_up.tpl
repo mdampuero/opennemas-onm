@@ -409,59 +409,7 @@
 			</li>
 		</ul>
 	</div>
-{* Botonera advertisement -------------------------------------------- *}
-{elseif preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-   <div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title} {if $category eq 0}HOME{/if}</h2></div>
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />Publicar
-				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
-			</li>
 
-			<li>
-				<a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={php} echo $_REQUEST['category']; {/php}&page={php} echo $_GET['page']; {/php}" class="admin_add" onmouseover="return escape('<u>N</u>ueva opinion');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nuevo" alt="Nuevo"><br />Nuevo
-				</a>
-			</li>
-		</ul>
-	</div>
-
-{elseif preg_match('/advertisement\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-			 <li>
-				<a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=list&category={php} echo $_REQUEST['category']; {/php}&page={php} echo $_GET['page']; {/php}" class="admin_add"  value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-		    </li>
-			<li>
-			{if isset($advertisement->id)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
-			{else}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar y salir
-				</a>
-			</li>
-		</ul>
-	</div>
 
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/category\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
@@ -471,7 +419,7 @@
 			<ul>
 				<li>
 					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
-						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />Nueva Sección
+						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
 					</a>
 				</li>
 			</ul>
@@ -482,12 +430,12 @@
 			<ul>
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:savePriority();" title="Guardar Positions" alt="Guardar Cambios">
-						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar Cambios" alt="Guardar Cambios"><br />Guardar Cambios
+						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar Cambios" alt="Guardar Cambios"><br />{t}Save changes{/t}
 					</a>
 				</li>
 				<li>
 					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add"  accesskey="N" tabindex="1">
-						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva Sección" alt="Nueva Sección"><br />Nueva Sección
+						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva Sección" alt="Nueva Sección"><br />{t}New section{/t}
 					</a>
 				</li>
 			</ul>

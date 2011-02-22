@@ -17,8 +17,7 @@
 .panel-ads {
 	clear: both;
 	display: none;
-	border: 2px solid #CCC;
-	width: 800px;
+	border: 1px solid #CCC;
 	margin-bottom: 10px;
 }
 .panel-ads.active-tab-body {
