@@ -54,8 +54,8 @@
 {/block}
 
 {block name="content"}
+<div class="wrapper-content">
 
-<div style="width:70%;margin:0 auto;">
     <div id="contenedor-gral">
 
         <ul class="tabs2">

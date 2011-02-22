@@ -7,7 +7,7 @@
 
 
 {block name="content"}
-<div class="wrapper-content" style="margin:0 auto; width:70%">
+<div class="wrapper-content">
 
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 

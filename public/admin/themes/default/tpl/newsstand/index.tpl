@@ -1,8 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="wrapper-content">
+
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-    <div id="content-wrapper" style="width:70% !important; margin:0 auto;">
+
+    <div id="content-wrapper">
 
     {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     {* ZONA MENU CATEGORIAS ******* *}

@@ -310,7 +310,7 @@ function send_notify(id,action){
 
 function get_dashboard_box(type,category,days,div) {
 
-    var url = '/admin/dashboard.php?action=get&type='+type+'&category='+category+'&days='+days;
+    var url = '/admin/controllers/statistics/statistics.php?action=get&type='+type+'&category='+category+'&days='+days;
 
     new Ajax.Request(url, {
         'method': 'get',

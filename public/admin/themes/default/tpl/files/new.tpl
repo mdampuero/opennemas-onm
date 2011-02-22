@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div style="width:70%; margin: 0 auto;">
-
+<div class="wrapper-content">
     <div id="menu-acciones-admin">
         <div style="float: left; margin-left: 10px; margin-top: 10px;">
             <h2>{t}File Manager :: Upload{/t}</h2>

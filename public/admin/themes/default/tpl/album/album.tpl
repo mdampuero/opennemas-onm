@@ -8,8 +8,8 @@
 
 
 {block name="content"}
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
-         style="max-width:70% !important; margin: 0 auto; display:block;">
+<div class="wrapper-content">
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
     {* LISTADO ******************************************************************* *}
     {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
@@ -307,4 +307,5 @@
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id}" />
     </form>
+</div>
 {/block}

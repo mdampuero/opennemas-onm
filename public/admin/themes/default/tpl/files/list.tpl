@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="wrapper-content" style="width:70%; margin: 0 auto;" >
+<div class="wrapper-content">
 
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
 

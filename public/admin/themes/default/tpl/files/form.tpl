@@ -2,7 +2,8 @@
 
 
 {block name="content"}
-<div style="width:70%; margin: 0 auto;">
+<div class="wrapper-content">
+
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">

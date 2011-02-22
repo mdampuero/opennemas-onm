@@ -73,8 +73,7 @@
 {/block}
 
 {block name="content"}
-
-<div class="wrapper-content" style="width:80%; margin:0 auto;">
+<div class="wrapper-content">
 	{* Botonera *}
 	<div id="menu-acciones-admin" class="clearfix">
 		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Newsletter management{/t}</h2></div>

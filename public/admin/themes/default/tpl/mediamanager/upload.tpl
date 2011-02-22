@@ -25,7 +25,7 @@
 {/block}
 
 {block name="content"}
-<div style="width:70%;margin:0 auto;">
+<div class="wrapper-content">
 
     <ul class="tabs2">
         <li>

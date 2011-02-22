@@ -26,7 +26,7 @@
 {/block}
 
 {block name="content"}
-<div style="width:70%;margin:0 auto;">
+<div class="wrapper-content">
 
 <div id="contenedor-gral">
     <ul class="tabs2">

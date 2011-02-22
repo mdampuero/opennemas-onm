@@ -24,8 +24,9 @@
 {/block}
 
 {block name="content"}
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}
-		 style="max-width:70% !important; margin: 0 auto; display:block;">
+<div class="wrapper-content">
+
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 		{if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
 			<div class="message" id="console-info">{$smarty.request.message}</div>
@@ -145,7 +146,7 @@
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id}" />
 	</form>
-
+</div>
 {/block}
 
 

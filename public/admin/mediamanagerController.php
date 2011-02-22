@@ -220,10 +220,11 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
                                                 'ORDER BY  created DESC ', $page, 56, $this->category);
         foreach($photos as $photo) {
+
             $extension = strtolower($photo->type_img);
             $photo->description_utf = html_entity_decode(($photo->description));
             $photo->metadata_utf = html_entity_decode($photo->metadata);
-             $this->check_thubnail( $photo );
+            $this->check_thubnail( $photo );
 
         }
 
@@ -452,9 +453,6 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image" AND '.$where,
                                                 'ORDER BY  created DESC ', $page, $items_page, $category);
 
-		var_dump($photos, pager);
-		die();
-		
 
         foreach($photos as $photo) {
             $extension = strtolower($photo->type_img);

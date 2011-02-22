@@ -115,12 +115,29 @@ function enviar2(elto, trg, acc, id) {
     if ((alguno != 1) && (id != 6)){
         alert("No hay ninguna noticia seleccionada");
     }else{
-      if((acc=='mdelete')){
-         if(confirm('¿Está seguro de eliminar esos elementos?'))
-         {
+        if((acc=='mdelete')){
+            if(confirm('¿Está seguro de eliminar esos elementos?')) {
+                
+                var parentEl = elto.parentNode;
+                while(parentEl.nodeName != "FORM") {
+                    parentEl = parentEl.parentNode;
+                }
+
+                parentEl.target = trg;
+                parentEl.action.value = acc;
+                parentEl.id.value = id;
+
+                if(objForm != null) {
+                    objForm.submit();
+                } else {
+                    parentEl.submit();
+                }
+            }
+        } else {
+
             var parentEl = elto.parentNode;
             while(parentEl.nodeName != "FORM") {
-                parentEl = parentEl.parentNode;
+                  parentEl = parentEl.parentNode;
             }
 
             parentEl.target = trg;
@@ -132,23 +149,8 @@ function enviar2(elto, trg, acc, id) {
             } else {
                 parentEl.submit();
             }
-         }
-      }else{
-           var parentEl = elto.parentNode;
-            while(parentEl.nodeName != "FORM") {
-                parentEl = parentEl.parentNode;
-            }
 
-            parentEl.target = trg;
-            parentEl.action.value = acc;
-            parentEl.id.value = id;
-
-            if(objForm != null) {
-                objForm.submit();
-            } else {
-                parentEl.submit();
-            }
-      }
+        }
     }
 }
 

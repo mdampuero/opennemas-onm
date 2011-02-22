@@ -319,7 +319,12 @@ b.r3{margin: 0 2px}
 b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px;}
 
 
-
+div.wrapper-content {
+	min-width:1000px;
+	max-width:1200px;
+	width:80%;
+	margin:0 auto;
+}
 
 
 div.overlay {

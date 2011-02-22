@@ -20,13 +20,13 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content" style="margin:0 auto; width:70%">
+<div class="wrapper-content">
+
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
         {include file="botonera_up.tpl"}
 
         <div id="warnings-validation"></div>
-
 
         <table class="adminheading">
             <tbody>

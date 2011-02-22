@@ -43,7 +43,7 @@ $menuXml = '<?xml version="1.0"?>
         <node title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'" link="controllers/trash.php" privilege="NOT_ADMIN" />
         <node title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'" link="controllers/link_control.php" privilege="BACKEND_ADMIN" />
         <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'" link="dashboard.php" privilege="BACKEND_ADMIN" />
+        <node title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'" link="controllers/statistics/statistics.php" privilege="BACKEND_ADMIN" />
         <!--<node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
         <node title="'.htmlspecialchars(_("Check PHP cache"), ENT_QUOTES).'" link="index.php" privilege="CACHE_ADMIN" />
         <node title="'.htmlspecialchars(_("Check database integrity"), ENT_QUOTES).'" link="mysql-check.php?action=check" privilege="BACKEND_ADMIN" />-->

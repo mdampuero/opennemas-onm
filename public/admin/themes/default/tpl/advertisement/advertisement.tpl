@@ -149,7 +149,7 @@
 
 
 {block name="content"}
-<div id="content-wrapper" style="width:70%;margin:0 auto;">
+<div class="wrapper-content">
 
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
 

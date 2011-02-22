@@ -11,6 +11,7 @@
 {/block}
 
 {block name="content"}
+<div class="wrapper-content">
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "index"}
     {* ZONA MENU CATEGORIAS ******* *}
@@ -33,6 +34,10 @@
         {include file="menu_categorys.tpl" home="dashboard.php?action=index"}
     </ul>
     <br style="clear: both;" />
+
+    <div id="menu-acciones-admin">
+        <div style="float:left; margin:8px;"><h2>{t}Content Statistics{/t}</h2></div>
+    </div>
 
     {literal}
         <div id="dashboard_enlaces">
@@ -120,15 +125,14 @@
             </tr>
         </table>
     </div>
-    {literal}
     <script type="text/javascript">
     /* <![CDATA[ */
-        change_dashboard('viewed',{/literal}{$category}{literal});
+        change_dashboard('viewed',{$category});
     /* ]]> */
     </script>
-    {/literal}
 {/if}
 
 <input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
 </form>
+</div>
 {/block}

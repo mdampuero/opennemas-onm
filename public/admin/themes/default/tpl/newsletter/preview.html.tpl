@@ -1,7 +1,7 @@
 {if $smarty.request.action=='send'}
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 {/if}
-<div style="font-size: 12px; font-family: Arial;">
+<div class="wrapper-content">
     <table border="0" cellpadding="0" cellspacing="0" width="765">
         <tbody>
             <tr>

@@ -2,7 +2,7 @@
 
 
 {block name="content"}
-<div class="wrapper-content" style="margin:0 auto; width:70%">
+<div class="wrapper-content">
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
