@@ -23,7 +23,7 @@ class TreeMenu extends Menu {
       * Contructor de la clase. Carga el fichero y comienza el parseo del fichero.
       * @access public
     */
-    function TreeMenu($menu, $resource, $type=MENUFILE) {
+	function __construct($menu, $fichMenu, $type=MENUFILE) {
         $this->Menu = &$menu;
 		//$xml = ($resource_type == MENUFILE)? $this->load($fichMenu): $fichMenu;
 
@@ -40,13 +40,6 @@ class TreeMenu extends Menu {
 		}
 
         $this->doParse($xml);
-    }
-
-	/**
-	  * Constructor PHP5
-	*/
-	function __construct($menu, $fichMenu, $type=MENUFILE) {
-	    $this->TreeMenu($menu, $fichMenu, $type);
 	}
 
 	/**
@@ -107,7 +100,7 @@ class TreeMenu extends Menu {
 		$this->carpetas[count($this->carpetas)-1]['signo'] = $signo;
 		$this->carpetas[count($this->carpetas)-1]['iconoExpandido'] = (!isset($attrs['iconoExpandido']))? 'tree_open.gif': $this->carpetas['iconoExpandido'];
 		$this->carpetas[count($this->carpetas)-1]['signoExpandido'] = (!isset($attrs['signoExpandido']))? 'minus.gif': $this->carpetas['signoExpandido'];
-        
+
         if( isset($attrs['highlight']) ) {
             $this->contenido .= '<div style="background-color: '.$attrs['highlight'].';" class="highlight">';
         }
@@ -130,11 +123,11 @@ class TreeMenu extends Menu {
         }
 
         if( isset($attrs['highlight']) ) {
-            $this->contenido .= '</div>';    
+            $this->contenido .= '</div>';
         } else {
-            $this->contenido .= '<br />';    
+            $this->contenido .= '<br />';
         }
-        
+
         $this->contenido .= '<span id="tree_'.$this->idMenu.'_'.$attrs['id'].'" style="display: none">'."\n";
         $this->nivelActual++;
     }

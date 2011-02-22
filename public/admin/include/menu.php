@@ -3,13 +3,12 @@
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="index.php" target="centro">
-        <node title="'.htmlspecialchars(_("Inicio"), ENT_QUOTES).'" link="index.php" />
         <node title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'" link="article.php" privilege="ARTICLE_FRONTPAGE" />
         <node title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'" link="controllers/widget/widget.php" privilege="WIDGET_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("Templates Manager"), ENT_QUOTES).'" link="index.php" privilege="ARTICLE_FRONTPAGE" />-->
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="article.php" target="centro">
+    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="#" target="centro">
         <node title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'" link="article.php?action=list_pendientes" privilege="ARTICLE_LIST_PEND" />
         <node title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'" link="controllers/opinion/opinion.php" privilege="OPINION_ADMIN" />
         <node title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'" link="controllers/comment.php" privilege="COMMENT_ADMIN" />
@@ -17,7 +16,7 @@ $menuXml = '<?xml version="1.0"?>
         <node title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'" link="controllers/advertisement/advertisement.php" privilege="ADVERTISEMENT_ADMIN" />
         <node title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'" link="static_pages.php" privilege="STATIC_ADMIN" />
         <node title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'" link="article.php?action=list_hemeroteca" privilege="ARCHIVE_ADMIN" />
-        <node title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'" link="article.php?action=list_agency" privilege="ARTICLE_LIST_PEND" />
+        <!--<node title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'" link="article.php?action=list_agency" privilege="ARTICLE_LIST_PEND" />-->
         <node title="'.htmlspecialchars(_("Sections Manager"), ENT_QUOTES).'" link="controllers/category/category.php" privilege="CATEGORY_ADMIN" />
      </submenu>
 

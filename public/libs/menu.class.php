@@ -41,6 +41,7 @@ class Menu extends ParserXML{
         $filename = dirname(__FILE__).'/'.'menues.conf';
         $xml = $this->load($filename);
         $this->doParse( $xml );
+
     }
 
 	function save($xml, $path) {
@@ -92,7 +93,7 @@ class Menu extends ParserXML{
     function printMenu() {
         return ($this->contenido);
     }
-    
+
     function render()
     {
         return $this->printMenu();
