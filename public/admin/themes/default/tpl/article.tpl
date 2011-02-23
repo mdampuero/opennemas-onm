@@ -157,47 +157,41 @@
         </div> {* div id=$category *}
     {/if}
 
-    {if isset($smarty.request.action) && $smarty.request.action eq "new"}
+    {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
         {include file="botonera_up.tpl"}
-        {include file="article_new.tpl"} {* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
-    {/if}
+        {include file="article_new.tpl"}
 
-    {if isset($smarty.request.action) && $smarty.request.action eq "read"}
-        {include file="botonera_up.tpl"}
-        {include  file="article_edit.tpl"} {* FORMULARIO PARA ACTUALIZAR UN CONTENIDO *********************************** *}
-    {/if}
-    {if  $smarty.request.action eq "read" || $smarty.request.action eq "new"}
-            {* Susbtituted by the Control.DatePicker prototype widget *}
-            {* dhtml_calendar inputField="starttime" button="triggerstart" singleClick=true ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR"}
-            {dhtml_calendar inputField="endtime" button="triggerend" singleClick=true ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR" *}
+        {* Susbtituted by the Control.DatePicker prototype widget *}
+        {* dhtml_calendar inputField="starttime" button="triggerstart" singleClick=true ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR"}
+        {dhtml_calendar inputField="endtime" button="triggerend" singleClick=true ifFormat="%Y-%m-%d %H:%M:%S" firstDay=1 align="CR" *}
 
-            {* This line add a generic images browser to TinyMCE *}
-            {* <script type="text/javascript" src="{$params.JS_DIR}/swampy_browser/sb.js"></script> *}
+        {* This line add a generic images browser to TinyMCE *}
+        {* <script type="text/javascript" src="{$params.JS_DIR}/swampy_browser/sb.js"></script> *}
 
-            <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
-            <script type="text/javascript" language="javascript">
-                tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+        <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+        <script type="text/javascript" language="javascript">
+            tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
-                {if isset($article) && $article->isClone()}
-                OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-                OpenNeMas.tinyMceConfig.advanced.readonly = 1;
-                {/if}
+            {if isset($article) && $article->isClone()}
+            OpenNeMas.tinyMceConfig.simple.readonly   = 1;
+            OpenNeMas.tinyMceConfig.advanced.readonly = 1;
+            {/if}
 
-                OpenNeMas.tinyMceConfig.simple.elements = "summary";
-                tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+            OpenNeMas.tinyMceConfig.simple.elements = "summary";
+            tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
 
-                OpenNeMas.tinyMceConfig.advanced.elements = "body";
-                tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-            </script>
+            OpenNeMas.tinyMceConfig.advanced.elements = "body";
+            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+        </script>
 
-            <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-                <img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />
-                <span id="reloadPreviewText"></span>
-            </div>
-            <div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-                <img src="{$params.IMAGE_DIR}btn_filesave.png" border="0" align="absmiddle" />
-                <span id="savePreviewText"></span>
-            </div>
+        <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
+            <img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />
+            <span id="reloadPreviewText"></span>
+        </div>
+        <div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
+            <img src="{$params.IMAGE_DIR}btn_filesave.png" border="0" align="absmiddle" />
+            <span id="savePreviewText"></span>
+        </div>
     {/if}
 
     {if isset($smarty.request.action) && $smarty.request.action eq "list_pendientes"}

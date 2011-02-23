@@ -90,7 +90,7 @@
 
 	</td>
 	<td  align="center" style="text-align: center;width:5%;">
-				<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$articles[c]->id}');" title="Editar">
+				<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
 					<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" /></a>
 			</td>
 	<td style="padding:10px;width:70px;" align="center">

@@ -1,3 +1,11 @@
+<div id="warnings-validation">
+{if is_object($article) && $article->isClone()}
+	{assign var="original" value=$article->getOriginal()}
+    Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
+{/if}
+</div>
+
+
 
 <div id="warnings-validation"></div>
 {* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
@@ -14,6 +22,11 @@
 	<li>
         <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
 	</li>
+	{if is_object($article) &&isset($clones)}
+		<li>
+			<a href="#clones">Clones</a>
+		</li>
+    {/if}
 </ul>
 
 {* Pestaña de edición ******************************************************** *}
@@ -26,8 +39,12 @@
         </td>
         <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input type="text" id="title" name="title" title="Título de la noticia en portada"
-                value="" class="required" style="width:95%" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
-				   onkeyup="countWords(this,document.getElementById('counter_title'))" tabindex="1"/>
+                value="{$article->title|clearslash|escape:"html"}" class="required" style="width:95%" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
+				   onkeyup="countWords(this,document.getElementById('counter_title'))"
+				   {if is_object($article)}
+				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
+				   {/if}
+				   tabindex="1"/>
         </td>
 		<td valign="top" align="right" style="padding:4px; width:30%" rowspan="6">
             <div class="utilities-conf">
@@ -38,9 +55,9 @@
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
 							<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="6">
-								   <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
+								   <option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
 								{section name=as loop=$allcategorys}
-									<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+									<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
 									{section name=su loop=$subcat[as]}
 										{if $subcat[as][su]->internal_category eq 1}
 											<option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
@@ -50,6 +67,7 @@
 							</select>
 						</td>
 					</tr>
+					{if $smarty.session.desde != 'list_hemeroteca'}
 					 <tr>
 						<td valign="top"  align="right" nowrap="nowrap">
 							<label for="with_comment">{t}Coments{/t}</label>
@@ -83,7 +101,7 @@
 								<option value="1" {if $article->frontpage eq 1}selected="selected"{/if}>{t}Yes{/t}</option>
 						   </select>
 						</td>
-				   </tr>
+					</tr>
 					<tr>
 						<td valign="top"  align="right" nowrap="nowrap">
 							<label for="frontpage">{t}Put in frontpage:{/t}</label>
@@ -94,7 +112,29 @@
 								<option value="1" {if $article->in_home eq 1}selected="selected"{/if}>{t}Yes{/t}</option>
 						   </select>
 						</td>
-				   </tr>
+					</tr>
+					{else} {* else if not list_hemeroteca *}
+					<tr>
+						<td valign="top"  align="right" nowrap="nowrap">
+							<label for="with_comment">{t}Archived:{/t}</label>
+						</td>
+						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
+							<select name="content_status" id="content_status" class="required">
+								<option value="0" {if $article->content_status eq 0}selected="selected"{/if}>Si</option>
+								<option value="1" {if $article->content_status eq 1}selected="selected"{/if}>No</option>
+							</select>
+							{* <input type="hidden" id="content_status" name="content_status"  value="{$article->content_status}" /> *}
+
+							<input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
+							<input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
+							<input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
+							<input type="hidden" id="available" name="available"  value="{$article->available}" />
+							<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
+						</td>
+					</tr>
+
+
+					{/if}
 					<tr>
 						<td valign="top" align="right">
 							<label for="counter_title">{t}Frontpage title:{/t}</label>
@@ -143,6 +183,14 @@
 						</td>
 					</tr>
 				</table>
+				<script type="text/javascript">
+					document.observe("dom:loaded", function() {
+						countWords(document.getElementById('title'), document.getElementById('counter_title'));
+						countWords(document.getElementById('subtitle'), document.getElementById('counter_subtitle'));
+						countWords(document.getElementById('summary'), document.getElementById('counter_summary'));
+						countWords(document.getElementById('body'), document.getElementById('counter_body'));
+					});
+				</script>
             </div>
         </td>
     </tr>
@@ -151,12 +199,13 @@
             <label for="title">{t}Inner title:{/t}</label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" valign="top" >
-            <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
-                value="" class="required" style="width:95%"  maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
+            <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
+					value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:95%"
+					maxlength="105"
+					onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
+					onkeyup="countWords(this,document.getElementById('counter_title_int'))"
+					tabindex="1"/>
 
-
-            {* input#title.onblur() cando title perda o foco copiar en título interior *}
-            {literal}
             <script type="text/javascript">
             /* <![CDATA[ */
             $('title').observe('blur', function(evt) {
@@ -168,7 +217,6 @@
             });
             /* ]]> */
             </script>
-            {/literal}
 
         </td>
     </tr>
@@ -177,17 +225,24 @@
             <label for="metadata">{t}Keywords{/t}</label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
-            <input type="text" id="metadata" name="metadata" style="width:70%" title="Metadatos" value="" tabindex="1"/>
+            <input type="text" id="metadata" name="metadata"
+				   {if is_object($article)}
+				   value="{$article->metadata}"
+				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
+				   {/if}
+				   style="width:70%" title="Metadatos" tabindex="1"/>
+
             <sub>{t}Separated by commas{/t}</sub>
         </td>
     </tr>
+
     <tr>
         <td valign="top" align="right" style="padding:4px;">
             <label for="subtitle">{t}Pretitle{/t}</label>
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
             <input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:95%"
-                value="" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
+                value="{$article->subtitle|upper|clearslash|escape:"html"}" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
         </td>
     </tr>
 
@@ -196,22 +251,31 @@
             <label for="agency">{t}Agency{/t}</label>
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
-            <input type="text" id="agency" name="agency" title="{t}Agency{/t}"
-                value="{t}Agency{/t}" class="required" style="width:95%" tabindex="3"
-				onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);" />
+            <input 	type="text" id="agency" name="agency" title="{t}Agency{/t}"
+					class="required" style="width:95%" tabindex="3"
+					{if is_object($article)}
+						value="{$article->agency|clearslash|escape:"html"}"
+						onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
+					{else}
+						value="{t}Agency{/t}"
+					{/if}
+				/>
         </td>
     </tr>
 
     <tr>
         <td >
             <label for="summary">{t}Summary{/t}</label><br />
-            <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-                <img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" /></a>
+			{if is_object($article) && !$article->isClone()}
+				<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
+					<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+				</a>
+			{/if}
         </td>
         <td >
             <textarea name="summary" id="summary" title="Resumen de la noticia"
                   onChange="countWords(this,document.getElementById('counter_summary'))"
-                  onkeyup="countWords(this,document.getElementById('counter_summary'))" tabindex="4"></textarea>
+                  onkeyup="countWords(this,document.getElementById('counter_summary'))" tabindex="4">{$article->summary|clearslash|escape:"html"}</textarea>
         </td>
     </tr>
     <tr>
@@ -219,7 +283,7 @@
             <label for="body">{t}Body{/t}</label>
         </td>
         <td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
-            <textarea name="body" id="body" title="Cuerpo de la noticia" style="width:98%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));" tabindex="5"></textarea>
+            <textarea name="body" id="body" title="Cuerpo de la noticia" style="width:98%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));" tabindex="5">{$article->body|clearslash}</textarea>
         </td>
     </tr>
     <tr>
@@ -250,7 +314,7 @@
         <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
                 <input type="text" id="starttime" name="starttime" size="18"
-                    title="Fecha inicio publicaci&oacute;n" value="" tabindex="-1" /></div>
+                    title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" /></div>
         </td>
     </tr>
     <tr>
@@ -260,7 +324,7 @@
         <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
                 <input type="text" id="endtime" name="endtime" size="18"
-                    title="Fecha fin publicaci&oacute;n" value="" tabindex="-1" /></div>
+                    title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" /></div>
 
             <sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
         </td>
@@ -271,7 +335,7 @@
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
             <textarea name="description" id="description"
-                title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1"></textarea>
+                title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
         </td>
     </tr>
 
@@ -279,27 +343,140 @@
     </table>
 </div>
 
+
+{if $smarty.request.action eq 'read'}
+<div class="panel" id="comments" style="width:95%">
+    <table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
+    <tbody>
+    <tr>
+        <th class="title" width='50%'>Comentario</th>
+        <th class="title"  width='20%'>Autor</th>
+        <th align="right">Publicar</th>
+        <th align="right">Eliminar</th>
+    </tr>
+        {section name=c loop=$comments}
+        <tr>
+            <td>  <a style="cursor:pointer;font-size:14px;" onclick="new Effect.toggle($('{$comments[c]->pk_comment}'),'blind')"> {$comments[c]->body|truncate:30} </a> </td>
+            <td> {$comments[c]->author} ({$comments[c]->ip})  <br /> {$comments[c]->email} </td>
+            <td align="right">
+             </td>
+             <td align="right">
+                 <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->pk_comment}');" title="Eliminar">
+                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+           </td>
+        </tr>
+        <tr><td>
+          <div id="{$comments[c]->pk_comment}" class="{$comments[c]->pk_comment}" style="display: none;">
+           <b>Comentario:</b> (IP: {$comments[c]->ip} - Publicado: {$comments[c]->changed})<br /> {$comments[c]->body}
+          </div>
+         </td></tr>
+    {/section}
+    <td colspan="5">
+
+     </td>
+    </tbody>
+    </table>
+</div>
+
+
+<div class="panel" id="opiniones-relacionadas" style="width:95%">
+    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+        <tbody><tr>
+            <td colspan="2">
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{/if}
+
+
 <div class="panel" id="contenidos-relacionados" style="width:95%">
 	{include file="article_relacionados.tpl"}
 </div>
 
-
+{if is_object($article)}
 <div class="panel" id="elementos-relacionados" style="width:95%">
-    <div style="padding:10px; width:90% margin:0 auto;">
-		<h2>{t}Related contents in frontpage{/t}</h2>
-		<div style="position:relative;" id="scroll-container2">
-			<ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
-		</div>
-		<br>
-		<h2>{t}Related contents in inner article:{/t}</h2>
-		<div style="position:relative;" id="scroll-container2int">
-			<ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
-		</div>
+    <br />
+    Listado contenidos relacionados en Portada:  <br />
+    <div style="position:relative;" id="scroll-container2">
+        <ul id="thelist2" style="padding: 4px; background: #EEEEEE">
+              {assign var=cont value=1}
+            {section name=n loop=$losrel}
+                <li id="{$losrel[n]->id|clearslash}">
+                    <table  width="99%">
+                        <tr>
+                            <td>{$losrel[n]->title|clearslash|escape:'html'}</td>
+                            <td width='120'>
+                                {assign var="ct" value=$losrel[n]->content_type}
+                                {$content_types.$ct}
+                            </td>
+                            <td width="120"> {$losrel[n]->category_name|clearslash} </td>
+                            <td width="120">
+                                <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                {assign var=cont value=$cont+1}
+            {/section}
+        </ul>
+    </div>
+    <br />
+    Listado contenidos relacionados en Interior:  <br />
+    <div style="position:relative;" id="scroll-container2int">
+        <ul id="thelist2int" style="padding: 4px; background: #EEEEEE">
+            {assign var=cont value=1}
+            {section name=n loop=$intrel}
+            <li id="{$intrel[n]->id|clearslash}"">
+                <table  width='99%'>
+                    <tr>
+                        <td>{$intrel[n]->title|clearslash|escape:'html'}  </td>
+                        <td width='120'> {* if $intrel[n]->content_type eq 1}Noticia{elseif  $intrel[n]->content_type eq 7} Galeria
+                            {elseif  $intrel[n]->content_type eq 9} Video {elseif  $intrel[n]->content_type eq 4} Opinion
+                            {elseif $intrel[n]->content_type eq 3} Fichero {/if *}
+                            {assign var="ct" value=$intrel[n]->content_type}
+                            {$content_types.$ct}
+                        </td>
+                        <td width='120'> {$intrel[n]->category_name|clearslash} </td>
+                        <td width='120'>
+                            <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
+                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
+                        </td>
+                    </tr>
+                </table>
+             </li>
+              {assign var=cont value=$cont+1}
+            {/section}
+        </ul>
+    </div>
+    <br /><br />
 
-		<div class="p">
-			<input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
-			<input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+    <div class="p">
+        <input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
+        <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+    </div>
+</div>
+{else}
+	<div class="panel" id="elementos-relacionados" style="width:95%">
+		<div style="padding:10px; width:90% margin:0 auto;">
+			<h2>{t}Related contents in frontpage{/t}</h2>
+			<div style="position:relative;" id="scroll-container2">
+				<ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
+			</div>
+			<br>
+			<h2>{t}Related contents in inner article:{/t}</h2>
+			<div style="position:relative;" id="scroll-container2int">
+				<ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
+			</div>
+
+			<div class="p">
+				<input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
+				<input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+			</div>
 		</div>
 	</div>
-</div>
+{/if}
 <input type="hidden" name="available"></input>
