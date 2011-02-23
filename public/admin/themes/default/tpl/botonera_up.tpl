@@ -559,30 +559,6 @@
 		</ul>
 	</div>
 
-{elseif preg_match('/user_groups\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-		    <li>
-				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}user_validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-				</a>
-		    </li>
-			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-			<li>
-			{if isset($user_group->id)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user_group->id}, 'formulario');">
-			{else}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
-			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-				</a>
-			</li>
-		</ul>
-	</div>
 
 {elseif preg_match('/privileges\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
 	<div id="menu-acciones-admin" class="clearfix">
