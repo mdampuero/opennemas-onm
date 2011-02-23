@@ -7,7 +7,14 @@ function smarty_function_admin_menu($params, &$smarty) {
     require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
     // Get the menu and output it as ypmenu.
-    $menu = new Menu();
-    $return = $menu->getMenu('YpMenu', $menuXml, 1);
-    return($return);
+    //$menu = new Menu();
+    //$htmlOutput = $menu->getMenu('YpMenu', $menuXml, 1);
+
+
+    require_once( SITE_LIBS_PATH.'simple_menu.class.php');
+
+    $menu = new SimpleMenu($menuXml);
+    $htmlOutput = $menu->getHTML();
+
+    return($htmlOutput);
 }

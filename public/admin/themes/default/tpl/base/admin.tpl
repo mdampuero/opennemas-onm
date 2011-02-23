@@ -16,6 +16,7 @@
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
+		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
         <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>

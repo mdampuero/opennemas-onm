@@ -29,10 +29,7 @@
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" {if $type_opinion=='2'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}Director opinion{/t}</font></a>
                 </li>
             </ul>
-            {* Zona mensajes cambiar a msgShow *}
-            <div style="padding:4px;">
-                <h2  style="color:#D00; text-align:center;">{if $smarty.get.alert}{$smarty.get.alert} {else}{$msg_alert}{/if}</h2>
-            </div>
+
             <br />
             {if $type_opinion eq '0'}
                 {assign value='Opinión del Autor' var='accion'}
@@ -43,7 +40,20 @@
               {elseif $type_opinion eq '-1'}
                 {assign value='Home' var='accion'}
             {/if}
+            <br>
+            <br>
+
             {include file="botonera_up.tpl"}
+
+            {if $smarty.get.alert or $msg_alert}
+            <div class="notice" style="margin-top:3px;">
+                {if $smarty.get.alert}
+                    {$smarty.get.alert}
+                {else}
+                    {$msg_alert}
+                {/if}
+            </div>
+            {/if}
             <div id="list_opinion">
                  {if $type_opinion=='-1'}
                      {include file="opinion/opinion_list_home.tpl"}
