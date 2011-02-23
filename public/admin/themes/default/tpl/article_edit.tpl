@@ -261,7 +261,8 @@
     </td>
 </tr>
 
-<tr><td></td>
+<tr>
+    <td></td>
     <td valign="top" align="center" colspan=2 >
         <div id="article_images" style="display:inline;">
             {include file="article_images_edit.tpl"}

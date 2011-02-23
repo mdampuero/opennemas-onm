@@ -290,7 +290,11 @@
         <td></td>
         <td valign="top" align="left" colspan="2" >
             <div id="article_images" style="width:98%">
-                {include  file="article_images.tpl"}
+				{if isset($article)}
+					{include file="article_images_edit.tpl"}
+				{else}
+					{include  file="article_images.tpl"}
+				{/if}
             </div>
         </td>
     </tr>
