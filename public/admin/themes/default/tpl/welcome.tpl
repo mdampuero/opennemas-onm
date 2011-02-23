@@ -4,19 +4,19 @@
         <tr>
             <td colspan="2">
                 <div id="cpanel" >
-                    
+
                     {acl isAllowed="ARTICLE_CREATE"}
                 	<div style="float: left;">
-                        <div class="icon">                            
+                        <div class="icon">
                             <a href="/admin/article.php?action=new&category=221">
                                 <img alt="{t}New Article{/t}" src="{$params.IMAGE_DIR}article_add.gif"/>
                                 <span>{t}New Article{/t}</span>
                             </a>
-                            
+
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="OPINION_CREATE"}
                     <div style="float: left;">
                         <div class="icon">
@@ -27,18 +27,18 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="ADVERTISEMENT_CREATE"}
                 	<div style="float: left;">
                         <div class="icon">
                             <a href="/admin/controllers/advertisement/advertisement.php?action=new&category=0">
-                                <img alt="{t}New Add{/t}" src="{$params.IMAGE_DIR}advertisement.png"/>
-                                <span>{t}New Add{/t}</span>
+                                <img alt="{t}New Ad{/t}" src="{$params.IMAGE_DIR}advertisement.png"/>
+                                <span>{t}New Ad{/t}</span>
                             </a>
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="MEDIA_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="ARTICLE_FRONTPAGE"}
                 	<div style="float: left;">
                         <div class="icon">
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="ARTICLE_LIST_PEND"}
                     <div style="float: left;">
                         <div class="icon">
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="OPINION_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="COMMENTS_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                     {acl isAllowed="NEWSLETTER_ADMIN"}
                     <div style="float: left;">
                         <div class="icon">
@@ -103,8 +103,8 @@
                             </a>
                         </div>
                     </div>
-                    {/acl}  
-                    
+                    {/acl}
+
                     {acl isAllowed="XML_IMPORT"}
                     <div style="float: left;">
                         <div class="icon">
@@ -115,11 +115,11 @@
                         </div>
                     </div>
                     {/acl}
-                    
+
                 </div>
             </td>
         </tr>
-        
+
         <tr>
             <td width="50%" valign="top">
                 {if count($messages.entries)>0}
@@ -143,9 +143,9 @@
                     </div>
                 </div>
                 {/if}
-                
+
                 <div class="clearer"></div>
-                
+
                 <div class="rssBox">
                     <h2>
                         <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
@@ -157,12 +157,12 @@
                 <script type="text/javascript">
                 /* <![CDATA[ */
                     var correoRss = new FeedReader('rssCorreo', 'http://www.elcorreogallego.es/rss/rss.php?idWeb=1&idIdioma=1&idMenuTipo=1&sinEdicion=false&idMenu=1&txtTitulo=%DAltima+Hora', {theme: 'correo', timeout: 8000});
-                /* ]]> */                            
+                /* ]]> */
                 </script>
                 {/literal}
-                
+
                 <div class="clearer"></div>
-                
+
                 <div class="rssBox">
                     <h2>
                         <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
@@ -174,12 +174,12 @@
                 <script type="text/javascript">
                 /* <![CDATA[ */
                     new FeedReader('rssOpinion', 'http://www.laopinioncoruna.es/elementosInt/rss/1', {timeout: 8000});
-                /* ]]> */                            
+                /* ]]> */
                 </script>
                 {/literal}
-                
+
                 <div class="clearer"></div>
-                
+
                 <div class="rssBox">
                     <h2>
                         <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
@@ -191,13 +191,13 @@
                 <script type="text/javascript">
                 /* <![CDATA[ */
                     new FeedReader('rssPais', 'http://www.elpais.com/rss.html', {timeout: 10000});
-                /* ]]> */                            
+                /* ]]> */
                 </script>
                 {/literal}
-                
-                
+
+
             </td>
-            
+
 			<td width="50%" valign="top">
                 {*<div class="pane-sliders" id="content-pane">
                     <div class="cpanelright">
@@ -214,28 +214,28 @@
                                 </li>
                                 {/section}
                                 </ul>
-                            </div>                                                        
+                            </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>*}
-                
+
                 <div>
-                    
+
                         <div class="rssBox">
                             <h2>
                                 <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
-                                Xornal.com                                                                
+                                Xornal.com
                             </h2>
                             <div id="rssXornal"></div>
-                        </div>                            
+                        </div>
                         {literal}
                         <script type="text/javascript">
                         /* <![CDATA[ */
                             var xornalRss = new FeedReader('rssXornal', 'http://www.xornal.com/rss/', {timeout: 20000});
-                        /* ]]> */                            
+                        /* ]]> */
                         </script>
                         {/literal}
-                    
+
                         <div class="rssBox">
                             <h2>
                                 <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
@@ -247,10 +247,10 @@
                         <script type="text/javascript">
                         /* <![CDATA[ */
                             var vozRss = new FeedReader('rssVoz', 'http://www.lavozdegalicia.es/portada/index.xml', {theme: 'voz', timeout: 6000});
-                        /* ]]> */                            
+                        /* ]]> */
                         </script>
                         {/literal}
-                        
+
                         <div class="rssBox">
                             <h2>
                                 <img src="{$params.IMAGE_DIR}rss/rss.png" border="0" align="absmiddle" />
@@ -262,16 +262,16 @@
                         <script type="text/javascript">
                         /* <![CDATA[ */
                             var faroRss = new FeedReader('rssFaro', 'http://www.farodevigo.es/elementosInt/rss/1', {timeout: 8000});
-                        /* ]]> */                            
+                        /* ]]> */
                         </script>
                         {/literal}
-                        
+
                     </div>
             </td>
         </tr>
     </tbody>
 </table>
-    
+
 {literal}
 <script type="text/javascript">
 document.observe('dom:loaded', function() {

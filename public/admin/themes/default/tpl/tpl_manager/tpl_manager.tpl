@@ -192,14 +192,14 @@
 
 						{* Gallery frontpage *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Frontpage article caché file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Frontpage article cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
 							<strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
 						</a>
 
 						{* Gallery inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Caché de gallery interior{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Inner gallery cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
 							 target="_blank">
 							<strong>{t}Opinion inner:{/t}</strong> {$titles.$resource|clearslash}
@@ -229,14 +229,14 @@
 
 						{* Frontpage mobile *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-						<img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Caché de portadas versión móvil{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
 							<strong>{t}Mobile Frontpage:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
 						</a>
 
 						{* Frontpages *}
 						{elseif ($caches[c].template == 'frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Caché de portadas sección{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
 						<strong>Frontpage:</strong> {if $caches[c].resource gt 0}
 							{$ccm->get_title($caches[c].category)|clearslash|default:"HOME"} (Pág. {$caches[c].resource})</a>
@@ -246,7 +246,7 @@
 
 						{* Other kind of resources *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Caché de portadas sección{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
 						{if $caches[c].resource gt 0}
 							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} {t}(Pág.{/t} {$caches[c].resource})</a>

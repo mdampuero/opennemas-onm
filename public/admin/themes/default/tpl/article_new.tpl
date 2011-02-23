@@ -38,7 +38,7 @@
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
 							<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="6">
-								   <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Desconocida{/t}</option>
+								   <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
 								{section name=as loop=$allcategorys}
 									<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
 									{section name=su loop=$subcat[as]}

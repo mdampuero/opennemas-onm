@@ -117,7 +117,7 @@ function enviar2(elto, trg, acc, id) {
     }else{
         if((acc=='mdelete')){
             if(confirm('¿Está seguro de eliminar esos elementos?')) {
-                
+
                 var parentEl = elto.parentNode;
                 while(parentEl.nodeName != "FORM") {
                     parentEl = parentEl.parentNode;

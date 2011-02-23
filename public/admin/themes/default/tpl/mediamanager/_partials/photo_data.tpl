@@ -34,8 +34,8 @@
             <p>
                 <label>{t}Color:{/t}</label>
                 <select name="color[{$photo1->id}]" id="color[{$photo1->id}]" />
-                    <option value="{t}B/N{/t}" {if $photo1->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
-                    <option value="{t}color{/t}" {if $photo1->color eq 'color'} selected {/if}>{t}Color{/t}</option>
+                    <option value="{t}B/W{/t}" {if $photo1->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
+                    <option value="{t}Color{/t}" {if $photo1->color eq 'color'} selected {/if}>{t}Color{/t}</option>
                 </select>
             </p>
 

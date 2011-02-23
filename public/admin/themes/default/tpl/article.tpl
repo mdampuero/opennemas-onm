@@ -175,24 +175,20 @@
             {* <script type="text/javascript" src="{$params.JS_DIR}/swampy_browser/sb.js"></script> *}
 
             <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
-            {literal}
             <script type="text/javascript" language="javascript">
                 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-                {/literal}
 
                 {if isset($article) && $article->isClone()}
                 OpenNeMas.tinyMceConfig.simple.readonly   = 1;
                 OpenNeMas.tinyMceConfig.advanced.readonly = 1;
                 {/if}
 
-                {literal}
                 OpenNeMas.tinyMceConfig.simple.elements = "summary";
                 tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
 
                 OpenNeMas.tinyMceConfig.advanced.elements = "body";
                 tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
             </script>
-            {/literal}
 
             <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
                 <img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />

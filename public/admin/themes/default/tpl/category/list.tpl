@@ -15,13 +15,13 @@
         {if !empty($msg)}
             <script type="text/javascript">
                 {if $smarty.request.resp eq 'SI'}
-                    showMsg({ 'warn':['{t}Deleted succesfulySe ha eliminado correctamente.{/t}'] },'inline');
+                    showMsg({ 'warn':['{t}Deleted succesfuly.{/t}'] },'inline');
                 {elseif $smarty.request.resp eq 'NO'}
                     showMsg({ 'warn':['{t}Not deleted, the section is not empty.{/t}<br />'] },'inline');
                 {elseif $smarty.request.resp eq 'ya'}
-                    showMsg({ 'warn':['{t}No se ha podido crear, la seccion ya existe.{/t}' ]},'inline');
+                    showMsg({ 'warn':['{t}Unable to create, the section exists.{/t}' ]},'inline');
                 {elseif $smarty.request.resp eq 'EMPTY'}
-                    showMsg({ 'warn':['{t}Se ha vaciado correctamente.{/t}'] },'inline');
+                    showMsg({ 'warn':['{t}Successfully emptied.{/t}'] },'inline');
                 {/if}
             </script>
         {/if}

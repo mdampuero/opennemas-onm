@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 16:11+0100\n"
+"POT-Creation-Date: 2011-02-23 16:01+0100\n"
 "PO-Revision-Date: 2011-02-19 00:26+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
@@ -780,14 +780,12 @@ msgid "Opinion inner:"
 msgstr ""
 
 #: locale/extracted_strings.c:464
-#, fuzzy
-msgid "Frontpage article cache file"
-msgstr "Portadas"
+msgid "Frontpage article caché file"
+msgstr ""
 
 #: locale/extracted_strings.c:470
-#, fuzzy
-msgid "Inner gallery cache file"
-msgstr "Ficheiro de caché de vídeo interior"
+msgid "Caché de gallery interior"
+msgstr ""
 
 #: locale/extracted_strings.c:476
 msgid "RSS Opinion author cache file "
@@ -815,18 +813,16 @@ msgid "Caché RSS"
 msgstr "Caché de RSS"
 
 #: locale/extracted_strings.c:497
-#, fuzzy
-msgid "Mobile frontpage cache file"
-msgstr "Portadas de móbil"
+msgid "Caché de portadas versión móvil"
+msgstr ""
 
 #: locale/extracted_strings.c:500
 msgid "Mobile Frontpage:"
 msgstr ""
 
 #: locale/extracted_strings.c:503 locale/extracted_strings.c:506
-#, fuzzy
-msgid "Section Frontpage cache file"
-msgstr "Ficheiro de caché de vídeo interior"
+msgid "Caché de portadas sección"
+msgstr ""
 
 #: locale/extracted_strings.c:509
 msgid "(Pág."
@@ -1753,8 +1749,7 @@ msgstr ""
 msgid "Black and white"
 msgstr ""
 
-#: locale/extracted_strings.c:1643 locale/extracted_strings.c:1679
-#: locale/extracted_strings.c:1682
+#: locale/extracted_strings.c:1643 locale/extracted_strings.c:1682
 msgid "Color"
 msgstr ""
 
@@ -1774,8 +1769,16 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: locale/extracted_strings.c:1673 locale/extracted_strings.c:1676
+#: locale/extracted_strings.c:1673
+msgid "B/N"
+msgstr ""
+
+#: locale/extracted_strings.c:1676
 msgid "B/W"
+msgstr ""
+
+#: locale/extracted_strings.c:1679
+msgid "color"
 msgstr ""
 
 #: locale/extracted_strings.c:1697

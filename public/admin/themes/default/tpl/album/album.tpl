@@ -16,9 +16,7 @@
 
         {if $category eq '3' && $totalalbums neq '4'}
             <script type="text/javascript">
-                {literal}
-                    showMsg({'warn':[{/literal}{t escape="off"}'Must have 4 favorites albuns to frontpage.<br />  '{/t}{literal}]},'inline');
-                {/literal}
+                showMsg({'warn':['{t escape="off"}Must have 4 favorites albuns to frontpage.<br />  {/t}' ]},'inline');
             </script>
         {/if}
 

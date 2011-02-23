@@ -461,13 +461,13 @@ gettext("Opinion inner article file");
 gettext("Opinion inner:");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Frontpage article caché file");
+gettext("Frontpage article cache file");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Opinion inner:");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Caché de gallery interior");
+gettext("Inner gallery cache file");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Opinion inner:");
@@ -494,16 +494,16 @@ gettext("Caché RSS");
 gettext("RSS:");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Caché de portadas versión móvil");
+gettext("Mobile frontpage cache file");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Mobile Frontpage:");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Caché de portadas sección");
+gettext("Section Frontpage cache file");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Caché de portadas sección");
+gettext("Section Frontpage cache file");
 
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("(Pág.");
@@ -1118,10 +1118,13 @@ gettext("End time publication");
 gettext("Click number:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Number of clicks\"");
+gettext("Number of clicks");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Number of clics\"");
+gettext("Current:");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Number of clics");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Views number");
@@ -1130,7 +1133,7 @@ gettext("Views number");
 gettext("Views number");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Currents:");
+gettext("Current:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Timer");
@@ -1667,13 +1670,13 @@ gettext("Author");
 gettext("Color:");
 
 /* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
-gettext("B/N");
+gettext("B/W");
 
 /* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
 gettext("B/W");
 
 /* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
-gettext("color");
+gettext("Color");
 
 /* ./themes/default/tpl//mediamanager/_partials/photo_data.tpl */
 gettext("Color");
@@ -2162,16 +2165,16 @@ gettext("Content");
 gettext("There is no stands");
 
 /* ./themes/default/tpl//category/list.tpl */
-gettext("Deleted succesfulySe ha eliminado correctamente.");
+gettext("Deleted succesfuly.");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Not deleted, the section is not empty.");
 
 /* ./themes/default/tpl//category/list.tpl */
-gettext("No se ha podido crear, la seccion ya existe.");
+gettext("Unable to create, the section exists.");
 
 /* ./themes/default/tpl//category/list.tpl */
-gettext("Se ha vaciado correctamente.");
+gettext("Successfully emptied.");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Available sections");
@@ -2228,7 +2231,7 @@ gettext("Edit");
 gettext("Delete");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("'Must have 4 favorites albuns to frontpage.<br />  '");
+gettext("Must have 4 favorites albuns to frontpage.<br />  ");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("WIDGET HOME");
@@ -2375,7 +2378,7 @@ gettext("Separated by coma");
 gettext("Album images (Double click to select and cut images)");
 
 /* ./themes/default/tpl//album/album_images.tpl */
-gettext("\"Show image\"");
+gettext("Show image");
 
 /* ./themes/default/tpl//album/album_images.tpl */
 gettext("Drag and drop images to select");
@@ -2417,7 +2420,7 @@ gettext("Tags:");
 gettext("Image");
 
 /* ./themes/default/tpl//album/album_images.tpl */
-gettext("Foot image:");
+gettext("Footer image:");
 
 /* ./themes/default/tpl//album/album_images.tpl */
 gettext("Cut the image that is in frontpage view.(300x250 px)");
@@ -2600,16 +2603,16 @@ gettext("We cant find any content with your search criteria.");
 gettext("Your search \"<b>%1</b>\" didn't return any element.");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Sugerencias:");
+gettext("Suggestions:");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Asegúrese de que todas las palabras estén escritas correctamente.");
+gettext("Check if all the words are written correctly.");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Intente usar otras palabras.");
+gettext("Use other words.");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Intente usar palabras más generales.");
+gettext("Use more general search criteria.");
 
 /* ./themes/default/tpl//search/search_advanced.tpl */
 gettext("Title");
@@ -2858,7 +2861,7 @@ gettext("Frontpage title:");
 gettext("Section:");
 
 /* ./themes/default/tpl//article_new.tpl */
-gettext("Desconocida");
+gettext("Unknown");
 
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Coments");
@@ -2975,10 +2978,10 @@ gettext("New Opinion");
 gettext("New Opinion");
 
 /* ./themes/default/tpl//welcome.tpl */
-gettext("New Add");
+gettext("New Ad");
 
 /* ./themes/default/tpl//welcome.tpl */
-gettext("New Add");
+gettext("New Ad");
 
 /* ./themes/default/tpl//welcome.tpl */
 gettext("Upload Photo");

@@ -1,23 +1,21 @@
-{literal}
-    <style type="text/css">
-	
+<style type="text/css">
 
-		#testWrap {
-			width: 600px;
-                        overflow:hidden;
-			float: left;
-			margin: 20px 0 0 50px; /* Just while testing, to make sure we return the correct positions for the image & not the window */
-		}
 
-		#previewArea {
-			margin: 20px; 0 0 20px;
-			float: left;
-                        background:#F5F5F5 none repeat scroll 0 0;
-                        border:2px double #333333;
-		}		
-	</style>
+	#testWrap {
+		width: 600px;
+					overflow:hidden;
+		float: left;
+		margin: 20px 0 0 50px; /* Just while testing, to make sure we return the correct positions for the image & not the window */
+	}
 
-{/literal}
+	#previewArea {
+		margin: 20px; 0 0 20px;
+		float: left;
+					background:#F5F5F5 none repeat scroll 0 0;
+					border:2px double #333333;
+	}
+</style>
+
 
 
 <tr>
@@ -26,29 +24,29 @@
 	 <div id="scroll-album">
 		 <ul class="gallery_list" id="album_list">
             {if $oldphoto}
-		 		 {assign var=indi value='1'}					
-				 {section name=n loop=$oldphoto}	
-				 {if $oldphoto[n]->content_status eq 1}				
+		 		 {assign var=indi value='1'}
+				 {section name=n loop=$oldphoto}
+				 {if $oldphoto[n]->content_status eq 1}
 					<li value="{$MEDIA_IMG_URL}{$oldphoto[n]->path_file}{$oldphoto[n]->name}" de:pk_photo="{$oldphoto[n]->pk_photo}"  id="f{$indi}-{$oldphoto[n]->pk_photo}">
-					    <a class="album" onClick="show_image('img{$oldphoto[n]->pk_photo}', 'f{$indi}-{$oldphoto[n]->pk_photo}')" title={t}"Show image"{/t}>
+					    <a class="album" onClick="show_image('img{$oldphoto[n]->pk_photo}', 'f{$indi}-{$oldphoto[n]->pk_photo}')" title="{t}Show image{/t}>"
 					     <img ondblclick="define_crop(this);"  style="{cssimagescale resolution=67 photo=$oldphoto[n]}" src="{$MEDIA_IMG_URL}{$oldphoto[n]->path_file}{$oldphoto[n]->name}"
                             class="draggable2" id="img{$oldphoto[n]->pk_photo}" de:pk_photo="{$oldphoto[n]->pk_photo}"  value="f{$indi}-{$oldphoto[n]->pk_photo}" name="{$oldphoto[n]->name}" de:mas="{$oldphoto[n]->name}"   de:path="{$oldphoto[n]->path_file}"  border="0" de:dimensions="{$oldphoto[n]->width} x {$oldphoto[n]->height} (px)" de:peso="{$oldphoto[n]->size}" de:created="{$oldphoto[n]->created}"  de:description="{$oldphoto[n]->description|escape:"html"}"  de:tags="{$oldphoto[n]->metadata}"   de:footer="{$oldphotos[n][2]|escape:"html"}"/><br>
-					   </a></li>                                          
+					   </a></li>
                                     {assign var=indi value=$indi+1}
                                 {/if}
-				 {/section}		
+				 {/section}
 			{/if}
 		</ul>
-	</div>	
+	</div>
     </td>
  </tr> <tr>
     <td style="height:60px;" colspan="3">  <div id="album_msg" style="display:none;"></div>
     </td>
-</tr> 
+</tr>
 
 <tr>
     <td></td><td></td>
-	<td valign="top" align="right" rowspan="2">	
+	<td valign="top" align="right" rowspan="2">
 		<br>
                   <table width="90%">
                         <tr>
@@ -59,7 +57,7 @@
                             </td>
                             <td align="right">
                                <select id="category_imag" name="category_imag" class="required" onChange="get_images(this.options[this.selectedIndex].value,1, 'list_by_category',0);">
-                                     
+
                                     <option value="0">GLOBAL</option>
                                     {section name=as loop=$allcategorys}
                                          <option value="{$allcategorys[as]->pk_content_category}" {if $article->category  eq $allcategorys[as]->pk_content_category} selected {/if}>{$allcategorys[as]->title}</option>
@@ -78,7 +76,7 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                 <div class="photos" id="photos" style="width:430px; height:540px; border:3px double #333333; padding:1px;">
                         <em>{t}Drag and drop images to select{/t}</em>
                         {if count($photos) gt 0}
@@ -104,14 +102,14 @@
                                   {/if}
                                 {/section}
                          </ul>
-             </div>                            
+             </div>
 	</td>
 </tr>
 <tr>
 	<td colspan="2">
-       
-	<div id="portada" style="width:420px;display:inline;">           	
-		<div id="imgdes">		  
+
+	<div id="portada" style="width:420px;display:inline;">
+		<div id="imgdes">
 		   <div id="nifty" style="width:580px;display:block;">
                        <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
 			   <table border="0">
@@ -139,16 +137,16 @@
                                     <br>
                                 </td></tr>
                                 <tr><td colspan=2>
-                                    <label for="title">{t}Foot image:{/t}</label>
+                                    <label for="title">{t}Footer image:{/t}</label>
                                     <input type="text" id="img_footer" name="img_footer" title="Imagen" value="" size="60" />
                                 </td></tr></table>
                          <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b>
                     </div>
-                </div>						
-          
+                </div>
 
-</div>	 
-	   <input type="hidden" id="ordenAlbum" name="ordenAlbum" value=""></input>	   
+
+</div>
+	   <input type="hidden" id="ordenAlbum" name="ordenAlbum" value=""></input>
 </td>
 </tr>
 
@@ -161,16 +159,15 @@
             </div>
              <div id="previewArea"> {if !empty($album->cover)} <img id="crop_img" src="{$MEDIA_IMG_URL}{$album->cover}" alt={t}"Frontpage image"{/t}  style="maxWidth:600px;maxHeight:400px;" /> {/if} </div>
              <div id="results">
-                      <input type="hidden" name="x1" id="x1" value=""/>
-                 <br />
-                      <input type="hidden" name="y1" id="y1" value=""/>
+                <input type="hidden" name="x1" id="x1" value=""/>
+                <br />
+					<input type="hidden" name="y1" id="y1" value=""/>
 
-                      <input type="hidden" name="width" id="width" value="" />
-                      <input type="hidden" name="height" id="height" value=""/>
+					<input type="hidden" name="width" id="width" value="" />
+					<input type="hidden" name="height" id="height" value=""/>
 
-                    <input type="hidden" name="path_img" id="path_img" value=""/>
-                    <input type="hidden" name="name_img" id="name_img" value=""/>
-               
+					<input type="hidden" name="path_img" id="path_img" value=""/>
+					<input type="hidden" name="name_img" id="name_img" value=""/>
              </div>
     </td>
 </tr>
@@ -179,7 +176,7 @@
 <script type="text/javascript">
 
   	album_make_mov();
-      
+
   function define_crop(element) {
 
               if(crop != null) {
@@ -210,7 +207,7 @@
                                  width :  b[0]+'px'
                                 });
                     }
-                     
+
                 } else {
                     if(b[0]>600){
                            var h=Math.floor( (c[0]*600) / b[0] );
@@ -245,7 +242,7 @@ Droppables.add('testWrap', {
         var a = element.getAttribute('de:dimensions');
         var b = a.split(' x ');
         var c = b[1].split(' (px)');
-        
+
         $('testImage').width  = b[0];
         $('testImage').height = c[0];
 

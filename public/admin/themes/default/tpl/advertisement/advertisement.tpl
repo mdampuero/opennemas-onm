@@ -289,13 +289,13 @@
                                         <label for="title">{t}Click number:{/t}</label>
                                     </td>
                                     <td>
-                                        <input type="text" id="num_clic" name="num_clic" title={t}"Number of clicks"{/t}
+                                        <input type="text" id="num_clic" name="num_clic" title="{t}Number of clicks{/t}"
                                             value="{$advertisement->num_clic}" />
                                         {if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'CLIC'}
-                                                Actuales: {$advertisement->num_clic_count}
+                                                {t}Current:{/t} {$advertisement->num_clic_count}
                                             {/if}
-                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title={t}"Number of clics"{/t}
+                                            <input type="hidden" id="num_clic_count" name="num_clic_count" title="{t}Number of clics{/t}"
                                                 value="{$advertisement->num_clic_count}" />
                                         {/if}
                                     </td>
@@ -309,7 +309,7 @@
                                             value="{$advertisement->num_view}" />
                                         {if $smarty.request.action eq "read"}
                                             {if $advertisement->type_medida == 'VIEW'}
-                                                {t}Currents:{/t} {$advertisement->views}
+                                                {t}Current:{/t} {$advertisement->views}
                                             {/if}
                                         {/if}
                                     </td>
