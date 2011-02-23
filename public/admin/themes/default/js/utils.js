@@ -234,7 +234,7 @@ function paginate_search(action,page,stringSearch,categories)
 function del_photo(id)
 {
     new Ajax.Request(
-        "controllers/opinion/author.php?action=check_img_author&id_img="+id+"",
+        "author.php?action=check_img_author&id_img="+id+"",
         {
             method: 'get',
 
