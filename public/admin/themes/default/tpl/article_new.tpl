@@ -16,13 +16,18 @@
 	<li>
 		<a href="#edicion-extra">{t}Article parameters{/t}</a>
 	</li>
+	{if is_object($article) && !$article->isClone()}
+    <li>
+		<a href="#comments">{t}Comments{/t}</a>
+    </li>
+    {/if}
 	<li>
         <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
 	</li>
 	<li>
         <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
 	</li>
-	{if is_object($article) &&isset($clones)}
+	{if is_object($article) && isset($clones)}
 		<li>
 			<a href="#clones">Clones</a>
 		</li>
@@ -484,3 +489,24 @@
 	</div>
 {/if}
 <input type="hidden" name="available"></input>
+
+{if isset($clones)}
+<div class="panel" id="clones" style="width:95%">
+    {include file="article_clones.tpl"}
+</div>
+{/if}
+
+{if is_object($article) && $article->isClone()}
+{* Disable fields via javascript if $article->isClone() *}
+{literal}
+<script type="text/javascript">
+(function() {
+    var elements = ['title', 'description', 'subtitle', 'metadata', 'agency'];
+    elements.each(function(item){
+        $(item).disabled = true;
+        $(item).setAttribute('disabled', 'disabled');
+    });
+}());
+</script>
+{/literal}
+{/if}
