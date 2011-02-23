@@ -40,8 +40,8 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
 
 
     if(!is_dir($uploaddir)) {
-            mkdir($uploaddir, 0777);
-            @chmod($uploaddir,0777); //Permisos de lectura y escritura del fichero
+        mkdir($uploaddir, 0777);
+        @chmod($uploaddir,0777); //Permisos de lectura y escritura del fichero
     }
     //arrays con Tags y descripcion de cada una
     $tags=$_REQUEST['tags'];
