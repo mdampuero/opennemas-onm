@@ -3,12 +3,12 @@
 		<td colspan=2><h2>{t}Multimedia associated to this article:{/t}</h2></td>
 	</tr>
 	<tr>
-		<td valign=top>
+		<td valign=top width="60%">
 			<div id="img_portada" style="display:block; width:100%;">
 				<table border='0' style="display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
 					<tr>
 						<td style="width:50%">
-							<h2>{t}Frontpage image:{/t}</h2>
+							<h2>{t}Image for frontpage:{/t}</h2>
 							<input type="hidden" id="input_video" name="fk_video" value="" size="70">
 							<input type="hidden" id="input_img1" name="img1" title="Imagen" value="" size="70"/>
 						</td>
@@ -55,7 +55,7 @@
 				<table border='0' style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
 					<tr>
 						<td>
-							<h2>Imagen Interior:</h2>
+							<h2>{t}Image for inner article page:{/t}</h2>
 						</td>
 						<td  align='right'>
 							<a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
@@ -99,7 +99,7 @@
 				<table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
 					<tr>
 						<td>
-							<h2>{t}Inner video:{/t}</h2>
+							<h2>{t}Video for inner article page:{/t}</h2>
 						</td>
 						<td  align='right'>
 							<a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">

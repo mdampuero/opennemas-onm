@@ -2,7 +2,7 @@
 <div id="warnings-validation">
 {if $article->isClone()}
     {assign var="original" value=$article->getOriginal()}
-    
+
     Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
 {/if}
 </div>
@@ -10,21 +10,21 @@
 {* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
 <ul id="tabs">
     <li>
-        <a href="#edicion-contenido">Edici&oacute;n noticia</a>
-    </li>    
+		<a href="#edicion-contenido">{t}Article content{/t}</a>
+    </li>
     <li>
-        <a href="#edicion-extra" onClick="javascript:get_tags($('title').value);">Par&aacute;metros de noticia</a>
+        <a href="#edicion-extra" onClick="javascript:get_tags($('title').value);">{t}Article parameters{/t}</a>
     </li>
     {if !$article->isClone()}
     <li>
-        <a href="#comments">Comentarios</a>
+		<a href="#comments">{t}Comments management{/t}</a>
     </li>
     {/if}
     <li>
-        <a href="#contenidos-relacionados">Contenidos relacionados</a>
+        <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
     </li>
     <li>
-        <a href="#elementos-relacionados" onClick="mover();">Organizar relacionados</a>
+        <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
     </li>
     {if isset($clones)}
     <li>
@@ -34,7 +34,7 @@
 </ul>
 
 
-<div class="panel" id="edicion-contenido" style="width:98%">
+<div class="panel" id="edicion-contenido">
 <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="96%">
 <tbody>
 <tr>
@@ -53,7 +53,7 @@
     <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
         <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
             value="{$article->title_int|clearslash|escape:"html"}" class="required" size="80" maxlength="105" onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);" onkeyup="countWords(this,document.getElementById('counter_title_int'))" tabindex="1"/>
-        
+
         {literal}
         <script type="text/javascript">
         /* <![CDATA[ */
@@ -83,7 +83,7 @@
                             {section name=su loop=$subcat[as]}
                                 {if $subcat[as][su]->internal_category eq 1}
                                     <option value="{$subcat[as][su]->pk_content_category}" {if $article->category  eq $subcat[as][su]->pk_content_category} selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                               
+
                                {/if}
                             {/section}
                         {/section}
@@ -101,7 +101,7 @@
                         <option value="1" {if $article->with_comment eq 1}selected="selected"{/if}>Si</option>
                     </select>
                 </td>
-            </tr>           
+            </tr>
             <tr>
                     <td valign="top"  align="right" nowrap="nowrap">
                         <label for="frontpage"> En Portada Sección: </label>
@@ -137,9 +137,9 @@
                 </td>
             </tr>
 
-            
+
             {else} {* else if not list_hemeroteca *}
-            
+
             <tr>
                 <td valign="top"  align="right" nowrap="nowrap">
                     <label for="with_comment"> Archivado: </label>
@@ -150,17 +150,17 @@
                         <option value="1" {if $article->content_status eq 1}selected="selected"{/if}>No</option>
                     </select>
                     {* <input type="hidden" id="content_status" name="content_status"  value="{$article->content_status}" /> *}
-                    
+
                     <input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
                     <input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
                     <input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
                     <input type="hidden" id="available" name="available"  value="{$article->available}" />
-                    <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />                    
+                    <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
                 </td>
             </tr>
-                
-     
-            {/if} 
+
+
+            {/if}
             <tr>
                 <td valign="top" align="right">
                     <label for="counter_title">T&iacute;tulo:</label>
@@ -234,7 +234,7 @@
     </td>
     <td style="padding:4px;" valign="top" nowrap="nowrap" >
         <input type="text" id="agency" name="agency" title="Agencia" tabindex="3"
-            value="{$article->agency|clearslash|escape:"html"}" class="required" size="100" 
+            value="{$article->agency|clearslash|escape:"html"}" class="required" size="100"
    {literal}onblur="setTimeout(function(){tinyMCE.get('summary').focus();}, 200);"{/literal} />
     </td>
 </tr>
@@ -249,7 +249,7 @@
     <td style="padding:4px;" valign="top" nowrap="nowrap">
         <textarea name="summary" id="summary" tabindex="4"
             title="Resumen de la noticia" style="width:100%; height:8em;"  onChange="countWords(this,document.getElementById('counter_summary'))" onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
-    </td>    
+    </td>
 </tr>
 <tr>
     <td valign="top" align="right" style="padding:4px;" >
@@ -260,15 +260,15 @@
             title="Cuerpo de la noticia" style="width:100%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));"> {$article->body|clearslash}</textarea>
     </td>
 </tr>
-    
+
 <tr><td></td>
     <td valign="top" align="center" colspan=2 >
         <div id="article_images" style="display:inline;">
             {include file="article_images_edit.tpl"}
         </div>
-        
-    </td>    
-</tr>    
+
+    </td>
+</tr>
 <tr>
     <td> </td>
     <td valign="top" align="left" colspan="2">&nbsp;</td>
@@ -340,29 +340,29 @@
 <div class="panel" id="comments" style="width:95%">
     <table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
     <tbody>
-    <tr>                
+    <tr>
         <th class="title" width='50%'>Comentario</th>
-        <th class="title"  width='20%'>Autor</th>                    
-        <th align="right">Publicar</th>        
+        <th class="title"  width='20%'>Autor</th>
+        <th align="right">Publicar</th>
         <th align="right">Eliminar</th>
-    </tr>                
+    </tr>
         {section name=c loop=$comments}
         <tr>
             <td>  <a style="cursor:pointer;font-size:14px;" onclick="new Effect.toggle($('{$comments[c]->pk_comment}'),'blind')"> {$comments[c]->body|truncate:30} </a> </td>
             <td> {$comments[c]->author} ({$comments[c]->ip})  <br /> {$comments[c]->email} </td>
             <td align="right">
              </td>
-             <td align="right">     
+             <td align="right">
                  <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->pk_comment}');" title="Eliminar">
                 <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
            </td>
         </tr>
         <tr><td>
-          <div id="{$comments[c]->pk_comment}" class="{$comments[c]->pk_comment}" style="display: none;">    
+          <div id="{$comments[c]->pk_comment}" class="{$comments[c]->pk_comment}" style="display: none;">
            <b>Comentario:</b> (IP: {$comments[c]->ip} - Publicado: {$comments[c]->changed})<br /> {$comments[c]->body}
           </div>
          </td></tr>
-    {/section}    
+    {/section}
     <td colspan="5">
 
      </td>
@@ -402,8 +402,8 @@
                             <td width='120'>
                                 {assign var="ct" value=$losrel[n]->content_type}
                                 {$content_types.$ct}
-                            </td> 
-                            <td width="120"> {$losrel[n]->category_name|clearslash} </td> 
+                            </td>
+                            <td width="120"> {$losrel[n]->category_name|clearslash} </td>
                             <td width="120">
                                 <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
@@ -424,27 +424,27 @@
             <li id="{$intrel[n]->id|clearslash}"">
                 <table  width='99%'>
                     <tr>
-                        <td>{$intrel[n]->title|clearslash|escape:'html'}  </td> 
-                        <td width='120'> {* if $intrel[n]->content_type eq 1}Noticia{elseif  $intrel[n]->content_type eq 7} Galeria  
-                            {elseif  $intrel[n]->content_type eq 9} Video {elseif  $intrel[n]->content_type eq 4} Opinion 
+                        <td>{$intrel[n]->title|clearslash|escape:'html'}  </td>
+                        <td width='120'> {* if $intrel[n]->content_type eq 1}Noticia{elseif  $intrel[n]->content_type eq 7} Galeria
+                            {elseif  $intrel[n]->content_type eq 9} Video {elseif  $intrel[n]->content_type eq 4} Opinion
                             {elseif $intrel[n]->content_type eq 3} Fichero {/if *}
                             {assign var="ct" value=$intrel[n]->content_type}
                             {$content_types.$ct}
-                        </td> 
-                        <td width='120'> {$intrel[n]->category_name|clearslash} </td> 
+                        </td>
+                        <td width='120'> {$intrel[n]->category_name|clearslash} </td>
                         <td width='120'>
                             <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a> 
+                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
                         </td>
                     </tr>
-                </table>  
+                </table>
              </li>
               {assign var=cont value=$cont+1}
             {/section}
         </ul>
     </div>
     <br /><br />
-    
+
     <div class="p">
         <input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
         <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>

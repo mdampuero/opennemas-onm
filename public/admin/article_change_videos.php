@@ -36,7 +36,7 @@ if(isset($_REQUEST['action']) ) {
             }
             //$videos = $cm->find('video', 'fk_content_type = 9 AND ' . $szWhere, 'ORDER BY created DESC');
   			list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 AND ' . $szWhere, 'ORDER BY  created DESC ',$_REQUEST['page'],20);
-			
+
             break;
     }
 }
@@ -51,23 +51,23 @@ if($pages->_totalPages>1){
     echo "</p> ";
 }
 */
-$tpl->assign('videos', $videos);     
-$pages=$pager;		
+$tpl->assign('videos', $videos);
+$pages=$pager;
 $params='0';
 $paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);
 if($pages->_totalPages>1) {
  	echo ($paginacionV);
 }
-echo "<ul id='thelist' class='gallery_list' style='width:400px;'> ";
-if($videos) {        
+echo "<ul id='thelist' class='clearfix gallery_list' style='width: 100%; margin: 0pt; padding: 0pt;'> ";
+if($videos) {
+	$num = 0;
     foreach ($videos as $as){
-        $ph=new video($as->pk_video);                
+        $ph=new video($as->pk_video);
         echo '<li><div style="float: left;"> <a>
               <img class="video" width="67" src="http://i4.ytimg.com/vi/'. $ph->videoid .'/default.jpg" id="draggable_video'.$num.'" name="'.$as->pk_video.'" alt="'.$as->title .'" qlicon="' . $ph->url . '" title="' . $ph->title . '" de:description="' .htmlspecialchars(stripslashes($ph->description), ENT_QUOTES). '" de:tags="' . $ph->metadata . '" de:created="' . $ph->created . '"  title="Desc:'.htmlspecialchars(stripslashes($ph->description), ENT_QUOTES) .' Tags:'.$ph->metadata.'"  />
               </a> </div></li>';
         $num++;
-            
+
     }
 }
 echo "	 </ul><br>";
-

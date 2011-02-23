@@ -23,10 +23,10 @@ if(isset($_REQUEST['action']) )
             $category=intval($_REQUEST['category']);
           //  $photos = $cm->find_by_category('Photo', $_REQUEST['category'], 'fk_content_type=8 ', 'ORDER BY created DESC');
             list($photos, $pager)= $cm->find_pages('Photo', 'fk_content_type=8  and content_status=1 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30, $category);
- 
+
             break;
 
-        case 'list_by_metadatas':            
+        case 'list_by_metadatas':
 
             if( isset($_REQUEST['metadatas']) && !empty($_REQUEST['metadatas'])) {
                 $presentSearch = cSearch::Instance();
@@ -49,16 +49,16 @@ if(isset($_REQUEST['action']) )
             }
             else
                 $szWhere = "TRUE";
-               
+
             if(!isset($_REQUEST['category']) || $_REQUEST['category'] <= 0) {
               //  $photos = $cm->find('Photo', 'fk_content_type = 8 AND ' . $szWhere, 'ORDER BY created DESC');
 		list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image" and contents.content_status=1 AND '. $szWhere, 'ORDER BY  created DESC ',$_REQUEST['page'],30);
-                
-            } else {         
+
+            } else {
                // $photos = $cm->find_by_category('Photo', $_REQUEST['category'], 'fk_content_type = 8 AND ' . $szWhere, 'ORDER BY created DESC');
                 list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image" and contents.content_status=1 AND '. $szWhere, 'ORDER BY  created DESC ',$_REQUEST['page'],30, $_REQUEST['category']);
             }
-              
+
             break;
     }
 }
@@ -66,9 +66,9 @@ if(isset($_REQUEST['action']) )
 if( isset($photos) &&
     !empty($photos))
     $photos=$cm->paginate_num($photos,30);
-    
-$cat=$_REQUEST['category'];			
-$pages=$cm->pager;		
+
+$cat=$_REQUEST['category'];
+$pages=$cm->pager;
 */
 if(isset($pager) && !empty($pager)) {
     $cat=$_GET['category'];
@@ -76,7 +76,7 @@ if(isset($pager) && !empty($pager)) {
     $paginacion = $cm->makePagesLink($pages, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
     echo $paginacion;
 }
-echo "<ul id='thelist' class='gallery_list' style='width:400px;'> ";
+echo "<ul id='thelist' class='gallery_list clearfix' style='width: 100%; margin: 0pt; padding: 0pt;'> ";
 if(isset($photos) && !empty($photos) ){
         $num=1;
         foreach ($photos as $as) {
@@ -98,4 +98,3 @@ if(isset($photos) && !empty($photos) ){
 }
 echo "	 </ul><br>";
 	//No funciona  onmouseover="return escape(\'Desc:'.$as->description.'<br>Tags:'.$as->metadata.'\');"
-

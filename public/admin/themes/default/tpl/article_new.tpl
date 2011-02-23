@@ -3,19 +3,16 @@
 {* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
 <ul id="tabs">
 	<li>
-		<a href="#edicion-contenido">Edici&oacute;n noticia</a>
+		<a href="#edicion-contenido">{t}Article content{/t}</a>
 	</li>
 	<li>
-		<a href="#edicion-extra">Par&aacute;metros de noticia</a>
+		<a href="#edicion-extra">{t}Article parameters{/t}</a>
 	</li>
 	<li>
-		<a href="#comments">Comentarios</a>
+        <a href="#contenidos-relacionados">{t}Related contents{/t}</a>
 	</li>
 	<li>
-		<a href="#contenidos-relacionados">Contenidos relacionados</a>
-	</li>
-	<li>
-		<a href="#elementos-relacionados" onClick="mover();">Organizar relacionados</a>
+        <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
 	</li>
 </ul>
 
@@ -248,7 +245,7 @@
     <tbody>
     <tr>
         <td valign="top" align="right" style="padding:4px;" >
-            <label for="starttime">Fecha inicio publicaci&oacute;n:</label>
+            <label for="starttime">{t}Publication start date:{/t}</label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
@@ -258,19 +255,19 @@
     </tr>
     <tr>
         <td valign="top" align="right" style="padding:4px;" >
-            <label for="endtime">Fecha fin publicaci&oacute;n:</label>
+            <label for="endtime">{t}Publication end date:{/t}</label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
             <div style="width:170px;">
                 <input type="text" id="endtime" name="endtime" size="18"
                     title="Fecha fin publicaci&oacute;n" value="" tabindex="-1" /></div>
 
-            <sub>Hora del servidor: {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
+            <sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
         </td>
     </tr>
     <tr>
         <td valign="top" align="right" style="padding:4px;" >
-            <label for="description">Descripci&oacute;n:</label>
+            <label for="description">{t}Description{/t}</label>
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
             <textarea name="description" id="description"
@@ -282,24 +279,6 @@
     </table>
 </div>
 
-<div class="panel" id="comments" style="width:95%">
-	<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" >
-	<tbody>
-	<tr>
-		<th class="title" >T&iacute;tulo</th>
-		<th class="title" >Autor</th>
-		<th align="right">Publicar</th>
-		<th align="right">Eliminar</th>
-	</tr>
-	<tr>
-        <td colspan="5">
-
-        </td>
-	</tr>
-	</tbody>
-	</table>
-</div>
-
 <div class="panel" id="contenidos-relacionados" style="width:95%">
 	{include file="article_relacionados.tpl"}
 </div>
@@ -307,16 +286,15 @@
 
 <div class="panel" id="elementos-relacionados" style="width:95%">
     <div style="padding:10px; width:90% margin:0 auto;">
-		Listado contenidos relacionados en Portada:  <br />
+		<h2>{t}Related contents in frontpage{/t}</h2>
 		<div style="position:relative;" id="scroll-container2">
 			<ul id="thelist2" style="padding: 4px; background: #EEEEEE"></ul>
 		</div>
 		<br>
-		Listado contenidos relacionados en Interior:  <br />
+		<h2>{t}Related contents in inner article:{/t}</h2>
 		<div style="position:relative;" id="scroll-container2int">
 			<ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
 		</div>
-		<br /><br />
 
 		<div class="p">
 			<input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>

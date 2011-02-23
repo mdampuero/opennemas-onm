@@ -180,7 +180,7 @@ if(isset($_REQUEST['action']) ) {
         break;
 
         case 'list_pendientes':
-            
+
             if( !Privileges_check::CheckPrivileges('ARTICLE_LIST_PEND')) {
                 Privileges_check::AccessDeniedAction();
             }
@@ -1067,8 +1067,8 @@ if(isset($_REQUEST['action']) ) {
                 }
                 $article = new Article();
                 $article->set_inhome($_inhome, $_SESSION['userid']);
-                $article->set_status($_status, $_SESSION['userid']);
-                $article->set_available($_available, $_SESSION['userid']);
+                //$article->set_status($_status, $_SESSION['userid']);
+                //$article->set_available($_available, $_SESSION['userid']);
             }
 
               $fields = (isset($_REQUEST['no_selected_fld'])) ? ($_REQUEST['no_selected_fld']) : null;
@@ -1090,6 +1090,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+           
         break;
 
         case 'mdelete':

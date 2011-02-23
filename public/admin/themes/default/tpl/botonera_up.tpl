@@ -322,29 +322,29 @@
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);return false;" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
+					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);return false;" name="submit_mult" value="noFrontpage" title="noFrontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />Publicar
+					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
 				</a>
 			</li>
 			 {if $type_opinion neq '-1'}
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 1);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />En Home
+					<img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />{t}Put in home{/t}
 				</a>
 			</li>
 			{/if}
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}home_no50.png"  title="Frontpage" alt="Frontpage" ><br />No Home
+					<img border="0" src="{$params.IMAGE_DIR}home_no50.png"  title="Frontpage" alt="Frontpage" ><br />{t escape="off"}Delete<br>from home{/t}
 				</a>
 			</li>
 			<li>
@@ -353,21 +353,21 @@
 				</button>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva opinion');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />Nuevo
+				<a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
+					<img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New<br/>opinion{/t}
 				</a>
 			</li>
 			 {if $type_opinion eq '-1'}
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:savePositionsOpinion();" title="Guardar Positions" alt="Guardar Posiciones">
-						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar Cambios" alt="Guardar Posiciones"><br />Guardar Posiciones
+						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
 					</a>
 				</li>
 			{/if}
              <li class="separator"> </li>
             <li>
 				<a href="author.php?action=new&desde=opinion" class="admin_add" name="submit_mult" value="Nuevo Autor" title="Nuevo Autor">
-					<img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="Nuevo Autor" alt="Nuevo Autor"><br />Nuevo Autor
+					<img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="Nuevo Autor" alt="Nuevo Autor"><br />{t escape="off"}Create<br>new author{/t}
 				</a>
 			</li>
 
@@ -379,36 +379,6 @@
 		</ul>
 	</div>
 
-{elseif preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-			<li>
-                        {if $smarty.session._from eq 'search_advanced'}
-                             <a href="#" class="admin_add"  onClick="window.location='search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}'">
-                                <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                             </a>
-                        {else}
-				<a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-                        {/if}
-		    </li>
-		    <li>
-				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$opinion->id}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-				</a>
-		    </li>
-			<li>
-                {if isset($opinion->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$opinion->id}', 'formulario');">
-                {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-                {/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar y salir</a>
-			</li>
-		</ul>
-	</div>
 
 
 {* Botonera category -------------------------------------------- *}

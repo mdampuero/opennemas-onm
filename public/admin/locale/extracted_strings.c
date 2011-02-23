@@ -40,6 +40,21 @@ gettext("Group name");
 /* ./themes/default/tpl//user_group.tpl */
 gettext("Grants:");
 
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Article content");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Article parameters");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Comments management");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Related contents");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Sort related contents");
+
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("HOME");
 
@@ -51,6 +66,111 @@ gettext("Editorial");
 
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("Director opinion");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Opinion Manager :: New opinion");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Article parameters");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Available:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Put in homepage:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Allow comments:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Title words-count:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Body words-count:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Image selection");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Inner opinion photo:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Widget photo:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Choose one available photo for the widget:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Type:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Opinion from author");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Opinion from editorial");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Director's letter");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Author:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Body:");
+
+/* ./themes/default/tpl//opinion/opinion_edit.tpl */
+gettext("Disallowed width, this element needs a 60px width photo.");
 
 /* ./themes/default/tpl//opinion/author.tpl */
 gettext("Author name");
@@ -173,7 +293,7 @@ gettext("Actions");
 gettext("Multimedia associated to this article:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("Frontpage image:");
+gettext("Image for frontpage:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("File:");
@@ -188,6 +308,9 @@ gettext("Weight:");
 gettext("Description:");
 
 /* ./themes/default/tpl//article_images.tpl */
+gettext("Image for inner article page:");
+
+/* ./themes/default/tpl//article_images.tpl */
 gettext("File:");
 
 /* ./themes/default/tpl//article_images.tpl */
@@ -200,7 +323,7 @@ gettext("Weight:");
 gettext("Description:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("Inner video:");
+gettext("Video for inner article page:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Available images");
@@ -397,6 +520,30 @@ gettext("Ohh, there is <strong>no cache file</strong> in the system.");
 /* ./themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Visit some pages in <a href=\"%1\" title=\"Visit your site\">your site</a>");
 
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Cache Manager :: Cache groups");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Cache group");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Activate");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("Expire time");
+
+/* ./themes/default/tpl//tpl_manager/config.tpl */
+gettext("There is no cache configuration available");
+
 /* ./themes/default/tpl//static_pages.tpl */
 gettext("New static page");
 
@@ -505,57 +652,6 @@ gettext("Your password must contain 5 characters and dont contain the word <pass
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Please check your first password and check again.");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Banner Intersticial in Frontpage (800X600)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Banner Top Right  (234X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Button Column 1 (300X*)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Button Column 3  (300X*)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Horizontal Separator   (650X80)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Banner Mini 1  (300X40)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Banner Mini 2 (300X40)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Button2 column3 (300X*)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions.tpl */
-gettext("Banner Bottom Right (234X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Banner Intersticial - Opinion Frontpage (800X600)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Banner Top  Right (234X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Banner Column Right (300X*)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion.tpl */
-gettext("Banner Bottom Right (234X90)");
-
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("HOME");
 
@@ -564,6 +660,36 @@ gettext("OPINION");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("GALLERIES");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("New");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("New");
+
+/* ./themes/default/tpl//advertisement/list.tpl */
+gettext("New");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("Banner type:");
@@ -602,7 +728,7 @@ gettext("Edit");
 gettext("Delete");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
-gettext("Undefined:");
+gettext("Undefined");
 
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("Clicks:");
@@ -640,212 +766,299 @@ gettext("Delete");
 /* ./themes/default/tpl//advertisement/list.tpl */
 gettext("There is no advertisement stored in this section");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+/* ./themes/default/tpl//advertisement/test_script.tpl */
+gettext("Test for Javascript ad");
+
+/* ./themes/default/tpl//advertisement/test_script.tpl */
+gettext("Close window");
+
+/* ./themes/default/tpl//advertisement/test_script.tpl */
+gettext("Close");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Banner Intersticial in Frontpage (800X600)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Banner Top Right  (234X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Button Column 1 (300X*)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Button Column 3  (300X*)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Horizontal Separator   (650X80)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Banner Mini 1  (300X40)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Banner Mini 2 (300X40)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Button2 column3 (300X*)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Banner Intersticial - Opinion Frontpage (800X600)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Big Banner Top (728X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Banner Top  Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Banner Column Right (300X*)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Big Banner Bottom (728X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
+gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
 gettext("Banner Intersticial - Video Frontpage (800X600)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
 gettext("Big Banner Top (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
 gettext("Banner Top Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
 gettext("Big Banner Bottom (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
 gettext("Banner Bottom Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner Intersticial - Opinion Inner (800X600)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Big Banner Top (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner Top Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner1 Column Right (300X*)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner2 Column Right (300X*)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Big Banner Bottom (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_opinion_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner Bottom Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Big banner top left");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Banner top right");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Button column 1");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Button column 3");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Horizontal separator");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Mini right 1");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Mini right 2");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Button bottom right");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Big banner bottom left");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
 gettext("Banner bottom right");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Banner Intersticial - Inner (800X600)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Big  Banner Top(I) (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Banner Top Right(I) (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Banner1 Column Right (I) (300X*)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Robapágina (650X*)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Banner2 Column Right(I) (300X*)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Big Banner Bottom(I) (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
 gettext("Banner Bottom Right(I) (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Big Banner top left (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Banner top right (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Banner Column right 1 (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Robapágina (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Banner Column right 2 (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Big Banner bottom left (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_map_positions_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Banner bottom right (Int.)");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Advertisement:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Delete");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Image");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("File:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Dimensions:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Size:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Weight:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Created:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Creation date");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Description:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Tags:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Advertisement:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Image");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("File:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Dimensions:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("default_img.jpg");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("XX x XX px");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Weight:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Create:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("XX Kb");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Description");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Creation date");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Default image:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("11/06/2008");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Example image");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Tags:");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
-gettext("Image:");
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("some, words, separated, by, commas");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Available multimedia for ads");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Drag and drop the advertisements to select them, use the logo to use flash");
 
-/* ./themes/default/tpl//advertisement/advertisement_images.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Pages:");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Banner Intersticial - Video Inner (800X600)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Big Banner Top (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Banner Top Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Button Column (265x95)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Big Banner Bottom (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_video_interior.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
 gettext("Banner Bottom Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Banner Intersticial - Gallery (800X600)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Big Banner Top (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Banner Top Right (234X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Big Banner Bottom (728X90)");
 
-/* ./themes/default/tpl//advertisement/advertisement_positions_gallery.tpl */
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Banner Bottom Right (234X90)");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Creating new Ad");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Editing Ad");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Save and exit");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Name:");
@@ -866,7 +1079,7 @@ gettext("No");
 gettext("Keywords:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Separate by coma");
+gettext("(Separated by comas)");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Metadata");
@@ -881,7 +1094,7 @@ gettext("Periodicity:");
 gettext("Undefined");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Nº Clicks");
+gettext("# Clics");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Nº Visits");
@@ -893,22 +1106,22 @@ gettext("By date");
 gettext("Start time publication:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Start time publication\"");
+gettext("Start time publication");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("End time publication:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"End time publication\"");
+gettext("End time publication");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Click number:");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Click number\"");
+gettext("\"Number of clicks\"");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("\"Click number\"");
+gettext("\"Number of clics\"");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Views number");
@@ -953,10 +1166,13 @@ gettext("Opinion");
 gettext("Gallery");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("JavaScript with advertisement");
+gettext("Advertisement with JavaScript");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Advertisement script");
+
+/* ./themes/default/tpl//advertisement/advertisement.tpl */
+gettext("Place here your JavaScript code");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Geoip code");
@@ -974,25 +1190,19 @@ gettext("Frontpage");
 gettext("Inner article");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Video Frontpage");
+gettext("Frontpage Video");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Inner video");
+gettext("Video Inner");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Opinion Frontpage");
+gettext("Frontpage Opinion");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Inner opinion");
+gettext("Opinion Inner");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Gallery");
-
-/* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Close window");
-
-/* ./themes/default/tpl//advertisement/advertisement.tpl */
-gettext("Close");
 
 /* ./themes/default/tpl//article.tpl */
 gettext("Frontpage articles");
@@ -1260,6 +1470,39 @@ gettext("New article");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Import XML");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Put in home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Delete<br>from home");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New<br/>opinion");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save positions");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Create<br>new author");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New section");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("New section");
 
 /* ./themes/default/tpl//botonera_up.tpl */
 gettext("Opinion Manager :: Author list");
@@ -2228,13 +2471,13 @@ gettext("Date");
 gettext("Actions");
 
 /* ./themes/default/tpl//user.tpl */
-gettext("Name:");
+gettext("Filter by name");
 
 /* ./themes/default/tpl//user.tpl */
-gettext("Login:");
+gettext("or username:");
 
 /* ./themes/default/tpl//user.tpl */
-gettext("Group:");
+gettext("and group:");
 
 /* ./themes/default/tpl//user.tpl */
 gettext("Search");
@@ -2243,7 +2486,7 @@ gettext("Search");
 gettext("Name Surname");
 
 /* ./themes/default/tpl//user.tpl */
-gettext("Login");
+gettext("Username");
 
 /* ./themes/default/tpl//user.tpl */
 gettext("Group");
@@ -2548,6 +2791,66 @@ gettext("Delete privilege");
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("No available privileges to list here.");
 
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Articles by section");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Articles in library");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Articles for review");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Opinions");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Albums");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Videos");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Files");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Articles by section");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Articles in library");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Pending articles");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Opinions");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Albums");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Videos");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Files");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Article content");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Article parameters");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Related contents");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Sort related contents");
+
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Frontpage title:");
 
@@ -2638,50 +2941,26 @@ gettext("Summary");
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Body");
 
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Privilege name");
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Publication start date:");
 
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Module");
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Publication end date:");
 
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Edit");
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Server hour:");
 
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Edit");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Edit");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("There is no privileges added yet");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Module");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Module");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Name");
-
-/* ./themes/default/tpl//privilege.tpl */
-gettext("recomended");
-
-/* ./themes/default/tpl//privilege.tpl */
+/* ./themes/default/tpl//article_new.tpl */
 gettext("Description");
 
-/* ./themes/default/tpl//privilege.tpl */
-gettext("Description");
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Related contents in frontpage");
+
+/* ./themes/default/tpl//article_new.tpl */
+gettext("Related contents in inner article:");
+
+/* ./themes/default/tpl//statistics/statistics.tpl */
+gettext("Content Statistics");
 
 /* ./themes/default/tpl//welcome.tpl */
 gettext("New Article");

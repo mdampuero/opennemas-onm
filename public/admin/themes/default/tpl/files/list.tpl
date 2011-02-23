@@ -99,12 +99,23 @@
 							</table>
 						{/section}
 					</tr>
+
 				</tbody>
+
+				<tfoot>
+					<tr>
+						<td colspan="7" class="pagination">
+							{$pagination->links}
+						</td>
+					</tr>
+				</tfoot>
 			 </table>
 		{else}
+			{if {$smarty.request.msg}}
 			<div class="notice">
 				{$smarty.request.msg}
 			</div>
+			{/if}
 			<table class="adminheading">
 				<tr>
 					<th>{t}File manager{/t}</th>
@@ -167,8 +178,8 @@
 			</div>
 		{/if}
 
-	<input type="hidden" id="action" name="action" value="" />
-	<input type="hidden" name="id" id="id" value="{$id}" />
+		<input type="hidden" id="action" name="action" value="" />
+		<input type="hidden" name="id" id="id" value="{$id}" />
 	</form>
 </div><!--fin wrapper-content-->
 {/block}
