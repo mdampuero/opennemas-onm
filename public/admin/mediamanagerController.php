@@ -152,15 +152,15 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         //Recorremos para comprobar si están sino mostramos default
         if($photos) {
             foreach($photos as $photo) {
-                if(!file_exists($this->path_upload . $photo->path_file . $photo->name)){
-                    $photo->content_status = 0;
-                    $ph = new Photo($photo->pk_photo);
-                    $ph->set_available(0, $_SESSION['userid']);
-                } else{
+                //if(!file_exists($this->path_upload . $photo->path_file . $photo->name)){
+                //    $photo->content_status = 0;
+                //    $ph = new Photo($photo->pk_photo);
+                //    $ph->set_available(0, $_SESSION['userid']);
+                //} else{
                     $photo->content_status = 1;
                     $ph = new Photo($photo->pk_photo);
                     $ph->set_available(1, $_SESSION['userid']);
-                }
+                //}
             }
 
             $this->tpl->assign('photo', $photos);

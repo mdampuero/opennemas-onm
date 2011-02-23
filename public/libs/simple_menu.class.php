@@ -41,10 +41,6 @@ class SimpleMenu {
 
     }
 
-    public function getChilds() {
-
-    }
-
     /**
     * Short description
     *
@@ -117,16 +113,3 @@ class SimpleMenu {
     }
 
 }
-
-//<ul id="menu">
-//	<li><a class="selected" title="Acceder a  Inicio" href="#">Inicio</a></li>
-//	<li>
-//        <a href="#">Descargas</a>
-//        <ul>
-//            <li><a title="Acceder a  Datos de la empresa" href="#">Soft Desktop</a></li>
-//            <li><a title="Acceder a  Descargas" href="#">Soft Móvil</a></li>
-//        </ul>
-//    </li>
-//	<li><a title="Acceder a  Nuestro Chef" href="#">Localización</a></li>
-//	<li><a title="Contacte con nosotros" href="#">Contacto</a></li>
-//</ul>

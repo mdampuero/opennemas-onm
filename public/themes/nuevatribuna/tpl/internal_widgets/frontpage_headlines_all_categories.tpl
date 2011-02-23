@@ -6,7 +6,7 @@
 <hr class="new-separator" />
 <div class="span-24 last">
 
-    <div class="clearfix">
+    <div class="span-16 clearfix">
         <div class="more-news span-16">
             <h4>Más noticias</h4>
             <hr class="more-news-separator" />
