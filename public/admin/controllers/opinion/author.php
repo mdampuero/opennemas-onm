@@ -23,6 +23,8 @@ if(!Acl::check('OPINION_ADMIN')) {
     Acl::Deny();
 }
 
+$_REQUEST['page'] = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':
@@ -39,7 +41,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'new':
-			//
+        //
 		break;
 
 		case 'read':

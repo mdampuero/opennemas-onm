@@ -6,7 +6,7 @@
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 	{include file="botonera_up.tpl"}
 	<table class="adminheading">
 		<tr align="right">
@@ -59,13 +59,18 @@
 					<a href="#" onClick="javascript:confirmar(this, {$authors[c]->pk_author});" title="Eliminar">
 						<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 					</a>
+                                      
 				</td>
 			</tr>
+            
 		{sectionelse}
 			<tr>
 				<td align="center"><b>{t}There is no available authors{/t}</b></td>
 			</tr>
         {/section}
+            <input type="hidden" id="action" name="action" value="">
+            <input type="hidden" id="id" name="id" value={$id}>
+        </form>
 		<tfoot>
 			<tr>
 				<td colspan="7" align="center">
@@ -74,6 +79,7 @@
 			</tr>
 		</tfoot>
     </table>
+
 {/if}
 
 
@@ -163,6 +169,7 @@
 							{/section}
 						 </ul>
 					</div>
+                    <input type="hidden" id="action" name="action" value="">
 					<input type="hidden" id="del_img" name="del_img" value="">
 					<input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
 				</td>
