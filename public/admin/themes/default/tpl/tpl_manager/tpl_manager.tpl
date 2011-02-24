@@ -170,6 +170,13 @@
 							<strong>{t}Article{/t}:</strong> {$titles.$resource|clearslash}
 						</a>
 
+						{* Frontpage mobile *}
+						{elseif ($caches[c].template == 'mobile-article-inner')}
+						<img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
+						<a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
+							<strong>{t}Mobile inner article:{/t}</strong> {$titles.$resource}
+						</a>
+
 						{* Video inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
 						<img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Inner video cache file{/t}" />

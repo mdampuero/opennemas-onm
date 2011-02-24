@@ -83,7 +83,7 @@ class SimpleMenu {
                     $html.= "</li>";
                 }
             }
-            $output = "<ul id='menu'>".$html."</ul>";
+            $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
 
             return $output;
 

@@ -103,7 +103,7 @@ switch($action) {
             'mail_host' => MAIL_HOST,
             'mail_user' => MAIL_USER,
             'mail_pass' => MAIL_PASS,
-            'mail_from' => MAIL_USER,
+            'mail_from' => MAIL_FROM,
             'mail_from_name' => 'OpenNemas Newsletter System',
         );
 

@@ -1,7 +1,7 @@
 /* Root = Horizontal, Secondary = Vertical */
 ul#menu {
   margin: 0;
-  margin-top:10px;
+  margin-top:7px;
   padding: 0;
 /*  width: 500px;*/ /*For KHTML*/
   list-style: none;
@@ -36,6 +36,7 @@ ul#menu  ul {
   background:#464646;
   -moz-border-radius: 5px 5px 5px 5px;
   border:1px solid #464646;
+  padding-top:2px;
 
 }
 

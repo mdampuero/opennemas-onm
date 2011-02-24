@@ -13,8 +13,8 @@ function smarty_function_gmail_mailbox($params, &$smarty) {
         $return = '<div id="user_mailbox">
                     <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email='
                     .$_SESSION['email'].'&continue=https%3A%2f%2fmail.google.com%2fmail"'
-                    .' title="Go to my GMail mailbox '.$mailbox['total'].'" target="_blank"><span>'.$mailbox['total'].'</span>'
-                    .'<img src="'.$RESOURCES_PATH.'images/gmail_ico.png" border="0" align="absmiddle" /></a>'
+                    .' title="'.sprintf(_("Your have %d emails in Gmail.\nClick here to go to your GMail mailbox\n "),$mailbox['total']).'" target="_blank"><span>'.$mailbox['total'].'&nbsp;</span>'
+                    .'<img style="vertical-align:middle" src="'.SITE_URL_ADMIN.'/themes/default/images/indicator-messages.png" border="0" align="absmiddle" /></a>'
                 .'</div>';
     }
 

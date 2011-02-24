@@ -110,7 +110,14 @@ class Newsletter
         $mail->SetLanguage('es');
         $mail->IsSMTP();
         $mail->Host = $params['mail_host'];
-        $mail->SMTPAuth = true;
+        if (!empty($params['mail_user'])
+            && !empty($paramsp['mail_password']))
+        {
+            $mail->SMTPAuth = true;
+        } else {
+            $mail->SMTPAuth = false;
+        }
+
         $mail->CharSet = 'utf-8';
 
         $mail->Username = $params['mail_user'];

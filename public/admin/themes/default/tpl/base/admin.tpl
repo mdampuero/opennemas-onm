@@ -59,9 +59,9 @@
 
     <div id="topbar-admin">
         <div id="logoonm">
-			<a  href="index.php" title="{t}Go to admin main page{/t}">
+			<a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" title="{t}Go to admin main page{/t}">
 			   <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="ONM"/></div>
-			   <div class="site-name">{$smarty.const.SITE_FULLNAME}</div>
+			   <!--<div class="site-name">{$smarty.const.SITE_FULLNAME}</div>-->
 			</a>
         </div>
 
@@ -72,10 +72,12 @@
                 <div id="name-box" style="float:left; margin-right:5px;">
                   <strong>
                     {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="/admin/user.php?action=read&id=%1">%2</a>{/t}
+
                     {if isset($smarty.session.isAdmin)}
                         <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
                             title="{t}Admin privileges{/t}" alt="" />
                     {/if}
+					{gmail_mailbox}
                   </strong>
                 </div><!--end name-box-->
 
@@ -84,18 +86,19 @@
                     <div id="user_activity" title="{t}Active users in backend{/t}">
                         {count_sessions}
                     </div>
+					&nbsp;&nbsp;&nbsp;
                 </div>
                 {/if}
 
                 <div id="session-actions" style="float:left;">
                   <a href="javascript:salir();" class="logout" title="{t}Logout from control panel{/t}">
-                      <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
-                          align="absmiddle" alt="Salir del Panel de Administración" /> {t}Log out{/t}
+						{t}Log out{/t}
+						<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
+							align="absmiddle" alt="Salir del Panel de Administración" />
                   </a>
                 </div><!--end session-actions-->
             </div>
 
-            {gmail_mailbox}
         </div>
 
     </div>

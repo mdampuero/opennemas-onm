@@ -327,7 +327,7 @@ if(($tpl->caching == 0)
                                     . '      OR (starttime != "0000-00-00 00:00:00" '
                                     . '      AND starttime<"'.$now.'"))'
                                     . ' AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))'
-                                    , 'ORDER BY position ASC LIMIT 0 , 6');
+                                    , 'ORDER BY position ASC LIMIT 0 , 3');
 
     foreach ($titular_gente as $gente) {
         $img = new Photo($gente->img2);

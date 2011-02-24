@@ -554,12 +554,18 @@ a.unpublishing:hover {
 
     #user_mailbox {
         text-align: right;
-        padding:2px 20px 2px 2px ;
-        float: left;
+		float:right;
+        padding:2px;
         margin:0 5px;
         color:#ccc;
-        padding: 2px;
     }
+	#user_mailbox a {
+		color:#CCCCCC;
+		text-decoration:none;
+	}
+	#user_mailbox img {
+		vertical-align:middle;
+	}
 
     #user_box {
         color: #0B55C4;

@@ -1,7 +1,7 @@
 {* Botonera *}
 <div id="menu-acciones-admin">
 	<div class="subtitle">
-		Proceso de envio
+		{t}Newsletter send report{/t}
 	</div>
 
 	<div class="steps">
