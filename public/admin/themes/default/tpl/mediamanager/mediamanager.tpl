@@ -93,11 +93,11 @@
                    </ul>
             </div>
         {if $action eq 'search'}
-            {include file="image_search.tpl"}
+            {include file="mediamanager/_partials/image_search.tpl"}
         {elseif $action eq 'searchResult'}
-            {include file="media-browser.tpl"}
+            {include file="mediamanager/_partials/media-browser.tpl"}
         {else}
-            {include file="media_list_infor.tpl"}
+            {include file="mediamanager/_partials/list_inforation.tpl"}
         {/if}
    {else}
 
@@ -342,7 +342,7 @@
                 <input type="hidden" name="category" value="{$smarty.request.category}" />
 
                 {section name=n loop=$photo}
-                    {include file="photo_data.tpl" display="none" photo1=$photo[n]}
+                    {include file="mediamanager/_partials/photo_data.tpl" display="none" photo1=$photo[n]}
                 {/section}
             </form>
 

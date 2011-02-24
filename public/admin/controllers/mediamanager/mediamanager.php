@@ -30,6 +30,7 @@ require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 require('../../mediamanagerController.php');
 
+
 //????? Parche pq no pasa el action, lo borra en algun sitio
 if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult') { $_REQUEST['action'] = "searchResult";
     unset($_SESSION['where']);
@@ -43,11 +44,11 @@ if (!isset($_REQUEST['where'])) {
 }
 
 if (!isset($_REQUEST['category'])
-    || ($_REQUEST['category'] == 'GLOBAL'
-    && empty($_REQUEST['action'])))
+    || ($_REQUEST['category'] == 'GLOBAL'))
+    //&& empty($_REQUEST['action'])))
 {
     $_REQUEST['category'] = 'GLOBAL';
-    $_REQUEST['action'] = "list_categorys";
+    //$_REQUEST['action'] = "list_categorys";
 }
 
 if (!Acl::check('IMAGE_ADMIN')) {
@@ -59,7 +60,6 @@ $mmc = new MediaManagerController();
 $mmc->action_init();
 
 $action = (!isset($_REQUEST['action']))? 'list_today': $_REQUEST['action'];
-
 
 
 switch($action) {
@@ -115,11 +115,6 @@ switch($action) {
     } break;
 
     case 'searchResult': {
-
-        var_dump('searchResult');
-        die();
-
-
         $name=$mmc->action_searchResult();
 
         $tpl = $mmc->tpl;
