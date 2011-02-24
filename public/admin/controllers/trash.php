@@ -99,7 +99,7 @@ if(isset($_REQUEST['action']) ) {
 			$contenido=new Content($_REQUEST['id']);
 			$contenido->no_delete($_REQUEST['id'],$_SESSION['userid']);
 
-			if($_REQUEST['desde']=='search'){
+			if(isset($_REQUEST['desde']) && ($_REQUEST['desde']=='search')){
 
 				$name = $GLOBALS['application']->conn->GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $contenido->content_type.'"');
 				$archive_php='controllers/'.strtolower($name).'.php'; //Nombre de la clase
