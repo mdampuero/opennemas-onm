@@ -1,57 +1,184 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>..: Panel de Control :..</title>
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="author" content="OpenHost,SL" />
+    <meta name="generator" content="OpenNemas - Open Source News Management System" />
 
-{stylesection name="head"}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}calendar_date_select.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
+        <title>OpenNeMaS - Admin section</title>
 
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
-{/stylesection}
-
-
-
-{scriptsection name="head"}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
-
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
-
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}newsletter.js?cacheburst=1259855452"></script>
-{/scriptsection}
+	    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
+		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
+        <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}welcomepanel.css?cacheburst=1257955982" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
 
 
-{literal}
-<script type="text/javascript">
-// <!--
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/effects.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
+		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
+		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}/modalbox.js"></script>
+		<script type="text/javascript" language="javascript" src="{$params.JS_DIR}newsletter.js?cacheburst=1259855452"></script>
 
-// -->
-</script>
-<style>
 
-::selection { background: transparent; }
-::-moz-selection { background: transparent; }
+        {* FIXME: corregir para que pille bien el path *}
+        {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
+            lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
+        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
+		<script type="application/x-javascript">
+		{if Acl::check('USER_ADMIN') eq true}
+			var users_online = [];
+			function linkToMB() {
+				$('MB_content').select('td a.modal').each(function(item) {
+					item.observe('click', function(event) {
+						Event.stop(event);
 
-</style>
-{/literal}
+						Modalbox.show(this.href, {
+							title: '{t}Active users{/t}',
+							afterLoad: linkToMB,
+							width: 300
+						});
+					});
+				});
+			}
+
+			document.observe('dom:loaded', function() {
+				if( $('user_activity') ) {
+					$('user_activity').observe('click', function() {
+						Modalbox.show('{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/index.php?action=show_panel', {
+							title: '{t}Active users{/t}',
+							afterLoad: linkToMB,
+							width: 300
+						});
+					});
+
+					new PeriodicalExecuter( function(pe) {
+						$('user_activity').update('<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/loading.gif" border="0" width="16" height="16" />');
+						new Ajax.Request('index.php', {
+							onSuccess: function(transport) {
+								// Actualizar o número de usuarios en liña e gardar o array en users_online
+								eval('users_online = ' + transport.responseText + ';');
+								$('user_activity').update( users_online.length );
+							}
+						});
+						//pe.stop();
+					}, 5*60); // Actualizar cada 2*60 segundos
+				}
+			});
+		{/if}
+		</script>
+
+
 </head>
 <body>
+	{* scriptsection name="body" *}
+	<script type="text/javascript" src="{$params.JS_DIR}wz_tooltip.js"></script>
+	{* /scriptsection *}
 
-<table border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%">
-<tr>
-	<td style="padding:1px;" align="left" valign="top">
+    <div id="topbar-admin">
+        <div id="logoonm">
+			<a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" title="{t}Go to admin main page{/t}">
+			   <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="ONM"/></div>
+			   <!--<div class="site-name">{$smarty.const.SITE_FULLNAME}</div>-->
+			</a>
+        </div>
 
-{if isset($smarty.session.messages) && !empty($smarty.session.messages)}
-    {messageboard type="inline"}
-{else}
-    {messageboard type="growl"}
-{/if}
+        {admin_menu}
+
+        <div class="info-left">
+            <div id="user_box" style="width:auto;">
+                <div id="name-box" style="float:left; margin-right:5px;">
+                  <strong>
+                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="/admin/user.php?action=read&id=%1">%2</a>{/t}
+
+                    {if isset($smarty.session.isAdmin)}
+                        <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
+                            title="{t}Admin privileges{/t}" alt="" />
+                    {/if}
+					{gmail_mailbox}
+                  </strong>
+                </div><!--end name-box-->
+
+                {if Acl::check('BACKEND_ADMIN') eq true}
+                <div style="padding-right:4px; float:left;" nowrap="nowrap">
+                    <div id="user_activity" title="{t}Active users in backend{/t}">
+                        {count_sessions}
+                    </div>
+					&nbsp;&nbsp;&nbsp;
+                </div>
+                {/if}
+
+                <div id="session-actions" style="float:left;">
+                  <a href="javascript:salir();" class="logout" title="{t}Logout from control panel{/t}">
+						{t}Log out{/t}
+						<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
+							align="absmiddle" alt="Salir del Panel de Administración" />
+                  </a>
+                </div><!--end session-actions-->
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="content">
+		<div class="wrapper-content">
+			<div id="menu-acciones-admin">
+				<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Delivered newsletter report{/t}</h2></div>
+
+				<div class="steps">
+					<img src="{$params.IMAGE_DIR}newsletter/5.gif" width="300" height="40" border="0" />
+				</div>
+
+				<ul>
+					<li>
+						<a href="#" class="admin_add" title="{t}Back{/t}">
+							<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" alt="" /><br />
+							{t}Previous step{/t}
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="form">
+				<form name="searchForm" id="searchForm" method="post" action="#">
+					{* Valores asistente *}
+					<input type="hidden" id="action"     name="action"     value="preview" />
+					<input type="hidden" id="postmaster" name="postmaster" value="" />
+				</form>
+			</div>
+			<table class="adminheading">
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+			<table border="0" cellpadding="0" cellspacing="0" align="left" width="100%" height="100%" class="adminlist">
+			<tr>
+				<td style="padding:1px;" align="left" valign="top">
+
+			{if isset($smarty.session.messages) && !empty($smarty.session.messages)}
+				{messageboard type="inline"}
+			{else}
+				{messageboard type="growl"}
+			{/if}
+
+

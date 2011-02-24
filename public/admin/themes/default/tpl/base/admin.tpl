@@ -137,7 +137,7 @@
 
 <script type="text/javascript">
     /* <![CDATA[ */
-    new YpSlideOutMenuHelper();
+    //new YpSlideOutMenuHelper();
 
     {if Acl::check('USER_ADMIN') eq true}
     var users_online = [];

@@ -123,15 +123,15 @@ switch($action) {
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
 
             if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                echo '<div class="mailing"><strong class="ok">OK</strong> ', $mailbox->name . ' &lt;' . $mailbox->email, '&gt;</div>';
+                echo '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>', $mailbox->name . ' &lt;' . $mailbox->email, '&gt;</td></tr>';
             } else {
-                echo '<div class="mailing"><strong class="failed">FAILED</strong> ', $mailbox->name . ' &lt;' . $mailbox->email, '&gt;</div>';
+                echo '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>', $mailbox->name . ' &lt;' . $mailbox->email, '&gt;</td></tr>';
             }
 
             flush();
         }
 
-        echo '<h1>Envío finalizado.</h1>';
+        echo '<tfoot><tr><td align="right" colspan=2><strong>Envío finalizado.</strong></td></tr></tfoot>';
         flush();
 
         $scriptContent =<<< HTML

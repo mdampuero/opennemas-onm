@@ -88,10 +88,11 @@
 						<td valign="top"  align="right" nowrap="nowrap">
 							<label for="with_comment">{t}Available:{/t}</label>
 						</td>
+
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
 							<select name="content_status" id="content_status" class="required" tabindex="7">
-								<option value="0" selected="selected">{t}No{/t}</option>
-								<option value="1" >{t}Yes{/t}</option>
+								<option value="0" {if $article->available eq 0}selected="selected"{/if}>{t}No{/t}</option>
+								<option value="1" {if $article->available eq 1}selected="selected"{/if}>{t}Yes{/t}</option>
 						   </select>
 							<span style="font-size:9px;"{t}(publish directly){/t}</span>
 						</td>
