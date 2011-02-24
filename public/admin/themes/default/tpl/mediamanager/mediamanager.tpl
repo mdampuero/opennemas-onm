@@ -64,7 +64,7 @@
             {assign value='Información' var='title_bar'}
         {/if}
 
-        <div style='float:left;margin-left:10px;margin-top:10px;'>
+        <div style='margin-left:10px;margin-top:10px;'>
             <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{$titulo_barra}:: {$title_bar} </h2></div>
             <div id="menu-acciones-admin" >
                     <ul>

@@ -159,9 +159,9 @@
             <div style="float: left; margin-left: 10px; margin-top: 10px;">
                 <h2>
                     {if $smarty.request.action eq "new"}
-                        {t}Creating new Ad{/t}
+                        {t}Advertisement Management :: Creating new Ad{/t}
                     {elseif $smarty.request.action eq "read"}
-                        {t}Editing Ad{/t}
+                        {t}Advertisement Management :: Editing Ad{/t}
                     {/if}
                 </h2>
             </div>
@@ -269,17 +269,17 @@
                                     </td>
                                 </tr>
 
-                                <tr id="porfecha" style="{if $advertisement->type_medida!='DATE'}display:none{/if};">
+                                <tr id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">
                                     <td align="right"></td>
                                     <td>
                                         <label for="starttime">{t}Start time publication:{/t}</label></td>
                                         <input type="text" id="starttime" name="starttime" title="{t}Start time publication{/t}"
-                                            value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                                            value="{if $advertisement->starttime neq '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
 
 
                                         <label for="endtime">{t}End time publication:{/t}</label>
                                         <input type="text" id="endtime" name="endtime" size="16" title="{t}End time publication{/t}"
-                                            value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                                            value="{if $advertisement->endtime neq '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
                                     </td>
                                 </tr>
 
