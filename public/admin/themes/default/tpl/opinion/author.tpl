@@ -111,23 +111,8 @@
 					<input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition}"  size="50"/>
 				</td>
 			</tr>
-			<tr> 
-  {*
-				<td valign="top" align="right" style="padding:4px;">
-					<label for="phone">{t}Political party{/t}</label>
-				</td>
-				<td style="padding:4px;" nowrap="nowrap">
-					<select name="politics" id="politics" class="required" title="Tendencia politica">
-						<option value="Progresista" {if $author->politics eq 'Progresista'} selected {/if}>{t}Progresist{/t}</option>
-						<option value="Conservador" {if $author->politics eq 'Conservador'} selected {/if}>{t}Conservative{/t}</option>
-						<option value="Izquierdas" {if $author->politics eq 'Izquierdas'} selected {/if}>{t}Left-wind{/t}</option>
-						<option value="Derechas" {if $author->politics eq 'Derechas'} selected {/if}>{t}Right-wind{/t}</option>
-						<option value="Centro" {if $author->politics eq 'Centro'} selected {/if}>{t}Center-wind{/t}</option>
-						<option value="Comunista" {if $author->politics eq 'Comunista'} selected {/if}>{t}Comunist{/t}</option>
-					 </select>
-				</td>
-			</tr> *}
-			<tr>
+			    
+ {* 			<tr>
 				<td valign="top" align="right" style="padding:4px;">
 					<label for="title">{t}Sex:{/t}</label>
 				</td>
@@ -137,7 +122,34 @@
 							<option value="Hombre" {if $author->gender eq 'Hombre'} selected {/if}>{t}Men{/t}</option>
 						</select>
 					</td>
-			</tr>
+			</tr> *}
+
+			<tr>
+                <td valign="top" align="right" style="padding:4px;">
+					<label for="phone">{t}Blog name:{/t}</label>
+				</td>
+                <td style="padding:4px;" nowrap="nowrap">
+					<input type="text" id="blogname" name="blogname" title="{t}Blog name{/t}" value="{$author->condition}"  size="50"/>
+				</td>
+{*				<td style="padding:4px;" nowrap="nowrap">
+					<select name="politics" id="politics" class="required" title="Tendencia politica">
+						<option value="Progresista" {if $author->politics eq 'Progresista'} selected {/if}>{t}Progresist{/t}</option>
+						<option value="Conservador" {if $author->politics eq 'Conservador'} selected {/if}>{t}Conservative{/t}</option>
+						<option value="Izquierdas" {if $author->politics eq 'Izquierdas'} selected {/if}>{t}Left-wind{/t}</option>
+						<option value="Derechas" {if $author->politics eq 'Derechas'} selected {/if}>{t}Right-wind{/t}</option>
+						<option value="Centro" {if $author->politics eq 'Centro'} selected {/if}>{t}Center-wind{/t}</option>
+						<option value="Comunista" {if $author->politics eq 'Comunista'} selected {/if}>{t}Comunist{/t}</option>
+					 </select>
+				</td>*}
+			</tr> 
+            <tr>
+                <td valign="top" align="right" style="padding:4px;">
+					<label for="phone">{t}Blog url:{/t}</label>
+				</td>
+                <td style="padding:4px;" nowrap="nowrap">
+					<input type="text" id="blogurl" name="blogurl" title="{t}Blog url{/t}" value="{$author->gender}"  size="50"/>
+				</td>
+            </tr>
 
  {*			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
