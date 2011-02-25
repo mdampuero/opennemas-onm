@@ -26,7 +26,7 @@
 			<tr>
 				<th class="title" style="align:left;padding:10px;width:30%;">{t}Author name{/t}</th>
 				<th class="title" style="padding:10px;width:20%;">{t}Genre{/t}</th>
-				<th class="title" style="padding:10px;width:20%;">{t}Politic sign{/t}</th>
+{*---------				<th class="title" style="padding:10px;width:20%;">{t}Politic sign{/t}</th> ------------*}
 				<th class="title" style="padding:10px;width:20%;">{t}Condition{/t}</th>
 				<th class="title" style="padding:10px;width:10%;">{t}Photos (#){/t}</th>
 				<th class="title" style="padding:10px;width:10%;align:right;">{t}Edit{/t}</th>
@@ -40,10 +40,10 @@
 				</td>
 				<td style="padding:10px;">
 								{$authors[c]->gender}
-				</td>
+{*				</td>
 				<td style="padding:10px;">
 						{$authors[c]->politics}
-				</td>
+				</td> -----------*}
 				<td style="padding:10px;">
 						{$authors[c]->condition}
 				</td>
@@ -103,7 +103,7 @@
 						value="{$author->name}" class="required"  size="50"/>
 				</td>
 			</tr>
-			<tr>
+ 			<tr>
 				<td valign="top" align="right" style="padding:4px;">
 					<label for="phone">{t}Condition{/t}</label>
 				</td>
@@ -111,7 +111,8 @@
 					<input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition}"  size="50"/>
 				</td>
 			</tr>
-			<tr>
+			<tr> 
+  {*
 				<td valign="top" align="right" style="padding:4px;">
 					<label for="phone">{t}Political party{/t}</label>
 				</td>
@@ -125,7 +126,7 @@
 						<option value="Comunista" {if $author->politics eq 'Comunista'} selected {/if}>{t}Comunist{/t}</option>
 					 </select>
 				</td>
-			</tr>
+			</tr> *}
 			<tr>
 				<td valign="top" align="right" style="padding:4px;">
 					<label for="title">{t}Sex:{/t}</label>
@@ -138,14 +139,14 @@
 					</td>
 			</tr>
 
-			<tr>
+ {*			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
 					<label for="phone">{t}Birthday:{/t}</label>
 				</td>
 				<td style="padding:4px;" nowrap="nowrap">
 					<input type="text" id="date_nac" name="date_nac" size="18" title="{t}Birthday{/t}" value="{$author->date_nac}" /><button id="triggerend">...</button>
 				</td>
-			</tr>
+			</tr> *}
 
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">
@@ -194,7 +195,7 @@
 	</table>
 
 
-    {dhtml_calendar inputField="date_nac" button="triggerend" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
+    {*dhtml_calendar inputField="date_nac" button="triggerend" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"*}
 
 	</form>
 	<style type="text/css">
