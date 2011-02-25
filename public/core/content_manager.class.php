@@ -262,7 +262,36 @@ class ContentManager
         }
 
     }
+    
+    static public function filterContentsbyProperty($array, $property)
+    {
 
+        $filterKeys = array_keys($property);
+        $filterKey = $filterKeys[0];
+        $filterValues = array_values($property);
+        $filterKey = $filterKeys[0];
+        $filterValues = $filterValues[0];
+        
+        $finalArray = array();
+        foreach($array as $element) {
+            
+            if(isset($element->home_placeholder)) {
+                var_dump($element);
+            }
+            die('dentro loop');
+            var_dump($filterKeys, $filterValues, $element->home_placeholder);
+            die();
+            if($element[$i]->{$filterKey} == $filterValue) {
+                $finalArray[] = $element;
+            }
+        }
+        return $finalArray;
+    }
+    
+    public function sortByPosition($a, $b)
+    {
+        return ($a->position == $b->position) ? 0 : (($a->position > $b->position) ? 1 : -1);
+    }
 
     /**
     * Sort one array of object by one of the object's property

@@ -73,18 +73,14 @@
 
                 <div id="contents-provider">
                         <ul id="tabs">
-                            <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
                             {if $category neq 'home'}
                             <li><a href="#other-articles">{t}Other articles in this category{/t}</a></li>
                             {else}
                             <li><a href="#suggested-elements">{t}Suggested articles{/t}</a></li>
                             {/if}
+                            <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
                         </ul>
-
-                        <div id="available-widgets" class="panel tabs-panel" style="width:100%">
-                            {include file="frontpage/blocks/widgets_available.tpl"}
-                        </div>
-
+                        
                         {if $category neq 'home'}
                         <div id="other-articles" class="panel tabs-panel" style="width:100%">
                             {include file="frontpage/blocks/others_articles_in_category.tpl"}
@@ -94,6 +90,12 @@
                             {include file="frontpage/blocks/articles_suggested.tpl"}
                         </div>
                         {/if}
+
+                        <div id="available-widgets" class="panel tabs-panel" style="width:100%">
+                            {include file="frontpage/blocks/widgets_available.tpl"}
+                        </div>
+
+                        
                 </div>
 
                 <div id="no_en_home" style="margin:10px 0">

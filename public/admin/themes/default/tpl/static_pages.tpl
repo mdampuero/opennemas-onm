@@ -1,109 +1,133 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="wrapper-content">
+	
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 {* LIST ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-<div id="menu-acciones-admin">
-<ul>
-    <li>
-        <a href="#" class="admin_add" onClick="enviar(this, '_self', 'new', -1);"
-           title="Nueva Página">
-            <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New static page{/t}
-        </a>
-    </li>
-</ul>
-</div>
+	<div id="menu-acciones-admin">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+		<ul>
+			<li>
+				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'new', -1);"
+				   title="Nueva Página">
+					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New static page{/t}
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+	<table class="adminheading">
+		<tr>
+			<td></td>
+		</tr>
+	</table>
+	<table class="adminlist">
+		<tbody>
+			<tr>
+				<td>
+					<div style="padding: 5px 0;">
+						<label>Título: <input type="text" name="filter[title]" value="{$smarty.request.filter.title}" /></label>
+						<button type="submit" onclick="javascript:$('action').value='list';">{t}Filter{/t}</button>
+					</div>
+					
+					<style>
+					table.adminlist td {
+						padding: 4px;
+					}
+					</style>
+					
+					<table border="0" class="adminlist">
+						{if count($pages)>0}
+						<thead>
+						<tr>
+							<th>Título</th>
+							<th>URL</th>
+							<th class="title">{t}Visits{/t}</th>
+							<th class="title">{t}Published{/t}</th>
+							<th>&nbsp;</th>
+						</tr>
+						</thead>
+						{/if}
+				
+						<tbody id="gridPages">
+						{section name=k loop=$pages}
+						<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
+							<td>
+								{$pages[k]->title}
+							</td>
+							<td>&raquo;
+								<a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
+									{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>
+							</td>
+						
+							<td width="44" align="right">
+								{$pages[k]->views}
+								&nbsp;&nbsp;
+							</td>
+						
+							<td width="44" align="center">
+								<a href="?action=chg_status&id={$pages[k]->id}" class="available">
+									{if $pages[k]->available eq 1}
+										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
+									{else}
+										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
+									{/if}
+								</a>
+							</td>
+						
+							<td width="64" align="center">
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+								&nbsp;&nbsp;
+								<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{/t}">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+							</td>
+						</tr>
+						{sectionelse}
+						<tr>
+							<td align="center"><h2>{t}There is no static pages.{/t}</h2></td>
+						</tr>
+						{/section}
+						</tbody>
+				
+						<tfoot>
+							<tr>
+								<td colspan="5" align="center">
+									{$pager->links}
+								</td>
+							</tr>
+						</tfoot>
+						</table>
+						
+						<script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
+						<script type="text/javascript" language="javascript">
+							$('gridPages').select('a.available').each(function(item){
+								new SwitcherFlag(item);
+							});
+						</script>
+						{/if}
+					
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr class="pagination">
+				<td>&nbsp;</td>
+			</tr>
+		</tfoot>
+	</table>
+			
+	
 
-<div style="padding: 5px 0;">
-	<label>Título: <input type="text" name="filter[title]" value="{$smarty.request.filter.title}" /></label>
-	<button type="submit" onclick="javascript:$('action').value='list';">{t}Filter{/t}</button>
-</div>
-
-<style>
-{literal}
-table.adminlist td {
-	padding: 4px;
-}
-{/literal}
-</style>
 
 
-<table border="0" class="adminlist">
-{if count($pages)>0}
-<thead>
-<tr>
-    <th>Título</th>
-	<th>URL</th>
-	<th class="title">{t}Visits{/t}</th>
-	<th class="title">{t}Published{/t}</th>
-    <th>&nbsp;</th>
-</tr>
-</thead>
-{/if}
 
-<tbody id="gridPages">
-{section name=k loop=$pages}
-<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-	<td>
-		{$pages[k]->title}
-	</td>
-	<td>&raquo;
-		<a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
-			{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>
-	</td>
 
-	<td width="44" align="right">
-		{$pages[k]->views}
-		&nbsp;&nbsp;
-	</td>
 
-	<td width="44" align="center">
-		<a href="?action=chg_status&id={$pages[k]->id}" class="available">
-			{if $pages[k]->available == 1}
-				<img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
-			{else}
-				<img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
-			{/if}
-		</a>
-	</td>
 
-	<td width="64" align="center">
-		<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$pages[k]->id}');" title="{t}Modify{t}">
-			<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-		&nbsp;&nbsp;
-		<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{t}">
-			<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-	</td>
-</tr>
-{sectionelse}
-<tr>
-	<td align="center"><h2>{t}There is no static pages.{/t}</h2></td>
-</tr>
-{/section}
-</tbody>
-
-<tfoot>
-    <tr>
-        <td colspan="5" align="center">
-            {$pager->links}
-        </td>
-    </tr>
-</tfoot>
-</table>
-
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
-<script type="text/javascript" language="javascript">
-/* <![CDATA[ */
-{literal}
-$('gridPages').select('a.available').each(function(item){
-	new SwitcherFlag(item);
-});
-{/literal}
-</script>
-{/if}
 
 {* FORM TO ADD/MODIFY  ************************************** *}
 {if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
@@ -236,4 +260,6 @@ document.observe('dom:loaded', function() {
 <input type="hidden" id="action" name="action" value="" />
 <input type="hidden" name="id" id="id" value="{$id}" />
 </form>
+
+</div>
 {/block}

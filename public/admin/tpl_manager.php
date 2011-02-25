@@ -233,7 +233,7 @@ switch($action) {
 
             $tplManager->saveConfig($config);
 
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
+            Application::forward($_SERVER['PHP_SELF'] . '?action=list');
         } else {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);

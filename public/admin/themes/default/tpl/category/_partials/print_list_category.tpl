@@ -1,4 +1,4 @@
-<table width="100%" cellpadding="0" cellspacing="0" id="{$category->pk_content_category}">
+<table  class="adminlist"  id="{$category->pk_content_category}">
     <tr {cycle values="class=row0,class=row1"}>
         <td style="padding: 0px 10px; height: 40px;">
              <b> {$category->title|clearslash|escape:"html"}</b>
@@ -33,7 +33,7 @@
         </td>
         <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
             {if $category->internal_category != 0 && $category->internal_category != 2}
-                <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$category->pk_content_category});" title="Modificar">
+                <a href="{$smarty.server.PHP_SELF}?action=read&id={$category->pk_content_category}" title="Modificar">
                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                 </a>
             {/if}
@@ -112,4 +112,9 @@
           {/section}
         </td>
     </tr>
+    <tfoot>
+        <tr class="pagination">
+            <td>&nbsp;</td>
+        </tr>
+    </tfoot>
 </table>

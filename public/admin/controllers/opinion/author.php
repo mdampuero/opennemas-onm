@@ -30,9 +30,9 @@ if( isset($_REQUEST['action']) ) {
 		case 'list':
 			$author = new Author();
 			$cm = new ContentManager();
-			$authors = $author->list_authors(NULL,'order by name');
+			$authors = $author->list_authors(NULL,'order by name asc');
 			$tpl->assign('authors_list', $authors);
-			$authors = $cm->paginate_num($authors,16);
+			$authors = $cm->paginate_num($authors,20);
 			$tpl->assign('authors', $authors);
 			$tpl->assign('paginacion', $cm->pager);
 

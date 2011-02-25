@@ -91,7 +91,7 @@
                 {/if}
 
                 <div id="session-actions" style="float:left;">
-                  <a href="javascript:salir();" class="logout" title="{t}Logout from control panel{/t}">
+                  <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL}');" class="logout" title="{t}Logout from control panel{/t}">
 						{t}Log out{/t}
 						<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
 							align="absmiddle" alt="Salir del Panel de Administración" />

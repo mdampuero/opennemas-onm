@@ -357,8 +357,8 @@ function  show_subcat(category,home){
     });//
 }
 
-function salir() {
-	if(confirm('¿Desea salir del panel de administración?')) {
-		location.href = 'logout.php';
+function salir(msg,url) {
+	if(confirm(msg)) {
+		location.href = url;
 	}
 }
