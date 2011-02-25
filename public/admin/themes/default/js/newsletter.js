@@ -222,7 +222,7 @@ Newsletter.Manager = Class.create({
             // Prevent dblclick twice on fieldtext
             itemDomNode.stopObserving('dblclick', this.handlerOnInlineEdit);
             
-            var textBox = new Element('input', {type: 'text', size: '90', value: itemDomNode.innerHTML});         
+            var textBox = new Element('input', {type: 'text', width:'10px', style:'font-size: 09pt', size: '50', value: itemDomNode.innerHTML});
             
             textBox.observe('blur', this.onUpdateItem.bindAsEventListener(this));
             textBox.observe('keypress', this.onKeyPress.bindAsEventListener(this));
