@@ -25,9 +25,9 @@
 		<thead>
 			<tr>
 				<th class="title" style="align:left;padding:10px;width:30%;">{t}Author name{/t}</th>
-				<th class="title" style="padding:10px;width:20%;">{t}Genre{/t}</th>
-{*---------				<th class="title" style="padding:10px;width:20%;">{t}Politic sign{/t}</th> ------------*}
-				<th class="title" style="padding:10px;width:20%;">{t}Condition{/t}</th>
+                <th class="title" style="padding:10px;width:20%;">{t}Condition{/t}</th>
+				<th class="title" style="padding:10px;width:20%;">{t}Blog name{/t}</th>
+    			<th class="title" style="padding:10px;width:20%;">{t}Blog url{/t}</th>
 				<th class="title" style="padding:10px;width:10%;">{t}Photos (#){/t}</th>
 				<th class="title" style="padding:10px;width:10%;align:right;">{t}Edit{/t}</th>
 				<th class="title" style="padding:10px;width:10%;align:right;">{t}Delete{/t}</th>
@@ -38,14 +38,15 @@
 				<td style="padding:10px;">
 						{$authors[c]->name}&nbsp;&nbsp;{*if $authors[c]->fk_user != 0}(usuario){/if*}
 				</td>
-				<td style="padding:10px;">
-								{$authors[c]->gender}
-{*				</td>
-				<td style="padding:10px;">
-						{$authors[c]->politics}
-				</td> -----------*}
+                
 				<td style="padding:10px;">
 						{$authors[c]->condition}
+				</td>
+                <td style="padding:10px;">
+						{$authors[c]->politics}
+				</td>
+				<td style="padding:10px;">
+                        {$authors[c]->gender}
 				</td>
 				<td style="padding:10px;">
 						{$authors[c]->num_photos}
@@ -129,7 +130,7 @@
 					<label for="phone">{t}Blog name:{/t}</label>
 				</td>
                 <td style="padding:4px;" nowrap="nowrap">
-					<input type="text" id="blogname" name="blogname" title="{t}Blog name{/t}" value="{$author->condition}"  size="50"/>
+					<input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politcs}"  size="50"/>
 				</td>
 {*				<td style="padding:4px;" nowrap="nowrap">
 					<select name="politics" id="politics" class="required" title="Tendencia politica">
@@ -147,7 +148,7 @@
 					<label for="phone">{t}Blog url:{/t}</label>
 				</td>
                 <td style="padding:4px;" nowrap="nowrap">
-					<input type="text" id="blogurl" name="blogurl" title="{t}Blog url{/t}" value="{$author->gender}"  size="50"/>
+					<input type="text" id="gender" name="gender" title="{t}Blog url{/t}" value="{$author->gender}"  size="50"/>
 				</td>
             </tr>
 
