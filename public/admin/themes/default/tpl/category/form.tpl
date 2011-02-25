@@ -49,7 +49,7 @@
                 {if !empty($category->name)}
                     <tr>
                         <td valign="top"  style="padding:4px;text-align:left; width:100px;">
-                                <label for="title">Nombre interno:</label>
+                                <label for="title">{t}Internal name:{/t}</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap"   colspan="2">
                             <input type="text" id="name" name="name" title="carpeta categoria" readonly

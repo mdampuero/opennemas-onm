@@ -92,7 +92,7 @@ if( isset($_REQUEST['action']) ) {
 			   $subcategorys = $ccm->find('fk_content_category ='.$_REQUEST['id'], 'ORDER BY fk_content_category,posmenu');
 			   $tpl->assign('subcategorys', $subcategorys);
 
-			   $tpl->display('category/list.tpl');
+			   $tpl->display('category/form.tpl');
 
 		break;
 
