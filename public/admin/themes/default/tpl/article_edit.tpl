@@ -120,8 +120,8 @@
                     </td>
                     <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                         <select name="in_home" id="in_home" class="required" tabindex="8">
-                            <option value="0" {if $article->in_home eq 0}selected="selected"{/if}>No</option>
-                            <option value="1" {if $article->in_home eq 1}selected="selected"{/if}>Si</option>
+                            <option value="0" {if $article->in_home eq 0}selected"{/if}>No</option>
+                            <option value="1" {if $article->in_home eq 1}selected"{/if}>Si</option>
                        </select>
                     </td>
             </tr>
