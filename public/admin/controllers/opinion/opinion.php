@@ -59,6 +59,7 @@ if (!isset($_REQUEST['type_opinion'])) {
 }
 $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
 
+
 if(isset($_REQUEST['action'])) {
     switch($_REQUEST['action']) {
         case 'list': {
@@ -177,6 +178,8 @@ if(isset($_REQUEST['action'])) {
 
             $tpl->assign('todos', $todos);
             $tpl->assign('opinion', $opinion);
+            $_SESSION['desde'] = 'new';
+            $_SESSION['_from'] = 'opinion.php';
         } break;
 
         case 'read': {
