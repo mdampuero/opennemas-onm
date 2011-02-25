@@ -6,6 +6,7 @@
 div.widget-most-seeing-voted-commented-content-wrapper {
     background: #dfdfdf !important;
     padding:7px !important;
+    margin-bottom:10px;
 }
 
 div.widget-most-seeing-voted-commented-content .title

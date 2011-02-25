@@ -48,7 +48,7 @@ submitForm = function() {
                 <label for="title">{t}Widget name{/t}:</label>
             </td>
             <td>
-                <input type="text" id="title" name="title" title="Nombre del widget" class="required" size="30" maxlength="60" />
+                <input type="text" id="title" value="{$widget->title}" name="title" title="Nombre del widget" class="required" size="30" maxlength="60" />
             </td>
         </tr>
         <tr>

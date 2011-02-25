@@ -2,8 +2,9 @@
 <div id="warnings-validation">
 {if $article->isClone()}
     {assign var="original" value=$article->getOriginal()}
-
-    Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
+	
+	{t}This article was strong{/t}
+	Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
 {/if}
 </div>
 
@@ -115,7 +116,7 @@
             </tr>
             <tr>
                     <td valign="top"  align="right" nowrap="nowrap">
-                        <label for="frontpage"> En Home: </label>
+                        <label for="frontpage">{t}Show in home{/t}</label>
                     </td>
                     <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                         <select name="in_home" id="in_home" class="required" tabindex="8">
@@ -126,7 +127,7 @@
             </tr>
             <tr>
                     <td valign="top"  align="right" nowrap="nowrap">
-                        <label for="available"> Disponible: </label>
+                        <label for="available"> {t}Available:{/t}</label>
                     </td>
                         <td  style="text-align:left;vertical-align:top" nowrap="nowrap">
                         <select name="available" id="available" class="required" tabindex="9">

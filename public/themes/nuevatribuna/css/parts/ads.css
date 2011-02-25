@@ -72,3 +72,16 @@ div.ad_in_column > div {
 div.ad_in_column {
 		margin:5px 0 10px 0;
 }
+
+/***********************************************************
+	Definitions for ads inside CONTENT
+************************************************************/
+.ads_break_frontpage {
+	clear:both;
+	margin:10px 0;
+}
+
+.ads_break_frontpage > div {
+	margin-left:-10px !important;
+	background-color:White;
+}
