@@ -95,8 +95,9 @@
                             </a>
                         </td>
                         <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
-                            {if $subcategorys[su]->internal_category==1}
-                                <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$subcategory->pk_content_category}); {rdelim}" title="Vaciar">
+
+                            {if ($subcategorys[su]->internal_category==1) && ($num_sub_contents[su].articles!=0 || $num_sub_contents[su].photos!=0 || $num_sub_contents[su].advertisement!=0)}
+                                <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$subcategorys[su]->pk_content_category}); {rdelim}" title="Vaciar">
                                     <img src="{$params.IMAGE_DIR}removecomment.png" border="0" alt="vaciar" />
                                 </a>
                             {/if}
