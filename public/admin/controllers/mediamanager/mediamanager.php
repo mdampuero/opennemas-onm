@@ -48,7 +48,7 @@ if (!isset($_REQUEST['category'])
     //&& empty($_REQUEST['action'])))
 {
     $_REQUEST['category'] = 'GLOBAL';
-    //$_REQUEST['action'] = "list_categorys";
+    $_REQUEST['action'] = "list_categorys";
 }
 
 if (!Acl::check('IMAGE_ADMIN')) {
