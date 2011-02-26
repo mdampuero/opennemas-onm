@@ -3,8 +3,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 
 define('PATH_FILES', realpath(dirname(__FILE__).'/../media/files/'));
 require_once(SITE_LIBS_PATH.'class.dir.php');
@@ -22,11 +22,12 @@ if(isset($orden)){
         $pos+=1;
     }
     $ok=1;
+    $output = Content::refreshFrontpageForAllCategories();
 
 }
 
-if( $ok==1){
-    echo '<script>
-    alert("Guardado correctamente");
-    </script>';
+if( !$ok==1){
+    header('HTTP/1.1 500 Internal Server Error');
+} else {
+    echo sprintf(_("Changes in category order saved correctly:\n %s"), $output);
 }

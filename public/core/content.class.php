@@ -1128,6 +1128,28 @@ class Content {
 
         }
     }
+    
+    static public function refreshFrontpageForAllCategories() {
+        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
+        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        
+        $ccm = ContentCategoryManager::get_instance();
+        
+        $availableCategories = $ccm->categories;
+        $output ='';
+    
+        foreach($availableCategories as $category) {
+    
+    
+            $tplManager->delete($category->name . '|RSS');
+    
+            $tplManager->delete($category->name . '|0');
+            $output .= "$category->name cleaned.\n";
+    
+        }
+        return $output;
+
+    }
 
     public function refreshHome($params = '') {
 

@@ -5,13 +5,18 @@
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
 {/block}
+{block name="header-css" append}
+    <style type="text/css">
+        .panel {
+            border:none !important;
+        }
+    </style>
+{/block}
 
 {block name="content"}
 <div class="wrapper-content">
+    
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-
-
-        <div id="media_msg" style="float:right;width:300px;display:none;">   </div>
         {if !empty($msg)}
             <script type="text/javascript">
                 {if $smarty.request.resp eq 'SI'}
@@ -19,7 +24,7 @@
                 {elseif $smarty.request.resp eq 'NO'}
                     showMsg({ 'warn':['{t}Not deleted, the section is not empty.{/t}<br />'] },'inline');
                 {elseif $smarty.request.resp eq 'ya'}
-                    showMsg({ 'warn':['{t}Unable to create, the section exists.{/t}' ]},'inline');
+                    showMsg({ 'warn':['{t}Unable to create, section is already exists.{/t}' ]},'inline');
                 {elseif $smarty.request.resp eq 'EMPTY'}
                     showMsg({ 'warn':['{t}Successfully emptied.{/t}'] },'inline');
                 {/if}
@@ -38,6 +43,12 @@
         <div class="panel" id="listado">
 
             {include file="botonera_up.tpl" type="list"}
+            
+            <table class="adminheading">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
             <table class="adminlist" id="tabla"  width="100%" style="margin-top:10px;">
                 <thead>
                     <tr>
@@ -74,7 +85,7 @@
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr>
+                    <tr class="pagination">
                         <td colspan="5" align="center">{$paginacion->links}</td>
                     </tr>
                 </tfoot>
@@ -85,7 +96,13 @@
         <div class="panel" id="ordenar" style="width:95%">
 
             {include file="botonera_up.tpl" type="order"}
-
+            <div id="warnings-validation"></div>
+            <table class="adminheading">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+            
             <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
                 <thead>
                     <tr>
@@ -150,11 +167,17 @@
             </table>
             <script type="text/javascript">
                 // <![CDATA[
-                    Sortable.create('cates',{
-                        tag:'table',
-                        dropOnEmpty: true,
-                        containment:["cates"],
-                        constraint:false});
+                    Sortable.create('cates',
+                                    {
+                                        tag:'table',
+                                        dropOnEmpty: true,
+                                        containment:["cates"],
+                                        onChange: function(item) {  
+                                            $('warnings-validation').update('<div class="notice">Por favor, recuerde guardar posiciones antes de terminar.</div>');
+                                        },
+                                        constraint:false
+                                    }
+                        );
                 // ]]>
             </script>
         </div>
