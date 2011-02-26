@@ -123,7 +123,7 @@ if( isset($_REQUEST['action']) ) {
             String_Utils::disabled_magic_quotes();
             $tpl->assign('script', $_POST['script']); // ten que vir por POST
 
-            $tpl->display('advertisement/advertisement.tpl');
+            $tpl->display('advertisement/test_script.tpl');
 
         } break;
 

@@ -3,7 +3,7 @@
     <tr>
         <td align="right" colspan="2">
             <label>
-                {t}Banner Intersticial in Frontpage (800X600){/t}
+                {t}Frontpage Intersticial (800X600){/t}
                 <input type="radio" name="type_advertisement" value="50" {if $advertisement->type_advertisement == 50}checked="checked" {/if}/>
             </label>
         </td>

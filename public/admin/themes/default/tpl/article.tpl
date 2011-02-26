@@ -101,7 +101,7 @@
                 <div id="no_en_home" style="margin:10px 0">
                     <table class="adminheading">
                         <tr>
-                            <th align="center">Articulos en Portada <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
+                            <th align="center">{t}Homepage articles{/t} <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
                         </tr>
                     </table>
                     <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
@@ -119,9 +119,10 @@
 
             </div> {* div id=pagina *}
             <script type="text/javascript">
+            
 
                 // <![CDATA[
-                make_sortable_divs_portadas( '{$category}');
+                make_sortable_divs_portadas('{$category}');
                 // Controlar o cambio de posicións para amosar un aviso
                 var posicionesIniciales = null;
                 var posicionesInicialesWarning = false; // Mellorar o rendemento
@@ -129,7 +130,6 @@
                     //Provisional repite innecesariamente.
                     {if $category eq 'home'}
                     changedTables({$category});
-
                     {/if}
                     if(!posicionesInicialesWarning) {
                         $$('input[type=checkbox]').each( function(item, idx) {
@@ -146,6 +146,13 @@
                     posicionesIniciales = $$('input[type=checkbox]');
                 });
                 make_sortable_divs_portadas('{$category}');
+                
+                $('tabs').observe('click', makealldivssortable);
+                
+                function makealldivssortable(event) {
+                    setTimeout('make_sortable_divs_portadas(\'{$category}\');', 800);
+                }
+
 
                 Draggables.observers.each(function(item){
                     item.onEnd= avisoGuardarPosiciones;
