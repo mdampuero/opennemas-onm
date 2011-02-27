@@ -207,9 +207,6 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $this->check_thubnail( $photo );
 
         }
-		
-		var_dump($photos);
-		die();
 
         $_SESSION['desde'] = 'list_today';
         if(isset($_REQUEST['where']) ) $_SESSION['where'] != '';

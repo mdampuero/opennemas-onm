@@ -31,20 +31,20 @@
 <div id="contenedor-gral">
     <ul class="tabs2">
         <li>
-            <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+            <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
                 GLOBAL</a>
         </li>
-         {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
+        {* {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
            {* <li>
                 <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     ALBUMS</a>
             </li>
             *}
             <li>
-                <a href="mediamanager.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     PUBLICIDAD</a>
             </li>
-        {/if}
+        {/if}*}
         {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
 
     </ul>
@@ -65,7 +65,7 @@
         {/if}
 
         <div style='margin-left:10px;margin-top:10px;'>
-            <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{$titulo_barra}:: {$title_bar} </h2></div>
+            <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Media manager{/t} :: {$title_bar} </h2></div>
             <div id="menu-acciones-admin" >
                     <ul>
                          <li>
@@ -107,7 +107,7 @@
 
    <br style="clear:both;" />
 
-{* BOTONERA: incluir en botonera_up.tpl*}
+    {* BOTONERA: incluir en botonera_up.tpl*}
      {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
         {if $action=='list_today'}
             {assign var=accion value='Fotos de Hoy'}

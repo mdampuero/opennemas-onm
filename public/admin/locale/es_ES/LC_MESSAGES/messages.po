@@ -2,20 +2,21 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Fran Diéguez <frandieguez@ubuntu.com>, 2011.
+# David Martinez <david.martinez@openhost.es>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-02-27 22:16+0100\n"
-"PO-Revision-Date: 2011-02-23 16:11+0100\n"
-"Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
-"Language-Team: Galician <gnome-gl-list@gnome.org>\n"
+"PO-Revision-Date: 2011-02-27 23:07+0100\n"
+"Last-Translator: David Martinez <david.martinez@openhost.es>\n"
+"Language-Team: Spanish <desarrollo@openhost.es>\n"
 "Language: gl_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: include/menu.php:5 locale/extracted_strings.c:1019
 #: locale/extracted_strings.c:1382
@@ -216,7 +217,7 @@ msgstr "Sin publicar"
 
 #: locale/extracted_strings.c:26
 msgid "Modify"
-msgstr ""
+msgstr "Modificar"
 
 #: locale/extracted_strings.c:29 locale/extracted_strings.c:176
 #: locale/extracted_strings.c:200 locale/extracted_strings.c:557
@@ -327,9 +328,8 @@ msgstr ""
 "Álbumes de imágenes (Pulse dos veces para seleccionar e cortar imagenes)"
 
 #: locale/extracted_strings.c:92
-#, fuzzy
 msgid "Show image"
-msgstr "Buscar imágenes"
+msgstr "Mostrar imagen"
 
 #: locale/extracted_strings.c:95
 msgid "Drag and drop images to select"
@@ -379,9 +379,8 @@ msgid "Tags:"
 msgstr "Etiquetas:"
 
 #: locale/extracted_strings.c:134
-#, fuzzy
 msgid "Footer image:"
-msgstr "Imágenes en color"
+msgstr "Imágenes en footer:"
 
 #: locale/extracted_strings.c:137
 msgid "Cut the image that is in frontpage view.(300x250 px)"
@@ -567,7 +566,7 @@ msgstr "Usuarios activos en el panel de administración"
 
 #: locale/extracted_strings.c:344
 msgid "Do you really want to exit from backend?"
-msgstr ""
+msgstr "¿Está seguro de que quiere salir del panel de administración?"
 
 #: locale/extracted_strings.c:347 locale/extracted_strings.c:1109
 msgid "Logout from control panel"
@@ -918,14 +917,12 @@ msgid "Article"
 msgstr "Artículo"
 
 #: locale/extracted_strings.c:845 locale/extracted_strings.c:902
-#, fuzzy
 msgid "Mobile frontpage cache file"
-msgstr "Portadas de móvil"
+msgstr "Fichero de caché de portadas de móvil"
 
 #: locale/extracted_strings.c:848
-#, fuzzy
 msgid "Mobile inner article:"
-msgstr "Noticia interior"
+msgstr "Noticia interior móbil:"
 
 #: locale/extracted_strings.c:851
 msgid "Inner video cache file"
@@ -953,14 +950,12 @@ msgid "Opinion inner:"
 msgstr "Opinión interior:"
 
 #: locale/extracted_strings.c:869
-#, fuzzy
 msgid "Frontpage article cache file"
-msgstr "Fichero de caché"
+msgstr "Fichero de caché de portada"
 
 #: locale/extracted_strings.c:875
-#, fuzzy
 msgid "Inner gallery cache file"
-msgstr "Ficheor de caché de artículo interior"
+msgstr "Ficheor de caché de galería interior"
 
 #: locale/extracted_strings.c:881
 msgid "RSS Opinion author cache file "
@@ -991,9 +986,8 @@ msgid "Mobile Frontpage:"
 msgstr "Portada de móbil:"
 
 #: locale/extracted_strings.c:908 locale/extracted_strings.c:911
-#, fuzzy
 msgid "Section Frontpage cache file"
-msgstr "Fichero de caché"
+msgstr "Fichero de caché de portada de sección"
 
 #: locale/extracted_strings.c:914
 msgid "(Pág."
@@ -1151,7 +1145,7 @@ msgstr "Buscar"
 
 #: locale/extracted_strings.c:1115
 msgid "Delivered newsletter report"
-msgstr ""
+msgstr "Informe de envío del boletín"
 
 #: locale/extracted_strings.c:1127 locale/extracted_strings.c:1274
 #: locale/extracted_strings.c:1289 locale/extracted_strings.c:1451
@@ -1224,9 +1218,8 @@ msgid "Widgets"
 msgstr "Widgets"
 
 #: locale/extracted_strings.c:1208
-#, fuzzy
 msgid "Homepage articles"
-msgstr "Portada de artículos"
+msgstr "Artículos de portada"
 
 #: locale/extracted_strings.c:1211
 msgid "NOT IN HOME"
@@ -1282,16 +1275,14 @@ msgid "No available sections"
 msgstr "Secciones no disponibles"
 
 #: locale/extracted_strings.c:1262
-#, fuzzy
 msgid "Internal name:"
-msgstr "Nombre interno"
+msgstr "Nombre interno:"
 
 #: locale/extracted_strings.c:1265 locale/extracted_strings.c:1442
 msgid "Banner type:"
 msgstr "Tipo de banner:"
 
 #: locale/extracted_strings.c:1268
-#, fuzzy
 msgid "State"
 msgstr "Estado"
 
@@ -1302,30 +1293,26 @@ msgid "Type:"
 msgstr "Tipo:"
 
 #: locale/extracted_strings.c:1280
-#, fuzzy
 msgid "Permanency"
-msgstr "Permanencia"
+msgstr "Permanencia:"
 
 #: locale/extracted_strings.c:1283 locale/extracted_strings.c:1460
 msgid "Clicks"
-msgstr "Clics"
+msgstr "Clicks"
 
 #: locale/extracted_strings.c:1286
 msgid "Seeing"
-msgstr ""
+msgstr "Visualizaciones"
 
 #: locale/extracted_strings.c:1301
-#, fuzzy
 msgid "Ad manager"
-msgstr "Gestor multimedia"
+msgstr "Gestor de publicidad"
 
 #: locale/extracted_strings.c:1304
-#, fuzzy
 msgid "Creating banner"
-msgstr "Creando nueva publicidad"
+msgstr "Creando publicidad"
 
 #: locale/extracted_strings.c:1307
-#, fuzzy
 msgid "Editing banner"
 msgstr "Editando publicidad"
 
@@ -1334,6 +1321,8 @@ msgid ""
 "Please, fill the form with the ad description and push <strong>Save and Exit "
 "</strong> when you've finished."
 msgstr ""
+"Complete el formulario con la descripción de la publicidad y pulse "
+"<strong>Guardar y salir</strong> cuando termine."
 
 #: locale/extracted_strings.c:1322 locale/extracted_strings.c:2555
 #: locale/extracted_strings.c:2699
@@ -1345,9 +1334,8 @@ msgid "Separated by commas"
 msgstr "Separadas por comas"
 
 #: locale/extracted_strings.c:1334
-#, fuzzy
 msgid "Hide Flash events:"
-msgstr "Ocultar eventos de Flash"
+msgstr "Ocultar eventos de Flash:"
 
 #: locale/extracted_strings.c:1337
 msgid "Periodicity:"
@@ -1358,27 +1346,24 @@ msgid "Undefined"
 msgstr "No definido"
 
 #: locale/extracted_strings.c:1343
-#, fuzzy
 msgid "Publication start time:"
 msgstr "Fecha de inicio de publicación:"
 
 #: locale/extracted_strings.c:1346
-#, fuzzy
 msgid "Publication end time:"
 msgstr "Fecha de fin de publicación:"
 
 #: locale/extracted_strings.c:1349
-#, fuzzy
 msgid "# of clicks:"
 msgstr "Número de clics:"
 
 #: locale/extracted_strings.c:1352
 msgid "Visualization count:"
-msgstr ""
+msgstr "Cuenta de visualizaciones:"
 
 #: locale/extracted_strings.c:1355
 msgid "Time scheduling:"
-msgstr ""
+msgstr "Planificación temporal:"
 
 #: locale/extracted_strings.c:1358
 msgid "URL:"
@@ -1397,19 +1382,16 @@ msgid "Gallery"
 msgstr "Galería"
 
 #: locale/extracted_strings.c:1373
-#, fuzzy
 msgid "Ad with JavaScript:"
-msgstr "Publicidad con JavaScript"
+msgstr "Publicidad con JavaScript:"
 
 #: locale/extracted_strings.c:1376
-#, fuzzy
 msgid "Test Javascript code"
-msgstr "Probar JavaScript de la publicidad"
+msgstr "Probar publicidad con JavaScript:"
 
 #: locale/extracted_strings.c:1379
-#, fuzzy
 msgid "Ad position:"
-msgstr "Guardar posiciones"
+msgstr "Posición de la publicidad:"
 
 #: locale/extracted_strings.c:1385
 msgid "Inner article"
@@ -1420,17 +1402,14 @@ msgid "Inner video"
 msgstr "Noticia interior"
 
 #: locale/extracted_strings.c:1394
-#, fuzzy
 msgid "Opinion frontpage"
 msgstr "Portada de opinión"
 
 #: locale/extracted_strings.c:1400
-#, fuzzy
 msgid "Galleries"
-msgstr "Galería"
+msgstr "Galerías"
 
 #: locale/extracted_strings.c:1403
-#, fuzzy
 msgid "HOMEPAGE"
 msgstr "PORTADA"
 
@@ -1499,9 +1478,8 @@ msgid "Close"
 msgstr "Cerrar"
 
 #: locale/extracted_strings.c:1526
-#, fuzzy
 msgid "Multimedia for this ad:"
-msgstr "Multimedia asociado a este artículo:"
+msgstr "Multimedia asociado a esta publicidad:"
 
 #: locale/extracted_strings.c:1538 locale/extracted_strings.c:1565
 #: locale/extracted_strings.c:2324 locale/extracted_strings.c:2411
@@ -1628,9 +1606,8 @@ msgid "Button Column (265x95)"
 msgstr ""
 
 #: locale/extracted_strings.c:1676
-#, fuzzy
 msgid "Frontpage Intersticial (800X600)"
-msgstr "Banner intersticial - Galería (800X600)"
+msgstr ""
 
 #: locale/extracted_strings.c:1679
 msgid "Top Left LeaderBoard (728X90)"
@@ -1641,44 +1618,36 @@ msgid "Top Right LeaderBoard  (234X90)"
 msgstr ""
 
 #: locale/extracted_strings.c:1685
-#, fuzzy
 msgid "Button Column 1 position 1 (300X*)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1688
-#, fuzzy
 msgid "Button Column 1 position 2  (300X*)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1691
-#, fuzzy
 msgid "Button Column 2 position 1 (300X*)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1694
-#, fuzzy
 msgid "Button Column 2 position 2  (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1697
-#, fuzzy
 msgid "Button Column 3 position 1 (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1700
-#, fuzzy
 msgid "Button Column 3 position 2  (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1703
-#, fuzzy
 msgid "Button Column 1 position 3  (200x200)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1706
-#, fuzzy
 msgid "Button Column 3 position 3 (200x200)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1709
 msgid "Center Left LeaderBoard (728X90)"
@@ -1689,44 +1658,36 @@ msgid "Center Right LeaderBoard (234x90)"
 msgstr ""
 
 #: locale/extracted_strings.c:1715
-#, fuzzy
 msgid "Button Column 1 position 4 (300X*)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1718
-#, fuzzy
 msgid "Button Column 1 position 5  (300X*)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1721
-#, fuzzy
 msgid "Button Column 2 position 4 (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1724
-#, fuzzy
 msgid "Button Column 2 position 5  (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1727
-#, fuzzy
 msgid "Button Column 3 position 4 (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1730
-#, fuzzy
 msgid "Button Column 3 position 5  (300X*)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1733
-#, fuzzy
 msgid "Button Column 1 position 6  (200x200)"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1736
-#, fuzzy
 msgid "Button Column 3 position 6 (200x200)"
-msgstr "Columna 3 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1739
 msgid "Bottom Left LeaderBoard (728X90)"
@@ -1737,9 +1698,8 @@ msgid "Bottom Right LeaderBoard (234X90)"
 msgstr ""
 
 #: locale/extracted_strings.c:1745
-#, fuzzy
 msgid "Big Banner top left (Int.)"
-msgstr "Banner grande superior (728X90)"
+msgstr ""
 
 #: locale/extracted_strings.c:1748
 msgid "Banner top right (Int.)"
@@ -1778,28 +1738,24 @@ msgid "Banner2 Column Right (300X*)"
 msgstr ""
 
 #: locale/extracted_strings.c:1787
-#, fuzzy
 msgid "Big banner top left"
-msgstr "Tipo de banner:"
+msgstr ""
 
 #: locale/extracted_strings.c:1790
-#, fuzzy
 msgid "Banner top right"
-msgstr "Tipo de banner:"
+msgstr ""
 
 #: locale/extracted_strings.c:1793
-#, fuzzy
 msgid "Button column 1"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1796
-#, fuzzy
 msgid "Button column 3"
-msgstr "Columna 1 inferior (300X*)"
+msgstr ""
 
 #: locale/extracted_strings.c:1799
 msgid "Horizontal separator"
-msgstr "Separador horizontal"
+msgstr ""
 
 #: locale/extracted_strings.c:1802
 #, fuzzy
@@ -1807,9 +1763,8 @@ msgid "Mini right 1"
 msgstr "Ancho mínimo:"
 
 #: locale/extracted_strings.c:1805
-#, fuzzy
 msgid "Mini right 2"
-msgstr "Ancho mínimo:"
+msgstr ""
 
 #: locale/extracted_strings.c:1808
 msgid "Button bottom right"
@@ -2080,21 +2035,20 @@ msgid "Your search \"<b>%1</b>\" didn't return any element."
 msgstr "Su búsqueda <b>%1</b> no devolvió ningún elemento."
 
 #: locale/extracted_strings.c:2111
-#, fuzzy
 msgid "Suggestions:"
-msgstr "Secciones:"
+msgstr "Sugerencias:"
 
 #: locale/extracted_strings.c:2114
 msgid "Check if all the words are written correctly."
-msgstr ""
+msgstr "Compruebe si todas las palabras están bien escritas."
 
 #: locale/extracted_strings.c:2117
 msgid "Use other words."
-msgstr ""
+msgstr "Use otras palabras."
 
 #: locale/extracted_strings.c:2120
 msgid "Use more general search criteria."
-msgstr ""
+msgstr "Use un  criterio de búsqueda más general."
 
 #: locale/extracted_strings.c:2126
 msgid "Article title"
@@ -2512,13 +2466,12 @@ msgid "Condition"
 msgstr "Condición"
 
 #: locale/extracted_strings.c:2681 locale/extracted_strings.c:2723
-#, fuzzy
 msgid "Blog name"
-msgstr "Nombre del grupo"
+msgstr "Nombre del blog"
 
 #: locale/extracted_strings.c:2684 locale/extracted_strings.c:2747
 msgid "Blog url"
-msgstr ""
+msgstr "Nombre del blog"
 
 #: locale/extracted_strings.c:2687
 msgid "Photos (#)"
@@ -2541,9 +2494,8 @@ msgid "Men"
 msgstr "Hombre"
 
 #: locale/extracted_strings.c:2720
-#, fuzzy
 msgid "Blog name:"
-msgstr "Nombre de la imagen:"
+msgstr "Nombre del blog:"
 
 #: locale/extracted_strings.c:2726
 msgid "Progresist"
@@ -2571,7 +2523,7 @@ msgstr "Comunista"
 
 #: locale/extracted_strings.c:2744
 msgid "Blog url:"
-msgstr ""
+msgstr "Url del blog:"
 
 #: locale/extracted_strings.c:2750
 msgid "Birthday:"
@@ -2733,7 +2685,7 @@ msgstr "Sección:"
 
 #: locale/extracted_strings.c:2966
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: locale/extracted_strings.c:2972
 msgid "Disabled"
@@ -2757,7 +2709,7 @@ msgstr "Poner en portada:"
 
 #: locale/extracted_strings.c:3008
 msgid "Archived:"
-msgstr ""
+msgstr "Archivado:"
 
 #: locale/extracted_strings.c:3014
 msgid "Inner title"
@@ -2817,9 +2769,8 @@ msgid "Comments management"
 msgstr "Gestor de comentarios"
 
 #: locale/extracted_strings.c:3092
-#, fuzzy
 msgid "Show in home"
-msgstr "Buscar imágenes"
+msgstr "Mostrar en portada"
 
 #: locale/extracted_strings.c:3098
 msgid "Multimedia associated to this article:"
