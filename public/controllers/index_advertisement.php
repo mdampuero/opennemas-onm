@@ -27,8 +27,10 @@ $advertisement = Advertisement::getInstance();
 
 // Load 1-16 banners and use cache to performance
 //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-$banners = $advertisement->getAdvertisements(array(1,2, 3,4, 5,6,7, 8, 9,10), $category);
- $cm = new ContentManager();
+$banners = $advertisement->getAdvertisements(array(1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36), $category);
+
+        
+$cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
 $advertisement->render($banners, $advertisement);
