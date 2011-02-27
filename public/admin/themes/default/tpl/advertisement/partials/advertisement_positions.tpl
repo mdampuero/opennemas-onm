@@ -213,9 +213,8 @@
 </table>
 
 <script defer="defer" type="text/javascript" language="javascript">
-/* <![CDATA[ */{literal}
+/* <![CDATA[ */
 var adPositionPortada = null;
-
 
 var positions_portada = [
                             '0,0,0,0', '1,1,178,23',
@@ -234,14 +233,12 @@ var options  =  {
                 };
 adPositionPortada = new AdPosition('advertisement-mosaic', options );
 document.observe('dom:loaded', function() {
-    {/literal}
     {if !empty($advertisement->type_advertisement)}
     adPositionPortada.selectPosition({ $advertisement->type_advertisement });
     {else}
     adPositionPortada.selectPosition(1);
     {/if}
-    {literal}
 });
-/* ]]> */{/literal}
+/* ]]> */
 </script>
 *}

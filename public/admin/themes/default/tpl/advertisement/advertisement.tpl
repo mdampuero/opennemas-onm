@@ -4,6 +4,18 @@
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
 {/block}
+
+{block name="header-css" append}
+    .inputExtension {
+        top:5px !important;
+    }
+    object {
+        z-index:0;
+    }
+    .datepickerControl {
+        z-index:99;
+    }
+{/block}
  
 {block name="content" append}
 <div class="wrapper-content">
@@ -294,24 +306,24 @@
                                 <tr>
                                     <td valign="top" colspan="2">
                 
-                                        <div id="porfecha" style="width:95%;display:{if $advertisement->type_medida!='DATE'}none{/if};">
+                                        <div id="porfecha" style="{if $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                                             <table width="95%">
                                             <tr>
-                                                <td valign="top" align="right" style="padding:4px;" width="40%">
+                                                <td valign="top" align="right" >
                                                     <label for="starttime">{t}Publication start time:{/t}</label>
                                                 </td>
-                                                <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                                    <input type="text" id="starttime" name="starttime" size="16" title="Fecha inicio publicacion"
+                                                <td>
+                                                    <input type="text" id="starttime" style="width:100%" name="starttime" title="Fecha inicio publicacion"
                                                         value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
                 
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td valign="top" align="right" style="padding:4px;" width="40%">
+                                                <td valign="top" align="right">
                                                     <label for="endtime">{t}Publication end time:{/t}</label>
                                                 </td>
-                                                <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                                    <input type="text" id="endtime" name="endtime" size="16" title="Fecha fin publicacion"
+                                                <td>
+                                                    <input type="text" id="endtime" style="width:100%" name="endtime" title="Fecha fin publicacion"
                                                         value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
                 
                                                 </td>
@@ -370,14 +382,14 @@
                                         <label for="timeout">{t}Time scheduling:{/t}</label>
                 
                                         <table width="95%">
-                                        <tr>
-                                            <td width="40%">&nbsp;</td>
-                                            <td style="padding:4px;" nowrap="nowrap" width="60%">
-                                                <input type="text" id="timeout" name="timeout" size="2" title="Segundos antes de desaparecer"
-                                                    value="{$advertisement->timeout|default:"4"}" style="text-align: right;" />
-                                                segundos. <sub>( -1 no desaparece )</sub>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td width="40%">&nbsp;</td>
+                                                <td style="padding:4px;" nowrap="nowrap" width="60%">
+                                                    <input type="text" id="timeout" name="timeout" size="2" title="Segundos antes de desaparecer"
+                                                        value="{$advertisement->timeout|default:"4"}" style="text-align: right;" /> 
+                                                    {t escape="off"}seconds. <sub>( -1 no desaparece )</sub>{/t}
+                                                </td>
+                                            </tr>
                                         </table>
                 
                                         </div>
@@ -416,9 +428,9 @@
                     </td>
                     <td valign="top" style="height:20px;padding:4px;">
                         <select name="category" id="category" class="required">
-                            <option value="0">{t}Portada{/t}</option>
+                            <option value="0">{t}Frontpage{/t}</option>
                             <option value="4" {if $category eq 4}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            <option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>
+                            <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
                                     {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
@@ -632,7 +644,7 @@
         <script type="text/javascript" language="javascript">
             if($('starttime')) {
                 new Control.DatePicker($('starttime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
+                    icon: '{$smarty.const.SITE_URL_ADMIN}/themes/default/images/template_manager/update16x16.png',
                     locale: 'es_ES',
                     timePicker: true,
                     timePickerAdjacent: true,
@@ -640,7 +652,7 @@
                 });
             
                 new Control.DatePicker($('endtime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
+                    icon: '{$smarty.const.SITE_URL_ADMIN}/themes/default/images/template_manager/update16x16.png',
                     locale: 'es_ES',
                     timePicker: true,
                     timePickerAdjacent: true,
