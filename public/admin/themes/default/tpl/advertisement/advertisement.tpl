@@ -6,6 +6,7 @@
 {/block}
 
 {block name="header-css" append}
+<style type="text/css">
     .inputExtension {
         top:5px !important;
     }
@@ -15,6 +16,7 @@
     .datepickerControl {
         z-index:99;
     }
+</style>
 {/block}
  
 {block name="content" append}

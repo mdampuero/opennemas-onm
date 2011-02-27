@@ -30,26 +30,8 @@
 
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-        <ul class="tabs2">
-            <li>
-                <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-                    GLOBAL</a>
-            </li>
-            {* <li>
-                 <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                     ALBUMS</a>
-             </li>
-             *}
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                    PUBLICIDAD</a>
-            </li>
-            {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
+        {include file="mediamanager/_partials/categories.tpl"}
 
-        </ul>
-
-        <br />
-        <br />
 
         <div id="menu-acciones-admin">
             <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}</h2></div>

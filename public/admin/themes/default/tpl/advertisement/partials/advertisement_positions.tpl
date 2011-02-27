@@ -241,4 +241,3 @@ document.observe('dom:loaded', function() {
 });
 /* ]]> */
 </script>
-*}

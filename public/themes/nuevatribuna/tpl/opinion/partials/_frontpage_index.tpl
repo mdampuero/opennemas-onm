@@ -56,8 +56,6 @@
                             <a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac].name id=$opinions[ac].pk_author}">
                             <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$opinions[ac].path_img}" alt="{$opinions[ac].name}" height="67" />
                             </a>
-                        {else}
-                            <img src="{$params.IMAGE_DIR}opinion/editorial.jpg" alt="{$opinions[ac].name}" height="67" />
                         {/if}
                     </div>
                     <div class="opinion-listing-colaborators-post span-5 last">
@@ -68,8 +66,6 @@
                                                                     date=$opinions[ac].created
                                                                     title=$opinions[ac].title
                                                                     category_name=$opinions[ac].author_name_slug}">{$opinions[ac].title|clearslash}</a>
-
-
                     </div>
                 </div>
 

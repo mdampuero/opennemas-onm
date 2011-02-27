@@ -91,6 +91,7 @@ if( isset($_REQUEST['action']) ) {
 			   $tpl->assign('category', $category);
 			   $subcategorys = $ccm->find('fk_content_category ='.$_REQUEST['id'], 'ORDER BY fk_content_category,posmenu');
 			   $tpl->assign('subcategorys', $subcategorys);
+			   
 
 			   $tpl->display('category/form.tpl');
 
@@ -108,6 +109,11 @@ if( isset($_REQUEST['action']) ) {
 						 $_REQUEST['logo_path'] ='';
 					}
 			   }
+			   
+			   if(!isset($_REQUEST['inmenu'])) {
+					$_REQUEST['inmenu'] = 0;
+			   }
+			   
 			   $category->update( $_REQUEST );
 
 			   Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');

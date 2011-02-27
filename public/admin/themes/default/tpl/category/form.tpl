@@ -38,8 +38,8 @@
         <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
             <tbody>
                 <tr>
-                    <td valign="top" style="padding:4px;text-align:right; width:100px;">
-                        <label for="title">T&iacute;tulo:</label>
+                    <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="title">{t}Title{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap"  colspan="2">
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash}"
@@ -48,7 +48,7 @@
                 </tr>
                 {if !empty($category->name)}
                     <tr>
-                        <td valign="top"  style="padding:4px;text-align:left; width:100px;">
+                        <td valign="middle"  style="padding:4px;text-align:right; width:100px;">
                                 <label for="title">{t}Internal name:{/t}</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap"   colspan="2">
@@ -58,21 +58,21 @@
                     </tr>
                 {/if}
                 <tr>
-                    <td valign="top" style="padding:4px;text-align:left; width:100px;">
-                        <label for="title">Subsecci&oacute;n de:</label>
+                    <td align="right" valign="top" style="padding:4px;text-align:right; width:100px;">
+                        <label for="title">{t}Subsection of:{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" >
                         <select name="subcategory" class="required" size="12">
-                            <option value="0" {if empty($category->fk_content_category) || $category->fk_content_category eq '0'}selected{/if}> </option>
+                            <option value="0" {if empty($category->fk_content_category) || $category->fk_content_category eq '0'}selected{/if}> -- </option>
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}" {if $category->fk_content_category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
                             {/section}
                         </select>
                     </td>
                     {* TODO: gestionar dinamicamente, con tabla content_type *}
-                    <td valign="top" style="padding:10px;text-align:left; width:340px;">
-                        <h3>Contenido al que pertenece: </h3>
-                         <div class="utilities-conf" style="width:60%;">
+                    <td valign="top" style="text-align:left; width:340px;">
+                        <h3>{t}Category available for:{/t}</h3>
+                        <div class="utilities-conf" style="width:60%;">
                             <table style="padding:4px; margin-left:10px;">
                                 <tr>
                                     <td  style="padding:4px;"> Global:</td>
@@ -103,17 +103,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" style="padding:4px;text-align:left; width:100px;">
-                        <label for="inmenu">Ver en menú:</label>
+                    <td align="right" valign="middle" style="width:100px;text-align:right">
+                        <label for="inmenu">{t}Show in menu:{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap" colspan="2" >
-                        <input type="checkbox" id="inmenu" name="inmenu"  value="1"
-                            {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>* Activado, ver en el menú de portada.
+                    <td style="padding:4px;" colspan="2" >
+                        <input type="checkbox" id="inmenu" name="inmenu"
+                               value="{if empty($category->fk_content_category) || $category->inmenu eq 1}1{else}0{/if}"
+                            {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>
+                            {t}If this option is activated this category will be showed in menu{/t}
                     </td>
                 </tr>
                  <tr>
-                    <td valign="top" style="padding:4px;text-align:left; width:100px;">
-                        <label for="inmenu">Logo en Portada:</label>
+                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="inmenu">{t}Frontpage logo:{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" >
                         <input type="file" id="logo_path" name="logo_path"  />
@@ -123,44 +125,47 @@
                      </td>
                 </tr>
                 <tr>
-                    <td valign="top" style="padding:4px;text-align:left; width:100px;">
-                        <label for="inmenu">Color:</label>
+                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="inmenu">{t}Color:{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap" colspan="2" >
-                        {literal}<script>initPicker('color','{/literal}{$category->color}{literal}',24);</script>{/literal}
-
+                    <td style="padding:4px;" colspan="2" >
+                        <script type="application/x-javascript">
+                            initPicker('color','{$category->color}', 24);
+                        </script>
                     </td>
                 </tr>
 
                 {if !empty($subcategorys)}
                     <tr>
-                        <td valign="top" style="padding:4px;text-align:left; width:100px;">
-                            <label>Subsecciones:</label>
+                        <td valign="top" style="text-align:right; ">
+                            <label>{t}Subsections:{/t}</label>
                         </td>
-                        <td style="padding:4px;" nowrap="nowrap" colspan="2"> <br />
-                            <table border="0" class="adminlist" id="cates">
+                        <td nowrap="nowrap" colspan="2">
+                            <table border="0" class="adminlist" id="cates" style="margin:0 10px 10px 0; width:90%">
+                                <thead>
+                                    <tr>
+    
+                                        <th class="title"  style="text-align:left;" >{t}Title:{/t}</th>
+                                        <th style="width:120px;text-align:left;" >{t}Internal name:{/t}</th>
+                                        <th  style="width:80px;">{t}Type:{/t}</th>
+                                        <th align="center"  style="width:80px;">{t}In menu:{/t}</th>
+                                        <th align="center" style="width:80px;">{t}Edit{/t}</th>
+                                        <th align="center" style="width:80px">{t}Delete{/t}</th>
+                                    </tr>
+                                </thead>
                                 <tr>
-
-                                    <th class="title"  style="padding:10px;text-align:left;" >T&iacute;tulo</th>
-                                    <th style="padding:10px;width:120px;text-align:left;" >Nombre interno</th>
-                                    <th  style="padding:10px;width:80px;">Tipo</th>
-                                    <th align="center"  style="padding:10px;width:80px;">En menu</th>
-                                    <th align="center" style="padding:10px;width:80px;">Modificar</th>
-                                    <th align="center" style="padding:10px;width:80px">Eliminar</th>
-                                </tr>
-                                <tr>
-                                    <td colspan="6" style="padding:0px;">
-                                        <div id="subcates" class="seccion" style="float:left;width:100%;border:1px solid gray;"> <br>
+                                    <td colspan="6">
+                                        <div id="subcates" class="seccion" style="float:left;width:100%;">
                                             {section name=s loop=$subcategorys}
                                                 <table width="100%" class="tabla" style="padding:0px;cursor:pointer;" id="{$subcategorys[s]->pk_content_category}">
-                                                    <tr {cycle values="class=row0,class=row1"}>
-                                                        <td style="font-size: 11px;padding:10px;text-align:left;">
+                                                    <tr>
+                                                        <td style="font-size: 11px;text-align:left;">
                                                              {$subcategorys[s]->title}</a>
                                                         </td>
-                                                        <td style="font-size: 11px;padding:10px;width:120px;text-align:left;">
+                                                        <td style="font-size: 11px;width:120px;text-align:left;">
                                                              {$subcategorys[s]->name}</a>
                                                         </td>
-                                                        <td style="font-size: 11px;padding:10px;width:80px;" align="center">
+                                                        <td style="font-size: 11px;width:80px;" align="center">
                                                           {if $subcategorys[s]->internal_category eq 3}
                                                              <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
                                                           {elseif $subcategorys[s]->internal_category eq 5}
@@ -169,15 +174,15 @@
                                                               <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
                                                           {/if}
                                                         </td>
-                                                        <td style="font-size: 11px;padding:10px;width:80px;"  align="center">
-                                                            {if $subcategorys[s]->inmenu==1} Si {else}No {/if}
+                                                        <td style="font-size: 11px;width:80px;"  align="center">
+                                                            {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
                                                         </td>
-                                                        <td style="font-size: 11px;padding:10px;width:80px;" align="center">
-                                                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$subcategorys[s]->pk_content_category});" title="Modificar">
+                                                        <td style="font-size: 11px;width:80px;" align="center">
+                                                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
                                                                 <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                                             </a>
                                                         </td>
-                                                        <td style="font-size: 11px;padding:10px;width:80px;" align="center">
+                                                        <td style="font-size: 11px;width:80px;" align="center">
                                                             <a href="#" onClick="javascript:confirmar(this, {$subcategorys[s]->pk_content_category});" title="Eliminar">
                                                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                                             </a>
@@ -194,6 +199,11 @@
                     </tr>
                 {/if}
             </tbody>
+            <tfoot>
+                <tr class="pagination">
+                    <td colspan=3></td>
+                </tr>
+            </tfoot>
         </table>
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id}" />
