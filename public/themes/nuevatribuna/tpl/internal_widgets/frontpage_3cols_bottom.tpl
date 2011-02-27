@@ -4,7 +4,7 @@
     @theme      Lucidity
 *}
 <div style="float:left; display:block; margin-left:-10px; width:200px;height:200px;">
-    {insert name="renderbanner" type=13 width="200" height="200" cssclass=""}
+    {insert name="renderbanner" type=16 width="200" height="200" cssclass=""}
 </div>
 {section name=g loop=$titulares_gente}
 {if $smarty.section.g.last}
@@ -23,5 +23,5 @@
     </div>
 {/section}
 <div style="float:left; display:block; margin-left:10px; margin-right:-10px; width:200px;height:200px;">
-    {insert name="renderbanner" type=33 width="200" height="200"  cssclass=""}
+    {insert name="renderbanner" type=36 width="200" height="200"  cssclass=""}
 </div>

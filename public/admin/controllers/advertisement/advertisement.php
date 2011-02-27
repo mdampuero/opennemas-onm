@@ -136,15 +136,15 @@ if( isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             $photos = $cm->find_by_category('Photo', 2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo) {
-                if(file_exists(MEDIA_IMG_PATH . $photo->path_file . $photo->name)) {
+                //if(file_exists(MEDIA_IMG_PATH . $photo->path_file . $photo->name)) {
                     $photo->content_status = 1;
                     $ph = new Photo($photo->pk_photo);
                     $ph->set_status(1, $_SESSION['userid']);
-                } else {
-                    $photo->content_status = 0;
-                    $ph = new Photo($photo->pk_photo);
-                    $ph->set_status(0,$_SESSION['userid']);
-                }
+                //} else {
+                //    $photo->content_status = 0;
+                //    $ph = new Photo($photo->pk_photo);
+                //    $ph->set_status(0,$_SESSION['userid']);
+                //}
             }
 
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
@@ -187,16 +187,16 @@ if( isset($_REQUEST['action']) ) {
 
             $photos = $cm->find_by_category('Photo',2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo){
-                if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
+                //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
                     $photo->content_status = 1;
                     $ph = new Photo($photo->pk_photo);
                     $ph->set_status(1,$_SESSION['userid']);
-                } else {
-                    //echo MEDIA_IMG_PATH.$photo->path_file.$photo->name."<br>";
-                    $photo->content_status=0;
-                    $ph=new Photo($photo->pk_photo);
-                    $ph->set_status(0,$_SESSION['userid']);
-                }
+                //} else {
+                //    //echo MEDIA_IMG_PATH.$photo->path_file.$photo->name."<br>";
+                //    $photo->content_status=0;
+                //    $ph=new Photo($photo->pk_photo);
+                //    $ph->set_status(0,$_SESSION['userid']);
+                //}
             }
 
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
@@ -244,7 +244,7 @@ if( isset($_REQUEST['action']) ) {
                     Application::forward('index.php');
                 }
 
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
             } else {
                 $tpl->assign('errors', $advertisement->errors);
             }
@@ -267,7 +267,7 @@ if( isset($_REQUEST['action']) ) {
                 Application::forward('index.php');
             }
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
         } break;
 
         case 'validate': {

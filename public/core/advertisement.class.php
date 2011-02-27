@@ -29,23 +29,34 @@ class Advertisement extends Content
         50 => "Banner Interticial en portada",
 
         /* Frontpages banners < 100 */
-        1 => "zBig banner superior",
-        2 => "Banner superior derecho",
+        1 => "Top Left LeaderBoard",
+        2 => "Top Right LeaderBoard",
 
-        3 => "Botón Columna 1",
+        3 => "Center Left LeaderBoard",
+        4 => "Center Right LeaderBoard",
 
-        4 => "Botón Columna 3",
-
-        5 => "Separador horizontal",
-
-        6 => "Mini 1º derecho",
-        7 => "Mini 2º derecho",
-
-        8 => "Botón Inferior Derecho",
-
-        9 => "Big Banner Inferior",
-        10 => "Banner Inferior Derecho",
-
+        5 => "Bottom Left LeaderBoard",
+        6 => "Bottom Right LeaderBoard",
+		
+		11 => "Button Colunm 1 Position 1",
+		12 => "Button Colunm 1 Position 2",
+		13 => "Button Colunm 1 Position 3",
+		14 => "Button Colunm 1 Position 4",
+		15 => "Button Colunm 1 Position 5",
+		16 => "Button Colunm 1 Position 6",
+		
+		21 => "Button Colunm 2 Position 1",
+		22 => "Button Colunm 2 Position 2",
+		24 => "Button Colunm 2 Position 4",
+		25 => "Button Colunm 2 Position 5",
+		
+		31 => "Button Colunm 3 Position 1",
+		32 => "Button Colunm 3 Position 2",
+		33 => "Button Colunm 3 Position 3",
+		34 => "Button Colunm 3 Position 4",
+		35 => "Button Colunm 3 Position 5",
+		36 => "Button Colunm 3 Position 6",
+		
 
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",

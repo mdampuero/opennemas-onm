@@ -12,7 +12,7 @@
 							</td>
 							<td style="text-align:right;">
 								<a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img');">
-									<img style="cursor:pointer;" src="{$smarty.const.SITE_ADMIN_URL}{$params.IMAGE_DIR}remove_image.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
+									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
 								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70" />
 							</td>
 						</tr>
@@ -22,10 +22,10 @@
 									{if strtolower($photo1->type_img)=='swf'}
 									<object id="change1"  name="{$advertisement->img}" >
 										<param name="movie" value="{$MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}"></param>
-										<embed src="{$MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" width="300" ></embed>
+										<embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" width="300" ></embed>
 									</object>
 									{else}
-									<img src="{$smarty.const.SITE_ADMIN_URL}{$params.IMAGE_DIR}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img}" id="change1" border="0" width="300px" />
+									<img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img}" id="change1" border="0" width="300px" />
 									{/if}
 								</div>
 							</td>
@@ -97,18 +97,19 @@
 				   {assign var=num value='1'}
 				   {section name=n loop=$photos}
 						{if $photos[n]->content_status eq 1}
-							<li>
+							<li style="position:relative">
 								{if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
-									<object style="z-index:3; cursor:default;"  title="Desc: {$photos[n]->description} Tags: {$photos[n]->metadata} ">
+									<object style="z-index:-3; cursor:default;"  title="Desc: {$photos[n]->description} Tags: {$photos[n]->metadata} ">
 										<param name="movie" value="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}{$photos[n]->name}"> <param name="autoplay" value="false">  <param name="autoStart" value="0">
 										<embed  width="68" height="40" style="cursor:default;" src="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}{$photos[n]->name}" name="{$photos[n]->pk_photo}" border="0" de:mas="{$photos[n]->name}" de:url="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}" de:ancho="{$photos[n]->width}" de:alto="{$photos[n]->height}" de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}" de:type_img="{$photos[n]->type_img}" de:description="{$photos[n]->description}" {* onmouseover="return escape('{$photos[n]->title}<br>{$photos[n]->description}');" *} title="{$photos[n]->title} - {$photos[n]->description}"></embed>
 									</object>
-									<span style="float:right;">
-									<img id="draggable_img{$num}" class="draggable" src="{$smarty.const.SITE_ADMIN_URL}themes/default/images/flash.gif" style="width:20px" name="{$photos[n]->pk_photo}" border="0" de:mas="{$photos[n]->name}"
-										 de:url="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}" de:ancho="{$photos[n]->width}" de:alto="{$photos[n]->height}" de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}" de:type_img="{$photos[n]->type_img}" de:description="{$photos[n]->description}" {* onmouseover="return escape('{$photos[n]->title}<br>{$photos[n]->description}');" *} title="Desc: {$photos[n]->description}  Tags: {$photos[n]->metadata}" /></span>
+									<span  style="float:right; clear:none;">
+									<img id="draggable_img{$num}" class="draggable" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" style="width:20px" name="{$photos[n]->pk_photo}" border="0" de:mas="{$photos[n]->name}"
+										 de:url="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}" de:ancho="{$photos[n]->width}" de:alto="{$photos[n]->height}" de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}" de:type_img="{$photos[n]->type_img}" de:description="{$photos[n]->description}" {* onmouseover="return escape('{$photos[n]->title}<br>{$photos[n]->description}');" *} title="Desc: {$photos[n]->description}  Tags: {$photos[n]->metadata}" />
+								</span>
 								{else}
 									<div>
-										<img style="vertical-align: middle;{cssimagescale resolution=68 photo=$photos[n]}" src="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}{$photos[n]->name}"
+										<img style="vertical-align: middle;{cssphotoscale width=$photos[n]->width height=$photos[n]->height resolution=68 photo=$photos[n]}" src="{$MEDIA_IMG_PATH_URL}{$photos[n]->path_file}{$photos[n]->name}"
 											 id="draggable_img{$num}"
 											 class="draggable"
 											 name="{$photos[n]->pk_photo}"

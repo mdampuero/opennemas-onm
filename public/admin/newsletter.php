@@ -228,13 +228,32 @@ HTML;
     default: {
         $items = $newsletter->getItemsProvider();
 
-        // articles
-        $articles = $items->getItems('Article', array('in_home=1', 'content_status=1'),
+        //$cm = new ContentManager();
+        //$articles =
+        //    $cm->find_all(  'Article',
+        //                    'contents.in_home=1 AND contents.frontpage=1'
+        //                    .' AND contents.available=1 AND contents.content_status=1'
+        //                    .' AND contents.fk_content_type=1',
+        //                    'ORDER BY home_pos ASC, created DESC LIMIT 0,'.Newsletter::ITEMS_MAX_LIMIT);
+        //
+        ///**
+        // * Filter articles if some of them has time scheduling
+        //*/
+        //$articles = $cm->getInTime($articles);
+        
+        //// articles
+        $articles = $items->getItems('Article',
+                                     array('in_home=1',
+                                           'content_status=1',
+                                           'contents.available=1',
+                                           'contents.frontpage=1'),
                                      'home_placeholder ASC, home_pos ASC, created DESC',
                                      '0, ' . Newsletter::ITEMS_MAX_LIMIT);
+        
 
         $tpl->assign('content_categories', $ccm->getCategoriesTreeMenu());
         $tpl->assign('items', $articles);
+        
 
         $tpl->display('newsletter/actions/listArticles.tpl');
     } break;

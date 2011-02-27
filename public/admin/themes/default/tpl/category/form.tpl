@@ -80,13 +80,13 @@
                                         <input type="radio" id="internal_category" name="internal_category"  value="1"
                                         {if empty($category->fk_content_category) || $category->internal_category eq 1} checked="checked"{/if}>
                                     </td>
-                                    <td  style="padding:4px;"> </td>
+                                    <!--<td  style="padding:4px;"> </td>
                                     <td  style="padding:4px;"> Álbumes:</td>
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="3"
                                         {if $category->internal_category eq 3} checked="checked"{/if}>
-                                    </td>
+                                    </td>-->
 
-                                </tr>
+                                </tr><!--
                                  <tr>
                                     <td  style="padding:4px;"> Vídeos:</td>
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="5"
@@ -97,7 +97,7 @@
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="4"
                                         {if $category->internal_category eq 4} checked="checked"{/if}>
                                     </td>
-                                </tr>
+                                </tr>-->
                             </table>
                          </div>
                     </td>

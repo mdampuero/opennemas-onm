@@ -16,16 +16,13 @@
    </tr>
    <tr>
        <td colspan="10">
-                <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
-                    <tr><td >Bloque {substr($place,-1)} lugar 0</td></tr>
-                </table>
 
                 <div id="{$place}_0" class="seccion" style=min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_0'}
                 </div>
 
                 <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
-                    <tr><td >Bloque {substr($place,-1)} lugar 1</td></tr>
+                    <tr><td >Publicidad {substr($place,-1)} lugar 1</td></tr>
                 </table>
 
                 <div id="{$place}_1" class="seccion" style="min-height:120px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
@@ -33,19 +30,35 @@
                 </div>
 
                 <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
-                    <tr><td >Bloque {substr($place,-1)} lugar 2</td></tr>
+                    <tr><td >Publicidad {substr($place,-1)} lugar 2</td></tr>
                 </table>
 
                 <div id="{$place}_2" class="seccion" style="min-height:60px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_2'}
                 </div>
-
-                <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
-                    <tr><td >Bloque {substr($place,-1)} lugar 3</td></tr>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#ccc !important;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >{if $place eq 'placeholder_1'}Contenido widget interior {else}Publicidad 200x200 {if $place eq 'placeholder_0'}Izda{else}Dcha{/if}{/if}</td></tr>
                 </table>
 
                 <div id="{$place}_3" class="seccion" style="min-height:70px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3'}
+                </div>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >Publicidad {substr($place,-1)} lugar 4</td></tr>
+                </table>
+
+                <div id="{$place}_4" class="seccion" style="min-height:70px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                    {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_4'}
+                </div>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >Publicidad{substr($place,-1)} lugar 5</td></tr>
+                </table>
+
+                <div id="{$place}_5" class="seccion" style="min-height:70px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
+                    {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_5'}
                 </div>
        </td>
    </tr>

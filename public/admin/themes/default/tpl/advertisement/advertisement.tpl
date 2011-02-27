@@ -247,17 +247,17 @@
             <div style="float:left; margin:8px;"><h2>{t}Ad manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2></div>
 			<ul>
                  <li>
-                    <a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="Cancelar" title="Cancelar">
+                    <a href="{$smarty.server.PHP_SELF}?action={$_REQUEST['desde']}&category={$_REQUEST['category']|default:0}&page={$_GET['page']|default:0}" value="Cancelar" title="Cancelar">
                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
                     </a>
                 </li>
                 <li>
                 {if isset($advertisement->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '{$smarty.server.PHP_SELF}', 'update', '{$advertisement->id}', 'formulario');">
                 {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '{$smarty.server.PHP_SELF}', 'create', '0', 'formulario');">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
                     </a>
                 </li>
             </ul>
@@ -265,7 +265,7 @@
         
         <table class="adminheading">
             <tr>
-                <td></td>
+                <td>{t escape="off"}Please, fill the form with the ad description and push <strong>Save and Exit </strong> when you've finished.{/t}</td>
             </tr>
         </table>
         <table class="adminlist">
@@ -279,7 +279,7 @@
                         <input  type="text" id="title" name="title" title="Publicidad"
                                 value="{$advertisement->title|clearslash|escape:"html"}"
                                 class="required"
-                                style="width:100%"
+                                style="width:90%"
                                 onBlur="javascript:get_metadata(this.value);"/>
                     </td>
                 
@@ -304,7 +304,7 @@
                                         <sub>{t}Separated by commas{/t}</sub>
                                     </td>
                                     <td>
-                                        <textarea id="metadata" name="metadata" style="width:100%"
+                                        <textarea id="metadata" name="metadata" style="width:90%"
                                            title="Metadatos" value="">{$advertisement->metadata|strip}</textarea>
                                     </td>
                                 </tr>
@@ -448,7 +448,7 @@
                 </tr>
                 
                 <tr>
-                    <td valign="top" align="right" style="height:20px;padding:4px;" >
+                    <td valign="top" align="right" >
                         <div id="div_url1" style="display:{if $advertisement->with_script==1}none{/if};">
                             <label for="title">{t}URL:{/t}</label>
                         </div>
@@ -456,7 +456,7 @@
                     <td valign="top" style="height:20px;padding:4px;" nowrap="nowrap">
                         <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">
                             <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
-                                size="80" value="{$advertisement->url|default:"http://"}" />
+                                style="width:90%" value="{$advertisement->url|default:"http://"}" />
                         </div>
                     </td>
                 </tr>
@@ -525,11 +525,11 @@
                         <ul id="tabs">
                             <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
                             <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                            <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
-                            <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
+                            <!--<li><a href="#publi-video">{t}Video frontpage{/t}</a></li>-->
+                            <!--<li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>-->
                             <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
                             <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
-                            <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
+                            <!--<li><a href="#publi-gallery">{t}Galleries{/t}</a></li>-->
                         </ul>
                 
                         <div id="publi-portada" class="panel-ads">
@@ -547,7 +547,7 @@
                         <div id="publi-opinion-interior" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
                         </div>
-                        <div id="publi-video" class="panel-ads">
+                        <!--<div id="publi-video" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_video.tpl"}
                         </div>
                 
@@ -556,7 +556,7 @@
                         </div>
                         <div id="publi-gallery" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                        </div>
+                        </div>-->
                 
                     </td>
                     <td>&nbsp;</td>

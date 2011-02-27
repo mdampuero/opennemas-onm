@@ -24,9 +24,9 @@
 		</ul>
 
 		<br><br>
-
 		<div id="menu-acciones-admin">
 			<div style="float:left; margin:8px;"><h2>{if $category eq 0}{t}File manager :: Overview{/t}{else}{t}File manager :: Files in this category{/t}{/if}</h2></div>
+			{if $category neq 0}
 			<ul>
 				<li>
 					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}" title="{t}Upload file{/t}">
@@ -35,6 +35,7 @@
 					</a>
 				</li>
 			</ul>
+			{/if}
 		</div>
 
 	<div id="{$category}">
