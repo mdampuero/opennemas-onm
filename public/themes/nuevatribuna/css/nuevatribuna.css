@@ -354,6 +354,26 @@ div.onm-new div.related-content span.res-article { display:none;}
 div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
 div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }
 div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
+div.onm-new.opinion div.nw-author strong{
+    color:#980101;
+}
+div.onm-new.opinion h3.nw-title a {
+    font-family:Arial;
+    font-size:.9em;
+    color:Black;
+    font-weight:bold;
+}
+div.onm-new.opinion h3.nw-title {
+    margin-bottom:.5em !important;
+}
+
+div#quick-news h4.onm-title {
+    font-weight:bold;
+    margin-bottom:.3em;
+}
+div#quick-news p.subtitle {
+    font-weight:bold;
+}
 
 /***********************************************************
    More resources sprite definition

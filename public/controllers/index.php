@@ -121,13 +121,18 @@ if(($tpl->caching == 0)
             $cm->find_all(  'Article',
                             'contents.in_home=1 AND contents.frontpage=1'
                             .' AND contents.available=1 AND contents.content_status=1'
-                            .' AND contents.fk_content_type=1',
+                            .' AND contents.fk_content_type=1'
+                            .' AND contents.home_placeholder != \'\'',
                             'ORDER BY home_pos ASC, created DESC');
 
         /**
          * Filter articles if some of them has time scheduling
         */
         $articles_home = $cm->getInTime($articles_home);
+        
+        foreach ($articles_home as $article) {
+            $article->position = $article->home_pos;
+        }
 
         $actual_category = 'home';
         $actual_category_id = 0;
@@ -136,11 +141,17 @@ if(($tpl->caching == 0)
         $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
 
         foreach($contentsInHomepage as $content) {
-            $articles_home[] = $content;
+            if(isset($content->home_placeholder)
+               && !empty($content->home_placeholder)
+               && ($content->home_placeholder != '')
+               )
+            {
+                $articles_home[] = $content;
+                
+            }
         }
 
         $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');
-        // }}}
 
     }
     else
@@ -153,8 +164,11 @@ if(($tpl->caching == 0)
             $articles_home =
                 $cm->find_by_category_name( 'Article',
                                             $actual_category,
-                                            'contents.available = 1 AND (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) and contents.fk_content_type=1 '
-                                            , 'ORDER BY content_status DESC, changed DESC, archive DESC '.$_limit);
+                                            'contents.available = 1 '
+                                            .'AND (contents.content_status = 0 OR (contents.content_status = 1 and contents.frontpage=0)) '
+                                            .'and contents.fk_content_type=1 '
+                                            .' AND contents.home_placeholder != \'\'',
+                                            'ORDER BY content_status DESC, changed DESC, archive DESC '.$_limit);
 
             // Filter by scheduled {{{
             $articles_home = $cm->getInTime($articles_home);
@@ -185,7 +199,14 @@ if(($tpl->caching == 0)
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
 
             foreach($contentsInHomepage as $content) {
-                $articles_home[] = $content;
+                if(isset($content->placeholder)
+                   && !empty($content->placeholder)
+                   && ($content->placeholder != '')
+                   )
+                {
+                    $articles_home[] = $content;
+                    
+                }
             }
 
             $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');

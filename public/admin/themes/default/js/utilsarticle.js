@@ -70,19 +70,21 @@ savePositions = function(category) {
 
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
+			$position = 1;
 			$(div_id).select('table').each(function(item) {
 				if(item.getAttribute('value')) {
-					if(item.getAttribute('data')){ $content_type = item.getAttribute('data') } else {
+					if(item.getAttribute('data')) {
+						$content_type = item.getAttribute('data')
+					} else {
 						$content_type = 'Article';
 					}
-					places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type};
+					places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type, 'position' : $position};
 					item.setAttribute('name',"selected_fld[]");
+					$position++;
 				}
 			});
         }
     });
-
-
 
     // Form
 	var frm = $('formulario');

@@ -297,5 +297,16 @@ class Opinion extends Content {
             }
         }
     }
+	
+	public function render() {
+		
+		$tpl = new Template(TEMPLATE_USER);
+		
+		$tpl->assign('item',$this);
+		$tpl->assign('cssclass', 'opinion');
+		
+		return $tpl->fetch('frontpage/frontpage_opinion.tpl');
+
+    }
 
 }

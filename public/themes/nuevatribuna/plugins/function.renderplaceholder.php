@@ -20,45 +20,25 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $caching = $smarty->caching;
     $smarty->caching = 0;
     if(isset($items) && count($items>0)){
-        
-        //foreach ($items as $article) {
-        //    if(preg_match('@.*placeholder.*@',$article->home_placeholder)) {
-        //    printf("$article->content_type - $article->position - $article->id - $article->home_placeholder - $article->title -  \n");
-        //        
-        //    }
-        //}
-        //
-        //echo "\n filtrados....\n\n";
-        
-    
-        $itemsForThisPlaceholder = array();
-        
         foreach($items as $i => $item) {
 
             if( $item->{$placeholder_property} == $placeholder && ($item->available == 1) ) {
 
-                $itemsForThisPlaceholder[] = $item;
-                //$outputHTML  .= $item->content_type." - ".$item->id. " - ".$item->{$placeholder_property}. " - ". $item->position . "<br/>\n";
+                if(method_exists($item, 'render')){
 
-            }
-            
-        }
+                    //$outputHTML .= $item->content_type."<br>";
+                    //$outputHTML .= "Position: ".$item->position;
+                    $outputHTML .= $item->render($params);
 
-        $itemsForThisPlaceholder = ContentManager::sortArrayofObjectsByProperty($itemsForThisPlaceholder, 'position');
-
-        foreach($itemsForThisPlaceholder as $i => $item) {
-
-            if(method_exists($item, 'render')){
-                $outputHTML .= $item->render($params);
-                //$outputHTML  .= $item->content_type." - ".$item->id. " - ".$item->{$placeholder_property}. " - ". $item->position . "<br/>\n";
-
-            } else {
-                $smarty->clearAssign($varname);
-                $smarty->assign($varname, $items[$i]);
-                $smarty->clearAssign('cssclass');
-                $smarty->assign('cssclass', $cssclass);
-                $outputHTML .= "\n". $smarty->fetch( $tpl, md5(serialize($item)) );
-                //$outputHTML  .= $item->content_type." - ".$item->id. " - ".$item->{$placeholder_property}. " - ". $item->position . "<br/>\n";
+                } else {
+                    $smarty->clearAssign($varname);
+                    $smarty->assign($varname, $items[$i]);
+                    $smarty->clearAssign('cssclass');
+                    $smarty->assign('cssclass', $cssclass);
+                    //$outputHTML .= "Position: ".$item->position;
+                    $outputHTML .= "\n". $smarty->fetch( $tpl, md5(serialize($item)) );
+                    //$outputHTML .= $item->content_type."<br>";
+                }
 
             }
 
@@ -69,6 +49,4 @@ function smarty_function_renderplaceholder($params, &$smarty) {
 
     // return all the html collected
     return( $outputHTML );
-    
-
 }

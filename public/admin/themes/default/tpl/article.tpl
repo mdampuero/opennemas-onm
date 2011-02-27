@@ -79,6 +79,7 @@
                             <li><a href="#suggested-elements">{t}Suggested articles{/t}</a></li>
                             {/if}
                             <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
+                            <li><a href="#available-opinions">{t}Opinions{/t}</a></li>
                         </ul>
                         
                         {if $category neq 'home'}
@@ -93,6 +94,10 @@
 
                         <div id="available-widgets" class="panel tabs-panel" style="width:100%">
                             {include file="frontpage/blocks/widgets_available.tpl"}
+                        </div>
+                        
+                        <div id="available-opinions" class="panel tabs-panel" style="width:100%">
+                            {include file="frontpage/blocks/opinions_available.tpl"}
                         </div>
 
                         

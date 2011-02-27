@@ -97,13 +97,12 @@
                     {include file="internal_widgets/frontpage_3cols_bottom.tpl"}
                 </div>
                 
-                {include file="ads/ad_break_content.tpl" type1='3' type2='4' nocache}
 
-
+{*
                 {if $category_name eq 'home'}
                     {include file="internal_widgets/frontpage_headlines_all_categories.tpl"}
                 {/if}
-
+*}
             </div><!-- fin #main_content -->
 
         </div><!-- fin .container -->

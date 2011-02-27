@@ -101,7 +101,7 @@ if(isset($_REQUEST['action']) ) {
                 //Sugeridas -
                 list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
                 $params = "'".$_REQUEST['category']."'";
-                $paginacion=$cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
+                $paginacion = $cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
 
                 $tpl->assign('paginacion', $paginacion);
                 $tpl->assign('other_category','suggested');
@@ -131,49 +131,44 @@ if(isset($_REQUEST['action']) ) {
                 $art->editor=$aut->get_user_name($art->fk_user_last_editor);
                 $art->rating= $rating->get_value($art->id);
                 $art->comment = $comment->count_public_comments( $art->id );
-
+                $art->position = $art->home_pos;
             }
 
-
-            foreach ($articles as $art){
-                $art->category_name= $art->loadCategoryName($art->id);
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
+            /// Adding Widgets {{{
+            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($categoryID);
+    
+            $contents_excluded_for_proposed = array();
+            foreach($contentsInHomepage as $content) {
+                $frontpage_articles[] = $content;
+                $contents_excluded_for_proposed[] = $content->id;
             }
-
-        /// Adding Widgets {{{
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($categoryID);
-
-        $contents_excluded_for_proposed = array();
-        foreach($contentsInHomepage as $content) {
-            $frontpage_articles[] = $content;
-            $contents_excluded_for_proposed[] = $content->id;
-        }
-
-        $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
-        // }}}
-
-        if(!isset($destacado)){
-            $destacado = null;
-        }
-        $tpl->assign('destacado', $destacado);
-        $tpl->assign('articles', $articles);
-        $tpl->assign('frontpage_articles', $frontpage_articles);
-
-        if(count($contents_excluded_for_proposed) >0) {
-            $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
-            $sql_excluded_elements = '&& `pk_widget` NOT IN ('.$widgets_excluded.')';
-        } else {
-            $sql_excluded_elements = '';
-        }
-        $widgets = $cm->find('Widget', 'fk_content_type=12 && `available`=1 '.$sql_excluded_elements, 'ORDER BY created DESC ');
-        $tpl->assign('widgets', $widgets);
-
-        $tpl->assign('category', $_REQUEST['category']);
-        $_SESSION['desde']='list';
-        $_SESSION['_from']=$_REQUEST['category'];
+            
+    
+            $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
+            // }}}
+    
+            if(!isset($destacado)){
+                $destacado = null;
+            }
+            $tpl->assign('destacado', $destacado);
+            $tpl->assign('articles', $articles);
+            $tpl->assign('frontpage_articles', $frontpage_articles);
+    
+            if(count($contents_excluded_for_proposed) >0) {
+                $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
+                $sql_excluded_widgets = '&& `pk_widget` NOT IN ('.$widgets_excluded.')';
+            } else {
+                $sql_excluded_widgets = '';
+            }
+            
+            $opinions = $cm->find('Opinion', '`available`=1  AND ORDER BY created DESC ');
+            
+            $widgets = $cm->find('Widget', 'fk_content_type=12 AND `available`=1 '.$sql_excluded_widgets, 'ORDER BY created DESC ');
+            $tpl->assign('widgets', $widgets);
+            $tpl->assign('opinions', $opinions);
+            $tpl->assign('category', $_REQUEST['category']);
+            $_SESSION['desde']='list';
+            $_SESSION['_from']=$_REQUEST['category'];
 
 
 // </editor-fold >

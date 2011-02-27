@@ -53,7 +53,7 @@
     </div><!-- #container -->
 
 	<div class="container_ads">
-	{include file="ads/ad_in_footer.tpl" type1='9' type2='10' nocache}
+	    {include file="ads/ad_break_content.tpl" type1='3' type2='4' nocache}
 	</div><!-- #container -->
 
     <div class="container container_with_border container_footer clearfix">

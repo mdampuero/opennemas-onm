@@ -41,7 +41,6 @@ $_other_contents = array();
 $contentTypeTranslationCache = array();
 $content_positions = array();
 
-$pos=1;
 $i=0;
 
 foreach($places as $id => $params) {
@@ -52,10 +51,9 @@ foreach($places as $id => $params) {
                                     'id' => $id,
                                     'category' => $categoryID,
                                     'placeholder' => $params['placeholder'],
-                                    'position' => $pos,
+                                    'position' => $params['position'],
                                     'content_type' => $params['content_type'],
                                    );
-        $pos++;
         $i++;
 
     // This element is an article so use the old way of positioning
@@ -66,14 +64,14 @@ foreach($places as $id => $params) {
             $i++;
         } else {
              $_frontpage[$i] = array(1, $id);
-             $_positions[$i] = array($pos, $params['placeholder'], $id);
-             $pos++;
+             $_positions[$i] = array($params['position'], $params['placeholder'], $id);
              $i++;
         }
     }
 
 
 }
+
 
 // Save contents, the new way
 $positionsSaved = ContentManager::saveContentPositionsForHomePage($categoryID, $content_positions);
