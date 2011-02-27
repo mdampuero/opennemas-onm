@@ -189,13 +189,16 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
     {
         $cm = new ContentManager();
         $ayer = 'DATE_SUB(CURDATE(), INTERVAL 1 DAY)';
-        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;		
 
         list($photos, $pager)= $cm->find_pages('Photo',
                                                'contents.fk_content_type=8 and photos.media_type="image" and created >=' .
                                                $ayer.' ',
                                                'ORDER BY created DESC ',
                                                $page, 56, $this->category);
+
+     // ContentManager::find_pages($content_type, $filter=null, $_order_by='ORDER BY 1',
+     //                            $page=1, $items_page=10, $pk_fk_content_category=null);
 
         foreach($photos as $photo) {
             $photo->description_utf = html_entity_decode(($photo->description));
@@ -204,10 +207,12 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $this->check_thubnail( $photo );
 
         }
+		
+		var_dump($photos);
+		die();
 
         $_SESSION['desde'] = 'list_today';
-        if(isset($_REQUEST['where']) )
-            $_SESSION['where'] != '';
+        if(isset($_REQUEST['where']) ) $_SESSION['where'] != '';
         $this->process_photos($photos);
         $this->tpl->assign('paginacion', $pager);
     }

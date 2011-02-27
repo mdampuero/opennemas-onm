@@ -28,7 +28,7 @@ require_once('../../session_bootstrap.php');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
-require('../../mediamanagerController.php');
+require(dirname(__FILE__).'/mediamanagerController.php');
 
 
 //????? Parche pq no pasa el action, lo borra en algun sitio

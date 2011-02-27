@@ -158,10 +158,28 @@ if(isset($_REQUEST['action']) ) {
                 $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
                 $sql_excluded_widgets = '&& `pk_widget` NOT IN ('.$widgets_excluded.')';
             } else {
-                $sql_excluded_widgets = '';
+                $sql_excluded_widgets = '1 = 1';
             }
             
-            $opinions = $cm->find('Opinion', '`available`=1  AND ORDER BY created DESC ');
+            if(count($contents_excluded_for_proposed) >0) {
+                $opinions_excluded = implode(', ', $contents_excluded_for_proposed);
+                $sql_excluded_opinions = ' && `pk_opinion` NOT IN ('.$opinions_excluded.')';
+            } else {
+                $sql_excluded_opinions = '1 = 1';
+            }
+            
+            $opinions = $cm->find('Opinion',
+                                  'contents.available = 1'
+                                  .$sql_excluded_opinions
+                                  ,' ORDER BY created');
+            
+            $rating = new Rating();
+            foreach($opinions as $opinion) {
+                $opinion->comments = count($comment->get_comments( $opinion->id ));
+                $opinion->author = new Author($opinion->fk_author);
+                $opinion->ratings = $rating->get_value($opinion->id);
+            }
+            
             
             $widgets = $cm->find('Widget', 'fk_content_type=12 AND `available`=1 '.$sql_excluded_widgets, 'ORDER BY created DESC ');
             $tpl->assign('widgets', $widgets);

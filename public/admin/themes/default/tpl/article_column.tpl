@@ -40,6 +40,11 @@
                 <table width="100%" height="30" class="aa" style="background-color:#ccc !important;text-align:center;padding:0px;padding-bottom:1px;">
                     <tr><td >{if $place eq 'placeholder_1'}Contenido widget interior {else}Publicidad 200x200 {if $place eq 'placeholder_0'}Izda{else}Dcha{/if}{/if}</td></tr>
                 </table>
+                <br>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#ccc !important;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >Separador con publicidad larga</td></tr>
+                </table>
 
                 <div id="{$place}_3" class="seccion" style="min-height:70px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_3'}
@@ -60,6 +65,15 @@
                 <div id="{$place}_5" class="seccion" style="min-height:70px;width:100%;background-color:#FFF;text-align:center;padding:0px;">
                     {rendercontent items=$frontpage_articles tpl="article_render_fila.tpl"  placeholder=$place|cat:'_5'}
                 </div>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#ccc !important;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >{if $place eq 'placeholder_1'}Contenido widget interior {else}Publicidad 200x200 {if $place eq 'placeholder_0'}Izda{else}Dcha{/if}{/if}</td></tr>
+                </table>
+                <br>
+                
+                <table width="100%" height="30" class="aa" style="background-color:#ccc !important;text-align:center;padding:0px;padding-bottom:1px;">
+                    <tr><td >Separador con publicidad larga</td></tr>
+                </table>
        </td>
    </tr>
 </table>

@@ -8,28 +8,26 @@
     </tr>
     <tr>
         <td colspan=4>
-            <div id="art" class="seccion">
+            <div id="available_opinions" class="seccion">
                 {assign var=aux value='100'}
-                {section name=d loop=$widgets}
-                    <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$widgets[d]->pk_widget}" data="{$widgets[d]->content_type}" class="tabla">
+                {section name=d loop=$opinions}
+                    <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$opinions[d]->id}" data="Opinion" class="tabla">
                         <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
                             <td align="left" style="width:3%">
-                                <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}" name="no_selected_fld[]" value="{$widgets[d]->pk_widget}" style="cursor:pointer;" >&nbsp;
+                                <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}"
+                                       name="no_selected_fld[]" value="{$opinions[d]->pk_widget}" style="cursor:pointer;" >&nbsp;
                             </td>
 
                             <td align="left" style="width:90%">
-                                <strong>WIDGET:</strong> {$widgets[d]->title}
+                                <strong>OPINION: {$opinions[d]->author->name} - </strong> {$opinions[d]->title}
                             </td>
 
                             <td align="left" style="width:3%">
-                                {if ($widgets[wgt]->renderlet != 'intelligentwidget')}
-                                <a href="controllers/widget/widget.php?action=edit&id={$widgets[d]->pk_widget}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                                {/if}
+                                <a href="controllers/opinion/opinion.php?action=read&id={$opinions[d]->id}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                             </td>
                         </tr>
                     </table>
-
                     {assign var=aux value=$aux+1}
                 {/section}
                 <br/>

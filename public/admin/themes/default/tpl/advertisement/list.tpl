@@ -39,7 +39,7 @@
 
         <ul class="tabs2" style="margin-bottom: 28px;">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOME{/t}</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}OPINION{/t}</font></a>

@@ -16,6 +16,6 @@
                                                 date=$item->created
                                                 title=$item->title
                                                 category_name=$author}" title="{$item->title|clearslash}">{$item->title|clearslash}</a></h3>
-    <div class="nw-subtitle">{$item->body|clearslash|strip_tags|truncate:400:'...':false:false}</div>
+    <div class="nw-subtitle">{$item->body|clearslash|strip_tags|truncate:200:'...':false:false}</div>
 
 </div>
