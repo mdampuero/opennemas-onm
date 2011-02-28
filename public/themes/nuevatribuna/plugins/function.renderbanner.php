@@ -9,8 +9,6 @@
 */
 function smarty_function_renderbanner($params, &$smarty, $cache=false) {
     $output = '';
-    var_dump($params);
-    die();
     
 
     $banner   = $params['banner'];
@@ -146,8 +144,6 @@ function smarty_function_renderbanner($params, &$smarty, $cache=false) {
     if( isset($params['afterHTML']) ) {
         $output .= $params['afterHTML'];
     }
-    var_dump($output);
-    die();
     
 
     return( $output );
