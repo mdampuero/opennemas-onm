@@ -113,12 +113,7 @@
                                                 </div>
 
                                                 <input type="hidden" name="category" value="{$category}" />
-
-                                                {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
-                                                    <input type="hidden" name="media_type" value="image" />
-                                                {else}
-                                                    <input type="hidden" name="media_type" value="graphic" />
-                                                {/if}
+                                                <input type="hidden" name="media_type" value="image" />
                                             </p>
                                         </div>
                                     </div>
