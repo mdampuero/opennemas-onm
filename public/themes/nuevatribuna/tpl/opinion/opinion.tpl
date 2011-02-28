@@ -112,13 +112,12 @@
 							</div><!--opinion-image-->
 							<h1 class="inner-article-title">{$opinion->title|clearslash}</h1>
 							<div class="inner-article-subtitle">
-								escrito por
 								{* 0 - autor, 1 - editorial, 2 - director *}
 								{if $opinion->type_opinion eq 0}
 									<a class="opinion-author-name" href="{$smarty.const.SITE_URL}{generate_uri 	content_type="opinion_author_frontpage"
 																												title=$opinion->author_name_slug
 																												id=$opinion->fk_author}">{$opinion->name} </a>
-									(<span class="opinion-author-condition">{$opinion->condition|clearslash|truncate:34:"...":"true"}</span>)
+								  | <span class="opinion-author-condition">{$opinion->condition|clearslash|truncate:34:"...":"true"}</span>
 								{elseif $opinion->type_opinion eq 2}
 									<a class="opinion-author-name" href="{$smarty.const.SITE_URL}{generate_uri 	content_type="opinion_author_frontpage"
 																												title='director'

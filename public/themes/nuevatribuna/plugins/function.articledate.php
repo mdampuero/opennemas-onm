@@ -8,6 +8,8 @@ function smarty_function_articledate($params, &$smarty) {
     $updated = $params['updated'];
     $nohour = $params['nohour'];
     $param = $params['param'];
+    $meses = array('Jan' =>'Enero',
+                    'Feb'=> 'Febrero');//,'Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 
     if(!empty($param)){
       return date($param ,strtotime($updated));
@@ -22,7 +24,7 @@ function smarty_function_articledate($params, &$smarty) {
 		if (!$nohour){
 			$hours = ' - '.date('H:i', $starttime).' h.';
 		}
-		return '<span class="CNewsDateUpdate">'.date('d/m/Y', $starttime).$hours.'</span>';
+	return '<span class="CNewsDateUpdate">Actualizado '.date('d ',$starttime) .$meses[date('M')]. date(' Y ', $starttime).$hours.'</span>';
 	}
 
     if (preg_match('/\-/', $created)) {
@@ -34,7 +36,8 @@ function smarty_function_articledate($params, &$smarty) {
 	if (!$nohour){
 	    $hours = ' -  '.date('H:i', $created).' h.';
 	}
-        return '<span class="CNewsDateUpdate">'.date('d  M  Y', $created).$hours.'</span>';
+
+	return '<span class="CNewsDateUpdate">Actualizado '.date('d ',$created) .$meses[date('M')]. date(' Y ', $created).$hours.'</span>';
     }
 
     if (preg_match('/\-/', $updated)) {
@@ -45,7 +48,7 @@ function smarty_function_articledate($params, &$smarty) {
 		$hours = ' - '.date('H:i', $updated).' h.';
 	}
     // Actualizado 02/01/2009 | 00:00 h.
-	return '<span class="CNewsDateUpdate">Actualizado '.date('d  M  Y', $updated).$hours.'</span>';
+	return '<span class="CNewsDateUpdate">Actualizado '.date('d ',$updated) .$meses[date('M')]. date(' Y ', $updated).$hours.'</span>';
 
     /* if(date('YmdHi', $created) == date('YmdHi', $updated)) {
         // 11/03/09 |  01:58 h
