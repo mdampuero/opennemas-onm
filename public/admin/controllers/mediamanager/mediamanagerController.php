@@ -217,8 +217,13 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
     {
         $cm = new ContentManager();
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+		$photos = $cm->find('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
+                                                'ORDER BY  created DESC ');
+		
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
-                                                'ORDER BY  created DESC ', $page, 56, $this->category);
+                                                'ORDER BY  created DESC ', $page, 2, $this->category);
+
+		
         foreach($photos as $photo) {
 
             $extension = strtolower($photo->type_img);

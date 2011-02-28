@@ -392,16 +392,18 @@ if(isset($_REQUEST['action']) ) {
 
             //Listado fotos
             // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-            list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8  and contents.content_status=1 and photos.media_type="image"', 'ORDER BY  created DESC ',$_REQUEST['page'],30, $_REQUEST['category']);
+            list($photos, $pager)= $cm->find_pages('Photo',
+                                                   'contents.fk_content_type=8  and contents.content_status=1 and photos.media_type="image"',
+                                                   'ORDER BY  created DESC ',$_REQUEST['page'],16, $_REQUEST['category']);
 
             foreach($photos as $photo){
-                if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)){
+                //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)){
                     $photo->content_status=1;
-                }else{
-                    $photo->content_status=0;
-                    $ph=new Photo($photo->pk_photo);
-                    $ph->set_status(0,$_SESSION['userid']);
-                }
+                //}else{
+                    //$photo->content_status=0;
+                    //$ph=new Photo($photo->pk_photo);
+                    //$ph->set_status(0,$_SESSION['userid']);
+                //}
             }
             $tpl->assign('photos', $photos);
             $paginacion=$cm->makePagesLink($pager, $_REQUEST['category'],'list_by_category',0);
@@ -434,12 +436,13 @@ if(isset($_REQUEST['action']) ) {
         break;
 
         case 'read':
-            if( !Privileges_check::CheckPrivileges('ARTICLE_UPDATE')) {
-                Privileges_check::AccessDeniedAction();
-            }
-            $tpl->assign('_from', $_SESSION['_from']);
-
         case 'only_read': {
+            if($_REQUEST['action'] == 'read') {
+                if( !Privileges_check::CheckPrivileges('ARTICLE_UPDATE')) {
+                    Privileges_check::AccessDeniedAction();
+                }
+                $tpl->assign('_from', $_SESSION['_from']);
+            }
             $article = new Article( $_REQUEST['id'] );
             $tpl->assign('article', $article);
 
@@ -471,18 +474,21 @@ if(isset($_REQUEST['action']) ) {
             }
 
             //Listado fotos
-            //$photos = $cm->find_by_category('Photo', $article->category, 'fk_content_type=8 and content_status=1', 'ORDER BY created DESC  LIMIT 0,100');
-            list($photos, $pager) = $cm->find_pages('Photo', '`contents`.`fk_content_type`=8  AND `contents`.`content_status`=1 and `photos`.`media_type`="image"', 'ORDER BY `created` DESC ', $_REQUEST['page'], 30, $article->category);
+            $photos = $cm->find_by_category('Photo', $article->category, 'fk_content_type=8 and content_status=1', 'ORDER BY created DESC  LIMIT 0,100');
+            $photos = $cm->find('Photo', 'fk_content_type=8 ', 'ORDER BY created DESC  LIMIT 0,100');
+            list($photos, $pager) = $cm->find_pages('Photo', '`contents`.`fk_content_type`=8  and `photos`.`media_type`="image"', 'ORDER BY `created` DESC ', $_REQUEST['page'], 30, $article->category);
+
 
             foreach($photos as $photo) {
-                if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
+                //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
                     $photo->content_status = 1;
-                } else {
-                    $photo->content_status = 0;
-                    $ph = new Photo($photo->pk_photo);
-                    $ph->set_status(0, $_SESSION['userid']);
-                }
+                //} else {
+                //   $photo->content_status = 0;
+                //   $ph = new Photo($photo->pk_photo);
+                //   $ph->set_status(0, $_SESSION['userid']);
+                //}
             }
+            
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
             //$photos = $cm->paginate_num($photos,30);

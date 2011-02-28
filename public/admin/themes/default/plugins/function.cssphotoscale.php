@@ -10,17 +10,23 @@ if( !function_exists('smarty_function_cssphotoscale') ) {
         if($height>0 and $width>0){ //No divide by 0
             
 	        if( $width > $height) {
-	            $w = $resolution;        
+	            $w = $resolution - 1;        
 	            $h = floor( ($height*$w) / $width );
-	        } else {
-	            $h = $resolution - 4;
+				
+	        } elseif ($width == $height) {
+				
+				$w = $h = $resolution;
+				
+			} else {
+				
+	            $h = $resolution - 3;
 	            $w = floor( ($width*$h) / $height );
 	        }
             
         } else {
             
-        	$w=0;
-        	$h=0;
+        	$w=$resolution;
+        	$h=$resolution;
             
         }
         
@@ -29,7 +35,7 @@ if( !function_exists('smarty_function_cssphotoscale') ) {
             return( $w );
             
         }
-        
+		
         return( 'width: '.$w.'px; height: '.$h.'px;' );
     }
 }

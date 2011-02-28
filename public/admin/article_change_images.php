@@ -76,25 +76,37 @@ if(isset($pager) && !empty($pager)) {
     $paginacion = $cm->makePagesLink($pages, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
     echo $paginacion;
 }
-echo "<ul id='thelist' class='gallery_list clearfix' style='width: 100%; margin: 0pt; padding: 0pt;'> ";
+echo "<ul id='thelist' class='gallery_list clearfix' style='width: 100%; margin: 0; padding: 0;'> ";
 if(isset($photos) && !empty($photos) ){
         $num=1;
         foreach ($photos as $as) {
         //	if(!is_file($as->path_file.$as->name)){
-            if(file_exists(MEDIA_IMG_PATH.$as->path_file.$as->name)){
-                require( dirname(__FILE__).'/themes/default/plugins/function.cssimagescale.php' );
-                $params = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67);
-                 $params2 = array('media' => MEDIA_IMG_PATH, 'photo' => $as, 'resolution' => 67, 'getwidth'=>1);
+            //if(file_exists(MEDIA_IMG_PATH.$as->path_file.$as->name)){
+                require( dirname(__FILE__).'/themes/default/plugins/function.cssphotoscale.php' );
+                $params = array('media' => MEDIA_IMG_PATH, 'width' => $as->heigth, 'height' => $as->height, 'photo' => $as, 'resolution' => 67);
+                $params2 = array('media' => MEDIA_IMG_PATH, 'width' => $as->heigth, 'height' => $as->height, 'photo' => $as, 'resolution' => 67, 'getwidth'=>1);
 
-                     echo '<li><div style="float: left;"> <a>'.
-                        '<img style="'.smarty_function_cssimagescale($params).'" src="'.MEDIA_IMG_PATH_WEB.$as->path_file.'140x100-'.$as->name.'" de:width="'.smarty_function_cssimagescale($params2).'"  id="draggable'.$cat.'_img'.$num.'" class="draggable" name="'.$as->pk_photo.'" border="0" de:mas="'.$as->name.'" de:ancho="'.$as->width.'" de:alto="'.$as->height.'" de:peso="'.$as->size.'" de:created="'.$as->created.'"  de:description="'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).'"  de:path="'.$as->path_file.'" de:tags="'.$as->metadata.'" title="Desc:'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).' Tags:'.$as->metadata.'" />'.
-                        '</a></div></li>	';
-                    $num++;
-            }else{
-                $ph=new Photo($as->pk_photo);
-                $ph->set_status(0,$_SESSION['userid']);
-            }
+				echo 	'<li>
+							<div>
+								<a>
+									<img style="'.smarty_function_cssphotoscale($params).'"
+									     src="'.MEDIA_IMG_PATH_WEB.$as->path_file.'140x100-'.$as->name.'"
+										 de:width="'.smarty_function_cssphotoscale($params2).'"
+										 id="draggable'.$cat.'_img'.$num.'" class="draggable" name="'.$as->pk_photo.'" border="0"
+										 de:mas="'.$as->name.'"
+										 de:ancho="'.$as->width.'"
+										 de:alto="'.$as->height.'"
+										 de:peso="'.$as->size.'"
+										 de:created="'.$as->created.'"
+										 de:description="'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).'"
+										 de:path="'.$as->path_file.'" de:tags="'.$as->metadata.'"
+										 title="Desc:'.htmlspecialchars(stripslashes($as->description), ENT_QUOTES).' Tags:'.$as->metadata.'" />'
+								.'</a></div></li>';
+				$num++;
+            //}else{
+            //    $ph=new Photo($as->pk_photo);
+            //    $ph->set_status(0,$_SESSION['userid']);
+            //}
         }
 }
-echo "	 </ul><br>";
-	//No funciona  onmouseover="return escape(\'Desc:'.$as->description.'<br>Tags:'.$as->metadata.'\');"
+echo "</ul>";

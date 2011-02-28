@@ -57,13 +57,16 @@
                         </div>
                     </div><!--third-column-->
                 </div><!-- .span-24 -->
-
+                <br style="clear:both; margin-top:10px;">
+                <hr class="news-separator" />
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols.tpl"}
                 </div>
-                
+                <br style="clear:both;">
+                <hr class="news-separator" />
+
                 {include file="ads/ad_break_content.tpl" type1='3' type2='4' nocache}
-                
+                <hr class="news-separator" />
 
                 <div class="span-24">
                     <div class="layout-column span-9 first-column">
@@ -92,10 +95,14 @@
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_5"}
                     </div><!--third-column-->
                 </div>
+                <br>
                 
+                <hr class="news-separator" />
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols_bottom.tpl"}
                 </div>
+                <hr class="news-separator" />
+                <br>
                 
 
 {*

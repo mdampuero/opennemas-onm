@@ -7,7 +7,7 @@
 		 		{if $video1->videoid} 	 		
 						<table border='0' width="550">
 						<tr><td>
-							<h2 style="color:#2f6d9d;">Imagen de Portada:</h2></td>
+							<h2 style="color:#2f6d9d;">Video de Portada:</h2></td>
 							<input type="hidden" id="input_video" name="fk_video" value="{$article->pk_video}" size="70">				 							
 							<input type="hidden" id="input_img1" name="img1" title="Imagen" value="" size="70"/>
 						  <td  align='right'>  
@@ -126,25 +126,42 @@
 									
                     <div id="photos" class="photos" style="width:440px; height:560px; border:0px double #333333; padding:1px;overflow:hidden;">
                             {if $paginacion}
-                                    <p align="center"> {$paginacion} </p>
+                                <p align="center">{$paginacion}</p>
                             {/if}
-                             <ul id="thelist"  class="gallery_list" style="width:400px;">
+                            <ul id="thelist"  class="gallery_list" style="width:400px;">
                                 {assign var=num value='1'}
-                                    {section name=n loop=$photos}
-                                    {if $photos[n]->content_status eq 1}
-                                      <li><div>
-                                        <a>
-                                        <img style="vertical-align:middle;{cssimagescale resolution=67 photo=$photos[n]}" src="{$MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}140x100-{$photos[n]->name}" id="draggable_img{$num}" class="draggable" name="{$photos[n]->pk_photo}" border="0" de:mas="{$photos[n]->name}" de:ancho="{$photos[n]->width}" de:alto="{$photos[n]->height}" de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}" de:description="{$photos[n]->description|clearslash|escape:'html'}" de:tags="{$photos[n]->metadata}" {* onmouseover="return escape('Desc:{$photos[n]->description|clearslash|escape:'html'}<br>Tags:{$photos[n]->metadata}');" *} title="Desc:{$photos[n]->description|clearslash|escape:'html'} - Tags:{$photos[n]->metadata}" />
-                                        </a> </div></li>
-                                           
-                                                    <script type="text/javascript">
-                                                      new Draggable('draggable_img{$num}', { revert:true, scroll: window, ghosting:true }  );
-                                                    </script>
-                                            
-                                             {assign var=num value=$num+1}
-                                    {/if}
-                                    {/section}
-                             </ul>
+								{section name=n loop=$photos}
+									{$photos[a]->width} {$photos[a]->height}
+									{if $photos[n]->content_status eq 1}
+										<li>
+											<div>
+												<a>
+													<img style="vertical-align:middle;{cssphotoscale width=$photos[n]->width height=$photos[n]->height resolution=67 photo=$photos[n]}"
+														 src="{$MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}140x100-{$photos[n]->name}"
+														 id="draggable_img{$num}"
+														 class="draggable"
+														 name="{$photos[n]->pk_photo}"
+														 border="0"
+														 de:mas="{$photos[n]->name}"
+														 de:ancho="{$photos[n]->width}"
+														 de:alto="{$photos[n]->height}"
+														 de:peso="{$photos[n]->size}"
+														 de:created="{$photos[n]->created}"
+														 de:description="{$photos[n]->description|clearslash|escape:'html'}"
+														 de:tags="{$photos[n]->metadata}"
+														 onmouseover="return escape('Desc:{$photos[n]->description|clearslash|escape:'html'}<br>Tags:{$photos[n]->metadata}');" *} title="Desc:{$photos[n]->description|clearslash|escape:'html'} - Tags:{$photos[n]->metadata}" />
+												</a>
+											</div>
+										</li>
+											   
+										<script type="text/javascript">
+										  new Draggable('draggable_img{$num}', { revert:true, scroll: window, ghosting:true }  );
+										</script>
+								
+										{assign var=num value=$num+1}
+									{/if}
+								{/section}
+                            </ul>
                     </div>
                 </div>
                 <div  onclick="new Effect.toggle($('videos-container'),'blind')" style="cursor:pointer;width:438px;height:22px; border:1px double #333333;background-color:#EEE;padding:4px;overflow:none;">

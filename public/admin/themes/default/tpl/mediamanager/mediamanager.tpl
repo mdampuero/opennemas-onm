@@ -30,18 +30,18 @@
         || ($category eq 'GLOBAL')}
         <li>
             <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
-                <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
+                <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
             </a>
         </li>
-         <li>
+        <li>
             <a class="admin_add" href="mediamanager.php?category={$category}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
-                <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}icons.png" alt="Información"><br />Información
+                <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}icons.png" alt="Información"><br />{t}Information{/t}
             </a>
         </li>
         {if $action eq 'searchResult'}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />Eliminar
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             <li>
@@ -155,44 +155,42 @@
         {/if}
    {else}
 
+        {* BOTONERA: incluir en botonera_up.tpl*}
+         {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
+            {if $action=='list_today'}
+                {assign var=accion value='Fotos de Hoy'}
+            {elseif $action=='list_all'}
+                {assign var=accion value='Catálogo Fotos'}
+            {elseif $action=='upload'  || $action=='results'}
+                {assign var=accion value='Subir Fotos'}
+            {elseif $action=='search'}
+                {assign var=accion value='Buscar Fotos'}
+            {elseif $action=='searchResult'}
+                {assign var=accion value='Resultado Búsqueda'}
+            {/if}
+         {else}
+            {if $action=='list_today'}
+                {assign var='accion' value='Gráficos de Hoy'}
+            {elseif $action=='list_all'}
+                {assign var='accion' value='Catálogo Gráficos'}
+            {elseif $action=='upload'  || $action=='results'}
+                {assign var='accion' value='Subir Gráficos'}
+            {elseif $action=='search'  || $action=='searchResult'}
+                {assign var='accion' value='Buscar Gráficos'}
+            {/if}
+         {/if}
 
-
-    {* BOTONERA: incluir en botonera_up.tpl*}
-     {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
-        {if $action=='list_today'}
-            {assign var=accion value='Fotos de Hoy'}
-        {elseif $action=='list_all'}
-            {assign var=accion value='Catálogo Fotos'}
-        {elseif $action=='upload'  || $action=='results'}
-            {assign var=accion value='Subir Fotos'}
-        {elseif $action=='search'}
-            {assign var=accion value='Buscar Fotos'}
-        {elseif $action=='searchResult'}
-            {assign var=accion value='Resultado Búsqueda'}
+        {if $action neq 'results'}
+            <div style='float:left;margin-left:10px;margin-top:10px;'>
+                <h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
+                <div id="menu-acciones-admin">
+                    <ul>
+                        
+                        {block name="admin-menu" append}{/block}
+            
+                    </ul>
+                </div>
         {/if}
-     {else}
-        {if $action=='list_today'}
-            {assign var='accion' value='Gráficos de Hoy'}
-        {elseif $action=='list_all'}
-            {assign var='accion' value='Catálogo Gráficos'}
-        {elseif $action=='upload'  || $action=='results'}
-            {assign var='accion' value='Subir Gráficos'}
-        {elseif $action=='search'  || $action=='searchResult'}
-            {assign var='accion' value='Buscar Gráficos'}
-        {/if}
-     {/if}
-
-      {if $action neq 'results'}
-        <div style='float:left;margin-left:10px;margin-top:10px;'>
-            <h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-            <div id="menu-acciones-admin">
-                <ul>
-                    
-                    {block name="admin-menu" append}{/block}
-        
-                </ul>
-            </div>
-    {/if}
 
 
 
