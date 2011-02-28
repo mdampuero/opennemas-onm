@@ -101,8 +101,6 @@
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols_bottom.tpl"}
                 </div>
-                <hr class="news-separator" />
-                <br>
                 
 
 {*
