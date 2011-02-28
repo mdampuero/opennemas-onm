@@ -142,7 +142,7 @@ function confirmar() {
         <td width="24">
             <ul class="action-buttons clearfix">
 
-                {if ($widgets[wgt]->renderlet != 'intelligentwidget')}
+                {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
                 <li>
                     <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>

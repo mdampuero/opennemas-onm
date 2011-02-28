@@ -137,5 +137,26 @@ div.morenews-in-category {
         }
 
 
-machine-related-contents
-title
+
+/***********************************************************
+   Widget latest opinions definition
+************************************************************/
+div.widget-latest-opinions {
+    font-size:13px;
+    width:100%;
+    margin-bottom:10px;
+}
+div.widget-latest-opinions ul {
+    margin:0;
+    padding:10px;
+    border:1px solid #ccc;
+}
+div.widget-latest-opinions li {
+    border-bottom:1px solid #ccc;
+    list-style:none;
+    padding:5px;
+}
+
+div.widget-latest-opinions li.last {
+    border-bottom:none;
+}

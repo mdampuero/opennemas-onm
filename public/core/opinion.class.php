@@ -308,5 +308,56 @@ class Opinion extends Content {
 		return $tpl->fetch('frontpage/frontpage_opinion.tpl');
 
     }
+	
+	
+	/**
+    * Get latest Opinions without opinions present in frontpage
+    *
+    * @return mixed, latest opinions sorted by creation time
+    */
+    static public function getLatestAvailableOpinions($params = array())
+    {
+        $contents = array();
+
+		// Setting up default parameters
+		$default_params = array(
+			'limit' => 6,
+		);
+		$options = array_merge($default_params, $params);
+		$_sql_limit = " LIMIT 0, ".$options['limit']." ";
+        
+
+        $cm = new ContentManager();
+		$ccm = ContentCategoryManager::get_instance();		
+
+		// Excluding opinions already present in this frontpage
+		$category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
+		$contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
+		foreach ($contentsSuggestedInFrontpage as $content) {
+			$excludedContents []= $content->pk_content;
+		}
+		//if (count($excludedContents) > 0) {
+		//	$sqlExcludedContents = ' AND pk_opinion NOT IN (';
+		//	$sqlExcludedContents .= implode(', ', $excludedContents);
+		//	$sqlExcludedContents .= ') ';
+		//}
+		
+		// Getting latest opinions taking in place later considerations
+        $contents = $cm->find_all('Opinion',
+                    'content_status=1 AND available=1',
+                    'ORDER BY  created DESC,  title ASC ' . $sqlExcludedContents .$_sql_limit);
+		
+		// For each opinion get its author and photo
+		foreach ($contents as $content) {
+			$content->author = new Author($content->fk_author);
+			$content->author->photo = $content->author->get_photo($content->fk_author_img);
+			if (isset($content->author->photo->path_img)){
+				$content->photo = $content->author->photo->path_img;
+			}
+			$content->name = $content->author->name;
+		}
+			
+        return $contents;
+    }
 
 }

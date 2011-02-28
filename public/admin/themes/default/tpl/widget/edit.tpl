@@ -57,8 +57,8 @@ submitForm = function() {
             </td>
             <td>
                 <select name="available" id="available">
-                    <option value="1" {if $widget->available == 1}selected="selected"{/if}>Si</option>
-                    <option value="0" {if $widget->available == 0}selected="selected"{/if}>No</option>
+                    <option value="1" {if $widget->available == 1}selected="selected"{/if}>{t}Yes{/t}</option>
+                    <option value="0" {if $widget->available == 0}selected="selected"{/if}>{t}No{/t}</option>
                 </select>
             </td>
         </tr>
@@ -68,9 +68,10 @@ submitForm = function() {
             </td>
             <td>
                 <select name="renderlet" id="renderlet">
-                    <option value="html" {if $widget->renderlet == 'html'}selected="selected"{/if}>HTML</option>
-                    <option value="php" {if $widget->renderlet == 'php'}selected="selected"{/if}>PHP</option>
-                    <option value="smarty" {if $widget->renderlet == 'smarty'}selected="selected"{/if}>Smarty</option>
+                    <option value="html" {if $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
+                    <option value="php" {if $widget->renderlet == 'php'}selected="selected"{/if}>{t}PHP{/t}</option>
+                    <option value="smarty" {if $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
+                    <option value="intelligentwidget" {if $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
                 </select>
             </td>
         </tr>
