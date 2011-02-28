@@ -62,7 +62,7 @@
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols.tpl"}
                 </div>
-                <br style="clear:both;">
+                <br style="clear:both">
                 <hr class="news-separator" />
 
                 {include file="ads/ad_break_content.tpl" type1='3' type2='4' nocache}
@@ -95,19 +95,13 @@
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_5"}
                     </div><!--third-column-->
                 </div>
-                <br>
-                
+                <br style="clear:both">
+                <br style="clear:both">
                 <hr class="news-separator" />
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols_bottom.tpl"}
                 </div>
                 
-
-{*
-                {if $category_name eq 'home'}
-                    {include file="internal_widgets/frontpage_headlines_all_categories.tpl"}
-                {/if}
-*}
             </div><!-- fin #main_content -->
 
         </div><!-- fin .container -->

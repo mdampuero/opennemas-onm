@@ -84,7 +84,7 @@ html[xmlns] .clearfix
 }
 
 #header div.logos-and-info {
-		margin:10px 10px 0 10px;
+		margin:5px 10px 0 10px;
 }
 /*
     Weather and time information definition
@@ -93,100 +93,121 @@ div.current-hour { font-family:Verdana; font-size:1.03em}
 div.current-hour span.hour{ color:#980101; }
 div.current-hour span.day{ color:#2d2c2b; }
 
-div.current-hour, #widget_weather_top
+div.current-hour,
+div#widget_weather_top
 {
-		width:49%;
-		float:left;
-		display:block
+    width:49%;
+    float:left;
+    display:block;
 }
 #widget_weather_top
 {
-		float:right; height:23px; overflow:hidden;
-		position:absolute; top:0px; right:10px;
+    float:right; height:23px;
+    overflow:hidden;
+    position:absolute;
+    top:0px;
+    right:10px;
 }
-		#widget_weather_top .widget-litte-temperatures
-		{
-				-moz-border-radius: 5px;
-				-webkit-border-radius: 5px;
-				border-radius:5px;
-				behavior: url(border-radius.htc);
-				display:block;
-				padding:2px 4px;
-				width:35px;
-				text-align: center;
-				color:White;
-				font-weight: bold;
-				float:left;
-				margin-bottom:3px;
-		}
-		#widget_weather_top ul { margin:0; padding:0; float:right; display:block; clear:both }
-				#widget_weather_top ul li { float:left; list-style:none; padding:0 2px; }
-		#widget_weather_top a { color:#005689; text-decoration: none; font-family: Georgia }
-		#widget_weather_top .widget-litte-city
-		{
-				color:#005689;
-				text-decoration: none;
-				max-width:100px;
-				text-align:right;
-				padding: 0.2em 0;
-				vertical-align: text-bottom
-		}
+    #widget_weather_top .widget-litte-temperatures
+    {
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius:5px;
+            behavior: url(border-radius.htc);
+            display:block;
+            padding:2px 4px;
+            width:35px;
+            text-align: center;
+            color:White;
+            font-weight: bold;
+            float:left;
+            margin-bottom:3px;
+    }
+    #widget_weather_top ul { margin:0; padding:0; float:right; display:block; clear:both }
+            #widget_weather_top ul li { float:left; list-style:none; padding:0 2px; }
+    #widget_weather_top a { color:#005689; text-decoration: none; font-family: Georgia }
+    #widget_weather_top .widget-litte-city
+    {
+            color:#005689;
+            text-decoration: none;
+            max-width:100px;
+            text-align:right;
+            padding: 0.2em 0;
+            vertical-align: text-bottom
+    }
 
-		#widget_weather_top  .max_temperature { background-color: #ffa91f; font-weight:bold; }
-		#widget_weather_top  .min_temperature { background-color: #bdbdbd; font-weight:bold; }
+    #widget_weather_top  .max_temperature { background-color: #ffa91f; font-weight:bold; }
+    #widget_weather_top  .min_temperature { background-color: #bdbdbd; font-weight:bold; }
 
 #logo-and-pages {
-		margin:5px 0 1px 0;
-		vertical-align:middle;
-		width:100%;
-		position:relative;
-		font-family:Verdana;
+    margin:5px 0 1px 0;
+    vertical-align:middle;
+    width:100%;
+    position:relative;
+    font-family:Verdana;
 }
-		#logo-and-pages h1{
-				margin:0;
-				padding:0;
-				display:inline;
-		}
-		#logo-and-pages a.big-text-logo{
-				font-family:Arial;
-				color: Black;
-				font-size:43px;
-				font-weight:bold;
-				margin:0 auto;
-				line-height:.9em;
-				text-decoration:none;
-		}
+    #logo-and-pages h1{
+        margin:10px 0;
+        padding:0;
+        display:inline;
+    }
+    #logo-and-pages a.big-text-logo{
+        font-family:Arial;
+        color: Black;
+        font-size:43px;
+        font-weight:bold;
+        margin:0 auto;
+        line-height:.9em;
+        text-decoration:none;
+    }
 
-		#logo-and-pages div.info-pages{
-				float:right;
-		}
-		#logo-and-pages div.logo-image{
-				float:left;
-		}
-				#logo-and-pages .colofon { margin-left:3px;}
-				#logo-and-pages div.info-pages {
-						position:absolute;
-						bottom:3px;
-						right:0px;
-				}
-						#logo-and-pages div.info-pages > * {
-								float:left
-						}
-						#logo-and-pages ul.pages {
-								margin:0;
-								vertical-align:middle;
-								margin:7px 5px 0 0;
-						}
+    #logo-and-pages div.info-pages{
+        float:right;
+    }
+    #logo-and-pages div.logo-image{
+        float:left;
+    }
+        #logo-and-pages .colofon { margin-left:3px;}
+        #logo-and-pages div.info-pages {
+            position:absolute;
+            bottom:3px;
+            right:0px;
+        }
+        #logo-and-pages div.info-pages * {
+            text-align:right;
+        }
+            #logo-and-pages div.info-pages div.block-pages {
+                float:right;
+                width:100%;
+                text-align:right;
+                margin-bottom:5px;
+            }
+                #logo-and-pages div.info-pages div.block-pages * {
+                    float:right;
+                }
+            #logo-and-pages div.info-pages div.colofon {
+                display:block;
+                clear:both;
+                text-transform:uppercase;
+                font-family:Arial;
+                color:#444;
+            }
+            #logo-and-pages ul.pages {
+                margin:0;
+                vertical-align:middle;
+                margin:7px 5px 0 0;
+                float:right;
+            }
 
-								#logo-and-pages div.info-pages ul.pages li{
-										float:left;
-										list-style:none;
-										color:#2D2C2B;
-								}
-										#logo-and-pages div.info-pages ul.pages li a{
-												color:#2D2C2B;
-												margin:0 3px;
-										}
+                #logo-and-pages div.info-pages ul.pages li{
+                    display:inline-block;
+                    list-style:none;
+                    color:#2D2C2B;
+                }
+                    #logo-and-pages div.info-pages ul.pages li a{
+                        color:#2D2C2B;
+                        margin:0 3px;
+                    }
 
 /***********************************************************
     Footer content definition

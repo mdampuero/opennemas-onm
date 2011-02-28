@@ -1,5 +1,5 @@
 <div class="ads_footer">
-    <div class="ad_with_border ad_vertical_marker clearfix">
+    <div class="ad_vertical_marker ad_with_border clearfix">
         <div>
             <div class="ad_728">
                 {insert name="renderbanner" type=$type1|default:'9' width="728" height="90" cssclass="ad"}
