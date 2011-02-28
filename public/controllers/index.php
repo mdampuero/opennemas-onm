@@ -368,12 +368,6 @@ if(($tpl->caching == 0)
                            .' LIMIT 0 , 5');
     $tpl->assign('lastAlbum', $lastAlbum);
 
-
-    /**
-     * Fetch information for opinion widget
-     * require_once ("index_opinion.php");
-    */
-
     /**
      * Fetch information for headlines
     */
