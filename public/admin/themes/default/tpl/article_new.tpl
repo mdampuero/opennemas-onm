@@ -263,7 +263,7 @@
 						value="{$article->agency|clearslash|escape:"html"}"
 						onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
 					{else}
-						value="{t}Agency{/t}"
+						value="nuevatribuna.es"
 					{/if}
 				/>
         </td>

@@ -149,20 +149,21 @@ class Photo extends Content
         $photo->infor = '';
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        
         if (is_file($image)) {
             $size = getimagesize($image, $info);
 
             switch ($size['mime']) {
                 case "image/gif": {
-                    $photo->infor = " La imagen es de tipo gif </br>";
+                    $photo->infor = _(" La imagen es de tipo gif </br>");
                 } break;
 
                 case "image/png": {
-                    $photo->infor = "La imagen es de tipo png </br>";
+                    $photo->infor = _("La imagen es de tipo png </br>");
                 } break;
 
                 case "image/bmp": {
-                    $photo->infor = "La imagen es de tipo bmp </br>";
+                    $photo->infor = _("La imagen es de tipo bmp </br>");
                 } break;
 
                 case 'image/jpeg': {
@@ -170,7 +171,7 @@ class Photo extends Content
                     $photo->exif = exif_read_data($image, 0, true);
 
                     if (!$photo->exif) {
-                        $photo->infor .= " No hay datos EXIF </br>";
+                        $photo->infor .= _(" No hay datos EXIF </br>");
                     } else {
 
                         $data_exif = $photo->exif;
@@ -194,13 +195,21 @@ class Photo extends Content
 
                     if (isset($info['APP13'])) {
                         $iptc = iptcparse($info['APP13']);
-
+            
                         if (is_array($iptc)) {
-                            $keywordcount = count($iptc["2#025"]);
-                            $keywords=$iptc["2#025"][0];
-
-                            for ($i=1; $i<$keywordcount; $i++) {
-                                $keywords .= ", ".$iptc["2#025"][$i]  ;
+                            
+                            $error_reporting = ini_get('error_reporting');
+                            error_reporting('E_ALL');
+                            
+                            if (isset($iptc["2#025"])) {
+                                $keywordcount = count($iptc["2#025"]);
+                                $keywords=$iptc["2#025"][0];
+    
+                                for ($i=1; $i<$keywordcount; $i++) {
+                                    $keywords .= ", ".$iptc["2#025"][$i]  ;
+                                }    
+                            } else {
+                                $keywords = '';
                             }
 
                             $myiptc['Keywords'] =$keywords;
@@ -241,6 +250,8 @@ class Photo extends Content
                             if (empty($photo->author_name)) {
                                 $photo->author_name = $myiptc['Photographer'];
                             }
+                            
+                            ini_set($error_reporting);
 
                         } else {
                             $photo->infor .= "No tiene datos IPTC </br>";

@@ -10,7 +10,8 @@
                 <ul class="span-17">
                     {foreach key=category_key item=category_value from=$categories}
                     <li class="{$category_value.name}{if $category_name eq $category_value.name} active{/if} clearfix">
-                        <a href="{$section_url}{$category_value.name}/" title="Sección: {$category_value.title}">{$category_value.title|mb_lower}</a>
+                        <a href="{$section_url}{$category_value.name}/"
+                           title="Sección: {$category_value.title}">{$category_value.title|mb_lower}</a>
                     </li>
                     {/foreach}
                     <li class="last"><a class="jump-to-up" href="#main_content">Volver arriba</a></li>

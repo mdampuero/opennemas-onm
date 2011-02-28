@@ -424,11 +424,10 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
            $_REQUEST['categ']= $_REQUEST['category'];
         }elseif(!empty($_SESSION['where'])) {
                 $where=$_SESSION['where'];
-
         }else{
             $search='';
             $where='';
-            $search.='Resultado de la Búsqueda: ';
+            $search.=_('Search results: ');
             if(!empty($_REQUEST['stringSearch'])) {
                 $stringSearch=preg_replace('/[\ ]+/', '%',$_REQUEST['stringSearch']);
                 $stringSearch = preg_replace('/[\,]+/', '%', $stringSearch);

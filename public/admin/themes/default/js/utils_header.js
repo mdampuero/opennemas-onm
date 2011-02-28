@@ -119,9 +119,11 @@ function enviar2(elto, trg, acc, id) {
             if(confirm('¿Está seguro de eliminar esos elementos?')) {
 
                 var parentEl = elto.parentNode;
+                
                 while(parentEl.nodeName != "FORM") {
                     parentEl = parentEl.parentNode;
                 }
+                return;
 
                 parentEl.target = trg;
                 parentEl.action.value = acc;
