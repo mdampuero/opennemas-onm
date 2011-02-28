@@ -393,7 +393,8 @@ div.onm-new.opinion h3.nw-title {
 
 div#quick-news h4.onm-title {
     font-weight:bold;
-    margin-bottom:.3em;
+    margin-top:.3em;
+    margin-bottom:0em;
 }
 div#quick-news p.subtitle {
     font-weight:bold;
