@@ -130,7 +130,7 @@
 								{/if}
 							</div>
 							<div class="inner-article-legend">
-								<span class="inner-article-place">Madrid</span> -
+								<span class="inner-article-place">nuevatribuna.es</span> |
 								<span class="inner-article-publish-date">{articledate article=$opinion updated=$opinion->changed}</span>
 							</div>
 						</div><!--title-subtitle-legend-->

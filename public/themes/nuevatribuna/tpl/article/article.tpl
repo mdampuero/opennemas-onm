@@ -54,8 +54,7 @@
                                 {/if}
                                 <div class="inner-article-subtitle">{$article->summary|clearslash}</div>
                                 <div class="inner-article-legend">
-                                    <span class="inner-article-author">{$article->agency|clearslash}</span> -
-                                    <span class="inner-article-place">Madrid</span> -
+                                    <span class="inner-article-author">{$article->agency|clearslash}</span> |
                                     <span class="inner-article-publish-date">{articledate article=$article updated=$article->changed}</span>
                                 </div>
                             </div><!--title-subtitle-legend-->

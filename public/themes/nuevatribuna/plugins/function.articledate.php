@@ -34,7 +34,7 @@ function smarty_function_articledate($params, &$smarty) {
 	if (!$nohour){
 	    $hours = ' -  '.date('H:i', $created).' h.';
 	}
-        return '<span class="CNewsDateUpdate">'.date('d \d\e M \d\e Y', $created).$hours.'</span>';
+        return '<span class="CNewsDateUpdate">Actualizado el '.date('d/m/Y', $created).$hours.'</span>';
     }
 
     if (preg_match('/\-/', $updated)) {
@@ -45,7 +45,7 @@ function smarty_function_articledate($params, &$smarty) {
 		$hours = ' - '.date('H:i', $updated).' h.';
 	}
     // Actualizado 02/01/2009 | 00:00 h.
-	return '<span class="CNewsDateUpdate">Actualizado el '.date('d \d\e M \d\e Y', $updated).$hours.'</span>';
+	return '<span class="CNewsDateUpdate">Actualizado el '.date('d/m/Y', $updated).$hours.'</span>';
 
     /* if(date('YmdHi', $created) == date('YmdHi', $updated)) {
         // 11/03/09 |  01:58 h
