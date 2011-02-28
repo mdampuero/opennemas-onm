@@ -341,7 +341,7 @@ if(($tpl->caching == 0)
     /************************************ TITULARES TENDENCIAS  ************************************/
     $titular_gente =
         $cm->find_by_category_name('Article',
-                                    'tendencias'
+                                    'entrevistas'
                                     , 'content_status=1 AND frontpage=1'
                                     . ' AND available=1 AND fk_content_type=1'
                                     . ' AND (starttime="0000-00-00 00:00:00" '

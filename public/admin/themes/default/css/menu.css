@@ -35,6 +35,8 @@ ul#menu  ul {
   left: 0px;
   background:#464646;
   -moz-border-radius: 5px 5px 5px 5px;
+  border-radius:5px;
+  -webkit-border-radius:5px;
   border:1px solid #464646;
   padding-top:2px;
 
