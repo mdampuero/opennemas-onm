@@ -195,7 +195,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                                                'contents.fk_content_type=8 and photos.media_type="image" and created <=' .
                                                $ayer.' ',
                                                'ORDER BY created DESC ',
-                                               $page, 56, $this->category);
+                                               $page, 40, $this->category);
 		
 
         foreach($photos as $photo) {
@@ -221,7 +221,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                                                 'ORDER BY  created DESC ');
 		
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
-                                                'ORDER BY  created DESC ', $page, 2, $this->category);
+                                                'ORDER BY  created DESC ', $page, 40, $this->category);
 
 		
         foreach($photos as $photo) {

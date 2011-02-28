@@ -160,6 +160,8 @@
 								
 										{assign var=num value=$num+1}
 									{/if}
+								{sectionelse}
+								<li>{t}There are no images in this category{/t}</li>
 								{/section}
                             </ul>
                     </div>
