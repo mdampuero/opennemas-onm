@@ -358,13 +358,16 @@ div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom
 		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:0; margin-bottom:8px; font-family:Georgia;}
 				div.onm-new .onm-new-title a { color: Black }
 		div.onm-new .onm-new-subtitle { font-size:13px; font-family: Arial; color:#2d2c2b; margin-bottom:10px; line-height:1.28em}
+        div.onm-new .onm-new-subtitle p {
+            margin-bottom:3px;
+        }
 		div.onm-new div.related-content { margin:0 0 8px 0;; }
 				div.onm-new div.related-content ul { list-style:square; margin:0; margin-left:15px; }
 						div.onm-new div.related-content ul li { color:#980101;  }
 								div.onm-new div.related-content ul li span { display:none; }
-								div.onm-new div.related-content ul li a { font-size:1.07em }
+								div.onm-new div.related-content ul li a { font-size:1.10em }
 		div.onm-new div.onm-new-comments  { width:100%; text-align:right; }
-				div.onm-new div.onm-new-comments a { color:Black; text-transform:uppercase; padding-left:23px; background:url(../images/bullets/comment_icon.gif) center left no-repeat; }
+				div.onm-new div.onm-new-comments a { color:#666; text-transform:uppercase; padding-left:23px; background:url(../images/bullets/comment_icon.gif) center left no-repeat; }
 
 /*Exceptions*/
 div.first-column div.onm-new:last-child,
