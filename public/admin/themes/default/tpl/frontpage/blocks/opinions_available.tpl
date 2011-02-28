@@ -16,7 +16,7 @@
 
                             <td align="left" style="width:3%">
                                 <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}"
-                                       name="no_selected_fld[]" value="{$opinions[d]->pk_widget}" style="cursor:pointer;" >&nbsp;
+                                       name="no_selected_fld[]" value="{$opinions[d]->id}" style="cursor:pointer;" >&nbsp;
                             </td>
 
                             <td align="left" style="width:90%">

@@ -142,10 +142,10 @@ if(isset($_REQUEST['action']) ) {
                 $frontpage_articles[] = $content;
                 $contents_excluded_for_proposed[] = $content->id;
             }
-            
     
             $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
             // }}}
+            
     
             if(!isset($destacado)){
                 $destacado = null;
