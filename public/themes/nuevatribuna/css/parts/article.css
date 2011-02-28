@@ -31,7 +31,7 @@ div.title-subtitle-legend {
         color:#747678;
     }
         
-        div.inner-article-legend span.inner-article-author { color: Black !important; text-transform:uppercase; }
+        div.inner-article-legend span.inner-article-author { color: Black !important; /*text-transform:uppercase; */}
         
 div.inner-article-other-contents, div.inner-article-utilities-box { border-top:1px solid #ccc; padding-top:5px;}
 div.inner-article-other-contents { width:480px; margin-right:10px; font-size:1.12em; color:#2d2c2b; position:relative;}
