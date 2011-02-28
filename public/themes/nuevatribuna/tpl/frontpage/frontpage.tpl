@@ -57,11 +57,14 @@
                         </div>
                     </div><!--third-column-->
                 </div><!-- .span-24 -->
+                
                 <br style="clear:both; margin-top:10px;">
                 <hr class="news-separator" />
+                
                 <div id="quick-news" class="span-24">
                     {include file="internal_widgets/frontpage_3cols.tpl"}
                 </div>
+                
                 <br style="clear:both">
                 <hr class="news-separator" />
 

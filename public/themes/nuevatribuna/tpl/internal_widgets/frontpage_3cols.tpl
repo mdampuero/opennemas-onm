@@ -16,7 +16,7 @@
             <div class="onm-new last">
                 <a href="{$titulares_gente[g]->uri}">
                     <img class="onm-image" style="width:185px;height:125px;" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$titulares_gente[g]->path_img}" alt="{$titulares_gente[g]->title|clearslash}"/></a>
-                <h4 class="onm-title"><a href="{$titulares_gente[g]->uri}">{$titulares_gente[g]->title|clearslash}</a></h4>
+                <h4 class="onm-title"><a href="{$titulares_gente[g]->uri}">{$titulares_gente[g]->subtitle|clearslash}</a></h4>
                 <p class="subtitle">{$titulares_gente[g]->summary|clearslash}</p>
             </div>
         </div>
