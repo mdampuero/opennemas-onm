@@ -11,9 +11,9 @@
     </a>
     {/if}
 
-    {if $category_name eq 'home'}
+    {*if $category_name eq 'home'*}
         <div class="onm-new-category-name {$item->category_name}">{$item->subtitle}</div>
-    {/if}
+    {*/if*}
     <h3 class="onm-new-title"><a href="/{$item->uri|clearslash}" title="{$item->title|clearslash|clean_for_html_attributes}">{$item->title|clearslash|escape}</a></h3>
     <div class="onm-new-subtitle">{$item->summary|clearslash}</div>
 
