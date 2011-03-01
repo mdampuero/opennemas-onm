@@ -5,6 +5,7 @@
 <div class="layout-column last-column span-8 last">
 
     {*{include file="widget_headlines_past.tpl"}     *}
+    {render_widget name="OpinionAuthorList"}
 
     {include file="ads/ad_in_column.tpl" type='3'}
 

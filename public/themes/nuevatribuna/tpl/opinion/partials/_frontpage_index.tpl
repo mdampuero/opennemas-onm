@@ -40,12 +40,12 @@
 
     {/if}
 
-    <div class="opinion-listing-colaborators  span-16 last">
-        <h3>Colaboradores</h3>
-        <div class="span-16 clearfix" style="padding:10px;">
+    <div class="opinion-listing-colaborators last">
+        <h3>Opiniones destacadas</h3>
+        <div class="span-16 clearfix">
             {section name=ac loop=$opinions start=0}
 
-            <div class="span-16">
+            <div style="padding:10px;">
 
                 {if $opinions[ac].path_img}
                     <div class="avatar-author span-2">
