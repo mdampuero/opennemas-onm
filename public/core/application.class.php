@@ -124,14 +124,14 @@ class Application {
                 $GLOBALS['application']->logger = &Log::singleton('composite');
 
                 $conf = array('mode' => 0600,
-                              'timeFormat' => '%Y%m%d%H%M%S',
+                              'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
                               'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
                 $fileLogger = &Log::singleton('file', SYS_LOG_FILENAME, 'application', $conf);
                 $GLOBALS['application']->logger->addChild($fileLogger);
 
                 /* if(defined('SYS_LOG_EMAIL')) {
                     $conf   = array('subject' => '[LOG] OpenNeMas application logger',
-                                    'timeFormat' => '%Y%m%d%H%M%S',
+                                    'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
                                     'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
                     $mailLogger = &Log::singleton('mail', SYS_LOG_EMAIL, 'application', $conf);
                     $GLOBALS['application']->logger->addChild($mailLogger);

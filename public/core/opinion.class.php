@@ -334,18 +334,23 @@ class Opinion extends Content {
 		$category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
 		$contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
 		foreach ($contentsSuggestedInFrontpage as $content) {
-			$excludedContents []= $content->pk_content;
+			if($content->content_type == 4) {
+				$excludedContents []= $content->id;
+			}
 		}
-		//if (count($excludedContents) > 0) {
-		//	$sqlExcludedContents = ' AND pk_opinion NOT IN (';
-		//	$sqlExcludedContents .= implode(', ', $excludedContents);
-		//	$sqlExcludedContents .= ') ';
-		//}
+		
+		if (count($excludedContents) > 0) {
+			$sqlExcludedContents = ' AND pk_opinion NOT IN (';
+			$sqlExcludedContents .= implode(', ', $excludedContents);
+			$sqlExcludedContents .= ') ';
+		}
 		
 		// Getting latest opinions taking in place later considerations
-        $contents = $cm->find_all('Opinion',
-                    'content_status=1 AND available=1',
-                    'ORDER BY  created DESC,  title ASC ' . $sqlExcludedContents .$_sql_limit);
+        $contents = $cm->find('Opinion',
+                    'content_status=1 AND available=1'. $sqlExcludedContents,
+                    'ORDER BY  created DESC,  title ASC ' .$_sql_limit);
+		
+		
 		
 		// For each opinion get its author and photo
 		foreach ($contents as $content) {

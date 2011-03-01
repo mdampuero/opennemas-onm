@@ -119,7 +119,7 @@ class ContentManager
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->load_obj($rs, $content_type);
-
+        
         return $items;
     }
 
