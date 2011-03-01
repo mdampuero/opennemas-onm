@@ -70,12 +70,14 @@
                 </tr>
             </table>
         </form>
-
     </div>
+
+    {if $smarty.request.action == 'send'}
+        <div class="message">{$message} - <a href="javascript:$.facebox.close(); return false;">Pechar esta xanela</a></div>
+    {/if}
+        
 </body>
 </html>
 {/if}
 
-{if $smarty.request.action == 'send'}
-<div class="message">{$message} - <a href="javascript:$.facebox.close(); return false;">Pechar esta xanela</a></div>
-{/if}
+
