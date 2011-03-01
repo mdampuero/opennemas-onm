@@ -61,12 +61,13 @@
                 <br style="clear:both; margin-top:10px;">
                 <hr class="news-separator" />
                 
-                <div id="quick-news" class="span-24">
-                    {include file="internal_widgets/frontpage_3cols.tpl"}
-                </div>
-                
-                <br style="clear:both">
-                <hr class="news-separator" />
+                {if $category_name eq 'home'}
+                    <div id="quick-news" class="span-24">
+                        {include file="internal_widgets/frontpage_3cols.tpl"}
+                    </div>
+                    <br style="clear:both">
+                    <hr class="news-separator" />
+                {/if}
 
                 {include file="ads/ad_break_content.tpl" type1='3' type2='4' nocache}
                 <hr class="news-separator" />

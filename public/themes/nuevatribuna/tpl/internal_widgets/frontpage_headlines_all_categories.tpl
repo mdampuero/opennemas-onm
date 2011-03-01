@@ -3,7 +3,6 @@
     @theme      Lucidity
 *}
 
-<hr class="new-separator" />
 <div class="span-24 last">
 
     <div class="span-16 clearfix">
@@ -24,10 +23,7 @@
     </div>
 
     <div class="more-promotions-from-diary span-8 last">
-            ESPACIO POR DEFINIR
-            <hr class="new-separator"/>
-            {include file="widgets/facebook_stream_box.tpl"}
-
+        {include file="widgets/facebook_stream_box.tpl"}
     </div>
 
 </div>
