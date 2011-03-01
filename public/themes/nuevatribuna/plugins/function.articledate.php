@@ -6,8 +6,17 @@
 function smarty_function_articledate($params, &$smarty) {
     $created = $params['created'];
     $updated = $params['updated'];
-    $nohour = $params['nohour'];
-    $param = $params['param'];
+
+    if (isset ($params['nohour'])){
+        $nohour = $params['nohour'];
+    } else {
+        $nohour = '';
+    }
+
+    if (isset ($params['param'])){
+        $params = $params['param'];
+    } 
+
     $meses = array('Jan' => 'Enero','Feb' => 'Febrero',
                    'Mar' => 'Marzo','Apr' => 'Abril',
                    'May' => 'Mayo', 'Jun' => 'Junio',

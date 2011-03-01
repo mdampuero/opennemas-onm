@@ -609,7 +609,22 @@ if(isset($_REQUEST['action']) ) {
                 $summary = stripslashes($article->summary);
             }
 
-            require_once $tpl->_get_plugin_filepath('function', 'articledate');
+
+            if (method_exists($tpl, '_get_plugin_filepath')) {
+                //handle with Smarty version 2
+                require_once $tpl->_get_plugin_filepath('function','articledate');
+            } else {
+                //handle with Smarty version 3 beta 8
+                foreach ($tpl->plugins_dir as $value) {
+                    $filepath = $value ."/function.articledate.php";
+                    if (file_exists($filepath)) {
+                        require_once $filepath;
+                    }
+                }
+            }
+
+
+            //require_once $tpl->_get_plugin_filepath('function', 'articledate');
             $params['created'] = $article->created;
             $params['updated'] = $article->updated;
             $params['article'] = $article;
