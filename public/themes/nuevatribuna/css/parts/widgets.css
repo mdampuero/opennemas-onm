@@ -129,6 +129,7 @@ div.morenews-in-category {
             color:#535050;
             font-weight:bold;
             font-family:Arial;
+            font-size:1.3em;
         }
         div.morenews-in-category .onm-new-little a{
             font-size:.75em;
@@ -146,18 +147,56 @@ div.widget-latest-opinions {
     width:100%;
     margin-bottom:10px;
 }
+
 div.widget-latest-opinions ul {
     margin:0;
-    padding:10px;
+    padding:7px;
     border:1px solid #ccc;
 }
+div.widget-latest-opinions ul h5{
+    margin:0;
+    font-weight:bold;
+}
+
 div.widget-latest-opinions li {
     border-bottom:1px solid #ccc;
     list-style:none;
-    padding:5px;
+    padding:3px;
 }
 
 div.widget-latest-opinions li.last {
+    border-bottom:none;
+}
+
+/***********************************************************
+   Widget latest interviews definition
+************************************************************/
+div.widget-latest-interviews {
+    font-size:13px;
+    margin-bottom:10px;
+    border:1px solid #ccc;
+}
+div.widget-latest-interviews div.widget-header {
+    border-bottom:1px solid #ccc;
+}
+div.widget-latest-interviews div.widget-content {
+}
+div.widget-latest-interviews ul {
+    margin:0;
+    padding:12px;
+}
+div.widget-latest-interviews ul h5{
+    margin:0;
+    font-weight:normal;
+}
+
+div.widget-latest-interviews li {
+    border-bottom:1px solid #ccc;
+    list-style:none;
+    padding:3px;
+}
+
+div.widget-latest-interviews li.last {
     border-bottom:none;
 }
 

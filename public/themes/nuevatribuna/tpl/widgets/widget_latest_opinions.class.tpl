@@ -7,8 +7,7 @@
             {section name=a loop=$latestOpinions max=6}
             <li {if $smarty.section.a.last}class="last"{/if}>
                 {if $latestOpinions[a]->name neq ""}
-                    <strong><a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$latestOpinions[a]->name id=$latestOpinions[a]->fk_author}">{$latestOpinions[a]->name}</a></strong>
-                    <br>
+                <h5><a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$latestOpinions[a]->name id=$latestOpinions[a]->fk_author}">{$latestOpinions[a]->name}</a></h5>
                 {/if}
                 <a href="{$smarty.const.SITE_URL}{generate_uri  content_type="opinion"
                                                                 id=$latestOpinions[a]->id
