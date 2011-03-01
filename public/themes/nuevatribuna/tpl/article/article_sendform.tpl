@@ -77,11 +77,3 @@
 </body>
 </html>
 {/if}
-
-<<<<<<< HEAD
-
-=======
-{if $smarty.request.action == 'send'}
-<div class="message">{$message} - <a href="javascript:$.facebox.close(); return false;">Cerrar esta ventana</a></div>
-{/if}
->>>>>>> Solved bug in comments link in frontpages of sections
