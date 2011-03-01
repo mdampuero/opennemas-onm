@@ -147,7 +147,7 @@ if( isset($_REQUEST['action']) ) {
                 echo $msg;
                 exit(0);
             }else{
-               $msg.="¿Está seguro que desea eliminar '".$att->title."' ?";
+                $msg="¿Está seguro que desea eliminar '".$att->title."' ?";
             //   $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
             //   $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
                echo $msg;
@@ -164,7 +164,7 @@ if( isset($_REQUEST['action']) ) {
                 $rel->delete_all($_REQUEST['id']);
                 $att->delete( $_REQUEST['id'],$_SESSION['userid'] );
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$att->category.'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$_REQUEST['page']);
          break;
 
 

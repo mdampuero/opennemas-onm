@@ -258,13 +258,13 @@ function del_photo(id)
 
 function delete_fichero(id,page){
 
-      new Ajax.Request( 'ficheros.php?action=delete&id='+id+'&page='+page,
+      new Ajax.Request( 'files.php?action=delete&id='+id+'&page='+page,
         {
             onSuccess: function(transport) {
                  var msg = transport.responseText;
                 // showMsg({'warn':[msg ]},'growl');
                    if(confirm(msg)) {
-                      var ruta='ficheros.php?action=yesdel&id='+id+'&page='+page;
+                      var ruta='files.php?action=yesdel&id='+id+'&page='+page;
                       location.href= ruta;
                    }
                    return false;

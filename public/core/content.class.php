@@ -1031,7 +1031,7 @@ class Content {
         }elseif($tipo=="video"){
                 $permalink="/".$tipo."/". $fecha."/".$this->id.'.html';
         }elseif($tipo=="ficheiro"){
-                $permalink="/".$tipo."/". $fecha."/". $namecat."/".$end; //En el end esta pasando el nombre del pdf
+                $permalink="/media/files".$end; //En el end esta pasando el nombre del pdf
         }elseif($tipo=="imaxe"){
                 $permalink="/media/images" .$end . $title;
         }else{
