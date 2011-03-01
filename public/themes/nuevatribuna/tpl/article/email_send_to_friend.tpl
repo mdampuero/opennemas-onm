@@ -53,7 +53,7 @@
             <tr>
                 <td>
                     <div style="font-size:1.2em; color:#222; color:#014687; text-align:right; text-decoration: underline;  font-size: 12px; line-height: 15px;">
-                        <a href="{$article->permalink}" target="_blank">Ir al artículo completo</a>
+                        <a href="{$smarty.const.SITE_URL}{$article->permalink}" target="_blank">Ir al artículo completo</a>
                     </div>
                 </td>
             </tr>

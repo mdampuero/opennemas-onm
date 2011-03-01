@@ -6,4 +6,4 @@ Hola {$destination},
 {$article->title}
 {$summary}
 - Artítulo de {$agency} escrito el {$date}
-Puede ver el artículo completo en: {$article->permalink}
+Puede ver el artículo completo en: {$smarty.const.SITE_URL}{$article->permalink}
