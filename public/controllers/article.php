@@ -575,6 +575,7 @@ if(isset($_REQUEST['action']) ) {
             require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
             
             $tplMail = new Template(TEMPLATE_USER);
+
             $mail = new PHPMailer();
 
             $mail->Host     = "localhost";
@@ -590,6 +591,8 @@ if(isset($_REQUEST['action']) ) {
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
             $mail->Subject  = substr(strip_tags($_REQUEST['body']), 0, 100);
+            
+            $tplMail->assign('destination', $_REQUEST['destination']);
 
             // Load permalink to embed into content
             $article = new Article($_REQUEST['article_id']);
@@ -607,12 +610,14 @@ if(isset($_REQUEST['action']) ) {
             } else {
                 $agency = SITE_FULLNAME;
             }
+            $tplMail->assign('agency',$agency);
 
             if (empty($article->summary)) {
                 $summary = substr(strip_tags(stripslashes($article->body)), 0, 300)."...";
             } else {
                 $summary = stripslashes($article->summary);
             }
+            $tplMail->assign('summary', $summary);
 
 
             if (method_exists($tpl, '_get_plugin_filepath')) {
@@ -634,11 +639,12 @@ if(isset($_REQUEST['action']) ) {
             $params['updated'] = $article->updated;
             $params['article'] = $article;
             $date = smarty_function_articledate($params,$tpl);
+            $tplMail->assign('date', $date);
             
-            $mail->Body = $tpl->fetch('article/email_send_to_friend.tpl');
+            $tplMail->caching = 0;
+            $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
 
-
-            $mail->AltBody = $tpl->fetch('article/email_send_to_friend_just_text.tpl');
+            $mail->AltBody = $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
             $mail->AddAddress( $_REQUEST['destination'] );
 
             if( $mail->Send() ) {
