@@ -160,3 +160,46 @@ div.widget-latest-opinions li {
 div.widget-latest-opinions li.last {
     border-bottom:none;
 }
+
+
+/***********************************************************
+   Widget list all authors definition
+************************************************************/
+div.widget-all-authors,
+div.widget-last-opinions-with-face {
+    background-color:#F3F3F3 !important;
+    border-top:10px solid #DEDEDE !important;
+    width:100%;
+    padding-bottom:10px;
+}
+
+div.widget-all-authors div{
+    margin:5px;
+}
+
+div.widget-all-authors div.content,
+div.widget-last-opinions-with-face div.content{
+    #background:#fff;
+    margin:10px;
+}
+
+div.widget-all-authors div.title,
+div.widget-last-opinions-with-face div.title
+{
+    font-size:1.2em;
+    color:Black;
+    font-family:Georgia;
+    font-style:italic;
+    font-size:1.5em;
+    margin:10px;
+}
+
+div.widget-all-authors a,
+div.widget-last-opinions-with-face a
+{
+}
+
+div.widget-all-authors select{
+    width:100%;
+    border:auto !important;
+}

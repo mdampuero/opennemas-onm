@@ -73,7 +73,7 @@
             <input type="hidden" id="id" name="id" value={$id}>
         </form>
 		<tfoot>
-			<tr>
+			<tr class="pagination">
 				<td colspan="7" align="center">
 					{$paginacion->links}
 				</td>

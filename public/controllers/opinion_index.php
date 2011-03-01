@@ -72,14 +72,17 @@ if (isset($_REQUEST['action'])) {
                                       'AND contents.content_status=1 ',
                                       'ORDER BY created DESC LIMIT '.$page.',2');
 
-                // Fetch the photo images of the director
-                $aut = new Author($director[0]->fk_author);
-                $foto = $aut->get_photo($director[0]->fk_author_img);
-                if (isset($foto->path_img)){
-                    $dir['photo'] = $foto->path_img;
-                }
-                $dir['name'] = $aut->name;
-                $tpl->assign('dir', $dir);
+				if (isset($director) && !empty($director)) {
+	                // Fetch the photo images of the director
+	                $aut = new Author($director[0]->fk_author);
+					$foto = $aut->get_photo($director[0]->fk_author_img);
+					if (isset($foto->path_img)){
+						$dir['photo'] = $foto->path_img;
+					}
+					$dir['name'] = $aut->name;
+					$tpl->assign('dir', $dir);
+					$tpl->assign('director',  $director[0]);
+				}
 
 
 				//define('ITEMS_PAGE', 2);
@@ -108,10 +111,9 @@ if (isset($_REQUEST['action'])) {
 				// Fetch information for shared parts
 				require_once ('widget_headlines_past.php');
 				require_once ("index_sections.php");
-				require_once("widget_static_pages.php");
+				require_once ("widget_static_pages.php");
 
                 $tpl->assign('editorial', $editorial);
-                $tpl->assign('director',  $director[0]);
                 $tpl->assign('opinions',  $improvedOpinions);
                 //$tpl->assign('pagination',  $pagination);
 

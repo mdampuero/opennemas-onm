@@ -8,7 +8,7 @@
     {include file="widgets/widget_opinions_author.tpl"}
     <hr class="new-separator"/>
 
-    {include file="widgets/widget_opinion_authorslist.tpl"}
+    {render_widget name="OpinionAuthorList"}
     <hr class="new-separator" />
 
     {include file="ads/ad_in_column.tpl" type='103'}

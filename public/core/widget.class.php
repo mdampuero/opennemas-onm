@@ -61,7 +61,6 @@ class Widget extends Content {
         $this->content_type = 'Widget';
     }
 
-
     public function create($data)
     {
 
@@ -107,6 +106,47 @@ class Widget extends Content {
     {
         parent::read($id);
         $this->id = $id;
+
+        $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
+
+        $values = array($id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if($rs === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return null;
+        }
+
+        $this->load( $rs->fields );
+    }
+    
+    /**
+     * Read, get a specific object
+     *
+     * @param int $id Object ID
+     * @return Widget Return instance to chaining method
+     */
+    public function readIntelligentFromName($content)
+    {
+        $sqlSearchWidget = "SELECT * FROM `widgets` WHERE `content`=?";
+        
+        $rs = $GLOBALS['application']->conn->Execute($sqlSearchWidget, $content);
+        if($rs === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return null;
+        }
+        
+        $id = $rs->fields['pk_widget'];
+        
+        
+        parent::read($id);
+        $this->id = array($id);
 
         $sql = "SELECT * FROM `widgets` WHERE `pk_widget`=?";
 

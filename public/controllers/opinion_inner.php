@@ -74,12 +74,6 @@ if(isset($_REQUEST['action']) ) {
                     $tpl->assign('rating_bar', $rating->render('article','vote'));
 
 
-
-                    // Fetch a list of authors to display the dropdown
-                    $aut = new Author();
-                    $all_authors = $aut->cache->all_authors(NULL,'ORDER BY name');
-                    $tpl->assign('list_all_authors', $all_authors);
-
                     // Fetch suggested contents
                     $objSearch = cSearch::Instance();
                     $suggestedContents =
@@ -87,6 +81,7 @@ if(isset($_REQUEST['action']) ) {
                                                             'Opinion',
                                                             " contents.available=1 AND pk_content = pk_fk_content",
                                                             4);
+                        
                     $suggestedContents= $cm->getInTime($suggestedContents);
                     $tpl->assign('suggested', $suggestedContents);
 

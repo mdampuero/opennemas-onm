@@ -75,10 +75,7 @@
             <div id="main_content" class="opinion-index wrapper_content_inside_container span-24">
 
                 <div class="in-big-title span-24">
-
-                    <h1>Opiniones</h1>
-                    <p class="in-subtitle">Conozca las últimas opiniones de nuestros redactores y colaboradores</p>
-
+                    <h1>Opinión</h1>
                 </div><!-- fin lastest-news -->
 
                 <div class="span-16">

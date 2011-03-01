@@ -7,16 +7,17 @@
 function smarty_function_render_widget($params, &$smarty) {
     
 	// Initialicing parameters
-	$widgetID = $params['id'];
+	$widgetID = $params['name'];
     $output = '';
 
 	// Initialize database access
 	$cm = new ContentManager();
 	$ccm = ContentCategoryManager::get_instance();
-    
+	
+	
 	// Initialize widget from db
 	$widget = new Widget();
-	$widget->read($widgetID);
+	$widget->readIntelligentFromName($widgetID);
     
 	if($widget->available) {
 		$output = $widget->render();

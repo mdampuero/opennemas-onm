@@ -41,7 +41,7 @@ div.opinion-listing-colaborators div.avatar-author{
 }
 
 div.in-big-title {
-    padding:20px 0 40px 0;
+    padding:20px 0 20px 0;
     background:url(../../images/sections/opinion-header.png) top right no-repeat;
 }
 
@@ -72,13 +72,12 @@ div.opinion-listing-colaborators-post h4.author-name{
 
 div.opinion-listing-colaborators-post h4.author-name a{
     font-variant:small-caps;
-    color:#8c7d3f !important;
+    color:#222 !important;
     font-family:Georgia;
 }
 
 div.opinion-listing-colaborators-post span.post-date{
     color:#666;
-    font-size:small;
 }
 div.in-big-title div.info-author a.opinion-author-name {
     font-size:1.3em;
@@ -103,7 +102,6 @@ div.in-big-title div.info-new{
 div.in-big-title{
     background-position:right bottom;
     padding:10px 0;
-    min-height:120px;
 }
 
 div.in-big-title h1{
@@ -114,43 +112,6 @@ div.in-big-title h1{
 p.in-subtitle {
     font-size:1.3em;
     color:#666;
-}
-
-div.widget-all-authors,
-div.widget-last-opinions-with-face {
-    background-color:#F3F3F3 !important;
-    border-top:10px solid #DEDEDE !important;
-}
-
-div.widget-all-authors div{
-    margin:5px;
-}
-
-div.widget-all-authors div.content,
-div.widget-last-opinions-with-face div.content{
-    #background:#fff;
-    margin:10px;
-}
-
-div.widget-all-authors div.title,
-div.widget-last-opinions-with-face div.title
-{
-    font-size:1.2em;
-    color:Black;
-    font-family:Georgia;
-    font-style:italic;
-    font-size:1.5em;
-    margin:10px;
-}
-
-div.widget-all-authors a,
-div.widget-last-opinions-with-face a
-{
-}
-
-div.widget-all-authors select{
-    width:100%;
-    border:auto !important;
 }
 
 div.info-author h2{

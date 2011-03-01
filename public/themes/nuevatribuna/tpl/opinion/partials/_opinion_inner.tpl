@@ -56,7 +56,7 @@
 	    <hr class="new-separator"/>
 	    <div class="more-news-bottom-article">
 		{if !empty($suggested)}
-		    <p class="title">Si le interesó este artículo, eche un vistazo a estes:</p>
+		    <p class="title">Si le interesó este artículo, eche un vistazo:</p>
 		     <ul>
 			{section name=r loop=$suggested}
 			     {if $suggested[r].pk_content neq $opinion->pk_content}

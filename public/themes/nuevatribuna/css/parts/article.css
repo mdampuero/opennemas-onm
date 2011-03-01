@@ -71,11 +71,15 @@ div.inner-article-utilities-box  { width:150px; margin-right:0;}
     
 div.machine-related-contents {
     font-size:1.2em;
-    margin-top:10px;
     color:#3d4f82;
+    width:100%;
 }
+    div.machine-related-contents > div {
+        /*border:1px solid #ccc;*/
+        /*margin:10px 10px 10px 0;*/
+    }
     div.machine-related-contents div.title{
-        font-size:1.4em;
+        font-size:1.1em;
         color:#535050;
         font-family:Arial;
         font-weight:bold
