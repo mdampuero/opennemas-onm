@@ -386,6 +386,37 @@ class ContentManager
 
     }
 
+        /**
+    * Gets the path of one file type by its ID
+    *
+    * @param int $contentID, the id of the content we want to work with
+    * @return string, the name of the content
+    */
+    static public function getFilePathFromId($contentID, $ucfirst = false)
+    {
+        // Raise an error if $contentID is not a number
+        if(!is_numeric($contentID)) {
+            // Try to uniformize this, cause if $contentID comes from an widget
+            // this raises an error cause the contentID is 'Widget'
+            //throw new InvalidArgumentException('getContentTypeNameFromId function only accepts integers. Input was: '.$int);
+            $return_value = ($ucfirst === true) ? ucfirst($contentID) : strtolower($contentID);
+        } else {
+
+            // retrieve the name for this id
+            $sql = "SELECT path FROM attachments WHERE `pk_attachment`=$contentID";
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+            if($rs->_numOfRows < 1) {
+                $return_value = false;
+            } else {
+                $return_value = ($ucfirst === true) ? ucfirst($rs->fields['path']) : $rs->fields['path'];
+            }
+        }
+
+        return $return_value;
+
+
+    }
 
     /**
      * This function returns an array of objects $content_type of the most viewed in the last few days indicated.
