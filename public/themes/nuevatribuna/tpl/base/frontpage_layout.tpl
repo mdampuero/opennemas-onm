@@ -52,10 +52,6 @@
     {block name="content"}{/block}
     </div><!-- #container -->
 
-	<div class="container_ads">
-	    {include file="ads/ad_break_content.tpl" type1='5' type2='6' nocache}
-	</div><!-- #container -->
-
     <div class="container container_with_border container_footer clearfix">
     {block name="footer"}{/block}
     </div><!-- #container -->

@@ -276,7 +276,7 @@ div#widget_weather_top
 						}
 
 						div#footer div.footer-categories li a:hover{
-								background:#fff
+								background:#c88;
 						}
 
 				div#footer div.footer-categories li.last {
@@ -289,10 +289,16 @@ div#widget_weather_top
 						}
 
 		div#footer div.main-static-pages {
-				border-bottom:1px solid #ccc;
-				width:100%
+            border-bottom:1px solid #ccc;
+            width:100%
 		}
+        div#footer div.main-static-pages {
+            margin-top:4px;
+        }
 
+        div#footer div.contact-data strong{
+            line-height:1.1em;
+        }
 
 		div#footer div.contact-data *{
 				display:inline-block;
@@ -321,18 +327,18 @@ div#main_content {
 }
 
 		div#main_content div.first-column {
-				border-right:1px solid #ccc;
-				margin-right:0;
-				width:360px;
+            border-right:1px solid #ccc;
+            margin-right:0;
+            width:360px;
 		}
 				div#main_content div.first-column > div {
-						padding-right:10px;
+					padding-right:10px;
 				}
 
 		div#main_content div.second-column {
-				width:290px;
-				border-right:1px solid #ccc;
-				background:White url(../images/backgrounds/gradient-second-column.png) top right repeat-x;
+            width:290px;
+            border-right:1px solid #ccc;
+            background:White url(../images/backgrounds/gradient-second-column.png) top right repeat-x;
 		}
 
 				div#main_content div.second-column > div {
@@ -341,6 +347,11 @@ div#main_content {
 						padding-top:10px;
 						overflow:hidden;
 				}
+                
+                div#main_content div.second-column div.onm-new .nw-subtitle {
+                    font-size: 13px;
+                    line-height:1.3em;
+                }
 
 		div#main_content div.third-column {
 				width:310px
@@ -356,7 +367,7 @@ div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom
 		div.onm-new .onm-new-image { max-width:100%; width:100%; margin-bottom:10px;}
 		div.onm-new .onm-new-category-name { margin:0 0 4px 0; text-transform: uppercase; display:block; width:auto; position:relative; line-height:1.3em; }
 		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:0; margin-bottom:8px; font-family:Georgia;}
-				div.onm-new .onm-new-title a { color: Black }
+				div.onm-new .onm-new-title a { color: Black; line-height:1.06em }
 		div.onm-new .onm-new-subtitle { font-size:13px; font-family: Arial; color:#2d2c2b; margin-bottom:10px; line-height:1.28em}
         div.onm-new .onm-new-subtitle p {
             margin-bottom:3px;
@@ -378,12 +389,16 @@ div.onm-new div.related-content span.res-article { display:none;}
 div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
 div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }
 div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
+div.onm-new.opinion div.nw-author {
+    margin-bottom:3px;
+}
 div.onm-new.opinion div.nw-author strong{
     color:#980101;
 }
 div.onm-new.opinion h3.nw-title a {
     font-family:Arial;
     font-size:.9em;
+    line-height:1.2em;
     color:Black;
     font-weight:bold;
 }
@@ -398,6 +413,10 @@ div#quick-news h4.onm-title {
 }
 div#quick-news p.subtitle {
     font-weight:bold;
+}
+
+div#quick-news div.onm-new {
+    margin-bottom:0;
 }
 
 /***********************************************************

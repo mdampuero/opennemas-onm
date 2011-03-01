@@ -115,6 +115,9 @@
 
 
 {block name="footer"}
+    <div class="container_ads">
+        {include file="ads/ad_in_footer.tpl" type1='5' type2='6' nocache}
+    </div>
 <div id="wrapper-footer" class="wrapper clearfix">
     <div class="container clearfix span-24 last">
         <div id="footer" class="">

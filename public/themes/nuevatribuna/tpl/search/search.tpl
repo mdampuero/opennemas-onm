@@ -43,9 +43,8 @@
                         </div><!--title-subtitle-legend-->
                     </div>
 
-
-                    <div id="cse-search-results" style="padding:20px"></div>
-
+                    <div id="cse-search-results" style="padding:20px; width: 100%;"></div>      
+                    
                     <script type="text/javascript">
                         var googleSearchIframeName = "cse-search-results";
                         var googleSearchFormName = "cse-search-box";
@@ -53,7 +52,7 @@
                         var googleSearchDomain = "www.google.es";
                         var googleSearchPath = "/cse";
                     </script>
-
+                    
                     <script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
                 </div>
 
