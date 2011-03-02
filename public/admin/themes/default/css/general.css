@@ -115,7 +115,7 @@ input.disabled { background-color: #F0F0F0; }
 input.button  { cursor: pointer;   }
 
 input:focus,
-textarea:focus { background-color: #ffd }
+textarea:focus { /*background-color: #ffd*/ }
 
 /* -- overall styles ------------------------------ */
 
