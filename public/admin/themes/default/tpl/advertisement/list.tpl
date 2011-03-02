@@ -44,9 +44,9 @@
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}OPINION{/t}</font></a>
             </li>
-            <li>
+<!--            <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}GALLERIES{/t}</font></a>
-            </li>
+            </li>-->
 
             {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>

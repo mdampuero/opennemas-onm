@@ -34,9 +34,9 @@
             <li>
             <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
             </li>
-            <li>
+<!--            <li>
             <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
-            </li>
+            </li>-->
             <script type="text/javascript">
             // <![CDATA[
                 {literal}
