@@ -216,9 +216,9 @@
                 </li>
                 <li>
                 {if isset($advertisement->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '{$smarty.server.PHP_SELF}', 'update', '{$advertisement->id}', 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
                 {else}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '{$smarty.server.PHP_SELF}', 'create', '0', 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
                     <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
                     </a>
