@@ -16,7 +16,7 @@
         escrito por
           {if $opinion->type_opinion eq 0}
         <a class="opinion-author-name" href="/opinions_autor/{$opinion->fk_author}/{$opinion->name|clearslash}.html">{$opinion->name}</a>
-        (<span class="opinion-author-condition">{$opinion->condition|clearslash|truncate:60:"...":"true"}</span>),
+        (<span class="opinion-author-condition">{$opinion->condition|clearslash|truncate:100:"...":"true"}</span>),
           {elseif $opinion->type_opinion eq 2}
         <a class="opinion-author-name" href="/opinions_autor/2/Director.html">El director</a>,
           {else}
