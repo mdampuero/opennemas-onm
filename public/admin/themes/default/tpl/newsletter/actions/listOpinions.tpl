@@ -178,6 +178,7 @@ document.observe('dom:loaded', function() {
 				</div>
 			</td>
 		</tr>
+        <div id="separator"></div>
 	</table>
 
 

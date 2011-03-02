@@ -16,6 +16,7 @@
         $('#sendform').submit(function(event) {
             event.preventDefault();
             $.ajax({
+                    method:'post',
                     url: $(this).attr('action'),
                     data: $(this).serialize(),
                     success: function(xhr, resultado) {
@@ -69,6 +70,7 @@
             </table>
         </form>
     </div>
+    {/if}
 
     {if $smarty.request.action == 'send'}
         <div class="message">{$message} - <a href="javascript:$.facebox.close(); return false;">Pechar esta xanela</a></div>
@@ -76,4 +78,4 @@
         
 </body>
 </html>
-{/if}
+

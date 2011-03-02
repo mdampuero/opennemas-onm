@@ -55,6 +55,7 @@ function buildFilter($filters)
             $fltr[] = '`in_home`=1';
             $fltr[] = '`frontpage`=1';
             $fltr[] = '`content_status`=1';
+            $fltr[] = '`home_placeholder` IS NOT NULL';
             $order_by = 'home_placeholder ASC, home_pos ASC, created DESC';
         } break;
 

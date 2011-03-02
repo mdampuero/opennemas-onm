@@ -161,6 +161,7 @@
 					<ul id="items-list" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
+            
 			<td width="50%">
 				<div id="container2">
 					{* Items selected *}
@@ -168,6 +169,7 @@
 				</div>
 			</td>
 		</tr>
+        <div id="separator"></div>
 	</table>
 
 </div>
