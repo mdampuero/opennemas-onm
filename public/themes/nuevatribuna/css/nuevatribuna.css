@@ -386,9 +386,9 @@ div.second-column div.onm-new:last-child,
 div.third-column div.onm-new:last-child,
 div.onm-new.last { border-bottom:none; } /* Drop border for latest articles in column */
 div.onm-new div.related-content span.res-article { display:none;}
-div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
-div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }
-div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
+div.home div.onm-new.top-firstcol .onm-new-title  { font-size:2.55em; }
+/*div.onm-new.top-secondcol .onm-new-title  { font-family: Arial; font-size:16px; font-weight:bold; }*/
+div.home div.onm-new.top-thirdcol .onm-new-title  { font-size:2.15em; }
 div.onm-new.opinion div.nw-author {
     margin-bottom:3px;
 }

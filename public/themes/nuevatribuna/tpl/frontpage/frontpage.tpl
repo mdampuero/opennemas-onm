@@ -26,7 +26,7 @@
                {include file="base/partials/_frontpage_menu.tpl"}
             </div><!-- #header -->
 
-            <div id="main_content" class="wrapper_content_inside_container span-24">
+            <div id="main_content" class="wrapper_content_inside_container span-24 {$category_name}">
 
                 <div class="span-24">
                     <div class="layout-column span-9 first-column">
