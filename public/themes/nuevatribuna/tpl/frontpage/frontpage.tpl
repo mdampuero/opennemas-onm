@@ -13,7 +13,6 @@
     {include file="internal_widgets/widget_google_analytics.tpl"}
 {/block}
 
-
 {block name="content"}
     <div class="container_ads">
         {include file="ads/ad_in_header.tpl" type1='1' type2='2' nocache}

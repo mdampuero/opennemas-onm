@@ -3,7 +3,7 @@
 
     @theme      Lucidity
 *}
-   
+
     <div class="wrapper_content_inside_container">
         <div class="span-24">
             <div class="footer-categories clearfix">
@@ -38,7 +38,7 @@
             <div class="span-8 last developed-by">
                 Desarrollado por OpenHost con:<br/>
                 <a href="http://www.openhost.es/" title="OpenHost S.L.">
-                    <img src="{$params.IMAGE_DIR}logos/opennemas.png" alt="OpenNemas Framework" />
+                    <img src="{$params.IMAGE_DIR}logos/logo-onm-small.png" alt="OpenNemas Framework" />
                 </a>
             </div>
     

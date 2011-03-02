@@ -48,6 +48,17 @@
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />
 </head>
 <body>
+    {*Definición de la variable 'section_url usada en menu y footer'*}
+    {if preg_match('/videos\.php/',$smarty.server.SCRIPT_NAME)}
+        {assign var='section_url' value='/video/'}
+    {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
+        {assign var='section_url' value='/encuesta/'}
+    {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
+        {assign var='section_url' value='/album/'}
+    {else}
+        {assign var='section_url' value='/seccion/'}
+    {/if}
+
     <div class="container">
     {block name="content"}{/block}
     </div><!-- #container -->

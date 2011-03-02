@@ -2,7 +2,7 @@
     OpenNeMas project
     @theme      Lucidity
 *}
-{if preg_match('/videos\.php/',$smarty.server.SCRIPT_NAME)} {assign var='section_url' value='/video/'} {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)} {assign var='section_url' value='/encuesta/'} {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}{assign var='section_url' value='/album/'}{else}{assign var='section_url' value='/seccion/'} {/if}
+
 <a href="#main_content" class="jump-to-content">Saltar al contenido</a>
 <div id="menu">
     <div id="submenu">
