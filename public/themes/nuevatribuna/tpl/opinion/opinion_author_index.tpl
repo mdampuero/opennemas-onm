@@ -116,7 +116,7 @@
 						{elseif $author_id eq 2}
 							Cartas del <a class="CNombreAuthorLink" href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title="title" id=2}">Director</a>
 						{else}
-							Opiniones de <br>
+							Opinión <br>
 							<a class="CNombreAuthorLink" href="{$smarty.const.SITE_URL}{generate_uri 	content_type="opinion_author_frontpage"
 																													title=$opinions[0]['name']
 																													id=$opinions[0].pk_author}">{$opinions[0]['name']}</a>
@@ -147,7 +147,7 @@
 																						id=$opinions[ac].id
 																						date=$opinions[ac].created
 																						title=$opinions[ac].title
-																						category_name=$author_name}"> Sigua leyendo &raquo; </a></p>
+																						category_name=$author_name}"> Siga leyendo &raquo; </a></p>
 								</div>
 							</div>
 
