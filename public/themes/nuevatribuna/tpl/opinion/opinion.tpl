@@ -71,20 +71,9 @@
     </script>
 {/block}
 
-{block name="footer"}
-<div id="wrapper-footer" class="wrapper clearfix">
-    <div class="container clearfix span-24 last">
-        <div id="footer" class="">
-             {include file="base/partials/_frontpage_footer.tpl"}
-        </div><!-- fin .footer -->
-    </div><!-- fin .container -->
-</div>
-{/block}
-
-
 {block name="content"}
 	<div class="container_ads">
-        {include file="ads/ad_in_header.tpl" type1='1' type2='2' nocache}
+        {include file="ads/ad_in_header.tpl" type1='101' type2='102' nocache}
     </div>
     <div class="wrapper clearfix">
 
@@ -173,4 +162,17 @@
         </div><!-- fin .container -->
 
     </div><!-- fin .wrapper -->
+{/block}
+
+{block name="footer"}
+<div class="container_ads">
+    {include file="ads/ad_in_footer.tpl" type1='109' type2='110' nocache}
+</div>
+<div id="wrapper-footer" class="wrapper clearfix">
+    <div class="container clearfix span-24 last">
+        <div id="footer" class="">
+             {include file="base/partials/_frontpage_footer.tpl"}
+        </div><!-- fin .footer -->
+    </div><!-- fin .container -->
+</div>
 {/block}
