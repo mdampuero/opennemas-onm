@@ -12,6 +12,7 @@ $advertisement = Advertisement::getInstance();
 $positions = array(101, 102, 103, 104, 105, 109, 110);
 
 $banners = $advertisement->getAdvertisements($positions, $category);
+
 if(count($banners<=0)){
  $cm = new ContentManager();
 $banners = $cm->getInTime($banners);

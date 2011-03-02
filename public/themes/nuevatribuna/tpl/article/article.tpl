@@ -32,7 +32,7 @@
 
 {block name="content"}
     <div class="container_ads">
-        {include file="ads/ad_in_header.tpl" type1='1' type2='2' nocache}
+        {include file="ads/ad_in_header.tpl" type1='101' type2='102' nocache}
     </div>
     <div class="wrapper clearfix">
         <div class="container container_with_border">
@@ -106,6 +106,9 @@
 
 
 {block name="footer"}
+<div class="container_ads">
+    {include file="ads/ad_in_footer.tpl" type1='109' type2='110' nocache}
+</div>
 <div id="wrapper-footer" class="wrapper clearfix">
     <div class="container clearfix span-24 last">
         <div id="footer" class="">

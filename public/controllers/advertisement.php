@@ -33,11 +33,6 @@ if (isset($_REQUEST['action'])) {
                 header("Location: $url");
             } else {
                  $advertisement->setNumClics($_GET['publi_id']);
-                // Deshabilitado a petición de Xornal.com
-                /* echo '<script type="text/javascript">
-                    alert(\'No disponible\');
-                    window.close();
-                </script>'; */
                 echo '<script type="text/javascript">window.close();</script>';
             }
         break;
