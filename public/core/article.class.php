@@ -102,7 +102,7 @@ class Article extends Content
             $data['description'] = String_Utils::get_num_words($data['body'], 50);
         }
 
-        $data['subtitle']=mb_strtoupper($data['subtitle'],'UTF-8');
+        $data['subtitle']= $data['subtitle'];
         $data['columns'] = 1;
         $data['home_columns'] = 1;
         $data['available'] = $data['content_status'];
@@ -131,7 +131,7 @@ class Article extends Content
         $this->saveRelated($data['ordenArti'], $this->id, 'set_rel_position');
         $this->saveRelated($data['ordenArtiInt'], $this->id, 'set_rel_position_int');
 
-        return true;
+        return $this->id;
     }
 
     public function saveRelated($data, $id, $method)

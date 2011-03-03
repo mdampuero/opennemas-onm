@@ -1,0 +1,69 @@
+<?php
+
+class ImportHelper {
+    
+    private $logFile = '';
+    
+    public function __construct($params = '')
+    {
+        $this->logFile = $params;
+        spl_autoload_register('ImportHelper::autoload');
+    }
+    
+    static public function autoload($className) {
+        $filename = strtolower($className);
+    
+        $includePaths = explode(':', get_include_path());
+        // Try convert MethodCacheManager to method_cache_manager
+        $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
+    
+        foreach ($includePaths as $path) {
+            if (file_exists($path.DIRECTORY_SEPARATOR.$filename.'.class.php')) {
+                require $path.DIRECTORY_SEPARATOR.$filename.'.class.php';
+            }
+        }
+    }
+
+    
+    public function log($text = null) {
+        if(isset($text) && !is_null($text) ) {
+            $handle = fopen( $this->logFile , "wb");
+            if ($handle) {
+                $datawritten = fwrite($handle, $text);
+                fclose($handle);
+            } else {
+                echo "There was a problem while trying to log your message.";
+            }
+        }
+    }
+    
+    static public function dumpObjectToString($object)
+    {
+        if (is_object($object)) {
+            $reflect = new ReflectionClass($object);
+            $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+            
+            $finalString = '';
+            foreach ($props as $prop) {
+                $finalString .= $prop->getName()."-> ".$object->{$prop}.", ";
+            }
+            return $finalString."\n";
+        } else {
+            return 'no';
+        }
+    }
+    
+    public function messageStatus($text)
+    {
+        system('clear');
+        $date = date('d.m.Y');
+        //$percent = ($total)? floor($current*100/$total): 0;
+        echo sprintf("[%s] %s", $date, $text);
+    }
+    
+    static public function getCmdOpts() {
+    
+        $opts = getopt("t:s:");
+        return $opts;
+    }
+}
