@@ -36,7 +36,7 @@
             </div>
      
             <div class="span-8 last developed-by">
-                Desarrollado por OpenHost con:<br/>
+                Desarrollado por OpenHost con: &nbsp; &nbsp; &nbsp;<br/>
                 <a href="http://www.openhost.es/" title="OpenHost S.L.">
                     <img src="{$params.IMAGE_DIR}logos/logo-onm-small-3.png" alt="OpenNemas Framework" />
                 </a>
