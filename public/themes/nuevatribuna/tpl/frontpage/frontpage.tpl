@@ -9,7 +9,6 @@
 
 {block name='footer-js'}
     {$smarty.block.parent}
-    {insert name="intersticial" type="50"}
     {include file="internal_widgets/widget_google_analytics.tpl"}
 {/block}
 

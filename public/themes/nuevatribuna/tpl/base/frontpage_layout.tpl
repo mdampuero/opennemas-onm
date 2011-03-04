@@ -38,6 +38,7 @@
 	{block name='header-css'}
     {/block}
     {block name="header-js"}
+    {insert name="intersticial" type="50"}
     <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
