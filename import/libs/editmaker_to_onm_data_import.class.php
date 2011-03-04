@@ -1,7 +1,8 @@
 <?php
 class EditmakerToOnmDataImport {
     
-    public $categoriesMatches = array(
+    public $categoriesMatches =
+            array(
                 48 => 13,   // CULTURA Y OCIO
                 45 => 14,   // ECONOMIA
                 55 => 298,  // ENTREVISTAS
@@ -10,7 +11,7 @@ class EditmakerToOnmDataImport {
                 50 => 12,   // MUNDO
                 51 => 296,  // SOCIEDAD
             );
-    public $opinionMatches =
+    public $categoriesOpinion =
             array(
                 39 => 4,     // OPINION
                 59 => 4,     // OPINION
@@ -18,7 +19,9 @@ class EditmakerToOnmDataImport {
                 63 => 4,     // OPINION
                 64 => 4,     // OPINION
                 66 => 4,     // OPINION
-        );
+            );
+            
+    public $matchAuthor = array();
     
     public function __construct ($config = array())
     {
@@ -58,11 +61,9 @@ class EditmakerToOnmDataImport {
         $_sql_where = ' WHERE Seccion IN ('.implode(', ', array_keys($this->categoriesMatches)).") ";
         $_limit = ''; /*'LIMIT 0,1';*/
         
-        
-        $_editmaker_columns_matching = '`Antetit` as ';
         $sql = 'SELECT * FROM noticias'.$_sql_where.' '.$_limit;
         
-        // Fetch the list of Articles available in EditMaker and some statistics
+        // Fetch the list of Articles available in EditMaker
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
         
@@ -100,18 +101,10 @@ class EditmakerToOnmDataImport {
                 $article = new Article();
                 $newArticleID = $article->create($values);
                 if(is_string($newArticleID)) {
-                    // Fetch the list of Articles available in EditMaker and some statistics
-                    $sql_translation_request =
-                            'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`)
-                                                   VALUES (?, ?, ?)';
-                    $translation_values = array($originalArticleID, $newArticleID, 'article');
-                    $translation_ids_request = $GLOBALS['application']->conn->Prepare($sql_translation_request);
-                    $rss = $GLOBALS['application']->conn->Execute($translation_ids_request,
-                                                                  $translation_values);
                     
-                    if (!$rss) {
-                        echo $GLOBALS['application']->conn->ErrorMsg();
-                    }
+                    $ih = new ImportHelper();
+                    $ih->logElementInsert($originalArticleID, $newArticleID, 'author');
+                    
                 }
                 //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
                 sleep(0.12);
@@ -135,11 +128,49 @@ class EditmakerToOnmDataImport {
         
     }
     
-    public function importOpinion()
+    public function importAuthors()
     {
         
+        $sql = 'SELECT * FROM firmantes';
+        
+        // Fetch the list of Articles available in EditMaker and some statistics
+        $request = $this->orig->conn->Prepare($sql);
+        $rs = $this->orig->conn->Execute($request);
+        
+        if (!$rs) {
+            ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
+        } else {
+        
+            $totalRows = $rs->_numOfRows;
+            $authors = $rs->fields;
+            $current = 1;
+            
+            while (!$rs->EOF) {
+                
+                $originalAuthorID = $rs->fields['id'];
+                
+                $values = array(
+                        'name' => iconv("ISO-8859-1", "UTF-8", $rs->fields['nombre']),
+                    );
+                        
+                $author = new Author();
+                $newAuthorID = $author->create($values);
+                if(is_string($newAuthorID)) {
+                    
+                    $ih = new ImportHelper();
+                    $ih->logElementInsert($originalAuthorID, $newAuthorID, 'author');
+                    
+                    $this->matchAuthor[$originalAuthorID] = $newAuthorID;
+                    
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
     }
     
+
     public function importComments()
     {
         

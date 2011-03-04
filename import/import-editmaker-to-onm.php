@@ -29,12 +29,14 @@ $app = Application::load();
 */
 $config_editmaker = array(
                           'bd_host' => 'localhost',
-                          'bd_database' => 'nuevatribuna',
+                          'bd_database' => 'nt-editmaker',
                           'bd_user' => 'root',
-                          'bd_pass' => 'hola' ,
+                          'bd_pass' => '1234' ,
                           'bd_type' => 'mysql' ,
                           );
 
 $migrationHandler = new EditmakerToOnmDataImport($config_editmaker);
-$migrationHandler->importArticles();
+//$migrationHandler->importArticles();
+$migrationHandler->importAuthors();
+//$migrationHandler->importOpinions();
 

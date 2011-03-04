@@ -41,8 +41,8 @@ class Author {
         }
 
         //tabla author_imgs
-		$this->pk_author = $GLOBALS['application']->conn->Insert_ID();
-		$titles = $data['titles'];
+	$this->pk_author = $GLOBALS['application']->conn->Insert_ID();
+	$titles = $data['titles'];
 
      	if($titles) {
             foreach($titles as $atid=>$des) {
@@ -56,7 +56,7 @@ class Author {
             }
 	}
 
-        return(true);
+        return($this->pk_author);
     }
 
     function read($id) {
