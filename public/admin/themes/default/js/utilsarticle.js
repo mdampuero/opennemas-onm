@@ -603,7 +603,7 @@ function search_related(id, metadata,page) {
                     var Nodes = $('thelist2').select('li');
                       for (var i=0;i < Nodes.length;i++) {
                               var id=Nodes[i].getAttribute('id');
-                              if(id){
+                              if(id!=$$('#'+id)){
                                       //var el =$$('#'+id+' input[class="portada"]');
                                       var el =$$('#'+id);
                                      el.each(function(item, index){
@@ -618,7 +618,7 @@ function search_related(id, metadata,page) {
                       var Nodes = $('thelist2int').select('li');
                       for (var i=0;i < Nodes.length;i++) {
                               var id=Nodes[i].getAttribute('id');
-                              if(id){
+                              if(id!=$$('.interior#'+id)){
                                       var el =$$('.interior#'+id);
                                       el.each(function(item, index){
                                                      if(item.getAttribute('class')=='interior'){
