@@ -37,9 +37,21 @@
      
             <div class="span-8 last developed-by">
                 Desarrollado por OpenHost con: &nbsp; &nbsp; &nbsp;<br/>
-                <a href="http://www.openhost.es/" title="OpenHost S.L.">
-                    <img src="{$params.IMAGE_DIR}logos/logo-onm-small-3.png" alt="OpenNemas Framework" />
+
+                <img src ="{$params.IMAGE_DIR}logos/logo-onm-small.png" usemap ="#ohmap" />
+
+                <map name="ohmap">
+                  <area shape="rect" coords="0,0,50,50" href="http://www.openhost.es/" alt="OpenHost S.L." />
+                  <area shape="rect" coords="60,10,195,97" href="http://www.openhost.es/es/opennemas" alt="Opennemas CMS" />
+                </map>
+
+
+<!--                <a style="float:left" href="http://www.openhost.es/" title="OpenHost S.L.">
+                    <img src="{$params.IMAGE_DIR}logos/logo-oh-small.png" alt="OpenNemas Framework" />
                 </a>
+                <a style="float:right" href="http://www.opennemas.com/" title="Opennemas CMS">
+                    <img src="{$params.IMAGE_DIR}logos/logo-onnemas-small.png" alt="OpenNemas Framework" />
+                </a>-->
             </div>
     
         </div>
