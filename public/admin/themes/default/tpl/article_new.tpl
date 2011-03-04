@@ -44,7 +44,7 @@
         </td>
         <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input type="text" id="title" name="title" title="Título de la noticia en portada"
-                value="{$article->title|clearslash|escape:"html"}" class="required" style="width:95%" maxlength="105" onChange="countWords(this,document.getElementById('counter_title'));"
+                value="{$article->title|clearslash|escape:"html"}" class="required" style="width:95%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
 				   onkeyup="countWords(this,document.getElementById('counter_title'))"
 				   {if is_object($article)}
 				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
@@ -207,7 +207,7 @@
         <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
 					value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:95%"
-					maxlength="105"
+					maxlength="256"
 					onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
 					onkeyup="countWords(this,document.getElementById('counter_title_int'))"
 					tabindex="1"/>
