@@ -38,13 +38,13 @@
 	{block name='header-css'}
     {/block}
     {block name="header-js"}
-    {insert name="intersticial" type="50"}
     <script type="text/javascript" src="{$params.JS_DIR}jquery-1.4.1.min.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.cycle.js"></script>
+    {insert name="intersticial" type="50"}
 	{/block}
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />
 </head>

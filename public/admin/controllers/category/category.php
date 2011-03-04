@@ -26,6 +26,14 @@ if (!isset($_REQUEST['page'])) {
      $_REQUEST['page'] = 1;
 }
 
+if(!isset ($_POST['inmenu'])) {
+   $_POST['inmenu'] = 0;
+}
+
+if (!isset($_REQUEST['inmenu'])) {
+    $_REQUEST['inmenu'] = 0;
+}
+
 if( isset($_REQUEST['action']) ) {
 
 	switch($_REQUEST['action']) {
@@ -99,9 +107,11 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'update':
 
-			   $category = new ContentCategory();
-			   $nameFile = $_FILES['logo_path']['name'];
-			   if(!empty($nameFile)){
+               $category = new ContentCategory();
+               $nameFile = $_FILES['logo_path']['name'];
+			   if(!empty($nameFile)){if(!isset ($_POST['inmenu'])) {
+                   $_POST['inmenu']=0;
+               }
 					$uploaddir="../media/sections/".$nameFile;
 					if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
 						 $_REQUEST['logo_path'] = $nameFile;
@@ -109,12 +119,13 @@ if( isset($_REQUEST['action']) ) {
 						 $_REQUEST['logo_path'] ='';
 					}
 			   }
-			   
-			   if(!isset($_REQUEST['inmenu'])) {
-					$_REQUEST['inmenu'] = 0;
-			   }
-			   
+              
 			   $category->update( $_REQUEST );
+               
+               /* Limpiar la cache de portada de todas las categorias */
+               if(isset ($_REQUEST['inmenu']) && $_REQUEST['inmenu']==1) {
+                   $refresh = Content::refreshFrontpageForAllCategories();                   
+               }
 
 			   Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
@@ -122,17 +133,21 @@ if( isset($_REQUEST['action']) ) {
 
 		  case 'create':
 
-			   $category = new ContentCategory();
-						   $nameFile = $_FILES['logo_path']['name'];
-						   $uploaddir="../media/sections/".$nameFile;
+               $category = new ContentCategory();
+               $nameFile = $_FILES['logo_path']['name'];
+               $uploaddir="../media/sections/".$nameFile;
 
-						   if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-							   $_POST['logo_path'] = $nameFile;
-						   }else{
-								$_POST['logo_path'] ='';
-						   }
-
+               if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                   $_POST['logo_path'] = $nameFile;
+               }else{
+                    $_POST['logo_path'] ='';
+               }
+               
 			   if($men = $category->create( $_POST )) {
+                   /* Limpiar la cache de portada de todas las categorias */
+                   if($_POST['inmenu']==1) {
+                       $refresh = Content::refreshFrontpageForAllCategories();
+                   }
 				   Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$men);
 			   } else {
 				   $tpl->assign('errors', $category->errors);
@@ -183,13 +198,24 @@ if( isset($_REQUEST['action']) ) {
 				  $_POST['logo_path'] = '';
 				  $_REQUEST['logo_path'] = '';
 			   }
-			   if(empty($_POST["id"])) {
-					   $category = new ContentCategory();
-					   if(!$category->create( $_POST ))
-					   $tpl->assign('errors', $category->errors);
+
+			   if(empty($_POST['id'])) {
+                   $category = new ContentCategory();
+                   if(!$category->create( $_POST )) {
+                       $tpl->assign('errors', $category->errors);
+                   }else{
+                       /* Limpiar la cache de portada de todas las categorias */
+                       if($_POST['inmenu']==1) {
+                           $refresh = Content::refreshFrontpageForAllCategories();
+                       }
+                   }
 			   } else {
-					   $category = new ContentCategory();
-					   $category->update( $_REQUEST );
+                   $category = new ContentCategory();
+                   $category->update( $_REQUEST );
+                   /* Limpiar la cache de portada de todas las categorias */
+                   if(isset ($_REQUEST['inmenu']) && $_REQUEST['inmenu']==1) {
+                       $refresh = Content::refreshFrontpageForAllCategories();
+                   }
 			   }
 
 			   Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$category->pk_content_category);

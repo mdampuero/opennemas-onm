@@ -80,7 +80,7 @@
                             {$num_sub_contents[su].advertisements|default:0}</a>
                         </td>
                         <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
-                            {if $subcategory[su]->inmenu==1}
+                            {if $subcategorys[su]->inmenu==1}
                                 <a href="?id={$subcategorys[su]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
                                     <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
                             {else}
