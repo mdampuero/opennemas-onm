@@ -109,16 +109,15 @@ if( isset($_REQUEST['action']) ) {
 
                $category = new ContentCategory();
                $nameFile = $_FILES['logo_path']['name'];
-			   if(!empty($nameFile)){if(!isset ($_POST['inmenu'])) {
-                   $_POST['inmenu']=0;
+               if(!empty($nameFile)){
+                   
+                  $uploaddir="../media/sections/".$nameFile;
+                  if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                      $_REQUEST['logo_path'] = $nameFile;
+                  }else{
+                      $_REQUEST['logo_path'] ='';
+                  }
                }
-					$uploaddir="../media/sections/".$nameFile;
-					if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-						 $_REQUEST['logo_path'] = $nameFile;
-					}else{
-						 $_REQUEST['logo_path'] ='';
-					}
-			   }
               
 			   $category->update( $_REQUEST );
                
