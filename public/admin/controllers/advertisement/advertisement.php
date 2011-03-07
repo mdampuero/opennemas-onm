@@ -224,15 +224,19 @@ if( isset($_REQUEST['action']) ) {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
+            
+            
+            $_REQUEST['publisher'] = $_SESSION['userid'];
+            $firstCategory = $_REQUEST['category'][0];
+            $_REQUEST['category'] = implode(',', $_REQUEST['category']);
 
             $advertisement = new Advertisement();
-            $_POST['publisher'] = $_SESSION['userid'];
-            if($advertisement->create( $_POST )) {
+            if($advertisement->create( $_REQUEST )) {
                 if($_SESSION['desde']=='index_portada') {
                     Application::forward('index.php');
                 }
 
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$firstCategory.'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
             } else {
                 $tpl->assign('errors', $advertisement->errors);
             }

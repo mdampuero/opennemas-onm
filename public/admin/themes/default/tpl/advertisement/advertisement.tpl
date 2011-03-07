@@ -447,8 +447,8 @@
                                 {/section}
                             {/section}
                         {else}
-                            <option value="0">{t}Frontpage{/t}</option>
-                            <option value="4" {if $category eq 4}selected="selected"{/if}>{t}Opinion{/t}</option>
+                            <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                            <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                             <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
