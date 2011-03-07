@@ -85,7 +85,7 @@ $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
 
 // Get filter and uri with params of list (query_string), remember don't assign to template $params
-list($filter, $query_string) = buildFilter('fk_content_categories=' . $_REQUEST['category']);
+list($filter, $query_string) = buildFilter('fk_content_categories LIKE \'%' . $_REQUEST['category'] . '%\'');
 $tpl->assign('query_string', $query_string);
 
 if( isset($_REQUEST['action']) ) {
@@ -128,23 +128,17 @@ if( isset($_REQUEST['action']) ) {
         } break;
 
         case 'new':
+            
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
 
-            //Noticias relacionadas
             $cm = new ContentManager();
             $photos = $cm->find_by_category('Photo', 2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo) {
-                //if(file_exists(MEDIA_IMG_PATH . $photo->path_file . $photo->name)) {
-                    $photo->content_status = 1;
-                    $ph = new Photo($photo->pk_photo);
-                    $ph->set_status(1, $_SESSION['userid']);
-                //} else {
-                //    $photo->content_status = 0;
-                //    $ph = new Photo($photo->pk_photo);
-                //    $ph->set_status(0,$_SESSION['userid']);
-                //}
+                $photo->content_status = 1;
+                $ph = new Photo($photo->pk_photo);
+                $ph->set_status(1, $_SESSION['userid']);
             }
 
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
@@ -173,6 +167,7 @@ if( isset($_REQUEST['action']) ) {
             }
 
             $advertisement = new Advertisement( $_REQUEST['id'] );
+            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
             $tpl->assign('advertisement', $advertisement);
 
             $adv = $advertisement->img;
@@ -187,16 +182,9 @@ if( isset($_REQUEST['action']) ) {
 
             $photos = $cm->find_by_category('Photo',2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo){
-                //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
-                    $photo->content_status = 1;
-                    $ph = new Photo($photo->pk_photo);
-                    $ph->set_status(1,$_SESSION['userid']);
-                //} else {
-                //    //echo MEDIA_IMG_PATH.$photo->path_file.$photo->name."<br>";
-                //    $photo->content_status=0;
-                //    $ph=new Photo($photo->pk_photo);
-                //    $ph->set_status(0,$_SESSION['userid']);
-                //}
+                $photo->content_status = 1;
+                $ph = new Photo($photo->pk_photo);
+                $ph->set_status(1,$_SESSION['userid']);
             }
 
             $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
@@ -257,6 +245,8 @@ if( isset($_REQUEST['action']) ) {
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
+            $firstCategory = $_REQUEST['category'][0];
+            $_REQUEST['category'] = implode(',', $_REQUEST['category']);
 
             $advertisement = new Advertisement();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
@@ -267,7 +257,7 @@ if( isset($_REQUEST['action']) ) {
                 Application::forward('index.php');
             }
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$firstCategory.'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
         } break;
 
         case 'validate': {

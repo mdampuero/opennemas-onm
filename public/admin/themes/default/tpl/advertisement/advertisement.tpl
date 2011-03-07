@@ -429,7 +429,24 @@
                         <label for="category">{t}Section{/t}</label>
                     </td>
                     <td valign="top" style="height:20px;padding:4px;">
-                        <select name="category" id="category" class="required">
+                        <select name="category[]" id="category" class="required" multiple>
+                        {if $smarty.request.action eq "read"}
+                            <option value="0">{t}Frontpage{/t}</option>
+                            <option value="4" {if in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+                            <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
+                            {section name=as loop=$allcategorys}
+                                <option value="{$allcategorys[as]->pk_content_category}"
+                                    {if in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                    {$allcategorys[as]->title}
+                                </option>
+                                {section name=su loop=$subcat[as]}
+                                    <option value="{$subcat[as][su]->pk_content_category}"
+                                        {if in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
+                                    </option>
+                                {/section}
+                            {/section}
+                        {else}
                             <option value="0">{t}Frontpage{/t}</option>
                             <option value="4" {if $category eq 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                             <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
@@ -445,6 +462,8 @@
                                     </option>
                                 {/section}
                             {/section}
+                        {/if}
+                            
                         </select>
                     </td>
                 </tr>

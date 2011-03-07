@@ -38,24 +38,24 @@ class Advertisement extends Content
         5 => "Bottom Left LeaderBoard",
         6 => "Bottom Right LeaderBoard",
 		
-		11 => "Button Colunm 1 Position 1",
-		12 => "Button Colunm 1 Position 2",
-		13 => "Button Colunm 1 Position 3",
-		14 => "Button Colunm 1 Position 4",
-		15 => "Button Colunm 1 Position 5",
-		16 => "Button Colunm 1 Position 6",
-		
-		21 => "Button Colunm 2 Position 1",
-		22 => "Button Colunm 2 Position 2",
-		24 => "Button Colunm 2 Position 4",
-		25 => "Button Colunm 2 Position 5",
-		
-		31 => "Button Colunm 3 Position 1",
-		32 => "Button Colunm 3 Position 2",
-		33 => "Button Colunm 3 Position 3",
-		34 => "Button Colunm 3 Position 4",
-		35 => "Button Colunm 3 Position 5",
-		36 => "Button Colunm 3 Position 6",
+	11 => "Button Colunm 1 Position 1",
+	12 => "Button Colunm 1 Position 2",
+	13 => "Button Colunm 1 Position 3",
+	14 => "Button Colunm 1 Position 4",
+	15 => "Button Colunm 1 Position 5",
+	16 => "Button Colunm 1 Position 6",
+	
+	21 => "Button Colunm 2 Position 1",
+	22 => "Button Colunm 2 Position 2",
+	24 => "Button Colunm 2 Position 4",
+	25 => "Button Colunm 2 Position 5",
+	
+	31 => "Button Colunm 3 Position 1",
+	32 => "Button Colunm 3 Position 2",
+	33 => "Button Colunm 3 Position 3",
+	34 => "Button Colunm 3 Position 4",
+	35 => "Button Colunm 3 Position 5",
+	36 => "Button Colunm 3 Position 6",
 		
 
         /* Intersticial banner noticia interior */
@@ -478,7 +478,7 @@ class Advertisement extends Content
             $cm = new ContentManager();
             if($category!=0) {
                 $rsBanner = $cm->find('Advertisement', ' type_advertisement IN ('.$types.') AND available=1 AND
-                                                    (fk_content_categories='.$category.' OR fk_content_categories=0)',
+                                                    (fk_content_categories LIKE \'%'.$category.'%\' OR fk_content_categories=0)',
                                         'ORDER BY type_advertisement, created');
             } else {
                 $rsBanner = $cm->find('Advertisement', ' type_advertisement IN ('.$types.') AND available=1 AND
@@ -489,17 +489,29 @@ class Advertisement extends Content
             // $advertisements is an array of banners, grouped by advertisement type
             $advertisements = array();
             foreach($rsBanner as $adv) {
+		
+		$adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+		
+		if(!in_array($category, $adv->fk_content_categories)
+		   && $adv->fk_content_categories != array(0))
+		{
+		    continue;
+		}
+		
+		
                 if(!isset($advertisements[$adv->type_advertisement])) {
                     $advertisements[$adv->type_advertisement] = array();
                 }
-
+		
+		
                 // Colocar primeiro os da propia sección
-                if($adv->fk_content_categories == 0) {
+                if($adv->fk_content_categories == array(0)) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
                 } else {
                     array_unshift($advertisements[$adv->type_advertisement], $adv);
                 }
-            }
+		
+            }	    
 
             // Perform operations for each advertisement type
             foreach($advertisements as $type_advertisement => $advs) {
