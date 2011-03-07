@@ -431,7 +431,7 @@
                     <td valign="top" style="height:20px;padding:4px;">
                         <select name="category[]" id="category" class="required" multiple>
                         {if $smarty.request.action eq "read"}
-                            <option value="0">{t}Frontpage{/t}</option>
+                            <option value="0" {if in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                             <option value="4" {if in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
                             <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
                             {section name=as loop=$allcategorys}
