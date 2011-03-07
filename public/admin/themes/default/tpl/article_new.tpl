@@ -127,8 +127,8 @@
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
 							<select name="content_status" id="content_status" class="required">
-								<option value="0" {if $article->content_status eq 0}selected="selected"{/if}>Si</option>
-								<option value="1" {if $article->content_status eq 1}selected="selected"{/if}>No</option>
+								<option value="0" {if $article->content_status eq 0}selected="selected"{/if}>{t}Yes{/t}</option>
+								<option value="1" {if $article->content_status eq 1}selected="selected"{/if}>{t}No{/t}</option>
 							</select>
 							{* <input type="hidden" id="content_status" name="content_status"  value="{$article->content_status}" /> *}
 
