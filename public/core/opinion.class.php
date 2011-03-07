@@ -106,7 +106,7 @@ class Opinion extends Content {
            return(false);
         }
 
-       return(true);
+       return($this->id);
     }
 
     function read($id) {

@@ -21,7 +21,7 @@ class EditmakerToOnmDataImport {
                 66 => 4,     // OPINION
             );
             
-    public $matchAuthor = array();
+    public $matchAuthors = array();
     
     public function __construct ($config = array())
     {
@@ -59,13 +59,17 @@ class EditmakerToOnmDataImport {
     {
         
         $_sql_where = ' WHERE Seccion IN ('.implode(', ', array_keys($this->categoriesMatches)).") ";
-        $_limit = ''; /*'LIMIT 0,1';*/
+        $_limit = /*'';*/ 'LIMIT 0,1';
         
         $sql = 'SELECT * FROM noticias'.$_sql_where.' '.$_limit;
+        
+        echo "Before read the original database...\n";
         
         // Fetch the list of Articles available in EditMaker
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
+
+        echo "After read the original database...\n";
         
         if (!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
@@ -104,9 +108,10 @@ class EditmakerToOnmDataImport {
                     
                     $ih = new ImportHelper();
                     $ih->logElementInsert($originalArticleID, $newArticleID, 'author');
+                    $ih->updateViews($newArticleID, $rs->fields['views']);
                     
                 }
-                //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
+                ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
                 sleep(0.12);
                 $current++;
                 
@@ -123,13 +128,90 @@ class EditmakerToOnmDataImport {
                 $rs->MoveNext();
             }
             $rs->Close(); # optional
-             
+            
         }
+        
+    }
+    
+    public function importOpinions()
+    {
+        $sql = "SELECT * FROM translation_ids WHERE type='author'";
+        
+        // Fetch the list of Articles available in EditMaker and some statistics
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($request);
+        
+        if (!$rs) {
+            ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
+        } else {
+            while (!$rs->EOF) {
+                
+                $this->matchAuthors[$rs->fields['pk_content_old']] = $rs->fields['pk_content'];
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+        
+
+        // Getting the 
+        $_filter_by_section = ' Seccion IN ('.implode(', ', array_keys($this->categoriesOpinion)).") ";
+        $sql = 'SELECT noticias.id, noticias.Antetit, noticias.Titulo,
+                noticias.Subtit, noticias.Entrad, noticias.Texto,
+                noticias.seccion, noticias.visitas, noticias.fecha,
+                firmantes.id as firmante_id, firmantes.nombre as firmante_nombre
+                FROM `noticias`, `noti_firma`, firmantes
+                WHERE '
+                .$_filter_by_section
+                .' AND noti_firma.id_firma = firmantes.id
+                   AND noti_firma.id_noti = noticias.id';
+        // Fetch the list of Opinions available for one author in EditMaker
+        $request = $this->orig->conn->Prepare($sql);
+        $rs = $this->orig->conn->Execute($request);
+        
+        
+        if(!$rs) {
+            ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
+        } else {
+            while (!$rs->EOF) {
+                
+                $originalOpinionID = $rs->fields['id'];
+                
+                $values =
+                    array(
+                        'title' => $rs->fields['Titulo'],
+                        'category' => 'opinion',
+                        'body' => $rs->fields['Texto'],
+                        'type_opinion' => '0',
+                        'metadata' => String_Utils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
+                        'views' => $rs->fields['visitas'],
+                        'created' => $rs->fields['fecha'],
+                        'fk_author' => $this->matchAuthors[$rs->fields['firmante_id']],
+                        'publisher' => 112,
+                        'available' => 1,
+                        'with_comment' => 1,
+                        'in_home' => 0,
+                    );
+                    
+                $opinion = new Opinion();
+                $newOpinionID = $opinion->create($values);
+                if(is_string($newOpinionID)) {
+                    $ih = new ImportHelper();
+                    $ih->logElementInsert($originalOpinionID, $newOpinionID, 'opinion');
+                    $ih->updateViews($newOpinionID,$rs->fields['visitas']);
+                }
+                
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional           
+        }
+        
         
     }
     
     public function importAuthors()
     {
+        
         
         $sql = 'SELECT * FROM firmantes';
         
@@ -172,6 +254,11 @@ class EditmakerToOnmDataImport {
     
 
     public function importComments()
+    {
+        
+    }
+    
+    private function loadAuthors()
     {
         
     }

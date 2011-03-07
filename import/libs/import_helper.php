@@ -53,6 +53,24 @@ class ImportHelper {
         }
     }
     
+    public function updateViews($contentID, $views)
+    {
+        if(isset($contentID) && isset($views)) {
+            $sql = 'UPDATE `contents` SET `views`=? WHERE pk_content=?';
+            
+            $values = array($contentID, $views);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            }
+            
+        } else {
+            echo "Please provide a contentID and views to update it.";
+        }
+    }
+    
     static public function dumpObjectToString($object)
     {
         if (is_object($object)) {
