@@ -169,6 +169,62 @@ div.widget-latest-opinions li.last {
 }
 
 /***********************************************************
+   Widget latest opinions definition
+************************************************************/
+div.widget-latest-opinions-clean {
+    font-size:13px;
+    width:100%;
+    margin-bottom:10px;
+}
+
+div.widget-latest-opinions-clean .widget-header {
+    color:#666;
+    font-family:Arial;
+    text-transform:uppercase;
+    font-size:1.1em;
+    border-bottom:1px dotted #ccc;
+}
+
+div.widget-latest-opinions-clean .widget-header img {
+    display:inline;
+}
+
+div.widget-latest-opinions-clean div.widget-header span {
+    padding-bottom:3px;
+}
+
+div.widget-latest-opinions-clean ul {
+    margin:0;
+}
+div.widget-latest-opinions-clean ul h5{
+    margin:0;
+    font-weight:bold;
+}
+
+div.widget-latest-opinions-clean ul h5 a{
+    color:Black;
+}
+div.widget-latest-opinions-clean ul a{
+    color:#666;
+}
+
+div.widget-latest-opinions-clean li {
+    border-bottom:1px dotted #ccc;
+    list-style:none;
+    padding:3px;
+}
+
+div.widget-latest-opinions-clean li.last {
+    border-bottom:none;
+}
+div.widget-latest-opinions-clean .more {
+    text-align:right;
+    width:100%;
+    margin-bottom:10px;
+}
+
+
+/***********************************************************
    Widget latest interviews definition
 ************************************************************/
 div.widget-latest-interviews {

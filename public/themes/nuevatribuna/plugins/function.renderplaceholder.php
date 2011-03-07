@@ -20,6 +20,7 @@ function smarty_function_renderplaceholder($params, &$smarty) {
     $caching = $smarty->caching;
     $smarty->caching = 0;
     if(isset($items) && count($items>0)){
+        $iteration = 0;
         foreach($items as $i => $item) {
 
             if( $item->{$placeholder_property} == $placeholder && ($item->available == 1) ) {
@@ -34,15 +35,20 @@ function smarty_function_renderplaceholder($params, &$smarty) {
                     $smarty->clearAssign($varname);
                     $smarty->assign($varname, $items[$i]);
                     $smarty->clearAssign('cssclass');
-                    $smarty->assign('cssclass', $cssclass);
+                    if($iteration == 0) {
+                        $smarty->assign('cssclass', $cssclass);
+                    }
                     //$outputHTML .= "Position: ".$item->position;
                     $outputHTML .= "\n". $smarty->fetch( $tpl, md5(serialize($item)) );
                     //$outputHTML .= $item->content_type."<br>";
                 }
+                
+                $iteration++;
 
             }
 
         }
+        unset($iteration);
     }
 
     $smarty->caching = $caching;
