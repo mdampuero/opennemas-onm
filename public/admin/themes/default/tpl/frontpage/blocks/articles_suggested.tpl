@@ -30,10 +30,10 @@
                                         <a href="?id={$suggestedArticles[d]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}"  title="No sugerir en home"  alt="No sugerir en home">
                                               <img class="inhome" src="{$params.IMAGE_DIR}gohome.png" border="0" alt="Publicado en home" title="Publicado en home"/>
                                               </a>
-                                        {*elseif $suggestedArticles[d]->in_home == 2}
+                                        {elseif $suggestedArticles[d]->in_home == 2}
                                             <a href="?id={$suggestedArticles[d]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}"  title="No sugerir en home"  alt="No sugerir en home">
                                             <img class="inhome" src="{$params.IMAGE_DIR}gosuggesthome.png" border="0" title="No sugerir en home" alt="No sugerir en home"/></a>
-                                        *}{else}
+                                        {else}
                                             <a href="?id={$suggestedArticles[d]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Sugerir en home" alt="Sugerir en home"></a>
                                         {/if}
                                     </div>

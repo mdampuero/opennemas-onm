@@ -628,14 +628,14 @@ if(isset($_REQUEST['action']) ) {
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
             $article->update( $_REQUEST );
 
-             if( $_SESSION['_from']=='search_advanced'){
-                 if($_GET['stringSearch']){
-                  Application::forward('search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
-                 }else{
-                     $_SESSION['desde']='list';
-                     $_SESSION['_from']='home';
-                 }
-             }
+            if( $_SESSION['_from']=='search_advanced'){
+                if($_GET['stringSearch']){
+                 Application::forward('search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+                }else{
+                    $_SESSION['desde']='list';
+                    $_SESSION['_from']='home';
+                }
+            }
             if($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
             }
@@ -861,10 +861,10 @@ if(isset($_REQUEST['action']) ) {
             // FIXME: evitar otros valores erróneos
             $status = array($_REQUEST['status'], $_REQUEST['id']); // Evitar otros valores
             $article->set_inhome($status,$_SESSION['userid']);
-            if($_REQUEST['status']==1){
-                $_home[] = array(105, 'placeholder_0_1',$_REQUEST['id']);
-                $article->set_home_position($_home, $_SESSION['userid']);
-            }
+            //if($_REQUEST['status']==1){
+            //    $_home[] = array(105, 'placeholder_0_1',$_REQUEST['id']);
+            //    $article->set_home_position($_home, $_SESSION['userid']);
+            //}
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         break;
 

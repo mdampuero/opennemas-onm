@@ -843,7 +843,7 @@ class Content {
         }
 
         $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE `contents` SET `in_home`=?, `home_pos`=20 WHERE `pk_content`=?');
+            Prepare('UPDATE `contents` SET `in_home`=? WHERE `pk_content`=?');
 
         if(!is_array($status)) {
             $values = array($status, $this->id);
