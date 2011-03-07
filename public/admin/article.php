@@ -157,7 +157,7 @@ if(isset($_REQUEST['action']) ) {
     
             if(count($contents_excluded_for_proposed) >0) {
                 $opinions_excluded = implode(', ', $contents_excluded_for_proposed);
-                $sql_excluded_opinions = ' && `pk_opinion` NOT IN ('.$opinions_excluded.')';
+                $sql_excluded_opinions = ' AND `pk_opinion` NOT IN ('.$opinions_excluded.')';
             } else {
                 $sql_excluded_opinions = ' AND 1 = 1';
             }
@@ -165,7 +165,7 @@ if(isset($_REQUEST['action']) ) {
             $opinions = $cm->find('Opinion',
                                   'contents.available = 1'
                                   .$sql_excluded_opinions
-                                  ,' ORDER BY created');
+                                  ,' ORDER BY created LIMIT 0,16');
             
             $rating = new Rating();
             foreach($opinions as $opinion) {
@@ -176,14 +176,14 @@ if(isset($_REQUEST['action']) ) {
             
             if(count($contents_excluded_for_proposed) >0) {
                 $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
-                $sql_excluded_widgets = ' && `pk_widget` NOT IN ('.$widgets_excluded.')';
+                $sql_excluded_widgets = ' AND `pk_widget` NOT IN ('.$widgets_excluded.')';
             } else {
                 $sql_excluded_widgets  = ' AND 1 = 1';
             }
             
             $widgets = $cm->find('Widget',
                                  'fk_content_type=12 AND `available`=1 '
-                                 .$sql_excluded_opinions,
+                                 .$sql_excluded_widgets,
                                  'ORDER BY created DESC ');
             
             $tpl->assign('widgets', $widgets);
