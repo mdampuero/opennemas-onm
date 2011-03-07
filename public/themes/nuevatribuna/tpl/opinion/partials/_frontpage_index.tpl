@@ -45,7 +45,7 @@
         <div class="span-16 clearfix">
             {section name=ac loop=$opinions start=0}
 
-            <div style="padding:10px;">
+            <div style="padding:5px 10px;" class="opinion clearfix">
 
                 {if $opinions[ac].path_img}
                     <div class="avatar-author span-2">
@@ -54,7 +54,7 @@
                         </a>
                     </div>
                 {/if}
-                <div class="opinion-listing-colaborators-post span-13 last">
+                <div class="opinion-listing-colaborators-post {if $opinions[ac].path_img}span-14{else}span-16{/if} last clearfix">
                     <h4 class="author-name"><a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac].name id=$opinions[ac].pk_author}">{$opinions[ac].name}</a></h4>
                     <span class="post-date">{$opinions[ac].created|date_format:"%d.%m.%Y"}</span> | 
                     <strong><a class="post-name" href="{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"

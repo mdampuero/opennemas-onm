@@ -36,7 +36,6 @@ div.opinion-listing-director > div{
 }
 div.opinion-listing-colaborators > div{
     padding:0;
-    padding-top:10px;
 }
 
 div.opinion-listing-colaborators div.avatar-author{
@@ -69,8 +68,8 @@ div.opinion-listing-colaborators-post a{
 }
 
 div.opinion-listing-colaborators-post h4.author-name{
-    margin-bottom:5px;
-    margin-top:5px;
+    margin-bottom:0px;
+    margin-top:0px;
 }
 
 div.opinion-listing-colaborators-post h4.author-name a{
