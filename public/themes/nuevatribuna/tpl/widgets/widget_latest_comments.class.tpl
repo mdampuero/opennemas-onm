@@ -1,5 +1,6 @@
 <div class="widget-latest-comments widget-latest-comments-wrapper clearfix">
     <div class="widget-header">
+        <img src="{$params.IMAGE_DIR}/logos/nuevatribuna-square.png" alt="Opiniones Nueva Tribuna" /> 
         <span>Últimos articulos comentados</span>
     </div>
     <div class="widget-content">
@@ -10,7 +11,7 @@
             </li>
             {sectionelse}
             <li>
-                En estos momentos no tenemos opiniones.
+                No hay se ha realizado ningún comentario ultimamente. Sea el primero! Vaya a una noticia y deje su opinion.
             </li>
             {/section}
         </ul>
