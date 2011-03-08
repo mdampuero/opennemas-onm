@@ -1,7 +1,7 @@
 {extends file='base/frontpage_layout.tpl'}
 
 {block name='meta'}
-    <title>{if !empty($category_real_name)}{$category_real_name|clearslash|capitalize} - {/if}{if !empty($subcategory_real_name)} {$subcategory_real_name|clearslash|capitalize} - {/if}{$smarty.const.SITE_TITLE}</title>
+    <title>{if !empty($category_real_name)}{$category_real_name|clearslash} - {/if}{if !empty($subcategory_real_name)} {$subcategory_real_name|clearslash} - {/if}{$smarty.const.SITE_TITLE}</title>
     <meta name="keywords" content="{$smarty.const.SITE_KEYWORDS}" />
     <meta name="description" content="{$smarty.const.SITE_DESCRIPTION}" />
 {/block}

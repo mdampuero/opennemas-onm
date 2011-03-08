@@ -3,17 +3,16 @@
 
 //TODO: revisar (index.php repeat code )
 
- 
 $category_name = (isset($category_name)) ? $category_name : null;
 $subcategory_name = (isset($subcategory_name)) ? $subcategory_name : null;
 $category = $ccm->get_id($category_name);
 $tpl->assign('category', $category);
 $tpl->assign('category_name', $category_name);
-$tpl->assign('category_real_name', $ccm->get_title($category_name));
+$tpl->assign('category_real_name', ucfirst(mb_strtolower(($ccm->get_title($category_name)),"UTF-8")));
 $subcategory = $ccm->get_id($subcategory_name);
 $tpl->assign('subcategory', $subcategory);
 $tpl->assign('subcategory_name', $subcategory_name);
-$tpl->assign('subcategory_real_name', $ccm->get_title($subcategory_name));
+$tpl->assign('subcategory_real_name', ucfirst(mb_strtolower(($ccm->get_title($subcategory_name)),"UTF-8")));
 
 if (preg_match('/videos\.php/', $_SERVER['SCRIPT_NAME'])) {
 
