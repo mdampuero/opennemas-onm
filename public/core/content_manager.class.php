@@ -699,9 +699,37 @@ class ContentManager
 
         return $articles;
     }
+    
+    public function getLatestComments()
+    {
+        $sql = 'SELECT *
+                FROM contents
+                WHERE contents.pk_content IN
+                      (SELECT fk_content
+                       FROM `comments`,contents
+                       WHERE comments.pk_comment = contents.pk_content
+                       ORDER BY contents.created DESC)
+                LIMIT 0,6';
+        $contents = array();
+                
+        
+        $latestCommenteContentSQL = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($latestCommenteContentSQL);
+        if (!$rs) {
+            //echo $GLOBALS['application']->conn->ErrorMsg();
+        } else {
+            while (!$rs->EOF) {
+                $contents []= $rs->fields['pk_content'];
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+        
+        return $contents;   
+    }
 
 
-/*****************************************************************************/
+    /*****************************************************************************/
      /**
      * This function returns an array of objects all types of the most viewed in the last few days indicated.
      * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false

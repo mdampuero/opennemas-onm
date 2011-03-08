@@ -165,7 +165,7 @@ if(isset($_REQUEST['action']) ) {
             $opinions = $cm->find('Opinion',
                                   'contents.available = 1'
                                   .$sql_excluded_opinions
-                                  ,' ORDER BY created LIMIT 0,16');
+                                  ,' ORDER BY created DESC LIMIT 0,16');
             
             $rating = new Rating();
             foreach($opinions as $opinion) {

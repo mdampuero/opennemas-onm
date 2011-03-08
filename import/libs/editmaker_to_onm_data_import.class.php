@@ -69,7 +69,6 @@ class EditmakerToOnmDataImport {
         $request = $this->orig->conn->Prepare($sql);
         $rs = $this->orig->conn->Execute($request);
 
-        echo "After read the original database...\n";
         
         if (!$rs) {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
@@ -80,6 +79,11 @@ class EditmakerToOnmDataImport {
             $current = 1;
             
             while (!$rs->EOF) {
+                
+                if ($ih->elementIsImported($rs->fields['id'], 'article') ) {
+                    echo "Article with id {$rs->fields['id']} already imported";
+                    continue;
+                }
                 
                 $originalArticleID = $rs->fields['id'];
                 
@@ -116,15 +120,6 @@ class EditmakerToOnmDataImport {
                 $current++;
                 
                 
-                //$article->set_numViews();
-                //$article['views'] = $rs->fields['visitas'];
-                //
-                //$sql =  'UPDATE `contents` SET `views`='.$article['views'].' '
-                //    .'WHERE `available`=1 AND `pk_content`='.$lastStoredArticleID;
-                //    
-                //    $article['created'] = $rs->fields['fecha'];
-                //
-                //
                 $rs->MoveNext();
             }
             $rs->Close(); # optional
@@ -173,6 +168,11 @@ class EditmakerToOnmDataImport {
             ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
         } else {
             while (!$rs->EOF) {
+                
+                if ($ih->elementIsImported($rs->fields['id'], 'opinion') ) {
+                    echo "Opinion with id {$rs->fields['id']} already imported";
+                    continue;
+                }
                 
                 $originalOpinionID = $rs->fields['id'];
                 
@@ -229,6 +229,11 @@ class EditmakerToOnmDataImport {
             
             while (!$rs->EOF) {
                 
+                if ($ih->elementIsImported($rs->fields['id'], 'author') ) {
+                    echo "Author with id {$rs->fields['id']} already imported";
+                    continue;
+                }
+                
                 $originalAuthorID = $rs->fields['id'];
                 
                 $values = array(
@@ -258,8 +263,4 @@ class EditmakerToOnmDataImport {
         
     }
     
-    private function loadAuthors()
-    {
-        
-    }
 }

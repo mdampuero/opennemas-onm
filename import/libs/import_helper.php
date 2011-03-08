@@ -71,6 +71,26 @@ class ImportHelper {
         }
     }
     
+    public function elementIsImported($contentID, $contentType)
+    {
+        if(isset($contentID) && isset($contentType)) {
+            $sql = 'SELECT * FROM `translations_ids` WHERE `pk_content_old`=? AND type=?';
+            
+            $values = array($contentID, $contentType);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                return ($rss->_numOfRows >= 1);
+            }
+            
+        } else {
+            echo "Please provide a contentID and views to update it.";
+        }
+    }
+    
     static public function dumpObjectToString($object)
     {
         if (is_object($object)) {
