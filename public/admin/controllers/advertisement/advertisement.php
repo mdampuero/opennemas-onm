@@ -96,7 +96,7 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('map', $map);
 
             // Filters
-            $map = array('-1' => _("--Todos--")) + $map;
+            $map = array('-1' => _("--All--")) + $map;
             $filter_options['type_advertisement'] = $map;
             $filter_options['available'] = array('-1' => _("-- All --"), '0' => _("No published"), '1' => _("Published"));
             $filter_options['type']      = array('-1' => _("-- All --"), '0' => _("Multimedia"), '1' => _("Javascript"));
@@ -107,8 +107,20 @@ if( isset($_REQUEST['action']) ) {
             list($advertisements, $pager)= $cm->find_pages('Advertisement',
                                                            $filter,
                                                            'ORDER BY created DESC ', $_REQUEST['page'], 20);
+            
+            $advertisementsCleaned = array();
+            foreach($advertisements as $adv) {
+                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+                
+                if(in_array($_REQUEST['category'], $adv->fk_content_categories)
+                   or $adv->fk_content_categories == array(0))
+                {
+                    $advertisementsCleaned []= $adv;
+                }
+            }
+            
             $tpl->assign('paginacion', $pager);
-            $tpl->assign('advertisements', $advertisements);
+            $tpl->assign('advertisements', $advertisementsCleaned);
 
             $_SESSION['desde'] = 'advertisement';
             $tpl->display('advertisement/list.tpl');
