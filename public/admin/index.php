@@ -40,7 +40,7 @@ $tpl_user =<<< TPLUSER
     <td align="center">%s</td>
     <td align="center">
         <a href="user.php?action=read&id=%s" title="Editar usuario" onclick="Modalbox.hide();" target="centro">
-            <img src="images/users_edit.png" border="0" /></a>
+            <img src="{$RESOURCES_PATH}images/users_edit.png" border="0" /></a>
         <a href="index.php?action=purge&userid=%s" class="modal" title="Purgar sesión">
             <img src="{$RESOURCES_PATH}images/publish_r.png" border="0" /></a>
     </td>

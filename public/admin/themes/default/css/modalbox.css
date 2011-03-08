@@ -20,7 +20,7 @@
 #MB_frame {
 	position: relative;
 	background-color: #EFEFEF;
-	height: 100%;
+	padding-bottom: 10px;
 }
 
 #MB_header {
