@@ -86,9 +86,24 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $photoSetPNG = $ccm->count_media_by_type_group('media_type="image" and type_img="png"');
         $photoSetBN = $ccm->count_media_by_type_group('media_type="image" and color="BN"');
 
-       // var_dump($photoSet);
         $num_sub_photos = array();
 
+        $num_photos_totalJPG=0; 
+        $num_photos_totalGIF=0;
+        $num_photos_totalPNG=0;
+        $num_photos_totalOTHER=0;
+        $num_photos_totalBN=0;
+        $num_photos_totalCOLOR=0;
+        $num_photos_totalSIZE=0;
+
+        $num_sub_photos_totalJPG=0;
+        $num_sub_photos_totalGIF=0;
+        $num_sub_photos_totalPNG=0;
+        $num_sub_photos_totalOTHER=0;
+        $num_sub_photos_totalBN=0;
+        $num_sub_photos_totalCOLOR=0;
+        $num_sub_photos_totalSIZE=0;
+        
         foreach($this->parentCategories as $k => $v) {
             if(isset($photoSet[$v->pk_content_category])) {
                 $num_photos[$k] = $photoSet[$v->pk_content_category];
@@ -98,7 +113,16 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 $num_photos[$k]->other = $photoSet[$v->pk_content_category]->total - $num_photos[$k]->jpg - $num_photos[$k]->gif - $num_photos[$k]->png;
                 $num_photos[$k]->BN = (isset($photoSetBN[$v->pk_content_category]))? $photoSetBN[$v->pk_content_category] : 0;
                 $num_photos[$k]->color = $photoSet[$v->pk_content_category]->total - $num_photos[$k]->BN;
+                // TOTALES
+                $num_photos_totalJPG += $num_photos[$k]->jpg;
+                $num_photos_totalGIF+= $num_photos[$k]->gif;
+                $num_photos_totalPNG+= $num_photos[$k]->png;
+                $num_photos_totalOTHER+= $num_photos[$k]->other;
+                $num_photos_totalBN+= $num_photos[$k]->BN;
+                $num_photos_totalCOLOR+= $num_photos[$k]->color;
+                $num_photos_totalSIZE+= $num_photos[$k]->size;
             }
+
             $j=0;
             foreach($fullcat as $child) {
                 if(($v->pk_content_category == $child->fk_content_category) &&
@@ -111,6 +135,15 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                             $num_sub_photos[$k][$j]->other = $photoSet[$child->pk_content_category]->total - $num_sub_photos[$k][$j]->jpg  - $num_sub_photos[$k][$j]->gif  - $num_sub_photos[$k][$j]->png ;
                             $num_sub_photos[$k][$j]->BN = (isset($photoSetBN[$child->pk_content_category]))? $photoSetBN[$child->pk_content_category] : 0;
                             $num_sub_photos[$k][$j]->color = $photoSet[$child->pk_content_category]->total - $num_sub_photos[$k][$j]->BN ;
+                            // TOTALES
+                            $num_sub_photos_totalJPG += $num_sub_photos[$k][$j]->jpg;
+                            $num_sub_photos_totalGIF+= $num_sub_photos[$k][$j]->gif;
+                            $num_sub_photos_totalPNG+= $num_sub_photos[$k][$j]->png;
+                            $num_sub_photos_totalOTHER+= $num_sub_photos[$k][$j]->other;
+                            $num_sub_photos_totalBN+= $num_sub_photos[$k][$j]->BN;
+                            $num_sub_photos_totalCOLOR+= $num_sub_photos[$k][$j]->color;
+                            $num_sub_photos_totalSIZE+= $num_sub_photos[$k][$j]->size;
+
                             $j++;
                 }
             }
@@ -119,8 +152,16 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         //Categorias especiales
         $j = 0;
 
-        // FIXME: eliminar as dependencias xeradas por un mal deseño
-        $especials = array(3 => 'album', 2 => 'publicidad');
+        // FIXME: eliminar as dependencias xeradas por un mal
+        // Eliminada categoria album del array $especials:  3 => 'album'
+        $especials = array(2 => 'publicidad');
+        $num_especials_totalJPG=0;
+        $num_especials_totalGIF=0;
+        $num_especials_totalPNG=0;
+        $num_especials_totalOTHER=0;
+        $num_especials_totalBN=0;
+        $num_especials_totalCOLOR=0;
+        $num_especials_totalSIZE=0;
         foreach($especials as $key=>$cat) {
             $num_especials[$j] =  new stdClass;
             $num_especials[$j]->title = $cat;
@@ -132,9 +173,36 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $num_especials[$j]->other = $photoSet[$key]->total - $num_especials[$j]->jpg  - $num_especials[$j]->gif  - $num_especials[$j]->png  ;
             $num_especials[$j]->BN = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
             $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
+            // TOTALES
+            $num_especials_totalJPG+=$num_especials[$j]->jpg;
+            $num_especials_totalGIF+=$num_especials[$j]->gif;
+            $num_especials_totalPNG+=$num_especials[$j]->png;
+            $num_especials_totalOTHER+=$num_especials[$j]->other;
+            $num_especials_totalBN+=$num_especials[$j]->BN;
+            $num_especials_totalCOLOR+=$num_especials[$j]->color;
+            $num_especials_totalSIZE+=$num_especials[$j]->size;
 
             $j++;
         }
+
+        $totalJPG = $num_photos_totalJPG + $num_sub_photos_totalJPG + $num_especials_totalJPG;
+        $totalGIF = $num_photos_totalGIF + $num_sub_photos_totalGIF + $num_especials_totalGIF;
+        $totalPNG = $num_photos_totalPNG + $num_sub_photos_totalPNG + $num_especials_totalPNG;
+        $totalOTHER = $num_photos_totalOTHER + $num_sub_photos_totalOTHER + $num_especials_totalOTHER;
+        $totalBN = $num_photos_totalBN + $num_sub_photos_totalBN + $num_especials_totalBN;
+        $totalCOLOR = $num_photos_totalCOLOR + $num_sub_photos_totalCOLOR + $num_especials_totalCOLOR;
+        $totalSIZE = $num_photos_totalSIZE + $num_sub_photos_totalSIZE + $num_especials_totalSIZE;
+        $totalTotales = $totalJPG + $totalGIF + $totalPNG + $totalOTHER;
+
+        $this->tpl->assign('total_jpg', $totalJPG);
+        $this->tpl->assign('total_gif', $totalGIF);
+        $this->tpl->assign('total_png', $totalPNG);
+        $this->tpl->assign('total_other', $totalOTHER);
+        $this->tpl->assign('total_bn', $totalBN);
+        $this->tpl->assign('total_color', $totalCOLOR);
+        $this->tpl->assign('total_size', $totalSIZE);
+        $this->tpl->assign('total_totales', $totalTotales);
+
 
         $this->tpl->assign('categorys', $this->parentCategories);
         $this->tpl->assign('subcategorys', $this->subcat);
