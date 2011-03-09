@@ -58,9 +58,27 @@ class ImportHelper {
         if(isset($contentID) && isset($views)) {
             $sql = 'UPDATE `contents` SET `views`=? WHERE pk_content=?';
             
-            $values = array($contentID, $views);
+            $values = array($views, $contentID);
             $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
+                                                          $values);
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            }
+            
+        } else {
+            echo "Please provide a contentID and views to update it.";
+        }
+    }
+    
+    public function updateCreateDate($contentID, $date)
+    {
+        if(isset($contentID) && isset($date)) {
+            $sql = 'UPDATE `contents` SET `created`=?, `changed`=? WHERE pk_content=?';
+            
+            $values = array($date, $date, $contentID);
+            $date_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($date_update_sql,
                                                           $values);
             if (!$rss) {
                 echo $GLOBALS['application']->conn->ErrorMsg();
@@ -74,12 +92,13 @@ class ImportHelper {
     public function elementIsImported($contentID, $contentType)
     {
         if(isset($contentID) && isset($contentType)) {
-            $sql = 'SELECT * FROM `translations_ids` WHERE `pk_content_old`=? AND type=?';
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
             
             $values = array($contentID, $contentType);
             $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
             $rss = $GLOBALS['application']->conn->Execute($views_update_sql,
                                                           $values);
+
             if (!$rss) {
                 echo $GLOBALS['application']->conn->ErrorMsg();
             } else {

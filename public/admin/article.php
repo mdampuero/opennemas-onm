@@ -221,6 +221,9 @@ if(isset($_REQUEST['action']) ) {
 
             if ($_REQUEST['category'] == 'todos') {
                 $articles = $cm->find('Article', 'fk_content_type=1 AND available=0 AND paper_page !=-1', 'ORDER BY paper_page ASC, position ASC, created DESC ');
+                var_dump($articles);
+                die();
+                
                 $tpl->assign('articles', $articles);
                 $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');

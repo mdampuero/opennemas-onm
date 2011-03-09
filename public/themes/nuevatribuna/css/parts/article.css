@@ -37,6 +37,16 @@ div.inner-article-other-contents, div.inner-article-utilities-box { border-top:1
 div.inner-article-other-contents { width:480px; margin-right:10px; font-size:1.12em; color:#2d2c2b; position:relative;}
     div.inner-article-other-contents div.inner-article-image img { max-width:480px; }
         div.inner-article-other-contents div.inner-article-image div.photo-subtitle { color:#535050; font-size:.97em; }
+    div.inner-article-other-contents cite{
+        float:left;
+        border-left:4px solid #d3d3d3;
+        color:Black;
+        font-family:Georgia;
+        font-size:1.3em;
+        margin:5px 10px 5px 0;
+        max-width:170px;
+        padding:10px 0 10px 10px
+    }
     
 div.inner-article-other-contents div.inner-article-image { float:right; margin:0 0 10px 10px;}
     

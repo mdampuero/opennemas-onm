@@ -36,7 +36,7 @@ $config_editmaker = array(
                           );
 
 $migrationHandler = new EditmakerToOnmDataImport($config_editmaker);
-//$migrationHandler->importArticles();
-$migrationHandler->importAuthors();
+$migrationHandler->importArticles();
+//$migrationHandler->importAuthors();
 //$migrationHandler->importOpinions();
 

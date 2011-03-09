@@ -59,11 +59,9 @@ class EditmakerToOnmDataImport {
     {
         
         $_sql_where = ' WHERE Seccion IN ('.implode(', ', array_keys($this->categoriesMatches)).") ";
-        $_limit = /*'';*/ 'LIMIT 0,1';
+        $_limit = ''; /*'LIMIT 0,1'*/;
         
         $sql = 'SELECT * FROM noticias'.$_sql_where.' '.$_limit;
-        
-        echo "Before read the original database...\n";
         
         // Fetch the list of Articles available in EditMaker
         $request = $this->orig->conn->Prepare($sql);
@@ -77,51 +75,54 @@ class EditmakerToOnmDataImport {
             $totalRows = $rs->_numOfRows;
             $articles = $rs->fields;
             $current = 1;
-            
+            $ih = new ImportHelper();
+                    
             while (!$rs->EOF) {
                 
                 if ($ih->elementIsImported($rs->fields['id'], 'article') ) {
-                    echo "Article with id {$rs->fields['id']} already imported";
-                    continue;
-                }
+                    echo "Article with id {$rs->fields['id']} already imported\n";
+                } else {
+                    echo "Importing article with id {$rs->fields['id']} - ";
+                    
+                    $originalArticleID = $rs->fields['id'];
                 
-                $originalArticleID = $rs->fields['id'];
-                
-                $values = array(
-                        'title' => $rs->fields['Titulo'],
-                        'category' => $this->matchCategory($rs->fields['Seccion']),
-                        'with_comment' => 1,
-                        'content_status' => 1,
-                        'frontpage' => 0,
-                        'in_home' => 0,
-                        'title_int' => $rs->fields['Titulo'],
-                        'metadata' => String_Utils::get_tags($rs->fields['Titulo']),
-                        'subtitle' => $rs->fields['Antetit'],
-                        'agency' => 'nuevatribuna.es',
-                        'summary' => $rs->fields['Entrad'],
-                        'body' => $rs->fields['Texto'],
-                        'posic' => 0,
-                        'id' => 0,
-                        'fk_publisher' => 125
-                    );
-                
+                    $values = array(
+                            'title' => $rs->fields['Titulo'],
+                            'category' => $this->matchCategory($rs->fields['Seccion']),
+                            'with_comment' => 1,
+                            'content_status' => 1,
+                            'frontpage' => 0,
+                            'in_home' => 0,
+                            'title_int' => $rs->fields['Titulo'],
+                            'metadata' => String_Utils::get_tags($rs->fields['Titulo']),
+                            'subtitle' => $rs->fields['Antetit'],
+                            'agency' => 'nuevatribuna.es',
+                            'summary' => $rs->fields['Entrad'],
+                            'body' => $rs->fields['Texto'],
+                            'posic' => 0,
+                            'id' => 0,
+                            'fk_publisher' => 125
+                        );                    
+                            
+                    $article = new Article();
+                    $newArticleID = $article->create($values);
+                    if(is_string($newArticleID)) {
                         
-                $article = new Article();
-                $newArticleID = $article->create($values);
-                if(is_string($newArticleID)) {
-                    
-                    $ih = new ImportHelper();
-                    $ih->logElementInsert($originalArticleID, $newArticleID, 'author');
-                    $ih->updateViews($newArticleID, $rs->fields['views']);
-                    
+                        $ih->logElementInsert($originalArticleID, $newArticleID, 'article');
+                        $ih->updateViews($newArticleID, $rs->fields['visitas']);
+                        $ih->updateCreateDate($newArticleID, $rs->fields['fecha']);
+                        
+                    }
+                    echo "new id {$newArticleID} [DONE]\n";
+                    //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
+                    //sleep(0.12);
                 }
-                ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
-                sleep(0.12);
-                $current++;
                 
+                $current++;
                 
                 $rs->MoveNext();
             }
+            
             $rs->Close(); # optional
             
         }
