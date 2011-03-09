@@ -117,7 +117,8 @@
                     <td colspan="5">
                         <div id="cates" class="seccion" style="float:left;width:100%;"> <br />
                             {section name=c loop=$ordercategorys}
-                                {if $ordercategorys[c]->internal_category neq "4"}
+                            {*NO album(3) , NO planConecta(9)*}
+                                {if $ordercategorys[c]->internal_category neq "4" && $ordercategorys[c]->pk_content_category neq "9" && $ordercategorys[c]->pk_content_category neq "3"}
                                     <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >
                                         <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;border:0px; padding:0px;margin:0px;">
                                             <td style="padding:10px;font-size: 11px;width:20%;">
