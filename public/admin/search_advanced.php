@@ -307,7 +307,12 @@ function checkTypes(& $htmlCheck)
     foreach($arrayTypes as $aType)
     {
 
-         if ($aType['pk_content_type'] != 5 && $aType['pk_content_type'] != 10){  //Eventos y entrevistas no
+         if ($aType['pk_content_type'] != 5 && // No eventos 
+                 $aType['pk_content_type'] != 10 && // No interviú
+                 $aType['pk_content_type'] != 11 && // No encuestas
+                 $aType['pk_content_type'] != 14 && // No kiosko
+                 $aType['pk_content_type'] != 9 && // No video
+                 $aType['pk_content_type'] != 7){  // No albums
             if(isset($_REQUEST[$aType['name']]))
             {
                 $szTypes .= $aType['name'] . ", ";

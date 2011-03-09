@@ -47,9 +47,9 @@
 <li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=opinion" {if $mytype=='opinion'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Opinions{/t}</a></li>
 <li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=advertisement" {if $mytype=='advertisement'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Ads{/t}</a></li>
 <li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=comment" {if $mytype=='comment'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Coments{/t}</a></li>
-<li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=album" {if $mytype=='album'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Albums{/t}</a></li>
+<!--<li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=album" {if $mytype=='album'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Albums{/t}</a></li>-->
 <li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=photo" {if $mytype=='photo'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Photographies{/t}</a></li>
-<li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=video" {if $mytype=='video'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Videos{/t}</a></li>
+<!--<li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=video" {if $mytype=='video'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Videos{/t}</a></li>-->
 <li><a href="{$_SERVER['PHP_SELF']}?action=list&mytype=attachment" {if $mytype=='attachment'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Files{/t}</a></li>
 </ul>
 

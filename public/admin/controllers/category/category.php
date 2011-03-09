@@ -52,24 +52,26 @@ if( isset($_REQUEST['action']) ) {
 
 			   foreach($allcategorys as $cate) {
 				   if($cate->internal_category !=0 ) {
+						 // Filtrar album(3) y PlanConecta(9)
+                         if($cate->pk_content_category!=3 && $cate->pk_content_category!=9){
+                             $num_contents[$i]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
+                             $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
+                             $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
 
-						 $num_contents[$i]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
-						 $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
-						 $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
-						 $categorys[$i]=$cate;
+                             $categorys[$i]=$cate;
+                         
+                             $resul = $ccm->find('internal_category != 0 AND fk_content_category ='.$cate->pk_content_category, 'ORDER BY  inmenu DESC, posmenu ASC');
+                             $j=0;
 
-						 $resul = $ccm->find('internal_category != 0 AND fk_content_category ='.$cate->pk_content_category, 'ORDER BY  inmenu DESC, posmenu ASC');
-						 $j=0;
-
-						 foreach($resul as $cate) {
-							  $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
-							  $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
-							  $num_sub_contents[$i][$j]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
-							  $j++;
-						 }
-						 $subcategorys[$i]=$resul;
+                             foreach($resul as $cate) {
+                                  $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
+                                  $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
+                                  $num_sub_contents[$i][$j]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
+                                  $j++;
+                             }
+                             $subcategorys[$i]=$resul;
 						 $i++;
-
+                         }
 				   }
 			   }
 
