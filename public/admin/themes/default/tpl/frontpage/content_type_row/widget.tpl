@@ -8,7 +8,7 @@
 
             <strong>WIDGET:</strong> {$item->title}
         </td>
-        {if $category neq 'home'}
+        {*if $category neq 'home'}
             <td class="un_no_view" style="width:20px;" align="center">
                 <div class="inhome" style="display:inline;">
                     {if $item->in_home == 1}
@@ -23,7 +23,7 @@
                     {/if}
                 </div>
             </td>
-        {/if}
+        {/if*}
         <td align="center" style="width:20px">
             {if ($item->renderlet != 'intelligentwidget')}
             <a href="controllers/widget/widget.php?action=edit&id={$item->pk_widget}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
@@ -35,8 +35,8 @@
         </td>
 
         {if $category neq 'home'}
-            <td  align="center"  class="un_width" style="width:20px;">
-            {if $item->frontpage == 1}
+        <td  align="center"  class="un_width" style="width:20px;">
+            {if $item->available == 1}
                     <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Quitar de portada">
                             <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
             {else}
@@ -48,9 +48,15 @@
                 <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
             </td>
         {else}
-             <td  align="center"  class="un_width" style="width:25px;">
-                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
-            </td>
+            <td  align="center"  class="un_width" style="width:25px;">
+            {if $item->available == 1}
+                    <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Quitar de portada">
+                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
+            {else}
+                    <a href="controllers/widget/widget.php?action=changeavailable&id={$item->pk_widget}" title="Publicar en portada">
+                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
+            {/if}
+             </td>
         {/if}
     </tr>
 </table>

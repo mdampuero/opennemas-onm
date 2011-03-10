@@ -57,6 +57,8 @@ if (!isset($_REQUEST['page'])) {
 if (!isset($_REQUEST['type_opinion'])) {
     $_REQUEST['type_opinion'] = -1;
 }
+
+$cm = new ContentManager();
 $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
 
 
@@ -632,6 +634,40 @@ if(isset($_REQUEST['action'])) {
               header('Content-type: application/json');
             Application::ajax_out($autores);
         break;
+
+        case 'changeavailable': {
+            $opinion->read($_REQUEST['id']);
+
+            $available = ($opinion->available+1) % 2;
+            $opinion->set_available($available, $_SESSION['userid']);
+
+            if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+                list($img, $text)  = ($available)? array('g', _('PUBLICADO')): array('r', _('PENDIENTE'));
+
+                echo '<img src="' . $tpl->image_dir . 'publish_' . $img . '.png" border="0" title="' . $text . '" />';
+                exit(0);
+            }
+
+            Application::forward('?action=list');
+            break;
+        }
+
+
+        case 'unpublish': {
+            //$widget->read($_REQUEST['id']);
+            $cm->unpublishFromHomePage($_REQUEST['id']);
+
+            Application::forward($_SERVER['SCRIPT_NAME']);
+            break;
+        }
+
+        case 'archive': {
+            //$widget->read($_REQUEST['id']);
+            $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+
+            Application::forward('?action=list');
+            break;
+        }
 
         case 'change_photos':
 

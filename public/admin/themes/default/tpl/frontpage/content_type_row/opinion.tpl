@@ -8,7 +8,7 @@
 
             <strong>{t}OPINION{/t} - {$item->author}: </strong>{$item->title}
         </td>
-        {if $category neq 'home'}
+        {*if $category neq 'home'}
             <td class="un_no_view" style="width:20px;" align="center">
                 <div class="inhome" style="display:inline;">
                     {if $item->in_home == 1}
@@ -23,22 +23,22 @@
                     {/if}
                 </div>
             </td>
-        {/if}
+        {/if*}
         <td align="center" style="width:20px">
             <a href="controllers/opinion/opinion.php?action=read&id={$item->id}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
         </td>
         <td  align="center"  class="un_width" style="width:20px;">
-                <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
+                <a  href="controllers/opinion/opinion.php?action=archive&id={$item->id}&category={$category}"  title="Archivar">
                    <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" /></a>
         </td>
 
         {if $category neq 'home'}
             <td  align="center"  class="un_width" style="width:20px;">
-            {if $item->frontpage == 1}
-                    <a href="controllers/opinion/opinion.php?id={$item->id}&amp;action=frontpage_status&amp;status=0&amp;category={$category}" title="Quitar de portada">
+            {if $item->available == 1}
+                    <a href="controllers/opinion/opinion.php?action=unpublish&id={$item->id}&amp;category={$category}" title="Quitar de portada">
                             <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
             {else}
-                    <a href="controllers/opinion/opinion.php?id={$item->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}" title="Publicar en portada">
+                    <a href="controllers/opinion/opinion.php?action=unpublish&id={$item->id}&amp;category={$category}" title="Publicar en portada">
                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
             {/if}
              </td>
@@ -46,9 +46,15 @@
                 <a href="#" onClick="javascript:delete_opinion('{$item->id}',0);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
             </td>
         {else}
-             <td  align="center"  class="un_width" style="width:25px;">
-                <a href="controllers/opinion/opinion.php?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
-            </td>
+            <td  align="center"  class="un_width" style="width:25px;">
+            {if $item->available == 1}
+                    <a href="controllers/opinion/opinion.php?action=unpublish&id={$item->id}&amp;category={$category}" title="Quitar de portada">
+                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
+            {else}
+                    <a href="controllers/opinion/opinion.php?action=unpublish&id={$item->id}&amp;category={$category}" title="Publicar en portada">
+                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
+            {/if}
+             </td>
         {/if}
     </tr>
 </table>
