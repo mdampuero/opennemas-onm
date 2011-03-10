@@ -17,7 +17,7 @@
     {* ZONA MENU CATEGORIAS ******* *}
     <ul class="tabs2" style="margin-bottom: 28px;">
         <li>
-            <a href="dashboard.php?action=index&category=0" id="link_global" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
+            <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
         </li>
           <script type="text/javascript">
                 // <![CDATA[
@@ -31,7 +31,7 @@
                     {/literal}
                 // ]]>
             </script>
-        {include file="menu_categorys.tpl" home="dashboard.php?action=index"}
+        {include file="menu_categorys.tpl" home="statistics.php?action=index"}
     </ul>
     <br style="clear: both;" />
 

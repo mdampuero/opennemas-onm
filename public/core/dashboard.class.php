@@ -11,14 +11,21 @@ class Dashboard {
 
     static function getMostViewed($content_type,$category=0,$days=3) {
         $cm = new ContentManager();
-        $mostVisitedContentObjects = $cm->cache->getMostViewedContent($content_type, false, $category, 0, $days, 10,true);
 
+        $mostVisitedContentObjects = $cm->cache->getMostViewedContent($content_type, false, $category, 0, $days, 10,true);
         $mostVisitedContent = array();
         for ($i=0;$i<count($mostVisitedContentObjects);$i++) {
             $mostVisitedContent[$i]['pk_content'] = $mostVisitedContentObjects[$i]->id;
             $mostVisitedContent[$i]['title'] = $mostVisitedContentObjects[$i]->title;
             $mostVisitedContent[$i]['views'] = $mostVisitedContentObjects[$i]->views;
-            $mostVisitedContent[$i]['permalink'] = $mostVisitedContentObjects[$i]->permalink;
+            $mostVisitedContent[$i]['permalink'] = Uri::generate('article',
+                            array(
+                                'id' => $mostVisitedContentObjects[$i]->id,
+                                'date' => date('Y-m-d', strtotime($mostVisitedContentObjects[$i]->created)),
+                                'category' => $cm->get_categoryName_by_contentId($mostVisitedContentObjects[$i]->id),
+                                'slug' => String_Utils::get_title($mostVisitedContentObjects[$i]->title),
+                            )
+                        );;
         }
 
         return $mostVisitedContent;
@@ -34,11 +41,10 @@ class Dashboard {
                 $html_output .= "<th align=\"center\" style=\"width:20%;\">Visitas</th>";
                 $html_output .= "<th style=\"width:80%\">T&iacute;tulo</th>";
                 $html_output .= "</tr>";
-
                 foreach ($items as $article) {
                     $html_output .= "<tr>";
                     $html_output .= "<td align=\"center\" style=\"width:20%;\">".$article["views"]."</th>";
-                    $html_output .= "<td style=\"width:80%\"><a href=\"".$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
+                    $html_output .= "<td style=\"width:80%\"><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
                     $html_output .= "</tr>";
                 }
 
@@ -71,11 +77,10 @@ class Dashboard {
                 $html_output .= "<th align=\"center\" style=\"width:20%;\">Comentarios</th>";
                 $html_output .= "<th style=\"width:80%\">T&iacute;tulo</th>";
                 $html_output .= "</tr>";
-
                 foreach ($items as $article) {
                     $html_output .= "<tr>";
                     $html_output .= "<td align=\"center\" style=\"width:20%;\">".$article["num"]."</th>";
-                    $html_output .= "<td style=\"width:80%\"><a href=\"".$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
+                    $html_output .= "<td style=\"width:80%\"><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
                     $html_output .= "</tr>";
                 }
 
@@ -125,7 +130,7 @@ class Dashboard {
                     $html_output .= "<tr>";
                     $html_output .= "<td align=\"center\">".$article["total_votes"]."</th>";
                     $html_output .= "<td align=\"center\">".$article["rate"]."</th>";
-                    $html_output .= "<td><a href=\"".$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
+                    $html_output .= "<td><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
                     $html_output .= "</tr>";
                 }
 

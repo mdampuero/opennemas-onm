@@ -21,6 +21,7 @@ $tpl->assign('content_types', array(1 => 'Noticia' , 7 => 'Galeria', 9 => 'Video
 
 if (!isset($_SESSION['desde'])) {$_SESSION['desde'] = 'index';}
 if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = '0';}
+if (!isset($_REQUEST['page'])) {$_REQUEST['page'] = '0';}
 
 $tpl->assign('category', $_REQUEST['category']);
 
