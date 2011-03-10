@@ -318,7 +318,7 @@ class Opinion extends Content {
     static public function getLatestAvailableOpinions($params = array())
     {
         $contents = array();
-
+		
 		// Setting up default parameters
 		$default_params = array(
 			'limit' => 6,
@@ -326,7 +326,6 @@ class Opinion extends Content {
 		$options = array_merge($default_params, $params);
 		$_sql_limit = " LIMIT 0, ".$options['limit']." ";
         
-
         $cm = new ContentManager();
 		$ccm = ContentCategoryManager::get_instance();		
 

@@ -73,6 +73,24 @@ if (!is_null($contentType) && !is_null($contentID)) {
                             )
                         );
             break;
+        
+        case 'opinion':
+            
+            $opinionID = getOriginalIDForContentTypeAndID($contentType, $contentID);
+            
+            $opinion = new Article($opinionID);
+            
+            $url .=  Uri::generate( 'opinion',
+                            array(
+                                'id' => $opinion->id,
+                                'date' => date('Y-m-d', strtotime($opinion->created)),
+                                'category' => String_Utils::get_title($opinion->name), //review this
+                                'slug' => $opinion->slug,
+                            )
+                        );
+            
+            break;
+        
         default:
             break;
     }

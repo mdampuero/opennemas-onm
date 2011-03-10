@@ -25,7 +25,17 @@ class ImportHelper {
     }
     
     public function logElementInsert($original, $final, $type) {
-    
+        $sql_translation_request =
+                'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`)
+                                       VALUES (?, ?, ?)';
+        $translation_values = array($original, $final, $type);
+        $translation_ids_request = $GLOBALS['application']->conn->Prepare($sql_translation_request);
+        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request,
+                                                      $translation_values);
+        
+        if (!$rss) {
+            echo $GLOBALS['application']->conn->ErrorMsg();
+        }
     }
 
     
