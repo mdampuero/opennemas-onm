@@ -21,8 +21,8 @@
          <div class="block-pages">
             <img src="{$params.IMAGE_DIR}logos/nuevatribuna-square.png" alt="{$smarty.const.SITE_TITLE}" />
             <ul class="pages">
-               <li><a href="http://tribuna.local/estaticas/contacto.html">Contacto</a> |</li>
-               <li><a href="http://tribuna.local/estaticas/subscripcion.html">Boletín Diario</a></li>
+               <li><a href="{$smarty.const.SITE_URL}estaticas/contacto.html">Contacto</a> |</li>
+               <li><a href="{$smarty.const.SITE_URL}estaticas/subscripcion.html">Boletín Diario</a></li>
             </ul>
          </div>
          <div class="colofon">
