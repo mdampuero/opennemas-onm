@@ -79,6 +79,22 @@ switch($action) {
         Application::forward('?action=list');
         break;
     }
+
+    case 'unpublish': {
+        //$widget->read($_REQUEST['id']);
+        $cm->unpublishFromHomePage($_REQUEST['id']);
+
+        Application::forward($_SERVER['SCRIPT_NAME']);
+        break;
+    }
+
+    case 'archive': {
+        //$widget->read($_REQUEST['id']);
+        $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+
+        Application::forward('?action=list');
+        break;
+    }
     
     case 'list':
     default: {

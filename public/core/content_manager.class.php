@@ -1987,4 +1987,37 @@ class ContentManager
         return $contentsOrdered;
     }
 
+    public function dropFromHomePageOfCategory($category,$pk_content)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+        $categoryId = $ccm->get_id($category);
+
+        $sql = 'DELETE FROM content_positions WHERE fk_category = '.$categoryId.' AND pk_fk_content = '.$pk_content;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function unpublishFromHomePage($pk_content)
+    {
+        $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$pk_content;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

@@ -14,19 +14,23 @@
                     <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$widgets[d]->pk_widget}" data="{$widgets[d]->content_type}" class="tabla">
                         <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
-                            <td align="left" style="width:3%">
-                                <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}" name="no_selected_fld[]" value="{$widgets[d]->pk_widget}" style="cursor:pointer;" >&nbsp;
+                            <td style="text-align: left; width:10px;">
+                                <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$widgets[d]->id}"  style="cursor:pointer;" />
                             </td>
+                            <td align="left" style="width:300px; text-align: left;">
 
-                            <td align="left" style="width:90%">
                                 <strong>WIDGET:</strong> {$widgets[d]->title}
                             </td>
 
-                            <td align="left" style="width:3%">
-                                {if ($widgets[wgt]->renderlet != 'intelligentwidget')}
+                            <td align="center" style="width:20px">
+                                {if ($widgets[d]->renderlet != 'intelligentwidget')}
                                 <a href="controllers/widget/widget.php?action=edit&id={$widgets[d]->pk_widget}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                                 {/if}
                             </td>
+                            <td  align="center"  class="un_width"  style="width:20px;">
+                                <a href="controllers/widget/widget.php?action=delete&id={$widgets[d]->pk_widget}" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                            </td>
+
                         </tr>
                     </table>
 
