@@ -205,7 +205,6 @@ class Content {
         // Fire event onBeforeXxx
         $GLOBALS['application']->dispatch('onBeforeRead', $this);
 
-
         $sql = 'SELECT * FROM contents, contents_categories WHERE pk_content = '.($id).' AND pk_content = pk_fk_content';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
