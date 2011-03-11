@@ -22,7 +22,7 @@
             <img src="{$params.IMAGE_DIR}logos/nuevatribuna-square.png" alt="{$smarty.const.SITE_TITLE}" />
             <ul class="pages">
                <li><a href="{$smarty.const.SITE_URL}estaticas/contacto.html">Contacto</a> |</li>
-               <li><a href="{$smarty.const.SITE_URL}estaticas/subscripcion.html">Boletín Diario</a></li>
+               <li><a href="{$smarty.const.SITE_URL}controllers/subscripcionBoletin.php">Boletín Diario</a></li>
             </ul>
          </div>
          <div class="colofon">
