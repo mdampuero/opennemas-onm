@@ -76,7 +76,7 @@ switch($action) {
             exit(0);
         }
         
-        Application::forward(SITE_URL_ADMIN.'/article.php');
+        Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
 
@@ -84,7 +84,7 @@ switch($action) {
         //$widget->read($_REQUEST['id']);
         $cm->unpublishFromHomePage($_REQUEST['id']);
 
-        Application::forward(SITE_URL_ADMIN.'/article.php');
+        Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
 
@@ -92,7 +92,7 @@ switch($action) {
         //$widget->read($_REQUEST['id']);
         $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
 
-        Application::forward(SITE_URL_ADMIN.'/article.php');
+        Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
     

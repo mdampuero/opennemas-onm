@@ -1992,8 +1992,10 @@ class ContentManager
         $ccm = ContentCategoryManager::get_instance();
         $categoryId = $ccm->get_id($category);
 
-        $sql = 'DELETE FROM content_positions WHERE fk_category = '.$categoryId.' AND pk_fk_content = '.$pk_content;
+        $sql = 'DELETE FROM content_positions WHERE fk_category = '.$category.' AND pk_fk_content = '.$pk_content;
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
 
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
