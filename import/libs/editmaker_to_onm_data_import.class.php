@@ -64,7 +64,9 @@ class EditmakerToOnmDataImport {
     public function matchAuthor($author)
     {
         
-        return $this->authorsMatching[$author];
+        return ((isset($this->matchAuthors[$author])
+                        ? $this->matchAuthors[$author]
+                        : false));
 
     }
     
@@ -154,12 +156,14 @@ class EditmakerToOnmDataImport {
             ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
         } else {
             
-            //while (!$rs->EOF) {
-            //    
-            //    $this->matchAuthors[$rs->fields['pk_content_old']] = $rs->fields['pk_content'];
-            //    $rs->MoveNext();
-            //}
-            //$rs->Close(); # optional
+            while (!$rs->EOF) {
+                
+                $this->matchAuthors[$rs->fields['pk_content_old']] = $rs->fields['pk_content'];
+                $rs->MoveNext();
+                
+            }
+            
+            $rs->Close(); # optional
             
             // Getting the 
             $_filter_by_section = ' Seccion IN ('.implode(', ', array_keys($this->categoriesOpinion)).") ";
@@ -171,7 +175,8 @@ class EditmakerToOnmDataImport {
                     WHERE '
                     .$_filter_by_section
                     .' AND noti_firma.id_firma = firmantes.id
-                       AND noti_firma.id_noti = noticias.id';
+                       AND noti_firma.id_noti = noticias.id'
+                    /*.' LIMIT 0,10'*/;
             // Fetch the list of Opinions available for one author in EditMaker
             $request = $this->orig->conn->Prepare($sql);
             $rs = $this->orig->conn->Execute($request);
@@ -189,40 +194,51 @@ class EditmakerToOnmDataImport {
                 while (!$rs->EOF) {
                     
                     if ($ih->elementIsImported($rs->fields['id'], 'opinion') ) {
-                        echo "Opinion with id {$rs->fields['id']} already imported\n";
+                        echo "[{$current}/{$totalRows}] Opinion with id {$rs->fields['id']} already imported\n";
                     } else {
-                        echo "Importing opinion with id {$rs->fields['id']} - ";
-                    
+                        echo "[{$current}/{$totalRows}] Importing opinion with id {$rs->fields['id']} - ";
+                        
                         $originalOpinionID = $rs->fields['id'];
                         
-                        $values =
-                            array(
-                                'title' => $rs->fields['Titulo'],
-                                'category' => 'opinion',
-                                'body' => $rs->fields['Texto'],
-                                'type_opinion' => '0',
-                                'metadata' => String_Utils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
-                                'views' => $rs->fields['visitas'],
-                                'created' => $rs->fields['fecha'],
-                                'fk_author' => $this->matchAuthor($rs->fields['firmante_id']),
-                                'publisher' => 112,
-                                'available' => 1,
-                                'with_comment' => 1,
-                                'in_home' => 0,
-                            );
+                        if ($this->matchAuthor($rs->fields['firmante_id'])) {
                             
+                            //var_dump($rs->fields['firmante_id'], $this->matchAuthor($rs->fields['firmante_id']));
+                            //die();
+                            //
                             
-                        $opinion = new Opinion();
-                        $newOpinionID = $opinion->create($values);
-                        
-                        if(is_string($newOpinionID)) {
+                            $values =
+                                array(
+                                    'title' => $rs->fields['Titulo'],
+                                    'category' => 'opinion',
+                                    'body' => $rs->fields['Texto'],
+                                    'type_opinion' => '0',
+                                    'metadata' => String_Utils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
+                                    'views' => $rs->fields['visitas'],
+                                    'created' => $rs->fields['fecha'],
+                                    'fk_author' => (int)$this->matchAuthor($rs->fields['firmante_id']),
+                                    'publisher' => 112,
+                                    'available' => 1,
+                                    'with_comment' => 1,
+                                    'in_home' => 0,
+                                );
                             
-                            $ih->logElementInsert($originalOpinionID, $newOpinionID, 'opinion');
-                            $ih->updateViews($newOpinionID,$rs->fields['visitas']);
-                            $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
-                        
+                                
+                                
+                            $opinion = new Opinion();
+                            $newOpinionID = $opinion->create($values);
+                            
+                            if(is_string($newOpinionID)) {
+                                
+                                $ih->logElementInsert($originalOpinionID, $newOpinionID, 'opinion');
+                                $ih->updateViews($newOpinionID,$rs->fields['visitas']);
+                                $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
+                            
+                            }
+                            echo "new id {$newOpinionID} [DONE]\n";
+                                                        
+                        } else {
+                            echo "This has not an correlated element\n";
                         }
-                        echo "new id {$newOpinionID} [DONE]\n";
                         
                     }
                     
@@ -242,7 +258,8 @@ class EditmakerToOnmDataImport {
                         new_authors.pk_author as new_id 
                 FROM    `".$this->dbConfig['bd_database']."`.`firmantes` as `original_authors`,
                         `".BD_INST."`.`authors` as `new_authors` 
-                WHERE `original_authors`.`nombre` =  `new_authors`.`name`";
+                WHERE `original_authors`.`nombre` =  `new_authors`.`name`
+                ORDER BY original_id";
                 
         // Fetch the list of Opinions available for one author in EditMaker
         $request = $this->orig->conn->Prepare($sql);
@@ -258,47 +275,19 @@ class EditmakerToOnmDataImport {
             $current = 1;
             $ih = new ImportHelper();
             
-            var_dump($totalRows);
-            die();
-            
-            
             while (!$rs->EOF) {
                 
-                if ($ih->elementIsImported($rs->fields['id'], 'opinion') ) {
-                    echo "Opinion with id {$rs->fields['id']} already imported\n";
+                if ($ih->elementIsImported($rs->fields['original_id'], 'author') ) {
+                    echo "[{$current}/{$totalRows}] Author with id {$rs->fields['original_id']} already imported\n";
                 } else {
-                    echo "Importing opinion with id {$rs->fields['id']} - ";
+                    echo "[{$current}/{$totalRows}] Importing author with id {$rs->fields['original_id']} - ";
                 
-                    $originalOpinionID = $rs->fields['id'];
-                    
-                    $values =
-                        array(
-                            $rs->fields['Titulo'],
-                            'category' => 'opinion',
-                            'body' => $rs->fields['Texto'],
-                            'type_opinion' => '0',
-                            'metadata' => String_Utils::get_tags($rs->fields['Titulo'].' '.$rs->fields['firmante_nombre'] ),
-                            'views' => $rs->fields['visitas'],
-                            'created' => $rs->fields['fecha'],
-                            'fk_author' => $this->matchAuthor($rs->fields['firmante_id']),
-                            'publisher' => 112,
-                            'available' => 1,
-                            'with_comment' => 1,
-                            'in_home' => 0,
-                        );
+                    if(is_string($rs->fields['new_id'])) {
                         
-                        
-                    $opinion = new Opinion();
-                    $newOpinionID = $opinion->create($values);
-                    
-                    if(is_string($newOpinionID)) {
-                        
-                        $ih->logElementInsert($originalOpinionID, $newOpinionID, 'opinion');
-                        $ih->updateViews($newOpinionID,$rs->fields['visitas']);
-                        $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
+                        $ih->logElementInsert($rs->fields['original_id'], $rs->fields['new_id'], 'author');
                     
                     }
-                    echo "new id {$newOpinionID} [DONE]\n";
+                    echo "new id {$rs->fields['new_id']} [DONE]\n";
                     
                 }
                 
@@ -332,9 +321,9 @@ class EditmakerToOnmDataImport {
             while (!$rs->EOF) {
                 
                 if ($ih->elementIsImported($rs->fields['id'], 'author') ) {
-                    echo "Author with id {$rs->fields['id']} already imported\n";
+                    echo "[{$current}/{$totalRows}] Author with id {$rs->fields['id']} already imported\n";
                 } else {
-                    echo "Importing author with id {$rs->fields['id']} - ";
+                    echo "[{$current}/{$totalRows}] Importing author with id {$rs->fields['id']} - ";
                     
                     $originalAuthorID = $rs->fields['id'];
                     

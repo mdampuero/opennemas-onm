@@ -42,10 +42,10 @@
 
     <div class="opinion-listing-colaborators last">
         <h3>Opiniones destacadas</h3>
-        <div class="span-16 clearfix">
+        <div class="span-16 last clearfix">
             {section name=ac loop=$opinions start=0}
 
-            <div style="padding:5px 10px;" class="opinion clearfix">
+            <div style="padding:5px 10px 5px 0;" class="opinion clearfix">
 
                 {if $opinions[ac].path_img}
                     <div class="avatar-author span-2">
