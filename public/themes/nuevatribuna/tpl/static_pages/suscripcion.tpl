@@ -52,30 +52,33 @@
                 <div class="span-24">
                     <div class="layout-column span-16 inner-article">
                             <div class="span-16 last title-subtitle-legend">
-                                <h1 class="inner-article-title">Suscripción Boletín de noticias</h1>
+                                <h1 class="inner-article-title">Suscripción al boletín de noticias</h1>
+                                <div class="inner-article-subtitle">
+                                    Si quiere recibir las últimas noticias y opiniones diariamente en su correo puede hacerlo
+                                    suscribiendose a nuestro boletín de noticias. Rellene el formulario y pulse enviar.
+                                    <br/><br/>
+                                    Si desea dejar de recibir el boletín de noticias rellene el formulario y asegúrese de marcar la opción "Desuscribirme".
                             </div>
-                        <div class="inner-article-subtitle">Rellene el formulario y pulse enviar para suscribirte/desuscribirte del boletín de noticias
                         </div>
-                            <div class="span-16 inner-article-content  clearfix">
-                                <div id="inner-article-body">
-                                    <div class="span-16 inner-article-other-contents">
+                            <div class="span-16 inner-article-content span-16 last clearfix">
+                                <div id="inner-article-body" class="clearfix">
+                                    <div class="inner-article-other-contents">
                                         <div>
                                             <form action="../controllers/subscripcionBoletin.php" method="post">
                                                 <table border="0" cellspacing="2" cellpadding="1" width="100%">
                                                     <tbody>
                                                         <tr>
-                                                            <td width="25%" align="right"><strong>Nombre y Apellidos:</strong></td>
-                                                            <td width="75%" align="center"><input name="name" size="16" type="text" /></td>
+                                                            <td width="25%" style="text-align:right;"><strong>Nombre:</strong></td>
+                                                            <td width="75%" style="text-align:left;"><input name="name" size="16" type="text" /></td>
                                                         </tr>
                                                         <tr>
-                                                            <td width="25%" align="right"><strong>E-mail:</strong></td>
+                                                            <td width="25%" style="text-align:right;"><strong>Correo electrónico:</strong></td>
                                                             <td width="75%" align="center"><input name="email" size="16" type="text" /></td>
                                                         </tr>
-                                                        <tr align="center"></tr>
                                                         <tr align="center">
-                                                            <td width="25%" align="right"><strong>Quiero:</strong></td>
+                                                            <td width="25%" style="text-align:right;"><strong></strong></td>
                                                             <td>
-                                                                <input name="boletin" type="radio" value="alta" /> Suscribirme al boletín
+                                                                <input name="boletin" type="radio" value="alta" selected/> Suscribirme al boletín
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -85,12 +88,12 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>&nbsp;</td>
+                                                            <td style="text-align:right; vertical-align:top;"><strong></strong></td>
                                                             <td>
                                                                 <script type="text/javascript"
-                                                                      src="http://www.google.com/recaptcha/api/challenge?k=6LdZYcISAAAAAPnwuNwqUWIq6JAHZI77bNOmXlHI"></script>
+                                                                      src="http://www.google.com/recaptcha/api/challenge?k={$smarty.const.RECAPTCHA_PUBLIC_KEY}"></script>
                                                                 <noscript>
-                                                                 <iframe src="http://www.google.com/recaptcha/api/noscript?k=your_public_key"
+                                                                 <iframe src="http://www.google.com/recaptcha/api/noscript?k={$smarty.const.RECAPTCHA_PUBLIC_KEY}"
                                                                      height="300" width="500" frameborder="0"></iframe><br>
                                                                  <textarea name="recaptcha_challenge_field" rows="3" cols="40">
                                                                  </textarea>

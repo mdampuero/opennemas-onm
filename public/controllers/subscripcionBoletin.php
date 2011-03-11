@@ -24,8 +24,7 @@ $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 switch($action) {
     case 'submit':
-            $privatekey = "6LdZYcISAAAAAGVf0DcmnSnAORNHFdedYSc3AwwG";
-            $resp = recaptcha_check_answer ($privatekey,
+            $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
                                         $_SERVER["REMOTE_ADDR"],
                                         $_POST["recaptcha_challenge_field"],
                                         $_POST["recaptcha_response_field"]);
