@@ -26,9 +26,9 @@ class EditmakerToOnmDataImport {
                 //74 => , //Alberto priego
                 //89 => , //alberto olmos
                 //102 => , //alfonso cuadros
-                //100 => 368, //amalia albarez
+                100 => 368, //amalia albarez
                 //113 => , //ana noguera
-                //123 => 256, //andres rojo
+                123 => 256, //andres rojo
                 70 => 370,
                 75  => 258,
                 93 => 371,
