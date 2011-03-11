@@ -72,7 +72,6 @@ foreach($places as $id => $params) {
 
 }
 
-
 // Save contents, the new way
 $positionsSaved = ContentManager::saveContentPositionsForHomePage($categoryID, $content_positions);
 

@@ -95,11 +95,25 @@ if(isset($_REQUEST['action']) ) {
             // Edit main frontpage or category frontpage
             if($_REQUEST['category']=='home') {
 
-                $frontpage_articles = $cm->find('Article', 'in_home=1 AND frontpage=1 AND content_status=1 AND available=1 AND fk_content_type=1', 'ORDER BY home_pos ASC');
-                $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND home_placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
+                $frontpage_articles =
+                        $cm->find(  'Article',
+                                    'in_home=1 AND frontpage=1 AND content_status=1
+                                    AND available=1 AND fk_content_type=1',
+                                    'ORDER BY home_pos ASC');
+                $destacada =
+                        $cm->find_by_category(  'Article',
+                                                $_REQUEST['category'],
+                                                'fk_content_type=1 AND content_status=1 AND available=1
+                                                AND frontpage=1 AND home_placeholder="placeholder_0_0" ',
+                                                'ORDER BY position ASC, created DESC');
 
                 //Sugeridas -
-                list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=1 AND fk_content_type=1 AND in_home=2', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10);
+                list($articles, $pages)=
+                        $cm->find_pages('Article',
+                                        'content_status=1 AND available=1 AND frontpage=1
+                                        AND fk_content_type=1 AND in_home=2',
+                                        'ORDER BY created DESC, title ASC ',$_REQUEST['page'],10);
+
                 $params = "'".$_REQUEST['category']."'";
                 $paginacion = $cm->makePagesLinkjs($pages, ' get_suggested_articles', $params);
 
@@ -111,17 +125,35 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('suggestedArticles', $suggestedArticles);
 
             } else {
-                    $frontpage_articles = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1  AND available=1 AND frontpage=1 ', 'ORDER BY position ASC, created DESC' );
-                    $destacada = $cm->find_by_category('Article', $_REQUEST['category'], 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1 AND placeholder="placeholder_0_0" ', 'ORDER BY position ASC, created DESC');
+                    $frontpage_articles =
+                            $cm->find_by_category(  'Article',
+                                                    $_REQUEST['category'],
+                                                    'fk_content_type=1 AND content_status=1  AND available=1
+                                                    AND frontpage=1 ',
+                                                    'ORDER BY position ASC, created DESC' );
+                            
+                    $destacada = $cm->find_by_category('Article',
+                                                       $_REQUEST['category'],
+                                                       'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1
+                                                       AND placeholder="placeholder_0_0" ',
+                                                       'ORDER BY position ASC, created DESC');
 
-                    list($articles, $pages)= $cm->find_pages('Article', 'content_status=1 AND available=1 AND frontpage=0 AND fk_content_type=1 ', 'ORDER BY  created DESC,  title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                    list($articles, $pages)= $cm->find_pages('Article',
+                                                             'content_status=1 AND available=1 AND frontpage=0
+                                                             AND fk_content_type=1 ',
+                                                             'ORDER BY  created DESC,  title ASC ',
+                                                             $_REQUEST['page'],
+                                                             10,
+                                                             $_REQUEST['category']);
+                    
                     $params=$_REQUEST['category'];
                     $paginacion=$cm->makePagesLinkjs($pages, ' get_others_articles', $params);
                     if($pages->_totalPages>1) {
                             $tpl->assign('paginacion', " ".$paginacion);
                     }
             }
-
+            
+            
             //Nombres de los publisher y editors
             $aut=new User();
 
@@ -131,7 +163,9 @@ if(isset($_REQUEST['action']) ) {
                 $art->editor=$aut->get_user_name($art->fk_user_last_editor);
                 $art->rating= $rating->get_value($art->id);
                 $art->comment = $comment->count_public_comments( $art->id );
-                $art->position = $art->home_pos;
+                if($_REQUEST['category'] == 'home') {
+                    $art->position = $art->home_pos;
+                }
             }
 
             /// Adding Widgets {{{
@@ -145,7 +179,6 @@ if(isset($_REQUEST['action']) ) {
     
             $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
             // }}}
-            
     
             if(!isset($destacado)){
                 $destacado = null;
