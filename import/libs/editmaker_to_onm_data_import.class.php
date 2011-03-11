@@ -21,13 +21,128 @@ class EditmakerToOnmDataImport {
                 66 => 4,     // OPINION
             );
             
-    public $authorsMatching =
+    public $matchAuthors =
             array(
-                
+                //74 => , //Alberto priego
+                //89 => , //alberto olmos
+                //102 => , //alfonso cuadros
+                //100 => 368, //amalia albarez
+                //113 => , //ana noguera
+                //123 => 256, //andres rojo
+                70 => 370,
+                75  => 258,
+                93 => 371,
+                62 => 260,
+                32 => 372,
+                //106 => , //antonio donhate
+                67 => 262,
+                72 => 263,
+                //91 => , //
+                41 => 265,
+                //111 => , //
+                61 => 266,
+                26 => 267,
+                65 => 269,
+                131 => 270,
+                121 => 271,
+                108 => 273,
+                90 => 272,
+                59 => 274,
+                134 => 276,
+                //124 => , //
+                137 => 279,
+                68 => 280,
+                58 => 281,
+                //54 => , //
+                128 => 377,
+                39 => 282,
+                87 => 283,
+                //86 => , //
+                139 => 284,
+                78 => 285,
+                125 => 286,
+                142 => 287,
+                36 => 288,
+                104 => 289,
+                34 => 291,
+                45 => 292,
+                133 => 294,
+                25 => 295,
+                48 => 296,
+                119 => 297,
+                //56 => , //
+                35 => 273,
+                95 => 305,
+                28 => 306,
+                126 => 307,
+                96 => 308,
+                144 => 310,
+                40 => 312,
+                118 => 313,
+                //127 => , //
+                //81 => , //
+                82 => 314,
+                141 => 374,
+                138 => 317,
+                109 => 318,
+                47 => 319,
+                //110 => , //
+                //52 => , //
+                42 => 320,
+                29 => 321,
+                115 => 322,
+                140 => 323,
+                69 => 324,
+                116 => 325,
+                104 => 327,
+                55 => 248,
+                27 => 328,
+                //77 => , 88 => , pueden ser el mismo
+                80 => 329,
+                99 => 330,
+                73 => 331,
+                //117 => , //
+                122 => 332,
+                //43 => , //
+                120 => 333,
+                //130 => , //
+                //98 => , //
+                //129 => , //
+                85 => 335,
+                60 => 336,
+                30 => 337,
+                143 => 340,
+                92 => 341,
+                //50 => , //
+                //79 => , //
+                97 => 343,
+                84 => 344,
+                //107 => , //
+                //71 => , //
+                38 => 346,
+                136 => 347,
+                63 => 348,
+                135 => 349,
+                46 => 350,
+                101 => 351,
+                53 => 352,
+                57 => 353,
+                83 => 354,
+                64 => 355,
+                //51 => , //
+                76 => 356,
+                33 => 357,
+                //49 => , //
+                103 => 358,
+                94 => 359,
+                114 => 360,
+                //44 => , //
+                66 => 361,
+                112 => 363,
+                //132 => , //
+                37 => 364,
             );
             
-    public $matchAuthors = array();
-    
     public function __construct ($config = array())
     {
         $this->dbConfig = $config;
@@ -163,6 +278,7 @@ class EditmakerToOnmDataImport {
                 
             }
             
+            
             $rs->Close(); # optional
             
             // Getting the 
@@ -247,6 +363,30 @@ class EditmakerToOnmDataImport {
                 }
                 $rs->Close(); # optional           
             }
+        }
+        
+    }
+    
+    public function importArrayAuthors()
+    {
+        $ih = new ImportHelper();
+        
+        $totalRows = count($this->matchAuthors);
+        $current = 1;
+        
+        
+        foreach ($this->matchAuthors as $original_id => $new_id) {
+            
+            if ($ih->elementIsImported($original_id, 'author') ) {
+                echo "[{$current}/{$totalRows}] Author with id {$original_id} already imported\n";
+            } else {
+
+                echo "[{$current}/{$totalRows}] Importing author with id {$original_id} - ";
+                $ih->logElementInsert($original_id, $new_id, 'author');
+                echo "new id {$new_id} [DONE]\n";
+                
+            }
+            $current++;
         }
         
     }

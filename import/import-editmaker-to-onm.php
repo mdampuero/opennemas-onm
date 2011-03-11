@@ -32,5 +32,6 @@ require 'editmaker-config.inc.php';
 $migrationHandler = new EditmakerToOnmDataImport($config_editmaker);
 //$migrationHandler->importArticles();
 //$migrationHandler->importAuthors();
-//$migrationHandler->importAuthorsWeirdMode();
+$migrationHandler->importArrayAuthors();
+$migrationHandler->importAuthorsWeirdMode();
 $migrationHandler->importOpinions();
