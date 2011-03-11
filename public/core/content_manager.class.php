@@ -2008,9 +2008,11 @@ class ContentManager
     public function unpublishFromHomePage($pk_content)
     {
         $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$pk_content;
+        $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
         $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs2 = $GLOBALS['application']->conn->Execute($sql2);
 
-        if (!$rs) {
+        if (!$rs || !$rs2) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
