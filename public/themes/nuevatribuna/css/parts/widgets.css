@@ -331,8 +331,11 @@ div.widget-all-authors div{
 
 div.widget-all-authors div.content,
 div.widget-last-opinions-with-face div.content{
-    #background:#fff;
     margin:10px;
+}
+
+div.widget-last-opinions-with-face div.content{
+    background:#fff;
 }
 
 div.widget-all-authors div.title,
@@ -349,9 +352,10 @@ div.widget-last-opinions-with-face div.title
 div.widget-all-authors a,
 div.widget-last-opinions-with-face a
 {
+    font-size:1.1em;
 }
 
 div.widget-all-authors select{
     width:100%;
-    border:auto !important;
+    
 }

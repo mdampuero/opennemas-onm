@@ -729,8 +729,20 @@ div.photos-highlighter a
     font-family: Arial;
 }
 
+/***********************************************************
+    Paginators
+************************************************************/
+.pagination {
+        width:100%
+}
+.pagination a{
+        border:1px solid #ccc;
+        padding:4px 6px;
+}
 
-
+.pagination.center {
+        text-align:center !important;
+}
 
 
 /***********************************************************

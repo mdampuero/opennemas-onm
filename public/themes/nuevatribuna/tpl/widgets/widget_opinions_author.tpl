@@ -15,15 +15,15 @@
             {/if}
                 
             <div class='content'>
-                 <ul>
-                        {section name=a loop=$other_opinions}
-                             <li><a href="{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
-                                                                id=$other_opinions[a]->id
-                                                                date=$other_opinions[a]->created
-                                                                title=$other_opinions[a]->title
-                                                                category_name=$other_opinions[a]->author_name_slug}">{$other_opinions[a]->title|clearslash}</a></li>
-                        {/section}
-                    </ul>
+                <ul>
+                    {section name=a loop=$other_opinions}
+                         <li><a href="{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
+                                                            id=$other_opinions[a]->id
+                                                            date=$other_opinions[a]->created
+                                                            title=$other_opinions[a]->title
+                                                            category_name=$other_opinions[a]->author_name_slug|default:autor}">{$other_opinions[a]->title|clearslash}</a></li>
+                    {/section}
+                </ul>
 
             </div>
         {/if}

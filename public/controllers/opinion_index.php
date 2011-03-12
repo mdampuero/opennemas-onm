@@ -42,8 +42,10 @@ require_once ("opinion_index_advertisement.php");
 /**
  * Generate the ID for use it to fetch caches
 */
-$page = (!isset($_GET['pageop'])) ? $page = 0 : $page = $_GET['pageop']-1;
+$page = (!isset($_GET['page'])) ? $page = 1 : $page = $_GET['page'];
 $cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
+
+var_dump($page);
 
 
 if (isset($_REQUEST['action'])) {
@@ -128,7 +130,8 @@ if (isset($_REQUEST['action'])) {
             // Don't execute the app logic if there are caches available
             if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
-                $_limit=' LIMIT '.($page*ITEMS_PAGE).', '.(ITEMS_PAGE);
+                $_limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
+var_dump($_limit);
 
                 // Fetch editorial opinions
                 if ($authorID==1) { //Editorial
@@ -148,8 +151,12 @@ if (isset($_REQUEST['action'])) {
                 } else { //Author
 
                     // First, I need to know the amount of opinions for if it is necessary to paginate.
-                    $total_opinions = $cm->count('Opinion','opinions.type_opinion=0 and opinions.fk_author='.($authorID).' and contents.available=1  and contents.content_status=1');
-                    $opinions = $cm->find_listAuthors('opinions.type_opinion=0 and opinions.fk_author='.($authorID).' and contents.available=1  and contents.content_status=1','ORDER BY created DESC '.$_limit);
+                    $total_opinions = $cm->count('Opinion',
+												 'opinions.type_opinion=0 and opinions.fk_author='.($authorID)
+												 .' AND contents.available=1 AND contents.content_status=1');
+                    $opinions = $cm->find_listAuthors('opinions.type_opinion=0 and opinions.fk_author='.($authorID)
+													  .' and contents.available=1  and contents.content_status=1',
+													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
                     $name_author = String_Utils::get_title($aut->name);
 
@@ -166,14 +173,20 @@ if (isset($_REQUEST['action'])) {
 					$improvedOpinions[] = $opinion;
 				}
 
-                $url='opinions_autor/'.$authorID.'/'.$name_author;
+                $url = Uri::generate('opinion_author_frontpage',
+							  array(
+									'slug' => $improvedOpinions[0]['author_name_slug'],
+									'id' => $improvedOpinions[0]['pk_author']
+									));
 
-                $pagination = $cm->create_paginate($improvedOpinions, ITEMS_PAGE, 2, 'URL', $url);
+                $pagination = $cm->create_paginate($total_opinions,
+												   20,
+												   2, 'URL', $url);
 
 				// Fetch information for shared parts
 				require_once ('widget_headlines_past.php');
 				require_once ("index_sections.php");
-				require_once("widget_static_pages.php");
+				require_once ("widget_static_pages.php");
 
                 $tpl->assign('author_name', $name_author);
                 $tpl->assign('pagination_list', $pagination);

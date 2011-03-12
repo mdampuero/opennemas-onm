@@ -152,7 +152,7 @@
 							</div>
 
 						{/section}
-						<p align="center">{$pagination_list->links}</p>
+						<div class="pagination center clearfix">{$pagination_list->links}</div>
 					</div>
 
                 </div>
