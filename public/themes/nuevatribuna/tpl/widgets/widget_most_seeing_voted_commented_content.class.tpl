@@ -8,9 +8,9 @@
 
    <div id="widget-most-seeing-voted-commented-content-tab" class="content clearfix widget-{$rnd_number}">
       <ul class="tab-selector">
-         <li><a href="#tab-more-views"><span>Lo + Visto</span></a></li>
-         <li><a href="#tab-more-voted"><span>Lo + Votado</span></a></li>
-         <li><a href="#tab-more-comments"><span>Lo + Comentado</span></a></li>
+         <li><a href="#tab-more-views"><span>+ visto</span></a></li>
+         <li><a href="#tab-more-voted"><span>+ votado</span></a></li>
+         <li><a href="#tab-more-comments"><span>+ comentado</span></a></li>
       </ul>
       <div id="tab-more-views" class="clearfix">
         {* <div class="explanation">Noticias, vídeos y comentarios</div> *}
