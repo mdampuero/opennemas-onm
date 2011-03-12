@@ -55,9 +55,9 @@
                                 <h1 class="inner-article-title">Suscripción al boletín de noticias</h1>
                                 <div class="inner-article-subtitle">
                                     Si quiere recibir las últimas noticias y opiniones diariamente en su correo puede hacerlo
-                                    suscribiendose a nuestro boletín de noticias. Rellene el formulario y pulse enviar.
+                                    dándose de alta en nuestro boletín de noticias. Rellene el formulario y pulse enviar.
                                     <br/><br/>
-                                    Si desea dejar de recibir el boletín de noticias rellene el formulario y asegúrese de marcar la opción "Desuscribirme".
+                                    Si desea dejar de recibir el boletín de noticias rellene el formulario y asegúrese de marcar la opción "Darme de baja".
                             </div>
                         </div>
                             <div class="span-16 inner-article-content span-16 last clearfix">
@@ -78,13 +78,13 @@
                                                         <tr align="center">
                                                             <td width="25%" style="text-align:right;"><strong></strong></td>
                                                             <td>
-                                                                <input name="boletin" type="radio" value="alta" selected/> Suscribirme al boletín
+                                                                <input name="boletin" type="radio" value="alta" selected/> Darme de alta en boletín
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>&nbsp;</td>
                                                             <td>
-                                                                <input name="boletin" type="radio" value="baja" /> Desuscribirme del boletín
+                                                                <input name="boletin" type="radio" value="baja" /> Darme de baja en boletín
                                                             </td>
                                                         </tr>
                                                         <tr>
