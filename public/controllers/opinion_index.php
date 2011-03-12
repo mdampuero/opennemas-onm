@@ -45,9 +45,6 @@ require_once ("opinion_index_advertisement.php");
 $page = (!isset($_GET['page'])) ? $page = 1 : $page = $_GET['page'];
 $cacheID = 'opinion|'.(($authorID != '') ? $authorID.'|' : '').$page;
 
-var_dump($page);
-
-
 if (isset($_REQUEST['action'])) {
 
 
@@ -131,7 +128,6 @@ if (isset($_REQUEST['action'])) {
             if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
                 $_limit=' LIMIT '.(($page-1)*ITEMS_PAGE).', '.(ITEMS_PAGE);
-var_dump($_limit);
 
                 // Fetch editorial opinions
                 if ($authorID==1) { //Editorial
