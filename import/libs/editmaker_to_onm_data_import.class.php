@@ -185,6 +185,36 @@ class EditmakerToOnmDataImport {
 
     }
     
+    public function importCategories()
+    {
+        $ih = new ImportHelper();
+            
+        foreach( $this->categoriesMatches as $originalID => $newID ) {
+            
+            if ($ih->elementIsImported($originalID, 'category') ) {
+                echo "Category with id {$originalID} already imported\n";
+            } else {
+                echo "Importing category with id {$originalID} - ";
+                $ih->logElementInsert($originalID, $newID, 'category');
+                echo "new id {$newID} [DONE]\n";
+            }
+
+        }
+        
+        foreach( $this->categoriesOpinion as $originalID => $originalID) {
+            
+            if ($ih->elementIsImported($originalID, 'category') ) {
+                echo "Category with id {$originalID} already imported\n";
+            } else {
+                echo "Importing category with id {$originalID} - ";
+                $ih->logElementInsert($originalID, $newID, 'category');
+                echo "new id {$newID} [DONE]\n";
+            }
+
+        }
+        
+    }
+    
     public function importArticles()
     {
         

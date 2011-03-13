@@ -17,13 +17,14 @@ Deny from all
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
     
     #Inner Opinion
-    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
+    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
     #Inner Article
     RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
     
     #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{REQUEST_URI} [A-Z]
-    RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
+    RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
+    #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
     
     #Other issues/topics/modules
     RewriteRule ^index.asp$ / [R=301,L,NC]
