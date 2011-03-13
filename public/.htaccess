@@ -9,8 +9,31 @@ Deny from all
     RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule  ^(.+).php3 $1.php
-
+    RewriteRule  ^index.asp$ / [R=301,L,NC]
+    
+    #Redirection from old nuevatribuna.es
+    RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
+    RewriteCond %{QUERY_STRING} &?ref=([^&]+)
+    RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    
+    #Inner Opinion
+    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=opinion&content_id=$1 [L,NC]
+    #Inner Article
+    RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    
+    #SECTIONS: seccion/51/SOCIEDAD/
+    RewriteCond %{REQUEST_URI} [A-Z]
+    RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
+    
+    #Other issues/topics/modules
+    RewriteRule ^index.asp$ / [R=301,L,NC]
+    RewriteRule ^enviar-noticia.asp$ / [R=301,L,NC]
+    RewriteRule ^imprimir-noticia.asp$ / [R=301,L,NC]
+    RewriteRule ^seccion.asp$ / [R=301,L,NC]
+    RewriteRule ^rss/portada.asp$ / [R=301,L,NC]
+    RewriteRule ^editmaker/i18n/text_idioma.asp$ / [R=301,L,NC]
+    
+    
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
@@ -34,13 +57,7 @@ Deny from all
     RewriteRule ^opinion/autor/([0-9]+)/(.*)$ controllers/opinion_index.php?alt=nopag&category_name=opinion&action=list_op_author&author_id=$1 [L,NC]
 
     #Opinion Inner
-    RewriteRule ^opinions/captcha/([0-9]+).jpg$ controllers/opinion_inner.php?action=captcha&category_name=opinion [L,NC]
-    RewriteRule ^opinion/(.*)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
-
-
-    #Portada de autores
-    RewriteRule ^opinions/autores/([0-9]+)/([0-9]+).html$ controllers/opinion.php?action=authors&category_name=opinion&author_id=$1 [L,NC]
-    #RewriteRule ^opinions/listado_xornalistas/([0-9]+)/(.*).html$ controllers/opinion_index.php?category_name=opinion&action=list_authors&page=$1 [L,NC]
+    RewriteRule ^opinion(|/.+)?/([a-z0-9\-]+)?/(.*)?/([0-9]+).html$ controllers/opinion_inner.php?opinion_id=$4&category_name=opinion&action=read&t=$1 [L,NC]
 
     #articulos print
     RewriteRule ^imprimir/[^/]+/([a-z0-9\-_]+)/([a-z0-9\-_]+)/([0-9]+).html$ controllers/article.php?action=print&article_id=$3&category_name=$1&subcategory_name=$2 [L,NC]
@@ -73,45 +90,15 @@ Deny from all
     RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
     RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
 
-
-    #Album
-    #/album/2008/12/08/foto/200812081741363340.html
-    RewriteRule ^albumes/?$ controllers/gallery.php?action=frontpage [L,NC]
-    RewriteRule ^album/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ controllers/gallery.php?action=$4&id_album=$5 [L,NC]
-    #http://retrincos.es/album/solo-album/
-    RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/gallery.php?action=foto&category_name=$1 [L,NC]
-    RewriteRule ^album/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/gallery.php?action=foto&category_name=$1&subcategory_name=$2 [L,NC]
-
-    #Video
-    #/video/0/2008/12/08/200812081741363340.html
-    RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
-    RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
-    RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^video/([a-z0-9\-]*)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6 [L,NC]
-
     #Files
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
-
-    #polls
-    #encuesta/2010/09/22/deportes/dsfsdfsf/2010092220475100111.html
-    RewriteRule ^encuesta/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/([a-z0-9\-]+)/([0-9]+).html$ controllers/poll.php?action=read&category_name=$4&poll_id=$6 [L,NC]
-    RewriteRule ^encuesta/([a-z0-9\-]+)/$ controllers/poll.php?action=read&category_name=$1 [L,NC]
 
     #Search
     RewriteRule ^search/google/(.*)$ controllers/search.php?stringSearch=$1&googleSearch=on [L,NC]
 
     #Static pages
     RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
-
-    #Weather
-    RewriteRule ^tempo/?$ playas.php [L,NC]
-    RewriteRule ^tempo/([a-z]+)\.html$ controllers/weather.php?l=$1 [L,NC]
-
-    #Newspaper stand
-    RewriteRule ^portadas$ controllers/kiosko.php [L,NC]
-    RewriteRule ^portadas/$ controllers/kiosko.php [L,NC]
-    RewriteRule ^portadas/([0-9]{4})/([0-9]{1,2})$ controllers/kiosko.php?year=$1&month=$2 [L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
