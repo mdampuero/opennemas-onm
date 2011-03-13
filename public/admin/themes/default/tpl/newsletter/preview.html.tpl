@@ -7,11 +7,7 @@
             <tr>
                 <td>
                     <a href="{$smarty.const.SITE_URL}" target="_blank">
-                    {if $smarty.request.action=='send'}
-                        <img src="cid:logo-cid" border="0" height="60" width="300" alt="" /></a>
-                    {else}
                         <img src="{$SITE_URL}/themes/nuevatribuna/images/logos/nuevatribuna-header.png" border="0" alt="Boletín de {$smarty.const.SITE_FULLNAME}" /></a>
-                    {/if}
                     <br />
                 </td>
             </tr>
@@ -42,7 +38,7 @@
                 {section name=n loop=$data->articles}
                 <tr>
                     <td style="font-size:15px;color:#980101;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #ddd;">
-                        <a href="{$URL_PUBLIC}{$data->articles[n]->uri}" style="color: #354b1d">
+                        <a href="{$URL_PUBLIC}{$data->articles[n]->uri}" style="color: #354b1d; text-decoration:none !important">
                             <b style="color:#980101;">&middot; {$data->articles[n]->category_name}</b>: <span style="color:Black">{$data->articles[n]->title}</span></a>
                     </td>
                 </tr>
@@ -63,7 +59,7 @@
                 {section name=o loop=$data->opinions}
                 <tr>
                     <td style="font-size:15px;color:#333333;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #ddd;">
-                    <a href="{$URL_PUBLIC}/seccion/opinion/" style="color:#354b1d">
+                    <a href="{$URL_PUBLIC}/seccion/opinion/" style="color:#354b1d; text-decoration:none !important">
                         <b style="color:#980101;">&middot; {$data->opinions[o]->author}</b>: <span style="color:Black">{$data->opinions[o]->title}</span></a>
                 </tr>
                 {/section}
@@ -86,8 +82,8 @@
             <tr>
                 <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #efefef;">
                 Usted est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
-                <a href="{$URL_PUBLIC}">{$smarty.const.SITE_FULLNAME} </a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
-                accediendo a  <a href="{$SITE_URL}/controllers/subscripcionBoletin.php"><b>esta direcci&oacute;n</b></a>.
+                <a href="{$URL_PUBLIC}" style="text-decoration:none !important">{$smarty.const.SITE_FULLNAME} </a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
+                accediendo a  <a href="{$SITE_URL}/controllers/subscripcionBoletin.php" style="text-decoration:none !important"><b>esta direcci&oacute;n</b></a>.
                 <br/><br/><br/>
                 <div align="center"><b>{$smarty.const.SITE_FULLNAME}</b> <br/> {$smarty.const.SITE_DESCRIPTION}</div>
 
