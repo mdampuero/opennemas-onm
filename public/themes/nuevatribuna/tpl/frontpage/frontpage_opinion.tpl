@@ -5,7 +5,7 @@
 *}
 
 
-<div class="onm-new {$cssclass}">
+<div class="onm-new {$cssclass}" id="{$item->id}">
      <div class="nw-author"><strong>OPINION</strong> | {$item->author|mb_upper}</div>
      {if $category_name eq 'home'}
         <div class="nw-category-name {$item->category_name}">{$item->category_title|upper|clearslash} <span>&nbsp;</span></div>
