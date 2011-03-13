@@ -51,7 +51,7 @@ switch($action) {
     case 'news': {
 
         //FIXME: add this value in a config file for easy editing
-        $interval='DATE_SUB(CURDATE(), INTERVAL 700 DAY)';
+        $interval='DATE_SUB(CURDATE(), INTERVAL 10 DAY)';
 
         $articlesByCategory = array();
 
