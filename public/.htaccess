@@ -9,7 +9,6 @@ Deny from all
     RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule  ^index.asp$ / [R=301,L,NC]
     
     #Redirection from old nuevatribuna.es
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
