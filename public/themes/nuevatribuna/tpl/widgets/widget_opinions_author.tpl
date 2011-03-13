@@ -21,7 +21,7 @@
                                                             id=$other_opinions[a]->id
                                                             date=$other_opinions[a]->created
                                                             title=$other_opinions[a]->title
-                                                            category_name=$other_opinions[a]->author_name_slug|default:autor}">{$other_opinions[a]->title|clearslash}</a></li>
+                                                            category_name=$other_opinions[a]->author_name_slug}">{$other_opinions[a]->title|clearslash}</a></li>
                     {/section}
                 </ul>
 

@@ -103,8 +103,13 @@ if(isset($_REQUEST['action']) ) {
                                                         .' AND available = 1  AND content_status=1'
                                                         ,' ORDER BY created DESC '
                                                         .' LIMIT 0,9');
+                    
+                    foreach($otherOpinions as $otherOpinion) {
+                        $otherOpinion->author_name_slug  = $opinion->author_name_slug;
+                        $otherOpinionsImproved[] = $otherOpinion;
+                    }
 
-                    $tpl->assign('other_opinions', $otherOpinions);
+                    $tpl->assign('other_opinions', $otherOpinionsImproved);
                     $tpl->assign('opinion', $opinion);
 
                 }

@@ -23,7 +23,8 @@
     </div>
 
     <div class="more-promotions-from-diary span-8 last">
-        {include file="widgets/facebook_stream_box.tpl"}
+        {render_widget name='MostSeeingVotedCommentedContent'}
+        {render_widget id='2011030118563800539'}
     </div>
 
 </div>

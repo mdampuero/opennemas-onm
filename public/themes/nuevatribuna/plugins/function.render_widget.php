@@ -7,18 +7,25 @@
 function smarty_function_render_widget($params, &$smarty) {
     
 	// Initialicing parameters
-	$widgetID = $params['name'];
+	$widgetName = (isset($params['name']) ? $params['name'] : null);
+	$widgetID = (isset($params['id']) ? $params['id'] : null);
     $output = '';
 
 	// Initialize database access
 	$cm = new ContentManager();
 	$ccm = ContentCategoryManager::get_instance();
 	
+	if(!is_null($widgetName)) {
+		// Initialize widget from db
+		$widget = new Widget();
+		$widget->readIntelligentFromName($widgetName);
+	} else {
 	
-	// Initialize widget from db
-	$widget = new Widget();
-	$widget->readIntelligentFromName($widgetID);
-    
+		// Initialize widget from db
+		$widget = new Widget();
+		$widget->read($widgetID);
+	}
+	
 	if($widget->available) {
 		$output = $widget->render();
 	}

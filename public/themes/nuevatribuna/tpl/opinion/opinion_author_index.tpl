@@ -136,7 +136,7 @@
 																						id=$opinions[ac].id
 																						date=$opinions[ac].created
 																						title=$opinions[ac].title
-																						category_name=$author_name}">{$opinions[ac].title|clearslash}</a></h3>
+																						category_name=$opinions[ac].author_name_slug}">{$opinions[ac].title|clearslash}</a></h3>
 								<div class="date-opinion-on-list">
 									 {articledate updated=$opinions[ac].changed}
 								</div>
@@ -147,7 +147,7 @@
 																						id=$opinions[ac].id
 																						date=$opinions[ac].created
 																						title=$opinions[ac].title
-																						category_name=$author_name}"> Siga leyendo &raquo; </a></p>
+																						category_name=$opinions[ac].author_name_slug}"> Siga leyendo &raquo; </a></p>
 								</div>
 							</div>
 
