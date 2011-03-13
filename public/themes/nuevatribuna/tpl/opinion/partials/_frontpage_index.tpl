@@ -45,28 +45,30 @@
         <div class="span-16 last clearfix">
             {section name=ac loop=$opinions start=0}
 
-            <div style="padding:5px 10px 5px 0;" class="opinion clearfix">
+            <div style="padding:5px 10px;" class="opinion clearfix">
 
-                {if $opinions[ac].path_img}
+                {if $opinions[ac]->path_img}
                     <div class="avatar-author span-2">
-                        <a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac].name id=$opinions[ac].pk_author}">
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$opinions[ac].path_img}" alt="{$opinions[ac].name}" height="67" />
+                        <a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac]->name id=$opinions[ac]->pk_author}">
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$opinions[ac]->path_img}" alt="{$opinions[ac]->name}" height="67" />
                         </a>
                     </div>
                 {/if}
-                <div class="opinion-listing-colaborators-post {if $opinions[ac].path_img}span-14{else}span-16{/if} last clearfix">
-                    <h4 class="author-name"><a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac].name id=$opinions[ac].pk_author}">{$opinions[ac].name}</a></h4>
-                    <span class="post-date">{$opinions[ac].created|date_format:"%d.%m.%Y"}</span> | 
+                <div class="opinion-listing-colaborators-post {if $opinions[ac]->path_img}span-14{else}span-16{/if} last clearfix">
+                    <h4 class="author-name"><a href="{$smarty.const.SITE_URL}{generate_uri content_type="opinion_author_frontpage" title=$opinions[ac]->name id=$opinions[ac]->fk_author}">{$opinions[ac]->name}</a></h4>
+                    <span class="post-date">{$opinions[ac]->created|date_format:"%d.%m.%Y"}</span> | 
                     <strong><a class="post-name" href="{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
-                                                                id=$opinions[ac].id
-                                                                date=$opinions[ac].created
-                                                                title=$opinions[ac].title
-                                                                category_name=$opinions[ac].author_name_slug}">{$opinions[ac].title|clearslash}</a></strong>
+                                                                id=$opinions[ac]->id
+                                                                date=$opinions[ac]->created
+                                                                title=$opinions[ac]->title
+                                                                category_name=$opinions[ac]->author_name_slug}">{$opinions[ac]->title|clearslash}</a></strong>
                     
                 </div>
             </div>
 
             {/section}
+            <div class="pagination center clearfix">{$pagination->links}</div>
+            <br>
         </div>
 
     </div>

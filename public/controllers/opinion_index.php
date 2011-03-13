@@ -86,26 +86,25 @@ if (isset($_REQUEST['action'])) {
 
 				//define('ITEMS_PAGE', 2);
 
-                $_limit='LIMIT '.($page*ITEMS_PAGE).', '.(ITEMS_PAGE);
-                $params='/seccion/opinion';
-
-
+                $_limit='LIMIT '.(($page-1)*ITEMS_PAGE).', '.(($page)*ITEMS_PAGE);
+                $url='/seccion/opinion';
+				
+				$total_opinions = $cm->count('Opinion','in_home=1 and available=1 and type_opinion=0',
+                                      'ORDER BY type_opinion DESC, position ASC, created DESC ');
 
                 // Fetch last opinions of contributors and paginate them by ITEM_PAGE
-                $opinions = $cm->find_listAuthors('opinions.type_opinion=0 '.
-                                              'AND contents.available=1 '.
-                                              'AND contents.in_home=1 '.
-                                              'AND contents.content_status=1',
-                                              'ORDER BY  position ASC, created DESC '.$_limit);
-				$improvedOpinions = array();
+				$opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+                                      'ORDER BY type_opinion DESC, position ASC, created DESC '.$_limit);
 
+				$improvedOpinions = array();
 				foreach($opinions as $opinion) {
-					$opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
+					$opinion->author = new Author($opinion->fk_author);
+					$opinion->name = $opinion->author->name;
+					$opinion->author_name_slug = String_Utils::get_title($opinion->name);
 					$improvedOpinions[] = $opinion;
 				}
 
-
-				//$pagination =$cm->create_paginate($opinions, ITEMS_PAGE, 4, 'URL', $params);
+                $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
 
 				// Fetch information for shared parts
 				require_once ('widget_headlines_past.php');
@@ -114,11 +113,11 @@ if (isset($_REQUEST['action'])) {
 
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('opinions',  $improvedOpinions);
-                //$tpl->assign('pagination',  $pagination);
+                $tpl->assign('pagination',  $pagination);
 
             }
 
-            $tpl->display('opinion/opinion_frontpage.tpl');
+            $tpl->display('opinion/opinion_frontpage.tpl', $cacheID);
 
         break;
 
@@ -175,9 +174,7 @@ if (isset($_REQUEST['action'])) {
 									'id' => $improvedOpinions[0]['pk_author']
 									));
 
-                $pagination = $cm->create_paginate($total_opinions,
-												   20,
-												   2, 'URL', $url);
+                $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
 
 				// Fetch information for shared parts
 				require_once ('widget_headlines_past.php');

@@ -335,7 +335,10 @@ div.widget-last-opinions-with-face div.content{
 }
 
 div.widget-last-opinions-with-face div.content{
-    background:#fff;
+}
+div.widget-last-opinions-with-face div.content li {
+    margin:4px 0;
+    list-style:none;
 }
 
 div.widget-all-authors div.title,

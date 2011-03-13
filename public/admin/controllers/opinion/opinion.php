@@ -72,6 +72,7 @@ if(isset($_REQUEST['action'])) {
             if($algoritm=='orden') {
                 $order=' position ASC, created DESC';
             }
+            
 
             $tpl->assign('algoritm', $algoritm);
             $comment = new Comment();
