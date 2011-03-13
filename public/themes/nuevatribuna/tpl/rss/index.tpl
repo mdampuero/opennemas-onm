@@ -73,14 +73,23 @@
                 <div class="span-24">
                     <div class="layout-column span-16 inner-article">
                             <div class="span-16 last title-subtitle-legend">
-                                    <h1 class="inner-article-title">&Iacute;ndice de RSS disponibles</h1>
-                                <div class="inner-article-subtitle">Está interesado en leer {$params.const.SITE_FULLENAME} de forma cómoda en su lector de RSS. Seleccione la categoría que le interese desde los diponibles que se muestran debajo.</div>
+                                    <h1 class="inner-article-title">Sindicación de contenidos mediante RSS</h1>
+                                <div class="inner-article-subtitle">La suscripci&#243;n a trav&#233;s del formato
+                                <a class="enlace" href="http://es.wikipedia.org/wiki/RSS">RSS</a> te permite acceder a los contenidos
+                                de <b>nuevatribuna.es</b> en tiempo real y sin necesidad de entrar constantemente en nuestra portada.<br/>
+                                Puedes utilizar programas espec&#237;ficos para la lectura de este tipo de formato o, si lo prefieres,
+                                puedes hacer uso de agregadores web (como <a class="enlace" href="http://www.bloglines.com/">Bloglines</a>,
+                                <a class="enlace" href="http://www.google.es/ig">Google</a>,
+                                <a class="enlace" href="http://es.my.yahoo.com/">My Yahoo!</a>,
+                                <a class="enlace" href="http://www.live.com/">Live</a> o
+                                <a class="enlace" href="http://www.netvibes.com/">Netvibes</a>)
+                                que no requieren instalaci&#243;n.
                             </div><!--title-subtitle-legend-->
                             <div class="span-16 inner-article-content  clearfix">
                                 <div id="inner-article-body">
                                     <div class="span-16 last" style="border-top:1px solid #CCCCCC; padding-top:5px;">
 
-
+                                        <h3>&#191;A qu&#233; contenidos de nuevatribuna.es puedes suscribirte a trav&#233;s de RSS?</h2>
                                         {if count($categoriesTree) > 0}
                                         <h3>Categor&iacute;as:</h3>
                                         <ul id="categories-list" class="clearfix">
