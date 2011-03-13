@@ -37,7 +37,11 @@
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:n="http://www.google.com/schemas/sitemap-news/0.9">
         {section name=c loop=$opinions}
             <url>
-                <loc><![CDATA[http://{$smarty.const.SITE}{$opinions[c].permalink}]]></loc>
+                <loc>{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
+                                                id=$opinions[c].id
+                                                date=$opinions[c].changed
+                                                title=$opinions[c].title
+                                                category_name=$opinions[c].author_name_slug}</loc>
                 <n:news>
                     <n:publication>
                         <n:name><![CDATA[{$smarty.const.SITE_NAME}]]></n:name>

@@ -1898,7 +1898,7 @@ class ContentManager
         // METER TB LEFT JOIN
         //necesita el as id para paginacion
 
-         $sql= 'SELECT contents.title, contents.metadata,contents.permalink,contents.changed,contents.starttime,contents.endtime
+         $sql= 'SELECT contents.pk_content as id, contents.title, authors.name, contents.metadata,contents.permalink,contents.changed,contents.starttime,contents.endtime
                 FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
                     LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img)
