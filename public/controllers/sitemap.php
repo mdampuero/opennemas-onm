@@ -70,8 +70,15 @@ switch($action) {
         // Get latest opinions
         $opinions = $cm->getOpinionAuthorsPermalinks('contents.available=1 AND contents.content_status=1 AND changed >='.$interval.'', 'ORDER BY position ASC, changed DESC LIMIT 100');
 
+        $improvedOpinions = array();
+        foreach($opinions as $opinion) {
+            
+            $opinion['author_name_slug'] = String_Utils::get_title($opinion['name']);
+            $improvedOpinions []= $opinion;
+        }
+        
         $tpl->assign('articlesByCategory',$articlesByCategory);
-        $tpl->assign('opinions', $opinions);
+        $tpl->assign('opinions', $improvedOpinions);
 
     }
 }

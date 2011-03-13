@@ -302,6 +302,10 @@ class Opinion extends Content {
 		
 		$tpl = new Template(TEMPLATE_USER);
 		
+		$aut = new Author($this->fk_author);
+		$this->name = String_Utils::get_title($aut->name);
+		$this->author_name_slug = $this->name;
+		
 		$tpl->assign('item',$this);
 		$tpl->assign('cssclass', 'opinion');
 		
