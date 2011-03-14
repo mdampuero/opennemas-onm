@@ -34,7 +34,8 @@
         {/section}
     </urlset>
 {elseif preg_match('/sitemap\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "news")}
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:n="http://www.google.com/schemas/sitemap-news/0.9">
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
         {section name=c loop=$opinions}
             <url>
                 <loc>{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
