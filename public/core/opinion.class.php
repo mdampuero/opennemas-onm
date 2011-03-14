@@ -59,7 +59,8 @@ class Opinion extends Content {
 					}
 
 				} else {
-					$authorName = new Author($this->fk_author);
+					$author = new Author($this->fk_author);
+					$authorName = $author->name;
 				}
 
 
@@ -68,7 +69,7 @@ class Opinion extends Content {
                                 'id' => $this->id,
                                 'date' => date('Y-m-d', strtotime($this->created)),
                                 'slug' => $this->slug,
-                                'author' => String_Utils::get_title($authorName),
+                                'category' => String_Utils::get_title($authorName),
                             )
                         );
 					//'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
