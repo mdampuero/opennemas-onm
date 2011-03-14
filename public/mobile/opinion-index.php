@@ -35,8 +35,19 @@ $director  = $cm->find('Opinion', 'type_opinion=2 AND in_home=1 AND available=1 
 $editorial = $cm->find('Opinion', 'type_opinion=1 AND in_home=1 AND available=1 AND content_status=1', 'ORDER BY position ASC, created DESC LIMIT 0,2');
 $opinions = $cm->find_listAuthors('available=1 AND type_opinion=0 AND content_status=1', 'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10');
 
+//Comprobación de index undefined php5.3
 $tpl->assign('editorial', $editorial);
-$tpl->assign('director', $director[0]);		
+if(isset ($director[0])){
+    $tpl->assign('director', $director[0]);
+}
+
+//Obtener los slug's de los autores
+$i=0;
+foreach ($opinions as $op){
+    $opinions[$i]['author_name_slug']=String_Utils::get_title($op['name']);
+    $i++;
+}
+
 $tpl->assign('opinions', $opinions);
 
 //$aut = new Author();

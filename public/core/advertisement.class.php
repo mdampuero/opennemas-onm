@@ -603,8 +603,8 @@ class Advertisement extends Content
                 if (isset($banner->path) && property_exists($banner, 'path')){
                     $adv = $banner->path; // "path" is Photo ID, $banner->img is similar but deprecated
                 }
-
-                if(isset($adv)) {
+                //Evitar undefined index
+                if(isset($photos[$adv])) {
                     $tpl->assign('photo'.$banner->type_advertisement, $photos[$adv]);
                 }
             }

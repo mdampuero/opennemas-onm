@@ -1,7 +1,11 @@
 {if !empty($op_colaborador)}
-
 <li class="post">
-      <a href="{$smarty.const.BASE_PATH}{$op_colaborador.permalink}">
+      <a href="{$smarty.const.BASE_PATH}/{generate_uri content_type="opinions"
+                                                        id=$op_colaborador.id
+                                                        date=$op_colaborador.created
+                                                        title=$op_colaborador.title
+                                                        category_name=$op_colaborador.author_name_slug}">
+          
         {if isset($photos.$id)}
          <img width="60" height="60" alt="{$photos.title}"
               src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/{$photos.$id}">

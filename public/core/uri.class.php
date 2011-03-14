@@ -24,6 +24,7 @@ class Uri {
     static public $url_configurations = array(
         'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
         'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+        'opinions'  =>  array( 'opinions/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
         'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_' ),
         'section'   =>  array( 'seccion/_ID_' ),
         'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
