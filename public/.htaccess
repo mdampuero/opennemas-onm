@@ -10,29 +10,38 @@ Deny from all
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     
+    #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
+
+    #Inner Article
+    RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+    
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
     
     #Inner Opinion
     RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
-    #Inner Article
-    RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
+
+    #Section
+    RewriteCond %{QUERY_STRING} &?ref=([^&]+)
+    RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
     
-    #SECTIONS: seccion/51/SOCIEDAD/
+    #SECTIONS: seccion/51/SOCIEDAD/    
     RewriteCond %{REQUEST_URI} [A-Z]
     RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
     
     #Other issues/topics/modules
+    RewriteRule $seccion.asp?ref=54$ /estaticas/quienes-somos.html [R=301,L,NC]
+    RewriteRule $seccion.asp?ref=58$ /estaticas/aviso-legal.html [R=301,L,NC]    
     RewriteRule ^index.asp$ / [R=301,L,NC]
     RewriteRule ^enviar-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^imprimir-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^seccion.asp$ / [R=301,L,NC]
     RewriteRule ^rss/portada.asp$ / [R=301,L,NC]
     RewriteRule ^editmaker/i18n/text_idioma.asp$ / [R=301,L,NC]
-    
+    #--------------------------------------------------------    
     
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
