@@ -42,30 +42,32 @@
                                                 date=$opinions[c].changed
                                                 title=$opinions[c].title
                                                 category_name=$opinions[c].author_name_slug}</loc>
-                <n:news>
-                    <n:publication>
-                        <n:name><![CDATA[{$smarty.const.SITE_NAME}]]></n:name>
-                        <n:language><![CDATA[es]]></n:language>
-                    </n:publication>
-                    <n:publication_date><![CDATA[{$opinions[c].changed|date_format:"%Y-%m-%dT%H:%M:%S+01:00"}]]></n:publication_date>
-                    <n:title><![CDATA[{$opinions[c].title|strip_tags|clearslash}]]></n:title>
-                    <n:keywords><![CDATA[{$opinions[c].metadata}]]></n:keywords>
-                </n:news>
+                <news:news>
+                    <news:publication>
+                        <news:name><![CDATA[{$smarty.const.SITE_NAME}]]></news:name>
+                        <news:language<![CDATA[es]]></news:language>
+                    </news:publication>
+                    <news:genres>OpEd</news:genres>
+                    <news:publication_date><![CDATA[{$opinions[c].changed|date_format:"%Y-%m-%dT%H:%M:%S+01:00"}]]></news:publication_date>
+                    <news:title><![CDATA[{$opinions[c].title|strip_tags|clearslash}]]></news:title>
+                    <news:keywords><![CDATA[{$opinions[c].metadata}]]></news:keywords>
+                </news:news>
             </url>
         {/section}
         {foreach name=outer item=category from=$articlesByCategory}
             {foreach key=key item=item from=$category}
             <url>
                 <loc>{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$item.pk_content date=$item.created category_name=$item.catName title=$item.title}</loc>
-                <n:news>
-                    <n:publication>
-                        <n:name><![CDATA[{$smarty.const.SITE_NAME}]]></n:name>
-                        <n:language><![CDATA[es]]></n:language>
-                    </n:publication>
-                    <n:publication_date><![CDATA[{$item.changed|date_format:"%Y-%m-%dT%H:%M:%S+01:00"}]]></n:publication_date>
-                    <n:title><![CDATA[{$item.title|strip_tags|clearslash}]]></n:title>
-                    <n:keywords><![CDATA[{$item.metadata}]]></n:keywords>
-                </n:news>
+                <news:news>
+                    <news:publication>
+                        <news:name><![CDATA[{$smarty.const.SITE_NAME}]]></news:name>
+                        <news:language<![CDATA[es]]></news:language>
+                    </news:publication>
+                    <news:genres>PressRelease</news:genres>                    
+                    <news:publication_date><![CDATA[{$item.changed|date_format:"%Y-%m-%dT%H:%M:%S+01:00"}]]></news:publication_date>
+                    <news:title><![CDATA[{$item.title|strip_tags|clearslash}]]></news:title>
+                    <news:keywords><![CDATA[{$item.metadata}]]></news:keywords>
+                </news:news>
                 </url>
             {/foreach}
         {/foreach}
