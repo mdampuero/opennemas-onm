@@ -24,6 +24,10 @@ Deny from all
     RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
     #Section
+    RewriteCond %{QUERY_STRING} ref=58
+    RewriteRule ^seccion\.asp$ /estaticas/quienes-somos.html? [R=301,L,NC]
+    RewriteCond %{QUERY_STRING} ref=54    
+    RewriteRule ^seccion\.asp$ /estaticas/aviso-legal.html? [R=301,L,NC]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
     
@@ -33,8 +37,7 @@ Deny from all
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
     
     #Other issues/topics/modules
-    RewriteRule ^seccion.asp?ref=54$ /estaticas/quienes-somos.html [R=301,L,NC]
-    RewriteRule ^seccion.asp?ref=58$ /estaticas/aviso-legal.html [R=301,L,NC]    
+   
     RewriteRule ^index.asp$ / [R=301,L,NC]
     RewriteRule ^enviar-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^imprimir-noticia.asp$ / [R=301,L,NC]
