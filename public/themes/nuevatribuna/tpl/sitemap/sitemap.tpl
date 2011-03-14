@@ -62,7 +62,7 @@
                 <news:news>
                     <news:publication>
                         <news:name><![CDATA[{$smarty.const.SITE_NAME}]]></news:name>
-                        <news:language<![CDATA[es]]></news:language>
+                        <news:language><![CDATA[es]]></news:language>
                     </news:publication>
                     <news:genres>PressRelease</news:genres>                    
                     <news:publication_date><![CDATA[{$item.changed|date_format:"%Y-%m-%dT%H:%M:%S+01:00"}]]></news:publication_date>
