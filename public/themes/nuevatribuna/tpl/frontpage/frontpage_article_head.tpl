@@ -3,7 +3,7 @@
 
     @theme      Lucidity
 *}
-<div class="onm-new {$cssclass}">
+<div class="onm-new {$cssclass}" id="{$item->id}">
     {if !empty($item->img1_path)}
     <a href="/{$item->uri|clearslash}" title="{$item->title|clearslash}">
         <img  class="onm-new-image" src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$item->img1_path}"

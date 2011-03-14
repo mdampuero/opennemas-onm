@@ -34,11 +34,10 @@
                         <div style="margin-left: 5px"><strong>NOTICIAS</strong></div>
                     </td>
                 </tr>
-
                 {section name=n loop=$data->articles}
                 <tr>
                     <td style="font-size:15px;color:#980101;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #ddd;">
-                        <a href="{$URL_PUBLIC}#{$data->articles[n]->id}" style="color: #354b1d; text-decoration:none !important">
+                        <a href="{$URL_PUBLIC}#{$data->articles[n]->pk_content}" style="color: #354b1d; text-decoration:none !important">
                             <b style="color:#980101;">&middot; {$data->articles[n]->category_name}</b>: <span style="color:Black">{$data->articles[n]->title}</span></a>
                     </td>
                 </tr>
@@ -55,11 +54,10 @@
                         <div style="margin-left: 5px"><strong>ARTÍCULOS DE OPINIÓN</strong></div>
                     </td>
                 </tr>
-
                 {section name=o loop=$data->opinions}
                 <tr>
                     <td style="font-size:15px;color:#333333;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #ddd;">
-                    <a href="{$URL_PUBLIC}/seccion/opinion/" style="color:#354b1d; text-decoration:none !important">
+                    <a href="{$URL_PUBLIC}/seccion/opinion/#{$data->opinions[o]->pk_content}" style="color:#354b1d; text-decoration:none !important">
                         <b style="color:#980101;">&middot; {$data->opinions[o]->author}</b>: <span style="color:Black">{$data->opinions[o]->title}</span></a>
                 </tr>
                 {/section}
