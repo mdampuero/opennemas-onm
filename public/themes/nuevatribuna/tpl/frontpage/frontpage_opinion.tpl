@@ -10,7 +10,7 @@
      {if $category_name eq 'home'}
         <div class="nw-category-name {$item->category_name}">{$item->category_title|upper|clearslash} <span>&nbsp;</span></div>
      {/if}
-    <h3 class="nw-title"><a href="{generate_uri   content_type="opinion"
+    <h3 class="nw-title"><a href="{$smarty.const.SITE_URL}{generate_uri   content_type="opinion"
                                                 id=$item->id
                                                 date=$item->created
                                                 title=$item->title
