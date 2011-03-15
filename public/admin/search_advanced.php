@@ -98,20 +98,15 @@ switch($_REQUEST['action'])
         $szCheckedTypes = checkTypes($htmlChecks);
         $szTags  = trim(htmlentities($_REQUEST['stringSearch'],ENT_QUOTES));
         $objSearch = cSearch::Instance();
-
-        $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.permalink, contents.description, contents.created,'
-                                                              .' contents.pk_content as id, contents_categories.catName, '
-                                                              .'contents_categories.pk_fk_content_category as category, '
-                                                              .'content_types.title as type, contents.available, contents.content_status, '
-                                                              .'contents.in_litter, content_types.name as content_type",
-                $szTags,
-                $szCheckedTypes,
-                "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
-                "contents_categories, content_types",
-                100);
+        $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
+                                                            $szTags,
+                                                            $szCheckedTypes,
+                                                            "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
+                                                            "contents_categories, content_types",
+                                                            100);
 
 
-        //$Pager = null;
+        $Pager = null;
         if( isset($arrayResults) &&
             !empty($arrayResults))
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
