@@ -311,11 +311,11 @@ function checkTypes(& $htmlCheck)
             if(isset($_REQUEST[$aType['name']]))
             {
                 $szTypes .= $aType['name'] . ", ";
-                $htmlCheck .= '<input id="'.$aType['name'] .'" name="' . $aType['name'] .'"  type="checkbox" valign="center" checked="true"/>'.$aType['title'];
+                $htmlCheck .= '<input id="'.$aType['name'] .'" name="' . $aType['name'] .'"  type="checkbox" valign="center" checked="true"/>'.htmlentities($aType['title']);
             }
             else
             {
-                $htmlCheck .= '<input id="'. $aType['name'].'" name="'.$aType['name'].'"  type="checkbox" valign="center"/>'.$aType['title'];
+                $htmlCheck .= '<input id="'. $aType['name'].'" name="'.$aType['name'].'"  type="checkbox" valign="center"/>'.htmlentities($aType['title']);
             }
          }
     }
