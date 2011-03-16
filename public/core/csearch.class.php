@@ -147,12 +147,23 @@ class cSearch
             empty($szWhere))
             return -1;
 
+        //Transform the input string to search like: 'La via del tren' => '+via +tren'
+        $szSourceTags = explode(', ', String_Utils::get_tags($szSourceTags));
+        $i = 0;
+        foreach ($szSourceTags as $key) {
+            $szSourceTags[$i] = '+'.$key;
+            $i++;
+        }
+        $szSourceTags = implode(' ', $szSourceTags);
+
         $szMatch = $this->DefineMatchOfSentence($szSourceTags);
+        //$szMatch = " CONTAINS (metadata, '".$szSourceTags."')";
+        //$szMatch = "contents.metadata LIKE '%".$szSourceTags."%'";
         $szSqlSentence = 'SELECT '. $szReturnValues . ", " . $szMatch . " as _height";
         $szSqlSentence .= " FROM contents, " . $szNewTable;
         $szSqlSentence .= " WHERE " . $szMatch;
         $szSqlSentence .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
-        $szSqlSentence .= " ORDER BY _height, changed DESC";
+        $szSqlSentence .= " ORDER BY _height DESC, created DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;        
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);

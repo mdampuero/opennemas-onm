@@ -61,7 +61,7 @@ switch($_REQUEST['action'])
 
         $htmlChecks=null;
         $szCheckedTypes = checkTypes($htmlChecks);
-        $szTags  = trim(htmlentities($_REQUEST['stringSearch'],ENT_QUOTES));
+        $szTags  = trim($_REQUEST['stringSearch']);
         $objSearch = cSearch::Instance();
         $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
                                                             $szTags,
@@ -76,7 +76,6 @@ switch($_REQUEST['action'])
         $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
         $tpl->assign('type2res', $type2res);
-
         $tpl->assign('arrayResults', $arrayResults);
         $tpl->assign('htmlCheckedTypes', $htmlChecks);
         $tpl->assign('pagination', $szPagesLink);
@@ -96,7 +95,7 @@ switch($_REQUEST['action'])
 
         $htmlChecks=null;
         $szCheckedTypes = checkTypes($htmlChecks);
-        $szTags  = trim(htmlentities($_REQUEST['stringSearch'],ENT_QUOTES));
+        $szTags  = trim($_REQUEST['stringSearch']);
         $objSearch = cSearch::Instance();
         $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
                                                             $szTags,
@@ -106,7 +105,7 @@ switch($_REQUEST['action'])
                                                             100);
 
 
-        $Pager = null;
+        //$Pager = null;
         if( isset($arrayResults) &&
             !empty($arrayResults))
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
@@ -277,6 +276,12 @@ function getContentTypes()
     try
     {
         $resultArray = $resultSet->GetArray();
+        $i=0;
+        foreach ($resultArray as $res) {
+            $resultArray[$i]['title'] = htmlentities($res['title']);
+            $resultArray[$i]['2'] = htmlentities($res['2']);
+            $i++;
+        }
     }
     catch(exception $e)
     {
@@ -311,11 +316,11 @@ function checkTypes(& $htmlCheck)
             if(isset($_REQUEST[$aType['name']]))
             {
                 $szTypes .= $aType['name'] . ", ";
-                $htmlCheck .= '<input id="'.$aType['name'] .'" name="' . $aType['name'] .'"  type="checkbox" valign="center" checked="true"/>'.htmlentities($aType['title']);
+                $htmlCheck .= '<input id="'.$aType['name'] .'" name="' . $aType['name'] .'"  type="checkbox" valign="center" checked="true"/>'.$aType['title'];
             }
             else
             {
-                $htmlCheck .= '<input id="'. $aType['name'].'" name="'.$aType['name'].'"  type="checkbox" valign="center"/>'.htmlentities($aType['title']);
+                $htmlCheck .= '<input id="'. $aType['name'].'" name="'.$aType['name'].'"  type="checkbox" valign="center"/>'.$aType['title'];
             }
          }
     }
