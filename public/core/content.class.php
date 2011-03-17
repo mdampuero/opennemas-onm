@@ -1090,7 +1090,7 @@ class Content {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if(property_exists($this, 'pk_article')) {
-            $tplManager->delete($this->category_name . '|' . $this->pk_article);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|' . $this->pk_article);
             //$tplManager->fetch(SITE_URL . $this->permalink);
 
             // Eliminamos a caché de home
@@ -1103,10 +1103,10 @@ class Content {
             }
 
             if(isset($this->frontpage) && $this->frontpage) {
-                $tplManager->delete($this->category_name . '|0');
+                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|0');
                 $tplManager->fetch(SITE_URL . 'seccion/' . $this->category_name);
 
-                $tplManager->delete($this->category_name . '|RSS');
+                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|RSS');
             }
         }
     }
@@ -1120,9 +1120,9 @@ class Content {
             $ccm = ContentCategoryManager::get_instance();
             $category_name = $ccm->get_name($_REQUEST['category']);
 
-            $tplManager->delete($category_name . '|RSS');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name) . '|RSS');
 
-            $tplManager->delete($category_name . '|0');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name) . '|0');
             $tplManager->fetch(SITE_URL . '/seccion/' . $category_name);
 
         }
@@ -1140,9 +1140,9 @@ class Content {
         foreach($availableCategories as $category) {
     
     
-            $tplManager->delete($category->name . '|RSS');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
     
-            $tplManager->delete($category->name . '|0');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
             $output .= "$category->name cleaned.\n";
     
         }
