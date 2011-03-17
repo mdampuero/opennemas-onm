@@ -64,7 +64,7 @@ switch($action) {
                             <script language="javascript">location.href="/home"</script>';
                 }
 
-                $to="boletin@listas.opennemas.com";
+                $to=MAIL_FORM_RECAPTCHA;
 
 
                 $mail = new PHPMailer();
