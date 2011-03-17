@@ -22,7 +22,7 @@
                     <br/>
                     Hola,
                     <br/>
-                    estas son las &uacute;ltimas noticias y art&iacute;culos de opini&oacute;n de hoy. Te recordamos que puedes encontrar estos artículos y muchos más visitando la web
+                    &eacute;stas son las &uacute;ltimas noticias y art&iacute;culos de opini&oacute;n de hoy. Te recordamos que puedes encontrar &eacute;stas noticias y muchas más visitando la web
                     de {$smarty.const.SITE_FULLNAME} (<a href="{$smarty.const.SITE_URL}">{$smarty.const.SITE_URL}</a>):
                     <br /><br />
                 </td>
