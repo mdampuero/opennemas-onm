@@ -147,9 +147,9 @@ class Template extends Smarty
         $cacheId = '';
 
         if (!empty($subseccion)) {
-            $cacheId = ($subseccion.'|'.$resource);
+            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $subseccion).'|'.$resource);
         } elseif (!empty($seccion)) {
-            $cacheId = ($seccion.'|'.$resource);
+            $cacheId = (preg_replace('/[^a-zA-Z0-9\s]+/', '', $seccion).'|'.$resource);
         } else {
             $cacheId = ('home|'.$resource);
         }
