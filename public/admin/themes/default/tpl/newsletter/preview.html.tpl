@@ -22,7 +22,7 @@
                     <br/>
                     Hola,
                     <br/>
-                    estas son las &uacute;ltimas noticias y articulos de opinions de hoy. Te recordamos que puedes encontra estas y muchas más visitando la web
+                    estas son las &uacute;ltimas noticias y art&iacute;culos de opini&oacute;n de hoy. Te recordamos que puedes encontrar estos artículos y muchos más visitando la web
                     de {$smarty.const.SITE_FULLNAME} (<a href="{$smarty.const.SITE_URL}">{$smarty.const.SITE_URL}</a>):
                     <br /><br />
                 </td>
@@ -79,7 +79,7 @@
 
             <tr>
                 <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #efefef;">
-                Usted est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
+                Est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
                 <a href="{$URL_PUBLIC}" style="text-decoration:none !important">{$smarty.const.SITE_FULLNAME} </a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
                 accediendo a  <a href="{$smarty.const.SITE_URL}/controllers/subscripcionBoletin.php" style="text-decoration:none !important"><b>esta direcci&oacute;n</b></a>.
                 <br/><br/><br/>

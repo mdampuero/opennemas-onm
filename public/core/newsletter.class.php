@@ -82,7 +82,7 @@ class Newsletter
                         'Abril', 'Mayo', 'Junio',
                         'Julio', 'Agosto', 'Septiembre',
                         'Octubre', 'Noviembre', 'Diciembre');
-        $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' DE ' . $months[(int)date('n')] . ' ' . date('Y'));
+        $tpl->assign('current_date', $days[(int)date('w')] . ' ' . date('j') . ' de ' . $months[(int)date('n')] . ' ' . date('Y'));
 
         $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $URL_PUBLIC);
