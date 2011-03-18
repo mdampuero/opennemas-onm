@@ -14,7 +14,7 @@
             <tr>
                 <td>
                     <div style="margin: 0px 0px 4px; padding-top: 10px; color:#980101; font-size: 12px; font-weight: bold; font-family: Arial;">
-                        Noticias del día ({$current_date})</div>
+                        Noticias. {$current_date}.</div>
                 </td>
             </tr>
             <tr>
