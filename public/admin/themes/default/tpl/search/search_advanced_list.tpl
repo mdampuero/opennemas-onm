@@ -13,7 +13,9 @@
     <tbody>
         {section name=c loop=$arrayResults}
         <tr {cycle values="class=row0,class=row1"}>
-            <td style="padding:10px;width:50%;">{$arrayResults[c].titule|clearslash}</td>
+            <td style="padding:10px;width:50%;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
+                <font size="1">&nbsp;&nbsp;&nbsp;&nbsp;<b>{t}Tags:{/t}</b>  {$arrayResults[c].metadata|clearslash}</font>
+            </td>
             <td style="width:15%;" align="center">
                 {$arrayResults[c].type}
             </td>
