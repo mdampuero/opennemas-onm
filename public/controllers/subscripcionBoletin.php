@@ -14,6 +14,9 @@ $tpl = new Template(TEMPLATE_USER);
 $ccm = ContentCategoryManager::get_instance();
 $cm = new ContentManager();
 require_once ("index_sections.php");
+/******************************  STATIC PAGES  *********************************/
+require_once("widget_static_pages.php");
+/******************************  STATIC PAGES  *********************************/
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 /********************************* ADVERTISEMENTS  *********************************************/
