@@ -21,6 +21,8 @@
 {/block}
 
 {block name='header-js'}
+<script src="{$params.JS_DIR}jcap.js" type="text/javascript"></script>
+<script src="{$params.JS_DIR}md5.js" type="text/javascript"></script>
 {$smarty.block.parent}
 {/block}
 
@@ -64,7 +66,7 @@
                                 <div id="inner-article-body" class="clearfix">
                                     <div class="inner-article-other-contents">
                                         <div>
-                                            <form action="../controllers/subscripcionBoletin.php" method="post">
+                                            <form action="../controllers/subscripcionBoletin.php" method="get" onsubmit="return jcap();">
                                                 <table border="0" cellspacing="2" cellpadding="1" width="100%">
                                                     <tbody>
                                                         <tr>
@@ -88,6 +90,10 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
+                                                            <td width="25%" style="text-align:right;"><strong> Validar: </strong></td>
+                                                            <td width="75%" align="center"><script type="text/javascript">sjcap();</script>
+                                                        </tr>
+<!--                                                        <tr>
                                                             <td style="text-align:right; vertical-align:top;"><strong></strong></td>
                                                             <td>
                                                                 <script type="text/javascript"
@@ -101,7 +107,7 @@
                                                                      value="manual_challenge">
                                                                 </noscript>
                                                             </td>
-                                                        </tr>
+                                                        </tr>-->
                                                         <tr>
                                                             <td width="25%" align="right"><strong></strong></td>
                                                             <td width="75%" align="center"><input id="submit" name="submit" type="submit" value="Enviar" /></td>

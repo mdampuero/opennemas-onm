@@ -4,7 +4,7 @@
 */
 require_once('../bootstrap.php');
 require_once('../libs/phpmailer/class.phpmailer.php');
-require_once('recaptchalib.php');
+//require_once('recaptchalib.php');
 /**
  * Setup view
 */
@@ -27,7 +27,7 @@ $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 switch($action) {
     case 'submit':
-            $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
+           /* $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
                                         $_SERVER["REMOTE_ADDR"],
                                         $_POST["recaptcha_challenge_field"],
                                         $_POST["recaptcha_response_field"]);
@@ -38,8 +38,8 @@ switch($action) {
                             <script language="javascript">location.href="#"</script>';
                 echo ($resp);
                 break;
-            } else {
-                if($_POST['email']=='' || $_POST['name']==''){
+            } else {*/                      
+                if($_REQUEST['email']=='' || $_REQUEST['name']==''){
                     $resp='<script language="JavaScript">(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                             <script language="javascript">location.href="#"</script>';
                     echo ($resp);
@@ -47,7 +47,7 @@ switch($action) {
                 }
                 // Your code here to handle a successful verification
                 // Checking the type of action to do (alta/baja)
-                if($_POST['boletin']=='alta'){
+                if($_REQUEST['boletin']=='alta'){
                     $mail->Subject  = utf8_decode("Solicitud de Alta - Boletín".SITE_FULLNAME);
 
                     $body=  "Solicitud de Alta en el boletin de: \r\n".
@@ -100,12 +100,8 @@ switch($action) {
                     echo('<script language="JavaScript">(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                     <script language="javascript">location.href="/home"</script>');
                 }
-            }
-            break;
 }
 
-$publickey = "6LdZYcISAAAAAPnwuNwqUWIq6JAHZI77bNOmXlHI"; // you got this from the signup page
-$tpl->assign('puclic_key',$publickey);
 $tpl->display('static_pages/suscripcion.tpl');
 
 
