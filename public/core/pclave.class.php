@@ -284,8 +284,8 @@ class PClave {
     }
     
     public function cb_url($pclave, $value) {
-        $text = '<a href="%s" title="Ir a %s">%s</a>';
-        
+        //Añadido target="_blank"
+        $text = '<a target="_blank" href="%s" title="Ir a %s">%s</a>';        
         return sprintf($text, $value, $value, $pclave);
     }
     
