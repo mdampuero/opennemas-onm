@@ -61,7 +61,7 @@ function smarty_function_renderTypeRelated($params,&$smarty) {
     $title_cleaned = preg_replace($patterns,$replace, $content->title);
     $pathFile = ContentManager::getFilePathFromId($content->id);
 
-    if ($content->content_type == 3) {
+    if ($content->content_type == 3 || $content->fk_content_type == 3) {
         $content->uri = 'media/files' . $pathFile;
     }
 
