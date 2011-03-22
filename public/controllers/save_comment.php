@@ -47,7 +47,7 @@ function saveComment($data)
     $data = array_map('strip_tags', $data);
     
     if($comment->hasBadWorsComment($data)) {
-        return "Su comentario fue rechazado automáticamente.\n Evite el uso de palabras malsonantes.";
+        return "Su comentario fue rechazado debido al uso de palabras malsonantes.";
     }
     
     $ip = Application::getRealIP();
@@ -67,7 +67,7 @@ if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) 
         $data['author']   = $_POST['nombre'];
         $data['title']    = $_POST['title'];
         $data['category'] = $_POST['category'];
-        $data['email']    = $_POST['email'];        
+        $data['email']    = $_POST['email'];
         
         echo saveComment($data);
         
@@ -100,6 +100,5 @@ if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) 
     echo("Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.");
 }
 
-	
 	
 	

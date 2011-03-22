@@ -2,6 +2,7 @@
 class EditmakerToOnmDataImport {
     
     public $idsMatches = array();
+    public $categoryIDForContentID = array();
     
     public $categoriesMatches =
             array(
@@ -207,6 +208,31 @@ class EditmakerToOnmDataImport {
             } else {
                 $this->idsMatches[$originalID] = $rss->fields['pk_content'];
                 return ($rss->fields['pk_content']);
+            }
+            
+        }
+    }
+    
+    public function getCategoryIDFromContent($pkContent) {
+        
+        if(isset($this->categoryIDForContentID[$pkContent])) {
+
+            return $this->categoryIDForContentID[$pkContent];
+
+        } else {
+            
+            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE `pk_fk_content`=?';
+            
+            $values = array($pkContent);
+            $getCategoryIDfromPkContent = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($getCategoryIDfromPkContent,
+                                                          $values);
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                $this->categoryIDForContentID[$pkContent] = $rss->fields['pk_fk_content_category'];
+                return ($rss->fields['pk_fk_content_category']);
             }
             
         }
@@ -550,7 +576,10 @@ class EditmakerToOnmDataImport {
 
     public function importComments()
     {
-        $sql = 'SELECT id_noti as fk_content,opiniones.* FROM opiniones,noti_foro WHERE opiniones.id_foro=noti_foro.id_foro ORDER BY `id_noti` ASC';
+        $sql = 'SELECT id_noti as fk_content,opiniones.* 
+                FROM  `opiniones` , noti_foro
+                WHERE opiniones.id_foro = noti_foro.id_foro
+                GROUP BY `id`';
         
         // Fetch the list of Comments available in EditMaker and some statistics
         $request = $this->orig->conn->Prepare($sql);
@@ -577,7 +606,8 @@ class EditmakerToOnmDataImport {
                     $data = array(
                                     'title' => '',
                                     'available' => 1,
-                                    'content_status'=> 1,
+                                    'content_status' => 1,
+                                    'category' => $this->getCategoryIDFromContent($this->matchID($rs->fields['fk_content'])),
                                     'body'   => iconv("ISO-8859-1", "UTF-8", $rs->fields['comentario']),
                                     'author' => iconv("ISO-8859-1", "UTF-8", $rs->fields['nombre']),
                                     'email'  => iconv("ISO-8859-1", "UTF-8", $rs->fields['email']),

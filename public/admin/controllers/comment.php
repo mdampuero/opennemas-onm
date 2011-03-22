@@ -25,7 +25,6 @@
 */
 require_once(dirname(__FILE__).'/../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
-
  
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
@@ -40,47 +39,42 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Comment Management');
 
-if(!isset($_REQUEST['category'])) {
-    $_REQUEST['category'] = 'todos';
-}
-$tpl->assign('category', $_REQUEST['category']);
 
-// Initialize $_REQUEST['page']
-$_REQUEST['page'] = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 
-if(isset($_REQUEST['action'])) {
+// Initialize request parameters
+$page = filter_input ( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
+$action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+$category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'todos')) );
+
+$tpl->assign('category', $category);
+
+if(isset($action)) {
     
-    switch($_REQUEST['action']) {
+    switch($action) {
         
         case 'list': {
+            
+            // Get all categories for the menu
             $ccm = ContentCategoryManager::get_instance();
             list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
-            
             $tpl->assign('subcat', $subcat);
             $tpl->assign('allcategorys', $parentCategories);
             $tpl->assign('datos_cat', $datos_cat);
 
-              // Assign a content types who have comments
-            $content_types = array(1 => 'Article' , 7 => 'Album', 9 => 'Video', 4 => 'Opinion', 11 => 'Poll');
+            // Set up the list of content types that could have comments
+            $content_types = array(1 => _('Article') , 7 => _('Album'), 9 => _('Video'), 4 => _('Opinion'), 11 => _('Poll'));
             $tpl->assign('content_types', $content_types);
             
             $cm = new ContentManager();
-            if (!isset($_REQUEST['comment_status'])) {
-                $_REQUEST['comment_status'] = 0;
-            }
-            if (!isset($_GET['page']) || empty($_GET['page'])) {$_GET['page'] = 1;}
+            $commentStatus = filter_input ( INPUT_GET, 'comment_status' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
 
-            $tpl->assign('comment_status', $_REQUEST['comment_status']);
-            $filter="content_status = ".$_REQUEST['comment_status'];
+            $tpl->assign('comment_status', $commentStatus);
+            $filter = "content_status = ".$commentStatus;
             
-           if($_REQUEST['category'] == 'encuesta') {
+            if($category == 'encuesta') {
+                
                 $ccm = new ContentManager();
-             //   $comments = $ccm->find('PC_Comment', '  '.$filter.' ', 'ORDER BY content_status, created DESC ');
-             //   $comments = $ccm->paginate($comments);
-                 list($comments, $pager)= $cm->find_pages('Comment',' '.$filter.' ', 'ORDER BY content_status, created DESC ',$_GET['page'],10);
-                    //$comments = $cm->paginate($comments);
-                    $tpl->assign('paginacion', $pager);
-          //      $pager = $ccm->pager;
+                list($comments, $pager)= $cm->find_pages('Comment',' '.$filter.' ', 'ORDER BY content_status, created DESC ',$page,10);
                 $tpl->assign('paginacion', $pager);
                 $tpl->assign('comments', $comments);
                 
@@ -90,7 +84,6 @@ if(isset($_REQUEST['action'])) {
                 foreach( $comments as $prima){
                     $polls[$i] = new Poll( $prima->fk_content );
                     $votes[$i] =new Vote( $prima->pk_comment );
-
                     $i++;
                 }
                     
@@ -98,7 +91,7 @@ if(isset($_REQUEST['action'])) {
                 $tpl->assign('votes', $votes);
                 
             } else {
-                if($_REQUEST['category'] == 'home') {
+                if($category == 'home') {
                     $comment = new Comment();
                     
                     //Comentarios de las noticias in_home
@@ -109,12 +102,12 @@ if(isset($_REQUEST['action'])) {
                         $tpl->assign('comments', $comments);
                     }
                     
-                } elseif($_REQUEST['category'] == 'todos') {
+                } elseif($category == 'todos') {
                     $comment = new Comment();
                     // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
                     list($comments, $pager)= $cm->find_pages('Comment', 'content_status = 0',
                                                              'ORDER BY  created DESC ',
-                                                             $_REQUEST['page'], 10);
+                                                             $page, 10);
                     $tpl->assign('paginacion', $pager);
                     $tpl->assign('comments', $comments);
                     
@@ -123,7 +116,7 @@ if(isset($_REQUEST['action'])) {
                     // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
                     list($comments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
                                                               'ORDER BY content_status, created DESC ',
-                                                              $_REQUEST['page'], 10, $_REQUEST['category']);
+                                                              $page, 10, $category);
                     $tpl->assign('paginacion', $pager);
                     $tpl->assign('comments', $comments);
                     
@@ -160,16 +153,20 @@ if(isset($_REQUEST['action'])) {
         } break;
         
         case 'read': {
-            //habrá que tener en cuenta el tipo
-            $comment = new Comment( $_REQUEST['id'] );
+            
+            $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+            
+            // habrá que tener en cuenta el tipo
+            $comment = new Comment( $contentID );
             if(is_null($comment->pk_comment)) {                                  
-                $comment = new Comment($_REQUEST['id']);
+                $comment = new Comment( $contentID );
                 
                 $tpl->assign('comment', $comment);
                 $poll = new Poll( $comment->fk_content );
                 $tpl->assign('article', $poll);
                 
             } else {
+                
                 $tpl->assign('comment', $comment);
                 
                 $article = new Article( $comment->fk_content );
@@ -209,14 +206,14 @@ if(isset($_REQUEST['action'])) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                 $category . '&page=' . $page);
         } break;
         
         case 'create': {
             $comment = new Comment();
             if($comment->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                     $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                     $category . '&page=' . $page);
             } else {
                 $tpl->assign('errors', $comment->errors);
             }
@@ -224,7 +221,7 @@ if(isset($_REQUEST['action'])) {
         
         case 'delete': {            
             
-            if($_REQUEST['category'] == 'encuesta'){
+            if($category == 'encuesta'){
                 $comment = new PC_Comment();
                 $comment->delete($_REQUEST['id']);
             } else {
@@ -233,11 +230,11 @@ if(isset($_REQUEST['action'])) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                 $category . '&page=' . $page);
         } break;
         
         case 'change_status': {
-            if(($_REQUEST['tipo'] == 'encuesta') || ($_REQUEST['category'] == 'encuesta')){
+            if(($_REQUEST['tipo'] == 'encuesta') || ($category == 'encuesta')){
                 $comment = new PC_Comment($_REQUEST['id']);                     
                 $comment->set_status($_REQUEST['status'], $_SESSION['userid']);
             } else {
@@ -256,8 +253,8 @@ if(isset($_REQUEST['action'])) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&comment_status=' . $_REQUEST['comment_status'] . '&page=' .
-                                 $_REQUEST['page']);
+                                 $category . '&comment_status=' . $_REQUEST['comment_status'] . '&page=' .
+                                 $page);
         } break;
         
         case 'mfrontpage': {
@@ -287,7 +284,7 @@ if(isset($_REQUEST['action'])) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                 $category . '&page=' . $page);
         } break;
         
         case 'mdelete': {
@@ -308,17 +305,17 @@ if(isset($_REQUEST['action'])) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                 $category . '&page=' . $page);
         } break;
         
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                                 $category . '&page=' . $page);
         } break;
     }
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                         $_REQUEST['category'] . '&page=' . $_REQUEST['page']);
+                         $category . '&page=' . $page);
 }
 
 $tpl->display('comment.tpl');

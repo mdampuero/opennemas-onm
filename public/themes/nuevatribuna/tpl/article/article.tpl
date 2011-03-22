@@ -3,10 +3,10 @@
 {block name="meta" append}
 <title>{$article->title|clearslash} - {$category_real_name|clearslash|capitalize} {$subcategory_real_name|clearslash|capitalize} - {$smarty.const.SITE_TITLE} </title>
 <meta name="keywords" content="{$article->metadata|clearslash}" />
-<meta name="description" content="{$article->summary|strip_tags|clearslash}" />
+<meta name="description" content="{$article->summary|strip_tags|clearslash|escape:"html"}" />
 
 <meta property="og:title" content="{$article->title|clearslash}" />
-<meta property="og:description" content="{$article->summary|strip_tags|clearslash}" />
+<meta property="og:description" content="{$article->summary|strip_tags|clearslash|escape:"html"}" />
 <meta property="og:image" content="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" />
 {/block}
 
