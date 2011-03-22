@@ -99,7 +99,7 @@ class Comment extends Content
            return(false);
         }
 
-        return(true);
+        return($this->id);
     }
 
 	/**

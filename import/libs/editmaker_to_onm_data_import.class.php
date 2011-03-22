@@ -1,6 +1,8 @@
 <?php
 class EditmakerToOnmDataImport {
     
+    public $idsMatches = array();
+    
     public $categoriesMatches =
             array(
                 48 => 13,   // CULTURA Y OCIO
@@ -23,11 +25,11 @@ class EditmakerToOnmDataImport {
             
     public $matchAuthors =
             array(
-                //74 => , //Alberto priego
-                //89 => , //alberto olmos
-                //102 => , //alfonso cuadros
+                74 => 384, //Alberto priego
+                89 => 385, //alberto olmos
+                //102 => , //alfonso cuadros // no articles
                 100 => 368, //amalia albarez
-                //113 => , //ana noguera
+                //113 => , //ana noguera // no articles
                 123 => 256, //andres rojo
                 70 => 370,
                 75  => 258,
@@ -37,9 +39,9 @@ class EditmakerToOnmDataImport {
                 //106 => , //antonio donhate
                 67 => 262,
                 72 => 263,
-                //91 => , //
+                91 => 386, // Antonio santo
                 41 => 265,
-                //111 => , //
+                //111 => , // Carlos Barra //no articles
                 61 => 266,
                 26 => 267,
                 65 => 269,
@@ -49,15 +51,15 @@ class EditmakerToOnmDataImport {
                 90 => 272,
                 59 => 274,
                 134 => 276,
-                //124 => , //
+                //124 => , // Daniel Jimenez // not created
                 137 => 279,
                 68 => 280,
                 58 => 281,
-                //54 => , //
+                54 => 390, // El Señor de Fouquet
                 128 => 377,
                 39 => 282,
                 87 => 283,
-                //86 => , //
+                //86 => , // Enrique Vázquez //no articles
                 139 => 284,
                 78 => 285,
                 125 => 286,
@@ -70,7 +72,7 @@ class EditmakerToOnmDataImport {
                 25 => 295,
                 48 => 296,
                 119 => 297,
-                //56 => , //
+                56 => 391, // Ignacio Fernández Toxo
                 35 => 273,
                 95 => 305,
                 28 => 306,
@@ -80,14 +82,14 @@ class EditmakerToOnmDataImport {
                 40 => 312,
                 118 => 313,
                 //127 => , //
-                //81 => , //
+                81 => 392, // José Félix Tezanos
                 82 => 314,
                 141 => 374,
                 138 => 317,
                 109 => 318,
                 47 => 319,
-                //110 => , //
-                //52 => , //
+                //110 => , // Jose María Asencio Mellado //no articles
+                52 => 393, // José María Martínez López
                 42 => 320,
                 29 => 321,
                 115 => 322,
@@ -101,19 +103,19 @@ class EditmakerToOnmDataImport {
                 80 => 329,
                 99 => 330,
                 73 => 331,
-                //117 => , //
+                //117 => , // Juanelo  //no articles
                 122 => 332,
-                //43 => , //
+                43 => 394, // Laureano Lázaro Araujo
                 120 => 333,
                 //130 => , //
-                //98 => , //
-                //129 => , //
+                98 => 395, // Luis Angel Aguilar Montero
+                129 => 396, // Macarena Elvira Rubio
                 85 => 335,
                 60 => 336,
                 30 => 337,
                 143 => 340,
                 92 => 341,
-                //50 => , //
+                50 => 397, // Mercedes Arancibia
                 //79 => , //
                 97 => 343,
                 84 => 344,
@@ -129,14 +131,14 @@ class EditmakerToOnmDataImport {
                 57 => 353,
                 83 => 354,
                 64 => 355,
-                //51 => , //
+                51 => 398, // Ramón Espinar
                 76 => 356,
                 33 => 357,
-                //49 => , //
+                49 => 405, // Rodolfo Serrano
                 103 => 358,
                 94 => 359,
                 114 => 360,
-                //44 => , //
+                44 => 400, // Susana Iván
                 66 => 361,
                 112 => 363,
                 //132 => , //
@@ -183,6 +185,31 @@ class EditmakerToOnmDataImport {
                         ? $this->matchAuthors[$author]
                         : false));
 
+    }
+    
+    public function matchID($originalID)
+    {
+        if(isset($this->idsMatches[$originalID])) {
+
+            return $this->idsMatches[$originalID];
+
+        } else {
+            
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=?';
+            
+            $values = array($originalID);
+            $getRowFromPkContentOld = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($getRowFromPkContentOld,
+                                                          $values);
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                $this->idsMatches[$originalID] = $rss->fields['pk_content'];
+                return ($rss->fields['pk_content']);
+            }
+            
+        }
     }
     
     public function importCategories()
@@ -240,9 +267,9 @@ class EditmakerToOnmDataImport {
             while (!$rs->EOF) {
                 
                 if ($ih->elementIsImported($rs->fields['id'], 'article') ) {
-                    echo "Article with id {$rs->fields['id']} already imported\n";
+                    echo "[{$current}/{$totalRows}] Article with id {$rs->fields['id']} already imported\n";
                 } else {
-                    echo "Importing article with id {$rs->fields['id']} - ";
+                    echo "[{$current}/{$totalRows}] Importing article with id {$rs->fields['id']} - ";
                     
                     $originalArticleID = $rs->fields['id'];
                 
@@ -523,7 +550,64 @@ class EditmakerToOnmDataImport {
 
     public function importComments()
     {
+        $sql = 'SELECT id_noti as fk_content,opiniones.* FROM opiniones,noti_foro WHERE opiniones.id_foro=noti_foro.id_foro ORDER BY `id_noti` ASC';
         
+        // Fetch the list of Comments available in EditMaker and some statistics
+        $request = $this->orig->conn->Prepare($sql);
+        $rs = $this->orig->conn->Execute($request);
+        
+        if (!$rs) {
+            ImportHelper::messageStatus($this->orig->conn->ErrorMsg());
+        } else {
+        
+            $totalRows = $rs->_numOfRows;
+            $authors = $rs->fields;
+            $current = 1;
+            $ih = new ImportHelper();
+            
+            while (!$rs->EOF) {
+                
+                if ($ih->elementIsImported($rs->fields['id'], 'comment') ) {
+                    echo "[{$current}/{$totalRows}] Comment with id {$rs->fields['id']} already imported\n";
+                } else {
+                    echo "[{$current}/{$totalRows}] Importing comment with id {$rs->fields['id']} over content with id {$this->matchID($rs->fields['fk_content'])} - ";
+                    
+                    $originalCommentID = $rs->fields['id'];
+
+                    $data = array(
+                                    'title' => '',
+                                    'available' => 1,
+                                    'content_status'=> 1,
+                                    'body'   => iconv("ISO-8859-1", "UTF-8", $rs->fields['comentario']),
+                                    'author' => iconv("ISO-8859-1", "UTF-8", $rs->fields['nombre']),
+                                    'email'  => iconv("ISO-8859-1", "UTF-8", $rs->fields['email']),
+                                  );
+                    
+                    $comment = new Comment();
+                    $newCommentID = $comment->create(
+                                                        array(
+                                                            'id' => $this->matchID($rs->fields['fk_content']),
+                                                            'data' => $data,
+                                                            'ip' => $rs->fields['ip']
+                                                        )
+                                                    );
+                    
+                    $ih->updateCreateDate($newCommentID, $rs->fields['fecha']);
+
+                    if(is_string($newCommentID)) {
+                        
+                        $ih = new ImportHelper();
+                        $ih->logElementInsert($originalCommentID, $newCommentID, 'comment');
+                        
+                    }
+                    echo "new id {$newCommentID} [DONE]\n";
+                    
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
     }
     
 }
