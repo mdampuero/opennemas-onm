@@ -4,7 +4,7 @@
 */
 require_once('../bootstrap.php');
 require_once('../libs/phpmailer/class.phpmailer.php');
-//require_once('recaptchalib.php');
+require_once('recaptchalib.php');
 /**
  * Setup view
 */
@@ -27,7 +27,7 @@ $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 switch($action) {
     case 'submit':
-           /* $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
+            $resp = recaptcha_check_answer (RECAPTCHA_PRIVATE_KEY,
                                         $_SERVER["REMOTE_ADDR"],
                                         $_POST["recaptcha_challenge_field"],
                                         $_POST["recaptcha_response_field"]);
@@ -38,7 +38,7 @@ switch($action) {
                             <script language="javascript">location.href="#"</script>';
                 echo ($resp);
                 break;
-            } else {*/                      
+            } else {                      
                 if($_REQUEST['email']=='' || $_REQUEST['name']==''){
                     $resp='<script language="JavaScript">(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                             <script language="javascript">location.href="#"</script>';
@@ -100,6 +100,8 @@ switch($action) {
                     echo('<script language="JavaScript">(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                     <script language="javascript">location.href="/home"</script>');
                 }
+            }
+            break;
 }
 
 $tpl->display('static_pages/suscripcion.tpl');
