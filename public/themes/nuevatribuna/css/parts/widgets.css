@@ -1,3 +1,97 @@
+
+div.widget .ui-tabs,
+div.widget .ui-widget,
+div.widget .ui-widget-content,
+div.widget .ui-corner-all
+{
+    padding:0; margin:0; border:1px solid White;
+}
+
+div.widget div { margin:0; padding:0; }
+div.widget div.ui-tabs-panel { overflow-x: hidden; border:none !important; margin:10px; border:0px !important; padding-bottom:10px; }
+div.widget .ui-tabs-nav a
+{
+    color:Black !important; font-family:Verdana !important; font-size:.8em !important; }
+div.widget .ui-tabs-nav
+{
+    border:0; border-bottom:1px solid #444 !important; background: White !important;
+    margin:10px;
+}
+
+div.widget div.ui-tabs ul.ui-tabs-nav li {
+  margin: 0 2px;
+  padding: 0;
+}
+
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a {
+    cursor:pointer !important;
+}
+
+div.widget .ui-tabs-default
+{
+    color:#F3F3F3 !important;
+    background-color:White !important;
+    border: 1px solid #444 !important;
+    border-bottom:1px solid White !important;
+    border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    behavior: url(border-radius.htc);
+
+}
+div.widget .ui-tabs-selected, .ui-tabs-active
+{
+    background:White !important;
+    border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius-bottomleft:0px;
+    -webkit-border-bottom-left-radius:0px;
+    -moz-border-radius-bottomright:0px;
+    -webkit-border-bottom-right-radius:0px;
+    border-bottom-right-radius:0px;
+    border-bottom-left-radius:0px;
+    behavior: url(border-radius.htc);
+    border: 1px solid #444 !important;
+    border-bottom:1px solid White !important;
+}
+
+div.widget .ui-state-default,
+div.widget div.ui-widget-content .ui-state-default {
+  background: #E6E6E6;
+  border: 1px solid #D3D3D3;
+  color: #555555;
+  font-weight: normal;
+}
+div.ui-tabs-selected a, div.ui-tabs-active a{color: Black !important;}
+div.widget div.ui-tabs-panel img{ float:left; margin:0 5px 10px;}
+div.widget .tab-lastest {
+    border-top: 1px dotted #ccc;
+    margin-bottom:5px;
+    width:100%;
+}
+
+div.widget .tab-lastest:first-child { border-top:none; }
+div.widget .tab-lastest:last-child {
+    border-bottom: 1px dotted #ccc;
+}
+div.widget .tab-lastest-title a
+{
+    color:#005689;
+    font-size:.9em;
+    margin:0;
+    padding:0
+}
+div.widget .tab-lastest-title{ margin:5px 10px; }
+
+
 /***********************************************************
    Widget Lastest elements definition definition
 ************************************************************/
@@ -15,8 +109,8 @@ div.widget-most-seeing-voted-commented-content .title
     font-size:1.6em;
 }
 
-div.widget-most-seeing-voted-commented-content .initially-hidden {
-    display:none;
+.initially-hidden {
+    display:none !important;
 }
 
 div.widget-most-seeing-voted-commented-content .ui-tabs,
@@ -361,4 +455,39 @@ div.widget-last-opinions-with-face a
 div.widget-all-authors select{
     width:100%;
     
+}
+
+/***********************************************************
+   Widget past headlines most viewed
+************************************************************/
+div.widget-past-headlines-most-viewed  {
+    margin-bottom:10px;
+    padding-top:1px;
+}
+div.widget-past-headlines-most-viewed > div {
+    margin:10px !important;
+    background:White;
+}
+div.widget-past-headlines-most-viewed div.ui-tabs-panel img {
+    float: left;
+    margin: 0 5px 10px;
+}
+div.widget-past-headlines-most-viewed .tab-lastest-title a {
+    font-family: Arial;
+    margin: 0;
+    padding: 0;
+}
+div.widget-past-headlines-most-viewed .tab-lastest-title {
+    margin: 5px 10px;
+}
+div.widget-past-headlines-most-viewed {
+    background-color: #F3F3F3 !important;
+}
+div.widget-past-headlines-most-viewed .title {
+    font-family: Georgia;
+    font-size: 1.6em;
+    padding: 0 10px;
+}
+div.widget-past-headlines-most-viewed div.widget .ui-tabs-nav {
+    margin-top:0 !important;
 }
