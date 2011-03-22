@@ -27,7 +27,7 @@ function smarty_function_render_widget($params, &$smarty) {
 	}
 	
 	if($widget->available) {
-		$output = $widget->render();
+		$output = $widget->render($params);
 	}
 	
 	// Render its contents
