@@ -89,11 +89,8 @@
                                                                 <input name="boletin" type="radio" value="baja" /> Darme de baja en boletín
                                                             </td>
                                                         </tr>
+                                                        
                                                         <tr>
-                                                            <td width="25%" style="text-align:right;"><strong> Validar: </strong></td>
-                                                            <td width="75%" align="center"><script type="text/javascript">sjcap();</script>
-                                                        </tr>
-<!--                                                        <tr>
                                                             <td style="text-align:right; vertical-align:top;"><strong></strong></td>
                                                             <td>
                                                                 <script type="text/javascript"
@@ -107,7 +104,7 @@
                                                                      value="manual_challenge">
                                                                 </noscript>
                                                             </td>
-                                                        </tr>-->
+                                                        </tr>
                                                         <tr>
                                                             <td width="25%" align="right"><strong></strong></td>
                                                             <td width="75%" align="center"><input id="submit" name="submit" type="submit" value="Enviar" /></td>
