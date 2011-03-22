@@ -103,7 +103,4 @@ switch($action) {
             }
             break;
 }
-
 $tpl->display('static_pages/suscripcion.tpl');
-
-
