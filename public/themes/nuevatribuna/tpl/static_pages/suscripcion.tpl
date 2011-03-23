@@ -66,7 +66,7 @@
                                 <div id="inner-article-body" class="clearfix">
                                     <div class="inner-article-other-contents">
                                         <div>
-                                            <form action="../controllers/subscripcionBoletin.php" method="get" onsubmit="return jcap();">
+                                            <form action="../controllers/subscripcionBoletin.php" method="post">
                                                 <table border="0" cellspacing="2" cellpadding="1" width="100%">
                                                     <tbody>
                                                         <tr>
