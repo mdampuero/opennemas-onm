@@ -27,24 +27,29 @@
             <div id="main_content" class="wrapper_content_inside_container span-24 {$category_name}">
 
                 <div class="span-24">
-                    <div class="layout-column span-9 first-column">
-                        <div>
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_0" cssclass="top-firstcol"}
-                            {include file="ads/ad_in_column.tpl" type=11 nocache}
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
-                            {include file="ads/ad_in_column.tpl" type='12' nocache}
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_2"}
+                    <div class="wrapper-two-columns span-16 last">
+                        <div class="layout-column highlighted">
+                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_highlighted.tpl' placeholder="highlighted_0" cssclass="highlighted"}
                         </div>
-                    </div><!-- first-column -->
-                    <div class="layout-column span-7 second-column ">
-                        <div>
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_0" cssclass="top-secondcol"}
-                            {include file="ads/ad_in_column.tpl" type='21' nocache}
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_1"}
-                            {include file="ads/ad_in_column.tpl" type='22' nocache}
-                            {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_2"}
-                        </div>
-                    </div> <!--second-column-->
+                        <div class="layout-column span-9 first-column">
+                            <div>
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_0" cssclass="top-firstcol"}
+                                {include file="ads/ad_in_column.tpl" type=11 nocache}
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_1"}
+                                {include file="ads/ad_in_column.tpl" type='12' nocache}
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_0_2"}
+                            </div>
+                        </div><!-- first-column -->
+                        <div class="layout-column span-7 second-column ">
+                            <div>
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_0" cssclass="top-secondcol"}
+                                {include file="ads/ad_in_column.tpl" type='21' nocache}
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_1"}
+                                {include file="ads/ad_in_column.tpl" type='22' nocache}
+                                {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_2"}
+                            </div>
+                        </div> <!--second-column-->
+                    </div><!-- wrapper-two-columns -->
                     <div class="layout-column span-8 last third-column">
                         <div>
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_2_0" cssclass="top-thirdcol"}

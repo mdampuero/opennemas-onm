@@ -20,7 +20,7 @@
 				</a>
 			</li>
             <li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('{t}List{/t}');" accesskey="L" tabindex="1">
+				<a href="{$smarty.server.PHP_SELF}?action=list" onmouseover="return escape('{t}List{/t}');" accesskey="L" tabindex="1">
 					<img border="0" src="{$params.IMAGE_DIR}list.png" title="List" alt={t}"List files from repository system{/t}"><br />{t}List{/t}
 				</a>
 			</li>
@@ -44,10 +44,10 @@
         <tr>
             <td>
                 <label for="username" >{t}User Name:{/t}</label><br>
-                <input type="text" id="svn_username" name="svn_username" title="{t}Username{/t}" value="{$username}" class="required" size="100" />
+                <input type="text" id="scm_username" name="scm_username" title="{t}Username{/t}" value="{$username}" class="required" size="100" />
                 <br>
                 <label for="password" >{t}Password:{/t}</label><br>
-                <input type="password" id="svn_password" name="svn_password" title="{t}Password{/t}" value="{$password}" class="required" size="100" />
+                <input type="password" id="scm_password" name="scm_password" title="{t}Password{/t}" value="{$password}" class="required" size="100" />
             </td>
         </tr>
         <tr>
@@ -81,9 +81,9 @@
             </h3>
             <b>{t}Acting performed:{/t} {$checkout}</b><br />
             <pre style="padding:1em; overflow:auto;">
-            {foreach from=$return item=foo}
-            {$foo}
-            {/foreach}
+{if is_array($return) && (count($return) > 0)}
+	{$return|implode:"\n\t"}
+{/if}
             </pre>
         </div>
     {/if}

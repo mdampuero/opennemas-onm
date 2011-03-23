@@ -52,9 +52,9 @@ $menuXml = '<?xml version="1.0"?>
     <submenu title="'.htmlspecialchars(_("Configuration"), ENT_QUOTES).'" link="configurator.php" privilege="CACHE_ADMIN,BACKEND_ADMIN">
         <node title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'" link="configurator.php"  privilege="BACKEND_ADMIN" />
         <node title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'" link="tpl_manager.php" privilege="CACHE_ADMIN" />
-        <!--<node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'" link="update-system.php"  privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Information"), ENT_QUOTES).'" link="index.php" privilege="BACKEND_ADMIN" />-->
+        <!--<node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />-->
+        <node title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'" link="controllers/updatesystem/index.php"  privilege="BACKEND_ADMIN" />
+        <!--<node title="'.htmlspecialchars(_("Information"), ENT_QUOTES).'" link="index.php" privilege="BACKEND_ADMIN" />-->
         <node title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'" link="http://www.openhost.es/" privilege="BACKEND_ADMIN" />
     </submenu>
 </menu>';

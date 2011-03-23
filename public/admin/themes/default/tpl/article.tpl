@@ -57,16 +57,21 @@
             </table>
             <div id="pagina">
 
-                <table class="adminlist">
-                    <tr id="columns" valign="top">
+                <table id="columns" class="adminlist">
+                    <tr  valign="top">
+                       <td colspan=3>
+                        {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='highlighted'}
+                       </td> 
+                    </tr>
+                    <tr valign="top">
                         <td width="33%">
-                              {include  file="article_column.tpl" place='placeholder_0'}
+                              {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_0'}
                         </td>
                          <td width="33%">
-                              {include  file="article_column.tpl" place='placeholder_1'}
+                              {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_1'}
                         </td>
                          <td width="33%">
-                              {include  file="article_column.tpl" place='placeholder_2'}
+                              {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_2'}
                         </td>
                     </tr>
                 </table>

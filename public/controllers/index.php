@@ -266,9 +266,8 @@ if(($tpl->caching == 0)
                 if(!empty($imagenes)) {
                     foreach($imagenes as $img) {
                         if($img->pk_content == $column[$c]->img1) {
-                         //   $photos[$art->id] = $img->path_file.$img->name;
-
                             $column[$c]->img1_path = $img->path_file.$img->name;
+                            $column[$c]->img1 = $img;
                             break;
                         }
                     }
