@@ -419,6 +419,10 @@ div.onm-new.opinion h3.nw-title {
 div.onm-new.highlighted {
     
 }
+    div.highlighted div.onm-new:last-child {
+        margin-bottom:0px;
+    }
+
     div.onm-new.highlighted div.onm-wrapper-image,
     div.onm-new.highlighted div.onm-wrapper-content {
         float:left;
