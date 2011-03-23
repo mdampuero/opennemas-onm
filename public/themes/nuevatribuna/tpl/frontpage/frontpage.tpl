@@ -28,7 +28,7 @@
 
                 <div class="span-24">
                     <div class="wrapper-two-columns span-16 last">
-                        <div class="layout-column highlighted">
+                        <div class="layout-column wrapper-highlighted">
                             {renderplaceholder items=$column tpl='frontpage/frontpage_article_highlighted.tpl' placeholder="highlighted_0" cssclass="highlighted"}
                         </div>
                         <div class="layout-column span-9 first-column">
