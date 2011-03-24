@@ -41,7 +41,7 @@ $.noConflict();
     jQuery(document).ready(function() {
         jQuery("#feed-{$smarty.section.feed.index}").gFeed ({
             url: '{$feeds[feed].url}',
-            max: 4
+            max: 3
         });
     });
 {/section}
