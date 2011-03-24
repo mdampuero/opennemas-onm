@@ -34,7 +34,15 @@
 
 
         <div id="menu-acciones-admin">
-            <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}</h2></div>
+            {if $datos_cat[0]}
+                <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}</h2></div>
+            {else}
+                {if $category eq "2"}
+                    <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t}Image manager:: Images for category «publicidad»{/t}</h2></div>
+                {else}
+                    <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t}Image manager:: Images for category «GLOBAL»{/t}</h2></div>
+                {/if}
+            {/if}
             <ul>
                 <li>
                     <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  name="submit_mult" value="Eliminar todos">

@@ -509,15 +509,15 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             if(!empty($_REQUEST['categ']) && $_REQUEST['categ']!='todas') { $category= $_REQUEST['categ']; } else {$category=''; $_REQUEST['category']='todas'; $search.=' De todas las categorias';}
             if(!empty($_REQUEST['author'])) { $where.=' `photos`.`author_name` LIKE "%'.$_REQUEST['author'].'%" AND ' ; $search.=' El autor '.$_REQUEST['author'];}
             if(!empty($_REQUEST['anchoMax'])) { $where.=' `photos`.`width` <= "'.$_REQUEST['anchoMax'].'" AND ' ; $search.=' Ancho menor que '.$_REQUEST['anchoMin'];}
-            if(!empty($_REQUEST['altoMax'])) { $where.=' `photos`.`height` <= "'.$_REQUEST['altoMax'].'" AND ' ; $search.='Alto menor que '.$_REQUEST['altoMin'];}
+            if(!empty($_REQUEST['altoMax'])) { $where.=' `photos`.`height` <= "'.$_REQUEST['altoMax'].'" AND ' ; $search.=' Alto menor que '.$_REQUEST['altoMin'];}
             if(!empty($_REQUEST['anchoMin'])) { $where.=' `photos`.`width` >= "'.$_REQUEST['anchoMin'].'" AND ' ; $search.=' Ancho mayor que '.$_REQUEST['anchoMin'];}
-            if(!empty($_REQUEST['altoMin'])) { $where.=' `photos`.`height` >= "'.$_REQUEST['altoMin'].'" AND ' ; $search.='Alto mayor que '.$_REQUEST['altoMin'];}
-            if(!empty($_REQUEST['endtime'])) { $where.=' `photos`.`date` <= "'.$_REQUEST['endtime'].'" AND ' ; $search.='Fecha anterior a '.$_REQUEST['endtime'];}
-            if(!empty($_REQUEST['starttime'])) { $where.=' `photos`.`date` >= "'.$_REQUEST['starttime'].'" AND ' ; $search.='Fecha posterior a '.$_REQUEST['starttime'];}
-            if(!empty($_REQUEST['pesoMax'])) { $where.=' `photos`.`size` <= "'.$_REQUEST['pesoMax'].'" AND ' ; $search.='Peso menor que '.$_REQUEST['pesoMax'];}
-            if(!empty($_REQUEST['pesoMin'])) { $where.=' `photos`.`size` >= "'.$_REQUEST['pesoMin'].'" AND ' ; $search.='Peso mayor que '.$_REQUEST['pesoMin'];}
-            if(!empty($_REQUEST['tipo'])) { $where.=' `photos`.`type_img` = "'.$_REQUEST['tipo'].'" AND ' ; $search.='De tipo '.$_REQUEST['tipo'];}
-            if(!empty($_REQUEST['color'])) { $where.=' `photos`.`color` = "'.$_REQUEST['color'].'" AND ' ; $search.='Con color '.$_REQUEST['color'];}
+            if(!empty($_REQUEST['altoMin'])) { $where.=' `photos`.`height` >= "'.$_REQUEST['altoMin'].'" AND ' ; $search.=' Alto mayor que '.$_REQUEST['altoMin'];}
+            if(!empty($_REQUEST['endtime'])) { $where.=' `photos`.`date` <= "'.$_REQUEST['endtime'].'" AND ' ; $search.=' Fecha anterior a '.$_REQUEST['endtime'];}
+            if(!empty($_REQUEST['starttime'])) { $where.=' `photos`.`date` >= "'.$_REQUEST['starttime'].'" AND ' ; $search.=' Fecha posterior a '.$_REQUEST['starttime'];}
+            if(!empty($_REQUEST['pesoMax'])) { $where.=' `photos`.`size` <= "'.$_REQUEST['pesoMax'].'" AND ' ; $search.=' Peso menor que '.$_REQUEST['pesoMax'];}
+            if(!empty($_REQUEST['pesoMin'])) { $where.=' `photos`.`size` >= "'.$_REQUEST['pesoMin'].'" AND ' ; $search.=' Peso mayor que '.$_REQUEST['pesoMin'];}
+            if(!empty($_REQUEST['tipo'])) { $where.=' `photos`.`type_img` = "'.$_REQUEST['tipo'].'" AND ' ; $search.=' De tipo '.$_REQUEST['tipo'];}
+            if(!empty($_REQUEST['color'])) { $where.=' `photos`.`color` = "'.$_REQUEST['color'].'" AND ' ; $search.=' Con color '.$_REQUEST['color'];}
             $where.=' 1=1 ';
             $_SESSION['where']=$where;
         }

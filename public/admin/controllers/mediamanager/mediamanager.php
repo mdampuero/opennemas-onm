@@ -32,7 +32,8 @@ require(dirname(__FILE__).'/mediamanagerController.php');
 
 
 //????? Parche pq no pasa el action, lo borra en algun sitio
-if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult') { $_REQUEST['action'] = "searchResult";
+if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult'){ 
+    $_REQUEST['action'] = "searchResult";
     unset($_SESSION['where']);
 }
 
@@ -42,10 +43,16 @@ if (!isset($_REQUEST['page'])) {
 if (!isset($_REQUEST['where'])) {
     $_REQUEST['where '] = '';
 }
+if (!empty($_REQUEST['categ'])){ //&& $_REQUEST['categ']=='todas') {
+    if($_REQUEST['categ']=='todas'){
+        $_REQUEST['category'] = 'GLOBAL';
+    }else{
+        $_REQUEST['category'] = $_REQUEST['categ'];
+    }
+}
 
 if (!isset($_REQUEST['category'])
-    || ($_REQUEST['category'] == 'GLOBAL'))
-    //&& empty($_REQUEST['action'])))
+    || ($_REQUEST['category'] == 'GLOBAL' && empty($_REQUEST['action'])))
 {
     $_REQUEST['category'] = 'GLOBAL';
     $_REQUEST['action'] = "list_categorys";
@@ -115,12 +122,12 @@ switch($action) {
     } break;
 
     case 'searchResult': {
-        $name=$mmc->action_searchResult();
+        $mmc->action_searchResult();
 
         $tpl = $mmc->tpl;
         $tpl->assign('action', $action);
         $tpl->assign('category', $mmc->category);
-        $tpl->display('mediamanager/mediamanager.tpl');
+        $tpl->display('mediamanager/list_all_in_category.tpl');
 
     } break;
 

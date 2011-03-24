@@ -21,6 +21,7 @@
                 <td align='left'>
                     <select name="categ" id="categ" />
                         <option value="todas" {if $photo1->color eq "todas"} selected {/if}>{t}All{/t}</option>
+                        <option value="2" {if $category eq "2"} selected {/if}>{t}Advertisement{/t}</option>
                         {section name=as loop=$allcategorys}
                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
@@ -78,6 +79,7 @@
                         <option value="gif" >gif</option>
                         <option value="png" >png</option>
                         <option value="svg" >svg</option>
+                        <option value="swf" >swf</option>
                         <option value="otros" >{t}Others{/t}</option>
                     </select>
                  </td>
