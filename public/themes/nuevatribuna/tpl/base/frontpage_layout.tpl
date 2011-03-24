@@ -25,12 +25,12 @@
     <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}/bp/ie.css" type="text/css" media="screen, projection" /><![endif]-->
 
     <link rel="stylesheet" href="{$params.CSS_DIR}nuevatribuna.css?{time()}" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="{$params.CSS_DIR}jui-nuevatribuna/jquery-ui.css?{time()" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="{$params.CSS_DIR}jui-nuevatribuna/jquery-ui.css?{time()}" type="text/css" media="screen,projection" />
 
-    <link rel="stylesheet" href="{$params.CSS_DIR}parts/ads.css?{time()" type="text/css" media="screen,projection" />
-	<link rel="stylesheet" href="{$params.CSS_DIR}parts/menu.css?{time()" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css?{time()" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="{$params.CSS_DIR}parts/widgets.css?{time()" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="{$params.CSS_DIR}parts/ads.css?{time()}" type="text/css" media="screen,projection" />
+	<link rel="stylesheet" href="{$params.CSS_DIR}parts/menu.css?{time()}" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css?{time()}" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="{$params.CSS_DIR}parts/widgets.css?{time()}" type="text/css" media="screen,projection" />
 
     <style type="text/css">{*$categories_styles*}</style>
 
