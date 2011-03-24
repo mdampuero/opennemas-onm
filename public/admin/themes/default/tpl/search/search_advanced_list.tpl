@@ -69,7 +69,7 @@
                         <img src="{$params.IMAGE_DIR}trash_no.png" border="0" width="24" alt="{t}Restore from trash{/t}" title="{t}Restore from trash{/t}" />
                      </a>
                 {else}
-                    {if ($arrayResults[c].type == 'artigo')}
+                    {if ($arrayResults[c].type == 'Articulo')}
                     {if ($arrayResults[c].available == 1) && ($arrayResults[c].content_status == 0)}
                         <a href="/admin/{$type2res.$ct}?&action=change_status&status=1&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from library{/t}">
                               <img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Recuperar Hemeroteca" title="Recuperar de Hemeroteca"/>
