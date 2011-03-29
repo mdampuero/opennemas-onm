@@ -1,39 +1,31 @@
 
+var Onm = {
+   
+   minFontSize: 8,
+   maxFontSize: 18,
+   
+   increaseFontSize: function(classEl) {
+      console.log(classEl);
+      var currentFontSize = $(classEl).css('font-size');
+      var currentFontSizeNum = parseFloat(currentFontSize, 10);
+      console.log(currentFontSizeNum);
+      if(currentFontSizeNum <= this.minFontSize) { return false; }
+      var newFontSize = currentFontSizeNum*1.05;
+      $(classEl).css('font-size', newFontSize);
+      return false;
+   },
 
-var min=8;
-var max=18;
-function increaseFontSize() {
-   var p = document.getElementsByClassName('inner-article-other-contents');
-   for(i=0;i<p.length;i++) {
-      if(p[i].style.fontSize) {
-         var s = parseInt(p[i].style.fontSize.replace("px",""));
-      } else {
-         var s = 12;
-      }
-      if(s!=max) {
-         s += 1;
-      }
-      p[i].style.fontSize = s+"px"
+   decreaseFontSize: function(classEl) {
+      
+      var currentFontSize = $(classEl).css('font-size');
+      var currentFontSizeNum = parseFloat(currentFontSize, 10);
+      if(currentFontSizeNum >= this.maxFontSize) { return false; }
+      var newFontSize = currentFontSizeNum*0.95;
+      $(classEl).css('font-size', newFontSize);
+      return false;
+      
    }
-}
-function decreaseFontSize() {
-   var p = document.getElementsByClassName('inner-article-other-contents');
-   for(i=0;i<p.length;i++) {
-      if(p[i].style.fontSize) {
-         var s = parseInt(p[i].style.fontSize.replace("px",""));
-      } else {
-         var s = 12;
-      }
-      if(s!=min) {
-         s -= 1;
-      }
-      p[i].style.fontSize = s+"px"
-   }   
-}
-
-function sendbyemail(title,url) {
- 
-  window.location="mailto:insert_here@your_friend.mail?subject=See this article '"+title+"' from Mabishu Studio&body=Please take a look at: "+url+" from Mabishu Blog.";
+   
 }
 
 function showCommentForm(){
