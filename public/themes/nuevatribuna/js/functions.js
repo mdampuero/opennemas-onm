@@ -9,8 +9,6 @@ var Onm = {
       var currentFontSizeNum = parseFloat(currentFontSize, 10);
       if(currentFontSizeNum <= this.minFontSize) { return false; }
       var newFontSize = currentFontSizeNum+1;
-      alert(currentFontSizeNum);
-      alert(newFontSize);
       $(classEl).css('font-size', newFontSize);
       return false;
    },
