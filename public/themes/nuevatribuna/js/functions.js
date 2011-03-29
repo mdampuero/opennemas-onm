@@ -8,7 +8,9 @@ var Onm = {
       var currentFontSize = $(classEl).css('font-size');
       var currentFontSizeNum = parseFloat(currentFontSize, 10);
       if(currentFontSizeNum <= this.minFontSize) { return false; }
-      var newFontSize = currentFontSizeNum*1.05;
+      var newFontSize = currentFontSizeNum+1;
+      alert(currentFontSizeNum);
+      alert(newFontSize);
       $(classEl).css('font-size', newFontSize);
       return false;
    },
@@ -18,7 +20,7 @@ var Onm = {
       var currentFontSize = $(classEl).css('font-size');
       var currentFontSizeNum = parseFloat(currentFontSize, 10);
       if(currentFontSizeNum >= this.maxFontSize) { return false; }
-      var newFontSize = currentFontSizeNum*0.95;
+      var newFontSize = currentFontSizeNum-1;
       $(classEl).css('font-size', newFontSize);
       return false;
       
