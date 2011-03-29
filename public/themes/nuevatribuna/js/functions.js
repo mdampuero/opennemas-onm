@@ -5,10 +5,8 @@ var Onm = {
    maxFontSize: 18,
    
    increaseFontSize: function(classEl) {
-      console.log(classEl);
       var currentFontSize = $(classEl).css('font-size');
       var currentFontSizeNum = parseFloat(currentFontSize, 10);
-      console.log(currentFontSizeNum);
       if(currentFontSizeNum <= this.minFontSize) { return false; }
       var newFontSize = currentFontSizeNum*1.05;
       $(classEl).css('font-size', newFontSize);
