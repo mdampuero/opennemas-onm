@@ -70,6 +70,17 @@ JSINTERSTICIAL;
         $width  = $params['width'];
         $height = $params['height'];
     }
+    
+    /**
+     * If the Ad is Flash based try to get the width and height fixed
+     */
+    if ( ($photo->width <= $width) 
+         && ($photo->height <= $height)
+         && ($photo->type_img === 'swf'))
+    {
+        $width = $photo->width;
+        $height = $photo->height;
+    }
 
     // If $height is equals to * then calculate using GD
     if($height == '*') {
@@ -96,6 +107,8 @@ JSINTERSTICIAL;
     if( isset($params['beforeHTML']) ) {
         $output .= $params['beforeHTML'];
     }
+    
+    
 
     // Initial container
     $output .= '<div class="'.$cssclass.'">';
@@ -113,6 +126,7 @@ JSINTERSTICIAL;
 
         // TODO: controlar los banners swf especiales con div por encima
         if( strtolower($photo->type_img)=='swf' ) {
+            
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params

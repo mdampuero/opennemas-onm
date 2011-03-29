@@ -43,7 +43,7 @@
                         <div class="layout-column span-7 second-column ">
                             <div>
                                 {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_0" cssclass="top-secondcol"}
-                                {include file="ads/ad_in_column.tpl" type='21' nocache}
+                                {include file="ads/ad_in_column.tpl" type='21' width=200 nocache}
                                 {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_1"}
                                 {include file="ads/ad_in_column.tpl" type='22' nocache}
                                 {renderplaceholder items=$column tpl='frontpage/frontpage_article_head.tpl' placeholder="placeholder_1_2"}
