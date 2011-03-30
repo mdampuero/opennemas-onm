@@ -70,9 +70,23 @@ switch($_REQUEST['action'])
                                                             "contents_categories, content_types",
                                                             100);
         $Pager = null;
-
+        
         $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
+        $indice = 0; $ind = 0;
+        $res = array();
+        $szTags = explode(' ', $szTags);
 
+        
+        foreach ($arrayResults as $res ) {
+            for($ind=0; $ind < sizeof($szTags); $ind++){
+                $arrayResults[$indice]['titule']= ext_str_ireplace($szTags[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTags[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
+
+            }
+            
+            $indice++;
+        }
+        
         $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
         $tpl->assign('type2res', $type2res);
@@ -437,4 +451,32 @@ function send_notify( $destinatario, $htmlcontent ) {
 
 		}
 	}
+    
+function ext_str_ireplace($findme, $replacewith, $subject)
+{
+     // Replaces $findme in $subject with $replacewith
+     // Ignores the case and do keep the original capitalization by using $1 in $replacewith
+     // Required: PHP 5
+
+     $rest = $subject;
+     $result = '';
+
+     while (stripos($rest, $findme) !== false) {
+          $pos = stripos($rest, $findme);
+
+          // Remove the wanted string from $rest and append it to $result
+          $result .= substr($rest, 0, $pos);
+          $rest = substr($rest, $pos, strlen($rest)-$pos);
+
+          // Remove the wanted string from $rest and place it correctly into $result
+          $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
+          $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
+     }
+
+     // After the last match, append the rest
+     $result .= $rest;
+
+     return $result;
+}
+
 ?>
