@@ -38,7 +38,7 @@
         <td  align="center"  class="un_width" style="width:20px;">
             {if $item->available == 1}
                     <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
-                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Despublicar" /></a>
+                            <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
             {else}
                     <a href="controllers/widget/widget.php?action=changeavailable&id={$item->pk_widget}" title="Publicar">
                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar" /></a>
@@ -51,7 +51,7 @@
             <td  align="center"  class="un_width" style="width:25px;">
             {if $item->available == 1}
                     <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
-                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Despublicar" /></a>
+                            <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
             {else}
                     <a href="controllers/widget/widget.php?action=changeavailable&id={$item->pk_widget}" title="Publicar">
                             <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar" /></a>
