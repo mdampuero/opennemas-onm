@@ -120,19 +120,34 @@ switch($_REQUEST['action'])
 
 
         //$Pager = null;
-        if( isset($arrayResults) &&
-            !empty($arrayResults))
+        if( isset($arrayResults) && !empty($arrayResults)){
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
-            $htmlPaging = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
+        }
+        
+        $indice = 0; $ind = 0;
+        $res = array();
+        $szTagsArray = explode(' ', $szTags);
 
-            $tpl->assign('type2res', $type2res);
 
-            $tpl->assign('pagination', $htmlPaging);
-            $tpl->assign('arrayResults',$arrayResults);
+        foreach ($arrayResults as $res ) {
+            for($ind=0; $ind < sizeof($szTagsArray); $ind++){
+                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
 
-            $html_out=$tpl->fetch('search/search_advanced_list.tpl');
-            $htmlTitle = (isset($htmlTitle)? $htmlTitle : '');
-            Application::ajax_out($html_out);
+            }
+
+            $indice++;
+        }
+        $htmlPaging = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
+
+        $tpl->assign('type2res', $type2res);
+
+        $tpl->assign('pagination', $htmlPaging);
+        $tpl->assign('arrayResults',$arrayResults);
+
+        $html_out=$tpl->fetch('search/search_advanced_list.tpl');
+        $htmlTitle = (isset($htmlTitle)? $htmlTitle : '');
+        Application::ajax_out($html_out);
 
     break;
 
