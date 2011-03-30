@@ -74,19 +74,19 @@ switch($_REQUEST['action'])
         $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
         $indice = 0; $ind = 0;
         $res = array();
-        $szTags = explode(' ', $szTags);
+        $szTagsArray = explode(' ', $szTags);
 
         
         foreach ($arrayResults as $res ) {
-            for($ind=0; $ind < sizeof($szTags); $ind++){
-                $arrayResults[$indice]['titule']= ext_str_ireplace($szTags[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTags[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
+            for($ind=0; $ind < sizeof($szTagsArray); $ind++){
+                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
 
             }
             
             $indice++;
         }
-        
+             
         $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
         $tpl->assign('type2res', $type2res);
@@ -105,7 +105,7 @@ switch($_REQUEST['action'])
             $Types = getContentTypes();
             break;
         }
-        $Types = getContentTypes();
+        //$Types = getContentTypes();
 
         $htmlChecks=null;
         $szCheckedTypes = checkTypes($htmlChecks);
