@@ -72,6 +72,12 @@ function confirmar(elto, id) {
     }
 }
 
+function confirmarDelComment(elto, id) {
+    if(confirm('¿Está seguro de querer eliminar este elemento?')) {
+        enviar(elto, '_self', 'delete_comment', id);
+    }
+}
+
 
 function confirmar_hemeroteca(eleto,category, id) {
     if(confirm('¿Está seguro de enviarlo a hemeroteca?')){

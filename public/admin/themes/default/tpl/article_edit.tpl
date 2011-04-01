@@ -355,7 +355,7 @@
             <td align="right">
              </td>
              <td align="right">
-                 <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->pk_comment}');" title="Eliminar">
+                 <a href="#" onClick="javascript:confirmarDelComment(this, '{$comments[c]->pk_comment}');" title="Eliminar">
                 <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
            </td>
         </tr>

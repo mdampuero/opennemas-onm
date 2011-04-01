@@ -483,6 +483,8 @@ if(isset($_REQUEST['action']) ) {
             $article = new Article( $_REQUEST['id'] );
             $tpl->assign('article', $article);
 
+            //Para usar el id de articulo al borrar un comentario
+            $_SESSION['olderId']=$_REQUEST['id'];
             $cm = new ContentManager();
 
             //Photos de noticia
@@ -760,6 +762,21 @@ if(isset($_REQUEST['action']) ) {
                 echo $msg;
                 exit(0);
         break;
+        
+        case 'delete_comment': {            
+            
+            $category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'todos')) );
+            if($category == 'encuesta'){
+                $comment = new PC_Comment();
+                $comment->delete($_REQUEST['id']);
+            } else {
+                $comment = new Comment();
+                $comment->delete($_POST['id'], $_SESSION['userid']);
+            }
+            
+            
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_SESSION['olderId'].'&stringSearch='.$_REQUEST['stringSearch'].'&page=#comments');
+        } break;
 
         case 'yesdel':
             if($_REQUEST['id']){
