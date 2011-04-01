@@ -25,10 +25,14 @@ class WidgetMostSeeingVotedCommentedContent extends Widget_Factory {
         // for most commented articles fetch the article data and fill its category, needed for uri generation
         $articlesMostCommentedImproved = array();
         if (!empty($articlesMostCommented) && count($articlesMostCommented) > 0) {
+            $i=0;
             foreach ($articlesMostCommented as $art) {
-                $article = new Article($art['pk_content']);
-                $article->category_name = $this->ccm->get_name((int)$article->category);
-                $articlesMostCommentedImproved[] = $article;
+                if($i < 6){
+                    $article = new Article($art['pk_content']);
+                    $article->category_name = $this->ccm->get_name((int)$article->category);
+                    $articlesMostCommentedImproved[] = $article;
+                }
+                $i++;
             }
         }
         
