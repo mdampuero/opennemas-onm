@@ -41,7 +41,7 @@
     {/if}
 
     <div class="opinion-listing-colaborators last">
-        <h3>Opiniones destacadas</h3>
+        <h3>Últimas opiniones </h3>
         <div class="span-16 last clearfix">
             {section name=ac loop=$opinions start=0}
 
