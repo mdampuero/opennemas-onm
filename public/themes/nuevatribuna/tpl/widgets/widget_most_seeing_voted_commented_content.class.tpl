@@ -14,7 +14,7 @@
             <li><a href="#tab-more-comments"><span>+ comentado</span></a></li>
         </ul>
         
-        <div id="tab-more-views" class="clearfix">
+        <div id="tab-more-views">
             {foreach from=$articlesMostViewed item=article}
                 <div class="tab-lastest clearfix">
                     <div class="tab-lastest-title">
@@ -23,7 +23,7 @@
                 </div>
             {/foreach}
         </div>
-        <div id="tab-more-voted" class="clearfix initially-hidden">
+        <div id="tab-more-voted">
             {foreach from=$articlesMostVoted item=article}
                 <div class="tab-lastest clearfix">
                     <div class="tab-lastest-title">
@@ -32,13 +32,11 @@
                 </div>
            {/foreach}
         </div>
-        <div id="tab-more-comments" class="clearfix initially-hidden">
+        <div id="tab-more-comments">
             {foreach from=$articlesMostCommented item=article}
                 <div class="tab-lastest clearfix">
                     <div class="tab-lastest-title">
-                        asdf
-                        {$article|var_dump}
-                        {*renderTypeRelated content=$article*}
+                        {renderTypeRelated content=$article}
                     </div>
                 </div>
             {/foreach}

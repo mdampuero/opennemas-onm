@@ -103,7 +103,7 @@ if(isset($_REQUEST['action']) ) {
                                                         .' AND available = 1  AND content_status=1'
                                                         ,' ORDER BY created DESC '
                                                         .' LIMIT 0,9');
-                    
+                    $otherOpinionsImproved = array();
                     foreach($otherOpinions as $otherOpinion) {
                         $otherOpinion->author_name_slug  = $opinion->author_name_slug;
                         $otherOpinionsImproved[] = $otherOpinion;

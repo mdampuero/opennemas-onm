@@ -17,7 +17,8 @@
     {include file="widgets/facebook_stream_box.tpl"}
     <hr class="new-separator" />
 
-    {include file="widgets/most-seeing-voted-commented-content.tpl"}
+    {*include file="widgets/widget_most_seeing_voted_commented_content.class.tpl"*}
+    {render_widget name="MostSeeingVotedCommentedContent"}
     <hr class="new-separator"/>
 
     {include file="ads/ad_in_column.tpl" type='105'}
