@@ -40,6 +40,16 @@
             </label>
         </td>
     </tr>
+    
+    <tr>
+        <td height="50" align="right" colspan="2">
+            <label>
+                {t}Robapágina (650X*){/t}
+                <input type="radio" name="type_advertisement" value="104" {if $advertisement->type_advertisement == 104}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    
     <tr>
         <td height="50" align="right"  colspan="2">
             <label>
@@ -77,6 +87,7 @@ var positions_opinion_interior = new Array();
 positions_opinion_interior[101] = '2,0,176,24';
 positions_opinion_interior[102] = '178,0,55,24';
 positions_opinion_interior[103] = '161,188,70,50';
+positions_opinion_interior[104] = '4,322,154,20';
 positions_opinion_interior[105] = '161,375,70,50';
 positions_opinion_interior[109] = '2,479,176,24';
 positions_opinion_interior[110] = '178,479,55,24';

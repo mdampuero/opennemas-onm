@@ -36,6 +36,7 @@
 <area shape="rect" coords="1,0,179,24" href="javascript:adPositionOpinionInterior.selectPosition(101);"/>
 <area shape="rect" coords="179,0,240,23" href="javascript:adPositionOpinionInterior.selectPosition(102);" />
 <area shape="rect" coords="161,188,234,242" href="javascript:adPositionOpinionInterior.selectPosition(103);" />
+<area shape="rect" coords="4,323,154,344"   href="javascript:adPositionOpinionInterior.selectPosition(104);" />
 <area shape="rect" coords="161,375,235,431" href="javascript:adPositionOpinionInterior.selectPosition(105);"/>
 <area shape="rect" coords="1,479,176,505" href="javascript:adPositionOpinionInterior.selectPosition(109);"/>
 <area shape="rect" coords="177,479,237,505" href="javascript:adPositionOpinionInterior.selectPosition(110);" />
