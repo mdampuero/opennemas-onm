@@ -53,6 +53,9 @@ if (!isset($_REQUEST['page'])) {
      $_REQUEST['page'] = 1;
 }
 
+if (!isset($_SESSION['type'])) {
+     $_SESSION['type'] = 0;
+}
 
 if (!isset($_REQUEST['type_opinion'])) {
     $_REQUEST['type_opinion'] = -1;

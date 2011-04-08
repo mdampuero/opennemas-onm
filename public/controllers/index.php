@@ -367,11 +367,6 @@ if(($tpl->caching == 0)
                            .' LIMIT 0 , 5');
     $tpl->assign('lastAlbum', $lastAlbum);
 
-    /**
-     * Fetch information for headlines
-    */
-    require_once('widget_headlines.php');
-    require_once('widget_headlines_past.php');
 
     /**
      * Fetch information for Static Pages

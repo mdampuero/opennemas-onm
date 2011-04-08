@@ -425,7 +425,7 @@ class ContentManager
      * @param boolean $not_empty If there are no results regarding the days indicated, the query is performed on the entire bd. For default is false
      * @param integer $category pk_content_category ok the contents. If value is 0, then does not filter by categories. For default is 0.
      * @param integer $author pk_author of the contnet. If value is 0, then does not filter by categories. For default is 0.
-     * @param integer $days Interval of days on which the consultation takes place. For default is 2.
+     * @param integer $days Interval of days on which the request takes place. For default is 2.
      * @param integer $num Number of objects that the function returns. For default is 8.
      * @param boolean $all Get all the content regardless of content status.
      * @return array of objects $content_type
@@ -539,6 +539,7 @@ class ContentManager
                 if(!$all) {
                     $pks = $this->getInTime($pks);
                 }
+                array_splice($pks, $num);
             }
         }
 
@@ -693,7 +694,7 @@ class ContentManager
 
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
-                $articles[$comment->fk_content]['comment'] = $comment->title;
+                $articles[$comment->fk_content]['comment'] = $comment->body;
             }
         }
 
@@ -704,11 +705,11 @@ class ContentManager
     {
         $sql = 'SELECT *
                 FROM contents
-                WHERE contents.pk_content IN
+                WHERE  contents.pk_content IN
                       (SELECT fk_content
                        FROM `comments`,contents
-                       WHERE comments.pk_comment = contents.pk_content
-                       ORDER BY contents.created DESC)
+                       WHERE comments.fk_content = contents.pk_content)
+                ORDER BY contents.created DESC
                 LIMIT 0,6';
         $contents = array();
                 

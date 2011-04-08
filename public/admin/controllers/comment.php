@@ -234,7 +234,7 @@ if(isset($action)) {
         } break;
         
         case 'change_status': {
-            if(($_REQUEST['tipo'] == 'encuesta') || ($category == 'encuesta')){
+            if((isset ($_REQUEST['tipo']) && $_REQUEST['tipo'] == 'encuesta') || ($category == 'encuesta')){
                 $comment = new PC_Comment($_REQUEST['id']);                     
                 $comment->set_status($_REQUEST['status'], $_SESSION['userid']);
             } else {

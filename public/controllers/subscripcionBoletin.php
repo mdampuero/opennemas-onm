@@ -39,7 +39,7 @@ switch($action) {
                 echo ($resp);
                 break;
             } else {                      
-                if($_REQUEST['email']=='' || $_REQUEST['name']==''){
+                if(!filter_var($_REQUEST['email'], FILTER_VALIDATE_EMAIL) || $_REQUEST['name']==''){
                     $resp='<script language="JavaScript">(!alert("Lo sentimos, no se ha podido completar su solicitud.\nVerifique el formulario y vuelva intentarlo."))</script>
                             <script language="javascript">location.href="#"</script>';
                     echo ($resp);

@@ -7,7 +7,8 @@
         <ul>
             {section name=a loop=$articles_comments max=6}
             <li {if $smarty.section.a.last}class="last"{/if}>
-                <a href="{$smarty.const.SITE_URL}{$articles_comments[a]->uri}#comentarios">{$articles_comments[a]->title}</a>
+                <h5><a href="{$smarty.const.SITE_URL}{$articles_comments[a]->uri}#comentarios">{$articles_comments[a]->title}</a></h5>
+                <h7>{$articles_comments[a]->comment}</h7>
             </li>
             {sectionelse}
             <li>

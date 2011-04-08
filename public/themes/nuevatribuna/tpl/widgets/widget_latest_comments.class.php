@@ -22,9 +22,16 @@ class WidgetLatestComments extends Widget_Factory {
 
                 $this_article = new Article($arts);
                 $this_article->category_name = $this->ccm->get_name((int)$this_article->category);
-
+                $comments = $this->cm->getLastComentsContent($this_article->content_type, true, $this_article->category, 5);
+                foreach ($comments as $comm) {
+                    if($this_article->pk_article == $comm['pk_content'] ){
+                        $this_article->comment = $comments[$this_article->pk_article]['comment'];
+                    }
+                }
+                
+                
                 $arts_commented[] = $this_article;
-
+                
             }
         }
 
@@ -36,3 +43,4 @@ class WidgetLatestComments extends Widget_Factory {
     }
 
 }
+   

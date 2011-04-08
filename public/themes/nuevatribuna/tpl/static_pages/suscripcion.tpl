@@ -35,6 +35,18 @@
       VideoJS.setup();
     })
 </script>
+<script>
+    {literal}
+function validate(form_id,email) {
+   var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+   var address = document.forms[form_id].elements[email].value;
+   if(reg.test(address) == false) {
+      alert('Invalid Email Address');
+      return false;
+   }
+}
+    {/literal}
+</script>
 {/block}
 
 {block name="content"}
@@ -66,7 +78,7 @@
                                 <div id="inner-article-body" class="clearfix">
                                     <div class="inner-article-other-contents">
                                         <div>
-                                            <form action="../controllers/subscripcionBoletin.php" method="post">
+                                            <form id="form_id" action="../controllers/subscripcionBoletin.php" method="post" onsubmit="javascript:return validate('form_id','email');">
                                                 <table border="0" cellspacing="2" cellpadding="1" width="100%">
                                                     <tbody>
                                                         <tr>

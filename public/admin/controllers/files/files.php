@@ -53,6 +53,7 @@ if( isset($_REQUEST['action']) ) {
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
                             $num_sub_photos[$k][] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $tpl->assign('num_sub_photos', $num_sub_photos);
                         }
                     }
                 }
@@ -69,7 +70,6 @@ if( isset($_REQUEST['action']) ) {
                 $tpl->assign('especials', $especials);
                 $tpl->assign('num_especials', $num_especials);
                 $tpl->assign('num_photos', $num_photos);
-                $tpl->assign('num_sub_photos', $num_sub_photos);
                 $tpl->assign('categorys', $parentCategories);
                 $tpl->assign('subcategorys', $subcat);
 
