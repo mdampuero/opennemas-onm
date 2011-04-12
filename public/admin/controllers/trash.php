@@ -102,10 +102,56 @@ if(isset($_REQUEST['action']) ) {
 			if(isset($_REQUEST['desde']) && ($_REQUEST['desde']=='search')){
 
 				$name = $GLOBALS['application']->conn->GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $contenido->content_type.'"');
-				$archive_php='controllers/'.strtolower($name).'.php'; //Nombre de la clase
-				$action='list';
-				if($name=='article'){$action='list_pendientes';}
-				Application::forward($archive_php.'?action='.$action.'&category='.$_REQUEST['category']);
+                $action='list';
+                switch ($contenido->content_type){
+                    case '1':
+                        $archive_php= strtolower($name).'.php'; //  Article
+                        break;
+                    
+                    case '2':
+                        $archive_php='controllers/advertisement/'.strtolower($name).'.php'; //Advertisement
+                        break;
+                    case '3':
+                        $archive_php='controllers/files/files.php'; //Attachment
+                        break;
+                    case '4':
+                        $archive_php='controllers/opinion/'.strtolower($name).'.php'; //Opinion
+                        break;
+                    case '5':
+                        //Eventos
+                        break;
+                    case '6':
+                        $archive_php='controllers/'.strtolower($name).'.php'; //Comments
+                        break;
+                    case '7':
+                        $archive_php='controllers/album/'.strtolower($name).'.php';//Álbum
+                        break;
+                    case '8':
+                        $archive_php='controllers/mediamanager/mediamanager.php'; //Images
+                        $action = 'list_today';
+                        break;
+                    case '9':
+                        $archive_php='controllers/video/'.strtolower($name).'.php'; //Videos
+                        break;
+                    case '10':
+                        //Entrevistas
+                        break;
+                    case '11':
+                        $archive_php= strtolower($name).'.php';//Encuestas
+                        break;
+                    case '12':
+                        $archive_php='controllers/widget/'.strtolower($name).'.php'; //Widgets
+                        break;
+                    case '13':
+                        $archive_php= strtolower($name).'s.php'; //Static_pages **Faltaba la 's' al final**
+                        break;
+                    case '14':
+                        $archive_php= strtolower($name).'.php';//Kiosko
+                        break;
+                }
+                
+				//if($name=='article'){$action='list_pendientes';}
+				Application::forward('/admin/'.$archive_php.'?action='.$action.'&category='.$_REQUEST['category']);
 
 			}else{
 

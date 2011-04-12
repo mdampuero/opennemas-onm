@@ -65,7 +65,7 @@
 
             <td style="width:10%;" align="center">
                 {if ($arrayResults[c].in_litter == 1)}
-                     <a href="/admin/litter.php?action=no_in_litter&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from trash{/t}">
+                     <a href="/admin/controllers/trash.php?action=no_in_litter&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from trash{/t}">
                         <img src="{$params.IMAGE_DIR}trash_no.png" border="0" width="24" alt="{t}Restore from trash{/t}" title="{t}Restore from trash{/t}" />
                      </a>
                 {else}
