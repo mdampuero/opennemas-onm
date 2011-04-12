@@ -420,10 +420,10 @@ function  get_suggested_articles(category,page) {
 
 //Paginacion otros articulos.
 function  get_others_articles(category,page){
-    new Ajax.Updater('frontpages', "article.php?action=get_others_articles&category="+category+"&page="+page,
+    new Ajax.Updater('other-articles', "article.php?action=get_others_articles&category="+category+"&page="+page,
     {
         evalScripts: true,
-        onLoaded : $('artic').update('<h2> Cargando ...</h2>'),
+        onLoaded : $('other_articles_in_category').update('<h2> Cargando ...</h2>'),
         onComplete: function() {
              make_sortable_divs_portadas();
              Sortable.create('art',{

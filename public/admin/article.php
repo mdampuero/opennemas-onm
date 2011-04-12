@@ -219,6 +219,12 @@ if(isset($_REQUEST['action']) ) {
                                  .$sql_excluded_widgets,
                                  'ORDER BY created DESC ');
             
+//            
+//                 var_dump($widgets);
+//                 var_dump($opinions);
+//                 var_dump($articles);
+//                 die();
+            
             $tpl->assign('widgets', $widgets);
             $tpl->assign('opinions', $opinions);
             $tpl->assign('category', $_REQUEST['category']);
@@ -1282,7 +1288,7 @@ if(isset($_REQUEST['action']) ) {
             }
             $tpl->assign('articles', $articles);
 
-            $html_out=$tpl->fetch('article_others_articles.tpl');
+            $html_out=$tpl->fetch('frontpage/blocks/others_articles_in_category.tpl');
             Application::ajax_out($html_out);
 
         break;
@@ -1310,7 +1316,7 @@ if(isset($_REQUEST['action']) ) {
 
             $tpl->assign('articles', $articles);
 
-            $html_out=$tpl->fetch('article_others_articles.tpl');
+            $html_out=$tpl->fetch('frontpage/blocks/others_articles_in_category.tpl');
             Application::ajax_out($html_out);
 
         break;
@@ -1362,9 +1368,13 @@ if(isset($_REQUEST['action']) ) {
 
         case 'get_noticias':
             $cm = new ContentManager();
-            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 10;
-                    $datos_cat = $ccm->find('pk_content_category=10', NULL);
+            if (!isset($_GET['category'])
+                || empty($_GET['category']) 
+                || ($_GET['category'] == 'home') 
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == '')){
+                    $category= 11;
+                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
             }else{ $category=$_GET['category']; }
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'noticias');
             /* $articles = $cm->find_by_category('Article', $category, 'content_status=1 AND available=1  AND fk_content_type=1', 'ORDER BY created DESC  LIMIT 0,100');
@@ -1388,8 +1398,8 @@ if(isset($_REQUEST['action']) ) {
           case 'get_hemeroteca':
             $cm = new ContentManager();
             if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 10;
-                    $datos_cat = $ccm->find('pk_content_category=10', NULL);
+                    $category= 11;
+                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'hemeroteca');
@@ -1407,8 +1417,8 @@ if(isset($_REQUEST['action']) ) {
          case 'get_pendientes':
             $cm = new ContentManager();
             if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-            $category= 10;
-            $datos_cat = $ccm->find('pk_content_category=10', NULL);
+            $category= 11;
+            $datos_cat = $ccm->find('pk_content_category=11', NULL);
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'pendientes');
@@ -1428,7 +1438,7 @@ if(isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             if (($_GET['category']) ||($_GET['category'] != 'home') || ($_GET['category'] != 'todos')){
                     $category= $_GET['category'];
-            }else{ $category=10; }
+            }else{ $category=11; }
             $tpl->assign('category', $_GET['category']);
             $tpl->assign('home', '');
             $html_out=$tpl->fetch('menu_categorys.tpl');
@@ -1439,8 +1449,8 @@ if(isset($_REQUEST['action']) ) {
         case 'get_videos':
             $cm = new ContentManager();
             if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-            $category= 10;
-            $datos_cat = $ccm->find('pk_content_category=10', NULL);
+            $category= 11;
+            $datos_cat = $ccm->find('pk_content_category=11', NULL);
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'videos');
@@ -1459,8 +1469,8 @@ if(isset($_REQUEST['action']) ) {
         case 'get_albums':
            $cm = new ContentManager();
            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                $category= 10;
-                $datos_cat = $ccm->find('pk_content_category=10', NULL);
+                $category= 11;
+                $datos_cat = $ccm->find('pk_content_category=11', NULL);
            }else{ $category=$_GET['category']; }
 
            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'albums');
@@ -1491,8 +1501,8 @@ if(isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
 
             if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 10;
-                    $datos_cat = $ccm->find('pk_content_category=10', NULL);
+                    $category= 11;
+                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
             }else{ $category=$_GET['category']; }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'adjuntos');

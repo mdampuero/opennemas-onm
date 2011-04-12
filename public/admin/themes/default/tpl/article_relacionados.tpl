@@ -6,13 +6,13 @@
 				<a onclick="search_related({$article->pk_article},$('metadata').value,1); divs_hide('search-noticias');" style="cursor:pointer;"><strong>{t}Suggested articles{/t}</strong></a><hr>
 			</li>
 			<li>
-				<a onclick="get_div_contents(0,'noticias',' {$article->category}',1); divs_hide('noticias_div');" style="cursor:pointer;"><strong>{t}Articles by section{/t}</strong></a><hr>
+				<a onclick="get_div_contents(0,'noticias','{$article->category}',1); divs_hide('noticias_div');" style="cursor:pointer;"><strong>{t}Articles by section{/t}</strong></a><hr>
 			</li>
 			<li>
-				<a onclick="get_div_contents(0,'hemeroteca',' {$article->category}',1); divs_hide('hemeroteca_div');" style="cursor:pointer;"><strong>{t}Articles in library{/t}</strong></a><hr>
+				<a onclick="get_div_contents(0,'hemeroteca','{$article->category}',1); divs_hide('hemeroteca_div');" style="cursor:pointer;"><strong>{t}Articles in library{/t}</strong></a><hr>
 			</li>
 			<li>
-				<a onclick="get_div_contents(0,'pendientes',' {$article->category}',1); divs_hide('pendientes_div');" style="cursor:pointer;"><strong>{t}Articles for review{/t}</strong></a><hr>
+				<a onclick="get_div_contents(0,'pendientes','{$article->category}',1); divs_hide('pendientes_div');" style="cursor:pointer;"><strong>{t}Articles for review{/t}</strong></a><hr>
 			</li>
 			<li>
 				<a onclick="get_div_contents(0,'opinions',0,1);  divs_hide('opinions_div');" style="cursor:pointer;"><strong>{t}Opinions{/t}</strong></a><hr>

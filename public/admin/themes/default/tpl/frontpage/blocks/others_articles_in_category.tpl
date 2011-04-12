@@ -21,6 +21,7 @@
     <tr>
         <td colspan="13">
             <div id="other_articles_in_category" class="seccion" style="float:left;width:100%;">
+                <div id="art" class="seccion" style="float:left;width:100%;"> <br />
                 {assign var=aux value='100'}
                 {section name=d loop=$articles}
                     <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$articles[d]->id}" class="tabla" style="text-align:center;padding:0px;">
@@ -109,7 +110,8 @@
                         </tr>
                     </table>
                     {assign var=aux value=$aux+1}
-                {/section}
+                    {/section}
+                </div>
                 <p align="center" style="margin:20px;"> {$paginacion} </p>
            </div>
         </td>
