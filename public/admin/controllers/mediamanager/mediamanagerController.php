@@ -471,6 +471,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
             $cm = new ContentManager();
             $relat = $cm->getContents($contents);
 
+            $msg = '';
             foreach($relat as $content) {
                 $msg .= "\n - " . strtoupper($content->content_type) . ": " . $content->title;
             }

@@ -20,10 +20,7 @@
     <table class="adminlist fuente_cuerpo">
         <tbody>
             <tr>
-                <td valign="top">
-
-                    <form action="{$smarty.server.SCRIPT_NAME}" style="margin:0 auto !important;">
-
+                <td valign="top">                    
                         <div id="container-thumbnails" class="clearfix">
                             <br class="clearer" />
                             {section name=n loop=$photo}
@@ -87,7 +84,7 @@
                                             {/if}
 
                                             &nbsp;
-                                            <a href="#" onclick="javascript:confirmar('?action=delFile&amp;id={$photo[n]->pk_photo}&amp;basename={$photo[n]->name}&amp;path={$path}&amp;listmode=weeks&amp;category={$category}&amp;page={$smarty.get.page}');" title="Eliminar fichero">
+                                            <a href="#" onclick="javascript:confirmar('?action=delFile&amp;id={$photo[n]->pk_photo}&amp;basename={$photo[n]->name}&amp;path={$photo[n]->path_file}&amp;listmode=weeks&amp;category={$category}&amp;page={$smarty.get.page}');" title="Eliminar fichero">
                                                 <img src="{$params.IMAGE_DIR}iconos/eliminar.gif" border="0" align="absmiddle" />
                                             </a>
 
@@ -141,6 +138,8 @@
                         </div>
 
                         <input type="hidden" name="listmode" value="weeks" />
+                        <input type="hidden" id="action" name="action" value="" />
+                        <input type="hidden" id="id" name="id" value="" />
                     </form>
                 </td>
             </tr>

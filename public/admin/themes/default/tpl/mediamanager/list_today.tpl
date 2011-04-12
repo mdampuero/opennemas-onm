@@ -29,7 +29,7 @@
 <div class="wrapper-content">
 
     {include file="mediamanager/_partials/categories.tpl"}
-
+    <form action="{$smarty.server.SCRIPT_NAME}" style="margin:0 auto !important;">
     <div id="menu-acciones-admin">
         <div style='float:left;margin-left:10px;margin-top:10px;'>
             <h2>Image manager:: {t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2>

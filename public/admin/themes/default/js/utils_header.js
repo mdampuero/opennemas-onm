@@ -16,6 +16,7 @@ function enviar(elto, trg, acc, id) {
     parentEl.id.value = id;
 
     if(objForm != null) {
+        alert('hola aki');
         objForm.submit();
     } else {
         parentEl.submit();
@@ -122,14 +123,18 @@ function enviar2(elto, trg, acc, id) {
         alert("No hay ninguna noticia seleccionada");
     }else{
         if((acc=='mdelete')){
-            if(confirm('¿Está seguro de eliminar esos elementos?')) {
+            if(id == 6){
+                var res = confirm('¿Está seguro de eliminar TODOS los elementos?');
+            }else{
+                var res = confirm('¿Está seguro de eliminar esos elementos?');
+            }
+            if(res) {
 
                 var parentEl = elto.parentNode;
                 
                 while(parentEl.nodeName != "FORM") {
                     parentEl = parentEl.parentNode;
                 }
-                return;
 
                 parentEl.target = trg;
                 parentEl.action.value = acc;

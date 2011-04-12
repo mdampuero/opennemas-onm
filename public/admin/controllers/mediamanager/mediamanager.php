@@ -37,6 +37,12 @@ if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult'){
     unset($_SESSION['where']);
 }
 
+if(isset($_REQUEST['listmode']) && $_REQUEST['listmode']==''){
+    if(isset($_REQUEST['category'])){
+        $_SESSION['cat']=$_REQUEST['category'];
+    }
+    
+}
 if (!isset($_REQUEST['page'])) {
     $_REQUEST['page'] = 1;
 }
@@ -51,11 +57,13 @@ if (!empty($_REQUEST['categ'])){ //&& $_REQUEST['categ']=='todas') {
     }
 }
 
-if (!isset($_REQUEST['category'])
-    || ($_REQUEST['category'] == 'GLOBAL' && empty($_REQUEST['action'])))
+if (!isset($_REQUEST['category']) 
+        || ($_REQUEST['category'] == 'GLOBAL' && empty($_REQUEST['action'])))
 {
     $_REQUEST['category'] = 'GLOBAL';
-    $_REQUEST['action'] = "list_categorys";
+    if(!isset ($_REQUEST['action'])){
+        $_REQUEST['action'] = "list_categorys";
+    }
 }
 
 if (!Acl::check('IMAGE_ADMIN')) {
@@ -203,14 +211,14 @@ switch($action) {
           unset($_SESSION['where']);
         }
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=' . $_SESSION['desde'] . '&name=' . $name .
-                             '&alerta=' . $mmc->alert . '&category=' . $mmc->category . '&page=' . $page);
+                             '&alerta=' . str_replace('"','\'', $mmc->alert). '&category=' . $mmc->category . '&page=' . $page);
     } break;
 
     case 'mdelete': {
         $msg="Las photos ";
-        if($_REQUEST['id']==6){ //Eliminar todos
+        if($_REQUEST['id']==6 && isset($_SESSION['cat'])){ //Eliminar todos
             $cm = new ContentManager();
-            $photos = $cm->find_by_category('Photo', $mmc->category , 'fk_content_type=8 AND   photos.media_type="image"', 'ORDER BY created DESC');
+            $photos = $cm->find_by_category('Photo', $_SESSION['cat'] , 'fk_content_type=8 AND   photos.media_type="image"', 'ORDER BY created DESC');
 
             if(count($photos)>0){
                 foreach ($photos as $art){
@@ -220,7 +228,7 @@ switch($action) {
             }
 
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$mmc->category.'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['cat'].'&page='.$_REQUEST['page']);
         }else{
             $fields = $_REQUEST['selected_fld'];
             if(isset($fields) && count($fields)>0) {
@@ -238,7 +246,7 @@ switch($action) {
 
         $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$mmc->category.'&alert='.$alert.'&msg='.$msg.'&page='.$_REQUEST['page']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$photo->category.'&alert='.$alert.'&msg='.$msg.'&page='.$_REQUEST['page']);
 
     } break;
 
