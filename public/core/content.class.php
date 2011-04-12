@@ -331,6 +331,10 @@ class Content {
             $data['permalink'] = $this->permalink;
         }
 
+        if(empty($data['description'])&& !isset ($data['description'])){$data['description']='';}
+        if(empty($data['metadata'])&& !isset ($data['metadata'])){$data['metadata']='';}
+        if(empty($data['pk_author'])&& !isset ($data['pk_author'])){$data['pk_author']='';}
+
         $values = array( $data['title'], $data['description'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'], $data['available'], $data['content_status'],
