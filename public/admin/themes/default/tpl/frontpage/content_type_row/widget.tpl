@@ -1,6 +1,6 @@
 <table id='tabla{$aux}' name='tabla{$aux}' value="{$item->pk_widget}" data="{$item->content_type}" width="100%" class="tabla">
     <tr class="row1{schedule_class item=$item}" style="cursor:pointer;">
-
+    {if $item->available == 1 && $item->content_status == 1}
         <td style="text-align: left; width:10px;">
             <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$item->id}"  style="cursor:pointer;" />
         </td>
@@ -36,27 +36,18 @@
 
         {if $category neq 'home'}
         <td  align="center"  class="un_width" style="width:20px;">
-            {if $item->available == 1}
-                    <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
-                            <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
-            {else}
-                    <a href="controllers/widget/widget.php?action=changeavailable&id={$item->pk_widget}" title="Publicar">
-                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar" /></a>
-            {/if}
-             </td>
+                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
+                    <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
+        </td>
             <td  align="center"  class="un_width"  style="width:20px;">
                 <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
             </td>
         {else}
             <td  align="center"  class="un_width" style="width:25px;">
-            {if $item->available == 1}
-                    <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
-                            <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
-            {else}
-                    <a href="controllers/widget/widget.php?action=changeavailable&id={$item->pk_widget}" title="Publicar">
-                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar" /></a>
-            {/if}
-             </td>
+                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
+                    <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
+            </td>
         {/if}
+    {/if}
     </tr>
 </table>

@@ -41,6 +41,7 @@
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
 		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
 		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}/modalbox.js"></script>
