@@ -6,7 +6,7 @@ class cSearch
 {
     const _ParseString = '/[\s,;]+/'; // caracteres por el cual separar cada elemento de la cadena.
 
-    const _FullTextColumn = 'metadata';
+    const _FullTextColumn = 'contents.metadata';
     const _FullTextColumn2 = 'contents.title';
     
     const _ITEMS_PAGE = 10;
@@ -166,15 +166,19 @@ class cSearch
         $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
         //$szMatch = " CONTAINS (metadata, '".$szSourceTags."')";
         //$szMatch = "contents.metadata LIKE '%".$szSourceTags."%'";
-        $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch)) .'+'.(($szMatch2)) . " as _height";
+        if($szContentsTypeTitle=='photo'){
+             $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch)). " as _height";
+             $szMatch2 = '1=1';
+        }else{
+            $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch)) .'+'.(($szMatch2)) . " as _height";
+        }
         $szSqlSentence .= " FROM contents, " . $szNewTable;
         $szSqlSentence .= " WHERE " . $szMatch.' AND '. $szMatch2;
         $szSqlSentence .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
         $szSqlSentence .= " ORDER BY _height DESC, created DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;        
 
-//        echo($szSqlSentence);
-//        die();
+
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
 
         if($resultSet!=null)
