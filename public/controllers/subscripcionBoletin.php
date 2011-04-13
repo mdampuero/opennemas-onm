@@ -46,9 +46,9 @@ switch($action) {
                     break;
                 }
                 // Your code here to handle a successful verification
-                // Checking the type of action to do (alta/baja)
+                // Checking the type of action to do (alta/baja)                
                 if($_REQUEST['boletin']=='alta'){
-                    $mail->Subject  = utf8_decode("Solicitud de Alta - Boletín".SITE_FULLNAME);
+                    $subject  = utf8_decode("Solicitud de ALTA - Boletín ".SITE_FULLNAME);
 
                     $body=  "Solicitud de Alta en el boletin de: \r\n".
                         "Nombre y Apellidos: ". $_REQUEST['name']." \r\n".
@@ -57,7 +57,7 @@ switch($action) {
                     $resp='<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
                             <script language="javascript">location.href="/home"</script>';
                 }else{
-                    $mail->Subject  = utf8_decode("Solicitud de Baja - Boletín".SITE_FULLNAME);
+                    $subject  = utf8_decode("Solicitud de BAJA - Boletín ".SITE_FULLNAME);
 
                     $body=  "Solicitud de Baja en el boletin de: \r\n".
                         "Nombre y Apellidos: ". $_REQUEST['name']." \r\n".
@@ -84,7 +84,7 @@ switch($action) {
                     $mail->SMTPAuth = false;
                 }
 
-
+                $mail->Subject = $subject;
                 $mail->From = $_REQUEST['email'];
                 $mail->FromName = utf8_decode($_REQUEST['name']);
                 $mail->Body = utf8_decode($body);
