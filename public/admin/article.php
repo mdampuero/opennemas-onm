@@ -219,11 +219,6 @@ if(isset($_REQUEST['action']) ) {
                                  .$sql_excluded_widgets,
                                  'ORDER BY created DESC ');
             
-//            
-//                 var_dump($widgets);
-//                 var_dump($opinions);
-//                 var_dump($articles);
-//                 die();
             
             $tpl->assign('widgets', $widgets);
             $tpl->assign('opinions', $opinions);

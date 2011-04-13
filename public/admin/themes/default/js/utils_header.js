@@ -16,7 +16,6 @@ function enviar(elto, trg, acc, id) {
     parentEl.id.value = id;
 
     if(objForm != null) {
-        alert('hola aki');
         objForm.submit();
     } else {
         parentEl.submit();
