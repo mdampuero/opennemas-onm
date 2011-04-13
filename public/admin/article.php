@@ -1343,7 +1343,7 @@ if(isset($_REQUEST['action']) ) {
             $mySearch = cSearch::Instance();
             $where="content_status=1 AND available=1 ";
             $search=$mySearch->SearchRelatedContents($_REQUEST['metadata'], 'Article',NULL,$where);
-            if(count($search)>0){
+            if(($search) && count($search)>0){
                 $id=0;
                 if($_REQUEST['id']){
                     $id=$_REQUEST['id'];
@@ -1355,6 +1355,7 @@ if(isset($_REQUEST['action']) ) {
                 $div = print_search_related($id, $search);
             } else{
                 $div="<h3>No hay noticias sugeridas</h3>";
+                $paginas='No hay noticias que se relacionen con las palabras clave: '.$_REQUEST['metadata'];
             }
             Application::ajax_out($div.$paginas);
 

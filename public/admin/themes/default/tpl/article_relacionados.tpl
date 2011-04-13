@@ -3,7 +3,11 @@
 		{* onClick="{section start=$aux loop=$todos2 step=1 name=foo}Effect.Fade('interior#up{$smarty.section.foo.index}');{/section}Effect.Appear('imgint');return false;" *}
 		<ul id="tabs">
 			<li>
-				<a onclick="search_related({$article->pk_article},$('metadata').value,1); divs_hide('search-noticias');" style="cursor:pointer;"><strong>{t}Suggested articles{/t}</strong></a><hr>
+                {if $article eq null}
+                    <a onclick="search_related(0, $('metadata').value,1); divs_hide('search-noticias');" style="cursor:pointer;"><strong>{t}Suggested articles{/t}</strong></a><hr>
+                {else}
+                    <a onclick="search_related({$article->pk_article},$('metadata').value,1); divs_hide('search-noticias');" style="cursor:pointer;"><strong>{t}Suggested articles{/t}</strong></a><hr>
+                {/if}
 			</li>
 			<li>
 				<a onclick="get_div_contents(0,'noticias','{$article->category}',1); divs_hide('noticias_div');" style="cursor:pointer;"><strong>{t}Articles by section{/t}</strong></a><hr>

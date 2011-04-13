@@ -63,9 +63,12 @@ class cSearch
         $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "') AS rel FROM contents, contents_categories";
         $szSqlWhere = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "') ";
         $szSqlWhere .=  " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
-          $szSqlWhere .= "  AND in_litter = 0 AND pk_content = pk_fk_content";
-         if($_where!=NULL){ $szSqlWhere .= "  AND ".$_where;}
+        $szSqlWhere .= "  AND in_litter = 0 AND pk_content = pk_fk_content";
+        if($_where!=NULL){
+            $szSqlWhere .= "  AND ".$_where;
+        }
         $szSqlSentence .= $szSqlWhere;
+        $szSqlSentence .= 'ORDER BY rel DESC, created DESC';
         if($iLimit!=NULL){
             $szSqlSentence .= " LIMIT 0, ".$iLimit;
         }
@@ -73,7 +76,7 @@ class cSearch
 
         // $result= $resultSet->GetArray();
         $i=0;
-        
+     
         $result = false;
      
         if($resultSet->fields){        
