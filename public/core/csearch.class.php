@@ -60,8 +60,11 @@ class cSearch
 	public function SearchRelatedContents($szSourceTags, $szContentsTypeTitle,$iLimit=NULL,$_where=NULL)
 	{
         
-        $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "') AS rel FROM contents, contents_categories";
-        $szSqlWhere = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "') ";
+        $szMatch = $this->DefineMatchOfSentence($szSourceTags); //Match con metadata
+        $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
+        
+        $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel FROM contents, contents_categories";
+        $szSqlWhere = " WHERE " . (($szMatch)) .'+'.(($szMatch2));
         $szSqlWhere .=  " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
         $szSqlWhere .= "  AND in_litter = 0 AND pk_content = pk_fk_content";
         if($_where!=NULL){
