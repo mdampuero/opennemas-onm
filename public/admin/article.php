@@ -1345,8 +1345,9 @@ if(isset($_REQUEST['action']) ) {
             $search=$mySearch->SearchRelatedContents($_REQUEST['metadata'], 'Article',NULL,$where);
             if(($search) && count($search)>0){
                 $id=0;
-                if($_REQUEST['id']){
-                    $id=$_REQUEST['id'];
+                //Para evitar mostrar la misma noticia que se edita en sugeridas
+                if($search[0]['id']){
+                    $id=$search[0]['id'];
                 }
                 $params=$id.",'".$_REQUEST['metadata']."'";
                 $search = $cm->paginate_array_num_js($search,20, 3, "search_related", $params);
