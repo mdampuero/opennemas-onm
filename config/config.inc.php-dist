@@ -29,6 +29,7 @@ define ('SITE_DESCRIPTION', "Información continua y análisis para una ciudadan
 define ('SITE_KEYWORDS', "nuevatribuna,diario,periodico,medio,digital,progresista,progresismo,izquierdas,españa,internacional,mundo,economia,cajamadrid,gurtel,banif,cultura,sociedad,ultimahora,opinion,analisis");              // Keyworks to use in the frontend
 define ('SITE_FULLNAME', "Nueva Tribuna");                        // Human readable site name
 define ('SITE_NAME', "nuevatribuna");                                  // Canonical name, should be lowcase and without spaces
+define ('SITE_DOMAIN', "nuevatribuna.es");
 
 /**
  * Database settings

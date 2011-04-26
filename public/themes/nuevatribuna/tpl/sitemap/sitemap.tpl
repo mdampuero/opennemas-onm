@@ -45,7 +45,7 @@
                                                 category_name=$opinions[c].author_name_slug}</loc>
                 <news:news>
                     <news:publication>
-                        <news:name><![CDATA[{$smarty.const.SITE_NAME}]]></news:name>
+                        <news:name><![CDATA[{$smarty.const.SITE_DOMAIN}]]></news:name>
                         <news:language><![CDATA[es]]></news:language>
                     </news:publication>
                     <news:genres>OpEd</news:genres>
@@ -61,7 +61,7 @@
                 <loc>{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$item.pk_content date=$item.created category_name=$item.catName title=$item.title}</loc>
                 <news:news>
                     <news:publication>
-                        <news:name><![CDATA[{$smarty.const.SITE_NAME}]]></news:name>
+                        <news:name><![CDATA[{$smarty.const.SITE_DOMAIN}]]></news:name>
                         <news:language><![CDATA[es]]></news:language>
                     </news:publication>
                     <news:genres>PressRelease</news:genres>                    
