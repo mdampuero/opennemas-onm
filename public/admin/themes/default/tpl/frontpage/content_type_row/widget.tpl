@@ -1,6 +1,6 @@
 <table id='tabla{$aux}' name='tabla{$aux}' value="{$item->pk_widget}" data="{$item->content_type}" width="100%" class="tabla">
     <tr class="row1{schedule_class item=$item}" style="cursor:pointer;">
-    {if $item->available == 1 && $item->content_status == 1}
+    {if $item->available == 1}
         <td style="text-align: left; width:10px;">
             <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$item->id}"  style="cursor:pointer;" />
         </td>
