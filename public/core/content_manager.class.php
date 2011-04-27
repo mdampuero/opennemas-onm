@@ -566,8 +566,8 @@ class ContentManager
         }
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-
-        $items = $this->find($content_type,'pk_content IN('.$pk_list.')',null,'`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
+        //public function find($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
+        $items = $this->find($content_type,'pk_content IN('.$pk_list.')',$_limit,'`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
         if (empty($items)) {
             return array();
         }
