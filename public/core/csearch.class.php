@@ -253,7 +253,7 @@ class cSearch
 	    $szSqlWhere .= " AND  ".$filter;
 	    $szSqlWhere .= " AND `contents`.`available` = 1 AND `contents`.`in_litter` = 0 AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`";
 	    $szSqlSentence .= $szSqlWhere;
-	    $szSqlSentence .= " ORDER BY rel DESC, created DESC LIMIT 0, ".$iLimit;
+	    $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT 0, ".$iLimit;
         
 	    $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
     
