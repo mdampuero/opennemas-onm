@@ -22,6 +22,8 @@
                     success: function(xhr, resultado) {
                         $('#sendform').html(xhr.responseText);
                         $('#resultado').hide();
+                        $('#facebox').hide();
+                        $('#facebox_overlay').hide();
                     },
                     error: function(xhr, resultado) {
                         $('#resultado').html(xhr.responseText)
