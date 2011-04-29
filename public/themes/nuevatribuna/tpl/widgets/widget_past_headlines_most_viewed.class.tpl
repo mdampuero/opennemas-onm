@@ -6,9 +6,9 @@
                     Lo último en {$actual_category_name|default:'Portada'}
                 </div>
                 <ul>
-                    <li><a href="#tab-last-day"><span>Último día</span></a></li>
-                    <li><a href="#tab-last-3-days"><span>Últimos 3 días</span></a></li>
-                    <li><a href="#tab-last-week"><span>Última semana</span></a></li>
+                    <li><a href="#tab-last-day"><span>24hs</span></a></li>
+                    <li><a href="#tab-last-3-days"><span>3 días</span></a></li>
+                    <li><a href="#tab-last-week"><span>1 semana</span></a></li>
                 </ul>
                 <div id="tab-last-day">
                     {section name=a loop=$articles_24h}
@@ -19,7 +19,7 @@
                         </div>
                     {/section}
                 </div>
-                <div id="tab-last-3-days" class="clearfix initially-hidden">
+                <div id="tab-last-3-days">
                      {section name=a loop=$articles_3day}
                         <div class="tab-lastest clearfix">
                             <div class="tab-lastest-title">
@@ -28,7 +28,7 @@
                         </div>
                     {/section}  
                 </div>
-                <div id="tab-last-week" class="clearfix initially-hidden">
+                <div id="tab-last-week">
                     {section name=a loop=$articles_1sem}
                         <div class="tab-lastest clearfix">
                             <div class="tab-lastest-title">
