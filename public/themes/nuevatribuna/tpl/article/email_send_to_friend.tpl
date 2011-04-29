@@ -11,13 +11,12 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="http://www.xornal.com/" border="0" target="_blank">
+                            <a href="{$smarty.const.SITE_URL}" border="0" target="_blank">
                                 <img border=0 src="{$params.IMAGE_DIR}logos/nuevatribuna-header.png" alt="{$smarty.const.SITE_FULLNAME}" />
-                                <div style="margin: 0px 0px 4px; padding-top: 10px;
-                                color:#980101; font-size: 18px; font-weight: bold; font-family: Arial;">
-                                Alguien ha compartido un artículo contigo
-                            </div>
                             </a>
+                            <div style="margin: 0px 0px 4px; padding-top: 10px; color:#980101; font-size: 18px; font-weight: bold; font-family: Arial;">
+                                Alguien ha compartido un artículo contigo
+                            </div> 
                             <br>
                         </td>
                     </tr>
@@ -40,7 +39,9 @@
                     <tr>
                         <td style="margin:10px 0;">
                             <div style="margin: 0px 0px 0px; padding: 0px; font-family: Arial; font-size:23px; color:#333333; font-weight: normal;  border-top: 1px solid #ccc;">
-                                <b>{$article->title}</b></div><br><div style="margin: 0px 0px 0px; padding: 0px; color:#666; font-size: 11px; font-weight: bold; text-align: left;">
+                                <a href="{$smarty.const.SITE_URL}{$article->permalink}" target="_blank">
+                                    <b>{$article->title}</b></div><br><div style="margin: 0px 0px 0px; padding: 0px; color:#666; font-size: 11px; font-weight: bold; text-align: left;">
+                                </a>
                                 <b>{$agency}</b> | {$date}</div>
                         </td>
                     </tr>
