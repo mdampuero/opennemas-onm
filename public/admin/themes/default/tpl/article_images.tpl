@@ -172,7 +172,7 @@
 					   {section name=n loop=$photos}
 					   {if $photos[n]->content_status eq 1}
 							<li>
-								<div style="float: left;">>
+								<div style="float: left;">
 									<a>
 										<img style="{cssphotoscale width=$photos[n]->width height=$photos[n]->height}" resolution=67 photo=$photos[n]}"
 												src="{$MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}140x100-{$photos[n]->name}"
@@ -202,10 +202,9 @@
 					{/if}
 				</div>
 			</div>
-
+            
 			<br>
 			<br>
-
 
 			<div  onclick="new Effect.toggle($('videos-container'),'blind')"
 				  style="cursor:pointer;  border:1px double #ccc; background-color:#EEE; padding:7px;">

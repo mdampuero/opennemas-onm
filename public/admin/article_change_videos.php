@@ -52,12 +52,8 @@ if($pages->_totalPages>1){
 }
 */
 $tpl->assign('videos', $videos);
-$pages=$pager;
-$params='0';
-$paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);
-if($pages->_totalPages>1) {
- 	echo ($paginacionV);
-}
+
+
 echo "<ul id='thelist' class='clearfix gallery_list' style='width: 100%; margin: 0pt; padding: 0pt;'> ";
 if($videos) {
 	$num = 0;
@@ -71,3 +67,10 @@ if($videos) {
     }
 }
 echo "	 </ul><br>";
+
+if(isset($pager) && !empty($pager)) {
+    $paginacion = $cm->makePagesLinkjs($pager, 'get_search_videos', 0);
+    if($pager->_totalPages>1) {
+        echo "<div align=\"center\" class=\"pagination\"> " . $paginacion . "</div>";
+    }
+}

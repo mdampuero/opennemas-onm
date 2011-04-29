@@ -70,12 +70,8 @@ if( isset($photos) &&
 $cat=$_REQUEST['category'];
 $pages=$cm->pager;
 */
-if(isset($pager) && !empty($pager)) {
-    $cat=$_GET['category'];
-    $pages=$pager;
-    $paginacion = $cm->makePagesLink($pages, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
-    echo $paginacion;
-}
+$cat=$_GET['category'];
+
 echo "<ul id='thelist' class='gallery_list clearfix' style='width: 100%; margin: 0; padding: 0;'> ";
 if(isset($photos) && !empty($photos) ){
         $num=1;
@@ -110,3 +106,13 @@ if(isset($photos) && !empty($photos) ){
         }
 }
 echo "</ul>";
+if(isset($pager) && !empty($pager)) {
+    $pages=$pager;
+    $paginacion=$cm->makePagesLink($pager, intval($cat),$_REQUEST['action'],$_REQUEST['metadatas']);
+    if($pager->_totalPages>1) {
+        echo "<div align=\"center\" class=\"pagination\"> " . $paginacion . "</div>";
+    }
+}
+
+
+            
