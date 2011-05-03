@@ -590,7 +590,7 @@ if(isset($_REQUEST['action']) ) {
 
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
-            $mail->Subject  = substr(strip_tags($_REQUEST['body']), 0, 100);
+            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
             
             $tplMail->assign('destination', $_REQUEST['destination']);
 
@@ -604,7 +604,7 @@ if(isset($_REQUEST['action']) ) {
             // Filter tags before send
             $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
             $message = $_REQUEST['body'];
-
+            $tplMail->assign('body', $message);
             if (empty($article->agency)) {
                 $agency = $article->agency;
             } else {

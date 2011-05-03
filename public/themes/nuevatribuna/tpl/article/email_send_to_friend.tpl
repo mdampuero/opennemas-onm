@@ -14,10 +14,10 @@
                             <a href="{$smarty.const.SITE_URL}" border="0" target="_blank">
                                 <img border=0 src="{$params.IMAGE_DIR}logos/nuevatribuna-header.png" alt="{$smarty.const.SITE_FULLNAME}" />
                             </a>
-                            <div style="margin: 0px 0px 4px; padding-top: 10px; color:#980101; font-size: 18px; font-weight: bold; font-family: Arial;">
+<!--                            <div style="margin: 0px 0px 4px; padding-top: 10px; color:#980101; font-size: 18px; font-weight: bold; font-family: Arial;">
                                 Alguien ha compartido un artículo contigo
-                            </div> 
-                            <br>
+                            </div> -->
+                        <br>
                         </td>
                     </tr>
                     <tr>
@@ -29,10 +29,11 @@
                         <td>
                             <div style="font-size:1.2em; color:#222">
                                 <b>Hola {$destination}</b>
-                                <br>
-                                <b>{$mail->FromName} quiere compartir contigo la siguiente información: </b>
-                                <br>
-                                <br{$message}
+                                <br><br>
+                                <b>{$mail->FromName} quiere compartir contigo la siguiente información de {$smarty.const.SITE_FULLNAME} </b>
+                                <br><br>
+                                <b> Comentario: {$body}</b>   
+                                <br><br>{$message}
                             </div>
                         </td>
                     </tr>
