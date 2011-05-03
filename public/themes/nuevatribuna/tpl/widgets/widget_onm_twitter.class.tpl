@@ -1,7 +1,7 @@
 <div class="onm-twitter widget-onm-twitter widget-onm-twitter-wrapper clearfix">
     <div class="top-bar">
         <div class="icon"></div>
-        <!--<h2 class="tut"></h2>-->
+        <h2 class="tut"></h2>
     </div>
     <div class="widget-content">
         <div class="loading">
