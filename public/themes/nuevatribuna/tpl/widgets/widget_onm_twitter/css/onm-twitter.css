@@ -53,9 +53,8 @@
 }
 
 .onm-twitter .tweet{
-	padding:5px;
-	margin:0 8px 8px;
-	height:71px;
+	padding:4px;
+	margin:0 4px 4px;
 	border:1px solid #F0F0F0;
 	background:url(img/transparent.png);
 	position:relative;
@@ -93,7 +92,6 @@
 
 .onm-twitter .tweet .txt{
 	clear:both;
-    font-size: x-small;
 }
 
 .onm-twitter .tweet .user{
