@@ -29,7 +29,7 @@
 }
 
 .onm-twitter .widget-content{
-	height:190px;
+	height:155px;
 	width:auto;
 	overflow-y:scroll;
 	overflow-x:hidden;
@@ -55,7 +55,7 @@
 .onm-twitter .tweet{
 	padding:5px;
 	margin:0 8px 8px;
-	
+	height:71px;
 	border:1px solid #F0F0F0;
 	background:url(img/transparent.png);
 	position:relative;
@@ -66,17 +66,17 @@
 
 .onm-twitter .tweet .user,
 .onm-twitter .tweet .time{
-	margin-bottom:2px;
+	margin-bottom:1px;
 }
 
 .onm-twitter .tweet .time{
-	font-size:10px;
+	font-size:9px;
 	color:#AAAAAA;
 	white-space:nowrap;
 }
 
 .onm-twitter .tweet .tweet-content {
-	margin-left:45px;
+	margin-left:25px;
 }
 .onm-twitter .tweet .avatar {
 	position:absolute;
@@ -85,14 +85,15 @@
 }
 
 .onm-twitter .tweet .avatar img{
-	width:36px;
-	height:36px;
+	width:15px;
+	height:15px;
 	border:2px solid #eeeeee;
 	margin:0 5px 5px 0;
 }
 
 .onm-twitter .tweet .txt{
 	clear:both;
+    font-size: x-small;
 }
 
 .onm-twitter .tweet .user{
