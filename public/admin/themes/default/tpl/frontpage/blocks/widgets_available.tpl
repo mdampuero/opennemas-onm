@@ -8,7 +8,7 @@
     </tr>
     <tr>
         <td colspan=4>
-            <div id="art" class="seccion">
+            <div id="widgets_available" class="seccion">
                 {assign var=aux value='100'}
                 {section name=d loop=$widgets}
                     <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$widgets[d]->pk_widget}" data="{$widgets[d]->content_type}" class="tabla">
