@@ -11,7 +11,8 @@ class WidgetLatestTwelveOpinions extends Widget_Factory {
     public function render($params = '') {
 
         // Retrieve all the required contents
-        $latestOpinionsClean = Opinion::getLatestAvailableOpinions(array('limit' => 12));
+        //$latestOpinionsClean = Opinion::getLatestAvailableOpinions(array('limit' => 12));
+        $latestOpinionsClean = Opinion::getAllLatestOpinions(array('limit' => 12));
 
         // Assign them to the template object
         $this->tpl->assign('latestOpinions', $latestOpinionsClean);
