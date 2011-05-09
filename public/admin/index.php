@@ -11,6 +11,13 @@ $sessions = $GLOBALS['Session']->getSessions();
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
+/**
+ * Setup number of pending comments
+*/
+$numComment = new Comment();
+$pending_comments = $numComment->count_pending_comments();
+$tpl->assign('numPendingComments', $pending_comments);
+
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 $RESOURCES_PATH = TEMPLATE_ADMIN_PATH_WEB;

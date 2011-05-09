@@ -307,6 +307,30 @@ class Comment extends Content
         return( $items);
 
     }
+    
+    /**
+	* Gets the number of pending comments
+	*
+	* @access public
+	* @param 
+	* @return integer, the number of pending comments
+	*/
+    public function count_pending_comments() {
+
+        $sql = 'SELECT count(pk_content)
+                FROM `contents`
+                WHERE `fk_content_type` =6
+                AND `content_status` =0
+                AND `available` =0
+                AND `in_litter` =0
+                ORDER BY `created` ASC';
+
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
+
+        return intval($rs->fields['count(pk_content)']);
+    }
+    
+
 
     public function filterComment($text, $weight)
     {
