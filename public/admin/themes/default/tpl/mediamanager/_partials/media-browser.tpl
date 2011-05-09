@@ -36,13 +36,18 @@
                                             <a onmouseout="UnTip()" onmouseover="Tip('<b>Descripción:</b> {$photo[n]->description_utf|clearslash|escape:'html'} <br /> <b>Metadatos:</b> {$photo[n]->metadata_utf|clearslash|escape:'html'} <br /> <b>Autor:</b> {$photo[n]->author_name|clearslash|escape:'html'} <br> <b>Tipo:</b> {$photo[n]->type_img}<br> <b>Creado:</b> {$photo[n]->date|date_format:"%Y-%m-%d %H:%M:%S"}', SHADOW, true, ABOVE, true, WIDTH, 400)" href="{$home}?action=image_data&amp;id={$photo[n]->pk_photo}&amp;category={$category}" title="Editar datos de la imagen" >
                                                 Visualizar datos &nbsp;
                                             </a>
-
-                                            <a style="cursor:pointer;" onmouseover="Tip('<img src=\'{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}\'>', SHADOW, true, ABOVE, true, WIDTH, {$photo[n]->width})" onmouseout="UnTip()" >
-                                                <img src="{$params.IMAGE_DIR}mediamanager/lupa.gif" border="0" width="18" height="18" align="absmiddle" />
-                                                Zoom
-                                            </a>
+                                            {if $photo[n]->type_img == 'swf'}
+                                                <a style="cursor:pointer;" onmouseover="Tip('<object><param name=\'wmode\' value=\'opaque\' value=\'{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}\'/><embed wmode=\'transparent\' src=\'{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}\'  ></embed></object>', SHADOW, true, ABOVE, true, WIDTH, 0)" onmouseout="UnTip()" >
+                                                    <img src="{$params.IMAGE_DIR}mediamanager/lupa.gif" border="0" width="18" height="18" align="absmiddle" />
+                                                    Zoom
+                                                </a>
+                                            {else}
+                                                <a style="cursor:pointer;" onmouseover="Tip('<img src=\'{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}\'>', SHADOW, true, ABOVE, true, WIDTH, {$photo[n]->width})" onmouseout="UnTip()" >
+                                                    <img src="{$params.IMAGE_DIR}mediamanager/lupa.gif" border="0" width="18" height="18" align="absmiddle" />
+                                                    Zoom
+                                                </a>
+                                            {/if}
                                         </div>
-
                                         <div class="table_div">
                                             <div>
                                                 {if preg_match('/^swf$/i', $photo[n]->type_img)}
