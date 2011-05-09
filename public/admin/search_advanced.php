@@ -79,8 +79,8 @@ switch($_REQUEST['action'])
         
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
 
             }
             
@@ -131,8 +131,8 @@ switch($_REQUEST['action'])
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b>$1</b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
 
             }
 
