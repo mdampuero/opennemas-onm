@@ -264,7 +264,7 @@
 						value="{$article->agency|clearslash|escape:"html"}"
 						onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
 					{else}
-						value="nuevatribuna.es"
+						value="{$smarty.const.SITE_AGENCY}"
 					{/if}
 				/>
         </td>

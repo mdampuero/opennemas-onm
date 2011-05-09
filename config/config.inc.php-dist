@@ -30,6 +30,7 @@ define ('SITE_KEYWORDS', "nuevatribuna,diario,periodico,medio,digital,progresist
 define ('SITE_FULLNAME', "Nueva Tribuna");                        // Human readable site name
 define ('SITE_NAME', "nuevatribuna");                                  // Canonical name, should be lowcase and without spaces
 define ('SITE_DOMAIN', "nuevatribuna.es");
+define ('SITE_AGENCY', "nuevatribuna.es");
 
 /**
  * Database settings
