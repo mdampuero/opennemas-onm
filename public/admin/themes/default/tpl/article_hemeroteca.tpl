@@ -38,6 +38,9 @@
 	<thead>
 <!--<th>ID</th>-->
 		<th class="title">Título</th>
+        {if $category=='todos'}
+            <th align="center" style="width:70px;">Secci&oacute;n</th>
+        {/if}
 		<th align="center" style="width:70px;">Fecha de modificación</th>
 		<th align="center" style="width:70px;">Visto</th>
 		<th align="center" style="width:70px;">Comentarios</th>
@@ -50,7 +53,7 @@
 		<th align="center" style="width:70px;">Eliminar</th>
 	</thead>
 
-<input type="hidden"  id="category" name="category" value="{$category}">
+    <input type="hidden"  id="category" name="category" value="{$category}">
 
 {section name=c loop=$articles}
 <tr {cycle values="class=row0,class=row1"}>
@@ -58,7 +61,12 @@
 		 <input type="checkbox" class="minput" pos=1 id="selected_fld_des_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$articles[c]->id}"  style="cursor:pointer;" >
 		<a href="#" onClick="javascript:enviar(this, '_self', 'only_read', '{$articles[c]->id}');" title="{$articles[c]->title|clearslash}"> {$articles[c]->title|clearslash}</a>
 	</td>
-	<td style="padding:10px;font-size: 11px;width:10%;" align="center">
+    {if $category=='todos'}
+        <td style="padding:10px;font-size: 11px;width:10%;" align="center">
+            {$articles[c]->category_name}
+        </td>
+    {/if}
+    <td style="padding:10px;font-size: 11px;width:10%;" align="center">
 		{$articles[c]->changed}
 	</td>
 	<td style="text-align: center;font-size: 11px;width:5%;">
@@ -84,8 +92,10 @@
 		{* <a href="#" onClick="javascript:enviar(this, '_self', 'only_read', '{$articles[c]->id}');" title="Consultar">
 			<img src="{$params.IMAGE_DIR}visualizar.png" border="0" /></a> *}
 
-        {* Previsualizar *}
-        <a href="{$articles[c]->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="UserVoice.PopIn.showPublic('{$articles[c]->permalink}');return false;" >
+        {* Previsualizar *}                
+        <a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}" 
+           target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" 
+           onclick="UserVoice.PopIn.showPublic('{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}');return false;" >
             <img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" /></a>
 
 	</td>
