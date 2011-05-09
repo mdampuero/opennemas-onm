@@ -260,7 +260,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;		
 
         list($photos, $pager)= $cm->find_pages('Photo',
-                                               'contents.fk_content_type=8 and photos.media_type="image" and created <=' .
+                                               'contents.fk_content_type=8 and photos.media_type="image" and created >=' .
                                                $ayer.' ',
                                                'ORDER BY created DESC ',
                                                $page, 40, $this->category);
