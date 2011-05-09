@@ -182,7 +182,8 @@ if( isset($_REQUEST['action']) ) {
 			   // FIXME: evitar otros valores erróneos
 			   $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
 			   $category->set_inmenu($status);
-
+               /* Limpiar la cache de portada de todas las categorias */
+               $refresh = Content::refreshFrontpageForAllCategories();
 			   Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['id'].'&page='.$_REQUEST['page']);
 
 		  break;
