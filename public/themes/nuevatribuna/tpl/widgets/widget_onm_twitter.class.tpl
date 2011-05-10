@@ -17,7 +17,7 @@
     div.onm-twitter .icon { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=images/header_bg.png, sizingMethod=crop); }
 </style>
 <![endif]-->
-<script type="text/javascript" src="http://nuevatribuna.local/themes/nuevatribuna//tpl/widgets/widget_onm_twitter/js/jquery.OnmTwitter.js"></script> 
+<script type="text/javascript" src="{$smarty.const.TEMPLATE_USER_URL}/tpl/widgets/widget_onm_twitter/js/jquery.OnmTwitter.js"></script> 
 <script defer="defer" type="text/javascript"> 
     jQuery(document).ready(function(){ OnmTwitter(['nuevatribuna']); });
 </script> 
