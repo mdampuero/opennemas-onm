@@ -21,7 +21,7 @@
                 <ul >
                  {section name=k loop=$statics}
                     {if $statics[k]->title eq 'Suscripción'}
-                        <li><a href="{$smarty.const.SITE_URL}controllers/subscripcionBoletin.php">{$statics[k]->title}</a></li>
+                        <li><a href="{$smarty.const.SITE_URL}newsletter/">{$statics[k]->title}</a></li>
                     {else}
                         <li><a href="/{$smarty.const.STATIC_PAGE_PATH}{$statics[k]->slug}.html">{$statics[k]->title}</a></li>
                     {/if}

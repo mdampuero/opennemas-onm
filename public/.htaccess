@@ -112,6 +112,10 @@ Deny from all
     #Static pages
     RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
 
+    #Newsletter links 
+    RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
+    RewriteRule ^newsletter/?$  controllers/subscripcionBoletin.php [L,NC]
+
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
     RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
