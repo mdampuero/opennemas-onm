@@ -100,7 +100,7 @@
             <tr>
                 <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #efefef;">
                 Est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de {$smarty.const.SITE_FULLNAME}. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
-                accediendo a  <a href="{$smarty.const.SITE_URL}controllers/subscripcionBoletin.php" style="text-decoration:none !important; color:#980101;"><b>esta direcci&oacute;n</b></a>.
+                accediendo a  <a href="{$smarty.const.SITE_URL}newsletter/" style="text-decoration:none !important; color:#980101;"><b>esta direcci&oacute;n</b></a>.
                 <br/><br/><br/>
                 <div align="center"><a href="{$smarty.const.SITE_URL}" style="color:#980101;">{$smarty.const.SITE_FULLNAME}</a> <br/> {$smarty.const.SITE_DESCRIPTION}</div>
 
