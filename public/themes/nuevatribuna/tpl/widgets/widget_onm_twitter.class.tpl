@@ -20,8 +20,8 @@
 </style>
 <![endif]-->
 <script type="text/javascript" src="{$smarty.const.TEMPLATE_USER_URL}/tpl/widgets/widget_onm_twitter/js/jquery.OnmTwitter.js"></script>
-<script type="application/x-javascript">
-    $(document).ready(function(){
+<script defer="defer" type="text/javascript">
+    jQuery(document).ready(function(){
         OnmTwitter([{$users}])
     });
 </script>
