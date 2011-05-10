@@ -35,6 +35,7 @@
 	overflow-x:hidden;
 	padding-bottom:20px;
 	margin-right:2px;
+	position:relative; /* needed for IE right visualization*/
 }
 
 .onm-twitter .icon {
@@ -58,7 +59,6 @@
 	border:1px solid #F0F0F0;
 	background:url(img/transparent.png);
 	position:relative;
-	
 	width:auto;
 	overflow:hidden;
 }

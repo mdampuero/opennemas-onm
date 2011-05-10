@@ -12,16 +12,12 @@
 </div>
 
 <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_USER_URL}/tpl/widgets/widget_onm_twitter/css/onm-twitter.css" />
-<!--[if lt IE 7]>
+<!--[if lt IE 8]>
 <style type="text/css">
-    div.tweet { background:none; border:none; }
-    div.twitIcon{ filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=images/header_bg.png, sizingMethod=crop); }
-    div.twitIcon img{ display:none; }
+    div.onm-twitter .icon { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=images/header_bg.png, sizingMethod=crop); }
 </style>
 <![endif]-->
-<script type="text/javascript" src="{$smarty.const.TEMPLATE_USER_URL}/tpl/widgets/widget_onm_twitter/js/jquery.OnmTwitter.js"></script>
-<script type="application/x-javascript">
-    $(document).ready(function(){
-        OnmTwitter([{$users}])
-    });
-</script>
+<script type="text/javascript" src="http://nuevatribuna.local/themes/nuevatribuna//tpl/widgets/widget_onm_twitter/js/jquery.OnmTwitter.js"></script> 
+<script defer="defer" type="text/javascript"> 
+    jQuery(document).ready(function(){ OnmTwitter(['nuevatribuna']); });
+</script> 
