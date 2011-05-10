@@ -74,7 +74,7 @@
                     <div id="pending_comments" title="{t}Pending comments{/t}">
                         <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment.php">
                             <span class="point"></span>  
-                            <em>{count_pending_comments}</em>
+                            <em>&nbsp;{count_pending_comments}&nbsp;</em>
                         </a>
                     </div>
 					&nbsp;&nbsp;&nbsp;
