@@ -23,12 +23,14 @@ function TweetTick(ob)
     $(ob.results).each(function(el){
     
         var str = '	<div class="tweet">\
-                    <div class="avatar"><a href="http://twitter.com/'+this.from_user+'" target="_blank"><img src="'+this.profile_image_url+'" alt="'+this.from_user+'" /></a></div>\
-                    <div class="tweet-content">\
-                        <div class="user"><a href="http://twitter.com/'+this.from_user+'" target="_blank">'+this.from_user+'</a></div>\
-                        <div class="time">'+relativeTime(this.created_at)+'</div>\
-                        <div class="txt">'+formatTwitString(this.text)+'</div>\
-                    </div>\
+                        <div class="tweet-inner-wrapper">\
+                            <div class="avatar"><a href="http://twitter.com/'+this.from_user+'" target="_blank"><img src="'+this.profile_image_url+'" alt="'+this.from_user+'" /></a></div>\
+                            <div class="tweet-content">\
+                                <div class="user"><a href="http://twitter.com/'+this.from_user+'" target="_blank">'+this.from_user+'</a></div>\
+                                <div class="time">'+relativeTime(this.created_at)+'</div>\
+                                <div class="txt">'+formatTwitString(this.text)+'</div>\
+                            </div>\
+                        </div>\
                     </div>';
         
         container.append(str);
