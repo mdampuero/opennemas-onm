@@ -582,7 +582,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         $sources = array(
             'Article' => array(
                 'table'  => 'contents',
-                'fields' => array('*'),
+                'fields' => array('pk_content', 'title', /*'summary',*/ 'permalink', 'created', 'category'),
                 'conditions' => '`fk_content_type`=1'
             ),
 
