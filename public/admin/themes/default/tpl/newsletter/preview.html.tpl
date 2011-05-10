@@ -23,7 +23,22 @@
                     Hola,
                     <br/>
                     &eacute;stas son las &uacute;ltimas noticias y art&iacute;culos de opini&oacute;n de hoy. Te recordamos que puedes encontrar &eacute;stas noticias y muchas más visitando la web
-                    de {$smarty.const.SITE_FULLNAME} (<a href="{$smarty.const.SITE_URL}">{$smarty.const.SITE_URL}</a>):
+                    de {$smarty.const.SITE_FULLNAME}
+                    <br /><br />
+                    Portadas Nueva Tribuna:<br />
+                    <a href="{$smarty.const.SITE_URL}" style="color:#980101;">Inicio </a>|
+                    {section loop=$inmenu_categorys name="c"}
+                        {if $inmenu_categorys[c]->inmenu eq 1}
+                            <a href="{$smarty.const.SITE_URL}seccion/{$inmenu_categorys[c]->name}" style="color:#980101;">
+                                {if $inmenu_categorys[c]->name == 'opinion'}
+                                    Opinión
+                                {else}
+                                    {$inmenu_categorys[c]->title}
+                                {/if}
+                            </a>
+                            {if !$smarty.section.c.last} | {/if}
+                        {/if}
+                    {/section}
                     <br /><br />
                 </td>
             </tr>
@@ -37,8 +52,13 @@
                 {section name=n loop=$data->articles}
                 <tr>
                     <td style="font-size:15px;color:#980101;font-weight:normal;padding:5px;padding-left:10px;border-top:1px solid #ddd;">
-                        <a href="{$URL_PUBLIC}#{$data->articles[n]->pk_content}" style="color: #354b1d; text-decoration:none !important">
-                            <b style="color:#980101;">&middot; {$data->articles[n]->category_name}</b>: <span style="color:Black">{$data->articles[n]->title}</span></a>
+                        <a href="{$URL_PUBLIC}/
+                           {generate_uri    content_type='articleNewsletter'
+                                            id=$data->articles[n]->pk_content
+                                            date=$data->articles[n]->date
+                                            category_name=$data->articles[n]->cat
+                                            title=''}/" style="color: #354b1d; text-decoration:none !important">
+                            <span style="color:Black">{$data->articles[n]->title}</span></a>
                     </td>
                 </tr>
                 {/section}
@@ -73,17 +93,16 @@
                 
             <tr>
                 <td style="font-family:Arial; font-size:12px; color:#000000;background:#ddd;padding:3px;border-bottom:1px solid #354b1d;">
-                    <div style="margin-left: 5px"><a href="{$smarty.const.SITE_URL}/controllers/subscripcionBoletin.php">MODIFICAR / CANCELAR SUSCRIPCI&Oacute;N</a></div>
+                    <div style="margin-left: 5px"><strong>MODIFICAR / CANCELAR SUSCRIPCI&Oacute;N</strong></div>
                 </td>
             </tr>
 
             <tr>
                 <td style=" font-size:12px; color:#333333; font-weight: normal; padding: 15px; padding-left: 10px; border-top: 1px solid #a0a0a0; background: #efefef;">
-                Est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de
-                <a href="{$URL_PUBLIC}" style="text-decoration:none !important">{$smarty.const.SITE_FULLNAME} </a>. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
-                accediendo a  <a href="{$smarty.const.SITE_URL}/controllers/subscripcionBoletin.php" style="text-decoration:none !important"><b>esta direcci&oacute;n</b></a>.
+                Est&aacute; recibiendo este bolet&iacute;n tras solicitar este servicio a trav&eacute;s de la web de {$smarty.const.SITE_FULLNAME}. En cualquier momento puede modificar o cancelar su suscripci&oacute;n
+                accediendo a  <a href="{$smarty.const.SITE_URL}controllers/subscripcionBoletin.php" style="text-decoration:none !important; color:#980101;"><b>esta direcci&oacute;n</b></a>.
                 <br/><br/><br/>
-                <div align="center"><b>{$smarty.const.SITE_FULLNAME}</b> <br/> {$smarty.const.SITE_DESCRIPTION}</div>
+                <div align="center"><a href="{$smarty.const.SITE_URL}" style="color:#980101;">{$smarty.const.SITE_FULLNAME}</a> <br/> {$smarty.const.SITE_DESCRIPTION}</div>
 
                 <br/>
                 </td>

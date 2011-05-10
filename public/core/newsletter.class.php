@@ -73,8 +73,27 @@ class Newsletter
     public function render()
     {
         $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+        $ccm = new ContentCategoryManager();
+        
         $data = json_decode($_REQUEST['postmaster']);
+        $i = 0;
+        foreach ($data->articles as $tok){            
+            $category = $ccm->get_name($tok->category);
+            $data->articles[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
+            $data->articles[$i]->cat = $category;
+            $i++;            
+        }
+        $i = 0;
+        foreach ($data->opinions as $tok){            
+            $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
+            $i++;            
+        }
+
         $tpl->assign('data', $data);
+
+        /*Fetch inmenu categorys*/
+        $inmenu_categorys = $ccm->find('internal_category != 0 AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');
+        $tpl->assign('inmenu_categorys', $inmenu_categorys);
 
         // VIERNES 4 DE SEPTIEMBRE 2009
         $days = array('Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado');
@@ -563,7 +582,7 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
         $sources = array(
             'Article' => array(
                 'table'  => 'contents',
-                'fields' => array('pk_content', 'title', /*'summary',*/ 'permalink', 'created', 'category'),
+                'fields' => array('*'),
                 'conditions' => '`fk_content_type`=1'
             ),
 
