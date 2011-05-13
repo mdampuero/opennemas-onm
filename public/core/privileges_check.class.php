@@ -4,22 +4,36 @@ class Privileges_check
 {    
 
     public static function CheckAccessCategories($CategoryId)
-        {                
+    {
         try {
-            if(!isset($CategoryId) || empty($CategoryId)) {
+            if (
+                !isset($CategoryId)
+                || is_null($CategoryId)
+                )
+            {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
                 return true;
             }
-            
-            if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
+
+            if (
+                isset($_SESSION['isAdmin'])
+                && $_SESSION['isAdmin']
+                )
+            {
                 return true;
             }
-            
-            if( !isset($_SESSION['accesscategories']) || 
-                empty($_SESSION['accesscategories'])  ||
-                !in_array($CategoryId,$_SESSION['accesscategories']))
+            //var_dump(!in_array($CategoryId,$_SESSION['accesscategories']));die();        
+
+            if (
+                !isset($_SESSION['accesscategories'])
+                || empty($_SESSION['accesscategories'])
+                || !in_array($CategoryId,$_SESSION['accesscategories'])
+                )
+            {
                 return false;
-                 
+            }
+            
+        
         } catch(Exception $e) {
             return false;
         }
@@ -29,7 +43,7 @@ class Privileges_check
     }
 
 
-    public static function CheckPrivileges($Privilege)
+    public static function CheckPrivileges($Privilege, $category = null)
     {
         try {
             if( !isset($_SESSION['userid']) || Privileges_check::CheckSessionExpireTime() ) {
@@ -40,9 +54,13 @@ class Privileges_check
                 return true;
             }
             
-            if( !isset($_SESSION['privileges']) ||
-                empty($_SESSION['userid']) ||
-                !in_array($Privilege,$_SESSION['privileges'])) {                
+            if (
+                !isset($_SESSION['privileges'])
+                || empty($_SESSION['userid'])
+                || !in_array($Privilege,$_SESSION['privileges']) 
+                || (!is_null($category) && !(Privileges_check::CheckAccessCategories($category)))
+                )
+            {                
                     return false;
             }
             

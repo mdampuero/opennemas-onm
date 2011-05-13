@@ -82,7 +82,7 @@
 				{/section}
 			</td>
 			<td style="padding:10px;" align="right">
-				<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$users[c]->id});" title="{t}Edit user{/t}">
+				<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page}" title="{t}Edit user{/t}">
 					<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/></a>
 					&nbsp;
 				<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
@@ -325,15 +325,16 @@
 									{else}
 										<option value =""></option>
 									{/if}
+									<option value="0" {if is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
 									{foreach item="c_it" from=$content_categories}
 
 										<option value="{$c_it->pk_content_category}" {if is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
 
 										{if count($c_it->childNodes)>0}
 											{foreach item="sc_it" from=$c_it->childNodes}
-												<option value="{$sc_it->pk_content_category}" {if is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>
-											&nbsp; &rArr; {$sc_it->title}</option>
-
+												<option value="{$sc_it->pk_content_category}" {if is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+														&nbsp; &rArr; {$sc_it->title}
+												</option>
 											{/foreach}
 										{/if}
 									{/foreach}

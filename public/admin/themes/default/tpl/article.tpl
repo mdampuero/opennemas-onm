@@ -20,6 +20,7 @@
     {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
         {* ZONA MENU CATEGORIAS ******* *}
         <ul class="tabs2" style="margin-bottom: 28px;">
+            {acl hasCategoryAccess=0}
             <li>
                 <a href="article.php?action=list&category=home" id='link_home' {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</a>
             </li>
@@ -31,6 +32,7 @@
                 });
             // ]]>
             </script>
+            {/acl}
             {include file="menu_categorys.tpl" home="article.php?action=list"}
         </ul>
 
