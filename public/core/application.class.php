@@ -70,10 +70,11 @@ class Application {
 
 
     static private function autoload($className) {
+        
+        // Use Onm old loader
         $filename = strtolower($className);
         if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
             require dirname(__FILE__).'/'.$filename.'.class.php';
-
         } else{
 
             // Try convert MethodCacheManager to method_cache_manager
@@ -83,7 +84,19 @@ class Application {
                 require dirname(__FILE__).'/'.$filename.'.class.php';
             }
         }
-
+        
+        // Use PSR-0 Final Proposal autoloader
+        $className = ltrim($className, '\\');
+        $fileName  = '';
+        $namespace = '';
+        if ($lastNsPos = strripos($className, '\\')) {
+            $namespace = substr($className, 0, $lastNsPos);
+            $className = substr($className, $lastNsPos + 1);
+            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+        }
+        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+    
+        require $fileName;
 
     }
 
