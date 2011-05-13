@@ -74,12 +74,19 @@ $.noConflict();
             <li>
                 <a href="article.php?action=new" class="admin_add"
                    title="{t}New article{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" title="" alt="" />
+                        <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" title="" alt="" />
                     <br />{t}New article{/t}
                 </a>
             </li>
         </ul>
     </div>
+    <br/>
+    {if isset($smarty.session.messages)
+        && !empty($smarty.session.messages)}
+        {messageboard type="inline"}
+    {else}
+        {messageboard type="growl"}
+    {/if}
     <br/>
     <table class="adminheading">
         <tbody>

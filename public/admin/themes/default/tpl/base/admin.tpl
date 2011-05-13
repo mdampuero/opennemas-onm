@@ -116,12 +116,12 @@
 
     <div id="content">
 
-	{if isset($smarty.session.messages)
+	{*if isset($smarty.session.messages)
 		&& !empty($smarty.session.messages)}
 		{messageboard type="inline"}
 	{else}
 		{messageboard type="growl"}
-	{/if}
+	{/if*}
 
     {block name="content"}
 

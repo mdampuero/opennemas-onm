@@ -29,6 +29,15 @@ while(list( , $node) = each($result)) {
 }
 $tpl->assign('news', $news);*/
 
+$feeds = array (
+                array('name' => 'El pais', 'url'=> 'http://www.elpais.com/rss/feed.html?feedId=1022'),
+                array('name' => '20 minutos', 'url'=> 'http://20minutos.feedsportal.com/c/32489/f/478284/index.rss'),
+                array('name' => 'Publico.es', 'url'=> 'http://www.publico.es/rss/'),
+                array('name' => 'El mundo', 'url'=> 'http://elmundo.feedsportal.com/elmundo/rss/portada.xml'),
+                );
+
+$tpl->assign('feeds',$feeds);
+
 if(isset($_SESSION['authGmail'])) {
     $user = new User();
     $messages = $user->cache->parseGmailInbox(base64_decode($_SESSION['authGmail']));        
@@ -36,4 +45,4 @@ if(isset($_SESSION['authGmail'])) {
     $tpl->assign('messages', $messages);
 }
 
-$tpl->display('welcome.tpl');
+$tpl->display('welcome/index.tpl');

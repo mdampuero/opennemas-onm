@@ -72,9 +72,13 @@ class SimpleMenu {
                         $html .= "<ul>";
 
                         foreach($menu as $submenu) {
-                            $html.= "<li>";
-                                $html .= $this->getHref($submenu['title'],$submenu['link']);
-                            $html.= "</li>";
+                            if ((!isset($submenu['privilege']) 
+                                || $this->checkAcl($submenu['privilege'])))
+                            {
+                                $html.= "<li>";
+                                    $html .= $this->getHref($submenu['title'],$submenu['link']);
+                                $html.= "</li>";
+                            }
                         }
 
                         $html .= "</ul>";

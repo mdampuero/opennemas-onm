@@ -53,6 +53,6 @@ class Acl
             $message->push();
         }
 
-        Application::forward('welcome.php');
+        Application::forward('/admin/welcome.php');
     }
 }

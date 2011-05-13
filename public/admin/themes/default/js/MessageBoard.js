@@ -52,21 +52,21 @@ var MessageBoard = Class.create({
     //Dependiendo del tipo hace un render distinto
     insert: function(){
         if (this.container==document.body) {
-            var newElement = new Element('div', {'class':'messageboard'}).update(this.output)
+            var newElement = new Element('div', {'class':''}).update(this.output)
             document.body.insertBefore(newElement, document.body.childNodes[0]);
         } else {
-            this.container.update(new Element('div', {'class':'messageboard'}).update(this.output));
+            this.container.update(new Element('div', {'class':''}).update(this.output));
         }
     },
     
     render_inline: function(){
-        this.container.setStyle({display: 'none'});
+        this.container.setStyle({display: 'inline'});
         this.insert();
         this.container.appear();
     },
 
     render_growl: function(){
-        this.container.setStyle({display: 'none'});
+        this.container.setStyle({display: 'inline'});
         this.insert();
         Effect.SlideDown(this.container);
     },
@@ -82,7 +82,7 @@ var MessageBoard = Class.create({
     },
 
     clear: function(){
-        this.container.setStyle({display: 'none'});
+        this.container.setStyle({display: 'inline'});
     },
     
     push :function(){
