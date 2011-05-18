@@ -78,6 +78,7 @@ if( isset($_REQUEST['action']) ) {
         
         case 'read': {
             $user = new User( $_REQUEST['id'] );
+            
             $user_group = new User_group();
             $tpl->assign('user', $user);
             $tpl->assign('user_groups', $user_group->get_user_groups());

@@ -79,11 +79,18 @@ if(isset($_REQUEST['action']) ) {
         } break;
 
         case 'list':
-
+            
             // Check if the user can edit frontpages
-            if(!Acl::check('ARTICLE_FRONTPAGE')) {
+            if(!Acl::check('ARTICLE_FRONTPAGE'))
+            {
                 Acl::deny();
-            }
+            } elseif (!Acl::_C($categoryID)) {
+                $categoryID = $_SESSION['accesscategories'][0];
+                $section = $ccm->get_name($categoryID);
+                $_REQUEST['category'] = $categoryID;
+                $tpl->assign('category', $_REQUEST['category']);
+            } 
+            
 
             $tpl->assign('titulo_barra', 'Frontpage Manager');
 
@@ -397,7 +404,6 @@ if(isset($_REQUEST['action']) ) {
             }
             $cm = new ContentManager();
             $rating = new Rating();
-            // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
             list($articles, $pager)= $cm->find_pages('Article', 'content_status=0 AND available=1 AND fk_content_type=1 ', 'ORDER BY changed DESC, created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
             $aut=new User();
             $comment = new Comment();

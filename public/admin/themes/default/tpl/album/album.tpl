@@ -4,21 +4,12 @@
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
 {/block}
 
-
-
-
 {block name="content"}
 <div class="wrapper-content">
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
     {* LISTADO ******************************************************************* *}
     {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-
-        {if $category eq '3' && $totalalbums neq '4'}
-            <script type="text/javascript">
-                showMsg({'warn':['{t escape="off"}Must have 4 favorites albuns to frontpage.<br />  {/t}' ]},'inline');
-            </script>
-        {/if}
 
         <ul class="tabs2" style="margin-bottom: 28px;">
             <li>
@@ -29,6 +20,11 @@
 
         <br class="clear"/>
         {include file="botonera_up.tpl"}
+
+        {if $category eq '3' && $totalvideos neq '4'}
+                <div class="notice">{t escape="off"}Must have 4 favorites albuns to frontpage.<br />  {/t}</div>
+        {/if}
+
 
         <div id="{$category}">
             <table class="adminheading">
