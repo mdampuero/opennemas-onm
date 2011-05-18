@@ -64,10 +64,12 @@
                     {t}GLOBAL{/t}</a>
             </li>
             {if $smarty.server.PHP_SELF eq '/admin/controllers/mediamanager/mediamanager.php'}
+            {acl isAllowed="ADVERTISEMENT_ADMIN"}
                 <li>
                     <a href="mediamanager.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                         {t}PUBLICIDAD{/t}</a>
                 </li>
+            {/acl}
             {/if}
             {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
         </ul>

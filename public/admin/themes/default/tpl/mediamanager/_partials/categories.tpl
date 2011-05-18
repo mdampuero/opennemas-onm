@@ -8,10 +8,12 @@
                      ALBUMS</a>
              </li>
              *}
+            {acl isAllowed="ADVERTISEMENT_ADMIN"}
             <li>
                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                     PUBLICIDAD</a>
             </li>
+            {/acl}
             {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
 
         </ul>
