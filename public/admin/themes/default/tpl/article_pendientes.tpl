@@ -2,9 +2,11 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list_pendientes"}
     <ul class="tabs2" style="margin-bottom: 28px;">
+        {acl hasCategoryAccess=0}
         <li>
             <a href="article.php?action=list_pendientes&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
         </li>
+        {/acl}
         {acl hasCategoryAccess=20}
         <li>
             <a href="article.php?action=list_pendientes&category=20" id='link_unknown' {if $category=='20'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>

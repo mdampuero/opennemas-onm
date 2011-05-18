@@ -88,6 +88,10 @@ if(isset($_REQUEST['action']) ) {
                 $categoryID = $_SESSION['accesscategories'][0];
                 $section = $ccm->get_name($categoryID);
                 $_REQUEST['category'] = $categoryID;
+                list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
+                $tpl->assign('subcat', $subcat);
+                $tpl->assign('allcategorys', $parentCategories);
+                $tpl->assign('datos_cat', $datos_cat);
                 $tpl->assign('category', $_REQUEST['category']);
             } 
             
@@ -248,11 +252,20 @@ if(isset($_REQUEST['action']) ) {
                 if( !Privileges_check::CheckAccessCategories($_REQUEST['category'])) {
                     Privileges_check::AccessCategoryDeniedAction();
                 }
-            }
+            } elseif (!Acl::_C($categoryID)) {
+                $categoryID = $_SESSION['accesscategories'][0]; 
+                $section = $ccm->get_name($categoryID); 
+                $_REQUEST['category'] = $categoryID; 
+                list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
+                $tpl->assign('subcat', $subcat);
+                $tpl->assign('allcategorys', $parentCategories);
+                $tpl->assign('datos_cat', $datos_cat);
+                $tpl->assign('category', $_REQUEST['category']); 
+            } 
             $tpl->assign('titulo_barra', 'Gesti&oacute;n de Pendientes');
 
             $cm = new ContentManager();
-            if (!isset($_REQUEST['category']) || $_REQUEST['category']=='home' || $_REQUEST['category']=='home' ) {
+            if (!isset($_REQUEST['category']) || $_REQUEST['category']=='home' || $_REQUEST['category']=='0' ) {
                 $_REQUEST['category'] = 'todos';
             }
 
@@ -263,21 +276,25 @@ if(isset($_REQUEST['action']) ) {
             if ($_REQUEST['category'] == 'todos') {
                 $articles = $cm->find('Article', 'fk_content_type=1 AND available=0 AND paper_page !=-1', 'ORDER BY paper_page ASC, position ASC, created DESC ');
                 $tpl->assign('articles', $articles);
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
-                                      'ORDER BY created DESC, type_opinion DESC, title ASC');
-                $tpl->assign('opinions', $opinions);
-                if(!empty($opinions)){
-                    $aut = new User();
-                    foreach ($opinions as $opin) {
-                        $autor = new Author($opin->fk_author);
-                        $names[] = $autor->name;
-                        $art_publishers[]=$aut->get_user_name($opin->fk_publisher);
-                        $art_editors[]=$aut->get_user_name($opin->fk_user_last_editor);
+                if(Acl::check('OPINION_ADMIN ')){
+                    $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
+                                            'ORDER BY created DESC, type_opinion DESC, title ASC');
+                    $tpl->assign('opinions', $opinions);
+                    if(!empty($opinions)){
+                        $aut = new User();
+                        foreach ($opinions as $opin) {
+                            $autor = new Author($opin->fk_author);
+                            $names[] = $autor->name;
+                            $art_publishers[]=$aut->get_user_name($opin->fk_publisher);
+                            $art_editors[]=$aut->get_user_name($opin->fk_user_last_editor);
+                        }
+                        $tpl->assign('opin_names', $names);
+                        $tpl->assign('opin_editors', $art_publishers);
+                        $tpl->assign('opin_editors', $art_editors);
                     }
-                    $tpl->assign('opin_names', $names);
-                    $tpl->assign('opin_editors', $art_publishers);
-                    $tpl->assign('opin_editors', $art_editors);
                 }
+                
+
             }elseif($_REQUEST['category'] == 'opinion'){
                 $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');

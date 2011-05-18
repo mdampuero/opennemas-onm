@@ -58,7 +58,7 @@ $.noConflict();
         </div>
         <ul>
             <li>
-                <a href="mediamanager.php?category=GLOBAL" class="admin_add"
+                <a href="controllers/mediamanager/mediamanager.php" class="admin_add"
                    title="{t}Media manager{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
                     <br />{t}Media manager{/t}
