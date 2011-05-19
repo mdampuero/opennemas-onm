@@ -24,7 +24,7 @@ if(isset($_REQUEST['action']) ) {
             
             $caching = $tpl->caching;
             $tpl->caching = 0;
-            $output = $tpl->fetch('module_print_comments.tpl');
+            $output = $tpl->fetch('internal_widgets/module_print_comments.tpl');
             $tpl->caching = $caching;
             //}
             Application::ajax_out($output);

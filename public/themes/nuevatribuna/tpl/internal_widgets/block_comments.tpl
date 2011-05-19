@@ -32,7 +32,7 @@
 /* <![CDATA[ */
 var pkContent = '{$contentId}';
 get_paginate_comments = function(page) {
-    var url = "/comments.php?action=paginate_comments&id=" + pkContent + "&page=" + page;
+    var url = "/controllers/comments.php?action=paginate_comments&id=" + pkContent + "&page=" + page;
     var previousContent = $("#list-comments").html();
 
     $("#list-comments").html('<img src="/themes/{$smarty.const.TEMPLATE_USER}/images/loading.gif" border="0" />');
