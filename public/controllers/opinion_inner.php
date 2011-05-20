@@ -61,7 +61,7 @@ if(isset($_REQUEST['action']) ) {
                     $title = $str->get_title($opinion->title);
                     $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                     $tpl->assign('print_url', $print_url);
-                    $tpl->assign('sendform_url', '/opinion_inner.php?action=sendform&opinion_id=' . $opinionID );
+                    $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $opinionID );
                     // } Sacar broza
 
 
@@ -166,7 +166,7 @@ if(isset($_REQUEST['action']) ) {
             $tpl->assign('token', $token);
 
             $tpl->caching = 0;
-            $tpl->display('opinion/opinion_sendform.tpl'); // Don't disturb cache
+            $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
             exit(0);
 
         } break;
@@ -183,8 +183,10 @@ if(isset($_REQUEST['action']) ) {
                 Application::forward('/');
             }
 
-            // Send article to friend
-            require(dirname(__FILE__)."/libs/phpmailer/class.phpmailer.php");
+            // Send opinion to friend
+            require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
+
+            $tplMail = new Template(TEMPLATE_USER);
 
             $mail = new PHPMailer();
 
@@ -200,54 +202,72 @@ if(isset($_REQUEST['action']) ) {
 
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
-            $mail->Subject  = substr(strip_tags($_REQUEST['body']), 0, 100);
+            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
+
+            $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
             $opinion = new Opinion($_REQUEST['opinion_id']);
 
+            $tplMail->assign('mail', $mail);
+            $tplMail->assign('opinion', $opinion);
+            
+
             // Filter tags before send
-            $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL .  $opinion->permalink);
-            $message = stripslashes($_REQUEST['body']);
-
-            $aut = new Author($opinion->fk_author);
-
-            //$aut->name
+            $message = $_REQUEST['body'];
+            $tplMail->assign('body', $message);
+            $agency = SITE_FULLNAME;
+            $tplMail->assign('agency',$agency);
             $summary = substr(strip_tags(stripslashes($opinion->body)), 0, 300)."...";
+            $tplMail->assign('summary', $summary);
+            $tplMail->assign('author', $opinion->author);
 
-            require_once $tpl->_get_plugin_filepath('function', 'articledate');
+            if (method_exists($tpl, '_get_plugin_filepath')) {
+                //handle with Smarty version 2
+                require_once $tpl->_get_plugin_filepath('function','articledate');
+            } else {
+                //handle with Smarty version 3 beta 8
+                foreach ($tpl->plugins_dir as $value) {
+                    $filepath = $value ."/function.articledate.php";
+                    if (file_exists($filepath)) {
+                        require_once $filepath;
+                    }
+                }
+            }
+
+            //require_once $tpl->_get_plugin_filepath('function', 'articledate');
             $params['created'] = $opinion->created;
             $params['updated'] = $opinion->updated;
-            $params['article'] = $opinion;
+            $params['opinion'] = $opinion;
             $date = smarty_function_articledate($params,$tpl);
-            $mail->Body = strip_tags('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">').
-                ('<html xmlns="http://www.w3.org/1999/xhtml">').
-                ('<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /><meta name="language" content="es" />').
-                ('<div style="font-size: 11px; font-family: Arial;"><table border="0" cellpadding="0" cellspacing="0" width="765"><tbody>').
-                ('<tr><td bgcolor="014687"><a href="http://www.xornal.com/" border="0" target="_blank"><img src="http://www.xornal.com/themes/xornal/images/xornal-logo.jpg" alt="Xornal.Com" border="0"></a><br></td></tr>').
-                ('<tr><td><div style="margin: 0px 0px 4px; padding-top: 10px; color:#014687; font-size: 18px; font-weight: bold; font-family: Arial;">ARTÍCULO RECOMENDADO<div></div></div></td></tr>').
-                ('<tr><td><b>Hola '.$_REQUEST['destination'].',</b><br>').
-                ('<b>'.$mail->FromName.' quiere compartir contigo la siguiente información: </b><br><br> '.$message.'<br><br></td></tr>').
-                ('<tr><td><img src="http://webdev-xornal.openhost.es/themes/xornal/images/fileteFondoNota.gif" height="1" width="1"></td></tr>').
-                ('<tr><td><div style="margin: 0px 0px 0px; padding: 0px; font-family: Arial; font-size:26px; color:#333333; font-weight: normal;  border-top: 1px solid #014687;">').
-                ('<b>'.stripslashes($opinion->title).'</b></div><br><div style="margin: 0px 0px 0px; padding: 0px; color:#014687; font-size: 11px; font-weight: bold; text-align: left;">').
-                ('<b>'.$aut->name.'</b> | '.$date.'</div></td></tr>').
-                ('<tr><td><div style="margin: 0px; color:#333333; font-size: 12px; line-height: 15px; border-bottom: 1px solid #014687; padding-bottom: 5px; ">').
-                ($summary.'</div></td></tr>').
-                ('<tr><td><div style="color:#014687; text-align:right; text-decoration: underline;  font-size: 12px; line-height: 15px;">').
-                ('<a href="'.$permalink.'" target="_blank">Ir al artículo completo</a></div>').
-                ('</td></tr></tbody></table></div></body></html>');
+            $tplMail->assign('date', $date);
 
-            $mail->AltBody = strip_tags($message) . "\n" . $permalink;
-            $mail->AddAddress( $_REQUEST['destination'] );
+            $tplMail->caching = 0;
+            $mail->Body = $tplMail->fetch('opinion/email_send_to_friend.tpl');
+
+            $mail->AltBody = $tplMail->fetch('opinion/email_send_to_friend_just_text.tpl');
+
+            /*
+             * Implementacion para enviar a multiples destinatarios separados por coma
+             */
+            $destinatarios = explode(',', $_REQUEST['destination']);     
+
+            foreach ($destinatarios as $dest) {
+                //$mail->AddAddress(trim($dest));    
+                $mail->AddBCC(trim($dest));
+            }
 
             if( $mail->Send() ) {
                 $tpl->assign('message', 'Opinión enviada correctamente.');
             } else {
+                if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+                    header("HTTP/1.0 404 Not Found");
+            }
                 $tpl->assign('message', 'El artículo de opinión no pudo ser enviado, inténtelo de nuevo más tarde. <br /> Disculpe las molestias.');
             }
 
             $tpl->caching = 0;
-            $tpl->display('opinion/opinion_sendform.tpl'); // Don't disturb cache
+            $tpl->display('opinion/partials/_opinion_sendform.tpl'); // Don't disturb cache
             exit(0);
         } break;
 

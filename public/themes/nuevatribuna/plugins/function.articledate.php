@@ -30,7 +30,9 @@ function smarty_function_articledate($params, &$smarty) {
     }
     
     $article = isset($params['article'])? $params['article']: null;
-    $starttime = strtotime($article->starttime);
+    if($article != null){    
+        $starttime = strtotime($article->starttime);
+    }
 
 	if (!empty($starttime) && ($starttime>0)) {
 		if (!$nohour){

@@ -48,20 +48,21 @@
             <table width="100%" border="0" cellpadding="3" cellspacing="2" class="tabular-form">
                 <tr>
                     <th><label for="name_sender">Tu nombre:</label></th>
-                    <td><input name="name_sender" type="text" size="40" /></td>
+                    <td><input name="name_sender" type="text" size="42" /></td>
                 </tr>
                 <tr>
                     <th><label for="sender">Tu e-mail:</label></th>
-                    <td><input name="sender" type="text" size="24" /></td>
+                    <td><input name="sender" type="text" size="42" /></td>
                 </tr>
                 <tr>
-                    <th><label for="destination">E-mail destinatario:</label></th>
-                    <td><input name="destination" type="text" size="24" /></td>
+                    <th><label for="destination">E-mail destinatario(s):</label></th>
+                    <td><input name="destination" type="text" size="42" /><br>
+                    <font style="font-size: 0.80em;">Para enviar a varios destinatarios, separar por coma.</font> </td>
                 </tr>
                 <tr>
                     <th><label for="body">Tu comentario:</label></th>
                     <td>
-                        <textarea name="body" rows="8" cols="50">{$article->title|clearslash}</textarea>
+                        <textarea name="body" rows="8" cols="50" size="50">{$article->title|clearslash}</textarea>
                     </td>
                 </tr>
                 <tr>

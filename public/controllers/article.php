@@ -592,7 +592,7 @@ if(isset($_REQUEST['action']) ) {
             $mail->FromName = $_REQUEST['name_sender'];
             $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
             
-            $tplMail->assign('destination', $_REQUEST['destination']);
+            $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
             $article = new Article($_REQUEST['article_id']);
@@ -605,7 +605,7 @@ if(isset($_REQUEST['action']) ) {
             $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
             $message = $_REQUEST['body'];
             $tplMail->assign('body', $message);
-            if (empty($article->agency)) {
+            if (!empty($article->agency)) {
                 $agency = $article->agency;
             } else {
                 $agency = SITE_FULLNAME;
@@ -645,7 +645,16 @@ if(isset($_REQUEST['action']) ) {
             $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
 
             $mail->AltBody = $tplMail->fetch('article/email_send_to_friend_just_text.tpl');
-            $mail->AddAddress( $_REQUEST['destination'] );
+
+            /*
+             * Implementacion para enviar a multiples destinatarios separados por coma
+             */
+            $destinatarios = explode(',', $_REQUEST['destination']);     
+
+            foreach ($destinatarios as $dest) {
+                //$mail->AddAddress(trim($dest));    
+                $mail->AddBCC(trim($dest));
+            }
 
             if( $mail->Send() ) {
                 $tpl->assign('message', 'Noticia enviada correctamente.');
