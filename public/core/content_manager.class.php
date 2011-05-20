@@ -468,7 +468,7 @@ class ContentManager
                 $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-
+        
         if($rs->_numOfRows<$num && $not_empty) {
             $sql = 'SELECT * FROM '.$_tables .
                     'WHERE '.$_where.$_category.$_author.' AND `contents`.`pk_content`=`pk_'.strtolower($content_type).'` '.
@@ -683,7 +683,7 @@ class ContentManager
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
 
-        $items = $this->find($content_type,'pk_content IN('.$pk_list.')',' LIMIT 0, '.$num.' ','`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
+        $items = $this->find($content_type,'pk_content IN('.$pk_list.')','','`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
         if (empty($items)) {
             return array();
         }
@@ -692,8 +692,13 @@ class ContentManager
             $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'comment'=>'','title'=>$item->title,'permalink'=>$item->permalink);
         }
 
+        $nbrChar = 40;
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
+                if(strlen($comment->body) > $nbrChar) {
+                      $comment->body = substr($comment->body, 0, $nbrChar);
+                      $comment->body .= '...';
+                 }
                 $articles[$comment->fk_content]['comment'] = $comment->body;
             }
         }
@@ -705,10 +710,11 @@ class ContentManager
     {
         $sql = 'SELECT *
                 FROM contents
-                WHERE  contents.pk_content IN
+                WHERE contents.fk_content_type=1 AND contents.pk_content IN
                       (SELECT fk_content
                        FROM `comments`,contents
-                       WHERE comments.fk_content = contents.pk_content)
+                       WHERE comments.fk_content = contents.pk_content
+                       ORDER BY pk_comment DESC)
                 ORDER BY contents.created DESC
                 LIMIT 0,6';
         $contents = array();
