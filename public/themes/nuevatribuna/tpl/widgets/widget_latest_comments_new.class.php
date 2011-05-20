@@ -1,9 +1,9 @@
 <?php
 
-class WidgetLatestComments extends Widget_Factory {
+class WidgetLatestCommentsNew extends Widget_Factory {
 
 
-    public $template = 'widgets/widget_latest_comments.class.tpl';
+    public $template = 'widgets/widget_latest_comments_new.class.tpl';
 
     public function __construct() {
         
@@ -27,14 +27,16 @@ class WidgetLatestComments extends Widget_Factory {
                     if($this_article->pk_article == $comm['pk_content'] ){
                         $this_article->comment = $comm['comment'];
                         $this_article->pk_comment = $comm['pk_comment'];
+                        $this_article->comment_author = $comm['author'];
                     }
                 }
+                
                 
                 $arts_commented[] = $this_article;
                 
             }
         }
-
+        
         // Assign them to the template object
         $this->tpl->assign('articles_comments', $arts_commented);
 

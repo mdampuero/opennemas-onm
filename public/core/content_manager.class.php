@@ -676,7 +676,7 @@ class ContentManager
         foreach ($comments as $comment) {
             $pk_list .= ' '.$comment->fk_content.',';
         }
-
+        
         if (strlen($pk_list)==0) {
             return array();
         }
@@ -687,12 +687,12 @@ class ContentManager
         if (empty($items)) {
             return array();
         }
-
+        
         foreach($items as $item) {
-            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'comment'=>'','title'=>$item->title,'permalink'=>$item->permalink);
+            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'comment'=>'','title'=>$item->title,'permalink'=>$item->permalink,'pk_comment'=>'','author'=>'');
         }
 
-        $nbrChar = 40;
+        $nbrChar = 400;
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
                 if(strlen($comment->body) > $nbrChar) {
@@ -700,9 +700,11 @@ class ContentManager
                       $comment->body .= '...';
                  }
                 $articles[$comment->fk_content]['comment'] = $comment->body;
+                $articles[$comment->fk_content]['pk_comment'] = $comment->pk_comment;
+                $articles[$comment->fk_content]['author'] = $comment->author;
             }
         }
-
+        
         return $articles;
     }
     
