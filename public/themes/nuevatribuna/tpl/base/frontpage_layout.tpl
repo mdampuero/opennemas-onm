@@ -19,6 +19,7 @@
     <meta http-equiv="Refresh" content="{$smarty.const.REFRESH_INTERVAL}; url=http://{$smarty.server.SERVER_NAME}{$smarty.server.REQUEST_URI}" />
     {block name='meta'}{/block}
     {asset_compile}
+    
 
     <link rel="stylesheet" href="{$params.CSS_DIR}/bp/screen.css" type="text/css" media="screen, projection" />
     <link rel="stylesheet" href="{$params.CSS_DIR}/bp/print.css" type="text/css" media="print" />
@@ -29,7 +30,6 @@
 
     <link rel="stylesheet" href="{$params.CSS_DIR}parts/ads.css?{time()}" type="text/css" media="screen,projection" />
 	<link rel="stylesheet" href="{$params.CSS_DIR}parts/menu.css?{time()}" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css?{time()}" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="{$params.CSS_DIR}parts/widgets.css?{time()}" type="text/css" media="screen,projection" />
 
     <style type="text/css">{*$categories_styles*}</style>
@@ -42,7 +42,6 @@
 	<script type="text/javascript" src="{$params.JS_DIR}jquery-ui.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}functions.js"></script>
 	<script type="text/javascript" src="{$params.JS_DIR}jquery.cookie.js"></script>
-	<script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
     <script type="text/javascript" src="{$params.JS_DIR}jquery.cycle.js"></script>
 	{/block}
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{$smarty.const.SITE_URL}rss/" />

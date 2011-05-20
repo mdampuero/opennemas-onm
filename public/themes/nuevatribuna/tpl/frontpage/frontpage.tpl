@@ -6,6 +6,11 @@
     <meta name="description" content="{$smarty.const.SITE_DESCRIPTION}" />
 {/block}
 
+{block name="header-js"}
+    <link rel="stylesheet" href="{$params.CSS_DIR}parts/intersticial.css" type="text/css" media="screen,projection" />
+    <script type="text/javascript" src="{$params.JS_DIR}jquery.intersticial.js"></script>
+    {$smarty.block.parent}
+{/block}
 
 {block name='footer-js'}
     {$smarty.block.parent}

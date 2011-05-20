@@ -372,7 +372,7 @@ div#main_content {
    Frontpage article definition
 ************************************************************/
 
-div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom:5px; }
+div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom:5px; z-index:0px; }
 		div.onm-new .onm-new-image { max-width:100%; width:100%; margin-bottom:10px;}
 		div.onm-new .onm-new-category-name { margin:0 0 4px 0; text-transform: uppercase; display:block; width:auto; position:relative; line-height:1.3em; }
 		div.onm-new .onm-new-title { font-size:2em; margin:0; margin:0; margin-bottom:8px; font-family:Georgia;}
@@ -388,6 +388,7 @@ div.onm-new { margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom
 								div.onm-new div.related-content ul li a { font-size:1.10em }
 		div.onm-new div.onm-new-comments  { width:100%; text-align:right; }
 				div.onm-new div.onm-new-comments a { color:#666; text-transform:uppercase; padding-left:23px; background:url(../images/bullets/comment_icon.gif) center left no-repeat; }
+        div.onm-new iframe { max-width:100%; z-index:0;}
 
 /*Exceptions*/
 div.highlighted div.onm-new:last-child,
