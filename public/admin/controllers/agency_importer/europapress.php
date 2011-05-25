@@ -44,19 +44,54 @@ switch($action) {
     
     case 'list':
         
-        // Get the amount of minutes from last sync
-        $minutesFromLastSync = \Onm\Import\Europapress::minutesFromLastSync();
+        $europapress = \Onm\Import\Europapress::getInstance();
         
-        $categories = \Onm\Import\Europapress::getOriginalCategories();
+        // Get the amount of minutes from last sync
+        $minutesFromLastSync = $europapress->minutesFromLastSync();
+        
+        $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
+        
+        $find_params = array(
+            'category' => filter_input ( INPUT_GET,
+                                        'find[category]' ,
+                                        FILTER_SANITIZE_STRING,
+                                        array('options' => array('default' => '*')) ),
+            'title' => filter_input ( INPUT_GET,
+                                     'find[title]',
+                                     FILTER_SANITIZE_STRING,
+                                     array('options' => array('default' => '*')) ),
+        );
+        
+        $elements = $europapress->findAll($find_params);
+        
+        $pager_options = array(
+            'mode'        => 'Sliding',
+            'perPage'     => 15,
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => count($elements),
+        );
+        //$pager = Pager::factory($pager_options);
+        
+        $message   = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING );
+        $error = filter_input ( INPUT_GET, 'error' , FILTER_SANITIZE_STRING );
 
-
+        $tpl->assign('elements', $elements);
         $tpl->assign('categories', $categories);
         $tpl->assign('minutes', $minutesFromLastSync);
+        //$tpl->assign('pagination', $pager);
+        $tpl->assign('message', $message);
+        $tpl->assign('error', $error);
         $tpl->display('agency_importer/europapress/list.tpl');
 
         break;
     
     case 'import':
+        
+        $httpParams []= array( 'message' => 'Action not implemented yet');
+        
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
     
         break;
 
@@ -70,8 +105,8 @@ switch($action) {
                 'password'  => EUROPAPRESS_AUTH_PASSWORD
             );
             
-            $epSynchronizer = \Onm\Import\Europapress::getInstance($ftpConfig);
-            $epSynchronizer->sync();
+            $epSynchronizer = \Onm\Import\Europapress::getInstance();
+            $message = $epSynchronizer->sync($ftpConfig);
 
         } catch (\Onm\Import\SynchronizationException $e) {
             $error = $e->getMessage();
@@ -81,7 +116,16 @@ switch($action) {
                             array('action' => 'list'),
                             array('page' => $page),
                             );
-        if (isset($error)) { $httpParams [] = array('message' => $error); }
+        if (isset($error)) { $httpParams []= array('error' => $error); }
+        if( isset($message)) {
+            $httpParams []= array(
+                                  'message' => urlencode(sprintf(
+                                                      _('Downloaded %d new articles and deleted %d old ones.'),
+                                                        $message['deleted'],
+                                                        $message['downloaded']
+                                                        ))
+                                );
+        }
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
         
     } break;

@@ -30,8 +30,7 @@ namespace Onm\Import;
 
 interface Importer {
     
-    static public function getInstance($config);
     public function findAll();
     public function findAllBy($params);
-
+    
 } // END interface 

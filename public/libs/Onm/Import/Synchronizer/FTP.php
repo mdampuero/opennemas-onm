@@ -31,19 +31,45 @@ namespace Onm\Import\Synchronizer;
 class FTP {
 
 
+    /*
+     * Opens an FTP connection with the parameters of the object
+     * 
+     * @throws Exception, if something went wrong while connecting to FTP server
+     */
 	public function __construct($params = null)
 	{
-
+        $this->ftpConnection = ftp_connect($params['server']);
+        
+        // test if the connection was successful
+        if (!$this->ftpConnection) {
+            throw new \Exception(sprintf(_('Can\'t connect to server %s'), $params['server']));
+        } else {
+        
+            // if there is a ftp login configuration use it
+            if (isset($params['user'])) {
+        
+                $loginResult = ftp_login($this->ftpConnection,
+                                         $params['user'],
+                                         $params['password']);
+       
+                if (!$loginResult) {
+                    throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
+                }
+                return $this;
+            }
+            
+        }
 	}
 
-    static public function downloadFilesToCacheDir($ftpConnection, $cacheDir)
+    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
     {
         
-        $files = ftp_nlist($ftpConnection, ftp_pwd($ftpConnection));
+        $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
         
-        self::cleanFiles($cacheDir,$files);
-        die();
-
+        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
+        
+        $downloadedFiles = 0;
+        
         if (is_writable($cacheDir)) {
             $elements = array();
             foreach($files as $file) {
@@ -51,12 +77,18 @@ class FTP {
                 
                 $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
                 if (!file_exists($localFilePath)){
-                    ftp_get($ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
+                    ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
+                    $downloadedFiles++;
                 }
             }
         } else {
             throw new Exception(sprintf(_('Directory %s is not writable.'),$cacheDir));
         }
+        
+        return array(
+                     "deleted" => $deletedFiles,
+                     "downloaded" => $downloadedFiles
+                     );
         
     }
     
@@ -66,38 +98,29 @@ class FTP {
      * @param files, the list of files present in server
      * @return boolean, true if all went well
     */
-    static public function cleanFiles($cacheDir, $serverFiles)
+    static public function cleanFiles($cacheDir, $serverFiles, $localFileList)
     {
-        $localFileList = self::getLocalFileList($cacheDir);
-        
-        $serverFileList = array();
-        foreach ($serverFiles as $key) {
-            $serverFileList []= $key;
-        }
-        
-        foreach ($localFileList as $file) {
-            var_dump($file, $serverFileList);
-            if(!in_array($file,$serverFileList)) {
-                //unlink($cacheDir.'/'.$file);
-                var_dump("Cleaning file $cacheDir.$file");
+
+        $deletedFiles = 0;
+
+        if (count($localFileList) > 0) {
+            
+            $serverFileList = array();
+            foreach ($serverFiles as $key) {
+                $serverFileList []= basename($key);
             }
+            
+            foreach ($localFileList as $file) {
+                if(!in_array($file,$serverFileList)) {
+                    unlink($cacheDir.'/'.$file);
+                    $deletedFiles++;
+                }
+            }
+    
         }
-        return true;
+                
+        return $deletedFiles;
     }
     
-    /*
-     * function 
-     */
-    static public function getLocalFileList($cacheDir)
-    {
-        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
-        $fileListingCleaned = array();
-        
-        foreach($fileListing as $file) {
-            $fileListingCleaned []= basename($file);
-        }
-        
-        return $fileListingCleaned;
-    }
 
 }

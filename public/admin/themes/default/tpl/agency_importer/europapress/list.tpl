@@ -1,22 +1,47 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js"}
+{$smarty.block.parent}
+<script type='text/javascript' src='{$params.JS_DIR}prototip.js'></script>
+{/block}
+
 {block name="content"}
 <div class="wrapper-content">
    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-    {include file="agency_importer/europapress/menu.tpl"}
+   {include file="agency_importer/europapress/menu.tpl"}
+	
+   {if ($message || ($minutes > 10))}
+   <div class="notice">
+		<ul>
+			{if $minutes > 10}
+			<p>
+				<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
+				{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
+			</p>
+			{/if}
+			{if $message}<p>{$message}</p>{/if}
+		</ul>
+   </div>
+   {/if}
+   
+   {if ($error)}
+   <div class="error">
+		{$error}
+   </div>
+   {/if}
 
    <div id="{$category}">
 
         <table class="adminheading">
 			<tr>
-                <th align="left"><span {if $minutes > 10}class="red"{/if}>{t 1=$minutes}Last sync: %1 minutes ago{/t}</th>
+                <th align="left"><span>Total: {$elements|count} articles.</span></th>
 				<th nowrap="nowrap" align="right">
 
 					<label for="username">{t}Filter by title{/t}</label>
 					<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name}" />
 
-					<label for="usergroup">{t}and group:{/t}</label>
+					<label for="usergroup">{t}and category:{/t}</label>
 					<select id="usergroup" name="filter[category]" onchange="$('action').value='list';this.form.submit();">
 						{html_options options=$categories selected=$smarty.request.filter.group}
 					</select>
@@ -28,69 +53,40 @@
 		</table>
 
 		<table class="adminlist" border=0>
-            {if count($element) >0}
+            {if count($elements) >0}
 			<thead>
 				<tr>
-					<th  style='width:6%;' align="center">{t}Priority{/t}</th>
-					<th  style='width:10%;'>{t}Title{/t}</th>
-					<th  style='width:50%;'>{t}Content (50 chars){/t}</th>
-					<th align="center" style="width:5%;">{t}Section{/t}</th>
-					<th  style='width:6%;' align="center">{t}Date{/t}</th>
+				    <th  style='width:1%;' align="center">{t}Priority{/t}</th>
+					<th>{t}Title{/t}</th>
+					<th align="center" style="width:5%;">{t}Date{/t}</th>
+					<th  style='width:6%;' align="center">{t}Section{/t}</th>
 					<th  style='width:6%;' align="center">{t}Actions{/t}</th>
 				</tr>
 			</thead>
             {/if}
+			
 
-            {section name=c loop=$element}
+            {section name=c loop=$elements}
             <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                <td style="font-size: 11px;width:4%;">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
-                </td>
-                <td style="padding:2px; font-size: 11px;width:16%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-                    {$comments[c]->title|strip_tags|clearslash|truncate:50}
-                </td>
-                <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-                    {$comments[c]->body|strip_tags|clearslash|truncate:50}
-                </td>
-                 {assign var=type value=$articles[c]->content_type}
-                <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-                     {$content_types[$type]}
-                </td>
-                <td style="padding:10px;font-size: 11px;width:25%;">
-                    <a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
-                    {$articles[c]->title|strip_tags|clearslash}
-                    </a>
-                </td>
-                <td style="width:6%;font-size: 11px;" align="center">
-                        {$comments[c]->ip}
-                </td>
-                {if $category eq 'todos' || $category eq 'home'}
-                <td style="width:6%;font-size: 11px;" align="center">
-                    {$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
-                </td>
-                {/if}
-                <td style="font-size: 11px;width:100px;" align="center">
-                    {if $category eq 'todos' || $comments[c]->content_status eq 0}
-                        <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-                        <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-                    {elseif $comments[c]->content_status eq 2}
-                            <a class="unpublishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-                                   </a>
-                    {else}
-                            <a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-                                   </a>
-                    {/if}
-                </td>
-                <td style="font-size: 11px;width:60px;" align="center">
-                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
-                        <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                </td>
-                <td style="font-size: 11px;width:60px;" align="center">
-                    <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                </td>
+			   
+		 		<td align="center">{$elements[c]->priority}</td>
+				<td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
+					{$elements[c]->title}
+				</td>
+				<td align="center">
+					{$elements[c]->created_at}
+				</td>
+				
+				<td align="center">
+					{$elements[c]->category}
+				</td>
+				
+				<td style="font-size: 11px;width:100px;" align="center">
+                     <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->id}" title="Importar">
+						<img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+					 </a>
+                </td> 
+				
            </tr>
     
             {sectionelse}

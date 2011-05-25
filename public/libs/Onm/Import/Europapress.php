@@ -30,7 +30,7 @@ namespace Onm\Import;
 
 class Europapress implements \Onm\Import\Importer
 {
-    
+
     // the instance object
     static private $instance = null;
     
@@ -45,17 +45,19 @@ class Europapress implements \Onm\Import\Importer
     
     private $syncPath = '';
     
+
     /**
     * Ensures that we always get one single instance
     *
     * @return object, the unique instance object 
-    * @author Fran Dieguez <fran@openhsot.es>
+    * @author Fran Dieguez <fran@openhost.es>
     **/
-    static public function getInstance($config)
+    static public function getInstance($config = array())
     {
 
-        if ((!self::$instance instanceof self) or
-            (count(array_diff($this->config, $config)) > 0))
+        if (!(self::$instance instanceof self)
+            //&& (count(array_diff($this->config, $config)) > 0)
+            )
         { 
             self::$instance = new self($config); 
         } 
@@ -64,48 +66,20 @@ class Europapress implements \Onm\Import\Importer
     }
 
     /**
-    * initialized the object, ftp connection and initial configuration
+    * initialized the object and initial configuration
     *
     * @return void
-    * @author Fran Dieguez <fran@openhsot.es>
+    * @author Fran Dieguez <fran@openhost.es>
     **/
     public function __construct($config)
     {
-        
         
         $this->syncPath = implode(DIRECTORY_SEPARATOR,
                                   array(CACHE_PATH, 'europapress_import_cache'));
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
-        
         // Merging default configurations with new ones
         $this->config = array_merge($this->defaultConfig, $config);
-        
-        
-    }
-    
-        
-    /*
-     * sync elements from news agency server and stores them into temporary dir
-     * 
-     * @param $params, misc params that alteres function behaviour
-     * @return boolean, true if all goes well
-     * @throws SyncronizationException, if something went wrong while sync 
-     */
-    public function sync($params = array())
-    {
-        // Check if the folder where store elements is ready and writtable
-        if(!$this->isSyncEnrironmetReady()) {
-            $this->setupSyncEnvironment();
-        }
-        
-        if ($this->connectToEuropaPressFTP() === true) {
-
-            $ftpSync = \Onm\Import\Synchronizer\FTP::downloadFilesToCacheDir($this->ftpConnection, $this->syncPath);
-            
-        } else {
-            //throw new \Onm\Import\SyncronizationException();
-        }
         
     }
     
@@ -145,34 +119,95 @@ class Europapress implements \Onm\Import\Importer
     
     }
     
+        
     /*
-     * Opens an FTP connection with the parameters of the object
+     * sync elements from news agency server and stores them into temporary dir
      * 
-     * @throws Exception, if something went wrong while connecting to FTP server
+     * @param $params, misc params that alteres function behaviour
+     * @return boolean, true if all goes well
+     * @throws SyncronizationException, if something went wrong while sync 
      */
-    public function connectToEuropaPressFTP()
+    public function sync($params = array())
     {
-        $this->ftpConnection = ftp_connect($this->config['server']);
-        
-        // test if the connection was successful
-        if (!$this->ftpConnection) {
-            throw new \Exception(sprintf(_('Can\'t connect to server %s'), $this->config['server']));
-        } else {
-        
-            // if there is a ftp login configuration use it
-            if (isset($this->config['user'])) {
-        
-                $loginResult = ftp_login($this->ftpConnection,
-                                         $this->config['user'],
-                                         $this->config['password']);
-       
-                if (!$loginResult) {
-                    throw new \Exception(sprintf(_('Can\'t login into server '), $this->config['server']));
-                }
-                return true;
-            }
-            
+        // Check if the folder where store elements is ready and writtable
+        if(!$this->isSyncEnrironmetReady()) {
+            $this->setupSyncEnvironment();
         }
+        
+        $excludedFiles = self::getLocalFileList($this->syncPath);
+        
+        $synchronizer = new \Onm\Import\Synchronizer\FTP($params, $excludedFiles);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath);
+
+        return $ftpSync;
+            
+    }
+    
+    
+    public function getSyncParams()
+    {
+        if (file_exists($this->syncFilePath)) {
+            return unserialize(file_get_contents($this->syncFilePath));
+        } else {
+            return array(
+                        'lastimport' => date('c'),
+                        'imported_elements' => array(),
+                        );
+        }
+    }
+    
+        
+    public function updateSyncFile($importedElements = array())
+    {
+
+        $syncParams = $this->getSyncParams();
+        
+        if (!is_array($syncParams)) { $syncParams = array(); }
+        
+        if(!is_array($importedElements)
+           && is_string($importedElements))
+        {
+            $importedElements = array($importedElements);
+        }
+        
+        $elements = $this->getLocalFileList();
+        $elementsCount = count($importedElements);
+        for ($i=0; $i < $elementsCount; $i++) { 
+            if(in_array($importedElements[$i], $elements)) {
+                $elements []= $importedElements[$i];
+            } else {
+                
+            }
+        }
+        
+        $newSyncParams = array(
+            'lastimport' => date('c'),
+            'imported_elements' => $elementsImportedPresentInLocal,
+        );
+        $syncParams = array_merge($syncParams, $newSyncParams);
+                
+        $serializedParams = serialize($syncParams);
+        file_put_contents($this->syncFilePath, $serializedParams);
+        
+        return $syncParams;
+        
+    }
+    
+    /*
+     * Gets the minutes from last synchronization of elements
+     * 
+     * @param $params, misc params that alteres function behaviour
+     * @return integer, minutes from last synchronization of elements
+     */
+    public function minutesFromLastSync($params = array())
+    {
+        $params = $this->getSyncParams();
+        
+        $to_time = strtotime(date('c'));
+        $from_time = strtotime($params['lastimport']);
+        return round((abs($to_time - $from_time) / 60), 0);
+        
+        
     }
     
     /**
@@ -183,26 +218,29 @@ class Europapress implements \Onm\Import\Importer
      **/
     public function findAll($params = array())
     {
-        if(is_null($this->ftpConnection)) {
-            throw new \Exception(_('FTP connection not available.'));
-        }
+        
+        //$synchronizer = new \Onm\Import\Synchronizer\FTP($this->syncPath);
+        
+        $files = $this->getLocalFileList($this->syncPath);
         
         $elements = array();
-        
-        $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
-        
-        foreach($files as $file) {
-            $elements []= $file;
+        $elementsCount = 0;
+        foreach ($files as $file) {
             
+            $elements []= new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
+            $elementsCount++;
+            
+            if(array_key_exists('limit',$params)
+               && ($elementsCount <= $params['limit']))
+            {
+                break;
+            }
         }
-        
-        /*var_dump(count($elements));
-        die()*/;
-        
         
         return $elements;
         
     }
+    
     
     /**
      * gets a list of stored elements filtered by some params
@@ -216,43 +254,25 @@ class Europapress implements \Onm\Import\Importer
     }
     
     
-    /*
-     * Return an array of localized categories
-     * 
-     * @param $arg
+
+        /*
+     * function 
      */
-    static public function getOriginalCategories()
+    static public function getLocalFileList($cacheDir)
     {
-        return $original_categories =  array(
-                                        'ECO' => _('Economy'),
-                                        'MUNDO' => _('World'),
-                                      );
-    }
-    
-    /*
-     * Retrieves a localized string of category from identifier
-     * 
-     * @param $arg
-     */
-    static public function matchCategoryName($categoryName)
-    {
-        if (empty($categoryName)) {
-            throw new \ArgumentException;
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+        
+        //20110525150845
+        //20110525151301
+        usort($fileListing, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
+
+        $fileListingCleaned = array();
+        
+        foreach($fileListing as $file) {
+            $fileListingCleaned []= basename($file);
         }
         
-        $categories = self::getOriginalCategories();
-        return $categories[$categoryName];
-    }
-    
-    /*
-     * Gets the minutes from last synchronization of elements
-     * 
-     * @param $params, misc params that alteres function behaviour
-     * @return integer, minutes from last synchronization of elements
-     */
-    static public function minutesFromLastSync($params = array())
-    {
-        return 20;
+        return $fileListingCleaned;
     }
 
     
