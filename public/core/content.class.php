@@ -955,6 +955,40 @@ class Content {
     }
 
     static function setNumViews($id=null) {
+        
+        $botStrings = array(
+                            "google",
+                            "bot",
+                            "msnbot",
+                            "facebookexternal",
+                            "yahoo",
+                            "spider",
+                            "archiver",
+                            "curl",
+                            "python",
+                            "nambu",
+                            "twitt",
+                            "perl",
+                            "sphere",
+                            "PEAR",
+                            "java",
+                            "wordpress",
+                            "radian",
+                            "crawl",
+                            "yandex",
+                            "eventbox",
+                            "monitor",
+                            "mechanize",
+                          );
+        
+        foreach($botStrings as $bot)
+        {
+            if(preg_match( "@".strtolower($_SERVER['HTTP_USER_AGENT'])."@", $bot) > 0) {
+                return false;
+            }
+        }
+        
+        
         if(is_null($id) ) {
             return false;
         }
