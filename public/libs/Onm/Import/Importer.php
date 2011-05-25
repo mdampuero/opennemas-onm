@@ -26,7 +26,9 @@
  * @package Import
  * @author Fran Dieguez <fran@openhost.es>, 2011
  **/
-interface Onm_Import_Importer {
+namespace Onm\Import;
+
+interface Importer {
     
     static public function getInstance($config);
     public function findAll();

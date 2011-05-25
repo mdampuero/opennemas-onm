@@ -2,13 +2,13 @@
 
 $menuXml = '<?xml version="1.0"?>
 <menu>
-    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="index.php" target="centro">
+    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="index.php">
         <node title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'" link="article.php" privilege="ARTICLE_FRONTPAGE" />
         <node title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'" link="controllers/widget/widget.php" privilege="WIDGET_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("Templates Manager"), ENT_QUOTES).'" link="index.php" privilege="ARTICLE_FRONTPAGE" />-->
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="#" target="centro">
+    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="#">
         <node title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'" link="article.php?action=list_pendientes" privilege="ARTICLE_LIST_PEND" />
         <node title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'" link="controllers/opinion/opinion.php" privilege="OPINION_ADMIN" />
         <node title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'" link="controllers/comment.php" privilege="COMMENT_ADMIN" />
@@ -34,11 +34,13 @@ $menuXml = '<?xml version="1.0"?>
         <node title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'" link="privileges.php" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" link="search_advanced.php" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" link="search_advanced.php" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
         <node title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'" link="search_advanced.php" privilege="SEARCH_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'" link="kiosko.php" privilege="CATEGORY_ADMIN" />-->
         <node title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'" link="newsletter.php" privilege="NEWSLETTER_ADMIN" />
         <node title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'" link="pclave.php" privilege="PCLAVE_ADMIN" />
+        <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
+        <node title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'" link="controllers/agency_importer/europapress.php" privilege="EP_IMPORTER_ADMIN" />
         <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
         <node title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'" link="controllers/trash.php" privilege="NOT_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'" link="controllers/link_control.php" privilege="BACKEND_ADMIN" />-->
