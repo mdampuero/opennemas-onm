@@ -53,11 +53,11 @@ switch($action) {
         
         $find_params = array(
             'category' => filter_input ( INPUT_GET,
-                                        'find[category]' ,
+                                        'filter[category]' ,
                                         FILTER_SANITIZE_STRING,
                                         array('options' => array('default' => '*')) ),
             'title' => filter_input ( INPUT_GET,
-                                     'find[title]',
+                                     'filter[title]',
                                      FILTER_SANITIZE_STRING,
                                      array('options' => array('default' => '*')) ),
         );
@@ -87,10 +87,30 @@ switch($action) {
 
         break;
     
+    case 'show':
+        
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+
+        try {
+            
+            $ep = new Onm\Import\Europapress();
+            $element = $ep->findByID($id);
+            
+        } catch (Exception $e) {
+            
+            // Redirect the user to the list of articles and show him/her an error message
+            $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            
+        }
+        
+        $tpl->assign('element', $element);
+        $tpl->display('agency_importer/europapress/show.tpl');
+        break;
+    
     case 'import':
         
         $httpParams []= array( 'message' => 'Action not implemented yet');
-        
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
     
         break;
@@ -121,8 +141,8 @@ switch($action) {
             $httpParams []= array(
                                   'message' => urlencode(sprintf(
                                                       _('Downloaded %d new articles and deleted %d old ones.'),
-                                                        $message['deleted'],
-                                                        $message['downloaded']
+                                                        $message['downloaded'],
+                                                        $message['deleted']
                                                         ))
                                 );
         }

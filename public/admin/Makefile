@@ -12,7 +12,7 @@ all: default updatepofiles compiletranslations
 default:
 	@echo "Extracting translations";
 	@tsmarty2c $(TPL_FOLDER) > $(LOCALE_FOLDER)'extracted_strings.c'
-	@xgettext **/*.php $(LOCALE_FOLDER)'extracted_strings.c' -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
+	@xgettext ../core/*.php ../libs/Onm/**/**/*.php **/**/*.php ./themes/default/**/*.php $(LOCALE_FOLDER)'extracted_strings.c' -o $(LOCALE_FOLDER)'onmadmin.pot' --from-code=UTF-8
 
 updatepofiles:
 	@echo "Updating translations";

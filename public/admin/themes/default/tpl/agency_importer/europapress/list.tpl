@@ -7,8 +7,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-   <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-
+   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs}>
    {include file="agency_importer/europapress/menu.tpl"}
 	
    {if ($message || ($minutes > 10))}
@@ -35,7 +34,7 @@
 
         <table class="adminheading">
 			<tr>
-                <th align="left"><span>Total: {$elements|count} articles.</span></th>
+                <th align="left">Total: {$elements|count} articles.</th>
 				<th nowrap="nowrap" align="right">
 
 					<label for="username">{t}Filter by title{/t}</label>
@@ -71,10 +70,12 @@
 			   
 		 		<td align="center">{$elements[c]->priority}</td>
 				<td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-					{$elements[c]->title}
+					<a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->id}" title="Importar">
+						{$elements[c]->title}
+					</a>
 				</td>
 				<td align="center">
-					{$elements[c]->created_at}
+						{$elements[c]->created_time->getTimestamp()|relative_date}
 				</td>
 				
 				<td align="center">
@@ -112,8 +113,7 @@
 	   </table>
    </div>
 
-   <input type="hidden" id="action" name="action" value="" />
-   <input type="hidden" name="id" id="id" value="{$id}" />
+   <input type="hidden" id="action" name="action" value="list" />
    </form>
 </div>
 {/block}

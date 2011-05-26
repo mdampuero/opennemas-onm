@@ -93,20 +93,14 @@ class Europapress {
                 break;
             
             case 'created_time':
-
-                // parse date and hour from original format
-                preg_match('@(?P<day>\d*)/(?P<month>\d*)/(?P<year>\d*)@',
-                           (string) $this->data->FECHA,$date);
-                preg_match('@(?P<hour>\d*):(?P<minutes>\d*):(?P<seconds>\d*)@',
-                           (string) $this->data->FECHA,$time);
+    
+                $dateFormat = 'd/m/Y H:i:s';
+                $originalDate = $this->data->FECHA.' '.$this->data->HORA;
+                $date = \DateTime::createFromFormat($dateFormat,
+                                                   $originalDate,
+                                                   new \DateTimeZone('Europe/Madrid'));
                 
-                if((count($date) > 0)
-                   && (count($hour) > 0))
-                {
-                    return date('c',mktime($hour['hour'], $time['minutes'], $time['seconds'],
-                                            $date['month'], $date['month'], $date['year']));
-                }
-                
+                return $date;
                 break;
             
             case 'pretitle':
@@ -145,7 +139,7 @@ class Europapress {
                 return (array) $this->data->LUGAR;
                 break;
             
-            case 'associated_docs':
+            case 'associatedDocs':
                 return (array) $this->data->DOCS;
                 break;
             
@@ -153,7 +147,7 @@ class Europapress {
                 return (array) $this->data->CATEGORIES;
                 break;
             
-            case 'datacastid':
+            case 'dataCastID':
                 return (array) $this->data->DATACASTID;
                 break;
             
@@ -209,7 +203,7 @@ class Europapress {
         if(file_exists($xmlFile)) {
             $this->data = simplexml_load_file($xmlFile);
         } else {
-            throw new Exception(sprintf(_("File '$xmlfile' doesn't exists."), $xmlFile));
+            throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
         }
         
         return $this;

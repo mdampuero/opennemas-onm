@@ -62,7 +62,7 @@ gettext("Signature:");
 gettext("Author:");
 
 /* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Tags:");
+gettext("Metatags:");
 
 /* ./themes/default/tpl//search/search_advanced_list.tpl */
 gettext("In library");
@@ -471,6 +471,9 @@ gettext("Page content");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Go to admin main page");
+
+/* ./themes/default/tpl//base/admin.tpl */
+gettext("Pending comments");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Welcome <a title=\"See my user preferences\" href=\"/admin/user.php?action=read&id=%1\">%2</a>");
@@ -1334,10 +1337,10 @@ gettext("Published");
 gettext("Published");
 
 /* ./themes/default/tpl//widget/index.tpl */
-gettext("Pending");
+gettext("Unpublished");
 
 /* ./themes/default/tpl//widget/index.tpl */
-gettext("Pending");
+gettext("Unpublished");
 
 /* ./themes/default/tpl//widget/index.tpl */
 gettext("Edit");
@@ -1347,6 +1350,9 @@ gettext("Delete");
 
 /* ./themes/default/tpl//widget/index.tpl */
 gettext("No widget found");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Suggested articles");
 
 /* ./themes/default/tpl//article_relacionados.tpl */
 gettext("Suggested articles");
@@ -2067,6 +2073,9 @@ gettext("Banner Top Right (234X90)");
 
 /* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner1 Column Right (300X*)");
+
+/* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
+gettext("Robapágina (650X*)");
 
 /* ./themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
 gettext("Banner2 Column Right (300X*)");
@@ -2868,6 +2877,147 @@ gettext("Delete privilege");
 
 /* ./themes/default/tpl//privilege/privilege.tpl */
 gettext("No available privileges to list here.");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("EuropaPress importer :: List of articles");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync list  with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Sync list  with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Last sync was %1 minutes ago.");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Try syncing the news list from server by clicking in \"Sync with server\" button above");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Filter by title");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("and category:");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Priority");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Date");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Section");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("There is no elements to import");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Try syncing from server by click over the \"Sync with server\" button above.");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("EuropaPress importer :: List of articles");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Go back to list");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Go back to list");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Sync list  with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Go back to list");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Go back to list");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Priority:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Date:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Pretitle:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Summary:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Body:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Photos:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("People:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Place:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Associated Docs:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Categories:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Level:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Level:");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Redactors:");
 
 /* ./themes/default/tpl//user.tpl */
 gettext("Filter by name");

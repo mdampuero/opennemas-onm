@@ -71,7 +71,7 @@ class Europapress implements \Onm\Import\Importer
     * @return void
     * @author Fran Dieguez <fran@openhost.es>
     **/
-    public function __construct($config)
+    public function __construct($config = array())
     {
         
         $this->syncPath = implode(DIRECTORY_SEPARATOR,
@@ -227,17 +227,49 @@ class Europapress implements \Onm\Import\Importer
         $elementsCount = 0;
         foreach ($files as $file) {
             
-            $elements []= new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
-            $elementsCount++;
+            $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
+            
+            if ((($params['title'] != '*'))
+                && !(preg_match('@'.$params['title'].'@', $element->title) > 0))
+            {
+                next;
+            }
+            
+            if ((($params['category'] != '*'))
+                && !(preg_match('@'.$params['category'].'@', $element->title) > 0))
+            {
+                next;
+            }
             
             if(array_key_exists('limit',$params)
                && ($elementsCount <= $params['limit']))
             {
                 break;
             }
+            
+            $elements []= $element;
+            $elementsCount++;
+            
+            
         }
         
+        usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
+        
         return $elements;
+        
+    }
+    
+    
+    /*
+     * gets the DataSource\Europapress object from id
+     * 
+     * @param $id
+     */
+    public function findByID($id)
+    {
+        
+        $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
+        return  $element;
         
     }
     
@@ -262,8 +294,6 @@ class Europapress implements \Onm\Import\Importer
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
         
-        //20110525150845
-        //20110525151301
         usort($fileListing, create_function('$a,$b', 'return filemtime($b) - filemtime($a);'));
 
         $fileListingCleaned = array();
