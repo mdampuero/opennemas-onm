@@ -481,15 +481,15 @@ a.unpublishing:hover {
 }
 
 /* Status scheduled news */
-.scheduled_A {
+.scheduled_A td {
 	background-color: #FFC !important;
 }
 
-.scheduled_V {
+.scheduled_V td {
 	background-color: #DFD !important;
 }
 
-.scheduled_R {
+.scheduled_R td {
 	background-color: #FDD !important;
 }
 
