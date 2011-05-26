@@ -102,7 +102,9 @@ class FTP {
     {
 
         $deletedFiles = 0;
-
+        
+            
+        
         if (count($localFileList) > 0) {
             
             $serverFileList = array();
@@ -116,7 +118,6 @@ class FTP {
                     $deletedFiles++;
                 }
             }
-    
         }
                 
         return $deletedFiles;

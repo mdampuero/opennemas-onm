@@ -98,7 +98,7 @@ class Article extends Content
 
     public function create($data)
     {
-        if(!$data['description']) {
+        if(!isset($data['description'])) {
             $data['description'] = String_Utils::get_num_words($data['body'], 50);
         }
 

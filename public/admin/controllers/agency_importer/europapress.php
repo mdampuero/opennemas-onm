@@ -110,8 +110,52 @@ switch($action) {
     
     case 'import':
         
-        $httpParams []= array( 'message' => 'Action not implemented yet');
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        
+        $ep = new Onm\Import\Europapress();
+        $element = $ep->findByID($id);
+        
+        
+        $values = array(
+                        'title' => substr($element->title, 0, 105),
+                        'category' => null,
+                        'with_comment' => 1,
+                        'content_status' => 0,
+                        'frontpage' => 0,
+                        'in_home' => 0,
+                        'title_int' => $element->title,
+                        'metadata' => String_Utils::get_tags($element->title),
+                        'subtitle' => $element->pretitle,
+                        'agency' => $element->agencyName,
+                        'summary' => $element->summary,
+                        'body' => $element->body,
+                        'posic' => 0,
+                        'id' => 0,
+                        'fk_publisher' => $_SESSION['userid'],
+                        'img1' => '',
+                        'img1_footer' => '',
+                        'img2' => '',
+                        'img2_footer' => '',
+                        'fk_video' => '',
+                        'fk_video2' => '',
+                        'footer_video2' => '',
+                        'ordenArti' => '',
+                        'ordenArtiInt' => '',
+                        );    
+        
+        
+        $article = new Article();
+        $newArticleID = $article->create($values);
+        
+        if(is_string($newArticleID)) {
+            
+            $httpParams []= array( 'id' => $newArticleID,
+                                  'action' => 'read');
+            Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.String_Utils::toHttpParams($httpParams));
+            
+        }        
+        
+        
     
         break;
 
@@ -127,6 +171,7 @@ switch($action) {
             
             $epSynchronizer = \Onm\Import\Europapress::getInstance();
             $message = $epSynchronizer->sync($ftpConfig);
+            $epSynchronizer->updateSyncFile();
 
         } catch (\Onm\Import\SynchronizationException $e) {
             $error = $e->getMessage();

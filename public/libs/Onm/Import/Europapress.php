@@ -136,60 +136,70 @@ class Europapress implements \Onm\Import\Importer
         
         $excludedFiles = self::getLocalFileList($this->syncPath);
         
-        $synchronizer = new \Onm\Import\Synchronizer\FTP($params, $excludedFiles);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath);
+        $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
+        $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles);
 
         return $ftpSync;
             
     }
     
     
+    
+    /**
+     * Fetch the statistics of last synchronization
+     *
+     * @return array, array('lastimport' => Date, 'imported_elements' => array())
+    */
     public function getSyncParams()
     {
         if (file_exists($this->syncFilePath)) {
             return unserialize(file_get_contents($this->syncFilePath));
         } else {
             return array(
-                        'lastimport' => date('c'),
+                        'lastimport' => '',
                         'imported_elements' => array(),
                         );
         }
     }
     
-        
+    
+    /**
+     * Update statistics of synchronization file
+     *
+     * @param array|string importedElements, ids of new imported elements
+     * @return array, array('lastimport' => Date, 'imported_elements' => array())
+    */
     public function updateSyncFile($importedElements = array())
     {
 
         $syncParams = $this->getSyncParams();
         
-        if (!is_array($syncParams)) { $syncParams = array(); }
-        
-        if(!is_array($importedElements)
-           && is_string($importedElements))
-        {
+        if(is_string($importedElements)) {
             $importedElements = array($importedElements);
         }
         
-        $elements = $this->getLocalFileList();
-        $elementsCount = count($importedElements);
-        for ($i=0; $i < $elementsCount; $i++) { 
-            if(in_array($importedElements[$i], $elements)) {
-                $elements []= $importedElements[$i];
-            } else {
-                
+        // Clean previously imported files that are not present in local cache
+        $localElements = $this->getLocalFileList($this->syncPath);
+        $previousImportedElements = $syncParams['imported_elements'];
+        $previousImportedElementsCount = count($previousImportedElements);
+        $elements = array();
+        for ($i=0; $i < $previousImportedElementsCount; $i++) { 
+            if(in_array($previousImportedElements[$i], $localElements)) {
+                $elements []= $previousImportedElements[$i];
             }
         }
         
+        // Include new importedElements with old ones
+        $newImportedelements = array_merge($importedElements,$elements);
+        
         $newSyncParams = array(
             'lastimport' => date('c'),
-            'imported_elements' => $elementsImportedPresentInLocal,
+            'imported_elements' => $newImportedelements,
         );
-        $syncParams = array_merge($syncParams, $newSyncParams);
                 
-        $serializedParams = serialize($syncParams);
-        file_put_contents($this->syncFilePath, $serializedParams);
+        file_put_contents($this->syncFilePath, serialize($newSyncParams));
         
-        return $syncParams;
+        return $newSyncParams;
         
     }
     
@@ -205,6 +215,7 @@ class Europapress implements \Onm\Import\Importer
         
         $to_time = strtotime(date('c'));
         $from_time = strtotime($params['lastimport']);
+        
         return round((abs($to_time - $from_time) / 60), 0);
         
         
@@ -213,7 +224,7 @@ class Europapress implements \Onm\Import\Importer
     /**
      * gets an array of news from EuropaPress
      *
-     * @return array, the array of news from EuropaPress
+     * @return array, the array of objects with news from EuropaPress
      * @author Fran Dieguez <fran@openhost.es>, 2011
      **/
     public function findAll($params = array())
@@ -232,13 +243,13 @@ class Europapress implements \Onm\Import\Importer
             if ((($params['title'] != '*'))
                 && !(preg_match('@'.$params['title'].'@', $element->title) > 0))
             {
-                next;
+                continue;
             }
             
             if ((($params['category'] != '*'))
                 && !(preg_match('@'.$params['category'].'@', $element->title) > 0))
             {
-                next;
+                continue;
             }
             
             if(array_key_exists('limit',$params)

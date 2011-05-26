@@ -198,7 +198,7 @@ class Europapress {
      */
     public function __construct($xmlFile) {
         
-        $this->agencyName = __CLASS__;
+        $this->agencyName = _('Agency/Europapress');
         
         if(file_exists($xmlFile)) {
             $this->data = simplexml_load_file($xmlFile);

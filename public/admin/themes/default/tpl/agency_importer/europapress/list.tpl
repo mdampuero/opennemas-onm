@@ -15,7 +15,11 @@
 		<ul>
 			{if $minutes > 10}
 			<p>
+				{if $minutes > 100}
+				<span class="red">{t}A long time ago from synchronization.{/t}</span>
+				{else}
 				<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
+				{/if}
 				{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
 			</p>
 			{/if}
