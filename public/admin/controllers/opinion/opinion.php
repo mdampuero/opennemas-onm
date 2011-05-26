@@ -380,7 +380,7 @@ if(isset($_REQUEST['action'])) {
                 $opinion->set_inhome($status,$_SESSION['userid']);
             }
             if( $_SESSION['desde']=='list_pendientes'){
-                Application::forward('article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&page=' . $_REQUEST['page']);
