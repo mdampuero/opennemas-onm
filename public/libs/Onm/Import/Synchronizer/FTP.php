@@ -60,7 +60,9 @@ class FTP {
             
         }
 	}
-
+    /*
+     * TODO: Documentar
+     */
     public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
     {
         
@@ -102,8 +104,6 @@ class FTP {
     {
 
         $deletedFiles = 0;
-        
-            
         
         if (count($localFileList) > 0) {
             

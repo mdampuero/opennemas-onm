@@ -2912,6 +2912,9 @@ gettext("Reload list");
 gettext("Reload list");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("A long time ago from synchronization.");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Last sync was %1 minutes ago.");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */

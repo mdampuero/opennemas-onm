@@ -33,7 +33,6 @@ class Europapress {
     
     private $data = null;
     
-    
     /**
     * Ensures that we always get one single instance
     *
@@ -50,6 +49,25 @@ class Europapress {
         } 
         return self::$instance;
 
+    }
+    
+    
+    /*
+     * __construct()
+     * @param $xmlFile, the XML file that contains information about an EP new
+     */
+    public function __construct($xmlFile) {
+        
+        $this->agencyName = _('Agency/Europapress');
+        
+        if(file_exists($xmlFile)) {
+            $this->data = simplexml_load_file($xmlFile);
+        } else {
+            throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
+        }
+        
+        return $this;
+    
     }
     
     /*
@@ -78,9 +96,6 @@ class Europapress {
                 break;
             
             case 'category':
-                //return 'as';
-                
-                
                 return self::matchCategoryName((string) $this->data->SECCION);
                 break;
             
@@ -188,26 +203,6 @@ class Europapress {
         
         $categories = self::getOriginalCategories();
         return $categories[(string)$categoryName];
-    }
-    
-    
-    
-    /*
-     * __construct()
-     * @param $xmlFile, the XML file that contains information about an EP new
-     */
-    public function __construct($xmlFile) {
-        
-        $this->agencyName = _('Agency/Europapress');
-        
-        if(file_exists($xmlFile)) {
-            $this->data = simplexml_load_file($xmlFile);
-        } else {
-            throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
-        }
-        
-        return $this;
-    
     }
     
     /*

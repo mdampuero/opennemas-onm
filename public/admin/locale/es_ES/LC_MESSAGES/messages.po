@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-26 13:38+0200\n"
-"PO-Revision-Date: 2011-05-26 13:39+0200\n"
+"POT-Creation-Date: 2011-05-26 23:27+0200\n"
+"PO-Revision-Date: 2011-05-26 23:28+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -34,18 +34,22 @@ msgstr ""
 msgid " No hay datos EXIF </br>"
 msgstr ""
 
-#: ../libs/Onm/Import/DataSource/Europapress.php:173
-msgid "Economy"
-msgstr "Economía"
+#: ../libs/Onm/Import/DataSource/Europapress.php:61
+msgid "Agency/Europapress"
+msgstr "Agencias/Europapress"
 
-#: ../libs/Onm/Import/DataSource/Europapress.php:174
-msgid "Polytics"
-msgstr "Política"
-
-#: ../libs/Onm/Import/DataSource/Europapress.php:206
+#: ../libs/Onm/Import/DataSource/Europapress.php:66
 #, php-format
 msgid "File '%d' doesn't exists."
 msgstr "El fichero «%d» no existe."
+
+#: ../libs/Onm/Import/DataSource/Europapress.php:188
+msgid "Economy"
+msgstr "Economía"
+
+#: ../libs/Onm/Import/DataSource/Europapress.php:189
+msgid "Polytics"
+msgstr "Política"
 
 #: ../libs/Onm/Import/Synchronizer/FTP.php:45
 #, php-format
@@ -100,7 +104,7 @@ msgstr "Javascript"
 msgid "ID \"%d\" doesn't exist"
 msgstr "El ID «%d» no existe"
 
-#: controllers/agency_importer/europapress.php:143
+#: controllers/agency_importer/europapress.php:188
 #, php-format
 msgid "Downloaded %d new articles and deleted %d old ones."
 msgstr "Se descargaron %d nuevos artículos y se eliminaron %d antiguos."
@@ -291,7 +295,7 @@ msgstr "Use un  criterio de búsqueda más general."
 #: locale/extracted_strings.c:1148 locale/extracted_strings.c:1217
 #: locale/extracted_strings.c:1433 locale/extracted_strings.c:1616
 #: locale/extracted_strings.c:1655 locale/extracted_strings.c:1844
-#: locale/extracted_strings.c:2528 locale/extracted_strings.c:2933
+#: locale/extracted_strings.c:2528 locale/extracted_strings.c:2936
 msgid "Title"
 msgstr "Título"
 
@@ -300,7 +304,7 @@ msgid "Article title"
 msgstr "Título del artículo"
 
 #: locale/extracted_strings.c:56 locale/extracted_strings.c:1529
-#: locale/extracted_strings.c:2990
+#: locale/extracted_strings.c:2993
 msgid "Pretitle:"
 msgstr "Antetítulo:"
 
@@ -487,7 +491,7 @@ msgstr "Agencia:"
 
 #: locale/extracted_strings.c:227 locale/extracted_strings.c:266
 #: locale/extracted_strings.c:788 locale/extracted_strings.c:1481
-#: locale/extracted_strings.c:3269
+#: locale/extracted_strings.c:3272
 msgid "Available:"
 msgstr "Disponible:"
 
@@ -631,8 +635,8 @@ msgstr "Nombre del grupo"
 #: locale/extracted_strings.c:359 locale/extracted_strings.c:662
 #: locale/extracted_strings.c:1037 locale/extracted_strings.c:1445
 #: locale/extracted_strings.c:2804 locale/extracted_strings.c:2870
-#: locale/extracted_strings.c:2942 locale/extracted_strings.c:3044
-#: locale/extracted_strings.c:3287
+#: locale/extracted_strings.c:2945 locale/extracted_strings.c:3047
+#: locale/extracted_strings.c:3290
 msgid "Actions"
 msgstr "Acciones"
 
@@ -652,8 +656,8 @@ msgstr "No hay ningún grupo creado todavía."
 msgid "Id"
 msgstr "Id"
 
-#: locale/extracted_strings.c:380 locale/extracted_strings.c:3086
-#: locale/extracted_strings.c:3089
+#: locale/extracted_strings.c:380 locale/extracted_strings.c:3089
+#: locale/extracted_strings.c:3092
 msgid "Name:"
 msgstr "Nombre:"
 
@@ -695,7 +699,7 @@ msgstr "No hay ninguna página estática disponible."
 #: locale/extracted_strings.c:929 locale/extracted_strings.c:1247
 #: locale/extracted_strings.c:1250 locale/extracted_strings.c:1253
 #: locale/extracted_strings.c:1256 locale/extracted_strings.c:2747
-#: locale/extracted_strings.c:2759 locale/extracted_strings.c:3491
+#: locale/extracted_strings.c:2759 locale/extracted_strings.c:3494
 msgid "Save"
 msgstr "Guardar"
 
@@ -719,8 +723,8 @@ msgstr "Guardar"
 #: locale/extracted_strings.c:2357 locale/extracted_strings.c:2360
 #: locale/extracted_strings.c:2750 locale/extracted_strings.c:2762
 #: locale/extracted_strings.c:2765 locale/extracted_strings.c:2768
-#: locale/extracted_strings.c:3515 locale/extracted_strings.c:3518
-#: locale/extracted_strings.c:3521
+#: locale/extracted_strings.c:3518 locale/extracted_strings.c:3521
+#: locale/extracted_strings.c:3524
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -745,7 +749,7 @@ msgstr "Palabras clave"
 msgid "Page content"
 msgstr "Contenido de la página"
 
-#: locale/extracted_strings.c:473 locale/extracted_strings.c:3458
+#: locale/extracted_strings.c:473 locale/extracted_strings.c:3461
 msgid "Go to admin main page"
 msgstr "Ir a la página de administración"
 
@@ -753,7 +757,7 @@ msgstr "Ir a la página de administración"
 msgid "Pending comments"
 msgstr "Comentarios pendientes"
 
-#: locale/extracted_strings.c:479 locale/extracted_strings.c:3461
+#: locale/extracted_strings.c:479 locale/extracted_strings.c:3464
 msgid ""
 "Welcome <a title=\"See my user preferences\" href=\"/admin/user.php?"
 "action=read&id=%1\">%2</a>"
@@ -761,11 +765,11 @@ msgstr ""
 "Bienvenido <a title=\"Ver mis preferencias de usuario\" href=\"/admin/user."
 "php?action=read&id=%1\">%2</a>"
 
-#: locale/extracted_strings.c:482 locale/extracted_strings.c:3464
+#: locale/extracted_strings.c:482 locale/extracted_strings.c:3467
 msgid "Admin privileges"
 msgstr "Privilegios de administración"
 
-#: locale/extracted_strings.c:485 locale/extracted_strings.c:3467
+#: locale/extracted_strings.c:485 locale/extracted_strings.c:3470
 msgid "Active users in backend"
 msgstr "Usuarios activos en el panel de administración"
 
@@ -773,16 +777,16 @@ msgstr "Usuarios activos en el panel de administración"
 msgid "Do you really want to exit from backend?"
 msgstr "¿Está seguro de que quiere salir del panel de administración?"
 
-#: locale/extracted_strings.c:491 locale/extracted_strings.c:3470
+#: locale/extracted_strings.c:491 locale/extracted_strings.c:3473
 msgid "Logout from control panel"
 msgstr "Salir del panel de administración"
 
-#: locale/extracted_strings.c:494 locale/extracted_strings.c:3473
+#: locale/extracted_strings.c:494 locale/extracted_strings.c:3476
 msgid "Log out"
 msgstr "Salir"
 
 #: locale/extracted_strings.c:497 locale/extracted_strings.c:500
-#: locale/extracted_strings.c:3452 locale/extracted_strings.c:3455
+#: locale/extracted_strings.c:3455 locale/extracted_strings.c:3458
 msgid "Active users"
 msgstr "Usuarios activos"
 
@@ -1034,7 +1038,7 @@ msgid "Save and continue"
 msgstr "Guardar y continuar"
 
 #: locale/extracted_strings.c:785 locale/extracted_strings.c:1451
-#: locale/extracted_strings.c:3254
+#: locale/extracted_strings.c:3257
 msgid "Article parameters"
 msgstr "Parámetros del artículo"
 
@@ -1089,7 +1093,7 @@ msgid "Director's letter"
 msgstr "Carta del director"
 
 #: locale/extracted_strings.c:854 locale/extracted_strings.c:1535
-#: locale/extracted_strings.c:2996
+#: locale/extracted_strings.c:2999
 msgid "Body:"
 msgstr "Cuerpo:"
 
@@ -1530,14 +1534,14 @@ msgstr "Nuevo widget"
 
 #: locale/extracted_strings.c:1319 locale/extracted_strings.c:1823
 #: locale/extracted_strings.c:1826 locale/extracted_strings.c:1829
-#: locale/extracted_strings.c:3272
+#: locale/extracted_strings.c:3275
 msgid "New"
 msgstr "Nuevo"
 
 #: locale/extracted_strings.c:1328 locale/extracted_strings.c:1622
 #: locale/extracted_strings.c:1652 locale/extracted_strings.c:1667
 #: locale/extracted_strings.c:1841 locale/extracted_strings.c:1856
-#: locale/extracted_strings.c:3278
+#: locale/extracted_strings.c:3281
 msgid "Type"
 msgstr "Tipo"
 
@@ -1588,7 +1592,7 @@ msgid "Photographies"
 msgstr "Fotografías"
 
 #: locale/extracted_strings.c:1436 locale/extracted_strings.c:1742
-#: locale/extracted_strings.c:2558 locale/extracted_strings.c:2939
+#: locale/extracted_strings.c:2558 locale/extracted_strings.c:2942
 msgid "Section"
 msgstr "Sección"
 
@@ -1597,19 +1601,19 @@ msgid "Views"
 msgstr "Vistas"
 
 #: locale/extracted_strings.c:1442 locale/extracted_strings.c:1628
-#: locale/extracted_strings.c:2936
+#: locale/extracted_strings.c:2939
 msgid "Date"
 msgstr "Fecha"
 
-#: locale/extracted_strings.c:1448 locale/extracted_strings.c:3251
+#: locale/extracted_strings.c:1448 locale/extracted_strings.c:3254
 msgid "Article content"
 msgstr "Contenido del artículo"
 
-#: locale/extracted_strings.c:1457 locale/extracted_strings.c:3260
+#: locale/extracted_strings.c:1457 locale/extracted_strings.c:3263
 msgid "Related contents"
 msgstr "Contenidos relacionados"
 
-#: locale/extracted_strings.c:1460 locale/extracted_strings.c:3263
+#: locale/extracted_strings.c:1460 locale/extracted_strings.c:3266
 msgid "Sort related contents"
 msgstr "Ordenar contenidos relacionados"
 
@@ -1657,7 +1661,7 @@ msgstr "Archivado:"
 msgid "Inner title"
 msgstr "Título interior"
 
-#: locale/extracted_strings.c:1532 locale/extracted_strings.c:2993
+#: locale/extracted_strings.c:1532 locale/extracted_strings.c:2996
 msgid "Summary:"
 msgstr "Resumen:"
 
@@ -1847,7 +1851,7 @@ msgid "URL:"
 msgstr "URL:"
 
 #: locale/extracted_strings.c:1745 locale/extracted_strings.c:1754
-#: locale/extracted_strings.c:1772 locale/extracted_strings.c:3323
+#: locale/extracted_strings.c:1772 locale/extracted_strings.c:3326
 msgid "Frontpage"
 msgstr "Portadas"
 
@@ -1917,7 +1921,7 @@ msgid "Viewed:"
 msgstr "Visualizaciones:"
 
 #: locale/extracted_strings.c:1877 locale/extracted_strings.c:2651
-#: locale/extracted_strings.c:2654 locale/extracted_strings.c:2987
+#: locale/extracted_strings.c:2654 locale/extracted_strings.c:2990
 msgid "Date:"
 msgstr "Fecha:"
 
@@ -2272,8 +2276,8 @@ msgstr "Gestor de artículos :: Creando nuevo artículo"
 msgid "Preview"
 msgstr "Previsualizar"
 
-#: locale/extracted_strings.c:2279 locale/extracted_strings.c:3326
-#: locale/extracted_strings.c:3383
+#: locale/extracted_strings.c:2279 locale/extracted_strings.c:3329
+#: locale/extracted_strings.c:3386
 msgid "Library"
 msgstr "Hemeroteca"
 
@@ -2300,8 +2304,8 @@ msgid "No home"
 msgstr "No en portada"
 
 #: locale/extracted_strings.c:2408 locale/extracted_strings.c:2411
-#: locale/extracted_strings.c:3308 locale/extracted_strings.c:3368
-#: locale/extracted_strings.c:3419
+#: locale/extracted_strings.c:3311 locale/extracted_strings.c:3371
+#: locale/extracted_strings.c:3422
 msgid "Select all"
 msgstr "Seleccionar todo"
 
@@ -2471,8 +2475,8 @@ msgstr "Hasta:"
 #: locale/extracted_strings.c:2621 locale/extracted_strings.c:2717
 #: locale/extracted_strings.c:2732 locale/extracted_strings.c:2753
 #: locale/extracted_strings.c:2780 locale/extracted_strings.c:2834
-#: locale/extracted_strings.c:2927 locale/extracted_strings.c:3032
-#: locale/extracted_strings.c:3392
+#: locale/extracted_strings.c:2930 locale/extracted_strings.c:3035
+#: locale/extracted_strings.c:3395
 msgid "Search"
 msgstr "Buscar"
 
@@ -2642,7 +2646,7 @@ msgstr "Resultado de la búsqueda"
 msgid "Search images"
 msgstr "Buscar imágenes"
 
-#: locale/extracted_strings.c:2846 locale/extracted_strings.c:3335
+#: locale/extracted_strings.c:2846 locale/extracted_strings.c:3338
 msgid "Buscar"
 msgstr "Buscar"
 
@@ -2654,8 +2658,8 @@ msgstr "Gestor de privilegios"
 msgid "Filter by module:"
 msgstr "Filtrar por módulo:"
 
-#: locale/extracted_strings.c:2861 locale/extracted_strings.c:3332
-#: locale/extracted_strings.c:3389
+#: locale/extracted_strings.c:2861 locale/extracted_strings.c:3335
+#: locale/extracted_strings.c:3392
 msgid "ALL"
 msgstr "TODAS"
 
@@ -2679,7 +2683,7 @@ msgstr "Eliminar privilegio"
 msgid "No available privileges to list here."
 msgstr "No hai privilegios disponibles para mostrar aquí."
 
-#: locale/extracted_strings.c:2882 locale/extracted_strings.c:2951
+#: locale/extracted_strings.c:2882 locale/extracted_strings.c:2954
 msgid "EuropaPress importer :: List of articles"
 msgstr "Importador de EuropaPress::Lista de artículos"
 
@@ -2690,7 +2694,7 @@ msgid "Sync with server"
 msgstr "Sincronizar con servidor"
 
 #: locale/extracted_strings.c:2891 locale/extracted_strings.c:2906
-#: locale/extracted_strings.c:2975
+#: locale/extracted_strings.c:2978
 msgid "Sync list  with server"
 msgstr ""
 
@@ -2700,10 +2704,14 @@ msgid "Reload list"
 msgstr "Recargar listado"
 
 #: locale/extracted_strings.c:2915
+msgid "A long time ago from synchronization."
+msgstr "La última sincronización fue hace cierto tiempo."
+
+#: locale/extracted_strings.c:2918
 msgid "Last sync was %1 minutes ago."
 msgstr "La última sincronización se llevó a cabo hace %1 minuto/s."
 
-#: locale/extracted_strings.c:2918
+#: locale/extracted_strings.c:2921
 msgid ""
 "Try syncing the news list from server by clicking in \"Sync with server\" "
 "button above"
@@ -2711,273 +2719,273 @@ msgstr ""
 "Intente actualizar la lista desde el servidor pulsando el botón «Sincronizar "
 "con servidor» de arriba."
 
-#: locale/extracted_strings.c:2921
+#: locale/extracted_strings.c:2924
 msgid "Filter by title"
 msgstr "Filtrar por título"
 
-#: locale/extracted_strings.c:2924
+#: locale/extracted_strings.c:2927
 msgid "and category:"
 msgstr "y categoría:"
 
-#: locale/extracted_strings.c:2930
+#: locale/extracted_strings.c:2933
 msgid "Priority"
 msgstr "Prioridad"
 
-#: locale/extracted_strings.c:2945
+#: locale/extracted_strings.c:2948
 msgid "There is no elements to import"
 msgstr "No hay ningún elemento para poder importarlo"
 
-#: locale/extracted_strings.c:2948
+#: locale/extracted_strings.c:2951
 msgid ""
 "Try syncing from server by click over the \"Sync with server\" button above."
 msgstr ""
 "Intente actualizar esta lista desde el servidor pulsando el botón "
 "«Sincronizar con servidor» desde la barra de herramientas superior."
 
-#: locale/extracted_strings.c:2954 locale/extracted_strings.c:2957
-#: locale/extracted_strings.c:2960 locale/extracted_strings.c:2963
-#: locale/extracted_strings.c:2966
+#: locale/extracted_strings.c:2957 locale/extracted_strings.c:2960
+#: locale/extracted_strings.c:2963 locale/extracted_strings.c:2966
+#: locale/extracted_strings.c:2969
 msgid "Import"
 msgstr "Importar"
 
-#: locale/extracted_strings.c:2969 locale/extracted_strings.c:2972
-#: locale/extracted_strings.c:2978 locale/extracted_strings.c:2981
+#: locale/extracted_strings.c:2972 locale/extracted_strings.c:2975
+#: locale/extracted_strings.c:2981 locale/extracted_strings.c:2984
 msgid "Go back to list"
 msgstr "Volver a la lista"
 
-#: locale/extracted_strings.c:2984
+#: locale/extracted_strings.c:2987
 msgid "Priority:"
 msgstr "Prioridad:"
 
-#: locale/extracted_strings.c:2999
+#: locale/extracted_strings.c:3002
 msgid "Photos:"
 msgstr "Fotos:"
 
-#: locale/extracted_strings.c:3002
+#: locale/extracted_strings.c:3005
 msgid "People:"
 msgstr "Personas:"
 
-#: locale/extracted_strings.c:3005
+#: locale/extracted_strings.c:3008
 msgid "Place:"
 msgstr "Lugar:"
 
-#: locale/extracted_strings.c:3008
+#: locale/extracted_strings.c:3011
 msgid "Associated Docs:"
 msgstr "Documentos asociados:"
 
-#: locale/extracted_strings.c:3011
+#: locale/extracted_strings.c:3014
 msgid "Categories:"
 msgstr "Categorías:"
 
-#: locale/extracted_strings.c:3014 locale/extracted_strings.c:3017
+#: locale/extracted_strings.c:3017 locale/extracted_strings.c:3020
 msgid "Level:"
 msgstr "Nivel:"
 
-#: locale/extracted_strings.c:3020
+#: locale/extracted_strings.c:3023
 msgid "Redactors:"
 msgstr "Redactores:"
 
-#: locale/extracted_strings.c:3023
+#: locale/extracted_strings.c:3026
 msgid "Filter by name"
 msgstr "Filtrar por nombre"
 
-#: locale/extracted_strings.c:3026
+#: locale/extracted_strings.c:3029
 msgid "or username:"
 msgstr "o nombre de usuario:"
 
-#: locale/extracted_strings.c:3029
+#: locale/extracted_strings.c:3032
 msgid "and group:"
 msgstr "y grupo:"
 
-#: locale/extracted_strings.c:3035
+#: locale/extracted_strings.c:3038
 msgid "Name Surname"
 msgstr "Nombre - Apelllido"
 
-#: locale/extracted_strings.c:3038 locale/extracted_strings.c:3176
+#: locale/extracted_strings.c:3041 locale/extracted_strings.c:3179
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: locale/extracted_strings.c:3041
+#: locale/extracted_strings.c:3044
 msgid "Group"
 msgstr "Grupo"
 
-#: locale/extracted_strings.c:3047 locale/extracted_strings.c:3050
-#: locale/extracted_strings.c:3053
+#: locale/extracted_strings.c:3050 locale/extracted_strings.c:3053
+#: locale/extracted_strings.c:3056
 msgid "Edit user"
 msgstr "Editar usuario"
 
-#: locale/extracted_strings.c:3056 locale/extracted_strings.c:3059
+#: locale/extracted_strings.c:3059 locale/extracted_strings.c:3062
 msgid "Delete user"
 msgstr "Eliminar usuario"
 
-#: locale/extracted_strings.c:3062
+#: locale/extracted_strings.c:3065
 msgid "There is no users created yet."
 msgstr "Aún no hay ningún usuario creado."
 
-#: locale/extracted_strings.c:3065
+#: locale/extracted_strings.c:3068
 msgid "Login:"
 msgstr "Nombre de usuario:"
 
-#: locale/extracted_strings.c:3068 locale/extracted_strings.c:3179
+#: locale/extracted_strings.c:3071 locale/extracted_strings.c:3182
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: locale/extracted_strings.c:3071
+#: locale/extracted_strings.c:3074
 msgid "Re-enter password:"
 msgstr "Reescriba la contraseña:"
 
-#: locale/extracted_strings.c:3074
+#: locale/extracted_strings.c:3077
 msgid "Session expire time:"
 msgstr "Tiempo de expiración de sesión:"
 
-#: locale/extracted_strings.c:3077
+#: locale/extracted_strings.c:3080
 msgid "minutes"
 msgstr "minutos"
 
-#: locale/extracted_strings.c:3080 locale/extracted_strings.c:3083
+#: locale/extracted_strings.c:3083 locale/extracted_strings.c:3086
 msgid "Email adress:"
 msgstr "Dirección de email:"
 
-#: locale/extracted_strings.c:3092 locale/extracted_strings.c:3095
+#: locale/extracted_strings.c:3095 locale/extracted_strings.c:3098
 msgid "Surname:"
 msgstr "Apellido:"
 
-#: locale/extracted_strings.c:3098 locale/extracted_strings.c:3101
+#: locale/extracted_strings.c:3101 locale/extracted_strings.c:3104
 msgid "Maiden surname:"
 msgstr "Segundo apellido:"
 
-#: locale/extracted_strings.c:3104 locale/extracted_strings.c:3107
+#: locale/extracted_strings.c:3107 locale/extracted_strings.c:3110
 msgid "Address:"
 msgstr "Dirección:"
 
-#: locale/extracted_strings.c:3110 locale/extracted_strings.c:3113
+#: locale/extracted_strings.c:3113 locale/extracted_strings.c:3116
 msgid "Telephone:"
 msgstr "Teléfono:"
 
-#: locale/extracted_strings.c:3116 locale/extracted_strings.c:3119
+#: locale/extracted_strings.c:3119 locale/extracted_strings.c:3122
 msgid "User group:"
 msgstr "Grupos de usuario:"
 
-#: locale/extracted_strings.c:3122
+#: locale/extracted_strings.c:3125
 msgid "User group manager"
 msgstr "Gestor de grupos de usuario"
 
-#: locale/extracted_strings.c:3125
+#: locale/extracted_strings.c:3128
 msgid "Edit groups and privileges"
 msgstr "Editar grupos y privilegios"
 
-#: locale/extracted_strings.c:3128
+#: locale/extracted_strings.c:3131
 msgid "Sections:"
 msgstr "Secciones:"
 
-#: locale/extracted_strings.c:3131 locale/extracted_strings.c:3137
-#: locale/extracted_strings.c:3140
+#: locale/extracted_strings.c:3134 locale/extracted_strings.c:3140
+#: locale/extracted_strings.c:3143
 msgid "Status"
 msgstr "Estado"
 
-#: locale/extracted_strings.c:3134
+#: locale/extracted_strings.c:3137
 msgid "Get the status of the OpenNemas system"
 msgstr "Obtener el estado de su instalación de OpenNemas"
 
-#: locale/extracted_strings.c:3143 locale/extracted_strings.c:3149
+#: locale/extracted_strings.c:3146 locale/extracted_strings.c:3152
 msgid "Update"
 msgstr "Actualizar"
 
-#: locale/extracted_strings.c:3146
+#: locale/extracted_strings.c:3149
 msgid "Update OpenNemas from the update server"
 msgstr "Actualizar OpenNemas desde el servidor de actualizaciones"
 
-#: locale/extracted_strings.c:3152 locale/extracted_strings.c:3158
+#: locale/extracted_strings.c:3155 locale/extracted_strings.c:3161
 msgid "Checkout"
 msgstr "Obtener"
 
-#: locale/extracted_strings.c:3155
+#: locale/extracted_strings.c:3158
 msgid "Fetch the lastest version of OpenNemas from update server"
 msgstr ""
 "Obtener la última versión de OpenNemas desde el servidor de actualizaciones"
 
-#: locale/extracted_strings.c:3161 locale/extracted_strings.c:3167
+#: locale/extracted_strings.c:3164 locale/extracted_strings.c:3170
 msgid "List"
 msgstr "Listar"
 
-#: locale/extracted_strings.c:3164
+#: locale/extracted_strings.c:3167
 msgid "\"List files from repository system"
 msgstr "\"Listar los ficheiros desde el sistema de repositorio"
 
-#: locale/extracted_strings.c:3170
+#: locale/extracted_strings.c:3173
 msgid "Please fill the information to connect to the update server."
 msgstr ""
 "Complete la información para conectarse al servidor de actualizaciones."
 
-#: locale/extracted_strings.c:3173
+#: locale/extracted_strings.c:3176
 msgid "User Name:"
 msgstr "Nombre de usuario:"
 
-#: locale/extracted_strings.c:3182 locale/extracted_strings.c:3227
+#: locale/extracted_strings.c:3185 locale/extracted_strings.c:3230
 msgid "Password"
 msgstr "Contraseña"
 
-#: locale/extracted_strings.c:3185
+#: locale/extracted_strings.c:3188
 msgid "Server URL:"
 msgstr "URL del servidor:"
 
-#: locale/extracted_strings.c:3188
+#: locale/extracted_strings.c:3191
 msgid "Server URL"
 msgstr "Server URL"
 
-#: locale/extracted_strings.c:3191
+#: locale/extracted_strings.c:3194
 msgid "Destination folder:"
 msgstr "Directorio de destino:"
 
-#: locale/extracted_strings.c:3194
+#: locale/extracted_strings.c:3197
 msgid "Destination"
 msgstr "Destino"
 
-#: locale/extracted_strings.c:3197
+#: locale/extracted_strings.c:3200
 msgid "Download OpenNemas on your server"
 msgstr "Descargar OpenNemas en su servidor"
 
-#: locale/extracted_strings.c:3200
+#: locale/extracted_strings.c:3203
 msgid "Getting information from the server"
 msgstr "Obtener información desde el servidor"
 
-#: locale/extracted_strings.c:3203
+#: locale/extracted_strings.c:3206
 msgid "Updating OpenNemas to the lastest version"
 msgstr "Actualizando OpenNemas a la última versión"
 
-#: locale/extracted_strings.c:3206
+#: locale/extracted_strings.c:3209
 msgid "Listing projects files"
 msgstr "Listando los ficheros del proyecto"
 
-#: locale/extracted_strings.c:3209
+#: locale/extracted_strings.c:3212
 msgid "Acting performed:"
 msgstr "Acción llevada a cabo:"
 
-#: locale/extracted_strings.c:3212
+#: locale/extracted_strings.c:3215
 msgid "Content Statistics"
 msgstr "Estadísticas de contenido"
 
-#: locale/extracted_strings.c:3215
+#: locale/extracted_strings.c:3218
 msgid "Panel de Control - %1"
 msgstr "Panel de control - %1"
 
-#: locale/extracted_strings.c:3218
+#: locale/extracted_strings.c:3221
 msgid "Did you lost?"
 msgstr "Te has perdido?"
 
-#: locale/extracted_strings.c:3221
+#: locale/extracted_strings.c:3224
 msgid "&larr; Go back to main website"
 msgstr "&larr; Volver a la página principal"
 
-#: locale/extracted_strings.c:3224
+#: locale/extracted_strings.c:3227
 msgid "User name"
 msgstr "Nombre de usuario"
 
-#: locale/extracted_strings.c:3230
+#: locale/extracted_strings.c:3233
 msgid "Remember me"
 msgstr "Recordarme"
 
-#: locale/extracted_strings.c:3233
+#: locale/extracted_strings.c:3236
 msgid ""
 "A product of <a href=\"%1\" title=\"%2\">%3</a><br/> %4 &copy; All rights "
 "resered"
@@ -2985,134 +2993,134 @@ msgstr ""
 "Un producto de <a href=\"%1\" title=\"%2\">%3</a><br/> %4 &copy; Todos los "
 "derechos reservados."
 
-#: locale/extracted_strings.c:3236
+#: locale/extracted_strings.c:3239
 msgid "File uploaded successfully"
 msgstr "Fichero subido con éxito"
 
-#: locale/extracted_strings.c:3239
+#: locale/extracted_strings.c:3242
 msgid "File uploaded"
 msgstr "Fichero subido"
 
-#: locale/extracted_strings.c:3242
+#: locale/extracted_strings.c:3245
 msgid "File Manager"
 msgstr "Gestor de ficheros"
 
-#: locale/extracted_strings.c:3245
+#: locale/extracted_strings.c:3248
 msgid "Video uploaded to Youtube."
 msgstr "Vídeo subido a Youtube."
 
-#: locale/extracted_strings.c:3248
+#: locale/extracted_strings.c:3251
 msgid "This article was strong"
 msgstr ""
 
-#: locale/extracted_strings.c:3257
+#: locale/extracted_strings.c:3260
 msgid "Comments management"
 msgstr "Gestor de comentarios"
 
-#: locale/extracted_strings.c:3266
+#: locale/extracted_strings.c:3269
 msgid "Show in home"
 msgstr "Mostrar en portada"
 
-#: locale/extracted_strings.c:3275
+#: locale/extracted_strings.c:3278
 msgid "Search keyworks containing "
 msgstr "Buscar palabras clave que contienen"
 
-#: locale/extracted_strings.c:3281
+#: locale/extracted_strings.c:3284
 msgid "Keyword"
 msgstr "Palabra clave"
 
-#: locale/extracted_strings.c:3284
+#: locale/extracted_strings.c:3287
 msgid "Replacement value"
 msgstr "Valor de reemplazo"
 
-#: locale/extracted_strings.c:3290 locale/extracted_strings.c:3344
-#: locale/extracted_strings.c:3395 locale/extracted_strings.c:3431
+#: locale/extracted_strings.c:3293 locale/extracted_strings.c:3347
+#: locale/extracted_strings.c:3398 locale/extracted_strings.c:3434
 msgid "Newsletter management"
 msgstr "Getión de boletín"
 
-#: locale/extracted_strings.c:3293 locale/extracted_strings.c:3347
-#: locale/extracted_strings.c:3398 locale/extracted_strings.c:3434
-#: locale/extracted_strings.c:3437
+#: locale/extracted_strings.c:3296 locale/extracted_strings.c:3350
+#: locale/extracted_strings.c:3401 locale/extracted_strings.c:3437
+#: locale/extracted_strings.c:3440
 msgid "Next"
 msgstr "Siguiente"
 
-#: locale/extracted_strings.c:3296 locale/extracted_strings.c:3350
-#: locale/extracted_strings.c:3401
+#: locale/extracted_strings.c:3299 locale/extracted_strings.c:3353
+#: locale/extracted_strings.c:3404
 msgid "Next step"
 msgstr "Siguiente paso"
 
-#: locale/extracted_strings.c:3299 locale/extracted_strings.c:3359
-#: locale/extracted_strings.c:3410
+#: locale/extracted_strings.c:3302 locale/extracted_strings.c:3362
+#: locale/extracted_strings.c:3413
 msgid "Clean container of selected opinions"
 msgstr "Limpiar el contenedor de las opiniones seleccionadas"
 
-#: locale/extracted_strings.c:3302 locale/extracted_strings.c:3362
-#: locale/extracted_strings.c:3413
+#: locale/extracted_strings.c:3305 locale/extracted_strings.c:3365
+#: locale/extracted_strings.c:3416
 msgid "Clean"
 msgstr "Limpiar"
 
-#: locale/extracted_strings.c:3305 locale/extracted_strings.c:3365
-#: locale/extracted_strings.c:3416
+#: locale/extracted_strings.c:3308 locale/extracted_strings.c:3368
+#: locale/extracted_strings.c:3419
 msgid "Select all the opinions available"
 msgstr "Seleccionar todas las opiniones disponibles"
 
-#: locale/extracted_strings.c:3311
+#: locale/extracted_strings.c:3314
 msgid "Article selection"
 msgstr "Selección de artículos"
 
-#: locale/extracted_strings.c:3314
+#: locale/extracted_strings.c:3317
 msgid "Articles that contain "
 msgstr "Artículos que contienen"
 
-#: locale/extracted_strings.c:3317 locale/extracted_strings.c:3377
+#: locale/extracted_strings.c:3320 locale/extracted_strings.c:3380
 msgid "in"
 msgstr "en"
 
-#: locale/extracted_strings.c:3320 locale/extracted_strings.c:3380
+#: locale/extracted_strings.c:3323 locale/extracted_strings.c:3383
 msgid "Home"
 msgstr "Portada"
 
-#: locale/extracted_strings.c:3329
+#: locale/extracted_strings.c:3332
 msgid "from category"
 msgstr "de la categoría"
 
-#: locale/extracted_strings.c:3338
+#: locale/extracted_strings.c:3341
 msgid "Available articles (please, double click over one element to send it)"
 msgstr ""
 "Artículos disponibles  - (pulse dos veces sobre un elemento para enviarlo)"
 
-#: locale/extracted_strings.c:3341
+#: locale/extracted_strings.c:3344
 msgid "Selected articles (please doucle click over one element to discart it)"
 msgstr ""
 "Artículos seleccionados (pulse dos veces sobre un elemento para descartarlo)"
 
-#: locale/extracted_strings.c:3353 locale/extracted_strings.c:3404
-#: locale/extracted_strings.c:3479
+#: locale/extracted_strings.c:3356 locale/extracted_strings.c:3407
+#: locale/extracted_strings.c:3482
 msgid "Back"
 msgstr "Atrás"
 
-#: locale/extracted_strings.c:3356 locale/extracted_strings.c:3407
-#: locale/extracted_strings.c:3482
+#: locale/extracted_strings.c:3359 locale/extracted_strings.c:3410
+#: locale/extracted_strings.c:3485
 msgid "Previous step"
 msgstr "Siguiente paso"
 
-#: locale/extracted_strings.c:3371
+#: locale/extracted_strings.c:3374
 msgid "Opinion selection"
 msgstr "Selección de opiniones"
 
-#: locale/extracted_strings.c:3374
+#: locale/extracted_strings.c:3377
 msgid "Opinions that contain "
 msgstr "Opiniones que contienen"
 
-#: locale/extracted_strings.c:3386
+#: locale/extracted_strings.c:3389
 msgid "from author"
 msgstr "del autor"
 
-#: locale/extracted_strings.c:3422
+#: locale/extracted_strings.c:3425
 msgid "Recipient selection"
 msgstr "Selección de destinatarios"
 
-#: locale/extracted_strings.c:3425
+#: locale/extracted_strings.c:3428
 msgid ""
 "Subscriptors available (please double click over a subscritor to add to "
 "recipients)"
@@ -3120,7 +3128,7 @@ msgstr ""
 "Subscriptores disponibles (pulse dos veces sobre un subscriptor para "
 "añadirlo como destinatario)"
 
-#: locale/extracted_strings.c:3428
+#: locale/extracted_strings.c:3431
 msgid ""
 "Subscriptors selected (please double click over a subscritor to delete from "
 "recipients)"
@@ -3128,44 +3136,44 @@ msgstr ""
 "Subscriptores seleccionados (pulse dos veces sobre un subscriptor para "
 "eliminarlo de los destinatarios)"
 
-#: locale/extracted_strings.c:3440 locale/extracted_strings.c:3443
+#: locale/extracted_strings.c:3443 locale/extracted_strings.c:3446
 msgid "Previous"
 msgstr "Anterior"
 
-#: locale/extracted_strings.c:3446
+#: locale/extracted_strings.c:3449
 msgid "Email subject"
 msgstr "Asunto del email"
 
-#: locale/extracted_strings.c:3449
+#: locale/extracted_strings.c:3452
 msgid "Newsletter preview:"
 msgstr "Previsualización del boletín:"
 
-#: locale/extracted_strings.c:3476
+#: locale/extracted_strings.c:3479
 msgid "Delivered newsletter report"
 msgstr "Informe de envío del boletín"
 
-#: locale/extracted_strings.c:3485 locale/extracted_strings.c:3488
+#: locale/extracted_strings.c:3488 locale/extracted_strings.c:3491
 msgid "Save configuration"
 msgstr "Guardar configuración"
 
-#: locale/extracted_strings.c:3494
+#: locale/extracted_strings.c:3497
 msgid "Backup configuration"
 msgstr "Hacer copia de seguridad"
 
-#: locale/extracted_strings.c:3497 locale/extracted_strings.c:3500
+#: locale/extracted_strings.c:3500 locale/extracted_strings.c:3503
 msgid "Backup"
 msgstr "Copia de seguridad"
 
-#: locale/extracted_strings.c:3503 locale/extracted_strings.c:3524
+#: locale/extracted_strings.c:3506 locale/extracted_strings.c:3527
 msgid "Recover configuration"
 msgstr "Recuperar configuración"
 
-#: locale/extracted_strings.c:3506 locale/extracted_strings.c:3509
-#: locale/extracted_strings.c:3527 locale/extracted_strings.c:3530
+#: locale/extracted_strings.c:3509 locale/extracted_strings.c:3512
+#: locale/extracted_strings.c:3530 locale/extracted_strings.c:3533
 msgid "Recover"
 msgstr "Recuperar"
 
-#: locale/extracted_strings.c:3512
+#: locale/extracted_strings.c:3515
 msgid "Please select a backup to restore"
 msgstr "Seleccione una copia de seguridad para restaurar"
 

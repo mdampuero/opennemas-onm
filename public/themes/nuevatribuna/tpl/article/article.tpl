@@ -25,7 +25,7 @@
 <script type="text/javascript" src="{$params.JS_DIR}videojs.js"></script>
 <script charset="utf-8" type="text/javascript">
     $(function(){
-      VideoJS.setup();
+        VideoJS.setup();
     })
 </script>
 {/block}

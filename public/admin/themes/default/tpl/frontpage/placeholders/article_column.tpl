@@ -1,5 +1,5 @@
 <table class="adminlist">
-    <tr>
+    <!--<tr>
          <th align="center"> </th>
         <th align="center" style="width:200px">T&iacute;tulo</th>
         {if $category neq 'home'}
@@ -13,7 +13,7 @@
         {if $category neq 'home'}
             <th align="center" style="width:20px;"class="rot270">Borr</th>
         {/if}
-   </tr>
+   </tr>-->
    <tr>
        <td colspan="10">
 
