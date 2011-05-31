@@ -312,4 +312,35 @@ class String_Utils {
 
         return $weight;
     }
+    
+    /*
+     * implodes a two dimension array to a http params string
+     * @param $array
+     */
+    
+    static public function toHttpParams(Array $httpParams)
+    {
+        
+        // The final result
+        $result = array();
+        if(is_array($httpParams)) {
+
+            // Iterate over each key-value parameter
+            foreach ($httpParams as $param) {
+                
+                // Implode each key => value parameter into key-value
+                foreach ($param as $key => $value) {
+                    $result []= $key.'='.$value;
+                }
+                
+            }
+            
+            // And implode all key=value parameters with &
+            $result = implode('&', $result);
+            return $result;
+            
+        } else {
+            throw new ArgumentError();
+        }
+    }
 }

@@ -18,8 +18,6 @@
     <link rel="shorcut icon" href="{$params.IMAGE_DIR}/logos/favicon.png" />
     <meta http-equiv="Refresh" content="{$smarty.const.REFRESH_INTERVAL}; url=http://{$smarty.server.SERVER_NAME}{$smarty.server.REQUEST_URI}" />
     {block name='meta'}{/block}
-    {asset_compile}
-    
 
     <link rel="stylesheet" href="{$params.CSS_DIR}/bp/screen.css" type="text/css" media="screen, projection" />
     <link rel="stylesheet" href="{$params.CSS_DIR}/bp/print.css" type="text/css" media="print" />
@@ -34,7 +32,6 @@
 
     <style type="text/css">{*$categories_styles*}</style>
 
-	{/asset_compile}
 	{block name='header-css'}
     {/block}
     {block name="header-js"}

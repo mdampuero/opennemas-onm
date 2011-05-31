@@ -113,7 +113,7 @@ div#widget_weather_top
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
             border-radius:5px;
-            behavior: url(border-radius.htc);
+            behavior: url(./border-radius.htc);
             display:block;
             padding:2px 4px;
             width:35px;

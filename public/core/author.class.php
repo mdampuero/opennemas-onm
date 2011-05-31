@@ -16,6 +16,15 @@ class Author {
     // Static members for performance
     static $__photos   = null;
     static $__authors  = null;
+	
+	private $defaultValues = array(
+				'name'=>'',
+				'gender'=>'',
+				'politics'=>'',
+				'condition'=>'',
+				'date_nac'=>'',
+				'titles'=>array(),
+			   );
 
     function __construct($id=null){
 
@@ -28,9 +37,21 @@ class Author {
     }
 
     function create($data) {
+		
+		$defaultValues = array(
+							   'name'=>'',
+							   'gender'=>'',
+							   'politics'=>'',
+							   'condition'=>'',
+							   'date_nac'=>'',
+							   'titles'=>array(),
+							  );
+		
+		$data = array_merge($this->defaultValues, $data);
+		
+		
         $sql = "INSERT INTO authors (`name`, `fk_user`, `gender`,`politics`,`condition`,`date_nac`) VALUES ( ?,?,?,?,?,?)";
-        $values = array($data['name'], '0', $data['gender'],$data['politics'],$data['condition'],$data['date_nac'] );
-
+        $values = array($data['name'], '0', $data['gender'], $data['politics'], $data['condition'], $data['date_nac'] );
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -41,11 +62,11 @@ class Author {
         }
 
         //tabla author_imgs
-	$this->pk_author = $GLOBALS['application']->conn->Insert_ID();
-	$titles = $data['titles'];
+		$this->pk_author = $GLOBALS['application']->conn->Insert_ID();
 
-     	if($titles) {
-            foreach($titles as $atid=>$des) {
+     	if(isset($data['titles'])) {
+			$titles = $data['titles'];
+            foreach($titles as $atid => $des) {
                 $sql = "INSERT INTO author_imgs (`fk_author`, `fk_photo`,`path_img`) VALUES (?,?,?)";
                 $values = array( $this->pk_author, $atid, $des );
                 if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -54,7 +75,7 @@ class Author {
                     $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 }
             }
-	}
+		}
 
         return($this->pk_author);
     }
@@ -115,6 +136,9 @@ class Author {
     }
 
     function update($data) {
+		
+		$data = array_merge($this->defaultValues, $data);
+		
     	$sql = "UPDATE `authors` SET `name`=?,`gender`=?, `politics`=?, `condition`=?
                     WHERE pk_author=".($data['id']);
 

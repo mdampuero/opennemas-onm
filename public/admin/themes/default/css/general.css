@@ -69,6 +69,10 @@ html[xmlns] .clearfix
 	height: 1%;
 }
 
+.red {
+	color: Red;
+}
+
 #minwidth { min-width: 960px; }
 
 .clr { clear: both; overflow:hidden; height: 0; }
@@ -391,8 +395,10 @@ table.adminform {
 	width: 100%;
 }
 table.adminform.nospace { margin-bottom: 0; }
-table.adminform tr.row0 { background-color: #f9f9f9; }
-table.adminform tr.row1 { background-color: #eeeeee; }
+tr.row0 { background-color: #f9f9f9; }
+tr.row1 { background-color: #eeeeee; }
+tr.row0 td,
+tr.row1 td { background: none !important; }
 
 table.adminform th {
 	font-size: 11px;

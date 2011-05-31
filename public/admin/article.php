@@ -425,7 +425,7 @@ if(isset($_REQUEST['action']) ) {
             $aut=new User();
             $comment = new Comment();
             foreach ($articles as $art){
-                 $art->category_name= $art->loadCategoryName($art->id);
+                $art->category_name= $art->loadCategoryName($art->id);
                 $art->publisher=$aut->get_user_name($art->fk_publisher);
                 $art->editor=$aut->get_user_name($art->fk_user_last_editor);
                 $art->rating= $rating->get_value($art->id);

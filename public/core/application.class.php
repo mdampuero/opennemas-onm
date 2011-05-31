@@ -46,14 +46,6 @@ class Application {
      */
     public static $sem = null;
 
-    //function Application() {
-    //    $this->adodb        = SITE_LIBS_PATH.'adodb5/adodb.inc.php';
-    //    $this->smarty       = SITE_LIBS_PATH.'smarty/Smarty.class.php';
-    //    $this->log          = SITE_LIBS_PATH.'Log.php';
-    //    $this->pager        = SITE_LIBS_PATH.'Pager/Pager.php';
-    //    $this->template     = SITE_LIBS_PATH.'template.class.php';
-    //}
-
     /**
      * Initializer for the Application class
      *
@@ -70,20 +62,36 @@ class Application {
 
 
     static private function autoload($className) {
+        
+        // Use Onm old loader
         $filename = strtolower($className);
         if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
             require dirname(__FILE__).'/'.$filename.'.class.php';
-
+            return true;
         } else{
-
             // Try convert MethodCacheManager to method_cache_manager
             $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
 
             if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
                 require dirname(__FILE__).'/'.$filename.'.class.php';
+                return true;
             }
         }
-
+        
+        // Use PSR-0 Final Proposal autoloader
+        if (strripos($className, '\\') !== false) {
+            $className = ltrim($className, '\\');
+            $fileName  = '';
+            $namespace = '';
+            if ($lastNsPos = strripos($className, '\\')) {
+                $namespace = substr($className, 0, $lastNsPos);
+                $className = substr($className, $lastNsPos + 1);
+                $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+            }
+            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+            
+            require $fileName;
+        }
 
     }
 

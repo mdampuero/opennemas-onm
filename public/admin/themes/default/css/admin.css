@@ -151,14 +151,14 @@ form {
 /* header block */
 table.adminheading {
 	margin:0 auto;
-	margin-top:3px;
+	/*margin-top:3px;*/
 	background-color: #FFF;
 	font-family:Georgia !important;
 	width: 100%;
 	text-align: left;
 	height: 30px;
 	width: 100%;
-	padding-left: 30px;
+	padding-left: 5px;
 	font-size: 28px;
 	border: 1px solid #ccc;
 
@@ -590,7 +590,9 @@ a.unpublishing:hover {
     }
 
 
-.error, .notice, .success {padding:.8em;border:2px solid #ddd;}
+.error, .notice, .success {padding:15px;border:2px solid #ddd; margin:4px auto;}
+.error ul, .notice ul, .success ul { margin:0; padding:0; }
+.error p, .notice p, .success p { margin:0;}
 .error {background:#FBE3E4;color:#8a1f11;border-color:#FBC2C4;}
 .notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
 .success {background:#E6EFC2;color:#264409;border-color:#C6D880;}
