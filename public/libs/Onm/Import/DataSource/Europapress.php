@@ -96,7 +96,7 @@ class Europapress {
                 break;
             
             case 'priority':
-                return (string) $this->data->PRIORIDAD;
+                return self::matchPriority((int) $this->data->PRIORIDAD);
                 break;
             
             case 'service':
@@ -205,12 +205,52 @@ class Europapress {
      */
     static public function matchCategoryName($categoryName)
     {
+
         if (empty($categoryName)) {
             throw new \ArgumentException;
         }
         
         $categories = self::getOriginalCategories();
-        return $categories[(string)$categoryName];
+        if (array_key_exists($categoryName, $categories)) {
+            $category = $categories[(string)$categoryName];
+        } else {
+            $category = $categoryName;
+        }
+        return $category;
+
+    }
+    
+    /*
+     * Return an array of localized priorities
+     * 
+     * @param $arg
+     */
+    static public function getOriginalPriorities()
+    {
+        return array(
+            10 => _('Flash'),
+            20 => _('Urgent'),
+            25 => _('General'),
+            30 => _('Normal'),
+        );
+    }
+    
+    /*
+     * Retrives a localized string for the priority from identifier
+     * 
+     */
+    static public function matchPriority($priority)
+    {
+        if (empty($priority)) {
+            throw new \ArgumentException("The priority can not be blank");
+        }
+        $priorities = self::getOriginalPriorities();
+        if (array_key_exists($priority, $priorities)) {
+            $priority = $priorities[(int) $priority];
+        } else {
+            $priority = $priority;
+        }
+        return $priority;
     }
     
     /*
