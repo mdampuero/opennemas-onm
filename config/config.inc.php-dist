@@ -183,6 +183,6 @@ define('ASSET_HOST','assets%02d.opennemas.com');
 /**
  * Agency importer
 */
-define('EFE_AUTH_USERNAME', '');
-define('EFE_AUTH_PASSWORD', '');
-define('EFE_AUTH_SERVER', '');
+define('EUROPAPRESS_AUTH_SERVER', '');
+define('EUROPAPRESS_AUTH_USERNAME', '');
+define('EUROPAPRESS_AUTH_PASSWORD', '');
