@@ -38,27 +38,26 @@ class FTP {
      */
 	public function __construct($params = null)
 	{
-        $this->ftpConnection = ftp_connect($params['server']);
-        
-        // test if the connection was successful
-        if (!$this->ftpConnection) {
-            throw new \Exception(sprintf(_('Can\'t connect to server %s'), $params['server']));
-        } else {
-        
-            // if there is a ftp login configuration use it
-            if (isset($params['user'])) {
-        
-                $loginResult = ftp_login($this->ftpConnection,
-                                         $params['user'],
-                                         $params['password']);
-       
-                if (!$loginResult) {
-                    throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
-                }
-                return $this;
-            }
-            
-        }
+		
+		$this->ftpConnection = @ftp_connect($params['server']);
+		// test if the connection was successful
+		if (!$this->ftpConnection) {
+			throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
+		} 
+
+		// if there is a ftp login configuration use it
+		if (isset($params['user'])) {
+	
+			$loginResult = ftp_login($this->ftpConnection,
+									 $params['user'],
+									 $params['password']);
+   
+			if (!$loginResult) {
+				throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
+			}
+			return $this;
+		}
+
 	}
     /*
      * TODO: Documentar
@@ -68,7 +67,8 @@ class FTP {
         
         $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
         
-        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
+        self::cleanWeirdFiles($cacheDir);
+		$deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
         
         $downloadedFiles = 0;
         
@@ -93,6 +93,27 @@ class FTP {
                      );
         
     }
+	
+	/*
+	 * Clean files that are not valid
+	 * 
+	 * @param $arg
+	 */
+	public function cleanWeirdFiles($cacheDir)
+	{
+		$fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+        
+		$fileListingCleaned = array();
+		
+        foreach($fileListing as $file) {
+			if (filesize($file) < 2) {
+				unlink($file);
+	            $fileListingCleaned []= basename($file);
+			}
+        }
+        
+		return	$fileListingCleaned;
+	}
     
     /**
      * Clean downloaded files in cacheDir that are not present in server

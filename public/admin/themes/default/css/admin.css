@@ -600,6 +600,8 @@ a.unpublishing:hover {
 .notice a {color:#514721;}
 .success a {color:#264409;}
 
+.error a, .notice a, .success a { text-decoration:underline !important; }
+
 
 /* New css properties to print pending comments counter  */
 

@@ -45,6 +45,8 @@ class Europapress implements \Onm\Import\Importer
     
     private $syncPath = '';
     
+    private $lockFile = '';
+    
 
     /**
     * Ensures that we always get one single instance
@@ -80,6 +82,8 @@ class Europapress implements \Onm\Import\Importer
 
         // Merging default configurations with new ones
         $this->config = array_merge($this->defaultConfig, $config);
+        
+        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
         
     }
     
@@ -134,13 +138,48 @@ class Europapress implements \Onm\Import\Importer
             $this->setupSyncEnvironment();
         }
         
+        if (file_exists($this->lockFile)) {
+            throw new \Onm\Import\Synchronizer\LockException(sprintf(_("Seems that other user is syncing the news.")));
+        }
+        
+        $this->lockSync();
+        
         $excludedFiles = self::getLocalFileList($this->syncPath);
         
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
         $ftpSync = $synchronizer->downloadFilesToCacheDir($this->syncPath, $excludedFiles);
+        
+        $this->unlockSync();
 
         return $ftpSync;
             
+    }
+    
+    
+    /*
+     * Creates a lock for avoid concurrent sync by multiple users
+     * 
+     * @param $arg
+     */
+    public function lockSync()
+    {
+        try {
+            touch($this->lockFile);
+            
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+    
+    /*
+     * Delete the lock for avoid concurrent sync by multiple users
+     * 
+     */
+    public function unlockSync()
+    {
+        if (file_exists($this->lockFile)) {
+            unlink($this->lockFile);
+        }
     }
     
     
@@ -238,7 +277,11 @@ class Europapress implements \Onm\Import\Importer
         $elementsCount = 0;
         foreach ($files as $file) {
             
-            $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
+            try {
+                $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
+            } catch (\Exception $e) {
+                continue;
+            }
             
             if ((($params['title'] != '*'))
                 && !(preg_match('@'.$params['title'].'@', $element->title) > 0))

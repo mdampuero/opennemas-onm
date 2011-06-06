@@ -61,7 +61,15 @@ class Europapress {
         $this->agencyName = _('Agency/Europapress');
         
         if(file_exists($xmlFile)) {
-            $this->data = simplexml_load_file($xmlFile);
+            if (filesize($xmlFile) < 2) {
+                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+            }
+            
+            try {
+                $this->data = simplexml_load_file($xmlFile);
+            } catch (Exception $e) {
+                throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
+            }
         } else {
             throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
         }

@@ -28,9 +28,9 @@
    </div>
    {/if}
    
-   {if ($error)}
+   {if (!empty($error))}
    <div class="error">
-		{$error}
+		{render_error}
    </div>
    {/if}
 

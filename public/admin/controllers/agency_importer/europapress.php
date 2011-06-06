@@ -79,7 +79,11 @@ switch($action) {
         //$pager = Pager::factory($pager_options);
         
         $message   = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING );
-        $error = filter_input ( INPUT_GET, 'error' , FILTER_SANITIZE_STRING );
+        if (isset($_SESSION['error']) && !empty($_SESSION['error'])) {
+            $error = $_SESSION['error'];
+        } else {
+            $error = '';
+        }
 
         $tpl->assign('elements', $elements);
         $tpl->assign('categories', $categories);
@@ -164,28 +168,39 @@ switch($action) {
         break;
 
     case 'sync': {
-        
         try {
-            
-            $ftpConfig = array(
-                'server'    => EUROPAPRESS_AUTH_SERVER,
-                'user'      => EUROPAPRESS_AUTH_USERNAME,
-                'password'  => EUROPAPRESS_AUTH_PASSWORD
-            );
-            
-            $epSynchronizer = \Onm\Import\Europapress::getInstance();
-            $message = $epSynchronizer->sync($ftpConfig);
-            $epSynchronizer->updateSyncFile();
-
-        } catch (\Onm\Import\SynchronizationException $e) {
-            $error = $e->getMessage();
+            try {
+                
+                try {
+                    
+                    $ftpConfig = array(
+                        'server'    => EUROPAPRESS_AUTH_SERVER,
+                        'user'      => EUROPAPRESS_AUTH_USERNAME,
+                        'password'  => EUROPAPRESS_AUTH_PASSWORD
+                    );
+                    
+                    $epSynchronizer = \Onm\Import\Europapress::getInstance();
+                    $message = $epSynchronizer->sync($ftpConfig);
+                    $epSynchronizer->updateSyncFile();
+        
+                } catch (\Onm\Import\SynchronizationException $e) {
+                    $_SESSION['error'] = $e->getMessage();
+                }
+                
+            } catch (\Onm\Import\Synchronizer\LockException $e) {
+                $_SESSION['error'] = $e->getMessage() 
+                                    .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),$_SERVER['PHP_SELF']);
+            }
+        } catch (\Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+            $e = new \Onm\Import\Europapress();
+            $e->unlockSync();
         }
         
         $httpParams = array(
                             array('action' => 'list'),
                             array('page' => $page),
                             );
-        if (isset($error)) { $httpParams []= array('error' => $error); }
         if( isset($message)) {
             $httpParams []= array(
                                   'message' => urlencode(sprintf(
@@ -197,6 +212,19 @@ switch($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
         
+    } break;
+    
+    case 'unlock': {
+        
+        $e = new \Onm\Import\Europapress();
+        $e->unlockSync();
+        unset($_SESSION['error']);
+        $httpParams = array(
+                            array('action' => 'list'),
+                            array('page' => $page),
+                            );
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
     } break;
     
 
