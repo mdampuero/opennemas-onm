@@ -102,7 +102,9 @@ div#widget_weather_top
 }
 
 .widget {
-        margin-bottom:10px;
+    margin-bottom:10px;
+    border-bottom: 1px solid #CCCCCC;
+    padding:10px;
 }
 #widget_weather_top
 {
@@ -114,18 +116,18 @@ div#widget_weather_top
 }
     #widget_weather_top .widget-litte-temperatures
     {
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius:5px;
-            behavior: url(./border-radius.htc);
-            display:block;
-            padding:2px 4px;
-            width:35px;
-            text-align: center;
-            color:White;
-            font-weight: bold;
-            float:left;
-            margin-bottom:3px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius:5px;
+        behavior: url(./border-radius.htc);
+        display:block;
+        padding:2px 4px;
+        width:35px;
+        text-align: center;
+        color:White;
+        font-weight: bold;
+        float:left;
+        margin-bottom:3px;
     }
     #widget_weather_top ul { margin:0; padding:0; float:right; display:block; clear:both }
             #widget_weather_top ul li { float:left; list-style:none; padding:0 2px; }
