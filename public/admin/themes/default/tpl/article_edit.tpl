@@ -40,7 +40,7 @@
 <tbody>
 <tr>
     <td valign="top" align="right" style="padding:4px;" width="10%">
-        <label for="title">T&iacute;tulo:</label>
+        <label for="title">{t}Title:{/t}</label>
     </td>
     <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
         <input type="text" id="title" name="title" title="Título de la noticia" tabindex="1"
@@ -49,7 +49,7 @@
 </tr>
 <tr>
     <td valign="top" align="right" style="padding:4px;" width="10%">
-        <label for="title">T&iacute;tulo Interior:</label>
+        <label for="title">{t}Inner title:{/t}</label>
     </td>
     <td style="padding:4px;" nowrap="nowrap" valign="top" width="50%">
         <input type="text" id="title_int" name="title_int" title="Título de la noticia interior"
@@ -98,8 +98,8 @@
                 </td>
                 <td nowrap="nowrap" style="text-align:left;vertical-align:top">
                     <select name="with_comment" id="with_comment" class="required" tabindex="7">
-                        <option value="0" {if $article->with_comment eq 0}selected="selected"{/if}>No</option>
-                        <option value="1" {if $article->with_comment eq 1}selected="selected"{/if}>Si</option>
+                        <option value="0" {if $article->with_comment eq 0}selected="selected"{/if}>{t}No{/t}</option>
+                        <option value="1" {if $article->with_comment eq 1}selected="selected"{/if}>{t}Yes{/t}</option>
                     </select>
                 </td>
             </tr>

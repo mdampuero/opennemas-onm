@@ -125,8 +125,8 @@ switch($action) {
         
         
         $values = array(
-                        'title' => substr($element->title, 0, 105),
-                        'category' => null,
+                        'title' => $element->title,
+                        'category' => 20,
                         'with_comment' => 1,
                         'content_status' => 0,
                         'frontpage' => 0,
@@ -149,8 +149,7 @@ switch($action) {
                         'footer_video2' => '',
                         'ordenArti' => '',
                         'ordenArtiInt' => '',
-                        );    
-        
+                        );
         
         $article = new Article();
         $newArticleID = $article->create($values);

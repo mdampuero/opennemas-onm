@@ -58,16 +58,16 @@ class Europapress {
      */
     public function __construct($xmlFile) {
         
-        $this->agencyName = _('Agency/Europapress');
+        $baseAgency = (defined('SITE_AGENCY')) ? SITE_AGENCY: sprintf(_('Agencies')) ;
+        $this->agencyName = $baseAgency.'/Europapress';
         
         if(file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
                 throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
             }
             
-            try {
-                $this->data = simplexml_load_file($xmlFile);
-            } catch (Exception $e) {
+            $this->data = simplexml_load_file($xmlFile, NULL, LIBXML_NOERROR | LIBXML_NOWARNING);
+            if (!$this->data) {
                 throw new \Exception(sprintf(_("File '%d' can't be loaded."), $xmlFile));
             }
         } else {
@@ -192,10 +192,10 @@ class Europapress {
      */
     static public function getOriginalCategories()
     {
-        return $original_categories =  array(
-                                        'ECO' => _('Economy'),
-                                        'POL' => _('Polytics'),
-                                      );
+        return array(
+                    'ECO' => _('Economy'),
+                    'POL' => _('Polytics'),
+                );
     }
     
     /*
