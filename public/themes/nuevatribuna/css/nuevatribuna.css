@@ -100,6 +100,10 @@ div#widget_weather_top
     float:left;
     display:block;
 }
+
+.widget {
+        margin-bottom:10px;
+}
 #widget_weather_top
 {
     float:right; height:23px;

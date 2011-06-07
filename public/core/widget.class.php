@@ -275,7 +275,7 @@ class Widget extends Content {
     public function render() {
         $method = '_renderlet_'.$this->renderlet;
         //call_user_func_array(array($this, $method), array($smarty));
-        return $this->$method();
+        return "<div class=\"widget\">".$this->$method()."</div>";
     }
 
     private function _renderlet_html() {
