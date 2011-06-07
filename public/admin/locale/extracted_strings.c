@@ -1,6 +1,12 @@
 /* ./themes/default/tpl//accessdenied.tpl */
 gettext("Access to section denied.");
 
+/* ./themes/default/tpl//video/video.tpl */
+gettext("HOME WIDGET");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("You must have 4 favorite videos to show them in homepage.");
+
 /* ./themes/default/tpl//article_images_edit.tpl */
 gettext("There are no images in this category");
 
@@ -143,10 +149,10 @@ gettext("Please, remember save positions after finish.");
 gettext("There is no stands");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("Must have 4 favorites albuns to frontpage.<br />  ");
+gettext("WIDGET HOME");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("WIDGET HOME");
+gettext("Must have 4 favorites albuns to frontpage.<br />  ");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Albums");
@@ -3130,6 +3136,9 @@ gettext("Edit groups and privileges");
 /* ./themes/default/tpl//user.tpl */
 gettext("Sections:");
 
+/* ./themes/default/tpl//user.tpl */
+gettext("HOME");
+
 /* ./themes/default/tpl//updatesystem/index.tpl */
 gettext("Status");
 
@@ -3246,6 +3255,198 @@ gettext("File Manager");
 
 /* ./themes/default/tpl//uploader.tpl */
 gettext("Video uploaded to Youtube.");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("New static page");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("New static page");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Filter");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Visits");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Open in a new window");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Unpublished");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Modify");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("There is no static pages.");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Page title");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Published:");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("(separated with comas)");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Keywords");
+
+/* ./themes/default/tpl//static_pages/static_pages.tpl */
+gettext("Page content");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Static Pages Management");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Editing page");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Título:");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Page title");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Published:");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Yes");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("(separated with comas)");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Direction:");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Keywords");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Page content");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Static Pages Management");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("New static page");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("New page");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("URL");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Visits");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Open in a new window");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Unpublished");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Modify");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("There is no static pages.");
 
 /* ./themes/default/tpl//article_edit.tpl */
 gettext("This article was strong");
