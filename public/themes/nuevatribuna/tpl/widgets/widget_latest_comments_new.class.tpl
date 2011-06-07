@@ -11,7 +11,7 @@
                 <b>{$articles_comments[a]->comment_title}</b> ({$articles_comments[a]->comment_author}):
                 <a style="font-size:0.95em" onmouseout="UnTip()" 
                    onmouseover="Tip('<b>Comentario:</b> {$articles_comments[a]->comment|escape:quotes|escape:javascript|escape:htmlall|clearslash}',BGCOLOR,'#A14646',FONTCOLOR,'#FFFFFF',BORDERCOLOR,'#A14646', SHADOW, false, ABOVE, true, WIDTH, 400)" 
-                   href="{$smarty.const.SITE_URL}{$articles_comments[a]->uri}#{$articles_comments[a]->pk_comment}" title="Ir al comentario" >{$articles_comments[a]->comment|truncate:150:"..."}</a>
+                   href="{$smarty.const.SITE_URL}{$articles_comments[a]->uri}#{$articles_comments[a]->pk_comment}" target="_blank" title="Ir al comentario" >{$articles_comments[a]->comment|truncate:150:"..."}</a>
                 </a>
             </li>
             {sectionelse}
