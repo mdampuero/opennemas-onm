@@ -28,6 +28,7 @@ class WidgetLatestCommentsNew extends Widget_Factory {
                         $this_article->comment = $comm['comment'];
                         $this_article->pk_comment = $comm['pk_comment'];
                         $this_article->comment_author = $comm['author'];
+                        $this_article->comment_title = $comm['comment_title'];
                     }
                 }
                 

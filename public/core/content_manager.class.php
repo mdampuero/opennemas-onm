@@ -670,40 +670,69 @@ class ContentManager
 
 
         $comments = $this->find('Comment','available=1 ',
-                            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 200');
+                            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50');
 
         $pk_list = '';
+        $pk_comment_list ='';
         foreach ($comments as $comment) {
             $pk_list .= ' '.$comment->fk_content.',';
+            $pk_comment_list .= ' '.$comment->pk_content.',';
         }
-        
+
         if (strlen($pk_list)==0) {
             return array();
         }
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
+        $pk_comment_list = substr($pk_comment_list, 0, strlen($pk_comment_list)-1);
 
         $items = $this->find($content_type,'pk_content IN('.$pk_list.')','','`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
         if (empty($items)) {
             return array();
         }
         
+        $sql = 'SELECT * FROM `contents` WHERE `pk_content` IN('.$pk_comment_list.')';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+       
+        if (!$rs) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            
+            return false;
+        } else {
+            while (!$rs->EOF) {
+                $contents []= $rs->fields;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+        
+        $comment_title = $this->find($content_type, $filter, $_order_by, $fields);
         foreach($items as $item) {
-            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'comment'=>'','title'=>$item->title,'permalink'=>$item->permalink,'pk_comment'=>'','author'=>'');
+            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,
+                                                'comment'=>'',
+                                                'title'=>$item->title,
+                                                'permalink'=>$item->permalink,
+                                                'pk_comment'=>'',
+                                                'author'=>'',
+                                                'comment_title' =>'');
         }
 
-        $nbrChar = 400;
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
-                if(strlen($comment->body) > $nbrChar) {
-                      $comment->body = substr($comment->body, 0, $nbrChar);
-                      $comment->body .= '...';
-                 }
+                
+                foreach($contents as $cont){
+                    if ($cont[0]==$comment->pk_comment) {
+                        $articles[$comment->fk_content]['comment_title'] = $cont['title'];
+                    }
+                }
+
                 $articles[$comment->fk_content]['comment'] = $comment->body;
                 $articles[$comment->fk_content]['pk_comment'] = $comment->pk_comment;
                 $articles[$comment->fk_content]['author'] = $comment->author;
             }
-        }
+        }      
         
         return $articles;
     }
