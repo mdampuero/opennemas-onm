@@ -685,6 +685,7 @@ if(isset($_REQUEST['action']) ) {
 
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
+            
             $article->update( $_REQUEST );
 
             if( $_SESSION['_from']=='search_advanced'){
@@ -709,6 +710,7 @@ if(isset($_REQUEST['action']) ) {
         break;
 
         case 'validate': {
+
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
 
@@ -725,6 +727,7 @@ if(isset($_REQUEST['action']) ) {
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $_SESSION['_from'] .
                                  '&id=' . $article->id);
+
         } break;
 
         case 'preview':

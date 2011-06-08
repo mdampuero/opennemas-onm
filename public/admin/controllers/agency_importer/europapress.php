@@ -101,7 +101,7 @@ switch($action) {
 
         try {
             
-            $ep = new Onm\Import\Europapress();
+            $ep = new \Onm\Import\Europapress();
             $element = $ep->findByID($id);
             
         } catch (Exception $e) {

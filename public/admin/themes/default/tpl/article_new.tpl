@@ -60,16 +60,16 @@
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
 							<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="6">
-                                                               <option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
-                                                               {section name=as loop=$allcategorys}
-                                                                   {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-									<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-									{section name=su loop=$subcat[as]}
-                                                                            {if $subcat[as][su]->internal_category eq 1}
-                                                                                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                                                            {/if}
-									{/section}
-                                                                    {/acl}
+								<option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
+								{section name=as loop=$allcategorys}
+									{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+								<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+										{section name=su loop=$subcat[as]}
+										{if $subcat[as][su]->internal_category eq 1}
+								<option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+										{/if}
+										{/section}
+									{/acl}
 								{/section}
 							</select>
 						</td>
@@ -88,15 +88,15 @@
 					</tr>
 					 <tr>
 						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="with_comment">{t}Available:{/t}</label>
+							<label for="content_status">{t}Available:{/t}</label>
 						</td>
 
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-							<select name="content_status" id="content_status" class="required" tabindex="7">
+							<select name="available" id="available" class="required" tabindex="7">
 								<option value="0" {if $article->available eq 0}selected{/if}>{t}No{/t}</option>
 								<option value="1" {if $article->available eq 1}selected{/if}>{t}Yes{/t}</option>
 						   </select>
-							<span style="font-size:9px;"{t}(publish directly){/t}</span>
+							<span style="font-size:9px;">{t}(publish directly){/t}</span>
 						</td>
 					</tr>
 					<tr>

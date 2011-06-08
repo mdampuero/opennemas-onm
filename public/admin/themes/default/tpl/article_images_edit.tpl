@@ -67,7 +67,7 @@
 							 </tr><tr>
 							 <td align='left'> 					 				
 								  <div id="droppable_div1">	 																							
-										<img src="../media/images/default_img.jpg" id="change1" name="{$article->img1}" border="0" width="300px" />
+										<img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change1" name="{$article->img1}" border="0" width="300px" />
                                         
 									</div>					
 						  	</td>
@@ -247,7 +247,7 @@
 						 </tr><tr>
 						 <td align='left'> 					 				
 							  <div id="droppable_div2">	 																							
-									<img src="../media/images/default_img.jpg" id="change2" name="{$article->img2}" border="0" width="300px" />
+									<img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change2" name="{$article->img2}" border="0" width="300px" />
                                     
 								</div>					
 					  	</td><td colspan="2" style="text-align:left;white-space:normal;" width="400">
@@ -308,15 +308,14 @@
 					<h2 style="color:#2f6d9d;">Video Interior:</h2></td>
 					 <td  align='right'>   
 					 	<a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">
-                                            <img src="themes/default/images/remove_image.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" /> </a>
-                        
+                        <img src="themes/default/images/remove_image.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" /> </a>                        
          			 </td>
 					 </tr><tr>
 					 <td align='left'> 
 					  
 					    <input type="hidden" id="input_video2" name="fk_video2" value="" size="70">				 
 					   <div id="droppable_div3">						 																			
-						 <img src="../media/images/default_img.jpg" id="change3" name="default_img" border="0" width="300px" />						
+						 <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change3" name="default_img" border="0" width="300px" />						
 						</div>
 					</td>	<td colspan="2" style="text-align:left;white-space:normal;">
 						 <div id="informa3"  style="text-align:left;overflow:auto;width:260px;>
