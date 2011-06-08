@@ -81,8 +81,7 @@ if(isset($_REQUEST['action']) ) {
         case 'list':
             
             // Check if the user can edit frontpages
-            if(!Acl::check('ARTICLE_FRONTPAGE'))
-            {
+            if(!Acl::check('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
             } elseif (!Acl::_C($categoryID)) {
                 $categoryID = $_SESSION['accesscategories'][0];

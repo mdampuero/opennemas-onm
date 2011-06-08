@@ -92,7 +92,7 @@
 						</td>
 
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-							<select name="available" id="available" class="required" tabindex="7">
+							<select name="content_status" id="available" class="required" tabindex="7">
 								<option value="0" {if $article->available eq 0}selected{/if}>{t}No{/t}</option>
 								<option value="1" {if $article->available eq 1}selected{/if}>{t}Yes{/t}</option>
 						   </select>
