@@ -59,7 +59,7 @@ class Europapress {
     public function __construct($xmlFile) {
         
         $baseAgency = (defined('SITE_AGENCY')) ? SITE_AGENCY: sprintf(_('Agencies')) ;
-        $this->agencyName = $baseAgency.'/Europapress';
+        $this->agencyName = $baseAgency.' | Europapress';
         
         if(file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
