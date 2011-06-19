@@ -7,7 +7,7 @@ function smarty_function_render_error($params, &$smarty) {
             $error .= "<li>{$key}</li>";
         }
     } else {
-        $error = "<ul>{$_SESSION['error']}</ul>";
+        $error = "<ul><li>{$_SESSION['error']}</li></ul>";
     }
     $error .= "</ul></p>"; 
     unset($_SESSION['error']);

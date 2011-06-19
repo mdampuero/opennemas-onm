@@ -59,6 +59,7 @@ class FTP {
 		}
 
 	}
+	
     /*
      * TODO: Documentar
      */
@@ -66,7 +67,7 @@ class FTP {
     {
         
         $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
-        
+		
         self::cleanWeirdFiles($cacheDir);
 		$deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
         
@@ -74,15 +75,17 @@ class FTP {
         
         if (is_writable($cacheDir)) {
             $elements = array();
-            foreach($files as $file) {
-                $elements []= $file;
-                
-                $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
-                if (!file_exists($localFilePath)){
-                    ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
-                    $downloadedFiles++;
-                }
-            }
+            if (count($files) > 0) {
+				foreach($files as $file) {
+					$elements []= $file;
+					
+					$localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
+					if (!file_exists($localFilePath)){
+						ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
+						$downloadedFiles++;
+					}
+				}
+			}
         } else {
             throw new Exception(sprintf(_('Directory %s is not writable.'),$cacheDir));
         }

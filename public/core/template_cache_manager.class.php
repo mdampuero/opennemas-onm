@@ -329,7 +329,7 @@ class TemplateCacheManager
     public function saveConfig($config)
     {
         $filename = $this->smarty->config_dir . 'cache.conf';
-        $fp = fopen($filename, 'w');
+        $fp = @fopen($filename, 'w');
 
         if($fp !== false) {
             foreach($config as $section => $entry) {
@@ -337,7 +337,6 @@ class TemplateCacheManager
                 fputs($fp, 'caching = ' . $entry['caching'] . "\n");
                 fputs($fp, 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n");
             }
-
             fclose($fp);
         } else {
             throw new Exception('Error open file: ' . $filename);
