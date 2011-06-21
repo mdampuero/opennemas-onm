@@ -1,15 +1,15 @@
 <table  class="adminlist"  id="{$category->pk_content_category}">
     <tr {cycle values="class=row0,class=row1"}>
         <td style="padding: 0px 10px; height: 40px;">
-             <b> {$category->title|clearslash|escape:"html"}</b>
+             <strong> {$category->title|clearslash|escape:"html"}</strong>
         </td>
         <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
           {if $category->internal_category eq 3}
-             <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
+             <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" title="Sección de Album" alt="Sección de Album" />
           {elseif $categorys->internal_category eq 5}
-             <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
+             <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" title="Sección de Videos"  alt="Sección de Videos" />
           {else}
-              <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
+              <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" title="Sección Global"  alt="Sección Global" />
           {/if}
         </td>
          <td style="padding: 0px 10px; height: 40px;width:80px;" align="center">
