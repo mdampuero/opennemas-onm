@@ -172,9 +172,12 @@ class cSearch
         $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
         //$szMatch = " CONTAINS (metadata, '".$szSourceTags."')";
         //$szMatch = "contents.metadata LIKE '%".$szSourceTags."%'";
-        if($szContentsTypeTitle=='photo'){
+        if(!stristr($szContentsTypeTitle, 'photo') === FALSE){
              $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch)). " as _height";
              $szMatch2 = '1=1';
+        }elseif(!stristr($szContentsTypeTitle, 'comment') === FALSE){
+             $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch2)). " as _height";
+             $szMatch = '1=1';
         }else{
             $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch)) .'+'.(($szMatch2)) . " as _height";
         }
