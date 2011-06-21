@@ -44,7 +44,7 @@ $tpl->assign('titulo_barra', 'Comment Management');
 // Initialize request parameters
 $page = filter_input ( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
 //Al borrar un comentario, $_POST['action'] nunca se asignaba a $action
-if(isset($_POST['action']) && ($_POST['action'] == 'delete' || $_POST['action'] == 'read' || $_POST['action'] == 'update')){
+if(isset($_POST['action']) && ($_POST['action'] == 'delete' || $_POST['action'] == 'mdelete' || $_POST['action'] == 'read' || $_POST['action'] == 'update')){
     $action = filter_input ( INPUT_POST, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }else{
     $action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
@@ -310,7 +310,7 @@ if(isset($action)) {
             }
             
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $category . '&page=' . $page);
+                                 $category . '&comment_status=' . $_REQUEST['comment_status'] . '&page=' . $page);
         } break;
         
         default: {
