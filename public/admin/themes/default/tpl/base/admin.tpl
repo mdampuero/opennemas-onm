@@ -72,7 +72,7 @@
             <div id="user_box" style="width:auto;">
                 <div style="padding-right:8px; float:left;" nowrap="nowrap">
                     <div id="pending_comments" title="{t}Pending comments{/t}">
-                        <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment.php">
+                        <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment.php?action=list&category=todos">
                             <span class="point"></span>  
                             <em>&nbsp;{count_pending_comments}&nbsp;</em>
                         </a>

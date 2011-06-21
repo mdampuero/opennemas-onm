@@ -11,7 +11,7 @@ $menuXml = '<?xml version="1.0"?>
     <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="#">
         <node title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'" link="article.php?action=list_pendientes" privilege="ARTICLE_LIST_PEND" />
         <node title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'" link="controllers/opinion/opinion.php" privilege="OPINION_ADMIN" />
-        <node title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'" link="controllers/comment.php" privilege="COMMENT_ADMIN" />
+        <node title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'" link="controllers/comment.php?action=list" privilege="COMMENT_ADMIN" />
         <!--<node title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'" link="poll.php" privilege="POLL_ADMIN" />-->
         <node title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'" link="controllers/advertisement/advertisement.php" privilege="ADVERTISEMENT_ADMIN" />
         <node title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'" link="static_pages.php" privilege="STATIC_ADMIN" />

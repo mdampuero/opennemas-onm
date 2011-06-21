@@ -36,7 +36,7 @@
 
         {if $category neq 'home'}
         <td  align="center"  class="un_width" style="width:20px;">
-                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
+                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}&category={$category}" title="Despublicar">
                     <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
         </td>
             <td  align="center"  class="un_width"  style="width:20px;">
@@ -44,7 +44,7 @@
             </td>
         {else}
             <td  align="center"  class="un_width" style="width:25px;">
-                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}" title="Despublicar">
+                <a href="controllers/widget/widget.php?action=unpublish&id={$item->pk_widget}&category={$category}" title="Despublicar">
                     <img class="portada" src="{$params.IMAGE_DIR}publish_no_small.gif" border="0" alt="Despublicar" /></a>
             </td>
         {/if}

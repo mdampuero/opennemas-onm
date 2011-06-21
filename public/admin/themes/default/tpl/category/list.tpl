@@ -52,11 +52,15 @@
             <table class="adminlist" id="tabla"  width="100%" style="margin-top:10px;">
                 <thead>
                     <tr>
-                        <th width="25%" class="title">{t}Title{/t}</th>
-                        <th width="25%" align="center">{t}Internal name{/t}</th>
-                        <th align="center" width="10%">{t}See in menu{/t}</th>
-                        <th align="center" width="15%">{t}Edit{/t}</th>
-                        <th align="center" width="25%">{t}Delete{/t}</th>
+                        <th width="360px">{t}Title{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Type{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Articles{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
+                        <th align="center" padding="10px" width="100px">{t}See in menu{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,11 +110,11 @@
             <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
                 <thead>
                     <tr>
-                        <th width="25%" class="title">T&iacute;tulo</th>
+                        <th width="20%" class="title">T&iacute;tulo</th>
                         <th width="25%" align="center">Nombre interno</th>
                         <th align="center" width="10%">Ver En menu</th>
                         <th align="center" width="15%">Modificar</th>
-                        <th align="center" width="25%">Eliminar</th>
+                        <th align="center" width="15%">Eliminar</th>
                     </tr>
                 </thead>
                 <tr>

@@ -19,6 +19,7 @@ require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 // Widget instance
 $widget = new Widget();
+$c = new Content();
 $cm = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
@@ -82,7 +83,10 @@ switch($action) {
 
     case 'unpublish': {
         //$widget->read($_REQUEST['id']);
-        $cm->unpublishFromHomePage($_REQUEST['id']);
+        $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+        /* Limpiar la cache de portada de todas las categorias */
+        $c->refreshFrontpage();
+        //$refresh = Content::refreshFrontpageForAllCategories();
 
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
@@ -91,6 +95,9 @@ switch($action) {
     case 'archive': {
         //$widget->read($_REQUEST['id']);
         $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+        /* Limpiar la cache de portada de todas las categorias */
+        $c->refreshFrontpage();
+        //$refresh = Content::refreshFrontpageForAllCategories();
 
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;

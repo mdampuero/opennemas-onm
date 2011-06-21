@@ -57,7 +57,8 @@
 		<tr>
 			<th class="title" align="left" style="width:40%;padding:10px;">{t}Name Surname{/t}</th>
 			<th class="title" style="width:20%;padding:10px;">{t}Username{/t}</th>
-			<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>
+			<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>                        
+                        <th class="title" style="width:20%;padding:10px;" align="center">{t}Enable/Disable{/t}</th>
 			<th class="title" style="width:20%;padding:10px;" align="right">{t}Actions{/t}</th>
 		</tr>
 		</thead>
@@ -67,9 +68,9 @@
 		<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
 
 			<td style="padding:10px;">
-						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
+                                <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
 				<a href="?action=read&id={$users[c]->id}" title="{t}Edit user{/t}">
-					{$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
+                                    {$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
 			</td>
 			<td style="padding:10px;">
 				{$users[c]->login}
@@ -80,6 +81,17 @@
 							{$user_groups[u]->name}
 					{/if}
 				{/section}
+			</td>
+                        <td style="padding:10px;" align="center">
+                                {if $users[c]->authorize eq 1}
+                                    <a href="?id={$users[c]->id}&amp;action=change_authorize&amp;status=1&amp;page={$paginacion->_currentPage}" title="Habilitado">
+                                        <img border="0" alt="Habilitado" src="{$params.IMAGE_DIR}publish_g.png">
+                                    </a>
+                                {else}
+                                    <a href="?id={$users[c]->id}&amp;action=change_authorize&amp;status=0&amp;page={$paginacion->_currentPage}" title="Desabilitado" >
+                                        <img border="0" alt="Desabilitado" src="{$params.IMAGE_DIR}publish_r.png">
+                                    </a>
+                                {/if}
 			</td>
 			<td style="padding:10px;" align="right">
 				<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page}" title="{t}Edit user{/t}">
