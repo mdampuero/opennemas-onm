@@ -119,7 +119,7 @@ class ContentManager
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->load_obj($rs, $content_type);
-        
+
         return $items;
     }
 
@@ -187,6 +187,11 @@ class ContentManager
     static public function saveContentPositionsForHomePage($categoryID, $elements =  array())
     {
 
+        /**
+         * Starting the Transaction
+        */
+        $GLOBALS['application']->conn->StartTrans();
+
         // Clean all the contents for this category after insert the new ones
         if(!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
             return false;
@@ -196,12 +201,6 @@ class ContentManager
 
             // Foreach element setup the sql values statement part
             foreach($elements as $element) {
-
-                //$positions[] = "( ".$element['id'].", "
-                //                .$categoryID.", "
-                //                .$element['position'].", "
-                //                ."'".$element['placeholder']."', "
-                //                ."'".$element['content_type']."')";
 
                 $positions[] = array(
                                         $element['id'],
@@ -231,10 +230,13 @@ class ContentManager
                 return true;
             }
 
-
         }
 
-        return null;
+        /**
+         * Finishing transaction
+        */
+        return $GLOBALS['application']->conn->CompleteTrans();
+
     }
 
     /**
@@ -262,7 +264,7 @@ class ContentManager
         }
 
     }
-    
+
     static public function filterContentsbyProperty($array, $property)
     {
 
@@ -271,10 +273,10 @@ class ContentManager
         $filterValues = array_values($property);
         $filterKey = $filterKeys[0];
         $filterValues = $filterValues[0];
-        
+
         $finalArray = array();
         foreach($array as $element) {
-            
+
             if(isset($element->home_placeholder)) {
                 var_dump($element);
             }
@@ -287,7 +289,7 @@ class ContentManager
         }
         return $finalArray;
     }
-    
+
     public function sortByPosition($a, $b)
     {
         return ($a->position == $b->position) ? 0 : (($a->position > $b->position) ? 1 : -1);
@@ -468,7 +470,7 @@ class ContentManager
                 $_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        
+
         if($rs->_numOfRows<$num && $not_empty) {
             $sql = 'SELECT * FROM '.$_tables .
                     'WHERE '.$_where.$_category.$_author.' AND `contents`.`pk_content`=`pk_'.strtolower($content_type).'` '.
@@ -690,15 +692,15 @@ class ContentManager
         if (empty($items)) {
             return array();
         }
-        
+
         $sql = 'SELECT * FROM `contents` WHERE `pk_content` IN('.$pk_comment_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
-       
+
         if (!$rs) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            
+
             return false;
         } else {
             while (!$rs->EOF) {
@@ -707,7 +709,7 @@ class ContentManager
             }
             $rs->Close(); # optional
         }
-        
+
         $comment_title = $this->find($content_type, $filter, $_order_by, $fields);
         foreach($items as $item) {
             $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,
@@ -721,7 +723,7 @@ class ContentManager
 
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
-                
+
                 foreach($contents as $cont){
                     if ($cont[0]==$comment->pk_comment) {
                         $articles[$comment->fk_content]['comment_title'] = $cont['title'];
@@ -732,11 +734,11 @@ class ContentManager
                 $articles[$comment->fk_content]['pk_comment'] = $comment->pk_comment;
                 $articles[$comment->fk_content]['author'] = $comment->author;
             }
-        }      
-        
+        }
+
         return $articles;
     }
-    
+
     public function getLatestComments()
     {
         $sql = 'SELECT *
@@ -749,8 +751,8 @@ class ContentManager
                 ORDER BY contents.created DESC
                 LIMIT 0,6';
         $contents = array();
-                
-        
+
+
         $latestCommenteContentSQL = $GLOBALS['application']->conn->Prepare($sql);
         $rs = $GLOBALS['application']->conn->Execute($latestCommenteContentSQL);
         if (!$rs) {
@@ -762,8 +764,8 @@ class ContentManager
             }
             $rs->Close(); # optional
         }
-        
-        return $contents;   
+
+        return $contents;
     }
 
 

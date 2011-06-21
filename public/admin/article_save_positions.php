@@ -21,17 +21,19 @@ if(isset($_REQUEST['category'])) {
     $tpl->delete($category_name . '|0');
 }
 
-$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
-                     ' - QueryString: ' . $_SERVER['QUERY_STRING'], PEAR_LOG_INFO );
-
 require_once('application_events.php');
 
-// Merda de magic_quotes
 String_Utils::disabled_magic_quotes();
 
 $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 
 $places = json_decode($_REQUEST['id'], true);
+
+/**
+ * Log this action
+*/
+$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
+                     ' - QueryString: ' . $_REQUEST['id'] , PEAR_LOG_INFO );
 
 $_frontpage = array();
 $_positions = array();
@@ -44,9 +46,11 @@ $content_positions = array();
 $i=0;
 
 foreach($places as $id => $params) {
+
     // This element isn't an article so store it in new content_position db table
     if($params['content_type'] != '1'
-       && preg_match('@^placeholder@',$params['placeholder']) ) {
+       && preg_match('@^placeholder@',$params['placeholder']) )
+    {
         $content_positions[] = array(
                                     'id' => $id,
                                     'category' => $categoryID,
@@ -69,11 +73,10 @@ foreach($places as $id => $params) {
         }
     }
 
-
 }
 
 // Save contents, the new way
-$positionsSaved = ContentManager::saveContentPositionsForHomePage($categoryID, $content_positions);
+$savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $content_positions);
 
 // Save contents, the old way
 $article = new Article();
@@ -87,7 +90,7 @@ if( $_REQUEST['category']!='home' ){
 
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {
-    if( $ok == 1 ) {
+    if( $ok == 1  && $savedProperly) {
         echo('<div class="success">Posiciones guardadas correctamente.</div>');
     } else {
         echo('<div class="success">Hubo errores al guardar las posiciones. Inténtelo de nuevos.</div>');
