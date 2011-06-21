@@ -114,6 +114,18 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
         } break;
         
+        case 'change_authorize': {
+            $user = new User( $_REQUEST['id'] );
+            //Autorizar o no , comprobar...
+            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            if($status == 1){
+                $user->unauthorize_user($user->id);
+            } else {
+                $user->authorize_user($user->id);
+            }
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+        } break;
+        
         case 'validate': {
             $user = null;
             if(empty($_POST["id"])) {

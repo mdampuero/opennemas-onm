@@ -42,6 +42,11 @@ if( isset($_REQUEST['action'])){
                     }
                 }
     
+                /**
+                 * Validar el usuario si esta authorize=1, sino mensaje de usuario de baja.
+                 */
+                if($user->authorize == 1){ 
+
                 // Load session
                 require_once('session_bootstrap.php');
     
@@ -70,7 +75,10 @@ if( isset($_REQUEST['action'])){
                 Privileges_check::loadSessionExpireTime();
     
                 //initHandleErrorPrivileges();
-                Application::forward(SITE_URL_ADMIN.SS.'index.php');
+                    Application::forward(SITE_URL_ADMIN.SS.'index.php');
+                } else{
+                    $tpl->assign('message', 'Este usuario se ha dado de baja. Consulte el administrador.');
+                }
             } else {
                 
                 // Show google captcha

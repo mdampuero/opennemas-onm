@@ -48,6 +48,7 @@ class User
     var $lastname         = null;
     var $address          = null;
     var $phone            = null;
+    var $authorize        = null; 
     var $id_user_group    = null;
     var $accesscategories = null;
     var $fk_user_group    = null;
@@ -136,6 +137,7 @@ class User
         $this->lastname         = $rs->fields['lastname'];
         $this->address          = $rs->fields['address'];
         $this->phone            = $rs->fields['phone'];
+        $this->authorize        = $rs->fields['authorize'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
     }
@@ -437,6 +439,7 @@ class User
             $this->lastname     = $data['lastname'];
             $this->address      = $data['address'];
             $this->phone        = $data['phone'];
+            $this->authorize    = $data['authorize'];            
             $this->fk_user_group= $data['fk_user_group'];
             
             if(isset($data['ids_category'])) {
@@ -461,9 +464,9 @@ class User
         $this->firstname    = null;
         $this->lastname     = null;
         $this->address      = null;
+        $this->authorize    = null;
         $this->phone        = null;
         $this->fk_user_group= null;
-        
         $this->accesscategories = null;
     }    
 
@@ -623,6 +626,40 @@ class User
             return $messages;
         } else {
             return false;
+        }
+    }
+    
+    /**
+     * Functions that manages the state of an user Enabled=1/Disabled=0
+     * 
+     * @param type $id
+     * @return type 
+     */
+    public function unauthorize_user($id)
+    {
+        $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
+        
+        if($GLOBALS['application']->conn->Execute($sql) === false) {
+          
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+            return;
+        }
+    }
+    
+    public function authorize_user($id)
+    {
+        $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
+        
+        if($GLOBALS['application']->conn->Execute($sql) === false) {
+          
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+            return;
         }
     }
 }
