@@ -9,43 +9,43 @@ Deny from all
     RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    
+
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
     #Inner Article
     RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
-    
+
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    
+
     #Inner Opinion
     RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
     #Section
     RewriteCond %{QUERY_STRING} ref=58
     RewriteRule ^seccion\.asp$ /estaticas/quienes-somos.html? [R=301,L,NC]
-    RewriteCond %{QUERY_STRING} ref=54    
+    RewriteCond %{QUERY_STRING} ref=54
     RewriteRule ^seccion\.asp$ /estaticas/aviso-legal.html? [R=301,L,NC]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
-    
-    #SECTIONS: seccion/51/SOCIEDAD/    
+
+    #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{REQUEST_URI} [A-Z]
     RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
-    
+
     #Other issues/topics/modules
-   
+
     RewriteRule ^index.asp$ / [R=301,L,NC]
     RewriteRule ^enviar-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^imprimir-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^seccion.asp$ / [R=301,L,NC]
     RewriteRule ^rss/portada.asp$ / [R=301,L,NC]
     RewriteRule ^editmaker/i18n/text_idioma.asp$ / [R=301,L,NC]
-    #--------------------------------------------------------    
-    
+    #--------------------------------------------------------
+
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
@@ -98,6 +98,9 @@ Deny from all
     RewriteRule ^sitemapweb.xml?$ controllers/sitemap.php?action=web [L,NC]
     RewriteRule ^sitemap.xml?$ controllers/sitemap.php [L,NC]
 
+    #Robots.txt
+    RewriteRule ^robots.txt?$ controllers/robots.php [L,NC]
+
     #Advertisement
     RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
     RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
@@ -112,13 +115,14 @@ Deny from all
     #Static pages
     RewriteRule ^estaticas/([a-z0-9\-]+)(\.html|/)?$ controllers/statics.php?slug=$1 [L,NC]
 
-    #Newsletter links 
+    #Newsletter links
     RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
     RewriteRule ^newsletter/?$  controllers/subscripcionBoletin.php [L,NC]
 
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
     RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
+
 
     ErrorDocument 404 /controllers/404.html
 </IfModule>
