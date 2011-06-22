@@ -1,13 +1,20 @@
 <?php
-/**
- * SimpleMEnu
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * @category Onm
- * @package Onm_UI
- * @subpackage Menu
- * @copyright Copyright (c) 2005-2010 OpenHost S.L. http://www.openhost.es)
- * @license http://framework.zend.com/license
- * @version    $Id: simple_menu.class.php 1 2011-02-23 01:37:48Z frandieguez $
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Onm\UI;
+
+/**
+ * Class for generate a menu from XML file, with support for ACLs system.
+ *
+ * @package    Onm
+ * @subpackage UI
+ * @author     Fran Dieguez <fran@openhost.es>
+ * @version    SVN: $Id: simple_menu.class.php 28842 Mér Xuñ 22 16:37:26 2011 frandieguez $
  */
 class SimpleMenu {
 
@@ -15,15 +22,15 @@ class SimpleMenu {
     private $errors = null;
 
     /**
-    * Short description
-    *
-    * @param type $paramName[, explanation of the variable]
-    * @return type[, explanation]
-    * @throws ExceptionClass [description]
-    */
-    public function __construct($menuXML) {
+     * Initilizes the object from an XML file
+     *
+     * @param string $menuXMLFile   the path to the XML menu file
+     *
+     * @return void
+     */
+    public function __construct($menuXMLFile) {
 
-        $menu = simplexml_load_string($menuXML);
+        $menu = simplexml_load_string($menuXMLFile);
 
         // If there were errors while loading the menu store them
         // otherwise store the menu
@@ -42,12 +49,12 @@ class SimpleMenu {
     }
 
     /**
-    * Short description
-    *
-    * @param type $paramName[, explanation of the variable]
-    * @return type[, explanation]
-    * @throws ExceptionClass [description]
-    */
+     * Returns the HTML for a given XML menu file
+     *
+     * @param array  $params     the params for this function
+     *
+     * @return string    the HTML for this menu
+     */
     public function getHTML($params = array()) {
 
         if(is_null($this->errors)) {
@@ -72,7 +79,7 @@ class SimpleMenu {
                         $html .= "<ul>";
 
                         foreach($menu as $submenu) {
-                            if ((!isset($submenu['privilege']) 
+                            if ((!isset($submenu['privilege'])
                                 || $this->checkAcl($submenu['privilege'])))
                             {
                                 $html.= "<li>";
@@ -107,7 +114,7 @@ class SimpleMenu {
             $privs = explode(',', $privilege);
             $test = false;
             foreach($privs as $priv) {
-                $test = $test || Acl::check($priv);
+                $test = $test || \Acl::check($priv);
             }
 
             return $test;
