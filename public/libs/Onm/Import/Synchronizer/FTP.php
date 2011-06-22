@@ -1,57 +1,45 @@
 <?php
-/**
- *  Copyright (C) 2011 by OpenHost S.L.
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
- **/
-/**
- * (c) Copyright Mér Mai 25 11:26:28 2011 Francisco Diéguez. All Rights Reserved.
-*/
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Onm\Import\Synchronizer;
 
-/*
- * class Sync
+/**
+ * Class to synchronize local folders with an external FTP folder.
+ *
+ * @package    Onm
+ * @subpackage Import
+ * @author     Fran Dieguez <fran@openhost.es>
+ * @version    SVN: $Id: FTP.php 28842 Mér Xuñ 22 16:24:40 2011 frandieguez $
  */
 class FTP {
 
 
     /*
      * Opens an FTP connection with the parameters of the object
-     * 
+     *
      * @throws Exception, if something went wrong while connecting to FTP server
      */
 	public function __construct($params = null)
 	{
-		
+
 		$this->ftpConnection = @ftp_connect($params['server']);
 		// test if the connection was successful
 		if (!$this->ftpConnection) {
 			throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
-		} 
+		}
 
 		// if there is a ftp login configuration use it
 		if (isset($params['user'])) {
-	
+
 			$loginResult = ftp_login($this->ftpConnection,
 									 $params['user'],
 									 $params['password']);
-   
+
 			if (!$loginResult) {
 				throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
 			}
@@ -59,26 +47,32 @@ class FTP {
 		}
 
 	}
-	
-    /*
-     * TODO: Documentar
-     */
-    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
+
+    /**
+	 * Downloads files from an FTP to a $cacheDir.
+	 *
+	 * @param string $cacheDir Path to the directory where save files to.
+	 *
+	 * @return array counts of deleted and downloaded files
+	 *
+	 * @throws <b>Exception</b> $cacheDir not writable.
+	 */
+	public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
     {
-        
+
         $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
-		
+
         self::cleanWeirdFiles($cacheDir);
 		$deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
-        
+
         $downloadedFiles = 0;
-        
+
         if (is_writable($cacheDir)) {
             $elements = array();
             if (count($files) > 0) {
 				foreach($files as $file) {
 					$elements []= $file;
-					
+
 					$localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
 					if (!file_exists($localFilePath)){
 						ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
@@ -89,53 +83,58 @@ class FTP {
         } else {
             throw new Exception(sprintf(_('Directory %s is not writable.'),$cacheDir));
         }
-        
+
         return array(
                      "deleted" => $deletedFiles,
                      "downloaded" => $downloadedFiles
                      );
-        
+
     }
-	
-	/*
-	 * Clean files that are not valid
-	 * 
-	 * @param $arg
+
+	/**
+	 * Remove empty or invalid files from $cacheDir.
+	 *
+	 * @param string $cacheDir The directory where remove files from.
+	 *
+	 * @return array list of deleted files
 	 */
 	public function cleanWeirdFiles($cacheDir)
 	{
 		$fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
-        
+
 		$fileListingCleaned = array();
-		
+
         foreach($fileListing as $file) {
 			if (filesize($file) < 2) {
 				unlink($file);
 	            $fileListingCleaned []= basename($file);
 			}
         }
-        
+
 		return	$fileListingCleaned;
 	}
-    
+
     /**
      * Clean downloaded files in cacheDir that are not present in server
      *
-     * @param files, the list of files present in server
+     * @param string 	$cacheDir 		the directory where remove files
+     * @param string 	$serverFiles 	the list of files present in server
+     * @param string 	$localFiles 	the list of local files 
+     *
      * @return boolean, true if all went well
     */
     static public function cleanFiles($cacheDir, $serverFiles, $localFileList)
     {
 
         $deletedFiles = 0;
-        
+
         if (count($localFileList) > 0) {
-            
+
             $serverFileList = array();
             foreach ($serverFiles as $key) {
                 $serverFileList []= basename($key);
             }
-            
+
             foreach ($localFileList as $file) {
                 if(!in_array($file,$serverFileList)) {
                     unlink($cacheDir.'/'.$file);
@@ -143,9 +142,9 @@ class FTP {
                 }
             }
         }
-                
+
         return $deletedFiles;
     }
-    
+
 
 }

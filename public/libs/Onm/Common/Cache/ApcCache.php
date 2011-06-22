@@ -1,18 +1,10 @@
 <?php
 /*
- *  $Id$
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Onm\Common\Cache;
@@ -25,6 +17,28 @@ namespace Onm\Common\Cache;
  */
 class APCCache extends AbstractCache
 {
+
+   /*
+    * Initilizes the APCCache
+    *
+    * @param $options
+    */
+    public function __construct($options= array())
+    {
+        $this->initialize($options);
+    }
+
+    /**
+    * Initializes this APCCache instance.
+    */
+    public function initialize($options = array())
+    {
+        if (!function_exists('apc_store') || !ini_get('apc.enabled'))
+        {
+            throw new \Exception('You must have APC installed and enabled to use APCCache class.');
+        }
+    }
+
     /**
      * {@inheritdoc}
      */

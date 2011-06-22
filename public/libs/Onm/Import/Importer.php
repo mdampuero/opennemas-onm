@@ -20,17 +20,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  **/
-/**
- * Base interface for create resource importers
- *
- * @package Import
- * @author Fran Dieguez <fran@openhost.es>, 2011
- **/
 namespace Onm\Import;
 
+/**
+ * Base interface for create resource importers.
+ *
+ * @package    Onm
+ * @subpackage Import
+ * @author     Fran Dieguez <fran@openhost.es>, 2011
+ * @version    SVN: $Id: Importer.php 28842 Mér Xuñ 22 16:22:02 2011 frandieguez $
+ */
 interface Importer {
-    
+
     public function findAll();
     public function findAllBy($params);
-    
-} // END interface 
+
+} // END interface
