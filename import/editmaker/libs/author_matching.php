@@ -21,7 +21,7 @@ require '../config/config.inc.php';
 $ihelper = new ImportHelper(dirname(__FILE__) . '/import.log');
 
 require SITE_LIBS_PATH.'/adodb5/adodb.inc.php';
-Application::import_libs('*');
+Application::importLibs('*');
 $app = Application::load();
 
 /**
@@ -31,10 +31,10 @@ require 'editmaker-config.inc.php';
 
 function getOriginalAuthors()
 {
-    
+
 }
 
 function getNewAuthors()
 {
-    
+
 }

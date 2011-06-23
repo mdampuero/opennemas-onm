@@ -1,20 +1,20 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Setup app
 */
 require_once('../../bootstrap.php');
 require_once('../session_bootstrap.php');
 
-// Ejemplo para tener objeto global
-require_once(SITE_CORE_PATH.'application.class.php');
-Application::import_libs('*');
-$app = Application::load();
-
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-$tpl->assign('titulo_barra', 'Papelera de elementos');
-//require_once(SITE_CORE_PATH.'img_galery.class.php'); // no existe
+$tpl->assign('titulo_barra', _('Trash'));
 require_once(SITE_CORE_PATH.'album_photo.class.php');
 
 if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
@@ -107,7 +107,7 @@ if(isset($_REQUEST['action']) ) {
                     case '1':
                         $archive_php= strtolower($name).'.php'; //  Article
                         break;
-                    
+
                     case '2':
                         $archive_php='controllers/advertisement/'.strtolower($name).'.php'; //Advertisement
                         break;
@@ -149,7 +149,7 @@ if(isset($_REQUEST['action']) ) {
                         $archive_php= strtolower($name).'.php';//Kiosko
                         break;
                 }
-                
+
 				//if($name=='article'){$action='list_pendientes';}
 				Application::forward('/admin/'.$archive_php.'?action='.$action.'&category='.$_REQUEST['category']);
 

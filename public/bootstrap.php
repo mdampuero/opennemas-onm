@@ -9,7 +9,7 @@ if (file_exists($configFile)) {
     require($configFile);
     require_once(SITE_CORE_PATH.'application.class.php');
 
-    Application::import_libs('*');
+    Application::importLibs('*');
     $app = Application::load();
 } else {
     $errorPage =  file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');

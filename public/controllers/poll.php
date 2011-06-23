@@ -25,12 +25,12 @@ if(empty($poll_id)) {
 if( isset($_REQUEST['op']) ) {
     switch($_REQUEST['op']) {
         case 'votar':
-     
-        
 
-     
+
+
+
             $poll = new Poll($poll_id);
-            
+
             if(!empty($poll)){
                 $cookie="polls".$poll_id;
                 if (isset($_COOKIE[$cookie])){
@@ -44,7 +44,7 @@ if( isset($_REQUEST['op']) ) {
                     $tpl->assign('msg','Gracias por su voto'.$_COOKIE[$cookie]);
                 }
             }
-            
+
             $tpl->assign('op', 'votar'); //conecta_CZonaEncuesta.tpl
         break;
 
@@ -65,14 +65,14 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
     } else {
         if(!empty($_REQUEST['poll_id'])){
             $poll = new Poll($poll_id);
-         
+
             $poll->category_name = $poll->loadCategoryName($_REQUEST['poll_id']);
 
             $category_name = $poll->category_name;
             $subcategory_name = null;
             $category = $ccm->get_id($category_name);
             $polls = $cm->find_by_category('Poll',$category, 'available=1 AND pk_content != '.$_REQUEST['poll_id'].' ', 'ORDER BY created DESC LIMIT 0,7');
-             
+
         }else{
             $category_name = $_GET['category_name'];
         }
@@ -133,20 +133,20 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
          $subcategory_name = null;
          $poll_id = $poll->pk_poll;
          $_REQUEST["action"] = 'read';
-        
+
      }
-     
+
 }
 $tpl->assign('polls',$polls);
- 
- 
+
+
 /**************************************  SECURITY  *******************************************/
 
 
 if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {        
-        case 'read':             
-      
+    switch($_REQUEST['action']) {
+        case 'read':
+
               // Load config
             $tpl->setConfig('polls');
 
@@ -193,7 +193,7 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('items', $items);
                  $data_rows = array();
                  $max_value = 0;
-                 
+
                  if(!empty($items)){
                     foreach($items as $item){
                         $data_rows[] = "['".$item['item']."',".$item['votes']."]";
@@ -221,14 +221,7 @@ if(isset($_REQUEST['action']) ) {
 
                 $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['poll_id']);
 
-                // MUTEXT CODE, DON'T use for performance
-                // Application::getMutex($cache_id);
-
                 if(  ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cache_id) ) {
-
-                   
-
-
 
                     $video = $cm->find_by_category_name('Video',  $actual_category, 'contents.content_status=1', 'ORDER BY created DESC LIMIT 0 , 1');
                     if(isset($video[0])){
@@ -242,11 +235,9 @@ if(isset($_REQUEST['action']) ) {
                     $comments = $comment->get_public_comments($_REQUEST['poll_id']);
 
                     $tpl->assign('num_comments', count($comments));
-                 
+
                 } // end if $tpl->is_cached
                 $tpl->assign('poll', $poll);
-                // END MUTEXT
-                // Application::releaseMutex();
 
                 /************* COLUMN-LAST *******************************/
 
@@ -268,18 +259,17 @@ if(isset($_REQUEST['action']) ) {
                 Application::forward301('/404.html');
             }
 
- 
+
         break;
-        
+
         default: {
           //  Application::forward301('index.php');
         } break;
     }
-    
+
 } else {
     Application::forward301('index.php');
 }
 $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
 
 $tpl->display('poll/poll.tpl', $cache_id);
-

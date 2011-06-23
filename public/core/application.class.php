@@ -1,4 +1,11 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 // Prevent direct access
 if (preg_match('/application\.class\.php/', $_SERVER['PHP_SELF'])) {
     die();
@@ -153,9 +160,16 @@ class Application {
         return( $GLOBALS['application'] );
     }
 
+    /**
+     * Set up gettext translations.
+     *
+     */
     static public function configGettext(){
 
 	    date_default_timezone_set('Europe/Madrid');
+
+        /* Set internal character encoding to UTF-8 */
+        mb_internal_encoding("UTF-8");
 
 	    $locale = DEFAULT_LOCALE;
 	    $domain = 'messages';
@@ -180,16 +194,9 @@ class Application {
     /**
     * Loads all the common libraries and the packages passed as argument
     *
-    * Description
-    *
-    * @access public,static,private,protected
-    * @param bool,string,integer,double $baz
-    * @return mixed
-    * @author nameofauthor
-    * Other available tags: @tutorial, @version, @copyright, @deprecated,
-    * @example, @ignore, @link, @see, @since
+    * @param array $packages list of packages to load
     */
-    static function import_libs($packages=null) {
+    static public function importLibs($packages=null) {
 
         $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
                         'log'      => SITE_LIBS_PATH.'/Log.php',
@@ -234,63 +241,23 @@ class Application {
     *
     * Use the header PHP function to redirect browser to another page
     *
-    * @access static
-    * @param string $url
-    * @return null
+    * @param string $url the url to redirect to
     */
     static function forward($url) {
         header ("Location: ".$url);
         exit(0);
     }
 
-    
+
     /**
-     * Static function to write the workflow logs 
-     * 
-     * @access static
-     * @param type $msg  
+     * Static function to write the workflow logs
+     *
+     * @param type $msg the msg to save into log file
      * @return null
      */
     public static function write_log($msg) {
-        $time = date('Y-m-d-h:i');        
+        $time = date('Y-m-d-h:i');
         $GLOBALS['application']->workflow->log( $time.'-'.$_SESSION['userid'].'-'.$_SESSION['username'].'-'.$msg.' \n', PEAR_LOG_INFO );
-    }
-    
-    
-    /**
-    * If MUTEX_ENABLE is enable try to block the semaphore on a given key
-    *
-    * Blocks the access to a given key using a semaphore
-    *
-    * @access public
-    * @param string $id, Cache Id to generate sem_id identifier
-    * @return null
-    */
-    public static function getMutex($id)
-    {
-        if(defined('MUTEX_ENABLE') && MUTEX_ENABLE != 0) {
-            $sem_key = crc32($id);
-            Application::$sem = sem_get($sem_key, 1, 0666, true);
-            sem_acquire(Application::$sem);
-            // $GLOBALS['application']->mutex->log('< I (' . $id . '): ' . getmypid());
-        }
-    }
-
-    /**
-    * If MUTEX_ENABLE is enable try to release the semaphore on a given key
-    *
-    * Release the access to a given key using a semaphore
-    *
-    * @access public
-    * @param string $id, Cache Id to generate sem_id identifier
-    * @return null
-    */
-    public static function releaseMutex()
-    {
-        if(!is_null(Application::$sem)) {
-            // $GLOBALS['application']->mutex->log('> O: ' . getmypid());
-            sem_release(Application::$sem);
-        }
     }
 
     /**
@@ -298,7 +265,7 @@ class Application {
      *
      * @param boolean $auto_redirect
      * @return boolean True if it's a mobile device and $auto_redirect is false
-    */
+     */
     function mobileRouter($auto_redirect=true)
     {
         $isMobileDevice = false;
@@ -330,7 +297,7 @@ class Application {
      *
      * Checks if the current URI requrested belongs to admin panel
      *
-     * @return boolean
+     * @return boolean true if request is from backend
     */
     static public function isBackend()
     {
@@ -342,9 +309,7 @@ class Application {
     *
     * Use the header PHP function to redirect browser to another page
     *
-    * @access static
-    * @param string $url
-    * @return null
+    * @param string $url the url to redirect to
     */
     static function forward301($url)
     {
