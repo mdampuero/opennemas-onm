@@ -16,7 +16,11 @@ require_once(SITE_LIBS_PATH.'class.dir.php');
 if(isset($_REQUEST['category'])) {
     $ccm = ContentCategoryManager::get_instance();
     $categoryID = ($_REQUEST['category'] == 'home')? 0 : $_REQUEST['category'];
-    $category_name = $ccm->get_name($categoryID);
+    if($categoryID == 0){
+        $category_name = 'home';
+    }else{
+        $category_name = $ccm->get_name($categoryID);
+    }
     $tpl->delete($category_name . '|RSS');
     $tpl->delete($category_name . '|0');
 }
@@ -29,11 +33,11 @@ $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 
 $places = json_decode($_REQUEST['id'], true);
 
-/**
- * Log this action
-*/
-$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
-                     ' - QueryString: ' . $_REQUEST['id'] , PEAR_LOG_INFO );
+///**
+// * Log this action
+//*/
+//$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
+//                     ' - QueryString: ' . $_REQUEST['id'] , PEAR_LOG_INFO );
 
 $_frontpage = array();
 $_positions = array();
@@ -87,6 +91,8 @@ if( $_REQUEST['category']!='home' ){
     $ok = $article->refresh_home($_suggested_home, $_positions,  $_SESSION['userid']);
 }
 
+$msg= "Change and Save positions -- Category: " . $category_name;
+Application::write_log($msg);
 
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {

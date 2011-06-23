@@ -178,6 +178,10 @@ class Content {
 
             return false;
         }
+        //Log - en pruebas
+        //$msg= '%content_type%-%pk_content%-%title%-%action%';
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$data['title'].'- Create';
+        Application::write_log($msg);
 
         // $this->id = $GLOBALS['application']->conn->Insert_ID();
         $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
@@ -221,6 +225,12 @@ class Content {
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
+        //Log
+        //$msg= '%content_type%-%pk_content%-%title%-%action%';
+//        if(isset ($_SESSION['userid']) && isset ($_SESSION['username'])){
+//            $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Read';
+//            Application::write_log($msg);
+//        }
     }
 
     function loadCategoryName($pk_content) {
@@ -348,6 +358,10 @@ class Content {
 
             return;
         }
+        //Log
+        //$msg= '%content_type%-%pk_content%-%title%-%action%';
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$data['title'].'- Update';
+        Application::write_log($msg);
 
         $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
         $catName = $cats->fields['name'];
@@ -395,6 +409,11 @@ class Content {
 
             return;
         }
+
+        //Log
+        //$msg= '%content_type%-%pk_content%-%title%-%action%';
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Remove litter';
+        Application::write_log($msg);
     }
 
 
@@ -427,6 +446,11 @@ class Content {
 
              return;
          }
+
+        //Log
+        //$msg= '%content_type%-%pk_content%-%title%-%action%';
+       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Send litter';
+       Application::write_log($msg);
     }
 
     /**
@@ -455,6 +479,8 @@ class Content {
 
             return;
         }
+       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Recover from litter';
+       Application::write_log($msg);
     }
 
     /**
@@ -671,6 +697,9 @@ class Content {
             $values = $status;
         }
 
+       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set status';
+       Application::write_log($msg);
+       
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -710,6 +739,9 @@ class Content {
             }
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set available';
+        Application::write_log($msg);
+        
         // Set status for it's updated to next event
         if(!empty($this)) {
             $this->available = $status;
@@ -765,6 +797,10 @@ class Content {
                 return;
             }
         }
+        
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set directly frontpage';
+        Application::write_log($msg);
+       
         // Set status for it's updated to next event
         if(!empty($this)) {
             $this->available = $status;
@@ -791,6 +827,9 @@ class Content {
             $values = $status;
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set frontpage';
+        Application::write_log($msg);
+        
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -821,6 +860,9 @@ class Content {
             $values = $position;
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set position';
+        Application::write_log($msg);
+        
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -854,6 +896,9 @@ class Content {
             $values = $status;
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set in_home';
+        Application::write_log($msg);
+        
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -884,6 +929,8 @@ class Content {
             $values =  $position;
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set home_position';
+        Application::write_log($msg);
 
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
@@ -948,6 +995,9 @@ class Content {
             }
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Refresh home';
+        Application::write_log($msg);
+        
         //$GLOBALS['application']->dispatch('onAfterSetInhome', $this);
         Content::refreshHome();
 
@@ -1217,7 +1267,62 @@ class Content {
             return false;
         }
 
+        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Toggle available';
+        Application::write_log($msg);
+        
         return true;
+    }
+    
+        public function dropFromHomePageOfCategory($category,$pk_content)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+        $cm = new ContentManager();
+        if($category == 'home'){
+            $category_name = 'home';
+            $category = 0;
+        }else{
+            $category_name = $ccm->get_name($category);
+        }
+    
+        $sql = 'DELETE FROM content_positions WHERE fk_category = '.$category.' AND pk_fk_content = '.$pk_content;
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+
+        if (!$rs) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        } else {
+            $type = $cm->getContentTypeNameFromId($this->content_type,true);
+            $msg= ''.$type.'- '.$pk_content.' Category: '.$category_name .' - Drop from HomePage';
+            Application::write_log($msg);
+            return true;
+        }
+    }
+
+    public function unpublishFromHomePage($pk_content)
+    {
+        $cm = new ContentManager();
+        
+        $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$pk_content;
+        $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs2 = $GLOBALS['application']->conn->Execute($sql2);
+
+        if (!$rs || !$rs2) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        } else {
+            $type = $cm->getContentTypeNameFromId($this->content_type,true);
+            $msg= ''.$this->content_type.'- '.$pk_content.' - Unpublish from HomePage';
+            Application::write_log($msg);
+            
+            return true;
+        }
     }
 
 }

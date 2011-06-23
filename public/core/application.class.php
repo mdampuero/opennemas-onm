@@ -243,6 +243,20 @@ class Application {
         exit(0);
     }
 
+    
+    /**
+     * Static function to write the workflow logs 
+     * 
+     * @access static
+     * @param type $msg  
+     * @return null
+     */
+    public static function write_log($msg) {
+        $time = date('Y-m-d-h:i');        
+        $GLOBALS['application']->workflow->log( $time.'-'.$_SESSION['userid'].'-'.$_SESSION['username'].'-'.$msg.' \n', PEAR_LOG_INFO );
+    }
+    
+    
     /**
     * If MUTEX_ENABLE is enable try to block the semaphore on a given key
     *

@@ -23,8 +23,8 @@ if(isset($_REQUEST['category'])) {
 }
 /* }}} */
 
-$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
-                     ' - QueryString: ' . $_SERVER['QUERY_STRING'], PEAR_LOG_INFO );
+//$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
+//                     ' - QueryString: ' . $_SERVER['QUERY_STRING'], PEAR_LOG_INFO );
 
 require_once('application_events.php');
 
@@ -161,6 +161,11 @@ $article = new Article();
         $article->refresh_home($_suggested_home, $_positions,  $_SESSION['userid']);
     }
  }
+
+$msg= " - Change and Save positions -- Category: " . $category_name;
+Application::write_log($msg);
+ 
+ 
 // Mostrar mensaxes si a petición ver por Ajax
 if( $isAjax ) {
     if( $ok == 1 ) {        

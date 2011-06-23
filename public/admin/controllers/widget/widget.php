@@ -82,8 +82,9 @@ switch($action) {
     }
 
     case 'unpublish': {
-        //$widget->read($_REQUEST['id']);
-        $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+        $widget = new Widget();
+        $widget->read($_REQUEST['id']);
+        $widget->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
         /* Limpiar la cache de portada de todas las categorias */
         $c->refreshFrontpage();
         //$refresh = Content::refreshFrontpageForAllCategories();
@@ -93,8 +94,9 @@ switch($action) {
     }
 
     case 'archive': {
-        //$widget->read($_REQUEST['id']);
-        $cm->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
+        $widget = new Widget();
+        $widget->read($_REQUEST['id']);
+        $widget->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
         /* Limpiar la cache de portada de todas las categorias */
         $c->refreshFrontpage();
         //$refresh = Content::refreshFrontpageForAllCategories();
