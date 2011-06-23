@@ -130,6 +130,39 @@ define('GOOGLE_CUSTOM_SEARCH_KEY', '015934879308878545076:fvw-rbc1ipq');
 define('RECAPTCHA_PUBLIC_KEY', '6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is');
 define('RECAPTCHA_PRIVATE_KEY', '6LfpY8ISAAAAAHzsd8Pa-VrsB_tFkaDIA2bhTKfH ');
 
+$activatedModules = array(
+                'ADS_MANAGER',
+                'ADVANCED_SEARCH',
+                //'ALBUM_MANAGER',
+                'ARTICLE_MANAGER',
+                'CACHE_MANAGER',
+                'CATEGORY_MANAGER',
+                'COMMENT_MANAGER',
+                'EUROPAPRESS_IMPORTER',
+                'FILE_MANAGER',
+                'FRONTPAGE_MANAGER',
+                'IMAGE_MANAGER',
+                'KEYWORD_MANAGER',
+                //'KIOSKO_MANAGER',
+                //'LINK_CONTROL_MANAGER',
+                //'MYSQL_MANAGER',
+                'NEWSLETTER_MANAGER',
+                'ONM_STATISTICS',
+                'OPINION_MANAGER',
+                //'PAPER_IMPORT',
+                //'PHP_CACHE_MANAGER',
+                //'POLL_MANAGER',
+                'PRIVILEGE_MANAGER',
+                'SETTINGS_MANAGER',
+                'STATIC_PAGES_MANAGER',
+                'SYSTEM_UPDATE_MANAGER',
+                'TRASH_MANAGER',
+                'USER_GROUP_MANAGER',
+                'USER_MANAGER',
+                //'VIDEO_MANAGER',
+                'WIDGET_MANAGER',
+            );
+
 /**
  * Repository settings
 */

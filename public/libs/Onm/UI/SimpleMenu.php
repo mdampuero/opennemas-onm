@@ -62,25 +62,27 @@ class SimpleMenu {
             $html = "";
             foreach($this->menu as $menu) {
 
-                // Check if the user can se this menu
-                if (!isset($menu['privilege'])
-                   || $this->checkAcl($menu['privilege']))
+                // Check if the user can se this menu and module activated
+                if  (
+                    (!isset($menu['privilege']) || $this->checkAcl($menu['privilege']))
+                    && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
+                    )
                 {
 
                     $html.= "<li>";
                     $html .= $this->getHref($menu['title'], $menu['link']);
 
                     // If there are elements in this submenu and user can see it, print them
-                    if ( $menu->count() > 0
-                        && (!isset($menu['privilege']) || $this->checkAcl($menu['privilege']))
-                        )
+                    if ( $menu->count() > 0 )
                     {
 
                         $html .= "<ul>";
 
                         foreach($menu as $submenu) {
-                            if ((!isset($submenu['privilege'])
-                                || $this->checkAcl($submenu['privilege'])))
+                            if (
+                                (!isset($submenu['privilege']) || $this->checkAcl($submenu['privilege']))
+                                && (\Onm\Module\ModuleManager::isActivated((string)$submenu['module_name']))
+                                )
                             {
                                 $html.= "<li>";
                                     $html .= $this->getHref($submenu['title'],$submenu['link']);

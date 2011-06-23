@@ -27,6 +27,7 @@ class Version
      * Compares a Onm version with the current one.
      *
      * @param string $version Onm version to compare.
+     * 
      * @return int Returns -1 if older, 0 if it is the same, 1 if version
      *             passed as argument is newer.
      */

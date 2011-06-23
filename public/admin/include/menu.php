@@ -3,60 +3,210 @@
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="index.php">
-        <node title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'" link="article.php" privilege="ARTICLE_FRONTPAGE" />
-        <node title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'" link="controllers/widget/widget.php" privilege="WIDGET_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Templates Manager"), ENT_QUOTES).'" link="index.php" privilege="ARTICLE_FRONTPAGE" />-->
+        <node
+            module_name="FRONTPAGE_MANAGER"
+            privilege="ARTICLE_FRONTPAGE"
+            title="'.htmlspecialchars(_("Frontpage Manager"), ENT_QUOTES).'"
+            link="article.php"
+        />
+        <node
+            module_name="WIDGET_MANAGER"
+            privilege="WIDGET_ADMIN"
+            title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'"
+            link="controllers/widget/widget.php"
+        />
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" link="#">
-        <node title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'" link="article.php?action=list_pendientes" privilege="ARTICLE_LIST_PEND" />
-        <node title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'" link="controllers/opinion/opinion.php" privilege="OPINION_ADMIN" />
-        <node title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'" link="controllers/comment.php?action=list" privilege="COMMENT_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'" link="poll.php" privilege="POLL_ADMIN" />-->
-        <node title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'" link="controllers/advertisement/advertisement.php" privilege="ADVERTISEMENT_ADMIN" />
-        <node title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'" link="static_pages.php" privilege="STATIC_ADMIN" />
-        <node title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'" link="article.php?action=list_hemeroteca" privilege="ARCHIVE_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'" link="article.php?action=list_agency" privilege="ARTICLE_LIST_PEND" />-->
-        <node title="'.htmlspecialchars(_("Sections Manager"), ENT_QUOTES).'" link="controllers/category/category.php" privilege="CATEGORY_ADMIN" />
+        <node
+            module_name="ARTICLE_MANAGER"
+            privilege="ARTICLE_LIST_PEND"
+            title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'"
+            link="article.php?action=list_pendientes"
+        />
+        <node
+            module_name="OPINION_MANAGER"
+            privilege="OPINION_ADMIN"
+            title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'"
+            link="controllers/opinion/opinion.php"
+        />
+        <node
+            module_name="COMMENT_MANAGER"
+            privilege="COMMENT_ADMIN"
+            title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'"
+            link="controllers/comment.php?action=list"
+        />
+        <node
+            module_name="POLL_MANAGER"
+            privilege="POLL_ADMIN"
+            title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"
+            link="poll.php"
+        />
+        <node
+            module_name="ADS_MANAGER"
+            privilege="ADVERTISEMENT_ADMIN"
+            title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'"
+            link="controllers/advertisement/advertisement.php"
+        />
+        <node
+            module_name="STATIC_PAGES_MANAGER"
+            privilege="STATIC_ADMIN"
+            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
+            link="static_pages.php"
+        />
+        <node
+            module_name="ARTICLE_MANAGER"
+            privilege="ARCHIVE_ADMIN"
+            title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
+            link="article.php?action=list_hemeroteca"
+        />
+        <node
+            module_name="PAPER_IMPORT"
+            privilege="ARTICLE_LIST_PEND"
+            title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'"
+            link="article.php?action=list_agency"
+        />
+        <node
+            module_name="CATEGORY_MANAGER"
+            privilege="CATEGORY_ADMIN"
+            title="'.htmlspecialchars(_("Category Manager"), ENT_QUOTES).'"
+            link="controllers/category/category.php"
+        />
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="controllers/mediamanager/mediamanager.php" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
-        <node title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'" link="controllers/mediamanager/mediamanager.php" privilege="IMAGE_ADMIN" />
-        <node title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'" link="controllers/files/files.php" privilege="FILE_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Videos"), ENT_QUOTES).'" link="controllers/video/video.php" privilege="VIDEO_ADMIN" />-->
-        <!--<node title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'" link="controllers/album/album.php" privilege="ALBUM_ADMIN" />-->
+        <node
+            module_name="IMAGE_MANAGER"
+            privilege="IMAGE_ADMIN"
+            title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
+            link="controllers/mediamanager/mediamanager.php"
+        />
+        <node
+            module_name="FILE_MANAGER"
+            privilege="FILE_ADMIN"
+            title="'.htmlspecialchars(_("Files"), ENT_QUOTES).'"
+            link="controllers/files/files.php"
+        />
+        <node
+            module_name="VIDEO_MANAGER"
+            privilege="VIDEO_ADMIN"
+            title="'.htmlspecialchars(_("Videos"), ENT_QUOTES).'"
+            link="controllers/video/video.php"
+        />
+        <node
+            module_name="ALBUM_MANAGER"
+            privilege="ALBUM_ADMIN"
+            title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'"
+            link="controllers/album/album.php"
+        />
     </submenu>
 
 
     <submenu title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'" link="user.php" privilege="USER_ADMIN">
-        <node title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'" link="user.php" />
-        <node title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'" link="user_groups.php" />
-        <node title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'" link="privileges.php" />
+        <node
+            module_name="USER_MANAGER"
+            privilege="USER_ADMIN"
+            title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
+            link="user.php"
+        />
+        <node
+            module_name="USER_GROUP_MANAGER"
+            title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
+            link="user_groups.php"
+            privilege="USER_ADMIN" />
+        <node
+            module_name="PRIVILEGE_MANAGER"
+            privilege="USER_ADMIN"
+            title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
+            link="privileges.php"
+        />
     </submenu>
 
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" link="search_advanced.php" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
-        <node title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'" link="search_advanced.php" privilege="SEARCH_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'" link="kiosko.php" privilege="CATEGORY_ADMIN" />-->
-        <node title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'" link="newsletter.php" privilege="NEWSLETTER_ADMIN" />
-        <node title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'" link="pclave.php" privilege="PCLAVE_ADMIN" />
-        <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'" link="controllers/agency_importer/europapress.php" privilege="EP_IMPORTER_ADMIN" />
-        <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'" link="controllers/trash.php" privilege="NOT_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'" link="controllers/link_control.php" privilege="BACKEND_ADMIN" />-->
-        <node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'" link="controllers/statistics/statistics.php" privilege="BACKEND_ADMIN" />
-        <!--<node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Check PHP cache"), ENT_QUOTES).'" link="index.php" privilege="CACHE_ADMIN" />
-        <node title="'.htmlspecialchars(_("Check database integrity"), ENT_QUOTES).'" link="mysql-check.php?action=check" privilege="BACKEND_ADMIN" />-->
+        <node
+            module_name="ADVANCED_SEARCH"
+            privilege="SEARCH_ADMIN"
+            title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'"
+            link="search_advanced.php"
+        />
+        <node
+            module_name="KIOSKO_MANAGER"
+            title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
+            link="kiosko.php"
+            privilege="KIOSKO_ADMIN" />
+        <node
+            module_name="NEWSLETTER_MANAGER"
+            title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'"
+            link="newsletter.php"
+            privilege="NEWSLETTER_ADMIN" />
+        <node
+            module_name="KEYWORD_MANAGER"
+            title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
+            link="pclave.php"
+            privilege="PCLAVE_ADMIN" />
+        <node
+            title="&lt;hr/&gt;"
+            link="javascript:return false;"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="EUROPAPRESS_IMPORTER"
+            title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
+            link="controllers/agency_importer/europapress.php"
+            privilege="EP_IMPORTER_ADMIN" />
+        <node
+            title="&lt;hr/&gt;"
+            link="javascript:return false;"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="TRASH_MANAGER"
+            title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
+            link="controllers/trash.php"
+            privilege="NOT_ADMIN" />
+        <node
+            module_name="LINK_CONTROL_MANAGER"
+            title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"
+            link="controllers/link_control.php"
+            privilege="BACKEND_ADMIN" />
+        <node
+            title="&lt;hr/&gt;"
+            link="javascript:return false;"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="ONM_STATISTICS"
+            title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
+            link="controllers/statistics/statistics.php"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="PHP_CACHE_MANAGER"
+            title="'.htmlspecialchars(_("Check PHP cache"), ENT_QUOTES).'"
+            link="index.php"
+            privilege="CACHE_ADMIN" />
+        <node
+            module_name="MYSQL_MANAGER"
+            title="'.htmlspecialchars(_("Check database integrity"), ENT_QUOTES).'"
+            link="controllers/system_information/mysql-check.php?action=check"
+            privilege="BACKEND_ADMIN" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Configuration"), ENT_QUOTES).'" link="configurator.php" privilege="CACHE_ADMIN,BACKEND_ADMIN">
-        <node title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'" link="configurator.php"  privilege="BACKEND_ADMIN" />
-        <node title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'" link="tpl_manager.php" privilege="CACHE_ADMIN" />
-        <!--<node title="&lt;hr/&gt;" link="javascript:return false;" privilege="BACKEND_ADMIN" />-->
-        <node title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'" link="controllers/updatesystem/index.php"  privilege="BACKEND_ADMIN" />
-        <!--<node title="'.htmlspecialchars(_("Information"), ENT_QUOTES).'" link="index.php" privilege="BACKEND_ADMIN" />-->
-        <node title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'" link="http://www.openhost.es/" privilege="BACKEND_ADMIN" />
+    <submenu title="'.htmlspecialchars(_("Configuration"), ENT_QUOTES).'" link="configurator.php" privilege="SETTINGS_MANAGER,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
+        <node
+            module_name="SETTINGS_MANAGER"
+            title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
+            link="configurator.php"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="CACHE_MANAGER"
+            title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
+            link="tpl_manager.php"
+            privilege="CACHE_ADMIN" />
+        <node
+            module_name="SYSTEM_UPDATE_MANAGER"
+            title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
+            link="controllers/updatesystem/index.php"
+            privilege="BACKEND_ADMIN" />
+        <node
+            title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
+            link="http://www.openhost.es/"
+            privilege="BACKEND_ADMIN" />
     </submenu>
 </menu>';
