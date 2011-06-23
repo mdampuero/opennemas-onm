@@ -29,7 +29,6 @@ class Application {
     var $workflow       = null;
     var $errors         = array();
     var $adodb          = null;
-    var $activerecord   = null;
     var $smarty         = null;
     var $log            = null;
     var $menu           = null;
@@ -62,7 +61,7 @@ class Application {
 
 
     static private function autoload($className) {
-        
+
         // Use Onm old loader
         $filename = strtolower($className);
         if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
@@ -77,7 +76,7 @@ class Application {
                 return true;
             }
         }
-        
+
         // Use PSR-0 Final Proposal autoloader
         if (strripos($className, '\\') !== false) {
             $className = ltrim($className, '\\');
@@ -89,7 +88,7 @@ class Application {
                 $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-            
+
             require $fileName;
         }
 
@@ -191,7 +190,8 @@ class Application {
     * @example, @ignore, @link, @see, @since
     */
     static function import_libs($packages=null) {
-        $libs = array(  'adodb'    => array(SITE_LIBS_PATH.'/adodb5/adodb.inc.php'),
+
+        $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
                         'log'      => SITE_LIBS_PATH.'/Log.php',
                         'pager'    => SITE_LIBS_PATH.'/Pager/Pager.php',
                         'template' => array(SITE_LIBS_PATH.'/smarty/Smarty.class.php',  SITE_LIBS_PATH.'/template.class.php'),

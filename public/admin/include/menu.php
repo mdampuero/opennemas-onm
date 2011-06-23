@@ -107,18 +107,19 @@ $menuXml = '<?xml version="1.0"?>
             module_name="USER_MANAGER"
             privilege="USER_ADMIN"
             title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
-            link="user.php"
+            link="controllers/acl/user.php"
         />
         <node
             module_name="USER_GROUP_MANAGER"
+            privilege="USER_ADMIN"
             title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
-            link="user_groups.php"
-            privilege="USER_ADMIN" />
+            link="controllers/acl/user_groups.php"
+        />
         <node
             module_name="PRIVILEGE_MANAGER"
             privilege="USER_ADMIN"
             title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
-            link="privileges.php"
+            link="controllers/acl/privileges.php"
         />
     </submenu>
 
@@ -176,19 +177,9 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
             link="controllers/statistics/statistics.php"
             privilege="BACKEND_ADMIN" />
-        <node
-            module_name="PHP_CACHE_MANAGER"
-            title="'.htmlspecialchars(_("Check PHP cache"), ENT_QUOTES).'"
-            link="index.php"
-            privilege="CACHE_ADMIN" />
-        <node
-            module_name="MYSQL_MANAGER"
-            title="'.htmlspecialchars(_("Check database integrity"), ENT_QUOTES).'"
-            link="controllers/system_information/mysql-check.php?action=check"
-            privilege="BACKEND_ADMIN" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Configuration"), ENT_QUOTES).'" link="configurator.php" privilege="SETTINGS_MANAGER,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
+    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" link="#" privilege="SETTINGS_MANAGER,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
         <node
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
@@ -203,6 +194,16 @@ $menuXml = '<?xml version="1.0"?>
             module_name="SYSTEM_UPDATE_MANAGER"
             title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
             link="controllers/updatesystem/index.php"
+            privilege="BACKEND_ADMIN" />
+        <node
+            module_name="PHP_CACHE_MANAGER"
+            title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
+            link="controllers/system_information/apc.php"
+            privilege="CACHE_ADMIN" />
+        <node
+            module_name="MYSQL_MANAGER"
+            title="'.htmlspecialchars(_("Database Manager"), ENT_QUOTES).'"
+            link="controllers/system_information/mysql-check.php?action=check"
             privilege="BACKEND_ADMIN" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"

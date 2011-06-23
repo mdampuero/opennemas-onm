@@ -73,16 +73,16 @@
                 <div style="padding-right:8px; float:left;" nowrap="nowrap">
                     <div id="pending_comments" title="{t}Pending comments{/t}">
                         <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment.php?action=list&category=todos">
-                            <span class="point"></span>  
+                            <span class="point"></span>
                             <em>&nbsp;{count_pending_comments}&nbsp;</em>
                         </a>
                     </div>
 					&nbsp;&nbsp;&nbsp;
                 </div>
-                
+
                 <div id="name-box" style="float:left; margin-right:5px;">
                   <strong>
-                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="/admin/user.php?action=read&id=%1">%2</a>{/t}
+                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&id=%1">%2</a>{/t}
 
                     {if isset($smarty.session.isAdmin)}
                         <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
@@ -91,7 +91,7 @@
 					{gmail_mailbox}
                   </strong>
                 </div><!--end name-box-->
-                
+
                 {if Acl::check('BACKEND_ADMIN') eq true}
                 <div style="padding-right:4px; float:left;" nowrap="nowrap">
                     <div id="user_activity" title="{t}Active users in backend{/t}">

@@ -6,7 +6,7 @@
 		<ul>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=new">
-					<img border="0" src="{$params.IMAGE_DIR}privilege_add.png" title="{t}New Privilege{/t}" alt="{t}New Privilege{/t}"><br />{t}New Privilege{/t}
+					<img border="0" src="{$params.IMAGE_DIR}privilege_add.png" title="{t}New User Group{/t}" alt="{t}New User Group{/t}"><br />{t}New User Group{/t}
 				</a>
 			</li>
 		</ul>
@@ -21,6 +21,7 @@
 	{if $smarty.request.action eq "list"}
 
 	{block name="action_buttons"}{/block}
+	<br>
 
 	<table class="adminheading">
 		<tr>

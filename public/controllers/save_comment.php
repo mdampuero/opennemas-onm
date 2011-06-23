@@ -42,24 +42,24 @@ function saveComment($data)
         $_POST['id'] = Article::getOriginalPk($_POST['id']);
     }
     // }}}
-    
+
     // Prevent XSS attack
     $data = array_map('strip_tags', $data);
-    
+
     if($comment->hasBadWorsComment($data)) {
         return "Su comentario fue rechazado debido al uso de palabras malsonantes.";
     }
-    
+
     $ip = Application::getRealIP();
     if($comment->create( array( 'id' => $_POST['id'], 'data' => $data, 'ip' => $ip) ) ) {
         return "Su comentario ha sido guardado y está pendiente de publicación.";
     }
-    
-    return "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";    
+
+    return "Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.";
 }
 
 if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) {
-    
+
     if( isset($_POST['security_code']) && empty($_POST['security_code']) ) {
         /*  Anonymous comment ************************* */
         $data = array();
@@ -68,37 +68,34 @@ if(isset($_POST['textareacomentario']) && !empty($_POST['textareacomentario'])) 
         $data['title']    = $_POST['title'];
         $data['category'] = $_POST['category'];
         $data['email']    = $_POST['email'];
-        
+
         echo saveComment($data);
-        
+
     } else {
-        
-        /* Check if user is facebook logged **************** */        
+
+        /* Check if user is facebook logged **************** */
         require_once dirname(__FILE__) . '/fb/facebook.php';
         // require_once dirname(__FILE__) . '/fb/config.php'; // deprecated, see section [Facebook API KEY] in config.inc.php
         $fb = new Facebook(FB_APP_APIKEY, FB_APP_SECRET);
         $fb_user = $fb->get_loggedin_user();
-        
+
         if($fb_user) {
-            $user_details = $fb->api_client->users_getInfo($fb_user, array('name', 'proxied_email'));  
-            
+            $user_details = $fb->api_client->users_getInfo($fb_user, array('name', 'proxied_email'));
+
             $data = array();
             $data['body']     = $_POST['textareacomentario'];
             $data['author']   = $user_details[0]['name'];
             $data['title']    = $_POST['title'];
             $data['category'] = $_POST['category'];
-            $data['email']    = $user_details[0]['proxied_email'];        
-            
+            $data['email']    = $user_details[0]['proxied_email'];
+
             echo saveComment($data);
-            
+
         } else {
             echo("Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.");
-        }                
+        }
 	}
-    
+
 } else {
     echo("Su comentario no ha sido guardado.\nAsegúrese de cumplimentar correctamente todos los campos.");
 }
-
-	
-	

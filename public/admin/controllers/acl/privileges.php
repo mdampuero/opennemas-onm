@@ -1,16 +1,24 @@
 <?php
-require_once('../bootstrap.php');
-
-require_once('./session_bootstrap.php');
-require_once(SITE_CORE_PATH.'privilege.class.php');
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Setup application
+*/
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 function buildFilter() {
-    
+
     if(isset($_REQUEST['module']) && !empty($_REQUEST['module'])) {
         return 'module="'.$_REQUEST['module'].'"';
     }
-    
+
     return null;
 }
 
@@ -30,12 +38,12 @@ $privilege = new Privilege();
 $_REQUEST['action'] = isset($_REQUEST['action'])? $_REQUEST['action']: 'list';
 switch($_REQUEST['action']) {
     case 'list': {
-        $filter = buildFilter();        
-        
+        $filter = buildFilter();
+
         $privileges = $privilege->get_privileges($filter);
         // FIXME: Set pagination
         $tpl->assign('privileges', $privileges);
-        
+
         // To filter
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
@@ -43,20 +51,20 @@ switch($_REQUEST['action']) {
 
     // Crear un nuevo permiso
     case 'new': {
-        $modules = $privilege->getModuleNames();                        
-        $tpl->assign('modules', $modules);            
-    } break;
-    
-    case 'read': {                        
-        $privilege->read($_REQUEST['id']);
-        $tpl->assign('privilege', $privilege);
-        $tpl->assign('id', $privilege->pk_privilege);
-        
-        $modules = $privilege->getModuleNames();                        
+        $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
     } break;
 
-    case 'update': {            
+    case 'read': {
+        $privilege->read($_REQUEST['id']);
+        $tpl->assign('privilege', $privilege);
+        $tpl->assign('id', $privilege->pk_privilege);
+
+        $modules = $privilege->getModuleNames();
+        $tpl->assign('modules', $modules);
+    } break;
+
+    case 'update': {
         $privilege->update( $_REQUEST );
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     } break;
@@ -68,7 +76,7 @@ switch($_REQUEST['action']) {
             $tpl->assign('errors', $privilege->errors);
         }
     } break;
-            
+
     case 'validate': {
         $privilege = null;
         if(empty($_POST["id"])) {
@@ -86,10 +94,10 @@ switch($_REQUEST['action']) {
         $privilege->delete( $_POST['id'] );
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     } break;
-    
+
     default: {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     } break;
-}    
+}
 
-$tpl->display('privilege/privilege.tpl');
+$tpl->display('acl/privilege/privilege.tpl');

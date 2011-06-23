@@ -1,11 +1,16 @@
 <?php
-
-require_once('../bootstrap.php');
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
- * Setup session
+ * Setup application
 */
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 $sessions = $GLOBALS['Session']->getSessions();
 
 /**
@@ -68,12 +73,12 @@ if( isset($_REQUEST['action']) ) {
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 		break;
 
-		
+
 		case 'validate':
 			$user_group = new User_group();
 			if(empty($_POST["id"])) {
 				if($user_group->create( $_POST ))
-					$tpl->assign('errors', $user_group->errors);		
+					$tpl->assign('errors', $user_group->errors);
 			} else {
 				$user_group = new User_group();
 				$user_group->update( $_REQUEST );
@@ -89,4 +94,4 @@ if( isset($_REQUEST['action']) ) {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 }
 
-$tpl->display('user_group.tpl');
+$tpl->display('acl/user_group/user_group.tpl');

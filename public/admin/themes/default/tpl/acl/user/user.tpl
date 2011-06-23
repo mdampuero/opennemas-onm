@@ -31,6 +31,7 @@
 
 		{include file="botonera_up.tpl"}
 		{* Filters: filter[name], filter[login], filter[group]  *}
+		<br>
 		<table class="adminheading">
 			<tr>
 				<th nowrap="nowrap" align="right">
@@ -57,7 +58,7 @@
 		<tr>
 			<th class="title" align="left" style="width:40%;padding:10px;">{t}Name Surname{/t}</th>
 			<th class="title" style="width:20%;padding:10px;">{t}Username{/t}</th>
-			<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>                        
+			<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>
                         <th class="title" style="width:20%;padding:10px;" align="center">{t}Enable/Disable{/t}</th>
 			<th class="title" style="width:20%;padding:10px;" align="right">{t}Actions{/t}</th>
 		</tr>
@@ -156,7 +157,13 @@
 
 		{include file="botonera_up.tpl"}
 
-			<table  border="0" cellpadding="4" cellspacing="0" class="fuente_cuerpo" width="100%">
+			<br>
+			<table class="adminheading">
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+			<table  class="adminlist">
 			<tr>
 				<td valign="top" width="50%">
 
@@ -380,6 +387,11 @@
 					</tr>
 
 					</tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+						</tr>
+					</tfoot>
 					</table>
 			</td>
 			</tr>

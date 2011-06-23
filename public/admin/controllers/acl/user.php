@@ -1,30 +1,16 @@
 <?php
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- 
- **/
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Setup application
 */
-
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
-
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 
 // Check ACL {{{
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
@@ -45,18 +31,18 @@ if( isset($_REQUEST['action']) ) {
         case 'list': {
             $cm = new ContentManager();
             $user = new User();
-            
+
             $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
             $users = $user->get_users($filters);
-            
+
             $users = $cm->paginate_num($users,12);
             $tpl->assign('users', $users);
-            
+
             $tpl->assign('paginacion', $cm->pager);
-            
+
             $user_group = new User_group();
             $group      = $user_group->get_user_groups();
-            
+
             $groupsOptions = array();
             $groupsOptions[] = '-- Seleccione un grupo --';
             foreach($group as $cat) {
@@ -64,56 +50,56 @@ if( isset($_REQUEST['action']) ) {
             }
             $tpl->assign('user_groups', $group);
             $tpl->assign('groupsOptions', $groupsOptions);
-        } break;        
-        
+        } break;
+
         case 'new': {
             $user = new User( $_REQUEST['id'] );
             $user_group = new User_group();
             $tpl->assign('user', $user);
             $tpl->assign('user_groups', $user_group->get_user_groups());
-            
+
             $tree = $ccm->getCategoriesTree();
             $tpl->assign('content_categories', $tree);
         } break;
-        
+
         case 'read': {
             $user = new User( $_REQUEST['id'] );
-            
+
             $user_group = new User_group();
             $tpl->assign('user', $user);
             $tpl->assign('user_groups', $user_group->get_user_groups());
-            
+
             $tree = $ccm->getCategoriesTree();
             $tpl->assign('content_categories', $tree);
             $tpl->assign('content_categories_select', $user->get_access_categories_id());
-            
+
             /*$tpl->assign('categories_options',  $user->get_categories_options());
             $tpl->assign('categories_selected', $user->get_access_categories_id());*/
         } break;
-        
+
         case 'update': {
             // TODO: validar datos
             $user = new User();
             $user->update( $_REQUEST );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
         } break;
-        
+
         case 'create': {
             $user = new User();
-            
+
             if($user->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
             } else {
                 $tpl->assign('errors', $user->errors);
             }
         } break;
-        
+
         case 'delete': {
             $user = new User();
             $user->delete( $_POST['id'] );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
         } break;
-        
+
         case 'change_authorize': {
             $user = new User( $_REQUEST['id'] );
             //Autorizar o no , comprobar...
@@ -125,13 +111,13 @@ if( isset($_REQUEST['action']) ) {
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
         } break;
-        
+
         case 'validate': {
             $user = null;
             if(empty($_POST["id"])) {
                 $user = new User();
                 if(!$user->create( $_POST )) {
-                    $tpl->assign('errors', $user->errors);        
+                    $tpl->assign('errors', $user->errors);
                 }
             } else {
                 $user = new User($_POST["id"]);
@@ -167,4 +153,4 @@ if( isset($_REQUEST['action']) ) {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page=$page');
 }
 
-$tpl->display('user.tpl');
+$tpl->display('acl/user/user.tpl');
