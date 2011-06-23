@@ -349,48 +349,6 @@ gettext("\"test image\"");
 /* ./themes/default/tpl//album/album_images.tpl */
 gettext("\"Frontpage image\"");
 
-/* ./themes/default/tpl//user_group.tpl */
-gettext("New Privilege");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("New Privilege");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("New Privilege");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Group name");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Actions");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Edit group");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Edit group");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Delete group");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Delete group");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("There is no groups created yet.");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Id");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Name:");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Group name");
-
-/* ./themes/default/tpl//user_group.tpl */
-gettext("Grants:");
-
 /* ./themes/default/tpl//static_pages.tpl */
 gettext("New static page");
 
@@ -480,9 +438,6 @@ gettext("Go to admin main page");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Pending comments");
-
-/* ./themes/default/tpl//base/admin.tpl */
-gettext("Welcome <a title=\"See my user preferences\" href=\"/admin/user.php?action=read&id=%1\">%2</a>");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Admin privileges");
@@ -1223,13 +1178,25 @@ gettext("Sort sections");
 gettext("Title");
 
 /* ./themes/default/tpl//category/list.tpl */
-gettext("Internal name");
+gettext("Type");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Articles");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Photos");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Advertisements");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("See in menu");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Edit");
+
+/* ./themes/default/tpl//category/list.tpl */
+gettext("Empty");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Delete");
@@ -1614,6 +1581,9 @@ gettext("News from \"%1\"");
 
 /* ./themes/default/tpl//welcome/index.tpl */
 gettext("You don't have RSS configured to show here");
+
+/* ./themes/default/tpl//system_information/mysql-check.tpl */
+gettext("Mysql checking");
 
 /* ./themes/default/tpl//comment.tpl */
 gettext("Author");
@@ -2857,32 +2827,188 @@ gettext("Information");
 /* ./themes/default/tpl//mediamanager/search.tpl */
 gettext("Delete");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
-gettext("Priveleges manager");
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Filter by name");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
-gettext("Filter by module:");
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("or username:");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
-gettext("ALL");
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("and group:");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
-gettext("Privilege name");
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Search");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
-gettext("Módule");
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Name Surname");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Username");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Group");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Enable/Disable");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
 gettext("Actions");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Edit user");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Delete user");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Delete user");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("There is no users created yet.");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Login:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Password:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Re-enter password:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Session expire time:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("minutes");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Email adress:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Email adress:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Surname:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Surname:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Maiden surname:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Maiden surname:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Address:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Address:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Telephone:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Telephone:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("User group:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("User group:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("User group manager");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Edit groups and privileges");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Sections:");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Priveleges manager");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Filter by module:");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("ALL");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Privilege name");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Módule");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("Edit privilege");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("Delete privilege");
 
-/* ./themes/default/tpl//privilege/privilege.tpl */
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("No available privileges to list here.");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("New User Group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("New User Group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("New User Group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Group name");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Edit group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Edit group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Delete group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Delete group");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("There is no groups created yet.");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Id");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Group name");
+
+/* ./themes/default/tpl//acl/user_group/user_group.tpl */
+gettext("Grants:");
 
 /* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
 gettext("EuropaPress importer :: List of articles");
@@ -3027,117 +3153,6 @@ gettext("Level:");
 
 /* ./themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Redactors:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Filter by name");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("or username:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("and group:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Search");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Name Surname");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Username");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Group");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Actions");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Edit user");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Edit user");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Edit user");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Delete user");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Delete user");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("There is no users created yet.");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Login:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Password:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Re-enter password:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Session expire time:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("minutes");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Email adress:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Email adress:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Name:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Name:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Surname:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Surname:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Maiden surname:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Maiden surname:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Address:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Address:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Telephone:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Telephone:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("User group:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("User group:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("User group manager");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Edit groups and privileges");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("Sections:");
-
-/* ./themes/default/tpl//user.tpl */
-gettext("HOME");
 
 /* ./themes/default/tpl//updatesystem/index.tpl */
 gettext("Status");
@@ -3465,6 +3480,18 @@ gettext("Related contents");
 
 /* ./themes/default/tpl//article_edit.tpl */
 gettext("Sort related contents");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Inner title:");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("No");
+
+/* ./themes/default/tpl//article_edit.tpl */
+gettext("Yes");
 
 /* ./themes/default/tpl//article_edit.tpl */
 gettext("Show in home");
