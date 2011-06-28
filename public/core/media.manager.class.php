@@ -18,7 +18,7 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 define('MEDIA_PER_PAGE', 24);
 
 
@@ -28,7 +28,7 @@ class MediaManager {
 
     var $_filter = NULL;
     var $pager   = NULL;
-    
+
     function __construct() {
         $this->_filter = '/\.(jpg|jpeg|gif|png|swf|flv|zip|tar|gz)$/i';
         //$this->_filter = '/\.(.*?)$/i';
@@ -56,7 +56,7 @@ class MediaManager {
     function listFilesByWeek($arr) {
         // Array resultado
         $result = array();
-        
+
         if (is_array($arr)) {
             // Ordenar por fecha
             $this->sort($arr, 'dD');
@@ -190,43 +190,6 @@ class MediaManager {
 		return($result);
     }
 
-    /**
-     * Crear la miniatura de una imagen
-     * @static
-    */
-    function miniatura($image, $width, $height) {
-        if(!file_exists($image)) {
-            header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
-            exit(0);
-        }
-
-        $dir_cache = dirname(__FILE__)."/../cache/thumbs/";
-        $file_info = pathinfo($image);
-
-        $thumbnail = new PThumb();
-        $thumbnail->use_cache = true;
-        $thumbnail->cache_dir = $dir_cache;
-        $thumbnail->error_mode = 2;
-
-        $data = $thumbnail->fit_thumbnail($image, $width, $height, 1, true);
-        if(!$data) {
-            header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
-            exit(0);
-        }
-
-        $data = $thumbnail->print_thumbnail($image, $data[0], $data[1], true);
-        if(!$data) {
-            //$thumbnail->display_x();
-            header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
-            exit(0);
-        }
-
-        // Salida de la imagen
-        header('Content-Type: image/'.$file_info['extension']);
-        echo("thumnail".$data);
-        exit(0);
-    }
-
     /* callbacks para ordenar los listados de ficheros */
     function cmp_name($a, $b) {
         return strcmp($a->basename, $b->basename);
@@ -331,4 +294,3 @@ class MediaManager {
         return( $str );
     }
 }
- 

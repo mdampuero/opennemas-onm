@@ -9,7 +9,7 @@ class String_Utils {
     * @access public
     * @param string $string
     */
-    function __construct($string=NULL){
+    public function __construct($string=NULL){
         //echo $stringTest." si<br>";
         if(!is_null($string))
             {$this->stringTest=$string;}
@@ -23,7 +23,7 @@ class String_Utils {
     * @param string $name, the string to clen
     * @return string, the string cleaned
     */
-    static function normalize_name($name) {
+    static public function normalize_name($name) {
         $name = strtolower($name);
         $trade = array( 'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A', 'À'=>'A', 'Ã'=>'A',
                         'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e', 'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E',
@@ -45,7 +45,7 @@ class String_Utils {
     * @access public
     * @param string $name
     */
-    function setString($string)
+    public function setString($string)
     {
         $this->stringTest=$string;
     }
@@ -56,7 +56,7 @@ class String_Utils {
     * @access public
     * @param string $name
     */
-    function getString()
+    public function getString()
     {
         return $this->stringTest;
     }
@@ -71,7 +71,7 @@ class String_Utils {
     * @param string $str, the string to clen
     * @return string, the string cleaned
     */
-    static function clearSpecialChars($str) {
+    static public function clearSpecialChars($str) {
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
         $str = mb_strtolower($str, 'UTF-8');
         $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\- ]', ' ', $str);
@@ -86,7 +86,7 @@ class String_Utils {
     * @param string $name, the string to clen
     * @return string, the string cleaned
     */
-    static function setSeparator($str, $separator='-') {
+    static public function setSeparator($str, $separator='-') {
         $str = trim($str);
         $str = preg_replace('/[ ]+/', $separator, $str);
 
@@ -100,7 +100,7 @@ class String_Utils {
      * @param boolean $useStopList
      * @return string
      */
-    static function get_title($title, $useStopList=true) {
+    static public function get_title($title, $useStopList=true) {
         $title = String_Utils::clearSpecialChars($title);
         $title = String_Utils::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
@@ -151,7 +151,7 @@ class String_Utils {
     * @param string $title
     * @return string
     */
-    static function get_tags($title) {
+    static public function get_tags($title) {
         $tags = String_Utils::clearSpecialChars($title);
 
         // Remove stop list
@@ -171,7 +171,7 @@ class String_Utils {
       * Modified from Meneame:
       * @link http://svn.meneame.net/index.cgi/branches/version3/www/libs/uri.php
     */
-    static function remove_shorts($string) {
+    static public function remove_shorts($string) {
         $shorts = file( dirname(__FILE__).'/string_utils_stoplist.txt');
 
         $size = count($shorts);
@@ -186,7 +186,7 @@ class String_Utils {
         return $string;
     }
 
-    static function str_stop($string, $max_length=30, $suffix='...'){
+    static public function str_stop($string, $max_length=30, $suffix='...'){
         if (strlen($string) > $max_length) {
             $string = substr($string, 0, $max_length);
             $pos = strrpos($string, " ");
@@ -199,7 +199,7 @@ class String_Utils {
         }
     }
 
-    static function unhtmlentities($string) {
+    static public function unhtmlentities($string) {
         // replace numeric entities
         $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
         $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
@@ -214,7 +214,7 @@ class String_Utils {
      *
      * @param array $data
      */
-    static function disabled_magic_quotes( &$data=NULL ) {
+    static public function disabled_magic_quotes( &$data=NULL ) {
         if( get_magic_quotes_gpc() ) {
             function stripslashes_deep($value) {
                 $value = is_array($value) ?
@@ -235,7 +235,7 @@ class String_Utils {
     }
 
 
-    static function clearBadChars($string)
+    static public function clearBadChars($string)
     {
         $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
         return $string;
@@ -250,7 +250,7 @@ class String_Utils {
     * @return string
     * @example String_Utils::get_num_words('hello world', 1)
     */
-    static function get_num_words($text,$num_words) {
+    static public function get_num_words($text,$num_words) {
         $no_html = strip_tags($text ); //Quita etiquetas html.
         $description = explode(" ",$no_html,$num_words);
         $sobra = array_pop($description);
@@ -312,33 +312,33 @@ class String_Utils {
 
         return $weight;
     }
-    
+
     /*
      * implodes a two dimension array to a http params string
      * @param $array
      */
-    
+
     static public function toHttpParams(Array $httpParams)
     {
-        
+
         // The final result
         $result = array();
         if(is_array($httpParams)) {
 
             // Iterate over each key-value parameter
             foreach ($httpParams as $param) {
-                
+
                 // Implode each key => value parameter into key-value
                 foreach ($param as $key => $value) {
                     $result []= $key.'='.$value;
                 }
-                
+
             }
-            
+
             // And implode all key=value parameters with &
             $result = implode('&', $result);
             return $result;
-            
+
         } else {
             throw new ArgumentError();
         }

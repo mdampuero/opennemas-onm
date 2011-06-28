@@ -6,8 +6,6 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-
-
 /**
  * Check privileges
 */
@@ -16,11 +14,6 @@ if(!Acl::check('OPINION_ADMIN')) {
     Acl::Deny();
 }
 
-
-//TODO: recoding
- 
-
-require_once(SITE_LIBS_PATH.'utils.functions.php');
 require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
@@ -30,7 +23,7 @@ $tpl->assign('titulo_barra', 'Nuevas Fotos Autor Opinion');
 
 if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
     $nameCat=$_REQUEST['nameCat'];
-    $nameAuthor= normalize_name($_REQUEST['nameAuthor']);
+    $nameAuthor= String_Utils::normalize_name($_REQUEST['nameAuthor']);
     $tpl->assign('nameCat', $_REQUEST['nameCat']);
     $tpl->assign('category', $_REQUEST['category']);
 
@@ -73,7 +66,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
 
                 $data['title']=$nameFile;
                 $data['name']=$name;
- 
+
                 $data['path_file']=  $path_file ;
                 $data['description']=$descript[$i];
                 $data['metadata']=$tags[$i];
@@ -116,9 +109,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
             }
 
 			}
-	}		
+	}
 }
 
 $tpl->display('opinion/newPhoto.tpl');
-	
- 

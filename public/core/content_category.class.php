@@ -20,51 +20,51 @@ class ContentCategory {
 
     function __construct($id=null) {
         // Si existe id, entonces cargamos los datos correspondientes
-        if(is_numeric($id)) {       
+        if(is_numeric($id)) {
             $this->read($id);
         }
     }
-    
+
     function create($data) {
 
         //if($data['subcategory']!=0){$sub="-".$data['subcategory'];}
         $data['name'] = strtolower($data['title']);
-        $data['name'] = normalize_name( $data['name']);
-         
+        $data['name'] = String_Utils::normalize_name( $data['name']);
+
         $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`) VALUES (?,?,?,?,?,?,?)";
         $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category'], $data['logo_path'], $data['color']);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();            
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return(false);
         }
-        
+
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
-        
+
         return(true);
     }
 
     function read($id) {
         $this->pk_content_category = ($id);
-        
+
         $sql = 'SELECT * FROM content_categories WHERE pk_content_category = '.$this->pk_content_category;
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return;
         }
-        
+
         $this->load($rs->fields);
     }
-    
-    
-    
+
+
+
     function load($properties) {
         if(is_array($properties)) {
             foreach($properties as $k => $v) {
@@ -80,29 +80,29 @@ class ContentCategory {
                 }
             }
         }
-    }    
+    }
 
     function update($data) {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
-        $data['name'] = normalize_name( $data['title']);
+        $data['name'] = String_Utils::normalize_name( $data['title']);
         if(empty($data['logo_path'])){
                 $data['logo_path']=$this->logo_path;
         }
         $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?,`logo_path`=?,`color`=?
                     WHERE pk_content_category=".($data['id']);
-        
+
         $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'], $data['internal_category'],$data['logo_path'],$data['color']);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return;
         }
-        
+
         if($data['subcategory']) {
             //Miramos sus subcategorias y se las añadimos a su nuevo padre
-            $sql = "UPDATE content_categories SET `fk_content_category`=? 
+            $sql = "UPDATE content_categories SET `fk_content_category`=?
                     WHERE fk_content_category=".($data['id']);
             $values = array($data['subcategory']);
             if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -112,45 +112,45 @@ class ContentCategory {
                 return;
             }
         }
-        
+
     }
 
-   
+
     function delete($id) {
         //Eliminar si está vacia.
         if(ContentCategoryManager::is_Empty($id)) {
             $sql = 'DELETE FROM content_categories WHERE pk_content_category='.($id);
-            
+
             if($GLOBALS['application']->conn->Execute($sql)===false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return("BD");
             }
-            
+
             $padre = "";
             if(isset($data['subcategory']) && !empty($data['subcategory'])) {
                 $cat   = $this->read($data['subcategory']);
                 $padre = $cat['name'];
             }
-             
+
             return("SI");
         } else {
             return("NO");
         }
-        
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return("BD");
-        }    
+        }
     }
 
     function empty_category($id) {
             $sql = 'SELECT pk_fk_content FROM contents_categories WHERE pk_fk_content_category='.($id);
-            
+
             $rs = $GLOBALS['application']->conn->Execute( $sql );
             if(!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -207,16 +207,16 @@ class ContentCategory {
         if($this->pk_content_category == NULL) {
             return(false);
         }
-        
+
         $sql = "UPDATE content_categories SET `posmenu`=?
                 WHERE pk_content_category=".($this->pk_content_category);
         $values = array($position);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return;
         }
     }
@@ -242,6 +242,5 @@ class ContentCategory {
         }
     }
 
-    
-}
 
+}

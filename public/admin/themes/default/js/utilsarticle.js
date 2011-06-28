@@ -248,7 +248,7 @@ function previewFrontpage(category) {
  * Eliminar desde botonera las cachés
  */
 function clearcache(category) {
-	new Ajax.Request('refresh_caches.php?category=' + encodeURIComponent(category), {
+	new Ajax.Request('controllers/tpl_manager/refresh_caches.php?category=' + encodeURIComponent(category), {
 		onSuccess: function(transport) {
 			$('warnings-validation').update(transport.responseText);
 			new Effect.Highlight( $('warnings-validation') );
