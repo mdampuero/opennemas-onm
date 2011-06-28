@@ -33,24 +33,17 @@ if ($_REQUEST['action']=='list_pendientes') {
 
 $tpl->assign('category', $_REQUEST['category']);
 
+/**
+ * Getting categories
+*/
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 
-// <editor-fold defaultstate="collapsed" desc="Container gente-fotoactualidad">
 // Parse template.conf to assign
 $tplFrontend = new Template(TEMPLATE_USER);
 $section = $ccm->get_name($_REQUEST['category']);
 $section = (empty($section))? 'home': $section;
 $categoryID = ($_REQUEST['category'] == 'home') ? 0 : $_REQUEST['category'];
-
-$container_noticias_gente = $tplFrontend->readKeyConfig('template.conf', 'container_noticias_gente', $section);
-
-if($container_noticias_gente == '1') {
-    $tpl->assign('bloqueGente', 'GENTE / FOTO ACTUALIDAD');
-} else {
-    $tpl->assign('bloqueGente', 'FOTO ACTUALIDAD / GENTE');
-}
-// </editor-fold>
 
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
@@ -60,26 +53,6 @@ $allcategorys = $parentCategories;
 if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
 
-        case 'toggleBlock': {
-            // previously defined
-            //$tplFrontend = new Template(TEMPLATE_USER);
-            $vars = $tplFrontend->readConfig('template.conf');
-
-            $vars[$section]['container_noticias_gente'] = ($container_noticias_gente + 1) % 2;
-            $vars[$section]['container_noticias_fotos'] = $container_noticias_gente;
-
-            $tplFrontend->saveConfig($vars, 'template.conf');
-
-            if($vars[$section]['container_noticias_gente'] == '1') {
-                echo('GENTE / FOTO ACTUALIDAD');
-            } else {
-                echo('FOTO ACTUALIDAD / GENTE');
-            }
-            exit(0);
-        } break;
-
-        case 'list':
-            
             // Check if the user can edit frontpages
             if(!Acl::check('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
@@ -92,23 +65,22 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('allcategorys', $parentCategories);
                 $tpl->assign('datos_cat', $datos_cat);
                 $tpl->assign('category', $_REQUEST['category']);
-            } 
-            
+            }
+
 
             $tpl->assign('titulo_barra', 'Frontpage Manager');
 
             $cm = new ContentManager();
-            // ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
             $rating = new Rating();
             $comment = new Comment();
 
             // Edit main frontpage or category frontpage
-            if($_REQUEST['category']=='home') {
+            if($_REQUEST['category'] == 'home') {
 
                 $frontpage_articles =
                         $cm->find(  'Article',
                                     'in_home=1 AND frontpage=1 AND content_status=1
-                                    AND available=1 AND fk_content_type=1',
+                                     AND available=1 AND fk_content_type=1',
                                     'ORDER BY home_pos ASC');
                 $destacada =
                         $cm->find_by_category(  'Article',
@@ -141,7 +113,7 @@ if(isset($_REQUEST['action']) ) {
                                                     'fk_content_type=1 AND content_status=1  AND available=1
                                                     AND frontpage=1 ',
                                                     'ORDER BY position ASC, created DESC' );
-                            
+
                     $destacada = $cm->find_by_category('Article',
                                                        $_REQUEST['category'],
                                                        'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1
@@ -155,16 +127,15 @@ if(isset($_REQUEST['action']) ) {
                                                              $_REQUEST['page'],
                                                              10,
                                                              $_REQUEST['category']);
-                    
+
                     $params=$_REQUEST['category'];
                     $paginacion=$cm->makePagesLinkjs($pages, ' get_others_articles', $params);
                     if($pages->_totalPages>1) {
                             $tpl->assign('paginacion', " ".$paginacion);
                     }
             }
-            
-            
-            //Nombres de los publisher y editors
+
+            // Nombres de los publisher y editors
             $aut=new User();
 
             foreach ($frontpage_articles as $art){
@@ -180,56 +151,56 @@ if(isset($_REQUEST['action']) ) {
 
             /// Adding Widgets {{{
             $contentsInHomepage = $cm->getContentsForHomepageOfCategory($categoryID);
-    
+
             $contents_excluded_for_proposed = array();
             foreach($contentsInHomepage as $content) {
                 $frontpage_articles[] = $content;
                 $contents_excluded_for_proposed[] = $content->id;
             }
-    
+
             $frontpage_articles = $cm->sortArrayofObjectsByProperty($frontpage_articles, 'position');
             // }}}
-    
+
             if(!isset($destacado)){
                 $destacado = null;
             }
             $tpl->assign('destacado', $destacado);
             $tpl->assign('articles', $articles);
             $tpl->assign('frontpage_articles', $frontpage_articles);
-    
-    
+
+
             if(count($contents_excluded_for_proposed) >0) {
                 $opinions_excluded = implode(', ', $contents_excluded_for_proposed);
                 $sql_excluded_opinions = ' AND `pk_opinion` NOT IN ('.$opinions_excluded.')';
             } else {
                 $sql_excluded_opinions = ' AND 1 = 1';
             }
-            
+
             $opinions = $cm->find('Opinion',
                                   'contents.available = 1'
                                   .$sql_excluded_opinions
                                   ,' ORDER BY created DESC LIMIT 0,16');
-            
+
             $rating = new Rating();
             foreach($opinions as $opinion) {
                 $opinion->comments = count($comment->get_comments( $opinion->id ));
                 $opinion->author = new Author($opinion->fk_author);
                 $opinion->ratings = $rating->get_value($opinion->id);
             }
-            
+
             if(count($contents_excluded_for_proposed) >0) {
                 $widgets_excluded = implode(', ', $contents_excluded_for_proposed);
                 $sql_excluded_widgets = ' AND `pk_widget` NOT IN ('.$widgets_excluded.')';
             } else {
                 $sql_excluded_widgets  = ' AND 1 = 1';
             }
-            
+
             $widgets = $cm->find('Widget',
                                  'fk_content_type=12 AND `available`=1 '
                                  .$sql_excluded_widgets,
                                  'ORDER BY created DESC ');
-            
-            
+
+
             $tpl->assign('widgets', $widgets);
             $tpl->assign('opinions', $opinions);
             $tpl->assign('category', $_REQUEST['category']);
@@ -252,15 +223,15 @@ if(isset($_REQUEST['action']) ) {
                     Privileges_check::AccessCategoryDeniedAction();
                 }
             } elseif (!Acl::_C($categoryID)) {
-                $categoryID = $_SESSION['accesscategories'][0]; 
-                $section = $ccm->get_name($categoryID); 
-                $_REQUEST['category'] = $categoryID; 
+                $categoryID = $_SESSION['accesscategories'][0];
+                $section = $ccm->get_name($categoryID);
+                $_REQUEST['category'] = $categoryID;
                 list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
                 $tpl->assign('subcat', $subcat);
                 $tpl->assign('allcategorys', $parentCategories);
                 $tpl->assign('datos_cat', $datos_cat);
-                $tpl->assign('category', $_REQUEST['category']); 
-            } 
+                $tpl->assign('category', $_REQUEST['category']);
+            }
             $tpl->assign('titulo_barra', 'Gesti&oacute;n de Pendientes');
 
             $cm = new ContentManager();
@@ -292,7 +263,7 @@ if(isset($_REQUEST['action']) ) {
                         $tpl->assign('opin_editors', $art_editors);
                     }
                 }
-                
+
 
             }elseif($_REQUEST['category'] == 'opinion'){
                 $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
@@ -550,7 +521,7 @@ if(isset($_REQUEST['action']) ) {
                 //   $ph->set_status(0, $_SESSION['userid']);
                 //}
             }
-            
+
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
             //$photos = $cm->paginate_num($photos,30);
@@ -684,7 +655,7 @@ if(isset($_REQUEST['action']) ) {
 
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-            
+
             $article->update( $_REQUEST );
 
             if( $_SESSION['_from']=='search_advanced'){
@@ -788,9 +759,9 @@ if(isset($_REQUEST['action']) ) {
                 echo $msg;
                 exit(0);
         break;
-        
-        case 'delete_comment': {            
-            
+
+        case 'delete_comment': {
+
             $category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'todos')) );
             if($category == 'encuesta'){
                 $comment = new PC_Comment();
@@ -799,8 +770,8 @@ if(isset($_REQUEST['action']) ) {
                 $comment = new Comment();
                 $comment->delete($_POST['id'], $_SESSION['userid']);
             }
-            
-            
+
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_SESSION['olderId'].'&stringSearch='.$_REQUEST['stringSearch'].'&page=#comments');
         } break;
 
@@ -1189,7 +1160,7 @@ if(isset($_REQUEST['action']) ) {
             }
 
            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
-           
+
         break;
 
         case 'mdelete':
@@ -1391,8 +1362,8 @@ if(isset($_REQUEST['action']) ) {
         case 'get_noticias':
             $cm = new ContentManager();
             if (!isset($_GET['category'])
-                || empty($_GET['category']) 
-                || ($_GET['category'] == 'home') 
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
                 || ($_GET['category'] == 'todos')
                 || ($_GET['category'] == '')){
                     $category= 11;

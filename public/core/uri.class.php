@@ -1,19 +1,17 @@
 <?php
-/**
-* Implements the Uri generation for every content type
-*
-* @category Onm
-* @package Onm_Uri
-* @subpackage Wand
-* @copyright Copyright (c) 2005-2010 OpenHost S.L. (http://www.openhost.es)
-* @license http://framework.zend.com/license
-* @version    $Id: uri.class.php 1 2011-02-16 11:58:44Z frandieguez $
-*/
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
 * Uri Class that implements the Uri generation for every content type
 *
 * @category Onm
-* @package Onm_Uri
+* @package Onm
+* @subpackage Uri
 * @copyright Copyright (c) 2005-2010 OpenHost S.L. http://www.openhost.es)
 * @license http://framework.zend.com/license
 * @version    $Id: uri.class.php 1 2011-02-16 11:59:19Z frandieguez $

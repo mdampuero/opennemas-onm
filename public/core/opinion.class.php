@@ -298,23 +298,23 @@ class Opinion extends Content {
             }
         }
     }
-	
+
 	public function render() {
-		
+
 		$tpl = new Template(TEMPLATE_USER);
-		
+
 		$aut = new Author($this->fk_author);
 		$this->name = String_Utils::get_title($aut->name);
 		$this->author_name_slug = $this->name;
-		
+
 		$tpl->assign('item',$this);
 		$tpl->assign('cssclass', 'opinion');
-		
+
 		return $tpl->fetch('frontpage/frontpage_opinion.tpl');
 
     }
-	
-	
+
+
 	/**
     * Get latest Opinions without opinions present in frontpage
     *
@@ -322,17 +322,18 @@ class Opinion extends Content {
     */
     static public function getLatestAvailableOpinions($params = array())
     {
-        $contents = array();
-		
+
+		$contents = array();
+
 		// Setting up default parameters
 		$default_params = array(
 			'limit' => 6,
 		);
 		$options = array_merge($default_params, $params);
-		$_sql_limit = " LIMIT 0, ".$options['limit']." ";
-        
+		$_sql_limit = " LIMIT {$options['limit']}";
+
         $cm = new ContentManager();
-		$ccm = ContentCategoryManager::get_instance();		
+		$ccm = ContentCategoryManager::get_instance();
 
 		// Excluding opinions already present in this frontpage
 		$category = (isset($_REQUEST['category'])) ? $ccm->get_id($_REQUEST['category']) :  0;
@@ -342,20 +343,20 @@ class Opinion extends Content {
 				$excludedContents []= $content->id;
 			}
 		}
-		
+
 		if (count($excludedContents) > 0) {
-			$sqlExcludedContents = ' AND pk_opinion NOT IN (';
+			$sqlExcludedContents = ' AND opinions.pk_opinion NOT IN (';
 			$sqlExcludedContents .= implode(', ', $excludedContents);
 			$sqlExcludedContents .= ') ';
 		}
-		
+
 		// Getting latest opinions taking in place later considerations
         $contents = $cm->find('Opinion',
-                    'content_status=1 AND available=1'. $sqlExcludedContents,
-                    'ORDER BY  created DESC,  title ASC ' .$_sql_limit);
-		
-		
-		
+                    'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
+                    'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit);
+
+
+
 		// For each opinion get its author and photo
 		foreach ($contents as $content) {
 			$content->author = new Author($content->fk_author);
@@ -365,35 +366,36 @@ class Opinion extends Content {
 			}
 			$content->name = $content->author->name;
 		}
-			
+
         return $contents;
     }
 
     /**
-    * Get all latest Opinions 
+    * Get all latest Opinions
     *
     * @return mixed, all latest opinions sorted by creation time
     */
     static public function getAllLatestOpinions($params = array())
     {
-        $contents = array();
-		
+
+		$contents = array();
+
 		// Setting up default parameters
 		$default_params = array(
 			'limit' => 6,
 		);
 		$options = array_merge($default_params, $params);
-		$_sql_limit = " LIMIT 0, ".$options['limit']." ";
-        
-        $cm = new ContentManager();
-		$ccm = ContentCategoryManager::get_instance();		
+		$_sql_limit = " LIMIT {$options['limit']}";
 
-		// Getting All latest opinions 
-        $contents = $cm->find('Opinion', 'available=1',
-                    'ORDER BY  created DESC,  title ASC ' .$_sql_limit);
-		
-		
-		
+		$cm = new ContentManager();
+		$ccm = ContentCategoryManager::get_instance();
+
+		// Getting All latest opinions
+		$contents = $cm->find('Opinion', 'contents.available=1 ',
+					'ORDER BY  contents.created DESC,  contents.title ASC ' .$_sql_limit);
+
+
+
 		// For each opinion get its author and photo
 		foreach ($contents as $content) {
 			$content->author = new Author($content->fk_author);
@@ -403,7 +405,7 @@ class Opinion extends Content {
 			}
 			$content->name = $content->author->name;
 		}
-			
+
         return $contents;
     }
 }
