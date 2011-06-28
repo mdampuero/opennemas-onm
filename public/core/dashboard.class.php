@@ -35,7 +35,7 @@ class Dashboard {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
-                $html_output .= OFC::graphicViewed($items);
+                $html_output .= \Onm\UI\OFC::graphicViewed($items);
                 $html_output .= "<div class=\"table\">";
                 $html_output .= "<table class=\"adminlist\" border=0><tr>";
                 $html_output .= "<th align=\"center\" style=\"width:20%;\">Visitas</th>";
@@ -70,7 +70,7 @@ class Dashboard {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
-                $html_output .= OFC::graphicComented($items);
+                $html_output .= \Onm\UI\OFC::graphicComented($items);
                 $html_output .= "<div class=\"table\">";
                 $html_output .= "<table class=\"adminlist\" border=0>";
                 $html_output .= "<tr>";
@@ -117,7 +117,7 @@ class Dashboard {
             $html_output = "<div class=\"dashboardBox\">".$title."";
 
             if (count($items)>0) {
-                $html_output .= OFC::graphicVoted($items);
+                $html_output .= \Onm\UI\OFC::graphicVoted($items);
                 $html_output .= "<div class=\"table\">";
                 $html_output .= "<table class=\"adminlist\" border=0>";
                 $html_output .= "<tr>";

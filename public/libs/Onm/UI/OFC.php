@@ -1,20 +1,25 @@
 <?php
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of ofc
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * @author toni
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-   
+namespace Onm\UI;
+/**
+ * Class for generate charts with Open Flash Charts.
+ *
+ * @package    Onm
+ * @subpackage Common
+ * @author     Fran Dieguez <fran@openhost.es>
+ * @version    Git: $Id: ofc.class.php Mar Xuñ 28 21:48:06 2011 frandieguez $
+ */
 class OFC {
- 
+
     static function graphicViewed($data) {
 
-        $bar = new bar_outline( 50, '#87ADD0', '#014687' );
+        $bar = new \bar_outline( 50, '#87ADD0', '#014687' );
         $bar->key('Visitas', 10);
 
         foreach($data as $item) {
@@ -27,7 +32,7 @@ class OFC {
             $bar->add_data_tip($item['views'], $tip);
         }
 
-        $g = new graph();
+        $g = new \graph();
         $g->set_bg_colour('#ffffff');
 
         $g->set_base('/libs/ofc1/');
@@ -42,7 +47,7 @@ class OFC {
         $g->set_y_max($top);
         $g->y_label_steps(10);
 
-        
+
         $g->set_width('100%');
         $g->set_height(250);
 
@@ -54,7 +59,7 @@ class OFC {
 
     static function graphicComented($data) {
 
-        $bar = new bar_outline(50,'#87ADD0','#014687');
+        $bar = new \bar_outline(50,'#87ADD0','#014687');
         $bar->key('Comentarios', 10);
 
         foreach($data as $item) {
@@ -67,7 +72,7 @@ class OFC {
             $bar->add_data_tip($item['num'], $tip);
         }
 
-        $g = new graph();
+        $g = new \graph();
         $g->set_bg_colour('#ffffff');
         $g->set_base('/libs/ofc1/');
         $g->set_swf_path('/libs/ofc1/');
@@ -91,7 +96,7 @@ class OFC {
 
     static function graphicVoted($data) {
 
-        $bar = new bar_outline(50,'#87ADD0','#014687');
+        $bar = new \bar_outline(50,'#87ADD0','#014687');
         $bar->key('Valoración', 10);
 
         foreach($data as $item) {
@@ -104,7 +109,7 @@ class OFC {
             $bar->add_data_tip($item['rate'], $tip);
         }
 
-        $g = new graph();
+        $g = new \graph();
         $g->set_bg_colour('#ffffff');
         $g->set_base('/libs/ofc1/');
         $g->set_swf_path('/libs/ofc1/');
@@ -127,4 +132,3 @@ class OFC {
     }
 
 }
-
