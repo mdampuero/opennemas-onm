@@ -50,8 +50,11 @@ $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
 $allcategorys = $parentCategories;
 
-if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {
+if (isset($_REQUEST['action']) ) {
+
+    switch ($_REQUEST['action']) {
+
+        case 'list':
 
             // Check if the user can edit frontpages
             if(!Acl::check('ARTICLE_FRONTPAGE')) {
