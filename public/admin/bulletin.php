@@ -11,30 +11,6 @@ require_once('./session_bootstrap.php');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-// Libraries for handle JSON strings
-require_once(SITE_LIBS_PATH.'PEAR.php');
-require_once(SITE_LIBS_PATH.'JSON.php');
-require_once(SITE_CORE_PATH.'string_utils.class.php');
-
-// FIXME: incluir en bulletin
-function parseData($param) {
-    $json = new Services_JSON();
-    $values = $json->decode($json->decode( clearslash($_REQUEST['data']))->{$param});
-    //$values = json_decode( clearslash($_REQUEST['data']));
-
-    if(in_array($param, array('news', 'opinions'))) {
-        foreach($values as $k => $v) {
-            foreach($values[$k] as $kk => $vv) {
-                if($kk !== 'id') {
-                    $values[$k]->{$kk} = base64_decode($vv);
-                }
-            }
-        }
-    }
-
-    return( $values );
-}
-
 // Eliminar scripts y estilos predefinidos; añadir necesarios
 $scripts = array('utils.js', 'photos.js', 'swfobject.js', 'validation.js', 'fabtabulous.js', 'jsvalidate/jsvalidate_beta04.js');
 $tpl->removeScript( $scripts );
@@ -73,8 +49,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             //$data->agencia = base64_encode($article->agency_web);
 
             // Data
-            $json = new Services_JSON();
-            $data = $json->encode( $data );
+            $data = json_encode( $data );
 
             $tpl->assign('message', $data);
 
@@ -92,8 +67,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             $data->summary    = base64_encode( $summary );
 
             // Data
-            $json = new Services_JSON();
-            $data = $json->encode( $data );
+            $data = json_encode( $data );
 
             $tpl->assign('message', $data);
         break;
@@ -138,7 +112,8 @@ try {
 EOD;
 
 // Actions by POST
-$action = (!isset($_POST['action']))? 'select': $_POST['action'];
+$action = filter_input ( INPUT_POST, 'action' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 'select')) );
+//$action = (!isset($_POST['action']))? 'select': $_POST['action'];
 
 
 switch($action) {
@@ -207,8 +182,7 @@ switch($action) {
             $data->opinions = Bulletin::prependItems($_REQUEST['opinions'], 'Opinion');
 
             // Data
-            $json = new Services_JSON();
-            $data = $json->encode( $data );
+            $data = json_encode( $data );
 
             $_POST['data_bulletin'] = $data = clearslash($data); // Hack para $smarty.post.data_bulletin
             $tpl->assign('data', $data);
@@ -262,8 +236,7 @@ switch($action) {
     case 'preview':
         $tpl->assign('titulo_barra', $titulo_barra.': Paso 5/5 - Vista Previa');
 
-        $json = new Services_JSON();
-        $data = $json->decode( clearslash($_REQUEST['data_bulletin']) );
+        $data = json_decode( clearslash($_REQUEST['data_bulletin']) );
 
         $tpl->assign('data', $data);
 
@@ -281,8 +254,7 @@ switch($action) {
         $id = $b->create($_REQUEST);
 
         // Data
-        $json = new Services_JSON();
-        $data = $json->decode( clearslash($_REQUEST['data_bulletin']) );
+        $data = json_decode( clearslash($_REQUEST['data_bulletin']) );
 
         $tpl->assign('data', $data);
 
@@ -311,8 +283,7 @@ switch($action) {
     break;
 
     case 'view_pdf':
-        $json = new Services_JSON();
-        $data = $json->decode( clearslash($_REQUEST['data_bulletin']) );
+        $data = json_decode( clearslash($_REQUEST['data_bulletin']) );
 
         $tpl->assign('data', $data);
 
