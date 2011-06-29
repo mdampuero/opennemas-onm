@@ -111,7 +111,7 @@ savePositions = function(category) {
                     parameters: frm.serialize(),
 
                     onLoading: function() {
-                       $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
+                       $('warnings-validation').update('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />Guardando posiciones de portada.<br />Por favor, espere un momento...</div>');
                        mutex = true;
                     },
                     onComplete: function(transport) {
