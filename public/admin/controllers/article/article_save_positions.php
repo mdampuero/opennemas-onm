@@ -91,7 +91,7 @@ if( $_POST['category']!='home' ){
     $ok = $article->refresh_home($_suggested_home, $_positions,  $_SESSION['userid']);
 }
 
-$msg= "Change and save positions -- Category: " . $category_name;
+$msg= "Change and save positions -- Category: {$category_name} --\n ". json_encode($content_positions,true) . "--\n {$placesJSON} ";
 Application::write_log($msg);
 
 // If this request is Ajax return properly formated result.

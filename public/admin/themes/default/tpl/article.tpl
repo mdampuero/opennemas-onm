@@ -62,7 +62,7 @@
                 <table id="columns" class="adminlist">
                     <tr  valign="top">
                        <td colspan=3>
-                        {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='highlighted'}
+                            {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='placeholder_highlighted'}
                        </td> 
                     </tr>
                     <tr valign="top">
