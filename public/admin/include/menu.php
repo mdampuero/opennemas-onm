@@ -188,7 +188,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
-            link="tpl_manager.php"
+            link="controllers/tpl_manager/tpl_manager.php"
             privilege="CACHE_ADMIN" />
         <node
             module_name="SYSTEM_UPDATE_MANAGER"

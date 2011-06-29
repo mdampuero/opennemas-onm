@@ -94,7 +94,7 @@ savePositions = function(category) {
     frm.category.value = category;
 
 
-    new Ajax.Request('article_save_positions.php',{
+    new Ajax.Request('controllers/article/article_save_positions.php',{
         method: 'post',
         parameters: frm.serialize(),
 

@@ -3,17 +3,17 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 
 /**
  * Setup view
 */
 $tpl = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
-require_once(SITE_LIBS_PATH.'class.dir.php');
+$category = filter_input ( INPUT_POST, 'category' , FILTER_DEFAULT );
 
-if(isset($_REQUEST['category'])) {
+if(isset($category) && !empty($category)) {
     $ccm = ContentCategoryManager::get_instance();
     $categoryID = ($_REQUEST['category'] == 'home')? 0 : $_REQUEST['category'];
     if($categoryID == 0){
@@ -25,19 +25,19 @@ if(isset($_REQUEST['category'])) {
     $tpl->delete($category_name . '|0');
 }
 
-require_once('application_events.php');
+require_once('../../application_events.php');
 
 String_Utils::disabled_magic_quotes();
 
 $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 
-$places = json_decode($_REQUEST['id'], true);
 
-///**
-// * Log this action
-//*/
-//$app->workflow->log( 'Cambiapos - ' . $_SESSION['username'] . ' ' . Application::getRealIP() .
-//                     ' - QueryString: ' . $_REQUEST['id'] , PEAR_LOG_INFO );
+/**
+ * Get the JSON-encoded places from request
+*/
+$placesJSON = filter_input ( INPUT_POST, 'id' , FILTER_DEFAULT );
+$places = json_decode($placesJSON, true);
+
 
 $_frontpage = array();
 $_positions = array();
@@ -84,21 +84,21 @@ $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $c
 
 // Save contents, the old way
 $article = new Article();
-if( $_REQUEST['category']!='home' ){
+if( $_POST['category']!='home' ){
     $article->set_frontpage($_frontpage, $_SESSION['userid']);
     $ok = $article->set_position($_positions, $_SESSION['userid']);
 } else {
     $ok = $article->refresh_home($_suggested_home, $_positions,  $_SESSION['userid']);
 }
 
-$msg= "Change and Save positions -- Category: " . $category_name;
+$msg= "Change and save positions -- Category: " . $category_name;
 Application::write_log($msg);
 
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {
-    if( $ok == 1  && $savedProperly) {
-        echo('<div class="success">Posiciones guardadas correctamente.</div>');
+    if( $ok == 1 && $savedProperly) {
+        echo "<div class='success'>"._('Positions saved successfully.')."</div>";
     } else {
-        echo('<div class="success">Hubo errores al guardar las posiciones. Inténtelo de nuevos.</div>');
+        echo "<div class='error'>". _('There was an error while saving the content positions. Please, try it again.') ."</div>";
     }
 }
