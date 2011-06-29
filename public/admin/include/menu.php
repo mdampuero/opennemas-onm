@@ -143,7 +143,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="KEYWORD_MANAGER"
             title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
-            link="pclave.php"
+            link="controllers/keywords/keywords.php"
             privilege="PCLAVE_ADMIN" />
         <node
             title="&lt;hr/&gt;"
