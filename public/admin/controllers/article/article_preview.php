@@ -43,7 +43,7 @@ else {
 //Dates information
 $hoy=mktime(0,0,0,date(m),date(d),date(Y));
 
-if(empty($_GET['efecha'])) { $tstamp=$hoy; $_GET['efecha']=$hoy;}
+if(empty($_GET['efecha'])) { $tstamp=$hoy; $_GET['efecha']=$hoy; }
 else{
     $tstamp = $_GET['efecha'];
     $month = date('n',$tstamp);

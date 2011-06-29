@@ -186,10 +186,10 @@ UserVoice.PopIn = {
   show: function(id) {
     var referer = window.location.href;
     if (referer.indexOf('?') != -1) { referer = referer.substring(0, referer.indexOf('?')) } // strip params
-    var url = "/admin/article_preview.php?article_id="+id;
+    var url = "/admin/controllers/article/article_preview.php?article_id="+id;
     UserVoice.Dialog.show("<iframe src=\"" + url + "\" frameborder=\"1\" scrolling=\"yes\" allowtransparency=\"true\" width=\"800px\" height=\"640px\"></iframe>");
   },
-  
+
   showPublic: function(url) {
     UserVoice.Dialog.show("<iframe src=\"" + url + "\" frameborder=\"1\" scrolling=\"yes\" allowtransparency=\"true\" width=\"1152\" height=\"640\"></iframe>");
   }
