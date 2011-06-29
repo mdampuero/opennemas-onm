@@ -101,6 +101,7 @@ savePositions = function(category) {
             return false;
         }
     }
+    console.log(frm.serialize());
 
     if (!mutex) {
             new Ajax.Request(
