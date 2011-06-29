@@ -67,7 +67,7 @@ savePositions = function(category) {
     var places = {};
     var huecos_id = new Array();
 
-    for(var i=0; i<huecos.length; i++) {
+    for (var i=0; i<huecos.length; i++) {
         huecos_id.push(huecos[i].id);
     }
 
@@ -75,16 +75,16 @@ savePositions = function(category) {
         if( $(div_id) ) {
             $position = 1;
             $(div_id).select('table').each(function(item) {
-                    if(item.getAttribute('value')) {
-                            if(item.getAttribute('data')) {
-                                    $content_type = item.getAttribute('data')
-                            } else {
-                                    $content_type = 'Article';
-                            }
-                            places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type, 'position' : $position};
-                            item.setAttribute('name',"selected_fld[]");
-                            $position++;
+                if(item.getAttribute('value')) {
+                    if(item.getAttribute('data')) {
+                            $content_type = item.getAttribute('data')
+                    } else {
+                            $content_type = 'Article';
                     }
+                    places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type, 'position' : $position};
+                    item.setAttribute('name',"selected_fld[]");
+                    $position++;
+                }
             });
         }
     });
@@ -97,43 +97,40 @@ savePositions = function(category) {
     frm.category.value = category;
     
     if (places.length < 1) {
-        console.log(places);
         if (confirm('¿Esta seguro de eliminar todos elementos de la portada ?')) {
             return false;
         }
     }
 
     if (!mutex) {
-        new Ajax.Request('controllers/article/article_save_positions.php',{
-            method: 'post',
-            parameters: frm.serialize(),
+            new Ajax.Request(
+                'controllers/article/article_save_positions.php',
+                {
+                    method: 'post',
+                    parameters: frm.serialize(),
 
-            onLoading: function() {
+                    onLoading: function() {
+                       $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
+                       mutex = true;
+                    },
+                    onComplete: function(transport) {
+                        $('warnings-validation').update( transport.responseText );
 
-               $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
-                       new Effect.Highlight( $('warnings-validation'));
-               mutex = true;
-            },
-            onComplete: function(transport) {
-                            $('warnings-validation').update( transport.responseText );
-                            new Effect.Highlight( $('warnings-validation') );
+                        // Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
+                        if(posicionesIniciales) {
+                                        posicionesIniciales = $$('input[type=checkbox]');
+                                        posicionesInicialesWarning = false;
+                        }
+                        mutex = false;
+                    },
 
-                            // Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
-                            if(posicionesIniciales) {
-                                            posicionesIniciales = $$('input[type=checkbox]');
-                                            posicionesInicialesWarning = false;
-                            }
-                            mutex = false;
-            },
-
-            onFailure: function() {
-                    $('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
-                    new Effect.Highlight( $('warnings-validation') );
-                    mutex = false;
-            }
-
-
-        });
+                    onFailure: function() {
+                         $('warnings-validation').update( transport.responseText );
+                        new Effect.Highlight( $('warnings-validation') );
+                        mutex = false;
+                    }
+                }
+            );
     }
         /*
    //Cambiar iconos

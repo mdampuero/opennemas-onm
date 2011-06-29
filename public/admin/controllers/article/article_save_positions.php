@@ -37,6 +37,31 @@ $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 */
 $placesJSON = filter_input ( INPUT_POST, 'id' , FILTER_DEFAULT );
 $places = json_decode($placesJSON, true);
+//if (json_last_error() != JSON_ERROR_NONE){
+switch (json_last_error()) {
+        case JSON_ERROR_NONE:
+            echo var_export($placesJSON).' - No errors';
+        break;
+        case JSON_ERROR_DEPTH:
+            echo var_export($placesJSON).' - Maximum stack depth exceeded';
+        break;
+        case JSON_ERROR_STATE_MISMATCH:
+            echo var_export($placesJSON).' - Underflow or the modes mismatch';
+        break;
+        case JSON_ERROR_CTRL_CHAR:
+            echo var_export($placesJSON).' - Unexpected control character found';
+        break;
+        case JSON_ERROR_SYNTAX:
+            echo var_export($placesJSON).' - Syntax error, malformed JSON';
+        break;
+        case JSON_ERROR_UTF8:
+            echo var_export($placesJSON).' - Malformed UTF-8 characters, possibly incorrectly encoded';
+        break;
+        default:
+            echo var_export($placesJSON).' - Unknown error';
+        break;
+    }
+//}
 
 
 $_frontpage = array();
