@@ -1,8 +1,11 @@
 // JavaScript Document
 //Funciones llamadas en article.tpl
 //
+
+var mutex = false;
+
  //Devuelve los ids de los divs que contienen noticias.
-getFrontpageHoles = function(){
+ getFrontpageHoles = function(){
     var huecos= $('columns').select('div');
     return huecos;
 }
@@ -61,7 +64,7 @@ savePositions = function(category) {
     huecos.push($('div_no_home'));
     huecos.push($('art'));
 
-	var places = {};
+    var places = {};
     var huecos_id = new Array();
 
     for(var i=0; i<huecos.length; i++) {
@@ -70,27 +73,27 @@ savePositions = function(category) {
 
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
-			$position = 1;
-			$(div_id).select('table').each(function(item) {
-				if(item.getAttribute('value')) {
-					if(item.getAttribute('data')) {
-						$content_type = item.getAttribute('data')
-					} else {
-						$content_type = 'Article';
-					}
-					places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type, 'position' : $position};
-					item.setAttribute('name',"selected_fld[]");
-					$position++;
-				}
-			});
+            $position = 1;
+            $(div_id).select('table').each(function(item) {
+                    if(item.getAttribute('value')) {
+                            if(item.getAttribute('data')) {
+                                    $content_type = item.getAttribute('data')
+                            } else {
+                                    $content_type = 'Article';
+                            }
+                            places[ item.getAttribute('value') ] = {'placeholder':huecos_id[i], 'content_type': $content_type, 'position' : $position};
+                            item.setAttribute('name',"selected_fld[]");
+                            $position++;
+                    }
+            });
         }
     });
 
     // Form
-	var frm = $('formulario');
+    var frm = $('formulario');
     //  console.log(places);
-	// Send articles positions into 'id' text field
-	frm.id.value =  Object.toJSON(places);
+    // Send articles positions into 'id' text field
+    frm.id.value =  Object.toJSON(places);
     frm.category.value = category;
     
     if (places.length < 1) {
@@ -100,35 +103,38 @@ savePositions = function(category) {
         }
     }
 
-    new Ajax.Request('controllers/article/article_save_positions.php',{
-        method: 'post',
-        parameters: frm.serialize(),
+    if (!mutex) {
+        new Ajax.Request('controllers/article/article_save_positions.php',{
+            method: 'post',
+            parameters: frm.serialize(),
 
-        onLoading: function() {
+            onLoading: function() {
 
-           $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
-		   new Effect.Highlight( $('warnings-validation'));
-           //showMsg({'loading':['Guardando posiciones...']},'growl');
-        },
-        onComplete: function(transport) {
-			$('warnings-validation').update( transport.responseText );
-			new Effect.Highlight( $('warnings-validation') );
+               $('warnings-validation').update('<div class="notice">Guardando posiciones...</div>');
+                       new Effect.Highlight( $('warnings-validation'));
+               mutex = true;
+            },
+            onComplete: function(transport) {
+                            $('warnings-validation').update( transport.responseText );
+                            new Effect.Highlight( $('warnings-validation') );
 
-			// Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
-			if(posicionesIniciales) {
-					posicionesIniciales = $$('input[type=checkbox]');
-					posicionesInicialesWarning = false;
-			}
-			//showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
-        },
+                            // Establecer o valor de posicionesIniciales para controlar os cambios de posicións e amosar avisos
+                            if(posicionesIniciales) {
+                                            posicionesIniciales = $$('input[type=checkbox]');
+                                            posicionesInicialesWarning = false;
+                            }
+                            mutex = false;
+            },
 
-        onFailure: function() {
-                $('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
-                new Effect.Highlight( $('warnings-validation') );
-        }
+            onFailure: function() {
+                    $('warnings-validation').update( 'Hubo errores al guardar las posiciones. Inténtelo de nuevo.' );
+                    new Effect.Highlight( $('warnings-validation') );
+                    mutex = false;
+            }
 
 
-    })
+        });
+    }
         /*
    //Cambiar iconos
         items =  $(div_id).getElementsByClassName("minput");
