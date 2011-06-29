@@ -92,7 +92,13 @@ savePositions = function(category) {
 	// Send articles positions into 'id' text field
 	frm.id.value =  Object.toJSON(places);
     frm.category.value = category;
-
+    
+    if (places.length < 1) {
+        console.log(places);
+        if (confirm('¿Esta seguro de eliminar todos elementos de la portada ?')) {
+            return false;
+        }
+    }
 
     new Ajax.Request('controllers/article/article_save_positions.php',{
         method: 'post',
