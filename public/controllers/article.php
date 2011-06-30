@@ -402,35 +402,7 @@ if(isset($_REQUEST['action']) ) {
             exit(0);
         } break;
 
-        case 'rating': {
-
-            $ip = $_SERVER['REMOTE_ADDR'];
-            $ip_from = $_GET['i'];
-            $vote_value = intval($_GET['v']);
-            $page = $_GET['p'];
-            $article_id = $_GET['a'];
-
-            if($ip != $ip_from) {
-                Application::ajax_out("Error!");
-            }
-
-            //Comprobamos que exista el artículo que se quiere votar
-            $content = new Content($article_id);
-            if(is_null($content->id)) {
-                Application::ajax_out("Error!");
-            }
-
-            $rating = new Rating($content->id);
-            $update = $rating->update($vote_value,$ip);
-
-            if($update) {
-                $html_out = $rating->render($page,'result',1);
-            } else {
-                $html_out = "Ya ha votado anteriormente esta noticia.";
-            }
-
-            Application::ajax_out($html_out);
-        } break;
+        
 
         case 'vote': {
 

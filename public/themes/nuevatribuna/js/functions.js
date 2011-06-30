@@ -38,7 +38,7 @@ function rating(ip,value,page,id) {
 
 	$('.vota'+id).html( '<img src="/themes/nuevatribuna/images/loading.gif" height="9" border="0"/> Actualizando...');
 
-	var url='/controllers/article.php?action=rating&i='+ip+'&v='+value+'&p='+page+'&a='+id;
+	var url='/controllers/rating.php?action=rating&i='+ip+'&v='+value+'&p='+page+'&a='+id;
 	  
         $.ajax({ url: url, context: document.body, success: function(result){
             $('.vota'+id).html( result);

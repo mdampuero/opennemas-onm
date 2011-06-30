@@ -6,8 +6,6 @@
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-require_once(SITE_LIBS_PATH.'utils.functions.php');
-
 /**
  * Setup view
 */

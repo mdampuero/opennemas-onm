@@ -74,14 +74,15 @@ JSINTERSTICIAL;
     /**
      * If the Ad is Flash based try to get the width and height fixed
      */
-    if ( ($photo->width <= $width) 
-         && ($photo->height <= $height)
-         && ($photo->type_img === 'swf'))
-    {
-        $width = $photo->width;
-        $height = $photo->height;
+    if (isset ($photo)) {
+        if ( ($photo->width <= $width) 
+             && ($photo->height <= $height)
+             && ($photo->type_img === 'swf'))
+        {
+            $width = $photo->width;
+            $height = $photo->height;
+        }
     }
-
     // If $height is equals to * then calculate using GD
     if($height == '*') {
         if(file_exists(MEDIA_IMG_PATH. $photo->path_file. $photo->name)) {
