@@ -77,26 +77,20 @@
 					{if $smarty.session.desde != 'list_hemeroteca'}
 					 <tr>
 						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="with_comment">{t}Coments{/t}</label>
+							<label for="with_comment">{t}Allow coments{/t}</label>
 						</td>
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-							<select name="with_comment" id="with_comment" class="required" tabindex="7">
-								<option value="0" >{t}Disabled{/t}</option>
-								<option value="1" selected="selected">{t}Enabled{/t}</option>
-						   </select>
+                                                    <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1 tabindex="6"/>
 						</td>
 					</tr>
 					 <tr>
 						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="content_status">{t}Available:{/t}</label>
+							<label for="available">{t}Available:{/t}</label>
 						</td>
 
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-							<select name="content_status" id="available" class="required" tabindex="7">
-								<option value="0" {if $article->available eq 0}selected{/if}>{t}No{/t}</option>
-								<option value="1" {if $article->available eq 1}selected{/if}>{t}Yes{/t}</option>
-						   </select>
-							<span style="font-size:9px;">{t}(publish directly){/t}</span>
+                                                    <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="available" value=1 tabindex="7"/>
+                                                    <span style="font-size:9px;">{t}(publish directly){/t}</span>
 						</td>
 					</tr>
 					<tr>
@@ -104,41 +98,29 @@
 							<label for="frontpage">{t}Put in section frontpage:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-							<select name="frontpage" id="frontpage" class="required" tabindex="8">
-								<option value="0" {if $article->frontpage eq 0}selected="selected"{/if}>{t}No{/t}</option>
-								<option value="1" {if $article->frontpage eq 1}selected="selected"{/if}>{t}Yes{/t}</option>
-						   </select>
+                                                    <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="7"/>
 						</td>
 					</tr>
 					<tr>
 						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="frontpage">{t}Put in frontpage:{/t}</label>
+							<label for="in_home">{t}Suggest for frontpage:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-							<select name="in_home" id="in_home" class="required" tabindex="8">
-								<option value="0" {if $article->in_home eq 0}selected="selected"{/if}>{t}No{/t}</option>
-								{*<option value="1" {if $article->in_home eq 1}selected="selected"{/if}>{t}Yes{/t}</option>*}
-								<option value="2" {if ($article->in_home eq 2) or !(isset($article->in_home))}selected="selected"{/if}>{t}Just suggest{/t}</option>
-						   </select>
+                                                    <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 1)}checked{/if} id="in_home" value=1 tabindex="7"/>
 						</td>
 					</tr>
 					{else} {* else if not list_hemeroteca *}
 					<tr>
 						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="with_comment">{t}Archived:{/t}</label>
+                                                    <label for="content_status">{t}Archived:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-							<select name="content_status" id="content_status" class="required">
-								<option value="0" {if $article->content_status eq 0}selected="selected"{/if}>{t}Yes{/t}</option>
-								<option value="1" {if $article->content_status eq 1}selected="selected"{/if}>{t}No{/t}</option>
-							</select>
-							{* <input type="hidden" id="content_status" name="content_status"  value="{$article->content_status}" /> *}
-
-							<input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
-							<input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
-							<input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
-							<input type="hidden" id="available" name="available"  value="{$article->available}" />
-							<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
+                                                    <input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
+                                                    <input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
+                                                    <input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
+                                                    <input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
+                                                    <input type="hidden" id="available" name="available"  value="{$article->available}" />
+                                                    <input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
 						</td>
 					</tr>
 
@@ -299,11 +281,7 @@
         <td></td>
         <td valign="top" align="left" colspan="2" >
             <div id="article_images" style="width:98%">
-				{if isset($article)}
-					{include file="article_images_edit.tpl"}
-				{else}
-					{include  file="article_images.tpl"}
-				{/if}
+                {include  file="article_images.tpl"}
             </div>
         </td>
     </tr>

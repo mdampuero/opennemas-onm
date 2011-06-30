@@ -6,6 +6,10 @@
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
+if(!Acl::check('ARTICLE_FRONTPAGE')) {
+    Acl::deny();
+}
+
 /**
  * Setup view
 */
@@ -92,8 +96,7 @@ if(!is_null($places)) {
     }
 }
 
-$msg= "Change and save positions -- Category: {$category_name} --\n por request: ". $placesJSON . " \n content_positions a json: ". json_encode($content_positions,true) . "-- \n ";
-Application::write_log($msg);
+Application::write_log("Change and save positions -- Category: {$category_name} --\n por request: {$placesJSON} \n");
 
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {
