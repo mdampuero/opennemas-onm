@@ -28,19 +28,19 @@
         VideoJS.setup();
     })
 </script>
-<script type="text/javascript">var current_section = "home";</script> 
-<!-- Piwik --> 
-<script type="text/javascript"> 
+<script type="text/javascript">var current_section = "home";</script>
+<!-- Piwik -->
+<script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.openhost.es/admin/" : "http://piwik.openhost.es/admin/");
 document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script><script type="text/javascript"> 
+</script><script type="text/javascript">
 try {
 var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 24);
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
-</script><noscript><p><img src="http://piwik.openhost.es/admin/piwik.php?idsite=24" style="border:0" alt="" /></p></noscript> 
-<!-- End Piwik Tracking Code --> 
+</script><noscript><p><img src="http://piwik.openhost.es/admin/piwik.php?idsite=24" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
 {/block}
 
 {block name="content"}
@@ -77,7 +77,7 @@ piwikTracker.enableLinkTracking();
                                         <div class="inner-article-image">
                                             {if $photoInt->name}
                                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoInt->path_file}{$photoInt->name}" title="{$article->img2_footer|clearslash|escape:"html"}" alt="{$article->img2_footer|clearslash|escape:"html"}" />
-                                               <div class="photo-subtitle">
+                                               <div class="photo-subtitle" style="width:{$photoInt->width}px">
                                                       <span class="photo-autor">{$article->img2_footer|clearslash|escape:"html"}</span>
                                                </div>
                                             {/if}
