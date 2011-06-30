@@ -1,6 +1,36 @@
 /* ./themes/default/tpl//accessdenied.tpl */
 gettext("Access to section denied.");
 
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Author");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Comment (50 chars)");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Type");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Content (50 chars)");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Date");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Votes");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Edit");
+
+/* ./themes/default/tpl//comment/comment.tpl */
+gettext("Delete");
+
 /* ./themes/default/tpl//video/video.tpl */
 gettext("HOME WIDGET");
 
@@ -510,69 +540,6 @@ gettext("Search images by title...");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Search video by title...");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Article");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Article");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Opinion");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Opinion");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Ad");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("New Ad");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Upload Photo");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Upload Photo");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Frontpage manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Frontpage manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Article manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Article manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Opinion manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Opinion manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Comment manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Comment manager");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Newsletter");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("Newsletter");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("XML Import");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("XML Import");
-
-/* ./themes/default/tpl//welcome.tpl */
-gettext("unread mails");
 
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("HOME");
@@ -1584,36 +1551,6 @@ gettext("You don't have RSS configured to show here");
 
 /* ./themes/default/tpl//system_information/mysql-check.tpl */
 gettext("Mysql checking");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Author");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Title");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Comment (50 chars)");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Type");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Content (50 chars)");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Date");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Votes");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Publish");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Edit");
-
-/* ./themes/default/tpl//comment.tpl */
-gettext("Delete");
 
 /* ./themes/default/tpl//advertisement/advertisement.tpl */
 gettext("Banner type:");
