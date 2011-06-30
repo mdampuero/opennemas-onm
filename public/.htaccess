@@ -13,6 +13,7 @@ Deny from all
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
+    
     #Inner Article
     RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
@@ -20,6 +21,18 @@ Deny from all
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
 
+    #------------------------- 
+    RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
+    RewriteCond %{QUERY_STRING} &?ref=([^&]+)
+    RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    #------------------------- 
+    RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
+    RewriteCond %{QUERY_STRING} &?id=([^&]+)
+    RewriteRule ^foros/mostrar_foro\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
+    #------------------------- 
+    RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
+    RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
+    
     #Inner Opinion
     RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
@@ -32,6 +45,11 @@ Deny from all
     RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
 
     #SECTIONS: seccion/51/SOCIEDAD/
+    RewriteCond %{QUERY_STRING} &?s=([^&]+) 
+    RewriteRule ^pda/seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
+    #TODO:send former pda URL to new mobile URL section
+
+    #SECTIONS: seccion/51/SOCIEDAD/    
     RewriteCond %{REQUEST_URI} [A-Z]
     RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
@@ -42,10 +60,14 @@ Deny from all
     RewriteRule ^enviar-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^imprimir-noticia.asp$ / [R=301,L,NC]
     RewriteRule ^seccion.asp$ / [R=301,L,NC]
-    RewriteRule ^rss/portada.asp$ / [R=301,L,NC]
+    RewriteRule ^rss/portada.asp$ /rss/? [R=301,L,NC]
     RewriteRule ^editmaker/i18n/text_idioma.asp$ / [R=301,L,NC]
     #--------------------------------------------------------
 
+    #Old Static pages
+    RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
+    #--------------------------------------------------------    
+    
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
