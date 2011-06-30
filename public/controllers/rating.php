@@ -1,17 +1,12 @@
 <?php
-require('./config.inc.php');
-require_once('./core/application.class.php');
-require_once('./core/content.class.php');
-require_once('./core/rating.class.php');
-
-Application::import_libs('*');
-$app = Application::load();
-
-
+/**
+ * Start up and setup the app
+*/
+require_once('../bootstrap.php');
 
 $action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING);
 if($action != 'rating') {
-    Application::ajax_out("Error Action!");
+    Application::ajax_out(_("Action not recognized!"));
 }
 
 
@@ -22,14 +17,14 @@ $page = filter_input(INPUT_GET,'p',FILTER_SANITIZE_STRING);
 $article_id = filter_input(INPUT_GET,'a',FILTER_SANITIZE_STRING);
 
 if($ip != $ip_from) {
-    Application::ajax_out("Error IP!");
+    Application::ajax_out(_("Problem with IP verification!"));
 }
 
 //Comprobamos que exista el artículo que se quiere votar
 $content = new Content($article_id);
- 
+
 if(is_null($content->id)) {
-    Application::ajax_out("Error content!");
+    Application::ajax_out(_("Content not available"));
 }
 
 $rating = new Rating($content->id);
@@ -38,8 +33,7 @@ $update = $rating->update($vote_value,$ip);
 if($update) {
     $html_out = $rating->render($page,'result',1);
 } else {
-    $html_out = "Ya ha votado anteriormente esta noticia.";
+    $html_out = _("You have voted this new previously.")    ;
 }
 
 Application::ajax_out($html_out);
-
