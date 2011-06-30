@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-30 13:12+0200\n"
+"POT-Creation-Date: 2011-06-30 13:18+0200\n"
 "PO-Revision-Date: 2011-02-19 00:26+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
@@ -16,6 +16,178 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: include/menu.php:5 locale/extracted_strings.c:1658
+#: locale/extracted_strings.c:1667 locale/extracted_strings.c:1685
+#: locale/extracted_strings.c:3491
+msgid "Frontpage"
+msgstr ""
+
+#: include/menu.php:9
+#, fuzzy
+msgid "Frontpage Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:15 locale/extracted_strings.c:1253
+msgid "Widget Manager"
+msgstr ""
+
+#: include/menu.php:20
+msgid "Contents"
+msgstr ""
+
+#: include/menu.php:24 locale/extracted_strings.c:1151
+#: locale/extracted_strings.c:1346
+msgid "Articles"
+msgstr ""
+
+#: include/menu.php:30 locale/extracted_strings.c:164
+#: locale/extracted_strings.c:1310 locale/extracted_strings.c:1334
+#: locale/extracted_strings.c:1349
+msgid "Opinions"
+msgstr ""
+
+#: include/menu.php:36 locale/extracted_strings.c:578
+#: locale/extracted_strings.c:1394
+msgid "Comments"
+msgstr ""
+
+#: include/menu.php:42
+msgid "Polls"
+msgstr ""
+
+#: include/menu.php:48 locale/extracted_strings.c:1157
+msgid "Advertisements"
+msgstr ""
+
+#: include/menu.php:54
+msgid "Static Pages"
+msgstr ""
+
+#: include/menu.php:60 locale/extracted_strings.c:2192
+#: locale/extracted_strings.c:3494 locale/extracted_strings.c:3551
+msgid "Library"
+msgstr ""
+
+#: include/menu.php:66
+#, fuzzy
+msgid "Agency Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:72
+#, fuzzy
+msgid "Category Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:77 locale/extracted_strings.c:1793
+msgid "Media"
+msgstr ""
+
+#: include/menu.php:81
+#, fuzzy
+msgid "Images"
+msgstr "Xestor de caché"
+
+#: include/menu.php:87 locale/extracted_strings.c:1319
+#: locale/extracted_strings.c:1343 locale/extracted_strings.c:1367
+msgid "Files"
+msgstr ""
+
+#: include/menu.php:93 locale/extracted_strings.c:1316
+#: locale/extracted_strings.c:1340 locale/extracted_strings.c:1364
+msgid "Videos"
+msgstr ""
+
+#: include/menu.php:99 locale/extracted_strings.c:188
+#: locale/extracted_strings.c:1313 locale/extracted_strings.c:1337
+#: locale/extracted_strings.c:1358
+msgid "Albums"
+msgstr ""
+
+#: include/menu.php:105 include/menu.php:109
+msgid "Users"
+msgstr ""
+
+#: include/menu.php:115
+msgid "User Groups"
+msgstr ""
+
+#: include/menu.php:121
+msgid "Privileges"
+msgstr ""
+
+#: include/menu.php:126
+msgid "Utilities"
+msgstr ""
+
+#: include/menu.php:130 locale/extracted_strings.c:53
+#: locale/extracted_strings.c:59
+msgid "Advanced Search"
+msgstr ""
+
+#: include/menu.php:135
+msgid "News Stand"
+msgstr ""
+
+#: include/menu.php:140
+msgid "Newsletter"
+msgstr ""
+
+#: include/menu.php:145 locale/extracted_strings.c:461
+#: locale/extracted_strings.c:1244 locale/extracted_strings.c:1484
+#: locale/extracted_strings.c:3290 locale/extracted_strings.c:3353
+msgid "Keywords"
+msgstr ""
+
+#: include/menu.php:154
+msgid "EuropaPress importer"
+msgstr ""
+
+#: include/menu.php:163 locale/extracted_strings.c:50
+#: locale/extracted_strings.c:1370
+msgid "Trash"
+msgstr ""
+
+#: include/menu.php:168
+msgid "Link control"
+msgstr ""
+
+#: include/menu.php:177
+msgid "Statistics"
+msgstr ""
+
+#: include/menu.php:182
+#, fuzzy
+msgid "System"
+msgstr "Anovar lista"
+
+#: include/menu.php:185
+#, fuzzy
+msgid "System settings"
+msgstr "Opcións"
+
+#: include/menu.php:190 locale/extracted_strings.c:872
+msgid "Cache Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:195
+#, fuzzy
+msgid "Update System"
+msgstr "Anovar lista"
+
+#: include/menu.php:200
+#, fuzzy
+msgid "PHP Cache Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:205
+#, fuzzy
+msgid "Database Manager"
+msgstr "Xestor de caché"
+
+#: include/menu.php:209
+msgid "Support and Help"
+msgstr ""
 
 #: ../core/photo.class.php:158
 msgid " La imagen es de tipo gif </br>"
@@ -368,14 +540,6 @@ msgstr ""
 msgid "ADS"
 msgstr ""
 
-#: locale/extracted_strings.c:50 locale/extracted_strings.c:1370
-msgid "Trash"
-msgstr ""
-
-#: locale/extracted_strings.c:53 locale/extracted_strings.c:59
-msgid "Advanced Search"
-msgstr ""
-
 #: locale/extracted_strings.c:56
 msgid "Search in the information catalog:"
 msgstr ""
@@ -477,11 +641,6 @@ msgstr ""
 msgid "Widgets"
 msgstr ""
 
-#: locale/extracted_strings.c:164 locale/extracted_strings.c:1310
-#: locale/extracted_strings.c:1334 locale/extracted_strings.c:1349
-msgid "Opinions"
-msgstr ""
-
 #: locale/extracted_strings.c:167
 #, fuzzy
 msgid "Homepage articles"
@@ -509,11 +668,6 @@ msgstr ""
 
 #: locale/extracted_strings.c:185
 msgid "Must have 4 favorites albuns to frontpage.<br />  "
-msgstr ""
-
-#: locale/extracted_strings.c:188 locale/extracted_strings.c:1313
-#: locale/extracted_strings.c:1337 locale/extracted_strings.c:1358
-msgid "Albums"
 msgstr ""
 
 #: locale/extracted_strings.c:191 locale/extracted_strings.c:257
@@ -821,12 +975,6 @@ msgstr ""
 msgid "(separated with comas)"
 msgstr ""
 
-#: locale/extracted_strings.c:461 locale/extracted_strings.c:1244
-#: locale/extracted_strings.c:1484 locale/extracted_strings.c:3290
-#: locale/extracted_strings.c:3353
-msgid "Keywords"
-msgstr ""
-
 #: locale/extracted_strings.c:464 locale/extracted_strings.c:3293
 #: locale/extracted_strings.c:3356
 msgid "Page content"
@@ -958,10 +1106,6 @@ msgstr ""
 #, fuzzy
 msgid "Ratings"
 msgstr "Opcións"
-
-#: locale/extracted_strings.c:578 locale/extracted_strings.c:1394
-msgid "Comments"
-msgstr ""
 
 #: locale/extracted_strings.c:581 locale/extracted_strings.c:956
 msgid "Created in"
@@ -1228,10 +1372,6 @@ msgstr ""
 #: locale/extracted_strings.c:869
 msgid "There is no cache configuration available"
 msgstr ""
-
-#: locale/extracted_strings.c:872
-msgid "Cache Manager"
-msgstr "Xestor de caché"
 
 #: locale/extracted_strings.c:875
 msgid "Are you sure that you want to delete this selected cache files?"
@@ -1528,18 +1668,10 @@ msgstr "Tódalas seccións"
 msgid "Sort sections"
 msgstr "Tódalas seccións"
 
-#: locale/extracted_strings.c:1151 locale/extracted_strings.c:1346
-msgid "Articles"
-msgstr ""
-
 #: locale/extracted_strings.c:1154
 #, fuzzy
 msgid "Photos"
 msgstr "Eliminar caché"
-
-#: locale/extracted_strings.c:1157
-msgid "Advertisements"
-msgstr ""
 
 #: locale/extracted_strings.c:1160
 msgid "See in menu"
@@ -1602,10 +1734,6 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: locale/extracted_strings.c:1253
-msgid "Widget Manager"
-msgstr ""
-
 #: locale/extracted_strings.c:1256
 msgid "New widget"
 msgstr ""
@@ -1632,16 +1760,6 @@ msgstr "Xestor de caché"
 
 #: locale/extracted_strings.c:1307
 msgid "Articles for review"
-msgstr ""
-
-#: locale/extracted_strings.c:1316 locale/extracted_strings.c:1340
-#: locale/extracted_strings.c:1364
-msgid "Videos"
-msgstr ""
-
-#: locale/extracted_strings.c:1319 locale/extracted_strings.c:1343
-#: locale/extracted_strings.c:1367
-msgid "Files"
 msgstr ""
 
 #: locale/extracted_strings.c:1331
@@ -1909,11 +2027,6 @@ msgstr ""
 msgid "URL:"
 msgstr ""
 
-#: locale/extracted_strings.c:1658 locale/extracted_strings.c:1667
-#: locale/extracted_strings.c:1685 locale/extracted_strings.c:3491
-msgid "Frontpage"
-msgstr ""
-
 #: locale/extracted_strings.c:1661 locale/extracted_strings.c:1670
 #, fuzzy
 msgid "Opinion"
@@ -1987,10 +2100,6 @@ msgstr ""
 #: locale/extracted_strings.c:1790 locale/extracted_strings.c:2564
 #: locale/extracted_strings.c:2567 locale/extracted_strings.c:3059
 msgid "Date:"
-msgstr ""
-
-#: locale/extracted_strings.c:1793
-msgid "Media"
 msgstr ""
 
 #: locale/extracted_strings.c:1796
@@ -2340,11 +2449,6 @@ msgstr ""
 #: locale/extracted_strings.c:2336 locale/extracted_strings.c:2339
 #: locale/extracted_strings.c:2342
 msgid "Preview"
-msgstr ""
-
-#: locale/extracted_strings.c:2192 locale/extracted_strings.c:3494
-#: locale/extracted_strings.c:3551
-msgid "Library"
 msgstr ""
 
 #: locale/extracted_strings.c:2219 locale/extracted_strings.c:2222
@@ -3365,28 +3469,12 @@ msgstr ""
 #~ msgstr "Vídeo interior"
 
 #, fuzzy
-#~ msgid "Frontpage Manager"
-#~ msgstr "Xestor de caché"
-
-#, fuzzy
 #~ msgid "Templates Manager"
-#~ msgstr "Xestor de caché"
-
-#, fuzzy
-#~ msgid "Agency Manager"
 #~ msgstr "Xestor de caché"
 
 #, fuzzy
 #~ msgid "Configuration"
 #~ msgstr "Cambiar expiración"
-
-#, fuzzy
-#~ msgid "System settings"
-#~ msgstr "Opcións"
-
-#, fuzzy
-#~ msgid "Update System"
-#~ msgstr "Anovar lista"
 
 #, fuzzy
 #~ msgid "Frontpage Video"

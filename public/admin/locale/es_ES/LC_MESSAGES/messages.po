@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-30 13:12+0200\n"
-"PO-Revision-Date: 2011-06-30 13:15+0200\n"
+"POT-Creation-Date: 2011-06-30 13:18+0200\n"
+"PO-Revision-Date: 2011-06-30 13:19+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -17,6 +17,169 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: include/menu.php:5 locale/extracted_strings.c:1658
+#: locale/extracted_strings.c:1667 locale/extracted_strings.c:1685
+#: locale/extracted_strings.c:3491
+msgid "Frontpage"
+msgstr "Portadas"
+
+#: include/menu.php:9
+msgid "Frontpage Manager"
+msgstr "Gestor de portadas"
+
+#: include/menu.php:15 locale/extracted_strings.c:1253
+msgid "Widget Manager"
+msgstr "Gestor de widgets"
+
+#: include/menu.php:20
+msgid "Contents"
+msgstr "Contenidos"
+
+#: include/menu.php:24 locale/extracted_strings.c:1151
+#: locale/extracted_strings.c:1346
+msgid "Articles"
+msgstr "Artículos"
+
+#: include/menu.php:30 locale/extracted_strings.c:164
+#: locale/extracted_strings.c:1310 locale/extracted_strings.c:1334
+#: locale/extracted_strings.c:1349
+msgid "Opinions"
+msgstr "Opiniones"
+
+#: include/menu.php:36 locale/extracted_strings.c:578
+#: locale/extracted_strings.c:1394
+msgid "Comments"
+msgstr "Comentarios"
+
+#: include/menu.php:42
+msgid "Polls"
+msgstr "Encuestas"
+
+#: include/menu.php:48 locale/extracted_strings.c:1157
+msgid "Advertisements"
+msgstr "Publicidad"
+
+#: include/menu.php:54
+msgid "Static Pages"
+msgstr "Páginas estáticas"
+
+#: include/menu.php:60 locale/extracted_strings.c:2192
+#: locale/extracted_strings.c:3494 locale/extracted_strings.c:3551
+msgid "Library"
+msgstr "Hemeroteca"
+
+#: include/menu.php:66
+msgid "Agency Manager"
+msgstr "Gestor de agencias"
+
+#: include/menu.php:72
+msgid "Category Manager"
+msgstr "Gestor de categorías"
+
+#: include/menu.php:77 locale/extracted_strings.c:1793
+msgid "Media"
+msgstr "Multimedia"
+
+#: include/menu.php:81
+msgid "Images"
+msgstr "Imágenes"
+
+#: include/menu.php:87 locale/extracted_strings.c:1319
+#: locale/extracted_strings.c:1343 locale/extracted_strings.c:1367
+msgid "Files"
+msgstr "Ficheros"
+
+#: include/menu.php:93 locale/extracted_strings.c:1316
+#: locale/extracted_strings.c:1340 locale/extracted_strings.c:1364
+msgid "Videos"
+msgstr "Vídeos"
+
+#: include/menu.php:99 locale/extracted_strings.c:188
+#: locale/extracted_strings.c:1313 locale/extracted_strings.c:1337
+#: locale/extracted_strings.c:1358
+msgid "Albums"
+msgstr "Álbumes"
+
+#: include/menu.php:105 include/menu.php:109
+msgid "Users"
+msgstr "Usuarios"
+
+#: include/menu.php:115
+msgid "User Groups"
+msgstr "Grupos de usuarios"
+
+#: include/menu.php:121
+msgid "Privileges"
+msgstr "Privilegios"
+
+#: include/menu.php:126
+msgid "Utilities"
+msgstr "Utilidades"
+
+#: include/menu.php:130 locale/extracted_strings.c:53
+#: locale/extracted_strings.c:59
+msgid "Advanced Search"
+msgstr "Búsqueda avanzada"
+
+#: include/menu.php:135
+msgid "News Stand"
+msgstr "Portadas de papel"
+
+#: include/menu.php:140
+msgid "Newsletter"
+msgstr "Boletín de noticias"
+
+#: include/menu.php:145 locale/extracted_strings.c:461
+#: locale/extracted_strings.c:1244 locale/extracted_strings.c:1484
+#: locale/extracted_strings.c:3290 locale/extracted_strings.c:3353
+msgid "Keywords"
+msgstr "Palabras clave"
+
+#: include/menu.php:154
+msgid "EuropaPress importer"
+msgstr "Importador de EuropaPress"
+
+#: include/menu.php:163 locale/extracted_strings.c:50
+#: locale/extracted_strings.c:1370
+msgid "Trash"
+msgstr "Papelera"
+
+#: include/menu.php:168
+msgid "Link control"
+msgstr "Control de links"
+
+#: include/menu.php:177
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#: include/menu.php:182
+msgid "System"
+msgstr "Sistema"
+
+#: include/menu.php:185
+msgid "System settings"
+msgstr "Opciones del sistema"
+
+#: include/menu.php:190 locale/extracted_strings.c:872
+msgid "Cache Manager"
+msgstr "Gestor de caché"
+
+#: include/menu.php:195
+msgid "Update System"
+msgstr "Actualizar sistema"
+
+#: include/menu.php:200
+msgid "PHP Cache Manager"
+msgstr "Gestor de caché de PHP"
+
+#: include/menu.php:205
+msgid "Database Manager"
+msgstr "Gestor de base de datos"
+
+#: include/menu.php:209
+msgid "Support and Help"
+msgstr "Soporte y ayuda"
 
 #: ../core/photo.class.php:158
 msgid " La imagen es de tipo gif </br>"
@@ -376,14 +539,6 @@ msgstr "ALBUMS"
 msgid "ADS"
 msgstr "PUBLICIDAD"
 
-#: locale/extracted_strings.c:50 locale/extracted_strings.c:1370
-msgid "Trash"
-msgstr "Papelera"
-
-#: locale/extracted_strings.c:53 locale/extracted_strings.c:59
-msgid "Advanced Search"
-msgstr "Búsqueda avanzada"
-
 #: locale/extracted_strings.c:56
 msgid "Search in the information catalog:"
 msgstr "Buscar en el catálogo de información:"
@@ -483,11 +638,6 @@ msgstr "Artículos sugeridos"
 msgid "Widgets"
 msgstr "Widgets"
 
-#: locale/extracted_strings.c:164 locale/extracted_strings.c:1310
-#: locale/extracted_strings.c:1334 locale/extracted_strings.c:1349
-msgid "Opinions"
-msgstr "Opiniones"
-
 #: locale/extracted_strings.c:167
 msgid "Homepage articles"
 msgstr "Artículos de portada"
@@ -515,11 +665,6 @@ msgstr "WIDGET de PORTADA"
 #: locale/extracted_strings.c:185
 msgid "Must have 4 favorites albuns to frontpage.<br />  "
 msgstr "Debe tener 4 álbums favoritos en portada.<br />"
-
-#: locale/extracted_strings.c:188 locale/extracted_strings.c:1313
-#: locale/extracted_strings.c:1337 locale/extracted_strings.c:1358
-msgid "Albums"
-msgstr "Álbumes"
 
 #: locale/extracted_strings.c:191 locale/extracted_strings.c:257
 #: locale/extracted_strings.c:260 locale/extracted_strings.c:296
@@ -816,12 +961,6 @@ msgstr "Publicada:"
 msgid "(separated with comas)"
 msgstr "(separadas por comas)"
 
-#: locale/extracted_strings.c:461 locale/extracted_strings.c:1244
-#: locale/extracted_strings.c:1484 locale/extracted_strings.c:3290
-#: locale/extracted_strings.c:3353
-msgid "Keywords"
-msgstr "Palabras clave"
-
 #: locale/extracted_strings.c:464 locale/extracted_strings.c:3293
 #: locale/extracted_strings.c:3356
 msgid "Page content"
@@ -946,10 +1085,6 @@ msgstr "Vistas"
 #: locale/extracted_strings.c:575
 msgid "Ratings"
 msgstr "Valoraciones"
-
-#: locale/extracted_strings.c:578 locale/extracted_strings.c:1394
-msgid "Comments"
-msgstr "Comentarios"
 
 #: locale/extracted_strings.c:581 locale/extracted_strings.c:956
 msgid "Created in"
@@ -1204,10 +1339,6 @@ msgstr "Fecha de expiración"
 #: locale/extracted_strings.c:869
 msgid "There is no cache configuration available"
 msgstr "No hai ninguna configuración de caché disponible"
-
-#: locale/extracted_strings.c:872
-msgid "Cache Manager"
-msgstr "Gestor de caché"
 
 #: locale/extracted_strings.c:875
 msgid "Are you sure that you want to delete this selected cache files?"
@@ -1498,17 +1629,9 @@ msgstr "Secciones disponibles"
 msgid "Sort sections"
 msgstr "Ordenar secciones"
 
-#: locale/extracted_strings.c:1151 locale/extracted_strings.c:1346
-msgid "Articles"
-msgstr "Artículos"
-
 #: locale/extracted_strings.c:1154
 msgid "Photos"
 msgstr "Fotos"
-
-#: locale/extracted_strings.c:1157
-msgid "Advertisements"
-msgstr "Publicidad"
 
 #: locale/extracted_strings.c:1160
 msgid "See in menu"
@@ -1570,10 +1693,6 @@ msgstr "Descripción"
 msgid "Content"
 msgstr "Contenido"
 
-#: locale/extracted_strings.c:1253
-msgid "Widget Manager"
-msgstr "Gestor de widgets"
-
 #: locale/extracted_strings.c:1256
 msgid "New widget"
 msgstr "Nuevo widget"
@@ -1599,16 +1718,6 @@ msgstr "Artículos en hemeroteca"
 #: locale/extracted_strings.c:1307
 msgid "Articles for review"
 msgstr "Artículos por revisar"
-
-#: locale/extracted_strings.c:1316 locale/extracted_strings.c:1340
-#: locale/extracted_strings.c:1364
-msgid "Videos"
-msgstr "Vídeos"
-
-#: locale/extracted_strings.c:1319 locale/extracted_strings.c:1343
-#: locale/extracted_strings.c:1367
-msgid "Files"
-msgstr "Ficheros"
 
 #: locale/extracted_strings.c:1331
 msgid "Pending articles"
@@ -1864,11 +1973,6 @@ msgstr "segundos. <sub>( -1 no desaparece )</sub>"
 msgid "URL:"
 msgstr "URL:"
 
-#: locale/extracted_strings.c:1658 locale/extracted_strings.c:1667
-#: locale/extracted_strings.c:1685 locale/extracted_strings.c:3491
-msgid "Frontpage"
-msgstr "Portadas"
-
 #: locale/extracted_strings.c:1661 locale/extracted_strings.c:1670
 msgid "Opinion"
 msgstr "Opinión"
@@ -1938,10 +2042,6 @@ msgstr "Visualizaciones:"
 #: locale/extracted_strings.c:2567 locale/extracted_strings.c:3059
 msgid "Date:"
 msgstr "Fecha:"
-
-#: locale/extracted_strings.c:1793
-msgid "Media"
-msgstr "Multimedia"
 
 #: locale/extracted_strings.c:1796
 msgid "Media element (flash, image, gif)"
@@ -2289,11 +2389,6 @@ msgstr "Gestor de artículos :: Creando nuevo artículo"
 #: locale/extracted_strings.c:2342
 msgid "Preview"
 msgstr "Previsualizar"
-
-#: locale/extracted_strings.c:2192 locale/extracted_strings.c:3494
-#: locale/extracted_strings.c:3551
-msgid "Library"
-msgstr "Hemeroteca"
 
 #: locale/extracted_strings.c:2219 locale/extracted_strings.c:2222
 msgid "Restore"
@@ -3285,9 +3380,6 @@ msgstr "Seleccione una copia de seguridad para restaurar"
 #~ msgid "Comment manager"
 #~ msgstr "Gestor de comentarios"
 
-#~ msgid "Newsletter"
-#~ msgstr "Boletín de noticias"
-
 #~ msgid "XML Import"
 #~ msgstr "Importación XML"
 
@@ -3315,44 +3407,8 @@ msgstr "Seleccione una copia de seguridad para restaurar"
 #~ msgid "Poll"
 #~ msgstr "Encuesta"
 
-#~ msgid "Frontpage Manager"
-#~ msgstr "Gestor de portadas"
-
 #~ msgid "Templates Manager"
 #~ msgstr "Gestor de plantillas"
-
-#~ msgid "Contents"
-#~ msgstr "Contenidos"
-
-#~ msgid "Polls"
-#~ msgstr "Encuestas"
-
-#~ msgid "Agency Manager"
-#~ msgstr "Gestor de agencias"
-
-#~ msgid "Images"
-#~ msgstr "Imágenes"
-
-#~ msgid "Users"
-#~ msgstr "Usuarios"
-
-#~ msgid "Privileges"
-#~ msgstr "Privilegios"
-
-#~ msgid "Utilities"
-#~ msgstr "Utilidades"
-
-#~ msgid "News Stand"
-#~ msgstr "Portadas de papel"
-
-#~ msgid "EuropaPress importer"
-#~ msgstr "Importador de EuropaPress"
-
-#~ msgid "Link control"
-#~ msgstr "Control de links"
-
-#~ msgid "Statistics"
-#~ msgstr "Estadísticas"
 
 #~ msgid "Check PHP cache"
 #~ msgstr "Comprobar caché de PHP"
@@ -3362,15 +3418,6 @@ msgstr "Seleccione una copia de seguridad para restaurar"
 
 #~ msgid "Configuration"
 #~ msgstr "Configuraciones"
-
-#~ msgid "System settings"
-#~ msgstr "Opciones del sistema"
-
-#~ msgid "Update System"
-#~ msgstr "Actualizar sistema"
-
-#~ msgid "Support and Help"
-#~ msgstr "Soporte y ayuda"
 
 #~ msgid "Genre"
 #~ msgstr "Género"
