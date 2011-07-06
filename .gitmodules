@@ -1,0 +1,3 @@
+[submodule "public/libs/Panorama"]
+	path = public/libs/Panorama
+	url = git://github.com/frandieguez/Panorama-PHP.git
