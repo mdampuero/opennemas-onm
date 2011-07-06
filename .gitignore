@@ -11,7 +11,8 @@ public/media
 */compile/*
 *komodo*
 public/admin/themes/default/compile/*
-**/**/*~ 
+**/**/*~
 /nbproject/private/
 /public/themes/nuevatribuna/config/
 db/*
+public/themes/*

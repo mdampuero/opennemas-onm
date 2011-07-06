@@ -57,11 +57,10 @@ class FTP {
 	 *
 	 * @throws <b>Exception</b> $cacheDir not writable.
 	 */
-	public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
+    public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
     {
 
         $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
-
         self::cleanWeirdFiles($cacheDir);
 		$deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
 
@@ -72,7 +71,6 @@ class FTP {
             if (count($files) > 0) {
 				foreach($files as $file) {
 					$elements []= $file;
-
 					$localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
 					if (!file_exists($localFilePath)){
 						ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
@@ -119,7 +117,7 @@ class FTP {
      *
      * @param string 	$cacheDir 		the directory where remove files
      * @param string 	$serverFiles 	the list of files present in server
-     * @param string 	$localFiles 	the list of local files 
+     * @param string 	$localFiles 	the list of local files
      *
      * @return boolean, true if all went well
     */
