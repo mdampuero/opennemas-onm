@@ -32,6 +32,26 @@ class Acl
         return Privileges_check::CheckPrivileges($rule);
     }
 
+     /**
+     * Shortcut to check privilege and forward
+     *
+     * @see Privileges_check::CheckPrivileges()
+     * @param string $rule
+     * @param string $module
+     * @return boolean
+    */
+    public static function checkOrForward($rule, $module=null)
+    {
+        if(!is_null($module)) {
+            $rule = strtoupper($module) . '_' . strtoupper($rule);
+        }
+
+        if( !Privileges_check::CheckPrivileges($rule)) {
+             Application::forward('/admin/welcome.php');
+        }
+        return true;
+
+    }
     /**
      * Shortcut to check access to category
      *
