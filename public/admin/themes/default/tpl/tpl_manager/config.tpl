@@ -9,7 +9,7 @@
 			<div style="float:left; margin:8px;"><h2>{t}Cache Manager :: Cache groups{/t}</h2></div>
 			<ul>
 				<li>
-					<a href="{$smarty.server.SCRIPT_NAME}?action=list" title="{t}Cancel{/t}">
+					<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
 						<img src="{$params.IMAGE_DIR}cancel.png" border="0" /><br />
 						{t}Cancel{/t}
 					</a>
