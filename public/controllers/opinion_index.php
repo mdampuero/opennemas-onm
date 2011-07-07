@@ -135,13 +135,21 @@ if (isset($_REQUEST['action'])) {
                     $opinions = $cm->find_listAuthorsEditorial('contents.available=1  AND contents.content_status=1', 'ORDER BY created DESC '.$_limit);
                     $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=1 and contents.available=1  and contents.content_status=1');
                     $name_author= 'editorial';
+					foreach ($opinions as &$opinion) {
+						$opinion['pk_author'] = 1;
+						$opinion['author_name_slug']  = $name_author;
+					}
 
                 // Fetch director opinions
                 } elseif ($authorID == 2) { //Director
 
                     $opinions = $cm->find_listAuthors('opinions.type_opinion=2 and contents.available=1 and contents.content_status=1', 'ORDER BY created DESC '.$_limit);
                     $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=2 and contents.available=1  and contents.content_status=1');
-                    $name_author= 'director';
+                    $name_author = 'director';
+					foreach ($opinions as &$opinion) {
+						$opinion['pk_author'] = 2;
+						$opinion['author_name_slug']  = $name_author;
+					}
 
                 // Fetch common author opinions
                 } else { //Author
@@ -155,24 +163,21 @@ if (isset($_REQUEST['action'])) {
 													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
                     $name_author = String_Utils::get_title($aut->name);
+					foreach ($opinions as &$opinion) {
+						$opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
+					}
 
                 }
+
+
 
                 // If there aren't opinions just redirect to homepage opinion
                 if(empty($total_opinions)){ Application::forward301('/seccion/opinion/'); }
 
-				$improvedOpinions = array();
-
-
-				foreach($opinions as $opinion) {
-					$opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
-					$improvedOpinions[] = $opinion;
-				}
-
                 $url = Uri::generate('opinion_author_frontpage',
 							  array(
-									'slug' => $improvedOpinions[0]['author_name_slug'],
-									'id' => $improvedOpinions[0]['pk_author']
+									'slug' => $opinions[0]['author_name_slug'],
+									'id' => $opinions[0]['pk_author']
 									));
 
                 $pagination = $cm->create_paginate($total_opinions, ITEMS_PAGE, 2, 'URL', $url);
@@ -184,7 +189,7 @@ if (isset($_REQUEST['action'])) {
 
                 $tpl->assign('author_name', $name_author);
                 $tpl->assign('pagination_list', $pagination);
-                $tpl->assign('opinions', $improvedOpinions);
+                $tpl->assign('opinions', $opinions);
                 $tpl->assign('author_id', $authorID);
 
             } // End if isCached
