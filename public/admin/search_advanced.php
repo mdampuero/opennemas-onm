@@ -79,8 +79,8 @@ switch($_REQUEST['action'])
         
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
 
             }
             
@@ -131,8 +131,8 @@ switch($_REQUEST['action'])
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
+                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
 
             }
 
@@ -466,32 +466,4 @@ function send_notify( $destinatario, $htmlcontent ) {
 
 		}
 	}
-    
-function ext_str_ireplace($findme, $replacewith, $subject)
-{
-     // Replaces $findme in $subject with $replacewith
-     // Ignores the case and do keep the original capitalization by using $1 in $replacewith
-     // Required: PHP 5
-
-     $rest = $subject;
-     $result = '';
-
-     while (stripos($rest, $findme) !== false) {
-          $pos = stripos($rest, $findme);
-
-          // Remove the wanted string from $rest and append it to $result
-          $result .= substr($rest, 0, $pos);
-          $rest = substr($rest, $pos, strlen($rest)-$pos);
-
-          // Remove the wanted string from $rest and place it correctly into $result
-          $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
-          $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
-     }
-
-     // After the last match, append the rest
-     $result .= $rest;
-
-     return $result;
-}
-
 ?>

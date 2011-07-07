@@ -1406,6 +1406,18 @@ if (isset($_REQUEST['action']) ) {
             $szSourceTags = explode(', ', String_Utils::get_tags($_REQUEST['metadata']));
             $where="content_status=1 AND available=1 ";
             $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
+            
+            //Put searched words with diferent color
+            $ind = 0; $indice = 0;
+            $res = array();
+            foreach ($search as $res ) {
+                for($ind=0; $ind < sizeof($szSourceTags); $ind++){
+                    $search[$indice]['title'] = String_Utils::ext_str_ireplace($szSourceTags[$ind], '<b><font color=blue>$1</font></b>', $search[$indice]['title']);
+                }
+                $indice++;
+            }
+
+            
             if(($search) && count($search)>0){
                 $params="0,'".$_REQUEST['metadata']."'";
                 $search = $cm->paginate_array_num_js($search,20 , 3, "search_adv", $params);
