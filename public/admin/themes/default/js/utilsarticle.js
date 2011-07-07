@@ -385,25 +385,6 @@ function vaciarImg(field){
 		}
  }
 
-// Paginacion galeria videos.
-function  get_videos(page) {
-	new Ajax.Updater('videos', "article_change_videos.php?page="+page ,
-	{
-		evalScripts: false,
-		onComplete: function() {
-			var photos = $('videos').select('img');
-			for(var i=0; i<photos.length; i++) {
-				//console.log("'" + photos[i].id + "'");
-				try {
-				//	new Draggable(photos[i].id, { revert:true, scroll: window, ghosting:true }  );
-				} catch(e) {
-				//	console.debug( e );
-				}
-			}
-		}
-	} );
-}
-
 
 //Paginacion otros articulos.
 function  get_suggested_articles(category,page) {

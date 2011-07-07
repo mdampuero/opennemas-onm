@@ -329,7 +329,7 @@ class Photo extends Content
         }
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
-        $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140x100-'.$this->name;
+        $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140-100-'.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);

@@ -57,7 +57,7 @@ if(($tpl->caching == 0)
     // Photo interior
     if(isset($article->img2) and ($article->img2 != 0)){
         $photo = new Photo($article->img2);
-        $tpl->assign('photo', $photo->path_file . '140x100-' . $photo->name);
+        $tpl->assign('photo', $photo->path_file . '140-100-' . $photo->name);
     }
 
 }

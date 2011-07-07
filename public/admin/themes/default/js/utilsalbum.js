@@ -1,20 +1,21 @@
 // JavaScript Document
 var num=0
+ 
 //add the mini in the list of album
 function album_put_mini(id){
 	
 	var ul = $('album_list');
 	Nodes = $('album_list').select('img');
-        for (var i=0;i < Nodes.length;i++) {      
-            if(Nodes[i].getAttribute('de:mas')==$(id).getAttribute('de:mas')){
-            //    showMsg({'warn':['La imagen ya esta en el album ']},'growl');
-               //album_msg
-            showMsgContainer({'warn':['La imagen ya esta en el album ']},'inline','album_msg');
-                 return false;
-            }
+    for (var i=0;i < Nodes.length;i++) {
+        if(Nodes[i].getAttribute('de:mas')==$(id).getAttribute('de:mas')){
+        //    showMsg({'warn':['La imagen ya esta en el album ']},'growl');
+        //album_msg
+        showMsgContainer({'warn':['La imagen ya esta en el album ']},'inline','album_msg');
+             return false;
         }
-        hideMsgContainer('album_msg');
-        num++;
+    }
+    hideMsgContainer('album_msg');
+    num++;
 	var pkfoto=$(id).name;
 	var imag=$(id).src;
 	 // alert(pkfoto);
@@ -49,8 +50,6 @@ function album_put_mini(id){
         min.setAttribute('de:mas', $(id).getAttribute('de:mas'));
         min.setAttribute('class', 'draggable2');
         min.setAttribute('ondblclick', 'define_crop(this)');
-
-        // added by vifito
         min.setAttribute('width', $(id).getAttribute('de:width'));
 
         a.appendChild(min);
@@ -60,7 +59,7 @@ function album_put_mini(id){
         ul.appendChild(li);
         //Definimos la papelera
         funcion='del_img("'+del+'")';
-        $('remove').setAttribute('onclick', funcion);
+         $('remove_img').setAttribute('onclick', funcion);
         //Lo hacemos movible.
         Sortable.create('album_list',{constraint: 'false', scroll:'scroll-album'});
        // new Draggable('img'+pkfoto, { revert:true, scroll: window, ghosting:true }  );
@@ -68,58 +67,153 @@ function album_put_mini(id){
 } 
   
  
- //Make moveable the list initial and define droppable the div show wath the image description
+//Make moveable the list initial and define droppable the div show wath the image description
 function album_make_mov(){
-     //Para poder ordenarlas
-      Sortable.create('album_list',{constraint: 'false', scroll:'scroll-album'});
+    //Para poder ordenarlas
+    Sortable.create('album_list',{constraint: 'false', scroll:'scroll-album'});
 
     //Para poder arrastrarlas
 
-  Droppables.add('nifty', { 
-    accept: 'draggable',
-    hoverclass: 'hover',
-    onDrop: function(element, droppable) {
-		
-		
-		var OID = album_put_mini(element.id);
-                if(OID){
-                    update_footer();
-                //    $('image_view').src = element.src;
-                    var src =element.src;
-                    src=src.replace( '140x100-','');           
-                    $('image_view').src= src;
-                    
-                    $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created') + "<br><b>Descripcion: </b>" + element.getAttribute('de:description') +"<br><b>Tags: </b>" + element.getAttribute('de:tags');
-                    $('img_footer').value= element.getAttribute('de:description');
+    Droppables.add('droppable_div1', {
+        accept: 'draggable',
+        hoverclass: 'hover',
+        onDrop: function(element, droppable) {				
+            var OID = album_put_mini(element.id);
+            if(OID) {
+                update_footer();
 
-                    //var funcion='save_footer('+element.id+')';
-                    var funcion = 'save_footer(\''+OID+'\')';
-                    $('img_footer').setAttribute('onchange', funcion);
-                    $('img_footer').setAttribute('rel', OID); // id da imaxe
+                var src =element.src;
+                src=src.replace( '140-100-','');
+                $('image_view').src= src;
 
-                    if( /Firefox\/2/.test(navigator.userAgent) ) {
-                            $('image_view').parentNode.style.height = $('image_view').height + 'px';
-                    }
+                $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created') + "<br><b>Descripcion: </b>" + element.getAttribute('de:description') +"<br><b>Tags: </b>" + element.getAttribute('de:tags');
+                $('img_footer').value= element.getAttribute('de:description');
+
+                //var funcion='save_footer('+element.id+')';
+                var funcion = 'save_footer(\''+OID+'\')';
+                $('img_footer').setAttribute('onchange', funcion);
+                $('img_footer').setAttribute('rel', OID); // id da imaxe
+
+                if( /Firefox\/2/.test(navigator.userAgent) ) {
+                        $('image_view').parentNode.style.height = $('image_view').height + 'px';
                 }
-  	}
-  });
+            }
+       }
+    });
+
+    Droppables.add('testWrap', {
+        accept: 'draggable2',
+        onDrop: function(element, droppable) {
+            if(crop != null) {
+                crop.remove();
+            }
+            $('testImage').src  = element.src;
+            $('path_img').value = element.getAttribute('de:path');
+            $('name_img').value = element.getAttribute('de:mas');
+
+            var a = element.getAttribute('de:dimensions');
+            var b = a.split(' x ');
+            var c = b[1].split(' (px)');
+
+            $('testImage').width  = b[0];
+            $('testImage').height = c[0];
+
+            cropcreate();
+        }
+    });
 
 }
 
 
+
+//CROP
+
+var crop = null;
+
+
+function cropcreate() {
+    crop = new Cropper.ImgWithPreview('testImage', {
+        minWidth: 300,
+        minHeight: 240,
+        ratioDim: { x: 300, y: 240 },
+        displayOnInit: true,
+        onEndCrop: onEndCrop,
+        previewWrap: 'previewArea'
+    });
+}
+
+function onEndCrop( coords, dimensions ) {
+    $( 'x1' ).value = coords.x1;
+    $( 'y1' ).value = coords.y1;
+
+    $( 'width' ).value  = dimensions.width;
+    $( 'height' ).value = dimensions.height;
+}
+
+
+function define_crop(element) {
+
+    if(crop != null) {
+        crop.remove();
+    }
+    if($('crop_img')) {
+        $('crop_img').src='';
+    }
+    $$('#previewArea img').each( function(e) { e.src=''; } ); //Para ocultar las de debajo
+    $('testImage').src = '/media/images/'+element.getAttribute('de:path') + element.getAttribute('de:mas');
+    $('path_img').value = element.getAttribute('de:path');
+    $('name_img').value = element.getAttribute('de:mas');
+    var a = element.getAttribute('de:dimensions');
+    var b = a.split(' x ');
+    var c = b[1].split(' (px)');
+    $('testImage').width=b[0];
+    $('testImage').height=c[0];
+    if(c[0]>b[0]){
+        if (c[0]>400) {
+            var w=Math.floor( (b[0]*400) / c[0] );
+             $('testImage').setStyle({
+                  height: '400px',
+                 width :  w +"px"
+                });
+         }else{
+             $('testImage').setStyle({
+                      height: c[0]+'px',
+                     width :  b[0]+'px'
+                    });
+        }
+
+    } else {
+        if(b[0]>600){
+               var h=Math.floor( (c[0]*600) / b[0] );
+                $('testImage').setStyle({
+                  width: '600px',
+                  height : h +"px"
+                });
+        }else{
+         $('testImage').setStyle({
+                  height: c[0]+'px',
+                 width :  b[0]+'px'
+                });
+        }
+    }
+
+    if (b[0]<300) { alert('La foto escogida para portada no supera los 300px de ancho');
+    }else{
+        if(c[0]<240){ alert('La foto escogida para portada no supera los 240px de alto');}
+    }
+
+    cropcreate();
+ }
+
+
 function check_crop() {
-   if($('crop_img')!=null){ //update
+    if( $('crop_img') != null){ //update
         return true;
-      }
+    }
     if(($( 'width' ).value=="")  || ($( 'width' ).value==null) || ($( 'width' ).value.length==0)){
- //       alert('Debe crear un crop');
-     //   var msgs2="Debe crear un crop para la portada  del album";
-      // msg({'warn':['']});
-     
-     // showMsg({'warn':['Debe crear un crop para la portada  del album ']},'growl');
-     alert('Debe crear un crop para la portada del album ');
-        return false;
-    }   
+         showMsgContainer({'warn':[' Debe crear un crop para la portada  del album ']},'inline','album_msg');
+         return false;
+    }
     return true;
 }
 
@@ -135,7 +229,7 @@ function update_footer() {
 }
 
 //Save footer_img
-function save_footer(img){	
+function save_footer(img) {
 	var descrip = $('img_footer').value;	
 	
 	//alert( 's'+descrip);
@@ -157,7 +251,7 @@ function show_image(img,del) {
 	$('informa').innerHTML="";
 //	$('image_view').src= $(img).src;
         var src =$(img).src;
-        src=src.replace( '140x100-','');
+        src=src.replace( '140-100-','');
         $('image_view').src= src;
 	$('informa').innerHTML="<b>Archivo: </b>"+$(img).getAttribute('name') + "<br><b>Dimensiones: </b>"+$(img).getAttribute('de:dimensions') + " <br><b>Peso: </b>" + $(img).getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + $(img).getAttribute('de:created') + "<br><b>Descripcion: </b>" + $(img).getAttribute('de:description') +"<br><b>Tags: </b>" + $(img).getAttribute('de:tags');
 	$('img_footer').value= $(img).getAttribute('de:footer'); 
@@ -170,7 +264,7 @@ function show_image(img,del) {
 	
 	var id= $(img).getAttribute('value');
 	funcion='del_img("'+del+'")';
-	$('remove').setAttribute('onclick', funcion); 
+	$('remove_img').setAttribute('onclick', funcion);
 }
 
 
@@ -246,5 +340,47 @@ function delete_album(id,page){
             }
         });
 
+
+ }
+
+
+//Eliminar y recuperar imagen en articulos.
+ function recuperar_eliminar(field){
+	  var nombre='input_'+field;
+	  if (document.getElementById( nombre ).value ==''){
+	  	 recuperarOpacity(field);
+	  }else{
+	  	 vaciarImg(field);
+	  }
+ }
+
+//Vaciar foto y meter img_default.
+function vaciarImg(field){
+ 		var nombre='remove_'+field;   //Icono papelera-recuperar
+		document.getElementById( nombre ).src='themes/default/images/trash_no.png';
+	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
+	    document.getElementById( nombre ).setAttribute('title','Recuperar');
+
+		if(field=='img1'){
+				document.getElementById( 'input_img1' ).value ='';				 
+				document.getElementById('img_portada').setAttribute('style','opacity:0.4;');
+				document.getElementById( nombre ).setAttribute('style','opacity:1;');
+				document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
+				document.getElementById('img1_footer').setAttribute('disabled','true');
+		}
+
+  }
+
+ function recuperarOpacity(field){
+	    var nombre='remove_'+field;
+		document.getElementById( nombre ).src='themes/default/images/remove_image.png';
+	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
+	    document.getElementById( nombre ).setAttribute('title','Eliminar');
+		if(field=='img1'){
+				document.getElementById( 'input_img1' ).value =document.getElementById( 'change1' ).name;
+ 				document.getElementById('img_portada').setAttribute('style','opacity:1;');
+				document.getElementById('informa').setAttribute('style','opacity:1;overflow:auto;width:260px;');
+				document.getElementById('img1_footer').removeAttribute('disabled');
+	 	}
 
  }

@@ -1,5 +1,5 @@
 <?php
-//error_reporting(E_ALL);
+
 require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
@@ -410,12 +410,9 @@ if (isset($_REQUEST['action']) ) {
             $_SESSION['desde']='list_hemeroteca';
         break;
 
-        case 'new':   // Crear un nuevo artículo
+        case 'new':   // Crear un nuevo artículo            
             
-            
-            if( !Privileges_check::CheckPrivileges('ARTICLE_CREATE')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_CREATE');
 
             if(!isset($_REQUEST['category']) || $_REQUEST['category']=='' || $_REQUEST['category']=='home') {
                 $_REQUEST['category']=$_SESSION['_from'];
@@ -424,73 +421,16 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             //FIXME: cambiar por la llamada a vars php en smarty
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
-
-            
-            /*
-             * If image manager module is available get information for photos.
-             */
-            if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
-                //Listado fotos
-                // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-                list($photos, $pager)= $cm->find_pages('Photo',
-                                                       'contents.fk_content_type=8  and contents.content_status=1 and photos.media_type="image"',
-                                                       'ORDER BY  created DESC ',$_REQUEST['page'],16, $_REQUEST['category']);
-
-                foreach($photos as $photo){
-                    //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)){
-                        $photo->content_status=1;
-                    //}else{
-                        //$photo->content_status=0;
-                        //$ph=new Photo($photo->pk_photo);
-                        //$ph->set_status(0,$_SESSION['userid']);
-                    //}
-                }
-                $tpl->assign('photos', $photos);
-                $paginacion=$cm->makePagesLink($pager, $_REQUEST['category'],'list_by_category',0);
-                if($pager->_totalPages>1) {
-                        $tpl->assign('paginacion', $paginacion);
-                }
-            }
-            
-            /*
-             * If video manager module is available get information for videos.
-             */
-            if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
-                //Listado videos
-                list($videos, $pages)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],20);
-                foreach($videos as $video){
-                    if($video->author_name =='vimeo'){
-                        $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                        $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-                        $return = curl_exec($curl);
-                        $return = unserialize($return);
-                        if(!empty($return)){
-                            $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                            $video->thumbnail_small = $return[0]['thumbnail_small'];
-                        }
-                        curl_close($curl);
-                    }
-                }
-                
-                $tpl->assign('videos', $videos);
-                $params='0';
-                $paginacionV=$cm->makePagesLinkjs($pages, 'get_search_videos', $params);
-                if($pages->_totalPages>1) {
-                    $tpl->assign('paginacionV', $paginacionV);
-                }
-            }
-            
-           
+         
+            //TODO: AJAX 
+            require_once('controllers/video/videoGallery.php');
+             
         break;
 
         case 'read':
         case 'only_read': {
             if($_REQUEST['action'] == 'read') {
-                if( !Privileges_check::CheckPrivileges('ARTICLE_UPDATE')) {
-                    Privileges_check::AccessDeniedAction();
-                }
+                Acl::checkOrForward('ARTICLE_UPDATE');
                 $tpl->assign('_from', $_SESSION['_from']);
             }
             $article = new Article( $_REQUEST['id'] );
@@ -524,58 +464,7 @@ if (isset($_REQUEST['action']) ) {
                 $video2 = new Video($video);
                 $tpl->assign('video2', $video2);
             }
-
-            //Listado fotos
-            $photos = $cm->find_by_category('Photo', $article->category, 'fk_content_type=8 and content_status=1', 'ORDER BY created DESC  LIMIT 0,100');
-            $photos = $cm->find('Photo', 'fk_content_type=8 ', 'ORDER BY created DESC  LIMIT 0,100');
-            list($photos, $pager) = $cm->find_pages('Photo', '`contents`.`fk_content_type`=8  and `photos`.`media_type`="image"', 'ORDER BY `created` DESC ', $_REQUEST['page'], 30, $article->category);
-
-
-            foreach($photos as $photo) {
-                //if(file_exists(MEDIA_IMG_PATH.$photo->path_file.$photo->name)) {
-                    $photo->content_status = 1;
-                //} else {
-                //   $photo->content_status = 0;
-                //   $ph = new Photo($photo->pk_photo);
-                //   $ph->set_status(0, $_SESSION['userid']);
-                //}
-            }
-
-            $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
-
-            //$photos = $cm->paginate_num($photos,30);
-            $tpl->assign('photos', $photos);
-            $pages = $pager;
-            $paginacion = $cm->makePagesLink($pages, $article->category ,'list_by_category',0);
-            if($pages->_totalPages > 1) {
-                $tpl->assign('paginacion', $paginacion);
-            }
-
-            //Listado videos
-            list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],20);
-             foreach($videos as $video){
-                if($video->author_name =='vimeo'){
-                    $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    if(!empty($return)){
-                        $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                        $video->thumbnail_small = $return[0]['thumbnail_small'];
-                    }
-                }
-            }
-            $tpl->assign('videos', $videos);
-            $pages = $pager;
-            $params = '0';
-            $paginacionV = $cm->makePagesLinkjs($pages, 'get_search_videos', $params);
-            if($pages->_totalPages > 1) {
-                $tpl->assign('paginacionV', $paginacionV);
-            }
-
+ 
             $rel= new Related_content();
 
             $relationes = array();
@@ -629,7 +518,7 @@ if (isset($_REQUEST['action']) ) {
             // }}}
         } break;
 
-        case 'create': {
+        case 'create': 
             
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
             if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
@@ -652,14 +541,14 @@ if (isset($_REQUEST['action']) ) {
 
                 $tpl->assign('errors', $article->errors);
             }
-        } break;
+        break;
 
-        case 'unlink': {
+        case 'unlink': 
             $article = new Article($_REQUEST['id']);
             $article->unlinkClone();
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&id=' . $_REQUEST['id']);
-        } break;
+        break;
 
         // Restore article and save content, see you that don't exist break.
         case 'restore':
@@ -732,7 +621,7 @@ if (isset($_REQUEST['action']) ) {
                     $tpl->assign('errors', $article->errors);
                 }
             } else {
-                $article->update( $_REQUEST );
+                $article->update( $_POST );
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $_SESSION['_from'] .
@@ -1564,6 +1453,7 @@ if (isset($_REQUEST['action']) ) {
             Application::ajax_out("<h2>Opiniones:</h2>".$menu.$html_out.$paginacionV);
 
         break;
+
         case 'get_adjuntos':
             $cm = new ContentManager();
 

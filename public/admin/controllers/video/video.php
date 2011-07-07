@@ -6,67 +6,55 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
+$content_types = array('article' => 1 , 'album' => 7, 'video' => 9, 'opinion' => 4, 'kiosko'=>14);
 
 /**
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Video Management');
+ 
+ // Check if the user can admin album
+Acl::checkOrForward('VIDEO_ADMIN');
 
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-
-
-
-if( !Privileges_check::CheckPrivileges('VIDEO_ADMIN'))
-{
-    Privileges_check::AccessDeniedAction();
-}
-if (!isset($_REQUEST['page'])) {
-     $_REQUEST['page'] = 1;
-}
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
 /******************* GESTION CATEGORIAS  *****************************/
-$ccm = new ContentCategoryManager();
-if (!isset($_REQUEST['category'])) {
 
-    $_REQUEST['category'] = 6;
-}
- 
+$category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
+if(empty($category)) {
+    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
 
-$allcategorys = $ccm->find('(internal_category=1 OR internal_category=5) AND fk_content_category=0', 'ORDER BY internal_category DESC, posmenu');
-//var_dump($allcategorys);
-$i=0;
-foreach( $allcategorys as $prima) {
-    $subcat[$i]=$ccm->find(' (internal_category=1 OR internal_category=5) AND fk_content_category ='.$prima->pk_content_category, 'ORDER BY posmenu');
-      $i++;
 }
 
-$datos_cat = $ccm->find('pk_content_category='.$_REQUEST['category'], NULL);
+$ccm = ContentCategoryManager::get_instance();
+list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($content_types['video'], $category);
 
-$tpl->assign('category', $_REQUEST['category']);
+if (empty($category) ) {
+    $category = $categoryData[0]->pk_content_category;
+}
+
+$tpl->assign('category', $category);
+
 $tpl->assign('subcat', $subcat);
-$tpl->assign('allcategorys', $allcategorys);
-$tpl->assign('datos_cat', $datos_cat);
+$tpl->assign('allcategorys', $parentCategories);
+//TODO: ¿datoscat?¿
+$tpl->assign('datos_cat', $categoryData);
+
 
  
 /* GESTION CATEGORIAS  */
- 
+
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
 			$cm = new ContentManager();
-            if( $_REQUEST['category'] == 6){
-                list($videos, $pager)= $cm->find_pages('Video', 'favorite =1', 'ORDER BY  created DESC ',$_REQUEST['page'],10);
-                $totalvideos = count($videos);
-                $tpl->assign('totalvideos', $totalvideos);
-                
-            }else{
-		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-                list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
-                $i=0;
 
-                
-            }
+		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
+                list($videos, $pager)= $cm->find_pages('Video', 'fk_content_type=9 ', 'ORDER BY  created DESC ',$page,10, $category);
+                $i=0;
+ 
+
             foreach($videos as $video){
                 $video->category_name = $video->loadCategoryName($video->pk_content);
                 $i++;
@@ -105,13 +93,13 @@ if( isset($_REQUEST['action']) ) {
 			$video = new Video();			
 			$video->update( $_REQUEST );
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_POST['category'].'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_POST['category'].'&page='.$page);
 		break;
 
 		case 'create':
 			$video = new Video();
 			if($video->create( $_POST )) {
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_POST['category'].'&page='.$_REQUEST['page']);
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_POST['category'].'&page='.$page);
 			} else {
 				$tpl->assign('errors', $video->errors);
 			}
@@ -132,10 +120,11 @@ if( isset($_REQUEST['action']) ) {
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
 		break;
  
-                case 'delete':
+        case 'delete':
 			$video = new Video($_REQUEST['id']);
                         $rel= new Related_content();
                         $relationes=array();
+                        $msg ='';
                         $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
                         if(!empty($relationes)){
                              $msg = "El video '".$video->title."', está relacionado con los siguientes articulos:  ";
@@ -167,13 +156,13 @@ if( isset($_REQUEST['action']) ) {
                         $rel->delete_all($_REQUEST['id']);
                         $video->delete( $_REQUEST['id'],$_SESSION['userid'] );
                     }
-                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$_REQUEST['page']);
+                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
                  break;
 		
 		case 'set_position':
 			$video = new Video($_REQUEST['id']);
 			$video->set_position($_REQUEST['posicion'],$_SESSION['userid']);
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 		break;
 
 		case 'change_status':
@@ -183,7 +172,7 @@ if( isset($_REQUEST['action']) ) {
 			//$video->set_status($status,$_SESSION['userid']);
 			$video->set_available($status, $_SESSION['userid']);
 			
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 		break;
 
         case 'change_favorite':
@@ -196,7 +185,7 @@ if( isset($_REQUEST['action']) ) {
             }else{
                     $msg="No se puede esta despublicado";
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
 		break;
 
 	
@@ -214,7 +203,7 @@ if( isset($_REQUEST['action']) ) {
         		    }
 			  }
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 		break;
 		
 		case 'mdelete':
@@ -244,15 +233,15 @@ if( isset($_REQUEST['action']) ) {
                              }
 			  }
                                $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&alert='.$alert.'&msgdel='.$msg.'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&alert='.$alert.'&msgdel='.$msg.'&page='.$page);
 		break;
 		
 		default:
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 		break;
 	}
 } else {
-	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }
 
 $tpl->display('video/video.tpl');

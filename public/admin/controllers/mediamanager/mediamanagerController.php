@@ -37,10 +37,14 @@ if(!class_exists('Imagick')) {
  */
 class mediamanagerController { // FIXME: nome das clases a primeira en maiusculas e con camelcase MediaController
     /**
-     * Constants for thumbnails resolution
+     * Constants for thumbnails resolution & max frontpage size
     */
     const THUMB_WIDTH  = 140;
-    const THUMB_HEIGHT = 100;
+    const THUMB_HEIGHT = 100;    
+    const INNER_WIDTH = 480;
+    const INNER_HEIGHT = 250;
+    const FRONT_WIDTH = 350;
+    const FRONT_HEIGHT = 200;
 
     /* View object */
     public $tpl;
@@ -236,7 +240,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
     }
 
     private function check_thubnail( $photo ){
-        if( (!file_exists($this->path_upload.$photo->path_file . '140x100-' . $photo->name))
+        if( (!file_exists($this->path_upload.$photo->path_file . '140-100-' . $photo->name))
                 && file_exists($this->path_upload. $photo->path_file . $photo->name)){
                 $extension = $photo->type_img;
                 if(preg_match('/^(jpeg|jpg|gif|png)$/i', $extension)) {
@@ -244,9 +248,10 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                         $thumb = new Imagick($this->path_upload . $photo->path_file . $photo->name);
 
                         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
+                        $thumb->stripImage();
 
                         // Write the new image to a file
-                        $thumb->writeImage($this->path_upload . $photo->path_file . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT .
+                        $thumb->writeImage($this->path_upload . $photo->path_file . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT .
                                            '-' . $photo->name);
                     }
                 }
@@ -402,9 +407,20 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                             // miniatura
                             $thumb = new Imagick($uploaddir.$name);
 
+                            //ARTICLE INNER
+                            $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
+                            //Write the new image to a file
+                            $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
+
+                            //FRONTPAGE
+                            $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
+                            //Write the new image to a file
+                            $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
+
+                            //THUMBNAIL
                             $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
                             //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT . '-' . $name);
+                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);                            
                         }
                     }
 

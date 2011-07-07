@@ -1,37 +1,29 @@
 <?php 
-/**
- * Contains the Album_Photo class
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * New BSD License
- *
- * LICENSE: Some license information
- *
- * @category   Zend
- * @package    Onm
- * @subpackage Album
- * @copyright  Copyright (c) 2008-2010 OpenHost S.L. (http://www.openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id:$
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 /**
  * This class handles Album photo elements
- *
- *
- * @category   Zend
- * @package    Onm
+ * 
+ * @category Onm
+ * @package Onm
  * @subpackage Album
- * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license   BSD License
- * @version    $Id: album_photo.class.php 1 2010-10-15 16:39:58Z Fran Dieguez $
- * @link       http://framework.zend.com/package/PackageName
- * @since      Class available since Release x.x.x
- * @deprecated Class deprecated in Release x.x.x
+ * @copyright Copyright (c) 2005-2010 OpenHost S.L. http://www.openhost.es)
+ * @license http://framework.zend.com/license
+ * @version    $Id: album_photo.class.php 1 2011-06-15 16:39:58Z Sandra Pereira $
+ * @since Class available since Release 1.5.0 BSD License
 */
-class Album_photo{
-    var $pk_album = NULL;
-    var $pk_photo = NULL; //id del articulo
-    var $position  = NULL;
-    var $description  = NULL;	
+
+class Album_photo {
+
+    public $pk_album = NULL;
+    public $pk_photo = NULL;
+    public $position = NULL;
+    public $description = NULL;
 	
     /**
     * PHP5 constructor
@@ -52,11 +44,12 @@ class Album_photo{
     * @param int $pk_photo, the foreighn key for the photo
     * @param int $position, the relative position of the photo
     * @param string $description, the description for this photo into the album
-    * * @return bool, true if the photo was created, false if was not
+    *
+    *  @return bool, true if the photo was created, false if was not
     */
     function create($pk_album, $pk_photo, $position, $description) {
 		
-	$sql = "INSERT INTO albums_photos (`pk_album`, `pk_photo`, `position`, `description`) " .
+        $sql = "INSERT INTO albums_photos (`pk_album`, `pk_photo`, `position`, `description`) " .
 				" VALUES (?,?,?,?)";
 
         $values = array($pk_album, $pk_photo, $position, $description);      
@@ -102,11 +95,6 @@ class Album_photo{
        
     }
 
-    /**
-    * The 
-    *
-    * 
-    */
     function update($data) {
         
         $sql = "UPDATE  albums_photos "
@@ -116,7 +104,7 @@ class Album_photo{
 
         $values = array($data['pk_album'], $data['pk_photo'], $data['position'], $data['description']);
   
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -125,7 +113,7 @@ class Album_photo{
     }
 
     /**
-    * Detetes one album from a given album
+    * Deleted one album from a given album
     *
     * @param int $pk_album, the album where delete the photo
     * @param int $pk_photo, the id of the photo to delete
@@ -155,9 +143,11 @@ class Album_photo{
     	$sql = 'SELECT * FROM albums_photos '
              . 'WHERE pk_album = ' .($pk_album)
              .' ORDER BY position ASC';
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
-         $i=0;
-        while(!$rs->EOF) {
+
+        $i=0;
+        while (!$rs->EOF) {
         	$album[$i][] = $rs->fields['pk_album']; 
         	$album[$i][] = $rs->fields['pk_photo'];  
         	$album[$i][] = $rs->fields['position'];  
@@ -166,8 +156,7 @@ class Album_photo{
           	$i++;
         }
  
-        return( $album);
-        
+        return( $album);        
     }
 	
 	/**
@@ -186,6 +175,7 @@ class Album_photo{
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return false;
         }
+
         return true;
     }
     
@@ -199,7 +189,7 @@ class Album_photo{
     */
     function set_position($pk_album,$pk_photo,$position) {    
         $sql = "UPDATE albums_photos SET  `position`=" .$position.        		
-        		" WHERE pk_album=".($pk_album).' AND pk_photo='.($pk_photo);
+          	   " WHERE pk_album=".($pk_album).' AND pk_photo='.($pk_photo);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -210,4 +200,3 @@ class Album_photo{
         return true;
 	}
 }
-?>

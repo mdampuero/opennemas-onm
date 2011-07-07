@@ -67,7 +67,7 @@
 
                                                 {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo[n]->type_img)}
                                                     <img onClick="javascript:$('selected_{$smarty.section.n.iteration}').click();"
-                                                         onmouseover="document.getElementById('header1-{$smarty.section.n.index}').style.display='inline';document.getElementById('header2-{$smarty.section.n.index}').style.display='inline';" onmouseout="document.getElementById('header1-{$smarty.section.n.index}').style.display='none';document.getElementById('header2-{$smarty.section.n.index}').style.display='inline';" src='{$MEDIA_IMG_URL}{$photo[n]->path_file}140x100-{$photo[n]->name}'
+                                                         onmouseover="document.getElementById('header1-{$smarty.section.n.index}').style.display='inline';document.getElementById('header2-{$smarty.section.n.index}').style.display='inline';" onmouseout="document.getElementById('header1-{$smarty.section.n.index}').style.display='none';document.getElementById('header2-{$smarty.section.n.index}').style.display='inline';" src='{$MEDIA_IMG_URL}{$photo[n]->path_file}140-100-{$photo[n]->name}'
                                                          class="thumbnail" />
                                                 {else}
                                                     <object onClick="javascript:$('selected_{$smarty.section.n.iteration}').click();"
@@ -112,7 +112,7 @@
                                         <img onClick="javascript:$('selected_{$smarty.section.n.iteration}').click();"
                                              title="{$photo[n]->name}"
                                              alt="{$photo[n]->name}"
-                                             src='{$MEDIA_IMG_URL}/140x100-nodisp_img.jpg'
+                                             src='{$MEDIA_IMG_URL}/140-100-nodisp_img.jpg'
                                              width="100%" class="thumbnail"/>
 
                                         <div style="display:inline"

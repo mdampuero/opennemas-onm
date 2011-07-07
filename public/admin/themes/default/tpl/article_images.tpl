@@ -49,7 +49,7 @@
                                         <td colspan=2>
                                             <div id="footer_img_portada"> 
                                                 <label for="title">{t}Footer text for frontpage image:{/t}</label>
-                                                <input type="text" id="img1_footer" name="img1_footer" title="Imagen" value="" size="50" tabindex="13" />
+                                                <input type="text" id="img1_footer" name="img1_footer" title="Imagen" value="" size="50" />
                                             </div>
                                         </td>
                                     </tr>
@@ -97,7 +97,7 @@
                                         <td colspan=2>
                                             <div id="footer_img_interior">
                                                 <label for="title">{t}Footer text for inner image:{/t}</label>
-                                                <input type="text" id="img2_footer" name="img2_footer" title="Imagen" value="" size="50" tabindex="14"/>
+                                                <input type="text" id="img2_footer" name="img2_footer" title="Imagen" value="" size="50" />
                                             </div>
                                         </td>
                                     </tr>
@@ -116,7 +116,7 @@
                                             <div class="cajaBusqueda">
                                                 <input id="stringImageSearch" name="stringImageSearch" type="text"
                                                    onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                                                   onclick="this.select();" value="{t}Search images by title...{/t}" tabindex="15"/>
+                                                   onclick="this.select();" value="{t}Search images by title...{/t}"/>
                                             </div>
                                         </td>
                                         <td align="right">
@@ -275,7 +275,7 @@
                                         <td colspan=2>
                                             <div id="video2_footer">
                                                 <label for="title">{t}Footer text for inner video:{/t}</label>
-                                                <input type="text" id="footer_video2" name="footer_video2" title="video interior footer" value="" size="50" tabindex="16" />
+                                                <input type="text" id="footer_video2" name="footer_video2" title="video interior footer" value="" size="50" />
                                             </div>
                                         </td>
                                     </tr>
@@ -296,7 +296,7 @@
                                                 <input class="textoABuscar" id="stringVideoSearch" name="stringVideoSearch" type="text"
                                                        onkeypress="onVideoKeyEnter(event, $('stringVideoSearch').value,1);"
                                                        onclick="this.select();" value="{t}Search video by title...{/t}"
-                                                       align="left" tabindex="17"/>
+                                                       align="left"/>
                                             </div>
                                         </td>
                                     </tr>

@@ -140,7 +140,7 @@ class mediagraficosController extends mediamanagerController{
             $photo->description_utf = html_entity_decode(($photo->description));
             $photo->metadata_utf = html_entity_decode($photo->metadata);
 
-            if((!file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . '140x100-' . $photo->name))
+            if((!file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . '140-100-' . $photo->name))
                && file_exists(dirname(__FILE__) . '/../www/media/images' . $photo->path_file . $photo->name)){
 
                 if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)){

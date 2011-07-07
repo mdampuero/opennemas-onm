@@ -8,9 +8,7 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
     <ul class="tabs2" style="margin-bottom: 28px;">
-         <li>
-              <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=6" {if $category==6} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >{t}HOME WIDGET{/t}</a>
-         </li>
+         
          {include file="menu_categorys.tpl" home="video.php?action=list"}
     </ul>
 

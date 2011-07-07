@@ -128,67 +128,7 @@ function counttiny(counter, editor){
 	counter.value=r;
 
 }
-
-function get_images(category,page,action, metadatas)
-{
-    new Ajax.Updater('photos', "/admin/article_change_images.php?page="+page+"&category="+category+"&action="+action+"&metadatas="+metadatas,
-        {
-            evalScripts: true,
-            onComplete: function() {
-                var photos = $('photos').select('img');
-                for(var i=0; i<photos.length; i++) {
-                  //  console.log("'" + photos[i].id + "'");
-                    try {
-                        new Draggable(photos[i].id, { revert:true, scroll: window, ghosting:true }  );
-                    } catch(e) {
-                     //   console.debug( e );
-                    }
-                }
-            }
-        } );
-}
-
-function onImageKeyEnter(e, category, metadatas, page)
-{
-    eKey = (document.all) ? e.keyCode : e.which;
-    if (eKey==13)
-    {
-        get_images(category, page, 'list_by_metadatas',metadatas);
-    }
-}
-
-function get_search_videos(metadatas, page)
-{
-	action='list_by_metadatas';
-	if(metadatas==0){
-		action='list';
-	}
-   new Ajax.Updater('videos', "article_change_videos.php?action="+action+"&page="+page+"&metadatas="+metadatas,
-        {
-            evalScripts: true,
-            onComplete: function() {
-                var videos = $('videos').select('img');
-                for(var i=0; i<videos.length; i++) {
-                  //  console.log("'" + videos[i].id + "'");
-                    try {
-                        new Draggable(videos[i].id, { revert:true, scroll: window, ghosting:true }  );
-                    } catch(e) {
-                    //    console.debug( e );
-                    }
-                }
-            }
-        } );
-}
-
-function onVideoKeyEnter(e, metadatas, page)
-{
-    ekey = (document.all) ? e.keyCode : e.which;
-    if (ekey==13)
-    {
-        get_search_videos(metadatas, page);
-    }
-}
-
+  
 function onChangeGroup(evaluateControl, ids)
 {
     if (document.getElementById)

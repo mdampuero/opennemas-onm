@@ -6,6 +6,7 @@
 {block name="header-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
 
     {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
@@ -194,8 +195,8 @@
             tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
             {if isset($article) && $article->isClone()}
-            OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-            OpenNeMas.tinyMceConfig.advanced.readonly = 1;
+                OpenNeMas.tinyMceConfig.simple.readonly   = 1;
+                OpenNeMas.tinyMceConfig.advanced.readonly = 1;
             {/if}
 
             OpenNeMas.tinyMceConfig.simple.elements = "summary";
@@ -243,6 +244,8 @@
             new OpenNeMas.Maxlength($('title'), {});
             $('title').focus(); // Set focus first element
         }
+        getGalleryImages('listByCategory','{$category}','','1');
+        getGalleryVideos('listByCategory','{$category}','','1');
     });
 
     if($('starttime')) {
