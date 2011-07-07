@@ -99,7 +99,7 @@ class cSearch
              {	
                  $result[$i]['id'] = $resultSet->fields['pk_content'];          	 
                  $result[$i]['pk_content'] = $resultSet->fields['pk_content'];  
-                 $result[$i]['title'] = strip_tags($resultSet->fields['title']);  
+                 $result[$i]['title'] = htmlentities(strip_tags($resultSet->fields['title']),ENT_QUOTES,'UTF-8',false);  
                  $result[$i]['pk_fk_content_category'] = $resultSet->fields['pk_fk_content_category'];
                  if ($resultSet->fields['catName'] == null) {
                      $result[$i]['catName'] = 'OPINIÓN';
