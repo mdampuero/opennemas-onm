@@ -58,6 +58,16 @@ function onSearchKeyEnter(e, elto, trg, acc, id)
     }
 }
 
+function onSearchAdvKeyEnter(e, id, checked)
+{
+    ekey = (document.all) ? e.keyCode : e.which;
+    if (ekey==13)
+    {
+        divs_hide('search-div2');
+        return search_adv(id, $('stringSearch').value,1,checked);
+    }
+}
+
 function preview(elto, trg, acc, id)
 {
     this.blur();

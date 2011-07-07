@@ -1866,7 +1866,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while(!$rs->EOF) {
             $pk_content_type = $rs->fields['pk_content_type'];
-            $items[$pk_content_type] = $rs->fields['title'];
+            $items[$pk_content_type] = htmlentities($rs->fields['title']);
             $rs->MoveNext();
         }
 

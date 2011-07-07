@@ -643,7 +643,61 @@ function search_related(id, metadata,page) {
     }
 }
 
-// Muestra listados: albumes, opiniones, videos, archivos
+// Muestra listado de la busqueda avanzada
+function search_adv(id, metadata,page) {
+    var inputs = document.getElementsByTagName("input");
+    var cbs = []; //will contain all checkboxes  
+    var checked = []; //will contain all checked checkboxes  
+    for (var i = 0; i < inputs.length; i++) {  
+        if (inputs[i].type == "checkbox" && inputs[i].className == "search") {  
+            cbs.push(inputs[i]); 
+            console.log(inputs[i].checked);
+            if (inputs[i].checked) {
+                checked.push(inputs[i].id);  
+            } 
+        }  
+    } 
+    if(metadata){
+        new Ajax.Updater('search-div2', 'article.php?action=search_adv&id='+id+'&metadata='+metadata+'&page='+page+'&type='+checked,
+        {
+           onComplete: function() {
+               
+                 //Posibilidad de marcar los que estan recien añadidos
+                    var Nodes = $('thelist2').select('li');
+                      for (var i=0;i < Nodes.length;i++) {
+                              var id=Nodes[i].getAttribute('id');
+                              if(id!=$$('#'+id)){
+                                      //var el =$$('#'+id+' input[class="portada"]');
+                                      var el =$$('#'+id);
+                                     el.each(function(item, index){
+                                             if(item.getAttribute('class')=='portada'){
+                                                    item.checked=true;
+                                             }
+                                     });
+
+                              }
+
+                      }
+                      var Nodes = $('thelist2int').select('li');
+                      for (var i=0;i < Nodes.length;i++) {
+                              var id=Nodes[i].getAttribute('id');
+                              if(id!=$$('.interior#'+id)){
+                                      var el =$$('.interior#'+id);
+                                      el.each(function(item, index){
+                                                     if(item.getAttribute('class')=='interior'){
+                                                    item.checked=true;
+                                             }
+                                     });
+
+                              }
+
+                      }
+            }
+        });
+    }
+}
+
+
 function  get_div_contents(id,content,category,page)
 {
     var div = content+'_div';

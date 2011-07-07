@@ -30,6 +30,9 @@
 			<li>
 				<a onclick="get_div_contents(0,'adjuntos', '{$article->category}',1); divs_hide('adjuntos_div'); " style="cursor:pointer;"><strong>{t}Files{/t}</strong></a><hr>
 			</li>
+                        <li>
+				<a onclick="divs_hide('search-div'); " style="cursor:pointer;"><strong>{t}Search{/t}</strong></a><hr>
+			</li>
 		</ul>
 	</div>
 	<div id="available-suggested-contents" class="clearfix" >
@@ -48,8 +51,8 @@
 			<h2>{t}Articles in library{/t}</h2>
 
 		</div>
-			<div id="pendientes_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br />
-				{include file="menu_categorys.tpl" home=""}
+                <div id="pendientes_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br />
+                        {include file="menu_categorys.tpl" home=""}
 			<h2>{t}Pending articles{/t}</h2>
 
 		</div>
@@ -103,21 +106,48 @@
 			</tbody>
 			</table>
 		</div>
-
-
-		<div id="search_div"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
-			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
-			<tbody>
-				<tr>
-					<td>
-						 Buscar: <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
-										class="required" size="80" onkeypress=" "/>
-					 </td>
-				</tr>
-			</tbody>
-			</table>
+		<div id="search-div"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+                    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="80%">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h2>Buscar:</h2>
+                                </td>
+                                <td>
+                                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                                           value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
+                                           size="80" onkeypress="onSearchAdvKeyEnter(event,{$article->pk_article|default:0});"/>
+                                </td>
+                                <td>
+                                    <a href="#" class="admin_add" 
+                                       onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); divs_hide('search-div2');" 
+                                       onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
+                                            <img border="0" src="{$params.IMAGE_DIR}search.png" title="Search" alt="Search">
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 		</div>
-
-	</div>
-
+                <div id="search-div2"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+                    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="margin:0 auto; width:50%">
+                                        <h3>{t}We cant find any content with your search criteria.{/t}</h3>
+                                        <p>{t escape="no" 1=$smarty.request.stringSearch|clearslash}Your search "<b>%1</b>" didn't return any element.{/t}</p>
+                                        <p style="margin-top: 1em;">{t}Suggestions:{/t}</p>
+                                        <ul>
+                                            <li>{t}Check if all the words are written correctly.{/t}</li>
+                                            <li>{t}Use other words.{/t}</li>
+                                            <li>{t}Use more general search criteria.{/t}</li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
 </div>

@@ -59,12 +59,24 @@ class cSearch
 	*/
 	public function SearchRelatedContents($szSourceTags, $szContentsTypeTitle,$iLimit=NULL,$_where=NULL)
 	{
+        if(is_array($szSourceTags)){
+            $szSourceTags2=array();
+            $i = 0;
+            foreach ($szSourceTags as $key) {
+                $szSourceTags2[$i] = '+'.$key;
+                $i++;
+            }
+
+            $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
+            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
+            $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags2);//Match con contents.title
+        } else {
+            $szMatch2 = '1=1';
+        }
         
         $szMatch = $this->DefineMatchOfSentence($szSourceTags); //Match con metadata
-        $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
-        
         $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel FROM contents, contents_categories";
-        $szSqlWhere = " WHERE " . (($szMatch)) .'+'.(($szMatch2));
+        $szSqlWhere = " WHERE " . (($szMatch)) .' AND '.(($szMatch2));
         $szSqlWhere .=  " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
         $szSqlWhere .= "  AND in_litter = 0 AND pk_content = pk_fk_content";
         if($_where!=NULL){
@@ -88,8 +100,12 @@ class cSearch
                  $result[$i]['id'] = $resultSet->fields['pk_content'];          	 
                  $result[$i]['pk_content'] = $resultSet->fields['pk_content'];  
                  $result[$i]['title'] = $resultSet->fields['title'];  
-                 $result[$i]['pk_fk_content_category'] = $resultSet->fields['pk_fk_content_category'];  
-                 $result[$i]['catName'] = $resultSet->fields['catName'];  
+                 $result[$i]['pk_fk_content_category'] = $resultSet->fields['pk_fk_content_category'];
+                 if ($resultSet->fields['catName'] == null) {
+                     $result[$i]['catName'] = 'OPINIÓN';
+                 } else {
+                    $result[$i]['catName'] = $resultSet->fields['catName']; 
+                 }
                  $result[$i]['created'] = $resultSet->fields['created'];  
                  $result[$i]['rel'] = $resultSet->fields['rel']; 
                  $result[$i]['available'] = $resultSet->fields['available']; 
@@ -164,14 +180,11 @@ class cSearch
         }
         $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
         $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
-        //( (1.3 * (MATCH(title) AGAINST ('+term +term2' IN BOOLEAN MODE))) + (0.6 * (MATCH(text) AGAINST ('+term +term2' IN BOOLEAN MODE))) ) AS relevance
-        ////
-        //(0.6 * ($szMatch)) +(1.3 * ($szMatch2))
+
 
         $szMatch = $this->DefineMatchOfSentence($szSourceTags2); //Match con metadata
         $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
-        //$szMatch = " CONTAINS (metadata, '".$szSourceTags."')";
-        //$szMatch = "contents.metadata LIKE '%".$szSourceTags."%'";
+
         if(!stristr($szContentsTypeTitle, 'photo') === FALSE){
              $szSqlSentence = 'SELECT '. $szReturnValues. ", " . (($szMatch)). " as _height";
              $szMatch2 = '1=1';

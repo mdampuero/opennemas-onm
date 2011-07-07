@@ -1374,7 +1374,7 @@ if (isset($_REQUEST['action']) ) {
 
         break;
 
-   case 'search_related':
+        case 'search_related':
             $cm = new ContentManager();
             $mySearch = cSearch::Instance();
             $where="content_status=1 AND available=1 ";
@@ -1398,6 +1398,28 @@ if (isset($_REQUEST['action']) ) {
 
         break;
 
+        case 'search_adv':
+            /* Buscador en pestaña de contenidos relacionandos*/
+            $cm = new ContentManager();
+            $mySearch = cSearch::Instance();
+            //Transform the input string to search like: 'La via del tren' => '+via +tren'
+            $szSourceTags = explode(', ', String_Utils::get_tags($_REQUEST['metadata']));
+            $where="content_status=1 AND available=1 ";
+            $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
+            if(($search) && count($search)>0){
+                $params="0,'".$_REQUEST['metadata']."'";
+                $search = $cm->paginate_array_num_js($search,20 , 3, "search_adv", $params);
+                $pages=$cm->pager;
+                $paginas='<p align="center">'.$pages->links.'</p>';
+                $div=print_search_related(0, $search);
+            } else{
+                $div="<h3>No hay noticias sugeridas</h3>";
+                $paginas='No hay noticias que se relacionen con las palabras clave: '.$_REQUEST['metadata'];
+            }
+
+            Application::ajax_out($div.$paginas);
+            
+        break;
 
         case 'get_noticias':
             $cm = new ContentManager();
@@ -1549,7 +1571,7 @@ if (isset($_REQUEST['action']) ) {
             $html_out=print_lists_related($_REQUEST['id'], $attaches, 'adjuntos_div');
             Application::ajax_out("<h2>Ficheros:</h2>".$categorys.$html_out.$paginacionV);
         break;
-
+        
         case 'get_categorys_list':
 
              $allcategorys =$ccm->cache->renderCategoriesTree();
@@ -1612,7 +1634,7 @@ if (isset($_REQUEST['action']) ) {
             $uri = $_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $clone->category . '&id=' . $clone->id;
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
-
+          
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;
