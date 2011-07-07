@@ -1404,7 +1404,7 @@ if (isset($_REQUEST['action']) ) {
             $mySearch = cSearch::Instance();
             //Transform the input string to search like: 'La via del tren' => '+via +tren'
             $szSourceTags = explode(', ', String_Utils::get_tags($_REQUEST['metadata']));
-            $where="content_status=1 AND available=1 ";
+            $where="available=1 ";
             $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
             
             //Put searched words with diferent color
