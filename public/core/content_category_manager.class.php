@@ -220,6 +220,45 @@ class ContentCategoryManager {
         return(0);
     }
 
+    /**
+     * Return first category data in the menu of type
+     *
+     * @param int $category_type content_type.
+     *
+     * @return array with category data
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    function getFirstCategory($category_type) {
+
+        if( is_null($this->categories) ) {
+            $sql = 'SELECT * FROM content_categories WHERE '.
+                   ' inmenu=1 AND internal_category = '.$category_type.
+                   ' ORDER BY posmenu LIMIT 1';
+
+            $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_type) );
+            
+            if (!$rs) {
+                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                return;
+            }
+
+            return $rs->fields;
+        }
+
+        // Singleton version
+        $categories = $this->order_by_posmenu($this->categories);
+
+        foreach($categories as $category) {
+            if(($category->internal_category == $category_type) && ($category->inmenu==1) ) {
+                
+                return( $category->name );
+            }
+        }
+    }
+
     //Returns the title of category
     function get_title($category_name) {
         if( is_null($this->categories) ) {
@@ -711,21 +750,39 @@ class ContentCategoryManager {
 
         return $groups;
     }
-
-    function getArraysMenu() {       
+    /**
+     * Order array of category menu and submenues.
+     * Get category info if there is one selected or get first category info
+     *
+     * @param int $internal_category
+     *
+     * @return array principal categories, childs categorys and category info
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    function getArraysMenu($internal_category = 1, $category=NULL) {
 
         //fullcat contains array with all cats order by posmenu
         //parentCategories is an array with all menu cats in frontpage
         //subcat is an array with all subcat form the parentCategories array
-        //datos_cat is the info of the cat selected
+        //$categoryData is the info of the category selected
+
         $fullcat = $this->order_by_posmenu($this->categories);
         $parentCategories = array();
+        $categoryData = array();
         foreach( $fullcat as $prima) {
-            if (/* ($prima->inmenu == 1)  && */ ($prima->internal_category == 1) && ($prima->fk_content_category == 0) ) {
+
+            if (!empty($category) && ($prima->pk_content_category == $category) &&
+                ($category !='home') && ( $category !='todos') ) {
+                $categoryData[] = $prima;
+            }
+            if ((($prima->internal_category == 1)
+                 || ($prima->internal_category == $internal_category))
+                && ($prima->fk_content_category == 0) ) {
+
                 $parentCategories[] = $prima;
             }								 
-        }
-
+        }       
         $subcat = array();
         foreach($parentCategories as $k => $v) {
             $subcat[$k] = array();
@@ -737,15 +794,13 @@ class ContentCategoryManager {
             }
         }
 
-        $datos_cat = array();
-        $category = (isset($_REQUEST['category'])? $_REQUEST['category'] : null);
-        foreach( $fullcat as $prima) {
-            if ( isset($category) && ($category !='home') && ( $category !='todos') && ($prima->pk_content_category == $category ) ) {
-                $datos_cat[] = $prima;
-            }
-        }    
         
-        return array($parentCategories, $subcat, $datos_cat);
+        if ( empty($category)  ) {
+             $categoryData[] = $parentCategories[0];
+
+        }         
+     
+        return array($parentCategories, $subcat, $categoryData);
     }
     
     

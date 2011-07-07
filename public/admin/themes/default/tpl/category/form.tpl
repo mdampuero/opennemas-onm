@@ -80,24 +80,24 @@
                                         <input type="radio" id="internal_category" name="internal_category"  value="1"
                                         {if empty($category->fk_content_category) || $category->internal_category eq 1} checked="checked"{/if}>
                                     </td>
-                                    <!--<td  style="padding:4px;"> </td>
+                                    <td  style="padding:4px;"> </td>
                                     <td  style="padding:4px;"> Álbumes:</td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="3"
-                                        {if $category->internal_category eq 3} checked="checked"{/if}>
-                                    </td>-->
+                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="7"
+                                        {if $category->internal_category eq 7} checked="checked"{/if}>
+                                    </td>
 
-                                </tr><!--
+                                </tr>
                                  <tr>
                                     <td  style="padding:4px;"> Vídeos:</td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="5"
-                                        {if $category->internal_category eq 5} checked="checked"{/if}>
+                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="9"
+                                        {if $category->internal_category eq 9} checked="checked"{/if}>
                                     </td>
                                    <td  style="padding:4px;"> </td>
                                     <td style="padding:4px;" > Kiosco: </td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="4"
-                                        {if $category->internal_category eq 4} checked="checked"{/if}>
+                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="14"
+                                        {if $category->internal_category eq 14} checked="checked"{/if}>
                                     </td>
-                                </tr>-->
+                                </tr>
                             </table>
                          </div>
                     </td>
@@ -160,10 +160,10 @@
                                                 <table width="100%" class="tabla" style="padding:0px;cursor:pointer;" id="{$subcategorys[s]->pk_content_category}">
                                                     <tr>
                                                         <td style="font-size: 11px;text-align:left;">
-                                                             {$subcategorys[s]->title}</a>
+                                                             {$subcategorys[s]->title}
                                                         </td>
                                                         <td style="font-size: 11px;width:120px;text-align:left;">
-                                                             {$subcategorys[s]->name}</a>
+                                                             {$subcategorys[s]->name}
                                                         </td>
                                                         <td style="font-size: 11px;width:80px;" align="center">
                                                           {if $subcategorys[s]->internal_category eq 3}

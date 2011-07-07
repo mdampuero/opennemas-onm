@@ -69,7 +69,7 @@
                             {assign var=containers value=1}
                             <div id="ctes" class="seon" style="float:left;width:100%;"> <br>
                                 {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category neq 4}
+                                    {if $categorys[c]->internal_category neq 14}
                                         {if $containers eq 1 && $categorys[c]->inmenu eq 0} <hr> <h2>{t}NO MENU{/t}</h2> <hr>   {assign var=containers value=0} {/if}
                                         {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                                     {/if}
@@ -78,7 +78,7 @@
                                 {/section}
                                 <hr> <h2>KIOSKO</h2> <hr>
                                 {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category eq 4}
+                                    {if $categorys[c]->internal_category eq 14}
                                         {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                                     {/if}
                                 {sectionelse}
@@ -126,15 +126,15 @@
                                     <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >
                                         <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;border:0px; padding:0px;margin:0px;">
                                             <td style="padding:10px;font-size: 11px;width:20%;">
-                                                 {if $categorys[c]->internal_category eq 3}
+                                                 {if $categorys[c]->internal_category eq 7}
                                                      <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
-                                                 {elseif $categorys[c]->internal_category eq 5}
+                                                 {elseif $categorys[c]->internal_category eq 9}
                                                      <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
                                                  {/if}
                                                 {$ordercategorys[c]->title}
                                             </td>
                                             <td align="center" style="padding:10px;font-size: 11px;width:25%;">
-                                                {$ordercategorys[c]->name|clearslash}</a>
+                                                {$ordercategorys[c]->name|clearslash} 
                                             </td>
                                             <td align="center" style="padding:10px;font-size: 11px;width:10%;">
                                                 {if $ordercategorys[c]->inmenu==1}

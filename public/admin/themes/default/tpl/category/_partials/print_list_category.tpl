@@ -3,10 +3,10 @@
         <td style="padding: 0px 10px; height: 40px;">
              <strong> {$category->title|clearslash|escape:"html"}</strong>
         </td>
-        <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">
-          {if $category->internal_category eq 3}
+        <td style="padding: 0px 10px; height: 40px;width:100px;" align="center">  
+          {if $category->internal_category eq 7}
              <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" title="Sección de Album" alt="Sección de Album" />
-          {elseif $categorys->internal_category eq 5}
+          {elseif $category->internal_category eq 9}
              <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" title="Sección de Videos"  alt="Sección de Videos" />
           {else}
               <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" title="Sección Global"  alt="Sección Global" />
@@ -62,22 +62,22 @@
                             <b>{$subcategorys[su]->title} </b>
                         </td>
                          <td align="center" style="padding:10px;width:80px;">
-                              {if $subcategorys[su]->internal_category eq 3}
+                              {if $subcategorys[su]->internal_category eq 7}
                                  <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
-                              {elseif $subcategorys[su]->internal_category eq 5}
+                              {elseif $subcategorys[su]->internal_category eq 9}
                                  <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
                               {else}
                                   <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
                               {/if}
                         </td>
                         <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
-                            {$num_sub_contents[su].articles|default:0}</a>
+                            {$num_sub_contents[su].articles|default:0}
                         </td>
                         <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
-                            {$num_sub_contents[su].photos|default:0}</a>
+                            {$num_sub_contents[su].photos|default:0}
                         </td>
                         <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
-                            {$num_sub_contents[su].advertisements|default:0}</a>
+                            {$num_sub_contents[su].advertisements|default:0}
                         </td>
                         <td align="center" style="padding: 0px 10px; height: 30px;width:80px;">
                             {if $subcategorys[su]->inmenu==1}

@@ -1781,72 +1781,7 @@ class ContentManager
         return $szPages;
     }
 
-
-    //FIXME: unificar todos los paginates
-    //Print Pagination links for function get_images(category,page,action, metadatas)
-    //admin article.php, article_change_images.php
-    public function makePagesLink($Pager, $category, $action, $metadatas)
-    {
-        $szPages = null;
-
-        if($Pager->_totalPages>1) {
-            $szPages = '<p align="center">';
-            if ($Pager->_currentPage != 1) {
-                $szPages .= '<a style="cursor:pointer;" onClick="get_images(\'' .
-                        $category.'\',1, \''.$action.'\', \''.$metadatas.'\');">Primera</a> ... | ';
-            }
-
-            for($iIndex=$Pager->_currentPage-2; $iIndex<=$Pager->_currentPage+2 && $iIndex <= $Pager->_totalPages; $iIndex++) {
-                if($Pager->_currentPage == 1) {
-                    if(($iIndex+2) > $Pager->_totalPages) {
-                        break;
-                    }
-
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
-                            ($iIndex+2).',     \''.$action.'\', \''.$metadatas.'\');">';
-
-                    if($Pager->_currentPage == ($iIndex+2)) {
-                        $szPages .= '<b>' . ($iIndex+2) . '</b></a> | ';
-                    } else {
-                        $szPages .= ($iIndex+2) . '</a> | ';
-                    }
-
-                } elseif($Pager->_currentPage == 2) {
-                    if(($iIndex+1) > $Pager->_totalPages) {
-                        break;
-                    }
-
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
-                            ($iIndex+1).',     \''.$action.'\', \''.$metadatas.'\');">';
-                    if($Pager->_currentPage == ($iIndex+1)) {
-                        $szPages .= '<b>' . ($iIndex+1) . '</b></a> | ';
-                    } else {
-                        $szPages .= ($iIndex+1) . '</a> | ';
-                    }
-
-                } else {
-                    $szPages .= '<a style="cursor:pointer;" onClick="get_images(\'' . $category.'\',' .
-                            $iIndex.', \''.$action.'\', \''.$metadatas.'\');">';
-                    if($Pager->_currentPage == ($iIndex)) {
-                        $szPages .= '<b>' . $iIndex . '</b></a> | ';
-                    } else {
-                        $szPages .= $iIndex . '</a> | ';
-                    }
-                }
-
-            }
-
-            if($Pager->_currentPage != $Pager->_lastPageText) {
-                $szPages .= '... <a style="cursor:pointer;" onClick="get_images(\''.$category.'\',' .
-                        $Pager->_lastPageText.', \''.$action.'\', \''.$metadatas.'\');">Última </a>';
-            }
-
-            $szPages .= "</p> ";
-        }
-
-        return $szPages;
-    }
-
+ 
 
     /* FIXME: Establecer los plurales siguiendo el criterio del idioma espanhol
     para otros casos ya tenemos versiones inglesas */

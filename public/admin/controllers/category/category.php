@@ -12,6 +12,7 @@ require_once('../../session_bootstrap.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Section Manager'));
 
+$content_types = array('article' => 1 , 'album' => 7, 'video' => 9, 'opinion' => 4, 'kiosko'=>14);
 /**
  * Setup Database access
 */
