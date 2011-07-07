@@ -122,7 +122,7 @@
                                     <a href="#" class="admin_add" 
                                        onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); divs_hide('search-div2');" 
                                        onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
-                                            <img border="0" src="{$params.IMAGE_DIR}search.png" title="Search" alt="Search">
+                                            <img border="0" src="{$params.IMAGE_DIR}icono-buscar.png" title="Search" alt="Search">
                                     </a>
                                 </td>
                             </tr>
