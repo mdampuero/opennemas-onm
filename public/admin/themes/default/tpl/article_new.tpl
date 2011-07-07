@@ -59,7 +59,7 @@
 						<label for="category">{t}Section:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-							<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="6">
+							<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="8">
 								<option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
 								{section name=as loop=$allcategorys}
 									{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
@@ -80,7 +80,7 @@
 							<label for="with_comment">{t}Allow coments{/t}</label>
 						</td>
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                                                    <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1 tabindex="6"/>
+                                                    <input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1 tabindex="9"/>
 						</td>
 					</tr>
 					 <tr>
@@ -89,7 +89,7 @@
 						</td>
 
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                                                    <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="available" value=1 tabindex="7"/>
+                                                    <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="available" value=1 tabindex="10"/>
                                                     <span style="font-size:9px;">{t}(publish directly){/t}</span>
 						</td>
 					</tr>
@@ -98,7 +98,7 @@
 							<label for="frontpage">{t}Put in section frontpage:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-                                                    <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="7"/>
+                                                    <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="11"/>
 						</td>
 					</tr>
 					<tr>
@@ -106,7 +106,7 @@
 							<label for="in_home">{t}Suggest for frontpage:{/t}</label>
 						</td>
 						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-                                                    <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 1)}checked{/if} id="in_home" value=1 tabindex="7"/>
+                                                    <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/>
 						</td>
 					</tr>
 					{else} {* else if not list_hemeroteca *}
@@ -195,7 +195,7 @@
 					maxlength="256"
 					onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
 					onkeyup="countWords(this,document.getElementById('counter_title_int'))"
-					tabindex="1"/>
+					tabindex="2"/>
 
             <script type="text/javascript">
             /* <![CDATA[ */
@@ -221,7 +221,7 @@
 				   value="{$article->metadata}"
 				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
 				   {/if}
-				   style="width:70%" title="Metadatos" tabindex="1"/>
+				   style="width:70%" title="Metadatos" tabindex="3"/>
 
             <sub>{t}Separated by commas{/t}</sub>
         </td>
@@ -233,7 +233,7 @@
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
             <input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:95%"
-                value="{$article->subtitle|upper|clearslash|escape:"html"}" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="2"/>
+                value="{$article->subtitle|upper|clearslash|escape:"html"}" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="4"/>
         </td>
     </tr>
 
@@ -243,7 +243,7 @@
         </td>
         <td style="padding:4px;" valign="top" nowrap="nowrap" >
             <input 	type="text" id="agency" name="agency" title="{t}Agency{/t}"
-					class="required" style="width:95%" tabindex="3"
+					class="required" style="width:95%" tabindex="5"
 					{if is_object($article)}
 						value="{$article->agency|clearslash|escape:"html"}"
 						onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
@@ -264,9 +264,9 @@
 			{/if}
         </td>
         <td >
-            <textarea name="summary" id="summary" title="Resumen de la noticia"
+            <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia"
                   onChange="countWords(this,document.getElementById('counter_summary'))"
-                  onkeyup="countWords(this,document.getElementById('counter_summary'))" tabindex="4">{$article->summary|clearslash|escape:"html"}</textarea>
+                  onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
         </td>
     </tr>
     <tr>
@@ -274,7 +274,9 @@
             <label for="body">{t}Body{/t}</label>
         </td>
         <td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
-            <textarea name="body" id="body" title="Cuerpo de la noticia" style="width:98%; height:20em;" onChange="counttiny(document.getElementById('counter_body'));" tabindex="5">{$article->body|clearslash}</textarea>
+            <textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia" 
+                      style="width:98%; height:20em;" 
+                      onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
         </td>
     </tr>
     <tr>
