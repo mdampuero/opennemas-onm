@@ -61,7 +61,7 @@ if (isset($_REQUEST['action'])) {
                                        'AND contents.in_home=1 '.
                                        'AND contents.content_status=1 ',
                                        'ORDER BY position ASC, created DESC '.
-                                       'LIMIT '.($page*2).',1');
+                                       'LIMIT 1');
 
                 // Fetch last opinions from director
                 $director = $cm->find('Opinion',
@@ -69,7 +69,8 @@ if (isset($_REQUEST['action'])) {
                                       'AND contents.available=1 '.
                                       'AND contents.in_home=1 '.
                                       'AND contents.content_status=1 ',
-                                      'ORDER BY created DESC LIMIT '.$page.',2');
+                                      'ORDER BY created DESC LIMIT 2');
+
 
 				if (isset($director) && !empty($director)) {
 	                // Fetch the photo images of the director
@@ -88,7 +89,7 @@ if (isset($_REQUEST['action'])) {
 
                 $_limit='LIMIT '.(($page-1)*ITEMS_PAGE).', '.(($page)*ITEMS_PAGE);
                 $url='/seccion/opinion';
-				
+
 				$total_opinions = $cm->count('Opinion','in_home=1 and available=1 and type_opinion=0',
                                       'ORDER BY type_opinion DESC, position ASC, created DESC ');
 
