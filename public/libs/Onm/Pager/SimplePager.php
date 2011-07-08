@@ -97,8 +97,8 @@ class SimplePager {
 
         $url = $params['url'];
 
-        $next = "<a style='cursor:pointer;' href='".$url."&page".($page+1).")' title='Next'> Next(".($page+1).") </a>";
-        $previous = "<a style='cursor:pointer;' href='".$url."&page".($page-1).")' title='Previous'> Previous(".($page-1).") </a>";
+        $next = "<a style='cursor:pointer;' href='".$url."&page=".($page+1)."' title='Next'> Next(".($page+1).") </a>";
+        $previous = "<a style='cursor:pointer;' href='".$url."&page=".($page-1)."' title='Previous'> Previous(".($page-1).") </a>";
 
         if ($page == 1 || empty($page)) {
             if($total <= $items) {

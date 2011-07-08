@@ -23,7 +23,7 @@ class Video extends Content{
         parent::create($data);
 
         $sql = "INSERT INTO videos (`pk_video`,`video_url`, `information`) " .
-                        "VALUES (?,?,?,?)";
+                        "VALUES (?,?,?)";
 
         $values = array($this->id, $data['video_url'],serialize($data['information']));
 
