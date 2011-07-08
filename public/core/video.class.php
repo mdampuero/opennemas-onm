@@ -2,10 +2,10 @@
  
 class Video extends Content{
     var $pk_video = NULL;
-    var $htmlcode  = NULL;
-    var $videoid  = NULL;
+    var $information  = NULL;
+    var $video_url  = NULL;
     var $author_name = NULL;
-   
+
     /**
       * Constructor PHP5
     */
@@ -22,10 +22,10 @@ class Video extends Content{
  
         parent::create($data);
 
-        $sql = "INSERT INTO videos (`pk_video`,`videoid`, `htmlcode`,`author_name`) " .
+        $sql = "INSERT INTO videos (`pk_video`,`video_url`, `information`) " .
                         "VALUES (?,?,?,?)";
 
-        $values = array($this->id, $data['videoid'],$data['htmlcode'],$data['author_name']);
+        $values = array($this->id, $data['video_url'],serialize($data['information']));
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -52,17 +52,17 @@ class Video extends Content{
         }
 
         $this->pk_video = $rs->fields['pk_video'];
-        $this->videoid = $rs->fields['videoid'];              
-    	$this->htmlcode = $rs->fields['htmlcode'];
-        $this->author_name = $rs->fields['author_name'];
+        $this->video_url = $rs->fields['video_url'];
+    	$this->information = unserialize($rs->fields['information']);
+       
     }
 
     function update($data) {
         parent::update($data);
-        $sql = "UPDATE videos SET  `videoid`=?, `htmlcode`=?,`author_name`=?  " .
+        $sql = "UPDATE videos SET  `video_url`=?, `information`=?  " .
         		" WHERE pk_video=".$data['id'];
 		//echo $sql;
-        $values = array($data['videoid'],$data['htmlcode'],$data['author_name']);
+        $values = array($data['video_url'],serialize($data['information']));
 		//print_r($values);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {

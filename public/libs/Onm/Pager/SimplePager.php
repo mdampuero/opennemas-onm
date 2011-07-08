@@ -30,12 +30,13 @@ class SimplePager {
     }
 
     /**
-     * Returns the HTML paginate
+     * Returns the HTML paginate with js action onclick
      *
-     * @param string  $function  name of javascript function
      * @param array  $params     the params for this function
+     *  function-javascript function name, 'total' totalelements,
+     *  'items' elements for page, and 'page' page number
      *
-     * @return string    the HTML for this menu
+     * @return string    the HTML for pagination
      */
     public static function getPager($params = array()) {
  
@@ -76,6 +77,56 @@ class SimplePager {
 
         return $output;
         
+    }
+
+     /**
+     * Returns the HTML paginate with href params
+     *
+     * @param array  $params     the params for this function
+     *  url-url to link, 'total' total elements,
+     *  'items' elements for page, and 'page' page number
+     *
+     * @return string    the HTML for pagination
+     */
+      public static function getPagerUrl($params = array()) {
+
+        $html = '';
+        $page = $params['page'];
+        $items = $params['items'];
+        $total = $params['total'];
+
+        $url = $params['url'];
+
+        $next = "<a style='cursor:pointer;' href='".$url."&page".($page+1).")' title='Next'> Next(".($page+1).") </a>";
+        $previous = "<a style='cursor:pointer;' href='".$url."&page".($page-1).")' title='Previous'> Previous(".($page-1).") </a>";
+
+        if ($page == 1 || empty($page)) {
+            if($total <= $items) {
+                $html ='';
+            } else {
+                $html.= "<li>";
+                $html.= $next;
+                $html.= "</li>";
+            }
+        } elseif ($total <= $items) {
+                     $html.= "<li>";
+                     $html.= $previous;
+                     $html.= "</li>";
+        } else {
+            $html.= "<li>";
+            $html.= $previous;
+            $html.= "</li>";
+            $html.= "<li>";
+            $html.= $next;
+            $html.= "</li>";
+        }
+
+        $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
+
+
+
+        return $output;
+
     }
 
 

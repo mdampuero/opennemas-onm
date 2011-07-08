@@ -173,7 +173,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'yesdel':
-            $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
+            $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             if($id){
                 $album = new Album($id);
                 //Delete relations
@@ -188,7 +188,7 @@ if( isset($_REQUEST['action']) ) {
 		
 		case 'change_status':
 
-            $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
+            $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                    array('options' => array('default'=> 0)));
 			$album = new Album($id); 
@@ -200,7 +200,7 @@ if( isset($_REQUEST['action']) ) {
 
         case 'change_favorite':
 
-            $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
+            $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                    array('options' => array('default'=> 0)));
             $album = new Album($id);
