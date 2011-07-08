@@ -16,3 +16,5 @@ public/admin/themes/default/compile/*
 /public/themes/nuevatribuna/config/
 db/*
 public/themes/*
+/nbproject/project.properties
+/nbproject/project.xml
