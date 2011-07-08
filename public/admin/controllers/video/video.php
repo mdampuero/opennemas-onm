@@ -76,6 +76,7 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'new':
 			// Nada
+ 
 		break;
 
 		case 'read':
@@ -113,7 +114,6 @@ if( isset($_REQUEST['action']) ) {
             }
 
 		break;
-
 
 		case 'update':
 
@@ -166,8 +166,11 @@ if( isset($_REQUEST['action']) ) {
                         $tpl->assign('errors', $video->errors);
                 } else {
                     $video = new Video($id);
-                    //Estamos atualizando un artículo
-                    $video->update( $_POST );
+
+                    $_POST['information'] = $video->information;
+
+                     $video->update( $_POST );
+
                 }
 
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
@@ -178,6 +181,8 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'delete':
+
+            Acl::checkOrForward('VIDEO_DELETE');
 
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 			$video = new Video($id);
@@ -209,6 +214,8 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'yesdel':
+
+            Acl::checkOrForward('VIDEO_DELETE');
 
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             if ($id) {

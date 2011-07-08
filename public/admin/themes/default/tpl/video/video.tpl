@@ -213,22 +213,19 @@
 
 							{if $smarty.request.action eq "read"}
 							<tr>
-							   <td valign="top" align="right" style="padding:4px;" >
+							   <td valign="top">
 									<label for="title">Enlace:</label>
-							   </td>
-							   <td style="padding:4px;" nowrap="nowrap" >
+
 									<a href="{$smarty.const.SITE_URL}{$video->permalink}" target="_blank">
 										{$smarty.const.SITE_URL}{$video->permalink}
 									</a>
 							   </td>
 							</tr>
 							<tr>
-							   <td valign="top" align="right" style="padding:4px;" >
+							   <td valign="top" >
 									<label for="title">{t}Information{/t}:</label>
-							   </td>
-							   <td nowrap="nowrap" >
 								   <div id="imgcc">
-										{foreach from=$video->information key=key item=value}
+										{foreach from=$video->information  key=key item=value}
 										<strong>{$key}</strong>: {$value} <br/>
 										{/foreach}
 								   </div>
