@@ -674,64 +674,6 @@
 			</li>
 		</ul>
 	</div>
- {* Botonera video -------------------------------------------- *}
-{elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-        <ul>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
-			</li>
-			<li>
-				<a href="#" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva carta');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />Nuevo Video
-				</a>
-			</li>
-		</ul>
-	</div>
-
-{elseif preg_match('/video\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "new")||($smarty.request.action eq "read"))}
-	<div style="float:left"></div>
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-		    <li>
-				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-				</a>
-		    </li>
-			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-			<li>
-			{if isset($video->id)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id}', 'formulario');">
-			{else}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-				</a>
-			</li>
-		</ul>
-	</div>
  {* Botonera polls -------------------------------------------- *}
 {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	<div id="menu-acciones-admin" class="clearfix">

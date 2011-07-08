@@ -13,7 +13,7 @@ Deny from all
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
-    
+
     #Inner Article
     RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
@@ -21,18 +21,18 @@ Deny from all
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
 
-    #------------------------- 
+    #-------------------------
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
     RewriteRule ^noticia\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #------------------------- 
+    #-------------------------
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
     RewriteRule ^foros/mostrar_foro\.asp$ /controllers/redirect-from-editmaker.php?content_type=article&content_id=%1 [L,NC]
-    #------------------------- 
+    #-------------------------
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
-    
+
     #Inner Opinion
     RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
 
@@ -45,11 +45,11 @@ Deny from all
     RewriteRule ^seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
 
     #SECTIONS: seccion/51/SOCIEDAD/
-    RewriteCond %{QUERY_STRING} &?s=([^&]+) 
+    RewriteCond %{QUERY_STRING} &?s=([^&]+)
     RewriteRule ^pda/seccion\.asp$ /controllers/redirect-from-editmaker.php?content_type=category&content_id=%1 [L,NC]
     #TODO:send former pda URL to new mobile URL section
 
-    #SECTIONS: seccion/51/SOCIEDAD/    
+    #SECTIONS: seccion/51/SOCIEDAD/
     RewriteCond %{REQUEST_URI} [A-Z]
     RewriteRule ^seccion/([0-9]+)/(.+)/ /controllers/redirect-from-editmaker.php?content_type=category&content_id=$1 [L,NC]
     #RewriteRule ^seccion/[0-9]+/([a-zA-Z0-9\-]+)/ /seccion/${lc:$1}/ [R=301,L,NC]
@@ -66,8 +66,8 @@ Deny from all
 
     #Old Static pages
     RewriteRule ^contacto($|/$) /estaticas/contacto? [R=301,L,NC]
-    #--------------------------------------------------------    
-    
+    #--------------------------------------------------------
+
     #Articles articulo/2008/09/29/galicia/ourense/titulo-noticia-separada-guiones/1222692016.html
     #Articles articulo/2008/09/29/galicia/titulo-noticia-separada-guiones/1222692016.html
     RewriteRule ^articulo/([a-z0-9\-]+)?/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/([a-z0-9\-]+)/([0-9]+).html$ controllers/article.php?category_name=$1&year=$2&month=$3&day=$4&article_id=$6&action=read [L,NC]
@@ -126,6 +126,22 @@ Deny from all
     #Advertisement
     RewriteRule ^publicidade/get/([0-9]+).html$ controllers/advertisement.php?action=get&id=$1 [L,NC]
     RewriteRule ^publicidade/([0-9]+).html$ controllers/advertisement.php?action=show&publi_id=$1 [L,NC]
+
+    #Album
+    #/album/2008/12/08/foto/200812081741363340.html
+    RewriteRule ^albumes/?$ controllers/gallery.php?action=frontpage [L,NC]
+    RewriteRule ^album/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/([0-9]+).html$ controllers/gallery.php?action=$4&id_album=$5 [L,NC]
+    #http://retrincos.es/album/solo-album/
+    RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/gallery.php?action=foto&category_name=$1 [L,NC]
+    RewriteRule ^album/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/gallery.php?action=foto&category_name=$1&subcategory_name=$2 [L,NC]
+
+    #Video
+    #/video/0/2008/12/08/200812081741363340.html
+    RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^video/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([0-9]+).html$ controllers/videos.php?action=inner&id=$4 [L,NC]
+
 
     #Files
     RewriteRule ^ficheiro/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/[a-z0-9_\-]+/([a-z0-9_\-]+)/([a-z0-9_\-]+)\.([a-z0-9]{2,4})$ /media/files/$1/$2/$3/$5.$6 [L,NC]
