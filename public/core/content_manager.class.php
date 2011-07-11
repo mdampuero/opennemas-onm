@@ -443,8 +443,8 @@ class ContentManager
           //  $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
               $_where .= '  AND `contents`.`available`=1 ';
         }
-        $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
-        $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT 0 , '.$num;
+        $_days = 'AND  `contents`.`created`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_order_by = 'ORDER BY `contents`.`content_status` DESC, `contents`.`views` DESC LIMIT '.$num;
 
         if( intval($category) > 0 ) {
             $_category = 'AND pk_fk_content_category='.$category.'  AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` ';
@@ -501,14 +501,14 @@ class ContentManager
         $items = array();
 
         $_where_slave = ' 1=1 ';
-        $_days = 'AND changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         if(!$all) {
             $_where_slave = ' available=1 ';
-            $_days = 'AND changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+            $_days = 'AND created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         }
 
         $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
-        $_limit = 'LIMIT 0 , '.$num;
+        $_limit = 'LIMIT '.$num;
 
         if (intval($category)>0) {
 
@@ -520,7 +520,7 @@ class ContentManager
             if(count($pks)<$num && $not_empty) {
                 //En caso de que existan menos de 6 contenidos, lo hace referente a los 200 últimos contenidos
                 $pks = $this->find_by_category($content_type, $category,$_where_slave.$_comented,
-                                'ORDER BY `contents`.`content_status` DESC, changed DESC LIMIT 0,200','pk_content, starttime, endtime');
+                                'ORDER BY `contents`.`content_status` DESC, created DESC LIMIT 200','pk_content, starttime, endtime');
                 if(!$all) {
                     $pks = $this->getInTime($pks);
                 }
@@ -537,7 +537,7 @@ class ContentManager
 
                 //En caso de que existan menos de $num contenidos, lo hace referente a los 200 últimos contenidos
                 $pks = $this->getInTime($this->find($content_type,$_where_slave.$_comented,
-                                'ORDER BY changed DESC LIMIT 0,200','pk_content, starttime, endtime'));
+                                'ORDER BY created DESC LIMIT 200','pk_content, starttime, endtime'));
                 if(!$all) {
                     $pks = $this->getInTime($pks);
                 }
@@ -623,11 +623,11 @@ class ContentManager
             $_where .= ' AND `contents`.`available`=1 ';
         }
 
-        $_days = 'AND  `contents`.changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.created>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `contents`.pk_content=`' . $this->table . '`.pk_' . strtolower($content_type) .
                              ' AND `ratings`.pk_rating=`contents`.pk_content ';
         $_order_by = 'ORDER BY `contents`.`content_status` DESC, `ratings`.total_votes DESC ';
-        $_limit = 'LIMIT 0 , '.$num;
+        $_limit = 'LIMIT '.$num;
 
         if( isset($author) && !is_null($author) && intval($author) > 0 ) {
             if($content_type=='Opinion') {
