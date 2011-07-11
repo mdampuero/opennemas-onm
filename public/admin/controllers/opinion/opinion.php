@@ -218,6 +218,11 @@ if(isset($_REQUEST['action'])) {
             $alert = '';
             
             if($opin->create($_POST)) {
+                // FIXME: buscar otra forma de hacerlo
+                /* Eliminar caché opinion cuando se crean nuevas opiniones */
+                require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+                $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete('opinion|1');
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
                 }
