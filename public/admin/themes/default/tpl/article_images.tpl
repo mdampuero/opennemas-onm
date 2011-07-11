@@ -49,7 +49,7 @@
                                     <td colspan=2>
                                         <div id="footer_img_portada">
                                             <label for="title">{t}Footer text for frontpage image:{/t}</label>
-                                            <input type="text" id="img1_footer" name="img1_footer" title="Imagen" value="" size="50" />
+                                            <input type="text" id="img1_footer" name="img1_footer" title="Imagen" value="{$article->img1_footer|default:""}" size="50" />
                                         </div>
                                     </td>
                                 </tr>
@@ -97,7 +97,7 @@
                                     <td colspan=2>
                                         <div id="footer_img_interior">
                                             <label for="title">{t}Footer text for inner image:{/t}</label>
-                                            <input type="text" id="img2_footer" name="img2_footer" title="Imagen" value="" size="50" />
+                                            <input type="text" id="img2_footer" name="img2_footer" title="Imagen" value="{$article->img2_footer|default:""}" size="50" />
                                         </div>
                                     </td>
                                 </tr>
@@ -253,7 +253,7 @@
                                     <td colspan=2>
                                         <div id="video2_footer">
                                             <label for="title">{t}Footer text for inner video:{/t}</label>
-                                            <input type="text" id="footer_video2" name="footer_video2" title="video interior footer" value="" size="50" />
+                                            <input type="text" id="footer_video2" name="footer_video2" title="video interior footer" value="{$article->footer_video2}" size="50" />
                                         </div>
                                     </td>
                                 </tr>

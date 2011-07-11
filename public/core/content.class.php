@@ -312,7 +312,7 @@ class Content {
                     WHERE pk_content=".($data['id']);
 
         $this->read( $data['id']); //????
-
+ 
         $data['changed'] = date("Y-m-d H:i:s");
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime'] = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
@@ -320,7 +320,7 @@ class Content {
         $data['content_status'] = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
         $data['available'] = (!isset($data['available']))? $this->available: $data['available'];
         $data['frontpage'] = (!isset($data['frontpage']))? $this->frontpage: $data['frontpage'];
-        $data['in_home']   = (empty($data['in_home']))? $this->in_home: $data['in_home'];
+        $data['in_home']   = (!isset($data['in_home']))? $this->in_home: $data['in_home'];
         $data['placeholder'] = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
         $data['home_placeholder'] = (empty($this->home_placeholder))? 'placeholder_0_1': $this->home_placeholder;
 

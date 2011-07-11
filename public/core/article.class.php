@@ -181,6 +181,10 @@ class Article extends Content
 
     public function update($data)
     {
+        if(isset($data['available']) and !isset($data['content_status'])) {
+            $data['content_status'] = $data['available'];
+        }
+        
         // If it's clone use special update {{{
         if($this->isClone($data['id'])) {
             $data = $this->updateClone($data['id'], $data);
@@ -192,11 +196,7 @@ class Article extends Content
         if(!$data['description']) {
             $data['description'] = String_Utils::get_num_words($data['body'], 50);
         }
-
-        if(isset($data['available']) and !isset($data['content_status'])) {
-            $data['content_status'] = $data['available'];
-        }
-
+ 
         $data['subtitle']=mb_strtoupper($data['subtitle'],'UTF-8');
 
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
