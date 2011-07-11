@@ -91,19 +91,10 @@ if (!is_null($action) ) {
             if(($tpl->caching == 0)
 			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl',$cacheID))){
 
-				/**
-				 * Get available albums and paginate them
-				*/
-//				list($albums, $pages)=
-//                        $cm->find_pages('Album',
-//                                        '1=1',
-//                                        'ORDER BY created DESC',$page,2);
-
-				$albums= $cm->find('Album', 'fk_content_type=7',
+				$albums = $cm->find('Album', 'fk_content_type=7 AND available=1',
                                     'ORDER BY  created DESC LIMIT 2');
 
 
-                //$tpl->assign('pagination', $pages);
 
 				foreach ($albums as &$album) {
 					//TODO: mirar porque no sale esto de DB
@@ -111,7 +102,7 @@ if (!is_null($action) ) {
 				}
 
 				$tpl->assign('albums', $albums);
-				//require_once("widget_static_pages.php");
+
 			}
 
 			/**
@@ -175,9 +166,6 @@ if (!is_null($action) ) {
 				   $i++;
 				}
 				$tpl->assign('album_photos', $albumPhotos);
-
-				//require_once("widget_gallerys_lastest.php");
-				//require_once("widget_static_pages.php");
 
 			} // END iscached
 

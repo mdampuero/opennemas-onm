@@ -62,7 +62,6 @@ if (isset($_REQUEST['action'])) {
             $video = NULL;
             $cm = new ContentManager();
 
-
             $cacheID = $tpl->generateCacheId($actual_category, null, '');
 
             # If is not cached process this action
