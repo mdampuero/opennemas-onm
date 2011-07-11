@@ -560,9 +560,9 @@ if (isset($_REQUEST['action']) ) {
            if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
+                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} 
             }
-            if (isset($_POST['content_status'])) {$_POST['content_status'] = 0;} else {$_POST['content_status'] = 1;}
+            if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
 
             // Register cache control event for updating content
             $GLOBALS['application']->register('onAfterUpdate', 'onAfterUpdate_refreshCache');
@@ -606,9 +606,9 @@ if (isset($_REQUEST['action']) ) {
             if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
+                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} 
             }
-            if (isset($_POST['content_status'])) {$_POST['content_status'] = 0;} else {$_POST['content_status'] = 1;}
+            if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;}   else {$_POST['content_status'] = 0;}
 
             $article = new Article();
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];

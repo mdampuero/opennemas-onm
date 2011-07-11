@@ -83,6 +83,9 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('VIDEO_READ');
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+            if (empty($id)) {
+                $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+            }
 			$video = new Video( $id );
 
             $tpl->assign('video', $video);

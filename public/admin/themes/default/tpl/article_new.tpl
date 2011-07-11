@@ -89,7 +89,7 @@
 						</td>
 
 						<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
-                                                    <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="available" value=1 tabindex="10"/>
+                                                    <input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1 tabindex="10"/>
                                                     <span style="font-size:9px;">{t}(publish directly){/t}</span>
 						</td>
 					</tr>
@@ -101,14 +101,16 @@
                                                     <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="11"/>
 						</td>
 					</tr>
-					<tr>
-						<td valign="top"  align="right" nowrap="nowrap">
-							<label for="in_home">{t}Suggest for frontpage:{/t}</label>
-						</td>
-						<td nowrap="nowrap" style="text-align:left;vertical-align:top">
-                                                    <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/>
-						</td>
-					</tr>
+                    {if (isset($article) && $article->in_home neq 1)}
+                        <tr>
+                            <td valign="top"  align="right" nowrap="nowrap">
+                                <label for="in_home">{t}Suggest for frontpage:{/t}</label>
+                            </td>
+                            <td nowrap="nowrap" style="text-align:left;vertical-align:top">
+                                                        <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/> 
+                            </td>
+                        </tr>
+                    {/if}
 					{else} {* else if not list_hemeroteca *}
 					<tr>
 						<td valign="top"  align="right" nowrap="nowrap">
