@@ -1,6 +1,6 @@
-<?php 
-//album de fotos 
- 
+<?php
+//album de fotos
+
 class Album extends Content{
     public $pk_album = NULL;
     public $subtitle = NULL;
@@ -9,23 +9,69 @@ class Album extends Content{
     public $cover = NULL;
     public $widthCover = 300;
     public $heightCover = 240;
-	
-   
+
+
     /**
       * Constructor PHP5
     */
-  
+
     function __construct($id=NULL){
 
-        parent::__construct($id);       
+        parent::__construct($id);
 
         if (!is_null($id)) {
             $this->read($id);
         }
-       	$this->content_type = 'Album';
+       	$this->content_type = __CLASS__;
     }
 
-    /**
+	public function __get($name)
+    {
+
+        switch ($name) {
+
+            case 'uri': {
+                $uri =  Uri::generate( 'album',
+                            array(
+                                'id' => $this->id,
+                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'category' => $this->category_name,
+                                'slug' => $this->slug,
+                            )
+                        );
+
+                return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            }
+            case 'slug': {
+                return String_Utils::get_title($this->title);
+                break;
+            }
+
+            case 'content_type_name': {
+				$contentTypeName = $GLOBALS['application']->conn->
+                    Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
+                    if(isset($contentTypeName->fields['name'])) {
+                        $returnValue = $contentTypeName;
+                    } else {
+                        $returnValue = $this->content_type;
+                    }
+					$this->content_type_name = $returnValue;
+                    return $returnValue;
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+
+		parent::__get($name);
+    }
+
+	/**
      * Explanation for this function.
      *
      * @param array $data  .
@@ -38,10 +84,10 @@ class Album extends Content{
         parent::create($data);
 
         $this->cover = $this->cropImageFront($data);
-        
+
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
         $data['fuente'] = (empty($data['fuente']))? '': $data['fuente'];
-		
+
 		$sql = "INSERT INTO albums ".
                " (`pk_album`,`subtitle`, `agency`,`fuente`,`cover`) " .
 			   " VALUES (?,?,?,?,?)";
@@ -54,7 +100,7 @@ class Album extends Content{
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
             return(false);
-        }		
+        }
 
         $data['id']=$this->id;
 
@@ -91,13 +137,13 @@ class Album extends Content{
 
         $this->pk_album = $rs->fields['pk_album'];
         $this->subtitle = $rs->fields['subtitle'];
-        $this->agency = $rs->fields['agency'];       
+        $this->agency = $rs->fields['agency'];
         $this->fuente = $rs->fields['fuente'];
         $this->cover = $rs->fields['cover'];
-     
+
     }
 
-    function update($data) {   
+    function update($data) {
 
         parent::update($data);
 
@@ -122,7 +168,7 @@ class Album extends Content{
 
         $album=new Album_photo();
 		$album->delete_album($data['id']);
-		    
+
         if(isset($data['ordenAlbum'])){
             $tok = strtok($data['ordenAlbum'],"++");
             $pos=1;
@@ -144,7 +190,7 @@ class Album extends Content{
      */
     function cropImageFront($data) {
 
-        
+
         if ($data['path_img'] && $data['name_img']) {
 
             $uploaddir = MEDIA_IMG_PATH.$data['path_img'];
@@ -170,7 +216,7 @@ class Album extends Content{
                     $width = $w;
                 }
             }
-            
+
             $picture->resizeImage($width, $height,Imagick::FILTER_LANCZOS,1);
             $picture->cropImage($data['width'], $data['height'], $data['x1'], $data['y1']);
             $picture->resizeImage($this->widthCover, $this->heightCover,Imagick::FILTER_LANCZOS,1);
@@ -188,10 +234,10 @@ class Album extends Content{
                 return false;
             }
             chmod($path, 0777);
-            
+
             return $data['path_img'].$cover;
         }
-     
+
     }
 
 
@@ -209,12 +255,12 @@ class Album extends Content{
             return;
         }
         $album=new Album_photo();
-		$album->delete_album($id);	
+		$album->delete_album($id);
 	}
-	
+
     function set_favorite($status) {
         $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
-        
+
         if ($this->id == NULL) {
             return(false);
         }
@@ -237,7 +283,7 @@ class Album extends Content{
 
 	//Lee de la tabla la relacion de galeria y fotos
     function get_album($id_album) {
-        
+
         if ($id_album == NULL) {
             return(false);
         }
@@ -256,12 +302,12 @@ class Album extends Content{
         }
 
         return($album_photos);
-       
+
     }
 
 
     function get_firstfoto_album($id_album) {
-        
+
         $album_photo = array();
         $sql = 'SELECT * from albums_photos WHERE pk_album = ' .($id_album).
                ' ORDER BY position ASC LIMIT 1';
@@ -288,6 +334,6 @@ class Album extends Content{
         }
 
         return $album_photo;
-       
+
     }
 }
