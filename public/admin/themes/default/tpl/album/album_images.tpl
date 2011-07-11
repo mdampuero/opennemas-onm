@@ -33,7 +33,7 @@
                                  <img ondblclick="define_crop(this);"
                                      style="{cssimagescale resolution=67 photo=$photoData[n]}"
                                      src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
-                                     class="draggable2" id="img{$oldphoto[n]->pk_photo}"  border="0"
+                                     class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
                                      de:pk_photo="{$photoData[n]->pk_photo}"
                                      value="f{$indi}-{$photoData[n]->pk_photo}"
                                      name="{$photoData[n]->name}"
