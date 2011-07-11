@@ -15,6 +15,7 @@ if(isset($_REQUEST['action']) ) {
             $comment = new Comment();
             $comments = $comment->get_public_comments($_REQUEST['id']);
             
+            $tpl->assign('num_comments_total', count($comments));
             //  if(count($comments) >0) {
             $cm = new ContentManager();
             $comments = $cm->paginate_num_js($comments, 9, 1, 'get_paginate_comments',"'".$_REQUEST['id']."'");
