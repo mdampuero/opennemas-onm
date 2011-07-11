@@ -21,7 +21,6 @@
                 <td>
                     <br/>
                     Hola,
-                    <br/>
                     &eacute;stas son las &uacute;ltimas noticias y art&iacute;culos de opini&oacute;n de hoy. Te recordamos que puedes encontrar &eacute;stas noticias y muchas más visitando la web
                     de {$smarty.const.SITE_FULLNAME}
                     <br /><br />
