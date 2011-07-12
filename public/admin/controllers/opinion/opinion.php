@@ -265,6 +265,10 @@ if(isset($_REQUEST['action'])) {
 
             $opinion = new Opinion();
             $opinion->update($_REQUEST);
+            
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('opinion|1');
 
             if($_SESSION['_from'] == 'search_advanced') {
                 if($_GET['stringSearch']){
@@ -350,7 +354,7 @@ if(isset($_REQUEST['action'])) {
             } else {
                 $msg =" ¿Está seguro que desea eliminar '" . $opinion->title . "' ?";
 
-                echo $msg;
+                echo $msg;            
                 exit(0);
             }
         } break;
@@ -363,6 +367,9 @@ if(isset($_REQUEST['action'])) {
 
                 $opinion = new Opinion($_REQUEST['id']);
                 $opinion->delete($_REQUEST['id'], $_SESSION['userid']);
+                require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+                $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete('opinion|1');
             }
             if( $_SESSION['desde']=='list_pendientes'){
                 Application::forward('article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
