@@ -36,19 +36,19 @@ $tpl->assign('category', $_REQUEST['category']);
 /**
  * Getting categories
 */
-$ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
-
 // Parse template.conf to assign
+$ccm = ContentCategoryManager::get_instance();
 $tplFrontend = new Template(TEMPLATE_USER);
 $section = $ccm->get_name($_REQUEST['category']);
 $section = (empty($section))? 'home': $section;
 $categoryID = ($_REQUEST['category'] == 'home') ? 0 : $_REQUEST['category'];
+list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($categoryID);
 
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
 $allcategorys = $parentCategories;
+
 
 if (isset($_REQUEST['action']) ) {
 
@@ -64,6 +64,7 @@ if (isset($_REQUEST['action']) ) {
                 $section = $ccm->get_name($categoryID);
                 $_REQUEST['category'] = $categoryID;
                 list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
+
                 $tpl->assign('subcat', $subcat);
                 $tpl->assign('allcategorys', $parentCategories);
                 $tpl->assign('datos_cat', $datos_cat);
@@ -71,7 +72,6 @@ if (isset($_REQUEST['action']) ) {
             }
 
 
-            $tpl->assign('titulo_barra', 'Frontpage Manager');
 
             $cm = new ContentManager();
             $rating = new Rating();
@@ -410,8 +410,8 @@ if (isset($_REQUEST['action']) ) {
             $_SESSION['desde']='list_hemeroteca';
         break;
 
-        case 'new':   // Crear un nuevo artículo            
-            
+        case 'new':   // Crear un nuevo artículo
+
             Acl::checkOrForward('ARTICLE_CREATE');
 
             if(!isset($_REQUEST['category']) || $_REQUEST['category']=='' || $_REQUEST['category']=='home') {
@@ -421,10 +421,10 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             //FIXME: cambiar por la llamada a vars php en smarty
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
-         
-            //TODO: AJAX 
+
+            //TODO: AJAX
             require_once('controllers/video/videoGallery.php');
-             
+
         break;
 
         case 'read':
@@ -464,7 +464,7 @@ if (isset($_REQUEST['action']) ) {
                 $video2 = new Video($video);
                 $tpl->assign('video2', $video2);
             }
- 
+
             $rel= new Related_content();
 
             $relationes = array();
@@ -518,13 +518,13 @@ if (isset($_REQUEST['action']) ) {
             // }}}
         } break;
 
-        case 'create': 
-            
+        case 'create':
+
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
             if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
             if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
-                
+
             $article = new Article();
             $_POST['fk_publisher']=$_SESSION['userid'];
              if( !Privileges_check::CheckPrivileges('ARTICLE_CREATE', $_SESSION['privileges']) &&
@@ -543,7 +543,7 @@ if (isset($_REQUEST['action']) ) {
             }
         break;
 
-        case 'unlink': 
+        case 'unlink':
             $article = new Article($_REQUEST['id']);
             $article->unlinkClone();
 
@@ -556,11 +556,11 @@ if (isset($_REQUEST['action']) ) {
             // DON'T USE BREAK it must be updated
 
         case 'update':
-            
+
            if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} 
+                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;}
             }
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;} else {$_POST['content_status'] = 0;}
 
@@ -602,11 +602,11 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'validate': {
-            
+
             if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
-                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} 
+                if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;}
             }
             if (isset($_POST['content_status'])) {$_POST['content_status'] = 1;}   else {$_POST['content_status'] = 0;}
 
@@ -1295,7 +1295,7 @@ if (isset($_REQUEST['action']) ) {
             $szSourceTags = explode(', ', String_Utils::get_tags($_REQUEST['metadata']));
             $where="available=1 ";
             $search=$mySearch->SearchRelatedContents($szSourceTags, 'Article,Opinion',NULL,$where);
-            
+
             //Put searched words with diferent color
             $ind = 0; $indice = 0;
             $res = array();
@@ -1306,7 +1306,7 @@ if (isset($_REQUEST['action']) ) {
                 $indice++;
             }
 
-            
+
             if(($search) && count($search)>0){
                 $params="0,'".$_REQUEST['metadata']."'";
                 $search = $cm->paginate_array_num_js($search,20 , 3, "search_adv", $params);
@@ -1319,7 +1319,7 @@ if (isset($_REQUEST['action']) ) {
             }
 
             Application::ajax_out($div.$paginas);
-            
+
         break;
 
         case 'get_noticias':
@@ -1473,7 +1473,7 @@ if (isset($_REQUEST['action']) ) {
             $html_out=print_lists_related($_REQUEST['id'], $attaches, 'adjuntos_div');
             Application::ajax_out("<h2>Ficheros:</h2>".$categorys.$html_out.$paginacionV);
         break;
-        
+
         case 'get_categorys_list':
 
              $allcategorys =$ccm->cache->renderCategoriesTree();
@@ -1536,7 +1536,7 @@ if (isset($_REQUEST['action']) ) {
             $uri = $_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $clone->category . '&id=' . $clone->id;
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
-          
+
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;

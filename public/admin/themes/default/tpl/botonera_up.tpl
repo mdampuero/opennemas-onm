@@ -92,7 +92,7 @@
 {* Botonera articles -------------------------------------------- *}
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if $category eq 0}HOME{/if}</h2></div>
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">

@@ -1,49 +1,49 @@
 <?php
 
 class ContentCategoryManager {
-    
+
     /**
      * @var array with categories
      */
     public $categories = null;
-    
+
     /**
      * @var ContentCategoryManager instance, singleton pattern
      */
     static private $instance = null;
-    
+
     /**
      * @var MethodCacheManager cache, object to cache requests
     */
     public $cache = null;
 
     function __construct() {
-        if( is_null(self::$instance) ) {                        
+        if( is_null(self::$instance) ) {
             // Posibilidad de cachear resultados de métodos
             $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-            
-            // Rellenar categorías dende caché            
+
+            // Rellenar categorías dende caché
             $this->categories = $this->cache->populate_categories();
-            
-            self::$instance = $this;                        
+
+            self::$instance = $this;
             return self::$instance;
         } else {
            return self::$instance;
-        }        
+        }
     }
-    
+
     static function get_instance() {
         if( is_null(self::$instance) ) {
             $instance = new ContentCategoryManager();
-            
+
             self::$instance = $instance;
             return self::$instance;
         } else {
             return self::$instance;
         }
-       
-    }     
-    
+
+    }
+
     /**
      * populate_categories, load internal array $this->categories for a
      * singleton instance
@@ -53,7 +53,7 @@ class ContentCategoryManager {
     function populate_categories() {
         $sql = 'SELECT * FROM content_categories';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -61,18 +61,18 @@ class ContentCategoryManager {
             // FIXME: controlar erros
             return('');
         }
-        
+
         // clear content
-        $this->categories = array();        
+        $this->categories = array();
         if($rs!=false) {
-            while($obj = $rs->FetchNextObject($toupper=false)) {            
+            while($obj = $rs->FetchNextObject($toupper=false)) {
                 $this->categories[ $obj->pk_content_category ] = $obj;
             }
-        }        
-        
+        }
+
         return( $this->categories );
     }
-    
+
     /**
      * Normalize names of category and subcategory
      *
@@ -85,12 +85,12 @@ class ContentCategoryManager {
             // It's a father category
             return array($category_name, $subcategory_name);
         }
-        
+
         $father = $this->get_father($category_name);
         if(!empty($father)) {
             return( array($father, $category_name) );
         }
-        
+
         // If don't match return same values
         return array($category_name, $subcategory_name);
     }
@@ -111,22 +111,22 @@ class ContentCategoryManager {
         }
 
         $sql = 'SELECT * FROM content_categories ' .
-                'WHERE internal_category<>0 AND '.$_where.' '.$_order_by;   
+                'WHERE internal_category<>0 AND '.$_where.' '.$_order_by;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if($rs !== false) {
-            while(!$rs->EOF) {                
+            while(!$rs->EOF) {
                 $obj = new ContentCategory();
                 $obj->load($rs->fields);
-                
+
                 $items[] = $obj;
-                
+
                 $rs->MoveNext();
             }
         }
-        
+
         return $items;
-    }    
+    }
 
 /**
      * find category and subcategory of type content.
@@ -145,35 +145,35 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories WHERE pk_content_category = ?';
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
-    
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            return $rs->fields['name'];         
-        }       
+            return $rs->fields['name'];
+        }
         if(isset($this->categories[$id]->name)) {
             return($this->categories[$id]->name);
         } else {
             return('');
         }
     }
-    
-    
+
+
     /**
      * Returns the position in menu
-     * 
+     *
      * @param int $id Category ID
      * @return int Return posmenu
      */
     function get_pos($id) {
         if( is_null($this->categories) ) {
-            if(is_numeric($id)) {        
+            if(is_numeric($id)) {
                 $sql = 'SELECT posmenu FROM content_categories WHERE pk_content_category = ?';
                 $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
-              
+
                 if (!$rs) {
                     $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                     $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -182,14 +182,14 @@ class ContentCategoryManager {
                 }
                 return $rs->fields['posmenu'];
             }
-            
+
             return 0;
         }
-        
+
         if(!isset($this->categories[$id])) {
             return 0;
         }
-        
+
         // Singleton version
         return $this->categories[$id]->posmenu;
     }
@@ -199,24 +199,24 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $sql = 'SELECT pk_content_category FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return NULL;
             }
-            
+
             return $rs->fields['pk_content_category'];
         }
-        
+
         // Singleton version
         foreach($this->categories as $category) {
             if($category->name == $category_name) {
                 return( $category->pk_content_category );
             }
         }
-        
+
         return(0);
     }
 
@@ -237,7 +237,7 @@ class ContentCategoryManager {
                    ' ORDER BY posmenu LIMIT 1';
 
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_type) );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -253,7 +253,7 @@ class ContentCategoryManager {
 
         foreach($categories as $category) {
             if(($category->internal_category == $category_type) && ($category->inmenu==1) ) {
-                
+
                 return( $category->name );
             }
         }
@@ -263,85 +263,85 @@ class ContentCategoryManager {
     function get_title($category_name) {
         if( is_null($this->categories) ) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
-            
+
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             return $rs->fields['title'];
         }
-        
+
         // Singleton version
         foreach($this->categories as $category) {
             if($category->name == $category_name) {
                 return( $category->title );
             }
         }
-        
+
         return('');
     }
-    
+
     function getByName($category_name) {
         if( is_null($this->categories) ) {
             $sql = 'SELECT title FROM content_categories WHERE name = ?';
-            
+
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             return $rs->fields;
         }
-        
+
         // Singleton version
         foreach($this->categories as $category) {
             if($category->name == $category_name) {
                 return $category;
             }
         }
-        
+
         return null;
     }
-    
+
     //Returns an all cetegories array
     function get_all_categories() {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories';
-          
+
             $rs = $GLOBALS['application']->conn->Execute( $sql );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             $items = array ();
             while(!$rs->EOF) {
                 $str = $rs->fields['name'];
                 $items[$str]=0;
                 $rs->MoveNext();
             }
-                
+
             return $items;
         }
-        
+
         // Singleton version
         $items = array();
         foreach($this->categories as $category) {
             $items[$category->name] = 0;
         }
-        
+
         return( $items );
     }
 
@@ -350,7 +350,7 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $sql = 'SELECT pk_content_category FROM content_categories WHERE internal_category=1';
             $rs = $GLOBALS['application']->conn->Execute( $sql );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -363,10 +363,10 @@ class ContentCategoryManager {
                 $items[$str]=$str;
                 $rs->MoveNext();
             }
-            
+
             return $items;
         }
-        
+
         // Singleton version
         $items = array();
         foreach($this->categories as $category) {
@@ -374,8 +374,8 @@ class ContentCategoryManager {
                 $items[$category->pk_content_category] = $category->pk_content_category;
             }
         }
-        
-        return( $items );    
+
+        return( $items );
     }
 
     //Returns an array with subcetegories from a single category
@@ -384,16 +384,16 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name,title,internal_category FROM content_categories WHERE internal_category<>0 AND inmenu=1 AND
                 fk_content_category = ? ORDER BY posmenu';
-            
+
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_id) );
-            
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             $items = array ();
             while(!$rs->EOF) {
                 $items[ $rs->fields['name'] ]['title']=$rs->fields['title'];
@@ -401,10 +401,10 @@ class ContentCategoryManager {
                 $rs->MoveNext();
             }
         }
-        
+
         // Singleton version
         $categories = $this->order_by_posmenu($this->categories);
-        
+
         $items = array ();
         foreach($categories as $category) {
             if( ($category->internal_category) && ($category->inmenu == 1)
@@ -413,14 +413,14 @@ class ContentCategoryManager {
                     $items[ $category->name ]['internal_category']=$category->internal_category;
 
             }
-        }                
-        
+        }
+
         return $items;
     }
-    
+
     function order_by_posmenu($categories) {
         $categories = array_values($categories);
-        
+
         // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
         if(!function_exists('__order_by_posmenu')) {
             // Ordenar
@@ -436,14 +436,14 @@ class ContentCategoryManager {
 
                 }
                 return ($a->posmenu > $b->posmenu) ? +1 : -1;
-                
+
             }
         }
         usort($categories, '__order_by_posmenu');
-        
+
         return( $categories );
     }
-    
+
     /**
      * Get a tree with categories and subcategories
      *
@@ -452,28 +452,28 @@ class ContentCategoryManager {
     */
     function getCategoriesTree() {
         $tree = array();
-        
+
         $categories = $this->order_by_posmenu($this->categories);
-        
+
         // First loop categories
         foreach($categories as $category) {
             if(($category->fk_content_category == 0) && ($category->internal_category != 0)) {
-            //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) { 
+            //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) {
                 $tree[$category->pk_content_category] = $category;
                 $tree[$category->pk_content_category]->childNodes = array();
             }
         }
-        
+
         // Loop on subcategories
         foreach($categories as $category) {
-            //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) { 
+            //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) {
             if(($category->fk_content_category != 0) && ($category->internal_category != 0) &&
                (isset($tree[$category->fk_content_category]))) {
-                
+
                 $tree[$category->fk_content_category]->childNodes[$category->pk_content_category] = $category;
             }
         }
-        
+
         return $tree;
     }
 
@@ -500,17 +500,17 @@ class ContentCategoryManager {
                          $tree[$i] = new stdClass();
                          $tree[$i]->pk_content_category = $subcat->pk_content_category;
                          $tree[$i]->title = '      ⇒ '.$subcat->title;
-                         
+
                          $i++;
                     }
                 }
-               
+
             }
         }
-        
+
         return $tree;
     }
-    
+
     /**
      * Get a tree with categories and subcategories for menu
      *
@@ -519,66 +519,66 @@ class ContentCategoryManager {
     */
     function getCategoriesTreeMenu() {
         $tree = array();
-        
+
         $categories = $this->order_by_posmenu($this->categories);
-        
+
         // First loop categories
         foreach($categories as $category) {
             if(($category->fk_content_category == 0) && ($category->internal_category != 0) /*&& ($category->inmenu == 1)*/) {
-            //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) { 
+            //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) {
                 $tree[$category->pk_content_category] = $category;
                 $tree[$category->pk_content_category]->childNodes = array();
             }
         }
-        
+
         // Loop on subcategories
         foreach($categories as $category) {
-            //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) { 
+            //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) {
             if(($category->fk_content_category != 0) && ($category->internal_category != 0) &&
                (isset($tree[$category->fk_content_category])) /* && ($category->inmenu == 1)*/ ) {
-                
+
                 $tree[$category->fk_content_category]->childNodes[$category->pk_content_category] = $category;
             }
         }
-        
+
         return $tree;
     }
 
     //Returns first subcategory from a father category_id
-    function get_first_subcategory($category_id) {        
+    function get_first_subcategory($category_id) {
         if( is_null($this->categories) ) {
             $sql = 'SELECT name FROM content_categories
                     WHERE inmenu=1 AND fk_content_category=? AND internal_category<>0
                     ORDER BY posmenu LIMIT 0,1';
-                
-            $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_id) );        
-            
+
+            $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_id) );
+
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             return $rs->fields['name'];
         }
-        
+
         // Singleton version
         $categories = $this->order_by_posmenu($this->categories);
-        
-        foreach($categories as $category) {            
+
+        foreach($categories as $category) {
             if(($category->fk_content_category==$category_id) && ($category->inmenu==1)
-                && ($category->internal_category!=0) ) {                
+                && ($category->internal_category!=0) ) {
                 return( $category->name );
             }
         }
     }
-    
+
     function get_father($category_name){
         if( is_null($this->categories) ) {
             $sql='SELECT content2.name FROM `content_categories` as content1,`content_categories` as content2 '.
                  'WHERE content1.name=? and content1.fk_content_category=content2.pk_content_category';
-            
+
             $rs = $GLOBALS['application']->conn->Execute( $sql, array($category_name) );
             if(!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -586,12 +586,12 @@ class ContentCategoryManager {
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
                 return;
             }
-            
+
             return $rs->fields['name'];
         }
-        
-        
-        // Singleton version        
+
+
+        // Singleton version
         $fk_content_category = '';
         // Search fk_content_category
         foreach($this->categories as $category) {
@@ -600,15 +600,15 @@ class ContentCategoryManager {
                 break;
             }
         }
-        
+
         foreach($this->categories as $category) {
             if($category->pk_content_category == $fk_content_category) {
                 return $category->name;
             }
         }
-        
+
         // FIXME: if flow of code could arrive here then throw a exception
-        return ''; 
+        return '';
     }
 
     //Returns false if the category does not exist
@@ -616,18 +616,18 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $sql = 'SELECT count(*) AS total FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->GetOne( $sql, $category_name );
-            
+
             return( $rs || $rs > 0 );
         }
-        
+
         // Singleton version
         // search into categories internal array ($this->categories)
         foreach($this->categories as $category) {
             if($category->name == $category_name) {
                 return true;
             }
-        }                        
-        
+        }
+
         return false;
     }
 
@@ -639,7 +639,7 @@ class ContentCategoryManager {
             `contents_categories`.`pk_fk_content_category`=? AND
             `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($pk_category) );
-        
+
         return( $rs->fields['number'] == 0 );
     }
 
@@ -660,18 +660,18 @@ class ContentCategoryManager {
     }
 
 
-    function count_content_by_type($category, $type) {        
+    function count_content_by_type($category, $type) {
         $sql = 'SELECT count(pk_content) AS number FROM `contents`,`contents_categories` WHERE'.
             ' contents.pk_content=pk_fk_content AND pk_fk_content_category=? AND `fk_content_type`=?';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($category, $type) );
-        
+
         if($rs->fields['number']) {
             return $rs->fields['number'];
         } else {
             return 0;
         }
     }
-    
+
     /**
      *
      *
@@ -686,20 +686,20 @@ class ContentCategoryManager {
                 FROM `contents`,`contents_categories`
                 WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` AND `in_litter`=0 AND `contents`.`fk_content_type`=? AND '.$_where.
                 ' GROUP BY `contents_categories`.`pk_fk_content_category`';
-       
+
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($type) );
-        
+
         $groups = array();
-        
+
         if($rs!==false) {
             while(!$rs->EOF) {
                 $groups[ $rs->fields['cat'] ] = $rs->fields['number'];
                 $rs->MoveNext();
-            }            
+            }
         }
-        
+
         return $groups;
-    }    
+    }
 
      function count_media_by_type_group($filter=NULL) {
          $_where = '1=1';
@@ -760,7 +760,7 @@ class ContentCategoryManager {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    function getArraysMenu($internal_category = 1, $category=NULL) {
+    function getArraysMenu($category=NULL, $internal_category = 1) {
 
         //fullcat contains array with all cats order by posmenu
         //parentCategories is an array with all menu cats in frontpage
@@ -781,8 +781,8 @@ class ContentCategoryManager {
                 && ($prima->fk_content_category == 0) ) {
 
                 $parentCategories[] = $prima;
-            }								 
-        }       
+            }
+        }
         $subcat = array();
         foreach($parentCategories as $k => $v) {
             $subcat[$k] = array();
@@ -794,16 +794,16 @@ class ContentCategoryManager {
             }
         }
 
-        
+
         if ( empty($category)  ) {
              $categoryData[] = $parentCategories[0];
 
-        }         
-     
+        }
+
         return array($parentCategories, $subcat, $categoryData);
     }
-    
-    
+
+
 
     /**
      * Returns the category name of a Content throw ID
@@ -830,4 +830,3 @@ class ContentCategoryManager {
 
 
 }
-
