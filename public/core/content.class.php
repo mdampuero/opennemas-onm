@@ -312,7 +312,7 @@ class Content {
                     WHERE pk_content=".($data['id']);
 
         $this->read( $data['id']); //????
- 
+
         $data['changed'] = date("Y-m-d H:i:s");
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime'] = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
@@ -699,7 +699,7 @@ class Content {
 
        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set status';
        Application::write_log($msg);
-       
+
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -741,7 +741,7 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set available';
         Application::write_log($msg);
-        
+
         // Set status for it's updated to next event
         if(!empty($this)) {
             $this->available = $status;
@@ -797,10 +797,10 @@ class Content {
                 return;
             }
         }
-        
+
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set directly frontpage';
         Application::write_log($msg);
-       
+
         // Set status for it's updated to next event
         if(!empty($this)) {
             $this->available = $status;
@@ -829,7 +829,7 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set frontpage';
         Application::write_log($msg);
-        
+
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -862,7 +862,7 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set position';
         Application::write_log($msg);
-        
+
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -898,7 +898,7 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set in_home';
         Application::write_log($msg);
-        
+
         if(count($values)>0) {
             if($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -997,7 +997,7 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Refresh home';
         Application::write_log($msg);
-        
+
         //$GLOBALS['application']->dispatch('onAfterSetInhome', $this);
         Content::refreshHome();
 
@@ -1005,7 +1005,7 @@ class Content {
     }
 
     static function setNumViews($id=null) {
-        
+
         $botStrings = array(
                             "google",
                             "bot",
@@ -1030,15 +1030,17 @@ class Content {
                             "monitor",
                             "mechanize",
                           );
-        
+
         foreach($botStrings as $bot)
         {
-            if(preg_match( "@".strtolower($_SERVER['HTTP_USER_AGENT'])."@", $bot) > 0) {
+            $httpUserAgent = preg_replace('@/@', '\/', $_SERVER['HTTP_USER_AGENT']);
+            die($httpUserAgent);
+            if(preg_match( "@".strtolower($httpUserAgent)."@", $bot) > 0) {
                 return false;
             }
         }
-        
-        
+
+
         if(is_null($id) ) {
             return false;
         }
@@ -1215,24 +1217,24 @@ class Content {
 
         }
     }
-    
+
     static public function refreshFrontpageForAllCategories() {
         require_once(dirname(__FILE__).'/template_cache_manager.class.php');
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-        
+
         $ccm = ContentCategoryManager::get_instance();
-        
+
         $availableCategories = $ccm->categories;
         $output ='';
-    
+
         foreach($availableCategories as $category) {
-    
-    
+
+
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-    
+
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
             $output .= "$category->name cleaned.\n";
-    
+
         }
         return $output;
 
@@ -1269,10 +1271,10 @@ class Content {
 
         $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Toggle available';
         Application::write_log($msg);
-        
+
         return true;
     }
-    
+
         public function dropFromHomePageOfCategory($category,$pk_content)
     {
         $ccm = ContentCategoryManager::get_instance();
@@ -1283,7 +1285,7 @@ class Content {
         }else{
             $category_name = $ccm->get_name($category);
         }
-    
+
         $sql = 'DELETE FROM content_positions WHERE fk_category = '.$category.' AND pk_fk_content = '.$pk_content;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1305,7 +1307,7 @@ class Content {
     public function unpublishFromHomePage($pk_content)
     {
         $cm = new ContentManager();
-        
+
         $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$pk_content;
         $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
         $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -1320,7 +1322,7 @@ class Content {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
             $msg= ''.$this->content_type.'- '.$pk_content.' - Unpublish from HomePage';
             Application::write_log($msg);
-            
+
             return true;
         }
     }
