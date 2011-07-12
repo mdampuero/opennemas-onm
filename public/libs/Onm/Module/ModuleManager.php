@@ -153,7 +153,7 @@ class ModuleManager {
             return true;
 
         // Check if module exists
-        } elseif (self::moduleExists($module)) {
+        } elseif (!self::moduleExists($module)) {
             throw new ModuleException("Module '{$module}'not available");
 
         // Finally return if that module is activated
