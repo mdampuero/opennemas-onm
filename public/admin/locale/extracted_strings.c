@@ -32,13 +32,52 @@ gettext("Edit");
 gettext("Delete");
 
 /* ./themes/default/tpl//video/video.tpl */
-gettext("HOME WIDGET");
+gettext("Video Manager :: Listing videos");
 
 /* ./themes/default/tpl//video/video.tpl */
-gettext("You must have 4 favorite videos to show them in homepage.");
+gettext("Title");
 
-/* ./themes/default/tpl//article_images_edit.tpl */
-gettext("There are no images in this category");
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Views");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Favorite");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Video Manager :: Video editing");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Enter video information");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Video URL:");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Comma separated");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Video description");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Information");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Section:");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Available:");
 
 /* ./themes/default/tpl//link_control/link_control.tpl */
 gettext("ALBUMS");
@@ -179,12 +218,6 @@ gettext("Please, remember save positions after finish.");
 gettext("There is no stands");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("WIDGET HOME");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Must have 4 favorites albuns to frontpage.<br />  ");
-
-/* ./themes/default/tpl//album/album.tpl */
 gettext("Albums");
 
 /* ./themes/default/tpl//album/album.tpl */
@@ -248,12 +281,6 @@ gettext("Title:");
 gettext("\"Album\"");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("Agency:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("\"Album\"");
-
-/* ./themes/default/tpl//album/album.tpl */
 gettext("%1");
 
 /* ./themes/default/tpl//album/album.tpl */
@@ -269,10 +296,16 @@ gettext("No");
 gettext("Yes");
 
 /* ./themes/default/tpl//album/album.tpl */
+gettext("Agency:");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
+
+/* ./themes/default/tpl//album/album.tpl */
 gettext("Description:");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("\"description\" ");
+gettext("description");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Keywords:");
@@ -290,9 +323,6 @@ gettext("Title:");
 gettext("\"Album\"");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("\"Album\"");
-
-/* ./themes/default/tpl//album/album.tpl */
 gettext("%1");
 
 /* ./themes/default/tpl//album/album.tpl */
@@ -306,6 +336,9 @@ gettext("No");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Yes");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("\"Album\"");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("\"description\"");
@@ -329,19 +362,13 @@ gettext("Album images (Double click to select and cut images)");
 gettext("Show image");
 
 /* ./themes/default/tpl//album/album_images.tpl */
-gettext("Drag and drop images to select");
+gettext("Available images");
 
 /* ./themes/default/tpl//album/album_images.tpl */
-gettext("Image");
+gettext("Search images by title...");
 
 /* ./themes/default/tpl//album/album_images.tpl */
-gettext("\"Delete\"");
-
-/* ./themes/default/tpl//album/album_images.tpl */
-gettext("\"Delete\"");
-
-/* ./themes/default/tpl//album/album_images.tpl */
-gettext("Image:");
+gettext("Image for frontpage:");
 
 /* ./themes/default/tpl//album/album_images.tpl */
 gettext("File:");
@@ -503,34 +530,43 @@ gettext("Multimedia associated to this article:");
 gettext("Image for frontpage:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("File:");
+gettext("File name:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Size:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("Weight:");
+gettext("File size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Footer text for frontpage image:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Image for inner article page:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("File:");
+gettext("File name:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Size:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("Weight:");
+gettext("File size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Description:");
 
 /* ./themes/default/tpl//article_images.tpl */
-gettext("Video for inner article page:");
+gettext("Footer text for inner image:");
 
 /* ./themes/default/tpl//article_images.tpl */
 gettext("Available images");
@@ -539,7 +575,61 @@ gettext("Available images");
 gettext("Search images by title...");
 
 /* ./themes/default/tpl//article_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Video for inner article page:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Code:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Footer text for inner video:");
+
+/* ./themes/default/tpl//article_images.tpl */
 gettext("Search video by title...");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Code:");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article_images.tpl */
+gettext("Description:");
 
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("HOME");
@@ -1319,6 +1409,9 @@ gettext("Videos");
 gettext("Files");
 
 /* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
 gettext("Suggested articles");
 
 /* ./themes/default/tpl//article_relacionados.tpl */
@@ -1341,6 +1434,24 @@ gettext("Videos");
 
 /* ./themes/default/tpl//article_relacionados.tpl */
 gettext("Files");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("We cant find any content with your search criteria.");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Your search \"<b>%1</b>\" didn't return any element.");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Suggestions:");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Check if all the words are written correctly.");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Use other words.");
+
+/* ./themes/default/tpl//article_relacionados.tpl */
+gettext("Use more general search criteria.");
 
 /* ./themes/default/tpl//trash/trash.tpl */
 gettext("Articles");
@@ -1409,22 +1520,10 @@ gettext("Section:");
 gettext("Unknown");
 
 /* ./themes/default/tpl//article_new.tpl */
-gettext("Coments");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Disabled");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Enabled");
+gettext("Allow coments");
 
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Available:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Yes");
 
 /* ./themes/default/tpl//article_new.tpl */
 gettext("(publish directly)");
@@ -1433,31 +1532,10 @@ gettext("(publish directly)");
 gettext("Put in section frontpage:");
 
 /* ./themes/default/tpl//article_new.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Put in frontpage:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Just suggest");
+gettext("Suggest for frontpage:");
 
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Archived:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("No");
 
 /* ./themes/default/tpl//article_new.tpl */
 gettext("Frontpage title:");
@@ -3399,42 +3477,6 @@ gettext("Delete");
 
 /* ./themes/default/tpl//static_pages/index.tpl */
 gettext("There is no static pages.");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("This article was strong");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Article content");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Article parameters");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Comments management");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Related contents");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Sort related contents");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Title:");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Inner title:");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Show in home");
-
-/* ./themes/default/tpl//article_edit.tpl */
-gettext("Available:");
 
 /* ./themes/default/tpl//pclave/index.tpl */
 gettext("New");
