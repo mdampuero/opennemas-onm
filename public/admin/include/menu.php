@@ -40,7 +40,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="POLL_MANAGER"
             privilege="POLL_ADMIN"
             title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"
-            link="poll.php"
+            link="controllers/poll/poll.php"
         />
         <node
             module_name="ADS_MANAGER"
@@ -133,7 +133,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="KIOSKO_MANAGER"
             title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
-            link="kiosko.php"
+            link="controllers/newsstand/newsstand.php"
             privilege="KIOSKO_ADMIN" />
         <node
             module_name="NEWSLETTER_MANAGER"
@@ -166,7 +166,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="LINK_CONTROL_MANAGER"
             title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"
-            link="controllers/link_control.php"
+            link="controllers/link_control/link_control.php"
             privilege="BACKEND_ADMIN" />
         <node
             title="&lt;hr/&gt;"

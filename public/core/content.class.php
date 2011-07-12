@@ -1034,7 +1034,6 @@ class Content {
         foreach($botStrings as $bot)
         {
             $httpUserAgent = preg_replace('@/@', '\/', $_SERVER['HTTP_USER_AGENT']);
-            die($httpUserAgent);
             if(preg_match( "@".strtolower($httpUserAgent)."@", $bot) > 0) {
                 return false;
             }
