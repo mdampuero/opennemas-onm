@@ -171,7 +171,7 @@ class ModuleManager {
      */
     static public function moduleExists($moduleName)
     {
-        return in_array($module, self::getAvailableModules());
+        return in_array($moduleName, self::getAvailableModules());
     }
 
 }

@@ -1033,7 +1033,7 @@ class Content {
 
         foreach($botStrings as $bot)
         {
-            $httpUserAgent = preg_replace('@/@', '\/', $_SERVER['HTTP_USER_AGENT']);
+            $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
             if(preg_match( "@".strtolower($httpUserAgent)."@", $bot) > 0) {
                 return false;
             }
