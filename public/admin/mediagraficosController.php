@@ -1,96 +1,96 @@
 <?php
-if (eregi('mediagraficosController.php', $_SERVER['PHP_SELF'])) {
+if (preg_match('@mediagraficosController\.php@', $_SERVER['PHP_SELF'])) {
 	die();
 }
 
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 class mediagraficosController extends mediamanagerController{
     /* View object */
- 
- function action_init()
+
+
+	public function action_init()
     {
-        $this->tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+
+		$this->tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->tpl->assign('titulo_barra', 'Gestor de Gr&aacute;ficos');
 
-
         $ccm = ContentCategoryManager::get_instance();
-       
-         $this->category=$_REQUEST['category'];
+        $this->category=$_REQUEST['category'];
         list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu();
         $this->category_name= $ccm->categories[$this->category]->name;
-   
+
         $this->tpl->assign('subcat', $this->subcat);
         $this->tpl->assign('allcategorys', $this->parentCategories);
         $this->tpl->assign('datos_cat', $datos_cat);
 
-       
-
-
-    }
-  
-   //List and count photos in categorys.
-     function action_list_categorys(){        
-            $ccm = ContentCategoryManager::get_instance();
-            $nameCat='GLOBAL'; //Se mete en litter pq category 0
-            $fullcat = $ccm->order_by_posmenu($ccm->categories);
-            $photoSet = $ccm->data_media_by_type_group('photos.media_type="graphic"');
-            $photoSetJPG = $ccm->count_media_by_type_group('media_type="graphic" and type_img="jpg"');
-            $photoSetGIF = $ccm->count_media_by_type_group('media_type="graphic" and type_img="gif"');
-            $photoSetPNG = $ccm->count_media_by_type_group('media_type="graphic" and type_img="png"');
-            $photoSetBN = $ccm->count_media_by_type_group('media_type="graphic" and color="BN"');
-
- 
-            foreach($this->parentCategories as $k => $v) {
-                $num_photos[$k] = $photoSet[$v->pk_content_category];
-                $num_photos[$k]->jpg = $photoSetJPG[$v->pk_content_category];
-                $num_photos[$k]->gif = $photoSetGIF[$v->pk_content_category];
-                $num_photos[$k]->png = $photoSetPNG[$v->pk_content_category];
-                $num_photos[$k]->other = $photoSet[$v->pk_content_category]->total - $photoSetJPG[$v->pk_content_category] - $photoSetGIF[$v->pk_content_category] - $photoSetPNG[$v->pk_content_category];
-                $num_photos[$k]->BN = $photoSetBN[$v->pk_content_category];
-                $num_photos[$k]->color = $photoSet[$v->pk_content_category]->total - $photoSetBN[$v->pk_content_category];
-
-
-                foreach($fullcat as $child) {
-                    if($v->pk_content_category == $child->fk_content_category &&
-                        isset($photoSet[$child->pk_content_category])) {
-                            $num_sub_photos[$k][] = $photoSet[$child->pk_content_category];
-                            $num_sub_photos[$k][]->jpg = $photoSetJPG[$child->pk_content_category];
-                            $num_sub_photos[$k][]->gif = $photoSetGIF[$child->pk_content_category];
-                            $num_sub_photos[$k][]->png = $photoSetPNG[$child->pk_content_category];
-                            $num_sub_photos[$k][]->other = $photoSet[$child->pk_content_category]->total - $photoSetJPG[$child->pk_content_category] - $photoSetGIF[$child->pk_content_category] - $photoSetPNG[$child->pk_content_category];
-                            $num_sub_photos[$k][]->BN = $photoSetBN[$child->pk_content_category];
-                            $num_sub_photos[$k][]->color = $photoSet[$child->pk_content_category]->total - $photoSetBN[$child->pk_content_category];
-
-                    }
-                }
-            }
-            //Categorias especiales
-            $j=0;
-
-            $this->tpl->assign('categorys', $this->parentCategories);
-            $this->tpl->assign('subcategorys', $this->subcat);
-            $this->tpl->assign('num_photos', $num_photos);
-            $this->tpl->assign('num_sub_photos', $num_sub_photos);
-
     }
 
+	//List and count photos in categorys.
+    public function action_list_categorys() {
+
+		$ccm = ContentCategoryManager::get_instance();
+		$nameCat='GLOBAL'; //Se mete en litter pq category 0
+		$fullcat = $ccm->order_by_posmenu($ccm->categories);
+		$photoSet = $ccm->data_media_by_type_group('photos.media_type="graphic"');
+		$photoSetJPG = $ccm->count_media_by_type_group('media_type="graphic" and type_img="jpg"');
+		$photoSetGIF = $ccm->count_media_by_type_group('media_type="graphic" and type_img="gif"');
+		$photoSetPNG = $ccm->count_media_by_type_group('media_type="graphic" and type_img="png"');
+		$photoSetBN = $ccm->count_media_by_type_group('media_type="graphic" and color="BN"');
+
+		foreach($this->parentCategories as $k => $v) {
+			$num_photos[$k] = $photoSet[$v->pk_content_category];
+			$num_photos[$k]->jpg = $photoSetJPG[$v->pk_content_category];
+			$num_photos[$k]->gif = $photoSetGIF[$v->pk_content_category];
+			$num_photos[$k]->png = $photoSetPNG[$v->pk_content_category];
+			$num_photos[$k]->other = $photoSet[$v->pk_content_category]->total - $photoSetJPG[$v->pk_content_category] - $photoSetGIF[$v->pk_content_category] - $photoSetPNG[$v->pk_content_category];
+			$num_photos[$k]->BN = $photoSetBN[$v->pk_content_category];
+			$num_photos[$k]->color = $photoSet[$v->pk_content_category]->total - $photoSetBN[$v->pk_content_category];
 
 
-    function action_list_today(){
-            $cm = new ContentManager();
-            $ayer='DATE_SUB(CURDATE(), INTERVAL 1 DAY)';
-            list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and created >='.$ayer.'  and photos.media_type="graphic"', 'ORDER BY  created DESC ',$_REQUEST['page'], 56, $this->category);
-            $_SESSION['desde']='list_today';
-            $this->process_photos($photos);
-            $this->tpl->assign('paginacion', $pager);
+			foreach ($fullcat as $child) {
+
+				if($v->pk_content_category == $child->fk_content_category &&
+					isset($photoSet[$child->pk_content_category])) {
+						$num_sub_photos[$k][] = $photoSet[$child->pk_content_category];
+						$num_sub_photos[$k][]->jpg = $photoSetJPG[$child->pk_content_category];
+						$num_sub_photos[$k][]->gif = $photoSetGIF[$child->pk_content_category];
+						$num_sub_photos[$k][]->png = $photoSetPNG[$child->pk_content_category];
+						$num_sub_photos[$k][]->other = $photoSet[$child->pk_content_category]->total - $photoSetJPG[$child->pk_content_category] - $photoSetGIF[$child->pk_content_category] - $photoSetPNG[$child->pk_content_category];
+						$num_sub_photos[$k][]->BN = $photoSetBN[$child->pk_content_category];
+						$num_sub_photos[$k][]->color = $photoSet[$child->pk_content_category]->total - $photoSetBN[$child->pk_content_category];
+				}
+
+			}
+		}
+
+		//Categorias especiales
+		$j=0;
+
+		$this->tpl->assign('categorys', $this->parentCategories);
+		$this->tpl->assign('subcategorys', $this->subcat);
+		$this->tpl->assign('num_photos', $num_photos);
+		$this->tpl->assign('num_sub_photos', $num_sub_photos);
+
     }
 
 
-    function action_list_all(){
+
+    public function action_list_today(){
+		$cm = new ContentManager();
+		$ayer='DATE_SUB(CURDATE(), INTERVAL 1 DAY)';
+		list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and created >='.$ayer.'  and photos.media_type="graphic"', 'ORDER BY  created DESC ',$_REQUEST['page'], 56, $this->category);
+		$_SESSION['desde']='list_today';
+		$this->process_photos($photos);
+		$this->tpl->assign('paginacion', $pager);
+    }
+
+
+    public function action_list_all()
+	{
         $cm = new ContentManager();
         list($photos, $pager)= $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="graphic"', 'ORDER BY  created DESC ',$_REQUEST['page'], 56, $this->category);
         $_SESSION['desde']='list_all';
@@ -100,17 +100,18 @@ class mediagraficosController extends mediamanagerController{
 
     public function action_searchResult()
     {
-        $cm = new ContentManager();
-        $items_page=56;
-        $page=$_REQUEST['page'];
+        $cm 		= new ContentManager();
+        $items_page = 56;
+        $page 		= $_REQUEST['page'];
         $_REQUEST['action']='searchResult';
 
-        if(!empty($_REQUEST['where'])){
-           $where=base64_decode($_REQUEST['where']);
-          
+        if (!empty($_REQUEST['where'])) {
+
+		   $where=base64_decode($_REQUEST['where']);
            $category= $_REQUEST['category'];
            $_REQUEST['categ']= $_REQUEST['category'];
-        }else{
+
+        } else {
             $where='';
             $search.='Resultado de la Búsqueda: ';
             if(!empty($_REQUEST['stringSearch'])) {
@@ -132,10 +133,11 @@ class mediagraficosController extends mediamanagerController{
             if(!empty($_REQUEST['color'])) { $where.=' `photos`.`color` <= "'.$_REQUEST['color'].'" AND ' ; $search.='Con color '.$_REQUEST['color'];}
             $where.=' 1=1 ';
         }
+
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="graphic" AND '.$where,
                                                 'ORDER BY  created DESC ', $page, $items_page, $category);
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $extension = strtolower($photo->type_img);
             $photo->description_utf = html_entity_decode(($photo->description));
             $photo->metadata_utf = html_entity_decode($photo->metadata);
@@ -160,8 +162,6 @@ class mediagraficosController extends mediamanagerController{
             }
         }
 
-
-
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $items_page,
@@ -173,6 +173,7 @@ class mediagraficosController extends mediamanagerController{
             'urlVar'      => 'page',
             'totalItems'  => $pager->_totalItems,
         );
+
         $pages = Pager::factory($pager_options);
 
         $_SESSION['desde'] = 'searchResult';
@@ -182,9 +183,6 @@ class mediagraficosController extends mediamanagerController{
         $this->tpl->assign('where', $where);
         $this->tpl->assign('pages', $pages);
 
-
     }
 
-
-   
 }

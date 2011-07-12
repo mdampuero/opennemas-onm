@@ -47,8 +47,8 @@ OpenNeMas.tinyMceConfig = {
 
         //external_image_list_url : "/admin/themes/default/js/tiny_mce/imagesexternallist.js",
         // Mirar o if de abaixo if(document.getElementById('category'))
-        external_image_list_url: (document.getElementById('category'))? "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value : '',
-        media_external_list_url: (document.getElementById('category'))? "/admin/images_tiny_external_list.php?category=" + document.getElementById('category').value: '',
+        external_image_list_url: (document.getElementById('category'))? "/admin/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value : '',
+        media_external_list_url: (document.getElementById('category'))? "/admin/controllers/image/images_tiny_external_list.php?category=" + document.getElementById('category').value: '',
 
         /* Iframe */
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/

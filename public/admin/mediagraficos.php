@@ -1,18 +1,18 @@
 <?php
-/* 
+/*
  * Change mediamanager to aproximate - used controller mediamanagerController
  */
 
 /**
  * Setup app
-*/
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
-require_once(SITE_LIBS_PATH.'utils.functions.php');
-require(SITE_CORE_PATH.'media.manager.class.php');
+ */
+require_once ('../bootstrap.php');
+require_once ('./session_bootstrap.php');
+require_once (SITE_LIBS_PATH.'utils.functions.php');
+require (SITE_CORE_PATH.'media.manager.class.php');
 
-require('./mediamanagerController.php');
-require('./mediagraficosController.php');
+require ('./mediamanagerController.php');
+require ('./mediagraficosController.php');
 
 
 //????? Parche pq no pasa el action, lo borra en algun sitio
@@ -64,7 +64,7 @@ switch($action) {
 
     case 'addPhoto':
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
-            //Mriar el tema de mensajes en los fallos que deberia devolver.           
+            //Mriar el tema de mensajes en los fallos que deberia devolver.
             $uploads=$mmc->action_addPhoto();
          if($uploads){
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=results&category='.$mmc->category.'&uploads='.$uploads.'&mensaje='.$mmc->alert);

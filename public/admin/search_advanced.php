@@ -13,311 +13,167 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Advanced Search');
 
-  $_SESSION['_from'] ='search_advanced';
-if( !isset($_REQUEST['action']) )
-{
-    $Types = getContentTypes();
-    $tpl->assign('arrayTypes', $Types);
-    $tpl->display('search/search_advanced.tpl');
-    return;
-}
+$_SESSION['_from'] ='search_advanced';
 
 // Assocciate content_type to resource, it has be static array because
 // don't exist a convention, sample attachment go on fichero.php
 $type2res = array(
     'article' => 'article.php',
     'advertisement' => 'controllers/advertisement/advertisement.php',
-    'attachment' => 'ficheros.php',
+    'attachment' => 'files/files.php',
     'opinion' => 'controllers/opinion/opinion.php',
     'comment' => 'controllers/comment.php',
     'album' => 'controllers/album/album.php',
-    'photo' => 'mediamanager.php',
+    'photo' => 'controllers/mediamanager/mediamanager.php',
     'video' => 'controllers/video/video.php',
     'interviu' => 'interviu.php',
-    'poll' => 'poll.php',
-    'static_page' => 'static_pages.php',
+    'poll' => 'controllers/poll/poll.php',
+    'static_page' => 'controllers/static_pages/static_pages.php',
 );
 
 
-switch($_REQUEST['action'])
-{
-    case 'load':
-        $Types = getContentTypes();
+$action = filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING);
+if (is_null($action)) {
+    $action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING, array('options' => array('default' => 'index')));
+}
+
+switch ($action) {
+
+    case 'index':
+
+        $Types = Content::getContentTypes();
         $tpl->assign('arrayTypes', $Types);
-        break;
+        $tpl->display('search_advanced/index.tpl');
+
+    break;
 
     case 'search':
 
-        if( !isset($_REQUEST['stringSearch']) ||
-            empty($_REQUEST['stringSearch']))
+        /**
+         * Get all the available content types
+         */
+        $contentTypes = Content::getContentTypes();
+        $tpl->assign('arrayTypes', $contentTypes);
+
+        /**
+         * if search string is empty skip executing some logic
+        */
+        if (isset($_REQUEST['stringSearch']) &&
+            !empty($_REQUEST['stringSearch']))
         {
-            $Types = getContentTypes();
-            $tpl->assign('arrayTypes', $Types);
-            break;
-        }
+            $htmlChecks=null;
+            $szCheckedTypes = checkTypes($htmlChecks);
+            $szTags  = trim($_REQUEST['stringSearch']);
+            $objSearch = cSearch::Instance();
+            $arrayResults = $objSearch->SearchContentsSelectMerge(
+                "contents.title as titule, contents.metadata, contents.permalink,
+                contents.description, contents.created, contents.pk_content as id,
+                contents_categories.catName, contents_categories.pk_fk_content_category as category,
+                content_types.title as type, contents.available, contents.content_status,
+                contents.in_litter, content_types.name as content_type",
+                $szTags,
+                $szCheckedTypes,
+                "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
+                "contents_categories, content_types",
+                100
+            );
 
-        $Types = getContentTypes();
-        $tpl->assign('arrayTypes', $Types);
+            $Pager = null;
+            $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
+            $indice = 0; $ind = 0;
+            $res = array();
+            $szTagsArray = explode(' ', $szTags);
 
-        $htmlChecks=null;
-        $szCheckedTypes = checkTypes($htmlChecks);
-        $szTags  = trim($_REQUEST['stringSearch']);
-        $objSearch = cSearch::Instance();
-        $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.metadata, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
-                                                            $szTags,
-                                                            $szCheckedTypes,
-                                                            "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
-                                                            "contents_categories, content_types",
-                                                            100);
-        $Pager = null;
-        
-        $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
-        $indice = 0; $ind = 0;
-        $res = array();
-        $szTagsArray = explode(' ', $szTags);
 
-        
-        foreach ($arrayResults as $res ) {
-            for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
+            foreach ($arrayResults as $res ) {
+
+                for($ind=0; $ind < sizeof($szTagsArray); $ind++){
+                    $arrayResults[$indice]['titule'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                    $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                }
+
+                $indice++;
 
             }
-            
-            $indice++;
-        }
-             
-        $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
-        $tpl->assign('type2res', $type2res);
-        $tpl->assign('arrayResults', $arrayResults);
-        $tpl->assign('htmlCheckedTypes', $htmlChecks);
-        $tpl->assign('pagination', $szPagesLink);
+            $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
+
+            $tpl->assign(array(
+                'type2res'     => $type2res,
+                'pagination'   => $szPagesLink,
+                'arrayResults' => $arrayResults,
+                'htmlCheckedTypes' => $htmlChecks
+            ));
+
+        }
+
+
+
+        $tpl->display('search_advanced/search.tpl');
 
     break;
 
     case 'search_paging':
 
-
         if( !isset($_REQUEST['stringSearch']) ||
             empty($_REQUEST['stringSearch']))
         {
-            $Types = getContentTypes();
+            $Types = Content::getContentTypes();
             break;
         }
-        //$Types = getContentTypes();
 
         $htmlChecks=null;
         $szCheckedTypes = checkTypes($htmlChecks);
         $szTags  = trim($_REQUEST['stringSearch']);
         $objSearch = cSearch::Instance();
-        $arrayResults = $objSearch->SearchContentsSelectMerge("contents.title as titule, contents.metadata, contents.permalink, contents.description, contents.created, contents.pk_content as id, contents_categories.catName, contents_categories.pk_fk_content_category as category, content_types.title as type, contents.available, contents.content_status, contents.in_litter, content_types.name as content_type",
-                                                            $szTags,
-                                                            $szCheckedTypes,
-                                                            "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
-                                                            "contents_categories, content_types",
-                                                            100);
+        $arrayResults = $objSearch->SearchContentsSelectMerge(
+            "contents.title as titule, contents.metadata, contents.permalink,
+            contents.description, contents.created, contents.pk_content as id,
+            contents_categories.catName, contents_categories.pk_fk_content_category as category,
+            content_types.title as type, contents.available, contents.content_status,
+            contents.in_litter, content_types.name as content_type",
+            $szTags,
+            $szCheckedTypes,
+            "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
+            "contents_categories, content_types",
+            100
+        );
 
 
-        //$Pager = null;
         if( isset($arrayResults) && !empty($arrayResults)){
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
         }
-        
-        $indice = 0; $ind = 0;
+
+        $indice = 0;
+        $ind = 0;
         $res = array();
         $szTagsArray = explode(' ', $szTags);
 
-
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['titule']);                
-                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><font color=blue>$1</font></b>', $arrayResults[$indice]['metadata']);
-
+                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
             }
 
             $indice++;
         }
+
         $htmlPaging = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
-        $tpl->assign('type2res', $type2res);
+        $tpl->assign(array(
+                        'type2res'     => $type2res,
+                        'pagination'   => $htmlPaging,
+                        'arrayResults' => $arrayResults
+                    ));
 
-        $tpl->assign('pagination', $htmlPaging);
-        $tpl->assign('arrayResults',$arrayResults);
-
-        $html_out=$tpl->fetch('search/search_advanced_list.tpl');
-        $htmlTitle = (isset($htmlTitle)? $htmlTitle : '');
+        $html_out=$tpl->fetch('search_advanced/partials/_list.tpl');
         Application::ajax_out($html_out);
 
     break;
 
-    case 'read':
-
-        $tpl->assign('subcat', $subcat);
-        // FIXME: Set pagination
-        $tpl->assign('allcategorys', $allcategorys);
-
-        $article = new Article( $_REQUEST['id'] );
-        $tpl->assign('article', $article);
-
-        $cm = new ContentManager();
-        //Photos de noticia
-        $img1=$article->img1;
-        if(isset($img1)){
-            //Buscar foto where pk_foto=img1
-            $photo1=new Photo($img1);
-        }
-
-        $tpl->assign('photo1', $photo1);
-        $img2=$article->img2;
-        if(isset($img2)){
-                //Buscar foto where pk_foto=img2
-            $photo2=new Photo($img2);
-        }
-
-        $tpl->assign('photo2', $photo2);
-            //Comentarios
-        $comment = new Comment();
-        $comments = $cm->find('Comment', 'content_status=1 and fk_content="'.$_REQUEST['id'].'"', NULL);
-        $tpl->assign('comments', $comments);
-         //Listado Autores
-        $aut=new Author();
-        $todos=$aut->all_authors();
-        $tpl->assign('todos', $todos);
-
-
-
-        $relationes=array();
-        $rel= new Related_content();
-
-        $relationes = $rel->get_relations( $_REQUEST['id'] );//de portada
-        $tpl->assign('yarelations', $relationes); //Portada
-        foreach($relationes as $aret) {
-             $resul = new Article($aret);
-             $losrel[]=$resul;
-        }
-        $tpl->assign('losrel', $losrel);
-        //Relacionados de interior
-        $intrelationes = $rel->get_relations_int( $_REQUEST['id'] );//de interor
-        $tpl->assign('intrelations', $intrelationes); //interior
-        foreach($intrelationes as $aret) {
-             $resul = new Article($aret);
-             $intrel[]=$resul;
-        }
-        $tpl->assign('intrel', $intrel);
-
-
-        $attach_rel = new Attach_content();
-
-        $reles=array();
-        $reles=$attach_rel->get_attach($_REQUEST['id']);
-        foreach($reles as $attaches) {
-             $resul = new Attachment($attaches);
-             $adjuntos[]=$resul;
-        }
-        $tpl->assign('adjuntos', $adjuntos);
-
-        $relespor=$attach_rel->get_attach_relations($_REQUEST['id']);
-        foreach($relespor as $attaches) {
-             $resul = new Attachment($attaches);
-             $adjuntospor[]=$resul;
-        }
-        $tpl->assign('adjuntospor', $adjuntospor);
-
-
-        $relesint=$attach_rel->get_attach_relations_int($_REQUEST['id']);
-        foreach($relesint as $attaches) {
-             $resul = new Attachment($attaches);
-             $adjuntosint[]=$resul;
-        }
-        $tpl->assign('adjuntosint', $adjuntosint);
-        break;
-    case 'confirm_notify':
-
-         $msg='¡ATENCION! <br />Esto es una funcionalidad para notificar la desaparicion de noticias. ¿Está seguro que desea enviarla?  <br />';
-         $msg.='   <a href="#" onClick="send_notify(\''.$_REQUEST['id'].'\',\'send_notify\');"> <img src="themes/default/images/ok.png" title="SI"> SI </a> <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO"> No </a><br /><br />';
-         echo $msg;
-         exit(0);
-    break;
-
-    case 'send_notify':
-            $article = new Article( $_REQUEST['id'] );
-            $article_data=" \n ID -".$article->id;
-            $article_data.=" \n Titulo -".$article->title;
-            $article_data.=" \n Content_status -".$article->content_status;
-            $article_data.=" \n Available -".$article->available;
-            $article_data.=" \n Frontpage -".$article->frontpage;
-            $article_data.=" \n posic -".$article->position;
-            $article_data.=" \n In_home -".$article->in_home;
-            $article_data.=" \n home_pos -".$article->home_pos;
-            $article_data.=" \n place -".$article->placeholder;
-            $article_data.=" \n home_place -".$article->home_placeholder;
-            $article_data.=" \n \n category -".$article->category;
-            $article_data.=" \n category name -".$article->catName;
-            $article_data.=" \n papelera -".$article->in_litter;
-            $article_data.=" \n fk_publisher -".$article->fk_publisher;
-            $article_data.=" \n fk_user_last_editor -".$article->fk_user_last_editor;
-
-            $sql = (isset($sql) ? $sql : 'no_sql_available');
-
-            $GLOBALS['application']->workflow->log( '\n NOTIFY - ' . $_SESSION['username'] . ' - ' . $sql . ' ' . print_r($article_data,true), PEAR_LOG_INFO );
-            $destinatario="sandra@openhost.es";
-            $params="";
-            $htmlcontent=$article_data;
-            send_notify( $destinatario, $htmlcontent );
-
-         $msg='Notificacion enviada <br />';
-         $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> Aceptar </a><br />';
-        echo $msg;
-        exit(0);
-    break;
-
-
     default:
         Application::forward('search_advanced.php');
         return;
-}
-
-$tpl->display('search/search_advanced.tpl');
-
-
-/*
- * Name: getContentTypes
- *
- * Description: Obtine de la base de datos los distintos tipos de contenidos.
- *
- * Input:   void.
- *
- * Output: array con los distintos tipos de contenidos. ID, Nombre y titulo.
-*/
-function getContentTypes()
-{
-    $szSqlContentTypes = "SELECT pk_content_type, name, title FROM content_types";
-    $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
-
-    if(!$resultSet)
-    {
-        printf("Get Content Types: Error al obtener el record Set.<br/>" .
-            "<pre>" . $szSqlContentTypes . "</pre><br/><br/>");
-        return null;
-    }
-
-    try
-    {
-        $resultArray = $resultSet->GetArray();
-        $i=0;
-        foreach ($resultArray as $res) {
-            $resultArray[$i]['title'] = htmlentities($res['title']);
-            $resultArray[$i]['2'] = htmlentities($res['2']);
-            $i++;
-        }
-    }
-    catch(exception $e)
-    {
-        printf("Excepcion: " . $e.message);
-        return null;
-    }
-    return $resultArray;
 }
 
 /*
@@ -331,12 +187,12 @@ function getContentTypes()
 */
 function checkTypes(& $htmlCheck)
 {
-    $arrayTypes = getContentTypes();
+    $arrayTypes = Content::getContentTypes();
     $szTypes =  '';
     foreach($arrayTypes as $aType)
     {
 
-         if ($aType['pk_content_type'] != 5 && // No eventos 
+         if ($aType['pk_content_type'] != 5 && // No eventos
                  $aType['pk_content_type'] != 10 && // No interviú
                  $aType['pk_content_type'] != 11 && // No encuestas
                  $aType['pk_content_type'] != 14 && // No kiosko
@@ -432,38 +288,3 @@ function PaginateLink($Pager, $szSearchString, $arrayCheckedTypes)
     }
     return $szPages;
 }
-
-
-function send_notify( $destinatario, $htmlcontent ) {
-        require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
-
-        	$mail = new PHPMailer();
-                $mail->SetLanguage('es');
-		$mail->IsSMTP();
-		$mail->Host = MAIL_HOST;
-		$mail->SMTPAuth = true;
-
-		$mail->Username = MAIL_USER;
-		$mail->Password = MAIL_PASS;
-
-        // FIXME: Eliminar las cadenas y poner constantes Ó implementar una clase especializada para envíos
-		$mail->From = $destinatario;
-		$mail->FromName = utf8_decode("OpenNemas");
-		$mail->IsHTML(true);
-
-
-		$mail->AddAddress($destinatario, $destinatario);
-
-                $mail->Subject  = utf8_decode("OpenNemas").' NOTIFY ';
-
-		/* $this->HTML = preg_replace('/>[^<]*"[^<]*</', '&#34;', $this->HTML);
-		$this->HTML = preg_replace("/>[^<]*'[^<]*</", '&#39;', $this->HTML); */
-
-		$mail->Body = utf8_decode( $htmlcontent );
-//print_r($mail);
-		if(!$mail->Send()) {
-                //    $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
-
-		}
-	}
-?>

@@ -592,31 +592,6 @@
 
 
 
-{* Botonera Search_avanced ----------------------------------------------- *}
- {elseif preg_match('/search_advanced\.php/',$smarty.server.SCRIPT_NAME) && ((!isset($smarty.request.action)) || ($smarty.request.action neq "read"))}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'search', 0);" onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
-					<img border="0" src="{$params.IMAGE_DIR}search.png" title="Search" alt="Search"><br />Search
-				</a>
-			</li>
-		</ul>
-	</div>
-
- {elseif preg_match('/search_advanced\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'search',0);" onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancel" alt="Search"><br />Cancelar
-				</a>
-			</li>
-		</ul>
-	</div>
-
-
 {* Botonera album -------------------------------------------- *}
 {elseif preg_match('/album\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
     <div id="menu-acciones-admin" class="clearfix">
