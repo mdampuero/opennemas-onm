@@ -52,7 +52,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="STATIC_PAGES_MANAGER"
             privilege="STATIC_ADMIN"
             title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            link="static_pages.php"
+            link="controllers/static_pages/static_pages.php"
         />
         <node
             module_name="ARTICLE_MANAGER"
