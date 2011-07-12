@@ -32,7 +32,6 @@
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/effects.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}ypSlideOutMenus.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
