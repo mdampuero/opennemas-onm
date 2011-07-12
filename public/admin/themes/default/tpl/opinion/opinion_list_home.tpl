@@ -26,7 +26,7 @@
 		    <table width="100%" cellpadding=0 cellspacing=0  id="{$director[0]->id}" border=0 >
                         <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
                             <td style="padding:4px;font-size: 11px;width:30px;">
-                                    <input type="checkbox" class="minput"  id="selected_0" name="selected_fld[]" value="{$director[0]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected_0').click();">
+                                    <input type="checkbox" class="minput"  id="selected_0" name="selected_fld[]" value="{$director[0]->id}"  style="cursor:pointer;">
                             </td>
                             <td style="font-size: 11px;width:180px;" onClick="javascript:document.getElementById('selected_0').click();">
                                      Director
