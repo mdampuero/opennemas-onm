@@ -14,7 +14,7 @@ Acl::checkOrForward('ALBUM_ADMIN');
 require_once('./albums_events.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Photo Album');
+$tpl->assign('titulo_barra', _('Photo Album'));
 
 //TODO: generate menu class for delete next array
 // Assign a content types for don't reinvent the wheel into template

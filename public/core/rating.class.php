@@ -106,7 +106,7 @@ class Rating
             
             //Si no existe un valoración para dicho contenido
             //comprobamos que el contenido exista y depues creamos la valoración
-            $this->create($pk_rating);
+            //$this->create($pk_rating);
             
             $this->pk_rating = $pk_rating;
             $this->total_value = 0;
