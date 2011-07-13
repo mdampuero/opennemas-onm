@@ -240,7 +240,7 @@ class Opinion extends Content {
 
 	//Poner en una clase aparte
     function get_opinion_algoritm() {
-        $sql = 'SELECT opinion_algoritm FROM settings';
+        $sql = 'SELECT `value` FROM settings `name`=`opinion_algoritm`';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
@@ -255,7 +255,7 @@ class Opinion extends Content {
     }
 
     function set_opinion_algoritm($value) {
-        $sql = "UPDATE settings SET `opinion_algoritm`='".$value."'";
+        $sql = "UPDATE settings SET `value`='".$value."' WHERE `name`=`opinion_algoritm`";
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);

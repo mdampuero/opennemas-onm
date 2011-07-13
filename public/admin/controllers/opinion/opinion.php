@@ -76,7 +76,7 @@ if(isset($_REQUEST['action'])) {
             if($algoritm=='orden') {
                 $order=' position ASC, created DESC';
             }
-            
+
 
             $tpl->assign('algoritm', $algoritm);
             $comment = new Comment();
@@ -216,7 +216,7 @@ if(isset($_REQUEST['action'])) {
             $_POST['publisher'] = $_SESSION['userid'];
 
             $alert = '';
-            
+
             if($opin->create($_POST)) {
                 // FIXME: buscar otra forma de hacerlo
                 /* Eliminar caché opinion cuando se crean nuevas opiniones */
@@ -265,7 +265,7 @@ if(isset($_REQUEST['action'])) {
 
             $opinion = new Opinion();
             $opinion->update($_REQUEST);
-            
+
             require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
@@ -354,7 +354,7 @@ if(isset($_REQUEST['action'])) {
             } else {
                 $msg =" ¿Está seguro que desea eliminar '" . $opinion->title . "' ?";
 
-                echo $msg;            
+                echo $msg;
                 exit(0);
             }
         } break;
