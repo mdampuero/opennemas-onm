@@ -33,7 +33,7 @@ if(empty($category)) {
 }
 
 $ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($content_types['video'], $category);
+list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu( $category, $content_types['video']);
 
 if (empty($category) ) {
     $category = $categoryData[0]->pk_content_category;

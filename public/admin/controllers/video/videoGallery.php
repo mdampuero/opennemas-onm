@@ -92,24 +92,6 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
     if(count($videos)> ITEMS_GALLERY)
         array_pop($videos); //next page
     
-    if(!empty($videos)){
-        foreach($videos as $video){
-            if($video->author_name =='vimeo'){
-                $url="  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                $curl = curl_init( 'http://vimeo.com/api/v2/video/'.$video->videoid.'.php');
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-                $return = curl_exec($curl);
-                $return = unserialize($return);
-                if(!empty($return)){
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
-                curl_close($curl);
-            }
-        }
-    }
-
     $tpl->assign('videos',  $videos);
 
     $videoPager = Onm\Pager\SimplePager::getPager($videoParams);

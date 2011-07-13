@@ -222,7 +222,7 @@
 							   </td>
 							</tr>
 							<tr>
-							   <td valign="top" >
+							   <td valign="top" > 
 									<label for="title">{t}Information{/t}:</label>
 								   <div id="imgcc">
 										{foreach from=$video->information  key=key item=value}
