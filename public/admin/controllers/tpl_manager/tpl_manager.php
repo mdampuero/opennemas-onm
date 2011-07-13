@@ -246,8 +246,8 @@ switch($action) {
                 'rss'               => 'RSS',
                 'video'             => 'Frontpage videos',
                 'video-inner'       => 'Inner video',
-                'gallery-frontpage'       => 'Gallery frontpage',
-                'gallery-inner'       => 'Gallery Inner',
+                'gallery-frontpage' => 'Gallery frontpage',
+                'gallery-inner'     => 'Gallery Inner',
             ));
 
             $tpl->assign('groupIcon', array(

@@ -18,16 +18,16 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
+use Onm\Settings as s;
 /**
  * Setup app
 */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
- 
+
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('COMMENT_ADMIN')) {    
+if(!Acl::check('COMMENT_ADMIN')) {
     Acl::deny();
 }
 
@@ -38,23 +38,79 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 // Initialize request parameters
 $page   = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
-$action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+if (!isset($action)) {
+    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+}
+
+/**
+ * Check if module is configured, if not redirect to configuration form
+*/
+if (
+    is_null(s::get('europapress_server_auth'))
+    && $action != 'config'
+) {
+    $httpParams [] = array(
+                        'action'=>'config',
+                        'message' => _('Please provide your Europapress auth credentials to start to use your Europapress Importer module')
+                    );
+    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+}
 
 switch($action) {
-    
+
+    case 'config':
+
+        if (count($_POST) <= 0) {
+            if ($serverAuth = s::get('europapress_server_auth')) {
+
+                $message    = filter_input( INPUT_GET, 'message' , FILTER_SANITIZE_STRING );
+
+                $tpl->assign(array(
+                    'server'    => $serverAuth['server'],
+                    'username' => $serverAuth['username'],
+                    'password' => $serverAuth['password'],
+                    'message' => $message
+                ));
+
+            }
+
+            $tpl->display('agency_importer/europapress/config.tpl');
+        } else {
+
+            $server     = filter_input( INPUT_POST, 'server' , FILTER_SANITIZE_STRING );
+            $username   = filter_input( INPUT_POST, 'username' , FILTER_SANITIZE_STRING );
+            $password   = filter_input( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
+
+            if (!isset($server) && !isset($username) && !isset($password)) {
+                Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=config');
+            }
+
+            $serverAuth = array(
+                'server'    => $server,
+                'username' => $username,
+                'password' => $password,
+            );
+            s::set('europapress_server_auth', $serverAuth);
+
+            Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=list');
+        }
+
+        break;
+
     case 'list':
-        
-        if(!Acl::check('COMMENT_ADMIN', 'EDIT')) {    
+
+        if(!Acl::check('COMMENT_ADMIN', 'EDIT')) {
             Acl::deny();
         }
-        
+
         $europapress = \Onm\Import\Europapress::getInstance();
-        
+
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $europapress->minutesFromLastSync();
-        
+
         $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
-        
+
         $find_params = array(
             'category' => filter_input ( INPUT_GET,
                                         'filter[category]' ,
@@ -65,9 +121,9 @@ switch($action) {
                                      FILTER_SANITIZE_STRING,
                                      array('options' => array('default' => '*')) ),
         );
-        
+
         $elements = $europapress->findAll($find_params);
-        
+
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => 15,
@@ -77,7 +133,7 @@ switch($action) {
             'totalItems'  => count($elements),
         );
         //$pager = Pager::factory($pager_options);
-        
+
         $message   = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING );
         if (isset($_SESSION['error']) && !empty($_SESSION['error'])) {
             $error = $_SESSION['error'];
@@ -94,36 +150,36 @@ switch($action) {
         $tpl->display('agency_importer/europapress/list.tpl');
 
         break;
-    
+
     case 'show':
-        
+
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
 
         try {
-            
+
             $ep = new \Onm\Import\Europapress();
             $element = $ep->findByID($id);
-            
+
         } catch (Exception $e) {
-            
+
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
             Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
-            
+
         }
-        
+
         $tpl->assign('element', $element);
         $tpl->display('agency_importer/europapress/show.tpl');
         break;
-    
+
     case 'import':
-        
+
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
-        
+
         $ep = new Onm\Import\Europapress();
         $element = $ep->findByID($id);
-        
-        
+
+
         $values = array(
                         'title' => $element->title,
                         'category' => 20,
@@ -150,44 +206,47 @@ switch($action) {
                         'ordenArti' => '',
                         'ordenArtiInt' => '',
                         );
-        
+
         $article = new Article();
         $newArticleID = $article->create($values);
-        
+
         if(is_string($newArticleID)) {
-            
+
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
             Application::forward(SITE_URL_ADMIN.'/article.php' . '?'.String_Utils::toHttpParams($httpParams));
-            
-        }        
-        
-        
-    
+
+        }
+
+
+
         break;
 
     case 'sync': {
         try {
             try {
-                
+
                 try {
-                    
+
+                    $serverAuth = s::get('europapress_server_auth');
+
+
                     $ftpConfig = array(
-                        'server'    => EUROPAPRESS_AUTH_SERVER,
-                        'user'      => EUROPAPRESS_AUTH_USERNAME,
-                        'password'  => EUROPAPRESS_AUTH_PASSWORD
+                        'server'    => $serverAuth['server'],
+                        'user'      => $serverAuth['username'],
+                        'password'  => $serverAuth['password']
                     );
-                    
+
                     $epSynchronizer = \Onm\Import\Europapress::getInstance();
                     $message = $epSynchronizer->sync($ftpConfig);
                     $epSynchronizer->updateSyncFile();
-        
+
                 } catch (\Onm\Import\SynchronizationException $e) {
                     $_SESSION['error'] = $e->getMessage();
                 }
-                
+
             } catch (\Onm\Import\Synchronizer\LockException $e) {
-                $_SESSION['error'] = $e->getMessage() 
+                $_SESSION['error'] = $e->getMessage()
                                     .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),$_SERVER['PHP_SELF']);
             }
         } catch (\Exception $e) {
@@ -195,7 +254,7 @@ switch($action) {
             $e = new \Onm\Import\Europapress();
             $e->unlockSync();
         }
-        
+
         $httpParams = array(
                             array('action' => 'list'),
                             array('page' => $page),
@@ -210,11 +269,11 @@ switch($action) {
                                 );
         }
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
-        
+
     } break;
-    
+
     case 'unlock': {
-        
+
         $e = new \Onm\Import\Europapress();
         $e->unlockSync();
         unset($_SESSION['error']);
@@ -225,9 +284,9 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
     } break;
-    
 
-    
+
+
     default: {
         $httpParams = array(
                             array('action','list'),

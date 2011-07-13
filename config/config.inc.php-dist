@@ -212,10 +212,3 @@ define ('ITEMS_PAGE', "20");
 
 /* [ASSSET SERVERS] *********************************************************  */
 define('ASSET_HOST','assets%02d.opennemas.com');
-
-/**
- * Agency importer
-*/
-define('EUROPAPRESS_AUTH_SERVER', '');
-define('EUROPAPRESS_AUTH_USERNAME', '');
-define('EUROPAPRESS_AUTH_PASSWORD', '');

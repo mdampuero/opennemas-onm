@@ -11,5 +11,11 @@
             <img border="0" src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
             </a>
         </li>
+
+        <li>
+            <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" value="{t}Config Europapress module{/t}" title="{t}Reload list{/t}">
+            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+            </a>
+        </li>
     </ul>
 </div>

@@ -8,8 +8,8 @@
 {block name="content"}
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs}>
-   {include file="agency_importer/europapress/menu.tpl"}
-	
+   {include file="agency_importer/europapress/partials/_menu.tpl"}
+
    {if ($message || ($minutes > 10))}
    <div class="notice">
 		<ul>
@@ -27,7 +27,7 @@
 		</ul>
    </div>
    {/if}
-   
+
    {if (!empty($error))}
    <div class="error">
 		{render_error}
@@ -67,11 +67,11 @@
 				</tr>
 			</thead>
             {/if}
-			
+
 
             {section name=c loop=$elements}
             <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-			   
+
 		 		<td align="center">{$elements[c]->priority}</td>
 				<td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
 					<a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->id}" title="Importar">
@@ -81,19 +81,19 @@
 				<td align="center">
 						{$elements[c]->created_time->getTimestamp()|relative_date}
 				</td>
-				
+
 				<td align="center">
 					{$elements[c]->category}
 				</td>
-				
+
 				<td style="font-size: 11px;width:100px;" align="center">
                      <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->id}" title="Importar">
 						<img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
 					 </a>
-                </td> 
-				
+                </td>
+
            </tr>
-    
+
             {sectionelse}
             <tr>
                 <td align="center" colspan=10>
