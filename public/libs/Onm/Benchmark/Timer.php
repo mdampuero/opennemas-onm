@@ -70,7 +70,7 @@ class Timer {
      */
     public function start($marker = "default")
     {
-        self::$markers[$marker] = array ( 'starttime' => $this->_getMicrotime());
+        self::$markers[$marker]['starttime'] = $this->_getMicrotime();
     }
 
     /**
@@ -83,7 +83,7 @@ class Timer {
     public function stop( $marker = "default")
     {
         if (array_key_exists($marker, self::$markers)) {
-            self::$markers[$marker] = array ( 'endtime' => $this->_getMicrotime());
+            self::$markers[$marker]['endtime'] = $this->_getMicrotime();
         } else  {
             throw new \Exception("Marker '{$marker}' doesn't exists.");
         }
