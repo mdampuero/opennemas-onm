@@ -36,7 +36,7 @@
                 <a href="#listado">{t}Available sections{/t}</a>
             </li>
             <li>
-                <a href="#ordenar">{t}Sort sections{/t}</a>
+                <a href="/{$smarty.const.ADMIN_DIR}/controllers/menues/menues.php">{t}Sort menues{/t}</a>
             </li>
         </ul>
 

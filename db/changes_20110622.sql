@@ -1,3 +1,37 @@
+-- Create Menu table for frontpage menu manager
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menues`
+--
+
+CREATE TABLE IF NOT EXISTS `menues` (
+  `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `categories` text NOT NULL,
+  `params` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`pk_menu`),
+  UNIQUE KEY `name` (`name`),
+  KEY `name_2` (`name`),
+  KEY `pk_menu` (`pk_menu`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `menues`
+--
+
+INSERT INTO `menues` (`pk_menu`, `name`, `type`, `categories`, `params`) VALUES
+(1, 'frontpage', '', '', NULL),
+(2, 'opinion', '', '', NULL),
+(3, 'mobile', '', '', NULL),
+(4, 'album', '', '', NULL),
+(5, 'video', '', '', NULL),
+(6, 'poll', '', '', NULL);
+
+
 -- Create table for settings
 DROP  TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
