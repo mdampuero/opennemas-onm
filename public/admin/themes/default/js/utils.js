@@ -64,7 +64,7 @@ function get_tags(title)
     var tags= document.getElementById('metadata').value;
 
     //uso del medotod GET
-    ajax.open("GET", "utils_content.php?action=get_tags&title="+title+"&categ="+category+"&tags="+tags);
+    ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+title+"&categ="+category+"&tags="+tags);
     ajax.onreadystatechange=function() {
     if (ajax.readyState==4) {
          //mostrar resultados en esta capa
@@ -128,7 +128,7 @@ function counttiny(counter, editor){
 	counter.value=r;
 
 }
-  
+
 function onChangeGroup(evaluateControl, ids)
 {
     if (document.getElementById)

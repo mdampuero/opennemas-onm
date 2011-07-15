@@ -1,7 +1,7 @@
 <?php
- 
+
 class Privileges_check
-{    
+{
 
     public static function CheckAccessCategories($CategoryId)
     {
@@ -22,7 +22,7 @@ class Privileges_check
             {
                 return true;
             }
-            //var_dump(!in_array($CategoryId,$_SESSION['accesscategories']));die();        
+            //var_dump(!in_array($CategoryId,$_SESSION['accesscategories']));die();
 
             if (
                 !isset($_SESSION['accesscategories'])
@@ -32,12 +32,12 @@ class Privileges_check
             {
                 return false;
             }
-            
-        
+
+
         } catch(Exception $e) {
             return false;
         }
-        
+
         $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
         return true;
     }
@@ -49,25 +49,25 @@ class Privileges_check
             if( !isset($_SESSION['userid']) || Privileges_check::CheckSessionExpireTime() ) {
                 Privileges_check::SessionExpireTimeAction();
             }
-            
+
             if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
                 return true;
             }
-            
+
             if (
                 !isset($_SESSION['privileges'])
                 || empty($_SESSION['userid'])
-                || !in_array($Privilege,$_SESSION['privileges']) 
+                || !in_array($Privilege,$_SESSION['privileges'])
                 || (!is_null($category) && !(Privileges_check::CheckAccessCategories($category)))
                 )
-            {                
+            {
                     return false;
             }
-            
+
         } catch(Exception $e) {
             return false;
         }
-        
+
         $_SESSION['lasturl'] = $_SERVER['REQUEST_URI'];
         return true;
     }
@@ -77,11 +77,11 @@ class Privileges_check
     }
 
     public static function AccessDeniedAction() {
-        Application::forward('/admin/accessdenied.php'.'?action=list_pendientes&category='.$_REQUEST['category']);
+        Application::forward('/admin/controllers/accessdenied/accessdenied.php'.'?action=list_pendientes&category='.$_REQUEST['category']);
     }
 
     public static function AccessCategoryDeniedAction() {
-        Application::forward('/admin/accesscategorydenied.php');
+        Application::forward('/admin/controllers/accessdenied/accesscategorydenied.php');
     }
 
     public static function LoadSessionExpireTime() {
@@ -90,9 +90,9 @@ class Privileges_check
         }
     }
 
-    private static function CheckSessionExpireTime() {    
+    private static function CheckSessionExpireTime() {
         if(time() > $_SESSION['expire']) {
-            session_destroy(); 
+            session_destroy();
             unset($_SESSION);
             return true;
         }
@@ -115,4 +115,3 @@ class Privileges_check
         set_error_handler('handleError');
     }
 }
-

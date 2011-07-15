@@ -9,7 +9,7 @@ require_once('articles_events.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 //require_once(SITE_LIBS_PATH.'Pager/Pager.php');
-require_once('utils_content.php');
+require_once('controllers/utils_content.php');
 
 // Assign a content types for don't reinvent the wheel into template
 $tpl->assign('content_types', array(1 => 'Noticia' , 7 => 'Galeria', 9 => 'Video', 4 => 'Opinion', 3 => 'Fichero'));
