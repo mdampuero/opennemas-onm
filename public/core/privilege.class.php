@@ -218,7 +218,31 @@ class Privilege
         }
         
         return $modules;
-    }    
+    }
+
+      function getPrivilegesByModules($filter=null)
+    {
+        $privileges = array();
+        if(is_null($filter)) {
+            $sql = 'SELECT * FROM privileges ORDER BY module';
+        } else {
+            $sql = 'SELECT * FROM privileges WHERE '.$filter.' GROUP BY module';
+        }
+
+
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        while(!$rs->EOF) {
+            $privilege = new Privilege();
+            $privilege->load( $rs->fields );
+
+            $module = $rs->fields['module'];
+            $privileges[$module][] = $privilege;
+            $rs->MoveNext();
+        }
+        return $privileges;
+    }
 
     /**
      * @deprecated 0.5     
