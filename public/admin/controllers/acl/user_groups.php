@@ -23,10 +23,7 @@ require_once(SITE_CORE_PATH.'user_group.class.php');
 require_once(SITE_CORE_PATH.'privilege.class.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
-if(!Acl::check('USER_ADMIN'))
-{
-    Privileges_check::AccessDeniedAction();
-}
+ Acl::checkOrForward('GROUP_ADMIN');
 
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
@@ -37,21 +34,27 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('user_groups', $user_groups);
 		break;
 
-		case 'new':
-			$user_group = new User_group();
-			$privilege = new Privilege();
-			$tpl->assign('user_group', $user_group);
-			$tpl->assign('privileges', $privilege->get_privileges());
-		break;
+		case 'read':          
 
-		case 'read':
 			$user_group = new User_group($_REQUEST['id']);
 			$privilege = new Privilege();
 			$tpl->assign('user_group', $user_group);
-			$tpl->assign('privileges', $privilege->get_privileges());
+			$tpl->assign('modules', $privilege->getPrivilegesByModules());
+		break;
+
+        case 'new':
+            Acl::checkOrForward('GROUP_GREATE');
+
+            $user_group = new User_group();
+			$privilege = new Privilege();
+			$tpl->assign('user_group', $user_group);
+			$tpl->assign('modules', $privilege->getPrivilegesByModules());
+
 		break;
 
 		case 'update':
+            Acl::checkOrForward('GROUP_UPDATE');
+
 			// TODO: validar datos
 			$user_group = new User_group();
 			$user_group->update( $_REQUEST );
@@ -59,6 +62,8 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'create':
+            Acl::checkOrForward('GROUP_CREATE');
+
 			$user_group = new User_group();
 			if($user_group->create( $_POST )) {
 				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
@@ -68,6 +73,8 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'delete':
+            Acl::checkOrForward('GROUP_DELETE');
+
 			$user_group = new User_group();
 			$user_group->delete( $_POST['id'] );
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
@@ -77,9 +84,11 @@ if( isset($_REQUEST['action']) ) {
 		case 'validate':
 			$user_group = new User_group();
 			if(empty($_POST["id"])) {
+                Acl::checkOrForward('GROUP_CREATE');
 				if($user_group->create( $_POST ))
 					$tpl->assign('errors', $user_group->errors);
 			} else {
+                Acl::checkOrForward('GROUP_UPDATE');
 				$user_group = new User_group();
 				$user_group->update( $_REQUEST );
 			}
@@ -90,6 +99,7 @@ if( isset($_REQUEST['action']) ) {
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 		break;
 	}
+    
 } else {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 }

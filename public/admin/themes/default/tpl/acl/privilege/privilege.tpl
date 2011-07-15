@@ -12,7 +12,7 @@
 {block name="content"}
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
 
 	{* LISTADO ******************************************************************* *}
 	{if $smarty.request.action eq "list"}
@@ -125,7 +125,7 @@
 	{* Módulo *}
 	<tr>
 		<td valign="top" align="right" style="padding:4px;" width="30%">
-			<label for="module">Módulo:</label>
+			<label for="module">{t}Module:{/t}</label>
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="module" name="module" title="Módulo" size="20" maxlength="40"
@@ -136,7 +136,7 @@
 	{* Name *}
 	<tr>
 		<td valign="top" align="right" style="padding:4px;" width="30%">
-			<label for="description">Nombre:</label>
+			<label for="description">{t}Name:{/t}</label>
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="name" name="name" title="Nombre" value="{$privilege->name}" class="required" />
@@ -147,7 +147,7 @@
 	{* Descripcion *}
 	<tr>
 		<td valign="top" align="right" style="padding:4px;" width="30%">
-			<label for="description">Descripci&oacute;n:</label>
+			<label for="description">{t}Descripti&oacute;n:{/t}</label>
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="description" name="description" title="Descripci&oacute;n" size="80" maxlength="100"

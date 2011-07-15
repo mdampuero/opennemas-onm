@@ -220,7 +220,15 @@ class Privilege
         return $modules;
     }
 
-      function getPrivilegesByModules($filter=null)
+    /**
+     * Get privileges group by modules
+     *
+     * @param string $filter where condition for check.
+     *
+     * @return array modules with each privileges 
+     *
+     */
+    function getPrivilegesByModules($filter=null)
     {
         $privileges = array();
         if(is_null($filter)) {
@@ -228,8 +236,6 @@ class Privilege
         } else {
             $sql = 'SELECT * FROM privileges WHERE '.$filter.' GROUP BY module';
         }
-
-
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 

@@ -15,7 +15,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} />
 
 	{* LIST ******************************************************************* *}
 	{if $smarty.request.action eq "list"}
@@ -96,24 +96,24 @@
 			<th nowrap></th>
 		</tr>
 	</table>
-	<table class="adminlist" width="600">
+	<table class="adminlist">
 		<tbody>
 		<!-- Id -->
 		<tr>
-			<td align="right" style="padding:4px;" width="30%">
+			<td align="right" style="padding:4px;" width="20%">
 				<label for="id">{* Id: *}</label>
 			</td>
-			<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<td style="padding:4px;" nowrap="nowrap" width="80%">
 				<input type="hidden" id="idReadOnly" name="idReadOnly" title="{t}Id{/t}"
 					value="{$user_group->id}" readonly />
 			</td>
 		</tr>
 		<!-- Nome -->
 		<tr>
-			<td valign="top" align="right" style="padding:4px;" width="30%">
+			<td valign="top" align="right" style="padding:4px;" width="20%">
 				<label for="name">{t}Name:{/t}</label>
 			</td>
-			<td style="padding:4px;" nowrap="nowrap" width="70%">
+			<td style="padding:4px;" nowrap="nowrap" width="80%">
 				<input type="text" id="name" name="name" title="{t}Group name{/t}"
 					value="{$user_group->name}" class="required"
 					{if $user_group->name eq $smarty.const.NAME_GROUP_ADMIN}disabled="disabled"{/if} />
@@ -121,29 +121,46 @@
 		</tr>
 		<!-- Privileges -->
 		<tr>
-			<td valign="top" align="right" style="padding:4px;" width="30%">
+			<td valign="top" align="right" style="padding:4px;" width="20%">
 				<label for="privileges">{t}Grants:{/t}</label>
 			</td>
-			<td style="padding:4px;" nowrap="nowrap" width="70%">
-				<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
-					<tbody>
-					{section name=privilege loop=$privileges}
-						<tr>
-						<td style="padding:4px;" nowrap="nowrap" width="5%">
 
-							{if $user_group->contains_privilege($privileges[privilege]->id)}
-							<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-							{else}
-							<input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-							{/if}
-						</td>
-						<td valign="top" align="left" style="padding:4px;" width="95%">
-							{$privileges[privilege]->description}
-						</td>
-						</tr>
-					{/section}
-					</tbody>
-				</table>
+			<td style="padding:4px;" nowrap="nowrap" width="80%">
+				 <div  style="float:left;width:420px;">
+                {foreach item=privileges from=$modules key=mod name=priv}
+                    {assign var=middle value=($smarty.foreach.priv.total/2)}
+                      {if $smarty.foreach.priv.index gt $middle &&   $smarty.foreach.priv.index lt $middle+1}</div><div style="float:left;width:420px;"> {/if}
+                        <div style=" width:400px;background-color: #EEE;">
+                        <a style="cursor:pointer;" onClick="Element.toggle('{$mod}');"> 
+                            <h3 style="padding:4px;"> {t}{$mod}{/t} </h3>
+                        </a>
+                        <br>  
+                        <table border="0" cellpadding="0" cellspacing="0" id="{$mod}" class="fuente_cuerpo" width="100%" style="display:none;">
+                            <tbody>
+                            {section name=privilege loop=$privileges}
+                                    <tr>
+                                    <td style="padding:4px;" nowrap="nowrap" width="5%">
+
+                                    {if $user_group->contains_privilege($privileges[privilege]->id)}
+                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
+                                       <script  type="text/javascript">
+                                            $('{$mod}').setStyle('display:block');
+                                       </script>
+
+                                    {else}
+                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
+                                    {/if}
+                                    </td>
+                                    <td valign="top" align="left" style="padding:4px;" width="95%">
+                                            {t}{$privileges[privilege]->description}{/t}
+                                    </td>
+                                    </tr>
+                            {/section}
+                        </tbody>
+                        </table>
+                     </div>
+                {/foreach}
+	      </div>
 			</td>
 		</tr>
 		</tbody>
@@ -156,7 +173,8 @@
 	</div>
 	{/if}
 
-	<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+	<input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id}" />
 	</form>
 </div>
 {/block}
