@@ -82,7 +82,7 @@ switch($action) {
             $username   = filter_input( INPUT_POST, 'username' , FILTER_SANITIZE_STRING );
             $password   = filter_input( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
 
-            if (!isset($server) && !isset($username) && !isset($password)) {
+            if (!isset($server) || !isset($username) || !isset($password)) {
                 Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=config');
             }
 
