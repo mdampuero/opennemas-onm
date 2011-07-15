@@ -1,3 +1,7 @@
+-- Add new ONM_SETTINGS privilege to the database and adding it to the Admnistrator grupo
+INSERT INTO `privileges` ( `name` , `description` , `module` ) VALUES ( 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM' );
+INSERT INTO `user_groups_privileges` ( `pk_fk_user_group` , `pk_fk_privilege` ) VALUES ( '5', '32');
+
 -- Create Menu table for frontpage menu manager
 
 

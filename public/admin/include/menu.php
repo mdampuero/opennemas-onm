@@ -183,8 +183,8 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
-            link="controllers/settings_manager/settings_manager.php"
-            privilege="BACKEND_ADMIN" />
+            link="controllers/system_settings/system_settings.php"
+            privilege="ONM_SETTINGS" />
         <node
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
