@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{$params.CSS_DIR}/bp/print.css" type="text/css" media="print" />
     <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}/bp/ie.css" type="text/css" media="screen, projection" /><![endif]-->
 
-	<link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css" type="text/css" />
+	<link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css?version=2" type="text/css" />
 
 <body id="loginpage">
 	<!-- Content -->
