@@ -3344,7 +3344,7 @@ gettext("Password:");
 gettext("Remember me");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("Login");
+gettext("Enter");
 
 /* ./themes/default/tpl//uploader.tpl */
 gettext("File uploaded successfully");

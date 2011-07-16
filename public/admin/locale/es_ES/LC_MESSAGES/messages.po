@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-16 03:36+0200\n"
-"PO-Revision-Date: 2011-07-16 03:43+0200\n"
+"POT-Creation-Date: 2011-07-16 03:46+0200\n"
+"PO-Revision-Date: 2011-07-16 03:46+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -3263,8 +3263,8 @@ msgid "Remember me"
 msgstr "Recordarme"
 
 #: locale/extracted_strings.c:3347
-msgid "Login"
-msgstr "Nombre de usuario"
+msgid "Enter"
+msgstr "Entrar"
 
 #: locale/extracted_strings.c:3350
 msgid "File uploaded successfully"
@@ -3501,6 +3501,9 @@ msgstr "Recuperar"
 #: locale/extracted_strings.c:3716
 msgid "Please select a backup to restore"
 msgstr "Seleccione una copia de seguridad para restaurar"
+
+#~ msgid "Login"
+#~ msgstr "Nombre de usuario"
 
 #~ msgid "Article title"
 #~ msgstr "Título del artículo"

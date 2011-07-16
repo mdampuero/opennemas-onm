@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-16 03:36+0200\n"
+"POT-Creation-Date: 2011-07-16 03:46+0200\n"
 "PO-Revision-Date: 2011-02-19 00:26+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
@@ -3355,7 +3355,7 @@ msgid "Remember me"
 msgstr ""
 
 #: locale/extracted_strings.c:3347
-msgid "Login"
+msgid "Enter"
 msgstr ""
 
 #: locale/extracted_strings.c:3350
