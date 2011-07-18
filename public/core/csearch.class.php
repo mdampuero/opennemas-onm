@@ -280,7 +280,7 @@ class cSearch
 
 	    $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`metadata`, `contents`.`created`, `contents`.`permalink`, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
 	    //$szSqlWhere  = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
-            $szSqlSentence .= " WHERE " . $szMatch.' + '. $szMatch2;
+            $szSqlWhere = " WHERE " . $szMatch.' + '. $szMatch2;
 	    $szSqlWhere .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
 	    $szSqlWhere .= " AND  ".$filter;
 	    $szSqlWhere .= " AND `contents`.`available` = 1 AND `contents`.`in_litter` = 0 AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`";
