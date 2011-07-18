@@ -23,10 +23,7 @@ if(preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
 /**
  * Site Information settings
 */
-define ('SITE_TITLE', "Diario digital Nueva Tribuna");                       // Title to use in the frontend
 define ('SITE_TITLE_MOBILE', "Nueva Tribuna");                       // Title to use in the frontend
-define ('SITE_DESCRIPTION', "Información continua y análisis para una ciudadanía comprometida con los valores de libertad, igualdad y justicia.");            // Description to use in the frontend
-define ('SITE_KEYWORDS', "nuevatribuna,diario,periodico,medio,digital,progresista,progresismo,izquierdas,españa,internacional,mundo,economia,cajamadrid,gurtel,banif,cultura,sociedad,ultimahora,opinion,analisis");              // Keyworks to use in the frontend
 define ('SITE_FULLNAME', "Nueva Tribuna");                        // Human readable site name
 define ('SITE_NAME', "nuevatribuna");                                  // Canonical name, should be lowcase and without spaces
 define ('SITE_DOMAIN', "nuevatribuna.es");
@@ -49,7 +46,6 @@ define ('APC_PREFIX', SITE_NAME);
 define ('SITE', $_SERVER['SERVER_NAME']);
 define ('SITE_PATH',  realpath(dirname(__FILE__).DS.'..'.DS."public").DS );
 
-//define ('SITE_PATH',  realpath(__DIR__.DS.'..'.DS) );
 define ('SITE_LIBS_PATH', realpath(SITE_PATH.DS."libs").DS);
 define ('SITE_CORE_PATH', realpath(SITE_PATH.DS."core").DS);
 
@@ -110,7 +106,7 @@ define ('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // /SITE_URL.S
 */
 define ('TEMPLATE_USER', "nuevatribuna");
 define ('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-define ('TEMPLATE_USER_PATH_WEB', SS."themes".SS.TEMPLATE_USER.SS);
+define ('TEMPLATE_USER_PATH_WEB', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
 define ('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
 
 define ('TEMPLATE_ADMIN', "default");
@@ -122,11 +118,6 @@ define('',false);
 /**
  * App settings
 */
-
-define('REFRESH_INTERVAL', '900'); // in seconds
-define('DEFAULT_LOCALE', "es_ES.UTF-8");
-define('GOOGLE_MAPS_API_KEY', 'ABQIAAAAIIMPay5i8oNP5CHI9iX55xSh3kxvKymPAceo7mCCRNEYmKBAgxSRfJ3nbaAs3ZJV5cQyUJuZOZpTlA');
-define('GOOGLE_CUSTOM_SEARCH_KEY', '015934879308878545076:fvw-rbc1ipq');
 define('RECAPTCHA_PUBLIC_KEY', '6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is');
 define('RECAPTCHA_PRIVATE_KEY', '6LfpY8ISAAAAAHzsd8Pa-VrsB_tFkaDIA2bhTKfH ');
 
@@ -201,9 +192,6 @@ define ('MAIL_PASS', "");
 
 /* [ADVERTISEMENT] ********************************************************** */
 define ('ADVERTISEMENT_ENABLE', 1);
-
-/* [IPC SYSTEM] ************************************************************* */
-define ('MUTEX_ENABLE', 0); // Experimental!!!
 
 /* [ SESION USUARIO ] ******************************************************** */
 $GLOBALS['USER_ID'] = NULL;

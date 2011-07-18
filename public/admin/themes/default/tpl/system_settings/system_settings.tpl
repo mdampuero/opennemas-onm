@@ -51,6 +51,10 @@ legend {
     margin-left:10px;
     vertical-align:middle
 }
+input[type="text"] {
+    width:300px;
+    max-height:80%
+}
 </style>
 {/block}
 

@@ -7,6 +7,9 @@
  * file that was distributed with this source code.
  */
 // Prevent direct access
+
+use \Onm\Settings as s;
+
 if (preg_match('/application\.class\.php/', $_SERVER['PHP_SELF'])) {
     die();
 }
@@ -164,14 +167,18 @@ class Application {
      * Set up gettext translations.
      *
      */
-    static public function configGettext(){
+    static public function configGettext()
+    {
 
-	    date_default_timezone_set('Europe/Madrid');
+        $availableTimezones = \DateTimeZone::listIdentifiers();
+
+
+	    date_default_timezone_set($availableTimezones[s::get('time_zone')]);
 
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-	    $locale = DEFAULT_LOCALE;
+	    $locale = s::get('site_language'). ".UTF-8";
 	    $domain = 'messages';
 
         if (self::isBackend()) {

@@ -56,7 +56,7 @@ switch($action) {
                             'message' => $message,
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
-                            'languages' => array('en' => _("English"), 'es' => _("Spanish"))
+                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"))
                         )
                     );
 
