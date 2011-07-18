@@ -262,14 +262,30 @@ class cSearch
 	    if( is_null($filter) ) {
 		    $filter = "1=1";
 	    }
+            
+            //Transform the input string to search like: 'La via del tren' => '+via +tren'
+            $szSourceTags = explode(', ', String_Utils::get_tags($szSourceTags));
+            $szSourceTags2=array();
+            $i = 0;
+            foreach ($szSourceTags as $key) {
+                $szSourceTags2[$i] = '+'.$key;
+                $i++;
+            }
+            $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
+            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
 
-	    $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`metadata`, `contents`.`created`, `contents`.`permalink`, MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "') AS rel  FROM contents, contents_categories ";
-	    $szSqlWhere  = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
+
+            $szMatch = $this->DefineMatchOfSentence($szSourceTags2); //Match con metadata
+            $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
+
+	    $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`metadata`, `contents`.`created`, `contents`.`permalink`, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
+	    //$szSqlWhere  = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
+            $szSqlSentence .= " WHERE " . $szMatch.' + '. $szMatch2;
 	    $szSqlWhere .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
 	    $szSqlWhere .= " AND  ".$filter;
 	    $szSqlWhere .= " AND `contents`.`available` = 1 AND `contents`.`in_litter` = 0 AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`";
 	    $szSqlSentence .= $szSqlWhere;
-	    $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT 0, ".$iLimit;
+	    $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ".$iLimit;
         
 	    $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
     
