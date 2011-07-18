@@ -4,6 +4,8 @@
  * Setup app
 */
 require_once('../bootstrap.php');
+
+
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 require_once(SITE_CORE_PATH.'method_cache_manager.class.php');
 
@@ -15,27 +17,30 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 if( isset($_REQUEST['action'])){
 	switch($_REQUEST['action']) {
         case 'login':
+
             $user = new User();
 
-            $token   = (isset($_REQUEST['token']))?   $_REQUEST['token']:   null;
-            $captcha = (isset($_REQUEST['captcha']))? $_REQUEST['captcha']: null;
+			/**
+			 * Get values from post
+			*/
+			$token = filter_input ( INPUT_POST, 'token' , FILTER_SANITIZE_STRING );
+			$captcha = filter_input ( INPUT_POST, 'captcha' , FILTER_SANITIZE_STRING );
+			$login = filter_input ( INPUT_POST, 'login' , FILTER_SANITIZE_STRING );
+			$password = filter_input ( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
 
-            $result = $user->login($_REQUEST['login'], $_REQUEST['password'], $token, $captcha);
+            $result = $user->login($login, $password, $token, $captcha);
 
-            if ($result === true) { // must be same type (===)
+            if ($result === true) {
+
+				$rememberme = filter_input ( INPUT_POST, 'rememberme' , FILTER_SANITIZE_STRING );
 
                 if( isset($_REQUEST['rememberme']) ) {
-                    // Use long expression of setcookie to have more security
-                    /*
-                      setcookie("login", $_REQUEST['login'], time()+3600, "/admin/", ".dominio.com", TRUE, TRUE);
-                      setcookie("password", $_REQUEST['password'], time()+3600, "/admin/", ".dominio.com", TRUE, TRUE);
-                    */
 
-                    $app->setcookie_secure("login_username", $_REQUEST['login'],    time()+60*60*24*30, '/admin/');
-                    $app->setcookie_secure("login_password", $_REQUEST['password'], time()+60*60*24*30, '/admin/');
+                    $app->setcookie_secure("login_username", $login,    time()+60*60*24*30, '/admin/');
+                    $app->setcookie_secure("login_password", $password, time()+60*60*24*30, '/admin/');
 
                 } else {
-                    if( isset($_COOKIE['login_username']) ) {
+                    if (isset($_COOKIE['login_username'])) {
                         // Caducar a cookie
                         setcookie("login_username", '', time()-(60*60) );
                         setcookie("login_password", '', time()-(60*60) );
@@ -43,33 +48,35 @@ if( isset($_REQUEST['action'])){
                 }
 
                 /**
-                 * Validar el usuario si esta authorize=1, sino mensaje de usuario de baja.
+                 * Check if user account is activated
                  */
                 if($user->authorize == 1){
 
 					// Load session
 					require_once('session_bootstrap.php');
 
-					$_SESSION = array(); // Clear before to load
+					$_SESSION = array(
+									  'userid' 			 => $user->id,
+									  'username' 		 => $user->login,
+									  'email' 			 => $user->email,
+									  'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)==SYS_NAME_GROUP_ADMIN ),
+									  'privileges' 		 => Privilege::get_privileges_by_user($user->id),
+									  'accesscategories' => $user->get_access_categories_id(),
+									  'authMethod' 		 => $user->authMethod,
+									  'default_expire'    => $user->sessionexpire,
+									  );
 
-					$_SESSION['userid']     = $user->id;
-					$_SESSION['username']   = $user->login;
-					$_SESSION['email']      = $user->email;
-					// SYS_NAME_GROUP_ADMIN defined into config.inc.php
-					$_SESSION['isAdmin']    = ( User_group::getGroupName($user->fk_user_group)==SYS_NAME_GROUP_ADMIN );
-					$_SESSION['privileges'] = Privilege::get_privileges_by_user($user->id);
-					$_SESSION['accesscategories'] = $user->get_access_categories_id();
-
-					// Method authentication: database|google_clientlogin
-					$_SESSION['authMethod'] = $user->authMethod;
+					/**
+					 * Available authentication methods:  database, google_clientlogin
+					 * Check if user auth is google_clientlogin stablish its auth for Gmail
+ 					 */
 					if($user->authMethod == 'google_clientlogin') {
-						$_SESSION['authGmail']  = base64_encode($_REQUEST['login'].':'.$_REQUEST['password']);
-						/* $_SESSION['loginToken'] = $user->clientLoginToken;
-						$_SESSION['passwd'] = $_REQUEST['password']; */
+						$_SESSION['authGmail']  = base64_encode($login.':'.$password);
 					}
 
-					//Carga en la varible de _SESSION expire el tiempo de expiración del usuario la sesión.
-					$_SESSION['default_expire'] = $user->sessionexpire;
+					/**
+					 * Store default expire time
+					 */
 					$app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
 
 					Privileges_check::loadSessionExpireTime();
