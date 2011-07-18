@@ -40,10 +40,10 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
- 
+
 /**
  * Rating
- * 
+ *
  * @package    OpenNeMas
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
@@ -56,7 +56,7 @@ class Rating
     var $total_value  = null;
     var $ips_count_rating  = null;
     var $num_of_stars = 5;
-    
+
     /**
      * Messages to use in links and image
      */
@@ -94,7 +94,7 @@ class Rating
         }
 
         return(true);
-    }    
+    }
 
     function read($pk_rating) {
         $sql = 'SELECT total_votes, total_value, ips_count_rating
@@ -103,24 +103,24 @@ class Rating
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if ($rs->EOF) {
-            
+
             //Si no existe un valoración para dicho contenido
             //comprobamos que el contenido exista y depues creamos la valoración
             //$this->create($pk_rating);
-            
+
             $this->pk_rating = $pk_rating;
             $this->total_value = 0;
             $this->total_votes = 0;
             $this->ips_count_rating = array();
-            
+
             //Lo creamos en la bd
             $sql = "INSERT INTO ratings (`pk_rating`,`total_votes`,
                                         `total_value`, `ips_count_rating`)
-                        VALUES (?,?,?,?)";            
-            
-            $values = array($this->pk_rating, $this->total_votes, $this->total_value, 
+                        VALUES (?,?,?,?)";
+
+            $values = array($this->pk_rating, $this->total_votes, $this->total_value,
                             serialize($this->ips_count_rating));
-    
+
             if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -128,7 +128,7 @@ class Rating
 
                 return(false);
             }
-            
+
             return;
         }
 
@@ -144,9 +144,9 @@ class Rating
         $this->total_value = $rs->fields['total_value'];
         $this->ips_count_rating = unserialize($rs->fields['ips_count_rating']);
     }
-    
+
      function get_value($pk_rating) {
-        $sql = 'SELECT total_votes, total_value 
+        $sql = 'SELECT total_votes, total_value
                 FROM ratings WHERE pk_rating ='.$pk_rating;
 
         $rs = $GLOBALS['application']->conn->Execute( $sql );
@@ -156,28 +156,28 @@ class Rating
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return;
         }
-        
+
         $value = 0;
-       
+
         if($rs->fields['total_votes']!=0){
             $valor=$rs->fields['total_value'] / $rs->fields['total_votes'];
-            
-              $value=round($valor * 100) / 100; 
-        }        
+
+              $value=round($valor * 100) / 100;
+        }
         return $value;
-        
+
      }
-        
+
     function update($vote_value,$ip) {
         $this->ips_count_rating = $this->add_count($this->ips_count_rating,$ip);
         if (!$this->ips_count_rating) return(false);
         $this->total_votes++;
         $this->total_value = $this->total_value + $vote_value;
-        
+
         $sql = "UPDATE ratings SET  `total_votes`=?, `total_value`=?, `ips_count_rating`=?
         WHERE pk_rating=".$this->pk_rating;
 
-        $values = array($this->total_votes, $this->total_value, 
+        $values = array($this->total_votes, $this->total_value,
                         serialize($this->ips_count_rating));
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -190,7 +190,7 @@ class Rating
 
         //creamos la cookie
         $GLOBALS['application']->setcookie_secure("vote".$this->pk_rating, 'true', time()+60*60*24*30);
-        
+
         return(true);
 
     }
@@ -202,7 +202,7 @@ class Rating
         }
         //Se busca si existe algún voto desde la ip
         $kip_count = array_search($ip, $ips);
-        
+
         if($kip_count === FALSE) {
             //No se ha votado desde esa ip
             $ips_count[] = array('ip' => $ip, 'count' => 1);
@@ -213,49 +213,33 @@ class Rating
 
         return $ips_count;
     }
-    
-    
+
+
     private function renderLink($i, $page, $pk_rating, $value) {
-        /*
-            <a href="javascript:rating('".$_SERVER['REMOTE_ADDR']."',1,'home','".$this->pk_rating."')" title="Sin interés">
-               <img id="$this->pk_rating_1"
-                    onmouseover="change_rating(1, '$this->pk_rating')"
-                    onmouseout="change_rating($value, '$this->pk_rating')"
-                    src="TEMPLATE_USER_PATH_WEB."images/home_noticias/semaforo ($value>=1 ? $html_out .= "Azul" : $html_out .= "Gris") .gif\"
-                    alt="Sin interés" />
-            </a>            
-        */
-        
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
-        ($page=='video') ? $sufijo='-black' : $sufijo='' ;
-        
-        $linkTpl = <<< LINKTPLDOC
-           <li> <a href="#votar" onclick="javascript:rating('%s', %d, '%s', '%s'); return false;" title="%s">
-                <img class="%s_%d"
-                     onmouseover="change_rating(%d, '%s','{$sufijo}')"
-                     onmouseout="change_rating(%d, '%s','{$sufijo}')"
-                     src="{$imgPath}%s{$sufijo}.png"
-                     alt="%s" />
-            </a></li>
-LINKTPLDOC;
-        
-        return sprintf($linkTpl, $_SERVER['REMOTE_ADDR'], $i, $page, $pk_rating,  $this->messages[$i],
-                                 $pk_rating, $i,
-                                 $i, $pk_rating,
-                                 $value, $pk_rating,
-                                 ($value>=$i)? "f-star" : "e-star",
-                                 $this->messages[$i]);
+
+        $active = ($value>=$i) ? 'active' : '';
+
+        $output = "<li>
+                <a href=\"#votar\" onclick=\"javascript:rating('{$_SERVER['REMOTE_ADDR']}', {$i}, '{$page}', '{$pk_rating}'); return false;\" title=\"{$this->messages[$i]}\">
+                    <div class='vote-element {$active} {$pk_rating}_{$i}'
+                        onmouseover=\"change_rating({$i}, '{$pk_rating}')\"
+                        onmouseout=\"change_rating({$value}, '{$pk_rating}')\">
+                        &nbsp;
+                    </div>
+                </a>
+            </li>";
+
+        return $output;
     }
-    
-    private function renderImg($i, $value, $page='article') {
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
-        $imageTpl = '<li> <img src="%s%s.png" alt="%s" title="%s" /></li> ';
-        ($page=='video') ? $sufijo='-black' : $sufijo='' ;
-        return sprintf($imageTpl, $imgPath, ($value>=$i) ? "f-star".$sufijo : "e-star".$sufijo, $this->messages[$i], $this->messages[$i]);
-        
+
+    private function renderImg($i, $value, $page='article')
+    {
+
+        $active = ($value>=$i) ? "active" : '';
+        return $imageTpl = "<li><div class='vote-element {$active}'>&nbsp;</div></li>";
 
     }
-    
+
         /**
     * Get an integer and returns an string with the humanized num of votes
     *
@@ -267,8 +251,8 @@ LINKTPLDOC;
     private function humanizeNumVotes($total_votes){
         return $total_votes.(($total_votes > 1)?" votos":" voto");
     }
-    
-    
+
+
     /**
     * Prints the list of img elements representing the actual votes
     *
@@ -279,18 +263,18 @@ LINKTPLDOC;
     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
     */
     private function getVotesOnImages($actual_votes, $kind_of_page){
-       
+
         $votes_on_images = '';
-        
+
         for($i=1; $i <= $this->num_of_stars; $i++) {
             $votes_on_images .= $this->renderImg($i,$actual_votes, $kind_of_page);
         }
 
         return $votes_on_images;
-    
+
     }
-    
-    
+
+
     /**
     * Prints the list of elements links representing the actual votes
     *
@@ -301,29 +285,29 @@ LINKTPLDOC;
     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
     */
     private function getVotesOnLinks($actual_votes, $kind_of_page){
-        
+
         $votes_on_links = '';
-        
+
         for($i=1; $i <= $this->num_of_stars; $i++) {
             $votes_on_links .= $this->renderLink($i, $kind_of_page, $this->pk_rating, $actual_votes);
         }
-        
+
         return $votes_on_links;
-        
+
     }
-    
-    
+
+
     /**
     * Get an integer and returns an string with the humanized num of votes
     *
     * @param   string $page num of votes
-    * @param   string $type the type of 
+    * @param   string $type the type of
     * @return  string description
     * @author  Fran Dieguez <fran@openhost.es>
     * @since   Mon Sep 13 2010 18:12:58 GMT+0200 (CEST)
     */
     function render($kind_of_page, $action, $ajax=0) {
-        
+
         /**
          * If the vote+id cookie exist just show the results and don't allow to vote again
          */
@@ -333,49 +317,49 @@ LINKTPLDOC;
          */
         ($this->total_votes==0  ? $actual_votes = 0
                                 : $actual_votes = (int)floor($this->total_value/$this->total_votes));
-        
+
         $html_out = "";
-        
+
         switch ($kind_of_page){
-            
+
             case "home":
             case "article":
             case "video":
-                
+
                 $html_out .= "<ul class=\"voting\">";
-                
+
                 // if the user can vote render the links to vote
                 if($action == "vote") {
-                    
+
                     // Render links
-                    $html_out .= $this->getVotesOnLinks($actual_votes, $kind_of_page);  
-                   
-                //if the user can't vote render the static images 
+                    $html_out .= $this->getVotesOnLinks($actual_votes, $kind_of_page);
+
+                //if the user can't vote render the static images
                 } elseif($action === "result") {
 
                     // Render images
                     $html_out .= $this->getVotesOnImages($actual_votes, $kind_of_page);
-                    
+
                 }
-                
+
                 $html_out .= "</ul> ";
-                
+
                 // append the counter of total votes
                 //$html_out .= $this->humanizeNumVotes($this->total_votes);
-                
+
                 // if this request is not an AJAX request wrap it.
                 if (!$ajax) {
                     $html_out = "<span class=\"vota".$this->pk_rating."\">".$html_out."</span>";
                 }
                 break;
-            
+
             default:
-                $html_out = 'content type not supported by the vote system';
-                
+                $html_out = _('This content type has not support for the voting system');
+
         }
-        
+
         return $html_out;
     }
-    
+
 }
 ?>
