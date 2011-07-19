@@ -118,62 +118,65 @@ class Application {
         if(!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
 
             $GLOBALS['application'] = new Application();
-
-            // Database
-            $GLOBALS['application']->conn = ADONewConnection(BD_TYPE);
-            $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);
-
-            // Check if adodb is log enabled
-            if( defined('ADODB_LOG_ENABLE') && (ADODB_LOG_ENABLE == 1) ) {
-                $GLOBALS['application']->conn->LogSQL();
-            }
-
-            //$GLOBALS['application']->conn->fnExecute = 'MonitorContentStatus';
-            //$GLOBALS['application']->conn->fnExecute = 'CountExecs';
-
-            $conf = array('mode' => 0600,'timeFormat' => '%Y%m%d%H%M%S','lineFormat' => '%1$s [%2$s] %4$s');
-            $GLOBALS['application']->workflow = Log::factory('file', SYS_LOG_PATH.'/workflow.log', 'WF', $conf);
-            //$GLOBALS['application']->mutex = Log::factory('file', SYS_LOG_PATH.'/mutex.log', 'MUTEX', $conf);
-
-            // Composite Logger (file + mail)
-            // http://www.indelible.org/php/Log/guide.html#composite-handlers
-            if( defined('LOG_ENABLE') && (LOG_ENABLE == 1)) {
-                $GLOBALS['application']->logger = &Log::singleton('composite');
-
-                $conf = array('mode' => 0600,
-                              'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
-                              'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-                $fileLogger = &Log::singleton('file', SYS_LOG_FILENAME, 'application', $conf);
-                $GLOBALS['application']->logger->addChild($fileLogger);
-
-                /* if(defined('SYS_LOG_EMAIL')) {
-                    $conf   = array('subject' => '[LOG] OpenNeMas application logger',
-                                    'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
-                                    'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-                    $mailLogger = &Log::singleton('mail', SYS_LOG_EMAIL, 'application', $conf);
-                    $GLOBALS['application']->logger->addChild($mailLogger);
-                } */
-            } else {
-                $GLOBALS['application']->logger = &Log::singleton('null');
-            }
+               
+            // Setting up DataBase connection  
+            self::initDatabase();
+            
+            // Setting up Logger  
+            self::initLogger();
+            
+            // Setting up Gettext 
+            self::initGettext();
         }
 
-        self::configGettext();
+        
 
         return( $GLOBALS['application'] );
+    }
+    
+    static public function initLogger() 
+    {
+        $logger = new \Onm\Log(s::get('log_level'));
+        $registry = Zend_Registry::set('logger', $logger);
+        
+        // Composite Logger (file + mail)
+        // http://www.indelible.org/php/Log/guide.html#composite-handlers
+        if( s::get('log_enable') == 1) {
+            $GLOBALS['application']->logger = &Log::singleton('composite');
+
+            $conf = array('mode' => 0600,
+                          'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
+                          'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
+            $fileLogger = &Log::singleton('file', SYS_LOG_FILENAME, 'application', $conf);
+            $GLOBALS['application']->logger->addChild($fileLogger);
+        } else {
+            $GLOBALS['application']->logger = &Log::singleton('null');
+        }
+    } 
+    
+    static public function initDatabase()
+    {
+        // Database
+        $GLOBALS['application']->conn = ADONewConnection(BD_TYPE);
+        $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);
+
+        // Check if adodb is log enabled
+        if(  s::get('log_enable') == 1 ) {
+            $GLOBALS['application']->conn->LogSQL();
+        }
     }
 
     /**
      * Set up gettext translations.
      *
      */
-    static public function configGettext()
+    static public function initGettext()
     {
 
         $availableTimezones = \DateTimeZone::listIdentifiers();
 
 
-	    date_default_timezone_set($availableTimezones[s::get('time_zone')]);
+        date_default_timezone_set($availableTimezones[s::get('time_zone')]);
 
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
@@ -196,15 +199,21 @@ class Application {
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
 
-	}
+    }
 
     /**
     * Loads all the common libraries and the packages passed as argument
     *
     * @param array $packages list of packages to load
     */
-    static public function importLibs($packages=null) {
-
+    static public function initAutoloader($packages=null) 
+    {
+        // Instanciate Zend_Loader_Autoloader
+        require_once 'Zend/Loader/Autoloader.php';
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        // Register Onm_ Namespace
+        $autoloader->registerNamespace('Onm_');
+        
         $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
                         'log'      => SITE_LIBS_PATH.'/Log.php',
                         'pager'    => SITE_LIBS_PATH.'/Pager/Pager.php',
@@ -241,6 +250,17 @@ class Application {
 
         // Function to autoload classes on the fly using SPL autload
         spl_autoload_register('Application::autoload');
+    }
+    
+    /**
+    * This function retrieves the logger instance that is in the Zend registry 
+    * 
+    * @return An instance of Onm logger
+    *
+    */
+    static public function getLogger()
+    {
+        return \Zend_Registry::get('logger');
     }
 
     /**
