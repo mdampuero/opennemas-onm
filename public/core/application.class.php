@@ -282,18 +282,6 @@ class Application {
         exit(0);
     }
 
-
-    /**
-     * Static function to write the workflow logs
-     *
-     * @param type $msg the msg to save into log file
-     * @return null
-     */
-    public static function write_log($msg) {
-        $time = date('Y-m-d-h:i');
-        $GLOBALS['application']->workflow->log( $time.'-'.$_SESSION['userid'].'-'.$_SESSION['username'].'-'.$msg.' \n', PEAR_LOG_INFO );
-    }
-
     /**
      * Detect a mobile device and redirect to mobile version
      *
