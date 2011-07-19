@@ -3,8 +3,8 @@
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once('../../../bootstrap.php');
+require_once('../../session_bootstrap.php');
 
 /**
  * Setup view
@@ -20,7 +20,7 @@ $_SESSION['_from'] ='search_advanced';
 $type2res = array(
     'article' => 'article.php',
     'advertisement' => 'controllers/advertisement/advertisement.php',
-    'attachment' => 'files/files.php',
+    'attachment' => 'controllers/files/files.php',
     'opinion' => 'controllers/opinion/opinion.php',
     'comment' => 'controllers/comment.php',
     'album' => 'controllers/album/album.php',

@@ -128,7 +128,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
             title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'"
-            link="search_advanced.php"
+            link="controllers/search_advanced/search_advanced.php"
         />
         <node
             module_name="KIOSKO_MANAGER"
