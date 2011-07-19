@@ -195,7 +195,7 @@ input[type="text"] {
                     <tbody>
                         <tr valign="top">
                             <th scope="row">
-                                <label for="log_enabled">{t}Enable Log:{/t}</label>
+                                <label for="log_db_enabled">{t}Enable Log:{/t}</label>
                             </th>
                             <td>
                                 <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />

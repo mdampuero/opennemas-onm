@@ -69,16 +69,9 @@ switch($action) {
         unset($_POST['action']);
         unset($_POST['submit']);
 
-        if (array_key_exists('advertisements_enabled',$_POST)) {
-            $_POST['advertisements_enabled'] = true;
-        } else {
-            $_POST['advertisements_enabled'] = false;
-        }
-        if (array_key_exists('log_enabled',$_POST)) {
-            $_POST['log_enabled'] = true;
-        } else {
-            $_POST['log_enabled'] = false;
-        }
+        $_POST['advertisements_enabled'] = array_key_exists('advertisements_enabled',$_POST);
+        $_POST['log_enabled'] = array_key_exists('log_enabled',$_POST);
+        $_POST['log_db_enabled'] = array_key_exists('log_db_enabled',$_POST);
 
 
         foreach ($_POST as $key => $value ) {
