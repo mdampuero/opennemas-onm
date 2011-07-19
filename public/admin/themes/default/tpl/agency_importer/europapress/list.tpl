@@ -7,7 +7,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs}>
+   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
    {include file="agency_importer/europapress/partials/_menu.tpl"}
 
    {if ($message || ($minutes > 10))}
@@ -34,22 +34,26 @@
    </div>
    {/if}
 
-   <div id="{$category}">
+   <div id="{$category|default:""}">
 
         <table class="adminheading">
 			<tr>
                 <th align="left">Total: {$elements|count} articles.</th>
 				<th nowrap="nowrap" align="right">
 
-					<label for="username">{t}Filter by title{/t}</label>
-					<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name}" />
+					 <label for="username">{t}Filter by title{/t}</label>
+					 {if isset($smarty.request.filter)
+						&& isset($smarty.request.filter.name)}
+						{assign var=filterName value=$smarty.request.filter.name}
+					 {/if}
+					 <input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$filterName|default:""}" />
 
 					<label for="usergroup">{t}and category:{/t}</label>
 					<select id="usergroup" name="filter[category]" onchange="$('action').value='list';this.form.submit();">
-						{html_options options=$categories selected=$smarty.request.filter.group}
+						{html_options options=$categories selected=$smarty.request.filter.group|default:""}
 					</select>
 
-					<input type="hidden" name="page" value="{$smarty.request.page}" />
+					<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
 					<input type="submit" value="{t}Search{/t}">
 				</th>
 			</tr>
@@ -83,7 +87,7 @@
 				</td>
 
 				<td align="center">
-					{$elements[c]->category}
+					{$elements[c]->category|default:""}
 				</td>
 
 				<td style="font-size: 11px;width:100px;" align="center">
@@ -110,7 +114,7 @@
             {/section}
             <tfoot>
                  <tr class="pagination" >
-                     <td colspan="13" align="center">{$paginacion->links}</td>
+                     <td colspan="13" align="center">{$paginacion->links|default:""}</td>
                  </tr>
             </tfoot>
 

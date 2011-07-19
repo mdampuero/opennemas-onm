@@ -15,7 +15,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} />
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 	{* LIST ******************************************************************* *}
 	{if $smarty.request.action eq "list"}
@@ -57,7 +57,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="3" align="center">{$paginacion->links}</td>
+				<td colspan="3" align="center">{$paginacion->links|default:""}</td>
 			</tr>
 		</tfoot>
 	</table>
@@ -166,7 +166,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="3" align="center">{$paginacion->links}</td>
+				<td colspan="3" align="center">{$paginacion->links|default:""}</td>
 			</tr>
 		</tfoot>
 	</table>
@@ -174,7 +174,7 @@
 	{/if}
 
 	<input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id}" />
+	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 	</form>
 </div>
 {/block}

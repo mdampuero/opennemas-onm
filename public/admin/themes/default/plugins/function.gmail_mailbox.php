@@ -2,13 +2,15 @@
 function smarty_function_gmail_mailbox($params, &$smarty) {
     // Check gmail inbox
     $mailbox = null;
-    $authGmail = $_SESSION['authGmail'];
+    if (!isset($_SESSION['authGmail']) && !empty($_SESSION['authGmail'])) {
+        $authGmail = $_SESSION['authGmail'];
+    }
 
     $return = '';
 
-    if(isset($authGmail)) {
+    if(isset($authGmail) && !empty($authGmail)) {
         $user = new User();
-        $mailbox = $user->cache->parseGmailInbox(base64_decode($_SESSION['authGmail']));
+        $mailbox = $user->cache->parseGmailInbox(base64_decode($smarty.session.authGmail));
 
         $return = '<div id="user_mailbox">
                     <a href="https://www.google.com/accounts/ServiceLoginAuth?service=mail&Email='

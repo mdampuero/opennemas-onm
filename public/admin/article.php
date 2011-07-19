@@ -1548,4 +1548,4 @@ if (isset($_REQUEST['action']) ) {
 
 $tpl->removeScript('wz_tooltip.js', 'body');
 
-$tpl->display('article.tpl');
+$tpl->display('article/article.tpl');

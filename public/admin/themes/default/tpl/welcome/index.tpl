@@ -102,7 +102,7 @@ $.noConflict();
         {if $feeds neq null}
             <tr style=" display:block; padding:10px !important;">
 
-            {section name="feed" loop=$feeds}
+            {section name="feed" loop=$feeds|default:array()}
                 <td style="vertical-align:top">
                     <h3>{t 1=$feeds[feed].name}News from "%1"{/t}</h3>
                     <div id="feed-{$smarty.section.feed.index}"></div>

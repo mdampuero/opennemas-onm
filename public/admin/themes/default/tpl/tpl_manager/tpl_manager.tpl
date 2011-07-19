@@ -111,24 +111,24 @@
 					</label>
 
 					<select name="type" id="type">
-						<option value="" {if $smarty.request.type eq ''}selected="selected"{/if}>{t}All types{/t}</option>
-						<option value="frontpages" {if $smarty.request.type eq 'frontpages'}selected="selected"{/if}>{t}Frontpages{/t}</option>
-						<option value="articles" {if $smarty.request.type eq 'articles'}selected="selected"{/if}>{t}Inner notice{/t}</option>
-						<option value="mobilepages" {if $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>{t}Mobile frontpages{/t}</option>
-						<option value="rss" {if $smarty.request.type eq 'rss'}selected="selected"{/if}>{t}RSS pages{/t}</option>
-						<option value="frontpage-opinions" {if $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>{t}Frontpage opinion{/t}</option>
-						<option value="opinions" {if $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Inner opinion{/t}</option>
-						<option value="video-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
-						<option value="video-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
-						<option value="gallery-frontpage" {if $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
-						<option value="gallery-inner" {if $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
+						<option value="" {if isset($smarty.request.type) && $smarty.request.type eq ''}selected="selected"{/if}>{t}All types{/t}</option>
+						<option value="frontpages" {if isset($smarty.request.type) && ($smarty.request.type eq 'frontpages')}selected="selected"{/if}>{t}Frontpages{/t}</option>
+						<option value="articles" {if isset($smarty.request.type) && $smarty.request.type eq 'articles'}selected="selected"{/if}>{t}Inner notice{/t}</option>
+						<option value="mobilepages" {if isset($smarty.request.type) && $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>{t}Mobile frontpages{/t}</option>
+						<option value="rss" {if isset($smarty.request.type) && $smarty.request.type eq 'rss'}selected="selected"{/if}>{t}RSS pages{/t}</option>
+						<option value="frontpage-opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>{t}Frontpage opinion{/t}</option>
+						<option value="opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Inner opinion{/t}</option>
+						<option value="video-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
+						<option value="video-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
+						<option value="gallery-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
+						<option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
 					</select>
 
 					{t}and from{/t}
 
 					<select name="section" id="section">
 						<option value="">{t}All sections{/t}</option>
-						{html_options options=$sections selected=$smarty.request.section}
+						{html_options options=$sections selected=$smarty.request.section|default:""}
 					</select>
 
 					<button onclick="javascript:paginate(1);return false;">

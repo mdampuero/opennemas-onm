@@ -2,7 +2,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
         <div id="menu-acciones-admin" class="clearfix">
             <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
@@ -45,7 +45,7 @@
             </tr>
         </table>
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </form>
 
 </div>

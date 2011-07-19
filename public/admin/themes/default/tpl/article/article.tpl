@@ -15,7 +15,7 @@
 
 {block name="content"}
 <div class="wrapper-content">
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
         <div id="content-wrapper">
         {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
             {include file="article/list.tpl"}

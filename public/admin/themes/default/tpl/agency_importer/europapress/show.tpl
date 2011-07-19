@@ -2,9 +2,9 @@
 
 {block name="content"}
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs}>
+   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-    <div id="menu-acciones-admin" class="clearfix">
+   <div id="menu-acciones-admin" class="clearfix">
         <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}EuropaPress importer :: List of articles{/t}</h2></div>
         <ul>
             <li>
@@ -25,7 +25,6 @@
         <table class="adminheading">
 			<tr>
                 <th align="left">&nbsp;</th>
-				
 			</tr>
 		</table>
 
@@ -39,7 +38,7 @@
                             <p>
                                 <strong>{t}Priority:{/t}</strong> {$element->priority}
                             </p>
-                            
+
                             <p>
                                 <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
                             </p>
@@ -141,7 +140,7 @@
                 </td>
             </tr>
 
-            
+
             <tfoot>
                  <tr class="pagination" >
                      <td colspan="13" align="center">&nbsp;</td>
@@ -155,4 +154,3 @@
    </form>
 </div>
 {/block}
-

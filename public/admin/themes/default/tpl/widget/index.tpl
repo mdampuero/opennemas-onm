@@ -169,7 +169,9 @@ function confirmar() {
     <tfoot>
         <tr>
             <td colspan="5" align="center">
-                {$pager->links}
+                {if isset($pager)}
+                    {$pager->links}
+                {/if}
             </td>
         </tr>
     </tfoot>

@@ -191,7 +191,7 @@
     {/if}
  </script>
 	{block name="footer-js"}
-		{if $smarty.request.action == 'new' || $smarty.request.action == 'read'}
+		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">
         	try {
 			// Activar la validación

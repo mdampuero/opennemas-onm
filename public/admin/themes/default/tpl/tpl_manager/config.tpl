@@ -46,13 +46,13 @@
 					{foreach from=$config key="k" item="v"}
 						<tr bgcolor="{cycle values="#ccc,#eee"}">
 							<td style="padding-left:30px;">
-								<img src="{$params.IMAGE_DIR}template_manager/{$groupIcon.$k}" border="0" title="Caché de opinión interior" />
-								{$groupName.$k}&nbsp;
-								<input type="hidden" name="group[]" value="{$k}" />
+								<img src="{$params.IMAGE_DIR}template_manager/{$groupIcon.$k|default:""}" border="0" title="Caché de opinión interior" />
+								{$groupName.$k|default:$k} &nbsp;
+								<input type="hidden" name="group[]" value="{$k|default:""}" />
 							</td>
 
 							<td align="center">
-								<input type="checkbox" name="caching[{$k}]" value="1" {if $v.caching}checked="checked"{/if}/>
+								<input type="checkbox" name="caching[{$k|default:""}]" value="1" {if $v.caching}checked="checked"{/if}/>
 							</td>
 
 							<td align="center">

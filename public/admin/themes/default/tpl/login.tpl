@@ -27,7 +27,7 @@
 					<div>{t}The journalism CMS{/t}</div>
 				</div>
 
-				{if isset($message)}
+				{if isset($message) && !empty($message)}
 				<div class="span-16 last">
 					<div class="span-14 prepend-1 append-1">
 						<div class="notice">{$message}</div>
@@ -46,10 +46,10 @@
 
 				<div class="span-16 last">
 					<div class="span-7 append-1">
-						<input name="login" id="user_login" type="text" tabindex="1" value="{$smarty.cookies.login_username}" />
+						<input name="login" id="user_login" type="text" tabindex="1" value="{$smarty.cookies.login_username|default:""}" />
 					</div>
 					<div class="span-7 last">
-						<input type="password" name="password" id="password" tabindex="2" value="{$smarty.cookies.login_password}" />
+						<input type="password" name="password" id="password" tabindex="2" value="{$smarty.cookies.login_password|default:""}" />
 					</div>
 				</div>
 
