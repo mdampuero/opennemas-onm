@@ -139,10 +139,10 @@ class Application {
      */
     static public function initGettext()
     {
-
-        if (iseet(s::get('time_zone'))) {
+        $timezone = s::get('time_zone');
+        if (isset($timezone)) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[s::get('time_zone')]);
+            date_default_timezone_set($availableTimezones[$timezone]);
         }
 
         /* Set internal character encoding to UTF-8 */
