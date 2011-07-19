@@ -164,28 +164,47 @@ input[type="text"] {
         </div>
 
         <div id="log" class="panel">
-            <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="log_enabled">{t}Enable log:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
-                            <span class="default-value">{t}Default: true{/t}</span>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Log level:{/t}</label>
-                        </th>
-                        <td>
-                            {html_options name=log_level options=$logLevels selected=$configs['log_level']}
-                            <span class="default-value">{t}Default: true{/t}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <fieldset>
+                <legend>System log</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="log_enabled">{t}Enable Log:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
+                                <span class="default-value">{t}Default: true{/t}</span>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Log level:{/t}</label>
+                            </th>
+                            <td>
+                                {html_options name=log_level options=$logLevels selected=$configs['log_level']}
+                                <span class="default-value">{t}Default: true{/t}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Database log</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="log_enabled">{t}Enable Log:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
+                                <span class="default-value">{t}Default: false{/t}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
         </div>
 
         <div id="external" class="panel">

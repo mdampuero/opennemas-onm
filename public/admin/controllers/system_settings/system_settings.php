@@ -44,7 +44,7 @@ switch($action) {
                                     'items_per_page',
                                     'refresh_interval',
                                     'advertisements_enabled',
-                                    'log_enabled', 'log_level',
+                                    'log_enabled', 'log_db_enabled', 'log_level',
                                     );
 
         $configurations = s::get($configurationsKeys);

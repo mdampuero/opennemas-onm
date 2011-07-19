@@ -70,41 +70,6 @@ class Application {
     }
 
 
-    static private function autoload($className) {
-
-        // Use Onm old loader
-        $filename = strtolower($className);
-        if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-            require dirname(__FILE__).'/'.$filename.'.class.php';
-            return true;
-        } else{
-            // Try convert MethodCacheManager to method_cache_manager
-            $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
-
-            if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-                require dirname(__FILE__).'/'.$filename.'.class.php';
-                return true;
-            }
-        }
-
-        // Use PSR-0 Final Proposal autoloader
-        if (strripos($className, '\\') !== false) {
-            $className = ltrim($className, '\\');
-            $fileName  = '';
-            $namespace = '';
-            if ($lastNsPos = strripos($className, '\\')) {
-                $namespace = substr($className, 0, $lastNsPos);
-                $className = substr($className, $lastNsPos + 1);
-                $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-            }
-            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-
-            require $fileName;
-        }
-
-    }
-
-
     /**
     * Setup the Application instance and assigns it to a global variable
     *
@@ -118,30 +83,32 @@ class Application {
         if(!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
 
             $GLOBALS['application'] = new Application();
-               
-            // Setting up DataBase connection  
+
+            // Setting up DataBase connection
             self::initDatabase();
-            
-            // Setting up Logger  
+
+            // Setting up Logger
             self::initLogger();
-            
-            // Setting up Gettext 
+
+            // Setting up Gettext
             self::initGettext();
         }
 
-        
+
 
         return( $GLOBALS['application'] );
     }
-    
-    static public function initLogger() 
+
+    static public function initLogger()
     {
+        $logLevel = (s::get('log_level'))?: normal;
+
         $logger = new \Onm\Log(s::get('log_level'));
         $registry = Zend_Registry::set('logger', $logger);
-        
+
         // Composite Logger (file + mail)
         // http://www.indelible.org/php/Log/guide.html#composite-handlers
-        if( s::get('log_enable') == 1) {
+        if( s::get('log_enabled') == 1) {
             $GLOBALS['application']->logger = &Log::singleton('composite');
 
             $conf = array('mode' => 0600,
@@ -152,8 +119,8 @@ class Application {
         } else {
             $GLOBALS['application']->logger = &Log::singleton('null');
         }
-    } 
-    
+    }
+
     static public function initDatabase()
     {
         // Database
@@ -161,7 +128,7 @@ class Application {
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);
 
         // Check if adodb is log enabled
-        if(  s::get('log_enable') == 1 ) {
+        if(  s::get('log_db_enabled') == 1 ) {
             $GLOBALS['application']->conn->LogSQL();
         }
     }
@@ -173,10 +140,10 @@ class Application {
     static public function initGettext()
     {
 
-        $availableTimezones = \DateTimeZone::listIdentifiers();
-
-
-        date_default_timezone_set($availableTimezones[s::get('time_zone')]);
+        if (iseet(s::get('time_zone'))) {
+            $availableTimezones = \DateTimeZone::listIdentifiers();
+            date_default_timezone_set($availableTimezones[s::get('time_zone')]);
+        }
 
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
@@ -206,14 +173,14 @@ class Application {
     *
     * @param array $packages list of packages to load
     */
-    static public function initAutoloader($packages=null) 
+    static public function initAutoloader($packages=null)
     {
         // Instanciate Zend_Loader_Autoloader
         require_once 'Zend/Loader/Autoloader.php';
         $autoloader = Zend_Loader_Autoloader::getInstance();
         // Register Onm_ Namespace
         $autoloader->registerNamespace('Onm_');
-        
+
         $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
                         'log'      => SITE_LIBS_PATH.'/Log.php',
                         'pager'    => SITE_LIBS_PATH.'/Pager/Pager.php',
@@ -251,12 +218,52 @@ class Application {
         // Function to autoload classes on the fly using SPL autload
         spl_autoload_register('Application::autoload');
     }
-    
+
     /**
-    * This function retrieves the logger instance that is in the Zend registry 
-    * 
-    * @return An instance of Onm logger
+     * Autoloads classes by its name.
+     *
+     * @param string $className the name of the class.
+     *
+     * @return boolean true if class was found and loaded
+     */
+    static private function autoload($className) {
+
+        // Use Onm old loader
+        $filename = strtolower($className);
+        if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
+            require dirname(__FILE__).'/'.$filename.'.class.php';
+            return true;
+        } else{
+            // Try convert MethodCacheManager to method_cache_manager
+            $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
+
+            if( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
+                require dirname(__FILE__).'/'.$filename.'.class.php';
+                return true;
+            }
+        }
+
+        // Use PSR-0 Final Proposal autoloader
+        if (strripos($className, '\\') !== false) {
+            $className = ltrim($className, '\\');
+            $fileName  = '';
+            $namespace = '';
+            if ($lastNsPos = strripos($className, '\\')) {
+                $namespace = substr($className, 0, $lastNsPos);
+                $className = substr($className, $lastNsPos + 1);
+                $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+            }
+            $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+            require $fileName;
+        }
+
+    }
+
+    /**
+    * This function retrieves the logger instance that is in the Zend registry
     *
+    * @return An instance of Onm logger
     */
     static public function getLogger()
     {
