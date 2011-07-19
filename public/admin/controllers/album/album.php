@@ -6,9 +6,11 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
+//Check if module is activated in this onm instance
+ \Onm\Module\ModuleManager::checkActivatedOrForward('ALBUM_MANAGER');
+
  // Check if the user can admin album
 Acl::checkOrForward('ALBUM_ADMIN');
-
 
 // Register events
 require_once('./albums_events.php');
@@ -16,50 +18,69 @@ require_once('./albums_events.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Photo Album'));
 
-//TODO: generate menu class for delete next array
-// Assign a content types for don't reinvent the wheel into template
-$content_types = array('article' => 1 , 'album' => 7, 'video' => 9, 'opinion' => 4, 'kiosko'=>14);
-
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
 /******************* GESTION CATEGORIAS  *****************************/
+$contentType = Content::getIDContentType('album');
 
 $category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
 if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
-
 }
 
 $ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($content_types['album'], $category);
- 
-if (empty($category) ) {   
-    $category = $categoryData[0]->pk_content_category;
-}
-
+list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+if(empty($category)) {$category ='favorite';}
 $tpl->assign('category', $category);
 
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
-//TODO: ¿datoscat?¿
+ 
 $tpl->assign('datos_cat', $categoryData);
 
-
-
+ define('ALBUM_FAVORITES', 4);
 /******************* GESTION CATEGORIAS  *****************************/
 
 if( isset($_REQUEST['action']) ) {
+    
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
+            Acl::checkOrForward('ALBUM_ADMIN');
             $cm = new ContentManager();
 
-            $albums= $cm->find_by_category('Album', $category, 'fk_content_type=7',
-                                        'ORDER BY  created DESC LIMIT 15');
+            if (empty($page)) {
+                $limit= "LIMIT ".(ITEMS_PAGE+1);
+            } else {
+                $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.$numItems;
+            }
 
-            $tpl->assign('albums', $albums);
-            //TODO: ajax pagination with next-previous
-            //$tpl->assign('paginacion', $pager);
+            if ($category == 'favorite') {
+                $albums = $cm->find_all('Album', 'favorite =1 AND available =1', 'ORDER BY  created DESC '.$limit);
+                if (count($albums) != ALBUM_FAVORITES ) {
+                   $tpl->assign('msg', _("Should have ".ALBUM_FAVORITES." ALBUMS ")) ;
+                }
+                if(!empty($albums)) {
+                    foreach ($albums as &$album) {
+                        $album->category_name = $ccm->get_name($album->category);
+                        $album->category_title = $ccm->get_title($album->category_name);
+                    }
+                }
+                
+            } else {
+                $albums= $cm->find_by_category('Album', $category, 'fk_content_type=7',
+                                               'ORDER BY created '.$limit);
+            }
 
+            $params = array('page'=>$page, 'items'=>ITEMS_PAGE,
+                    'total' => count($albums),
+                    'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category );
+
+            $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
+
+            $tpl->assign( array(
+                            'pagination' => $pagination,
+                            'albums' => $albums ));
+            
 		break;
 
 		case 'new':
@@ -71,8 +92,7 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ALBUM_UPDATE');
             
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-
-            if(empty($id)) { //because fordwards
+            if(empty($id)) { //because forwards
                 $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             }
 
@@ -99,8 +119,10 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ALBUM_UPDATE');
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-
 			$album = new Album($id);
+            if(!Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+                $msg ="Only read";
+            }
 			$album->update( $_POST );
                        
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
@@ -127,10 +149,12 @@ if( isset($_REQUEST['action']) ) {
 				$album = new Album();
 				if(!$album->create( $_POST ))
 					$tpl->assign('errors', $album->errors);
-			} else {
-                
+			} else {                
                 Acl::checkOrForward('ALBUM_UPDATE');
 				$album = new Album($id);
+                if(!Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+                    $msg ="Only read";
+                }
 				$album->update( $_POST );
 			}
 
@@ -173,6 +197,8 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
         case 'yesdel':
+            Acl::checkOrForward('ALBUM_DELETE');
+
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             if($id){
                 $album = new Album($id);
@@ -187,7 +213,8 @@ if( isset($_REQUEST['action']) ) {
 
 		
 		case 'change_status':
-
+            Acl::checkOrForward('ALBUM_AVAILABLE');
+            
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                    array('options' => array('default'=> 0)));
@@ -216,6 +243,7 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'mfrontpage':
 
+             Acl::checkOrForward('ALBUM_AVAILABLE');
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
             {
                 $fields = $_REQUEST['selected_fld'];
@@ -234,6 +262,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 		
 		case 'mdelete':
+            Acl::checkOrForward('ALBUM_TRASH');
 			if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
 			    $fields = $_REQUEST['selected_fld'];
                 if (is_array($fields)) {

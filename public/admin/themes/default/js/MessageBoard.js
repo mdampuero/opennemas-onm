@@ -15,6 +15,7 @@ function showMsg(msgs,mtype) {
 }
 
 function showMsgContainer(msgs,mtype,container) {
+ 
     var mb = new MessageBoard(msgs,{container:container,type:mtype});
     mb.render();
     return false;
@@ -33,7 +34,7 @@ var MessageBoard = Class.create({
         this.container = $(options.container) || document.body;
         this.messages = messages;
         this.type = options.type || 'growl';
-    },
+      },
     
     parse: function(){
         var html_code = '<ul class="messageboard">';
@@ -62,7 +63,7 @@ var MessageBoard = Class.create({
     render_inline: function(){
         this.container.setStyle({display: 'inline'});
         this.insert();
-        this.container.appear();
+        this.container.SlideDown();
     },
 
     render_growl: function(){
@@ -82,7 +83,7 @@ var MessageBoard = Class.create({
     },
 
     clear: function(){
-        this.container.setStyle({display: 'inline'});
+        this.container.setStyle({display: 'none'});
     },
     
     push :function(){
