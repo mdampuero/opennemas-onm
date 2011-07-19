@@ -8,7 +8,7 @@
  */
 // Prevent direct access
 
-use \Onm\Settings as s;
+use Onm\Settings as s;
 
 if (preg_match('/application\.class\.php/', $_SERVER['PHP_SELF'])) {
     die();

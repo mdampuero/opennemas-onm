@@ -15,6 +15,7 @@
  * @package default
  **/
 namespace Onm;
+use Onm\Settings as s;
 /**
  * Define DocBlock
  **/  
@@ -98,7 +99,7 @@ class Log extends  \Zend_Log {
     */
     protected function _errorWriter($loglevel)
     {
-        if (\Onm\Settings::get('log_db_enabled') == 1) {
+        if (s::get('log_db_enabled') == 1) {
             $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
             switch ($loglevel){
                 case 'normal':
