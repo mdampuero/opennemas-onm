@@ -7,13 +7,7 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-
-
-// Check ACL
-require_once( SITE_CORE_PATH.'privileges_check.class.php' );
-if(!Acl::check('ADVERTISEMENT_ADMIN')) {
-    Acl::deny();
-}
+Acl::checkOrForward('ADVERTISEMENT_ADMIN');
 
 // Register events
 require_once('./advertisement_events.php');
@@ -90,7 +84,8 @@ $tpl->assign('query_string', $query_string);
 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
-        case 'list': {
+        
+        case 'list': 
             // Advertisement map
             $map = Advertisement::$map;
             $tpl->assign('map', $map);
@@ -125,9 +120,9 @@ if( isset($_REQUEST['action']) ) {
             $_SESSION['desde'] = 'advertisement';
             $tpl->display('advertisement/list.tpl');
             
-        } break;
+        break;
 
-        case 'test_script': {
+        case 'test_script': 
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
@@ -137,48 +132,24 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->display('advertisement/test_script.tpl');
 
-        } break;
+        break;
 
         case 'new':
             
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
-
-            $cm = new ContentManager();
-            $photos = $cm->find_by_category('Photo', 2, 'fk_content_type=8 ', 'ORDER BY created DESC');
-            foreach($photos as $photo) {
-                $photo->content_status = 1;
-                $ph = new Photo($photo->pk_photo);
-                $ph->set_status(1, $_SESSION['userid']);
-            }
-
-            $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
-
-            $photos = $cm->paginate_num($photos,16);
-            $tpl->assign('photos', $photos);
-            $pages = $cm->pager;
-            $paginacion = "";
-
-            for($i=1; $i<=($pages->_totalPages); $i++) {
-                $paginacion .= ' <a style="cursor:pointer;" onClick="get_advertisements('.$i.')">'.$i.'</a> ';
-            }
-
-            if(($pages->_totalPages)>1) {
-                $tpl->assign('paginacion', $paginacion);
-            }
-
+            Acl::checkOrForward('ADVERTISEMENT_CREATE');
+ 
             $tpl->display('advertisement/advertisement.tpl');
 
         break;
 
-        case 'read': {
-            //habrá que tener en cuenta el tipo
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'read':
+            //TODO: Pedir por ajax
+            Acl::checkOrForward('ADVERTISEMENT_UPDATE');
 
             $advertisement = new Advertisement( $_REQUEST['id'] );
+            if($advertisement->fk_user != $_SESSION['userid'] && (!Acl::check('CONTENT_OTHER_UPDATE')) ) {
+               $msg =("Only read. You aren't ownner");
+            }
             $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
             $tpl->assign('advertisement', $advertisement);
 
@@ -192,7 +163,7 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->assign('photo1', $photo1);
 
-            $photos = $cm->find_by_category('Photo',2, 'fk_content_type=8 ', 'ORDER BY created DESC');
+             $photos = $cm->find_by_category('Photo',2, 'fk_content_type=8 ', 'ORDER BY created DESC');
             foreach($photos as $photo){
                 $photo->content_status = 1;
                 $ph = new Photo($photo->pk_photo);
@@ -210,35 +181,17 @@ if( isset($_REQUEST['action']) ) {
             if($pages->_totalPages>1) {
                  $tpl->assign('paginacion', $paginacion);
             }
-
+ 
             $tpl->display('advertisement/advertisement.tpl');
 
-            /**
-                //Noticias relacionadas
-                $cm = new ContentManager();
-                $articules = $cm->find('Article','content_status=1', 'ORDER BY archive DESC');
-                // Agrupa los artículos por categoría y controla si están publicados
+        break;
 
-                $articles_agrupados = Related_content::sortArticles($articules);
-                $tpl->assign('articles_agrupados', $articles_agrupados);
-
-
-                $rel = new Related_content();
-                $relationes = $rel->get_relations( $_REQUEST['id'] );
-                $tpl->assign('yarelations', $relationes);
-                if($relationes) {
-                    $tpl->assign('ya', 1);
-                }
-            **/
-        } break;
-
-        case 'create': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
-            
+        case 'create': 
+            Acl::checkOrForward('ADVERTISEMENT_CREATE');            
             
             $_REQUEST['publisher'] = $_SESSION['userid'];
+            $_REQUEST['fk_author'] = $_SESSION['userid'];
+            
             $firstCategory = $_REQUEST['category'][0];
             $_REQUEST['category'] = implode(',', $_REQUEST['category']);
 
@@ -255,12 +208,11 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->display('advertisement/advertisement.tpl');
 
-        } break;
+        break;
 
-        case 'update': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'update': 
+            Acl::checkOrForward('ADVERTISEMENT_UPDATE');
+            
             $firstCategory = $_REQUEST['category'][0];
             $_REQUEST['category'] = implode(',', $_REQUEST['category']);
 
@@ -274,9 +226,9 @@ if( isset($_REQUEST['action']) ) {
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$firstCategory.'&page='.$_REQUEST['page']/*.'&'.$query_string*/);
-        } break;
+        break;
 
-        case 'validate': {
+        case 'validate': 
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
@@ -295,23 +247,20 @@ if( isset($_REQUEST['action']) ) {
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$advertisement->id.'&'.$query_string);
-        } break;
+        break;
 
-        case 'delete': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'delete': 
+            Acl::checkOrForward('ADVERTISEMENT_DELETE');
 
             $advertisement = new Advertisement();
             $advertisement->delete( $_POST['id'],$_SESSION['userid'] );
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
 
-        case 'change_status': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'change_status':
+
+            Acl::checkOrForward('ADVERTISEMENT_AVAILABLE');
 
             $advertisement = new Advertisement($_REQUEST['id']);
             //Publicar o no, comprobar num clic
@@ -319,12 +268,10 @@ if( isset($_REQUEST['action']) ) {
             $advertisement->set_status($status,$_SESSION['userid']);
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
 
-        case 'available_status': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'available_status': 
+            Acl::checkOrForward('ADVERTISEMENT_AVAILABLE');
 
             $advertisement = new Advertisement($_REQUEST['id']);
             //Publicar o no, comprobar num clic
@@ -332,12 +279,10 @@ if( isset($_REQUEST['action']) ) {
             $advertisement->set_available($status, $_SESSION['userid']);
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
 
-        case 'mfrontpage': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'mfrontpage': 
+            Acl::checkOrForward('ADVERTISEMENT_AVAILABLE');
 
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
@@ -351,12 +296,10 @@ if( isset($_REQUEST['action']) ) {
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
 
-        case 'mdelete': {
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+        case 'mdelete': 
+            Acl::checkOrForward('ADVERTISEMENT_DELETE');
 
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
@@ -369,11 +312,11 @@ if( isset($_REQUEST['action']) ) {
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
 
-        default: {
+        default: 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page'].'&'.$query_string);
-        } break;
+        break;
     }
 
 } else {

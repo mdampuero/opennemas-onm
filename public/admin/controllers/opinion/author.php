@@ -6,28 +6,22 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-
 /**
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Author Opinion Management');
-
-
-/**
- * Check privileges
-*/
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('OPINION_ADMIN')) {
-    Acl::Deny();
-}
+ 
+Acl::checkOrForward('USER_ADMIN');
 
 $_REQUEST['page'] = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 
 if( isset($_REQUEST['action']) ) {
-	switch($_REQUEST['action']) {
-		case 'list':
+    switch($_REQUEST['action']) {
+        case 'list':
+            Acl::checkOrForward('USER_ADMIN');
+
 			$author = new Author();
 			$cm = new ContentManager();
 			$authors = $author->list_authors(NULL,'order by name asc');
@@ -45,6 +39,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'read':
+            Acl::checkOrForward('AUTHOR_UPDATE');
 			$author = new Author( $_REQUEST['id'] );
 			$tpl->assign('author', $author);
 			$photos=$author->get_author_photos($_REQUEST['id']);
@@ -54,6 +49,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'update':
+            Acl::checkOrForward('AUTHOR_UPDATE');
 			$author = new Author();
 			$author->update( $_REQUEST );
 
@@ -65,6 +61,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'create':
+            Acl::checkOrForward('AUTHOR_CREATE');
 			$author = new Author();
 			if($author->create( $_POST )) {
 				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
@@ -74,6 +71,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'delete':
+            Acl::checkOrForward('AUTHOR_DELETE');
 			$author = new Author();
 			$author->delete( $_POST['id'] );
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);

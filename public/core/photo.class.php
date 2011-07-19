@@ -168,13 +168,19 @@ class Photo extends Content
 
                 case 'image/jpeg': {
 
-                    $photo->exif = exif_read_data($image, 0, true);
+                    $exif = array();
+                    if (isset($info)) {
+                        foreach($info as $key => $val) {
+                            if ($key != 'APP1') { $data_exif = read_exif_data($image, 0, true); break; }
+                        }
+                    }
+                    
+                    $photo->exif = $data_exif;
 
-                    if (!$photo->exif) {
+                    if (empty($exif)) {
                         $photo->infor .= _(" No hay datos EXIF </br>");
-                    } else {
 
-                        $data_exif = $photo->exif;
+                    } else {
 
                         if (empty($photo->color)) {
                             if ($data_exif['COMPUTED']['IsColor']==0) {

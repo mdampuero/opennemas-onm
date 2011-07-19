@@ -9,10 +9,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 /**
  * Check privileges
 */
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('OPINION_ADMIN')) {
-    Acl::Deny();
-}
+Acl::checkOrForward('AUTHOR_CREATE');
 
 require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 

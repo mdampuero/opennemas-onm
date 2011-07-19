@@ -30,10 +30,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 /**
  * Check privileges
 */
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('OPINION_ADMIN')) {
-    Acl::Deny();
-}
+Acl::checkOrForward('OPINION_ADMIN');
 
 /**
  * Setup view
@@ -68,7 +65,7 @@ $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
 
 if(isset($_REQUEST['action'])) {
     switch($_REQUEST['action']) {
-        case 'list': {
+        case 'list': 
             $order = ' position ASC, created DESC';
             $opinion = new Opinion();
 
@@ -170,9 +167,10 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('opinions', $opinions);
             $_SESSION['desde'] = 'opinion';
             $_SESSION['_from'] = 'opinion.php';
-        } break;
+        break;
 
-        case 'new': {
+        case 'new':
+            Acl::checkOrForward('OPINION_CREATE');
             // Select de autores.
             $aut = new Author();
             $todos = $aut->all_authors(NULL,'ORDER BY name');
@@ -187,9 +185,10 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('opinion', $opinion);
             $_SESSION['desde'] = 'new';
             $_SESSION['_from'] = 'opinion.php';
-        } break;
+        break;
 
-        case 'read': {
+        case 'read':
+            Acl::checkOrForward('OPINION_UPDATE');
             //habrá que tener en cuenta el tipo
             $opinion = new Opinion($_REQUEST['id']);
             $tpl->assign('opinion', $opinion);
@@ -209,9 +208,10 @@ if(isset($_REQUEST['action'])) {
 
             $photos = $aut->get_author_photos($opinion->fk_author);
             $tpl->assign('photos', $photos);
-        } break;
+        break;
 
-        case 'create': {
+        case 'create': 
+            Acl::checkOrForward('OPINION_CREATE');
             $opin = new Opinion();
             $_POST['publisher'] = $_SESSION['userid'];
 
@@ -240,18 +240,18 @@ if(isset($_REQUEST['action'])) {
             } else {
                 $tpl->assign('errors', $opinion->errors);
             }
-        } break;
+        break;
 
-        case 'update': {
-
+        case 'update': 
+            Acl::checkOrForward('OPINION_UPDATE');
             //TODO : Revisar esto porque antes saltaba un warning
             $alert= '';
 
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
-                Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
+            if(!Acl::check('CONTENT_OTHER_UPDATE') && $opinionCheck->fk_user != $_SESSION['userid']) {
+                $msg ="Only read";
             }
 
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
@@ -289,11 +289,12 @@ if(isset($_REQUEST['action'])) {
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
             }
-        } break;
+        break;
 
-        case 'validate': {
+        case 'validate': 
             $opinion = null;
             if(empty($_POST["id"])) {
+                Acl::checkOrForward('OPINION_CREATE');
                 $opinion = new Opinion();
                 $_POST['publisher'] = $_SESSION['userid'];
 
@@ -301,10 +302,11 @@ if(isset($_REQUEST['action'])) {
                     $tpl->assign('errors', $opinion->errors);
                 }
             } else {
+                Acl::checkOrForward('OPINION_UPDATE');
                 $opinionCheck = new Opinion();
                 $opinionCheck->read($_REQUEST['id']);
 
-                if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+                if(!Acl::check('CONTENT_OTHER_UPDATE') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                     Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
                 }
 
@@ -321,13 +323,14 @@ if(isset($_REQUEST['action'])) {
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&type_opinion=' .
                                  $_SESSION['type'] . '&id=' . $opinion->id);
-        } break;
+        break;
 
-        case 'delete': {
+        case 'delete':
+            Acl::checkOrForward('OPINION_DELETE');
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::check('OPINION_ADMIN') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+            if($opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                 Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
             }
 
@@ -357,9 +360,10 @@ if(isset($_REQUEST['action'])) {
                 echo $msg;
                 exit(0);
             }
-        } break;
+        break;
 
-        case 'yesdel': {
+        case 'yesdel':
+            Acl::checkOrForward('OPINION_DELETE');
             if($_REQUEST['id']) {
                 //Delete relations
                 $rel= new Related_content();
@@ -377,9 +381,10 @@ if(isset($_REQUEST['action'])) {
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                                  $opinion->category . '&page=' . $_REQUEST['page']);
             }
-        } break;
+        break;
 
-        case 'change_status': {
+        case 'change_status':
+            Acl::checkOrForward('OPINION_FRONTPAGE');
             $opinion = new Opinion($_REQUEST['id']);
 
             //Publicar o no,
@@ -398,9 +403,10 @@ if(isset($_REQUEST['action'])) {
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&page=' . $_REQUEST['page']);
             }
-        } break;
+        break;
 
-        case 'mfrontpage': {
+        case 'mfrontpage':
+            Acl::checkOrForward('OPINION_FRONTPAGE');
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
                 $fields = $_REQUEST['selected_fld'];
                 $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
@@ -416,9 +422,10 @@ if(isset($_REQUEST['action'])) {
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&page=' . $_REQUEST['page']);
-        } break;
+        break;
 
-        case 'mdelete': {
+        case 'mdelete':
+            Acl::checkOrForward('OPINION_DELETE');
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
                 $fields = $_REQUEST['selected_fld'];
 
@@ -446,9 +453,10 @@ if(isset($_REQUEST['action'])) {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&msgdelete=' . $alert . '&msg=' . $msg .
                                  '&page=' . $_REQUEST['page']);
-        } break;
+        break;
 
-        case 'inhome_status': {
+        case 'inhome_status':
+            Acl::checkOrForward('OPINION_HOME');
             $opinion = new Opinion($_REQUEST['id']);
             $alert='';
             // FIXME: evitar otros valores erróneos
@@ -479,9 +487,10 @@ if(isset($_REQUEST['action'])) {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&alert=' . $alert .
                                  '&page=' . $_REQUEST['page']);
-        } break;
+        break;
 
-        case 'm_inhome_status': {
+        case 'm_inhome_status':
+            Acl::checkOrForward('OPINION_HOME');
             $fields = $_REQUEST['selected_fld'];
             $alert = '';
 
@@ -522,18 +531,9 @@ if(isset($_REQUEST['action'])) {
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
-        } break;
+        break;
 
-        case 'change_algoritm': {
-            if($_REQUEST['algoritm']) {
-                $opinion = new Opinion();
-                $opinion->set_opinion_algoritm($_REQUEST['algoritm']);
-            }
-
-            exit(0);
-        } break;
-
-        case 'save_positions': {
+        case 'save_positions': 
             if(isset($_REQUEST['orden'])){
 
                 $tok = strtok($_REQUEST['orden'], ",");
@@ -560,9 +560,9 @@ if(isset($_REQUEST['action'])) {
             }
 
             exit(0);
-        } break;
+        break;
 
-        case 'change_list_byauthor': {
+        case 'change_list_byauthor': 
             $cm = new ContentManager();
             if($_REQUEST['author'] == 0) {
                 $_REQUEST['action'] = 'list'; //Para que sea correcta la paginacion.
@@ -611,7 +611,7 @@ if(isset($_REQUEST['action'])) {
                 exit(0);
                 // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&type_opinion=0&page='.$_REQUEST['page']);
             }
-        } break;
+        break;
 
         case 'update_title':
             $filter = '`pk_content` = ' . $_REQUEST['id'];
@@ -647,12 +647,12 @@ if(isset($_REQUEST['action'])) {
         case 'get_authors_list':
             $aut = new Author();
             $autores = $aut->all_authors(NULL,'ORDER BY name');
-             $autores = json_encode($autores);
-              header('Content-type: application/json');
+            $autores = json_encode($autores);
+            header('Content-type: application/json');
             Application::ajax_out($autores);
         break;
 
-        case 'changeavailable': {
+        case 'changeavailable': 
             $opinion->read($_REQUEST['id']);
 
             $available = ($opinion->available+1) % 2;
@@ -666,11 +666,9 @@ if(isset($_REQUEST['action'])) {
             }
 
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
-            break;
-        }
-
-
-        case 'unpublish': {
+        break;
+        
+        case 'unpublish': 
             $opinion = new Opinion();
             $opinion->read($_REQUEST['id']);
             $opinion->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
@@ -679,10 +677,9 @@ if(isset($_REQUEST['action'])) {
             //$refresh = Content::refreshFrontpageForAllCategories();
 
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
-            break;
-        }
+        break;
 
-        case 'archive': {
+        case 'archive': 
             $opinion = new Opinion();
             $opinion->read($_REQUEST['id']);
             $opinion->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
@@ -691,8 +688,8 @@ if(isset($_REQUEST['action'])) {
             //$refresh = Content::refreshFrontpageForAllCategories();
 
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
-            break;
-        }
+        break;
+        
 
         case 'change_photos':
 
@@ -711,9 +708,9 @@ if(isset($_REQUEST['action'])) {
             Application::ajax_out($out);
         break;
 
-        default: {
+        default: 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $_REQUEST['page']);
-        } break;
+        break;
     }
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
