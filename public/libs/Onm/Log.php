@@ -98,19 +98,22 @@ class Log extends  \Zend_Log {
     */
     protected function _errorWriter($loglevel)
     {
-        $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
-        switch ($loglevel){
-            case 'normal':
-                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE,'>='));
-                break;
-            case 'verbose':
-                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::ERR,'>='));
-                break;
-            case 'all':
-                $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::EMERG,'>='));
-                break;
+        if (\Onm\Settings::get('log_db_enabled') == 'on') {
+            $writer = new \Zend_Log_Writer_Stream(SYS_LOG_PATH.'/onm.log');
+            switch ($loglevel){
+                case 'normal':
+                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::NOTICE,'>='));
+                    break;
+                case 'verbose':
+                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::ERR,'>='));
+                    break;
+                case 'all':
+                    $writer->addFilter(new \Zend_Log_Filter_Priority(\Zend_Log::EMERG,'>='));
+                    break;
+            }
+        } else {
+            $writer = new \Zend_Log_Writer_Mock;
         }
-        
         $writer->setFormatter($this->_formatter);
         return $writer;
     }

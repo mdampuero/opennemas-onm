@@ -128,7 +128,7 @@ class Application {
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_INST);
 
         // Check if adodb is log enabled
-        if(  s::get('log_db_enabled') == 1 ) {
+        if(  s::get('log_db_enabled') == 'on' ) {
             $GLOBALS['application']->conn->LogSQL();
         }
     }
