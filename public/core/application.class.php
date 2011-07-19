@@ -101,9 +101,9 @@ class Application {
 
     static public function initLogger()
     {
-        $logLevel = (s::get('log_level'))?: normal;
-
-        $logger = new \Onm\Log(s::get('log_level'));
+        // init Logger
+        $logLevel = (s::get('log_level'))?: 'normal';
+        $logger = new \Onm\Log($logLevel);
         $registry = Zend_Registry::set('logger', $logger);
 
         // Composite Logger (file + mail)
