@@ -38,7 +38,7 @@ class Content {
     var $endtime = null;
     var $created = null;
     var $changed = null;
-    var $fk_author = null;
+    var $fk_user = null;
     var $fk_publisher = null;
     var $fk_user_last_editor = null;
     var $category = null;
@@ -160,10 +160,12 @@ class Content {
             $data['description']='';
         }
         if (empty($data['metadata'])&& !isset ($data['metadata'])) {$data['metadata']='';}
-        if (empty($data['pk_author'])&& !isset ($data['pk_author'])) {$data['pk_author']='';}
 
-        if (empty($data['fk_publisher'])&& !isset ($data['fk_publisher'])) {$data['fk_publisher']='';}
-        $data['fk_user_last_editor'] = $data['fk_publisher']; // Se cambia al modificar
+        $data['fk_user'] =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
+        
+        $data['fk_user_last_editor'] =  $data['fk_user'];
+
+        $data['fk_publisher'] = (empty($data['available']))? '': $data['fk_user'];
 
         $fk_content_type = $GLOBALS['application']->conn->
             GetOne('SELECT * FROM `content_types` WHERE name = "'. $this->content_type.'"');
@@ -173,7 +175,7 @@ class Content {
                         $data['created'], $data['changed'], $data['content_status'],
                         $data['views'], $data['position'],$data['frontpage'],
                         $data['placeholder'],$data['home_placeholder'],$data['paper_page'],
-                        $data['pk_author'], $data['fk_publisher'], $data['fk_user_last_editor'],
+                        $data['fk_user'], $data['fk_publisher'], $data['fk_user_last_editor'],
                         $data['in_home'], $data['home_pos'],$data['available'],$data['permalink']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -331,7 +333,10 @@ class Content {
 
         if (empty($data['description'])&& !isset ($data['description'])) {$data['description']='';}
 
-        if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) {$data['fk_user_last_editor']='';}
+
+        $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
+
+        if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) {$data['fk_user_last_editor']= $_SESSION['userid'];}
 
         //
         // FIXME: os permalinks deben establecerse dende a clase deriva e existir un método
@@ -962,31 +967,63 @@ class Content {
      */
     static public function getContentTypes()
     {
-
-        $szSqlContentTypes = "SELECT pk_content_type, name, title FROM content_types";
-        $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
-
-        if (!$resultSet) {
-            throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
+        $fetchedFromAPC = false;
+        if (extension_loaded('apc')) {
+            $resultArray = apc_fetch(APC_PREFIX . "_getContentTypes", $fetchedFromAPC);
         }
 
-        try
-        {
-            $resultArray = $resultSet->GetArray();
-            $i=0;
-            foreach ($resultArray as &$res) {
-                $resultArray[$i]['title'] = htmlentities($res['title']);
-                $resultArray[$i]['2'] = htmlentities($res['2']);
-                $i++;
+        // If was not fetched from APC now is turn of DB
+        if (!$fetchedFromAPC) {
+
+            $szSqlContentTypes = "SELECT pk_content_type, name, title FROM content_types";
+            $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
+
+            if (!$resultSet) {
+                throw new \Exception("There was an error while fetching available content types. '$szSqlContentTypes'.");
             }
-        } catch (exception $e) {
-            printf("Excepcion: " . $e.message);
-            return null;
-        }
 
+            try
+            {
+                $resultArray = $resultSet->GetArray();
+                $i=0;
+                foreach ($resultArray as &$res) {
+                    $resultArray[$i]['title'] = htmlentities($res['title']);
+                    $resultArray[$i]['2'] = htmlentities($res['2']);
+                    $i++;
+                }
+            } catch (exception $e) {
+                printf("Excepcion: " . $e.message);
+                return null;
+            }
+
+            if (extension_loaded('apc')) {
+                    apc_store(APC_PREFIX . "__getContentTypes", $resultArray);
+                }
+        }
+        
         return $resultArray;
     }
 
+    /*
+     * find  content type id by name.
+     *
+     * @return int pk_content_type.
+     *
+     * @throw Exception if there was an error while fetching all the content types
+     */
+    static public function getIdContentType($name)
+    {
+        $contenTypes = self::getContentTypes();
+
+         foreach ($contenTypes as $types) {
+             if($types['name'] == $name) {
+                 return $types['pk_content_type'];
+             }
+         }
+
+         return false;
+
+    }
 
     //FIXME: Mezcla funciones set_home_position (ordena las que estan) + set_inhome (quita las no home) + refrescar cache home
     public function  refresh_home($status, $position, $last_editor)

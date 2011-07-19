@@ -9,23 +9,35 @@
  * {/acl}
  *
 */
+ 
 function smarty_block_acl($params, $content, &$smarty, $open) {
     if( $open ) {
         // NADA
     } else {
        // require_once(SITE_PATH . '/core/privileges_check.class.php');
         $check = true;
-        
+
         if(isset($params['isAllowed'])) {
-            $isAllowed = $params['isAllowed'];            
-            $check = $check && Acl::check($isAllowed);            
+            $isAllowed = $params['isAllowed'];
+            $check = $check && Acl::check($isAllowed);
         }
-        
+
+        if(isset($params['isNotAllowed'])) {
+            $isAllowed = $params['isNotAllowed'];
+            $check = !($check && Acl::check($isAllowed));
+        }
+
         if(isset($params['hasCategoryAccess'])) {
             $hasCategoryAccess = $params['hasCategoryAccess'];
             $check = $check && Acl::_C($hasCategoryAccess);
-        }        
-        
+        }
+
+        if(isset($params['nohasCategoryAccess'])) {
+            $hasCategoryAccess = $params['nohasCategoryAccess'];
+            $check = $check && Acl::_C($hasCategoryAccess);
+            $check = !($check);
+        }
+
         return $check ? $content: '';
     }
 }
