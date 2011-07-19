@@ -215,24 +215,6 @@ function delete_fichero(id,page){
  }
 
 
-function delete_videos(id,page){
-
-      new Ajax.Request( 'video.php?action=delete&id='+id+'&page='+page,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
-              //   showMsg({'warn':[msg ]},'growl');
-              if(confirm(msg)) {
-                      var ruta='video.php?action=yesdel&id='+id+'&page='+page;
-                      location.href= ruta;
-                   }
-                   return false;
-            }
-        });
-
-
- }
-
 
 
 function send_notify(id,action){
