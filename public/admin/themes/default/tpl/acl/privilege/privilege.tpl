@@ -12,7 +12,7 @@
 {block name="content"}
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 	{* LISTADO ******************************************************************* *}
 	{if $smarty.request.action eq "list"}
@@ -20,15 +20,16 @@
 	<div id="menu-acciones-admin" >
 		<div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Priveleges manager{/t}</h2></div>
 	</div>
+	<br>
 
 	<table class="adminheading">
 		<tr>
 			<th nowrap align="right">
 				<label>{t}Filter by module:{/t}
 					<select name="module" onchange="$('action').value='list';$('formulario').submit();">
-						<option value="">-- {t}ALL{/t} --</option>
+						<option value="">{t}-- All --{/t}</option>
 						{section name="mods" loop=$modules}
-						<option value="{$modules[mods]}"{if $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
+						<option value="{$modules[mods]}"{if isset($smarty.request.module) && $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
 						{/section}
 					</select>
 				</label>
@@ -61,7 +62,7 @@
 					</td>
 
 					<td align="center">
-						<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$privileges[c]->id}');" title="{t}Edit privilege{/t}">
+						<a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 							&nbsp;
 						<a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
@@ -76,7 +77,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="5" align="center">{$paginacion->links}</td>
+				<td colspan="5" align="center">{$paginacion->links|default:""}</td>
 			</tr>
 		</tfoot>
 	</table>
@@ -117,15 +118,44 @@
 	{/literal}
 	</style>
 
-	{include file="botonera_up.tpl"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Priveleges manager :: Editing privilege{/t}</h2></div>
+		<ul>
+			<li>
+			{if isset($privilege->id)}
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$privilege->id}', 'formulario');">
+			{else}
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
+			{/if}
+					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}"><br />{t}Save{/t}
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$privilege->id}', 'formulario');" value="Validar" title="Validar">
+					<img border="0" src="{$params.IMAGE_DIR}validate.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+				</a>
+		    </li>
+			<li>
+				<a href="{$smarty.server.PHP_SELF}?action=list" onmouseover="return escape('<u>C</u>ancelar');" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
+				</a>
+			</li>
+		</ul>
+	</div>
+	<br>
 
-	<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
+	<table class="adminheading">
+		<tr>
+			<td>{t}Privilege information{/t}</td>
+		</tr>
+	</table>
+	<table border="0" cellpadding="0" cellspacing="0" class="adminlist" width="600">
 	<tbody>
 
 	{* Módulo *}
 	<tr>
 		<td valign="top" align="right" style="padding:4px;" width="30%">
-			<label for="module">{t}Module:{/t}</label>
+			<label for="module">{t}Module{/t}</label>
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="module" name="module" title="Módulo" size="20" maxlength="40"
@@ -140,14 +170,14 @@
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="name" name="name" title="Nombre" value="{$privilege->name}" class="required" />
-			<sub>(recomendación: MODULO_ACCION)</sub>
+			<sub>{t}(recomendation: MODULE_ACTION){/t}</sub>
 		</td>
 	</tr>
 
 	{* Descripcion *}
 	<tr>
 		<td valign="top" align="right" style="padding:4px;" width="30%">
-			<label for="description">{t}Descripti&oacute;n:{/t}</label>
+			<label for="description">{t}Description{/t}</label>
 		</td>
 		<td style="padding:4px;" nowrap="nowrap" width="70%">
 			<input type="text" id="description" name="description" title="Descripci&oacute;n" size="80" maxlength="100"
@@ -155,6 +185,11 @@
 		</td>
 	</tr>
 	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan=3></td>
+		</tr>
+	</tfoot>
 	</table>
 	</div>
 
@@ -198,7 +233,7 @@
 	</script>
 	{/if}
 
-	<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+	<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id|default:""}" />
 	</form>
 </div>
 {/block}

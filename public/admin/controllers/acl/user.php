@@ -36,20 +36,23 @@ if( isset($_REQUEST['action']) ) {
             $users = $user->get_users($filters);
 
             $users = $cm->paginate_num($users,12);
-            $tpl->assign('users', $users);
-
-            $tpl->assign('paginacion', $cm->pager);
 
             $user_group = new User_group();
             $group      = $user_group->get_user_groups();
 
             $groupsOptions = array();
-            $groupsOptions[] = '-- Seleccione un grupo --';
+            $groupsOptions[] = _('-- Select a group --');
             foreach($group as $cat) {
                 $groupsOptions[$cat->id] = $cat->name;
             }
-            $tpl->assign('user_groups', $group);
-            $tpl->assign('groupsOptions', $groupsOptions);
+
+            $tpl->assign( array(
+                'users' => $users,
+                'paginacion' => $cm->pager,
+                'user_groups' => $group,
+                'groupsOptions' => $groupsOptions,
+            ));
+
         } break;
 
         case 'new': {
@@ -149,8 +152,8 @@ if( isset($_REQUEST['action']) ) {
     }
 
 } else {
-    $page = (isset($_REQUEST['page'])?$_REQUEST['page']:"");
-    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page=$page');
+    $page = (isset($_REQUEST['page'])? $_REQUEST['page'] : 0);
+    Application::forward($_SERVER['SCRIPT_NAME']."?action=list&page={$page}");
 }
 
 $tpl->display('acl/user/user.tpl');

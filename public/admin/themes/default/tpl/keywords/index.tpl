@@ -6,25 +6,29 @@
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
 		{* LISTADO ******************************************************************* *}
-		{if !isset($smarty.request.action) || $smarty.request.action eq "list"}
+		{if !isset($smarty.get.action) || $smarty.get.action eq "list"}
 		<div id="menu-acciones-admin">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'new', -1);"
-				   title="Nueva palabra clave">
-					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
-				</a>
-			</li>
-		</ul>
+			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>Keyword Manager :: Listing keywords</h2></div>
+			<ul>
+				<li>
+					<a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" title="Nueva palabra clave">
+						<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
+					</a>
+				</li>
+			</ul>
 		</div>
+		<br>
 
 
 		<table class="adminheading">
 			<tr>
 				<td align="right">
 					{t}Search keyworks containing {/t}
-					<input type="text" name="filter[pclave]" style="margin-top:-2px;" value="{$smarty.request.filter.pclave}" />
+					{if isset($smarty.request.filter)
+						&& isset({$smarty.request.filter.pclave})}
+						{assign var=filterPClave value=$smarty.request.filter.pclave}
+					{/if}
+					<input type="text" name="filter[pclave]" style="margin-top:-2px;" value="{$filterPClave|default:""}" />
 					<button type="submit" onclick="javascript:$('action').value='list';">Filtrer</button>
 				</td>
 			</tr>
@@ -40,7 +44,7 @@
 			</thead>
 
 			<tbody>
-				{section name=k loop=$pclaves}
+				{section name=k loop=$pclaves|default:array()}
 				<tr style="background:{cycle values="#eeeeee,#ffffff"} !important">
 
 					<td align="center" weight="15">
@@ -54,10 +58,10 @@
 					</td>
 
 					<td width="44">
-						<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$pclaves[k]->id});" title="Modificar">
+						<a href="{$smarty.server.PHP_SELF}?action=read&id={$pclaves[k]->id}" title="{t}Modify{/t}">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 						&nbsp;
-						<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="Eliminar">
+						<a href="#" onClick="javascript:confirmar(this, {$pclaves[k]->id});" title="{t}Delete{/t}">
 							<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 					</td>
 				</tr>
@@ -80,31 +84,39 @@
 
 
 		{* FORMULARIO PARA ENGADIR OU MODIFICAR  ************************************** *}
-		{if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
+		{if isset($smarty.get.action) && (($smarty.get.action eq "new") || ($smarty.get.action eq "read"))}
 		<div id="menu-acciones-admin">
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);"
-				   value="Guardar" title="Guardar">
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar" /><br />Guardar
-				</a>
-			</li>
-			<li>
-				<a href="?action=list" class="admin_add" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-		</ul>
+			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+				<ul>
+				<li>
+					<a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);"
+					   value="Guardar" title="Guardar">
+						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar" /><br />Guardar
+					</a>
+				</li>
+				<li>
+					<a href="?action=list" class="admin_add" value="Cancelar" title="Cancelar">
+						<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+					</a>
+				</li>
+			</ul>
 		</div>
+		<br>
 
-		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
+		<table class="adminheading">
+			<tr>
+				<td>{t}Keyword information{/t}</td>
+			</tr>
+		</table>
+
+		<table border="0" cellpadding="0" cellspacing="0" class="adminlist">
 		<tbody>
 		<tr>
 			<td valign="top" align="right" style="padding:4px;" width="40%">
 				<label for="name">Palabra clave:</label>
 			</td>
 			<td style="padding:4px;" nowrap="nowrap" width="60%">
-				<input type="text" id="pclave" name="pclave" title="Palabra clave" value="{$pclave->pclave}"
+				<input type="text" id="pclave" name="pclave" title="Palabra clave" value="{$pclave->pclave|default:""}"
 					   class="required" size="30" maxlength="60" />
 			</td>
 		</tr>
@@ -114,7 +126,7 @@
 			</td>
 			<td style="padding:4px;" nowrap="nowrap" width="60%">
 				<select name="tipo" id="tipo">
-					{html_options options=$tipos selected=$pclave->tipo}
+					{html_options options=$tipos selected=$pclave->tipo|default:""}
 				</select>
 			</td>
 		</tr>
@@ -123,13 +135,9 @@
 				<label for="value">Valor:</label>
 			</td>
 			<td style="padding:4px;" nowrap="nowrap" width="60%">
-				<input type="text" id="value" name="value" title="Valor" value="{$pclave->value}"
+				<input type="text" id="value" name="value" title="Valor" value="{$pclave->value|default:""}"
 					   size="50" maxlength="240" />
 			</td>
-		</tr>
-
-		<tr>
-			<td colspan="2"><hr /></td>
 		</tr>
 
 		<tr>
@@ -142,6 +150,11 @@
 		</tr>
 
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan=2></td>
+			</tr>
+		</tfoot>
 		</table>
 
 		<script type="text/javascript">
@@ -167,7 +180,7 @@
 		{/if}
 
 		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id}" />
+		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 	</form>
 
 </div>

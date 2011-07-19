@@ -29,7 +29,6 @@ require_once('../../session_bootstrap.php');
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Keyworks management');
 
 require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 require_once(SITE_CORE_PATH.'string_utils.class.php');
@@ -50,68 +49,8 @@ $pclave = new PClave();
 
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 switch($action) {
-    case 'autolink': {
-        $content = json_decode($HTTP_RAW_POST_DATA)->content;
-        if(!empty($content)) {
-            // Terms was cached, no problem
-            $terms = $pclave->getList();
 
-            // Return to editor
-            echo $pclave->replaceTerms($content, $terms);
-        }
-
-        exit(0);
-    } break;
-
-    case 'read': {
-        $id = $_REQUEST['id'];
-        $pclave->read($id);
-
-        $tpl->assign('id', $id);
-        $tpl->assign('pclave', $pclave);
-    } // Executa tamén new
-
-    case 'new': {
-        // Show form
-        $tpl->assign('tipos', array('url' => 'URL', 'intsearch' => 'Búsqueda interna', 'email' => 'Email'));
-    } break;
-
-    case 'delete': {
-        $id = intval($_REQUEST['id']);
-        $pclave->delete($id);
-
-        Application::forward('?action=list' . $_redirect);
-    } break;
-
-    case 'save': {
-        $pclave->save($_POST);
-
-        Application::forward('?action=list' . $_redirect);
-    } break;
-
-    case 'search': {
-        $id    = intval($_REQUEST['id']);
-        $terms = $pclave->getList();
-
-        $matches = array();
-
-        foreach($terms as $term) {
-            if($term->id != $id) {
-                if(preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $term->pclave)) {
-                    $matches[] = $term;
-                }
-            }
-        }
-
-        $tpl->assign('terms', $matches);
-        $tpl->display('pclave/search.tpl');
-
-        exit(0);
-    } break;
-
-    case 'list':
-    default: {
-        $_REQUEST['action'] = 'list';
+    case 'list': {
 
         $filter = null;
         if(isset($_REQUEST['filter']) && !empty($_REQUEST['filter']['pclave'])) {
@@ -138,8 +77,69 @@ switch($action) {
 
         $tpl->assign('pclaves', $terms);
         $tpl->assign('pager', $pager);
+        $tpl->display('keywords/index.tpl');
+    } break;
+
+    case 'search': {
+        $id    = intval($_REQUEST['id']);
+        $terms = $pclave->getList();
+
+        $matches = array();
+
+        foreach($terms as $term) {
+            if($term->id != $id) {
+                if(preg_match('/^' . preg_quote($_REQUEST['q']) . '/', $term->pclave)) {
+                    $matches[] = $term;
+                }
+            }
+        }
+
+        $tpl->assign('terms', $matches);
+        $tpl->display('keywords/search.tpl');
+    } break;
+
+    case 'read': {
+        $id = $_REQUEST['id'];
+        $pclave->read($id);
+
+        $tpl->assign('id', $id);
+        $tpl->assign('pclave', $pclave);
+        $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
+        $tpl->display('keywords/index.tpl');
+
+    } break;
+
+    case 'new': {
+        // Show form
+        $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
+        $tpl->display('keywords/index.tpl');
+    } break;
+
+    case 'delete': {
+        $id = intval($_REQUEST['id']);
+        $pclave->delete($id);
+
+        Application::forward('?action=list' . $_redirect);
+    } break;
+
+    case 'save': {
+        $pclave->save($_POST);
+
+        Application::forward('?action=list' . $_redirect);
+    } break;
+
+    case 'autolink': {
+        $content = json_decode($HTTP_RAW_POST_DATA)->content;
+        if(!empty($content)) {
+            // Terms was cached, no problem
+            $terms = $pclave->getList();
+
+            // Return to editor
+            echo $pclave->replaceTerms($content, $terms);
+        }
+    } break;
+
+    default: {
+        Application::forward($_SERVER['PHP_SELF'] . '?action=list');
     } break;
 }
-
-
-$tpl->display('pclave/index.tpl');

@@ -1258,7 +1258,7 @@ if (isset($_REQUEST['action']) ) {
 
             $tpl->assign('articles', $articles);
 
-            $html_out=$tpl->fetch('article_list_frontpages.tpl');
+            $html_out=$tpl->fetch('article/list_frontpages.tpl');
             Application::ajax_out($html_out);
 
         break;

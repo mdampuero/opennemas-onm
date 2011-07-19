@@ -47,12 +47,14 @@ switch($_REQUEST['action']) {
         // To filter
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
+        $tpl->display('acl/privilege/privilege.tpl');
     } break;
 
     // Crear un nuevo permiso
     case 'new': {
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
+        $tpl->display('acl/privilege/privilege.tpl');
     } break;
 
     case 'read': {
@@ -62,11 +64,7 @@ switch($_REQUEST['action']) {
 
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
-    } break;
-
-    case 'update': {
-        $privilege->update( $_REQUEST );
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+        $tpl->display('acl/privilege/privilege.tpl');
     } break;
 
     case 'create': {
@@ -75,6 +73,12 @@ switch($_REQUEST['action']) {
         } else {
             $tpl->assign('errors', $privilege->errors);
         }
+        $tpl->display('acl/privilege/privilege.tpl');
+    } break;
+
+    case 'update': {
+        $privilege->update( $_REQUEST );
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     } break;
 
     case 'validate': {
@@ -99,5 +103,3 @@ switch($_REQUEST['action']) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     } break;
 }
-
-$tpl->display('acl/privilege/privilege.tpl');

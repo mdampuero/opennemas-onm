@@ -6,7 +6,7 @@
 		<ul>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=new">
-					<img border="0" src="{$params.IMAGE_DIR}privilege_add.png" title="{t}New User Group{/t}" alt="{t}New User Group{/t}"><br />{t}New User Group{/t}
+					<img border="0" src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New Privilege{/t}"><br />{t}New User group{/t}
 				</a>
 			</li>
 		</ul>
@@ -75,17 +75,17 @@
 				</a>
 		    </li>
 			<li>
-				<a href="{$smaty.server.PHP_SELF}?action=list" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-			<li>
 			{if isset($user_group->id)}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user_group->id}, 'formulario');">
 			{else}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
 			{/if}
 					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+				</a>
+			</li>
+			<li>
+				<a href="{$smaty.server.PHP_SELF}?action=list" value="Cancelar" title="Cancelar">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 				</a>
 			</li>
 		</ul>
@@ -131,10 +131,10 @@
                     {assign var=middle value=($smarty.foreach.priv.total/2)}
                       {if $smarty.foreach.priv.index gt $middle &&   $smarty.foreach.priv.index lt $middle+1}</div><div style="float:left;width:420px;"> {/if}
                         <div style=" width:400px;background-color: #EEE;">
-                        <a style="cursor:pointer;" onClick="Element.toggle('{$mod}');"> 
+                        <a style="cursor:pointer;" onClick="Element.toggle('{$mod}');">
                             <h3 style="padding:4px;"> {t}{$mod}{/t} </h3>
                         </a>
-                        <br>  
+                        <br>
                         <table border="0" cellpadding="0" cellspacing="0" id="{$mod}" class="fuente_cuerpo" width="100%" style="display:none;">
                             <tbody>
                             {section name=privilege loop=$privileges}

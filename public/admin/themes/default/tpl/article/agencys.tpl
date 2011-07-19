@@ -28,8 +28,6 @@
         {include file="menu_categorys.tpl" home="article.php?action=list_agency"}
     </ul>
 
-    <br style="clear: both;" />
-
     {if $smarty.get.alert eq 'ok'}
         <script type="text/javascript" language="javascript">
             {literal}
@@ -37,9 +35,12 @@
             {/literal}
         </script>
     {/if}
-    {include file="botonera_up.tpl"}
+
+    {include file="article/partials/_menu.tpl"}
+    <br>
+
     <div id="{$category}">
-        <table border=0 style="width:100%">
+        <table class="adminheading">
             <tr>
                 <td><strong>Noticias {* y Opiniones *} de Agencias</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
                 <td align='right'>Ir a secci&oacute;n:
@@ -62,7 +63,6 @@
                 </td>
             </tr>
         </table>
-        <br />
         <table class="adminlist">
             <tr style="border-bottom: 2px solid #000;">
                 <th style="width:50px;"></th>
@@ -105,7 +105,7 @@
                                 // ]]>
                               </script>
                         </td>
-                       
+
                     {/if}
                     <td style="padding:5px;font-size: 11px;">
                         <span style="cursor:pointer;" title="agency" id="agency_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->agency} </span>
@@ -219,10 +219,13 @@
                 <td colspan="3" align="center">{$paginacion->links}</td>
             </tr>
         {/if}
+        <tfoot>
+            <td colspan="9"></td>
+        </tfoot>
         </table>
 
              <br />
             {include file="botonera_up.tpl"}
-        
+
     </div>
 {/if}

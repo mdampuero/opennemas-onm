@@ -96,8 +96,8 @@
 			</ul>
 		</div>
 
-
 		<div>
+		<br>
 
 		<table class="adminheading">
 			<tr>

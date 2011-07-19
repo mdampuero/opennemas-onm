@@ -24,149 +24,182 @@
 {block name="content"}
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 		{* LIST ******************************************************************* *}
 		{if !isset($smarty.request.action) || $smarty.request.action eq "list"}
+			<div id="menu-acciones-admin" class="clearfix">
+				<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+				<ul>
+					<li>
+						<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+							<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
+						</a>
+					</li>
+					<li>
+						<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+							<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todos" status="0">
+						</button>
+					</li>
+					<li>
+						<a href="#" class="admin_add" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>uevo usuario');" accesskey="N" tabindex="1">
+							<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />Nuevo Usuario
+						</a>
+					</li>
+				</ul>
+			</div>
+			<br>
 
-		{include file="botonera_up.tpl"}
-		{* Filters: filter[name], filter[login], filter[group]  *}
-		<br>
-		<table class="adminheading">
+			{* Filters: filter[name], filter[login], filter[group]  *}
+			<table class="adminheading">
+				<tr>
+					<th nowrap="nowrap" align="right">
+
+						<label for="username">{t}Filter by name{/t}</label>
+						<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name|default:""}" />
+
+						<label for="userlogin">{t}or username:{/t}</label>
+						<input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login|default:""}" />
+
+						<label for="usergroup">{t}and group:{/t}</label>
+						<select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
+							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
+								{assign var=filter_selected value=$smarty.request.filter.group}
+							{/if}
+							{html_options options=$groupsOptions selected=$filter_selected|default:""}
+						</select>
+
+						<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
+						<input type="submit" value="{t}Search{/t}">
+					</th>
+				</tr>
+			</table>
+
+			<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
+			<thead>
 			<tr>
-				<th nowrap="nowrap" align="right">
-
-					<label for="username">{t}Filter by name{/t}</label>
-					<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name}" />
-
-					<label for="userlogin">{t}or username:{/t}</label>
-					<input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login}" />
-
-					<label for="usergroup">{t}and group:{/t}</label>
-					<select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
-						{html_options options=$groupsOptions selected=$smarty.request.filter.group}
-					</select>
-
-					<input type="hidden" name="page" value="{$smarty.request.page}" />
-					<input type="submit" value="{t}Search{/t}">
-				</th>
+				<th class="title" align="left" style="width:40%;padding:10px;">{t}Name Surname{/t}</th>
+				<th class="title" style="width:20%;padding:10px;">{t}Username{/t}</th>
+				<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>
+				<th class="title" style="width:20%;padding:10px;" align="right">{t}Actions{/t}</th>
 			</tr>
-		</table>
+			</thead>
 
-		<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
-		<thead>
-		<tr>
-			<th class="title" align="left" style="width:40%;padding:10px;">{t}Name Surname{/t}</th>
-			<th class="title" style="width:20%;padding:10px;">{t}Username{/t}</th>
-			<th class="title" style="width:20%;padding:10px;">{t}Group{/t}</th>
-                        <th class="title" style="width:20%;padding:10px;" align="center">{t}Enable/Disable{/t}</th>
-			<th class="title" style="width:20%;padding:10px;" align="right">{t}Actions{/t}</th>
-		</tr>
-		</thead>
+			<tbody>
+			{section name=c loop=$users}
+			<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
 
-		<tbody>
-		{section name=c loop=$users}
-		<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-
-			<td style="padding:10px;">
-                                <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
-				<a href="?action=read&id={$users[c]->id}" title="{t}Edit user{/t}">
-                                    {$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
-			</td>
-			<td style="padding:10px;">
-				{$users[c]->login}
-			</td>
-			<td style="padding:10px;">
-				{section name=u loop=$user_groups}
-					{if $user_groups[u]->id == $users[c]->fk_user_group}
-							{$user_groups[u]->name}
-					{/if}
-				{/section}
-			</td>
-                        <td style="padding:10px;" align="center">
-                                {if $users[c]->authorize eq 1}
-                                    <a href="?id={$users[c]->id}&amp;action=change_authorize&amp;status=1&amp;page={$paginacion->_currentPage}" title="Habilitado">
-                                        <img border="0" alt="Habilitado" src="{$params.IMAGE_DIR}publish_g.png">
-                                    </a>
-                                {else}
-                                    <a href="?id={$users[c]->id}&amp;action=change_authorize&amp;status=0&amp;page={$paginacion->_currentPage}" title="Desabilitado" >
-                                        <img border="0" alt="Desabilitado" src="{$params.IMAGE_DIR}publish_r.png">
-                                    </a>
-                                {/if}
-			</td>
-			<td style="padding:10px;" align="right">
-				<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page}" title="{t}Edit user{/t}">
-					<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/></a>
-					&nbsp;
-				<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
-					<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/></a>
-			</td>
-		</tr>
-		{sectionelse}
-		<tr colspan="5">
-			<td align="center"><b>{t}There is no users created yet.{/t}</b></td>
-		</tr>
-		{/section}
-		</tbody>
-
-		{if count($users) gt 0}
-			<tfoot>
-			<tr>
-				<td colspan="5" align="center">{$paginacion->links}</td>
+				<td style="padding:10px;">
+							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
+					<a href="?action=read&id={$users[c]->id}" title="{t}Edit user{/t}">
+						{$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
+				</td>
+				<td style="padding:10px;">
+					{$users[c]->login}
+				</td>
+				<td style="padding:10px;">
+					{section name=u loop=$user_groups}
+						{if $user_groups[u]->id == $users[c]->fk_user_group}
+								{$user_groups[u]->name}
+						{/if}
+					{/section}
+				</td>
+				<td style="padding:10px;" align="right">
+					<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page|default:0}" title="{t}Edit user{/t}">
+						<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/></a>
+						&nbsp;
+					<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
+						<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/></a>
+				</td>
 			</tr>
-			</tfoot>
-		{/if}
+			{sectionelse}
+			<tr colspan="5">
+				<td align="center"><b>{t}There is no users created yet.{/t}</b></td>
+			</tr>
+			{/section}
+			</tbody>
 
-		</table>
+			{if count($users) gt 0}
+				<tfoot>
+				<tr>
+					<td colspan="5" align="center">{$paginacion->links}</td>
+				</tr>
+				</tfoot>
+			{/if}
+
+			</table>
 		{/if}
 
 
 		{* FORM TO ADD/MODIFY A CONTENT ************************************** *}
 		{if isset($smarty.request.action) && (($smarty.request.action eq "new") || ($smarty.request.action eq "read"))}
-		<script language="javascript" type="text/javascript" src="{$params.JS_DIR}SpinnerControl.js"></script>
-		<script language="javascript" type="text/javascript" src="{$params.JS_DIR}modalbox.js"></script>
+			<script language="javascript" type="text/javascript" src="{$params.JS_DIR}SpinnerControl.js"></script>
+			<script language="javascript" type="text/javascript" src="{$params.JS_DIR}modalbox.js"></script>
 
-		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}modalbox.css" media="screen" />
+			<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}modalbox.css" media="screen" />
 
-		{literal}
-		<style>
-		.spinner_button {
-			width: 18px;
-			height: 18px;
+			{literal}
+			<style>
+			.spinner_button {
+				width: 18px;
+				height: 18px;
 
-			color: #204A87;
-			font-weight: bold;
-			background-color: #DDD;
+				color: #204A87;
+				font-weight: bold;
+				background-color: #DDD;
 
-			border-top: 1px solid #CCC;
-			border-right: 1px solid #999;
-			border-bottom: 1px solid #999;
-			border-left: 1px solid #CCC;
-		}
+				border-top: 1px solid #CCC;
+				border-right: 1px solid #999;
+				border-bottom: 1px solid #999;
+				border-left: 1px solid #CCC;
+			}
 
-		.spinner_button:hover {
-			background-color: #EEE;
+			.spinner_button:hover {
+				background-color: #EEE;
 
-			border-top: 1px solid #DDD;
-			border-right: 1px solid #CCC;
-			border-bottom: 1px solid #CCC;
-			border-left: 1px solid #DDD;
-		}
-		</style>
-		{/literal}
+				border-top: 1px solid #DDD;
+				border-right: 1px solid #CCC;
+				border-bottom: 1px solid #CCC;
+				border-left: 1px solid #DDD;
+			}
+			</style>
+			{/literal}
 
-		{include file="botonera_up.tpl"}
+			<div id="menu-acciones-admin" class="clearfix">
+				<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}User manager :: Editing user information{/t}</h2></div>
+				<ul>
+					<li>
+						<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user->id}', 'formulario');" value="Validar" title="Validar">
+							<img border="0" src="{$params.IMAGE_DIR}user_validate.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+						</a>
+					</li>
 
+					<li>
+					{if isset($user->id)}
+					   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user->id}, 'formulario');">
+					{else}
+					   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
+					{/if}
+							<img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}
+						</a>
+					</li>
+					<li>
+						<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="{t}Cancel{/t}" title="Cancelar">
+							<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
+						</a>
+					</li>
+
+				</ul>
+			</div>
 			<br>
 			<table class="adminheading">
 				<tr>
-					<td></td>
+					<td>{t}Editing user information{/t}</td>
 				</tr>
 			</table>
-			<table  class="adminlist">
+			<table  border="0" cellpadding="4" cellspacing="0" class="adminlist" width="100%">
 			<tr>
 				<td valign="top" width="50%">
-
 					<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
 					<tbody>
 
@@ -318,7 +351,6 @@
 								/*if( confirm('¿Está seguro de querer salir de la edición del usuario?') ) {
 									window.open('user_groups.php?action=read&id=' + $('id_user_group').value, 'centro');
 								}*/
-
 								Modalbox.show('<iframe width="100%" height="450" src="user_groups.php?action=read&id=' + $('id_user_group').value+'"  frameborder="0" marginheight="0" marginwidth="0"></iframe>', {title: '{t}User group manager{/t}', width: 760});
 							}
 							</script>
@@ -339,19 +371,19 @@
 						<td style="padding:4px;" nowrap="nowrap">
 							<div  id="comboAccessCategory" name="comboAccessCategory">
 								<select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
-									{if count($content_categories_select)<=0}
+									{if isset($content_categories_select) && count($content_categories_select)<=0}
 										<option value ="" selected="selected"></option>
 									{else}
 										<option value =""></option>
 									{/if}
-									<option value="0" {if is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
+									<option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
 									{foreach item="c_it" from=$content_categories}
 
-										<option value="{$c_it->pk_content_category}" {if is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
+										<option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
 
 										{if count($c_it->childNodes)>0}
 											{foreach item="sc_it" from=$c_it->childNodes}
-												<option value="{$sc_it->pk_content_category}" {if is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+												<option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
 														&nbsp; &rArr; {$sc_it->title}
 												</option>
 											{/foreach}
@@ -387,20 +419,20 @@
 					</tr>
 
 					</tbody>
-					<tfoot>
-						<tr>
-							<td></td>
-						</tr>
-					</tfoot>
 					</table>
 			</td>
 			</tr>
+			<tfoot>
+				<tr>
+					<td colspan=2></td>
+				</tr>
+			</tfoot>
 			</table>
 
 		{/if}
 
 		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id}" />
+		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 	</form>
 
 </div>

@@ -1,13 +1,11 @@
-<div id="warnings-validation">
+{include file="article/partials/_menu.tpl"}
 {if is_object($article) && $article->isClone()}
+<div class="notice">
 	{assign var="original" value=$article->getOriginal()}
     Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
-{/if}
 </div>
+{/if}
 
-
-
-<div id="warnings-validation"></div>
 {* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
 <ul id="tabs">
 	<li>
@@ -16,7 +14,7 @@
 	<li>
 		<a href="#edicion-extra">{t}Article parameters{/t}</a>
 	</li>
-	{if is_object($article) && !$article->isClone()}
+	{if isset($article) && is_object($article) && !$article->isClone()}
     <li>
 		<a href="#comments">{t}Comments{/t}</a>
     </li>
@@ -27,7 +25,7 @@
 	<li>
         <a href="#elementos-relacionados" onClick="mover();">{t}Sort related contents{/t}</a>
 	</li>
-	{if is_object($article) && isset($clones)}
+	{if isset($article) && is_object($article) && isset($clones)}
 		<li>
 			<a href="#clones">Clones</a>
 		</li>
@@ -44,7 +42,7 @@
         </td>
         <td style="padding:4px;" nowrap="nowrap" valign="top" >
             <input type="text" id="title" name="title" title="Título de la noticia en portada"
-                value="{$article->title|clearslash|escape:"html"}" class="required" style="width:95%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
+                value="{$article->title|clearslash|escape:"html"|default:""}" class="required" style="width:95%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
 				   onkeyup="countWords(this,document.getElementById('counter_title'))"
 				   {if is_object($article)}
 				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
@@ -107,7 +105,7 @@
                                 <label for="in_home">{t}Suggest for frontpage:{/t}</label>
                             </td>
                             <td nowrap="nowrap" style="text-align:left;vertical-align:top">
-                                                        <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/> 
+                                                        <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/>
                             </td>
                         </tr>
                     {/if}
@@ -219,9 +217,9 @@
         </td>
         <td style="padding:4px;" nowrap="nowrap" >
             <input type="text" id="metadata" name="metadata"
-				   {if is_object($article)}
+				   {if isset($article) && is_object($article)}
 				   value="{$article->metadata}"
-				   onChange="search_related('{$article->pk_article}',$('metadata').value);"
+				   onChange="search_related('{$article->pk_article|default:""}',$('metadata').value);"
 				   {/if}
 				   style="width:70%" title="Metadatos" tabindex="3"/>
 
@@ -276,8 +274,8 @@
             <label for="body">{t}Body{/t}</label>
         </td>
         <td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
-            <textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia" 
-                      style="width:98%; height:20em;" 
+            <textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia"
+                      style="width:98%; height:20em;"
                       onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
         </td>
     </tr>
@@ -285,7 +283,7 @@
         <td></td>
         <td valign="top" align="left" colspan="2" >
             <div id="article_images" style="width:98%">
-                {include  file="article_images.tpl"}
+                {include  file="article/partials/_images.tpl"}
             </div>
         </td>
     </tr>
@@ -388,10 +386,10 @@
 
 
 <div class="panel" id="contenidos-relacionados" style="width:95%">
-	{include file="article_relacionados.tpl"}
+	{include file="article/partials/_related.tpl"}
 </div>
 
-{if is_object($article)}
+{if isset($article) && is_object($article)}
 <div class="panel" id="elementos-relacionados" style="width:95%">
     <br />
     Listado contenidos relacionados en Portada:  <br />
@@ -477,13 +475,12 @@
 
 {if isset($clones)}
 <div class="panel" id="clones" style="width:95%">
-    {include file="article_clones.tpl"}
+    {include file="article/partials/_clones.tpl"}
 </div>
 {/if}
 
-{if is_object($article) && $article->isClone()}
+{if isset($article) && is_object($article) && $article->isClone()}
 {* Disable fields via javascript if $article->isClone() *}
-{literal}
 <script type="text/javascript">
 (function() {
     var elements = ['title', 'description', 'subtitle', 'metadata', 'agency'];
@@ -493,5 +490,29 @@
     });
 }());
 </script>
-{/literal}
 {/if}
+
+<script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+<script type="text/javascript" language="javascript">
+	tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+
+	{if isset($article) && $article->isClone()}
+		OpenNeMas.tinyMceConfig.simple.readonly   = 1;
+		OpenNeMas.tinyMceConfig.advanced.readonly = 1;
+	{/if}
+
+	OpenNeMas.tinyMceConfig.simple.elements = "summary";
+	tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+
+	OpenNeMas.tinyMceConfig.advanced.elements = "body";
+	tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+</script>
+
+<div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
+	<img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />
+	<span id="reloadPreviewText"></span>
+</div>
+<div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
+	<img src="{$params.IMAGE_DIR}btn_filesave.png" border="0" align="absmiddle" />
+	<span id="savePreviewText"></span>
+</div>

@@ -1,25 +1,31 @@
+{include file="article/partials/_menu.tpl"}
+<br>
 
-{* FORMULARIO PARA CONSULTAR UN CONTENIDO *********************************** *}
-{if isset($smarty.post.action) && $smarty.post.action eq "only_read"}
+<div id="edicion-contenido">
+    <table class="adminheading">
+        <tr>
+            <td></td>
+        </tr>
+    </table>
 
-<div   id="edicion-contenido" style="width:720px">
-    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">
+    <table class="adminlist">
+
         <tbody>
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">T&iacute;tulo:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="title" name="title" title="T&iacute;tulo de la noticia"
                         value="{$article->title|clearslash}" readonly size="100" />
                 </td>
             </tr>
             {if $article->subtitle}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Antet&iacute;tulo:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="subtitle" name="subtitle" title="antetítulo"
                         value="{$article->subtitle|clearslash}" readonly size="100" />
                 </td>
@@ -27,10 +33,10 @@
               {/if}
               {if $article->agency}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Firma:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="agency" name="agency" title="Agencia"
                         value="{$article->agency|clearslash}" readonly size="100" />
                 </td>
@@ -38,10 +44,10 @@
               {/if}
               {if $article->fk_author}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Autor:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="agency" name="agency" title="Agencia"
                             {section name=as loop=$todos}
                                              {if $article->fk_author eq $todos[as]->pk_author} value="{$todos[as]->name}" {/if}
@@ -52,10 +58,10 @@
               {/if}
               {if $article->in_home}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">En home:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="agency" name="agency" title="Agencia"
                         {if $article->in_home eq 1} value="SI" {else} value="NO"  {/if}
                          readonly size="100" />
@@ -64,19 +70,19 @@
               {/if}
                  {if $article->metadata}
                 <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="metadata">Palabras clave: </label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="metadata" name="metadata" size="100" title="Metadatos" value="{$article->metadata}"  readonly/>
                 </td>
             </tr>
             {/if}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Secci&oacute;n:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="agency" name="agency" title="Agencia"
                          readonly size="100"
                                 {section name=as loop=$allcategorys}
@@ -90,21 +96,21 @@
             </tr>
             {if $article->summary neq ""}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="summary">Entradilla:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <textarea name="summary" id="summary" readonly
-                        title="Resumen de la noticia" style="width:100%; height:8em;">{$article->summary|clearslash}</textarea>
+                        title="Resumen de la noticia" style="width:90%; height:8em;">{$article->summary|clearslash}</textarea>
                 </td>
             </tr>
             {/if}
             {if $article->img1}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Imagen de Portada:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <table border='0' width="96%">
                         <tr>
                             <td><h2 style="color:#2f6d9d;">Imagen de Portada:</h2></td>
@@ -131,20 +137,20 @@
                 </td>
             </tr>
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Pie imagen de portada:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="img1_footer" name="img1_footer" title="Imagen" readonly value="{$article->img1_footer}" size="100" />
                 </td>
             </tr>
             {/if}
             {if $article->img2}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Imagen Interior:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                      <table border='0' width="96%">
                         <tr>
                             <td>
@@ -173,10 +179,10 @@
                 </td>
             </tr>
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="title">Pie imagen interior:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <input type="text" id="img2_footer" name="img2_footer" title="Imagen" readonly value="{$article->img2_footer}" size="100" />
                 </td>
             </tr>
@@ -184,12 +190,12 @@
 
             {if $article->body}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="body">Cuerpo:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <textarea name="body" id="body" readonly disabled
-                        title="Cuerpo de la noticia" style="width:100%; height:20em;">{$article->body|clearslash}</textarea>
+                        title="Cuerpo de la noticia" style="width:90%; height:20em;">{$article->body|clearslash}</textarea>
 
                 </td>
             </tr>
@@ -197,10 +203,10 @@
 
             {if $losrel}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                    <label for="body">Articulos-relacionados en Portada:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <ul >
                         {section name=n loop=$losrel}
                          <li> {$losrel[n]->title|clearslash}  </li>
@@ -212,10 +218,10 @@
 
             {if $intrel}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                    <label for="body">Articulos-relacionados en Interior:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                      <ul>
                         {section name=n loop=$intrel}
                          <li>{$intrel[n]->title|clearslash}  </li>
@@ -227,9 +233,9 @@
 
             {if $adjuntospor}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="body">Elementos-relacionados en Portada:</label></td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <ul>
                         {section name=n loop=$adjuntospor}
                              <li>  {$adjuntospor[n]->title|clearslash} </li>
@@ -241,10 +247,10 @@
 
             {if $adjuntosint}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                     <label for="body">Elementos-relacionados en Portada:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                     <ul>
                         {section name=n loop=$adjuntosint}
                                  <li> {$adjuntosint[n]->title|clearslash} </li>
@@ -255,9 +261,9 @@
             {/if}
             {if $comments}
             <tr>
-                <td valign="top" align="right" style="padding:4px;" width="30%">
+                <td valign="top" align="right" style="padding:4px;" width="15%">
                  <label for="body">Comentarios:</label></td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td style="padding:4px;" nowrap="nowrap" width="85%">
                         <ul>
                             {section name=c loop=$comments}
                                      <li> {$comments[c]->title|clearslash} - {$comments[c]->changed}) </li>
@@ -269,6 +275,3 @@
         </tbody>
     </table>
 </div>
-
-{/if}
-

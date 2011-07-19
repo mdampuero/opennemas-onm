@@ -1,4 +1,3 @@
-
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list_pendientes"}
     <ul class="tabs2" style="margin-bottom: 28px;">
@@ -30,16 +29,14 @@
         {include file="menu_categorys.tpl" home="article.php?action=list_pendientes"}
     </ul>
 
-    <br style="clear: both;" />
-
     {if $smarty.get.alert eq 'ok'}
         <script type="text/javascript" language="javascript">
-            {literal}
-                alert('{/literal}{$smarty.get.msg}{literal}');
-            {/literal}
+            alert('{$smarty.get.msg}');
         </script>
     {/if}
-    {include file="botonera_up.tpl"}
+
+    {include file="article/partials/_menu.tpl"}
+    <br>
 
 
     <div id="{$category}">
