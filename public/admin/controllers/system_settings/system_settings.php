@@ -43,20 +43,21 @@ switch($action) {
                                     'recaptcha',
                                     'items_per_page',
                                     'refresh_interval',
-                                    'advertisements_enabled'
+                                    'advertisements_enabled',
+                                    'log_enabled', 'log_db_enabled', 'log_level',
                                     );
 
         $configurations = s::get($configurationsKeys);
-
 
         $message = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING, array('options' => array('default' => null)) );
 
         $tpl->assign(
                      array(
-                            'message' => $message,
+                            'message'  => $message,
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
-                            'languages' => array('en' => _("English"), 'es' => _("Spanish"))
+                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish")),
+                            'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
                         )
                     );
 
@@ -68,13 +69,9 @@ switch($action) {
         unset($_POST['action']);
         unset($_POST['submit']);
 
-        if (array_key_exists('advertisements_enabled',$_POST)) {
-            $_POST['advertisements_enabled'] = true;
-        } else {
-            $_POST['advertisements_enabled'] = false;
-        }
-
-
+        $_POST['advertisements_enabled'] = array_key_exists('advertisements_enabled',$_POST);
+        $_POST['log_enabled'] = array_key_exists('log_enabled',$_POST);
+        $_POST['log_db_enabled'] = array_key_exists('log_db_enabled',$_POST);
 
 
         foreach ($_POST as $key => $value ) {

@@ -56,10 +56,10 @@ class Content {
     var $placeholder = null;
     var $home_placeholder = null;
     var $paper_page = null;
-
+    
     function __construct($id=null) {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
+        
         if (!is_null($id)) {
             $this->read($id);
         }
@@ -185,10 +185,6 @@ class Content {
 
             return false;
         }
-        //Log - en pruebas
-        //$msg= '%content_type%-%pk_content%-%title%-%action%';
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$data['title'].'- Create';
-        Application::write_log($msg);
 
         // $this->id = $GLOBALS['application']->conn->Insert_ID();
         $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
@@ -205,6 +201,12 @@ class Content {
             return false;
         }
 
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        if(isset ($_SESSION['username']) && isset ($_SESSION['userid'])) {
+            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Create '.$this->content_type.' at '.$catName.' Id '.$this->id);
+        }
+        
         // Fire event
         $GLOBALS['application']->dispatch('onAfterCreate', $this);
 
@@ -232,12 +234,7 @@ class Content {
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
-        //Log
-        //$msg= '%content_type%-%pk_content%-%title%-%action%';
-//        if (isset ($_SESSION['userid']) && isset ($_SESSION['username'])) {
-//            $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Read';
-//            Application::write_log($msg);
-//        }
+        
     }
 
     function loadCategoryName($pk_content) {
@@ -323,7 +320,6 @@ class Content {
         $data['changed'] = date("Y-m-d H:i:s");
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime'] = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
-     //        echo  'av '.  $data['available']."- c ".$data['content_status'];
         $data['content_status'] = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
         $data['available'] = (!isset($data['available']))? $this->available: $data['available'];
         $data['frontpage'] = (!isset($data['frontpage']))? $this->frontpage: $data['frontpage'];
@@ -338,7 +334,6 @@ class Content {
 
         if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) {$data['fk_user_last_editor']= $_SESSION['userid'];}
 
-        //
         // FIXME: os permalinks deben establecerse dende a clase deriva e existir un método
         // na clase pai que se poda sobreescribir --> sustituir os if por unha chamada do estilo $this->buildPermalink()
         if (($this->content_type != 'attachment') && ($this->category != $data['category'])) {
@@ -368,10 +363,6 @@ class Content {
 
             return;
         }
-        //Log
-        //$msg= '%content_type%-%pk_content%-%title%-%action%';
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$data['title'].'- Update';
-        Application::write_log($msg);
 
         $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
         $catName = $cats->fields['name'];
@@ -387,6 +378,11 @@ class Content {
 
             return(false);
         }
+        
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Update '.$name_type.' at '.$catName.' Id '.$this->id);
+       
 //        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
     }
 
@@ -420,10 +416,9 @@ class Content {
             return;
         }
 
-        //Log
-        //$msg= '%content_type%-%pk_content%-%title%-%action%';
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Remove litter';
-        Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at '.$this->content_type.' Id '.$this->id);
     }
 
 
@@ -457,10 +452,9 @@ class Content {
              return;
          }
 
-        //Log
-        //$msg= '%content_type%-%pk_content%-%title%-%action%';
-       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Send litter';
-       Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Delete at '.$this->content_type.' Id '.$this->id);
     }
 
     /**
@@ -489,8 +483,9 @@ class Content {
 
             return;
         }
-       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Recover from litter';
-       Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Recover from litter (no_delete) at '.$this->content_type.' Id '.$this->id);
     }
 
     /**
@@ -707,8 +702,6 @@ class Content {
             $values = $status;
         }
 
-       $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set status';
-       Application::write_log($msg);
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
@@ -719,6 +712,10 @@ class Content {
                 return;
             }
         }
+        
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set_status  at '.$this->content_type.' Id '.$this->id);
     }
 
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
@@ -749,8 +746,9 @@ class Content {
             }
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set available';
-        Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set_available at '.$this->content_type.' Id '.$this->id);
 
         // Set status for it's updated to next event
         if (!empty($this)) {
@@ -809,8 +807,9 @@ class Content {
             }
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set directly frontpage';
-        Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set directly frontpage at '.$this->content_type.' Id '.$this->id);
 
         // Set status for it's updated to next event
         if (!empty($this)) {
@@ -838,9 +837,6 @@ class Content {
             $values = $status;
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set frontpage';
-        Application::write_log($msg);
-
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -850,6 +846,10 @@ class Content {
                 return false;
             }
         }
+        
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set frontpage at '.$this->content_type.' Id '.$this->id);
 
    //     $GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
     }
@@ -871,9 +871,6 @@ class Content {
             $values = $position;
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set position';
-        Application::write_log($msg);
-
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -885,6 +882,10 @@ class Content {
 
         }
 
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set position at '.$this->content_type.' Id '.$this->id);
+        
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
 
         return true;
@@ -907,9 +908,6 @@ class Content {
             $values = $status;
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set in_home';
-        Application::write_log($msg);
-
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -919,6 +917,10 @@ class Content {
                 return;
             }
         }
+        
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set in home at '.$this->content_type.' Id '.$this->id);
 
         $GLOBALS['application']->dispatch('onAfterSetInhome', $this);
     }
@@ -941,9 +943,6 @@ class Content {
             $values =  $position;
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Set home_position';
-        Application::write_log($msg);
-
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -954,6 +953,10 @@ class Content {
             }
         }
 
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set home position at '.$this->content_type.' Id '.$this->id);
+        
         // $GLOBALS['application']->dispatch('onAfterHomePosition', $this);
 
     }
@@ -1073,9 +1076,6 @@ class Content {
                 }
             }
         }
-
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Refresh home';
-        Application::write_log($msg);
 
         //$GLOBALS['application']->dispatch('onAfterSetInhome', $this);
         Content::refreshHome();
@@ -1347,13 +1347,14 @@ class Content {
             return false;
         }
 
-        $msg= ''.$this->content_type.'-'.$this->id.'-'.$this->title.'- Toggle available';
-        Application::write_log($msg);
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Toggle available at '.$this->content_type.' Id '.$this->id);
 
         return true;
     }
 
-        public function dropFromHomePageOfCategory($category,$pk_content)
+    public function dropFromHomePageOfCategory($category,$pk_content)
     {
         $ccm = ContentCategoryManager::get_instance();
         $cm = new ContentManager();
@@ -1376,8 +1377,9 @@ class Content {
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
-            $msg= ''.$type.'- '.$pk_content.' Category: '.$category_name .' - Drop from HomePage';
-            Application::write_log($msg);
+            /* Notice log of this action */
+            $logger = Application::getLogger();
+            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Drop from frontpage at category '.$category_name.' an '.$type.' Id '.$pk_content);
             return true;
         }
     }
@@ -1398,9 +1400,9 @@ class Content {
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
-            $msg= ''.$this->content_type.'- '.$pk_content.' - Unpublish from HomePage';
-            Application::write_log($msg);
-
+            /* Notice log of this action */
+            $logger = Application::getLogger();
+            $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Unpublish from homepage at '.$type.' Id '.$pk_content);
             return true;
         }
     }

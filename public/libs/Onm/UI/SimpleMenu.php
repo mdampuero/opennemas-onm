@@ -107,7 +107,10 @@ class SimpleMenu {
     }
 
     private function getHref($title, $url) {
-        return "<a href=\"".SITE_URL_ADMIN."/$url\">".$title."</a>";
+        if (!preg_match("@^http@",$url)) {
+            $url = SITE_URL_ADMIN."/".$url;
+        }
+        return "<a href=\"$url\">".$title."</a>";
     }
 
     private  function checkAcl($privilege)

@@ -62,7 +62,7 @@
          <td>
 
             <div style="padding:40px;">
-                <script src="http://maps.google.com/maps?file=api&v=2&sensor=true&key={$smarty.const.GOOGLE_MAPS_API_KEY}" type="text/javascript"></script>
+                <script src="http://maps.google.com/maps?file=api&v=2&sensor=true&key={setting google_maps_api_key}" type="text/javascript"></script>
 
                 <p>
                   <input type="text" value="{$photo1->address}"  id="address[{$photo1->id}]" name="address[{$photo1->id}]" size="20">

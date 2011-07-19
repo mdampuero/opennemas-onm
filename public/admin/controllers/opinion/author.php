@@ -78,15 +78,15 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'validate':
-
 			$author = new Author();
-			if(empty($_POST["id"])) {
+			if($_GET['action'] == 'new') {
 
-				//Estamos creando un nuevo artículo
-				if(!$author->create( $_POST ))
-					$tpl->assign('errors', $author->errors);
+                            //Estamos creando un nuevo artículo
+                            if(!$author->create( $_POST )) {
+                                $tpl->assign('errors', $author->errors);
+                            }
 			} else {
-				$author = new Author($_POST["id"]);
+				$author = new Author($_GET['id']);
 				//Estamos atualizando un artículo
 				$author->update( $_REQUEST );
 			}

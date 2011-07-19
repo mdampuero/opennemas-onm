@@ -96,7 +96,9 @@ if(!is_null($places)) {
     }
 }
 
-Application::write_log("Change and save positions -- Category: {$category_name} --\n por request: {$placesJSON} \n");
+/* Notice log of this action */
+$logger = Application::getLogger();
+$logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Frontpage save positions at '.$category_name.' Ids '.$placesJSON);
 
 // If this request is Ajax return properly formated result.
 if( $isAjax ) {

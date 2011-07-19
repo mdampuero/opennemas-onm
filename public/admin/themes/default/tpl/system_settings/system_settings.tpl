@@ -51,6 +51,10 @@ legend {
     margin-left:10px;
     vertical-align:middle
 }
+input[type="text"] {
+    width:300px;
+    max-height:80%
+}
 </style>
 {/block}
 
@@ -76,6 +80,7 @@ legend {
             <li>
                 <a href="#general">{t}General{/t}</a>
                 <a href="#mail">{t}Mail{/t}</a>
+                <a href="#log">{t}Log{/t}</a>
                 <a href="#external">{t}External Services{/t}</a>
                 <a href="#misc">{t}Miscelanous{/t}</a>
             </li>
@@ -113,7 +118,7 @@ legend {
                             <label for="site_title">{t}Time Zone:{/t}</label>
                         </th>
                         <td>
-                            {html_options name=time_zone options=$timezones selected=$configurations['time_zone']}
+                            {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
                         </td>
                     </tr>
                     <tr valign="top">
@@ -121,7 +126,7 @@ legend {
                             <label for="site_title">{t}Language{/t}</label>
                         </th>
                         <td>
-                            {html_options name=site_language options=$languages selected=$configurations['site_language']}
+                            {html_options name=site_language options=$languages selected=$configs['site_language']}
                         </td>
                     </tr>
                 </tbody>
@@ -156,6 +161,50 @@ legend {
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div id="log" class="panel">
+            <fieldset>
+                <legend>System log</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="log_enabled">{t}Enable Log:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
+                                <span class="default-value">{t}Default: true{/t}</span>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Log level:{/t}</label>
+                            </th>
+                            <td>
+                                {html_options name=log_level options=$logLevels selected=$configs['log_level']}
+                                <span class="default-value">{t}Default: true{/t}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Database log</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="log_db_enabled">{t}Enable Log:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
+                                <span class="default-value">{t}Default: false{/t}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
         </div>
 
         <div id="external" class="panel">

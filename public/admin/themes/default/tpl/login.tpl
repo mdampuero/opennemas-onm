@@ -1,70 +1,92 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es-es" lang="es-es" dir="ltr" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>..: {t 1="OpenNeMaS"}Panel de Control - %1{/t}:..</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{t 1="OpenNeMaS"}Control Panel - %1{/t}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
+	<meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
 
-    <link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css" type="text/css" />
+	<link rel="stylesheet" href="{$params.CSS_DIR}/bp/screen.css" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="{$params.CSS_DIR}/bp/print.css" type="text/css" media="print" />
+    <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}/bp/ie.css" type="text/css" media="screen, projection" /><![endif]-->
 
-    {scriptsection name="head"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
-    {/scriptsection}
-</head>
+	<link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css?version=2" type="text/css" />
 
-<body class="login">
-  <div id="topbar">
-  	<a href="/" title="{t}Did you lost?{/t}">{t escape="off"}&larr; Go back to main website{/t}</a>
-  </div>
-  <div id="login">
-    <h1><a href=""><img src="{$params.IMAGE_DIR}logo-opennemas-big.png"></a></h1>
+<body id="loginpage">
+	<!-- Content -->
+	<div id="content-wrapper"  class="span-16 last clearfix">
+		<div id="t_a_auth_container" class="clearfix">
 
-    {if isset($message)}
-        <div id="message" align="middle">{$message}</div>
-        <script type="text/javascript">{literal}
-        document.observe('dom:loaded', function() {
-            new Effect.Highlight('message', { startcolor: '#ffff99', endcolor: '#ffffff'});
-        });{/literal}
-        </script>
-    {/if}
+		<form method="post" action="login.php" id="loginform" name="loginform">
+			<div class="span-16">
 
-    <form method="post" action="login.php" id="loginform" name="loginform">
-        <p>
-            <label>{t}User name{/t}<br/>
-            <input tabindex="10" size="20" class="input" name="login" id="user_login" type="text"
-                   value="{$smarty.cookies.login_username}" /></label>
-        </p>
-        <p>
-            <label>{t}Password{/t}<br/>
-            <input type="password" tabindex="20" size="20"  class="input" name="password" id="user_pass"
-                   value="{$smarty.cookies.login_password}" /></label>
-        </p>
-        {if isset($captcha)}
-        <p>
-            <img src="{$captcha}" border="0" /><br />
-            <input type="text" tabindex="30" size="20" class="input" name="captcha" id="captcha"
-                   value="" autocomplete="off" />
-        </p>
-        {/if}
-        <p class="forgetmenot"><label>
-            <input type="checkbox" tabindex="90" value="forever"
-				   id="rememberme" name="rememberme" {if isset($smarty.cookies.login_username)}checked="checked" {/if}/> {t}Remember me{/t}</label>
-        </p>
-        <p class="submit">
-            <input type="submit" tabindex="100" value="Acceder" id="wp-submit" name="wp-submit"/>
+				<div id="logo">
+					<h1>OpenNeMaS</h1>
+					<div>{t}The journalism CMS{/t}</div>
+				</div>
 
-            <input type="hidden" id="action" name="action" value="login" />
+				{if isset($message)}
+				<div class="span-16 last">
+					<div class="span-14 prepend-1 append-1">
+						<div class="notice">{$message}</div>
+					</div>
+				</div>
+				{/if}
+
+				<div class="span-16 last">
+					<div class="span-8">
+						<label for="user_login">{t}User name:{/t}</label>
+					</div>
+					<div class="span-8 last">
+						<label for="password">{t}Password:{/t}</label>
+					</div>
+				</div>
+
+				<div class="span-16 last">
+					<div class="span-7 append-1">
+						<input name="login" id="user_login" type="text" tabindex="1" value="{$smarty.cookies.login_username}" />
+					</div>
+					<div class="span-7 last">
+						<input type="password" name="password" id="password" tabindex="2" value="{$smarty.cookies.login_password}" />
+					</div>
+				</div>
+
+				<div class="span-16 last clearfix submit-remember-block">
+					<div class="span-8">
+						<input type="checkbox" tabindex="3" value="forever" id="rememberme" name="rememberme"
+							{if isset($smarty.cookies.login_username)}checked="checked" {/if}/>{t}Remember me{/t}</label>
+					</div>
+					<div class="span-8 last right">
+						<button type="submit" tabindex="4" class="awesome blue-openhost large"><span>{t}Enter{/t}</span></button>
+					</div>
+				</div>
+				{if isset($captcha)}
+				<p>
+					<img src="{$captcha}" border="0" /><br />
+					<input type="text" name="captcha" id="captcha"
+						   value="" autocomplete="off" />
+				</p>
+				{/if}
+			</div>
+			<input type="hidden" id="action" name="action" value="login" />
             <input type="hidden" name="testcookie" value="1" />
 
             {if isset($token)}
                 {* Google token to identify captcha challenge *}
                 <input type="hidden" name="token" value="{$token}" />
             {/if}
-        </p>
-    </form>
-  </div>
-  <div style="margin:0 auto; color:#666; font-size:.9em; text-align:center; width:300px;">
-	{t escape="off" 1="http://www.openhost.es" 2="OpenHost S.L." 3="OpenHost S.L." 4=date("Y")}A product of <a href="%1" title="%2">%3</a><br/> %4 &copy; All rights resered{/t}
-  </div>
+		</form>
+
+		</div>
+	</div>
+
+	<div class="clear"></div>
+
+    <!-- Footer -->
+    <div id="footer">
+      	<div class="copyright">{t escape=off}Powered by <a href="http://www.tomatocms.com">OpenNeMaS</a> v{$version}{/t}</div>
+    </div>
 </body>
 </html>

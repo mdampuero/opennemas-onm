@@ -376,7 +376,7 @@ if(isset($_REQUEST['action'])) {
                 $tplManager->delete('opinion|1');
             }
             if( $_SESSION['desde']=='list_pendientes'){
-                Application::forward('article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                                  $opinion->category . '&page=' . $_REQUEST['page']);

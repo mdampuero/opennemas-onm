@@ -51,8 +51,14 @@ if(isset($_REQUEST['action']) && $_REQUEST['action']=='addPhoto') {
             $micro=intval(substr($t['usec'],0,5)); //Le damos formato de 5digitos a los microsegundos
 
             $name= date("YmdHis").$micro.".".$extension;
-
-            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
+            
+            if(!is_dir($uploaddir)) {
+                FilesManager::createDirectory($uploaddir);
+            }
+                
+            $uploader_status = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name);
+            
+            if ($uploader_status) {
 
                 @chmod($uploaddir.$name,0777); //Permisos   del fichero
 

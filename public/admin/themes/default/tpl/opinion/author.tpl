@@ -23,15 +23,15 @@
 	</table>
 	<table border="0" cellpadding="4" cellspacing="0" class="adminlist" width="600">
 		<thead>
-			<tr>
-				<th class="title" style="align:left;padding:10px;width:30%;">{t}Author name{/t}</th>
-                <th class="title" style="padding:10px;width:20%;">{t}Condition{/t}</th>
-				<th class="title" style="padding:10px;width:20%;">{t}Blog name{/t}</th>
-    			<th class="title" style="padding:10px;width:20%;">{t}Blog url{/t}</th>
-				<th class="title" style="padding:10px;width:10%;">{t}Photos (#){/t}</th>
-				<th class="title" style="padding:10px;width:10%;align:right;">{t}Edit{/t}</th>
-				<th class="title" style="padding:10px;width:10%;align:right;">{t}Delete{/t}</th>
-			</tr>
+                    <tr>
+                        <th class="title" style="align:left;padding:10px;width:30%;">{t}Author name{/t}</th>
+                        <th class="title" style="padding:10px;width:20%;">{t}Condition{/t}</th>
+                        <th class="title" style="padding:10px;width:20%;">{t}Blog name{/t}</th>
+                        <th class="title" style="padding:10px;width:20%;">{t}Blog url{/t}</th>
+                        <th class="title" style="padding:10px;width:10%;">{t}Photos (#){/t}</th>
+                        <th class="title" style="padding:10px;width:10%;align:right;">{t}Edit{/t}</th>
+                        <th class="title" style="padding:10px;width:10%;align:right;">{t}Delete{/t}</th>
+                    </tr>
 		</thead>
 		{section name=c loop=$authors}
 			<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
@@ -42,11 +42,11 @@
 				<td style="padding:10px;">
 						{$authors[c]->condition}
 				</td>
-                <td style="padding:10px;">
+                                <td style="padding:10px;">
 						{$authors[c]->politics}
 				</td>
 				<td style="padding:10px;">
-                        {$authors[c]->gender}
+                                                {$authors[c]->gender}
 				</td>
 				<td style="padding:10px;">
 						{$authors[c]->num_photos}
@@ -162,31 +162,31 @@
 			</tr> *}
 
 			<tr>
-				<td valign="top" align="right" style="padding:4px;" width="40%">
-					<b>{t}Author photos{/t}</b>
-				</td>
-				<td style="padding:4px;">
-					<div id="contenedor" name="contenedor" style="display:none; "> </div>
-					<div class="photos" >
-						 <ul id='thelist'  class="gallery_list">
-							{section name=as loop=$photos}
-							<li id='{$photos[as]->pk_img}'>
-								<div style="float: left;width:90px;">
-									<a><img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}" width="67"  border="1" /></a>
-									<br>
-									{$photos[as]->description}
-								</div>
-								<a href="#" onclick="javascript:del_photo('{$photos[as]->pk_img}');" title="{t}Delete photo{/t}">
-									<img src="{$params.IMAGE_DIR}iconos/eliminar.gif" border="0" align="absmiddle" />
-								</a>&nbsp;
-							</li>
-							{/section}
-						 </ul>
-					</div>
-                    <input type="hidden" id="action" name="action" value="">
-					<input type="hidden" id="del_img" name="del_img" value="">
-					<input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
-				</td>
+                            <td valign="top" align="right" style="padding:4px;" width="40%">
+                                    <b>{t}Author photos{/t}</b>
+                            </td>
+                            <td style="padding:4px;">
+                                    <div id="contenedor" name="contenedor" style="display:none; "> </div>
+                                    <div class="photos" >
+                                             <ul id='thelist'  class="gallery_list">
+                                                    {section name=as loop=$photos}
+                                                    <li id='{$photos[as]->pk_img}'>
+                                                            <div style="float: left;width:90px;">
+                                                                    <a><img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}" width="67"  border="1" /></a>
+                                                                    <br>
+                                                                    {$photos[as]->description}
+                                                            </div>
+                                                            <a href="#" onclick="javascript:del_photo('{$photos[as]->pk_img}');" title="{t}Delete photo{/t}">
+                                                                    <img src="{$params.IMAGE_DIR}iconos/eliminar.gif" border="0" align="absmiddle" style="width:20px; height:20px;" />
+                                                            </a>&nbsp;
+                                                    </li>
+                                                    {/section}
+                                             </ul>
+                                    </div>
+                                    <input type="hidden" id="action" name="action" value="">
+                                    <input type="hidden" id="del_img" name="del_img" value="">
+                                    <input type="hidden" id="fk_author_img" name="fk_author_img" value="" />
+                            </td>
 			</tr>
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" width="40%">{t}Upload more files{/t}</td>

@@ -739,7 +739,7 @@ class ContentManager
         return $articles;
     }
     
-    public function getLatestComments()
+    public function getLatestComments($num=6)
     {
         $sql = 'SELECT *
                 FROM contents
@@ -749,7 +749,7 @@ class ContentManager
                        WHERE comments.fk_content = contents.pk_content
                        ORDER BY pk_comment DESC)
                 ORDER BY contents.created DESC
-                LIMIT 0,6';
+                LIMIT '. $num;
         $contents = array();
                 
         

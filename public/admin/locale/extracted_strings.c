@@ -88,105 +88,6 @@ gettext("ADS");
 /* ./themes/default/tpl//link_control/link_control.tpl */
 gettext("Trash");
 
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Advanced Search");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Search in the information catalog:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Advanced Search");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Search string:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Content types:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("We cant find any content with your search criteria.");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Your search \"<b>%1</b>\" didn't return any element.");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Suggestions:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Check if all the words are written correctly.");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Use other words.");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Use more general search criteria.");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Title");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Article title");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Pretitle:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Signature:");
-
-/* ./themes/default/tpl//search/search_advanced.tpl */
-gettext("Author:");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Metatags:");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In library");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In library");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In pending");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In pending");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In pending");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In pending");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("In pending");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Restore from trash");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Restore from trash");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Restore from trash");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("Restore from library");
-
-/* ./themes/default/tpl//search/search_advanced_list.tpl */
-gettext("There isn't any existent elements that matches your search criteria");
-
 /* ./themes/default/tpl//article.tpl */
 gettext("Frontpage articles");
 
@@ -406,89 +307,26 @@ gettext("\"test image\"");
 /* ./themes/default/tpl//album/album_images.tpl */
 gettext("\"Frontpage image\"");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("New static page");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("Menues");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("New static page");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("Title");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Filter");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("Edit");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Visits");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("\"Edit\"");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Published");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("Menu Manager");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Open in a new window");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext(" Save ");
 
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Unpublished");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Modify");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("There is no static pages.");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Page title");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Published:");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Keywords:");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("(separated with comas)");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Keywords");
-
-/* ./themes/default/tpl//static_pages.tpl */
-gettext("Page content");
+/* ./themes/default/tpl//menues/menues.tpl */
+gettext("New Menu");
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Go to admin main page");
@@ -874,6 +712,90 @@ gettext("Body:");
 /* ./themes/default/tpl//opinion/opinion_edit.tpl */
 gettext("Disallowed width, this element needs a 60px width photo.");
 
+/* ./themes/default/tpl//search_advanced/index.tpl */
+gettext("Advanced Search");
+
+/* ./themes/default/tpl//search_advanced/index.tpl */
+gettext("Search in the information catalog:");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("We cant find any content with your search criteria.");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("Your search \"<b>%1</b>\" didn't return any element.");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("Suggestions:");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("Check if all the words are written correctly.");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("Use other words.");
+
+/* ./themes/default/tpl//search_advanced/partials/_no_results.tpl */
+gettext("Use more general search criteria.");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Metatags:");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In library");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In library");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In pending");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In pending");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In pending");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Published");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In pending");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("In pending");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Restore from trash");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Restore from trash");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Restore from trash");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("Restore from library");
+
+/* ./themes/default/tpl//search_advanced/partials/_list.tpl */
+gettext("There isn't any existent elements that matches your search criteria");
+
+/* ./themes/default/tpl//search_advanced/search.tpl */
+gettext("Advanced Search");
+
+/* ./themes/default/tpl//search_advanced/search.tpl */
+gettext("Search string:");
+
+/* ./themes/default/tpl//search_advanced/search.tpl */
+gettext("Content types:");
+
 /* ./themes/default/tpl//files/new.tpl */
 gettext("File Manager :: Upload");
 
@@ -1229,7 +1151,7 @@ gettext("Successfully emptied.");
 gettext("Available sections");
 
 /* ./themes/default/tpl//category/list.tpl */
-gettext("Sort sections");
+gettext("Sort menues");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Title");
@@ -2351,6 +2273,12 @@ gettext("Cancel");
 gettext("Cancel");
 
 /* ./themes/default/tpl//botonera_up.tpl */
+gettext("Frontpage Manager");
+
+/* ./themes/default/tpl//botonera_up.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//botonera_up.tpl */
 gettext("Delete");
 
 /* ./themes/default/tpl//botonera_up.tpl */
@@ -2983,6 +2911,15 @@ gettext("Delete privilege");
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("No available privileges to list here.");
 
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Module:");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Name:");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Descripti&oacute;n:");
+
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
 gettext("New User Group");
 
@@ -3025,38 +2962,38 @@ gettext("Group name");
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
 gettext("Grants:");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("EuropaPress importer :: List of articles");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("EuropaPress importer :: Configuration");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("Sync list  with server");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Auth credentials");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Reload list");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Server:");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Sync list  with server");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Username:");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Reload list");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Password:");
 
-/* ./themes/default/tpl//agency_importer/europapress/menu.tpl */
-gettext("Reload list");
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Save configuration");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("A long time ago from synchronization.");
@@ -3096,6 +3033,54 @@ gettext("There is no elements to import");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Try syncing from server by click over the \"Sync with server\" button above.");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("EuropaPress importer :: List of articles");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync list  with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Sync list  with server");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Config Europapress module");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Reload list");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Config Europapress module");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Config Europapress module");
+
+/* ./themes/default/tpl//agency_importer/europapress/partials/_menu.tpl */
+gettext("Config");
 
 /* ./themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("EuropaPress importer :: List of articles");
@@ -3168,6 +3153,96 @@ gettext("Level:");
 
 /* ./themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Redactors:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("System Wide Settings");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("General");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Mail");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("External Services");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Miscelanous");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site title:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site description:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site keywords:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Time Zone:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Language");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Mail server");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Username");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Password");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Google Maps API key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Google Search API key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("APP key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Secret key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("You can get your Facebook App Keys from <a href=\"https://developers.facebook.com/apps\">Facebook Developers website</a>.");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("API key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Base domain:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Page ID:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Private key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Public Key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Private key:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("You can get your recaptcha API Keys from <a href=\"https://www.google.com/recaptcha/admin/create\">reCATPCHA website</a>.");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Enable advertisements:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Default: true");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Items per page:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Refresh page every (secs):");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Save");
 
 /* ./themes/default/tpl//updatesystem/index.tpl */
 gettext("Status");
@@ -3254,25 +3329,22 @@ gettext("Acting performed:");
 gettext("Content Statistics");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("Panel de Control - %1");
+gettext("Control Panel - %1");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("Did you lost?");
+gettext("The journalism CMS");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("&larr; Go back to main website");
+gettext("User name:");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("User name");
-
-/* ./themes/default/tpl//login.tpl */
-gettext("Password");
+gettext("Password:");
 
 /* ./themes/default/tpl//login.tpl */
 gettext("Remember me");
 
 /* ./themes/default/tpl//login.tpl */
-gettext("A product of <a href=\"%1\" title=\"%2\">%3</a><br/> %4 &copy; All rights resered");
+gettext("Enter");
 
 /* ./themes/default/tpl//uploader.tpl */
 gettext("File uploaded successfully");
@@ -3286,92 +3358,8 @@ gettext("File Manager");
 /* ./themes/default/tpl//uploader.tpl */
 gettext("Video uploaded to Youtube.");
 
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("New static page");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("New static page");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Filter");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Visits");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Open in a new window");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Published");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Unpublished");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Modify");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("There is no static pages.");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Save");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Page title");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Published:");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Keywords:");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("(separated with comas)");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Keywords");
-
-/* ./themes/default/tpl//static_pages/static_pages.tpl */
-gettext("Page content");
-
 /* ./themes/default/tpl//static_pages/read.tpl */
-gettext("Static Pages Management");
+gettext("Static Pages Manager");
 
 /* ./themes/default/tpl//static_pages/read.tpl */
 gettext("Editing page");
@@ -3401,7 +3389,10 @@ gettext("Cancel");
 gettext("Cancel");
 
 /* ./themes/default/tpl//static_pages/read.tpl */
-gettext("Título:");
+gettext("Insert the static page information");
+
+/* ./themes/default/tpl//static_pages/read.tpl */
+gettext("Title:");
 
 /* ./themes/default/tpl//static_pages/read.tpl */
 gettext("Page title");
@@ -3434,7 +3425,10 @@ gettext("Keywords");
 gettext("Page content");
 
 /* ./themes/default/tpl//static_pages/index.tpl */
-gettext("Static Pages Management");
+gettext("Static Pages Manager");
+
+/* ./themes/default/tpl//static_pages/index.tpl */
+gettext("Listing static pages");
 
 /* ./themes/default/tpl//static_pages/index.tpl */
 gettext("New static page");
