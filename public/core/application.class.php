@@ -184,7 +184,7 @@ class Application {
         $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
                         'log'      => SITE_LIBS_PATH.'/Log.php',
                         'pager'    => SITE_LIBS_PATH.'/Pager/Pager.php',
-                        'template' => array(SITE_LIBS_PATH.'/smarty/Smarty.class.php',  SITE_LIBS_PATH.'/template.class.php'),
+                        'template' => array(SITE_LIBS_PATH.'/smarty/smarty-legacy/Smarty.class.php',  SITE_LIBS_PATH.'/template.class.php'),
                      );
 
         // if no packages was given load the common libraries

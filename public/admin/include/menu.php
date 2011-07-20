@@ -102,7 +102,7 @@ $menuXml = '<?xml version="1.0"?>
     </submenu>
 
 
-    <submenu title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'" link="user.php" privilege="USER_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" link="#" privilege="USER_ADMIN">
         <node
             module_name="USER_MANAGER"
             privilege="USER_ADMIN"

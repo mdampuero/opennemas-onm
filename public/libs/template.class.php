@@ -27,42 +27,42 @@ class Template extends Smarty
         // Call the parent constructor
         parent::__construct();
 
-        // Register db resource
-        /*$this->register_resource("db",
-                array("smarty_get_db_template", "smarty_get_db_timestamp",
-                          "smarty_get_db_secure", "smarty_get_db_trusted"));*/
+        /**
+         * Add global plugins path
+         */
+        $this->plugins_dir[]= realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
 
         // Parent variables
-        $this->template_dir = SITE_PATH.DS.'themes'.DS.$theme.DS.'tpl/';
-        $this->compile_dir  = SITE_PATH.DS.'themes'.DS.$theme.DS.'compile/';
-        $this->config_dir   = SITE_PATH.DS.'themes'.DS.$theme.DS.'config/';
-        $this->cache_dir    = SITE_PATH.DS.'themes'.DS.$theme.DS.'cache/';
-        $this->plugins_dir[]= SITE_PATH.DS.'themes'.DS.$theme.DS.'plugins/';
-        $this->caching      = false;
-        $this->allow_php_tag = true;
+        $baseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
+        $this->template_dir     = realpath($baseDir.'tpl/').'/';
+        $this->compile_dir      = realpath($baseDir.'compile/').'/';
+        $this->config_dir       = realpath($baseDir.'config/').'/';
+        $this->cache_dir        = realpath($baseDir.'cache/').'/';
+        $this->plugins_dir[]    = realpath($baseDir.'plugins/').'/';
+        $this->caching          = false;
+        $this->allow_php_tag    = true;
+
 
         // Template variables
-        $this->locale_dir   = SITE_URL.SS.'themes'.SS.$theme.SS.'locale/';
-        $this->css_dir      = SITE_URL.SS.'themes'.SS.$theme.SS.'css/';
-        $this->image_dir    = SITE_URL.SS.'themes'.SS.$theme.SS.'images/';
-        $this->js_dir       = SITE_URL.SS.'themes'.SS.$theme.SS.'js/';
+        $baseUrl = SITE_URL.SS.'themes'.SS.$theme.SS;
+        $this->locale_dir       = $baseUrl.'locale/';
+        $this->css_dir          = $baseUrl.'css/';
+        $this->image_dir        = $baseUrl.'images/';
+        $this->js_dir           = $baseUrl.'js/';
 
         // Set filters: $filters = array('pre' => array(), 'post' => array(), 'output' => array())
         $this->setFilters($filters);
 
         $this->loadFilter("output","trimwhitespace");
-        
-        // Only load this plugin if the request comes from frontend, not backend
-        if(get_class() === 'Template') {
-            //$this->loadFilter("output","indent_html");
-        }
-        
+
 
         $this->assign(  'params',
-                        array('LOCALE_DIR' =>    $this->locale_dir,
-                            'CSS_DIR'	 =>    $this->css_dir,
-                            'IMAGE_DIR'  =>    $this->image_dir,
-                            'JS_DIR'	 =>    $this->js_dir )
+                            array(
+                                'LOCALE_DIR' =>    $this->locale_dir,
+                                'CSS_DIR'	 =>    $this->css_dir,
+                                'IMAGE_DIR'  =>    $this->image_dir,
+                                'JS_DIR'	 =>    $this->js_dir
+                            )
         );
 
         $this->theme = $theme;
@@ -269,9 +269,9 @@ class TemplateAdmin extends Template {
 
     function __construct($theme, $filters = array())
     {
-        
+
         // Call the parent constructor
-        parent::__construct($theme);
+        parent::__construct($theme, $filters);
 
         $this->setFilters($filters);
 
@@ -290,7 +290,7 @@ class TemplateAdmin extends Template {
         $this->caching	= false;
         $this->allow_php_tag = true;
 
-        
+
 
         // Template variables
         $this->locale_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'locale/';
