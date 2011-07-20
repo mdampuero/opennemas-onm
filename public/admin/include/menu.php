@@ -138,7 +138,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="NEWSLETTER_MANAGER"
             title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'"
-            link="newsletter.php"
+            link="controllers/newsletter/newsletter.php"
             privilege="NEWSLETTER_ADMIN" />
         <node
             module_name="KEYWORD_MANAGER"
