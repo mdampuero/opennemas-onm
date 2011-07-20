@@ -1,3 +1,16 @@
+-- --------------------------------------------------------
+-- 19-July-2011
+--Config changes for LOG
+INSERT INTO `nuevatribuna`.`settings` (`name` ,`value`)
+VALUES ('log_level', 's:6:"normal";');
+INSERT INTO `nuevatribuna`.`settings` (`name` ,`value`)
+VALUES ('log_enabled', 'b:1;');
+INSERT INTO `nuevatribuna`.`settings` (`name` ,`value`)
+VALUES ('log_db_enabled', 'b:1;');
+
+
+-- --------------------------------------------------------
+-- 15-July-2011
 -- Add new ONM_SETTINGS privilege to the database and adding it to the Admnistrator grupo
 INSERT INTO `privileges` ( `name` , `description` , `module` ) VALUES ( 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM' );
 INSERT INTO `user_groups_privileges` ( `pk_fk_user_group` , `pk_fk_privilege` ) VALUES ( '5', '32');
@@ -6,7 +19,7 @@ INSERT INTO `user_groups_privileges` ( `pk_fk_user_group` , `pk_fk_privilege` ) 
 
 
 -- --------------------------------------------------------
-
+-- 13-July-2011
 --
 -- Table structure for table `menues`
 --
@@ -56,9 +69,3 @@ ALTER TABLE `videos` ADD `favorite` SMALLINT( 1 ) NULL DEFAULT '0';
 --New Feature for enable/disable users
 
 ALTER TABLE `users` ADD `authorize` TINYINT( 1 ) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized' AFTER `phone`
-
---Config changes for LOG
-INSERT INTO `nuevatribuna`.`settings` (`name` ,`value`)
-VALUES ('log_level', 's:6:"normal";');
-INSERT INTO `nuevatribuna`.`settings` (`name` ,`value`)
-VALUES ('log_enable', 'b:1;');
