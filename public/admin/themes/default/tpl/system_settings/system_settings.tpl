@@ -20,14 +20,6 @@ label{
 .panel {
     background:White;
 }
-div.action-bar {
-    text-align:right;
-    background:#ddd;
-    border:0px solid #ccc;
-    border-bottom-width:1px;
-    padding:5px;
-    margin-bottom:20px;
-}
 fieldset {
     border:none;
     border-top:1px solid #ccc;
@@ -376,7 +368,7 @@ input[type="text"] {
 
 
         <div class="action-bar">
-            <input type="submit" name="submit" value="{t}Save{/t}"  class="awesome green">
+            <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
         </div>
 
         <input type="hidden" id="action" name="action" value="save"/>

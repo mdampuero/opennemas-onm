@@ -37,66 +37,60 @@
                 </li>
             </ul>
         </div>
+        <br>
 
-    {if $message}
-    <div class="error">
-         <ul>
-            {foreach from=$message item=msg}
-            <li>{$msg}</li>
-            {/foreach}
-         </ul>
-    </div>
-    {/if}
+        {if $message}
+        <div class="error">
+             <ul>
+                {foreach from=$message item=msg}
+                <li>{$msg}</li>
+                {/foreach}
+             </ul>
+        </div>
+        {/if}
 
-    {if (!empty($error))}
-    <div class="error">
-         {render_error}
-    </div>
-    {/if}
+        {if (!empty($error))}
+        <div class="error">
+             {render_error}
+        </div>
+        {/if}
 
-    <div id="{$category}">
+        <div id="{$category}">
 
-         <table class="adminheading">
-             <tr>
-                 <th align="left">{t}Auth credentials{/t}</th>
-             </tr>
-         </table>
+             <table class="adminheading">
+                 <tr>
+                     <th align="left">{t}Auth credentials{/t}</th>
+                 </tr>
+             </table>
 
-         <table class="adminlist" border=0>
+             <table class="adminlist" border=0>
 
-            <tr>
-                <td>
-                    <div class="form-wrapper">
-                        <div>
-                            <label for="server">{t}Server:{/t}</label>
-                            <input type="text" class="required" name="server" value="{$server|default:""}" />
+                <tr>
+                    <td>
+                        <div class="form-wrapper">
+                            <div>
+                                <label for="server">{t}Server:{/t}</label>
+                                <input type="text" class="required" name="server" value="{$server|default:""}" />
+                            </div>
+                            <div>
+                                <label for="username">{t}Username:{/t}</label>
+                                <input type="text" class="required" id="username" name="username" value="{$username|default:""}" />
+                            </div>
+                            <div>
+                                <label for="password">{t}Password:{/t}</label>
+                                <input type="password" class="required" id="password" name="password" value="{$password|default:""}" />
+                            </div>
                         </div>
-                        <div>
-                            <label for="username">{t}Username:{/t}</label>
-                            <input type="text" class="required" id="username" name="username" value="{$username|default:""}" />
-                        </div>
-                        <div>
-                            <label for="password">{t}Password:{/t}</label>
-                            <input type="password" class="required" id="password" name="password" value="{$password|default:""}" />
-                        </div>
-                        <div style="text-align:right;">
-                            <br>
-                            <input type="submit" name="submit" value="{t}Save configuration{/t}">
-                        </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
 
-             <tfoot>
-                  <tr class="pagination" >
-                      <td colspan="13" align="center"></td>
-                  </tr>
-             </tfoot>
+            </table>
+            <div class="action-bar">
+                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            </div>
+        </div>
 
-        </table>
-    </div>
-
-    <input type="hidden" id="action" name="action" value="config" />
+        <input type="hidden" id="action" name="action" value="config" />
    </form>
 </div>
 {/block}

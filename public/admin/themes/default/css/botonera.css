@@ -39,8 +39,7 @@ html[xmlns] .clearfix {
 	padding:4px;
     height:65px;
 	border:1px solid #ccc;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
+	border-radius: 3px;
 	width:99%;
 }
 

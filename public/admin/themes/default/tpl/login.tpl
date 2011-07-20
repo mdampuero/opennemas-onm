@@ -13,6 +13,7 @@
     <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}/bp/ie.css" type="text/css" media="screen, projection" /><![endif]-->
 
 	<link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css?version=2" type="text/css" />
+	<link rel="stylesheet" href="{$params.CSS_DIR}buttons.css?version=2" type="text/css" />
 
 <body id="loginpage">
 	<!-- Content -->
@@ -59,7 +60,7 @@
 							{if isset($smarty.cookies.login_username)}checked="checked" {/if}/>{t}Remember me{/t}</label>
 					</div>
 					<div class="span-8 last right">
-						<button type="submit" tabindex="4" class="awesome blue-openhost large"><span>{t}Enter{/t}</span></button>
+						<button type="submit" tabindex="4" class="awesome blue-openhost"><span>{t}Enter{/t}</span></button>
 					</div>
 				</div>
 				{if isset($captcha)}

@@ -26,6 +26,7 @@
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}buttons.css" />
 	{/block}
 
     {block name="header-js"}
