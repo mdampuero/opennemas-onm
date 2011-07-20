@@ -56,47 +56,74 @@ document.observe('dom:loaded', function() {
 
 		<div class="steps">
 			<img src="{$params.IMAGE_DIR}newsletter/4.gif" width="300" height="40" border="0" usemap="#map" />
-			{include file="newsletter/wizard.png.map"}
+			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 
 		<ul>
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
 					{t}Next{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Previous{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
 					{t}Previous{/t}
 				</a>
 			</li>
 
 		</ul>
 	</div>
+	<br>
+	
 
-	<div class="margin:0 auto; width:70%; text-align:center">
-		<div class="form"  style="margin:0 auto; width:80%; text-align:left">
-			<form name="searchForm" id="searchForm" method="post" action="#">
-				<p>
-					<label>{t}Email subject{/t}:</label>
-					<input type="text" name="subject" id="subject" size="80"
-						   value="[{$smarty.const.SITE_FULLNAME}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
-				</p>
+	<table class="adminheading">
+		<th>
+			<td></td>
+		</th>
+	</table>
 
-				{* Valores asistente *}
-				<input type="hidden" id="action"     name="action"     value="send" />
-				<input type="hidden" id="postmaster" name="postmaster" value="" />
-			</form>
+	<table class="adminlist">
+		<tr>
+			<td>
+				<div  style="width:80%; margin:0 auto;">
+					<form name="searchForm" id="searchForm" method="post" action="#">
+						<p>
+							<label>{t}Email subject{/t}:</label>
+							<input type="text" name="subject" id="subject" size="80"
+								   value="[{$smarty.const.SITE_FULLNAME}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+						</p>
 
-			<p>
-				<label>{t}Newsletter preview:{/t}</label>
-			</p>
-			<div id="preview">
-				{$htmlContent}
-			</div>
+						{* Valores asistente *}
+						<input type="hidden" id="action"     name="action"     value="send" />
+						<input type="hidden" id="postmaster" name="postmaster" value="" />
+					</form>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="width:80%; margin:0 auto;">
+					<div style="border:1px solid #ccc; padding:20px;">
+						{$htmlContent}
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+		</tr>
+		<tfoot>
+			<tr>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+
+
+
 
 		</div>
 	</div>

@@ -72,21 +72,21 @@ class Newsletter
 
     public function render()
     {
-        $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+        $tpl = new Template(TEMPLATE_USER);
         $ccm = new ContentCategoryManager();
-        
+
         $data = json_decode($_REQUEST['postmaster']);
         $i = 0;
-        foreach ($data->articles as $tok){            
+        foreach ($data->articles as $tok){
             $category = $ccm->get_name($tok->category);
             $data->articles[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
             $data->articles[$i]->cat = $category;
-            $i++;            
+            $i++;
         }
         $i = 0;
-        foreach ($data->opinions as $tok){            
+        foreach ($data->opinions as $tok){
             $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
-            $i++;            
+            $i++;
         }
 
         $tpl->assign('data', $data);
@@ -106,7 +106,7 @@ class Newsletter
         $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $URL_PUBLIC);
 
-        $htmlContent = $tpl->fetch('newsletter/preview.html.tpl');
+        $htmlContent = $tpl->fetch('newsletter/newsletter.tpl');
         return $htmlContent;
     }
 

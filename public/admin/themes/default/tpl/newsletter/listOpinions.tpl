@@ -93,20 +93,20 @@ document.observe('dom:loaded', function() {
 
 		<div class="steps">
 			<img src="{$params.IMAGE_DIR}newsletter/2.gif" width="300" height="40" border="0" usemap="#map" />
-			{include file="newsletter/wizard.png.map"}
+			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 
 		<ul>
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
 					{t}Previous step{/t}
 				</a>
 			</li>

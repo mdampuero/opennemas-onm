@@ -80,13 +80,13 @@
 
 		<div class="steps">
 			<img src="{$params.IMAGE_DIR}newsletter/1.gif" width="300" height="40" border="0" usemap="#map" />
-			{include file="newsletter/wizard.png.map"}
+			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 
 		<ul>
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/next.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
@@ -103,8 +103,24 @@
 					{t}Select all{/t}
 				</a>
 			</li>
+			<li>
+				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config newsletter module{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+					{t}Configurations{/t}
+				</a>
+			</li>
 		</ul>
 	</div>
+
+	{if $message}
+        <div class="success">
+             <ul>
+                {foreach from=$message item=msg}
+                <li>{$msg}</li>
+                {/foreach}
+             </ul>
+        </div>
+    {/if}
 
 	<div class="form notice">
 		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Article selection{/t}</h3>
@@ -161,7 +177,7 @@
 					<ul id="items-list" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
-            
+
 			<td width="50%">
 				<div id="container2">
 					{* Items selected *}

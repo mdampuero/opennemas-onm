@@ -386,9 +386,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'list_hemeroteca':
             $tpl->assign('titulo_barra', 'Hemeroteca');
-
-            // Engadir lightview.js para previsualización
-            $tpl->addScript('lightview.js', 'head');
+            
             if (!isset($_REQUEST['category']) || $_REQUEST['category'] =='home') {
                 $_REQUEST['category'] = 'todos';
             }

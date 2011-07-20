@@ -188,6 +188,8 @@ define ('FB_APP_SECRET', '7c012877eefb97adfebb27457c5ec722');
 define ('MAIL_HOST', "localhost"); // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
 define ('MAIL_USER', "");
 define ('MAIL_PASS', "");
+define('MAIL_FROM', 'noreply@opennemas.com');
+
 
 
 /* [ADVERTISEMENT] ********************************************************** */
