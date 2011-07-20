@@ -126,48 +126,47 @@
             {/section}
         </td>
     </tr>
-
     <tr>
-        <td colspan="9">
-            <table width="100%" cellpadding=0 cellspacing=0 >
-                <tr class="{cycle values="row0"}">
-                    <td style="padding: 0px 10px; height: 24px;font-size: 11px;">
-                        <b> TOTALES </b>
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_jpg|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_gif|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_png|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_other|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_color|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_bn|default:0}
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {math equation="x / y" x=$total_size|default:0 y=1024 format="%.2f"} MB
-                    </td>
-                    <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
-                        {$total_totales|default:0}
-                    </td>
-                </tr>
-            </table>
+        <td>
+            &nbsp;
         </td>
     </tr>
 
-
-
     <tfoot>
         <tr>
-            <td>&nbsp;</td>
+            <td colspan="9" style="padding: 10px 0px;">
+                <table width="100%" cellpadding=0 cellspacing=0>
+                    <tr class="{cycle values="row0"}">
+                        <td style="padding: 0px 10px; height: 24px;font-size: 11px;">
+                            <strong> TOTALES </strong>
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_jpg|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_gif|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_png|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_other|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_color|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_bn|default:0}
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {math equation="x / y" x=$total_size|default:0 y=1024 format="%.2f"} MB
+                        </td>
+                        <td style="text-align: center; padding:0px; height:24px; font-size:11px; width:10%;">
+                            {$total_totales|default:0}
+                        </td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </tfoot>
 </table>
