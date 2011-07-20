@@ -17,7 +17,7 @@
                          de:created="{$videos[n]->created}"
                          de:description="{$videos[n]->description|clearslash|escape:'html'}"
                          de:tags="{$videos[n]->metadata}"
-                         title="Desc:{$videos[n]->description|clearslash|escape:'html'} - Tags:{$videos[n]->metadata}" />
+                         title="{$videos[n]->title}" />
 
                 </a>
            </div>

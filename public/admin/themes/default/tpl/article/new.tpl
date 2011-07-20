@@ -99,7 +99,7 @@
                                                     <input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="11"/>
 						</td>
 					</tr>
-                    {if (isset($article) && $article->in_home neq 1)}
+                    {if ($article->in_home neq 1)}
                         <tr>
                             <td valign="top"  align="right" nowrap="nowrap">
                                 <label for="in_home">{t}Suggest for frontpage:{/t}</label>

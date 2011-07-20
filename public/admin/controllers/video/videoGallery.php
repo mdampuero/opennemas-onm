@@ -24,7 +24,7 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'
 }
 if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
     if( !defined('ITEMS_GALLERY') ){
-        define('ITEMS_GALLERY', 25);
+        define('ITEMS_GALLERY', 20);
     }
 
     $action = filter_input(INPUT_GET,'action',FILTER_VALIDATE_INT, array('options' => array('default'=> 'listByMetadatas')));
