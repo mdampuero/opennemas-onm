@@ -141,10 +141,6 @@ textarea:focus { /*background-color: #ffd*/ }
 	padding: 25px 5px 0 0;
 }
 
-#border-bottom 			{ background: url(/admin/images/j_bottom.png) repeat-x; }
-#border-bottom div  		{ background: url(/admin/images/j_corner_br.png) 100% 0 no-repeat; }
-#border-bottom div div 	{ background: url(/admin/images/j_corner_bl.png) no-repeat; height: 11px; }
-
 #footer .copyright { margin: 10px; text-align: center; }
 
 #header-box  { border: 1px solid #ccc; background: #f0f0f0; }
