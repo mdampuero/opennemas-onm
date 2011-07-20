@@ -31,6 +31,45 @@ gettext("Edit");
 /* ./themes/default/tpl//comment/comment.tpl */
 gettext("Delete");
 
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Keywords:");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Comma separated");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Video description");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Service:");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Other Information");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Original Title");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("FLV");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Download Url");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Service");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Duration");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Url Thumbnail");
+
+/* ./themes/default/tpl//video/videoInformation.tpl */
+gettext("Enbed Url");
+
 /* ./themes/default/tpl//video/video.tpl */
 gettext("Video Manager :: Listing videos");
 
@@ -39,6 +78,12 @@ gettext("Title");
 
 /* ./themes/default/tpl//video/video.tpl */
 gettext("Views");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Service");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Section");
 
 /* ./themes/default/tpl//video/video.tpl */
 gettext("Published");
@@ -59,25 +104,13 @@ gettext("Enter video information");
 gettext("Video URL:");
 
 /* ./themes/default/tpl//video/video.tpl */
-gettext("Title:");
-
-/* ./themes/default/tpl//video/video.tpl */
-gettext("Keywords:");
-
-/* ./themes/default/tpl//video/video.tpl */
-gettext("Comma separated");
-
-/* ./themes/default/tpl//video/video.tpl */
-gettext("Video description");
-
-/* ./themes/default/tpl//video/video.tpl */
-gettext("Information");
-
-/* ./themes/default/tpl//video/video.tpl */
 gettext("Section:");
 
 /* ./themes/default/tpl//video/video.tpl */
 gettext("Available:");
+
+/* ./themes/default/tpl//video/video.tpl */
+gettext("Only accepted videos from");
 
 /* ./themes/default/tpl//link_control/link_control.tpl */
 gettext("ALBUMS");
@@ -88,41 +121,11 @@ gettext("ADS");
 /* ./themes/default/tpl//link_control/link_control.tpl */
 gettext("Trash");
 
-/* ./themes/default/tpl//article.tpl */
-gettext("Frontpage articles");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Other articles in this category");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Suggested articles");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Widgets");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Opinions");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Homepage articles");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("NOT IN HOME");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("NOT IN FRONTPAGE OF %1");
-
-/* ./themes/default/tpl//article.tpl */
-gettext("Please, remember save positions after finish.");
-
 /* ./themes/default/tpl//newsstand/index.tpl */
 gettext("There is no stands");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Albums");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("%1");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Title");
@@ -131,7 +134,10 @@ gettext("Title");
 gettext("Created");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("Viewed");
+gettext("Views");
+
+/* ./themes/default/tpl//album/album.tpl */
+gettext("Section");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Published");
@@ -173,49 +179,7 @@ gettext("Delete");
 gettext("No album saved");
 
 /* ./themes/default/tpl//album/album.tpl */
-gettext("New Album");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Title:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("\"Album\"");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("%1");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("%1");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Available:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("No");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Yes");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Agency:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("\"Album\"");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("description");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Keywords:");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Separate by coma");
-
-/* ./themes/default/tpl//album/album.tpl */
-gettext("Edit Album");
+gettext("Enter album information");
 
 /* ./themes/default/tpl//album/album.tpl */
 gettext("Title:");
@@ -328,6 +292,579 @@ gettext(" Save ");
 /* ./themes/default/tpl//menues/menues.tpl */
 gettext("New Menu");
 
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Article content");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Article parameters");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Comments");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Related contents");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Sort related contents");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Frontpage title:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Section:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Unknown");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Allow coments");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Available:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("(publish directly)");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Put in section frontpage:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Suggest for frontpage:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Archived:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Frontpage title:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Inner title");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Pretitle:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Summary:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Body:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Inner title:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Inner title:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Keywords");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Separated by commas");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Pretitle");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Agency");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Agency");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Summary");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Body");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Publication start date:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Publication end date:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Server hour:");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Description");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Related contents in frontpage");
+
+/* ./themes/default/tpl//article/new.tpl */
+gettext("Related contents in inner article:");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Frontpage articles");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Other articles in this category");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Widgets");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Opinions");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Homepage articles");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("NOT IN HOME");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("NOT IN FRONTPAGE OF %1");
+
+/* ./themes/default/tpl//article/list.tpl */
+gettext("Please, remember save positions after finish.");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Articles by section");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Articles in library");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Articles for review");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Opinions");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Albums");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Videos");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Files");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Suggested articles");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Articles by section");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Articles in library");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Pending articles");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Opinions");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Albums");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Videos");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Files");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("We cant find any content with your search criteria.");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Your search \"<b>%1</b>\" didn't return any element.");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Suggestions:");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Check if all the words are written correctly.");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Use other words.");
+
+/* ./themes/default/tpl//article/partials/_related.tpl */
+gettext("Use more general search criteria.");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Multimedia associated to this article:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Image for frontpage:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Footer text for frontpage image:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Image for inner article page:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Footer text for inner image:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Available images");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Search images by title...");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File name:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File size:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Video for inner article page:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Code:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Footer text for inner video:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Search video by title...");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Code:");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("File creation date");
+
+/* ./themes/default/tpl//article/partials/_images.tpl */
+gettext("Description:");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Article manager :: Creating new article");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Library");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Restore");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Restore");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Clone");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Clone");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Library");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Seeing article");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Go back");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Go back");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Go back");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Go back");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Frontpage Manager");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("HOME");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Unpublish");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Arquive");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Suggest to home");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("No home");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("No home");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save changes");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Clean cache");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Clean cache");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete all");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Publish");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Publish to frontpage");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("New article");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Import XML");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Title");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Section");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Modification time");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Views");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Comments");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Publisher");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Last Editor");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//article/library.tpl */
+gettext("Restore to available");
+
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Go to admin main page");
 
@@ -360,114 +897,6 @@ gettext("Your password must contain 5 characters and dont contain the word <pass
 
 /* ./themes/default/tpl//base/admin.tpl */
 gettext("Please check your first password and check again.");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Multimedia associated to this article:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Image for frontpage:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File name:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Footer text for frontpage image:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Image for inner article page:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File name:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Footer text for inner image:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Available images");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Search images by title...");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File name:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File name:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File size:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Video for inner article page:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Code:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Footer text for inner video:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Search video by title...");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Code:");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("File creation date");
-
-/* ./themes/default/tpl//article_images.tpl */
-gettext("Description:");
 
 /* ./themes/default/tpl//opinion/opinion.tpl */
 gettext("HOME");
@@ -1303,78 +1732,6 @@ gettext("Delete");
 /* ./themes/default/tpl//widget/index.tpl */
 gettext("No widget found");
 
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Suggested articles");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Suggested articles");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Articles by section");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Articles in library");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Articles for review");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Opinions");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Albums");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Videos");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Files");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Search");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Suggested articles");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Articles by section");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Articles in library");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Pending articles");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Opinions");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Albums");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Videos");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Files");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("We cant find any content with your search criteria.");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Your search \"<b>%1</b>\" didn't return any element.");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Suggestions:");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Check if all the words are written correctly.");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Use other words.");
-
-/* ./themes/default/tpl//article_relacionados.tpl */
-gettext("Use more general search criteria.");
-
 /* ./themes/default/tpl//trash/trash.tpl */
 gettext("Articles");
 
@@ -1416,108 +1773,6 @@ gettext("Date");
 
 /* ./themes/default/tpl//trash/trash.tpl */
 gettext("Actions");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Article content");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Article parameters");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Comments");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Related contents");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Sort related contents");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Frontpage title:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Section:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Unknown");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Allow coments");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Available:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("(publish directly)");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Put in section frontpage:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Suggest for frontpage:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Archived:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Frontpage title:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Inner title");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Pretitle:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Summary:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Body:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Inner title:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Inner title:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Keywords");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Separated by commas");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Pretitle");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Agency");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Agency");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Summary");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Body");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Publication start date:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Publication end date:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Server hour:");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Description");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Related contents in frontpage");
-
-/* ./themes/default/tpl//article_new.tpl */
-gettext("Related contents in inner article:");
 
 /* ./themes/default/tpl//welcome/index.tpl */
 gettext("Welcome to %1");
@@ -2138,240 +2393,6 @@ gettext("Bottom Left LeaderBoard (728X90)");
 gettext("Bottom Right LeaderBoard (234X90)");
 
 /* ./themes/default/tpl//botonera_up.tpl */
-gettext("Article manager :: Creating new article");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Library");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Restore");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Restore");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Clone");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Clone");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Cancel");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Frontpage Manager");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("HOME");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Unpublish");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Unpublish");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Arquive");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Arquive");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Arquive");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Suggest to home");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Suggest to home");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Suggest to home");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("No home");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("No home");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Select all");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Select all");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save changes");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save changes");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Save changes");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Clean cache");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Clean cache");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete all");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Delete");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Publish");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Publish to frontpage");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("New article");
-
-/* ./themes/default/tpl//botonera_up.tpl */
-gettext("Import XML");
-
-/* ./themes/default/tpl//botonera_up.tpl */
 gettext("Delete");
 
 /* ./themes/default/tpl//botonera_up.tpl */
@@ -2792,9 +2813,6 @@ gettext("Username");
 gettext("Group");
 
 /* ./themes/default/tpl//acl/user/user.tpl */
-gettext("Enable/Disable");
-
-/* ./themes/default/tpl//acl/user/user.tpl */
 gettext("Actions");
 
 /* ./themes/default/tpl//acl/user/user.tpl */
@@ -2814,6 +2832,42 @@ gettext("Delete user");
 
 /* ./themes/default/tpl//acl/user/user.tpl */
 gettext("There is no users created yet.");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("User manager :: Editing user information");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/user/user.tpl */
+gettext("Editing user information");
 
 /* ./themes/default/tpl//acl/user/user.tpl */
 gettext("Login:");
@@ -2891,7 +2945,7 @@ gettext("Priveleges manager");
 gettext("Filter by module:");
 
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
-gettext("ALL");
+gettext("-- All --");
 
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("Privilege name");
@@ -2912,22 +2966,64 @@ gettext("Delete privilege");
 gettext("No available privileges to list here.");
 
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
-gettext("Module:");
+gettext("Priveleges manager :: Editing privilege");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Cancel");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Privilege information");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Module");
 
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
 gettext("Name:");
 
 /* ./themes/default/tpl//acl/privilege/privilege.tpl */
-gettext("Descripti&oacute;n:");
+gettext("(recomendation: MODULE_ACTION)");
+
+/* ./themes/default/tpl//acl/privilege/privilege.tpl */
+gettext("Description");
 
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
-gettext("New User Group");
+gettext("New Privilege");
 
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
-gettext("New User Group");
+gettext("New Privilege");
 
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
-gettext("New User Group");
+gettext("New User group");
 
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
 gettext("Group name");
@@ -2962,6 +3058,36 @@ gettext("Group name");
 /* ./themes/default/tpl//acl/user_group/user_group.tpl */
 gettext("Grants:");
 
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("New");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Search keyworks containing ");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Type");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Keyword");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Replacement value");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Actions");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Modify");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Delete");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Keyword Manager :: Editing keyword information");
+
+/* ./themes/default/tpl//keywords/index.tpl */
+gettext("Keyword information");
+
 /* ./themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("EuropaPress importer :: Configuration");
 
@@ -2993,7 +3119,7 @@ gettext("Username:");
 gettext("Password:");
 
 /* ./themes/default/tpl//agency_importer/europapress/config.tpl */
-gettext("Save configuration");
+gettext("Save");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("A long time ago from synchronization.");
@@ -3164,6 +3290,9 @@ gettext("General");
 gettext("Mail");
 
 /* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Log");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
 gettext("External Services");
 
 /* ./themes/default/tpl//system_settings/system_settings.tpl */
@@ -3192,6 +3321,24 @@ gettext("Username");
 
 /* ./themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Password");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Enable Log:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Default: true");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Log level:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Default: true");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Enable Log:");
+
+/* ./themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Default: false");
 
 /* ./themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Maps API key:");
@@ -3346,18 +3493,6 @@ gettext("Remember me");
 /* ./themes/default/tpl//login.tpl */
 gettext("Enter");
 
-/* ./themes/default/tpl//uploader.tpl */
-gettext("File uploaded successfully");
-
-/* ./themes/default/tpl//uploader.tpl */
-gettext("File uploaded");
-
-/* ./themes/default/tpl//uploader.tpl */
-gettext("File Manager");
-
-/* ./themes/default/tpl//uploader.tpl */
-gettext("Video uploaded to Youtube.");
-
 /* ./themes/default/tpl//static_pages/read.tpl */
 gettext("Static Pages Manager");
 
@@ -3472,264 +3607,207 @@ gettext("Delete");
 /* ./themes/default/tpl//static_pages/index.tpl */
 gettext("There is no static pages.");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("New");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Newsletter :: Configuration");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("Search keyworks containing ");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("Type");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("Keyword");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Sync list  with server");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("Replacement value");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//pclave/index.tpl */
-gettext("Actions");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Go back to list");
 
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Newsletter management");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Information about newsletter receipt");
 
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Next");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Maillist email:");
 
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Next step");
+/* ./themes/default/tpl//newsletter/config.tpl */
+gettext("Maillist name:");
 
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Clean container of selected opinions");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Clean");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Select all the opinions available");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Select all");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Article selection");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Articles that contain ");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("in");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Home");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Frontpage");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Library");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("from category");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("ALL");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Buscar");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Available articles (please, double click over one element to send it)");
-
-/* ./themes/default/tpl//newsletter/actions/listArticles.tpl */
-gettext("Selected articles (please doucle click over one element to discart it)");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Newsletter management");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Next");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Next step");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Back");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Previous step");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Clean container of selected opinions");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Clean");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Select all the opinions available");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Select all");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Opinion selection");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Opinions that contain ");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("in");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Home");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Library");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("from author");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("ALL");
-
-/* ./themes/default/tpl//newsletter/actions/listOpinions.tpl */
-gettext("Search");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Newsletter management");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Next");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Next step");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Back");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Previous step");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Clean container of selected opinions");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Clean");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Select all the opinions available");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Select all");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Recipient selection");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Subscriptors available (please double click over a subscritor to add to recipients)");
-
-/* ./themes/default/tpl//newsletter/actions/listAccounts.tpl */
-gettext("Subscriptors selected (please double click over a subscritor to delete from recipients)");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Newsletter management");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Next");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Next");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Previous");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Previous");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Email subject");
-
-/* ./themes/default/tpl//newsletter/actions/preview.tpl */
-gettext("Newsletter preview:");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Active users");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Active users");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Go to admin main page");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Welcome <a title=\"See my user preferences\" href=\"/admin/user.php?action=read&id=%1\">%2</a>");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Admin privileges");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Active users in backend");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Logout from control panel");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Log out");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Delivered newsletter report");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Back");
-
-/* ./themes/default/tpl//newsletter/header.tpl */
-gettext("Previous step");
-
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Save configuration");
-
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Save configuration");
-
-/* ./themes/default/tpl//configurator.tpl */
+/* ./themes/default/tpl//newsletter/config.tpl */
 gettext("Save");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Backup configuration");
+/* ./themes/default/tpl//newsletter/send.tpl */
+gettext("Delivered newsletter report");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Backup");
+/* ./themes/default/tpl//newsletter/send.tpl */
+gettext("Back");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Backup");
+/* ./themes/default/tpl//newsletter/send.tpl */
+gettext("Previous step");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover configuration");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Newsletter management");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Next");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Next step");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Please select a backup to restore");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Clean container of selected opinions");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Cancel");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Clean");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Cancel");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Select all the opinions available");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Cancel");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Select all");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover configuration");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Config newsletter module");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Configurations");
 
-/* ./themes/default/tpl//configurator.tpl */
-gettext("Recover");
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Article selection");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Articles that contain ");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("in");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Home");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Frontpage");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Library");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("from category");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("ALL");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Buscar");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Available articles (please, double click over one element to send it)");
+
+/* ./themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Selected articles (please doucle click over one element to discart it)");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Newsletter management");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Next");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Next step");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Back");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Previous step");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Clean container of selected opinions");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Clean");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Select all the opinions available");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Opinion selection");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Opinions that contain ");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("in");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Home");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Library");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("from author");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("ALL");
+
+/* ./themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Search");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Newsletter management");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Next");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Next step");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Back");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Previous step");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Clean container of selected opinions");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Clean");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Select all the opinions available");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Select all");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Recipient selection");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Subscriptors available (please double click over a subscritor to add to recipients)");
+
+/* ./themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Subscriptors selected (please double click over a subscritor to delete from recipients)");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Newsletter management");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Next");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Next");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Previous");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Previous");
+
+/* ./themes/default/tpl//newsletter/preview.tpl */
+gettext("Email subject");
 
