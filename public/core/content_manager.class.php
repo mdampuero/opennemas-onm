@@ -304,6 +304,8 @@ class ContentManager
     */
     static public function sortArrayofObjectsByProperty( $array, $property )
     {
+        // Y si el array es vacio ????
+        if (count($array) > 0) {
         $cur = 1;
         $stack[1]['l'] = 0;
         $stack[1]['r'] = count($array)-1;
@@ -351,6 +353,7 @@ class ContentManager
             } while ( $l < $r );
 
         } while ( $cur != 0 );
+        }
 
         return $array;
 
