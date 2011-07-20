@@ -87,7 +87,7 @@
 
     <!-- Footer -->
     <div id="footer">
-      	<div class="copyright">{t escape=off}Powered by <a href="http://www.tomatocms.com">OpenNeMaS</a> v{$version}{/t}</div>
+      	<div class="copyright">{t escape=off}Powered by <a href="http://www.openhost.es/opennemas">OpenNeMaS</a> v{$version}{/t}</div>
     </div>
 </body>
 </html>
