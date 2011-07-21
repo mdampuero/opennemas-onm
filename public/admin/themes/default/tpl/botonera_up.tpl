@@ -70,16 +70,7 @@
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/category\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	{if $type eq "list"}
-		<div id="menu-acciones-admin" class="clearfix">
-			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-			<ul>
-				<li>
-					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
-						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
-					</a>
-				</li>
-			</ul>
-		</div>
+		
 	{elseif $type eq "order"}
 		<div id="menu-acciones-admin" class="clearfix">
 			<div style="float:left"><b><em>DRAG &amp; DROP: pinche y arrastre las filas para determinar el orden en el menú de las secciones</em></b></div>

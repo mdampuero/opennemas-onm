@@ -12,10 +12,7 @@ class ContentCategory {
     var $internal_category=NULL; // flag asignar a un tipo de contenido.
     /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
      * $internal_category = 1 categoria generica para todos los tipos de contenidos.
-     * $internal_category = 2 categorias especiales Se ven en el menú pero no se pueden modificar pq son fijas. Opinion, unknown, conecta...
-     * $internal_category = 3 categorias para albums.
-     * $internal_category = 4 categorias para el kiosco
-     * $internal_category = 5 categorias para contenidos video.
+     * $internal_category = n corresponde con el content_type
      */
 
     function __construct($id=null) {
@@ -30,9 +27,26 @@ class ContentCategory {
         //if($data['subcategory']!=0){$sub="-".$data['subcategory'];}
         $data['name'] = strtolower($data['title']);
         $data['name'] = String_Utils::normalize_name( $data['name']);
+        $ccm = new ContentCategoryManager();
+        
+        if( $ccm->exists($data['name'])) {
+            $i = 1;
+            $name = $data['name'];            
+            while($ccm->exists($name)){
+                $name = $data['name'].$i;
+                $i++;
+            }
+            $data['name'] = $name;
+        }
 
-        $sql = "INSERT INTO content_categories (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`) VALUES (?,?,?,?,?,?,?)";
-        $values = array($data['name'], $data['title'],$data['inmenu'],$data['subcategory'],$data['internal_category'], $data['logo_path'], $data['color']);
+
+        $sql = "INSERT INTO content_categories
+                (`name`, `title`,`inmenu`,`fk_content_category`,`internal_category`, `logo_path`,`color`)
+                VALUES (?,?,?,?,?,?,?)";
+
+        $values = array($data['name'], $data['title'],$data['inmenu'],
+                        $data['subcategory'],$data['internal_category'],
+                        $data['logo_path'], $data['color']);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();

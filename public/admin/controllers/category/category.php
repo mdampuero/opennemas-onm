@@ -6,6 +6,7 @@
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
+Acl::checkOrForward('CATEGORY_ADMIN');
 /**
  * Setup view
 */
@@ -13,28 +14,22 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Section Manager'));
 
 $content_types = array('article' => 1 , 'album' => 7, 'video' => 9, 'opinion' => 4, 'kiosko'=>14);
-/**
- * Setup Database access
-*/
+//$contentType = Content::getIDContentType('advertisement');
+
 $ccm = new ContentCategoryManager();
 
 //$ccm = ContentCategoryManager::get_instance();
 //list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
 
-$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0', 'ORDER BY inmenu DESC, posmenu');
+$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0 ', 'ORDER BY internal_category, inmenu DESC, posmenu');
 $tpl->assign('allcategorys', $allcategorys);
 
-if (!isset($_REQUEST['page'])) {
-     $_REQUEST['page'] = 1;
-}
+ 
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
+ 
 
-if(!isset ($_POST['inmenu'])) {
-   $_POST['inmenu'] = 0;
-}
+$inmenu = filter_input(INPUT_GET,'inmenu',FILTER_VALIDATE_INT, array('options' => array('default' => 0)));
 
-if (!isset($_REQUEST['inmenu'])) {
-    $_REQUEST['inmenu'] = 0;
-}
 
 if( isset($_REQUEST['action']) ) {
 
@@ -54,8 +49,6 @@ if( isset($_REQUEST['action']) ) {
 
             foreach($allcategorys as $cate) {
                if($cate->internal_category !=0 ) {
-                     // Filtrar album(3) y PlanConecta(9)
-                     if($cate->pk_content_category!=3 && $cate->pk_content_category!=9){
                          $num_contents[$i]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
@@ -73,7 +66,6 @@ if( isset($_REQUEST['action']) ) {
                          }
                          $subcategorys[$i]=$resul;
                      $i++;
-                     }
                }
             }
 
@@ -189,7 +181,7 @@ if( isset($_REQUEST['action']) ) {
             /* Limpiar la cache de portada de todas las categorias */
             $refresh = Content::refreshFrontpageForAllCategories();
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['id'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['id'].'&page='.$page);
 
 		break;
 

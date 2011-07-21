@@ -9,16 +9,6 @@
 			<li>
 				<a href="{$_SERVER['PHP_SELF']}?action=list&category=0" id="link_global"  {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}GLOBAL{/t}</a>
 			</li>
-			<script type="text/javascript">
-			// <![CDATA[
-			Event.observe($('link_global'), 'mouseover', function(event) {
-				$('menu_subcats').setOpacity(0);
-				e = setTimeout("show_subcat('{$category}','{$home|urlencode}');
-				$('menu_subcats').setOpacity(1);",1000);
-			});
-			// ]]>
-			</script>
-
 			{include file="menu_categorys.tpl" home="{$_SERVER['PHP_SELF']}?action=list"}
 
 		</ul>

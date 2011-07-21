@@ -36,6 +36,8 @@ class String_Utils {
                         '<'=>'', '>'=>'', '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
                         '.'=>'', ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n');
         $name = strtr($name, $trade);
+        $name = preg_replace('/[\-]+/', '-', $name);
+        $name = preg_replace('/[\ ]+/', '', $name);
         return $name;
     }
 

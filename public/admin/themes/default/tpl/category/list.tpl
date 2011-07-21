@@ -41,23 +41,32 @@
         </ul>
 
         <div class="panel" id="listado">
-
-            {include file="botonera_up.tpl" type="list"}
-            
+            <div id="menu-acciones-admin" class="clearfix">
+                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+                <ul>
+                    <li>
+                        <a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
+                            <img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+             
             <table class="adminheading">
                 <tr>
                     <td>&nbsp;</td>
                 </tr>
             </table>
-            <table class="adminlist" id="tabla"  width="100%" style="margin-top:10px;">
+            <table class="adminlist" id="tabla"  width="100%">
                 <thead>
                     <tr>
                         <th width="360px">{t}Title{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Name{/t}</th>
                         <th width="120px" padding="0px 10px" align="center">{t}Type{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Articles{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
-                        <th align="center" padding="10px" width="100px">{t}See in menu{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
@@ -65,12 +74,26 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td colspan="9">
-                            {assign var=containers value=1}
-                            <div id="ctes" class="seon" style="float:left;width:100%;"> <br>
+                        <td colspan="10">
+                                <hr> <h2>GLOBAL</h2> <hr>
                                 {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category neq 14}
-                                        {if $containers eq 1 && $categorys[c]->inmenu eq 0} <hr> <h2>{t}NO MENU{/t}</h2> <hr>   {assign var=containers value=0} {/if}
+                                    {if $categorys[c]->internal_category eq 1}                                       
+                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                    {/if}
+                                {sectionelse}
+                                    <h2><b>{t}No available sections{/t}</b></h2>
+                                {/section}
+                                 <hr> <h2>ALBUM</h2> <hr>
+                                {section name=c loop=$categorys}
+                                    {if $categorys[c]->internal_category eq 7}
+                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                    {/if}
+                                {sectionelse}
+                                    <h2><b>{t}No available sections{/t}</b></h2>
+                                {/section}
+                                 <hr> <h2>VIDEO</h2> <hr>
+                                {section name=c loop=$categorys}
+                                    {if $categorys[c]->internal_category eq 9}
                                         {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                                     {/if}
                                 {sectionelse}
@@ -84,7 +107,7 @@
                                 {sectionelse}
                                     <h2><b>{t}No available sections{/t}</b></h2>
                                 {/section}
-                            </div>
+                           
                         </td>
                     </tr>
                 </tbody>

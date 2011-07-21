@@ -59,13 +59,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ARCHIVE_ADMIN"
             title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
             link="article.php?action=list_hemeroteca"
-        />
-        <node
-            module_name="PAPER_IMPORT"
-            privilege="ARTICLE_LIST_PEND"
-            title="'.htmlspecialchars(_("Agency Manager"), ENT_QUOTES).'"
-            link="article.php?action=list_agency"
-        />
+        />        
         <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
@@ -153,7 +147,19 @@ $menuXml = '<?xml version="1.0"?>
             module_name="EUROPAPRESS_IMPORTER"
             title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
             link="controllers/agency_importer/europapress.php"
-            privilege="EP_IMPORTER_ADMIN" />
+            privilege="IMPORT_EPRESS" />
+        <node
+            module_name="PAPER_IMPORT"
+            privilege="IMPORT_EFE"
+            title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
+            link="article.php?action=list_agency"
+        />
+        <node
+            module_name="PAPER_IMPORT"
+            privilege="IMPORT_XML"
+            title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
+            link="importXML.php?action=info"
+        />
         <node
             title="&lt;hr/&gt;"
             link="javascript:return false;"
