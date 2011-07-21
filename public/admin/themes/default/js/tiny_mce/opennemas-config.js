@@ -16,13 +16,13 @@ OpenNeMas.tinyMceConfig = {
         mode : "exact",
         theme : "advanced",
         language: "es",
-        plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator",
+        plugins : "safari,style,advlink,inlinepopups,paste,noneditable,media,searchreplace,xornal,spellchecker,tabfocus,iframe,gtranslator,blockquote",
 
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-        theme_advanced_buttons2_add : "styleprops,|,media,iframe,spellchecker,gtranslator,xornalautolink",
+        theme_advanced_buttons2_add : "styleprops,|,media,iframe,spellchecker,gtranslator,xornalautolink,blockquote",
         theme_advanced_buttons2_add_before: "visualaid,charmap,sub,sup,|,cut,copy,pastetext,|,removeformat,cleanup,code,|,search,replace,|",
         theme_advanced_buttons3 : "",
         theme_advanced_toolbar_location : "top",
@@ -52,8 +52,8 @@ OpenNeMas.tinyMceConfig = {
 
         /* Iframe */
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/
-        extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
-
+        extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],blockquote/div[class=style1]",
+                
         theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
