@@ -66,26 +66,9 @@ function noticiasshow(my) {
   }	
 }
 
-
-function  get_advertisements(page) {
-   new Ajax.Updater('photos', "advertisement_images.php?page="+page, {
-         evalScripts: false, 
-         onComplete: function() {		   			
-            var photos = $('photos').select('img');
-            for(var i=0; i<photos.length; i++) {
-               //console.log("'" + photos[i].id + "'");
-               try {
-                  new Draggable(photos[i].id, { revert:true, scroll: window, ghosting:true }  );
-               } catch(e) {
-               //	console.debug( e );
-               }
-            }
-         }
-   });
-}
-
-
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
+
+// TODO: this code is identical utils.js or utilsarticle.js
 
 //Eliminar y recuperar imagen en articulos.
  function recuperar_eliminar(field){

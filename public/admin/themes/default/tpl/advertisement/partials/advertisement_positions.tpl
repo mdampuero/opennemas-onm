@@ -1,7 +1,7 @@
 <table border="0" cellpadding="4" cellspacing="6" id="ads_type_portada">
 <tbody>
     <tr>
-        <td align="center" colspan=2>
+        <td align="center" colspan="2">
             <table width=100%>
                 <tr>
                     <td align="center">
@@ -18,7 +18,7 @@
         </td>
     </tr>
     <tr>
-        <td align="center" colspan=2>
+        <td align="center" colspan="2">
             <table width=100%>
                 <tr>
                     <td align="left">
@@ -42,7 +42,7 @@
     </tr>
 
     <tr>
-        <td colspan=2 align=right>
+        <td colspan="2" align="right">
             <table width=100%>
                 <tr>
                     <td align="right">
@@ -201,7 +201,7 @@
                     <td align="right">
                         <label>
                             {t}Bottom Right LeaderBoard (234X90){/t}
-                            <input type="radio" name="type_advertisement" value=6" {if $advertisement->type_advertisement == 6}checked="checked" {/if}/>
+                            <input type="radio" name="type_advertisement" value="6" {if $advertisement->type_advertisement == 6}checked="checked" {/if}/>
                         </label>
                     </td>
                 </tr>
@@ -216,16 +216,33 @@
 /* <![CDATA[ */
 var adPositionPortada = null;
 
-var positions_portada = [
-                            '0,0,0,0', '1,1,178,23',
-                            '180,1,58,23', '3,277,76,62',
-                            '160,346,76,62', '3,553,154,25',
-                            '160,553,74,12', '160,566,74,12',
-                            '160,753,76,56', '1,826,176,22',
-                            '177,826,58,22' ];
+var positions_portada = [ '0,0,0,0', '1,1,175,24', '180,1,58,24',
+                          '1,292,175,24', '180,292,58,24',
+                          '1,576,175,26', '180,576,58,26' ];
+
+positions_portada[11]='8,48,72,76';
+positions_portada[21]='86,48,72,76';
+positions_portada[31]='162,48,72,76';
+positions_portada[12]='8,134,72,76';
+positions_portada[22]='86,134,72,76',
+positions_portada[32]='162,135,72,76';
+
+positions_portada[13]='8,224,50,52';
+positions_portada[33]='184,224,50,54';
+
+positions_portada[14]='8,335,72,76';
+positions_portada[24]='86,335,72,76';
+positions_portada[34]='162,335,72,76';
+positions_portada[15]='8,422,72,76';
+positions_portada[25]='86,422,72,76',
+positions_portada[35]='162,422,72,76';
+
+positions_portada[16]='8,512,48,50';
+positions_portada[36]='186,509,50,54';
+
 
 // Intersticial banner
-positions_portada[50] = '0,0,240,878';
+positions_portada[50] = '0,0,240,620';
 
 var options  =  {
                 'positions': positions_portada,

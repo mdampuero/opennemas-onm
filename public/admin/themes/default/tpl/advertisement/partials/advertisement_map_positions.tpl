@@ -23,7 +23,7 @@
 
 <div id="advertisement-mosaic" style="display: none;">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="/admin/images/advertisement/front_lucidity_240.png" width="240" height="878" border="0" usemap="#mapPortada" />
+    <img src="/admin/images/advertisement/front_advertisement.png" width="240" height="628" border="0" usemap="#mapPortada" />
 </div>
 
 <map name="mapPortada">
@@ -32,27 +32,55 @@
     <!-- #$-:Please do not edit lines starting with "#$" -->
     <!-- #$VERSION:2.3 -->
     <!-- #$AUTHOR:sandra -->
-    <area shape="rect" coords="1,1,176,26" alt="Big banner superior izquierdo" title="{t}Big banner top left{/t}"
+    <area shape="rect" coords="1,1,174,25" alt="Big banner superior izquierdo" title="{t}Big banner top left{/t}"
           href="javascript:adPositionPortada.selectPosition(1);" />
-    <area shape="rect" coords="177,1,239,26" alt="Banner superior derecho" title="{t}Banner top right{/t}"
+    <area shape="rect" coords="178,1,240,25" alt="Banner superior derecho" title="{t}Banner top right{/t}"
           href="javascript:adPositionPortada.selectPosition(2);" />
-    <area shape="rect" coords="3,277,81,339" alt="Botón columna 1" title="{t}Button column 1{/t}"
+    <area shape="rect" coords="10,46,80,128" alt="Botón columna 1 position1" title="{t}Button column 1 position 1{/t}"
+          href="javascript:adPositionPortada.selectPosition(11);" />
+    <area shape="rect" coords="10,132,80,212" alt="Botón columna 1 position2" title="{t}Button column 1 position 2{/t}"
+          href="javascript:adPositionPortada.selectPosition(12);" />
+    <area shape="rect" coords="90,46,160,128" alt="Botón columna 2 position1" title="{t}Button column 2 position 1{/t}"
+          href="javascript:adPositionPortada.selectPosition(21);" />
+    <area shape="rect" coords="90,132,160,212" alt="Botón columna 2 position2" title="{t}Button column 2 position 2{/t}"
+          href="javascript:adPositionPortada.selectPosition(22);" />
+    <area shape="rect" coords="160,46,240,128" alt="Botón columna 3 position1" title="{t}Button column 3 position 1{/t}"
+          href="javascript:adPositionPortada.selectPosition(31);" />
+    <area shape="rect" coords="160,132,240,212" alt="Botón columna 3 position2" title="{t}Button column 3 position 2{/t}"
+          href="javascript:adPositionPortada.selectPosition(32);" />
+
+    <area shape="rect" coords="10,225,60,280" alt="Botón columna 1 position3" title="{t}Button column 1 position 3{/t}"
+          href="javascript:adPositionPortada.selectPosition(13);" />
+    <area shape="rect" coords="184,225,238,280" alt="Botón columna 3 position3" title="{t}Button column 3 position 3{/t}"
+          href="javascript:adPositionPortada.selectPosition(33);" />
+    
+    <area shape="rect" coords="1,294,174,318" alt="Botón columna " title="{t}Center Left LeaderBoard{/t}"
           href="javascript:adPositionPortada.selectPosition(3);" />
-    <area shape="rect" coords="160,346,237,410" alt="Botón columna 3" title="{t}Button column 3{/t}"
+    <area shape="rect" coords="178,294,240,318" alt="Botón columna " title="{t}Center Right LeaderBoard{/t}"
           href="javascript:adPositionPortada.selectPosition(4);" />
 
-    <area shape="rect" coords="3,553,158,575" alt="Separador horizontal" title="{t}Horizontal separator{/t}"
-          href="javascript:adPositionPortada.selectPosition(5);" />
-    <area shape="rect" coords="159,553,233,566" alt="Mini derecho 1" title="{t}Mini right 1{/t}"
-          href="javascript:adPositionPortada.selectPosition(6);" />
-    <area shape="rect" coords="159,566,233,578" alt="Mini derecho 2" title="{t}Mini right 2{/t}"
-          href="javascript:adPositionPortada.selectPosition(7);" />
+    <area shape="rect" coords="10,334,80,416" alt="Botón columna 1 position4" title="{t}Button column 1 position 4{/t}"
+          href="javascript:adPositionPortada.selectPosition(14);" />
+    <area shape="rect" coords="10,420,80,500" alt="Botón columna 1 position5" title="{t}Button column 1 position 5{/t}"
+          href="javascript:adPositionPortada.selectPosition(15);" />
+    <area shape="rect" coords="90,334,160,416" alt="Botón columna 2 position4" title="{t}Button column 2 position 4{/t}"
+          href="javascript:adPositionPortada.selectPosition(24);" />
+    <area shape="rect" coords="90,420,160,500" alt="Botón columna 2 position5" title="{t}Button column 2 position 5{/t}"
+          href="javascript:adPositionPortada.selectPosition(25);" />
+    <area shape="rect" coords="160,334,240,416" alt="Botón columna 3 position4" title="{t}Button column 3 position 4{/t}"
+          href="javascript:adPositionPortada.selectPosition(34);" />
+    <area shape="rect" coords="160,420,240,500" alt="Botón columna 3 position5" title="{t}Button column 3 position 5{/t}"
+          href="javascript:adPositionPortada.selectPosition(35);" />
+ 
+    <area shape="rect" coords="10,510,60,560" alt="Botón columna 1 position5" title="{t}Button column 1 position 5{/t}"
+          href="javascript:adPositionPortada.selectPosition(16);" />
+    <area shape="rect" coords="184,510,238,560" alt="Botón columna 3 position6" title="{t}Button column 3 position 6{/t}"
+          href="javascript:adPositionPortada.selectPosition(36);" />
 
-    <area shape="rect" coords="159,753,237,812" alt="Botón inferior derecho" title="{t}Button bottom right{/t}"
-          href="javascript:adPositionPortada.selectPosition(8);" />
-    <area shape="rect" coords="1,826,176,849" alt="Big banner inferior izquierdo"
-        title="{t}Big banner bottom left{/t}" href="javascript:adPositionPortada.selectPosition(9);" />
-    <area shape="rect" coords="177,826,239,849" alt="Banner inferior derecho" title="{t}Banner bottom right{/t}"
-          href="javascript:adPositionPortada.selectPosition(10);" />
+    <area shape="rect" coords="1,574,174,608" alt="Separador horizontal" title="{t}Horizontal separator{/t}"
+          href="javascript:adPositionPortada.selectPosition(5);" />
+    <area shape="rect" coords="178,574,240,608" alt="Mini derecho 1" title="{t}Mini right 1{/t}"
+          href="javascript:adPositionPortada.selectPosition(6);" />
+    
 
 </map>

@@ -4,7 +4,9 @@
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
 {/block}
-
+{block name="footer-js" append}
+      <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
+{/block}
 {block name="header-css" append}
 <style type="text/css">
     .inputExtension {
@@ -24,186 +26,7 @@
    
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-    {* LISTADO ************************************************************** *}
-    {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-
-        <ul class="tabs2" style="margin-bottom: 28px;">
-            <li>
-            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>HOME</font></a>
-            </li>
-            <li>
-            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>OPINIÓN</font></a>
-            </li>
-<!--            <li>
-            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>GALERÍAS</font></a>
-            </li>-->
-            <script type="text/javascript">
-            // <![CDATA[
-                {literal}
-                      Event.observe($('link_home'), 'mouseover', function(event) {
-                         $('menu_subcats').setOpacity(0);
-                         e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                        });
-                      Event.observe($('link_opinion'), 'mouseover', function(event) {
-                         $('menu_subcats').setOpacity(0);
-                         e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                        });
-                      Event.observe($('link_gallery'), 'mouseover', function(event) {
-                         $('menu_subcats').setOpacity(0);
-                         e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                        });
-
-                {/literal}
-            // ]]>
-            </script>
-            {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
-        </ul>
-        <br style="clear: both;" />
-
-        <div id="{$category}">
-        
-            {include file="botonera_up.tpl"}
-            
-            <script type="text/javascript">
-                function submitFilters(frm) {
-                    $('action').value='list';
-                    $('page').value = 1;
-                    frm.submit();
-                }
-            </script>
-
-            <table class="adminheading">
-                <tr>
-                    <th nowrap="nowrap" align="right">
-                        <label>{t}Banner type:{/t}
-                        <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.type_advertisement
-                                          selected=$smarty.request.filter.type_advertisement}
-                        </select></label>
-                        &nbsp;&nbsp;&nbsp;
-            
-                        <label>{t}State{/t}
-                        <select name="filter[available]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.available
-                                          selected=$smarty.request.filter.available}
-                        </select></label>
-                        &nbsp;&nbsp;&nbsp;
-            
-                        <label>{t}Type:{/t}
-                        <select name="filter[type]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.type
-                                          selected=$smarty.request.filter.type}
-                        </select></label>
-            
-                        {* $_REQUEST['page'] => $_POST['page'] is more important that $_GET['page'], see also php.ini - variables_order *}
-                        <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
-                    </th>
-                </tr>
-            </table>
-
-            <table class="adminlist">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th class="title">{t}Type{/t}</th>
-                        <th>{t}Title{/t}</th>
-                        <th align="center">{t}Permanency{/t}</th>
-                        <th align="center">{t}Clicks{/t}</th>
-                        <th align="center">{t}Seeing{/t}</th>
-                        <th align="center">{t}Type{/t}</th>
-                        <th align="center">{t}Published{/t}</th>
-                        <th align="center">{t}Edit{/t}</th>
-                        <th align="center">{t}Delete{/t}</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {section name=c loop=$advertisements}
-                    <tr {cycle values="class=row0,class=row1"}>
-                        <td style="text-align:center;font-size: 11px;width:5%;">
-                            <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
-                                value="{$advertisements[c]->pk_advertisement}" />
-                        </td>
-                        <td style="font-size: 11px;">
-                            <label for="title">
-                                {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
-                                {$map.$type_advertisement}
-                            </label>
-                        </td>
-                        <td style="font-size: 11px;">
-                            {$advertisements[c]->title|clearslash}
-                        </td>
-                    
-                        <td style="text-align:center;font-size: 11px;width:80px;" align="center">
-                            {if $advertisements[c]->type_medida == 'NULL'} Indefinida {/if}
-                            {if $advertisements[c]->type_medida == 'CLIC'} Clicks: {$advertisements[c]->num_clic} {/if}
-                            {if $advertisements[c]->type_medida == 'VIEW'} Visionados: {$advertisements[c]->num_view} {/if}
-                            {if $advertisements[c]->type_medida == 'DATE'}
-                                Fecha: {$advertisements[c]->starttime|date_format:"%d:%m:%Y"}-{$advertisements[c]->endtime|date_format:"%d:%m:%Y"}
-                            {/if}
-                        </td>
-                    
-                        <td style="text-align:center;font-size: 11px;width:105px;" align="right">
-                            {$advertisements[c]->num_clic_count}
-                        </td>
-                        <td style="text-align:center;font-size: 11px;width:40px;" align="right">
-                             {$advertisements[c]->views}
-                        </td>
-                        <td style="text-align:center;font-size: 11px;width:70px;" align="center">
-                            {if $advertisements[c]->with_script == 1}
-                                <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
-                                     alt="Javascript" title="Javascript" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="Multimedia"
-                                     title="Elemento multimedia (flash, imagen, gif animado)" />
-                            {/if}
-                        </td>
-                        <td style="text-align:center;width:70px;" align="center">
-                            {if $advertisements[c]->available == 1}
-                                <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                                    title="Publicado">
-                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                            {else}
-                                <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                                    title="Pendiente">
-                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                            {/if}
-                        </td>
-                    
-                        <td style="text-align:center;width:70px;" align="center">
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$advertisements[c]->id}');" title="Modificar">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        </td>
-                    
-                        <td style="text-align:center;width:70px;" align="center">
-                            <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="Eliminar">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                        </td>
-                    
-                    </tr>
-                    {sectionelse}
-                    <tr>
-                        <td align="center" colspan="10">
-                            <h2>Ninguna publicidad guardada en esta sección</h2>
-                        </td>
-                    </tr>
-                    {/section}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="10" style="padding:10px;font-size: 12px;" align="center">
-                            <br /><br />
-                            {$paginacion->links}
-                            <br /><br />
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-    {/if}
-
+    
     {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
     
         <div id="menu-acciones-admin" class="clearfix">
@@ -254,7 +77,8 @@
                                         <label for="available">{t}Published:{/t}</label>
                                     </td>
                                     <td>
-                                        <select name="available" id="available">
+                                        <select name="available" id="available"
+                                            {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"} disabled="disabled" {/acl} >
                                             <option value="1" {if $advertisement->available == 1}selected="selected"{/if}>Si</option>
                                             <option value="0" {if $advertisement->available == 0}selected="selected"{/if}>No</option>
                                         </select>
@@ -433,7 +257,7 @@
                         {if $smarty.request.action eq "read"}
                             <option value="0" {if in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                             <option value="4" {if in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
+                            <option value="3" {if in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Gallery{/t}</option>
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
                                     {if in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
@@ -448,8 +272,13 @@
                             {/section}
                         {else}
                             <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                            {is_module_activated name="OPINION_MANAGER"}
                             <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            <!--<option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>-->
+                            {/is_module_activated}
+                            {is_module_activated name="ALBUM_MANAGER"}
+                            <option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>
+                            {/is_module_activated}
+
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
                                     {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
@@ -507,11 +336,17 @@
                         <ul id="tabs">
                             <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
                             <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                            <!--<li><a href="#publi-video">{t}Video frontpage{/t}</a></li>-->
-                            <!--<li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>-->
+                            {is_module_activated name="VIDEO_MANAGER"}
+                            <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
+                            <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
+                            {/is_module_activated}
+                            {is_module_activated name="OPINION_MANAGER"}
                             <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
                             <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
-                            <!--<li><a href="#publi-gallery">{t}Galleries{/t}</a></li>-->
+                            {/is_module_activated}
+                            {is_module_activated name="ALBUM_MANAGER"}
+                            <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
+                            {/is_module_activated}
                         </ul>
                 
                         <div id="publi-portada" class="panel-ads">
@@ -521,24 +356,27 @@
                         <div id="publi-interior" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                         </div>
-                
+                        {is_module_activated name="OPINION_MANAGER"}
                         <div id="publi-opinion" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                        </div>
-                
+                        </div>                
                         <div id="publi-opinion-interior" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
                         </div>
-                        <!--<div id="publi-video" class="panel-ads">
+                        {/is_module_activated}
+                        {is_module_activated name="VIDEO_MANAGER"}
+                        <div id="publi-video" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_video.tpl"}
                         </div>
-                
                         <div id="publi-video-interior" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
                         </div>
+                        {/is_module_activated}
+                        {is_module_activated name="ALBUM_MANAGER"}
                         <div id="publi-gallery" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                        </div>-->
+                        </div>
+                        {/is_module_activated}
                 
                     </td>
                     <td>&nbsp;</td>

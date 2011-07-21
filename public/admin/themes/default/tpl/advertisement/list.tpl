@@ -41,21 +41,14 @@
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
-            <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_opinion"  {if $category==4} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}OPINION{/t}</font></a>
-            </li>
-<!--            <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=3" id="link_gallery"  {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}GALLERIES{/t}</font></a>
-            </li>-->
-
+           
             {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
-        <br style="clear: both;" />
 
         <div id="{$category}">
 
             <div id="menu-acciones-admin" class="clearfix">
-                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title} {if $category eq 0}HOME{/if}</h2></div>
+                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
                 <ul>
                     <li>
                         <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
@@ -86,8 +79,7 @@
                     </li>
                 </ul>
             </div>
-
-
+            <br />
 
             <table class="adminheading">
                 <tr>
