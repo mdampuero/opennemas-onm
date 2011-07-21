@@ -27,7 +27,7 @@
         </ul>
 
         <div id="menu-acciones-admin" class="clearfix">
-            <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
+            <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp; {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul>
                 {acl isAllowed="ALBUM_DELETE"}
                 <li>
@@ -168,6 +168,7 @@
     {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 
        <div id="menu-acciones-admin" class="clearfix">
+           <div style="float:left; margin:8px;"><h2>{t}Album manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Album{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">

@@ -16,7 +16,7 @@ Acl::checkOrForward('ALBUM_ADMIN');
 require_once('./albums_events.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Photo Album'));
+$tpl->assign('titulo_barra', _('Album Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 

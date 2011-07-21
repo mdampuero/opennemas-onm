@@ -49,6 +49,7 @@ if (!isset($_REQUEST['page'])) {
 if (!isset($_REQUEST['where'])) {
     $_REQUEST['where '] = '';
 }
+//TODO - ???????????????????????????? what is this?
 if (!empty($_REQUEST['categ'])){ //&& $_REQUEST['categ']=='todas') {
     if($_REQUEST['categ']=='todas'){
         $_REQUEST['category'] = 'GLOBAL';

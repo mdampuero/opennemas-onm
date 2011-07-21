@@ -229,7 +229,7 @@
 
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list_hemeroteca")}
 	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{if $category eq 'todos'} {$category|upper} {else}{$datos_cat[0]->title} {/if}</h2></div>
 		<ul>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">

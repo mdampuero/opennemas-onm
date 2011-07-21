@@ -26,12 +26,12 @@
 require_once(dirname(__FILE__).'/../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
+// Check MODULE
+\Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_MANAGER');
 // Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('COMMENT_ADMIN')) {
-    Acl::deny();
-}
+Acl::checkOrForward('COMMENT_ADMIN');
 
+ 
 /**
  * Setup view
 */
@@ -55,7 +55,10 @@ if(isset($_POST['action'])
 }else{
     $action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
-$category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'todos')) );
+$category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING );
+if(empty($category)) {
+    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 'todos' )));
+}
 
 $tpl->assign('category', $category);
 
@@ -67,7 +70,7 @@ if(isset($action)) {
 
             // Get all categories for the menu
             $ccm = ContentCategoryManager::get_instance();
-            list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
+            list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category);
             $tpl->assign('subcat', $subcat);
             $tpl->assign('allcategorys', $parentCategories);
             $tpl->assign('datos_cat', $datos_cat);

@@ -5,61 +5,43 @@
 */
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
-// Register events
+ 
+\Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
 
+Acl::checkOrForward('POLL_ADMIN');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Polls');
+$tpl->assign('titulo_barra', 'Polls Management');
 
-require_once(SITE_CORE_PATH.'album_photo.class.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
 
-if (!isset($_REQUEST['page'])) {
-     $_REQUEST['page'] = 1;
+
+/******************* GESTION CATEGORIAS  *****************************/
+$contentType = Content::getIDContentType('poll');
+
+ 
+$category = filter_input(INPUT_GET,'category');
+if(empty($category)) {
+    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
 }
-
-if (!isset($_REQUEST['category'])) {
-     $_REQUEST['category'] = 15;//deportes
-}
-
-
 
 $ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
-
-// <editor-fold defaultstate="collapsed" desc="Container gente-fotoactualidad">
-// Parse template.conf to assign
-$tplFrontend = new Template(TEMPLATE_USER);
-$section = $ccm->get_name($_REQUEST['category']);
-$section = (empty($section))? 'home': $section;
-
-$container_noticias_gente = $tplFrontend->readKeyConfig('template.conf', 'container_noticias_gente', $section);
-
-if($container_noticias_gente == '1') {
-    $tpl->assign('bloqueGente', 'GENTE / FOTO ACTUALIDAD');
-} else {
-    $tpl->assign('bloqueGente', 'FOTO ACTUALIDAD / GENTE');
-}
-// </editor-fold>
-
+list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+if(empty($category))
+    $category = $categoryData[0]->pk_content_category;
+$tpl->assign('category', $category);
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
-$tpl->assign('datos_cat', $datos_cat);
+$tpl->assign('datos_cat', $categoryData);
 $allcategorys = $parentCategories;
-$tpl->assign('category', $_REQUEST['category']);
-/*if( !Privileges_check::CheckPrivileges('MUL_ADMIN'))
-{
-    Privileges_check::AccessDeniedAction();
-}
-*/
-
+ 
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
 
             $cm = new ContentManager();
 		     	// ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-			list($polls, $pager)= $cm->find_pages('Poll', 'fk_content_type=11 ', 'ORDER BY  created DESC ',$_REQUEST['page'],10, $_REQUEST['category']);
+			list($polls, $pager)= $cm->find_pages('Poll', 'fk_content_type=11 ', 'ORDER BY  created DESC ',$page,10, $category);
 
 			foreach($polls as $poll){
                 $poll->category_name = $poll->loadCategoryName($poll->pk_content);
@@ -74,10 +56,12 @@ if( isset($_REQUEST['action']) ) {
 			break;
 
 		case 'new':
+            Acl::checkOrForward('POLL_CREATE');
 			// Nada
 			break;
 
 		case 'read': //habrá que tener en cuenta el tipo
+             Acl::checkOrForward('POLL_UPDATE');
 			$poll = new Poll( $_REQUEST['id'] );
 			$tpl->assign('poll', $poll);
 
@@ -86,20 +70,22 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'create':
+             Acl::checkOrForward('POLL_CREATE');
 			$poll = new Poll();
 			$_POST['publisher'] = $_SESSION['userid'];
 			if($poll->create( $_POST )) {
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 			} else {
 				$tpl->assign('errors', $poll->errors);
 			}
 		break;
 
 		case 'update':
+             Acl::checkOrForward('POLL_UPDATE');
 			$poll = new Poll();
 			$poll->update( $_REQUEST );
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
 		break;
 
@@ -107,10 +93,12 @@ if( isset($_REQUEST['action']) ) {
 			$poll = null;
 
 			if(empty($_POST["id"])) {
+                 Acl::checkOrForward('POLL_CREATE');
 				$poll = new Poll();
 				if(!$poll->create( $_POST ))
 					$tpl->assign('errors', $poll->errors);
 			} else {
+                 Acl::checkOrForward('POLL_UPDATE');
 				$poll = new Poll();
 				$poll->update( $_REQUEST );
 			}
@@ -119,13 +107,15 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'delete':
+            Acl::checkOrForward('POLL_DELETE');
 			$poll = new Poll();
 			$poll->delete( $_POST['id'] );
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 		break;
 
 		case 'change_status':
+             Acl::checkOrForward('POLL_AVAILABLE');
 			$poll = new Poll($_REQUEST['id']);
 			//Publicar o no,
 			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -134,42 +124,26 @@ if( isset($_REQUEST['action']) ) {
 			if($_GET['from']=='index'){
 				Application::forward('index.php?action=list');
 			}else{
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
-			}
-		break;
-
-		case 'set_view_column':
-            $cm = new ContentManager();
-             $polls = $cm->find('Poll', 'content_status=1 and view_column=1', 'ORDER BY created DESC');
-            if((count($polls)<2) OR $_REQUEST['status']!=1){
-                $poll = new Poll($_REQUEST['id']);
-                //Publicar o no,
-                $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-                $poll->set_view_column($status);
-             }else{
-                $msg="Ya hay dos encuestas en portada.";
-            }
-			if($_GET['from']=='index'){
-				Application::forward('index.php?action=list&msg='.$msg);
-			}else{
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 			}
 		break;
 
 		case 'change_favorite':
-
-                        $poll = new Poll($_REQUEST['id']);
-                        //Publicar o no,
-                        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-                        $poll->set_favorite($status);
+             Acl::checkOrForward('POLL_FAVORITE');
+            $poll = new Poll($_REQUEST['id']);
+            //Publicar o no,
+            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            $poll->set_favorite($status);
 			if($_GET['from']=='index'){
 				Application::forward('index.php?action=list&msg='.$msg);
 			}else{
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 			}
 		break;
 
 		case 'change_available':
+            Acl::checkOrForward('POLL_AVAILABLE');
+
 			$poll = new Poll($_REQUEST['id']);
 			//Publicar o no,
 			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -183,6 +157,7 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'mfrontpage':
+             Acl::checkOrForward('POLL_AVAILABLE');
 			  if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
 			  {
 			     $fields = $_REQUEST['selected_fld'];
@@ -195,10 +170,10 @@ if( isset($_REQUEST['action']) ) {
         		    }
 			  }
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 		break;
 		case 'mdelete':
-
+              Acl::checkOrForward('POLL_DELETE');
 			  if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
 			  {
 			    $fields = $_REQUEST['selected_fld'];
@@ -211,14 +186,14 @@ if( isset($_REQUEST['action']) ) {
         		    }
 			  }
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 		break;
 		default:
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 		break;
 	}
 } else {
-	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }
 
 

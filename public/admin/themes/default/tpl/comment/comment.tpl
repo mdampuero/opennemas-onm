@@ -51,7 +51,34 @@
 
    <div id="{$category}">
 
-	{include file="botonera_up.tpl"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp; 
+                {if $category eq 'home' ||  $category eq 'todos'} {$category|upper} {else} {$datos_cat[0]->title} {/if}</h2></div>
+		<ul>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 2);" name="submit_mult" value="noFrontpage" title="Rechazar">
+					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="Rechazar" alt="Rechazar" ><br />Rechazar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Publicar">
+					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+				</a>
+			</li>
+			<li>
+				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+				</button>
+			</li>
+		</ul>
+	</div>
+
+       <br />
 		<table class="adminheading">
 			<tr>
 				<th nowrap>Comentarios pendientes de publicar</th>
@@ -151,11 +178,11 @@
 		{sectionelse}
 			{if $category eq 'todos'}
 				<tr>
-					   <td align="center" colspan=10><h2 style="margin:50px">No hai ningun comentario <br/>pendiente de moderación</h2></td>
+					   <td align="center" colspan=10><h2 style="margin:50px">No hay ningun comentario <br/>pendiente de moderación</h2></td>
 			   </tr>
 			{else}
 			   <tr>
-					   <td align="center" colspan=10><br><br><p><h2><b>No hain ningún comentario guardado</b></h2></p><br><br></td>
+					   <td align="center" colspan=10><br><br><h2><b>No hay ningún comentario guardado</b></h2><br><br></td>
 			   </tr>
 			{/if}
 		{/section}
@@ -175,25 +202,48 @@
    {* FORMULARIO PARA ACTUALIZAR *********************************** *}
    {if isset($smarty.post.action) && $smarty.post.action eq "read"}
 
-	{include file="botonera_up.tpl"}
+	<div id="menu-acciones-admin" class="clearfix">
+		<div style='float:left'><h2>&nbsp;{$datos_cat[0]->title}</h2></div>
+		<ul>
+			<li>
+				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
+					<img border="0" src="{$params.IMAGE_DIR}save.gif" ="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" value="Cancelar" title="Cancelar">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				</a>
+			</li>
+			<li>
+				<a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
+					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
+				</a>
+			</li>
+			<li>
+				{if $comment->content_status == 1}
+					<a href="?id={$comment->id}&amp;action=change_status&amp;status=0&amp;category={$comment->category}" title="Publicar">
+						<img src="{$params.IMAGE_DIR}publish_no.gif" border="0" alt="Publicado" /><br />Despublicar
+					</a>
+				{else}
+					<a href="?id={$comment->id}&amp;action=change_status&amp;status=1&amp;category={$comment->category}" title="Despublicar">
+						<img src="{$params.IMAGE_DIR}publish.gif" border="0" alt="Pendiente" /><br />Publicar
+					</a>
+				{/if}
+			</li>
+			 <li>
+                <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
+                    <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />Ver noticia
+                </a>
+			</li>
+		</ul>
+	</div>
 
 
    <div id="edicion-contenido">
 
    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="99%">
    <tbody>
-
-   {*
-   <tr>
-	   <td valign="top" align="right" style="padding:4px;" width="30%">
-		   <label for="title">Noticia:</label>
-	   </td>
-	   <td style="padding:4px;" nowrap="nowrap" width="70%">
-			   <h2><a style="cursor:pointer;"  onClick="new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">{$article->title|clearslash}</a> <span style="font-size:9px;">(* Pinche sobre el titulo para ver la noticia.)</span></h2>
-
-	   </td>
-   </tr>
-   *}
    <tr>
 	   <td valign="top" align="right" style="padding:4px;" width="30%">
 		   <label for="title">T&iacute;tulo:</label>
@@ -205,7 +255,7 @@
 			   value="{$comment->fk_content}" />
 	   </td>
 
-	   <td rowspan="5" valign="top"><b>
+	   <td rowspan="5" valign="top"> 
 			   <table style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
 				<tr>
 					   <td valign="top" align="right" style="padding:4px;">

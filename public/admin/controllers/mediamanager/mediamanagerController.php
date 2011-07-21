@@ -69,7 +69,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $ccm = ContentCategoryManager::get_instance();
         $this->category = $_REQUEST['category'];
 
-        list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu();
+        list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu($this->category);
         if($this->category != 'GLOBAL') {
             $this->category_name = $ccm->categories[$this->category]->name;
         }

@@ -1,71 +1,8 @@
 {* Botonera comentarios ---------------------------------------------------------------------------------- *}
-{if preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp;{$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {if $category==4} OPINION {else} {$category|upper}{/if}{/if}</h2></div>
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar"><br />Eliminar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 2);" name="submit_mult" value="noFrontpage" title="Rechazar">
-					<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="Rechazar" alt="Rechazar" ><br />Rechazar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Publicar">
-					<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
-			</li>
-		</ul>
-	</div>
 
-{elseif preg_match('/comment\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left'><h2>&nbsp;{$datos_cat[0]->title}</h2></div>
-		<ul>
-			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" ="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-				</a>
-			</li>
-			<li>
-				<a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
-					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
-				</a>
-			</li>
-			<li>
-				{if $comment->content_status == 1}
-					<a href="?id={$comment->id}&amp;action=change_status&amp;status=0&amp;category={$comment->category}" title="Publicar">
-						<img src="{$params.IMAGE_DIR}publish_no.gif" border="0" alt="Publicado" /><br />Despublicar
-					</a>
-				{else}
-					<a href="?id={$comment->id}&amp;action=change_status&amp;status=1&amp;category={$comment->category}" title="Despublicar">
-						<img src="{$params.IMAGE_DIR}publish.gif" border="0" alt="Pendiente" /><br />Publicar
-					</a>
-				{/if}
-			</li>
-			 <li>
-                <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
-                    <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />Ver noticia
-                </a>
-			</li>
-		</ul>
-	</div>
 
 {* Botonera opinion -------------------------------------------- *}
-{elseif preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
+{if preg_match('/opinion\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	<div id="menu-acciones-admin" class="clearfix">
 		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$accion}</h2></div>
 		<ul>

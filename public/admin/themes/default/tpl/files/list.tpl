@@ -25,7 +25,7 @@
 
 		<br><br>
 		<div id="menu-acciones-admin">
-			<div style="float:left; margin:8px;"><h2>{if $category eq 0}{t}File manager :: Overview{/t}{else}{t}File manager :: Files in this category{/t}{/if}</h2></div>
+			<div style="float:left; margin:8px;"><h2>{if $category eq 0}{t}File manager :: Overview{/t}{else}{t}File manager :: Files in category{/t} {$datos_cat[0]->title} {/if}</h2></div>
 			{if $category neq 0}
 			<ul>
 				<li>

@@ -817,8 +817,7 @@ class ContentCategoryManager {
 
 
         if ( empty($category)  ) {
-             $categoryData[] = $parentCategories[0];
-
+             $categoryData[] = $parentCategories[0]; 
         }
 
         return array($parentCategories, $subcat, $categoryData);

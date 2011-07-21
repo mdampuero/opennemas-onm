@@ -11,39 +11,41 @@ require_once('../../session_bootstrap.php');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-$tpl->assign('titulo_barra', 'Gesti&oacute;n de Ficheros Adjuntos');
+$tpl->assign('titulo_barra', 'FILE MANAGEMENT');
 
 require_once('../../attachments_events.php');
 
-if(!isset($_REQUEST['category'])) {
-    $_REQUEST['category'] = 0; // GLOBAL
+\Onm\Module\ModuleManager::checkActivatedOrForward('FILE_MANAGER');
+
+Acl::checkOrForward('FILE_ADMIN');
+
+$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
+
+
+/******************* GESTION CATEGORIAS  *****************************/
+$contentType = Content::getIDContentType('poll');
+
+
+$category = filter_input(INPUT_GET,'category');
+if(empty($category)) {
+    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
 }
 
-$tpl->assign('category', $_REQUEST['category']);
-if (!isset($_REQUEST['page'])) {
-     $_REQUEST['page'] = 1;
-}
 $ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
+list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category);
 
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
-
-$name_cat = $ccm->get_name($_REQUEST['category']);
-
-// Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if( !Acl::check('FILE_ADMIN')){
-    Acl::deny();
-}
-
+ 
 
 //if (!isset($_REQUEST['alerta'])) {$_REQUEST['alerta'] = 0;}
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'list': {
-            if($_REQUEST['category'] == 0) {
+            if($category == 0) {
                 $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
 
                 $fullcat = $ccm->order_by_posmenu($ccm->categories);
@@ -75,11 +77,11 @@ if( isset($_REQUEST['action']) ) {
 
             } else {
                 $cm = new ContentManager();
-                //    $attaches = $cm->find_by_category('Attachment', $_REQUEST['category'] , 'fk_content_type=3 ', 'ORDER BY created DESC');
+                //    $attaches = $cm->find_by_category('Attachment', $category , 'fk_content_type=3 ', 'ORDER BY created DESC');
                 //    $attaches = $cm->paginate_num($attaches,12);
                 //ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
                 list($attaches, $pager)= $cm->find_pages('Attachment', 'fk_content_type=3 ',
-                                                         'ORDER BY  created DESC ',$_REQUEST['page'],10,  $_REQUEST['category']);
+                                                         'ORDER BY  created DESC ',$page,10,  $category);
                 $tpl->assign('paginacion', $pager);
 
                 $i = 0;
@@ -108,7 +110,7 @@ if( isset($_REQUEST['action']) ) {
                 $tpl->assign('alerta', $alert);
             }
 
-            $tpl->assign('category', $_REQUEST['category']);
+            $tpl->assign('category', $category);
 
             $tpl->display('files/list.tpl');
         } break;
@@ -124,7 +126,7 @@ if( isset($_REQUEST['action']) ) {
         case 'update':
             $att = new Attachment();
             $att->update(  $_REQUEST );
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         break;
 
         case 'delete':
@@ -153,7 +155,7 @@ if( isset($_REQUEST['action']) ) {
                echo $msg;
                exit(0);
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&message='.$msg.'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&message='.$msg.'&page='.$page);
          break;
 
         case 'yesdel':
@@ -164,7 +166,7 @@ if( isset($_REQUEST['action']) ) {
                 $rel->delete_all($_REQUEST['id']);
                 $att->delete( $_REQUEST['id'],$_SESSION['userid'] );
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
          break;
 
 
@@ -178,7 +180,7 @@ if( isset($_REQUEST['action']) ) {
 
             require_once('../../attachments_events.php');
 
-            if (!isset($_REQUEST['category'])) { $_REQUEST['category'] = 10; }
+            if (!isset($category)) { $category = 10; }
             if( !isset($_POST['op']) ) { $op = 'view'; }
 
             $tpl->assign('filterRegexp', '/^[a-z0-9\-_]+\.[a-z0-9]{2,4}$/i');
@@ -189,7 +191,7 @@ if( isset($_REQUEST['action']) ) {
                 if(isset($_FILES['path']['name'])
                    && !empty($_FILES['path']['name'])) {
 
-                    $category = (isset($_REQUEST['category'])) ? $_REQUEST['category'] : 0;
+                    $category = (isset($category)) ? $category : 0;
 
                     $dateStamp = date('Ymd');
                     $directoryDate =date("/Y/m/d/");
@@ -222,7 +224,7 @@ if( isset($_REQUEST['action']) ) {
                         $attachment = new Attachment();
                         if ($attachment->create($data)) {
                             $msg = _("File created successfuly.");
-                            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$_REQUEST['page']);
+                            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$page);
                         }
 
                     } else {
@@ -234,16 +236,16 @@ if( isset($_REQUEST['action']) ) {
                 }
 
             }
-            $tpl->assign('category', $_REQUEST['category']);
+            $tpl->assign('category', $category);
 
             $tpl->display('files/new.tpl');
 
         break;
 
         default: {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         } break;
     }
 } else {
-    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 }

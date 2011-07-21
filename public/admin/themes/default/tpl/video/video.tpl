@@ -38,7 +38,7 @@
         </ul>
        
 		<div id="menu-acciones-admin" class="clearfix">
-			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Video Manager :: Listing videos{/t}</h2></div>
+			<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
 			<ul>
                 {acl isAllowed="VIDEO_DELETE"}
 				<li>
@@ -178,9 +178,7 @@
 	{if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 
 		<div id="menu-acciones-admin" class="clearfix">
-			<div style="float:left;margin-left:10px;margin-top:10px;">
-				<h2>{t}Video Manager :: Video editing{/t}</h2>
-			</div>
+			<div style="float:left; margin:8px;"><h2>{t}Video manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
 			<ul>
 				<li>
 				{if isset($video->id)}
