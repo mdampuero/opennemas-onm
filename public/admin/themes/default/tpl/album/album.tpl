@@ -80,7 +80,7 @@
                 </tr>
             </table> 
             <table class="adminlist">
-                <tr>
+                <thead>
                     <th class="title" style="width:35px;"></th>
                     <th>{t}Title{/t}</th>
 
@@ -91,7 +91,7 @@
                     <th align="center" style="width:35px;">{t}Favorite{/t}</th>
                     <th align="center" style="width:35px;">{t}Edit{/t}</th>
                     <th align="center" style="width:35px;">{t}Delete{/t}</th>
-                </tr>
+                </thead>
 
                 {section name=as loop=$albums}
                     <tr {cycle values="class=row0,class=row1"}>
@@ -152,12 +152,10 @@
                 <tr>
                         <td align="center" colspan=5><br><br><h2><b>{t}No album saved{/t} </b></h2><br><br></td>
                 </tr>
-            {/section}
-            {if !empty($pagination)}
-                <tr>
-                  <td colspan="9"><br><br>{$paginacion->links}<br><br></td>
-                </tr>
-            {/if}
+            {/section}           
+                <tfoot>
+                  <td colspan="9"> {if !empty($pagination)} {$paginacion->links} {/if}</td>
+                </tfoot>           
             </table>
         </div>
  

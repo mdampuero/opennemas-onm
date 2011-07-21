@@ -90,9 +90,9 @@
                 </tr>
             </table>
             <table class="adminlist">
-                <tr>
-                    <th class="title" style="width:35px;"></th>
-                    <th>{t}Title{/t}</th>
+                <thead>
+                    <th style="width:35px;"></th>
+                    <th class="title">{t}Title{/t}</th>
                     <th align="center" style="width:35px;">{t}Views{/t}</th>
                     <th align="center">{t}Service{/t}</th>
                     <th align="center">Created</th>
@@ -100,7 +100,7 @@
                     <th align="center" style="width:35px;">{t}Published{/t}</th>
                     <th align="center" style="width:35px;">{t}Favorite{/t}</th>
                     <th align="center" style="width:35px;">{t}Actions{/t}</th>
-                </tr>
+                </thead>
                 {section name=c loop=$videos}
                     <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
                         <td >
@@ -160,14 +160,12 @@
                     <tr>
                         <td align="center" colspan="8"><br><br><h2><b>Ningun video guardado</b></h2><br><br></td>
                     </tr>
-                {/section}
-                {if !empty($pagination)}
+                {/section}                
                     <tfoot>
 						<tr>
-							<td colspan="10" align="center">{$pagination}</td>
+							<td colspan="10" align="center">{if !empty($pagination)}{$pagination} {/if}</td>
 						</tr>
-					</tfoot>
-                {/if}
+					</tfoot>               
             </table>           
         </div>
 
