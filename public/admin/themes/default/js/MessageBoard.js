@@ -63,7 +63,7 @@ var MessageBoard = Class.create({
     render_inline: function(){
         this.container.setStyle({display: 'inline'});
         this.insert();
-        this.container.SlideDown();
+        Effect.SlideDown(this.container);
     },
 
     render_growl: function(){

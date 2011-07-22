@@ -24,28 +24,57 @@
 	    <div id="scroll-album">
 		    <ul class="gallery_list" id="album_list">
                 {if !empty($photoData)}
-                     {assign var=indi value='1'}
+                     {assign var=indi value='1'}          
                      {section name=n loop=$photoData}
                          <li value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
                              de:pk_photo="{$photoData[n]->pk_photo}"  id="f{$indi}-{$photoData[n]->pk_photo}">
-                             <a class="album" title="{t}Show image{/t}"
-                                onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
-                                 <img ondblclick="define_crop(this);"
-                                     style="{cssimagescale resolution=67 photo=$photoData[n]}"
-                                     src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
-                                     class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
-                                     de:pk_photo="{$photoData[n]->pk_photo}"
-                                     value="f{$indi}-{$photoData[n]->pk_photo}"
-                                     name="{$photoData[n]->name}"
-                                     de:mas="{$photoData[n]->name}"
-                                     de:path="{$photoData[n]->path_file}"
-                                     de:dimensions="{$photoData[n]->width} x {$photoData[n]->height} (px)"
-                                     de:peso="{$photoData[n]->size}"
-                                     de:created="{$photoData[n]->created}"
-                                     de:description="{$photoData[n]->description|escape:"html"}"
-                                     de:tags="{$photoData[n]->metadata}"
-                                     de:footer="{$otherPhotos[n][2]|escape:"html"}" />
-                             </a>
+                             {if strtolower($photoData[n]->type_img)=='swf'}
+                                 <a class="album" title="{t}Show image{/t}"
+                                    onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
+                                     <object id="change2" >
+                                        <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photoData[n]->path_file}{$photoData[n]->name}"></param>
+                                        <embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photoData[n]->path_file}{$photoData[n]->name}" width="68" height="50" ></embed>
+                                    </object>
+                                     <span  style="float:right; clear:none;">
+                                        <img id="img{$photoData[n]->pk_photo}" class="draggable2" style="width:16px;height:16px;"
+                                         src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" ondblclick="return false;"
+                                         style="{cssimagescale resolution=67 photo=$photoData[n]}"
+                                         class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
+                                         de:pk_photo="{$photoData[n]->pk_photo}"
+                                         value="f{$indi}-{$photoData[n]->pk_photo}"
+                                         name="{$photoData[n]->name}"
+                                         de:mas="{$photoData[n]->name}"
+                                         de:type_img="{$photoData[n]->type_img}"
+                                         de:url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}"
+                                         de:path="{$photoData[n]->path_file}"
+                                         de:dimensions="{$photoData[n]->width} x {$photoData[n]->height} (px)"
+                                         de:peso="{$photoData[n]->size}"
+                                         de:created="{$photoData[n]->created}"
+                                         de:description="{$photoData[n]->description|escape:"html"}"
+                                         de:tags="{$photoData[n]->metadata}"
+                                         de:footer="{$otherPhotos[n][2]|escape:"html"}" />
+                                     </span>
+                                 </a>
+                             {else}
+                                 <a class="album" title="{t}Show image{/t}"
+                                    onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
+                                     <img ondblclick="define_crop(this);"
+                                         style="{cssimagescale resolution=67 photo=$photoData[n]}"
+                                         src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
+                                         class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
+                                         de:pk_photo="{$photoData[n]->pk_photo}"
+                                         value="f{$indi}-{$photoData[n]->pk_photo}"
+                                         name="{$photoData[n]->name}"
+                                         de:mas="{$photoData[n]->name}"
+                                         de:path="{$photoData[n]->path_file}"
+                                         de:dimensions="{$photoData[n]->width} x {$photoData[n]->height} (px)"
+                                         de:peso="{$photoData[n]->size}"
+                                         de:created="{$photoData[n]->created}"
+                                         de:description="{$photoData[n]->description|escape:"html"}"
+                                         de:tags="{$photoData[n]->metadata}"
+                                         de:footer="{$otherPhotos[n][2]|escape:"html"}" />
+                                 </a>
+                             {/if}
                          </li>
                          {assign var=indi value=$indi+1}
                      {/section}
@@ -105,7 +134,7 @@
                             <h2>{t}Image for frontpage:{/t}</h2>
 
                         <td  align='right'>
-                            <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img1');">
+                            <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
                                 <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png"
                                      id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                             </a>

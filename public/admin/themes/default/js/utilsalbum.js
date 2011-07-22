@@ -17,8 +17,8 @@ function album_put_mini(id){
     hideMsgContainer('album_msg');
     num++;
 	var pkfoto=$(id).name;
-	var imag=$(id).src;
-	 // alert(pkfoto);
+    var imag=$(id).src;
+	 
 	var del='n'+num+'-'+pkfoto;
 	li= document.createElement('li');  		
 	li.setAttribute('id', del);	
@@ -50,10 +50,28 @@ function album_put_mini(id){
         min.setAttribute('de:mas', $(id).getAttribute('de:mas'));
         min.setAttribute('class', 'draggable2');
         min.setAttribute('ondblclick', 'define_crop(this)');
-        min.setAttribute('width', $(id).getAttribute('de:width'));
+        
 
-        a.appendChild(min);
+        if(($(id).getAttribute('de:type_img')=='swf') || ($(id).getAttribute('de:type_img')=='SWF')){
+            min.setAttribute('style','width:16px; height:16px;');
+            min.setAttribute('de:url', $(id).getAttribute('de:url'));
+            min.setAttribute('de:type_img', $(id).getAttribute('de:type_img'));
+            min.setAttribute('ondblclick', 'return false;');
+            span = document.createElement('span');
+            span.setAttribute('style','float: right; clear: none;');
+            span.appendChild(min);
+            div = document.createElement('div');
+            div.innerHTML='<object id="image_view" de:type_img="'+ $(id).getAttribute('de:type_img')+">"
+                                                    +'<param name="movie" value="'+ $(id).getAttribute('de:url') +'/'+ $(id).getAttribute('de:mas')
+                                                    + '"><embed src="'+ $(id).getAttribute('de:url')
+                                                    +'/'+$(id).getAttribute('de:mas')+ '" width="68" height="50" ></embed></object>';
 
+            div.appendChild(span);
+            a.appendChild(div);
+        }else{
+            min.setAttribute('width', $(id).getAttribute('de:width'));
+            a.appendChild(min);
+        }
         li.appendChild(a);
 
         ul.appendChild(li);
@@ -80,22 +98,41 @@ function album_make_mov(){
         onDrop: function(element, droppable) {				
             var OID = album_put_mini(element.id);
             if(OID) {
-                update_footer();
+                if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
 
-                var src =element.src;
-                src=src.replace( '140-100-','');
-                $('image_view').src= src;
+                     var ancho=element.getAttribute('de:ancho');
+                     if(element.getAttribute('de:ancho')>300) { ancho=300; }
+                     $('droppable_div1').innerHTML='<object id="image_view" de:type_img=">'+ element.getAttribute('de:type_img')
+                                                    +'<param name="movie" value="'+ element.getAttribute('de:url') +'/'+ element.getAttribute('de:mas')
+                                                    + '"><embed src="'+ element.getAttribute('de:url')
+                                                    +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
+                     $('informa').innerHTML=' es un Flash';
+                     $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created');
+                     
+                     $('img_footer').value= element.getAttribute('de:description');
 
-                $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created') + "<br><b>Descripcion: </b>" + element.getAttribute('de:description') +"<br><b>Tags: </b>" + element.getAttribute('de:tags');
-                $('img_footer').value= element.getAttribute('de:description');
+                } else {
+                    update_footer();
 
-                //var funcion='save_footer('+element.id+')';
-                var funcion = 'save_footer(\''+OID+'\')';
-                $('img_footer').setAttribute('onchange', funcion);
-                $('img_footer').setAttribute('rel', OID); // id da imaxe
+                    var src =element.src;
+                    src=src.replace( '140-100-','');
+                    
+                    $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created') + "<br><b>Descripcion: </b>" + element.getAttribute('de:description') +"<br><b>Tags: </b>" + element.getAttribute('de:tags');
+                    $('img_footer').value= element.getAttribute('de:description');
 
-                if( /Firefox\/2/.test(navigator.userAgent) ) {
-                        $('image_view').parentNode.style.height = $('image_view').height + 'px';
+                    //var funcion='save_footer('+element.id+')';
+                    var funcion = 'save_footer(\''+OID+'\')';
+                    $('img_footer').setAttribute('onchange', funcion);
+                    $('img_footer').setAttribute('rel', OID); // id da imaxe
+
+                    if( /Firefox\/2/.test(navigator.userAgent) ) {
+                            $('image_view').parentNode.style.height = $('image_view').height + 'px';
+                    }
+
+                    var ancho=element.getAttribute('de:ancho');
+                    $('droppable_div1').innerHTML= '<img src="'+ src.replace( '140-100-','') + '"  id="image_view" border="0" style="max-width: 300px;" width="'+ancho+'" >';
+
+
                 }
             }
        }
@@ -246,13 +283,25 @@ function save_footer(img) {
 
 //Show description and image in cuadro imagen.
 function show_image(img,del) {
+
 	update_footer();
 	
 	$('informa').innerHTML="";
-//	$('image_view').src= $(img).src;
+    if(($(img).getAttribute('de:type_img')=='swf') || ($(img).getAttribute('de:type_img')=='SWF')){
+
+        var ancho=$(img).getAttribute('de:ancho');
+        if($(img).getAttribute('de:ancho')>300) { ancho=300; }
+        $('droppable_div1').innerHTML='<object id="image_view" de:type_img=">'+ $(img).getAttribute('de:type_img')
+                                +'<param name="movie" value="'+ $(img).getAttribute('de:url') +'/'+ $(img).getAttribute('de:mas')
+                                + '"><embed src="'+ $(img).getAttribute('de:url')
+                                +'/'+$(img).getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
+    }else{
+
         var src =$(img).src;
-        src=src.replace( '140-100-','');
-        $('image_view').src= src;
+
+        var ancho=$(img).getAttribute('de:ancho');
+        $('droppable_div1').innerHTML= '<img src="'+ src.replace( '140-100-','') + '"  id="image_view" border="0" style="max-width: 300px;" width="'+ancho+'" >';
+    }
 	$('informa').innerHTML="<b>Archivo: </b>"+$(img).getAttribute('name') + "<br><b>Dimensiones: </b>"+$(img).getAttribute('de:dimensions') + " <br><b>Peso: </b>" + $(img).getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + $(img).getAttribute('de:created') + "<br><b>Descripcion: </b>" + $(img).getAttribute('de:description') +"<br><b>Tags: </b>" + $(img).getAttribute('de:tags');
 	$('img_footer').value= $(img).getAttribute('de:footer'); 
 	var funcion='save_footer('+img+')';
@@ -361,12 +410,12 @@ function vaciarImg(field){
 	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
 	    document.getElementById( nombre ).setAttribute('title','Recuperar');
 
-		if(field=='img1'){
-				document.getElementById( 'input_img1' ).value ='';				 
-				document.getElementById('img_portada').setAttribute('style','opacity:0.4;');
+		if(field=='img'){
+				document.getElementById( 'input_img' ).value ='';				 
+				document.getElementById('image_view').setAttribute('style','opacity:0.4;');
 				document.getElementById( nombre ).setAttribute('style','opacity:1;');
 				document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-				document.getElementById('img1_footer').setAttribute('disabled','true');
+				document.getElementById('img_footer').setAttribute('disabled','true');
 		}
 
   }
@@ -376,11 +425,11 @@ function vaciarImg(field){
 		document.getElementById( nombre ).src='themes/default/images/remove_image.png';
 	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
 	    document.getElementById( nombre ).setAttribute('title','Eliminar');
-		if(field=='img1'){
-				document.getElementById( 'input_img1' ).value =document.getElementById( 'change1' ).name;
- 				document.getElementById('img_portada').setAttribute('style','opacity:1;');
+		if(field=='img'){
+				document.getElementById( 'input_img' ).value =document.getElementById( 'image_view' ).name;
+ 				document.getElementById('image_view').setAttribute('style','opacity:1;');
 				document.getElementById('informa').setAttribute('style','opacity:1;overflow:auto;width:260px;');
-				document.getElementById('img1_footer').removeAttribute('disabled');
+				document.getElementById('img_footer').removeAttribute('disabled');
 	 	}
 
  }
