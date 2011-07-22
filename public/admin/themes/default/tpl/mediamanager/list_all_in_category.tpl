@@ -26,24 +26,19 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-
-        {include file="mediamanager/_partials/categories.tpl"}
-
-
-        <div id="menu-acciones-admin">
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>
             {if $datos_cat[0]}
-                <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}</h2></div>
+                {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}
+            {elseif $category eq "2"}
+                    {t}Image manager:: Images for category «publicidad»{/t}
             {else}
-                {if $category eq "2"}
-                    <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t}Image manager:: Images for category «publicidad»{/t}</h2></div>
-                {else}
-                    <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t}Image manager:: Images for category «GLOBAL»{/t}</h2></div>
-                {/if}
-            {/if}
-            <ul>
+                {t}Image manager:: Images for category «GLOBAL»{/t}
+            {/if}</h2></div>
+            <ul class="old-button">
                 <li>
                     <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  name="submit_mult" value="Eliminar todos">
                         <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
@@ -82,22 +77,21 @@
                         <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
                     </a>
                 </li>
-
             </ul>
         </div>
+    </div>
 
+<div class="wrapper-content">
 
+        {include file="mediamanager/_partials/categories.tpl"}
 
         <div id="{$category}" class="categ" style="padding: 6px 2px;">
-
                 {include file="mediamanager/_partials/media-browser.tpl"}
-
         </div>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" id="id" name="id" value="" />
 
-    </form>
-
-</div>
+    </div>
+</form>
 {/block}

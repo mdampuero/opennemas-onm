@@ -26,15 +26,11 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-
-    {include file="mediamanager/_partials/categories.tpl"}
-    <form action="{$smarty.server.SCRIPT_NAME}" style="margin:0 auto !important;">
-    <div id="menu-acciones-admin">
-        <div style='float:left;margin-left:10px;margin-top:10px;'>
-            <h2>Image manager:: {t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2>
-        </div>
-        <ul>
+<form action="{$smarty.server.SCRIPT_NAME}" style="margin:0 auto !important;">
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Image manager{/t} :: {t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2></div>
+        <ul class="old-button">
             {if $action neq 'upload'}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
@@ -55,29 +51,31 @@
 
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
+                    <img border="0"  src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
                 </a>
             </li>
 
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Fotos
+                    <img border="0"  src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Fotos
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
+                    <img border="0"  src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
+                    <img border="0"  src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
                 </a>
             </li>
-
         </ul>
     </div>
+</div>
 
+<div class="wrapper-content">
+    {include file="mediamanager/_partials/categories.tpl"}
 
     <div id="{$category}" class="categ" style="padding: 6px 2px;">
         {if !empty($smarty.request.mensaje)}
@@ -91,4 +89,5 @@
 
 
 </div><!--fin wrapper-content-->
+</form>
 {/block}

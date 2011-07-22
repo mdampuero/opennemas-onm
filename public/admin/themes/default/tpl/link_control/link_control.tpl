@@ -1,10 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="admin_menu"}
-	<div id="menu-acciones-admin" class="clearfix">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-		<ul>
-			 <li>
+	<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{$titulo_barra}</h2></div>
+        <ul class="old-button">
+            <li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelFiles', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
 					<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />Eliminar todos
 				</a>
@@ -19,14 +20,16 @@
 					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
 				</button>
 			</li>
-		</ul>
+        </ul>
     </div>
+</div>
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+	{block name="admin_menu"}{/block}
+	<div class="wrapper-content">
 
 		{if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
 			<div class="message" id="console-info">{$smarty.request.message}</div>
@@ -77,7 +80,7 @@
 			<br/><br/><br/>
 		</div>
 
-		{block name="admin_menu"}{/block}
+
 		</div>
 
 		<div id="{$category}" class="categ" style="width:100%; padding: 6px 2px;">

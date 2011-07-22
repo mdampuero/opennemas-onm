@@ -33,7 +33,7 @@ if( isset($_REQUEST['action']) ) {
 			$user_groups = $user_group->get_user_groups();
 			// FIXME: Set pagination
 			$tpl->assign('user_groups', $user_groups);
-			$tpl->display('acl/user_group/user_group.tpl');
+			$tpl->display('acl/user_group/list.tpl');
 
 		break;
 
@@ -43,7 +43,7 @@ if( isset($_REQUEST['action']) ) {
 			$privilege = new Privilege();
 			$tpl->assign('user_group', $user_group);
 			$tpl->assign('modules', $privilege->getPrivilegesByModules());
-			$tpl->display('acl/user_group/user_group.tpl');
+			$tpl->display('acl/user_group/new.tpl');
 
 		break;
 
@@ -55,7 +55,7 @@ if( isset($_REQUEST['action']) ) {
 			$privilege = new Privilege();
 			$tpl->assign('user_group', $user_group);
 			$tpl->assign('modules', $privilege->getPrivilegesByModules());
-			$tpl->display('acl/user_group/user_group.tpl');
+			$tpl->display('acl/user_group/new.tpl');
 
 		break;
 

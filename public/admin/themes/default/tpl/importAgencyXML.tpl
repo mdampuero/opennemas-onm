@@ -1,46 +1,43 @@
 {extends file="base/admin.tpl"}
 
-{block name="admin_menu"}
-	<div id="menu-acciones-admin" class="clearfix">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-		<ul>
+{block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+        <ul class="old-button">
             <li>
 				<a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
 				</a>
 			</li>
             <li>
                 <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Check
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
                 </a>
             </li>
             <li>
                 <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />Import
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
                 </a>
             </li>
             <li>
                 <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />Remove File
+                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />{t}Remove File{/t}
                 </a>
             </li>
             <li>
                 <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />Add File
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />{t}Add File{/t}
                 </a>
             </li>
-		</ul>
-	</div>
-{/block}
+        </ul>
+    </div>
+</div>
+<!--form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addFile" method="POST" enctype="multipart/form-data"-->
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-{block name="content"}
 <div class="wrapper-content">
-
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 	<div>
-		<!--form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=addFile" method="POST" enctype="multipart/form-data"-->
-
-		{block name="admin_menu"}{/block}
 
 		<table class="adminheading">
 			<tr>
@@ -101,6 +98,6 @@
 
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id}" />
-	</form>
 </div>
+</form>
 {/block}

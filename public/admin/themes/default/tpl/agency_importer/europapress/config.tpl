@@ -24,19 +24,20 @@
 {/block}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-
-       <div id="menu-acciones-admin" class="clearfix">
-            <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}EuropaPress importer :: Configuration{/t}</h2></div>
-            <ul>
-                <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
         <br>
 
         {if $message}

@@ -5,9 +5,11 @@ body {
 	background:none;
 	width:100%;
 	margin:0;
+	min-height:100%
 }
 html{
 	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
+	min-height:100%
 }
 
 h2 {
@@ -961,15 +963,7 @@ label {
 
 :focus { -moz-outline-style: none; }
 
-div#menu-acciones-admin li.separator {
-	background-image:url(../images/separator.gif);
-	background-position:center bottom;
-	background-repeat:no-repeat;
-	border:0 none;
-    height:50px;
-    margin:0 8px;
-    width:4px;
-}
+
 
 div.utilities-conf{
     padding:10px;

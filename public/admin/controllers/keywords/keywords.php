@@ -105,14 +105,14 @@ switch($action) {
         $tpl->assign('id', $id);
         $tpl->assign('pclave', $pclave);
         $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
-        $tpl->display('keywords/index.tpl');
+        $tpl->display('keywords/new.tpl');
 
     } break;
 
     case 'new': {
         // Show form
         $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
-        $tpl->display('keywords/index.tpl');
+        $tpl->display('keywords/new.tpl');
     } break;
 
     case 'delete': {

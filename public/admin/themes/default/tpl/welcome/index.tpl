@@ -51,12 +51,10 @@ $.noConflict();
 {/block}
 
 {block name="content"}
-<div style="width:70%;margin:0 auto;">
-    <div id="menu-acciones-admin" >
-        <div style="float: left; margin-left: 10px; margin-top: 10px;">
-            <h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2>
-        </div>
-        <ul>
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2></div>
+        <ul class="old-button">
             <li>
                 <a href="controllers/mediamanager/mediamanager.php" class="admin_add"
                    title="{t}Media manager{/t}">
@@ -80,7 +78,8 @@ $.noConflict();
             </li>
         </ul>
     </div>
-    <br/>
+</div>
+<div class="wrapper-content">
     {if isset($smarty.session.messages)
         && !empty($smarty.session.messages)}
         {messageboard type="inline"}

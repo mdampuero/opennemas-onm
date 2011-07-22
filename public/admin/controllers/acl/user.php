@@ -25,6 +25,11 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'User Management');
 
 $ccm = new ContentCategoryManager();
+if (!array_key_exists('page', $_REQUEST)) {
+    $page = 0;
+} else {
+    $page = $_REQUEST['page'] ?:0;
+}
 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
@@ -53,6 +58,8 @@ if( isset($_REQUEST['action']) ) {
                 'groupsOptions' => $groupsOptions,
             ));
 
+            $tpl->display('acl/user/list.tpl');
+
         } break;
 
         case 'new': {
@@ -63,6 +70,8 @@ if( isset($_REQUEST['action']) ) {
 
             $tree = $ccm->getCategoriesTree();
             $tpl->assign('content_categories', $tree);
+
+            $tpl->display('acl/user/new.tpl');
         } break;
 
         case 'read': {
@@ -78,29 +87,32 @@ if( isset($_REQUEST['action']) ) {
 
             /*$tpl->assign('categories_options',  $user->get_categories_options());
             $tpl->assign('categories_selected', $user->get_access_categories_id());*/
+
+            $tpl->display('acl/user/new.tpl');
         } break;
 
         case 'update': {
             // TODO: validar datos
             $user = new User();
             $user->update( $_REQUEST );
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         } break;
 
         case 'create': {
             $user = new User();
 
             if($user->create( $_POST )) {
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
             } else {
                 $tpl->assign('errors', $user->errors);
             }
+            $tpl->display('acl/user/new.tpl');
         } break;
 
         case 'delete': {
             $user = new User();
             $user->delete( $_POST['id'] );
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         } break;
 
         case 'change_authorize': {
@@ -112,7 +124,7 @@ if( isset($_REQUEST['action']) ) {
             } else {
                 $user->authorize_user($user->id);
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         } break;
 
         case 'validate': {
@@ -142,12 +154,11 @@ if( isset($_REQUEST['action']) ) {
                     }
                 }
             }
-
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
             break;
 
         default: {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         } break;
     }
 
@@ -155,5 +166,3 @@ if( isset($_REQUEST['action']) ) {
     $page = (isset($_REQUEST['page'])? $_REQUEST['page'] : 0);
     Application::forward($_SERVER['SCRIPT_NAME']."?action=list&page={$page}");
 }
-
-$tpl->display('acl/user/user.tpl');

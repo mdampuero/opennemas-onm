@@ -1,38 +1,39 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+	<style type="text/css">
+	td {
+		background:none !important;
+	}
+	</style>
+{/block}
+
 {block name="content"}
+<div class="top-action-bar clearfix">
+	<div class="wrapper-content">
+		<div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
+		<ul class="old-button">
+			<li>
+				<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
+					<img src="{$params.IMAGE_DIR}cancel.png" border="0" /><br />
+					{t}Cancel{/t}
+				</a>
+			</li>
+
+			<li>
+
+			</li>
+		</ul>
+	</div>
+
+</div>
 <div class="wrapper-content">
 
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
-		<div id="menu-acciones-admin">
-			<div style="float:left; margin:8px;"><h2>{t}Cache Manager :: Cache groups{/t}</h2></div>
-			<ul>
-				<li>
-					<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
-						<img src="{$params.IMAGE_DIR}cancel.png" border="0" /><br />
-						{t}Cancel{/t}
-					</a>
-				</li>
 
-				<li>
-					<a href="#config" onclick="$('formulario').submit();return false;" title="">
-						<img src="{$params.IMAGE_DIR}save.gif" border="0" /><br />
-						{t}Save{/t}
-					</a>
-				</li>
-			</ul>
-		</div>
-
-		<div>
-
-			<table class="adminheading" style="width:50%; margin:0 auto; margin-top:10px;">
-				<tr>
-					<th>&nbsp;</th>
-				</tr>
-			</table>
-
-			<table id="tabla" name="tabla" class="adminlist" style="width:50%; margin:0 auto;">
+		<div style="width:100%">
+			<table id="tabla" name="tabla" class="adminlist" >
 			{if count($config)>0}
 
 				<thead>
@@ -44,7 +45,7 @@
 				</thead>
 				<tbody>
 					{foreach from=$config key="k" item="v"}
-						<tr bgcolor="{cycle values="#ccc,#eee"}">
+						<tr style="background:{cycle values="#f1f1f1,#fff"} !important">
 							<td style="padding-left:30px;">
 								<img src="{$params.IMAGE_DIR}template_manager/{$groupIcon.$k|default:""}" border="0" title="Caché de opinión interior" />
 								{$groupName.$k|default:$k} &nbsp;
@@ -62,17 +63,21 @@
 					{/foreach}
 				</tbody>
 			{else}
-				<h1>{t}There is no cache configuration available{/t}</h1>
+				<tbody>
+					<tr>
+						<td>
+							<h1>{t}There is no cache configuration available{/t}</h1>
+						</td>
+					</tr>
+				</tbody>
 			{/if}
-			<tfoot>
-				<tr>
-					<td colspan=3></td>
-				</tr>
-			</tfoot>
 			</table>
-
-
 		</div>
+		<div class="action-bar clearfix">
+            <div class="right">
+                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
+            </div>
+        </div>
 
 		<input type="hidden" id="action" name="action" value="config" />
 	</form>

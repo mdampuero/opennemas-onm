@@ -25,6 +25,28 @@
 {/block}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t 1=$datos_cat[0]->title}Image manager :: Upload image to "%1"{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                </a>
+            </li>
+            <li>
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
+                </a>
+            </li>
+            <li>
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
 
     <ul class="tabs2">
@@ -41,34 +63,6 @@
         {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
 
     </ul>
-
-    <br/>
-    <br />
-
-
-	<div id="menu-acciones-admin">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t 1=$datos_cat[0]->title}Image manager :: Upload image to "%1"{/t}</h2></div>
-
-        <ul>
-
-            <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
-                </a>
-            </li>
-            <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
-                </a>
-            </li>
-            <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
-                </a>
-            </li>
-
-        </ul>
-	</div>
 
 
     <div id="upload-photos" >
@@ -118,18 +112,6 @@
                                         </div>
                                     </div>
 
-                                    <div id="form-actions" >
-
-
-                                        <hr />
-                                        <strong>{t}Actions{/t}</strong><br>
-
-                                        <div style="text-align:right">
-                                            <input type="submit" name="submit" align="middle" width="22px" height="22px" style="cursor:pointer;" value="{t}Upload files{/t}" />
-                                        </div>
-
-                                    </div>
-
                                     <div id="explanations" style="margin:20px auto; width:50%; border:1px solid #ccc; padding:5px 15px">
                                         <h2>{t}How I can use this form?{/t}</h2>
                                         <br /><br />
@@ -167,12 +149,13 @@
                     </td>
                 </tr>
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                </tr>
-            </tfoot>
         </table>
+		<div class="action-bar clearfix">
+			<div class="right">
+				<button type="submit" class="onm-button red">{t}Upload files{/t}</button>
+			</div>
+		</div>
+
     </div>
 
 </div>

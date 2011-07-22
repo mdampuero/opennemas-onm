@@ -26,6 +26,18 @@
 {/block}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
+                    <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
 
     <ul class="tabs2">
@@ -44,20 +56,6 @@
         {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
 
     </ul>
-
-    <div id="menu-acciones-admin" >
-        <div style="float: left; margin-left: 10px; margin-top: 10px;">
-            <h2>Images manager :: General statistics </h2>
-        </div>
-        <ul>
-             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
-                </a>
-            </li>
-       </ul>
-    </div>
-
     {include file="mediamanager/_partials/list_information.tpl"}
 </div>
 {/block}

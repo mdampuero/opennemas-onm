@@ -1,6 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}News Stand{/t}</h2></div>
+    </div>
+</div>
 <div class="wrapper-content">
 
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
