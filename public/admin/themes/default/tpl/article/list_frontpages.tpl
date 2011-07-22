@@ -10,7 +10,7 @@
                     <th align="center" style="width:50px;">Votos</th>
                     <th align="center" style="width:50px;"><img src="{$params.IMAGE_DIR}coment.png" border="0" alt="Numero comentarios" /></th>
                     <th align="center" style="width:70px;">Fecha</th>
-  
+
                     <th align="center" style="width:110px;">Publisher</th>
                     <th align="center" style="width:110px;">Last Editor</th>
                     <th align="center" style="width:50px;">Editar</th>
@@ -28,18 +28,18 @@
                     <tr valign="top">
                         <td colspan="2">
                             <div id="top" style="border:1px #333;">
-                                {renderarticlecondition items=$articles tpl="article_render_frontpages_home.tpl"   odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers} </div>
+                                {renderarticlecondition items=$articles tpl="article/partials/_article_render_frontpages_home.tpl"   odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers} </div>
                            <div id="left">   </div> <div id="right">   </div>
                           </td>
                     </tr>
                    {* <tr valign="top">
                         <td width="50%" style="border-right:1px solid #DDDDDD;">
-                           <div id="left">                             
+                           <div id="left">
                                 {renderarticle items=$articles tpl="article_render_frontpages_home.tpl" placeholder="placeholder_0_1" odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers}
                            </div>
                          </td>
                          <td width="50%" style="padding:4px;">
-                            <div id="right"> 
+                            <div id="right">
                                     {renderarticle items=$articles tpl="article_render_frontpages_home.tpl"  placeholder="placeholder_1_0" odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers}
                                     {renderarticle items=$articles tpl="article_render_frontpages_home.tpl"  placeholder="placeholder_1_1" odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers}
                                     {renderarticle items=$articles tpl="article_render_frontpages_home.tpl"  placeholder="placeholder_1_2" odd_rating=$art_rating odd_comment=$art_comment odd_editors =$art_editors odd_publishers=$art_publishers}
@@ -48,8 +48,8 @@
                           </td>
                     </tr>
                     *}
-                </table>               
-                   
+                </table>
+
            </div>
         </td>
     </tr>
