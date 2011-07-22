@@ -154,12 +154,26 @@
                 </tr>
             {/if}
         {/if}
-        {if $opinions}
-            {if $category eq 'todos'}
+
+
+		<tfoot>
+			<tr>
+				<td colspan="10" class="pagination">
+					{$pagination->links}
+				</td>
+			</tr>
+		</tfoot>
+        </table>
+        <br>
+
+
+        {if $opinions && $category eq 'todos'}
+            <table class="adminheading">
                 <tr>
-                    <td align="left" colspan="4"><br><br><h2><b>Opiniones:</b></h2></td>
+                    <td><strong>{t}Opinions{/t}</strong></td>
                 </tr>
-            {/if}
+            </table>
+            <table class="adminlist">
             {section name=c loop=$opinions}
                 <tr {cycle values="class=row0,class=row1"}   >
                     <td style="font-size: 11px;">
@@ -219,16 +233,8 @@
                     </td>
                 </tr>
             {/section}
+            </table>
         {/if}
-
-		<tfoot>
-			<tr>
-				<td colspan="10" class="pagination">
-					{$pagination->links}
-				</td>
-			</tr>
-		</tfoot>
-        </table>
 
     </div>
 {/if}

@@ -1,4 +1,4 @@
-<table class="adminlist">
+<table width="100%" style="border-bottom:1px solid #ccc">
     <!--<tr>
          <th align="center"> </th>
         <th align="center">T&iacute;tulo</th>
@@ -14,8 +14,8 @@
             <th align="center" style="width:20px;"class="rot270">Borr</th>
         {/if}
    </tr>-->
-   <tr>
-       <td colspan="10">
+   <tr width="100%" >
+       <td>
             <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
                 <tr><td>{t}Highlighted article (Pay attention on images bigger than 391px){/t}</td></tr>
             </table>
