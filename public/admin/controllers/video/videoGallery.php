@@ -33,73 +33,85 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
     $category = filter_input( INPUT_GET, 'category', FILTER_VALIDATE_INT, array('options' => array('default'=> 0)));
 
-    $numItems = ITEMS_GALLERY +1;
-    if (empty($page)) {
-        $limit= "LIMIT {$numItems}";
-    } else {
-        $limit= "LIMIT ".($page-1) * ITEMS_GALLERY .', '.$numItems;
+    $metadatas = filter_input(INPUT_GET,'metadatas',FILTER_VALIDATE_INT, array('options' => array('default'=> '')));
+
+    $fetchedFromAPC = false;
+    if (extension_loaded('apc')) {
+   //     $html_out = apc_fetch(APC_PREFIX ."videoGallery_".$metadatas."_".$category."_".$page, $fetchedFromAPC);
     }
- 
-    if($action == 'listByMetadatas' || empty($category)) {
+    if (!$fetchedFromAPC) {
 
-        $metadatas = filter_input(INPUT_GET,'metadatas',FILTER_VALIDATE_INT, array('options' => array('default'=> '')));
 
-        if (!empty($metadatas)) {
-            $presentSearch = cSearch::Instance();
-            $arrayIds = $presentSearch->cache->SearchContentsSelect('pk_content', $metadatas, 'video', 100);
-            if(!empty($arrayIds)) {
-                $szWhere = '( FALSE ';
-                foreach($arrayIds as $Id)
-                {
-                    $szWhere .= ' OR pk_content = ' . $Id[0];
-                }
-                $szWhere .= ')';
-            } else {
-                $szWhere = "TRUE";
-                $html_out .= "<div align=\"center\" ><p>No se encontró ningún contenido con todos los términos de su búsqueda.</p>" .
-                    "<p>Su búsqueda - <b>" . $_REQUEST['metadatas'] . "</b> - no produjo ningún documento.</p></div><br/>";
-
-                 
-            }
+        $numItems = ITEMS_GALLERY +1;
+        if (empty($page)) {
+            $limit= "LIMIT {$numItems}";
         } else {
-            $szWhere = "TRUE";
-            $metadatas ='';
+            $limit= "LIMIT ".($page-1) * ITEMS_GALLERY .', '.$numItems;
         }
 
-          if (empty($category)) {
-             $videos = $cm->find('Video', 'contents.fk_content_type = 9  AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
+        if($action == 'listByMetadatas' || empty($category)) {
 
-          } else {
-             $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
+            if (!empty($metadatas)) {
+                $presentSearch = cSearch::Instance();
+                $arrayIds = $presentSearch->cache->SearchContentsSelect('pk_content', $metadatas, 'video', 100);
+                if(!empty($arrayIds)) {
+                    $szWhere = '( FALSE ';
+                    foreach($arrayIds as $Id)
+                    {
+                        $szWhere .= ' OR pk_content = ' . $Id[0];
+                    }
+                    $szWhere .= ')';
+                } else {
+                    $szWhere = "TRUE";
+                    $html_out .= "<div align=\"center\" ><p>No se encontró ningún contenido con todos los términos de su búsqueda.</p>" .
+                        "<p>Su búsqueda - <b>" . $_REQUEST['metadatas'] . "</b> - no produjo ningún documento.</p></div><br/>";
 
-          }
-       
 
-         $videoParams = array('page'=>$page, 'items'=>ITEMS_GALLERY,
-                        'total' => count($videos), 'function'=>'getGalleryVideos',
-                        'others'=>'"listByMetadatas", "'.$category.'", "'.$metadatas.'"' );
+                }
+            } else {
+                $szWhere = "TRUE";
+                $metadatas ='';
+            }
 
-        
+              if (empty($category)) {
+                 $videos = $cm->find('Video', 'contents.fk_content_type = 9  AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
 
-    }else {
-        $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
+              } else {
+                 $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
 
-        $videoParams = array('page'=>$page, 'items'=>ITEMS_GALLERY,
-                        'total' => count($videos), 'function'=>'getGalleryVideos',
-                        'others'=>'"listbyCategory", "'.$metadatas.'"' );
+              }
+
+
+             $videoParams = array('page'=>$page, 'items'=>ITEMS_GALLERY,
+                            'total' => count($videos), 'function'=>'getGalleryVideos',
+                            'others'=>'"listByMetadatas", "'.$category.'", "'.$metadatas.'"' );
+
+
+
+        }else {
+            $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
+
+            $videoParams = array('page'=>$page, 'items'=>ITEMS_GALLERY,
+                            'total' => count($videos), 'function'=>'getGalleryVideos',
+                            'others'=>'"listbyCategory", "'.$metadatas.'"' );
+        }
+
+        if(count($videos)> ITEMS_GALLERY)
+            array_pop($videos); //next page
+
+        $tpl->assign('videos',  $videos);
+
+        $videoPager = Onm\Pager\SimplePager::getPager($videoParams);
+        $tpl->assign('videoPager', $videoPager);
+        $html_out.=$tpl->fetch('video/videoGallery.tpl');
+        if (extension_loaded('apc')) {
+            apc_store(APC_PREFIX ."videoGallery_".$metadatas."_".$category."_".$page, $html_out);
+        }
     }
- 
-    if(count($videos)> ITEMS_GALLERY)
-        array_pop($videos); //next page
-    
-    $tpl->assign('videos',  $videos);
-
-    $videoPager = Onm\Pager\SimplePager::getPager($videoParams);
-    $tpl->assign('videoPager', $videoPager);
 
     if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest')) {
 
-        $html_out.=$tpl->fetch('video/videoGallery.tpl');
+       
 
         Application::ajax_out($html_out);
     }
