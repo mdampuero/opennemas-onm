@@ -110,9 +110,7 @@
                     <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="80%">
                         <tbody>
                             <tr>
-                                <td>
-                                    <h2>Buscar:</h2>
-                                </td>
+                                <label for="title" >{t}Search in the information catalog:{/t}</label><br/><br/>
                                 <td>
                                     <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                                            value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
@@ -120,7 +118,7 @@
                                 </td>
                                 <td>
                                     <a href="#" class="admin_add" 
-                                       onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); divs_hide('search-div2');" 
+                                       onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); Effect.Appear('search-div2');" 
                                        onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
                                             <img border="0" src="{$params.IMAGE_DIR}icono-buscar.png" title="Search" alt="Search">
                                     </a>

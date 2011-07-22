@@ -85,7 +85,7 @@ class cSearch
         $szSqlSentence .= $szSqlWhere;
         $szSqlSentence .= 'ORDER BY rel DESC, created DESC';
         if($iLimit!=NULL){
-            $szSqlSentence .= " LIMIT 0, ".$iLimit;
+            $szSqlSentence .= " LIMIT ".$iLimit;
         }
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
 
