@@ -36,11 +36,11 @@ html[xmlns] .clearfix {
 #menu-acciones-admin {
 	margin: 0px;
 	background-color: #ddd;
-	padding:4px;
     height:65px;
 	border:1px solid #ccc;
 	border-radius: 3px;
-	width:99%;
+	width:100%;
+	padding:4px 0;
 }
 
 #menu-acciones-admin ul {

@@ -100,4 +100,4 @@ if( isset($_REQUEST['action'])){
 	}
 }
 $tpl->assign('version', \Onm\Common\Version::VERSION);
-$tpl->display('login.tpl');
+$tpl->display('login/login.tpl');

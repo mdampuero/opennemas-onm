@@ -5,7 +5,7 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="OpenHost,SL" />
-    <meta name="generator" content="OpenNemas - Open Source News Management System" />
+    <meta name="generator" content="OpenNemas - News Management System" />
 
     {block name="meta"}
         <title>OpenNeMaS - Admin section</title>
@@ -17,12 +17,10 @@
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
 		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css"/>
         <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}welcomepanel.css?cacheburst=1257955982" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
@@ -33,6 +31,7 @@
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/effects.js"></script>
+
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>

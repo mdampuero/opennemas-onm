@@ -166,3 +166,70 @@
 	border: 1px solid #2D6200;
 	box-shadow:none;
 }
+
+
+/* -------------------------------------------------------------
+  Content from dashboard.css
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+div.upload {
+    height: 335px;
+}
+
+#dashboard_enlaces {
+    margin-top:20px;
+    font-size: 13px;
+}
+
+#dashboard_enlaces a{
+    text-decoration:underline;
+    font-weight:bold;
+}
+
+#dashboard_enlaces a:hover {
+    text-decoration:underline overline;
+}
+
+div.dashboardBox {
+    background-color: #FFF;
+    background-image: url('../images/dashboardbox_top.png');
+    background-repeat: repeat-x;
+    background-position: top;
+    border: 1px solid #ccc;
+    border-top:none;
+    margin: 0.5em 0.2em;
+    min-height: 100px;
+    min-height:200px;
+}
+
+div.dashboardBox h2 {
+    font-weight: bold;
+    color:white;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 1em;
+    text-shadow:none;
+}
+
+div.dashboardBox > p{
+    background:White;
+    padding:50px 20px;
+    text-align:center;
+    margin-bottom:10px;
+    border: 1px solid #ccc;
+}
+
+div.dashboardBox div {
+    padding: 4px;
+    margin-bottom: 2px;
+}
+
+div.dashboardBox div.table {
+    margin: 0px;
+    margin-bottom: 2px;
+    overflow: auto;
+}
+
+
+.clearer {
+    clear: both;
+}
