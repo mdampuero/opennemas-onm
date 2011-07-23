@@ -149,6 +149,11 @@ form {
 .yellow.awesome, .yellow.awesome:visited		{ background-color: #ffb515; }
 .yellow.awesome:hover							{ background-color: #fc9200; }
 
+.action-buttons { margin:0; width:100; padding:0;}
+.action-buttons li {
+	display:inline-block;
+	list-style:none;
+}
 
 
 /* Estilos personalizados */
@@ -1990,3 +1995,4 @@ div.rssBox span.category {
 .buttons .button span.icon.home {
 	background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
 }
+

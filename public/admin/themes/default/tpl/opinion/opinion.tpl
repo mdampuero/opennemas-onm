@@ -13,7 +13,6 @@
 
     {* LISTADO ******************************************************************* *}
     {if !isset($smarty.request.action) || $smarty.request.action eq "list"}
-
         <div>
             <ul class="tabs">
                 <li>

@@ -1,6 +1,19 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}" title="{t}Upload file{/t}">
+						<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
+						{t}Upload file{/t}
+					</a>
+				</li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
 
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
@@ -12,21 +25,6 @@
 			{include file="menu_categorys.tpl" home="{$_SERVER['PHP_SELF']}?action=list"}
 
 		</ul>
-
-		<br><br>
-		<div id="menu-acciones-admin">
-			<div style="float:left; margin:8px;"><h2>{if $category eq 0}{t}File manager :: Overview{/t}{else}{t}File manager :: Files in category{/t} {$datos_cat[0]->title} {/if}</h2></div>
-			{if $category neq 0}
-			<ul>
-				<li>
-					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}" title="{t}Upload file{/t}">
-						<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
-						{t}Upload file{/t}
-					</a>
-				</li>
-			</ul>
-			{/if}
-		</div>
 
 	<div id="{$category}">
 		{if $category eq 0}

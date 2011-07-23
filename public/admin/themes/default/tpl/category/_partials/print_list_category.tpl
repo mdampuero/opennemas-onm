@@ -1,12 +1,12 @@
-<table  class="adminlist"  id="{$category->pk_content_category}">
-    <tr {cycle values="class=row0,class=row1"} style="padding: 0px 10px; height: 40px;">
+<table  id="{$category->pk_content_category}" style="width:100%">
+    <tr {cycle values="class=row0,class=row1"} >
         <td>
              <strong> {$category->title|clearslash|escape:"html"}</strong>
         </td>
         <td style="width:120px;" >
-             <strong> {$category->name}</strong>  
+             <strong> {$category->name}</strong>
         </td>
-        <td style="width:100px;" align="center">  
+        <td style="width:100px;" align="center">
           {if $category->internal_category eq 7}
              <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" title="Sección de Album" alt="Sección de Album" />
           {elseif $category->internal_category eq 9}

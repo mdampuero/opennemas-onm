@@ -7,7 +7,7 @@
 			<ul class="old-button">
 				<li>
                     <a href="{$smarty.server.PHP_SELF}?action=new">
-                        <img border="0" src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New Privilege{/t}"><br />{t}New User group{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
                     </a>
                 </li>
 			</ul>

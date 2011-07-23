@@ -1,20 +1,19 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="wrapper-content">
-    <div id="menu-acciones-admin">
-        <div style="float: left; margin-left: 10px; margin-top: 10px;">
-            <h2>{t}File Manager :: Upload{/t}</h2>
-        </div>
-        <ul>
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+        <ul class="old-button">
             <li>
                 <a href="{$_SERVER['PHP_SELF']}?action=list" class="admin_add" value="Cancelar" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                 </a>
             </li>
         </ul>
     </div>
-
+</div>
+<div class="wrapper-content">
     <form action="{$_SERVER['PHP_SELF']}" method="POST" enctype="multipart/form-data" style="margin-top:10px !important;">
 
         {if $message neq ""}
@@ -59,17 +58,17 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td style="padding-bottom:20px">
-                        <input id="op" name="op" type="submit" value="{t}Upload{/t}" />
+
                     </td>
                 </tr>
 
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan=2>&nbsp;</td>
-                </tr>
-            </tfoot>
         </table>
+        <div class="action-bar clearfix">
+            <div class="right">
+                <button type="submit" class="onm-button red">{t}Upload{/t}</button>
+            </div>
+        </div>
         <input type="hidden" id="action" name="action" value="upload" />
         <input type="hidden" id="category" name="category" value="{$category}" />
     </form>

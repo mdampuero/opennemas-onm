@@ -48,16 +48,25 @@ if( isset($_REQUEST['action']) ) {
 			$tpl->assign('paginacion', $pager);
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
 
+			$tpl->display('newsstand/list.tpl');
+
+
 		break;
 
 		case 'new':
+
+			$tpl->display('newsstand/new.tpl');
+
 		break;
 
-		case 'read': //habrá que tener en cuenta el tipo
+		case 'read':
+
 			$cm = new ContentManager();
 			$kiosko = new Kiosko( $_REQUEST['id'] );
 			$tpl->assign('kiosko', $kiosko);
-                        $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
+            $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
+			$tpl->display('newsstand/read.tpl');
+
 		break;
 
 		case 'update':
@@ -73,44 +82,45 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'create':
 
-                        $_POST['fk_publisher']=$_SESSION['userid'];
+			$_POST['fk_publisher']=$_SESSION['userid'];
 
-                        //Se crea el nombre del PDF
-                        $date = new DateTime($_POST['date']);
-                        $_POST['name'] = $date->format('dmy').'.pdf';
+			//Se crea el nombre del PDF
+			$date = new DateTime($_POST['date']);
+			$_POST['name'] = $date->format('dmy').'.pdf';
 
-                        //Se crea el path
-                        $cc = new ContentCategoryManager();
-                        $cat  = $cc->get_name( $_REQUEST['category'] );
-                        $_POST['path'] = '/'.$cat.'/'.$date->format('Ym').'/';
+			//Se crea el path
+			$cc = new ContentCategoryManager();
+			$cat  = $cc->get_name( $_REQUEST['category'] );
+			$_POST['path'] = '/'.$cat.'/'.$date->format('Ym').'/';
 
-                        $ruta = MEDIA_DIR.'/files/kiosko'.$_POST['path'];
-                        // Create folder if it doesn't exist
-                        if( !file_exists($ruta) ) {
-                            mkdir($ruta, 0777, true);
-                        }
+			$ruta = MEDIA_DIR.'/files/kiosko'.$_POST['path'];
+			// Create folder if it doesn't exist
+			if( !file_exists($ruta) ) {
+				mkdir($ruta, 0777, true);
+			}
 
-                        // Move uploaded file
-                        $uploadStatus = @move_uploaded_file($_FILES['file']['tmp_name'], $ruta.$_POST['name']);
+			// Move uploaded file
+			$uploadStatus = @move_uploaded_file($_FILES['file']['tmp_name'], $ruta.$_POST['name']);
 
-                        $kiosko = new Kiosko();
-                        if($uploadStatus!== false && $kiosko->create( $_POST )) {
-                            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
-                        } else {
-                            if ($uploadStatus===false) {
-                                $msg = new Message('Ocurrió algún error al subir la portada y no pudo guardarse. <br />Póngase en contacto con los administradores.', 'error');
-                                $msg->push();
-                                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
-                            }
-                            //Error debido a portada ya subida enla fecha indicada
-                            $_REQUEST['action'] = 'new';
-                            $tpl->assign('kiosko', $kiosko);
-                        }
+			$kiosko = new Kiosko();
+			if($uploadStatus!== false && $kiosko->create( $_POST )) {
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+			} else {
+				if ($uploadStatus===false) {
+					$msg = new Message('Ocurrió algún error al subir la portada y no pudo guardarse. <br />Póngase en contacto con los administradores.', 'error');
+					$msg->push();
+					Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+				}
+				//Error debido a portada ya subida enla fecha indicada
+				$_REQUEST['action'] = 'new';
+				$tpl->assign('kiosko', $kiosko);
+			}
+
 		break;
 
 		case 'delete':
 			$portada = new Kiosko($_REQUEST['id']);
-                        $portada->remove();
+            $portada->remove();
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 		break;
 
@@ -121,7 +131,7 @@ if( isset($_REQUEST['action']) ) {
 			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
 			//$album->set_status($status,$_SESSION['userid']);
 
-                        $portada->set_available($status, $_SESSION['userid']);
+            $portada->set_available($status, $_SESSION['userid']);
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
 		break;
@@ -145,6 +155,3 @@ if( isset($_REQUEST['action']) ) {
 } else {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page'].'&category='.$_REQUEST['category']);
 }
-
-$tpl->display('newsstand/index.tpl');
-?>

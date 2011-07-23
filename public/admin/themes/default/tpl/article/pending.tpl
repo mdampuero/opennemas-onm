@@ -1,5 +1,68 @@
-{* LISTADO ******************************************************************* *}
-{if !isset($smarty.post.action) || $smarty.post.action eq "list_pendientes"}
+{extends file="base/admin.tpl"}
+{block name="header-css" append}
+<link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/utilities.css" />
+{/block}
+
+{block name="header-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
+
+    {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    {/if}
+{/block}
+
+{block name="content"}
+<div class="top-action-bar">
+    <div class="wrapper-content">
+        <div class="title"><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
+        <ul class="old-button">
+             <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />{t}Delete all{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
+                </a>
+            </li>
+            {if $category!=20}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');" name="submit_mult" value="noFrontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />{t}Publish{/t}
+                </a>
+            </li>
+             <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdirectly_frontpage', 1);" onmouseover="return escape('<u>P</u>ublicar directamente en portada');" name="submit_mult" value="noFrontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish_direct.gif" alt="publicar en portada directamente"><br />{t}Publish to frontpage{/t}
+                </a>
+            </li>
+            {/if}
+            <li>
+                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
+                </button>
+            </li>
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" alt="Nuevo"><br />{t}New article{/t}
+                </a>
+            </li>
+            <li>
+                <a href="importXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
+                    <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />{t}Import XML{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="wrapper-content">
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+        <div id="content-wrapper">
+
     <ul class="tabs2" style="margin-bottom: 28px;">
         {acl hasCategoryAccess=0}
         <li>
@@ -34,9 +97,6 @@
             alert('{$smarty.get.msg}');
         </script>
     {/if}
-
-    {include file="article/partials/_menu.tpl"}
-    <br>
 
 
     <div id="{$category}">
@@ -134,8 +194,8 @@
                         {/if}
                     </td>
                     <td style="padding:5px;" align="center">
-                        <a style="cursor:pointer" onClick="javascript:enviar(this, '_self', 'read', '{$articles[c]->id}');" title="Modificar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" /></a>
+                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="{t}Edit{/t}">
+                            <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit{/t}" /></a>
                     </td>
                     <td style="padding:5px;" align="center">
                         <a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
@@ -237,4 +297,40 @@
         {/if}
 
     </div>
-{/if}
+
+            <script type="text/javascript" language="javascript">
+            document.observe('dom:loaded', function() {
+                if($('title')){
+                    new OpenNeMas.Maxlength($('title'), {});
+                    $('title').focus(); // Set focus first element
+                }
+                getGalleryImages('listByCategory','{$category}','','1');
+                getGalleryVideos('listByCategory','{$category}','','1');
+            });
+
+            if($('starttime')) {
+                new Control.DatePicker($('starttime'), {
+                    icon: './themes/default/images/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+                });
+
+                new Control.DatePicker($('endtime'), {
+                    icon: './themes/default/images/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+                });
+            }
+            </script>
+
+
+            <input type="hidden" id="action" name="action" value="" />
+            <input type="hidden" name="id" id="id" value="{$id}" />
+        </div>
+    </form>
+</div>
+{/block}

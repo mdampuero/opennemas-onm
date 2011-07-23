@@ -35,16 +35,17 @@ $tpl->assign('category', $category);
 
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
- 
+
 $tpl->assign('datos_cat', $categoryData);
 
  define('ALBUM_FAVORITES', 4);
 /******************* GESTION CATEGORIAS  *****************************/
 
 if( isset($_REQUEST['action']) ) {
-    
+
 	switch($_REQUEST['action']) {
-		case 'list':  //Buscar publicidad entre los content
+
+		case 'list':
             Acl::checkOrForward('ALBUM_ADMIN');
             $cm = new ContentManager();
 
@@ -65,7 +66,7 @@ if( isset($_REQUEST['action']) ) {
                         $album->category_title = $ccm->get_title($album->category_name);
                     }
                 }
-                
+
             } else {
                 $albums= $cm->find_by_category('Album', $category, 'fk_content_type=7',
                                                'ORDER BY created '.$limit);
@@ -80,17 +81,19 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign( array(
                             'pagination' => $pagination,
                             'albums' => $albums ));
-            
+
+			$tpl->display('album/list.tpl');
+
 		break;
 
 		case 'new':
-            
+			$tpl->display('album/new.tpl');
 		break;
 
 		case 'read':
-            
+
             Acl::checkOrForward('ALBUM_UPDATE');
-            
+
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             if(empty($id)) { //because forwards
                 $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
@@ -112,7 +115,21 @@ if( isset($_REQUEST['action']) ) {
             }
             $tpl->assign('category', $album->category);
   		 	$tpl->assign('photoData', $photoData);
-  		 	
+			$tpl->display('album/new.tpl');
+
+		break;
+
+		case 'create':
+
+            Acl::checkOrForward('ALBUM_CREATE');
+
+			$album = new Album();
+			if($album->create( $_POST )) {
+				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+			}else{
+				$tpl->assign('errors', $album->errors);
+			}
+			$tpl->display('album/new.tpl');
 		break;
 
 		case 'update':
@@ -124,21 +141,9 @@ if( isset($_REQUEST['action']) ) {
                 $msg ="Only read";
             }
 			$album->update( $_POST );
-                       
+
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-            
-		break;
 
-		case 'create':
-            
-            Acl::checkOrForward('ALBUM_CREATE');
-
-			$album = new Album();
-			if($album->create( $_POST )) {                
-				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-			}else{
-				$tpl->assign('errors', $album->errors);
-			}
 		break;
 
         case 'validate':
@@ -149,7 +154,7 @@ if( isset($_REQUEST['action']) ) {
 				$album = new Album();
 				if(!$album->create( $_POST ))
 					$tpl->assign('errors', $album->errors);
-			} else {                
+			} else {
                 Acl::checkOrForward('ALBUM_UPDATE');
 				$album = new Album($id);
                 if(!Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
@@ -166,12 +171,12 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ALBUM_DELETE');
 
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-            
+
 			$album = new Album($id);
             $rel= new Related_content();
             $relations=array();
             $msg ='';
-            $relations = $rel->get_content_relations( $id ); 
+            $relations = $rel->get_content_relations( $id );
             if (!empty($relations)) {
                  $msg = "El album  '".$album->title."' , está relacionado con los siguientes articulos:  \n";
                  $cm= new ContentManager();
@@ -192,7 +197,7 @@ if( isset($_REQUEST['action']) ) {
                 echo $msg;
                 exit(0);
             }
-            
+
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 		break;
 
@@ -207,18 +212,18 @@ if( isset($_REQUEST['action']) ) {
                 $rel->delete_all($id);
                 $album->delete($id,$_SESSION['userid'] );
             }
-            
+
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$_REQUEST['page']);
         break;
 
-		
+
 		case 'change_status':
             Acl::checkOrForward('ALBUM_AVAILABLE');
-            
+
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                    array('options' => array('default'=> 0)));
-			$album = new Album($id); 
+			$album = new Album($id);
             $album->set_available($status, $_SESSION['userid']);
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
@@ -238,7 +243,7 @@ if( isset($_REQUEST['action']) ) {
                     $msg = "No se puede esta despublicado";
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
-            
+
 		break;
 
 		case 'mfrontpage':
@@ -260,7 +265,7 @@ if( isset($_REQUEST['action']) ) {
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 		break;
-		
+
 		case 'mdelete':
             Acl::checkOrForward('ALBUM_TRASH');
 			if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
@@ -290,7 +295,7 @@ if( isset($_REQUEST['action']) ) {
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&alert='.$alert.'&msgdel='.$msg.'&page='.$page);
 		break;
-						
+
 		default:
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 		break;
@@ -298,6 +303,3 @@ if( isset($_REQUEST['action']) ) {
 } else {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }
-
-$tpl->display('album/album.tpl');
-

@@ -1,4 +1,77 @@
-{* ZONA MENU CATEGORIAS ******* *}
+{extends file="base/admin.tpl"}
+{block name="header-css" append}
+<link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/utilities.css" />
+{/block}
+
+{block name="header-js" append}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
+
+    {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
+        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
+    {/if}
+{/block}
+
+{block name="content"}
+<div class="top-action-bar">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="noFrontpage" ><br />{t}Unpublish{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:confirmar_hemeroteca(this,{$category}, 0);" name="submit_mult" value="Archivar" title="Archivar">
+                    <img border="0" src="{$params.IMAGE_DIR}archive.gif" title="{t}Arquive{/t}" alt="{t}Arquive{/t}" ><br />{t}Arquive{/t}
+                </a>
+            </li>
+            {if $category!='home'}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
+                    <img border="0" src="{$params.IMAGE_DIR}gosuggest50.png" title="{t}Suggest to home{/t}" alt="{t}Suggest to home{/t}" ><br />{t}Suggest to home{/t}
+                </a>
+            </li>
+            {/if}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);" name="submit_mult" value="Frontpage" title="Frontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="Frontpage" ><br />{t}No home{/t}
+                </a>
+            </li>
+            <li>
+                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                    <img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
+                </button>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:savePositions('{$category}');" title="Guardar Positions" alt="Guardar Cambios">
+                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save changes{/t}" alt="{t}Save changes{/t}" ><br />{t}Save changes{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:previewFrontpage('{$category}');return false;" title="Previsualizar posiciones en portada">
+                    <img border="0" src="{$params.IMAGE_DIR}preview_layout.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
+                </a>
+            </li>
+            <li>
+                 <a href="#" onclick="clearcache('{$category}'); return false;" id="button_clearcache">
+                     <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
+                 </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+
+<div class="wrapper-content">
+
     <ul class="tabs2" style="margin-bottom: 28px;">
         {acl hasCategoryAccess=0}
         <li>
@@ -15,11 +88,6 @@
         {/acl}
         {include file="menu_categorys.tpl" home="article.php?action=list"}
     </ul>
-
-    {* Archivo respuesta cabecera ajax guarda posicion*}
-    {* include_php file="cambiapos.php" *}
-
-    {include file="article/partials/_menu.tpl"}
 
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}
     {if $smarty.get.alert eq 'ok'}
@@ -154,3 +222,41 @@
         // ]]>
         </script>
     </div> {* div id=$category *}
+    <td valign="top" align="right" style="padding:4px;" width="30%">
+
+            <script type="text/javascript" language="javascript">
+            document.observe('dom:loaded', function() {
+                if($('title')){
+                    new OpenNeMas.Maxlength($('title'), {});
+                    $('title').focus(); // Set focus first element
+                }
+                getGalleryImages('listByCategory','{$category}','','1');
+                getGalleryVideos('listByCategory','{$category}','','1');
+            });
+
+            if($('starttime')) {
+                new Control.DatePicker($('starttime'), {
+                    icon: './themes/default/images/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+                });
+
+                new Control.DatePicker($('endtime'), {
+                    icon: './themes/default/images/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+                });
+            }
+            </script>
+
+
+            <input type="hidden" id="action" name="action" value="" />
+            <input type="hidden" name="id" id="id" value="{$id}" />
+        </div>
+    </form>
+</div>
+{/block}

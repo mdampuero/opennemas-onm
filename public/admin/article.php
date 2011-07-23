@@ -210,8 +210,8 @@ if (isset($_REQUEST['action']) ) {
             $_SESSION['desde']='list';
             $_SESSION['_from']=$_REQUEST['category'];
 
+            $tpl->display('article/list.tpl');
 
-// </editor-fold >
         break;
 
         case 'list_pendientes':
@@ -305,6 +305,9 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('category', $_REQUEST['category']);
             $_SESSION['desde']='list_pendientes';
             $_SESSION['_from']=$_REQUEST['category'];
+
+            $tpl->display('article/pending.tpl');
+
         break;
 
         case 'list_agency': //$data['paper_page']=-1;
@@ -381,12 +384,15 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('category', $_REQUEST['category']);
             $_SESSION['desde']='list_agency';
             $_SESSION['_from']=$_REQUEST['category'];
+
+            $tpl->display('article/article.tpl');
+
         break;
 
 
         case 'list_hemeroteca':
             $tpl->assign('titulo_barra', 'Hemeroteca');
-            
+
             if (!isset($_REQUEST['category']) || $_REQUEST['category'] =='home') {
                 $_REQUEST['category'] = 'todos';
             }
@@ -406,6 +412,9 @@ if (isset($_REQUEST['action']) ) {
             $tpl->assign('paginacion', $pager);
             $tpl->assign('category', $_REQUEST['category']);
             $_SESSION['desde']='list_hemeroteca';
+
+            $tpl->display('article/library.tpl');
+
         break;
 
         case 'new':   // Crear un nuevo artículo
@@ -422,6 +431,7 @@ if (isset($_REQUEST['action']) ) {
 
             //TODO: AJAX
             require_once('controllers/video/videoGallery.php');
+            $tpl->display('article/new.tpl');
 
         break;
 
@@ -513,6 +523,7 @@ if (isset($_REQUEST['action']) ) {
 
                 $tpl->assign('clones', $clones);
             }
+            $tpl->display('article/article.tpl');
             // }}}
         } break;
 
@@ -539,6 +550,8 @@ if (isset($_REQUEST['action']) ) {
 
                 $tpl->assign('errors', $article->errors);
             }
+            $tpl->display('article/article.tpl');
+
         break;
 
         case 'unlink':
@@ -1091,6 +1104,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'mdelete':
+
             if($_REQUEST['id']==6){ //Eliminar todos
                 $cm = new ContentManager();
                 if($_SESSION['_from']=='todos' || $_SESSION['_from']=='opinion'){
@@ -1178,8 +1192,7 @@ if (isset($_REQUEST['action']) ) {
                 }
             }
 
-
-                 $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
+            $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='. $_SESSION['_from'].'&alert='.$alert.'&msg='.$msg.'&page='.$_REQUEST['page']);
 
@@ -1300,7 +1313,7 @@ if (isset($_REQUEST['action']) ) {
             if ($search) {
                 foreach ($search as $res ) {
                     $search[$indice]['metadata'] = htmlentities($search[$indice]['metadata'],NULL, 'UTF-8');
-                    for($ind=0; $ind < sizeof($szSourceTags); $ind++){                    
+                    for($ind=0; $ind < sizeof($szSourceTags); $ind++){
                         $search[$indice]['title'] = String_Utils::ext_str_ireplace($szSourceTags[$ind], '<b><font color=blue>$1</font></b>', $search[$indice]['title']);
                     }
                     $indice++;
@@ -1545,7 +1558,3 @@ if (isset($_REQUEST['action']) ) {
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
 }
-
-$tpl->removeScript('wz_tooltip.js', 'body');
-
-$tpl->display('article/article.tpl');

@@ -10,27 +10,25 @@ submitForm = function() {
 {/block}
 
 {block name="content" append}
-<div style="width:70%;margin:0 auto;">
-    <form action="widget.php" method="post" name="formulario" id="formulario" style="width:70%;margin:0 auto;">
+<div class="top-action-bar">
+    <div class="wrapper-content">
+        <div class="title">
+            <h2>{if $smarty.request.action eq "new"}{t}Creating new widget{/t}{else}{t 1=$widget->title}Editing widget «%1»{/t}{/if}</h2>
+        </div>
+        <ul class="old-button">
+            <li>
+                <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                    {t}Go back{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
+    <div class="wrapper-content">
         <input type="hidden" id="id" name="id" value="{$widget->id|default:""}" />
         <input type="hidden" id="action" name="action" value="save" />
-        <div id="menu-acciones-admin">
-            <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{if $smarty.request.action eq "new"}{t}Creating new widget{/t}{else}{t 1=$widget->title}Editing widget «%1»{/t}{/if}</h2></div>
-            <ul>
-                <li>
-                    <a href="#" class="admin_add" onClick="javascript:submitForm();" value="Guardar" title="{t}Save{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />
-                        {t}Save{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
-                        {t}Cancel{/t}
-                    </a>
-                </li>
-            </ul>
-        </div>
 
         <div id="warnings-validation"></div>
 
@@ -104,14 +102,12 @@ submitForm = function() {
         </tr>
 
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5" align="center">
-                    <br/><br/>
-                </td>
-            </tr>
-        </tfoot>
         </table>
-    </form>
-</div>
+        <div class="action-bar clearfix">
+            <div class="right">
+                <button type="submit" class="onm-button red">{t}Save{/t}</button>
+            </div>
+        </div>
+    </div>
+</form>
 {/block}
