@@ -26,13 +26,10 @@
 {/block}
 
 {block name="content"}
-<div style="width:70%;margin:0 auto;">
-
-    <div id="menu-acciones-admin">
-
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
-
-        <ul>
+<div class="top-action-bar">
+    <div class="wrapper-content">
+        <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
+        <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=save_data&id={$photo1->id}" class="admin_add">
                      <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir"  alt="Guardar y salir" ><br />{t}Save{/t}
@@ -46,9 +43,10 @@
                      <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
                 </a>
             </li>
-         </ul>
+        </ul>
     </div>
-
+</div>
+<div class="wrapper-content">
 
     {include file="mediamanager/_partials/photo_data.tpl" display='inline'}
 
