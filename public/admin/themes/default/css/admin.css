@@ -222,8 +222,8 @@ table.adminlist tr.row2 {
 	text-align: right;
 }
 table.adminlist td {
-        padding: 0;
-        font-size: 11px;
+	padding: 2px;
+	font-size: 11px;
 }
 table.adminlist tr.row0:hover {
 	background-color: #EEEEEE;
@@ -1929,7 +1929,13 @@ div.rssBox span.category {
 .top-action-bar .title {
 	padding:0;
 	margin:0;
-
+}
+.top-action-bar .title > * {
+	display:inline-block;
+	padding:10px 0;
+}
+.top-action-bar .title img {
+	margin-left:10px;
 }
 .top-action-bar .title h2 {
 	margin:0;
@@ -1995,4 +2001,3 @@ div.rssBox span.category {
 .buttons .button span.icon.home {
 	background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
 }
-

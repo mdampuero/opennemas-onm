@@ -16,7 +16,7 @@
             {else}
                 <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
             {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
                 </a>
             </li>
         </ul>

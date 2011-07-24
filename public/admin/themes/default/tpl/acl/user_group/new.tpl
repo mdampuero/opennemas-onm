@@ -9,7 +9,7 @@
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}user_validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                        <img border="0" src="{$params.IMAGE_DIR}user_save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
                     </a>
                 </li>
                 <li>
@@ -18,7 +18,7 @@
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
                     </a>
                 </li>
                 <li>

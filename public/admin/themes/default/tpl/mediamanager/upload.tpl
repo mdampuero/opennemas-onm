@@ -30,18 +30,8 @@
         <div class="title"><h2>{t 1=$datos_cat[0]->title}Image manager :: Upload image to "%1"{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
-                </a>
-            </li>
-            <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
-                </a>
-            </li>
-            <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
+                <a href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="{t}Go Back{/t}">
+                    <img src="{$params.IMAGE_DIR}newsletter/previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
                 </a>
             </li>
         </ul>

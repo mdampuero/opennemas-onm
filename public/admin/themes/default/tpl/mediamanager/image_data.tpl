@@ -32,7 +32,7 @@
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=save_data&id={$photo1->id}" class="admin_add">
-                     <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir"  alt="Guardar y salir" ><br />{t}Save{/t}
+                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" ><br />{t}Save{/t}
                 </a>
             </li><li>
                 {if !isset($smarty.request.stringSearch)}

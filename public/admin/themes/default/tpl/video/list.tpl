@@ -20,45 +20,44 @@
 
 {block name="content"}
 <form action="#" method="post" name="formulario" {$formAttrs}>
-
-        <div class="top-action-bar clearfix">
-			<div class="wrapper-content">
-				<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
-				<ul class="old-button">
-					{acl isAllowed="VIDEO_DELETE"}
-					<li>
-						<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-							<img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
-						</a>
-					</li>
-					{/acl}
-					{acl isAllowed="VIDEO_AVAILABLE"}
-					<li>
-						<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-							<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
-						</a>
-					</li>
-					<li>
-						<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-							<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-						</a>
-					</li>
-					{/acl}
-					<li>
-						<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-							<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-						</button>
-					</li>
-					{acl isAllowed="VIDEO_CREATE"}
-					<li>
-						<a href="{$smarty.server.SCRIPT_NAME}?action=new&category={$category}" accesskey="N" tabindex="1">
-							<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />Nuevo Video
-						</a>
-					</li>
-					{/acl}
-				</ul>
-			</div>
+	<div class="top-action-bar clearfix">
+		<div class="wrapper-content">
+			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+			<ul class="old-button">
+				{acl isAllowed="VIDEO_DELETE"}
+				<li>
+					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+						<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+					</a>
+				</li>
+				{/acl}
+				{acl isAllowed="VIDEO_AVAILABLE"}
+				<li>
+					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+						<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+					</a>
+				</li>
+				<li>
+					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
+						<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+					</a>
+				</li>
+				{/acl}
+				<li>
+					<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+						<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+					</button>
+				</li>
+				{acl isAllowed="VIDEO_CREATE"}
+				<li>
+					<a href="{$smarty.server.SCRIPT_NAME}?action=new&category={$category}" accesskey="N" tabindex="1">
+						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />Nuevo Video
+					</a>
+				</li>
+				{/acl}
+			</ul>
 		</div>
+	</div>
 
         <div class="wrapper-content">
 

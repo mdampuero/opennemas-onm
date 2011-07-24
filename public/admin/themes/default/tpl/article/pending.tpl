@@ -20,12 +20,12 @@
         <ul class="old-button">
              <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />{t}Delete all{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
                 </a>
             </li>
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             {if $category!=20}
@@ -47,7 +47,7 @@
             </li>
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
-                    <img border="0" src="{$params.IMAGE_DIR}/article_add.gif" alt="Nuevo"><br />{t}New article{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
                 </a>
             </li>
             <li>

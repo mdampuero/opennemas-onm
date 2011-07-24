@@ -23,13 +23,13 @@
 			{if  $type_opinion eq '0'}
 			<th class="title"  style="width:150px;">{t}Author name{/t}</th> {/if}
 			<th class="title">{t}Title{/t}</th>
-			<th align="center" style="width:70px;">{t}View{/t}</th>
-			<th align="center" style="width:70px;">{t}Ratings{/t}</th>
-			<th align="center" style="width:70px;">{t}Comments{/t}</th>
-			<th align="center" style="width:70px;">{t}Created in{/t}</th>
-			<th align="center" style="width:70px;">{t}In home{/t}</th>
-			<th align="center" style="width:70px;">{t}Published{/t}</th>
-			<th align="center" style="width:70px;">{t}Actions{/t}</th>
+			<th align="center" >{t}View{/t}</th>
+			<th align="center" >{t}Ratings{/t}</th>
+			<th align="center" >{t}Comments{/t}</th>
+			<th align="center" >{t}Created in{/t}</th>
+			<th align="center" >{t}In home{/t}</th>
+			<th align="center" >{t}Published{/t}</th>
+			<th align="center" >{t}Actions{/t}</th>
 	  </tr>
 	</thead>
 	<tbody>

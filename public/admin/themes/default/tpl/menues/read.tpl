@@ -26,7 +26,7 @@
             <ul class="old-button">
                 <li>
                     <a  onclick="saveMenu();enviar(this, '_self', 'save', 0);" class="admin_add"  name="submit_mult" value="Save" title="Save">
-                        <img border="0" id="save-button"  src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar" ><br />{t} Save {/t}
+                        <img border="0" id="save-button"  src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="Guardar" ><br />{t} Save {/t}
                     </a>
                 </li>
                 <li>

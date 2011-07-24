@@ -20,7 +20,7 @@
                 <li>
                     {acl isAllowed="ALBUM_CREATE"}
                     <a class="admin_add" onClick="album_get_order(); if(check_crop()) enviar(this, '_self', 'validate', '{$album->id}');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
                     </a>
                     {/acl}
                 </li>
@@ -34,7 +34,7 @@
                             <a onClick="javascript: album_get_order(); if(check_crop()) enviar(this, '_self', 'create', '0');">
                         {/acl}
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
                 <li>

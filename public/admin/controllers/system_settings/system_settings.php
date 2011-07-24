@@ -56,7 +56,7 @@ switch($action) {
                             'message'  => $message,
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
-                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish")),
+                            'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
                             'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
                         )
                     );

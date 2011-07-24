@@ -15,7 +15,7 @@
     $('postmaster').value = Object.toJSON(postData);
 
     // Attach click event to button
-    var botonera = $('menu-acciones-admin').select('ul li a');
+    var botonera = $('buttons').select('ul li a');
     botonera[0].setStyle({ display: '' });
     botonera[0].observe('click', function() {
     $('searchForm').action.value = 'preview';
@@ -25,14 +25,13 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-    <div id="menu-acciones-admin">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Delivered newsletter report{/t}</h2></div>
-        <div class="steps">
+<div class="top-action-bar" id="buttons">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Delivered newsletter report{/t} </h2>
             <img src="{$params.IMAGE_DIR}newsletter/5.gif" width="300" height="40" border="0" />
         </div>
 
-        <ul>
+        <ul class="old-button">
             <li>
                 <a href="#" class="admin_add" title="{t}Back{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
@@ -41,6 +40,9 @@
             </li>
         </ul>
     </div>
+</div>
+
+<div class="wrapper-content">
 
     <div class="form">
         <form name="searchForm" id="searchForm" method="post" action="#">

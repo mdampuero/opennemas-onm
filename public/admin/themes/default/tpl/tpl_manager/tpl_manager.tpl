@@ -60,7 +60,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
+        <div class="title"><h2>{t}Cache Manager{/t}</h2></div>
 		<ul class="old-button">
 			<li>
 				<a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
@@ -97,7 +97,6 @@
 <div class="wrapper-content">
 
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-<br>
 
 		<table class="adminheading">
 			<tr>

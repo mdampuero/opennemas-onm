@@ -11,7 +11,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
+		<div class="title"><h2>{t}Cache Manager{/t} :: {t}Configuration{/t}</h2></div>
 		<ul class="old-button">
 			<li>
 				<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">

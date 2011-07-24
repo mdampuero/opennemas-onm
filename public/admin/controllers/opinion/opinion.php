@@ -36,7 +36,10 @@ Acl::checkOrForward('OPINION_ADMIN');
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Gestión de Opinión');
+$tpl->assign('titulo_barra', _('Opinion Manager'));
+
+// FIXME: usar en template {$smarty.const.MEDIA_IMG_PATH_URL}
+$tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
 
 // Register events
 require_once('./opinion_events.php');
@@ -65,7 +68,7 @@ $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
 
 if(isset($_REQUEST['action'])) {
     switch($_REQUEST['action']) {
-        case 'list': 
+        case 'list':
             $order = ' position ASC, created DESC';
             $opinion = new Opinion();
 
@@ -167,6 +170,8 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('opinions', $opinions);
             $_SESSION['desde'] = 'opinion';
             $_SESSION['_from'] = 'opinion.php';
+
+            $tpl->display('opinion/list.tpl');
         break;
 
         case 'new':
@@ -185,6 +190,7 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('opinion', $opinion);
             $_SESSION['desde'] = 'new';
             $_SESSION['_from'] = 'opinion.php';
+            $tpl->display('opinion/new.tpl');
         break;
 
         case 'read':
@@ -208,9 +214,11 @@ if(isset($_REQUEST['action'])) {
 
             $photos = $aut->get_author_photos($opinion->fk_author);
             $tpl->assign('photos', $photos);
+
+            $tpl->display('opinion/new.tpl');
         break;
 
-        case 'create': 
+        case 'create':
             Acl::checkOrForward('OPINION_CREATE');
             $opin = new Opinion();
             $_POST['publisher'] = $_SESSION['userid'];
@@ -240,9 +248,11 @@ if(isset($_REQUEST['action'])) {
             } else {
                 $tpl->assign('errors', $opinion->errors);
             }
+            $tpl->display('opinion/new.tpl');
+
         break;
 
-        case 'update': 
+        case 'update':
             Acl::checkOrForward('OPINION_UPDATE');
             //TODO : Revisar esto porque antes saltaba un warning
             $alert= '';
@@ -291,7 +301,7 @@ if(isset($_REQUEST['action'])) {
             }
         break;
 
-        case 'validate': 
+        case 'validate':
             $opinion = null;
             if(empty($_POST["id"])) {
                 Acl::checkOrForward('OPINION_CREATE');
@@ -533,9 +543,8 @@ if(isset($_REQUEST['action'])) {
                                  $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
         break;
 
-        case 'save_positions': 
-            if(isset($_REQUEST['orden'])){
-
+        case 'save_positions':
+            if (isset($_REQUEST['orden'])){
                 $tok = strtok($_REQUEST['orden'], ",");
                 $_positions = array();
                 $pos = 1;
@@ -562,7 +571,7 @@ if(isset($_REQUEST['action'])) {
             exit(0);
         break;
 
-        case 'change_list_byauthor': 
+        case 'change_list_byauthor':
             $cm = new ContentManager();
             if($_REQUEST['author'] == 0) {
                 $_REQUEST['action'] = 'list'; //Para que sea correcta la paginacion.
@@ -607,10 +616,11 @@ if(isset($_REQUEST['action'])) {
             $tpl->assign('autores', $autores);
 
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])  && ($_SERVER['HTTP_X_REQUESTED_WITH']=="XMLHttpRequest")){
-                $tpl->display('opinion/opinion_list.tpl');
+                $tpl->display('opinion/partials/_opinion_list.tpl');
                 exit(0);
                 // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&type_opinion=0&page='.$_REQUEST['page']);
             }
+
         break;
 
         case 'update_title':
@@ -652,7 +662,7 @@ if(isset($_REQUEST['action'])) {
             Application::ajax_out($autores);
         break;
 
-        case 'changeavailable': 
+        case 'changeavailable':
             $opinion->read($_REQUEST['id']);
 
             $available = ($opinion->available+1) % 2;
@@ -667,8 +677,8 @@ if(isset($_REQUEST['action'])) {
 
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
-        
-        case 'unpublish': 
+
+        case 'unpublish':
             $opinion = new Opinion();
             $opinion->read($_REQUEST['id']);
             $opinion->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
@@ -679,7 +689,7 @@ if(isset($_REQUEST['action'])) {
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
 
-        case 'archive': 
+        case 'archive':
             $opinion = new Opinion();
             $opinion->read($_REQUEST['id']);
             $opinion->dropFromHomePageOfCategory($_REQUEST['category'],$_REQUEST['id']);
@@ -689,7 +699,7 @@ if(isset($_REQUEST['action'])) {
 
             Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
-        
+
 
         case 'change_photos':
 
@@ -708,15 +718,10 @@ if(isset($_REQUEST['action'])) {
             Application::ajax_out($out);
         break;
 
-        default: 
+        default:
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $_REQUEST['page']);
         break;
     }
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
 }
-
-// FIXME: usar en template {$smarty.const.MEDIA_IMG_PATH_URL}
-$tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
-
-$tpl->display('opinion/opinion.tpl');

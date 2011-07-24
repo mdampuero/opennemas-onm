@@ -2,7 +2,7 @@
 
 
 function changePhotos(fk_author)
-{	
+{
 	new Ajax.Updater('photos', "opinion.php?action=change_photos&fk_author="+fk_author,
         {
             evalScripts: true,
@@ -11,13 +11,13 @@ function changePhotos(fk_author)
                 $('fk_author_img_widget').value='';
                 var photos = $('photos').select('img');
                 for(var i=0; i<photos.length; i++) {
-                                  
+
                     try {
                         new Draggable(photos[i].id, { revert:true }  );
                          Imagen = new Image();
                          Imagen.setAttribute('id',photos[i].id);
-	       		    	 Imagen.onload=function(){	 
-	       		    	 // console.log("'" + this.id +"- ");  
+	       		    	 Imagen.onload=function(){
+	       		    	 // console.log("'" + this.id +"- ");
 	       			    	 if( this.width == 60){
 	       			    		$('widget').src=this.src;
 	       			    		$('fk_author_img_widget').value=this.id;
@@ -25,21 +25,21 @@ function changePhotos(fk_author)
 	       			    		 $('fk_author_img').value=this.id;
 	       		   			 $('seleccionada').src=this.src;
 	       			    	 }
-	       		    	 };	       		    	
+	       		    	 };
 	       		    	 Imagen.src=photos[i].src+'?'+Math.random();
 	       		    //	 debugger;
                     } catch(e) {
                      // console.debug( e );
                     }
                 }
-               
+
             }
         } );
 }
 
 function show_authors(type_opinion)
 {
-	if(type_opinion==0){	
+	if(type_opinion==0){
                 $('div_author1').setStyle({display:'inline'});
 		$('div_author2').setStyle({display:'inline'});
 	}else{
@@ -52,9 +52,9 @@ function show_authors(type_opinion)
            $('fk_author_img').value='';
 	   $('seleccionada').src='';
            $('thelist').childElements().each(function(item){
-                item.parentNode.removeChild(item);            
+                item.parentNode.removeChild(item);
             });
-          
+
         }else{
             if(type_opinion==2){
               //TODO: get id director not manually
@@ -83,34 +83,35 @@ function savePositionsOpinion() {
 	if($('cates')){
 		var items = $('cates').select(".sortable");
 		for (i = 0; i < items.length; i++) {
-                    if(orden){
-                        orden =orden + "," +items[i].id;
-                    }else{
-                          orden =items[i].id;
-                    }
+			if(orden){
+				orden =orden + "," +items[i].id;
+			}else{
+				orden =items[i].id;
+			}
 		}
 		//	alert('orden'+orden);
 	}
 	//Editorial
-	if($('editoriales')){
+	if ($('editoriales')) {
 		items = $('editoriales').select(".edits_sort");
 		for (i = 0; i < items.length; i++) {
 		    orden =orden + "," +items[i].id;
 		}
-		//	alert('orden'+orden);
 	}
-      if(orden){
-           new Ajax.Request(
-                    "opinion.php?action=save_positions&orden="+orden+"",
-                    {
-                            method: 'get',
-                            onLoaded : $('msg').update('<h2> Guardando ...</h2>'),
-                            onSuccess: function(transport) {
-                                     $('msg').update('<h2> Guardando correctamente</h2>');
-                            }
-                  }
-          );
-      }
+	console.log(orden);
+    if (orden) {
+		new Ajax.Request(
+			"/admin/controllers/opinion/opinion.php?action=save_positions",
+			{
+				method: 'post',
+				postBody: 'orden='+orden,
+				onLoaded : $('msg').update('<div class="notice">Guardando posiciones...</div>'),
+				onSuccess: function(transport) {
+					$('msg').update('<div class="success">Posiciones guardadas correctamente</div>');
+				}
+			}
+        );
+    }
 }
 
 function changeList(author)

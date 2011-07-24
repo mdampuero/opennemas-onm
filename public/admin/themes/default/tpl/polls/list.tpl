@@ -31,7 +31,7 @@
                 </li>
                 <li>
                     <a href="#" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva carta');" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/polls.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />Nueva Encuesta
+                        <img border="0" src="{$params.IMAGE_DIR}/poll-new.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />Nueva Encuesta
                     </a>
                 </li>
             </ul>
@@ -53,19 +53,21 @@
              </table>
 
              <table class="adminlist">
-             <tr>
-                 <th class="title"></th>
-                 <th class="title">T&iacute;tulo</th>
-                 <th class="title">Subt&iacute;tulo</th>
-                 <th align="center">Votos</th>
-                 <th align="center">Visto</th>
-                 <th align="center">Fecha</th>
-                 <th align="center">Favorito</th>
-                 <th align="center">Publicado</th>
-                 <th align="center">Archivar</th>
-                 <th align="center">Modificar</th>
-                 <th align="center">Eliminar</th>
-               </tr>
+             <thead>
+                <tr>
+                    <th class="title"></th>
+                    <th class="title">T&iacute;tulo</th>
+                    <th class="title">Subt&iacute;tulo</th>
+                    <th align="center">Votos</th>
+                    <th align="center">Visto</th>
+                    <th align="center">Fecha</th>
+                    <th align="center">Favorito</th>
+                    <th align="center">Publicado</th>
+                    <th align="center">Archivar</th>
+                    <th align="center">Modificar</th>
+                    <th align="center">Eliminar</th>
+                </tr>
+             </thead>
 
              {section name=c loop=$polls}
              <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >

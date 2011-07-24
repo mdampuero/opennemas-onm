@@ -8,7 +8,7 @@
                 <ul class="old-button">
                     <li>
                         <a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
-                            <img border="0" src="{$params.IMAGE_DIR}save.gif" ="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
+                            <img border="0" src="{$params.IMAGE_DIR}save.png" ="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
                         </a>
                     </li>
                     <li>
@@ -18,7 +18,7 @@
                     </li>
                     <li>
                         <a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
-                            <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                            <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
                         </a>
                     </li>
                     <li>

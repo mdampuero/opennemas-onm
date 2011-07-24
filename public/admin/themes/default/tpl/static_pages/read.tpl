@@ -7,7 +7,7 @@
 		<ul class="old-button">
 			<li>
                 <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);" value="Guardar" title="{t}Save{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
                 </a>
             </li>
             <li>

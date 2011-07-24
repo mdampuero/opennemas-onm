@@ -38,13 +38,13 @@
                         <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');" >
                     {/acl}
 				{/if}
-						<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+						<img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
 					</a>
 				</li>
                 {acl isAllowed="VIDEO_CREATE"}
 				<li>
 					<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id}', 'formulario');" value="Validar" title="Validar">
-						<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+						<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
 					</a>
 				</li>
                 {/acl}

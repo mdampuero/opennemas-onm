@@ -34,7 +34,7 @@
 			{else}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
 			{/if}
-				<img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
+				<img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
 				</a>
 			</li>
 			<li>

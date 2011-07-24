@@ -36,7 +36,7 @@ document.observe('dom:loaded', function() {
 
         $('postmaster').value = Object.toJSON(postData); // Binding post-data
 
-        var botonera = $$('div#menu-acciones-admin ul li a');
+        var botonera = $$('div#buttons ul li a');
         botonera[0].observe('click', function() {
             manager.serialize('opinions');
 
@@ -85,18 +85,14 @@ document.observe('dom:loaded', function() {
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-
-	{* Botonera *}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Newsletter management{/t}</h2></div>
-
-		<div class="steps">
+<div id="buttons" class="top-action-bar clearfix">
+	<div class="wrapper-content">
+		<div class="title">
+			<h2>{t}Newsletter management{/t}</h2>
 			<img src="{$params.IMAGE_DIR}newsletter/2.gif" width="300" height="40" border="0" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
-
-		<ul>
+		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
@@ -125,6 +121,8 @@ document.observe('dom:loaded', function() {
 			</li>
 		</ul>
 	</div>
+</div>
+<div class="wrapper-content">
 
 	<div class="form notice">
 		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Opinion selection{/t}</h3>

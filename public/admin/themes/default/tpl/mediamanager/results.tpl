@@ -57,7 +57,7 @@
             <ul>
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir"  alt="Guardar y salir" />
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
                         <br />
                         Guardar
                     </a>
