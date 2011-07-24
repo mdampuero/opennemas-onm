@@ -33,6 +33,40 @@
 
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
+                </a>
+            </li>
+            <li>
+                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+                </button>
+            </li>
+
+            <li>
+                <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$_REQUEST['category']}&page={$_GET['page']}"
+                   class="admin_add" accesskey="N" tabindex="1">
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
 
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
@@ -41,45 +75,11 @@
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
-           
+
             {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
         <div id="{$category}">
-
-            <div id="menu-acciones-admin" class="clearfix">
-                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
-                <ul>
-                    <li>
-                        <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                            <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                            <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                            <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-                        </button>
-                    </li>
-
-                    <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$_REQUEST['category']}&page={$_GET['page']}"
-                           class="admin_add" accesskey="N" tabindex="1">
-                            <img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <br />
 
             <table class="adminheading">
                 <tr>

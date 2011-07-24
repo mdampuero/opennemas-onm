@@ -34,7 +34,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="COMMENT_MANAGER"
             privilege="COMMENT_ADMIN"
             title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'"
-            link="controllers/comment.php?action=list"
+            link="controllers/comment/comment.php?action=list"
         />
         <node
             module_name="POLL_MANAGER"

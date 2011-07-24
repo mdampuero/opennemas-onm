@@ -84,7 +84,7 @@ if (!isset($_SESSION['desde'])) {
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $categoryData);
- 
+
 
 // Get filter and uri with params of list (query_string), remember don't assign to template $params
 list($filter, $query_string) = buildFilter('fk_content_categories LIKE \'%' . $category . '%\'');
@@ -92,8 +92,8 @@ $tpl->assign('query_string', $query_string);
 
 if( isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
-        
-        case 'list': 
+
+        case 'list':
             // Advertisement map
             $map = Advertisement::$map;
             $tpl->assign('map', $map);
@@ -110,27 +110,27 @@ if( isset($_REQUEST['action']) ) {
             list($advertisements, $pager)= $cm->find_pages('Advertisement',
                                                            $filter,
                                                            'ORDER BY created DESC ', $page, 20);
-            
+
             $advertisementsCleaned = array();
             foreach($advertisements as $adv) {
                 $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-                
+
                 if(in_array($category, $adv->fk_content_categories)
                    or $adv->fk_content_categories == array(0))
                 {
                     $advertisementsCleaned []= $adv;
                 }
             }
-            
+
             $tpl->assign('paginacion', $pager);
             $tpl->assign('advertisements', $advertisementsCleaned);
 
             $_SESSION['desde'] = 'advertisement';
             $tpl->display('advertisement/list.tpl');
-            
+
         break;
 
-        case 'test_script': 
+        case 'test_script':
             Acl::checkOrForward('ADVERTISEMENT_ADMIN');
 
             String_Utils::disabled_magic_quotes();
@@ -141,10 +141,10 @@ if( isset($_REQUEST['action']) ) {
         break;
 
         case 'new':
-            
+
             Acl::checkOrForward('ADVERTISEMENT_CREATE');
- 
-            $tpl->display('advertisement/advertisement.tpl');
+
+            $tpl->display('advertisement/new.tpl');
 
         break;
 
@@ -168,15 +168,15 @@ if( isset($_REQUEST['action']) ) {
             }
 
             $tpl->assign('photo1', $photo1);
- 
- 
-            $tpl->display('advertisement/advertisement.tpl');
+
+
+            $tpl->display('advertisement/new.tpl');
 
         break;
 
-        case 'create': 
-            Acl::checkOrForward('ADVERTISEMENT_CREATE');            
-            
+        case 'create':
+            Acl::checkOrForward('ADVERTISEMENT_CREATE');
+
             $_REQUEST['publisher'] = $_SESSION['userid'];
             $_REQUEST['fk_author'] = $_SESSION['userid'];
 
@@ -194,13 +194,13 @@ if( isset($_REQUEST['action']) ) {
                 $tpl->assign('errors', $advertisement->errors);
             }
 
-            $tpl->display('advertisement/advertisement.tpl');
+            $tpl->display('advertisement/new.tpl');
 
         break;
 
-        case 'update': 
+        case 'update':
             Acl::checkOrForward('ADVERTISEMENT_UPDATE');
-            
+
             $firstCategory = $_REQUEST['category'][0];
             $_REQUEST['category'] = implode(',', $_REQUEST['category']);
 
@@ -216,7 +216,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$firstCategory.'&page='.$page/*.'&'.$query_string*/);
         break;
 
-        case 'validate': 
+        case 'validate':
             if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
                 Privileges_check::AccessDeniedAction();
             }
@@ -237,7 +237,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$advertisement->id.'&'.$query_string);
         break;
 
-        case 'delete': 
+        case 'delete':
             Acl::checkOrForward('ADVERTISEMENT_DELETE');
 
             $advertisement = new Advertisement();
@@ -258,7 +258,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
         break;
 
-        case 'available_status': 
+        case 'available_status':
             Acl::checkOrForward('ADVERTISEMENT_AVAILABLE');
 
             $advertisement = new Advertisement($_REQUEST['id']);
@@ -269,7 +269,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
         break;
 
-        case 'mfrontpage': 
+        case 'mfrontpage':
             Acl::checkOrForward('ADVERTISEMENT_AVAILABLE');
 
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
@@ -286,7 +286,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
         break;
 
-        case 'mdelete': 
+        case 'mdelete':
             Acl::checkOrForward('ADVERTISEMENT_DELETE');
 
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
@@ -302,7 +302,7 @@ if( isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
         break;
 
-        default: 
+        default:
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
         break;
     }
