@@ -46,17 +46,6 @@ switch($action) {
 
 
     break;
-
-    case 'new':
-        Acl::checkOrForward('MENU_CREATE');
-        $name = 'album';
-        $tpl->assign('pages', $pages);
-
-
-    break;
-
-
-    break;
     case 'read':
 
         Acl::checkOrForward('MENU_READ');
@@ -75,35 +64,6 @@ switch($action) {
         $tpl->display('menues/read.tpl');
 
     break;
-
-    case 'create':
-
-         Acl::checkOrForward('MENU_CREATE');
-
-         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-         $_POST['items'] = json_decode($_POST['positions'], true);
-
-         $mn = new Menu();
-         $menu = $mn->update($_POST);
-
-         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-
-    break;
-
-    case 'update':
-
-         Acl::checkOrForward('MENU_UPDATE');
-
-         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-         $_POST['categories'] = json_decode($_POST['positions'], true);
-
-         $mn = new Menu();
-         $menu = $mn->update($_POST);
-
-         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-
-    break;
-
 
     case 'save':
 
