@@ -10,12 +10,15 @@
 {/block}
 
 {block name="content"}
+
+
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Priveleges manager{/t}</h2></div>
 		</div>
 	</div>
+    {render_messages}
     <div class="wrapper-content">
         <table class="adminheading">
             <tr>
