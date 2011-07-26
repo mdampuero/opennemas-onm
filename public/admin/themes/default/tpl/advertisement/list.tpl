@@ -33,6 +33,7 @@
 
 
 {block name="content"}
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -69,7 +70,6 @@
 </div>
 <div class="wrapper-content">
 
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
 
         <ul class="tabs2" style="margin-bottom: 28px;">
             <li>

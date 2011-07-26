@@ -7,6 +7,7 @@
 
 
 {block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Listing opinions{/t}</h2></div>
@@ -65,7 +66,6 @@
         </ul>
     </div>
 </div>
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
     <div class="wrapper-content">
 
         <div>

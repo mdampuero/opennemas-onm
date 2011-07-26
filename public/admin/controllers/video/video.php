@@ -130,15 +130,15 @@ if( isset($_REQUEST['action']) ) {
                         $videoP = new \Panorama\Video($url);
 
                         $information = $videoP->getVideoDetails();
-                        $tpl->assign('information', $information);
-                        $html_out = $tpl->fetch('video/videoInformation.tpl');
-                        if (extension_loaded('apc')) {
-                            apc_store(APC_PREFIX ."video_".$url, $information);
-                        }
-
+                        
                     } catch (Exception $e) {
                            $html_out = _( "Can't get video information. Check url");
                     }
+                }
+                $tpl->assign('information', $information);
+                $html_out = $tpl->fetch('video/videoInformation.tpl');
+                if (extension_loaded('apc')) {
+                    apc_store(APC_PREFIX ."video_".$url, $information);
                 }
             }  else {
                  $html_out =  _("Please, Check url");
