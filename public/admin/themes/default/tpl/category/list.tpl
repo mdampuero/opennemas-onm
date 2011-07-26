@@ -45,8 +45,11 @@
 
         <ul id="tabs">
             <li>
-                <a href="#listado">{t}Available sections{/t}</a>
+            <a href="category.php#listado">Listar secciones</a>
             </li>
+        <li>
+            <a href="#ordenar">Ordenar Secciones</a>
+        </li>
         </ul>
 
         <div class="panel" id="listado">
@@ -242,9 +245,10 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td colspan="5">
+                    <td colspan="5">   
                         <div id="cates" class="seccion" style="float:left;width:100%;"> <br />
                             {section name=c loop=$ordercategorys}
+                          
                             {*NO album(3) , NO planConecta(9)*}
                                 {if $ordercategorys[c]->internal_category neq "4" && $ordercategorys[c]->pk_content_category neq "9" && $ordercategorys[c]->pk_content_category neq "3"}
                                     <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >

@@ -21,7 +21,7 @@ $ccm = new ContentCategoryManager();
 //$ccm = ContentCategoryManager::get_instance();
 //list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
 
-$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0 ', 'ORDER BY internal_category, inmenu DESC, posmenu');
+$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0 ', 'ORDER BY  inmenu DESC, posmenu');
 $tpl->assign('allcategorys', $allcategorys);
 
  
