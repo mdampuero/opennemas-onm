@@ -341,7 +341,7 @@ gettext("Editing menu");
 gettext(" Save ");
 
 /* ./themes/default/tpl//menues/read.tpl */
-gettext("Go back");
+gettext("Add External Link");
 
 /* ./themes/default/tpl//menues/read.tpl */
 gettext("Go back");
@@ -353,7 +353,22 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./themes/default/tpl//menues/read.tpl */
-gettext("New Menu");
+gettext("Go back");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Name");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Description");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Elements");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Available categories");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Menu elements");
 
 /* ./themes/default/tpl//menues/list.tpl */
 gettext("Menu manager");
@@ -369,6 +384,9 @@ gettext("Title");
 
 /* ./themes/default/tpl//menues/list.tpl */
 gettext("Edit");
+
+/* ./themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
 
 /* ./themes/default/tpl//menues/list.tpl */
 gettext("\"Edit\"");
@@ -387,9 +405,6 @@ gettext("Publish to frontpage");
 
 /* ./themes/default/tpl//article/pending.tpl */
 gettext("New article");
-
-/* ./themes/default/tpl//article/pending.tpl */
-gettext("Import XML");
 
 /* ./themes/default/tpl//article/pending.tpl */
 gettext("Edit");
@@ -800,6 +815,39 @@ gettext("Description:");
 gettext("Article manager :: Creating new article");
 
 /* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and continue");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Save and exit");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
+gettext("Preview");
+
+/* ./themes/default/tpl//article/partials/_menu.tpl */
 gettext("Cancel");
 
 /* ./themes/default/tpl//article/partials/_menu.tpl */
@@ -813,39 +861,6 @@ gettext("Cancel");
 
 /* ./themes/default/tpl//article/partials/_menu.tpl */
 gettext("Go back");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and exit");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
-
-/* ./themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
 
 /* ./themes/default/tpl//article/partials/_menu.tpl */
 gettext("Article manager :: Editing article");
@@ -1478,7 +1493,7 @@ gettext("Configuration");
 gettext("Cancel");
 
 /* ./themes/default/tpl//tpl_manager/config.tpl */
-gettext("Cancel");
+gettext("Go back");
 
 /* ./themes/default/tpl//tpl_manager/config.tpl */
 gettext("Cache group");
@@ -1699,24 +1714,6 @@ gettext("Edit");
 /* ./themes/default/tpl//frontpage/blocks/opinions_available.tpl */
 gettext("Edit");
 
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Keyword Manager :: Editing keyword information");
-
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Go back");
-
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Check");
-
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Import");
-
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Remove File");
-
-/* ./themes/default/tpl//importAgencyXML.tpl */
-gettext("Add File");
-
 /* ./themes/default/tpl//category/form.tpl */
 gettext("Title");
 
@@ -1782,12 +1779,6 @@ gettext("Unable to create, section is already exists.");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Successfully emptied.");
-
-/* ./themes/default/tpl//category/list.tpl */
-gettext("Available sections");
-
-/* ./themes/default/tpl//category/list.tpl */
-gettext("Sort menues");
 
 /* ./themes/default/tpl//category/list.tpl */
 gettext("Global categories");
@@ -3352,8 +3343,29 @@ gettext("Delete");
 /* ./themes/default/tpl//acessdenied/accessdenied.tpl */
 gettext("Access to section denied.");
 
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Go back");
+
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Check");
+
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Import");
+
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Remove File");
+
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Add File");
+
+/* ./themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("To categories");
+
 /* ./themes/default/tpl//agency_importer/europapress/config.tpl */
-gettext("Keyword Manager :: Editing keyword information");
+gettext("EuropaPress importer");
+
+/* ./themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Module configuration");
 
 /* ./themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("Go back to list");
@@ -3386,7 +3398,10 @@ gettext("Password:");
 gettext("Save");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
-gettext("Keyword Manager :: Editing keyword information");
+gettext("EuropaPress importer");
+
+/* ./themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Available articles");
 
 /* ./themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Sync with server");
@@ -3473,7 +3488,10 @@ gettext("There is no elements to import");
 gettext("Try syncing from server by click over the \"Sync with server\" button above.");
 
 /* ./themes/default/tpl//agency_importer/europapress/show.tpl */
-gettext("Keyword Manager :: Editing keyword information");
+gettext("EuropaPress importer");
+
+/* ./themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Article information");
 
 /* ./themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Import");
@@ -3738,6 +3756,9 @@ gettext("Acting performed:");
 
 /* ./themes/default/tpl//statistics/statistics.tpl */
 gettext("Content Statistics");
+
+/* ./themes/default/tpl//importxml/importxml.tpl */
+gettext("XML import");
 
 /* ./themes/default/tpl//importxml/importxml.tpl */
 gettext("Import articles from paper");

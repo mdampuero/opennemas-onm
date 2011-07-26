@@ -46,6 +46,7 @@
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
                 </button>
             </li>
+            <li class="separator"></li>
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
                     <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
@@ -58,7 +59,7 @@
 <div class="wrapper-content">
         <div id="content-wrapper">
 
-    <ul class="tabs2" style="margin-bottom: 28px;">
+    <ul class="tabs2" style="margin-bottom:28px;">
         {acl hasCategoryAccess=0}
         <li>
             <a href="article.php?action=list_pendientes&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>

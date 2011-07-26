@@ -14,13 +14,11 @@
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "index"}
 <div class="top-action-bar clearfix">
-        <div class="wrapper-content">
-            <div class="title"><h2>{t}Content Statistics{/t}</h2></div>
-        </div>
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Content Statistics{/t}</h2></div>
     </div>
+</div>
 <div class="wrapper-content">
-
-
     {* ZONA MENU CATEGORIAS ******* *}
     <ul class="tabs2">
         <li>

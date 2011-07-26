@@ -15,8 +15,8 @@
 		<ul class="old-button">
 			<li>
 				<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
-					<img src="{$params.IMAGE_DIR}cancel.png" border="0" /><br />
-					{t}Cancel{/t}
+					<img src="{$params.IMAGE_DIR}newsletter/previous.png" border="0" /><br />
+					{t}Go back{/t}
 				</a>
 			</li>
 

@@ -102,6 +102,7 @@
 					{t}Select all{/t}
 				</a>
 			</li>
+			<li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config newsletter module{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />

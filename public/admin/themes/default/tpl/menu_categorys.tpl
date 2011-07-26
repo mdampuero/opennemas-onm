@@ -5,7 +5,7 @@
           {if (preg_match('/video\.php/',$home)) || (!preg_match('/video\.php/',$home) && ($allcategorys[as]->internal_category neq '9'))}
                {if (preg_match('/album\.php/', $home)) || (!preg_match('/album\.php/', $home) && ($allcategorys[as]->internal_category neq '7'))}
                <li>
-                    <a class="links" {if $home} href="{$home}&category={$ca}" {/if} id="link_{$ca}"   {if $category==$ca} style="color:#000000; font-weight:bold; background-color:#BFD9BF;cursor:pointer;" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF;cursor:pointer;" {else} style="cursor:pointer;" {/if}{/if} >
+                    <a  {if $home} href="{$home}&category={$ca}" {/if} id="link_{$ca}"  class="links {if $category==$ca} active {else}{if $ca eq $datos_cat[0]->fk_content_category}active {else} deactive {/if}{/if}" >
                     {if $allcategorys[as]->inmenu eq 0} <img src="{$params.IMAGE_DIR}publish_r.png" style="width:10px;height:10px;"/>{/if}
                     {$allcategorys[as]->title}
                     {if $allcategorys[as]->internal_category eq 7}
@@ -32,12 +32,12 @@
                   $('menu_subcats').setOpacity(1);
                   new Effect.Opacity('menu_subcats', { from: 0.0, to: 1.0, duration: 0.5 });
                   show_subcat('{$ca}','{$home|urlencode}');
-         
+
                 });
                 Event.observe($('link_{$ca}'), 'mouseout', function(event) {
                     e = setTimeout("show_subcat('{$category}','{$home|urlencode}');",4000);
                 });
-                
+
                 // ]]>
         </script>
      {/acl}

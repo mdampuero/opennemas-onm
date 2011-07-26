@@ -84,7 +84,7 @@
 					{t}Change expiration{/t}
 				</a>
 			</li>
-
+			<li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
 					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />

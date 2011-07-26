@@ -29,30 +29,36 @@
         <div id="{$category}">
             <table class="adminheading">
                 <tr>
-                    <th nowrap>{t}Menues{/t}</th>
+                    <td>{t}Menues{/t}</td>
                 </tr>
             </table>
             <table class="adminlist">
-                <tbody>
+                <thead>
                     <tr>
-                        <th style="padding:10px;" align='left'>{t}Title{/t}</th>
-                        <th>{t}Edit{/t}</th>
+                        <th style="text-align:left; padding-left:10px">{t}Title{/t}</th>
+                        <th align="center">{t}Edit{/t}</th>
                     </tr>
-
+                </thead>
+                <tbody>
                     {foreach from=$pages item=value key=page}
                     <tr {cycle values="class=row0,class=row1"}>
-                        <td style="padding:10px;font-size: 11px;width:60%;">
-                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$page}" title="{$page}">
-                                {$page}</a>
+                        <td style="padding-left:10px">
+                            {$page|capitalize}
                         </td>
 
-                        <td style="padding:10px;width:10%;" align="center">
-                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$page}" title="{$page}" title={t}"Edit"{/t}>
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                        <td style="padding:5px; width:100px;" align="center">
+                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$page}" title="{t 1=$page}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                            </a>
                         </td>
                     </tr>
                     {/foreach}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 

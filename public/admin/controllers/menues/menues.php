@@ -15,18 +15,10 @@ Acl::checkOrForward('MENUES_ADMIN');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Section Manager'));
 
- /**
- * Setup Database access
-*/
-//$ccm = new ContentCategoryManager();
-//$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0', 'ORDER BY inmenu DESC, posmenu');
-
 $ccm = ContentCategoryManager::get_instance();
-
 
 //Frontpages ¿? add polls, kiosko, static_pages
 $pages = array('frontpage'=>1, 'opinion'=>1, 'album'=>7, 'video'=>9, 'mobile'=>1, 'poll'=>11);
-
 
 $action = filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING );
 if (empty($action)) {
@@ -39,10 +31,10 @@ switch($action) {
     case 'list':
 
         Acl::checkOrForward('MENU_LIST');
-        
+
         $tpl->assign('pages', $pages);
 
-       
+
         $tpl->display('menues/list.tpl');
 
 
@@ -53,7 +45,7 @@ switch($action) {
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         $tpl->assign('categories', $parentCategories);
-         
+
         $tpl->assign('pages', $pages);
 
         $tpl->display('menues/read.tpl');
@@ -65,18 +57,18 @@ switch($action) {
         Acl::checkOrForward('MENU_READ');
 
         $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
-        
+
 
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
-                
+
         $tpl->assign('categories', $parentCategories);
         $tpl->assign('pages', $pages);
 
         $menu = Menu::getMenu($name);
-        
+
         $tpl->assign('menu', $menu);
-     
+
         $tpl->display('menues/read.tpl');
 
     break;
@@ -86,7 +78,7 @@ switch($action) {
          Acl::checkOrForward('MENU_CREATE');
 
          $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-         
+
          $params = serialize(array('description'=>$data['description']));
 
          $_POST['positions'] = json_decode($_POST['items'], true);
@@ -101,7 +93,7 @@ switch($action) {
     case 'update':
 
          Acl::checkOrForward('MENU_UPDATE');
- 
+
          $_POST['params'] = serialize(array('description'=>$_POST['description']));
 
          //TODO:get site_name;
@@ -109,11 +101,11 @@ switch($action) {
 
          $mn = new Menu();
          $menu = $mn->update($_POST);
- 
+
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
     break;
- 
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;

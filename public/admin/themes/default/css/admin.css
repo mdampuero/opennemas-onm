@@ -768,7 +768,6 @@ div.action-bar .right{
 
 #tabs li {
 	float: left;
-	margin-bottom:-1px;
 	margin-left: 0;
 	padding-left: 0;
 }
@@ -791,7 +790,7 @@ div.action-bar .right{
 #tabs a.active-tab {
 	background: White !important;
 	color:Black !important;
-	border-bottom: none;
+	border-bottom: 1px solid White;
     color: Black !important;
     margin-bottom: -1px;
 	/*
@@ -922,6 +921,9 @@ input.disabled {
 
 input.required, textarea.required {
 	border: 1px solid #FCC;
+}
+input.required[type="file"], textarea.required[type="file"] {
+	border: none;
 }
 input.validation-failed, textarea.validation-failed {
 	border: 1px solid #FF3300;

@@ -7,7 +7,7 @@
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New cover{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}add_kiosko.gif" title="Nueva" alt="Nueva"><br />{t}New ePaper{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}New ePaper{/t}
                 </a>
             </li>
         </ul>
@@ -128,4 +128,3 @@
 </form>
 
 {/block}
-

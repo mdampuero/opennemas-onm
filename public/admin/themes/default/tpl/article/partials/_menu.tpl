@@ -5,11 +5,6 @@
 		<div class="title"><h2>{t}Article manager :: Creating new article{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={if isset($_SESSION['desde'])}{$_SESSION['desde']}{else}list_pendientes{/if}&category={$_REQUEST['category']}&page={$_GET['page']}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
-				</a>
-			</li>
-			<li>
 				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
 				<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 				</a>
@@ -23,6 +18,12 @@
 			<li>
 				<a href="{$article->permalink}" target="_blank" accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
 				<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
+			</li>
+			<li class="separator"></li>
+			<li>
+				<a href="{$smarty.server.PHP_SELF}?action={if isset($_SESSION['desde'])}{$_SESSION['desde']}{else}list_pendientes{/if}&category={$_REQUEST['category']}&page={$_GET['page']}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+				</a>
 			</li>
 
 		</ul>
