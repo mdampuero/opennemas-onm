@@ -24,7 +24,7 @@ class String_Utils {
     * @return string, the string cleaned
     */
     static public function normalize_name($name) {
-        $name = strtolower($name);
+        $name = mb_strtolower($name);
         $trade = array( 'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A', 'À'=>'A', 'Ã'=>'A',
                         'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e', 'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E',
                         'Ë'=>'E', 'Ê'=>'E', 'í'=>'i', 'ì'=>'i', 'ï'=>'i', 'î'=>'i', 'Í'=>'I', 'Ì'=>'I',

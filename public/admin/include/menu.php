@@ -164,7 +164,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="PAPER_IMPORT"
             privilege="IMPORT_XML"
             title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
-            link="importXML.php?action=info"
+            link="controllers/agency_importer/importXML.php?action=info"
         />
         <node
             title="&lt;hr/&gt;"

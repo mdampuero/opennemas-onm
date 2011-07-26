@@ -123,7 +123,7 @@ class Article extends Content
                     $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
                     $data['fk_video'], $data['fk_video2'],$data['footer_video2'],
                     $data['columns'], $data['home_columns'], $data['with_comment'], $data['title_int']);
-
+ 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);

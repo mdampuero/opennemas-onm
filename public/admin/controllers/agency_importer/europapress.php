@@ -26,7 +26,7 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 // Check ACL
-Acl::checkOrForward('INPORT_EPRESS');
+Acl::checkOrForward('IMPORT_EPRESS');
 
 /**
  * Setup view

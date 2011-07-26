@@ -247,10 +247,10 @@ if (isset($_REQUEST['action']) ) {
             $art_editors = array();
 
             if ($_REQUEST['category'] == 'todos') {
-                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0 AND paper_page !=-1', 'ORDER BY paper_page ASC, position ASC, created DESC ');
+                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0', 'ORDER BY paper_page ASC, position ASC, created DESC ');
                 $tpl->assign('articles', $articles);
                 if(Acl::check('OPINION_ADMIN ')){
-                    $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
+                    $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
                                             'ORDER BY created DESC, type_opinion DESC, title ASC');
                     $tpl->assign('opinions', $opinions);
                     if(!empty($opinions)){
@@ -269,7 +269,7 @@ if (isset($_REQUEST['action']) ) {
 
 
             }elseif($_REQUEST['category'] == 'opinion'){
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page !=-1',
+                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0',
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');
                 $tpl->assign('opinions', $opinions);
                 $aut = new User();
@@ -284,7 +284,7 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('opin_editors', $art_editors);
             }else{
                 // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 AND paper_page !=-1', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 ', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
                 $tpl->assign('articles', $articles);
                 $tpl->assign('paginacion', $pager);
             }
@@ -329,10 +329,10 @@ if (isset($_REQUEST['action']) ) {
             }
 
             if ($_REQUEST['category'] == 'todos') {
-                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0 AND paper_page =-1', 'ORDER BY  position ASC, created DESC ');
+                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0 ', 'ORDER BY  position ASC, created DESC ');
 
                 $tpl->assign('articles', $articles);
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page =-1',
+                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');
                 $tpl->assign('opinions', $opinions);
                 if(!empty($opinions)){
@@ -348,7 +348,7 @@ if (isset($_REQUEST['action']) ) {
                     $tpl->assign('opin_editors', $art_editors);
                 }
             }elseif($_REQUEST['category'] == 'opinion'){
-                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 AND paper_page =-1',
+                $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
                                       'ORDER BY created DESC, type_opinion DESC, title ASC');
                 $tpl->assign('opinions', $opinions);
                 $aut = new User();
@@ -363,7 +363,7 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('opin_editors', $art_editors);
             }else{
                 // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 AND paper_page =-1 ', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
+                list($articles, $pager)= $cm->find_pages('Article', 'available=0 AND fk_content_type=1 ', 'ORDER BY  created DESC, title ASC ',$_REQUEST['page'],10, $_REQUEST['category']);
                 $tpl->assign('articles', $articles);
                 $tpl->assign('paginacion', $pager);
             }

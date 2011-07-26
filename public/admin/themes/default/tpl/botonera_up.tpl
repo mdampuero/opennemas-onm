@@ -1,4 +1,5 @@
 {* Botonera opinion -------------------------------------------- *}
+
 {* Botonera category -------------------------------------------- *}
 {if preg_match('/category\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "list")}
 	{if $type eq "list"}
@@ -47,3 +48,4 @@
 		</ul>
 	</div>
 {/if}
+  

@@ -51,11 +51,6 @@
                     <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
                 </a>
             </li>
-            <li>
-                <a href="importXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
-                    <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />{t}Import XML{/t}
-                </a>
-            </li>
         </ul>
     </div>
 </div>

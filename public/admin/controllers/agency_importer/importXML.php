@@ -1,28 +1,50 @@
 <?php
-
+/* -*- Mode: PHP; tab-width: 4 -*- */
+/**
+ * OpenNeMas project
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://framework.zend.com/license/new-bsd
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@zend.com so we can send you a copy immediately.
+ *
+ * @category   OpenNeMas
+ * @package    OpenNeMas
+ * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
+ * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ */
+use Onm\Settings as s;
 /**
  * Setup app
 */
-require_once('../bootstrap.php');
-require_once('./session_bootstrap.php');
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 /**
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Import new articles from XML');
+$tpl->assign('titulo_barra', 'Import new articles from paper XML');
 
-$ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu();
 
-$tpl->assign('subcat', $subcat);
-$tpl->assign('allcategorys', $parentCategories);
-$tpl->assign('datos_cat', $datos_cat);
-$allcategorys = $parentCategories;
+
+// TODO : define in settings
+define('SITE_TMP_PATH',  SITE_PATH.'..'.DS.'tmp'.DS.'xml'.DS);
+$uploaddir  = SITE_TMP_PATH;
+
+if(!file_exists($uploaddir)){
+    mkdir($uploaddir);
+}
+
 
 $numCategories = array();
+$ccm = new ContentCategoryManager();
 $numCategories = $ccm->get_all_categories();
-$clearCategories = array();
 
 $finales = array(".EFE", ". EFE", ".n", ". n", ".  n", ".l", ". l", ".XdG", ". XdG", ".EP", ". EP");
 
@@ -84,14 +106,14 @@ function createArticle($elementXML,$numCategories,$check='1')
     $data = array();
     $ccm = ContentCategoryManager::get_instance();
 
-    $data['fk_publisher']=$_SESSION['userid'];
+    $data['fk_publisher'] = $_SESSION['userid'];
 
     $data['subtitle']="";
     $data['agency']="";
     $data['title']="";
     $data['summary']="";
     $data['body']="";
-    $data['pk_author']="";
+    $data['pk_author'] = $_SESSION['userid'];
 
     foreach ($elementXML->epigrafe as $texto) {
        $data['subtitle'].= $texto;
@@ -102,7 +124,7 @@ function createArticle($elementXML,$numCategories,$check='1')
         $data['subtitle'] = strtoupper($elementXML->seccion);
     }
 
-    foreach ($elementXML->entradilla as $texto) {
+    foreach ($elementXML->entradilla as $texto ) {
        $data['summary'].= $texto;
     }
 
@@ -163,16 +185,18 @@ function createArticle($elementXML,$numCategories,$check='1')
         $current_category = 'unknown';
 
         $data['category'] = 20;
+    }else{
+ 
+        $elementXML['category'] = $elementXML['category'].' (Assigned to '.$current_category.')';
     }
 
-    $elementXML->seccion =$elementXML->seccion.' ('.$current_category.')';
-
-    $numCategories[ $ccm->get_title($current_category) ]+=1;
+    $numCategories[ $current_category ]+=1;
 
     //Creating article object
-    $data['metadata']="";$data['agency_web']="";$data['img1']="";$data['img1_in']="";$data['img1_footer']="";
-    $data['img2']="";$data['img2_in']="";$data['img2_footer']="";$data['with_galery']="";$data['with_galery_int']="";$data['with_comment']="1";
+    $data['metadata']="";$data['agency_web']="";$data['img1']="";$data['img1']="";$data['img1_footer']="";
+    $data['img2']="";$data['img2_footer']="";$data['with_galery']="";$data['with_galery_int']="";$data['with_comment']="1";
     $data['columns']="1";$data['description']="";$data['fk_video']="";$data['fk_video2']="";$data['footer_video2']="";
+    $data['ordenArti']="";$data['ordenArtiInt']="";
 
     $article = new Article();
     $metadata = String_Utils::get_title($data['title']);
@@ -188,11 +212,14 @@ function createArticle($elementXML,$numCategories,$check='1')
                 $data['content_status']=0;
                 $data['available']=0;
                 $data['frontpage']=0;
-                $data['position']=$numCategories[ $ccm->get_title($current_category) ];
+           
         }else{ //directo a portada
                 $data['content_status']=1;
                 $data['available']=1;
-                $data['frontpage']=1;
+                $data['frontpage']=0;
+
+                //Disponible si pero sin ir a portada directamente
+            /*    $data['frontpage']=1;
                 if( $numCategories[ $ccm->get_title($current_category) ]==1){
                     //Meter la destacada actual en el placeholder_0_1
                     $cm=new ContentManager();
@@ -208,9 +235,10 @@ function createArticle($elementXML,$numCategories,$check='1')
                 }else{
                     $data['position']=$numCategories[ $ccm->get_title($current_category) ];
                     $data['placeholder']='placeholder_0_1';
+                }*/
+
                 }
         }
-    }
 
     $article->create( $data );
     return $numCategories;
@@ -276,10 +304,10 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $data['fk_author_img']="";
             $data['fk_author_img_widget']="";
             if($author_data){
-                $metas_name=$author_data[0]['original_name'];
+                $metas_name= $author_data[0]['original_name'];
                 rsort($author_data);
-                $data['fk_author']=$author_data[0]['id'];
-                $photos=$au->get_author_photos($data['fk_author']);
+                $data['fk_author'] = $author_data[0]['id'];
+                $photos = $au->get_author_photos($data['fk_author']);
                 foreach($photos as $photo) {
                      if($photo->width < 70) {
                         $data['fk_author_img_widget']=$photo->pk_img;
@@ -288,10 +316,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
                      }
                 }
                 $data['type_opinion']='0';
-                if($author_data[0]['id']=='58'){
-                     $data['type_opinion']='2';
-                }
-                 elseif($author_data[0]['id']=='43'){
+                if(strtolower($author_data[0]['original_name'])=='editorial'){
                      $data['type_opinion']='1';
                 }
                  if($check==1) { //Importar a pendientes
@@ -319,9 +344,12 @@ function createOpinion($elementXML,$numCategories,$check='1')
             $metadata = String_Utils::get_title($data['title']);
             $data['metadata'] = str_replace('-',',',$metadata);
             $data['metadata'] = $data['metadata'].', '.$metas_name;
+
             $opinion = new Opinion();
             $opinion->create( $data );
+
             $numCategories['opinion']+=1;
+
             return $numCategories;
 } #end createOpinion
 
@@ -336,10 +364,7 @@ if(isset($_REQUEST['action']) ) {
                 for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
 
                     $nameFile = $_FILES["file"]["name"][$i];
-
-                    $uploaddir = SITE_ADMIN_TMP_PATH.DS.'xml'.DS;
-                    @chmod($uploaddir,0775); //Permisos de lectura y escritura del fichero
-
+ 
                     $datos=pathinfo($nameFile);//sacamos info del archivo
 
                     //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
@@ -351,9 +376,7 @@ if(isset($_REQUEST['action']) ) {
 
                     if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploaddir.$name)) {
 
-                        @chmod($uploaddir.$name,0775); //Permisos de lectura y escritura del fichero
-
-                        $check=$_REQUEST['check_pendientes'][$i];
+                        $check = !isset($_REQUEST['check_pendientes'][$i])?0:$_REQUEST['check_pendientes'][$i];
 
                         if ($extension == "zip"){
                             $dataZIP = array();
@@ -384,6 +407,7 @@ if(isset($_REQUEST['action']) ) {
                             }else{
                                 $numCategories=createArticle($eltoXML,$numCategories,$check);
                             }
+
                             $dataXML[$j] = $eltoXML;
                             $j++;
                         }
@@ -393,72 +417,7 @@ if(isset($_REQUEST['action']) ) {
                            <br> Compruebe su tamaño (MAX 300 MB)";
                      }
                 }
-                $check=$_REQUEST['check_pendientes'][0];
-                $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
-                //Process FRONTPAGES (only 20)
-                $cm = new ContentManager();
-                if($check==0){
-                   /* foreach($numCategories as $category=>$num){
-
-                        if($num!=0 && $category!='UNKNOWN' && $category !='opinion'){
-
-                             $category=strtolower(String_Utils::normalize_name($category));
-                             if (($category == 'política') || ($category == 'polItica')|| ($category == 'politica')){
-                                     $category = 'polItica';
-                             }
-                             $id_category=$ccm->get_id($category);
-
-                             $total_articles=$cm->count('Article', '`contents`.`fk_content_type`=1 AND `contents`.`frontpage`=1 AND `contents`.`content_status`=1 AND `contents`.`available`=1', $id_category);
-
-                             if($total_articles>20){
-                                 $_frontpage = array();
-                                 //reducir a 20 noticias en portada
-                                 $articles= $cm->find_by_category('Article', $id_category, 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY changed DESC, created DESC, position ASC LIMIT 20,'.$total_articles);
-                                 foreach($articles as $article){
-                                      $_frontpage[] = array(0, $article->id);
-                                 }
-                                 $article = new Article();
-                                 $article->set_frontpage($_frontpage, $_SESSION['userid']);
-
-                             }
-
-                             $tplManager->delete($category . '|RSS');
-                             $delete = $tplManager->delete($category . '|0');
-                        }
-                    }
-                    */
-                     foreach($numCategories as $category=>$num){
-                        if($num!=0 && $category!='UNKNOWN' && $category !='opinion'){
-                             $category=strtolower(String_Utils::normalize_name($category));
-                             if (($category == 'política') || ($category == 'polItica')|| ($category == 'politica')){
-                                     $category = 'polItica';
-                             }
-                             $id_category=$ccm->get_id($category);
-
-                             $total=$num;
-                             $_frontpage = array();
-                             $_positions = array();
-                             //reducir a 20 noticias en portada
-                             $articles= $cm->find_by_category('Article', $id_category, 'fk_content_type=1 AND content_status=1 AND available=1 AND frontpage=1   AND placeholder!="placeholder_0_0"', 'ORDER BY changed DESC, position ASC ');
-                             $articles = $cm->getInTime($articles);
-                             foreach($articles as $article){
-                                 if($total<20){
-                                     $_position[]= array($total,'placeholder_0_1', $article->id);
-                                     $total++;
-                                 }else{
-                                      $_frontpage[] = array(0, $article->id);
-                                 }
-
-                             }
-                             $article = new Article();
-                             $article->set_frontpage($_frontpage, $_SESSION['userid']);
-                             $article->set_position($_position, $_SESSION['userid']);
-                             $tplManager->delete($category . '|RSS');
-                             $delete = $tplManager->delete($category . '|0');
-                        }
-                    }
-                }
 
                 $tpl->assign('numCategories', $numCategories);
                 $tpl->assign('XMLFile', $XMLFile);
@@ -475,17 +434,12 @@ if(isset($_REQUEST['action']) ) {
 
             $dateStamp = date('Y') . date ('m') . date ('d');
 
-            if (count($_FILES["file"]["name"]) >= 1
-                && !isset($_FILES["file"])
-                && !empty($_FILES["file"]["name"][0]) ) {
+            if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
 
                 for($i=0,$j=0;$i<count($_FILES["file"]["name"]);$i++) {
 
                     $nameFile = $_FILES["file"]["name"][$i];
-
-                    $uploaddir = SITE_ADMIN_TMP_PATH.DS.'xml'.DS;
-                    @chmod($uploaddir,0775); //Permisos de lectura y escritura del fichero
-
+ 
                     $datos=pathinfo($nameFile);					 //sacamos inofr del archivo
 
                     //Preparamos el nuevo nombre YYYYMMDDHHMMSSmmmmmm
@@ -501,9 +455,7 @@ if(isset($_REQUEST['action']) ) {
                         {
                             $dataZIP = array();
                             $dataZIP = decompressZIP($uploaddir.$name);
-
-                            @chmod($uploaddir.$name,0775);
-
+ 
                             sort($dataZIP);
                             foreach($dataZIP as $elementZIP) {
                                 @chmod($uploaddir.$elementZIP,0775);
@@ -545,4 +497,7 @@ if(isset($_REQUEST['action']) ) {
    $tpl->assign('action', "info");
 }
 
-$tpl->display('importxml/importxml.tpl');
+$tpl->assign('formAttrs', 'enctype="multipart/form-data"');
+$tpl->display('agency_importer/efe/EFE.tpl');
+
+
