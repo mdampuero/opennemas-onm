@@ -1,21 +1,22 @@
 {extends file="base/admin.tpl"}
 
-{block name="admin_menu"}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style="float:left;margin-left:15px;margin-top:10px;"><h2>{$titulo_barra}</h2></div>
-        <ul>
+{block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}System update{/t}</h2></div>
+        <ul class="old-button">
 			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'status', 0);" onmouseover="return escape('{t}Status{/t}');" accesskey="S" tabindex="4" title="{t}Get the status of the OpenNemas system{/t}">
+				<a href="{$smarty.server.PHP_SELF}?action=status" tabindex="4" title="{t}Get the status of the OpenNemas system{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Status" alt="{t}Status{/t}"><br />{t}Status{/t}
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'update', 0);" onmouseover="return escape('{t}Update{/t}');" accesskey="U" tabindex="3">
+				<a href="{$smarty.server.PHP_SELF}?action=update" tabindex="3">
 					<img border="0" src="{$params.IMAGE_DIR}update-system.png" title="Update" alt="{t}Update OpenNemas from the update server{/t}"><br />{t}Update{/t}
 				</a>
 			</li>
 			<li>
-				<a href="#" class="admin_add" onclick="enviar(this, '_self', 'co', 0);" onmouseover="return escape('{t}Checkout{/t}');" accesskey="C" tabindex="2">
+				<a href="{$smarty.server.PHP_SELF}?action=co" tabindex="2">
 					<img border="0" src="{$params.IMAGE_DIR}checkout.png" title="Checkout" alt="{t}Fetch the lastest version of OpenNemas from update server{/t}"><br />{t}Checkout{/t}
 				</a>
 			</li>
@@ -25,16 +26,12 @@
 				</a>
 			</li>
 		</ul>
-	</div>
-{/block}
-
-{block name="content"}
-<div style="width:70%; margin:0 auto;">
+    </div>
+</div>
+<div class="wrapper-content">
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
-
-    {block name="admin_menu"}{/block}
-    <table class="adminheading" style="margin-top:20px">
+    <table class="adminheading">
         <tr>
             <th nowrap>{t}Please fill the information to connect to the update server.{/t}</th>
         </tr>

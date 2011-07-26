@@ -1,5 +1,5 @@
 <?php
-  
+
 /**
  * Setup app
 */
@@ -22,7 +22,7 @@ $tpl->assign('titulo_barra', _('Section Manager'));
 //$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0', 'ORDER BY inmenu DESC, posmenu');
 
 $ccm = ContentCategoryManager::get_instance();
- 
+
 
 //Frontpages ¿? add polls, kiosko, static_pages
 $pages = array('frontpage'=>1, 'opinion'=>1, 'album'=>7, 'video'=>9, 'mobile'=>1, 'poll'=>11);
@@ -37,10 +37,13 @@ if (empty($action)) {
 switch($action) {
 
     case 'list':
+
         Acl::checkOrForward('MENU_LIST');
         $name = 'album';
         $tpl->assign('pages', $pages);
-      
+
+        $tpl->display('menues/list.tpl');
+
 
     break;
 
@@ -55,18 +58,21 @@ switch($action) {
 
     break;
     case 'read':
+
         Acl::checkOrForward('MENU_READ');
-        
-        $name =   filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
- 
+
+        $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
+
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
         $mn = new Menu();
         $menu = $mn->getMenu($name);
-  
+
         $tpl->assign('categories', $parentCategories);
         $tpl->assign('menu', $menu);
         $tpl->assign('name', $name);
         $tpl->assign('pages', $pages);
+
+        $tpl->display('menues/read.tpl');
 
     break;
 
@@ -101,16 +107,18 @@ switch($action) {
 
     case 'save':
 
-         Acl::checkOrForward('MENU_UPDATE');
+        Acl::checkOrForward('MENU_UPDATE');
 
-         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-         $_POST['categories'] = json_decode($_POST['positions'], true);   
-      
-         $mn = new Menu();
-         $menu = $mn->setMenu($_POST);
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        $_POST['categories'] = json_decode($_POST['positions'], true);
 
-         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
- 
+        $mn = new Menu();
+        $menu = $mn->setMenu($_POST);
+
+
+
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
     break;
 
     default:
@@ -118,5 +126,3 @@ switch($action) {
     break;
 
 }
-
-$tpl->display('menues/menues.tpl');

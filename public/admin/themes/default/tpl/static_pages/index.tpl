@@ -1,27 +1,27 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="top-action-bar">
+	<div class="wrapper-content">
+		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Listing static pages{/t}</h2></div>
+		<ul class="old-button">
+			<li>
+				<a href="{$smarty.server.PHP_SELF}?action=new" title="Nueva Página">
+					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New page{/t}
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
 <div class="wrapper-content">
 
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-        <div id="menu-acciones-admin">
-            <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Static Pages Manager{/t} :: {t}Listing static pages{/t}</h2></div>
-		<ul>
-                <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new" title="Nueva Página">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New page{/t}
-                    </a>
-                </li>
-            </ul>
-        </div><!--menu-acciones-admin-->
-        <br>
-
         <table class="adminheading">
             <tr>
-                <th nowrap="nowrap" align="right">
-                    <label>Título: <input type="text" name="filter[title]" value="{$smarty.request.filter.title|default:""}" /></label>
-                    <input type="submit" value="{t}Search{/t}">
+                <th align="right">
+                    <label>Título: <input type="text" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" /></label>
+                    <input type="submit" id="search" value="{t}Search{/t}">
                 </th>
             </tr>
         </table><!--menu-heading-->

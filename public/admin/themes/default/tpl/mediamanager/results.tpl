@@ -38,7 +38,7 @@
                  ALBUMS</a>
          </li>
          *}
-        
+
         {acl isAllowed="ADVERTISEMENT_ADMIN"}
          <li>
              <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
@@ -57,7 +57,7 @@
             <ul>
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
-                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir"  alt="Guardar y salir" />
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
                         <br />
                         Guardar
                     </a>

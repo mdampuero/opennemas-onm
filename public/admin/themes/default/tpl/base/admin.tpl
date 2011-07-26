@@ -12,12 +12,10 @@
     {/block}
 
     {block name="header-css"}
-	    <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/general.css" />
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/admin.css" />
         <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/modalbox.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
+        <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" /><![endif]-->
 		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
-        <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" /><![endif]-->
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>

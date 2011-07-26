@@ -1,12 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-
-   <div id="menu-acciones-admin" class="clearfix">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}EuropaPress importer :: List of articles{/t}</h2></div>
-        <ul>
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+        <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=import&id={$element->id}" class="admin_add" value="{t}Import{/t}" title="{t}Import{/t}">
                 <img border="0" src="{$params.IMAGE_DIR}archive_no.png" title="{t}Import{/t}" alt="{t}Import{/t}" ><br />{t}Import{/t}
@@ -19,6 +17,9 @@
             </li>
         </ul>
     </div>
+</div>
+<div class="wrapper-content">
+   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
    <div id="{$category}">
 

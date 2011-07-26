@@ -14,8 +14,20 @@
 {/block}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{$titulo_barra}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
-    
+
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
         {if !empty($msg)}
             <script type="text/javascript">
@@ -41,20 +53,10 @@
         </ul>
 
         <div class="panel" id="listado">
-            <div id="menu-acciones-admin" class="clearfix">
-                <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}</h2></div>
-                <ul>
-                    <li>
-                        <a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
-                            <img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-             
+
             <table class="adminheading">
                 <tr>
-                    <td>&nbsp;</td>
+                    <td>{t}Global categories{/t}</td>
                 </tr>
             </table>
             <table class="adminlist" id="tabla"  width="100%">
@@ -75,39 +77,141 @@
                 <tbody>
                     <tr>
                         <td colspan="10">
-                                <hr> <h2>GLOBAL</h2> <hr>
-                                {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category eq 1}                                       
-                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
-                                    {/if}
-                                {sectionelse}
-                                    <h2><b>{t}No available sections{/t}</b></h2>
-                                {/section}
-                                 <hr> <h2>ALBUM</h2> <hr>
-                                {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category eq 7}
-                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
-                                    {/if}
-                                {sectionelse}
-                                    <h2><b>{t}No available sections{/t}</b></h2>
-                                {/section}
-                                 <hr> <h2>VIDEO</h2> <hr>
-                                {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category eq 9}
-                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
-                                    {/if}
-                                {sectionelse}
-                                    <h2><b>{t}No available sections{/t}</b></h2>
-                                {/section}
-                                <hr> <h2>KIOSKO</h2> <hr>
-                                {section name=c loop=$categorys}
-                                    {if $categorys[c]->internal_category eq 14}
-                                        {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
-                                    {/if}
-                                {sectionelse}
-                                    <h2><b>{t}No available sections{/t}</b></h2>
-                                {/section}
-                           
+                            {section name=c loop=$categorys}
+                                {if $categorys[c]->internal_category eq 1}
+                                    {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {/if}
+                            {sectionelse}
+                                <h2><strong>{t}No available sections{/t}</strong></h2>
+                            {/section}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="10" align="center">{$paginacion->links}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <br>
+
+
+            <table class="adminheading">
+                <tr>
+                    <td>{t}Album categories{/t}</td>
+                </tr>
+            </table>
+            <table class="adminlist" id="tabla"  width="100%">
+                <thead>
+                    <tr>
+                        <th width="360px">{t}Title{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Name{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Type{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Articles{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="10">
+                            {section name=c loop=$categorys}
+                                {if $categorys[c]->internal_category eq 7}
+                                    {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                {/if}
+                            {sectionelse}
+                                <h2><strong>{t}No available sections{/t}</strong></h2>
+                            {/section}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="10" align="center">{$paginacion->links}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <br>
+
+            <table class="adminheading">
+                <tr>
+                    <td>{t}Video categories{/t}</td>
+                </tr>
+            </table>
+            <table class="adminlist" id="tabla"  width="100%">
+                <thead>
+                    <tr>
+                        <th width="360px">{t}Title{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Name{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Type{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Articles{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="10">
+                        {section name=c loop=$categorys}
+                            {if $categorys[c]->internal_category eq 9}
+                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                            {/if}
+                        {sectionelse}
+                            <h2><strong>{t}No available sections{/t}</strong></h2>
+                        {/section}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="5" align="center">{$paginacion->links}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <br>
+
+            <table class="adminheading">
+                <tr>
+                    <td>{t}ePaper categories{/t}</td>
+                </tr>
+            </table>
+            <table class="adminlist" id="tabla"  width="100%">
+                <thead>
+                    <tr>
+                        <th width="360px">{t}Title{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Name{/t}</th>
+                        <th width="120px" padding="0px 10px" align="center">{t}Type{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Articles{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="10">
+                        {section name=c loop=$categorys}
+                            {if $categorys[c]->internal_category eq 14}
+                                {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                            {/if}
+                        {sectionelse}
+                            <h2><strong>{t}No available sections{/t}</strong></h2>
+                        {/section}
+
                         </td>
                     </tr>
                 </tbody>
@@ -129,7 +233,7 @@
                     <td>&nbsp;</td>
                 </tr>
             </table>
-            
+
             <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
                 <thead>
                     <tr>
@@ -157,7 +261,7 @@
                                                 {$ordercategorys[c]->title}
                                             </td>
                                             <td align="center" style="padding:10px;font-size: 11px;width:25%;">
-                                                {$ordercategorys[c]->name|clearslash} 
+                                                {$ordercategorys[c]->name|clearslash}
                                             </td>
                                             <td align="center" style="padding:10px;font-size: 11px;width:10%;">
                                                 {if $ordercategorys[c]->inmenu==1}
@@ -187,7 +291,7 @@
                                     </table>
                                 {/if}
                             {sectionelse}
-                                <h2><b>Ning&uacute;na secci&oacute;n guardada</b></h2>
+                                <h2><strong>Ning&uacute;na secci&oacute;n guardada</strong></h2>
                             {/section}
                         </div>
                     </td>
@@ -200,7 +304,7 @@
                                         tag:'table',
                                         dropOnEmpty: true,
                                         containment:["cates"],
-                                        onChange: function(item) {  
+                                        onChange: function(item) {
                                             $('warnings-validation').update('<div class="notice">Por favor, recuerde guardar posiciones antes de terminar.</div>');
                                         },
                                         constraint:false

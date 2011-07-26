@@ -1,27 +1,26 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div class="wrapper-content">
-
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
-
-    <div id="menu-acciones-admin">
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
-        <ul>
-            <li>
+<div class="top-action-bar">
+	<div class="wrapper-content">
+		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
+		<ul class="old-button">
+			<li>
                 <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);" value="Guardar" title="{t}Save{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}save.gif" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
                 </a>
             </li>
             <li>
                 <a href="?action=list" class="admin_add" value="Cancelar" title="{t}Cancel{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />{t}Cancel{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />{t}Go back{/t}
                 </a>
             </li>
-        </ul>
-    </div><!--menu-acciones-admin-->
-    <br>
+		</ul>
+	</div>
+</div>
+<div class="wrapper-content">
 
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <table class="adminheading">
         <tr>
             <td>{t}Insert the static page information{/t}</td>

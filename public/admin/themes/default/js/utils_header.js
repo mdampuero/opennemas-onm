@@ -63,7 +63,7 @@ function onSearchAdvKeyEnter(e, id, checked)
     ekey = (document.all) ? e.keyCode : e.which;
     if (ekey==13)
     {
-        divs_hide('search-div2');
+        Effect.Appear('search-div2');
         return search_adv(id, $('stringSearch').value,1,checked);
     }
 }

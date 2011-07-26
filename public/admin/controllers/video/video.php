@@ -32,7 +32,7 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 $contentType = Content::getIDContentType('video');
 
 $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
- 
+
 if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING);
 
@@ -56,7 +56,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'list':
 
 			$cm = new ContentManager();
-			
+
             if (empty($page)) {
                 $limit= "LIMIT ".(ITEMS_PAGE+1);
             } else {
@@ -74,7 +74,7 @@ if( isset($_REQUEST['action']) ) {
                         $video->category_title = $ccm->get_title($video->category_name);
                     }
                 }
-              
+
             } else {
                 $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 ',
                                             'ORDER BY created DESC '.$limit);
@@ -88,11 +88,14 @@ if( isset($_REQUEST['action']) ) {
                             'pagination' => $pagination,
                             'videos' => $videos ));
 
+			$tpl->display('video/list.tpl');
+
 		break;
 
 		case 'new':
-			// Nada
- 
+
+			$tpl->display('video/new.tpl');
+
 		break;
 
 		case 'read':
@@ -105,15 +108,17 @@ if( isset($_REQUEST['action']) ) {
 			$video = new Video( $id );
 
             $tpl->assign('information', $video->information);
-          
+
             $tpl->assign('video', $video);
- 
+
+			$tpl->display('video/new.tpl');
+
 		break;
 
         case 'getVideoInformation':
-            
+
             $url = filter_input(INPUT_GET,'url',FILTER_DEFAULT);
-            $url = rawurldecode($url);           
+            $url = rawurldecode($url);
             if ($url) {
                 $fetchedFromAPC = false;
                 if (extension_loaded('apc')) {
@@ -135,12 +140,12 @@ if( isset($_REQUEST['action']) ) {
                            $html_out = _( "Can't get video information. Check url");
                     }
                 }
-            }  else {                   
+            }  else {
                  $html_out =  _("Please, Check url");
             }
             Application::ajax_out($html_out);
-           
-            
+
+
         break;
 
 		case 'create':
@@ -153,6 +158,7 @@ if( isset($_REQUEST['action']) ) {
             } else {
                 $tpl->assign('errors', $video->errors);
             }
+			$tpl->display('video/new.tpl');
 
 		break;
 
@@ -177,20 +183,20 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'validate':
 
-			 
-            $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);           
+
+            $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             $_POST['information'] = json_decode($_POST['information'],true);
- 
+
             if (!$id) {
                 Acl::checkOrForward('VIDEO_CREATE');
                 $video = new Video();
-               
+
                 //Estamos creando un nuevo artículo
                 if(!$video->create( $_POST ))
                     $tpl->assign('errors', $video->errors);
             } else {
                 Acl::checkOrForward('VIDEO_UPDATE');
-                $video = new Video($id);                
+                $video = new Video($id);
                 if(!Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
                     $msg ="Only read";
                 }
@@ -231,6 +237,7 @@ if( isset($_REQUEST['action']) ) {
                  echo $msg;
                  exit(0);
             }
+
 
 		break;
 
@@ -356,5 +363,3 @@ if( isset($_REQUEST['action']) ) {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
 }
-
-$tpl->display('video/video.tpl');

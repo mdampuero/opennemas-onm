@@ -5,7 +5,7 @@
 */
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
- 
+
 \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
 
 Acl::checkOrForward('POLL_ADMIN');
@@ -19,7 +19,7 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => ar
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('poll');
 
- 
+
 $category = filter_input(INPUT_GET,'category');
 if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
@@ -34,7 +34,7 @@ $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $categoryData);
 $allcategorys = $parentCategories;
- 
+
 if( isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {
 		case 'list':  //Buscar publicidad entre los content
@@ -51,13 +51,13 @@ if( isset($_REQUEST['action']) ) {
 			/* Ponemos en la plantilla la referencia al objeto pager */
 			$tpl->assign('paginacion', $pager);
 			$tpl->assign('polls', $polls);
-
+			   $tpl->display('polls/list.tpl');
 
 			break;
 
 		case 'new':
             Acl::checkOrForward('POLL_CREATE');
-			// Nada
+			$tpl->display('polls/new.tpl');
 			break;
 
 		case 'read': //habrá que tener en cuenta el tipo
@@ -67,6 +67,8 @@ if( isset($_REQUEST['action']) ) {
 
 			$items=$poll->get_items($_REQUEST['id']);
 			$tpl->assign('items', $items);
+			$tpl->display('polls/new.tpl');
+
 		break;
 
 		case 'create':
@@ -78,7 +80,9 @@ if( isset($_REQUEST['action']) ) {
 			} else {
 				$tpl->assign('errors', $poll->errors);
 			}
-		break;
+	 	  $tpl->display('polls/new.tpl');
+
+		  break;
 
 		case 'update':
              Acl::checkOrForward('POLL_UPDATE');
@@ -195,6 +199,3 @@ if( isset($_REQUEST['action']) ) {
 } else {
 	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }
-
-
-$tpl->display('polls/poll.tpl');

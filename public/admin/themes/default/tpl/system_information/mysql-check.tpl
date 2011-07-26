@@ -1,10 +1,15 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Database manager{/t}</h2></div>
+    </div>
+</div>
 <div class="wrapper-content">
     <table class="adminheading">
         <tr>
-            <th nowrap>Check Mysql server performance</th>
+            <th>Check Mysql server performance</th>
         </tr>
     </table>
     <table class="adminlist">

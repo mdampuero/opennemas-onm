@@ -3,10 +3,13 @@ body {
 	font-size:12px;
 	font-family:Arial, Helvetica, sans-serif;
 	background:none;
+	width:100%;
+	margin:0;
+	min-height:100%
 }
 html{
 	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
-	min-height:100%;
+	min-height:100%
 }
 
 h2 {
@@ -23,6 +26,7 @@ h2 {
 
 #content{
 	margin-top: 50px;
+	width:100%
 }
 
 td, th {
@@ -145,6 +149,11 @@ form {
 .yellow.awesome, .yellow.awesome:visited		{ background-color: #ffb515; }
 .yellow.awesome:hover							{ background-color: #fc9200; }
 
+.action-buttons { margin:0; width:100; padding:0;}
+.action-buttons li {
+	display:inline-block;
+	list-style:none;
+}
 
 
 /* Estilos personalizados */
@@ -213,8 +222,8 @@ table.adminlist tr.row2 {
 	text-align: right;
 }
 table.adminlist td {
-        padding: 0;
-        font-size: 11px;
+	padding: 2px;
+	font-size: 11px;
 }
 table.adminlist tr.row0:hover {
 	background-color: #EEEEEE;
@@ -322,6 +331,7 @@ b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px;}
 div.wrapper-content {
 	width:1100px;
 	margin:0 auto;
+	position:relative;
 }
 
 
@@ -707,11 +717,17 @@ div.ui-blocker-message img {
 
 div.action-bar {
     text-align:right;
-    background:#ddd;
-    border:0px solid #ccc;
+	background: none repeat scroll 0 0 #F1F1F1;
+    border: 1px solid #D2D2D2;
     border-bottom-width:1px;
-    padding:5px;
+	border-top-width:0px;
+    padding:5px 0;
     margin-bottom:20px;
+	width:100%
+}
+div.action-bar .right{
+	float:right;
+	margin-right:5px
 }
 
 
@@ -866,7 +882,7 @@ div.action-bar {
 
 .tabs2 a:hover{
 	background:#ccc !important;
-	color:Black;
+	color:Black !important;
 }
 
 .tabs2 li {
@@ -883,16 +899,14 @@ div.action-bar {
 	margin-right: 6px;
 	background-color: #e1e1e1;
 	text-decoration: none;
-	color: #888;
-	border:1px solid #F2F2F2;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	text-shadow: White 1px 1px 0px;
+	color: #666 !important;
+	border:1px solid #e1e1e1;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 .tabs2 a.active-tab {
 	background-color: #CCC;
-	border-top: 2px solid #999;
 	padding-top: 3px;
 	color: #000;
 }
@@ -954,15 +968,7 @@ label {
 
 :focus { -moz-outline-style: none; }
 
-div#menu-acciones-admin li.separator {
-	background-image:url(../images/separator.gif);
-	background-position:center bottom;
-	background-repeat:no-repeat;
-	border:0 none;
-    height:50px;
-    margin:0 8px;
-    width:4px;
-}
+
 
 div.utilities-conf{
     padding:10px;
@@ -1420,20 +1426,13 @@ fieldset.adminform { border: 1px solid #ccc; margin: 0 10px 10px 10px; }
 
 table.adminlist {
 	width: 100%;
-	border-spacing: 1px;
-	background-color: #e7e7e7;
 	color: #666;
 }
-
-table.adminlist td,
-table.adminlist th { padding: 4px; }
 
 table.adminlist thead th {
 	text-align: center;
 	background: #f0f0f0;
 	color: #666;
-	border-bottom: 1px solid #999;
-	border-left: 1px solid #fff;
 }
 
 table.adminlist thead a:hover { text-decoration: none; }
@@ -1448,7 +1447,7 @@ table.adminlist tbody tr.row1 	{ background: #f9f9f9; border-top: 1px solid #fff
 table.adminlist tbody tr.row0:hover td,
 table.adminlist tbody tr.row1:hover td  { background-color: #ffd ; }
 
-table.adminlist tbody tr td 	   { height: 25px; background: #fff; border: 1px solid #fff; }
+table.adminlist tbody tr td 	   { background: #fff;}
 table.adminlist tbody tr.row1 td { background: #f9f9f9; border-top: 1px solid #FFF; }
 
 table.adminlist tfoot tr { text-align: center;  color: #333; }
@@ -1911,4 +1910,94 @@ div.rssBox span.category {
 
 .clearer {
 	clear: both;
+}
+
+/* -------------------------------------------------------------
+  New top action bar
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.top-action-bar {
+	background: none repeat scroll 0 0 #F1F1F1;
+    border: none;
+    border-bottom: 1px solid #D2D2D2;
+    clear: both;
+    position: relative;
+    width: 100%;
+	margin:0;
+	margin-top:-13px;
+	margin-bottom:5px;
+}
+.top-action-bar .title {
+	padding:0;
+	margin:0;
+}
+.top-action-bar .title > * {
+	display:inline-block;
+	padding:10px 0;
+}
+.top-action-bar .title img {
+	margin-left:10px;
+}
+.top-action-bar .title h2 {
+	margin:0;
+	padding:0;
+	padding:22px 0;
+	font-size:1.6em;
+}
+
+.top-action-bar .buttons {
+	position:absolute;
+	right:0;
+	bottom:15px;
+}
+
+.top-action-bar .buttons .button:first-child {
+	margin-right:-4px;
+	border-radius:2px 0 0 2px;
+}
+.top-action-bar .buttons .button:last-child {
+	margin-left:-4px;
+	border-radius:0px 2px 2px 0;
+}
+
+
+.top-action-bar .buttons .button:hover:active {
+	background: -moz-linear-gradient(center top , #F8F8F8, #F1F1F1) repeat scroll 0 0 transparent;
+    border-color: #3366CC;
+    box-shadow: 0 1px 5px #CCCCCC inset;
+    z-index: 2;
+}
+
+.top-action-bar .buttons .button:hover,
+.top-action-bar .buttons .button.active{
+    background: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1) repeat scroll 0 0 transparent;
+    box-shadow: 0 1px 5px #CCCCCC inset;
+    border-color: #C0C0C0;
+}
+
+.top-action-bar .buttons .button {
+	background: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1) repeat scroll 0 0 transparent;
+    border: 1px solid #D9D9D9;
+	border-radius:2px;
+    height: 35px;
+    text-align: center;
+    vertical-align: middle;
+    width: 50px;
+    color: #3366CC;
+    outline: medium none;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.buttons .button span.icon {
+    height: 18px;
+    width: 18px;
+	display:block;
+	margin:0 auto;
+	margin-top:8px;
+}
+
+.buttons .button span.icon.home {
+	background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
 }

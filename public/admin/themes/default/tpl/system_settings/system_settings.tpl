@@ -51,11 +51,18 @@ input[type="text"] {
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-
-    <div id="menu-acciones-admin">
-        <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}System Wide Settings{/t}</h2></div>
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
+        <!--<div class="buttons">
+            <a href="" class="button"><span class="icon home">&nbsp;</span>  </a>
+            <a href="" class="button"><span class="icon home">&nbsp;</span></a>
+            <a href="" class="button"><span class="icon home">&nbsp;</span></a>
+        </div>-->
     </div>
+</div>
+
+<div class="wrapper-content">
 
     {if !is_null($message)}
         <div class="success">
@@ -350,7 +357,7 @@ input[type="text"] {
                         </th>
                         <td>
                             <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                            <span class="default-value">Default: 20 elements</span>
+                            <span class="default-value">{t}Default: 20 elements{/t}</span>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -359,7 +366,7 @@ input[type="text"] {
                         </th>
                         <td>
                             <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                            <span class="default-value">Default: 900 secs</span>
+                            <span class="default-value">{t}Default: 900 secs{/t}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -367,8 +374,10 @@ input[type="text"] {
         </div>
 
 
-        <div class="action-bar">
-            <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
+        <div class="action-bar clearfix">
+            <div class="right">
+                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
+            </div>
         </div>
 
         <input type="hidden" id="action" name="action" value="save"/>

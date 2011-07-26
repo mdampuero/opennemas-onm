@@ -58,46 +58,45 @@
 
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Cache Manager{/t}</h2></div>
+		<ul class="old-button">
+			<li>
+				<a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
+					{t}Delete{/t}
+				</a>
+			</li>
+
+			<li>
+				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
+				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
+					{t}Regenerate{/t}
+				</a>
+			</li>
+
+			<li>
+				<a href="#update" onclick="sendForm('update');return false;"
+				  title="{t}This changes the expire date but maintains the cache file contents{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" border="0" /><br />
+					{t}Change expiration{/t}
+				</a>
+			</li>
+
+			<li>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
+					{t}Settings{/t}
+				</a>
+			</li>
+		</ul>
+    </div>
+</div>
 <div class="wrapper-content">
 
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-		<div id="menu-acciones-admin">
-			<div style="float:left; margin:8px;"><h2>{t}Cache Manager{/t}</h2></div>
-			<ul>
-				<li>
-					<a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
-						<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
-						{t}Delete{/t}
-					</a>
-				</li>
-
-				<li>
-					<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
-					  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
-						<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
-						{t}Regenerate{/t}
-					</a>
-				</li>
-
-				<li>
-					<a href="#update" onclick="sendForm('update');return false;"
-					  title="{t}This changes the expire date but maintains the cache file contents{/t}">
-						<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" border="0" /><br />
-						{t}Change expiration{/t}
-					</a>
-				</li>
-
-				<li>
-					<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
-						<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
-						{t}Settings{/t}
-					</a>
-				</li>
-			</ul>
-		</div>
-
-		<div>
-		<br>
 
 		<table class="adminheading">
 			<tr>

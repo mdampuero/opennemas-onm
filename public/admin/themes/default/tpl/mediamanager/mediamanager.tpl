@@ -41,7 +41,7 @@
         {if $action eq 'searchResult'}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             <li>
@@ -54,12 +54,12 @@
         {if $action neq 'upload'}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar todos"><br />{t}Delete all{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash_button.gif" alt="Eliminar"><br />{t}Delete{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             <li>
@@ -78,7 +78,7 @@
         {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
-                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />{t}Upload media{/t}
+                    <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />{t}Upload media{/t}
                 </a>
             </li>
             <li>
@@ -95,7 +95,7 @@
         {else}
             <li>
                  <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
-                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}upload_web.png" alt="Subir Fotos"><br />Subir Gráficos
+                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />Subir Gráficos
                  </a>
             </li>
             <li>
@@ -117,11 +117,11 @@
 
 {block name="content"}
 <div class="wrapper-content">
-    
+
 {if $action neq 'upload' or $action neq 'results'}
     <form method="post" action="#">
 {/if}
-    
+
 <div id="contenedor-gral">
 
     {include file="mediamanager/_partials/categories.tpl"}
@@ -185,9 +185,9 @@
                 <h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
                 <div id="menu-acciones-admin">
                     <ul>
-                        
+
                         {block name="admin-menu" append}{/block}
-            
+
                     </ul>
                 </div>
         {/if}
@@ -304,7 +304,7 @@
                     <ul>
                         <li>
                             <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
-                                <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir"  alt="Guardar y salir" />
+                                <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
                                 <br />
                                 {t}Save{/t}
                             </a>

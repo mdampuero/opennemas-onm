@@ -82,24 +82,23 @@ function confirmar() {
 {/block}
 
 {block name="content"}
-<div style="width:70%;margin:0 auto;">
-
-
-    <div id="menu-acciones-admin">
-    <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Widget Manager{/t}</h2></div>
-    <ul>
-        <li>
-            <a href="widget.php?action=new" class="admin_add"
-               title="{t}New widget{/t}">
-                <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
-                <br />{t}New{/t}
-            </a>
-        </li>
-    </ul>
+<div class="top-action-bar">
+    <div class="wrapper-content">
+        <div class="title">
+            <h2>{t}Widget Manager{/t}</h2>
+        </div>
+        <ul class="old-button">
+            <li>
+                <a href="widget.php?action=new" class="admin_add"
+                   title="{t}New widget{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
+                    <br />{t}New{/t}
+                </a>
+            </li>
+        </ul>
     </div>
-
-    <br/>
-
+</div>
+<div class="wrapper-content">
     <table class="adminheading">
         <tbody>
             <tr>

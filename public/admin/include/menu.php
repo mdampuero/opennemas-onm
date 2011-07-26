@@ -2,7 +2,7 @@
 
 $menuXml = '<?xml version="1.0"?>
 <menu>
-    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="index.php">
+    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" link="#">
         <node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
@@ -34,7 +34,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="COMMENT_MANAGER"
             privilege="COMMENT_ADMIN"
             title="'.htmlspecialchars(_("Comments"), ENT_QUOTES).'"
-            link="controllers/comment.php?action=list"
+            link="controllers/comment/comment.php?action=list"
         />
         <node
             module_name="POLL_MANAGER"
@@ -59,7 +59,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ARCHIVE_ADMIN"
             title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
             link="article.php?action=list_hemeroteca"
-        />        
+        />
         <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
@@ -68,7 +68,7 @@ $menuXml = '<?xml version="1.0"?>
         />
      </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="controllers/mediamanager/mediamanager.php" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="#" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
             privilege="IMAGE_ADMIN"
@@ -117,7 +117,7 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" link="search_advanced.php" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" link="#" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"

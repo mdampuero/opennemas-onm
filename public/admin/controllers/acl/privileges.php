@@ -47,14 +47,14 @@ switch($_REQUEST['action']) {
         // To filter
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
-        $tpl->display('acl/privilege/privilege.tpl');
+        $tpl->display('acl/privilege/list.tpl');
     } break;
 
     // Crear un nuevo permiso
     case 'new': {
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
-        $tpl->display('acl/privilege/privilege.tpl');
+        $tpl->display('acl/privilege/new.tpl');
     } break;
 
     case 'read': {
@@ -64,7 +64,7 @@ switch($_REQUEST['action']) {
 
         $modules = $privilege->getModuleNames();
         $tpl->assign('modules', $modules);
-        $tpl->display('acl/privilege/privilege.tpl');
+        $tpl->display('acl/privilege/new.tpl');
     } break;
 
     case 'create': {
@@ -73,7 +73,7 @@ switch($_REQUEST['action']) {
         } else {
             $tpl->assign('errors', $privilege->errors);
         }
-        $tpl->display('acl/privilege/privilege.tpl');
+        $tpl->display('acl/privilege/new.tpl');
     } break;
 
     case 'update': {
