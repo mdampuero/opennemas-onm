@@ -64,13 +64,13 @@
                         <img border="0" id="save-button"  src="{$params.IMAGE_DIR}save.gif" title="Guardar" alt="Guardar" ><br />{t} Save {/t}
                     </a>
                 </li>
-                {*
+
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=new" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}/advertisement.png" title="New Menu" alt="New Menu"><br />{t}New Menu{/t}
                     </a>
                 </li>
-                *}
+                 
             </ul>
         </div>
 
