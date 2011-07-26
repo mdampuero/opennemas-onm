@@ -20,7 +20,7 @@
                 <td colspan="2" style="padding:20px;" nowrap="nowrap" colspan='3'>
                     <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                             class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;
-                    <button type="submit" class="onm-button green">{t}Search{/t}</button>
+                    <button type="submit" class="onm-button green" onclick="return enviar(this, '_self', 'search', 0);">{t}Search{/t}</button>
                 </td>
             </tr>
             <tr>

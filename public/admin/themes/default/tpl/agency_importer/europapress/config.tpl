@@ -26,7 +26,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+        <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Module configuration{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">

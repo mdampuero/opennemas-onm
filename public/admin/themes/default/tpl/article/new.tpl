@@ -322,14 +322,14 @@ if($('starttime')) {
 				</td>
 				<td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
 					<textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia"
-							  style="width:98%; height:20em;"
+							  style="width:100%; height:20em;"
 							  onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
 				</td>
 			</tr>
 			<tr>
 				<td></td>
 				<td valign="top" align="left" colspan="2" >
-					<div id="article_images" style="width:98%">
+					<div id="article_images">
 						{include  file="article/partials/_images.tpl"}
 					</div>
 				</td>
