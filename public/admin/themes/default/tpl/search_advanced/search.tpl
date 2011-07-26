@@ -22,7 +22,7 @@
                     <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                         value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
                         class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;
-                    <button type="submit" class="onm-button green">{t}Search{/t}</button>
+                    <button type="submit" class="onm-button green" onclick="return enviar(this, '_self', 'search', 0);">{t}Search{/t}</button>
                 </td>
             </tr>
             <tr>
