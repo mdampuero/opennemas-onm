@@ -1,3 +1,16 @@
+-- 20-July -2011
+ALTER TABLE `menues` CHANGE `categories` `site` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+CREATE TABLE `nueva-tribuna`.`menu_items` (
+`pk_item` INT NOT NULL ,
+`pk_menu` INT NOT NULL ,
+`title` VARCHAR( 255 ) NOT NULL ,
+`link_name` VARCHAR( 255 ) NOT NULL ,
+`type` VARCHAR( 255 ) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
+`position` INT NOT NULL ,
+`pk_father` INT NULL
+) ENGINE = MYISAM ;
+
 -- --------------------------------------------------------
 -- 19-July-2011
 --Config changes for LOG

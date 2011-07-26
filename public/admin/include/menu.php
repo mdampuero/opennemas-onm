@@ -66,6 +66,12 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Category Manager"), ENT_QUOTES).'"
             link="controllers/category/category.php"
         />
+        <node
+            module_name="MENU_MANAGER"
+            privilege="MENU_ADMIN"
+            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
+            link="controllers/menues/menues.php"
+        />
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" link="#" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
@@ -152,7 +158,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="PAPER_IMPORT"
             privilege="IMPORT_EFE"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
-            link="article.php?action=list_agency"
+            link="controllers/agency_importer/EFE.php"
         />
         <node
             module_name="PAPER_IMPORT"

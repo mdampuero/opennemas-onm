@@ -39,48 +39,81 @@ switch($action) {
     case 'list':
 
         Acl::checkOrForward('MENU_LIST');
-        $name = 'album';
+        
         $tpl->assign('pages', $pages);
 
+       
         $tpl->display('menues/list.tpl');
 
 
     break;
-    case 'read':
 
-        Acl::checkOrForward('MENU_READ');
+    case 'new':
+        Acl::checkOrForward('MENU_CREATE');
 
-        $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
-
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
-        $mn = new Menu();
-        $menu = $mn->getMenu($name);
-
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         $tpl->assign('categories', $parentCategories);
-        $tpl->assign('menu', $menu);
-        $tpl->assign('name', $name);
+         
         $tpl->assign('pages', $pages);
 
         $tpl->display('menues/read.tpl');
 
     break;
 
-    case 'save':
+    case 'read':
 
-        Acl::checkOrForward('MENU_UPDATE');
+        Acl::checkOrForward('MENU_READ');
 
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        $_POST['categories'] = json_decode($_POST['positions'], true);
-
-        $mn = new Menu();
-        $menu = $mn->setMenu($_POST);
+        $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
+        
 
 
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
+                
+        $tpl->assign('categories', $parentCategories);
+        $tpl->assign('pages', $pages);
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+        $menu = Menu::getMenu($name);
+        
+        $tpl->assign('menu', $menu);
+     
+        $tpl->display('menues/read.tpl');
 
     break;
 
+    case 'create':
+
+         Acl::checkOrForward('MENU_CREATE');
+
+         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+         
+         $params = serialize(array('description'=>$data['description']));
+
+         $_POST['positions'] = json_decode($_POST['items'], true);
+
+         $mn = new Menu();
+         $menu = $mn->create($_POST);
+
+         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+    break;
+
+    case 'update':
+
+         Acl::checkOrForward('MENU_UPDATE');
+ 
+         $_POST['params'] = serialize(array('description'=>$_POST['description']));
+
+         //TODO:get site_name;
+         $_POST['site'] = SITE;
+
+         $mn = new Menu();
+         $menu = $mn->update($_POST);
+ 
+         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+    break;
+ 
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;

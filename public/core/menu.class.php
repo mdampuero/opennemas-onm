@@ -10,25 +10,133 @@
  * Class Menu
  *
  * Class to manage frontpage menu in OpenNeMas
- * 
+ *
  */
-class Menu
-{
-    public $pk_menu     = null;
-    public $name        = null;
-    public $type        = null;
-    public $categories  = null;
-    public $description = null;
+class Menu {
+    public $pk_menu = null;
+    public $name    = null;
+    public $type    = null;
+    public $site    = null;
+    public $params  = null;
+
+    public $config = "default_config";
 
     /**
      * Constructor
      *
      * @param int $id Privilege Id
     */
-    function __construct($id=null)
+    public function __construct($id=null)
     {
          
     }
+
+    /**
+     * Create a new menu
+     *
+     * @param array $data  .
+     *
+     * @return bool If create in database
+     */
+
+    public function create($data) {
+
+        //check if name is unique
+        //!(empty($data['name']))? '': $data['name'];
+
+		$sql = "INSERT INTO menues ".
+               " (`name`, `params`, `site`) " .
+			   " VALUES (?,?,?,?)";
+
+        $values = array($data["name"],$data["params"], $data["site"]);
+
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return false;
+        }
+
+        $id = $GLOBALS['application']->conn->Insert_ID();
+        MenuItems::setMenu($id, $data['items']);
+
+        return true;
+    }
+
+    /**
+     * Explanation for this function.
+     *
+     * @param datatype $varname Var explanation.
+     *
+     * @return datatype Explanation of returned data
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    public function read($id) {
+
+        $sql = 'SELECT * FROM menues WHERE pk_menu = '.($id);
+        $rs = $GLOBALS['application']->conn->Execute( $sql );
+
+        if (!$rs) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return false;
+        }
+
+        return $rs->fields;
+
+    }
+
+    public function update($data) {
+
+        $sql = "UPDATE menues SET  `name`=?, `params`=?, `site`=? ".
+        		" WHERE pk_menu= ?" ;
+
+        $values = array($data['name'], $data['params'], $data['site'],
+                         $data['id']);
+ 
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        }
+        
+        MenuItems::setMenu($data['id'], $data['items']);
+
+        return true;
+	}
+
+     /**
+    * Delete definetelly one content
+    *
+    * This simulates a trash system by setting their available flag to false
+    *
+    * @access public
+    * @param integer $id
+    * @param integer $last_editor
+    * @return null
+    */
+    public function delete($id) {
+        
+        $sql = 'DELETE FROM menues WHERE pk_menu='.($id);
+
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            return false;
+        }
+        return true;
+
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu Id '.$this->id);
+    }
+
 
     /**
      * Get a menu in the frontpage
@@ -38,9 +146,9 @@ class Menu
      * @return array with categories order by positions
      */
 
-    public function getMenu($name)
+    static public function getMenu($name)
     {
-        $sql = "SELECT `categories` FROM menues WHERE name = '{$name}'";
+        $sql = "SELECT pk_menu, site, params FROM menues WHERE name = '{$name}'";
         $rs = $GLOBALS['application']->conn->Execute( $sql );
  
         if (!$rs) {
@@ -48,10 +156,18 @@ class Menu
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
-            return;
+            return false;
         }
- 
-        return unserialize($rs->fields['categories']);
+        $menu = new stdClass();
+
+        $menu->name = $name;
+        $menu->pk_menu = $rs->fields['pk_menu'];
+        $menu->params = $rs->fields['params'];
+        $menu->site = $rs->fields['site'];
+        
+        $menu->items = MenuItems::getMenuItems('pk_menu='.$menu->pk_menu);
+
+        return $menu;
 
     }
 
@@ -62,21 +178,10 @@ class Menu
      *
      * @return bool if update ok true
      */
-    public function setMenu($params = array())
+    static public function setMenu($menu, $params_config = array())
     {
-        $sql = "UPDATE menues SET  `categories`=?  ".
-        		" WHERE `name`=? ";
- 
-        $values = array( serialize($params['categories']), $params['name'] );
- 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;                    
-        }
-      
-        return true;
+
+       
 
     }
     

@@ -24,7 +24,30 @@
 
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-        {include file="botonera_up.tpl"}
+        <div id="menu-acciones-admin" class="clearfix">
+		<ul>
+		    <li>
+				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category}', 'formulario');" value="Validar" title="Validar">
+					<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+				</a>
+		    </li>
+			<li>
+			{if isset($category->pk_content_category)}
+               <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category}, 'formulario');">
+			{else}
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
+			{/if}
+					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+				</a>
+			</li>
+			<li>
+				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="Cancelar" title="Cancelar">
+					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				</a>
+			</li>
+		</ul>
+	</div>
+
 
         <div id="warnings-validation"></div>
 

@@ -47,9 +47,6 @@
             <li>
                 <a href="#listado">{t}Available sections{/t}</a>
             </li>
-            <li>
-                <a href="/{$smarty.const.ADMIN_DIR}/controllers/menues/menues.php">{t}Sort menues{/t}</a>
-            </li>
         </ul>
 
         <div class="panel" id="listado">

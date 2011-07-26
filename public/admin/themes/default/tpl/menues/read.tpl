@@ -25,7 +25,7 @@
             <div class="title"><h2>{t}Menu manager{/t} :: {t}Editing menu{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a  onclick="saveMenu();enviar(this, '_self', 'save', 0);" class="admin_add"  name="submit_mult" value="Save" title="Save">
+                    <a  onclick="saveMenu();enviar(this, '_self', 'update', '{$menu->pk_menu}');" class="admin_add"  name="submit_mult" value="Save" title="Save">
                         <img border="0" id="save-button"  src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="Guardar" ><br />{t} Save {/t}
                     </a>
                 </li>
@@ -54,27 +54,44 @@
             <tbody>
                  <tr>
                     <td style="width:80%;">
-                        <ul id="menu-categories" style="min-height:50px; background-color: #EEE" >
-                            {section name=c loop=$menu}
-                                <li id="{$menu[c]['id']}" title="{$menu[c]['title']}" name="{$menu[c]['name']}" class="drag-category">{$menu[c]['title']} </li>
-                            {/section}
+                        <label>{t}Name{/t}</label>
+                        <input type="text" size="100" name="name" id="name" value="{$menu->name}" />
+                        <br> <br>
+                        <label>{t}Description{/t}</label>
+                        {assign var=params value=$menu->params|unserialize} 
+                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:100%; height:8em;">{t 1=$params['description']|clearslash|escape:"html"}%1{/t}</textarea>
+                        <br>
+                        <br>
+                        <div id="divInsert">
+                        </div>
+                        <br>
+                        *{t} Drop items for menu in the next container {/t}
+                        <ul id="menu-categories" style="min-height:50px; background-color: #EEE" >                         
+                            {if !empty($menu->items)}
+                                {section name=c loop=$menu->items}
+                                    <li id="{$menu->items[c]->pk_menu}" title="{$menu->items[c]->title}"
+                                        link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
+                                        class="drag-category"> {$menu->items[c]->title} </li>
+                                {/section}
+                            {/if}
                         </ul>
 
                     </td>
                     <td valign="top">
-
+                            Categories link: <br>
                             <ul id='ul-categories' style="min-height:50px;">
                                 {section name=as loop=$categories}
-                                    <li id="{$categories[as]->pk_content_category}" title="{$categories[as]->title}" name="{$categories[as]->name}"  class="drag-category">
+                                    <li id="{$categories[as]->pk_content_category}" title="{$categories[as]->title}" type="category" link="{$categories[as]->link}"  class="drag-category">
                                         {$categories[as]->title}
                                     </li>
-                                    {section name=su loop=$subcat[as]}
-                                         <li id="{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}" name="{$subcat[as][su]->name}"  class="drag-category">
+                                    {*section name=su loop=$subcat[as]}
+                                         <li id="{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}" type="category" link="{$subcat[as][su]->link}"  class="drag-category">
                                              &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</li>
-                                    {/section}
+                                    {/section*}
                                 {/section}
+                                    
                                 {foreach from=$pages item=value key=page}
-                                    <li id="{$value}" title="{$page}" name="{$page}"  class="drag-category">
+                                    <li id="{$value}" title="{$page}" link="{$page}" type="internal"  class="drag-category">
                                        {t}{$page}{/t}
                                     </li>
                                 {/foreach}
@@ -94,27 +111,14 @@
                                        containment:[ 'ul-categories', 'menu-categories' ]
 
                                    });
-
-                                    saveMenu = function() {
-                                        var positions = new Array();
-                                        var i=0;
-                                         $$('ul#menu-categories li').each( function(item) {
-                                             if(item.getAttribute('id')) {
-
-                                                positions[i] = { 'id':item.getAttribute('id'), 'title': item.getAttribute('title'), 'name': item.getAttribute('name') };
-                                                i++;
-                                             }
-                                         });
-
-                                        $('positions').value =  Object.toJSON(positions);
-                                        //return false;
-
-                                    }
-
-
-
+ 
                             // ]]>
                             </script>
+                    </td>
+                    <td style="vertical-align:top;">
+                      <a onClick="addLink();" style="cursor:pointer;">
+                          <img src="{$params.IMAGE_DIR}add.png" border="0" />
+                          <br>{t}Add External Link{/t} </a> &nbsp;
                     </td>
 
                 </tr>
@@ -127,9 +131,8 @@
         </table>
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="text" size="100" name="positions" id="positions" value="" />
-        <input type="text" size="100" name="name" id="name" value="{$name}" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" size="100" name="items" id="items" value="" />
+        <input type="hidden" name="id" id="id" value="{$menu->pk_menu}" />
     </div><!--fin wrapper-content-->
 </form>
 {/block}
