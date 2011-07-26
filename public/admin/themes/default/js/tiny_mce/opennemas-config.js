@@ -22,12 +22,14 @@ OpenNeMas.tinyMceConfig = {
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
         theme_advanced_buttons1_add : "fontselect,fontsizeselect",
-        theme_advanced_buttons2_add : "styleprops,|,media,iframe,spellchecker,gtranslator,xornalautolink,blockquote",
-        theme_advanced_buttons2_add_before: "visualaid,charmap,sub,sup,|,cut,copy,pastetext,|,removeformat,cleanup,code,|,search,replace,|",
-        theme_advanced_buttons3 : "",
+        theme_advanced_buttons2_add : "styleprops",
+        theme_advanced_buttons2_add_before: "visualaid,charmap,sub,sup,|,cut,copy,pastetext,search,replace,|",
+        theme_advanced_buttons3 : "media,iframe,spellchecker,gtranslator,xornalautolink,blockquote,|,removeformat,cleanup,code",
         theme_advanced_toolbar_location : "top",
         theme_advanced_toolbar_align : "left",
         theme_advanced_statusbar_location : "bottom",
+        skin : "o2k7",
+        skin_variant : "silver",
 
         /* theme_advanced_styles : "Título 1=header1;Título 2=header2;Título 3=header3;",*/
         theme_advanced_disable : "help",
@@ -54,7 +56,7 @@ OpenNeMas.tinyMceConfig = {
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/
         extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],blockquote/div[class=style1]",
                 
-        theme_advanced_resize_horizontal : false,
+        theme_advanced_resize_horizontal : true,
         theme_advanced_resizing : true,
 
         spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
@@ -79,7 +81,8 @@ OpenNeMas.tinyMceConfig = {
         theme : "advanced",
         language: "es",
         plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe,gtranslator",
-
+        skin : "o2k7",
+        skin_variant : "silver",
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
