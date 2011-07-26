@@ -14,6 +14,7 @@
 {/block}
 
 {block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
@@ -60,7 +61,6 @@
 </div>
 
 <div class="wrapper-content">
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
         <div id="content-wrapper">
 
     <ul class="tabs2" style="margin-bottom: 28px;">

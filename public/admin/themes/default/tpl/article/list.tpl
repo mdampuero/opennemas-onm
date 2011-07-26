@@ -14,6 +14,7 @@
 {/block}
 
 {block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -68,7 +69,7 @@
         </ul>
     </div>
 </div>
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+
 
 <div class="wrapper-content">
 
