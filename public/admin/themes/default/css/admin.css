@@ -609,7 +609,7 @@ a.unpublishing:hover {
 .success a {color:#264409;}
 
 .error a, .notice a, .success a { text-decoration:underline !important; }
-
+.error li, .notice li, .success li { list-style:none;}
 
 /* New css properties to print pending comments counter  */
 
@@ -768,7 +768,7 @@ div.action-bar .right{
 
 #tabs li {
 	float: left;
-
+	margin-bottom:-1px;
 	margin-left: 0;
 	padding-left: 0;
 }
@@ -780,7 +780,7 @@ div.action-bar .right{
 	margin-right: 6px;
 	border: 1px solid #ccc;
 	border-bottom:none;
-	color:#aaa;
+	color:Black;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
 	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
@@ -789,8 +789,11 @@ div.action-bar .right{
 }
 
 #tabs a.active-tab {
-	background-color: White !important;
-	color:Black !important
+	background: White !important;
+	color:Black !important;
+	border-bottom: none;
+    color: Black !important;
+    margin-bottom: -1px;
 	/*
 	border-top: 2px solid #999;
 	padding-top: 3px;

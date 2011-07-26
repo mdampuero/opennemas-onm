@@ -1,5 +1,5 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<table align="center" style="border:1px solid #ccc;">
+<table align="center">
 	<tr>
         <td colspan=2><h2>{t}Multimedia associated to this article:{/t}</h2></td>
 	</tr>
@@ -156,7 +156,7 @@
                     Droppables.add('droppable_div1', {
                         accept: ['draggable', 'video'],
                         onDrop: function(element) {
-                                    
+
                                      if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
                                          var ancho=element.getAttribute('de:ancho');
                                          if(element.getAttribute('de:ancho')>300) { ancho=300; }
@@ -172,7 +172,7 @@
                                         var source=element.src;
                                         if($('change1').src){
                                             recuperarOpacity('img1');
-                                            
+
                                             if(element.getAttribute('class')=='draggable'){
                                                 $('change1').src = source.replace( '140-100-','');
                                             }else{
@@ -225,7 +225,7 @@
                                      $('informa2').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created');
                                      $('input_img2').value=element.name;
 
-                                } else {                                   
+                                } else {
                                     var source2=element.src;
                                     if($('change2').src){
                                             recuperarOpacity('img2');

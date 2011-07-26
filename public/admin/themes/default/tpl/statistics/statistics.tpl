@@ -11,41 +11,38 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.request.action) || $smarty.request.action eq "index"}
+<div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Content Statistics{/t}</h2></div>
+        </div>
+    </div>
+<div class="wrapper-content">
+
+
     {* ZONA MENU CATEGORIAS ******* *}
-    <ul class="tabs2" style="margin-bottom: 28px;">
+    <ul class="tabs2">
         <li>
             <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
         </li>
           <script type="text/javascript">
                 // <![CDATA[
-                    {literal}
-                          Event.observe($('link_global'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
+                Event.observe($('link_global'), 'mouseover', function(event) {
+                   $('menu_subcats').setOpacity(0);
+                   e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 
-                           });
-
-                    {/literal}
+                 });
                 // ]]>
             </script>
         {include file="menu_categorys.tpl" home="statistics.php?action=index"}
     </ul>
-    <br style="clear: both;" />
 
-    <div id="menu-acciones-admin">
-        <div style="float:left; margin:8px;"><h2>{t}Content Statistics{/t}</h2></div>
+    <div id="dashboard_enlaces">
+        <a href="javascript:change_dashboard('viewed',{$category})">Más Vistas</a> |
+        <a href="javascript:change_dashboard('comented',{$category})">Más Comentadas</a> |
+        <a href="javascript:change_dashboard('voted',{$category})">Más Valoradas</a>
     </div>
-
-    {literal}
-        <div id="dashboard_enlaces">
-            <a href="javascript:change_dashboard('viewed',{/literal}{$category}{literal})">Más Vistas</a> |
-            <a href="javascript:change_dashboard('comented',{/literal}{$category}{literal})">Más Comentadas</a> |
-            <a href="javascript:change_dashboard('voted',{/literal}{$category}{literal})">Más Valoradas</a>
-        </div>
-    {/literal}
 
     <div id="viewed">
         <table border="0" Cellpadding="0" cellspacing="0"  width="100%">
@@ -130,9 +127,10 @@
         change_dashboard('viewed',{$category});
     /* ]]> */
     </script>
+</div>
 {/if}
 
-<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id}" />
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id}" />
 </form>
-</div>
 {/block}

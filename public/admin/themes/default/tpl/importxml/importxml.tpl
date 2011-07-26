@@ -6,7 +6,7 @@
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Import articles from paper{/t}</h2></div>
+			<div class="title"><h2>{t}XML import{/t} :: {t}Import articles from paper{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="article.php?action=list_pendientes&category=todos" value="Cancelar" title="Cancelar">
