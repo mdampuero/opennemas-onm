@@ -504,8 +504,8 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('total_num', $j);
 
             }
-            //Removed all of temp files in SITE_ADMIN_TMP_PATH
-         //   foreach(glob(SITE_ADMIN_TMP_PATH.'xml'.DS.'*.*') as $v){unlink($v);}
+            //Removed all of temp files in SITE_TMP_PATH
+             foreach(glob($uploaddir) as $v) { unlink($v); }
         break;
 
 	default:
