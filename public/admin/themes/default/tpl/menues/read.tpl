@@ -74,6 +74,43 @@ input[type="text"] {
 #availablecategories  li, #menuelements li { padding:4px; list-style:none; border:1px solid #ddd; cursor:pointer; margin:3px; display:inline-block;}
 #availablecategories  li:hover, #menuelements li:hover { background:#eee}
 .left { margin-right:10px;  }
+
+.reveal-modal {
+
+		top: 90px;
+		left: 50%;
+		margin-left: -300px;
+		width: 440px;
+		background: #FFF;
+		background: rgba(255,255,255,.9);
+		position: absolute;
+		z-index: 101;
+		padding: 30px 40px 34px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+		-moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
+		-webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
+		-box-shadow: 0 0 10px rgba(0,0,0,.4);
+		}
+ 
+	.reveal-modal .close-reveal-modal {
+		font-size: 22px;
+		line-height: .5;
+		position: absolute;
+		top: 8px;
+		right: 11px;
+		color: #aaa;
+		text-shadow: 0 -1px 1px rbga(0,0,0,.6);
+		font-weight: bold;
+		cursor: pointer;
+		}
+    .save-button{
+		position: absolute;
+		top: 78px;
+		right: 20px;		
+		cursor: pointer;
+		}
 </style>
 {/block}
 
@@ -110,7 +147,7 @@ input[type="text"] {
             </tr>
         </table>
         <table class="adminlist">
-            {assign var=params value=$menu->params|unserialize}
+            {assign var=menuParams value=$menu->params|unserialize}
             <tbody>
                  <tr>
                     <td>
@@ -126,7 +163,7 @@ input[type="text"] {
                             <tr>
                                 <th><label for="description">{t}Description{/t}</label></th>
                                 <td>
-                                    <textarea name="description" id="description" cols="60">{$params['description']|clearslash}</textarea>
+                                    <textarea name="description" id="description" cols="60">{$menuParams['description']|clearslash}</textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -170,17 +207,17 @@ input[type="text"] {
                             </tr>
                         </table>
                     </td>
-
-                    <td valign="top">
-
-                    </td>
-                    <td style="vertical-align:top;">
-
-                    </td>
-
                 </tr>
                  <tr>
-                    <div class="divInsert"></div>
+                     <td style="vertical-align:top;">
+                        <div id="linkInsertions" class="reveal-modal" style="display:none;">
+                            <label>{t}Title:{/t}</label> <input type="text" name="itemTitle" value="" id="itemTitle" size="60">
+                            <br>
+                            <label>{t}Link:{/t}</label> <input type="text" name="link" value="" id="link" size="60"> <br>
+                            <button onclick="saveLink();return false;" class="save-button onm-button green" type="submit">{t}Save{/t}</button>
+                            <a title="Close" onclick="$('linkInsertions').hide();return false;" class="close-reveal-modal">&#215;</a></div>
+                        </div>
+                     </td>
                  </tr>
             </tbody>
             <tfooter>

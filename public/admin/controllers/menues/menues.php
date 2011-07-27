@@ -79,7 +79,7 @@ switch($action) {
 
          $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
 
-         $params = serialize(array('description'=>$data['description']));
+         $_POST['params'] = serialize(array('description'=>$data['description']));
 
          $_POST['positions'] = json_decode($_POST['items'], true);
 
