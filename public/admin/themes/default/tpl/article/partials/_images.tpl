@@ -17,7 +17,7 @@
                                         <input type="hidden" id="input_video" name="fk_video" value="" size="70">
                                     <td  align='right'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img1');">
-                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png" id="remove_img1" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
+                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
                                     </td>
                                 </tr>
@@ -72,7 +72,7 @@
                                     </td>
                                     <td  align='right'>
                                         <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
-                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png" id="remove_img2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
+                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
                                     </td>
                                 </tr>
@@ -270,7 +270,7 @@
                                     </td>
                                     <td  align='right'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">
-                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
+                                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
                                     </td>
                                 </tr>

@@ -129,7 +129,7 @@ if(($tpl->caching == 0)
          * Filter articles if some of them has time scheduling
         */
         $articles_home = $cm->getInTime($articles_home);
-        
+
         foreach ($articles_home as $article) {
             $article->position = $article->home_pos;
         }
@@ -147,7 +147,7 @@ if(($tpl->caching == 0)
                )
             {
                 $articles_home[] = $content;
-                
+
             }
         }
 
@@ -205,7 +205,7 @@ if(($tpl->caching == 0)
                    )
                 {
                     $articles_home[] = $content;
-                    
+
                 }
             }
 

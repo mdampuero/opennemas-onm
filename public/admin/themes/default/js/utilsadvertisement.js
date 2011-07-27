@@ -101,7 +101,7 @@ function noticiasshow(my) {
 
  function recuperarOpacity(field){
 	    var nombre='remove_'+field;
-		document.getElementById( nombre ).src='/admin/themes/default/images/remove_image.png';
+		document.getElementById( nombre ).src='/admin/themes/default/images/trash.png';
 	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
 	    document.getElementById( nombre ).setAttribute('title','Eliminar');
 		if(field=='img'){

@@ -31,7 +31,7 @@
         <ul class="old-button">
             <li>
                 <a href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="{t}Go Back{/t}">
-                    <img src="{$params.IMAGE_DIR}newsletter/previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
+                    <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
                 </a>
             </li>
         </ul>

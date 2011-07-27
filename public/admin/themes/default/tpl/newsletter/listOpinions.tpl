@@ -109,7 +109,7 @@ document.observe('dom:loaded', function() {
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/editclear.png" alt="" /><br />
+					<img border="0" src="{$params.IMAGE_DIR}editclear.png" alt="" /><br />
 					{t}Clean{/t}
 				</a>
 			</li>

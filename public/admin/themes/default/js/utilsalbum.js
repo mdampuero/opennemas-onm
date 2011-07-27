@@ -422,7 +422,7 @@ function vaciarImg(field){
 
  function recuperarOpacity(field){
 	    var nombre='remove_'+field;
-		document.getElementById( nombre ).src='themes/default/images/remove_image.png';
+		document.getElementById( nombre ).src='themes/default/images/trash.png';
 	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
 	    document.getElementById( nombre ).setAttribute('title','Eliminar');
 		if(field=='img'){

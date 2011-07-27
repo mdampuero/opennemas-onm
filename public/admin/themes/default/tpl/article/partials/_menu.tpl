@@ -22,7 +22,7 @@
 			<li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action={if isset($_SESSION['desde'])}{$_SESSION['desde']}{else}list_pendientes{/if}&category={$_REQUEST['category']}&page={$_GET['page']}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
 

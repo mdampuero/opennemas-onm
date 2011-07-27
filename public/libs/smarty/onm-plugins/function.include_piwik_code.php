@@ -21,23 +21,24 @@ function smarty_function_include_piwik_code($params, &$smarty) {
 
         $httpsHost = preg_replace("@http:@", "https:", $piwikConfig['server_url']);
 
-        $output = "\n<!-- Piwik -->
-        <script type=\"text/javascript\">
-            var pkBaseURL = ((\"https:\" == document.location.protocol) ? \"".$httpsHost."\" : \"".$piwikConfig['page_id']."\");
-            document.write(unescape(\"%3Cscript src='\" + pkBaseURL + \"piwik.js' type='text/javascript'%3E%3C/script%3E\"));
-        </script>
-        <script type=\"text/javascript\">
-        try {
-            var piwikTracker = Piwik.getTracker(pkBaseURL + \"piwik.php\", ".$piwikConfig['page_id'].");
-            piwikTracker.trackPageView();
-            piwikTracker.enableLinkTracking();
-        } catch( err ) {}
-        </script>
-        <noscript><p><img src=\"".$piwikConfig['server_url']."/piwik.php?idsite=".$piwikConfig['page_id']."\" style=\"border:0\" alt=\"\" /></p></noscript>
-        <!-- End Piwik Tracking Code -->";
+        $output = '<!-- Piwik -->
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "'.$httpsHost.'" : "'. $httpsHost .'");
+document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '. $piwikConfig['page_id'] .');
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="'. $httpsHost .'?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->';
 
     }
 
     return $output;
 
 }
+
+
+

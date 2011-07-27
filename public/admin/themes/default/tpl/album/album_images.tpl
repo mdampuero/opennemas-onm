@@ -135,7 +135,7 @@
 
                         <td  align='right'>
                             <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png"
+                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png"
                                      id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                             </a>
                         </td>

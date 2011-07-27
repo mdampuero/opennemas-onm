@@ -7,7 +7,7 @@
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=list" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
+                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
                 </a>
             </li>
         </ul>

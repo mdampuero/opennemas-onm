@@ -10,7 +10,7 @@
 			<ul class="old-button">
 				<li>
 					<a href="article.php?action=list_pendientes&category=todos" value="Cancelar" title="Cancelar">
-						<img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+						<img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 					</a>
 				</li>
 				<li>
