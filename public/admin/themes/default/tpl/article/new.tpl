@@ -280,7 +280,7 @@ if($('starttime')) {
 				</td>
 				<td style="padding:4px;" valign="top" nowrap="nowrap" >
 					<input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:95%"
-						value="{$article->subtitle|upper|clearslash|escape:"html"}" class="required" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="4"/>
+						value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="4"/>
 				</td>
 			</tr>
 
@@ -564,8 +564,8 @@ if($('starttime')) {
 			<span id="savePreviewText"></span>
 		</div>
 
-<!--		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id}" />-->
+		<input type="hidden" id="action" name="action" value="" />
+		<input type="hidden" name="id" id="id" value="{$id}" />
 	</div>
 </form>
 {/block}
