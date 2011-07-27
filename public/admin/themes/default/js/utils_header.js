@@ -230,11 +230,17 @@ function cancel(action,category,page) {
     if(/index_portada/.test(action)) {
         location.href ='/admin/index.php';
     }else if(/opinion/.test(action)) {
-        location.href ='controllers/opinion/opinion.php';
+        location.href ='/admin/controllers/opinion/opinion.php';
     }else if(/advertisement/.test(action)) {
-        location.href ='controllers/advertisement/advertisement.php';
+        location.href ='controllers/advertisement/advertisement.php';    
+    }else if(/europa_press_import/.test(action)) {
+        location.href ='controllers/agency_importer/europapress.php';
+    }else if(/search_advanced/.test(action)) {
+        location.href ='/admin/controllers/search_advanced/search_advanced.php';
+    }else if(/widget/.test(action)) {
+        location.href ='widget.php';
     }else{
-        location.href= 'article.php?action='+action+'&category='+category+'&page='+page;
+        location.href= '/admin/article.php?action='+action+'&category='+category+'&page='+page;
     }
 }
 

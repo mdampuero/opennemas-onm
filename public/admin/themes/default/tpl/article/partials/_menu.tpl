@@ -36,12 +36,12 @@
 		<div class="title"><h2>{t}Article manager :: Editing article{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-                {if $smarty.session._from eq 'search_advanced'}
-                     <a href="#" class="admin_add"  onClick="window.location='search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}'">
+                {if $smarty.session.desde eq 'search_advanced'  && isset($smarty.get.stringSearch)}
+                     <a href="#" class="admin_add"  onClick="window.location='controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}';">
                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                      </a>
                 {else}
-                    <a href="#" class="admin_add" onClick='cancel( {php} echo '"'.$_SESSION['desde'].'", "'.$_REQUEST['category'].'", "'.$_GET['page'].'"';{/php});' value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                    <a href="#" class="admin_add" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                     </a>
                 {/if}

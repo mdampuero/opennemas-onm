@@ -59,6 +59,9 @@
                 {if $arrayResults[c].content_type eq 'photo'}
                         <a href="/admin/{$type2res.$ct}?action=image_data&id={$arrayResults[c].id}&category={$arrayResults[c].category}&desde=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page|default:0}" title="Editar">
                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                {elseif $arrayResults[c].content_type eq 'widget'}
+                    <a href="/admin/{$type2res.$ct}?action=edit&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
+                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                 {else}
                     <a href="/admin/{$type2res.$ct}?action=read&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>

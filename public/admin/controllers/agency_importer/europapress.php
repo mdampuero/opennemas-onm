@@ -206,6 +206,7 @@ switch($action) {
 
         $article = new Article();
         $newArticleID = $article->create($values);
+        $_SESSION['desde']= 'europa_press_import';
 
         if(is_string($newArticleID)) {
 

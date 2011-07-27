@@ -17,7 +17,7 @@ submitForm = function() {
         </div>
         <ul class="old-button">
             <li>
-                <a href="?action=list" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                     {t}Go back{/t}
                 </a>
