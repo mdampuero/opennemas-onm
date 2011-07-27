@@ -455,7 +455,7 @@ if($('starttime')) {
 									<td width="120"> {$losrel[n]->category_name|clearslash} </td>
 									<td width="120">
 										<a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
-											<img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
+											<img src="{$params.IMAGE_DIR}btn_no.png" border="0" /> </a>
 									</td>
 								</tr>
 							</table>
@@ -483,7 +483,7 @@ if($('starttime')) {
 								<td width='120'> {$intrel[n]->category_name|clearslash} </td>
 								<td width='120'>
 									<a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
-										<img src="{$params.IMAGE_DIR}trash.png" border="0" /> </a>
+										<img src="{$params.IMAGE_DIR}btn_no.png" border="0" /> </a>
 								</td>
 							</tr>
 						</table>
