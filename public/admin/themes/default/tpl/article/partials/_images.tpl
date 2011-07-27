@@ -9,13 +9,13 @@
                 {is_module_activated name="IMAGE_MANAGER"}
                 <tr>
                     <td valign="top">
-                        <div id="img_portada" style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
+                        <div id="img_portada" style="display:block; width: 630px;">
+                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                         <h2>{t}Image for frontpage:{/t}</h2>
                                         <input type="hidden" id="input_video" name="fk_video" value="" size="70">
-                                    <td  align='right'>
+                                    <td  align='center'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img1');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -39,14 +39,14 @@
                                             {/if}
                                         </div>
                                     </td>
-                                    <td colspan="2" style="text-align:left;white-space:normal;">
+                                    <td colspan="1" style="text-align:left;white-space:normal;">
                                         <div id="informa" style="text-align:left; width:260px;overflow:auto;">
-                                            <p><strong>{t}File name:{/t}</strong> {$photo1->name|default:'default_img.jpg'}</p>
-                                            <p><strong>{t}Size:{/t}:</strong> {$photo1->width|default:0} x {$photo1->height|default:0} (px)</p>
-                                            <p><strong>{t}File size:{/t}</strong> {$photo1->size|default:0} Kb</p>
-                                            <p><strong>{t}File creation date{/t}:</strong> {$photo1->created|default:""}</p>
-                                            <p><strong>{t}Description:{/t}</strong> {$photo1->description|default:""|clearslash|escape:'html'}</p>
-                                            <p><strong>Tags:</strong> {$photo1->metadata|default:""}</p>
+                                            <p><strong>{t}File name:{/t}</strong><br/> {$photo1->name|default:'default_img.jpg'}</p>
+                                            <p><strong>{t}Size:{/t}</strong><br/> {$photo1->width|default:0} x {$photo1->height|default:0} (px)</p>
+                                            <p><strong>{t}File size:{/t}</strong><br/> {$photo1->size|default:0} Kb</p>
+                                            <p><strong>{t}File creation date{/t}:</strong><br/> {$photo1->created|default:""}</p>
+                                            <p><strong>{t}Description:{/t}</strong><br/> {$photo1->description|default:""|clearslash|escape:'html'}</p>
+                                            <p><strong>Tags:</strong><br/> {$photo1->metadata|default:""}</p>
                                         </div>
                                         <div id="noimag" style="display: inline; width:100%; height:30px;"></div>
                                         <div id="noinfor" style="display: none; width:100%;  height:30px;"></div>
@@ -64,13 +64,13 @@
                         </div>
                         <br/>
                         <input type="hidden" id="posic" name="posic" value="0" />
-                        <div id="img_interior"  style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
+                        <div id="img_interior"  style="display:block; width: 630px;">
+                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                         <h2>{t}Image for inner article page:{/t}</h2>
                                     </td>
-                                    <td  align='right'>
+                                    <td  align='center'>
                                         <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -94,14 +94,14 @@
                                             {/if}
                                         </div>
                                     </td>
-                                    <td colspan="2" style="text-align:left;white-space:normal;">
+                                    <td colspan="1" style="text-align:left;white-space:normal;">
                                         <div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
-                                            <p><strong>{t}File name:{/t}</strong> {$photo2->name|default:'default_img.jpg'}</p>
-                                            <p><strong>{t}Size:{/t}:</strong> {$photo2->width|default:0} x {$photo2->height|default:0} (px)</p>
-                                            <p><strong>{t}File size:{/t}</strong> {$photo2->size|default:0} Kb</p>
-                                            <p><strong>{t}File creation date{/t}:</strong> {$photo2->created|default:""}</p>
-                                            <p><strong>{t}Description:{/t}</strong> {$photo2->description|default:""|clearslash|escape:'html'}</p>
-                                            <p><strong>Tags:</strong> {$photo2->metadata|default:""}</p>
+                                            <p><strong>{t}File name:{/t}</strong><br/> {$photo2->name|default:'default_img.jpg'}</p>
+                                            <p><strong>{t}Size:{/t}:</strong><br/> {$photo2->width|default:0} x {$photo2->height|default:0} (px)</p>
+                                            <p><strong>{t}File size:{/t}</strong><br/> {$photo2->size|default:0} Kb</p>
+                                            <p><strong>{t}File creation date{/t}:</strong><br/> {$photo2->created|default:""}</p>
+                                            <p><strong>{t}Description:{/t}</strong><br/> {$photo2->description|default:""|clearslash|escape:'html'}</p>
+                                            <p><strong>Tags:</strong><br/> {$photo2->metadata|default:""}</p>
                                         </div>
                                         <div id="noimag2" style="display: inline; width:100%; height:30px;">	</div>
                                         <div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
@@ -118,7 +118,7 @@
                             </table>
                         </div>
                     </td>
-                    <td valign="top" style="width:460px;">
+                    <td valign="top">
                         <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
                             <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
                         </div>
@@ -165,7 +165,7 @@
                                                                         + '"><embed src="'+ element.getAttribute('de:url')
                                                                         +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
                                          $('informa').innerHTML=' es un Flash';
-                                         $('informa').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created');
+                                         $('informa').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
                                          $('input_img1').value=element.name;
 
                                     } else {
@@ -189,17 +189,17 @@
                                         $('informa').innerHTML=' ';
                                         if(element.getAttribute('class')=='draggable'){
                                             $('input_img1').value=element.name;
-                                            $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong> " + element.getAttribute('de:mas') + "</p>"+
-                                                "<p><strong>{t}Size:{/t}:</strong> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
-                                                "<p><strong>{t}File size:{/t}</strong> " + element.getAttribute('de:peso') + " Kb</p>"+
-                                                "<p><strong>{t}File creation date{/t}:</strong> " + element.getAttribute('de:created') + "</p>"+
-                                                "<p><strong>{t}Description:{/t}</strong> " + element.getAttribute('de:description') +"</p>"+
-                                                "<p><strong>Tags:</strong> "+ element.getAttribute('de:tags')+"</p> ";
+                                            $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
+                                                "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
+                                                "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
+                                                "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
+                                                "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
+                                                "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
                                             $('img1_footer').value= element.getAttribute('de:description');
                                             $('input_video').value='';
                                         }else{
                                            $('input_video').value=element.name;
-                                           $('informa').innerHTML="<strong>Codigo: </strong>"+element.getAttribute('title')  + "<br><strong>Fecha Creaci&oacute;n: </strong>" + element.getAttribute('de:created') + "<br><strong>Descripcion: </strong>" + element.getAttribute('de:description') +"<br><strong>Tags: </strong>" + element.getAttribute('de:tags');
+                                           $('informa').innerHTML="<strong>Codigo: </strong><br/>"+element.getAttribute('title')  + "<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created') + "<br><strong>Descripcion: </strong><br/>" + element.getAttribute('de:description') +"<br><strong>Tags: </strong><br/>" + element.getAttribute('de:tags');
                                            $('img1_footer').value= element.getAttribute('de:description');
                                            $('input_img1').value='';
                                         }
@@ -222,7 +222,7 @@
                                                                     + '"><embed src="'+ element.getAttribute('de:url')
                                                                     +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
                                      $('informa2').innerHTML=' es un Flash';
-                                     $('informa2').innerHTML="<b>Archivo: </b>"+element.getAttribute('de:mas') + "<br><b>Dimensiones: </b>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><b>Peso: </b>" + element.getAttribute('de:peso') + "Kb<br><b>Fecha Creaci&oacute;n: </b>" + element.getAttribute('de:created');
+                                     $('informa2').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
                                      $('input_img2').value=element.name;
 
                                 } else {
@@ -240,12 +240,12 @@
                                     }
                                     $('input_img2').value=element.name;
                                     $('informa2').innerHTML=' ';
-                                    $('informa2').innerHTML=" <p><strong>{t}File name:{/t}</strong> " + element.getAttribute('de:mas') + "</p>"+
-                                        "<p><strong>{t}Size:{/t}:</strong> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
-                                        "<p><strong>{t}File size:{/t}</strong> " + element.getAttribute('de:peso') + " Kb</p>"+
-                                        "<p><strong>{t}File creation date{/t}:</strong> " + element.getAttribute('de:created') + "</p>"+
-                                        "<p><strong>{t}Description:{/t}</strong> " + element.getAttribute('de:description') +"</p>"+
-                                        "<p><strong>Tags:</strong> "+ element.getAttribute('de:tags')+"</p> ";
+                                    $('informa2').innerHTML=" <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
+                                        "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
+                                        "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
+                                        "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
+                                        "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
+                                        "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
                                      $('img2_footer').value= element.getAttribute('de:description');
 
                                     // En firefox 2, precísase reescalar o div co alto da imaxe
@@ -262,13 +262,13 @@
                 <br/>
                 <tr>
                     <td valign="top">
-                        <div id="video_interior" style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
+                        <div id="video_interior" style="display:block; width: 630px;">
+                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                             <h2>{t}Video for inner article page:{/t}</h2>
                                     </td>
-                                    <td  align='right'>
+                                    <td  align='center'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -285,12 +285,12 @@
                                             {/if}
                                         </div>
                                     </td>
-                                    <td colspan="2" style="text-align:left;white-space:normal;">
+                                    <td colspan="1" style="text-align:left;white-space:normal;">
                                         <div id="informa3" style="text-align:left;width:260px; overflow:auto;">
-                                            <p><strong>{t}Code:{/t}</strong> {$video2->videoid|default:""}</p>
-                                            <p><strong>{t}File creation date{/t}:</strong> {$video2->created|default:""}</p>
-                                            <p><strong>{t}Description:{/t}</strong> {$video2->description|default:""|clearslash|escape:'html'}</p>
-                                            <p><strong>Tags:</strong> {$video2->metadata|default:""}</p>
+                                            <p><strong>{t}Code:{/t}</strong><br/> {$video2->videoid|default:""}</p>
+                                            <p><strong>{t}File creation date{/t}:</strong><br/> {$video2->created|default:""}</p>
+                                            <p><strong>{t}Description:{/t}</strong><br/> {$video2->description|default:""|clearslash|escape:'html'}</p>
+                                            <p><strong>Tags:</strong><br/> {$video2->metadata|default:""}</p>
                                         </div>
                                         <div id="noimag3" style="display: inline; width:380px; height:30px;"></div>
                                         <div id="noinfor3" style="display: none; width:100%;  height:30px;"></div>
@@ -299,7 +299,7 @@
                                 <tr>
                                     <td colspan=2>
                                         <div id="video2_footer">
-                                            <label for="title">{t}Footer text for inner video:{/t}</label>
+                                            <label for="title">{t}Footer text for inner video:{/t}</label><br/>
                                             <input type="text" id="footer_video2" name="footer_video2" title="video interior footer" value="{$article->footer_video2}" size="50" />
                                         </div>
                                     </td>
@@ -307,7 +307,7 @@
                             </table>
                         </div>
                     </td>
-                    <td valign="top" style="width:460px;">
+                    <td valign="top">
                         <div style="cursor:pointer;  border:1px double #ccc; background-color:#EEE; padding:7px;">
                             <a style="cursor:pointer;" onclick="new Effect.toggle($('videos-container'),'blind')">
                                 <strong>Videos</strong>
@@ -357,10 +357,10 @@
                         }
                         $('input_video2').value=element.name;
                         $('informa3').innerHTML=' ';
-                        $('informa3').innerHTML = "<p><strong>{t}Code:{/t}</strong>" + element.getAttribute('title')  + "</p>"+
-                                            "<p><strong>{t}File creation date{/t}:</strong>" + element.getAttribute('de:created') + "</p>"+
-                                            "<p><strong>{t}Description:{/t}</strong>" + element.getAttribute('de:description') +"</p>"+
-                                            "<p><strong>Tags:</strong>" + element.getAttribute('de:tags')+"</p>";
+                        $('informa3').innerHTML = "<p><strong>{t}Code:{/t}</strong><br/>" + element.getAttribute('title')  + "</p>"+
+                                            "<p><strong>{t}File creation date{/t}:</strong><br/>" + element.getAttribute('de:created') + "</p>"+
+                                            "<p><strong>{t}Description:{/t}</strong><br/>" + element.getAttribute('de:description') +"</p>"+
+                                            "<p><strong>Tags:</strong><br/>" + element.getAttribute('de:tags')+"</p>";
                         $('footer_video2').value= element.getAttribute('de:description');
                     }
                 });
