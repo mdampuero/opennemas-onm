@@ -370,6 +370,15 @@ gettext("Available categories");
 /* ./themes/default/tpl//menues/read.tpl */
 gettext("Menu elements");
 
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Title:");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Link:");
+
+/* ./themes/default/tpl//menues/read.tpl */
+gettext("Save");
+
 /* ./themes/default/tpl//menues/list.tpl */
 gettext("Menu manager");
 
