@@ -62,7 +62,7 @@
             <ul class="old-button">
                 <li>
                     <a class="admin_add" href="mediamanager.php?category={$category}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
-                        <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}newsletter/previous.png" alt="Información"><br />{t}Go back{/t}
+                        <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}previous.png" alt="Información"><br />{t}Go back{/t}
                     </a>
                 </li>
                 {if $action eq 'searchResult'}

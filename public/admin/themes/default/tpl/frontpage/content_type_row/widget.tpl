@@ -26,7 +26,7 @@
         {/if*}
         <td align="center" style="width:20px">
             {if ($item->renderlet != 'intelligentwidget')}
-            <a href="controllers/widget/widget.php?action=edit&id={$item->pk_widget}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+            <a href="controllers/widget/widget.php?action=edit&id={$item->pk_widget}&category={$smarty.request.category}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
             {/if}
         </td>
         <td  align="center"  class="un_width" style="width:20px;">

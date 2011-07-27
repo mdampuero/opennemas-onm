@@ -25,7 +25,7 @@
             </td>
         {/if*}
         <td align="center" style="width:20px">
-            <a href="controllers/opinion/opinion.php?action=read&id={$item->id}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+            <a href="controllers/opinion/opinion.php?action=read&id={$item->id}&category={$smarty.request.category}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
         </td>
         <td  align="center"  class="un_width" style="width:20px;">
                 <a  href="controllers/opinion/opinion.php?action=archive&id={$item->id}&category={$category}"  title="Archivar">

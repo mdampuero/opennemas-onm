@@ -25,11 +25,11 @@
                 <li>
                     {if $smarty.session._from eq 'opinion.php'}
                             <a href="opinion.php" class="admin_add">
-                            <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
                         </a>
                     {else}
                         <a href="{$_SERVER['PHP_SELF']}?action=list&page=0" class="admin_add" title="Cancelar">
-                            <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
                         </a>
                     {/if}
                 </li>

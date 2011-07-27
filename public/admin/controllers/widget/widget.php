@@ -30,7 +30,9 @@ switch($action) {
     case 'edit': {
         $id = $_REQUEST['id'];                
         $widget->read($id);
-        
+        if(isset($_REQUEST['category'])) {
+            $_SESSION['categoria'] = $_REQUEST['category'];
+        }
         $tpl->assign('id', $id);
         $tpl->assign('widget', $widget);
         $tpl->display('widget/edit.tpl');
@@ -58,9 +60,20 @@ switch($action) {
             $widget->update($data);
         } else {            
             $widget->create($data);
-        }        
+        }     
+        
+        if (isset($_SESSION['desde'])) {
+            if ($_SESSION['desde'] == 'list') {
+                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
+            }elseif ($_SESSION['desde'] == 'widget') {
+                Application::forward('?action=list');
+            }elseif ($_SESSION['desde'] == 'search_advanced') {
+                Application::forward('/admin/controllers/search_advanced/search_advanced.php');
+            }
+        }
         
         Application::forward('?action=list');
+        
         break;
     } 
     
@@ -125,6 +138,8 @@ switch($action) {
         $pager = Pager::factory($pager_options);
         
         $terms = array_slice($terms, ($page-1)*$items_page, $items_page);*/
+        
+        $_SESSION['desde'] = 'widget';
         
         $tpl->assign('widgets', $widgets);
         //$tpl->assign('pager', $pager);

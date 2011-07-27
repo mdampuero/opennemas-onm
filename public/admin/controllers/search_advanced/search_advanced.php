@@ -13,7 +13,7 @@ $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Advanced Search');
 
-$_SESSION['_from'] ='search_advanced';
+$_SESSION['desde'] ='search_advanced';
 
 // Assocciate content_type to resource, it has be static array because
 // don't exist a convention, sample attachment go on fichero.php
@@ -29,6 +29,7 @@ $type2res = array(
     'interviu' => 'interviu.php',
     'poll' => 'controllers/poll/poll.php',
     'static_page' => 'controllers/static_pages/static_pages.php',
+    'widget' => 'controllers/widget/widget.php',
 );
 
 
@@ -82,7 +83,7 @@ switch ($action) {
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
             $indice = 0; $ind = 0;
             $res = array();
-            $szTagsArray = explode(' ', $szTags);
+            $szTagsArray = explode(', ', String_Utils::get_tags($szTags));
 
 
             foreach ($arrayResults as $res ) {
@@ -147,7 +148,7 @@ switch ($action) {
         $indice = 0;
         $ind = 0;
         $res = array();
-        $szTagsArray = explode(' ', $szTags);
+        $szTagsArray = explode(', ', String_Utils::get_tags($szTags));
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){

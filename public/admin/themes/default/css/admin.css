@@ -170,11 +170,13 @@ table.adminheading {
 	padding-left: 5px;
 	font-size: 28px;
 	border: 1px solid #ccc;
-
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
-	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
-text-shadow:0 1px 0 #FFFFFF;
+	background: #ededed; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#dfdfdf)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #ededed,  #dfdfdf); /* for firefox 3.6+ */
+	text-shadow:0 1px 0 #FFFFFF;
 }
 table.adminheading img{
 	vertical-align:middle;
@@ -782,7 +784,10 @@ div.action-bar .right{
 	color:Black;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
-	background:url("../images/gray-grad.png") repeat-x scroll left top #DFDFDF;
+	background: #ededed; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#dfdfdf)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #ededed,  #dfdfdf); /* for firefox 3.6+ */
 	text-shadow:0 1px 0 #FFFFFF;
 	text-decoration:none !important;
 }

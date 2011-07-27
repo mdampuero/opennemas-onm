@@ -134,7 +134,7 @@ input[type="text"] {
                 <li class="separator"></li>
                 <li>
                     <a  href="{$smarty.server.PHP_SELF}?action=list"  title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}newsletter/previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

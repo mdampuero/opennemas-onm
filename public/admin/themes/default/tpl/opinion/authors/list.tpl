@@ -14,7 +14,7 @@
                 </li>
                 <li >
                     <a href="opinion.php?action=list&desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
-                        <img border="0" src="{$params.IMAGE_DIR}newsletter/previous.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go back{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go back{/t}
                     </a>
                 </li>
             </ul>

@@ -198,7 +198,9 @@ if(isset($_REQUEST['action'])) {
             //habrá que tener en cuenta el tipo
             $opinion = new Opinion($_REQUEST['id']);
             $tpl->assign('opinion', $opinion);
-
+            if(isset($_REQUEST['category'])) {
+                $_SESSION['categoria'] = $_REQUEST['category'];
+            }
             $aut = new Author();
             $todos = $aut->all_authors(NULL,'ORDER BY name');
             $tpl->assign('todos', $todos);
@@ -214,7 +216,7 @@ if(isset($_REQUEST['action'])) {
 
             $photos = $aut->get_author_photos($opinion->fk_author);
             $tpl->assign('photos', $photos);
-
+            
             $tpl->display('opinion/new.tpl');
         break;
 
@@ -279,12 +281,14 @@ if(isset($_REQUEST['action'])) {
             require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
-
-            if($_SESSION['_from'] == 'search_advanced') {
-                if($_GET['stringSearch']){
-                    Application::forward('search_advanced.php?action=search&stringSearch=' .
-                                         $_GET['stringSearch'] . '&category=' . $_SESSION['_from'] .
-                                         '&page=' . $_REQUEST['page']);
+            
+            if($_SESSION['desde'] == 'search_advanced') {
+                if(isset($_GET['stringSearch'])){
+                    Application::forward('/admin/controllers/search_advanced/search_advanced.php?'.
+                        'action=search&'.
+                        'stringSearch='.$_GET['stringSearch'].'&'.
+                        'category='.$_SESSION['_from'].'&'.
+                        'page=' . $_REQUEST['page']);
                 } else {
                     $_SESSION['desde'] = 'list';
                     $_SESSION['type'] = $_REQUEST['type_opinion'];
@@ -294,7 +298,9 @@ if(isset($_REQUEST['action'])) {
             if($_SESSION['desde'] == 'index_portada') {
                 Application::forward('index.php');
             }elseif( $_SESSION['desde']=='list_pendientes'){
-                Application::forward('article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$_REQUEST['page']);
+            }elseif ($_SESSION['desde'] == 'list') {
+                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$_REQUEST['page']);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);

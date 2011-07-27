@@ -591,9 +591,9 @@ if (isset($_REQUEST['action']) ) {
 
             $article->update( $_REQUEST );
 
-            if( $_SESSION['_from']=='search_advanced'){
-                if($_GET['stringSearch']){
-                 Application::forward('search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+            if( $_SESSION['desde']=='search_advanced'){
+                if(isset($_GET['stringSearch'])){
+                 Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
                 }else{
                     $_SESSION['desde']='list';
                     $_SESSION['_from']='home';
@@ -601,6 +601,12 @@ if (isset($_REQUEST['action']) ) {
             }
             if($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
+            }elseif ($_SESSION['desde'] == 'europa_press_import') {
+                Application::forward('controllers/agency_importer/europapress.php?action=list&page=0&message=');
+            }elseif ($_SESSION['desde'] == 'list') {
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
+            }elseif ($_SESSION['desde'] == 'list_hemeroteca') {
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
             if(isset($_REQUEST['available']) && $_REQUEST['available'] == 1){
                  $_SESSION['desde']='list';

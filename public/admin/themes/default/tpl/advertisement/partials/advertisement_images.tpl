@@ -10,7 +10,7 @@
 							</td>
 							<td style="text-align:right;">
 								<a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img');">
-									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/remove_image.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
+									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
 								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70" />
 							</td>
 						</tr>
