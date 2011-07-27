@@ -9,8 +9,8 @@
                 {is_module_activated name="IMAGE_MANAGER"}
                 <tr>
                     <td valign="top">
-                        <div id="img_portada" style="display:block; width: 630px;">
-                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="img_portada" style="display:block;">
+                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                         <h2>{t}Image for frontpage:{/t}</h2>
@@ -64,8 +64,8 @@
                         </div>
                         <br/>
                         <input type="hidden" id="posic" name="posic" value="0" />
-                        <div id="img_interior"  style="display:block; width: 630px;">
-                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="img_interior"  style="display:block;">
+                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                         <h2>{t}Image for inner article page:{/t}</h2>
@@ -262,8 +262,8 @@
                 <br/>
                 <tr>
                     <td valign="top">
-                        <div id="video_interior" style="display:block; width: 630px;">
-                            <table style="width:625px; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="video_interior" style="display:block;">
+                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
                                 <tr>
                                     <td>
                                             <h2>{t}Video for inner article page:{/t}</h2>
