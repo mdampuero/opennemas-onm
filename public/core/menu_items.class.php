@@ -184,7 +184,7 @@ class MenuItems {
      */
     static public function setMenu($id, $items =array(), $params_config = array())
     {
-        $config['pk_father'] =0;  //TODO: use: params_config
+        $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
 
         $items = json_decode($items);
   
@@ -207,7 +207,7 @@ class MenuItems {
                 $i++;
 
             }
-
+ 
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);

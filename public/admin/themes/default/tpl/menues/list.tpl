@@ -22,6 +22,13 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Menu manager{/t} :: {t}Listing menues{/t}</h2></div>
+          <ul class="old-button">
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New menu{/t}
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="wrapper-content">
@@ -40,19 +47,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {foreach from=$pages item=value key=page}
+                    {section loop=$menues name=m}
                     <tr {cycle values="class=row0,class=row1"}>
                         <td style="padding-left:10px">
-                            {$page|capitalize}
+                            {$menues[m]->name|capitalize}
                         </td>
 
                         <td style="padding:5px; width:100px;" align="center">
-                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$page}" title="{t 1=$page}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                 <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                             </a>
                         </td>
                     </tr>
-                    {/foreach}
+                    {/section}
                 </tbody>
                 <tfoot>
                     <tr>

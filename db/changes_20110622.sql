@@ -1,3 +1,46 @@
+--27-July-2011
+
+DROP TABLE IF EXISTS `menu_items`;
+CREATE TABLE IF NOT EXISTS `menu_items` (
+  `pk_item` int(11) NOT NULL AUTO_INCREMENT,
+  `pk_menu` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `link_name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
+  `position` int(11) NOT NULL,
+  `pk_father` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pk_item`),
+  KEY `pk_item` (`pk_item`),
+  KEY `pk_menu` (`pk_menu`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS `menues`;
+CREATE TABLE IF NOT EXISTS `menues` (
+  `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `site` text NOT NULL,
+  `params` varchar(255) DEFAULT NULL,
+  `pk_father` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pk_menu`),
+  UNIQUE KEY `name` (`name`),
+  KEY `name_2` (`name`),
+  KEY `pk_menu` (`pk_menu`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `menues`
+--
+
+INSERT INTO `menues` (`pk_menu`, `name`, `type`, `site`, `params`, `pk_father`) VALUES
+(1, 'frontpage', '', ' ', NULL, NULL),
+(2, 'opinion', '', ' ', NULL, NULL),
+(3, 'mobile', '', '', NULL, NULL),
+(4, 'album', '', ' ', NULL, NULL),
+(5, 'video', '', ' ', NULL, NULL);
+
+
+
 -- 20-July -2011
 ALTER TABLE `menues` CHANGE `categories` `site` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
 

@@ -33,6 +33,9 @@ switch($action) {
         Acl::checkOrForward('MENU_LIST');
 
         $tpl->assign('pages', $pages);
+        $menues = Menu::listMenues();
+
+        $tpl->assign('menues', $menues);
 
 
         $tpl->display('menues/list.tpl');
@@ -43,10 +46,29 @@ switch($action) {
     case 'new':
         Acl::checkOrForward('MENU_CREATE');
 
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
-        $tpl->assign('categories', $parentCategories);
+        $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
 
-        $tpl->assign('pages', $pages);
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        $albumCategories = array();
+        $videoCategories = array();
+        foreach($ccm->categories as $category) {
+            if($category->internal_category == $pages['album']) {
+                $albumCategories[] = $category;
+            } else if($category->internal_category == $pages['video']) {
+                $videoCategories[] = $category;
+            }
+        }
+        $cm = new ContentManager();
+        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $menues = Menu::listMenues();
+
+        $tpl->assign(array( 'categories'=> $parentCategories,
+                            'subcat'=> $subcat,
+                            'albumCategories'=>$albumCategories,
+                            'videoCategories'=>$videoCategories,
+                            'staticPages'=> $staticPages,
+                            'menues'=> $menues,
+                            'pages'=> $pages ));
 
         $tpl->display('menues/read.tpl');
 
@@ -58,12 +80,27 @@ switch($action) {
 
         $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
 
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        $albumCategories = array();
+        $videoCategories = array();
+        foreach($ccm->categories as $category) {
+            if($category->internal_category == $pages['album']) {
+                $albumCategories[] = $category;
+            } else if($category->internal_category == $pages['video']) {
+                $videoCategories[] = $category;
+            }
+        }
+        $cm = new ContentManager();
+        $staticPages = $cm->find('Static_Page', '1=1', 'ORDER BY created DESC ');
+        $menues = Menu::listMenues();
 
-
-        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
-
-        $tpl->assign('categories', $parentCategories);
-        $tpl->assign('pages', $pages);
+        $tpl->assign(array( 'categories'=> $parentCategories,
+                            'subcat'=> $subcat,
+                            'albumCategories'=>$albumCategories,
+                            'videoCategories'=>$videoCategories,
+                            'staticPages'=> $staticPages,
+                            'menues'=> $menues,
+                            'pages'=> $pages ));
 
         $menu = Menu::getMenu($name);
 
@@ -73,15 +110,39 @@ switch($action) {
 
     break;
 
+    case 'validate':
+            $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+
+            $_POST['params'] = serialize(array('description'=>$_POST['description']));
+            $_POST['site'] = SITE;
+
+
+            if(empty($id)) {
+                Acl::checkOrForward('MENU_CREATE');
+
+                $mn = new Menu();                
+                $mn->create($_POST);
+
+            } else {
+                Acl::checkOrForward('MENU_UPDATE');
+
+                $mn = new Menu($id);
+                $menu = $mn->update($_POST);
+
+            }
+
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&name=' . $_POST['name']);
+        break;
+
+
     case 'create':
 
          Acl::checkOrForward('MENU_CREATE');
 
          $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
 
-         $_POST['params'] = serialize(array('description'=>$data['description']));
-
-         $_POST['positions'] = json_decode($_POST['items'], true);
+         $_POST['params'] = serialize(array('description'=>$_POST['description']));
+         $_POST['site'] = SITE;
 
          $mn = new Menu();
          $menu = $mn->create($_POST);
@@ -95,7 +156,6 @@ switch($action) {
          Acl::checkOrForward('MENU_UPDATE');
 
          $_POST['params'] = serialize(array('description'=>$_POST['description']));
-
          //TODO:get site_name;
          $_POST['site'] = SITE;
 
