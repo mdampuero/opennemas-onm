@@ -16,6 +16,7 @@ makeSortable = function(){
                 tag:'li',
                 hoverclass: 'active',
                 constraint: 'horizontal',
+                ghosting: true,
                 containment: drops
         });
      });
@@ -25,6 +26,7 @@ makeSortable = function(){
                 dropOnEmpty: true,
                 hoverclass: 'active',
                 constraint: 'horizontal',
+                ghosting: true,
                 containment: drops,
                 onChange: function(item) {
                     id=item.id;
@@ -166,4 +168,11 @@ createActions = function(id) {
  
         $(id).appendChild(div);
 
+}
+
+// add father category
+
+addFather = function() {
+    name = $('father').options[$('father').selectedIndex].getAttribute('name');
+   
 }

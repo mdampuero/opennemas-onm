@@ -176,13 +176,23 @@ input[type="text"] {
                                 <th><label for="description">{t}Father menu{/t}</label></th>
                                 <td>
                                     <select id='pk_father' name='pk_father'>
-                                        <option id="0" title="Ninguno"> </option>
+                                        <option value="0" title="Ninguno"> </option>
                                         {section loop=$menues name=m}
-                                            <option value="{$menues[m]->pk_menu}" title="{$menues[m]->name}" {if $menu->pk_father eq  $menues[m]->pk_menu}selected{/if}>
-                                                {$menues[m]->name}
+                                            <option value="{$menues[m]->pk_menu}" name="{$menues[m]->name}"
+                                                {if $menu->pk_father eq  $menues[m]->pk_menu} selected {/if}>
+                                                    {$menues[m]->name}
                                             </option>
+                                            {assign var=items value=$menues[m]->items}
+                                            {if !empty($items)}
+                                                {section name=su loop=$items}
+                                                    <option value="{$items[su]->pk_item}" name="{$items[su]->name}"
+                                                    {if $menu->pk_father eq $items[su]->pk_item} selected {/if}>
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;{$items[su]->title}
+                                                    </option>
+                                                {/section}
+                                            {/if}
                                         {/section}
-                                    </select>
+                                    </select>                                   
                                 </td>
                             </tr>
                             <tr>

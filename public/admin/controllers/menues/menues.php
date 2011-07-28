@@ -29,7 +29,7 @@ if (empty($action)) {
 switch($action) {
 
     case 'list':
-
+  
         Acl::checkOrForward('MENU_LIST');
 
         $tpl->assign('pages', $pages);
@@ -165,7 +165,7 @@ switch($action) {
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
     break;
-
+ 
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;

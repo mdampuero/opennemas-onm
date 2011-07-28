@@ -244,5 +244,46 @@ class Menu {
 
 
     }
+
+
+    static public function renderMenu($name) {
+        $menu = self::getMenu($name);
+       
+        foreach($menu->items as &$item){
+            $item->submenu = MenuItems::getMenuItems('pk_father='.$item->pk_item);
+        }
+
+        return $menu;
     
+    }
+
+    /*  Example:
+     *  $out="<ul>";
+        foreach($menu->items as $item) {
+            $out.= "<li><a href='{$item->link}'>{$item->title}</li>";
+            if(!empty($item->submenu)) {
+                $out.= "<ul>";
+                foreach($item->submenu as $sub) {
+                    $out.= "<li><a href='{$sub->link}'>{$sub->title}</li>";
+                }
+                $out.= "</ul>";
+            }
+        }
+        $out.= "</ul>";
+        echo $out;
+    }
+     *  
+     */
+    /*
+     * Show:
+        -Frontpage
+            * mobile
+            * opinion
+            * album
+            * video
+        -Internacional
+        -Cultura | Ocio
+        -América Latina
+     *
+     */
 }
