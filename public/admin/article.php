@@ -813,7 +813,7 @@ if (isset($_REQUEST['action']) ) {
                   //  $article->set_frontpage($_frontpage, $_SESSION['userid']);
                 }
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_hemeroteca&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         break;
 
         case 'frontpage_status':
@@ -1110,7 +1110,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'mdelete':
-
+            
             if($_REQUEST['id']==6){ //Eliminar todos
                 $cm = new ContentManager();
                 if($_SESSION['_from']=='todos' || $_SESSION['_from']=='opinion'){
