@@ -333,10 +333,7 @@ if(($tpl->caching == 0)
 
     $tpl->assign('articles_home_express', $articles_home_express);
 
-    /************************************ TITULARES DEL DIA  ************************************/
-    if ($category_name != 'home') {
-        require_once ("module_other_headlines.php");
-    }
+
     /************************************ TITULARES TENDENCIAS  ************************************/
     $titular_gente =
         $cm->find_by_category_name('Article',
@@ -370,7 +367,7 @@ if(($tpl->caching == 0)
 
     /**
      * Fetch information for Static Pages
-    */
+     */
     require_once("widget_static_pages.php");
 
 } // $tpl->is_cached('index.tpl')
