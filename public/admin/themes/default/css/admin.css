@@ -913,9 +913,12 @@ div.action-bar .right{
 }
 
 .tabs2 a.active-tab {
-	background-color: #CCC;
+        color:#000000; 
+        font-weight:bold; 
+        background-color:#BFD9BF;
+/*	background-color: #CCC;
 	padding-top: 3px;
-	color: #000;
+	color: #000;*/
 }
 /* END: .tabs2 added by vifito ********************** */
 
