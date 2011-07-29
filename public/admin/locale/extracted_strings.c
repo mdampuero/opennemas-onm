@@ -338,7 +338,16 @@ gettext("Menu manager");
 gettext("Editing menu");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
-gettext(" Save ");
+gettext("Save and continue");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Save and continue");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Save and continue");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Save and Exit");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Add External Link");
@@ -362,13 +371,31 @@ gettext("Name");
 gettext("Description");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Father menu");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Elements");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
-gettext("Available categories");
+gettext("Menu elements");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
-gettext("Menu elements");
+gettext("Global Categories");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Album Categories");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Video Categories");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Available Frontpages");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Static Pages");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Subcategories");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Title:");
@@ -384,6 +411,9 @@ gettext("Menu manager");
 
 /* ./public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Listing menues");
+
+/* ./public/admin/themes/default/tpl//menues/list.tpl */
+gettext("New menu");
 
 /* ./public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Menues");
@@ -3614,6 +3644,9 @@ gettext("Username");
 gettext("Password");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("System log");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Enable Log:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -3626,16 +3659,25 @@ gettext("Log level:");
 gettext("Default: true");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Database log");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Enable Log:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Default: false");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Google Services");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Maps API key:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Search API key:");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Facebook");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("APP key:");
@@ -3647,16 +3689,25 @@ gettext("Secret key:");
 gettext("You can get your Facebook App Keys from <a href=\"https://developers.facebook.com/apps\">Facebook Developers website</a>.");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Google Analytics Statistics");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("API key:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Base domain:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Piwik Statistics");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Page ID:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Private key:");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Recaptcha");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Public Key:");

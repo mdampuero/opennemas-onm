@@ -262,17 +262,17 @@ if(($tpl->caching == 0)
         $column[$c]->category_title = $column[$c]->loadCategoryTitle($articles_home[$aux]->id);
         /*****  GET IMAGE DATA *****/
         if(isset($column[$c]->img1)) {
-                // Buscar la imagen
-                if(!empty($imagenes)) {
-                    foreach($imagenes as $img) {
-                        if($img->pk_content == $column[$c]->img1) {
-                            $column[$c]->img1_path = $img->path_file.$img->name;
-                            $column[$c]->img1 = $img;
-                            break;
-                        }
+            // Buscar la imagen
+            if(!empty($imagenes)) {
+                foreach($imagenes as $img) {
+                    if($img->pk_content == $column[$c]->img1) {
+                        $column[$c]->img1_path = $img->path_file.$img->name;
+                        $column[$c]->img1 = $img;
+                        break;
                     }
                 }
             }
+        }
         /***** GET OBJECT VIDEO *****/
         if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
             $video=$column[$c]->fk_video;

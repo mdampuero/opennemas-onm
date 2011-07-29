@@ -6,7 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Onm\Settings as s;
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
@@ -49,11 +50,8 @@ switch($action) {
 
         $configurations = s::get($configurationsKeys);
 
-        $message = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING, array('options' => array('default' => null)) );
-
         $tpl->assign(
                      array(
-                            'message'  => $message,
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
                             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
@@ -78,9 +76,9 @@ switch($action) {
             s::set($key, $value);
         }
 
+        m::add(_('Settings saved.'), m::SUCCESS);
         $httpParams = array(
                             array('action'=>'list'),
-                            array('message'=> _('Settings saved.')),
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
         break;

@@ -64,13 +64,7 @@ input[type="text"] {
 
 <div class="wrapper-content">
 
-    {if !is_null($message)}
-        <div class="success">
-            {foreach from=$message item=msg}
-                <p>{$msg}</p>
-            {/foreach}
-        </div>
-    {/if}
+    {render_messages}
 
     <form action="{$smarty.server.SCRIPT_NAME}" method="post" name="formulario" id="formulario" {$formAttrs}>
 
@@ -164,7 +158,7 @@ input[type="text"] {
 
         <div id="log" class="panel">
             <fieldset>
-                <legend>System log</legend>
+                <legend>{t}System log{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -189,7 +183,7 @@ input[type="text"] {
                 </table>
             </fieldset>
             <fieldset>
-                <legend>Database log</legend>
+                <legend>{t}Database log{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -208,7 +202,7 @@ input[type="text"] {
 
         <div id="external" class="panel">
             <fieldset>
-                <legend>Google Services</legend>
+                <legend>{t}Google Services{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -233,7 +227,7 @@ input[type="text"] {
             </fieldset>
 
             <fieldset>
-                <legend>Facebook</legend>
+                <legend>{t}Facebook{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -261,7 +255,7 @@ input[type="text"] {
             </fieldset>
 
             <fieldset>
-                <legend>Google Analytics Statistics</legend>
+                <legend>{t}Google Analytics Statistics{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -286,7 +280,7 @@ input[type="text"] {
             </fieldset>
 
             <fieldset>
-                <legend>Piwik Statistics</legend>
+                <legend>{t}Piwik Statistics{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
@@ -311,7 +305,7 @@ input[type="text"] {
             </fieldset>
 
             <fieldset>
-                <legend>Recaptcha</legend>
+                <legend>{t}Recaptcha{/t}</legend>
                 <table>
                     <tbody>
                         <tr valign="top">
