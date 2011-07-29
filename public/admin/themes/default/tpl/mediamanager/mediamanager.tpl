@@ -142,9 +142,9 @@
         <div style='margin-left:10px;margin-top:10px;'>
             <div style="float: left; margin-left: 10px; margin-top: 10px;"><h2>{t}Media manager{/t} :: {$title_bar} </h2></div>
             <div id="menu-acciones-admin" >
-                    <ul>
-                         {block name="admin-menu" append}{/block}
-                   </ul>
+            <ul>
+                     {block name="admin-menu" append}{/block}
+               </ul>
             </div>
         {if $action eq 'search'}
             {include file="mediamanager/_partials/image_search.tpl"}
@@ -185,9 +185,7 @@
                 <h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
                 <div id="menu-acciones-admin">
                     <ul>
-
                         {block name="admin-menu" append}{/block}
-
                     </ul>
                 </div>
         {/if}

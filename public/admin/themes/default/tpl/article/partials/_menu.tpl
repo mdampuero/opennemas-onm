@@ -83,9 +83,9 @@
 </div>
 
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "only_read")}
-	<div id="menu-acciones-admin" class="clearfix">
-		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Library{/t} :: {t}Seeing article{/t}</h2></div>
-		<ul>
+	<div class="top-action-bar clearfix">
+		<div class="title"><h2>{t}Library{/t} :: {t}Seeing article{/t}</h2></div>
+		<ul class="old-button">
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.get.category}&page={$_GET['page']}" title="{t}Go back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}

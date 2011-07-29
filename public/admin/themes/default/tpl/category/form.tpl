@@ -20,34 +20,36 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-
-        <div id="menu-acciones-admin" class="clearfix">
-		<ul>
-		    <li>
+<div class="top-action-bar clearfix">
+	<div class="wrapper-content">
+		<div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
+		<ul class="old-button">
+			<li>
 				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}validate.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
 				</a>
-		    </li>
+			</li>
 			<li>
 			{if isset($category->pk_content_category)}
-               <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category}, 'formulario');">
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category}, 'formulario');">
 			{else}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
 			{/if}
 					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
 				</a>
 			</li>
+			<li class="separator"></li>
 			<li>
-				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
 				</a>
 			</li>
 		</ul>
 	</div>
+</div>
+<div class="wrapper-content">
 
+    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
         <div id="warnings-validation"></div>
 
@@ -167,7 +169,7 @@
                             <table border="0" class="adminlist" id="cates" style="margin:0 10px 10px 0; width:90%">
                                 <thead>
                                     <tr>
-    
+
                                         <th class="title"  style="text-align:left;" >{t}Title:{/t}</th>
                                         <th style="width:120px;text-align:left;" >{t}Internal name:{/t}</th>
                                         <th  style="width:80px;">{t}Type:{/t}</th>

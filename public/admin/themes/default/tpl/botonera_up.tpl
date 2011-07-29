@@ -5,9 +5,9 @@
 	{if $type eq "list"}
 
 	{elseif $type eq "order"}
-		<div id="menu-acciones-admin" class="clearfix">
-			<div style="float:left"><b><em>DRAG &amp; DROP: pinche y arrastre las filas para determinar el orden en el menú de las secciones</em></b></div>
-			<ul>
+		<div class="top-action-bar clearfix">
+			<div style="title"><strong><em>DRAG &amp; DROP: pinche y arrastre las filas para determinar el orden en el menú de las secciones</em></strong></div>
+			<ul class="old-button">
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:savePriority();" title="Guardar Positions" alt="Guardar Cambios">
 						<img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Cambios"><br />{t}Save changes{/t}
@@ -24,8 +24,8 @@
 
 {* Botonera category -------------------------------------------- *}
 {elseif preg_match('/category\.php/',$smarty.server.SCRIPT_NAME) && (($smarty.request.action eq "read") || ($smarty.request.action eq "new"))}
-	<div id="menu-acciones-admin" class="clearfix">
-		<ul>
+	<div class="top-action-bar clearfix">
+		<ul class="old-button">
 		    <li>
 				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category}', 'formulario');" value="Validar" title="Validar">
 					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
@@ -48,4 +48,3 @@
 		</ul>
 	</div>
 {/if}
-  
