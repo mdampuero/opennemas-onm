@@ -248,7 +248,7 @@ input[type="text"] {
                                             <ul id='albumCategories' class="elementsContainer">
                                                 {section name=as loop=$albumCategories}
                                                         <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
-                                                            type="category" link="{$albumCategories[as]->name}"  class="drag-category" pk_menu="">
+                                                            type="albumCategory" link="{$albumCategories[as]->name}"  class="drag-category" pk_menu="">
                                                             {$albumCategories[as]->title}
                                                         </li>                                             
                                                 {/section}
@@ -258,7 +258,7 @@ input[type="text"] {
                                             <ul id='videoCategories' class="elementsContainer">
                                                 {section name=as loop=$videoCategories}
                                                         <li id="video_{$videoCategories[as]->pk_content_category}" title="{$videoCategories[as]->title}"
-                                                            type="category" link="{$videoCategories[as]->name}"  class="drag-category" pk_menu="">
+                                                            type="videoCategory" link="{$videoCategories[as]->name}"  class="drag-category" pk_menu="">
                                                             {$videoCategories[as]->title}
                                                         </li>
                                                 {/section}

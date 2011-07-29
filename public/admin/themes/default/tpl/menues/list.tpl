@@ -48,17 +48,36 @@
                 </thead>
                 <tbody>
                     {section loop=$menues name=m}
-                    <tr {cycle values="class=row0,class=row1"}>
-                        <td style="padding-left:10px">
-                            {$menues[m]->name|capitalize}
-                        </td>
+                        <tr {cycle values="class=row0,class=row1"}>
+                            <td style="padding-left:10px">
+                                {$menues[m]->name|capitalize}
+                            </td>
 
-                        <td style="padding:5px; width:100px;" align="center">
-                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                            </a>
-                        </td>
-                    </tr>
+                            <td style="padding:5px; width:100px;" align="center">
+                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                </a>
+                            </td>
+                        </tr>
+                    
+                        {foreach key=k item=subMenu from=$subMenues}
+                            {if $k eq $menues[m]->pk_menu}
+                                {section loop=$subMenu name=s}
+                                    <tr {cycle values="class=row0,class=row1"}>
+                                        <td style="padding-left:50px">
+                                            {$subMenu[s]->name|capitalize}
+                                        </td>
+
+                                        <td style="padding:5px; width:100px;" align="center">
+                                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
+                                               title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                 {/section}
+                             {/if}
+                        {/foreach}
                     {/section}
                 </tbody>
                 <tfoot>

@@ -34,8 +34,31 @@ switch($action) {
 
         $tpl->assign('pages', $pages);
         $menues = Menu::listMenues();
+        $subMenues = array();
+        $list = array();
+        $subList = array();
+        
+        foreach($menues as $menu) {
+            if(empty($menu->pk_father)) {
+                $list[] = $menu;
+            }else{
+               $subMenues[] = $menu;
+            }
+        }
 
-        $tpl->assign('menues', $menues);
+
+        foreach($subMenues as $submenu){            
+            //TODO: mejorar, buscamos su menu padre ya que solo sabemos el item
+              foreach($list as $menu) {
+                    foreach($menu->items as $item){
+                        if($item->pk_item == $submenu->pk_father) {
+                            $subList[$item->pk_menu][] = $submenu;
+                        }
+                }
+            }
+        }
+
+        $tpl->assign( array('menues'=>$list, 'subMenues'=>$subList) );
 
 
         $tpl->display('menues/list.tpl');

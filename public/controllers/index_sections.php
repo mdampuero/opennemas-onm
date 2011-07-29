@@ -1,4 +1,5 @@
 <?php
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //TODO: revisar (index.php repeat code )
@@ -74,3 +75,16 @@ $styles.= "\tdiv#submenu > ul, div.toolbar-bottom a, div.utilities a," . " .tran
 $tpl->assign('categories_styles', $styles);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
+
+/* new menu*/
+if (preg_match('/videos\.php/', $_SERVER['SCRIPT_NAME'])) {
+    $menuFrontpage= Menu::renderMenu('video');
+    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+} elseif (preg_match('/gallery\.php/', $_SERVER['SCRIPT_NAME'])) {
+    $menuFrontpage= Menu::renderMenu('album');
+    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+}else{
+    $menuFrontpage= Menu::renderMenu('frontpage');
+    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+}
