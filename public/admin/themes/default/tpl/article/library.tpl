@@ -37,7 +37,7 @@
 					</a>
 				</li>
 				<li>
-					<a title="Advanced Search" tabindex="1" accesskey="N" class="admin_add" href="{$smarty.const.SITE_URL}admin/search_advanced.php">
+					<a title="Advanced Search" tabindex="1" accesskey="N" class="admin_add" href="{$smarty.const.SITE_URL}admin/controllers/search_advanced/search_advanced.php">
 					<img border="0" alt="Advanced Search" title="Advanced Search" src="{$smarty.const.SITE_URL}/admin/themes/default/images/search.png"><br>Search
 					</a>
 				</li>
