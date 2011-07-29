@@ -83,8 +83,8 @@ Deny from all
     RewriteRule ^articulo/captcha/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z]+)/(.*)/([0-9]+).jpg$ controllers/article.php?category_name=$4&article_id=$6&action=captcha [L,NC]
 
     #Opinion Frontpage
-    RewriteRule ^seccion/opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
-    RewriteRule ^seccion/opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
+    RewriteRule ^opinion/([0-9]+)/$ controllers/opinion_index.php?category_name=opinion&action=list_opinions&page=$1 [L,NC]
+    RewriteRule ^opinion/?$ controllers/opinion_index.php?category_name=opinion&action=list_opinions [L,NC]
 
     #Opinion Autor index
     RewriteRule ^opinion/autor/([0-9]+)/(.*)/([0-9]*)/$ controllers/opinion_index.php?alt=pag&category_name=opinion&action=list_op_author&author_id=$1&page=$3 [L,NC]
@@ -101,7 +101,7 @@ Deny from all
     #Home
     RewriteRule ^/?$ controllers/index.php?category_name=home [L,NC]
     RewriteRule ^home/?$ controllers/index.php?category_name=home [L,NC]
-
+    
     #Sections
     RewriteRule ^seccion/([a-z0-9\-]+)/?$ controllers/index.php?category_name=$1 [L,NC]
     RewriteRule ^seccion/([a-z0-9\-]+)/([0-9]+)/?$ controllers/index.php?category_name=$1&page=$2 [L,NC]
@@ -129,8 +129,8 @@ Deny from all
 
     #Album
     #/album/2008/12/08/foto/200812081741363340.html
-    RewriteRule ^albumes/?$ controllers/album.php?action=frontpage [L,NC]
-    RewriteRule ^albumes/([0-9])?$ controllers/album.php?action=frontpage&page=$1 [L,NC]
+    RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
+    RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&page=$1 [L,NC]
     #            album/generic/2011-07-09/prueba/2011070918522200812.html
     RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
     #http://retrincos.es/album/solo-album/
