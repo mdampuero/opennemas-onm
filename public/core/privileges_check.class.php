@@ -91,7 +91,7 @@ class Privileges_check
     }
 
     private static function CheckSessionExpireTime() {
-        if(time() > $_SESSION['expire']) {
+        if(isset($_SESSION) && array_key_exists('expire', $_SESSION) && (time() > $_SESSION['expire'])) {
             session_destroy();
             unset($_SESSION);
             return true;

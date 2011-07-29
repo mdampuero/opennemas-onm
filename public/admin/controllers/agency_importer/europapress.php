@@ -18,7 +18,8 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-use Onm\Settings as s;
+use Onm\Settings as s,
+    Onm\Message  as m;
 /**
  * Setup app
 */
@@ -47,9 +48,9 @@ if (
     is_null(s::get('europapress_server_auth'))
     && $action != 'config'
 ) {
+    m::add(_('Please provide your Europapress auth credentials to start to use your Europapress Importer module'));
     $httpParams [] = array(
                         'action'=>'config',
-                        'message' => _('Please provide your Europapress auth credentials to start to use your Europapress Importer module')
                     );
     Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 }
@@ -150,14 +151,17 @@ switch($action) {
 
     case 'show':
 
-        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
 
         try {
 
             $ep = new \Onm\Import\Europapress();
-            $element = $ep->findByID($id);
+            //$element = $ep->findByID($id);
+
+            $element = $ep->findByFileName($id);
 
         } catch (Exception $e) {
+
 
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
@@ -171,10 +175,10 @@ switch($action) {
 
     case 'import':
 
-        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
 
         $ep = new Onm\Import\Europapress();
-        $element = $ep->findByID($id);
+        $element = $ep->findByFileName($id);
 
 
         $values = array(

@@ -321,6 +321,21 @@ class Europapress implements \Onm\Import\Importer
 
     }
 
+    /*
+     * Fetches a DataSource\Europapress object from id
+     *
+     * @param $fileName
+     *
+     * @return  DataSource\Europapress  the article object
+     */
+    public function findByFileName($id)
+    {
+
+        $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$id);
+        return  $element;
+
+    }
+
 
     /**
      * gets a list of stored elements filtered by some params
