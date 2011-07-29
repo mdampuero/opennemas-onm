@@ -267,7 +267,7 @@ input[type="text"] {
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}" title="{$page}" link="{if $page neq 'frontpage'}{$page}{/if}"
+                                                    <li id="page_{$value}" title="{$page}" link="{if $page neq 'frontpage'}{$page}{else}home{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
                                                        {t}{$page}{/t}
                                                     </li>
