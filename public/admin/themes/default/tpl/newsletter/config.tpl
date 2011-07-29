@@ -24,12 +24,11 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-
-       <div id="menu-acciones-admin" class="clearfix">
-            <div style='float:left;margin-left:10px;margin-top:10px;'><h2>{t}Newsletter :: Configuration{/t}</h2></div>
-            <ul>
+<form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+    <div class="top-action-bar">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Newsletter :: Configuration{/t}</h2></div>
+            <ul class="old-button">
                 <li>
                     <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
@@ -37,23 +36,10 @@
                 </li>
             </ul>
         </div>
-        <br>
+    </div>
+    <div class="wrapper-content">
 
-        {if $message}
-        <div class="message">
-             <ul>
-                {foreach from=$message item=msg}
-                <li>{$msg}</li>
-                {/foreach}
-             </ul>
-        </div>
-        {/if}
-
-        {if (!empty($error))}
-        <div class="error">
-             {render_error}
-        </div>
-        {/if}
+        {render_messages}
 
         <div id="{$category}">
 

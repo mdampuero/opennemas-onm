@@ -26,51 +26,52 @@
 {/block}
 
 {block name="content"}
-<div class="wrapper-content">
+<form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
 
-    <ul class="tabs2">
-        <li>
-            <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-                GLOBAL</a>
-        </li>
-        {* <li>
-             <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                 ALBUMS</a>
-         </li>
-         *}
+    <div class="top-action-bar">
+        <div class="title"><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
+                    <br />
+                    Guardar
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="enviar(this, '_self','{$smarty.session.desde}', 0);" value="Cancelar" title="Cancelar">
+                    <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" />
+                    <br />
+                    Cancelar
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper-content">
 
-        {acl isAllowed="ADVERTISEMENT_ADMIN"}
-         <li>
-             <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                 PUBLICIDAD</a>
-         </li>
-         {/acl}
-        {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
+        <ul class="tabs2">
+            <li>
+                <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+                    GLOBAL</a>
+            </li>
+            {* <li>
+                 <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                     ALBUMS</a>
+             </li>
+             *}
 
-    </ul>
+            {acl isAllowed="ADVERTISEMENT_ADMIN"}
+             <li>
+                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                     PUBLICIDAD</a>
+             </li>
+             {/acl}
+            {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
+
+        </ul>
 
 
-    <form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
         <input type="hidden" name="category" value="{$category}" />
-        <div style='float:left;margin-left:10px;margin-top:10px;'><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-        <div id="menu-acciones-admin">
-            <ul>
-                <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
-                        <br />
-                        Guardar
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self','{$smarty.session.desde}', 0);" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" />
-                        <br />
-                        Cancelar
-                    </a>
-                </li>
-            </ul>
-        </div>
 
         <div id="media_msg" style="float:right;width:300px;display:none;"> </div>
 
@@ -85,14 +86,10 @@
         {section name=n loop=$photo}
             {include file="mediamanager/_partials/photo_data.tpl" display="none" photo1=$photo[n]}
         {/section}
-    </form>
 
+    </div><!--wrapper-content-->
 
-
-<input type="hidden" id="action" name="action" value="" />
-<input type="hidden" name="id" id="id" value="{$id}" />
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id}" />
 </form>
-
-
-</div>
 {/block}

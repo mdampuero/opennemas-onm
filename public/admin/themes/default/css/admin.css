@@ -913,8 +913,8 @@ div.action-bar .right{
 }
 
 .tabs2 a.active-tab {
-        color:#000000; 
-        font-weight:bold; 
+        color:#000000;
+        font-weight:bold;
         background-color:#BFD9BF;
 /*	background-color: #CCC;
 	padding-top: 3px;
@@ -2013,4 +2013,176 @@ div.rssBox span.category {
 
 .buttons .button span.icon.home {
 	background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
+}
+
+
+
+
+/* -------------------------------------------------------------
+  Main admin menu
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Root = Horizontal, Secondary = Vertical */
+ul#menu {
+  margin: 0;
+  margin-top:7px;
+  padding: 0;
+/*  width: 500px;*/ /*For KHTML*/
+  list-style: none;
+  margin-left:20px
+}
+
+ul#menu li {
+  margin: 0;
+  border: 0 none;
+  padding: 0;
+  float: left; /*For Gecko*/
+  display: inline;
+  list-style: none;
+  position: relative;
+  height: 22px;
+}
+ul#menu li{
+	padding-bottom:3px;
+}
+ul#menu li:hover{
+}
+
+ul#menu  ul {
+  margin: 0;
+  border: 0 none;
+  padding: 0;
+  list-style: none;
+  display: none;
+  position: absolute;
+  top: 25px;
+  left: 0px;
+  background:#464646;
+  -moz-border-radius: 5px 5px 5px 5px;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  border:1px solid #464646;
+  padding-top:2px;
+
+}
+
+ul#menu ul:after /*From IE 7 lack of compliance*/{
+  clear: both;
+  display: block;
+  content: ".";
+  height: 0;
+  visibility: hidden;
+}
+
+ul#menu ul li {
+  float: left; /*For IE 7 lack of compliance*/
+  display: block !important;
+  display: inline; /*For IE*/
+}
+
+/* Root Menu */
+ul#menu a {
+  padding: 5px 15px 5px;
+  float: none !important; /*For Opera*/
+  float: left; /*For IE*/
+  display: block;
+  color: #CCCCCC;
+  text-decoration: none;
+  text-decoration: none;
+  height: auto !important;
+  height: 1%; /*For IE*/
+}
+
+ul#menu > li > a {
+	padding: 5px 25px 5px;
+}
+ul#menu ul > li > a {
+	min-width: 180px;
+	width:180px;
+	display:block;
+}
+
+
+/* Root Menu Hover Persistence */
+ul#menu a:hover,
+ul#menu li:hover a,
+ul#menu li.iehover a {
+color: White;
+
+}
+
+/* 2nd Menu */
+ul#menu li:hover li a,
+ul#menu li.iehover li a {
+  float: none;
+  border:none;
+}
+
+/* 2nd Menu Hover Persistence */
+ul#menu li:hover li a:hover,
+ul#menu li:hover li:hover a,
+ul#menu li.iehover li a:hover,
+ul#menu li.iehover li.iehover a {
+	background:#555555;
+}
+
+/* 3rd Menu */
+ul#menu li:hover li:hover li a,
+ul#menu li.iehover li.iehover li a {
+  background: #555555;;
+}
+
+/* 3rd Menu Hover Persistence */
+
+ul#menu li:hover li:hover li a:hover,
+ul#menu li:hover li:hover li:hover a,
+ul#menu li.iehover li.iehover li a:hover,
+ul#menu li.iehover li.iehover li.iehover a {
+	background:#555555;
+}
+
+/* 4th Menu */
+ul#menu li:hover li:hover li:hover li a,
+ul#menu li.iehover li.iehover li.iehover li a {
+	background:#555555;
+}
+
+/* 4th Menu Hover */
+ul#menu li:hover li:hover li:hover li a:hover,
+ul#menu li.iehover li.iehover li.iehover li a:hover {
+	background:#555555;
+}
+
+ul#menu ul ul,
+ul#menu ul ul ul {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 200px;
+}
+
+/* Do Not Move - Must Come Before display:block for Gecko */
+ul#menu li:hover ul ul,
+ul#menu li:hover ul ul ul,
+ul#menu li.iehover ul ul,
+ul#menu li.iehover ul ul ul {
+  display: none;
+}
+
+ul#menu li:hover ul,
+ul#menu ul li:hover ul,
+ul#menu ul ul li:hover ul,
+ul#menu li.iehover ul,
+ul#menu ul li.iehover ul,
+ul#menu ul ul li.iehover ul {
+  display: block;
+}
+ul#menu .selected{
+	color: #003300;
+}
+
+ul#menu hr{
+	border: 1px solid #DDDDDD;
+    height: 0px !important;
+    width: 100%;
+	margin:4px;
 }

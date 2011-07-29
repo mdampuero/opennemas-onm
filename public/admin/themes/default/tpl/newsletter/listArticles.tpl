@@ -117,15 +117,7 @@
 
 <div class="wrapper-content">
 
-	{if $message}
-        <div class="success">
-             <ul>
-                {foreach from=$message item=msg}
-                <li>{$msg}</li>
-                {/foreach}
-             </ul>
-        </div>
-    {/if}
+	{render_messages}
 
 	<div class="form notice">
 		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Article selection{/t}</h3>

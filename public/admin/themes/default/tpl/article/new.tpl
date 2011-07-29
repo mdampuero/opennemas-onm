@@ -109,14 +109,15 @@ if($('starttime')) {
 									<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="8">
 										<option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
 										{section name=as loop=$allcategorys}
-											{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+										{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
 										<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
 												{section name=su loop=$subcat[as]}
 												{if $subcat[as][su]->internal_category eq 1}
-										<option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+										<option value="{$subcat[as][su]->pk_content_category}"
+												{if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
 												{/if}
 												{/section}
-											{/acl}
+										{/acl}
 										{/section}
 									</select>
 								</td>

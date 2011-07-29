@@ -18,7 +18,8 @@
  * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-use Onm\Settings as s;
+use Onm\Settings as s,
+    Onm\Message  as m;
 
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
@@ -266,11 +267,8 @@ switch($action) {
 
         $configurations = s::get($configurationsKeys);
 
-        $message = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING, array('options' => array('default' => null)) );
-
         $tpl->assign(
                      array(
-                            'message'  => $message,
                             'configs'   => $configurations,
                         )
                     );
@@ -288,9 +286,10 @@ switch($action) {
             s::set($key, $value);
         }
 
+        m::add(_('Settings saved.'), m::SUCCESS);
+
         $httpParams = array(
                             array('action'=>'listArticles'),
-                            array('message'=> _('Settings saved.')),
                             );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
