@@ -22,6 +22,8 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
+        <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+            
 		<div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
 		<ul class="old-button">
 			<li>
@@ -49,7 +51,7 @@
 </div>
 <div class="wrapper-content">
 
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+   
 
         <div id="warnings-validation"></div>
 

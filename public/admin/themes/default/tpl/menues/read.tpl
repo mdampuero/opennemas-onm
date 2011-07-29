@@ -267,7 +267,7 @@ input[type="text"] {
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}" title="{$page}" link="{$page}"
+                                                    <li id="page_{$value}" title="{$page}" link="{if $page neq 'frontpage'}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
                                                        {t}{$page}{/t}
                                                     </li>
@@ -291,7 +291,7 @@ input[type="text"] {
                                                     <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
                                                     {section name=su loop=$subcat[as]}
                                                          <li id="subcat_{$subcat[as][su]->pk_content_category}" title="{$subcat[as][su]->title}"
-                                                             type="category" link="{$subcat[as][su]->link}"  class="drag-category" pk_menu="">
+                                                             type="category" link="{$subcat[as][su]->name}"  class="drag-category" pk_menu="">
                                                             {$subcat[as][su]->title}</li>
                                                     {/section}
                                                     </ul>

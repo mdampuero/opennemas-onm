@@ -14,6 +14,7 @@
 {/block}
 
 {block name="content"}
+       <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}</h2></div>
@@ -28,7 +29,7 @@
 </div>
 <div class="wrapper-content">
 
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+ 
         {if !empty($msg)}
             <script type="text/javascript">
                 {if $smarty.request.resp eq 'SI'}

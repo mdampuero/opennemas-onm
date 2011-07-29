@@ -37,13 +37,15 @@ class importerIdeal {
     }
 
    static public function check_label($label){
-        $relation = array( "/Antetitulo/"=>"subtitle",
+        $relation = array(
+                      "/Antetitulo/"=>"subtitle",
                       "/TextoGeneral/"=>"body",
                       "/Titulo/"=>"title",
                       "/Título Int/"=>"title_int",
                       "/TituloBreveDespiece/"=>"title",
                       "/TextoBandera/"=>"summary",
                       "/Entradilla/"=>"summary",
+                      "/Cuadratin/"=>"summary",
                       "/Firma/" => "agency",
                       "/Data/" => "agency"
 
