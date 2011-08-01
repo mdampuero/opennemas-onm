@@ -51,7 +51,9 @@ class ModuleManager {
      */
     static public function getActivatedModules()
     {
-        global $activatedModules;
+        //global $activatedModules;
+        $activatedModules = \Onm\Settings::get('activated_modules');
+
 
         if (is_null(self::$activatedModules)) {
 
