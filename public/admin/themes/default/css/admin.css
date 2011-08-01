@@ -1885,3 +1885,45 @@ div#menu-acciones-admin li.separator,
 .old-button img{
 	height:35px !important;
 }
+
+/* -------------------------------------------------------------
+  Help blocks
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.help-block {
+	background:White;
+	border:1px solid #bfbfbf;
+	position:relative;
+	width:100%;
+}
+	.help-block .title {
+		position:absolute;
+		background: #bfbfbf url(../images/backgrounds/back-help.png) bottom right no-repeat;
+		top:0px;
+		left:0px;
+		display:block;
+		width:100%
+	}
+		.help-block .title h4 {
+			margin:7px 10px;
+			padding:0 !important;
+			margin-bottom:20px;
+			color:#444;
+			text-transform:uppercase;
+			font-size:13px;
+			background:url(../images/backgrounds/bullet-help.png) bottom right no-repeat;
+			margin-right:24px;
+		}
+	.help-block .content {
+		margin-top:40px;
+		padding:15px;
+		color:#333;
+		font-size:1.02em;
+	}
+
+	.margin-right-1 {
+		margin-right:1em;
+	}
+
+	.margin-left-1 {
+		margin-left:1em;
+	}

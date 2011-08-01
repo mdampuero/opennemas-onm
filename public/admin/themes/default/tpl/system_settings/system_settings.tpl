@@ -44,7 +44,7 @@ legend {
     vertical-align:middle
 }
 input[type="text"] {
-    width:300px;
+    width:400px;
     max-height:80%
 }
 </style>
@@ -54,11 +54,11 @@ input[type="text"] {
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}System Wide Settings{/t}</h2></div>
-        <!--<div class="buttons">
+        <div class="buttons" style="display:none">
             <a href="" class="button"><span class="icon home">&nbsp;</span>  </a>
             <a href="" class="button"><span class="icon home">&nbsp;</span></a>
             <a href="" class="button"><span class="icon home">&nbsp;</span></a>
-        </div>-->
+        </div>
     </div>
 </div>
 
@@ -277,8 +277,9 @@ input[type="text"] {
                                 <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}">
                             </td>
                             <td rowspan=2>
-                                <div class="notice">
-                                    {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="content">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}</div>
                                 </div>
                             </td>
                         </tr>
@@ -308,8 +309,9 @@ input[type="text"] {
                                 <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}">
                             </td>
                             <td rowspan=2 valign="top">
-                                <div class="notice">
-                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="content">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}</div>
                                 </div>
                             </td>
                         </tr>
@@ -338,8 +340,9 @@ input[type="text"] {
                                 <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
                             </td>
                             <td rowspan=2 valign="top">
-                                <div class="notice">
-                                    {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="content">{t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}</div>
                                 </div>
                             </td>
                         </tr>
@@ -368,8 +371,9 @@ input[type="text"] {
                                 <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}">
                             </td>
                             <td rowspan=2 valign="top">
-                                <div class="notice">
-                                    {t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}}</div>
                                 </div>
                             </td>
                         </tr>
