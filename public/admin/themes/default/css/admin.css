@@ -1945,7 +1945,7 @@ div#menu-acciones-admin li.separator,
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 #copyright {
 	vertical-align:top;
-
+	margin-top:10px
 }
 	#copyright .company {
 		color:#888;
