@@ -7,7 +7,7 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Opinion Manager :: New opinion{/t}</h2></div>
@@ -21,7 +21,7 @@
                     <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="Cancelar" title="Cancelar">
                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                     </a>
-                    
+
                 {/if}
             </li>
             <li>
@@ -35,7 +35,7 @@
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar y salir</a>
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}</a>
             </li>
         </ul>
     </div>
@@ -280,7 +280,7 @@
     </script>
 
     <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id}" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </form>
 
 </div><!--fin wrapper-content-->

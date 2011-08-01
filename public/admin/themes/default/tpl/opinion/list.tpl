@@ -97,15 +97,10 @@
             <br>
             <br>
 
-            {include file="botonera_up.tpl"}
-
-            {if $smarty.get.alert or $msg_alert}
+            {if isset($smarty.get.alert) or isset($msg_alert)}
             <div class="notice" style="margin-top:3px;">
-                {if $smarty.get.alert}
-                    {$smarty.get.alert}
-                {else}
-                    {$msg_alert}
-                {/if}
+                <p>{$smarty.get.alert|default:""}</p>
+                <p>{$msg_alert|default:""}</p>
             </div>
             {/if}
             <div id="list_opinion">
@@ -117,18 +112,18 @@
             </div>
          </div>
 
-    {dialogo script="print"}
+        {dialogo script="print"}
 
-    <script type="text/javascript" language="javascript">
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), { });
-        }
-    });
-    </script>
+        <script type="text/javascript" language="javascript">
+        document.observe('dom:loaded', function() {
+            if($('title')){
+                new OpenNeMas.Maxlength($('title'), { });
+            }
+        });
+        </script>
 
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" id="action" name="action" value="" />
+        <input type="hidden" name="id" id="id" value="{$id}" />
 
     </div><!--fin wrapper-content-->
 </form>

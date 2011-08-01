@@ -139,20 +139,20 @@
                 </ul>
 
                 {if $category neq 'home'}
-                <div id="other-articles" class="panel tabs-panel" style="width:100%">
+                <div id="other-articles" class="panel no-border tabs-panel" style="width:100%">
                     {include file="frontpage/blocks/others_articles_in_category.tpl"}
                 </div>
                 {else}
-                <div id="suggested-elements" class="panel tabs-panel" style="width:100%">
+                <div id="suggested-elements" class="panel no-border tabs-panel" style="width:100%">
                     {include file="frontpage/blocks/articles_suggested.tpl"}
                 </div>
                 {/if}
 
-                <div id="available-widgets" class="panel tabs-panel" style="width:100%">
+                <div id="available-widgets" class="panel no-border tabs-panel" style="width:100%">
                     {include file="frontpage/blocks/widgets_available.tpl"}
                 </div>
 
-                <div id="available-opinions" class="panel tabs-panel" style="width:100%">
+                <div id="available-opinions" class="panel no-border tabs-panel" style="width:100%">
                     {include file="frontpage/blocks/opinions_available.tpl"}
                 </div>
             </div>

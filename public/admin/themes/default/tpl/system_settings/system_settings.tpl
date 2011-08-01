@@ -89,6 +89,9 @@ input[type="text"] {
                         <td>
                             <input type="text" id="site_title" name="site_title" value="{$configs['site_title']|default:""}">
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -96,6 +99,9 @@ input[type="text"] {
                         </th>
                         <td>
                             <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                     <tr valign="top">
@@ -105,6 +111,9 @@ input[type="text"] {
                         <td>
                             <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_description']|default:""}</textarea>
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -113,6 +122,9 @@ input[type="text"] {
                         <td>
                             {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -120,6 +132,9 @@ input[type="text"] {
                         </th>
                         <td>
                             {html_options name=site_language options=$languages selected=$configs['site_language']}
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                 </tbody>
@@ -135,6 +150,9 @@ input[type="text"] {
                         <td>
                             <input type="text" id="mail_server" name="mail_server" value="{$configs['mail_server']|default:""}">
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -143,6 +161,9 @@ input[type="text"] {
                         <td>
                             <input type="text" id="mail_username" name="mail_username" value="{$configs['mail_username']|default:""}">
                         </td>
+                        <td>
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -150,6 +171,9 @@ input[type="text"] {
                         </th>
                         <td>
                             <input type="password" id="mail_password" name="mail_password" value="{$configs['mail_password']|default:""}">
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                 </tbody>
@@ -169,6 +193,9 @@ input[type="text"] {
                                 <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
                                 <span class="default-value">{t}Default: true{/t}</span>
                             </td>
+                        <td>
+
+                        </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -178,6 +205,9 @@ input[type="text"] {
                                 {html_options name=log_level options=$logLevels selected=$configs['log_level']}
                                 <span class="default-value">{t}Default: true{/t}</span>
                             </td>
+                        <td>
+
+                        </td>
                         </tr>
                     </tbody>
                 </table>
@@ -194,6 +224,9 @@ input[type="text"] {
                                 <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
                                 <span class="default-value">{t}Default: false{/t}</span>
                             </td>
+                        <td>
+
+                        </td>
                         </tr>
                     </tbody>
                 </table>
@@ -212,6 +245,9 @@ input[type="text"] {
                             <td>
                                 <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}">
                             </td>
+                        <td>
+
+                        </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -219,6 +255,9 @@ input[type="text"] {
                             </th>
                             <td>
                                 <input type="text" id="google_custom_search_api_key" name="google_custom_search_api_key" value="{$configs['google_custom_search_api_key']|default:""}">
+                            </td>
+                            <td>
+
                             </td>
                         </tr>
 
@@ -237,6 +276,11 @@ input[type="text"] {
                             <td>
                                 <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}">
                             </td>
+                            <td rowspan=2>
+                                <div class="notice">
+                                    {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}
+                                </div>
+                            </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -249,9 +293,7 @@ input[type="text"] {
 
                     </tbody>
                 </table>
-                <div class="notice">
-                    {t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}
-                </div>
+
             </fieldset>
 
             <fieldset>
@@ -264,6 +306,11 @@ input[type="text"] {
                             </th>
                             <td>
                                 <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}">
+                            </td>
+                            <td rowspan=2 valign="top">
+                                <div class="notice">
+                                    {t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}
+                                </div>
                             </td>
                         </tr>
                         <tr valign="top">
@@ -290,6 +337,11 @@ input[type="text"] {
                             <td>
                                 <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
                             </td>
+                            <td rowspan=2 valign="top">
+                                <div class="notice">
+                                    {t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}
+                                </div>
+                            </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -315,6 +367,11 @@ input[type="text"] {
                             <td>
                                 <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}">
                             </td>
+                            <td rowspan=2 valign="top">
+                                <div class="notice">
+                                    {t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}
+                                </div>
+                            </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -327,9 +384,7 @@ input[type="text"] {
 
                     </tbody>
                 </table>
-                <div class="notice">
-                    {t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}
-                </div>
+
             </fieldset>
         </div>
 
@@ -344,6 +399,9 @@ input[type="text"] {
                             <input type="checkbox" id="advertisements_enabled" name="advertisements_enabled" {if ($configs['advertisements_enabled'])}checked{/if} />
                             <span class="default-value">{t}Default: true{/t}</span>
                         </td>
+                        <td valign="top">
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -353,6 +411,9 @@ input[type="text"] {
                             <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                             <span class="default-value">{t}Default: 20 elements{/t}</span>
                         </td>
+                        <td valign="top">
+
+                        </td>
                     </tr>
                     <tr valign="top">
                         <th scope="row">
@@ -361,6 +422,9 @@ input[type="text"] {
                         <td>
                             <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
                             <span class="default-value">{t}Default: 900 secs{/t}</span>
+                        </td>
+                        <td valign="top">
+
                         </td>
                     </tr>
                 </tbody>

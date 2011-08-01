@@ -27,7 +27,7 @@
                         <select name="module" onchange="$('action').value='list';$('formulario').submit();">
                             <option value="">{t}-- All --{/t}</option>
                             {section name="mods" loop=$modules}
-                            <option value="{$modules[mods]}"{if isset($smarty.request.module) && $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
+							<option value="{$modules[mods]}"{if isset($smarty.request.module) && $modules[mods] eq $smarty.request.module} selected="selected"{/if}>{$modules[mods]}</option>
                             {/section}
                         </select>
                     </label>
@@ -81,7 +81,8 @@
         </table>
 
 
-    	<input type="hidden" id="action" name="action" value="" /><input type="hidden" name="id" id="id" value="{$id|default:""}" />
+    	<input type="hidden" id="action" name="action" value="" />
+		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
 {/block}

@@ -1,20 +1,17 @@
 <table class="adminlist">
     <tr>
-        <th align="center"></th>
-        <th align="center">T&iacute;tulo</th>
-        <th align="center" style="width:50px;">Visto</th>
-        <th align="center" style="width:50px;">Votos</th>
+        <th align="center" style="width:30px;"></th>
+        <th align="center">{t}Title{/t}</th>
+        <th align="center" style="width:50px;">{t}Views{/t}</th>
+        <th align="center" style="width:50px;">{t}Votes{/t}</th>
         <th align="center" style="width:50px;"><img src="{$params.IMAGE_DIR}coment.png" border="0" alt="Numero comentarios" /></th>
-        <th align="center" style="width:70px;">Fecha</th>
-        <th align="center" style="width:110px;">Publisher</th>
-        <th align="center" style="width:110px;">Last Editor</th>
+        <th align="center" style="width:70px;">{t}Date{/t}</th>
+        <th align="center" style="width:110px;">{t}Publisher{/t}</th>
+        <th align="center" style="width:110px;">{t}Last Editor{/t}</th>
         {if $other_category eq 'suggested'}
-            <th align="center" style="width:60px;">Secci&oacute;n</th>
+            <th align="center" style="width:60px;">{t}Section{/t}</th>
         {/if}
-        <th align="center" style="width:20px;" class="rot270">Editar</th>
-        <th align="center" style="width:20px;" class="rot270">Arch</th>
-        <th align="center" style="width:20px;" class="rot270">Home</th>
-        <th align="center" style="width:20px;" class="rot270">Elim</th>
+        <th align="center" style="width:80px;">{t}Actions{/t}</th>
 
 
     </tr>
@@ -82,13 +79,13 @@
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
                                 </a>
                             </td>
-                            <td class='no_width' style="width:30px;" align="center">
+                            <td class='no_width' style="width:20px;" align="center">
                                 <a href="?id={$articles[d]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Archivar">
                                     <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" />
                                 </a>
                             </td>
                              {if $other_category neq 'suggested'}
-                                <td class='no_width' style="width:23px;" align="center">
+                                <td class='no_width' style="width:20px;" align="center">
                                      <a href="?id={$articles[d]->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="No en portada">
                                         <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="No en portada" />
                                     </a>
@@ -103,7 +100,7 @@
                                        </a>
                                  </td>
                             {/if}
-                            <td class='no_width' style="width:25px;" align="center">
+                            <td class='no_width' style="width:20px;" align="center">
                                    <a href="#" onClick="javascript:delete_article('{$articles[d]->id}','{$category}',0);" title="Eliminar">
                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </td>
@@ -112,7 +109,7 @@
                     {assign var=aux value=$aux+1}
                     {/section}
                 </div>
-                <p align="center" style="margin:20px;"> {$paginacion} </p>
+                <div style="margin:20px;" class="pagination"> {$paginacion} </div>
            </div>
         </td>
    </tr>

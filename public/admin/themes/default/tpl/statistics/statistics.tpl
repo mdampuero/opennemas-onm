@@ -24,15 +24,15 @@
         <li>
             <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
         </li>
-          <script type="text/javascript">
-                // <![CDATA[
-                Event.observe($('link_global'), 'mouseover', function(event) {
-                   $('menu_subcats').setOpacity(0);
-                   e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
+        <script type="text/javascript">
+        // <![CDATA[
+        Event.observe($('link_global'), 'mouseover', function(event) {
+           $('menu_subcats').setOpacity(0);
+           e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 
-                 });
-                // ]]>
-            </script>
+         });
+        // ]]>
+        </script>
         {include file="menu_categorys.tpl" home="statistics.php?action=index"}
     </ul>
 
@@ -129,6 +129,6 @@
 {/if}
 
     <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id}" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 {/block}
