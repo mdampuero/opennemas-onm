@@ -179,8 +179,8 @@ if($('starttime')) {
 									<label for="counter_title">{t}Frontpage title:{/t}</label>
 								</td>
 								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_title" name="counter_title" title="counter_title"
-										value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/>
+									<input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
+										value="0"  size="3" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/>
 								</td>
 							</tr>
 							<tr>
@@ -188,8 +188,8 @@ if($('starttime')) {
 									<label for="counter_title">{t}Inner title{/t}</label>
 								</td>
 								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int"
-										value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/>
+									<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
+										value="0" size="3" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/>
 								</td>
 							</tr>
 							<tr>
@@ -197,8 +197,8 @@ if($('starttime')) {
 									<label for="counter_subtitle">{t}Pretitle:{/t}</label>
 								</td>
 								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle"
-										value="0" class="required" size="5" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/>
+									<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
+										value="0"  size="3" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/>
 								</td>
 							</tr>
 							<tr colspan=2>
@@ -206,8 +206,8 @@ if($('starttime')) {
 									<label for="counter_summary">{t}Summary:{/t}</label>
 								</td>
 								<td nowrap="nowrap"  style="text-align:left;vertical-align:top">
-									<input type="text" id="counter_summary" name="counter_summary" title="counter_summary"
-										value="0" class="required" size="5"
+									<input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
+										value="0" size="3"
 										   onChange="countWords(document.getElementById('summary'),this)"
 										   onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/>
 								</td>
@@ -217,8 +217,8 @@ if($('starttime')) {
 									<label for="counter_body">{t}Body:{/t}</label>
 								</td>
 								<td nowrap="nowrap"  style="text-align:left;vertical-align:top" >
-									<input type="text" id="counter_body" name="counter_body" title="counter_body"
-										value="0" class="required" size="5" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));" tabindex="-1"/>
+									<input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
+										value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));" tabindex="-1"/>
 								</td>
 							</tr>
 						</table>

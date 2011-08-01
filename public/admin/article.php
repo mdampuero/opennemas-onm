@@ -523,7 +523,7 @@ if (isset($_REQUEST['action']) ) {
 
                 $tpl->assign('clones', $clones);
             }
-            $tpl->display('article/article.tpl');
+            $tpl->display('article/new.tpl');
             // }}}
         } break;
 
@@ -1110,7 +1110,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'mdelete':
-            
+
             if($_REQUEST['id']==6){ //Eliminar todos
                 $cm = new ContentManager();
                 if($_SESSION['_from']=='todos' || $_SESSION['_from']=='opinion'){

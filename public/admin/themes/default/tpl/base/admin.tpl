@@ -66,7 +66,8 @@
 
         <div class="info-left">
             <div id="user_box" style="width:auto;">
-                <div style="padding-right:8px; float:left;" nowrap="nowrap">
+				{if (int)count_pending_comments > 0}
+				<div style="padding-right:8px; float:left;" nowrap="nowrap">
                     <div id="pending_comments" title="{t}Pending comments{/t}">
                         <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
                             <span class="point"></span>
@@ -75,10 +76,12 @@
                     </div>
 					&nbsp;&nbsp;&nbsp;
                 </div>
+				{/if}
+
 
                 <div id="name-box" style="float:left; margin-right:5px;">
                   <strong>
-                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username}Welcome <a title="See my user preferences" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&id=%1">%2</a>{/t}
+                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}Welcome <a title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">%2</a>{/t}
 
                     {if isset($smarty.session.isAdmin)}
                         <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"

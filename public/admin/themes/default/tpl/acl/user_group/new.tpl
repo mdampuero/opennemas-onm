@@ -9,7 +9,7 @@
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </a>
                 </li>
                 <li>
@@ -18,12 +18,13 @@
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
+                <li class="separator"></li>
                 <li>
-                    <a href="{$smaty.server.PHP_SELF}?action=list" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    <a href="{$smaty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

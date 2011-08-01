@@ -130,7 +130,7 @@
                 <th  align="left" style="width:230px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Agencia/Autor</th>
                 <th align="center" style="width:80px;">Creado</th>
                 {*  <th align="center" style="padding:5px;font-size: 11px;width:50px;">Publisher</th>*}
-                <th align="center" style="width:50px;">Last Editor</th>
+                <th align="center" style="width:80px;">Last Editor</th>
                 <th align="center" style="width:40px;">{if $category!=20}Aprobar{/if}</th>
                 <th align="center" style="width:40px;">Editar</th>
                 <th align="center" style="width:40px;">Eliminar</th>

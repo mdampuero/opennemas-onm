@@ -12,18 +12,7 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}Opinion Manager :: New opinion{/t}</h2></div>
         <ul class="old-button">
-            <li>
-                {if $smarty.session.desde eq 'search_advanced'}
-                     <a href="/admin/controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
-                     </a>
-                {else}
-                    <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
-                    </a>
 
-                {/if}
-            </li>
             <li>
                 <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$opinion->id}', 'formulario');" value="Validar" title="Validar">
                     <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
@@ -36,6 +25,19 @@
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}</a>
+            </li>
+            <li class="separator"></li>
+            <li>
+                {if $smarty.session.desde eq 'search_advanced'}
+                     <a href="/admin/controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}">
+                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
+                     </a>
+                {else}
+                    <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" title="{t}Go back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                    </a>
+
+                {/if}
             </li>
         </ul>
     </div>

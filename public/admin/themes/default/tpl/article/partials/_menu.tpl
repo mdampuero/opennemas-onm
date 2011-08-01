@@ -35,18 +35,7 @@
 	<div class="wrapper-content">
 		<div class="title"><h2>{t}Article manager :: Editing article{/t}</h2></div>
 		<ul class="old-button">
-			<li>
-                {if $smarty.session.desde eq 'search_advanced'  && isset($smarty.get.stringSearch)}
-                     <a href="#" class="admin_add"  onClick="window.location='controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}';">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
-                     </a>
-                {else}
-                    <a href="#" class="admin_add" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
-                    </a>
-                {/if}
-            </li>
-            {if ($article->content_status eq 0) && ($article->available eq 1)}
+			{if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
                 <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
                     <img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
@@ -77,6 +66,18 @@
                 <a href="{$article->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
                     <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
                 </a>
+            </li>
+			<li class="separator"></li>
+			<li>
+                {if $smarty.session.desde eq 'search_advanced'  && isset($smarty.get.stringSearch)}
+                     <a href="#" class="admin_add"  onClick="window.location='controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}';">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+					</a>
+                {else}
+                    <a href="#" class="admin_add" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+					</a>
+                {/if}
             </li>
 		</ul>
 	</div>

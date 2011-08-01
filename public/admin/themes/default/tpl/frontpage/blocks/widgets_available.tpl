@@ -1,10 +1,12 @@
 
 <table class="adminlist">
-    <tr>
-        <th align="center" style="width:30px">Selec</th>
-        <th align="left">{t}Title{/t}</th>
-        <th align="center" style="width:80px">{t}Actions{/t}</th>
-    </tr>
+    <thead>
+        <tr>
+            <th align="center" style="width:30px">Selec</th>
+            <th align="left">{t}Title{/t}</th>
+            <th align="center" style="width:80px">{t}Actions{/t}</th>
+        </tr>
+    </thead>
     <tr>
         <td colspan=4>
             {if $category == 'home'}
