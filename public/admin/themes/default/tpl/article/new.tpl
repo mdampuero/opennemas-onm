@@ -111,12 +111,12 @@ if($('starttime')) {
 										{section name=as loop=$allcategorys}
 										{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
 										<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-												{section name=su loop=$subcat[as]}
-												{if $subcat[as][su]->internal_category eq 1}
-										<option value="{$subcat[as][su]->pk_content_category}"
-												{if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-												{/if}
-												{/section}
+										{section name=su loop=$subcat[as]}
+											{if $subcat[as][su]->internal_category eq 1}
+												<option value="{$subcat[as][su]->pk_content_category}"
+												{if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+											{/if}
+										{/section}
 										{/acl}
 										{/section}
 									</select>
