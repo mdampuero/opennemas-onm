@@ -445,7 +445,6 @@ textarea{
                             <label for="mail_server">{t}Activated modules{/t}</label>
                         </th>
                         <td>
-                            {$configs['activated_modules']|var_dump}
                             {html_checkboxes name='activated_modules' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
                         </td>
                         <td>
