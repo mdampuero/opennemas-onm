@@ -54,10 +54,9 @@ class ModuleManager {
         //global $activatedModules;
         $activatedModules = \Onm\Settings::get('activated_modules');
 
-
         if (is_null(self::$activatedModules)) {
 
-            if(!isset($activatedModules)) {
+            if(!isset($activatedModules) or (count($activatedModules) < 1)) {
 
                 self::$availableModules = self::getAvailableModules();
 
