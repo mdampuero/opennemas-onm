@@ -86,6 +86,9 @@ legend {
 
 input[type="text"],
 textarea {  border: 1px solid silver; }
+input[type="checkbox"] {
+	vertical-align:middle
+}
 
 input.disabled { background-color: #F0F0F0; }
 
@@ -1868,13 +1871,12 @@ ul#menu hr{
 
 div#menu-acciones-admin li.separator,
 .old-button li.separator{
-	background-image:url(../images/separator.gif);
-	background-position:center bottom;
-	background-repeat:no-repeat;
+	background:url(../images/separator.png) center center no-repeat;
 	border:0 none;
-    height:50px;
+    height:57px;
     margin:0 8px;
     width:4px;
+	vertical-align:middle
 }
 
 .old-button {
@@ -1895,14 +1897,21 @@ div#menu-acciones-admin li.separator,
 	position:relative;
 	width:100%;
 }
+	.help-block.warning {
+		border-color: #FBC2C4;
+	}
 	.help-block .title {
 		position:absolute;
-		background: #bfbfbf url(../images/backgrounds/back-help.png) bottom right no-repeat;
+		background: #D2D2D2 url(../images/backgrounds/back-help.png) bottom right no-repeat;
 		top:0px;
 		left:0px;
 		display:block;
 		width:100%
 	}
+		.help-block.warning .title {
+			background-color: #FBE3E4;
+			color: #8A1F11;
+		}
 		.help-block .title h4 {
 			margin:7px 10px;
 			padding:0 !important;
@@ -1913,6 +1922,9 @@ div#menu-acciones-admin li.separator,
 			background:url(../images/backgrounds/bullet-help.png) bottom right no-repeat;
 			margin-right:24px;
 		}
+			.help-block.warning .title h4 {
+				color: #8A1F11;
+			}
 	.help-block .content {
 		margin-top:40px;
 		padding:15px;

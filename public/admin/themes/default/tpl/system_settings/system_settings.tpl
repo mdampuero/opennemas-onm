@@ -43,7 +43,8 @@ legend {
     margin-left:10px;
     vertical-align:middle
 }
-input[type="text"] {
+input[type="text"],
+textarea{
     width:400px;
     max-height:80%
 }
@@ -76,6 +77,7 @@ input[type="text"] {
                 <a href="#log">{t}Log{/t}</a>
                 <a href="#external">{t}External Services{/t}</a>
                 <a href="#misc">{t}Miscelanous{/t}</a>
+                <a href="#modules">{t}Modules{/t}</a>
             </li>
         </ul>
 
@@ -373,7 +375,7 @@ input[type="text"] {
                             <td rowspan=2 valign="top">
                                 <div class="help-block margin-left-1">
                                     <div class="title"><h4>Get API keys</h4></div>
-                                    <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}}</div>
+                                    <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}</div>
                                 </div>
                             </td>
                         </tr>
@@ -429,6 +431,27 @@ input[type="text"] {
                         </td>
                         <td valign="top">
 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="modules" class="panel">
+           <table>
+                <tbody>
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="mail_server">{t}Activated modules{/t}</label>
+                        </th>
+                        <td>
+                            {html_checkboxes name='activated_modules[]' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
+                        </td>
+                        <td>
+                            <div class="help-block warning margin-left-1">
+                                <div class="title"><h4>Dragons Ahead!</h4></div>
+                                <div class="content">{t escape=off}This section is experimental and could not work as espected{/t}</div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

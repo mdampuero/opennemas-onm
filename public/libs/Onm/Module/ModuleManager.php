@@ -96,6 +96,7 @@ class ModuleManager {
                 'KEYWORD_MANAGER',
                 'KIOSKO_MANAGER',
                 'LINK_CONTROL_MANAGER',
+                'MENU_MANAGER',
                 'MYSQL_MANAGER',
                 'NEWSLETTER_MANAGER',
                 'ONM_STATISTICS',
@@ -112,7 +113,7 @@ class ModuleManager {
                 'USER_MANAGER',
                 'VIDEO_MANAGER',
                 'WIDGET_MANAGER',
-                'MENU_MANAGER',
+
             );
         }
 

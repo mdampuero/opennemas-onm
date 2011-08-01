@@ -7,7 +7,8 @@
  * file that was distributed with this source code.
  */
 use Onm\Settings as s,
-    Onm\Message as m;
+    Onm\Message as m,
+    Onm\Module\ModuleManager;
 /**
  * Setup app
 */
@@ -18,7 +19,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 Acl::checkorForward('ONM_SETTINGS');
 
-\Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
+ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
 
 /**
  * Setup view
@@ -46,12 +47,14 @@ switch($action) {
                                     'refresh_interval',
                                     'advertisements_enabled',
                                     'log_enabled', 'log_db_enabled', 'log_level',
+                                    'activated_modules'
                                     );
 
         $configurations = s::get($configurationsKeys);
 
         $tpl->assign(
                      array(
+                            'available_modules'          => ModuleManager::getAvailableModules(),
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
                             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
