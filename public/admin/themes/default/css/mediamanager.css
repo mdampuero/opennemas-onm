@@ -5,7 +5,7 @@
 	margin: 10px;
 
 	font-family: sans-serif;
-	font-size: 12x;
+	font-size: 12px;
 	font-weight: bold;
 }
 
@@ -13,9 +13,7 @@
 	padding: 2px 4px;
 	padding-right: 10px;
 	margin: 4px 0;
-	background-image: url({/literal}{$params.IMAGE_DIR}{literal}mediamanager/arrow_directory.gif);
-	background-repeat: no-repeat;
-	background-position: right;
+	background: url(../images/mediamanager/arrow_directory.gif) top right no-repeat;
 }
 
 div.thumbnail {
@@ -30,7 +28,7 @@ div.thumbnail {
 	float: left;
 	position: relative;
 	overflow: hidden;
-        
+
 }
 
 .table_div{
@@ -39,15 +37,15 @@ div.thumbnail {
     margin:0px;
       width:140px;
     height:100px;
- 
+
 }
 
 
 .table_div div {
-                display: table-cell !important; margin:0;
-                vertical-align: middle !important;
-                text-align: center;
-                float: none !important;
+	display: table-cell !important; margin:0;
+	vertical-align: middle !important;
+	text-align: center;
+	float: none !important;
 }
 
 

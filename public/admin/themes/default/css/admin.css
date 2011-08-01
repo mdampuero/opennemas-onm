@@ -1358,7 +1358,7 @@ a img.calendar {
 #MB_loading {
 	padding: 1.5em;
 	text-indent: -10000px;
-	background: transparent url(spinner.gif) 50% 0 no-repeat;
+	background: transparent url(../images/spinner.gif) 50% 0 no-repeat;
 }
 
 /* Color scheme */
@@ -1939,3 +1939,48 @@ div#menu-acciones-admin li.separator,
 	.margin-left-1 {
 		margin-left:1em;
 	}
+
+/* -------------------------------------------------------------
+  Footer
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#copyright {
+	vertical-align:top;
+
+}
+	#copyright .company {
+		color:#888;
+		float:left;
+		width:40%
+	}
+		#copyright .company img {
+			margin-right:1em;
+			margin-top:5px;
+		}
+
+	#copyright .support {
+		float:right;
+		width:40%;
+		text-align:right;
+		margin-top:0px;
+	}
+
+		#copyright .support{
+
+		}
+
+		#copyright .support li {
+			list-style:none !important;
+			display:inline-block;
+			margin:0 10px;
+		}
+		#copyright .support li:last-child {
+			margin-right:0px;
+		}
+			#copyright .support li a {
+				padding:5px 10px;
+				background:White;
+			}
+
+			#copyright .support li a:hover {
+				background:#efefef;
+			}

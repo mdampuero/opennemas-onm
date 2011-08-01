@@ -13,15 +13,15 @@
 
     {block name="header-css"}
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
-        <!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" /><![endif]-->
-		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+		<!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" /><![endif]-->
 		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}buttons.css" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
+		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
+        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
+
 	{/block}
 
     {block name="header-js"}
@@ -112,34 +112,27 @@
 
     <div id="content">
 
-	{*if isset($smarty.session.messages)
-		&& !empty($smarty.session.messages)}
-		{messageboard type="inline"}
-	{else}
-		{messageboard type="growl"}
-	{/if*}
-
     {block name="content"}
 
     {/block}
+
     </div>
 
 
 
-    {*<div id="copyright">
+    <div id="copyright" class="wrapper-content clearfix">
 
-        <div class="company">
-            <img align="left" src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="OpenNeMaS"/>
+        <div class="company left">
+            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
             made by OpenHost S.L.<br/>
-            All rights reserved ® 2010
+            All rights reserved ® 2008 - {strftime("%Y")}
         </div>
 
         <ul class="support">
-            <li><a href="#">About</a>
-            <li><a href="#">Help</a>
+            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
         </ul>
 
-    </div>*}
+    </div>
 
 
 <script type="text/javascript">
