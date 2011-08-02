@@ -179,6 +179,7 @@ table {
 
 table.adminheading {
     border: 1px solid #BFBFBF;
+	border-bottom-width:0px;
 	margin:0 auto;
 	/*margin-top:3px;*/
 	background-color: #FFF;
@@ -189,6 +190,7 @@ table.adminheading {
 	width: 100%;
 	padding-left: 5px;
 	border: 1px solid #ccc;
+	border-bottom:0px;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
 	background: #eAeAeA; /* for non-css3 browsers */
@@ -224,9 +226,9 @@ table.adminlist thead th {
 	background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e1e2e1)); /* for webkit browsers */
 	background: -moz-linear-gradient(top,  #fefefe,  #e1e2e1); /* for firefox 3.6+ */
 	padding:4px 4px;
-	border-right:1px solid #ccc;
+	border:1px solid #ccc;
+	border-left-width:0px;
 	text-shadow:0 1px 0 #FFFFFF;
-	border-bottom:1px solid #ccc !important;
 }
 table.adminlist thead th:hover {
 	background: #d1d2d1; /* for non-css3 browsers */
@@ -304,8 +306,10 @@ table.adminform tfoot tr td{
 }
 .gallery_list li {
 	float: left; display:inline-block; margin:0 5px 5px 0;  background:#F0F0F0; border:1px solid #CBCBCB;
+	width:70px; height:70px;
+	overflow:hidden !important;
 }
-.gallery_list li img { cursor:pointer; border:0px; width:67px; height:67px; }
+.gallery_list li img { cursor:pointer; border:0px; width:100% }
 .gallery_list li{ display: inline !important;  max-height:67px;}
 
 .gallery_list li div { display: table-cell !important; width:67px; height: 67px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
@@ -1624,3 +1628,21 @@ ul#menu hr{
 			#copyright .support li a:hover {
 				background:#efefef;
 			}
+
+/* -------------------------------------------------------------
+  Simple pager
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#simplepager {
+	margin:0;
+	padding:0;
+	border:0 none;
+}
+	#simplepager li{
+		display:inline-block;
+		list-style:none;
+		margin-right:10px
+	}
+
+	#simplepager li a {
+		cursor:pointer;
+	}

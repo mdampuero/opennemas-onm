@@ -121,7 +121,7 @@
         </table>
         <table class="adminlist">
             <thead>
-                <th style="width:50px;"></th>
+                <th style="width:15px;"></th>
                 <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
                 {if $category eq 'todos' || $category eq 'opinion'}
                     <th align="center" style="width:100px;">{t}Section{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
@@ -140,9 +140,9 @@
                     <td>
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$articles[c]->id}"  style="cursor:pointer;" />
                         <input type="hidden"  name="permit_{$articles[c]->id}"  id="permit_{$articles[c]->id}"     {if $articles[c]->category !=20} value="1" {else} value="0" {/if}  />
-                        {if isset($articles[c]->paper_page)} <img align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                     </td>
                     <td style="padding:3px;">
+                        {if isset($articles[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                         <span style="cursor:pointer;" title="title" id="title_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->title|clearslash} </span>
                         <script type="text/javascript">
                             // <![CDATA[
@@ -234,7 +234,7 @@
             </table>
             <table class="adminlist">
                 <thead>
-                    <th style="width:50px;"></th>
+                    <th style="width:15px;"></th>
                     <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
                     {if $category eq 'todos' || $category eq 'opinion'}
                         <th align="center" style="width:100px;">{t}Type{/t}</th>
@@ -251,9 +251,9 @@
                         <td style="font-size: 11px;">
                               <input type="checkbox" class="minput"  id="selected_opin_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;">
                               <input type="hidden"  name="permit_{$opinions[c]->id}"  id="permit_{$opinions[c]->id}" value="1"    />
-                              {if isset($opinions[c]->paper_page)} <img align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                         </td>
                         <td  onClick="javascript:document.getElementById('selected_opin_{$smarty.section.c.iteration}').click();">
+                            {if isset($opinions[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                             <span style="cursor:pointer;"  title="opinion" id="op_{$opinions[c]->id}" name="{$opinions[c]->id}" >{$opinions[c]->title|clearslash} </span>
                             <script type="text/javascript">
                                 // <![CDATA[

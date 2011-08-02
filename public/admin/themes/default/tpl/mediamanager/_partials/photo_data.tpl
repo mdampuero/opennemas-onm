@@ -40,26 +40,25 @@
                         <p>
                             <label>{t}Color:{/t}</label>
                             <select name="color[{$photo1->id}]" id="color[{$photo1->id}]" />
-                                <option value="{t}B/W{/t}" {if $photo1->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
                                 <option value="{t}Color{/t}" {if $photo1->color eq 'color'} selected {/if}>{t}Color{/t}</option>
+                                <option value="{t}B/W{/t}" {if $photo1->color eq 'BN'} selected {/if}>{t}B/W{/t}</option>
                             </select>
-                        </p>
-
-                        <p>
-                            <label for="title">{t}Keywords:{/t}</label>
-                            <textarea id="metadata[{$photo1->id}]" name="metadata[{$photo1->id}]"
-                                title="Metadatos"  rows="2"  style="width:99%" >{$photo1->metadata|strip}</textarea>
                         </p>
                         <p>
                             <label>{t}Description:{/t}</label> <br /><textarea id="description[{$photo1->id}]" name="description[{$photo1->id}]"
-                                title="descripcion" rows="2" style="width:99%">{$photo1->description|clearslash|escape:'html'}</textarea>
+                                title="descripcion" rows="2" style="width:96%">{$photo1->description|clearslash|escape:'html'}</textarea>
+                        </p>
+                        <p>
+                            <label for="title">{t}Keywords:{/t}</label>
+                            <textarea id="metadata[{$photo1->id}]" name="metadata[{$photo1->id}]"
+                                title="Metadatos"  rows="2"  style="width:96%" >{$photo1->metadata|strip}</textarea>
                         </p>
 
                         <input type="hidden" name="resolution[{$photo1->id}]" value="{$photo1->resolution}" />
                         <input type="hidden" name="title" value="{$photo1->name}" />
 
                     </td>
-                    <td style="width:300px;vertical-align:top; padding:20px;">
+                    <td style="width:300px;vertical-align:top; padding:20px 10px;">
                         <div class="help-block ">
                             <div class="title"><h4>{t}HELP{/t}</h4></div>
                             <div class="content">{t escape=off}Complete all the photo information for helping OpenNeMas to make better search results{/t}</div>
@@ -73,100 +72,104 @@
         <td>
             <table style="width:100%">
                 <tr>
+
                     <td style="vertical-align:top; padding:10px">
-                            {if $photo1->myiptc}
-                                <div id="iptc" class="photo-static-info">
-                                  <table>
-                                      <tr>
-                                        <th colspan="2"><h3>{t}IPTC Data:{/t}</h3></th>
-                                      </tr>
-                                      {foreach item="val" key="caption" from=$photo1->myiptc}
-                                          {if $val}
-                                                 <tr>
-                                                    <td><strong>{$caption}</strong> </td>
-                                                    <td style="padding: 2px;">{$val}</td>
-                                                 </tr>
-                                          {/if}
-                                      {/foreach}
-                                  </table>
-                                  <br />
-                                </div>
-                            {else}
-                                <div id="iptc" class="photo-static-info">
-                                    <strong>{t}No available IPTC data.{/t}</strong>
-                                </div>
-                            {/if}
+                        {if $photo1->myiptc}
+                        <div id="iptc" class="photo-static-info">
+                          <table>
+                              <tr>
+                                <th colspan="2"><h3>{t}IPTC Data:{/t}</h3></th>
+                              </tr>
+                              {foreach item="val" key="caption" from=$photo1->myiptc}
+                                  {if $val}
+                                         <tr>
+                                            <td><strong>{$caption}</strong> </td>
+                                            <td style="padding: 2px;">{$val}</td>
+                                         </tr>
+                                  {/if}
+                              {/foreach}
+                          </table>
+                          <br />
                         </div>
-                    </td>
-                    <td style="vertical-align:top; padding:10px">
-                        {if is_null($photo1->exif) neq true}
-                            <div id="exif" class="photo-static-info">
-                                <table>
-                                    <tr>
-                                        <th colspan="2"><h3>{t}EXIF Data:{/t}</h3></th>
-                                    </tr>
-                                    {foreach item="value" key="name" from=$photo1->exif}
-                                        <tr>
-                                            <td colspan="2"><strong>{$name} </strong> </td>
-                                        </tr>
-                                        {foreach item="dato" key="d" from=$value}
-                                        <tr>
-                                            <td><strong>{$d}</strong></td>
-                                            <td style="padding: 2px;">{$dato}</td>
-                                        </tr>
-                                        {/foreach}
-                                    {/foreach}
-                                </table>
-                            </div>
                         {else}
-                            <div id="exif" class="photo-static-info">
-                                <strong>{t}No available EXIF data.{/t}</strong>
-                            </div>
+                        <div id="iptc" class="photo-static-info">
+                            <strong>{t}No available IPTC data.{/t}</strong>
+                        </div>
                         {/if}
                     </td>
-                    <td style="vertical-align:top; padding:10px; width:40%">
-                        <label for="address[{$photo1->id}]">Geolocalization</label>
-                        <script src="http://maps.google.com/maps?file=api&v=2&sensor=true&key={setting google_maps_api_key}" type="text/javascript"></script>
+                    <td style="vertical-align:top; padding:10px;">
+                        {if is_null($photo1->exif) neq true}
+                        <div id="exif" class="photo-static-info">
+                            <table>
+                                <tr>
+                                    <th colspan="2"><h3>{t}EXIF Data:{/t}</h3></th>
+                                </tr>
+                                {foreach item="value" key="name" from=$photo1->exif}
+                                    <tr>
+                                        <td colspan="2"><strong>{$name} </strong> </td>
+                                    </tr>
+                                    {foreach item="dato" key="d" from=$value}
+                                    <tr>
+                                        <td><strong>{$d}</strong></td>
+                                        <td style="padding: 2px;">{$dato}</td>
+                                    </tr>
+                                    {/foreach}
+                                {/foreach}
+                            </table>
+                        </div>
+                        {else}
+                        <div id="exif" class="photo-static-info">
+                            <strong>{t}No available EXIF data.{/t}</strong>
+                        </div>
+                        {/if}
+                    </td>
+                    <td style="vertical-align:top; padding:10px;width:330px">
+                        <div class="photo-geolocation">
+                            <label for="address[{$photo1->id}]">Geolocalization</label>
 
-                        <p>
-                          <input type="text" value="{$photo1->address}"  id="address[{$photo1->id}]" name="address[{$photo1->id}]" size="20">
-                          <input type="button" value="IR" onClick="showAddress(); return false;" />
-                        </p>
+                            <p style="text-align:center">
+                              <input type="text" value="{$photo1->address}"  id="address[{$photo1->id}]" name="address[{$photo1->id}]" size="30">
+                              <input class="onm-button blue" type="button" value="IR" onClick="showAddress(); return false;" />
+                            </p>
 
-                        <div id="map_canvas[{$photo1->id}]" style="width:100%; height:200px"></div>
+                            <div class="photo-geolocation-canvas" id="map_canvas[{$photo1->id}]" style="height:200px"></div>
 
-                        <script defer="defer" type="text/javascript" charset="utf-8">
-                            var map = new GMap2(document.getElementById("map_canvas[{$photo1->id}]"));
-                            map.setCenter(new GLatLng(42.339806,-7.866068), 13);
-                            function initialize() {
+                            <script src="http://maps.google.com/maps?file=api&sensor=true&key={setting google_maps_api_key}" type="text/javascript"></script>
+                            <script defer="defer" type="text/javascript" charset="utf-8">
+                                var map = new GMap2(document.getElementById("map_canvas[{$photo1->id}]"));
+                                map.setCenter(new GLatLng(42.339806,-7.866068), 13);
+                                function initialize() {
 
-                            }
-
-                            function showAddress() {
-                                 var address = document.getElementById('address[{$photo1->id}]').value;
-
-                                 if(address){
-                                     var geocoder = new GClientGeocoder();
-                                     if (geocoder) {
-                                           geocoder.getLatLng(address, function(point) {
-                                           if (!point) {
-                                             alert("{t}We can't geolocalize that direction{/t}" + address);
-                                           } else {
-                                             map.setCenter(point, 13);
-                                             var marker = new GMarker(point);
-                                             map.addOverlay(marker);
-                                             marker.openInfoWindowHtml(address);
-                                           }
-                                         });
-                                    }
                                 }
-                             }
-                        </script>
-                        <br>
 
-                        <div class="help-block ">
-                            <div class="title"><h4>{t}Geolocalization{/t}</h4></div>
-                            <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. In the future you will enjoy geolocalized search results.{/t}</div>
+                                function showAddress() {
+                                     var address = document.getElementById('address[{$photo1->id}]').value;
+
+                                     if(address){
+                                         var geocoder = new GClientGeocoder();
+                                         if (geocoder) {
+                                               geocoder.getLatLng(address, function(point) {
+                                               if (!point) {
+                                                 alert("{t}We can't geolocalize that direction{/t}" + address);
+                                               } else {
+                                                 map.setCenter(point, 7);
+                                                 var marker = new GMarker(point);
+                                                 map.addOverlay(marker);
+                                                 marker.openInfoWindowHtml(address);
+                                               }
+                                             });
+                                        }
+                                    }
+                                 }
+                            </script>
+                            <br>
+
+                            <div class="help-block ">
+                                <div class="title"><h4>{t}Geolocalization{/t}</h4></div>
+                                <div class="content">{t escape=off}Help OpenNeMas to get all the photos geolocalized. In the future you will enjoy geolocalized search results.{/t}</div>
+                            </div>
+                        </div>
+
                         </div>
                     </td>
                 </tr>

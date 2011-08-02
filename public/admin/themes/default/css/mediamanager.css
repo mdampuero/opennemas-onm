@@ -167,3 +167,14 @@ div.week {
 #iptc, #exif {
 	padding:10px
 }
+.photo-geolocation {
+	border:1px solid #bfbfbf;
+	padding:10px;
+	border-radius:5px;
+}
+
+.photo-geolocation .photo-geolocation-canvas{
+	border:1px solid #bfbfbf;
+	margin:5px;
+	box-shadow:0 0 3px 3px rgba(0,0,0, 0.1);
+}

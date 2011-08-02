@@ -43,13 +43,14 @@
                         {t}Save{/t}
                     </a>
                 </li>
+                <li class="separator"></li>
                 <li>
                     {if !isset($smarty.request.stringSearch)}
                         <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.request.category}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                     {else}
                         <a href="search_advanced.php?action=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page}" class="admin_add" value="Cancelar" title="Cancelar">
                     {/if}
-                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
+                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

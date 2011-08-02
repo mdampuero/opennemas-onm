@@ -146,7 +146,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div id="photos" class="photos" style="height:460px; border:0px double #333333; margin:5px; overflow:auto;">
+                            <div id="photos" class="photos" style="margin:5px;">
                                 {*AJAX imageGallery *}
                             </div>
                        </div>
@@ -157,57 +157,57 @@
                         accept: ['draggable', 'video'],
                         onDrop: function(element) {
 
-                                     if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
-                                         var ancho=element.getAttribute('de:ancho');
-                                         if(element.getAttribute('de:ancho')>300) { ancho=300; }
-                                         $('droppable_div1').innerHTML='<object id="change1"><param name="movie" value="'+
-                                                                        element.getAttribute('de:url') +'/'+ element.getAttribute('de:mas')
-                                                                        + '"><embed src="'+ element.getAttribute('de:url')
-                                                                        +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
-                                         $('informa').innerHTML=' es un Flash';
-                                         $('informa').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
-                                         $('input_img1').value=element.name;
+									if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
+										var ancho=element.getAttribute('de:ancho');
+										if(element.getAttribute('de:ancho')>300) { ancho=300; }
+										$('droppable_div1').innerHTML='<object id="change1"><param name="movie" value="'+
+																	   element.getAttribute('de:url') +'/'+ element.getAttribute('de:mas')
+																	   + '"><embed src="'+ element.getAttribute('de:url')
+																	   +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
+										$('informa').innerHTML=' es un Flash';
+										$('informa').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
+										$('input_img1').value=element.name;
 
-                                    } else {
-                                        var source=element.src;
-                                        if($('change1').src){
-                                            recuperarOpacity('img1');
+								   } else {
+									   var source=element.src;
+									   if($('change1').src){
+										   recuperarOpacity('img1');
 
-                                            if(element.getAttribute('class')=='draggable'){
-                                                $('change1').src = source.replace( '140-100-','');
-                                            }else{
-                                                $('change1').src = source;
-                                            }
-                                            $('change1').name=element.name;
-                                            var ancho=element.getAttribute('de:ancho');
-                                            if(element.getAttribute('de:ancho')>300) { ancho=300; }
-                                            $('change1').setAttribute('width',ancho);
-                                        }else{
-                                             var ancho=element.getAttribute('de:ancho');
-                                             $('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" style="max-width: 300px;" width="'+ancho+'" >';
-                                        }
-                                        $('informa').innerHTML=' ';
-                                        if(element.getAttribute('class')=='draggable'){
-                                            $('input_img1').value=element.name;
-                                            $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
-                                                "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
-                                                "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
-                                                "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
-                                                "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
-                                                "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
-                                            $('img1_footer').value= element.getAttribute('de:description');
-                                            $('input_video').value='';
-                                        }else{
-                                           $('input_video').value=element.name;
-                                           $('informa').innerHTML="<strong>Codigo: </strong><br/>"+element.getAttribute('title')  + "<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created') + "<br><strong>Descripcion: </strong><br/>" + element.getAttribute('de:description') +"<br><strong>Tags: </strong><br/>" + element.getAttribute('de:tags');
-                                           $('img1_footer').value= element.getAttribute('de:description');
-                                           $('input_img1').value='';
-                                        }
-                                        // En firefox 2, precísase reescalar o div co alto da imaxe
-                                        if( /Firefox\/2/.test(navigator.userAgent) ) {
-                                            $('droppable_div1').style.height = $('change1').height + 'px';
-                                        }
-                                    }
+										   if(element.getAttribute('class')=='draggable'){
+											   $('change1').src = source.replace( '140-100-','');
+										   }else{
+											   $('change1').src = source;
+										   }
+										   $('change1').name=element.name;
+										   var ancho=element.getAttribute('de:ancho');
+										   if(element.getAttribute('de:ancho')>300) { ancho=300; }
+										   $('change1').setAttribute('width',ancho);
+									   }else{
+											var ancho=element.getAttribute('de:ancho');
+											$('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" style="max-width: 300px;" width="'+ancho+'" >';
+									   }
+									   $('informa').innerHTML=' ';
+									   if(element.getAttribute('class')=='draggable'){
+										   $('input_img1').value=element.name;
+										   $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
+											   "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
+											   "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
+											   "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
+											   "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
+											   "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
+										   $('img1_footer').value= element.getAttribute('de:description');
+										   $('input_video').value='';
+									   }else{
+										  $('input_video').value=element.name;
+										  $('informa').innerHTML="<strong>Codigo: </strong><br/>"+element.getAttribute('title')  + "<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created') + "<br><strong>Descripcion: </strong><br/>" + element.getAttribute('de:description') +"<br><strong>Tags: </strong><br/>" + element.getAttribute('de:tags');
+										  $('img1_footer').value= element.getAttribute('de:description');
+										  $('input_img1').value='';
+									   }
+									   // En firefox 2, precísase reescalar o div co alto da imaxe
+									   if( /Firefox\/2/.test(navigator.userAgent) ) {
+										   $('droppable_div1').style.height = $('change1').height + 'px';
+									   }
+								   }
 
                             }
                       });
@@ -338,7 +338,7 @@
                                 </tr>
                             </table>
                             <br>
-                            <div id="videos" class="photos" style="height: 460px; border: 0px double rgb(51, 51, 51); margin: 5px; overflow: auto;">
+                            <div id="videos" class="photos" style="margin: 5px;">
                                 {*AJAX videoGallery *}
                            </div>
                         </div>

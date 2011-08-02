@@ -114,14 +114,14 @@
                         {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='placeholder_highlighted'}
                    </td>
                 </tr>
-                <tr valign="top">
-                    <td width="33%">
+                <tr valign="top" width="100%">
+                    <td >
                           {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_0'}
                     </td>
-                     <td width="33%">
+                     <td >
                           {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_1'}
                     </td>
-                     <td width="33%">
+                    <td>
                           {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_2'}
                     </td>
                 </tr>

@@ -25,7 +25,7 @@ class SimplePager {
 
 
     public function __construct() {
- 
+
 
     }
 
@@ -39,16 +39,16 @@ class SimplePager {
      * @return string    the HTML for pagination
      */
     public static function getPager($params = array()) {
- 
+
         $html = '';
         $page = $params['page'];
-        $items = $params['items'];       
+        $items = $params['items'];
         $total = $params['total'];
         $others =$params['others'];
         $function = $params['function'];
 
-        $next = "<a style='cursor:pointer;' onClick='".$function."(".$others.",".($page+1).")' title='Next'> Next(".($page+1).") </a>";
-        $previous = "<a style='cursor:pointer;' onClick='".$function."(".$others.",".($page-1).")' title='Previous'> Previous(".($page-1).") </a>";
+        $next       = "<a onClick='".$function."(".$others.",".($page+1).")'  title='Next'>Next »</a>";
+        $previous   = "<a onClick='".$function."(".$others.",".($page-1).")' title='Previous'>« Previous</a>";
 
         if ($page == 1 || empty($page)) {
             if($total <= $items) {
@@ -71,12 +71,12 @@ class SimplePager {
             $html.= "</li>";
         }
 
-        $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
+        $output = "<ul id='simplepager' class='clearfix'>".$html."</ul>";
 
-        
+
 
         return $output;
-        
+
     }
 
      /**
@@ -86,9 +86,9 @@ class SimplePager {
      *  url-url to link, 'total' total elements,
      *  'items' elements for page, and 'page' page number
      *
-     * @return string    the HTML for pagination
+     * @return string the HTML for pagination
      */
-      public static function getPagerUrl($params = array()) {
+    public static function getPagerUrl($params = array()) {
 
         $html = '';
         $page = $params['page'];
@@ -97,8 +97,8 @@ class SimplePager {
 
         $url = $params['url'];
 
-        $next = "<a style='cursor:pointer;' href='".$url."&page=".($page+1)."' title='Next'> Next(".($page+1).") </a>";
-        $previous = "<a style='cursor:pointer;' href='".$url."&page=".($page-1)."' title='Previous'> Previous(".($page-1).") </a>";
+        $next       = "<a href='".$url."&page=".($page+1)."' title='Next'>". _('Next »') ."</a>";
+        $previous   = "<a href='".$url."&page=".($page-1)."' title='Previous'>". _('« Previous') ."</a>";
 
         if ($page == 1 || empty($page)) {
             if($total <= $items) {
@@ -109,9 +109,9 @@ class SimplePager {
                 $html.= "</li>";
             }
         } elseif ($total <= $items) {
-                     $html.= "<li>";
-                     $html.= $previous;
-                     $html.= "</li>";
+            $html.= "<li>";
+            $html.= $previous;
+            $html.= "</li>";
         } else {
             $html.= "<li>";
             $html.= $previous;
@@ -122,8 +122,6 @@ class SimplePager {
         }
 
         $output = "<ul id='menu' class='clearfix'>".$html."</ul>";
-
-
 
         return $output;
 
