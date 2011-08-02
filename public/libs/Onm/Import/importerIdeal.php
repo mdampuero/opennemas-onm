@@ -105,8 +105,12 @@ class importerIdeal {
                                  foreach($node->attributes() as $c=>$d){
                                      $field = self::check_label($d);
                                      if(!empty($field) && empty($data[$field])) {
+                                         if($field =='agency'){
+                                             $data[$field] = $node->children()->span[0] .  $node->children()->span[1] ;
+                                         }else{
                                          // $name=$node->getname();  probar a usar en vez de las etiquetas
-                                         $data[$field] = $node->p->span ;
+                                            $data[$field] = $node->p->span ;
+                                         }
                                      }
                                  }
                              }
@@ -117,7 +121,7 @@ class importerIdeal {
             }
         }
 
-        $data['created']= $year.'-'.$month.'-'.$day.' '.'00:00:00' ;
+        $data['created']= $year.'-'.sprintf("%02d", $month).'-'.sprintf("%02d", $day).' '.'00:00:00' ;
 
         $data['metadata']="";$data['agency_web']="";$data['img1']="";$data['img1']="";$data['img1_footer']="";
         $data['img2']="";$data['img2_footer']="";$data['with_galery']="";$data['with_galery_int']="";$data['with_comment']="1";

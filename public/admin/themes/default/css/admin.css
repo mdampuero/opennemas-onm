@@ -282,14 +282,14 @@ table.adminlist tfoot tr td { padding:10px; }
 .gallery_list {
 	list-style:none; margin:0 auto;
 }
-.gallery_list li {
+.gallery_list li {    
 	float: left; display:inline-block; margin:0 5px 5px 0;  background:#F0F0F0; border:1px solid #CBCBCB;
 }
-.gallery_list li img { cursor:pointer; border:0px; width:69px; height:69px; }
-.gallery_list li{ display: inline !important;}
+.gallery_list li img { cursor:pointer; border:0px; width:67px; height:67px; }
+.gallery_list li{ display: inline !important;  max-height:67px;}
 
-.gallery_list li div { display: table-cell !important; width:69px; height: 69px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
-.gallery_list li a.album { display: table-cell !important; width:69px; height:69px; vertical-align: middle !important; text-align: center; float: none !important;}
+.gallery_list li div { display: table-cell !important; width:67px; height: 67px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
+.gallery_list li a.album { display: table-cell !important; width:67px; height:67px; vertical-align: middle !important; text-align: center; float: none !important;}
 
 
 #main_image{margin:0 auto 6px auto;background:#FFF;}
