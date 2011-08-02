@@ -95,6 +95,7 @@
         </table>
 
         <input type="hidden" id="action" name="action" value="list" />
+        <input type="hidden" id="id" name="id" value="" />
     </form>
 
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>

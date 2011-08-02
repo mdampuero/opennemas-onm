@@ -2,12 +2,18 @@
 
 {block name="content"}
 <div class="top-action-bar">
-	<div class="wrapper-content">
-		<div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
-		<ul class="old-button">
-			<li>
-                <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);" value="Guardar" title="{t}Save{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}" /><br />{t}Save{/t}
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Static Pages Manager{/t} :: {t}Editing page{/t}</h2></div>
+        <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+            <ul class="old-button">
+            <li>
+                <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', $('id').value, 'formulario');" value="Validar" title="Validar">
+                    <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar(this, '_self', 'save', $('id').value);" value="Guardar" title="{t}Save and exit{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" /><br />{t}Save and exit{/t}
                 </a>
             </li>
             <li>
@@ -20,7 +26,6 @@
 </div>
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <table class="adminheading">
         <tr>
             <td>{t}Insert the static page information{/t}</td>

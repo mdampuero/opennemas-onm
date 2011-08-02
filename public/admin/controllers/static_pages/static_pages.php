@@ -112,6 +112,20 @@ switch($action) {
 
     break;
 
+    case 'validate':
+
+        $page = new Static_Page();
+
+        $data = $_POST;
+
+        $data['slug'] = $page->buildSlug($data['slug'], $data['id'], $data['title']);
+        $data['metadata']  = String_Utils::normalize_metadata($data['metadata']);
+        $page->save($data);
+
+        Application::forward( $_SERVER['SCRIPT_NAME'].'?action=read&id='.$data['id']);
+
+    break;
+
     case 'build_slug':
 
         /**
