@@ -1,6 +1,5 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="footer-js" append}
     <script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}

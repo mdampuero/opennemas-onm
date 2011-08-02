@@ -29,30 +29,33 @@
 <form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
 
     <div class="top-action-bar">
-        <div class="title"><h2> {$accion}:: &nbsp;{$datos_cat[0]->title}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
-                    <br />
-                    Guardar
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onClick="enviar(this, '_self','{$smarty.session.desde}', 0);" value="Cancelar" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" />
-                    <br />
-                    Cancelar
-                </a>
-            </li>
-        </ul>
+        <div class="wrapper-content">
+            <div class="title"><h2> {t}Media manager{/t} :: {t}Editing photo {/t}{$datos_cat[0]->title}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
+                        <br />
+                        {t}Save{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="#" class="admin_add" onClick="enviar(this, '_self','{$smarty.session.desde}', 0);" value="Cancelar" title="Cancelar">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" />
+                        <br />
+                        {t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="wrapper-content">
 
         <ul class="tabs2">
             <li>
                 <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-                    GLOBAL</a>
+                    {t}ALL{/t}</a>
             </li>
             {* <li>
                  <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>

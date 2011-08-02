@@ -29,21 +29,20 @@
 					</td>
 				</tr>
 			</table>
-			<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
+			<table class="adminlist">
 				<thead>
 					<tr>
-						<th class="title">{t}Type{/t}</th>
-						<th class="title">{t}Keyword{/t}</th>
-						<th class="title">{t}Replacement value{/t}</th>
-						<th>{t}Actions{/t}</th>
+						<th style="width:40px;">{t}Type{/t}</th>
+						<th scope=col>{t}Keyword{/t}</th>
+						<th scope=col>{t}Replacement value{/t}</th>
+						<th scope=col style="width:40px;">{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					{section name=k loop=$pclaves|default:array()}
-					<tr style="background:{cycle values="#eeeeee,#ffffff"} !important">
-
-						<td align="center" weight="15">
+					<tr>
+						<td align="center" style="padding:3px;">
 							<img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
 						</td>
 						<td>
@@ -53,7 +52,7 @@
 							{$pclaves[k]->value|default:"-"}
 						</td>
 
-						<td width="44">
+						<td align="center">
 							<a href="{$smarty.server.PHP_SELF}?action=read&id={$pclaves[k]->id}" title="{t}Modify{/t}">
 								<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 							&nbsp;

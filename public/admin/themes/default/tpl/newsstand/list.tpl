@@ -44,44 +44,43 @@
 
                 {if count($portadas) > 0}
                 <thead>
-                    <th align="center" style="width:100px;">Portada</th>
-                    <th align="center">T&iacute;tulo</th>
-                    <th align="center" style="width:100px;">Fecha</th>
-                    <th align="center">Publisher</th>
-                    <th align="center">Última edición</th>
+                    <th align="center" style="width:100px;">{t}Cover{/t}</th>
+                    <th align="center">{t}Title{/t}</th>
+                    <th align="center" style="width:90px;">Fecha</th>
+                    <th align="center" style="width:10px;">{t}Publisher{/t}</th>
+                    <th align="center" style="width:90px;">{t}Last editor{/t}</th>
                     <th align="center" style="width:10px;">Favorito</th>
-                    <th align="center" style="width:110px;">Publicado</th>
-                    <th align="center" style="width:50px;">Editar</th>
-                    <th align="center" style="width:50px;">Elim</th>
+                    <th align="center" style="width:10px;">Publicado</th>
+                    <th align="center" style="width:50px;">{t}Actions{/t}</th>
                 </thead>
                 {/if}
 
                 {section name=as loop=$portadas}
                 <tr {cycle values="class=row0,class=row1"}>
-                    <td style="padding:10px;font-size: 11px;">
+                    <td >
                         <img src="{$MEDIA_IMG_PATH_WEB}kiosko{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}" title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" width="80" onmouseover="Tip('<img src={$MEDIA_IMG_PATH_WEB}kiosko{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, true, WIDTH, 200)" onmouseout="UnTip()" />
                     </td>
-                    <td style="padding:10px;font-size: 11px;">
+                    <td >
                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$portadas[as]->pk_kiosko}');" title="{$portadas[as]->title|clearslash}">
                         {$portadas[as]->title|clearslash}</a>
                     </td>
-                    <td style="padding:10px;font-size: 11px;">
+                    <td align="center">
                         {$portadas[as]->date}
                     </td>
-                    <td  class='no_view' style="width:110px;" align="center">
+                    <td  align="center">
                         {$portadas[as]->publisher}
                     </td>
-                    <td  class='no_view' style="width:110px;" align="center">
+                    <td  align="center">
                         {$portadas[as]->editor}
                     </td>
-                    <td style="padding:10px;font-size: 11px;">
+                    <td align="center">
                         {if $portadas[as]->favorite == 1}
                             <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de favorito"></a>
                         {else}
                             <a href="?id={$portadas[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Poner de favorito"></a>
                         {/if}
                     </td>
-                    <td style="padding:10px;width:10%;" align="center">
+                    <td align="center">
                         {if $portadas[as]->available == 1}
                             <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
@@ -92,12 +91,11 @@
                             </a>
                         {/if}
                     </td>
-                    <td style="padding:10px;width:10%;" align="center">
+                    <td align="center">
                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$portadas[as]->pk_kiosko}');" title="Modificar">
                             <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                         </a>
-                    </td>
-                    <td style="padding:10px;width:10%;" align="center">
+                        &nbsp;
                         <a href="#" onClick="confirm('¿Seguro que desea eliminar la portada?');enviar(this, '_self', 'delete', '{$portadas[as]->pk_kiosko}');" title="Eliminar">
                             <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                         </a>

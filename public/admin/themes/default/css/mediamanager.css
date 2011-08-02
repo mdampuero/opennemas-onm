@@ -132,3 +132,38 @@ div.week {
 	border-left: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 }
+
+.photoform {
+
+}
+
+.photoform .image-preview {
+	border:10px solid #bfbfbf;
+	border-radius:10px;
+	background:#bfbfbf;
+	text-align:center;
+	width:auto;
+	max-width:370px;
+	max-height:400px;
+	margin:0 auto !important;
+	vertical-align:top;
+}
+
+.photoform .image-preview img {
+	width:100%
+}
+
+.photoform .photo-static-info {
+	background:#dedede;
+	border:1px solid #ccc;
+	border-radius:3px;
+	padding:0 15px;
+}
+
+.photoform label {
+	text-transform:uppercase;
+	color:#333
+}
+#iptc, #exif {
+	padding:10px
+}

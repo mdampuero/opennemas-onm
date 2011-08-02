@@ -16,7 +16,6 @@ var manager = null;
 var itemsList = {json_encode value=$items}; // Elementos para seleccionar
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
-{literal}
 document.observe('dom:loaded', function() {
 	var itemsSelected = new Array();
 	if(postData!=null && postData.accounts) {
@@ -70,7 +69,6 @@ document.observe('dom:loaded', function() {
 		});
 	});
 });
-{/literal}
 </script>
 
 {/block}
@@ -117,7 +115,7 @@ document.observe('dom:loaded', function() {
 
 	<div class="form notice">
 		<h3 style="margin:0 auto !important; padding:0 auto !important;">{t}Recipient selection{/t}</h3>
-		Please select your desired persons to sent the newsletter to.
+		{t}Please select your desired persons to sent the newsletter to.{/t}
 	</div>
 
 	<div class="form">

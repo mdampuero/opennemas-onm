@@ -65,144 +65,137 @@
 		<div class="clearfix">
             {if $category neq "todos"}
                 <ul class="tabs">
-                <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
-                </li>
-                <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
-                </li>
+					<li>
+						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
+					</li>
+					<li>
+						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
+					</li>
 
-                <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
-                </li>
+					<li>
+						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
+					</li>
                 </ul>
             {/if}
         </div>
 
 
-	  <div id="{$category}">
+		<div id="{$category}">
 
-		   <table class="adminheading">
-			   <tr>
-				   <th>{t}Comments pending for publishing{/t}</th>
-			   </tr>
-		   </table>
+			<table class="adminheading">
+				<tr>
+					<th>{t}Comments pending for publishing{/t}</th>
+				</tr>
+			</table>
 
-		   <table class="adminlist" border=0>
-			   <thead>
+			<table class="adminlist" border=0>
+			{if count($comments) > 0}
+				<thead>
 				   <tr>
-					   <th  style='width:4%;'></th>
-					   <th  style='width:10%;'>{t}Author{/t}</th>
-					   <th  style='width:16%;'>{t}Title{/t}</th>
-					   <th  style='width:25%;'>{t}Comment (50 chars){/t}</th>
-					   <th  style='width:10%;'>{t}Type{/t}</th>
-					   <th  style='width:25%;'>{t}Content (50 chars){/t}</th>
-					   <th  style='width:6%;' align="center">IP</th>
+					   <th  style='width:30px'></th>
+					   <th  style='width:100px;'>{t}Author{/t}</th>
+					   <th  style='width:200px;'>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
+					   <th style='width:200px;'>{t}Commented on{/t}</th>
+					   <th  style='width:6%;' align="center">{t}IP{/t}</th>
 					   {if $category eq 'todos' || $category eq 'home'}
-						   <th align="center" style="width:5%;">Secci&oacute;n</th>
+						   <th align="center" style="width:5%;">{t}Category{/t}</th>
 					   {/if}
-					   <th  style='width:6%;' align="center">{t}Date{/t}</th>
-					   <th style='width:100px;' align="center">{t}Votes{/t}</th>
-					   <th style='width:100px;' align="center">{t}Publish{/t}</th>
-					   <th style='width:60px;' align="center">{t}Edit{/t}</th>
-					   <th style='width:60px;' align="center">{t}Delete{/t}</th>
+					   <th  style='width:110px;' align="center">{t}Date{/t}</th>
+					   <th style='width:20px;' align="center">{t}Votes{/t}</th>
+					   <th style='width:80px;' align="center">{t}Actions{/t}</th>
 				   </tr>
 			   </thead>
-
-		   <div class='fisgona' id='fisgona' name='fisgona'></div>
-			  {* Provisional - comentarios en encuestas en la solapa todos *}
-
-		   {section name=c loop=$comments}
-		   <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-			   <td style="font-size: 11px;width:4%;">
-				   <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
-			   </td>
-			   <td style="font-size: 11px;width:10%;">
-				   {$comments[c]->author|strip_tags} <br>
-				   {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
-					   <span title="{$comments[c]->email}">via facebook</span>
-				   {else}
-					   {$comments[c]->email}
-				   {/if}
-			   </td>
-			   <td style="padding:2px; font-size: 11px;width:16%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-				   {$comments[c]->title|strip_tags|clearslash|truncate:50}
-			   </td>
-			   <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-				   {$comments[c]->body|strip_tags|clearslash|truncate:50}
-			   </td>
-				{assign var=type value=$articles[c]->content_type}
-			   <td style="font-size: 11px;width:25%;" onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)">
-					{$content_types[$type]}
-			   </td>
-			   <td style="padding:10px;font-size: 11px;width:25%;">
-				   <a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
-				   {$articles[c]->title|strip_tags|clearslash}
-				   </a>
-			   </td>
-			   <td style="width:6%;font-size: 11px;" align="center">
-					   {$comments[c]->ip}
-			   </td>
-			   {if $category eq 'todos' || $category eq 'home'}
-			   <td style="width:6%;font-size: 11px;" align="center">
-				   {$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
-			   </td>
 			   {/if}
-			   <td style="width:6%;font-size: 11px;" align="center">
-				   {$comments[c]->created}
-			   </td>
-					   <td style="width:100px;font-size: 11px;" align="center">
-								  {$votes[c]->value_pos} /  {$votes[c]->value_pos}
-						   </td>
-			   <td style="font-size: 11px;width:100px;" align="center">
-						   {if $category eq 'todos' || $comments[c]->content_status eq 0}
-							   <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-									   <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-							   <a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-									   <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-						   {elseif $comments[c]->content_status eq 2}
-								   <a class="unpublishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-										  </a>
-						   {else}
-								   <a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-										  </a>
-						   {/if}
-			   </td>
-			   <td style="font-size: 11px;width:60px;" align="center">
-				   <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
-					   <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-			   </td>
-			   <td style="font-size: 11px;width:60px;" align="center">
-				   <a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
-					   <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-			   </td>
-		  </tr>
 
-		   {sectionelse}
-			   {if $category eq 'todos'}
-				   <tr>
-						  <td align="center" colspan=10><h2 style="margin:50px">No hay ningun comentario <br/>pendiente de moderación</h2></td>
-				  </tr>
-			   {else}
-				  <tr>
-						  <td align="center" colspan=10><br><br><h2><b>No hay ningún comentario guardado</b></h2><br><br></td>
-				  </tr>
-			   {/if}
-		   {/section}
-		   <tfoot>
-				<tr class="pagination" >
-					<td colspan="13" align="center">{$paginacion->links}</td>
-				</tr>
-		   </tfoot>
+				<tbody>
+					<div class='fisgona' id='fisgona' name='fisgona'></div>
+					{* Provisional - comentarios en encuestas en la solapa todos *}
 
-		  </table>
-	  </div>
+					{section name=c loop=$comments}
+					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
+						<td >
+							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
+						</td>
+						<td >
+							{$comments[c]->author|strip_tags}
+							{if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
+								&lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
+							{else}
+								&lt;{$comments[c]->email}&gt;
+							{/if}
+						</td>
+						<td onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+							{if $title}
+								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:30:"..."}]</strong>
+							{/if} {$comments[c]->body|strip_tags|clearslash|truncate:50}
+						</td>
+						 {assign var=type value=$articles[c]->content_type}
+						<td >
+							<strong>[{$content_types[$type]}]</strong>
+							<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
+							{$articles[c]->title|strip_tags|clearslash}
+							</a>
+						</td>
+						<td align="center">
+							{$comments[c]->ip}
+						</td>
+						{if $category eq 'todos' || $category eq 'home'}
+						<td align="center">
+							{$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
+						</td>
+						{/if}
+						<td align="center">
+							{$comments[c]->created}
+						</td>
+						<td align="center">
+							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
+						</td>
+						<td align="center">
+							{if $category eq 'todos' || $comments[c]->content_status eq 0}
+								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+							{elseif $comments[c]->content_status eq 2}
+								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+								</a>
+							{else}
+								<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+								</a>
+							{/if}
+							&nbsp;
+							<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
+								<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+							&nbsp;
+							<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
+								<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+						</td>
+					</tr>
 
-   {dialogo script="print"}
+					{sectionelse}
+					<tr>
+						<td align="center" colspan=10>
+							<h3 style="margin:50px">No hay ningun comentario <br/>pendiente de moderación</h3>
+						</td>
+					</tr>
+					{/section}
+				</tbody>
+				{if count($comments) > 0}
+				<tfoot>
+					<tr class="pagination" >
+						<td colspan="13" align="center">{$paginacion->links}</td>
+					</tr>
+				</tfoot>
+				{/if}
 
-
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+			</table>
+		</div>
     </div>
+
+	<input type="hidden" id="action" name="action" value="" />
+	<input type="hidden" name="id" id="id" value="{$id}" />
+
 </form>
 {/block}

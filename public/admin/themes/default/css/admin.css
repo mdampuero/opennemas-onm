@@ -197,7 +197,8 @@ table.adminheading {
 	text-shadow:0 1px 0 #FFFFFF;
 }
 table.adminlist img, table.adminheading img { vertical-align:middle; }
-table.adminlist {
+table.adminlist,
+table.adminform {
 	width:100%;
 	background-color: #FFFFFF;
 	margin: 0px;
@@ -207,6 +208,9 @@ table.adminlist {
     border-spacing: 0;
 	color: #333;
 }
+table.adminform {
+	border-top:1px solid #bfbfbf
+}
 
 table.adminlist thead th {
 	margin: 0px;
@@ -214,57 +218,69 @@ table.adminlist thead th {
 	font-size: 11px;
 	color: #000;
 	padding: 1px;
-	background: #dfdfdf; /* for non-css3 browsers */
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#dfdfdf'); /* for IE */
-	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dfdfdf)); /* for webkit browsers */
-	background: -moz-linear-gradient(top,  #fff,  #dfdfdf); /* for firefox 3.6+ */
-	padding:5px 3px;
+	background: #e1e2e1; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e1e2e1'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e1e2e1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #fefefe,  #e1e2e1); /* for firefox 3.6+ */
+	padding:4px 4px;
 	border-right:1px solid #ccc;
 	text-shadow:0 1px 0 #FFFFFF;
+	border-bottom:1px solid #ccc !important;
+}
+table.adminlist thead th:hover {
+	background: #d1d2d1; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#d1d2d1'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#d1d2d1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #fefefe,  #d1d2d1); /* for firefox 3.6+ */
+}
+table.adminlist thead tr {
+	border-bottom:1px solid #ccc !important;
 }
 table.adminlist thead th:last-child {
-	border:none !important
+	border-right:none !important
+}
+table.adminlist thead img {
+	max-height:12px;
 }
 table.adminlist img{
 	vertical-align:middle;
-	max-height:16px;
 }
 table.adminlist tr {
 	cursor:pointer;
 }
-table.adminlist tr.row0 {
-	background-color: #fff;
+table.adminlist tr.row0,
+table.adminlist tr:nth-child(even) {
+	background-color: #f3f3f3;
 }
-table.adminlist tr.row1 {
-	background-color: #f5f5f5;
+table.adminlist tr.row1,
+table.adminlist tr:nth-child(odd) {
+	background-color: #fff;
 }
 table.adminlist tr.row2 {
 	background-color: #FFF;
 	border-bottom: 1px;
 	text-align: right;
 }
-table.adminlist tr.row0:hover {
+table.adminlist tr:hover {
 	background-color: #EEEEEE;
 }
-table.adminlist tr.row1:hover {
-	background-color: #EEEEEE;
-}
-
 table.adminlist thead a:hover { text-decoration: none; }
 table.adminlist thead th img { vertical-align: middle; }
 table.adminlist tbody th { font-weight: bold; }
 table.adminlist tbody tr			{ background-color: #fff;  text-align: left; }
-table.adminlist tbody tr td 	   { background: #fff;}
-table.adminlist tfoot tr { text-align: center;  color: #333; }
-table.adminlist tfoot td,
-
-table.adminlist td.order 		{ text-align: center; white-space: nowrap; }
-table.adminlist td.order span { float: left; display: block; width: 20px; text-align: center; }
+table.adminlist tbody tr td 	   { background:transparent;}
+table.adminlist tfoot tr, table.adminform tfoot tr { text-align: center;  color: #333; }
 
 .pagination a { border:1px solid #ddd; padding:4px 6px; background:#fafafa;}
 .pagination a:hover { background:#fff;}
-table.adminlist tfoot tr td { padding:10px; }
 
+table.adminlist tfoot tr td,
+table.adminform tfoot tr td{
+	background:#F1F1F1;
+	border-top:1px solid #D2D2D2;
+	padding:10px;
+	text-align: center; white-space: nowrap;
+}
 
 .pagination div.limit {
 	float: left;
@@ -393,7 +409,7 @@ a.favourite_off:hover {
 
 a.publishing {
 	background-image: url("../images/publish_g.png");
-	display: block;
+	display: inline-block;
 	width: 16px;
 	height: 16px;
 }
@@ -408,7 +424,7 @@ a.publishing:hover {
 
 a.unpublishing {
 	background-image: url("../images/publish_r.png");
-	display: block;
+	display: inline-block;
 	width: 16px;
 	height: 16px;
 }

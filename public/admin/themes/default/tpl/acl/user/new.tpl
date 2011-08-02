@@ -150,7 +150,7 @@ function showGroupUsers(elto) {
                 <td>{t}Editing user information{/t}</td>
             </tr>
         </table>
-        <table  border="0" cellpadding="4" cellspacing="0" class="adminlist" width="100%">
+        <table class="adminform"  width="100%">
             <tr>
                 <td valign="top">
 

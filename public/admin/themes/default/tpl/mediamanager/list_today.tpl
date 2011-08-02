@@ -34,12 +34,12 @@
             {if $action neq 'upload'}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />Eliminar todos
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />Eliminar
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             <li>
@@ -51,23 +51,23 @@
 
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
-                    <img border="0"  src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
+                    <img border="0"  src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
 
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
-                    <img border="0"  src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />Subir Fotos
+                    <img border="0"  src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />{t}Upload{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
-                    <img border="0"  src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos
+                    <img border="0"  src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
                 </a>
             </li>
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
-                    <img border="0"  src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />Fotos de Hoy
+                    <img border="0"  src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
                 </a>
             </li>
         </ul>

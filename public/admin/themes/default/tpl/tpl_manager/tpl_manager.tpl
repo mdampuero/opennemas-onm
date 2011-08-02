@@ -12,7 +12,7 @@
                 });
 
                 new Control.DatePicker(item,{
-                    icon: './themes/default/images/template_manager/update16x16.png',
+                    icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
                     locale: 'es_ES',
                     timePicker: true,
                     timePickerAdjacent: true,
@@ -143,19 +143,19 @@
 		<table id="tabla" name="tabla" width="100%" class="adminlist">
 			<thead>
 				<tr align="left">
-					<th><input type="checkbox" value="" onclick="selectAll(this.checked, $('tabla').select('tbody input[type=checkbox]'));" /></th>
+					<th  width="16"><input type="checkbox" value="" onclick="selectAll(this.checked, $('tabla').select('tbody input[type=checkbox]'));" /></th>
 					<th>{t}Resource{/t}</th>
-					<th>{t}Category{/t}</th>
-					<th>{t}Created in{/t}</th>
-					<th>{t}Valid until{/t}</th>
-					<th>{t}File size{/t}</th>
-					<th>{t}Actions{/t}</th>
+					<th align=center scope=col style="width:30px;">{t}Category{/t}</th>
+					<th align=center scope=col style="width:160px;">{t}Created in{/t}</th>
+					<th align=center scope=col style="width:170px;">{t}Valid until{/t}</th>
+					<th align=center scope=col style="width:40px;">{t}Size{/t}</th>
+					<th align=center scope=col style="width:30px;">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			<tbody>
 			{section name="c" loop=$caches}
 				<tr bgcolor="{cycle values="#EEEEEE,#FFFFFF"}">
-				   <td width="16">
+				   <td>
 						<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
 						<input type="hidden"   name="cacheid[]"  value="{$caches[c].category}|{$caches[c].resource}" />
 						<input type="hidden"   name="tpl[]"      value="{$caches[c].template}.tpl" />
@@ -263,29 +263,29 @@
 
 					{/if}
 				</td>
-				<td width="100">
+				<td >
 					{$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}
 				</td>
 
-				<td width="125" align="center">
+				<td align=center>
 					{$caches[c].created|date_format:"%H:%M:%S %d/%m/%Y"}
 				</td>
 
-				<td width="190" align="center">
+				<td align=center>
 					<div>
 						{if $caches[c].expires < $smarty.now}
-							 <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="La caché ya expiró" style="float: left; margin-right: 4px;" />
+							 <img src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="X" title="{t}Cache file expired{/t}" style="float: right; margin: 4px;" />
 						 {else}
-							 <img style="margin:7px 4px; float:left" src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="Caché activa"  style="float: left; margin-right: 4px;" />
+							 <img  src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="V" title="{t}Cache file valid{/t}"  style="float: right; margin: 4px;" />
 						 {/if}
 						 <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
 							maxlength="20" style="width: 130px; display:inline"/>
 					</div>
 				</td>
-				<td width="70" align="center">
+				<td align=center>
 					{$caches[c].size/1024|string_format:"%d"} KB
 				</td>
-				<td width="20" align="center">
+				<td align=center>
 				   <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
 					   title="{t}Regenerate cache file{/t}">
 						<img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" />

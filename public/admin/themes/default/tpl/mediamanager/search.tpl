@@ -100,14 +100,7 @@
                 {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
             </ul>
 
-
-            <table class="adminheading">
-                <tr>
-                    <td></td>
-                </tr>
-            </table>
-
-            <table class="adminlist" style="padding-top:20px;" >
+            <table class="adminform" >
                 <tbody >
                     <tr>
                         <td style="width:35%;" align='right'> <strong>{t}Image name:{/t}</strong></td>

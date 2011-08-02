@@ -17,10 +17,10 @@
     </tbody>
 </table>
 <div id="media-browser"  style="width:100%;">
-    <table class="adminlist fuente_cuerpo">
+    <table class="adminform">
         <tbody>
             <tr>
-                <td valign="top">                    
+                <td valign="top">
                         <div id="container-thumbnails" class="clearfix">
                             <br class="clearer" />
                             {section name=n loop=$photo}

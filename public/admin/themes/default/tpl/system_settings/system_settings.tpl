@@ -247,9 +247,12 @@ textarea{
                             <td>
                                 <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}">
                             </td>
-                        <td>
-
-                        </td>
+                            <td rowspan=2 valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="content">{t escape=off}You can get your Google Maps API Key from <a href="http://code.google.com/intl/gl-GL/apis/maps/signup.html">Google maps sign up website</a>.{/t}</div>
+                                </div>
+                            </td>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -257,9 +260,6 @@ textarea{
                             </th>
                             <td>
                                 <input type="text" id="google_custom_search_api_key" name="google_custom_search_api_key" value="{$configs['google_custom_search_api_key']|default:""}">
-                            </td>
-                            <td>
-
                             </td>
                         </tr>
 

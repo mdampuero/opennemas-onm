@@ -36,7 +36,7 @@
                 <th nowrap></th>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
             <tbody>
             <!-- Id -->
             <tr>

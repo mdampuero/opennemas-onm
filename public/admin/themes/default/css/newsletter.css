@@ -1,73 +1,34 @@
-ul#items-list {
-	/*min-height: 200px;
-	overflow: scroll;*/
-	background-color: #FFF;
-
-	list-style: none;
-	margin: 0 4px;
-}
-
-ul#items-list li {
-	padding: 4px;
-	margin: 8px 0;
-	list-style: none;
-	background-color: #DDD;
-}
-
-ul#items-list li:hover {
-	padding: 4px;
-	margin: 8px 0;
-	list-style: none;
-	background-color: #EEF;
-
-	cursor: hand;
-	cursor: pointer;
-}
-
+ul#items-list,
 ul#items-selected {
-	/*min-height: 200px;
-	overflow: scroll;*/
 	background-color: #FFF;
-
 	list-style: none;
-	margin: 0 4px;
 }
 
+ul#items-list li,
 ul#items-selected li {
-	height: 22px;
-
-	padding: 4px;
-	margin: 8px 0;
+	padding: 5px;
 	list-style: none;
-	background-color: #DDD;
-
-	cursor: move;
+	display:block !important;
 }
-ul#items-selected li, ul#items-selected li img{
+ul#items-list li:nth-child(even),
+ul#items-selected li:nth-child(even) {
+	background-color: #f3f3f3;
+}
+ul#items-selected li:nth-child(odd),
+ul#items-list li:nth-child(odd) {
+	background-color: #fff;
+}
+
+ul#items-list li:hover,
+ul#items-selected li:hover{
+	background-color: #bfbfbf;
+}
+
+ul#items-selected li,
+ul#items-selected li img,
+ul#items-list li,
+ul#items-list li img{
 	vertical-align:middle
-}
-
-ul#items-selected li.account {
-	cursor: auto;
-}
-
-ul#items-selected li:hover {
-	padding: 4px;
-	margin: 8px 0;
-	list-style: none;
-	background-color: #EEF;
-}
-
-ul#items-selected li strong {
-	display: block;
-	float: left;
-}
-
-ul#items-selected li span {
-	display: block;
-	float: left;
-
-	cursor: pointer;
 }
 
 ul#items-selected li span:hover {
@@ -83,19 +44,18 @@ ul#items-selected li.account span:hover, ul#items-selected li.account span {
 	cursor: auto;
 }
 
-/*ul#items-selected li input {*/
-/*	width: 300px;*/
-/*}*/
+ul#items-selected li .title {
+	overflow:hidden;
+	vertical-align:middle;
+}
 
 ul#items-selected li div.actions {
-	display: block;
-	float: left;
 	cursor: pointer;
-	margin:3px;
-	width: 20px;
-	height: 20px;
-	background-image: url(../images/newsletter/close.gif);
-	background-repeat: no-repeat;
+	width: 12px;
+	height: 12px;
+	background: url(../images/newsletter/close.gif) center center no-repeat;
+	display:inline-block;
+	margin:5px 5px 0 0;
 }
 
 /* Container preview */
@@ -204,3 +164,6 @@ div#menu-acciones-admin li.separator {
 /*#items-list, #items-selected {*/
 /*	overflow: auto;*/
 /*}*/
+table.adminlist tbody td {
+	border-right:1px solid #bfbfbf
+}
