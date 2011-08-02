@@ -6,7 +6,6 @@
 
 
 <link rel="stylesheet" href="{$params.CSS_DIR}admin.css" type="text/css" />
-<link rel="stylesheet" href="{$params.CSS_DIR}style.css" type="text/css" />
 <!--[if IE]>
     <link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" />
 <![endif]-->
@@ -33,13 +32,13 @@
                             <td style="border: 1px solid #ccc;"><input type="image" src="{$params.IMAGE_DIR}save_all.png" onClick="return getNameAuthor();" alt="Submit" name="submit" align="middle" width="22px" height="22px" style="cursor:pointer;" ></td>
                         </tr>
                     </table>
-                </p>  
+                </p>
                 <input type="hidden" id="nameAuthor" name="nameAuthor" title="nameAuthor" value="{$nameAuthor}" size="40" />
-                <div id="fotosContenedor">					
-                    <div class="marcoFoto" id="foto0"><input type="hidden" name="MAX_FILE_SIZE" value="300000" />   
+                <div id="fotosContenedor">
+                    <div class="marcoFoto" id="foto0"><input type="hidden" name="MAX_FILE_SIZE" value="300000" />
                         <input type="hidden" id="nameCat" name="nameCat" title="nameCat" value="{$nameCat}" size="40" />
                         <input type="hidden" id="category" name="category" title="category" value="{$category}" size="40" />
-                        <p style="font-weight: bold;">Foto #0: 
+                        <p style="font-weight: bold;">Foto #0:
                             <input type="file" name="file[0]" id="fFile0" class="required" size="50" onChange="ckeckName(this,'fileCat[0]');"/>
                             <div id="fileCat[0]" name="fileCat[0]" style="display:none;">
                                 <table border='0' bgcolor='red'   cellpadding='4'>
@@ -49,9 +48,9 @@
                                 </table>
                             </div>
                         </p>
-                        
+
                     </div>
-                    
+
                 </div>
                 <table>
                     <tr>
@@ -81,7 +80,7 @@
 </tr>
 </tbody>
 </table>
-		
-	
+
+
 </body>
 </html>

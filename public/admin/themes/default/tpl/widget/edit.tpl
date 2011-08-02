@@ -39,7 +39,7 @@ submitForm = function() {
                 </tr>
             </tbody>
         </table>
-        <table border="0" cellpadding="0" cellspacing="0" class="adminlist fuente_cuerpo">
+        <table class="adminform">
         <tbody>
         <tr>
             <td valign="top" align="right" style="padding:4px;" width="150px">

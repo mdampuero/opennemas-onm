@@ -90,8 +90,6 @@ input[type="password"]{
     border-left: 1px solid #DDD;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}modalbox.css" media="screen" />
-
 {/block}
 
 {block name="footer-js" append}

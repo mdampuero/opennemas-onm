@@ -37,14 +37,14 @@ class Dashboard {
             if (count($items)>0) {
                 $html_output .= \Onm\UI\OFC::graphicViewed($items);
                 $html_output .= "<div class=\"table\">";
-                $html_output .= "<table class=\"adminlist\" border=0><tr>";
-                $html_output .= "<th align=\"center\" style=\"width:20%;\">Visitas</th>";
-                $html_output .= "<th style=\"width:80%\">T&iacute;tulo</th>";
-                $html_output .= "</tr>";
+                $html_output .= "<table class=\"adminlist\" border=0><thead><tr>";
+                $html_output .= "<th align=\"center\" style=\"width:5%;\">Visitas</th>";
+                $html_output .= "<th>T&iacute;tulo</th>";
+                $html_output .= "</tr></thead>";
                 foreach ($items as $article) {
                     $html_output .= "<tr>";
-                    $html_output .= "<td align=\"center\" style=\"width:20%;\">".$article["views"]."</th>";
-                    $html_output .= "<td style=\"width:80%\"><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
+                    $html_output .= "<td align=\"center\">".$article["views"]."</th>";
+                    $html_output .= "<td><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
                     $html_output .= "</tr>";
                 }
 
@@ -73,14 +73,14 @@ class Dashboard {
                 $html_output .= \Onm\UI\OFC::graphicComented($items);
                 $html_output .= "<div class=\"table\">";
                 $html_output .= "<table class=\"adminlist\" border=0>";
-                $html_output .= "<tr>";
-                $html_output .= "<th align=\"center\" style=\"width:20%;\">Comentarios</th>";
-                $html_output .= "<th style=\"width:80%\">T&iacute;tulo</th>";
-                $html_output .= "</tr>";
+                $html_output .= "<thead><tr>";
+                $html_output .= "<th align=\"center\" style=\"width:5%;\">Comentarios</th>";
+                $html_output .= "<th >T&iacute;tulo</th>";
+                $html_output .= "</tr></thead>";
                 foreach ($items as $article) {
                     $html_output .= "<tr>";
-                    $html_output .= "<td align=\"center\" style=\"width:20%;\">".$article["num"]."</th>";
-                    $html_output .= "<td style=\"width:80%\"><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
+                    $html_output .= "<td align=\"center\"".$article["num"]."</th>";
+                    $html_output .= "<td><a href=\"".SITE_URL.$article["permalink"]."\" target=\"_blank\">".$article["title"]."</th>";
                     $html_output .= "</tr>";
                 }
 
@@ -120,11 +120,11 @@ class Dashboard {
                 $html_output .= \Onm\UI\OFC::graphicVoted($items);
                 $html_output .= "<div class=\"table\">";
                 $html_output .= "<table class=\"adminlist\" border=0>";
-                $html_output .= "<tr>";
-                $html_output .= "<th align=\"center\" style=\"width:10%;\">Votos</th>";
-                $html_output .= "<th align=\"center\" style=\"width:10%;\">Puntuaci&oacute;n</th>";
-                $html_output .= "<th style=\"width:60%\">T&iacute;tulo</th>";
-                $html_output .= "</tr>";
+                $html_output .= "<thead><tr>";
+                $html_output .= "<th align=\"center\" style=\"width:5%;\">Votos</th>";
+                $html_output .= "<th align=\"center\" style=\"width:5%;\">Puntuaci&oacute;n</th>";
+                $html_output .= "<th>T&iacute;tulo</th>";
+                $html_output .= "</tr></thead>";
 
                 foreach ($items as $article) {
                     $html_output .= "<tr>";

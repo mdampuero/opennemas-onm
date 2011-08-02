@@ -1,6 +1,5 @@
 {extends file="base/admin.tpl"}
 {block name="header-css" append}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}utilities.css"/>
 <style>
 div#pagina td, div#pagina th {
     font-size:11px;

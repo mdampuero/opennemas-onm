@@ -4,8 +4,6 @@
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}calendar_date_select.css" />
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}style.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}botonera.css"/>
 <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
 {/block}
 

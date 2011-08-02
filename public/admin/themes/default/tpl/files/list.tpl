@@ -106,8 +106,7 @@
 						<th class="title">{t}Title{/t}</th>
 						<th class="title">{t}Path{/t}</th>
 						<th align="center">{t}Availability{/t}</th>
-						<th align="center">{t}Edit{/t}</th>
-						<th align="center">{t}Delete{/t}</th>
+						<th align="center">{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
@@ -128,10 +127,14 @@
 							{/if}
 						</td>
 						<td style="padding:10px;width: 84px;" align="center">
-								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$attaches[c]->id}');" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-						</td>
-						<td style="padding:10px;width: 84px;" align="center">
-							<a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+							<ul class="action-buttons">
+								<li>
+									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$attaches[c]->id}');" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+								</li>
+								<li>
+									<a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+								</li>
+							</ul>
 						</td>
 					</tr>
 					{sectionelse}

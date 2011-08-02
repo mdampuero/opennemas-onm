@@ -1,7 +1,4 @@
 {extends file="base/admin.tpl"}
-{block name="header-css" append}
-<link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}css/utilities.css" />
-{/block}
 
 {block name="header-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>

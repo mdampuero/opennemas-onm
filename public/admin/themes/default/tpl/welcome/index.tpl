@@ -1,7 +1,6 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}utilities.css"/>
 <style type="text/css">
     .gf-title, .gf-title:hover{
         font-size:1.1em;
@@ -25,6 +24,9 @@
     }
     .gf-relativePublishedDate {
         display:block;
+    }
+    .gfc-result {
+        min-height:100px !important;
     }
 </style>
 {/block}

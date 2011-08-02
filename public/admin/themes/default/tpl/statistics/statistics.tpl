@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css"}
-    {$smarty.block.parent}
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}dashboard.css" />
-{/block}
-
 {block name="header-js"}
     {$smarty.block.parent}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}swfobject.js"></script>

@@ -59,8 +59,7 @@
 			<tbody>
 				<tr>
 					<td colspan="2" align="right">
-						<a href="#" onClick="javascript:enviar(this, '_self', 'update', '{$attaches->pk_attachment}');">
-							<img src="{$params.IMAGE_DIR}btn_guardar.gif" border="0" /></a>&nbsp;&nbsp;
+						<a href="#" class="onm-button red" onClick="javascript:enviar(this, '_self', 'update', '{$attaches->pk_attachment}');">Guardar</a>
 					</td>
 				</tr>
 			</tbody>

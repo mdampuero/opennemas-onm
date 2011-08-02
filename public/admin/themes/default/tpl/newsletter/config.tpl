@@ -1,10 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js"}
-{$smarty.block.parent}
-<script type='text/javascript' src='{$params.JS_DIR}prototip.js'></script>
-{/block}
-
 {block name="header-css" append}
     <style type="text/css">
     label {

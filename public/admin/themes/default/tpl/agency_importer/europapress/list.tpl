@@ -1,10 +1,4 @@
 {extends file="base/admin.tpl"}
-
-{block name="header-js"}
-{$smarty.block.parent}
-<script type='text/javascript' src='{$params.JS_DIR}prototip.js'></script>
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">

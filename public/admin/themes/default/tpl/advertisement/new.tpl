@@ -41,6 +41,7 @@
 				<img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
 				</a>
 			</li>
+			<li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action={$_REQUEST['desde']}&category={$_REQUEST['category']|default:0}&page={$_GET['page']|default:0}" value="Cancelar" title="Cancelar">
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}

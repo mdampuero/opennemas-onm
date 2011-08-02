@@ -19,7 +19,6 @@
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
-		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}menu.css"/>
         <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
 
 	{/block}

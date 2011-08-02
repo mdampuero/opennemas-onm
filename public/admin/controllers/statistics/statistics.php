@@ -37,6 +37,7 @@ if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
 
         case 'index':
+            $tpl->display('statistics/statistics.tpl');
             break;
 
         case 'get':
@@ -81,7 +82,3 @@ if(isset($_REQUEST['action']) ) {
 } else {
     Application::forward($_SERVER['SCRIPT_NAME'].'?action=index&category='.$_REQUEST['category']);
 }
-
-$tpl->removeScript('wz_tooltip.js', 'body');
-
-$tpl->display('statistics/statistics.tpl');

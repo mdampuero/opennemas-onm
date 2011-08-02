@@ -88,7 +88,7 @@ input[type="text"],
 input[type="file"],
 textarea {  border: 1px solid silver; }
 input[type="checkbox"] {
-	vertical-align:middle
+	vertical-align:middle;
 }
 
 input.disabled { background-color: #F0F0F0; }
@@ -863,9 +863,6 @@ input.disabled {
 
 input.required, textarea.required {
 	border: 1px solid #FCC;
-}
-input.required[type="file"], textarea.required[type="file"] {
-	border: none;
 }
 input.validation-failed, textarea.validation-failed {
 	border: 1px solid #FF3300;
