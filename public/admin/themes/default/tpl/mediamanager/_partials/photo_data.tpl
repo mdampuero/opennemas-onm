@@ -185,7 +185,7 @@
 <script defer="defer" type="text/javascript" language="javascript">
     if($('fecha[{$photo1->id}]')) {
         new Control.DatePicker($('fecha[{$photo1->id}]'), {
-            icon: './themes/default/images/template_manager/update16x16.png',
+            icon: './../../themes/default/images/template_manager/update16x16.png',
             locale: 'es_ES',
             timePicker: true,
             timePickerAdjacent: true,

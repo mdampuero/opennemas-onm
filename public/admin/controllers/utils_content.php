@@ -69,7 +69,7 @@ if(isset($_REQUEST['action']) ) {
             }else{ $category=10; }
 
             $tpl->assign('category', $_GET['category']);
-            $tpl->assign('home', $_GET['home'].'.php&action=list');
+            $tpl->assign('home', $_GET['home']);
             $html_out = $tpl->fetch('menu_subcategorys.tpl');
             Application::ajax_out($html_out);
             

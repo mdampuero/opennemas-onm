@@ -26,31 +26,43 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar">
-    <div class="wrapper-content">
-        <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?action=save_data&id={$photo1->id}" class="admin_add">
-                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" ><br />{t}Save{/t}
-                </a>
-            </li><li>
-                {if !isset($smarty.request.stringSearch)}
-                    <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category=0" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                {else}
-                    <a href="search_advanced.php?action=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page}" class="admin_add" value="Cancelar" title="Cancelar">
-                {/if}
-                     <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
-                </a>
-            </li>
-        </ul>
+<form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
+    <div class="top-action-bar">
+        <div class="wrapper-content">
+            <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$photo1->id}', 'form_upload');" value="Validar" title="Validar">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '{$photo1->id}');">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
+                        <br />
+                        {t}Save{/t}
+                    </a>
+                </li>
+                <li>
+                    {if !isset($smarty.request.stringSearch)}
+                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.request.category}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                    {else}
+                        <a href="search_advanced.php?action=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page}" class="admin_add" value="Cancelar" title="Cancelar">
+                    {/if}
+                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Cancel{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+    <div class="wrapper-content">
 
-    {include file="mediamanager/_partials/photo_data.tpl" display='inline'}
+        {include file="mediamanager/_partials/photo_data.tpl" display='inline'}
 
-    <input type="hidden" name="category" value="{$photo1->category}" />
+        <input type="hidden" name="category" value="{$photo1->category}" />
 
-</div>
+    </div>
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id}" />
+</form>
 {/block}

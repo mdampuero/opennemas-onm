@@ -8,7 +8,7 @@
             {if (preg_match('/album\.php/',$home)) || (!preg_match('/album\.php/',$home) && ($subcat[as][su]->internal_category neq '3'))}
                 {if $allcategorys[as]->pk_content_category eq $category}
                      <li>
-                        <a  href="{$home}&category={$subcat[as][su]->pk_content_category}" class="links {if $category==$subca}active {/if}" >
+                        <a  href="{$home}&category={$subcat[as][su]->pk_content_category}" class="links {if $category==$subca}active-tab {else}{if $subca eq $datos_cat[0]->fk_content_category}active-tab{else} deactive {/if} {/if}" >
                          <span style="color:#222 ;margin-left: 12px;margin-right: 12px;">
                            {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0} <img src="{$params.IMAGE_DIR}publish_r.png" style="width:10px;"/>{/if}{$subcat[as][su]->title}
                            </span></a>
@@ -17,7 +17,7 @@
                     {if $subcat[as][su]->fk_content_category eq $datos_cat[0]->fk_content_category}
                          {assign var=subca value=$subcat[as][su]->pk_content_category}
                          <li>
-                             <a class="links" href="{$home}&category={$subcat[as][su]->pk_content_category}" class="links {if $category==$subca}active {/if}" >
+                             <a  href="{$home}&category={$subcat[as][su]->pk_content_category}" class="links {if $category==$subca}active-tab {else}{if $subca eq $datos_cat[0]->fk_content_category}active-tab{else} deactive {/if} {/if}" >
                              <span style="color:#222 ;margin-left: 12px;margin-right: 12px;">
                              {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0} <img src="{$params.IMAGE_DIR}publish_r.png" style="width:10px;"/>{/if}{$subcat[as][su]->title}
                              </span></a>

@@ -179,6 +179,17 @@ switch($action) {
                              $mmc->category . '&page=' . $page);
     } break;
 
+    
+    case 'validate': {
+        $mmc->action_updateDatasPhotos();
+        if(isset($_REQUEST['where']) && $_SESSION['where']) {
+            unset($_SESSION['where']);
+        }
+        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;        
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=image_data&category=' .
+                             $_REQUEST['category']. '&id=' . $_REQUEST['id']);
+    } break;
+    
     case 'addPhoto': {
         if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
             //Mirar el tema de mensajes en los fallos que deberia devolver.

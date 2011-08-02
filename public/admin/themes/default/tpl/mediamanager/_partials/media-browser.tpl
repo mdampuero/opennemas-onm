@@ -143,8 +143,8 @@
                         </div>
 
                         <input type="hidden" name="listmode" value="weeks" />
-                        <input type="hidden" id="action" name="action" value="" />
-                        <input type="hidden" id="id" name="id" value="" />
+<!--                        <input type="hidden" id="action" name="action" value="" />
+                        <input type="hidden" id="id" name="id" value="" />-->
                     </form>
                 </td>
             </tr>

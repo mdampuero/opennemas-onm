@@ -70,7 +70,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $this->category = $_REQUEST['category'];
 
         list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu($this->category);
-        if($this->category != 'GLOBAL') {
+        if($this->category != 'GLOBAL' && $this->category != 0) {
             $this->category_name = $ccm->categories[$this->category]->name;
         }
         $this->tpl->assign('subcat', $this->subcat);
