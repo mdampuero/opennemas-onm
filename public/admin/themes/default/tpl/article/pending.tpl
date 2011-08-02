@@ -139,7 +139,7 @@
                         <input type="hidden"  name="permit_{$articles[c]->id}"  id="permit_{$articles[c]->id}"     {if $articles[c]->category !=20} value="1" {else} value="0" {/if}  />
                     </td>
                     <td style="padding:3px;">
-                        {if isset($articles[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
+                        {if isset($articles[c]->paper_page) && !empty($articles[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                         <span style="cursor:pointer;" title="title" id="title_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->title|clearslash} </span>
                         <script type="text/javascript">
                             // <![CDATA[

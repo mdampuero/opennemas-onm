@@ -105,6 +105,8 @@ if (!is_null($action) ) {
 
 			}
 
+            require_once ("album_front_ads.php");
+
 			/**
 			 * Send the response to the user
 			 */
@@ -131,7 +133,7 @@ if (!is_null($action) ) {
 
 			$tpl->assign('contentId', $albumID);
 
-			require_once ("gallery_advertisement.php");
+			require_once("album_inner_ads.php");
 
 			if (($tpl->caching == 0)
 				&& (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){

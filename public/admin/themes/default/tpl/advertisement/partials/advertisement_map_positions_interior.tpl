@@ -23,7 +23,7 @@
 
 <div id="advertisement-mosaic-interior" style="">
     <div id="advertisement-mosaic-interior-frame"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240" height="550" border="0" usemap="#mapInterior" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240" border="0" usemap="#mapInterior" />
 </div>
 
 <map name="mapInterior">
