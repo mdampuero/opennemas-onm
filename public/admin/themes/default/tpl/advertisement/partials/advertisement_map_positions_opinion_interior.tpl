@@ -5,7 +5,7 @@
     padding: 0;
     position: relative;
     width: 240px;
-    height: 508px;
+    height: 400px;
 }
 
 #advertisement-mosaic-opinioninterior-frame {
@@ -21,9 +21,9 @@
 </style>
 {/literal}
 
-<div id="advertisement-mosaic-opinioninterior" style="display: none;">
+<div id="advertisement-mosaic-opinioninterior" style=" ">
     <div id="advertisement-mosaic-opinioninterior-frame"></div>
-    <img src="/admin/images/advertisement/opinion_inner_240.png" width="240" height="508" border="0" usemap="#mapOpinionInterior" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240"  border="0" usemap="#mapOpinionInterior" />
 </div>
 
 <map name="mapOpinionInterior">
@@ -33,11 +33,15 @@
 <!-- #$-:Please do not edit lines starting with "#$" -->
 <!-- #$VERSION:2.3 -->
 <!-- #$AUTHOR:sandra -->
-<area shape="rect" coords="1,0,179,24" href="javascript:adPositionOpinionInterior.selectPosition(101);"/>
+<!--<area shape="rect" coords="1,0,179,24" href="javascript:adPositionOpinionInterior.selectPosition(101);"/>
 <area shape="rect" coords="179,0,240,23" href="javascript:adPositionOpinionInterior.selectPosition(102);" />
 <area shape="rect" coords="161,188,234,242" href="javascript:adPositionOpinionInterior.selectPosition(103);" />
 <area shape="rect" coords="4,323,154,344"   href="javascript:adPositionOpinionInterior.selectPosition(104);" />
 <area shape="rect" coords="161,375,235,431" href="javascript:adPositionOpinionInterior.selectPosition(105);"/>
 <area shape="rect" coords="1,479,176,505" href="javascript:adPositionOpinionInterior.selectPosition(109);"/>
 <area shape="rect" coords="177,479,237,505" href="javascript:adPositionOpinionInterior.selectPosition(110);" />
+-->
+
 </map>
+
+

@@ -1,19 +1,20 @@
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_opinion">
+<table border="0" cellpadding="4" cellspacing="6" id="ads_type_gallery">
 <tbody>
     <tr>
         <td align="right" colspan="2">
             <label>
-                {t}Banner Intersticial - Opinion Frontpage (800X600){/t}
+                {t}Banner Intersticial - Gallery (800X600){/t}
                 <input type="radio" name="type_advertisement" value="50" {if $advertisement->type_advertisement == 50}checked="checked" {/if}/>
             </label>
         </td>
         <td rowspan="7" align="right" width="340">
-            {include file="advertisement/partials/advertisement_map_positions_opinion.tpl"}
+            {include file="advertisement/partials/advertisement_map_positions_gallery_inner.tpl"}
         </td>
     </tr>
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
+  
     <tr>
         <td align="right">
             <label>
@@ -23,21 +24,30 @@
         </td>
         <td align="right">
             <label>
-                {t}Banner Top  Right (234X90){/t}
+                {t}Banner Top Right (234X90){/t}
                 <input type="radio" name="type_advertisement" value="2" {if $advertisement->type_advertisement == 2}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
+
     <tr>
-        <td align="right">&nbsp;</td>
-        <td align="right">
+        <td colspan="2"><hr /></td>
+    </tr>
+
+    <tr>
+        <td align="right" colspan="2">
             <label>
-                {t}Banner Column Right (300X*){/t}
+                {t}Banner1 Column Right (I) (300X*){/t}
                 <input type="radio" name="type_advertisement" value="3" {if $advertisement->type_advertisement == 3}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-    
+ 
+ 
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+
     <tr>
         <td align="right">
             <label>
@@ -55,25 +65,25 @@
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script defer="defer" type="text/javascript" language="javascript">
 /* <![CDATA[ */{literal}
-var adPositionOpinion = null;
+var adPositionGalleryInner = null;
 
-var positions_opinion = new Array();
-positions_opinion[1] = '2,0,176,24';
-positions_opinion[2] = '178,0,55,24';
-positions_opinion[3] = '162,217,70,50';
-positions_opinion[9] = '2,276,176,24';
-positions_opinion[10] = '178,276,55,24';
-positions_opinion[50] = '0,0,240,327';
+var positions_galleryInner = new Array();
+positions_galleryInner[1] = '2,0,176,24';
+positions_galleryInner[2] = '178,0,55,24';
+positions_galleryInner[3] = '158,106,74,72';
+positions_galleryInner[9] = '2,297,176,24';
+positions_galleryInner[10] = '178,297,55,24';
+positions_galleryInner[50] = '0,0,240,352';
 
 
-var options = {'positions': positions_opinion, 'radios': $('ads_type_opinion').select('input[name=type_advertisement]') };
-//adPositionOpinion = new AdPosition('advertisement-mosaic-opinion', options );
+var options = {'positions': positions_galleryInner, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
+// adPositionGalleryInner = new AdPosition('advertisement-mosaic-gallery-inner', options );
 document.observe('dom:loaded', function() {
     {/literal}
-    {if !empty($advertisement->type_advertisement) && $category == '4'}
-  //  adPositionOpinion.selectPosition({$advertisement->type_advertisement});
+    {if !empty($advertisement->type_advertisement) && $category == '3'}
+   //     adPositionGalleryInner.selectPosition({$advertisement->type_advertisement});
     {/if}
     {literal}
 });

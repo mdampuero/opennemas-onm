@@ -13,7 +13,7 @@
                 </tr>
             </table>
         </td>
-        <td rowspan="11" align="right" width="240">
+        <td rowspan="11" align="right" width="340">
             {include file="advertisement/partials/advertisement_map_positions.tpl"}
         </td>
     </tr>
@@ -248,12 +248,12 @@ var options  =  {
                 'positions': positions_portada,
                 'radios': $('ads_type_portada').select('input[name=type_advertisement]')
                 };
-adPositionPortada = new AdPosition('advertisement-mosaic', options );
+ //adPositionPortada = new AdPosition('advertisement-mosaic', options );
 document.observe('dom:loaded', function() {
     {if !empty($advertisement->type_advertisement)}
-    adPositionPortada.selectPosition({ $advertisement->type_advertisement });
+   // adPositionPortada.selectPosition({ $advertisement->type_advertisement });
     {else}
-    adPositionPortada.selectPosition(1);
+   // adPositionPortada.selectPosition(1);
     {/if}
 });
 /* ]]> */

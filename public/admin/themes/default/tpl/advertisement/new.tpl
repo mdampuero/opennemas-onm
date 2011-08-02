@@ -352,6 +352,7 @@
                             {/is_module_activated}
                             {is_module_activated name="ALBUM_MANAGER"}
                             <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
+                            <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
                             {/is_module_activated}
                         </ul>
 
@@ -381,6 +382,9 @@
                         {is_module_activated name="ALBUM_MANAGER"}
                         <div id="publi-gallery" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
+                        </div>
+                        <div id="publi-gallery-inner" class="panel-ads">
+                            {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                         </div>
                         {/is_module_activated}
 
@@ -434,18 +438,13 @@
                         this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: ''});
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none'});
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none'});
-                        this.changePropertyTabs('a[href$=publi-gallery]', { display: 'none' });
-                    } else if(['publi-gallery'].indexOf(id) != -1) {
-                        this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-gallery]', { display: '' });
-
+                        this.changePropertyTabs('a[href$=publi-gallery], a[href$=publi-gallery-inner]', { display: 'none' });
+                    
                      } else {
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: '' });
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: '' });
                         this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-gallery]', { display: 'none' });
+                        this.changePropertyTabs('a[href$=publi-gallery],a[href$=publi-gallery-inner]', { display: '' });
                     }
 
 

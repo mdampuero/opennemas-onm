@@ -8,11 +8,14 @@
                 <input type="radio" name="type_advertisement" value="150" {if $advertisement->type_advertisement == 150}checked="checked" {/if}/>
             </label>
         </td>
-        <td rowspan="8" align="right" width="240">
+        <td rowspan="8" align="right" width="340">
             {include file="advertisement/partials/advertisement_map_positions_interior.tpl"}
         </td>
     </tr>
 
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
     <tr>
         <td align="right">
             <label>
@@ -96,12 +99,12 @@ positions_interior[110] = '177,518,55,23';
 positions_interior[150] = '0,0,240,550';
 
 
-var options = {'positions': positions_interior, 'radios': $('ads_type_interior').select('input[name=type_advertisement]') };
-adPositionInterior = new AdPosition('advertisement-mosaic-interior', options );
+//var options = {'positions': positions_interior, 'radios': $('ads_type_interior').select('input[name=type_advertisement]') };
+//adPositionInterior = new AdPosition('advertisement-mosaic-interior', options );
 document.observe('dom:loaded', function() {
     {/literal}
     {if !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100)} {* && $category != '4' *}
-    adPositionInterior.selectPosition({$advertisement->type_advertisement});
+  //  adPositionInterior.selectPosition({$advertisement->type_advertisement});
     {/if}
     {literal}
 });

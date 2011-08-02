@@ -41,13 +41,14 @@ class importerIdeal {
                       "/Antetitulo/"=>"subtitle",
                       "/TextoGeneral/"=>"body",
                       "/Titulo/"=>"title",
-                      "/Título Int/"=>"title_int",
-                      "/TituloBreveDespiece/"=>"title",
+                      "/T?tulo Int/"=>"title_int",
+                      "/TituloBreveDespiece/"=>"title_int",
+                      "/Firma/" => "agency",
+                      "/Data/" => "agency",
                       "/TextoBandera/"=>"summary",
                       "/Entradilla/"=>"summary",
-                      "/Cuadratin/"=>"summary",
-                      "/Firma/" => "agency",
-                      "/Data/" => "agency"
+                      "/Cuadratin/"=>"summary"
+                      
 
                        );
         foreach($relation as $pattern=>$value) {

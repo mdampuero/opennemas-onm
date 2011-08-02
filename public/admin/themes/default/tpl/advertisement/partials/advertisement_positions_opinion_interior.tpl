@@ -8,7 +8,7 @@
                 <input type="radio" name="type_advertisement" value="150" {if $advertisement->type_advertisement == 150}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right" width="240" rowspan="8">
+        <td align="right" width="340" rowspan="8">
             {include file="advertisement/partials/advertisement_map_positions_opinion_interior.tpl"}
         </td>
     </tr>
@@ -95,11 +95,11 @@ positions_opinion_interior[150] = '0,0,240,508';
 
 
 var options = {'positions': positions_opinion_interior, 'radios': $('ads_type_interior_opinion').select('input[name=type_advertisement]') };
-adPositionOpinionInterior = new AdPosition('advertisement-mosaic-opinioninterior', options );
+// adPositionOpinionInterior = new AdPosition('advertisement-mosaic-opinioninterior', options );
 document.observe('dom:loaded', function() {
     {/literal}
     {if !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100) && $category == '4'}
-    adPositionOpinionInterior.selectPosition({$advertisement->type_advertisement});
+ //   adPositionOpinionInterior.selectPosition({$advertisement->type_advertisement});
     {/if}
     {literal}
 });

@@ -5,7 +5,7 @@
     padding: 0;
     position: relative;
     width: 240px;
-    height: 550px;
+    height: 500px;
 }
 
 #advertisement-mosaic-interior-frame {
@@ -21,9 +21,9 @@
 </style>
 {/literal}
 
-<div id="advertisement-mosaic-interior" style="display: none;">
+<div id="advertisement-mosaic-interior" style="">
     <div id="advertisement-mosaic-interior-frame"></div>
-    <img src="/admin/images/advertisement/article_inner_240.png" width="240" height="550" border="0" usemap="#mapInterior" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240" height="550" border="0" usemap="#mapInterior" />
 </div>
 
 <map name="mapInterior">
@@ -33,7 +33,7 @@
 <!-- #$VERSION:2.3 -->
 <!-- #$AUTHOR:sandra -->
 
-
+<!--
 <area shape="rect" coords="0,2,180,24" alt="Big Banner Superior Izquierdo (Int.)" title="{t}Big Banner top left (Int.){/t}"
     href="javascript:adPositionInterior.selectPosition(101);" />
 
@@ -53,6 +53,6 @@
     href="javascript:adPositionInterior.selectPosition(109);" />
 
 <area shape="rect" coords="181,520,235,5431" alt="Banner Inferior Derecho (Int.)" title="{t}Banner bottom right (Int.){/t}"
-    href="javascript:adPositionInterior.selectPosition(110);" />
+    href="javascript:adPositionInterior.selectPosition(110);" />-->
 
 </map>

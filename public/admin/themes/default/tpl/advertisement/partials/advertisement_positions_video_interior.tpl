@@ -8,7 +8,7 @@
                 <input type="radio" name="type_advertisement" value="350" {if $advertisement->type_advertisement == 350}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right" width="240" rowspan="8">
+        <td align="right" width="340" rowspan="8">
             {include file="advertisement/partials/advertisement_map_positions_video_interior.tpl"}
         </td>
     </tr>
@@ -75,11 +75,11 @@ positions_video_interior[310] = '178,382,55,24';
 positions_video_interior[350] = '0,0,240,435';
 
 var options = {'positions': positions_video_interior, 'radios': $('ads_type_interior_video').select('input[name=type_advertisement]') };
-adPositionVideoInterior = new AdPosition('advertisement-mosaic-videointerior', options );
+// adPositionVideoInterior = new AdPosition('advertisement-mosaic-videointerior', options );
 document.observe('dom:loaded', function() {
     {/literal}
     {if !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100) && $category == '4'}
-    adPositionVideoInterior.selectPosition({$advertisement->type_advertisement});
+   // adPositionVideoInterior.selectPosition({$advertisement->type_advertisement});
     {/if}
     {literal}
 });

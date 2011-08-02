@@ -5,7 +5,7 @@
     padding: 0;
     position: relative;
     width: 240px;
-    height: 327px;
+    height: 400px;
 }
 
 #advertisement-mosaic-frame-opinion {
@@ -21,9 +21,9 @@
 </style>
 {/literal}
 
-<div id="advertisement-mosaic-opinion" style="display: none;">
+<div id="advertisement-mosaic-opinion" style="">
     <div id="advertisement-mosaic-frame-opinion"></div>
-    <img src="/admin/images/advertisement/opinion_front_ads_240.png" width="240" height="327" border="0" usemap="#mapOpinion" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/right1Ads.png" width="240" border="0" usemap="#mapOpinion" />
 </div>
 
 <map name="mapOpinion">
@@ -34,9 +34,10 @@
 <!-- #$-:Please do not edit lines starting with "#$" -->
 <!-- #$VERSION:2.3 -->
 <!-- #$AUTHOR:sandra -->
-<area shape="rect" coords="4,0,178,24" title="bigbannertop"  href="javascript:adPositionOpinion.selectPosition(1);"/>
+<!--<area shape="rect" coords="4,0,178,24" title="bigbannertop"  href="javascript:adPositionOpinion.selectPosition(1);"/>
 <area shape="rect" coords="179,0,240,24" title="topleftbanner"  href="javascript:adPositionOpinion.selectPosition(2);" />
 <area shape="rect" coords="162,217,233,270" title="lateralbanner"  href="javascript:adPositionOpinion.selectPosition(3);" />
 <area shape="rect" coords="4,276,178,301" title="bigbottombanner"  href="javascript:adPositionOpinion.selectPosition(9);" />
-<area shape="rect" coords="179,276,240,301" title="leftbotombanner" href="javascript:adPositionOpinion.selectPosition(10);"/>
+<area shape="rect" coords="179,276,240,301" title="leftbotombanner" href="javascript:adPositionOpinion.selectPosition(10);"/>-->
+
 </map>

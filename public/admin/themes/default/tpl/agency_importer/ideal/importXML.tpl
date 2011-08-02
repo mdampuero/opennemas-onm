@@ -76,11 +76,11 @@
                     <tr><td colspan="2"><h3>{$XMLFile[$smarty.foreach.articl.index]}</h3></td></tr>
                  {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency}</td></tr>{/if}
                   {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
-                  {if !empty($article.subtitle)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Antetitulo: </td><td>{$article.subtitle}</td></tr>{/if}
+                  {if !empty($article.subtitle)}<tr style="font-size:16px;font-weight:700"><td>Antetitulo: </td><td>{$article.subtitle}</td></tr>{/if}
                     {if !empty($article.title)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Titulo: </td><td>{$article.title}</td></tr>
                     {else}<tr style="color:orangered;font-size:16px;font-weight:700"><td>Titulo: </td><td> No tiene</td></tr>
                     {/if}
-                    {if !empty($article.title_int)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Titulo Interior: </td><td>{$article.title_int}</td></tr>{/if}
+                    {if !empty($article.title_int)}<tr style="font-size:16px;font-weight:700"><td>Titulo Interior: </td><td>{$article.title_int}</td></tr>{/if}
                     {if !empty($article.summary)}<tr><td style="vertical-align:top;"><b>Entradilla: </b></td><td>{$article.summary}</td></tr>{/if}
                     {if !empty($article.body)}<tr><td style="vertical-align:top;" ><b>Cuerpo: </b></td><td>{$article.body}</td></tr>{/if}
                     {if !empty($article.date)}<tr><td><b>Fecha: </b></td><td>{$article.date}</td></tr>{/if}

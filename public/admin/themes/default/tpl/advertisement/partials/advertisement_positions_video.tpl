@@ -7,7 +7,7 @@
                 <input type="radio" name="type_advertisement" value="250" {if $advertisement->type_advertisement == 250}checked="checked" {/if}/>
             </label>
         </td>
-        <td rowspan="7" align="right" width="240">
+        <td rowspan="7" align="right" width="340">
             {include file="advertisement/partials/advertisement_map_positions_video.tpl"}
         </td>
     </tr>
@@ -32,6 +32,21 @@
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
+
+    <tr>
+        <td align="right" colspan="2">
+            <label>
+                {t}Banner1 Column Right (I) (300X*){/t}
+                <input type="radio" name="type_advertisement" value="203" {if $advertisement->type_advertisement == 203}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+
 
     <tr>
         <td align="right">
@@ -64,11 +79,11 @@ positions_video[250] = '0,0,240,401';
 
 
 var options = {'positions': positions_video, 'radios': $('ads_type_video').select('input[name=type_advertisement]') };
-adPositionVideo = new AdPosition('advertisement-mosaic-video', options );
+// adPositionVideo = new AdPosition('advertisement-mosaic-video', options );
 document.observe('dom:loaded', function() {
     {/literal}
     {if !empty($advertisement->type_advertisement) && $category == '4'}
-    adPositionVideo.selectPosition({$advertisement->type_advertisement});
+//    adPositionVideo.selectPosition({$advertisement->type_advertisement});
     {/if}
     {literal}
 });

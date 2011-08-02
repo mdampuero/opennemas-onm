@@ -21,9 +21,9 @@
 </style>
 {/literal}
 
-<div id="advertisement-mosaic" style="display: none;">
+<div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="/admin/images/advertisement/front_advertisement.png" width="240" height="628" border="0" usemap="#mapPortada" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" width="240" height="628" border="0" usemap="#mapPortada" />
 </div>
 
 <map name="mapPortada">
@@ -32,7 +32,7 @@
     <!-- #$-:Please do not edit lines starting with "#$" -->
     <!-- #$VERSION:2.3 -->
     <!-- #$AUTHOR:sandra -->
-    <area shape="rect" coords="1,1,174,25" alt="Big banner superior izquierdo" title="{t}Big banner top left{/t}"
+<!--    <area shape="rect" coords="1,1,174,25" alt="Big banner superior izquierdo" title="{t}Big banner top left{/t}"
           href="javascript:adPositionPortada.selectPosition(1);" />
     <area shape="rect" coords="178,1,240,25" alt="Banner superior derecho" title="{t}Banner top right{/t}"
           href="javascript:adPositionPortada.selectPosition(2);" />
@@ -81,6 +81,6 @@
           href="javascript:adPositionPortada.selectPosition(5);" />
     <area shape="rect" coords="178,574,240,608" alt="Mini derecho 1" title="{t}Mini right 1{/t}"
           href="javascript:adPositionPortada.selectPosition(6);" />
-    
+    -->
 
 </map>

@@ -5,7 +5,7 @@
     padding: 0;
     position: relative;
     width: 240px;
-    height: 435px;
+    height: 400px;
 }
 
 #advertisement-mosaic-videointerior-frame {
@@ -21,9 +21,9 @@
 </style>
 {/literal}
 
-<div id="advertisement-mosaic-videointerior" style="display: none;">
+<div id="advertisement-mosaic-videointerior" style=" ">
     <div id="advertisement-mosaic-videointerior-frame"></div>
-    <img src="/admin/images/advertisement/video_inner_240.png" width="240" height="435" border="0" usemap="#mapVideoInterior" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/videoAds.png" width="240" height="435" border="0" usemap="#mapVideoInterior" />
 </div>
 
 <map name="mapVideoInterior">
@@ -32,9 +32,9 @@
 <!-- #$-:Please do not edit lines starting with "#$" -->
 <!-- #$VERSION:2.3 -->
 <!-- #$AUTHOR:sandra -->
-<area shape="rect" coords="2,1,177,25" href="javascript:adPositionVideoInterior.selectPosition(301);" />
+<!--<area shape="rect" coords="2,1,177,25" href="javascript:adPositionVideoInterior.selectPosition(301);" />
 <area shape="rect" coords="177,1,238,25" href="javascript:adPositionVideoInterior.selectPosition(302);" />
 <area shape="rect" coords="168,183,235,213" href="javascript:adPositionVideoInterior.selectPosition(303);" />
 <area shape="rect" coords="4,382,174,407" href="javascript:adPositionVideoInterior.selectPosition(309);" />
-<area shape="rect" coords="175,382,236,407" href="javascript:adPositionVideoInterior.selectPosition(310);" />
+<area shape="rect" coords="175,382,236,407" href="javascript:adPositionVideoInterior.selectPosition(310);" />-->
 </map>
