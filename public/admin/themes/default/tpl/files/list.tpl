@@ -6,7 +6,7 @@
         <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}" title="{t}Upload file{/t}">
+					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}&op=view" title="{t}Upload file{/t}">
 						<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
 						{t}Upload file{/t}
 					</a>

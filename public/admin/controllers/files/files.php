@@ -180,62 +180,56 @@ if( isset($_REQUEST['action']) ) {
 
             require_once('../../attachments_events.php');
 
-            if (!isset($category)) { $category = 10; }
-            if( !isset($_POST['op']) ) { $op = 'view'; }
-
             $tpl->assign('filterRegexp', '/^[a-z0-9\-_]+\.[a-z0-9]{2,4}$/i');
 
 
-            if (isset($_POST['op'])) {
+            if(isset($_FILES['path']['name'])
+               && !empty($_FILES['path']['name'])) {
 
-                if(isset($_FILES['path']['name'])
-                   && !empty($_FILES['path']['name'])) {
+                $category = (isset($category)) ? $category : 0;
 
-                    $category = (isset($category)) ? $category : 0;
+                $dateStamp = date('Ymd');
+                $directoryDate =date("/Y/m/d/");
+                $basePath = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.$directoryDate ;
 
-                    $dateStamp = date('Ymd');
-                    $directoryDate =date("/Y/m/d/");
-                    $basePath = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.$directoryDate ;
+                $fileName = $_FILES['path']['name'];
+                $fileType   = $_FILES['path']['type'];
+                $fileSize = $_FILES['path']['size'];
+                $fileName = preg_replace('/[^a-z0-9_\-\.]/i', '-', strtolower($fileName));
 
-                    $fileName = $_FILES['path']['name'];
-                    $fileType   = $_FILES['path']['type'];
-                    $fileSize = $_FILES['path']['size'];
-                    $fileName = preg_replace('/[^a-z0-9_\-\.]/i', '-', strtolower($fileName));
+                $data['title'] = $_POST['title'];
+                $data['path'] = $directoryDate.$fileName;
+                $data['category'] = $category;
+                $data['available'] = 1;
+                $data['description'] = $_POST['title'];
+                $data['metadata'] = String_Utils::get_tags($_POST['title']);
+                $data['fk_publisher'] = $_SESSION['userid'];
 
-                    $data['title'] = $_POST['title'];
-                    $data['path'] = $directoryDate.$fileName;
-                    $data['category'] = $category;
-                    $data['available'] = 1;
-                    $data['description'] = $_POST['title'];
-                    $data['metadata'] = String_Utils::get_tags($_POST['title']);
-                    $data['fk_publisher'] = $_SESSION['userid'];
+                // Create folder if it doesn't exist
 
-                    // Create folder if it doesn't exist
+                if( !file_exists($basePath) ) {
+                    mkdir($basePath, 0777, true);
+                }
 
-                    if( !file_exists($basePath) ) {
-                        mkdir($basePath, 0777, true);
-                    }
+                // Move uploaded file
+                $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
 
-                    // Move uploaded file
-                    $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
+                if ($uploadStatus !== false) {
 
-                    if ($uploadStatus !== false) {
-
-                        $attachment = new Attachment();
-                        if ($attachment->create($data)) {
-                            $msg = _("File created successfuly.");
-                            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$page);
-                        }
-
-                    } else {
-                        $tpl->assign('message', _('There was an error while uploading the file. <br />Please, contact your system administration'));
+                    $attachment = new Attachment();
+                    if ($attachment->create($data)) {
+                        $msg = _("File created successfuly.");
+                        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$page);
                     }
 
                 } else {
-                    $tpl->assign('message', _('Please select a file before send the form') );
+                    $tpl->assign('message', _('There was an error while uploading the file. <br />Please, contact your system administration'));
                 }
 
+            } elseif (!isset($_GET['op'])) {
+                $tpl->assign('message', _('Please select a file before send the form') );
             }
+
             $tpl->assign('category', $category);
 
             $tpl->display('files/new.tpl');
