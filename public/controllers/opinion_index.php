@@ -61,7 +61,7 @@ if (isset($_REQUEST['action'])) {
                                        'AND contents.in_home=1 '.
                                        'AND contents.content_status=1 ',
                                        'ORDER BY position ASC, created DESC '.
-                                       'LIMIT 1');
+                                       'LIMIT 2');
 
                 // Fetch last opinions from director
                 $director = $cm->find('Opinion',
