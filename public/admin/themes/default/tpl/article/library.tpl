@@ -75,7 +75,7 @@
 	<div id="{$category}">
 		<table class="adminheading">
 			<tr>
-				<td><strong>Articles in library</strong></td>
+				<td><strong>{t}Articles in library{/t}</strong></td>
 			</tr>
 		</table>
 
@@ -88,7 +88,7 @@
 				<th align="center">{t}Views{/t}</th>
 				<th align="center">{t}Comments{/t}</th>
 				<th align="center">Votaci&oacute;n</th>
-				<th align="center">{t}Publisher{/t}</th>
+				<th align="center">{t}Author{/t}</th>
 				<th align="center">{t}Last Editor{/t}</th>
 				<th align="center" style="width:100px;">{t}Actions{/t}</th>
 			</thead>
