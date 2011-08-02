@@ -129,7 +129,7 @@ class ModuleManager {
     static public function checkAllModulesActivated()
     {
         $activatedModules = \Onm\Settings::get('activated_modules');
-        if (!isset($activatedModules)) {
+        if (!isset($activatedModules) or !is_array($activatedModules)) {
             return true;
         }
         return in_array('ALL', $activatedModules);
