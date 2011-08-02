@@ -18,6 +18,10 @@
     .datepickerControl {
         z-index:99;
     }
+    table.adminlist img {
+        height:auto !important;
+        max-height:400px; 
+    }
 </style>
 {/block}
 

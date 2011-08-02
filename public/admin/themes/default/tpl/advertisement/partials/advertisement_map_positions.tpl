@@ -18,12 +18,13 @@
     border: 1px dashed #F00;
     background-color: #996633;
 }
+
 </style>
 {/literal}
 
 <div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" width="240" height="628" border="0" usemap="#mapPortada" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" style="width:240px;height:628px;" border="0" usemap="#mapPortada" />
 </div>
 
 <map name="mapPortada">
