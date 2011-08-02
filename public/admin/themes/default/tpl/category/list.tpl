@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-       <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}</h2></div>
@@ -46,11 +46,11 @@
 
         <ul id="tabs">
             <li>
-            <a href="category.php#listado">Listar secciones</a>
+                <a href="category.php#listado">Listar secciones</a>
             </li>
-        <li>
-            <a href="#ordenar">Ordenar Secciones</a>
-        </li>
+<!--            <li>
+                <a href="#ordenar">Ordenar Secciones</a>
+            </li>-->
         </ul>
 
         <div class="panel" id="listado">
@@ -226,7 +226,7 @@
 
 
         <div class="panel" id="ordenar" style="width:95%">
-
+                    
             {include file="botonera_up.tpl" type="order"}
             <div id="warnings-validation"></div>
             <table class="adminheading">
