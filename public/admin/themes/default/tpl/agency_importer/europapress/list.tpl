@@ -115,9 +115,13 @@
 				 </td>
 
 				 <td style="font-size: 11px;width:100px;" align="center">
-					  <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
-						 <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
-					  </a>
+						<ul class="action-buttons">
+							<li>
+								<a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
+								   <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+								</a>
+							</li>
+						</ul>
 				 </td>
 
 			</tr>

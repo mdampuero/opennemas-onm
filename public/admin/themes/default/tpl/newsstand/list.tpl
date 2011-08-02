@@ -46,11 +46,11 @@
                 <thead>
                     <th align="center" style="width:100px;">{t}Cover{/t}</th>
                     <th align="center">{t}Title{/t}</th>
-                    <th align="center" style="width:90px;">Fecha</th>
+                    <th align="center" style="width:90px;">{t}Date{/t}</th>
                     <th align="center" style="width:10px;">{t}Publisher{/t}</th>
                     <th align="center" style="width:90px;">{t}Last editor{/t}</th>
-                    <th align="center" style="width:10px;">Favorito</th>
-                    <th align="center" style="width:10px;">Publicado</th>
+                    <th align="center" style="width:10px;">{t}Favorte{/t}</th>
+                    <th align="center" style="width:10px;">{t}Published{/t}</th>
                     <th align="center" style="width:50px;">{t}Actions{/t}</th>
                 </thead>
                 {/if}
@@ -92,13 +92,20 @@
                         {/if}
                     </td>
                     <td align="center">
-                        <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$portadas[as]->pk_kiosko}');" title="Modificar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                        </a>
-                        &nbsp;
-                        <a href="#" onClick="confirm('¿Seguro que desea eliminar la portada?');enviar(this, '_self', 'delete', '{$portadas[as]->pk_kiosko}');" title="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                        </a>
+                        <ul class="action-buttons">
+                            <li>
+                                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$portadas[as]->pk_kiosko}');" title="Modificar">
+                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onClick="confirm('¿Seguro que desea eliminar la portada?');enviar(this, '_self', 'delete', '{$portadas[as]->pk_kiosko}');" title="Eliminar">
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                </a>
+                            </li>
+                        </ul>
+
+
                     </td>
 
                 </tr>

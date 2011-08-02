@@ -16,9 +16,9 @@
                 <th nowrap>{t}Advanced Search{/t}</th>
             </tr>
         </table>
-        <table class="adminlist" style="text-align:center;">
+        <table class="adminform" style="text-align:center;">
             <tr>
-                <td colspan=2 style="padding:20px;" nowrap="nowrap" colspan='3'>
+                <td colspan=2 style="padding:20px; text-align:center" nowrap="nowrap" colspan='3'>
                     <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                         value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
                         class="required" size="100%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;

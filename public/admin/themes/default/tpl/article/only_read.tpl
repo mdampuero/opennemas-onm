@@ -8,7 +8,7 @@
         </tr>
     </table>
 
-    <table class="adminlist">
+    <table class="adminform">
 
         <tbody>
             <tr>

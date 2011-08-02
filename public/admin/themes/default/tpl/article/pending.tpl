@@ -181,17 +181,24 @@
                     <td align="center" >
                         <span style="cursor:pointer;" title="editor" id="editor_{$articles[c]->id}">{$art_editors[c]}</span>
                     </td>
-                    <td style="padding:5px" align="right">
-                        {if $category!=20 && $articles[c]->category !=20}
-                            <a href="?id={$articles[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                        {/if}
-                        &nbsp;
-                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="{t}Edit{/t}">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit{/t}" /></a>
-                        &nbsp;
-                        <a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                    <td style="padding-right:15px" align="right">
+                        <ul class="action-buttons">
+                            {if $category!=20 && $articles[c]->category !=20}
+                            <li>
+                                <a href="?id={$articles[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
+                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                                </a>
+                            </li>
+                            {/if}
+                            <li>
+                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="{t}Edit{/t}">
+                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit{/t}" /></a>
+                            </li>
+                            <li>
+                                <a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                            </li>
+                        </ul>
                     </td>
                 </tr>
             {/section}
@@ -277,23 +284,29 @@
                         </td>
 
                         <td  align="center">
-                            {if $opinions[c]->content_status == 1}
-                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                            </a>
-                            {else}
-                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                            </a>
-                            {/if}
-                            &nbsp;
-                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                            </a>
-                            &nbsp;
-                            <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                            </a>
+                            <ul class="action-buttons">
+                                <li>
+                                    {if $opinions[c]->content_status == 1}
+                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                                    </a>
+                                    {else}
+                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                                    </a>
+                                    {/if}
+                                </li>
+                                <li>
+                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
+                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                    </a>
+                                </li>
+                                <li>
+                                     <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
+                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                    </a>
+                                </li>
+                            </ul>
                         </td>
                     </tr>
                 {/section}

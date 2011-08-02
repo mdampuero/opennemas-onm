@@ -77,11 +77,16 @@
 				{/if}
 			</td>
 			<td style="width:70px;" align="center">
-				<a href="{$_SERVER['PHP_SELF']}?action=read&id={$opinions[c]->id}" title="Modificar">
-					<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-				&nbsp;
-				<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
-					<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+				<ul class="action-buttons">
+					<li>
+						<a href="{$_SERVER['PHP_SELF']}?action=read&id={$opinions[c]->id}" title="Modificar">
+							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+					</li>
+					<li>
+						<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
+							<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+					</li>
+				</ul>
 			</td>
 		</tr>
 		{/section}

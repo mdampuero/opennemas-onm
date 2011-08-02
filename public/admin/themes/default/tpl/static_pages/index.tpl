@@ -20,7 +20,7 @@
         <table class="adminheading">
             <tr>
                 <th align="right">
-                    <label>Título: <input type="text" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" /></label>
+                    <label>{t}Title:{/t} <input type="text" name="filter[title]" for="submit" value="{$smarty.request.filter.title|default:""}" /></label>
                     <input type="submit" id="search" value="{t}Search{/t}">
                 </th>
             </tr>
@@ -38,10 +38,10 @@
                 </tr>
             </thead>
             {/if}
-            <tbody id="gridPages">
+            <tbody>
                 {section name=k loop=$pages}
                 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-                    <td>
+                    <td style="padding:5px;">
                         {$pages[k]->title}
                     </td>
                     <td>&raquo;
@@ -65,11 +65,18 @@
                     </td>
 
                     <td width="64" align="center">
-                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        &nbsp;&nbsp;
-                        <a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{/t}">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+						<ul class="action-buttons">
+							<li>
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{/t}">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								</a>
+							</li>
+						</ul>
                     </td>
                 </tr>
                 {sectionelse}

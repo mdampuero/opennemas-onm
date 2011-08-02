@@ -35,7 +35,7 @@
                                 {/if}
                             </td>
                             <td  align="center"  class="un_width"  style="width:10px;">
-                                <a href="controllers/widget/widget.php?action=delete&id={$widgets[d]->pk_widget}" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                                <a href="controllers/widget/widget.php?action=delete&id={$widgets[d]->pk_widget}" title="Eliminar"><img height=16px src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </td>
 
                         </tr>

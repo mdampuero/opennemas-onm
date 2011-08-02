@@ -77,16 +77,17 @@
             </table>
             <table class="adminlist">
                 <thead>
-                    <th class="title" style="width:35px;"></th>
-                    <th>{t}Title{/t}</th>
-
-                    <th>{t}Created{/t}</th>
-                    <th align="center" style="width:35px;">{t}Views{/t}</th>
-                    {if $category=='favorite'}<th align="center">{t}Section{/t}</th> {/if}
-                    <th align="center">{t}Published{/t}</th>
-                    <th align="center" style="width:35px;">{t}Favorite{/t}</th>
-                    <th align="center" style="width:35px;">{t}Edit{/t}</th>
-                    <th align="center" style="width:35px;">{t}Delete{/t}</th>
+                    <tr>
+                        <th class="title" style="width:35px;"></th>
+                        <th>{t}Title{/t}</th>
+                        <th>{t}Created{/t}</th>
+                        <th align="center" style="width:35px;">{t}Views{/t}</th>
+                        {if $category=='favorite'}<th align="center">{t}Section{/t}</th> {/if}
+                        <th align="center">{t}Published{/t}</th>
+                        <th align="center" style="width:35px;">{t}Favorite{/t}</th>
+                        <th align="center" style="width:35px;">{t}Edit{/t}</th>
+                        <th align="center" style="width:35px;">{t}Delete{/t}</th>
+                    </tr>
                 </thead>
 
                 {section name=as loop=$albums}
@@ -146,7 +147,7 @@
                 </tr>
                 {sectionelse}
                 <tr>
-                        <td align="center" colspan=5><br><br><h2><b>{t}No album saved{/t} </b></h2><br><br></td>
+                        <td align="center" colspan=9><br><br><h2>{t}No album saved{/t}</h2><br><br></td>
                 </tr>
             {/section}
                 <tfoot>

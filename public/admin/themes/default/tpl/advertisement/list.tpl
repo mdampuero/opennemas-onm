@@ -33,45 +33,45 @@
 
 
 {block name="content"}
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
-<div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
-        <ul class="old-button">
-            <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                </a>
-            </li>
-            <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
-                </a>
-            </li>
-            <li>
-                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                    <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-                </button>
-            </li>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
+                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
+                    </a>
+                </li>
+                <li>
+                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                        <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
+                    </button>
+                </li>
 
-            <li>
-                <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$_REQUEST['category']}&page={$_GET['page']}"
-                   class="admin_add" accesskey="N" tabindex="1">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
-                </a>
-            </li>
-        </ul>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$_REQUEST['category']}&page={$_GET['page']}"
+                       class="admin_add" accesskey="N" tabindex="1">
+                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="wrapper-content">
+    <div class="wrapper-content">
 
 
-        <ul class="tabs2" style="margin-bottom: 28px;">
+        <ul class="tabs2">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
@@ -106,37 +106,41 @@
             <table class="adminlist">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th class="title">{t}Type{/t}</th>
+                        <th  style="width:10px"></th>
+                        <th class="title"  style="width:250px">{t}Type{/t}</th>
                         <th>{t}Title{/t}</th>
-                        <th align="center">{t}Permanence{/t}</th>
-                        <th align="center">{t}Clicks{/t}</th>
-                        <th align="center">{t}Viewed{/t}</th>
-                        <th align="center">{t}Type{/t}</th>
-                        <th align="center">{t}Published{/t}</th>
-                        <th align="center">{t}Edit{/t}</th>
-                        <th align="center">{t}Delete{/t}</th>
+                        <th align="center" style="width:30px">{t}Permanence{/t}</th>
+                        <th align="center" style="width:40px">{t}Clicks{/t}</th>
+                        <th align="center" style="width:40px">{t}Views{/t}</th>
+                        <th align="center" style="width:70px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {section name=c loop=$advertisements}
                     <tr {cycle values="class=row0,class=row1"}>
-                        <td style="text-align:center;font-size: 11px;width:5%;">
+                        <td style="text-align:center;">
                             <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
                                 value="{$advertisements[c]->pk_advertisement}" />
                         </td>
-                        <td style="font-size: 11px;">
+                        <td style="">
                             <label for="title">
+                                {if $advertisements[c]->with_script == 1}
+                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
+                                         alt="Javascript" title="Javascript" />
+                                {else}
+                                    <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="{t}Media{/t}"
+                                         title="{t}Media element (flash, image, gif){/t}" />
+                                {/if}
                                 {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
                                 {$map.$type_advertisement}
                             </label>
                         </td>
-                        <td style="font-size: 11px;">
+                        <td style="">
                             {$advertisements[c]->title|clearslash}
                         </td>
 
-                        <td style="text-align:center;font-size: 11px;width:80px;" align="center">
+                        <td style="text-align:center;" align="center">
                             {if $advertisements[c]->type_medida == 'NULL'} {t}Undefined{/t} {/if}
                             {if $advertisements[c]->type_medida == 'CLIC'} {t}Clicks:{/t} {$advertisements[c]->num_clic} {/if}
                             {if $advertisements[c]->type_medida == 'VIEW'} {t}Viewed:{/t} {$advertisements[c]->num_view} {/if}
@@ -145,41 +149,36 @@
                             {/if}
                         </td>
 
-                        <td style="text-align:center;font-size: 11px;width:105px;" align="right">
+                        <td style="text-align:center;" align="right">
                             {$advertisements[c]->num_clic_count}
                         </td>
-                        <td style="text-align:center;font-size: 11px;width:40px;" align="right">
+                        <td style="text-align:center;" align="right">
                              {$advertisements[c]->views}
                         </td>
-                        <td style="text-align:center;font-size: 11px;width:70px;" align="center">
-                            {if $advertisements[c]->with_script == 1}
-                                <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
-                                     alt="Javascript" title="Javascript" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="{t}Media{/t}"
-                                     title="{t}Media element (flash, image, gif){/t}" />
-                            {/if}
-                        </td>
-                        <td style="text-align:center;width:70px;" align="center">
-                            {if $advertisements[c]->available == 1}
-                                <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                                    title={t}"Published"{/t}>
-                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
-                            {else}
-                                <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                                    title={t}"Unresolved"{/t}>
-                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}" /></a>
-                            {/if}
-                        </td>
-
-                        <td style="text-align:center;width:70px;" align="center">
-                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$advertisements[c]->id}" title="{t}Edit{/t}">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        </td>
-
-                        <td style="text-align:center;width:70px;" align="center">
-                            <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                        <td style="text-align:center;" align="center">
+                            <ul class="action-buttons">
+                                <li>
+                                    {if $advertisements[c]->available == 1}
+                                        <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
+                                            title={t}"Published"{/t}>
+                                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                                    {else}
+                                        <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
+                                            title={t}"Unresolved"{/t}>
+                                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}" /></a>
+                                    {/if}
+                                </li>
+                                <li>
+                                    <a href="{$smarty.server.PHP_SELF}?action=read&id={$advertisements[c]->id}" title="{t}Edit{/t}">
+                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
+                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                    </a>
+                                </li>
+                            </ul>
                         </td>
 
                     </tr>

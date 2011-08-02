@@ -55,7 +55,7 @@
                 <th nowrap>&nbsp;</th>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
             <tbody>
                 <tr>
                     <td></td>

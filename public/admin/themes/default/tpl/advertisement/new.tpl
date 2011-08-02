@@ -20,7 +20,7 @@
     }
     table.adminlist img {
         height:auto !important;
-        max-height:400px; 
+        max-height:400px;
     }
 </style>
 {/block}
@@ -52,18 +52,14 @@
 
 <div class="wrapper-content">
 
-
-
     {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
-
-
 
         <table class="adminheading">
             <tr>
                 <td>{t escape="off"}Please, fill the form with the ad description and push <strong>Save and Exit </strong> when you've finished.{/t}</td>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
             <tbody>
 
                 <tr>
@@ -443,7 +439,7 @@
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none'});
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none'});
                         this.changePropertyTabs('a[href$=publi-gallery], a[href$=publi-gallery-inner]', { display: 'none' });
-                    
+
                      } else {
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: '' });
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: '' });

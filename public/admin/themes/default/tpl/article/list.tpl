@@ -164,12 +164,13 @@
                     </tr>
                 </table>
                 <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
-                    <tr><td width="100%">
-                        <div id="div_no_home" style="width:100%;min-height:80px;padding:5px;overflow:auto;">
-                          {if $category eq 'home'} {t}NOT IN HOME{/t} {else} {t 1=$datos_cat[0]->title}NOT IN FRONTPAGE OF %1{/t} {/if}
-                        </div>
-                    </td>
-                  </tr>
+                    <tr>
+                        <td width="100%">
+                            <div id="div_no_home" style="width:100%;min-height:80px;padding:5px;overflow:auto;">
+                              {if $category eq 'home'} {t}NOT IN HOME{/t} {else} {t 1=$datos_cat[0]->title}NOT IN FRONTPAGE OF %1{/t} {/if}
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </div>
 

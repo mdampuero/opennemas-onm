@@ -12,7 +12,7 @@
             <th>Check Mysql server performance</th>
         </tr>
     </table>
-    <table class="adminlist">
+    <table class="adminform">
         <tbody>
             <tr>
                 <td>

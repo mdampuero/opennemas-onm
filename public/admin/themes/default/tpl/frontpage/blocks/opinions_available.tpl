@@ -28,7 +28,7 @@
                                 <a href="controllers/opinion/opinion.php?action=read&id={$opinions[d]->id}&category={$smarty.request.category}" title="{t}Edit{/t}"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                             </td>
                             <td  align="center" style="width:40px">
-                                <a href="controllers/opinion/opinion.php?action=delete&id={$opinions[d]->id}" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                                <a href="controllers/opinion/opinion.php?action=delete&id={$opinions[d]->id}" title="Eliminar"><img height=16px  src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </td>
                         </tr>
                     </table>

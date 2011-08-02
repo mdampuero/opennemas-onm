@@ -1,4 +1,4 @@
-<table class="adminlist">
+<table class="adminform">
     <tr {cycle values="class=row0,class=row1"} style="padding:20xp;">
         <td>
             <div style="margin:0 auto; width:50%">

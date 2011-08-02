@@ -138,14 +138,21 @@
                                  {/acl}
                             </td>
                             <td style="padding:1px; font-size:11px;" align="center">
-                                {acl isAllowed="VIDEO_DELETE"}
-                                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
-                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                                {/acl}
-                                {acl isAllowed="VIDEO_DELETE"}
-                                    <a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                                {/acl}
+								<ul class="action-buttons">
+	                                {acl isAllowed="VIDEO_DELETE"}
+									<li>
+										<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
+											<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+									</li>
+	                                {/acl}
+
+	                                {acl isAllowed="VIDEO_DELETE"}
+									<li>
+										<a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
+											<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+									</li>
+	                                {/acl}
+								</ul>
                             </td>
                         </tr>
 

@@ -127,23 +127,30 @@
 						{$articles[c]->editor}
 					</td>
 					<td align="center">
-						<a href="{$smarty.server.PHP_SELF}?id={$articles[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="{t}Restore to available{/t}">
-							<img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Publicar" />
-						</a>
-						&nbsp;
-						<a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}"
-						   target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');"
-						   onclick="UserVoice.PopIn.showPublic('{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}');return false;" >
-							<img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />
-						</a>
-						&nbsp;
-						<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
-							<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
-						</a>
-						&nbsp;
-						<a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
-							<img src="{$params.IMAGE_DIR}trash.png" border="0" />
-						</a>
+						<ul class="action-buttons">
+							<li>
+								<a href="{$smarty.server.PHP_SELF}?id={$articles[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="{t}Restore to available{/t}">
+									<img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Publicar" />
+								</a>
+							</li>
+							<li>
+								<a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}"
+								   target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');"
+								   onclick="UserVoice.PopIn.showPublic('{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}');return false;" >
+									<img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />
+								</a>
+							</li>
+							<li>
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
+								</a>
+							</li>
+							<li>
+								<a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								</a>
+							</li>
+						</ul>
 					</td>
 				</tr>
 				{sectionelse}

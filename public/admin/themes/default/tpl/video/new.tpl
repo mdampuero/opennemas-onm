@@ -62,7 +62,7 @@
 					<td>{t}Enter video information{/t}</td>
 				</tr>
 			</table>
-			<table class="adminlist">
+			<table class="adminform">
 				<tbody>
 					 <tr>
 						<td valign="top" style="width:70%;">

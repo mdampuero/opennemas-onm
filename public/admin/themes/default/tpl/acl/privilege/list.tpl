@@ -60,11 +60,18 @@
                         </td>
 
                         <td align="center">
-                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                                &nbsp;
-                            <a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                            <ul class="action-buttons">
+								<li>
+									<a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+										<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+									</a>
+								</li>
+								<li>
+									<a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
+                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+									</a>
+								</li>
+							</ul>
                         </td>
                     </tr>
                 {sectionelse}

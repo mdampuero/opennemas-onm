@@ -31,8 +31,8 @@
             <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
             <ul class="old-button">
                <li>
-                    <a href="?action=list" class="admin_add" value="Cancelar" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    <a href="?action=list" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>
@@ -40,7 +40,12 @@
     </div>
 
     <div class="wrapper-content">
-		<table border="0" cellpadding="0" cellspacing="0" class="adminlist">
+        <table class="adminheading">
+            <tr>
+                <th>{t}Keyword information{/t}</th>
+            </tr>
+        </table>
+		<table class="adminform">
             <tbody>
             <tr>
                 <td valign="top" align="right" style="padding:4px;" width="40%">

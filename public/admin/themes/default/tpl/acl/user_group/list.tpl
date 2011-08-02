@@ -39,11 +39,18 @@
                         {$user_groups[c]->name}
                     </td>
                     <td style="padding:10px;width:75px; text-align:center">
-                        <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="{t}Edit group{/t}">
-                            <img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit group{/t}" border="0" /></a>
-                            &nbsp;
-                        <a href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="{t}Delete group{/t}">
-                            <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete group{/t}" border="0" /></a>
+						<ul class="action-buttons">
+							<li>
+								<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="{t}Edit group{/t}">
+									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit group{/t}" border="0" />
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="javascript:confirmar(this, {$user_groups[c]->id});" title="{t}Delete group{/t}">
+									<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete group{/t}" border="0" />
+								</a>
+							</li>
+						</ul>
                     </td>
                 </tr>
                 {sectionelse}

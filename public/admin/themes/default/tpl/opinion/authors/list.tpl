@@ -49,7 +49,7 @@
             </thead>
             {section name=c loop=$authors}
                 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-                    <td>
+                    <td style="padding:5px;">
                         {$authors[c]->name}&nbsp;&nbsp;{*if $authors[c]->fk_user != 0}(usuario){/if*}
                     </td>
                     <td>
@@ -65,14 +65,18 @@
                         {$authors[c]->num_photos}
                     </td>
                     <td style="text-align:center;">
-                        <a href="{$_SERVER['PHP_SELF']}?action=read&id={$authors[c]->pk_author}" title="Modificar">
-                            <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                        </a>
-                        &nbsp;
-                        <a href="#" onClick="javascript:confirmar(this, {$authors[c]->pk_author});" title="Eliminar">
-                            <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                        </a>
-
+						<ul class="action-buttons">
+							<li>
+								<a href="{$_SERVER['PHP_SELF']}?action=read&id={$authors[c]->pk_author}" title="Modificar">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="javascript:confirmar(this, {$authors[c]->pk_author});" title="Eliminar">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								</a>
+							</li>
+						</ul>
                     </td>
                 </tr>
 

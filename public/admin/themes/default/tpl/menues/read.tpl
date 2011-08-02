@@ -5,7 +5,7 @@
     <script type="text/javascript">
          document.observe('dom:loaded', function() {
             makeSortable();
-         });     
+         });
     </script>
 {/block}
 
@@ -81,7 +81,7 @@ input[type="text"] {
     -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
     -box-shadow: 0 0 10px rgba(0,0,0,.4);
     }
- 
+
 .reveal-modal .close-reveal-modal {
     font-size: 22px;
     line-height: .5;
@@ -152,7 +152,7 @@ input[type="text"] {
                 <td>{t}Menu {$name} Frontpage{/t}: </td>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
             {assign var=menuParams value=$menu->params|unserialize}
             <tbody>
                  <tr>
@@ -192,7 +192,7 @@ input[type="text"] {
                                                 {/section}
                                             {/if}
                                         {/section}
-                                    </select>                                   
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -232,7 +232,7 @@ input[type="text"] {
                                             </li>
                                             <li>
                                                 <a href="#subcategories">{t}Subcategories{/t}</a>
-                                            </li>                                            
+                                            </li>
                                         </ul>
                                         <div class="panel" id="listado">
                                             <ul id='availableCategories' class="elementsContainer">
@@ -250,7 +250,7 @@ input[type="text"] {
                                                         <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
                                                             type="albumCategory" link="{$albumCategories[as]->name}"  class="drag-category" pk_menu="">
                                                             {$albumCategories[as]->title}
-                                                        </li>                                             
+                                                        </li>
                                                 {/section}
                                             </ul>
                                          </div>
@@ -274,7 +274,7 @@ input[type="text"] {
                                                 {/foreach}
                                             </ul>
                                         </div>
-                                         <div class="panel" id="staticPages"> 
+                                         <div class="panel" id="staticPages">
                                               <ul id='availableStatics' class="elementsContainer">
                                                  {section name=k loop=$staticPages}
                                                      <li id="static_{$staticPages[k]->id}" title="{$staticPages[k]->title}" pk_menu=""
@@ -298,16 +298,16 @@ input[type="text"] {
                                                 {/if}
                                             {/section}
                                         </div>
-                                       
-                                    </div>                                                                                                    
+
+                                    </div>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                  <tr>
-                     <td style="vertical-align:top;"> 
-                       
+                     <td style="vertical-align:top;">
+
                      </td>
                  </tr>
             </tbody>
@@ -317,7 +317,7 @@ input[type="text"] {
                 </tr>
             </tfooter>
         </table>
-        <div id="linkInsertions" class="reveal-modal" style="display:none;">          
+        <div id="linkInsertions" class="reveal-modal" style="display:none;">
             <label>{t}Title:{/t}</label> <input type="text" name="itemTitle" value="" id="itemTitle" size="60">
             <br>
             <label>{t}Link:{/t}</label> <input type="text" name="link" value="" id="link" size="60"> <br>

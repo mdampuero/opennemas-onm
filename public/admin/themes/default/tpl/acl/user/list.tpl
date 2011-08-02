@@ -102,11 +102,19 @@
 						{/section}
 					</td>
 					<td style="padding:4px;" align="right">
-						<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page|default:0}" title="{t}Edit user{/t}">
-							<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/></a>
-							&nbsp;
-						<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
-							<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/></a>
+						<ul class="action-buttons">
+							<li>
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page|default:0}" title="{t}Edit user{/t}">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/>
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/>
+								</a>
+							</li>
+						</ul>
+
 					</td>
 				</tr>
 				{sectionelse}

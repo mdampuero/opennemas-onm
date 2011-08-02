@@ -37,7 +37,7 @@
         </tr>
     </table>
 
-    <table class="adminlist" style="padding:50px 100px">
+    <table class="adminform" style="padding:50px 100px">
         <tr>
             <td>
                 <label for="username" >{t}User Name:{/t}</label><br>

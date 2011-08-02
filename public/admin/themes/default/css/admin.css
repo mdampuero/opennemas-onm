@@ -85,6 +85,7 @@ legend {
 }
 
 input[type="text"],
+input[type="file"],
 textarea {  border: 1px solid silver; }
 input[type="checkbox"] {
 	vertical-align:middle
@@ -245,6 +246,9 @@ table.adminlist thead img {
 table.adminlist img{
 	vertical-align:middle;
 }
+.action-buttons img {
+	max-height:16px;
+}
 table.adminlist tr {
 	cursor:pointer;
 }
@@ -298,7 +302,7 @@ table.adminform tfoot tr td{
 .gallery_list {
 	list-style:none; margin:0 auto;
 }
-.gallery_list li {    
+.gallery_list li {
 	float: left; display:inline-block; margin:0 5px 5px 0;  background:#F0F0F0; border:1px solid #CBCBCB;
 }
 .gallery_list li img { cursor:pointer; border:0px; width:67px; height:67px; }

@@ -23,6 +23,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
                     </a>
                 </li>
+                <li class="separator"></li>
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
@@ -37,7 +38,7 @@
                 <td></td>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
              <tbody>
                  <tr>
                      <td> </td><td > </td>

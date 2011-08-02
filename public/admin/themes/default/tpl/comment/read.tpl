@@ -12,11 +12,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" value="Cancelar" title="Cancelar">
-                            <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                        </a>
-                    </li>
-                    <li>
                         <a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
                             <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
                         </a>
@@ -32,9 +27,15 @@
                             </a>
                         {/if}
                     </li>
-                     <li>
+                    <li>
                         <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
                             <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />Ver noticia
+                        </a>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                         </a>
                     </li>
                 </ul>
@@ -48,7 +49,7 @@
                 <td></td>
             </th>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
          <tbody>
          <tr>
              <td valign="top" align="right" style="padding:4px;" width="30%">

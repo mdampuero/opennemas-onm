@@ -9,22 +9,22 @@
 <div class="wrapper-content">
     <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-        <table class="adminheading" style="margin-top:20px; border-top:none !important">
+        <table class="adminheading">
             <tr>
                 <th nowrap>{t}Advanced Search{/t}</th>
             </tr>
         </table>
-        <table class="adminlist" style="width:100%" >
+        <table class="adminform">
 
             <tr>
-                <td colspan="2" style="padding:20px;" nowrap="nowrap" colspan='3'>
+                <td colspan="2" style="padding:20px; text-align:center" nowrap="nowrap" colspan='3'>
                     <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
                             class="required" size="80%" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;
                     <button type="submit" class="onm-button green" onclick="return enviar(this, '_self', 'search', 0);">{t}Search{/t}</button>
                 </td>
             </tr>
             <tr>
-                <td style="padding:20px; padding-top:0; vertical-align:middle" nowrap="nowrap">
+                <td style="padding:20px; padding-top:0; vertical-align:middle; text-align:center" nowrap="nowrap">
                     {foreach name=contentTypes item=type from=$arrayTypes}
                     {*NO interviu(10), NO albums(7), NO video(9), NO encuesta(11), NO kiosko(14), NO eventos(5)*}
                         {if $type[0] != 5 && $type[0] != 10 && $type[0] != 11 && $type[0] != 14 && $type[0] != 7 && $type[0] != 9}

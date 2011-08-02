@@ -56,23 +56,29 @@
 						{/if}
 					</td>
 					<td align="center" style="width:72px;">
-						{if $director[0]->content_status == 1}
-							<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
-								<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-							</a>
-						{else}
-							<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
-								<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-							</a>
-						{/if}
-						&nbsp;
-						<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$director[0]->id}');" title="Modificar">
-							<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-						</a>
-						&nbsp;
-						<a href="#" onClick="javascript:delete_opinion('{$director[0]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
-							<img src="{$params.IMAGE_DIR}trash.png" border="0" />
-						</a>
+						<ul class="action-buttons">
+							<li>
+								{if $director[0]->content_status == 1}
+									<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+									</a>
+								{else}
+									<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+									</a>
+								{/if}
+							</li>
+							<li>
+								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$director[0]->id}');" title="Modificar">
+									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="javascript:delete_opinion('{$director[0]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
+									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								</a>
+							</li>
+						</ul>
 					</td>
 				</tr>
 			</table>
@@ -141,23 +147,34 @@
 								{/if}
 							</td>
 							<td align="center" style="width:72px;">
-								{if $editorial[c]->content_status == 1}
-									<a href="?id={$editorial[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
-										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-									</a>
-								{else}
-									<a href="?id={$editorial[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
-										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-									</a>
-								{/if}
+								<ul class="action-buttons">
+									<li>
+										{if $editorial[c]->content_status == 1}
+											<a href="?id={$editorial[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+												<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+											</a>
+										{else}
+											<a href="?id={$editorial[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+												<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+											</a>
+										{/if}
+									</li>
+									<li>
+										<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$editorial[c]->id}');" title="Modificar">
+											<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+										</a>
+									</li>
+									<li>
+										<a href="#" onClick="javascript:delete_opinion('{$editorial[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
+											<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+										</a>
+									</li>
+								</ul>
+
 								&nbsp;
-								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$editorial[c]->id}');" title="Modificar">
-									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-								</a>
+
 								&nbsp;
-								<a href="#" onClick="javascript:delete_opinion('{$editorial[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
-									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
-								</a>
+
 							</td>
 						</tr>
 				</table>
@@ -237,24 +254,29 @@
 					{/if}
 				</td>
 				<td align="center" style="width:74px;">
-					{if $opinions[c]->content_status == 1}
-						<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
-							<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-						</a>
-					{else}
-						<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
-							<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-						</a>
-					{/if}
-					&nbsp;
-					<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$opinions[c]->id}');" title="Modificar">
-						<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-					</a>
-					&nbsp;
-					<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
-						<img src="{$params.IMAGE_DIR}trash.png" border="0" />
-					</a>
-					&nbsp;
+					<ul class="action-buttons">
+						<li>
+							{if $opinions[c]->content_status == 1}
+								<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+									<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+								</a>
+							{else}
+								<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+									<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+								</a>
+							{/if}
+						</li>
+						<li>
+							<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$opinions[c]->id}');" title="Modificar">
+								<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
+								<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+							</a>
+						</li>
+					</ul>
 				</td>
 			</tr>
 	</table>

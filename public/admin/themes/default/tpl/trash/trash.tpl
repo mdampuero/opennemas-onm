@@ -77,37 +77,33 @@
 				</thead>
 
 				<tbody>
+					{section name=c loop=$litterelems}
+					<tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
+						 <td style="text-align: left;width:2%;">
+							 <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+						 </td>
+						 <td style="text-align: left;width:75%;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+							 {$litterelems[c]->title|clearslash}
+						 </td>
+						 <td style="text-align: center;width:5%;">{$secciones[c]}</td>
+						 <td style="text-align: center;width:3%;">{$litterelems[c]->views}</td>
+						 <td style="text-align: center;width:8%;">{$litterelems[c]->created}</td>
+						 <td style="text-align: center;width:10%;">
+							 <ul class="action-buttons">
+								 <li>
+									 <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar"><img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="Recuperar" width='24px' /></a>
+								 </li>
+								 <li>
+									 <a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+								 </li>
+							 </ul>
+						 </td>
+					 </tr>
+					{sectionelse}
 					<tr>
-						<td colspan=7>
-							<div id="even" class="seccion" style="float:left;width:100%;"> <br>
-							{assign var=aux value='2'}
-							{section name=c loop=$litterelems}
-
-							<table id='tabla{$aux}' name='tabla{$aux}' value="{$evenpublished[c]->id|default:""}" width="100%" class="tabla" style="text-align:center;padding:0px;">
-							   <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
-									<td style="text-align: left;width:2%;">
-										<input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
-									</td>
-									<td style="text-align: left;width:75%;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
-										{$litterelems[c]->title|clearslash}
-									</td>
-									<td style="text-align: center;width:5%;">{$secciones[c]}</td>
-									<td style="text-align: center;width:3%;">{$litterelems[c]->views}</td>
-									<td style="text-align: center;width:8%;">{$litterelems[c]->created}</td>
-									<td style="text-align: center;width:10%;">
-										<a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar"><img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="Recuperar" width='24px' /></a>
-										&nbsp;
-										<a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-									</td>
-								</tr>
-							</table>
-						{sectionelse}
-						<tr>
 						<td align="center" colspan=6><br><br><p><h3><b>Ningun elemento en la papelera</b></h3></p><br><br></td>
-						</tr>
-						{/section}
-						<td>
 					</tr>
+					{/section}
 				</tbody>
 
 				<tfoot>

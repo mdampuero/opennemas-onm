@@ -43,7 +43,7 @@
                 <td>&nbsp;</td>
             </tr>
         </table>
-        <table  class="adminlist">
+        <table  class="adminform">
             <tbody>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;" width="200px">

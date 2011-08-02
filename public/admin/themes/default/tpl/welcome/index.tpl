@@ -95,7 +95,7 @@ $.noConflict();
         </tbody>
     </table>
 
-    <table border="0" cellpadding="4" cellspacing="0" class="adminlist" >
+    <table border="0" cellpadding="4" cellspacing="0" class="adminform" >
 
         <tbody>
         {if $feeds neq null}

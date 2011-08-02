@@ -27,7 +27,7 @@
                 <th>&nbsp;</th>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="adminform">
             <tbody>
                 <tr>
                     <td>&nbsp;</td>

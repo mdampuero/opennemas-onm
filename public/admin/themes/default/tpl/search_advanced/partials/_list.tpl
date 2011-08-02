@@ -1,33 +1,30 @@
 <table class="adminlist">
     <thead>
-        <th class="title">Title</th>
-        <th align="center">Type</th>
-        <th align="center">Section</th>
-        <th align="center">Creation date</th>
-        <th align="center">Status</th>
-        <th align="center">Edit</th>
-        <th align="center">Restore</th>
-        <!--<th align="center">View</th>-->
-        <!--<th align="center">Notify</th>-->
+        <th class="title" style="width:50%;">{t}Title{/t}</th>
+        <th align="center" style="width:30px;">{t}Type{/t}</th>
+        <th align="center" style="width:50px;">{t}Category{/t}</th>
+        <th align="center" style="width:50px;">{t}Creation date{/t}</th>
+        <th align="center" style="width:20px;">{t}Status{/t}</th>
+        <th align="center" style="width:50px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
         {section name=c loop=$arrayResults}
-        <tr {cycle values="class=row0,class=row1"}>
-            <td style="padding:10px;width:50%;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
+        <tr>
+            <td style="padding:10px;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
                 {if $arrayResults[c].content_type neq 'comment'}
                     <font size="1"><b>{t}Metatags:{/t}</b>  {$arrayResults[c].metadata|clearslash}</font>
                 {/if}
             </td>
-            <td style="width:15%;" align="center">
+            <td  align="center">
                 {$arrayResults[c].type}
             </td>
-            <td style="width:15%;" align="center">
+            <td align="center">
                 {$arrayResults[c].catName}
             </td>
-            <td style="width:15%;" align="center">
+            <td align="center">
                 {$arrayResults[c].created}
             </td>
-            <td style="padding:10px;width:10%;" align="center">
+            <td align="center">
                 {if ($arrayResults[c].in_litter == 1)}
                     <img src="{$params.IMAGE_DIR}trash.png" border="0" alt="En Papelera" title="En Papelera"/>
                 {else}
@@ -54,49 +51,41 @@
                         {/if}
                  {/if}
             </td>
-            <td style="width:10%;" align="center">
-                {assign var="ct" value=$arrayResults[c].content_type}
-                {if $arrayResults[c].content_type eq 'photo'}
-                        <a href="/admin/{$type2res.$ct}?action=image_data&id={$arrayResults[c].id}&category={$arrayResults[c].category}&desde=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page|default:0}" title="Editar">
-                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                {elseif $arrayResults[c].content_type eq 'widget'}
-                    <a href="/admin/{$type2res.$ct}?action=edit&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
-                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                {else}
-                    <a href="/admin/{$type2res.$ct}?action=read&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
-                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                {/if}
-            </td>
+            <td align="center">
+                <ul class="action-buttons">
+                    <li>
+                        {assign var="ct" value=$arrayResults[c].content_type}
+                        {if $arrayResults[c].content_type eq 'photo'}
+                                <a href="/admin/{$type2res.$ct}?action=image_data&id={$arrayResults[c].id}&category={$arrayResults[c].category}&desde=search&stringSearch={$smarty.request.stringSearch}&page={$smarty.request.page|default:0}" title="Editar">
+                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                        {elseif $arrayResults[c].content_type eq 'widget'}
+                            <a href="/admin/{$type2res.$ct}?action=edit&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
+                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                        {else}
+                            <a href="/admin/{$type2res.$ct}?action=read&id={$arrayResults[c].id}&stringSearch={$smarty.request.stringSearch}&desde=search&page={$smarty.request.page|default:0}" title="Editar">
+                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                        {/if}
+                    </li>
+                    <li>
+                        {if ($arrayResults[c].in_litter == 1)}
+                            <a href="/admin/controllers/trash.php?action=no_in_litter&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from trash{/t}">
+                               <img src="{$params.IMAGE_DIR}trash_no.png" border="0" width="24" alt="{t}Restore from trash{/t}" title="{t}Restore from trash{/t}" />
+                            </a>
+                       {else}
+                           {if ($arrayResults[c].type == 'Articulo')}
+                           {if ($arrayResults[c].available == 1) && ($arrayResults[c].content_status == 0)}
+                               <a href="/admin/{$type2res.$ct}?&action=change_status&status=1&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from library{/t}">
+                                     <img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Recuperar Hemeroteca" title="Recuperar de Hemeroteca"/>
+                                 </a>
+                           {/if}
+                           {else}
+                               X
+                           {/if}
+                      {/if}
+                    </li>
+                </ul>
 
-            <td style="width:10%;" align="center">
-                {if ($arrayResults[c].in_litter == 1)}
-                     <a href="/admin/controllers/trash.php?action=no_in_litter&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from trash{/t}">
-                        <img src="{$params.IMAGE_DIR}trash_no.png" border="0" width="24" alt="{t}Restore from trash{/t}" title="{t}Restore from trash{/t}" />
-                     </a>
-                {else}
-                    {if ($arrayResults[c].type == 'Articulo')}
-                    {if ($arrayResults[c].available == 1) && ($arrayResults[c].content_status == 0)}
-                        <a href="/admin/{$type2res.$ct}?&action=change_status&status=1&desde=search&id={$arrayResults[c].id}&category={$arrayResults[c].category}" title="{t}Restore from library{/t}">
-                              <img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Recuperar Hemeroteca" title="Recuperar de Hemeroteca"/>
-                          </a>
-                    {/if}
-                    {else}
-                        X
-                    {/if}
-               {/if}
           </td>
-          <!--<td style="width:10%;" align="center">-->
-          <!--    <a href="#" target="_blank" accesskey="P"-->
-          <!--       onmouseover="return escape('<u>P</u>revisualizar');"-->
-          <!--       onclick="myLightWindow.activateWindow({ href: '{$arrayResults[c].uri}',title: 'Previsualización',author: {$smarty.const.SITEFULL_NAME}});return false;" >-->
-          <!--      <img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />-->
-          <!--    </a>-->
-          <!--</td>-->
-          <!--<td style="width:10%;" align="center">-->
-          <!--    <a href="#" accesskey="N'" onmouseover="return escape('<u>N</u>otificar');" onclick="send_notify('{$arrayResults[c].id}','confirm_notify');" >-->
-          <!--        <img border="0" src="{$params.IMAGE_DIR}file_alert.png" title="Notificar" alt="Notificar" />-->
-          <!--    </a>-->
-          <!--</td>-->
       </tr>
 
       {sectionelse}

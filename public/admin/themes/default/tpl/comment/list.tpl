@@ -151,26 +151,32 @@
 							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
 						</td>
 						<td align="center">
-							{if $category eq 'todos' || $comments[c]->content_status eq 0}
-								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-							{elseif $comments[c]->content_status eq 2}
-								<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
-									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-								</a>
-							{else}
-								<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
-									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-								</a>
-							{/if}
-							&nbsp;
-							<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
-								<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-							&nbsp;
-							<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
-								<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+							<ul class="action-buttons">
+								<li>
+									{if $category eq 'todos' || $comments[c]->content_status eq 0}
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+												<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+												<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+									{elseif $comments[c]->content_status eq 2}
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+										</a>
+									{else}
+										<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+										</a>
+									{/if}
+								</li>
+								<li>
+									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
+										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+								</li>
+								<li>
+									<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
+										<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+								</li>
+							</ul>
 						</td>
 					</tr>
 

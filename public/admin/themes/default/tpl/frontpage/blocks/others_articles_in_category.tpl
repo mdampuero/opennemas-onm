@@ -102,7 +102,7 @@
                             {/if}
                             <td class='no_width' style="width:20px;" align="center">
                                    <a href="#" onClick="javascript:delete_article('{$articles[d]->id}','{$category}',0);" title="Eliminar">
-                                       <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                                       <img height=16px  src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </td>
                         </tr>
                     </table>
