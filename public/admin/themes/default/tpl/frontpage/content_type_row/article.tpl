@@ -27,33 +27,39 @@
                 {$item->category_name}
             </td>
         {/if}
-        <td  align="center"  class="un_width" style="text-align: center;width:20px;">
-                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$item->id}');" title="Editar">
-                        <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" /></a>
+        <td  style="width:80px; text-align:right; padding-right:10px;">
+            <ul class="action-buttons">
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?id={$item->id}&action=read" title="Editar">
+                        <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
+                    </a>
+                </li>
+                <li>
+                    <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
+                        <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" />
+                    </a>
+                </li>
+                {if $category neq 'home'}
+                    <li>
+                        {if $item->frontpage == 1}
+                        <a href="{$smarty.server.PHP_SELF}?id={$item->id}&amp;action=frontpage_status&amp;status=0&amp;category={$category}" title="Quitar de portada">
+                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" />
+                        </a>
+                        {else}
+                        <a href="{$smarty.server.PHP_SELF}?id={$item->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}" title="Publicar en portada">
+                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" />
+                        </a>
+                        {/if}
+                    </li>
+                    <li>
+                        <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                    </li>
+                {else}
+                    <li>
+                        <a href="{$smarty.server.PHP_SELF}?id={$item->id}&action=inhome_status&status=0&category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
+                    </li>
+                {/if}
+            </ul>
         </td>
-        <td  align="center"  class="un_width" style="width:20px;">
-                <a  onClick="javascript:confirmar_hemeroteca(this,'{$category}','{$item->id}') "  title="Archivar">
-                   <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar" /></a>
-        </td>
-
-        {if $category neq 'home'}
-            <td  align="center"  class="un_width" style="width:20px;">
-            {if $item->frontpage == 1}
-                    <a href="?id={$item->id}&amp;action=frontpage_status&amp;status=0&amp;category={$category}" title="Quitar de portada">
-                            <img class="portada" src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Quitar de portada" /></a>
-            {else}
-                    <a href="?id={$item->id}&amp;action=frontpage_status&amp;status=1&amp;category={$category}" title="Publicar en portada">
-                            <img class="noportada" src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicar en portada" /></a>
-            {/if}
-             </td>
-            <td  align="center"  class="un_width"  style="width:20px;">
-                <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-            </td>
-        {else}
-             <td  align="center"  class="un_width" style="width:25px;">
-                <a href="?id={$item->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Quitar de home" alt="Quitar de home" ></a>
-            </td>
-        {/if}
-
     </tr>
 </table>

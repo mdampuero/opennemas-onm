@@ -108,7 +108,7 @@
         </table>
         <div id="pagina">
 
-            <table id="columns" class="adminlist">
+            <table id="columns" class="adminform">
                 <tr  valign="top">
                    <td colspan=3>
                         {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='placeholder_highlighted'}
