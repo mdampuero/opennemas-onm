@@ -64,11 +64,11 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="title" name="title" title={t}"Album"{/t}
-                            size="80" value="{$album->title|clearslash|escape:"html"}"
+                            size="60" value="{$album->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
                     </td>
                     <td rowspan="4">
-                        <table style='background-color:#F5F5F5; padding:18px; width:99%;'>
+                        <table style='background-color:#F5F5F5; padding:18px;'>
                             <tr>
                                 <td valign="top"  align="right" nowrap="nowrap">
                                 <label for="title">Secci&oacute;n:</label>
@@ -105,7 +105,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="agency" name="agency" title={t}"Album"{/t}
-                            size="80" value="{$album->agency|clearslash|escape:"html"}" />
+                            size="60" value="{$album->agency|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                 <tr>
@@ -113,7 +113,7 @@
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:100%; height:8em;">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:90%; height:10em;">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 
@@ -122,7 +122,7 @@
                         <label for="metadata">{t}Keywords:{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="metadata" name="metadata" size="80"
+                        <input type="text" id="metadata" name="metadata" size="60"
                            class="required" title={t}"Metadata"{/t} value="{$album->metadata}" />
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
                     </td>
