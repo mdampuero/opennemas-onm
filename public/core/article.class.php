@@ -202,8 +202,8 @@ class Article extends Content
         }
  
         $data['subtitle']=mb_strtoupper($data['subtitle'],'UTF-8');
-        $data['img1_footer'] = (!isset($data['img1_footer']) || empty($data['img1_footer']))? '': intval($data['img1_footer']);
-        $data['img2_footer'] = (!isset($data['img2_footer']) || empty($data['img2_footer']))? '': intval($data['img2_footer']);
+        $data['img1_footer'] = (!isset($data['img1_footer']) || empty($data['img1_footer']))? '': $data['img1_footer'];
+        $data['img2_footer'] = (!isset($data['img2_footer']) || empty($data['img2_footer']))? '': $data['img2_footer'];
         $data['with_comment'] = (!isset($data['with_comment']) || empty($data['with_comment']))? '': intval($data['with_comment']);
 
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
