@@ -54,9 +54,9 @@ if(!is_null($places)) {
     $i=0;
 
     foreach($places as $id => $params) {
-
+        
         // This element isn't an article so store it in new content_position db table
-        if($params['content_type'] != '1'
+        if($params['content_type'] != '1' && $params['content_type'] != 'Article'
            && preg_match('@^placeholder@',$params['placeholder']) )
         {
             $content_positions[] = array(
