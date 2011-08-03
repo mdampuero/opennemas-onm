@@ -65,17 +65,17 @@
 
         <div class="info-left">
             <div id="user_box" style="width:auto;">
-				{if (int)count_pending_comments > 0}
-				<div style="padding-right:8px; float:left;" nowrap="nowrap">
+            {if {count_pending_comments} gt 0}
+                <div style="padding-right:8px; float:left;" nowrap="nowrap">
                     <div id="pending_comments" title="{t}Pending comments{/t}">
                         <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
                             <span class="point"></span>
                             <em>&nbsp;{count_pending_comments}&nbsp;</em>
                         </a>
                     </div>
-					&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                 </div>
-				{/if}
+            {/if}
 
 
                 <div id="name-box" style="float:left; margin-right:5px;">
