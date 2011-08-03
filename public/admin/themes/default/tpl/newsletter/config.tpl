@@ -44,7 +44,7 @@
                  </tr>
             </table>
 
-            <table class="adminlist" border=0>
+            <table class="adminform" border=0>
                 <tr>
                     <td>
                         <div class="form-wrapper">

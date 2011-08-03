@@ -81,7 +81,7 @@ if(isset($_REQUEST['action']) ) {
                                                             'Opinion',
                                                             " contents.available=1 AND pk_content = pk_fk_content",
                                                             4);
-                        
+
                     $suggestedContents= $cm->getInTime($suggestedContents);
                     $tpl->assign('suggested', $suggestedContents);
 
@@ -103,13 +103,11 @@ if(isset($_REQUEST['action']) ) {
                                                         .' AND available = 1  AND content_status=1'
                                                         ,' ORDER BY created DESC '
                                                         .' LIMIT 0,9');
-                    $otherOpinionsImproved = array();
-                    foreach($otherOpinions as $otherOpinion) {
+                    foreach($otherOpinions as &$otherOpinion) {
                         $otherOpinion->author_name_slug  = $opinion->author_name_slug;
-                        $otherOpinionsImproved[] = $otherOpinion;
                     }
 
-                    $tpl->assign('other_opinions', $otherOpinionsImproved);
+                    $tpl->assign('other_opinions', $otherOpinions);
                     $tpl->assign('opinion', $opinion);
 
                 }
@@ -211,7 +209,7 @@ if(isset($_REQUEST['action']) ) {
 
             $tplMail->assign('mail', $mail);
             $tplMail->assign('opinion', $opinion);
-            
+
 
             // Filter tags before send
             $message = $_REQUEST['body'];
@@ -250,10 +248,10 @@ if(isset($_REQUEST['action']) ) {
             /*
              * Implementacion para enviar a multiples destinatarios separados por coma
              */
-            $destinatarios = explode(',', $_REQUEST['destination']);     
+            $destinatarios = explode(',', $_REQUEST['destination']);
 
             foreach ($destinatarios as $dest) {
-                //$mail->AddAddress(trim($dest));    
+                //$mail->AddAddress(trim($dest));
                 $mail->AddBCC(trim($dest));
             }
 

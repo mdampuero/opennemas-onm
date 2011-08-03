@@ -9,7 +9,8 @@ require_once('../../session_bootstrap.php');
 if(!Acl::check('ARTICLE_FRONTPAGE')) {
     Acl::deny();
 }
-
+$timer = \Onm\Benchmark\Timer::getInstance();
+$timer->start();
 /**
  * Setup view
 */
@@ -36,6 +37,10 @@ String_Utils::disabled_magic_quotes();
 $isAjax = ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 
 
+$timer->stop();
+require 'FB.php';
+FB::log('Initialization'.$timer->display());
+
 /**
  * Get the JSON-encoded places from request
 */
@@ -53,8 +58,9 @@ if(!is_null($places)) {
 
     $i=0;
 
+    $timer->start();
     foreach($places as $id => $params) {
-        
+
         // This element isn't an article so store it in new content_position db table
         if($params['content_type'] != '1' && $params['content_type'] != 'Article'
            && preg_match('@^placeholder@',$params['placeholder']) )
@@ -83,6 +89,10 @@ if(!is_null($places)) {
 
     }
 
+    $timer->stop();
+    FB::log('Calculated positions '.$timer->display());
+
+    $timer->start();
     // Save contents, the new way
     $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $content_positions);
 
@@ -94,6 +104,11 @@ if(!is_null($places)) {
     } else {
         $ok = $article->refresh_home($_suggested_home, $_positions,  $_SESSION['userid']);
     }
+
+
+    $timer->stop();
+    FB::log('Stored positions '.$timer->display());
+
 }
 
 /* Notice log of this action */

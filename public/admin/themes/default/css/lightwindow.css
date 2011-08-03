@@ -340,6 +340,7 @@
 		border-radius:5px 5px 0 0;
 		font-weight:bold;
 		padding:2px 10px;
+		display:block !important;
 	}
 
 	a#lightwindow_title_bar_close_link,
