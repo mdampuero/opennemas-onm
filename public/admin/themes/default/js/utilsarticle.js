@@ -245,7 +245,7 @@ function previewFrontpage(category) {
 
 	$('formulario').action.value = '';
 	myLightWindow.activateWindow({
-		href: '/controllers/preview.php?articles='+ Object.toJSON(places) +'&category'+category,
+		href: '/controllers/preview.php?articles='+ Object.toJSON(places) +'&category='+category,
 		title: 'Previsualización Portada',
 		author: ' ',
 		type: 'external'
