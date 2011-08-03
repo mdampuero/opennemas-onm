@@ -38,25 +38,25 @@ class Advertisement extends Content
         5 => "Bottom Left LeaderBoard",
         6 => "Bottom Right LeaderBoard",
 		
-	11 => "Button Colunm 1 Position 1",
-	12 => "Button Colunm 1 Position 2",
-	13 => "Button Colunm 1 Position 3",
-	14 => "Button Colunm 1 Position 4",
-	15 => "Button Colunm 1 Position 5",
-	16 => "Button Colunm 1 Position 6",
-	
-	21 => "Button Colunm 2 Position 1",
-	22 => "Button Colunm 2 Position 2",
-	24 => "Button Colunm 2 Position 4",
-	25 => "Button Colunm 2 Position 5",
-	
-	31 => "Button Colunm 3 Position 1",
-	32 => "Button Colunm 3 Position 2",
-	33 => "Button Colunm 3 Position 3",
-	34 => "Button Colunm 3 Position 4",
-	35 => "Button Colunm 3 Position 5",
-	36 => "Button Colunm 3 Position 6",
-		
+        11 => "Button Colunm 1 Position 1",
+        12 => "Button Colunm 1 Position 2",
+        13 => "Button Colunm 1 Position 3",
+        14 => "Button Colunm 1 Position 4",
+        15 => "Button Colunm 1 Position 5",
+        16 => "Button Colunm 1 Position 6",
+
+        21 => "Button Colunm 2 Position 1",
+        22 => "Button Colunm 2 Position 2",
+        24 => "Button Colunm 2 Position 4",
+        25 => "Button Colunm 2 Position 5",
+
+        31 => "Button Colunm 3 Position 1",
+        32 => "Button Colunm 3 Position 2",
+        33 => "Button Colunm 3 Position 3",
+        34 => "Button Colunm 3 Position 4",
+        35 => "Button Colunm 3 Position 5",
+        36 => "Button Colunm 3 Position 6",
+
 
         /* Intersticial banner noticia interior */
         150 => "[I] Banner Interticial noticia interior",
@@ -78,6 +78,7 @@ class Advertisement extends Content
         /* Videos Front banners > 200 */
         201 => "[V] Big banner superior",
         202 => "[V] Banner superior derecho",
+        203 => "[V] Banner Video Button",
 
         209 => "[V] Big Banner Inferior",
         210 => "[V] Banner Inferior Derecho",
@@ -94,6 +95,31 @@ class Advertisement extends Content
         309 => "[VI] Big Banner Inferior",
         310 => "[VI] Banner Inferior Derecho",
 
+	/* Intersticial banner album front */
+        450 => "[V] Banner Interticial",
+
+        /* Albums Front banners > 400 */
+        401 => "[A] Big banner superior",
+        402 => "[A] Banner superior derecho",
+
+        403 => "[A] Banner1 Column Right",
+        405 => "[A] Banner1 2Column Right",
+
+        409 => "[A] Big Banner Inferior",
+        410 => "[A] Banner Inferior Derecho",
+
+	/* Intersticial banner album inner */
+        550 => "[AI] Banner Interticial",
+
+        /* Video Interior banners > 500 */
+        501 => "[AI] Big banner superior",
+        502 => "[AI] Banner superior Derecho",
+
+        503 => "[AI] Banner Video Button",
+
+        509 => "[AI] Big Banner Inferior",
+        510 => "[AI] Banner Inferior Derecho",
+ 
     );
 
     /**

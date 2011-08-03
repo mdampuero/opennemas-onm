@@ -127,7 +127,7 @@
                         if(element.getAttribute('de:ancho')>300) { ancho=300; }
                         $('change1').setAttribute('width',ancho);
                     } else {
-                        $('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" width="'+ancho+'" >';
+                        $('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" style="max-width:300px;" width="'+ancho+'" >';
                     }
 			   		$('informa').innerHTML=' ';
                     $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong> " + element.getAttribute('de:mas') + "</p>"+
