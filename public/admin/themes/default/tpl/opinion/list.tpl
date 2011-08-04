@@ -97,7 +97,7 @@
             <br>
             <br>
 
-            {if isset($smarty.get.alert) or isset($msg_alert)}
+            {if (isset($smarty.get.alert) && ($smarty.get.alert neq "")) or (isset($msg_alert) && ($msg_alert neq ""))}
             <div class="notice" style="margin-top:3px;">
                 <p>{$smarty.get.alert|default:""}</p>
                 <p>{$msg_alert|default:""}</p>
