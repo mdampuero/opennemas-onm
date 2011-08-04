@@ -1,5 +1,6 @@
 <?php
 
+use Onm\Settings as s;
 require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
@@ -428,6 +429,9 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             //FIXME: cambiar por la llamada a vars php en smarty
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
+
+            //Setup config for site-agency
+            $tpl->assign('site_agency', s::get('site_agency'));
 
             //TODO: AJAX
             require_once('controllers/video/videoGallery.php');

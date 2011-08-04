@@ -119,6 +119,17 @@ textarea{
                     </tr>
                     <tr valign="top">
                         <th scope="row">
+                            <label for="site_title">{t}Site agency:{/t}</label>
+                        </th>
+                        <td>
+                            <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row">
                             <label for="site_title">{t}Time Zone:{/t}</label>
                         </th>
                         <td>

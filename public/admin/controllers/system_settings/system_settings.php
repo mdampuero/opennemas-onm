@@ -37,7 +37,7 @@ switch($action) {
     case 'list':
 
         $configurationsKeys = array(
-                                    'site_title', 'site_description','site_keywords',
+                                    'site_title', 'site_description','site_keywords','site_agency',
                                     'time_zone','site_language','mail_server',
                                     'mail_username','mail_password','google_maps_api_key',
                                     'google_custom_search_api_key','facebook',

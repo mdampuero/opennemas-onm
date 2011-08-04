@@ -27,6 +27,7 @@
  * class Europapress
  */
 namespace Onm\Import\DataSource;
+use Onm\Settings as s;
 
 class Europapress {
 
@@ -59,7 +60,7 @@ class Europapress {
 
         $this->xmlFile = basename($xmlFile);
 
-        $baseAgency = (defined('SITE_AGENCY')) ? SITE_AGENCY: sprintf(_('Agencies')) ;
+        $baseAgency = s::get('site_agency');
         $this->agencyName = $baseAgency.' | Europapress';
 
         if(file_exists($xmlFile)) {

@@ -293,7 +293,7 @@ if($('starttime')) {
 								value="{$article->agency|clearslash|escape:"html"}"
 								onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
 							{else}
-								value="{$smarty.const.SITE_AGENCY}"
+								value="{$site_agency}"
 							{/if}
 						/>
 				</td>
