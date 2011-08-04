@@ -27,23 +27,25 @@
         </ul>
     </div>
 </div>
+
 <div class="wrapper-content">
-
- 
-        {if !empty($msg)}
-            <script type="text/javascript">
-                {if $smarty.request.resp eq 'SI'}
-                    showMsg({ 'warn':['{t}Deleted succesfuly.{/t}'] },'inline');
-                {elseif $smarty.request.resp eq 'NO'}
-                    showMsg({ 'warn':['{t}Not deleted, the section is not empty.{/t}<br />'] },'inline');
-                {elseif $smarty.request.resp eq 'ya'}
-                    showMsg({ 'warn':['{t}Unable to create, section is already exists.{/t}' ]},'inline');
-                {elseif $smarty.request.resp eq 'EMPTY'}
-                    showMsg({ 'warn':['{t}Successfully emptied.{/t}'] },'inline');
-                {/if}
-            </script>
-        {/if}
-
+    {if !empty($smarty.get.resp) && $smarty.get.resp == "NO"}
+        <div class="notice" style="margin-top:3px;">
+            <p>{t}To delete a category previously you have to empty it{/t}</p>
+        </div>
+    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "SI"}
+        <div class="success" style="margin-top:3px;">
+            <p>{t}Categoy deleted successfully{/t}</p>
+        </div>
+    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "BD"}
+        <div class="error" style="margin-top:3px;">
+            <p>{t}Error: you have some Database errors{/t}</p>
+        </div>
+    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "EMPTY"}
+        <div class="success" style="margin-top:3px;">
+            <p>{t}Category has been emptied successfully{/t}</p>
+        </div>
+    {/if}
         <ul id="tabs">
             <li>
                 <a href="category.php#listado">Listar secciones</a>
