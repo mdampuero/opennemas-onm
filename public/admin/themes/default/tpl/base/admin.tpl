@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="author" content="OpenHost,SL" />
     <meta name="generator" content="OpenNemas - News Management System" />
+    <link rel="shorcut icon" href="{$params.IMAGE_DIR}/favicon.png" />
 
     {block name="meta"}
         <title>OpenNeMaS - Admin section</title>
