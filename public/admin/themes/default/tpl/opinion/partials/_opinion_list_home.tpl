@@ -224,7 +224,7 @@
 					{if $opinions[c]->type_opinion==1} Editorial{elseif $opinions[c]->type_opinion==2}
 						{t}Director{/t}
 					{else}
-						<a href="controllers/opinion/author.php?action=read&id={$opinions[c]->fk_author}">
+						<a href="author.php?action=read&id={$opinions[c]->fk_author}">
 							{$names[c]}
 						</a>
 					{/if}
