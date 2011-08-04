@@ -27,13 +27,13 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
         define('ITEMS_GALLERY', 20);
     }
 
-    $action = filter_input(INPUT_GET,'action',FILTER_VALIDATE_INT, array('options' => array('default'=> 'listByMetadatas')));
+    $action = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING, array('options' => array('default'=> 'listByMetadatas')));
     $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT,  array('options' => array('default'=> 1)));
     $html_out='';
 
     $category = filter_input( INPUT_GET, 'category', FILTER_VALIDATE_INT, array('options' => array('default'=> 0)));
 
-    $metadatas = filter_input(INPUT_GET,'metadatas',FILTER_VALIDATE_INT, array('options' => array('default'=> '')));
+    $metadatas = filter_input(INPUT_GET,'metadatas',FILTER_SANITIZE_STRING, array('options' => array('default'=> '')));
 
     $fetchedFromAPC = false;
     if (extension_loaded('apc')) {
@@ -53,7 +53,7 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
             if (!empty($metadatas)) {
                 $presentSearch = cSearch::Instance();
-                $arrayIds = $presentSearch->cache->SearchContentsSelect('pk_content', $metadatas, 'video', 100);
+                $arrayIds = $presentSearch->SearchContentsSelect('pk_content', $metadatas, 'video', 100);
                 if(!empty($arrayIds)) {
                     $szWhere = '( FALSE ';
                     foreach($arrayIds as $Id)
@@ -64,7 +64,7 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
                 } else {
                     $szWhere = "TRUE";
                     $html_out .= "<div align=\"center\" ><p>No se encontró ningún contenido con todos los términos de su búsqueda.</p>" .
-                        "<p>Su búsqueda - <b>" . $_REQUEST['metadatas'] . "</b> - no produjo ningún documento.</p></div><br/>";
+                        "<p>Su búsqueda - <b>" . $metadatas . "</b> - no produjo ningún documento.</p></div><br/>";
 
 
                 }
