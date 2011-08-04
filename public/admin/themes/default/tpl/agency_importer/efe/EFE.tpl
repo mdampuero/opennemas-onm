@@ -60,8 +60,8 @@
 			</td></tr>
 		</table><br />
 	{if isset($dataXML) && !empty($dataXML)}
-		{if isset($action) && $action eq 'check'}<h2>Checking XML files</h2>
-		{else}<h2>IMPORTING XML files</h2>
+		{if isset($action) && $action eq 'check'}<h2>{t}Checking XML files{/t}</h2>
+		{else}<h2>{t}Impoting XML files{/t}</h2>
 		{/if}
 		<br />
         <div style="background:#F7F7F7 none repeat scroll 0 0;border:1px solid #D7D7D7;padding:0;margin:0.5em 1em;overflow:auto;">
@@ -76,19 +76,19 @@
                         {/foreach}
                      </ul>
                 {/if}
-               
+
             </div>
 
             {foreach from=$dataXML item=article name=articl}
                 <table style="width: 90%;">
                     <tr><td colspan="2"><h3>{$XMLFile[$smarty.foreach.articl.index]}</h3></td></tr>
-                 {if !empty($article.agency)}<tr><td><b>Agencia: </b></td><td>{$article.agency}</td></tr>{/if}
-                  {if !empty($article.created)}<tr><td><b>Fecha: </b></td><td>{$article.created}</td></tr>{/if}
-                    {if !empty($article.title)}<tr style="color:blue;font-size:16px;font-weight:700"><td>Titulo: </td><td>{$article.title}</td></tr>{/if}
-                    {if !empty($article.summary)}<tr><td style="vertical-align:top;"><b>Entradilla: </b></td><td>{$article.summary}</td></tr>{/if}
-                    {if !empty($article.text)}<tr><td style="vertical-align:top;" ><b>Cuerpo: </b></td><td>{$article.text}</td></tr>{/if}
-                    {if !empty($article.date)}<tr><td><b>Fecha: </b></td><td>{$article.date}</td></tr>{/if}
-                    {if !empty($article.category)}<tr><td><b>Sección: </b></td><td>{$article.category}   </td></tr>{/if}
+                 {if !empty($article.agency)}<tr><td><b>{t}Agency:{/t} </b></td><td>{$article.agency}</td></tr>{/if}
+                  {if !empty($article.created)}<tr><td><b>{t}Date:{/t} </b></td><td>{$article.created}</td></tr>{/if}
+                    {if !empty($article.title)}<tr style="color:blue;font-size:16px;font-weight:700"><td>{t}Title:{/t} </td><td>{$article.title}</td></tr>{/if}
+                    {if !empty($article.summary)}<tr><td style="vertical-align:top;"><b>{t}Summary:{/t} </b></td><td>{$article.summary}</td></tr>{/if}
+                    {if !empty($article.text)}<tr><td style="vertical-align:top;" ><b>{t}Body:{/t} </b></td><td>{$article.text}</td></tr>{/if}
+                    {if !empty($article.date)}<tr><td><b>{t}Date:{/t} </b></td><td>{$article.date}</td></tr>{/if}
+                    {if !empty($article.category)}<tr><td><b>{t}Category:{/t} </b></td><td>{$article.category}   </td></tr>{/if}
                 </table>
                 <br>
             {/foreach}
@@ -96,7 +96,7 @@
 	{else}
 		<br />
 		 <pre style="background:#F7F7F7 none repeat scroll 0 0;border:1px solid #D7D7D7;padding:0;margin:0.5em 1em;overflow:auto;">
-			<div style="text-align:center"><h3>Select a XML or a zip of XML Files to import</h3></div>
+			<div style="text-align:center"><h3>{t}Select a XML or a zip of XML Files to import{/t}</h3></div>
 		</pre>
 	{/if}
 	</div>
@@ -107,6 +107,3 @@
 </div>
 </form>
 {/block}
-
-
- 

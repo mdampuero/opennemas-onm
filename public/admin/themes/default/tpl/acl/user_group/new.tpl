@@ -5,7 +5,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Keyword Manager :: Listing keywords{/t}</h2></div>
+            <div class="title"><h2>{t}Keyword Manager{/t} :: {t}Listing keywords{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">

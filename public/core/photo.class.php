@@ -149,21 +149,21 @@ class Photo extends Content
         $photo->infor = '';
 
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
-        
+
         if (is_file($image)) {
             $size = getimagesize($image, $info);
 
             switch ($size['mime']) {
                 case "image/gif": {
-                    $photo->infor = _(" La imagen es de tipo gif </br>");
+                    $photo->infor = _("The image type is GIF </br>");
                 } break;
 
                 case "image/png": {
-                    $photo->infor = _("La imagen es de tipo png </br>");
+                    $photo->infor = _("The image type is PNG </br>");
                 } break;
 
                 case "image/bmp": {
-                    $photo->infor = _("La imagen es de tipo bmp </br>");
+                    $photo->infor = _("The image type is BMP </br>");
                 } break;
 
                 case 'image/jpeg': {
@@ -174,11 +174,11 @@ class Photo extends Content
                             if ($key != 'APP1') { $data_exif = read_exif_data($image, 0, true); break; }
                         }
                     }
-                    
+
                     $photo->exif = $data_exif;
 
                     if (empty($exif)) {
-                        $photo->infor .= _(" No hay datos EXIF </br>");
+                        $photo->infor .= _("No availabel EXIF data</br>");
 
                     } else {
 
@@ -201,19 +201,19 @@ class Photo extends Content
 
                     if (isset($info['APP13'])) {
                         $iptc = iptcparse($info['APP13']);
-            
+
                         if (is_array($iptc)) {
-                            
+
                             $error_reporting = ini_get('error_reporting');
                             error_reporting('E_ALL');
-                            
+
                             if (isset($iptc["2#025"])) {
                                 $keywordcount = count($iptc["2#025"]);
                                 $keywords=$iptc["2#025"][0];
-    
+
                                 for ($i=1; $i<$keywordcount; $i++) {
                                     $keywords .= ", ".$iptc["2#025"][$i]  ;
-                                }    
+                                }
                             } else {
                                 $keywords = '';
                             }
@@ -256,18 +256,18 @@ class Photo extends Content
                             if (empty($photo->author_name)) {
                                 $photo->author_name = $myiptc['Photographer'];
                             }
-                            
+
                             ini_set($error_reporting);
 
                         } else {
-                            $photo->infor .= "No tiene datos IPTC </br>";
+                            $photo->infor .=  _("No availabel IPTC data</br>");
                         }
                     }
                 } break;
             } // endswitch;
 
         } else {
-            $photo->infor .= "La imagen es incorrecta.";
+            $photo->infor .=  _("Invalid image file</br>");
         }
 
         return $photo;

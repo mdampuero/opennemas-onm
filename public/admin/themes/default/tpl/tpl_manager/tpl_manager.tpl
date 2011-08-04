@@ -255,7 +255,7 @@
 						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 						<a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
 						{if $caches[c].resource gt 0}
-							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} {t}(Pág.{/t} {$caches[c].resource})</a>
+							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} {t 1=$caches[c].resource}(Page %1){/t}</a>
 						{else}
 							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
 						{/if}

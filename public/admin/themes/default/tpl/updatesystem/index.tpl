@@ -22,7 +22,7 @@
 			</li>
             <li>
 				<a href="{$smarty.server.PHP_SELF}?action=list" onmouseover="return escape('{t}List{/t}');" accesskey="L" tabindex="1">
-					<img border="0" src="{$params.IMAGE_DIR}list.png" title="List" alt={t}"List files from repository system{/t}"><br />{t}List{/t}
+					<img border="0" src="{$params.IMAGE_DIR}list.png" title="List" alt="{t}List files from repository system{/t}"><br />{t}List{/t}
 				</a>
 			</li>
 		</ul>

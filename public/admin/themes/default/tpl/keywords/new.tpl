@@ -28,7 +28,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Keyword Manager :: Editing keyword information{/t}</h2></div>
+            <div class="title"><h2>{t}Keyword Manager{/t} :: {t}Editing keyword information{/t}</h2></div>
             <ul class="old-button">
                <li>
                     <a href="?action=list" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">

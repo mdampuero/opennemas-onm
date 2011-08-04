@@ -4,7 +4,7 @@
 <form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Keyword Manager :: Listing keywords{/t}</h2></div>
+			<div class="title"><h2>{t}Keyword Manager{/t} :: {t}Listing keywords{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" title="Nueva palabra clave">

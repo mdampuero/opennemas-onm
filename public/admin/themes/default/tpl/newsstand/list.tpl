@@ -49,7 +49,7 @@
                     <th align="center" style="width:90px;">{t}Date{/t}</th>
                     <th align="center" style="width:10px;">{t}Publisher{/t}</th>
                     <th align="center" style="width:90px;">{t}Last editor{/t}</th>
-                    <th align="center" style="width:10px;">{t}Favorte{/t}</th>
+                    <th align="center" style="width:10px;">{t}Favorite{/t}</th>
                     <th align="center" style="width:10px;">{t}Published{/t}</th>
                     <th align="center" style="width:50px;">{t}Actions{/t}</th>
                 </thead>

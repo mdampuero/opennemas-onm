@@ -81,7 +81,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Priveleges manager :: Editing privilege{/t}</h2></div>
+			<div class="title"><h2>{t}Privileges manager{/t} :: {t}Editing privilege{/t}</h2></div>
 			<ul class="old-button">
 				<li>
                 {if isset($privilege->id)}

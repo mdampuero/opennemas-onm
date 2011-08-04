@@ -206,7 +206,7 @@ gettext("Publisher");
 gettext("Last editor");
 
 /* ./public/admin/themes/default/tpl//newsstand/list.tpl */
-gettext("Favorte");
+gettext("Favorite");
 
 /* ./public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Published");
@@ -1901,7 +1901,7 @@ gettext("Section Frontpage cache file");
 gettext("Section Frontpage cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("(Pág.");
+gettext("(Page %1)");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Cache file expired");
@@ -2617,24 +2617,6 @@ gettext("Close window");
 /* ./public/admin/themes/default/tpl//advertisement/test_script.tpl */
 gettext("Close");
 
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Banner Intersticial - Gallery (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Banner Top Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Banner1 Column Right (I) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery_inner.tpl */
-gettext("Banner Bottom Right (234X90)");
-
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Multimedia for this ad:");
 
@@ -2722,138 +2704,6 @@ gettext("File creation date");
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Description:");
 
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Big banner top left");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Banner top right");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 1");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 2");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 2 position 1");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 2 position 2");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 1");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 2");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 3");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 3");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Center Left LeaderBoard");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Center Right LeaderBoard");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 4");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 5");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 2 position 4");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 2 position 5");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 4");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 5");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 1 position 5");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Button column 3 position 6");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Horizontal separator");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions.tpl */
-gettext("Mini right 1");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Banner Intersticial - Inner (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Big  Banner Top(I) (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Banner Top Right(I) (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Banner1 Column Right (I) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Robapágina (650X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Banner2 Column Right(I) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Big Banner Bottom(I) (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_interior.tpl */
-gettext("Banner Bottom Right(I) (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Banner Intersticial - Video Inner (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Banner Top Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Button Column (265x95)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video_interior.tpl */
-gettext("Banner Bottom Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Banner Intersticial - Opinion Inner (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Banner Top Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Banner1 Column Right (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Robapágina (650X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Banner2 Column Right (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion_interior.tpl */
-gettext("Banner Bottom Right (234X90)");
-
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
 gettext("Big Banner top left (Int.)");
 
@@ -2876,130 +2726,7 @@ gettext("Big Banner bottom left (Int.)");
 gettext("Banner bottom right (Int.)");
 
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Banner Intersticial - Gallery (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
 gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Banner Top Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Banner1 Column Right (I) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Banner2 Column Right(II) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Banner Bottom Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Banner Intersticial - Video Frontpage (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Banner Top Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Banner1 Column Right (I) (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_video.tpl */
-gettext("Banner Bottom Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Banner Intersticial - Opinion Frontpage (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Banner Top  Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Banner Column Right (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Big Banner Bottom (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_opinion.tpl */
-gettext("Banner Bottom Right (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Frontpage Intersticial (800X600)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Top Left LeaderBoard (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Top Right LeaderBoard  (234X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 1 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 2  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 2 position 1 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 2 position 2  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 1 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 2  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 3  (200x200)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 3 (200x200)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Center Left LeaderBoard (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Center Right LeaderBoard (234x90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 4 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 5  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 2 position 4 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 2 position 5  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 4 (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 5  (300X*)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 1 position 6  (200x200)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Button Column 3 position 6 (200x200)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Bottom Left LeaderBoard (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions.tpl */
-gettext("Bottom Right LeaderBoard (234X90)");
 
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_gallery_inner.tpl */
 gettext("Banner Column right 1 (Int.)");
@@ -3335,10 +3062,10 @@ gettext("Go back");
 gettext("Delete");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("GLOBAL");
+gettext("Global");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("PUBLICIDAD");
+gettext("Advertisement");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
 gettext("Image name:");
@@ -3557,7 +3284,10 @@ gettext("Delete user");
 gettext("There is no users created yet or <br/>your search don't match your criteria");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/new.tpl */
-gettext("Priveleges manager :: Editing privilege");
+gettext("Privileges manager");
+
+/* ./public/admin/themes/default/tpl//acl/privilege/new.tpl */
+gettext("Editing privilege");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/new.tpl */
 gettext("Save");
@@ -3611,7 +3341,7 @@ gettext("(recomendation: MODULE_ACTION)");
 gettext("Description");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
-gettext("Priveleges manager");
+gettext("Privileges manager");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Filter by module:");
@@ -3638,7 +3368,10 @@ gettext("Delete privilege");
 gettext("No available privileges to list here.");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
-gettext("Keyword Manager :: Listing keywords");
+gettext("Keyword Manager");
+
+/* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
+gettext("Listing keywords");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
 gettext("Save and continue");
@@ -3716,7 +3449,10 @@ gettext("Delete group");
 gettext("There is no groups created yet.");
 
 /* ./public/admin/themes/default/tpl//keywords/new.tpl */
-gettext("Keyword Manager :: Editing keyword information");
+gettext("Keyword Manager");
+
+/* ./public/admin/themes/default/tpl//keywords/new.tpl */
+gettext("Editing keyword information");
 
 /* ./public/admin/themes/default/tpl//keywords/new.tpl */
 gettext("Go back");
@@ -3740,7 +3476,10 @@ gettext("Keyword information");
 gettext("Save");
 
 /* ./public/admin/themes/default/tpl//keywords/index.tpl */
-gettext("Keyword Manager :: Listing keywords");
+gettext("Keyword Manager");
+
+/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+gettext("Listing keywords");
 
 /* ./public/admin/themes/default/tpl//keywords/index.tpl */
 gettext("New");
@@ -3785,7 +3524,37 @@ gettext("Remove File");
 gettext("Add File");
 
 /* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Checking XML files");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Impoting XML files");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
 gettext("To categories");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Agency:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Date:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Title:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Summary:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Body:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Date:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Category:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+gettext("Select a XML or a zip of XML Files to import");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("EuropaPress importer");
@@ -4034,6 +3803,9 @@ gettext("Site description:");
 gettext("Site keywords:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site agency:");
+
+/* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Time Zone:");
 
 /* ./public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -4187,7 +3959,7 @@ gettext("Checkout");
 gettext("List");
 
 /* ./public/admin/themes/default/tpl//updatesystem/index.tpl */
-gettext("\"List files from repository system");
+gettext("List files from repository system");
 
 /* ./public/admin/themes/default/tpl//updatesystem/index.tpl */
 gettext("List");

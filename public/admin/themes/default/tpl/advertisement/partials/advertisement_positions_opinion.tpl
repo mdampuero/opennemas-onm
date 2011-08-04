@@ -3,7 +3,7 @@
     <tr>
         <td align="right" colspan="2">
             <label>
-                {t}Banner Intersticial - Opinion Frontpage (800X600){/t}
+                Banner Intersticial - Opinion Frontpage (800X600)
                 <input type="radio" name="type_advertisement" value="50" {if $advertisement->type_advertisement == 50}checked="checked" {/if}/>
             </label>
         </td>
@@ -17,13 +17,13 @@
     <tr>
         <td align="right">
             <label>
-                {t}Big Banner Top (728X90){/t}
+                Big Banner Top (728X90)
                 <input type="radio" name="type_advertisement" value="1" {if $advertisement->type_advertisement == 1}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                {t}Banner Top  Right (234X90){/t}
+                Banner Top  Right (234X90)
                 <input type="radio" name="type_advertisement" value="2" {if $advertisement->type_advertisement == 2}checked="checked" {/if}/>
             </label>
         </td>
@@ -32,22 +32,22 @@
         <td align="right">&nbsp;</td>
         <td align="right">
             <label>
-                {t}Banner Column Right (300X*){/t}
+                Banner Column Right (300X*)
                 <input type="radio" name="type_advertisement" value="3" {if $advertisement->type_advertisement == 3}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-    
+
     <tr>
         <td align="right">
             <label>
-                {t}Big Banner Bottom (728X90){/t}
+                Big Banner Bottom (728X90)
                 <input type="radio" name="type_advertisement" value="9" {if $advertisement->type_advertisement == 9}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
-                {t}Banner Bottom Right (234X90){/t}
+                Banner Bottom Right (234X90)
                 <input type="radio" name="type_advertisement" value="10" {if $advertisement->type_advertisement == 10}checked="checked" {/if}/>
             </label>
         </td>
