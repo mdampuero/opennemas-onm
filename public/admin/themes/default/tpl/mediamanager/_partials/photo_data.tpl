@@ -45,8 +45,9 @@
                             </select>
                         </p>
                         <p>
-                            <label>{t}Description:{/t}</label> <br /><textarea id="description[{$photo1->id}]" name="description[{$photo1->id}]"
-                                title="descripcion" rows="2" style="width:96%">{$photo1->description|clearslash|escape:'html'}</textarea>
+                            <label>{t}Description:{/t}</label> <br /><textarea class="required" id="description[{$photo1->id}]" name="description[{$photo1->id}]"
+                                title="descripcion" rows="2" style="width:96%"
+                                onBlur="javascript:get_metadata_imagen(this.value,'{$photo1->id}');">{$photo1->description|clearslash|escape:'html'}</textarea>
                         </p>
                         <p>
                             <label for="title">{t}Keywords:{/t}</label>

@@ -83,7 +83,7 @@ function get_metadata(title)
 {
 	 //instanciamos el objetoAjax
 	   ajax=objetoAjax();
-
+           
 	   var tags= document.getElementById('metadata').value;
 
 	   //uso del medotod GET
@@ -101,8 +101,27 @@ function get_metadata(title)
 
 
 }
+//Para imagen
+function get_metadata_imagen(description,id)
+{
+	 //instanciamos el objetoAjax
+	   ajax=objetoAjax();
+           
+	   var tags= document.getElementById('metadata['+id+']').value;
 
+	   //uso del medotod GET
+	   ajax.open("GET", "/admin/controllers/utils_content.php?action=get_tags&title="+description+"&tags="+tags);
+	   ajax.onreadystatechange=function() {
+	    if (ajax.readyState==4) {
+		     //mostrar resultados en esta capa
+		     document.getElementById('metadata['+id+']').value = ajax.responseText
 
+		   }
+       }
+   //como hacemos uso del metodo GET
+   //colocamos null
+   ajax.send(null)
+}
 
 function countWords(text,counter){
 
