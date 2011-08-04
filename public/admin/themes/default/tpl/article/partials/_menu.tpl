@@ -16,7 +16,7 @@
 			</li>
 
 			<li>
-				<a href="{$article->permalink}" target="_blank" accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
+				<a href="#"  accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
 				<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
 			</li>
 			<li class="separator"></li>
@@ -63,7 +63,7 @@
             {/if}
 
             <li>
-                <a href="{$article->permalink}" target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
+                <a href="#" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
                     <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
                 </a>
             </li>
