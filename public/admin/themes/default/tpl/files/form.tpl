@@ -2,11 +2,27 @@
 
 
 {block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+        <div class="title"><h2>{t}Files manager :: General statistics{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a href="{$_SERVER['PHP_SELF']}?action=list" class="admin_add" value="Cancelar" title="Cancelar">
+                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="wrapper-content">
-
+        <table class="adminheading">
+            <tr>
+                <th>&nbsp;</th>
+            </tr>
+        </table>
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
-		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="700">
+		<table border="0" cellpadding="0" cellspacing="0" class="adminform" width="700">
 			<tbody>
 				<tr>
 					<td valign="top" align="right" style="padding:4px;" width="30%">
@@ -54,20 +70,14 @@
 			</tbody>
 		</table>
 
+        <div class="action-bar clearfix">
+            <div class="right">
+                <a href="#" class="onm-button red" onClick="javascript:enviar(this, '_self', 'update', '{$attaches->pk_attachment}');">{t}Save{/t}</a>
+            </div>
+        </div>
 
-		<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
-			<tbody>
-				<tr>
-					<td colspan="2" align="right">
-						<a href="#" class="onm-button red" onClick="javascript:enviar(this, '_self', 'update', '{$attaches->pk_attachment}');">Guardar</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id}" />
-	</form>
-
+        <input type="hidden" id="action" name="action" value="" />
+        <input type="hidden" name="id" id="id" value="{$id}" />
+    </form>
 </div>
 {/block}
