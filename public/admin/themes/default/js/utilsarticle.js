@@ -210,7 +210,7 @@ changedTables = function(category) {
 function previewFrontpage(category) {
 
 
-   // changedTables(category);
+    // changedTables(category);
     var huecos = getFrontpageHoles();
 
     huecos.push($('div_no_home'));
@@ -236,12 +236,11 @@ function previewFrontpage(category) {
     });
 
     // Form
-	var frm = $('formulario');
-      //  console.log(places);
-	// Send articles positions into 'id' text field
-	frm.id.value =  Object.toJSON(places);
+    var frm = $('formulario');
+    // Send articles positions into 'id' text field
+    frm.id.value =  Object.toJSON(places);
     frm.category.value = category;
-   // frm.preview_time.value = 20;
+    // frm.preview_time.value = 20;
 
 	$('formulario').action.value = '';
 	myLightWindow.activateWindow({
@@ -253,6 +252,21 @@ function previewFrontpage(category) {
 
 }
 
+function previewArticle(id,formID,type){
+    if(!validateForm(formID))
+        return false;
+
+    $(formID).id.value = id;
+   
+    $('formulario').action.value = '';
+    myLightWindow.activateWindow({
+        href: '/controllers/preview_content.php?id='+id+'&action=article',
+        title: 'Previsualización',
+        author: '',
+        type: 'external'
+    });
+   
+}
 /**
  * Eliminar desde botonera las cachés
  */
@@ -729,59 +743,6 @@ function  divs_hide(mydiv)
 	 Effect.Appear(mydiv);
 	 return false;
 }
-
-
-function previewArticle(id,formID,type){
-    if(!validateForm(formID))
-        return false;
-
-    $(formID).action.value = 'preview';
-    $(formID).id.value = id;
-
-    new Ajax.Request('article.php',{
-        method: 'post',
-        parameters: $(formID).serialize(),
-        onSuccess: function(transport) {
-            $('formulario').action.value = '';
-            myLightWindow.activateWindow({
-                href: '/controllers/preview_content.php?id='+transport.responseText+'&action=article',
-                title: 'Previsualización',
-                author: 'retrincos.info',
-                type: 'external'
-            });
-        },
-        onLoading: function() {
-            /*
-            $('savePreview').setStyle({display: 'none'});
-            $('reloadPreview').setStyle({display: ''});
-            $('reloadPreviewText').update('Cargando previsualización...');
-            */
-           showMsg({'loading':['Cargando previsualización...']},'growl');
-        },
-        onComplete: function(transport) {
-            $('reloadPreview').setStyle({display: 'none'});
-            if (type=='create') {
-                $('button_save').onclick = function() {
-                   recolectar();
-                   sendFormValidate(this, '_self', 'update', transport.responseText, 'formulario');
-                };
-                $('button_preview').onclick = function() {
-                   recolectar();
-                   previewArticle(transport.responseText,'formulario','update');
-                   return false;
-                };
-                $(formID).available.value = 0;
-            }
-            /*
-            $('savePreview').setStyle({display: ''});
-            $('savePreviewText').update('El artículo ha sido guardado tras la previsualización.');
-            */
-           //showMsg({'info':['El artículo ha sido guardado tras la previsualización.']},'growl');
-           setTimeout("hideMsgContainer('msgBox')",6000);
-        }
-    })
-}
-
 
 function delete_article(id,category,page){
 
