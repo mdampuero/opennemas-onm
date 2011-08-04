@@ -3,7 +3,7 @@
 
 getGalleryImages = function(action, category, metadatas, page) {
     if(metadatas == 0){
-		action = 'list';
+		action = 'listByCategory';
 	}
     new Ajax.Updater('photos', "/admin/controllers/image/imageGallery.php?action="+action+"&page="+page+"&category="+category+"&metadatas="+metadatas,
     {

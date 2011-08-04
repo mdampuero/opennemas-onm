@@ -65,7 +65,6 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
             }
         } else {
             $szWhere = "TRUE";
-            $metadatas ='';
         }
 
         if (empty($category)) {

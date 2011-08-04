@@ -70,7 +70,6 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
                 }
             } else {
                 $szWhere = "TRUE";
-                $metadatas ='';
             }
 
               if (empty($category)) {
@@ -89,7 +88,7 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
 
 
         }else {
-            $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1 AND ' . $szWhere, 'ORDER BY created DESC '.$limit);
+            $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 AND contents.content_status=1', 'ORDER BY created DESC '.$limit);
 
             $videoParams = array('page'=>$page, 'items'=>ITEMS_GALLERY,
                             'total' => count($videos), 'function'=>'getGalleryVideos',
