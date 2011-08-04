@@ -193,10 +193,10 @@ table.adminheading {
 	border-bottom:0px;
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-radius: 6px 6px 0 0;
-	background: #eAeAeA; /* for non-css3 browsers */
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eAeAeA', endColorstr='#D2D2D2'); /* for IE */
-	background: -webkit-gradient(linear, left top, left bottom, from(#eAeAeA), to(#D2D2D2)); /* for webkit browsers */
-	background: -moz-linear-gradient(top,  #eAeAeA,  #D2D2D2); /* for firefox 3.6+ */
+	background: #f1f1f1; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#d9d9d9)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #f1f1f1, #d9d9d9); /* for firefox 3.6+ */
 	text-shadow:0 1px 0 #FFFFFF;
 }
 table.adminlist img, table.adminheading img { vertical-align:middle; }
@@ -656,7 +656,7 @@ div.ui-blocker-message {
     top: 50%;
     left: 0%;
     width: 100%;
-    color:White;
+    color:Black;
     clear:both;
 	font-weight:bold;
     font-family:Arial, Verdana;

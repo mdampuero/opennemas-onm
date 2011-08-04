@@ -28,7 +28,7 @@ $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 switch($action) {
     case 'edit': {
-        $id = $_REQUEST['id'];                
+        $id = $_REQUEST['id'];
         $widget->read($id);
         if(isset($_REQUEST['category'])) {
             $_SESSION['categoria'] = $_REQUEST['category'];
@@ -38,30 +38,30 @@ switch($action) {
         $tpl->display('widget/edit.tpl');
         break;
     } // Executa tamén new
-    
+
     case 'new': {
         $tpl->display('widget/edit.tpl');
         break;
-    } 
-    
+    }
+
     case 'delete': {
         $id = $_REQUEST['id'];
         $widget->delete($id);
-        
-        
+
+
         Application::forward('?action=list');
         break;
     }
-    
+
     case 'save': {
-        $data = $_POST;        
-        
+        $data = $_POST;
+
         if(intval($data['id']) > 0) {
             $widget->update($data);
-        } else {            
+        } else {
             $widget->create($data);
-        }     
-        
+        }
+
         if (isset($_SESSION['desde'])) {
             if ($_SESSION['desde'] == 'list') {
                 Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria']);
@@ -71,25 +71,25 @@ switch($action) {
                 Application::forward('/admin/controllers/search_advanced/search_advanced.php');
             }
         }
-        
+
         Application::forward('?action=list');
-        
+
         break;
-    } 
-    
+    }
+
     case 'changeavailable': {
         $widget->read($_REQUEST['id']);
-        
+
         $available = ($widget->available+1) % 2;
         $widget->set_available($available, $_SESSION['userid']);
-        
+
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
             list($img, $text)  = ($available)? array('g', _('PUBLICADO')): array('r', _('PENDIENTE'));
-            
+
             echo '<img src="' . $tpl->image_dir . 'publish_' . $img . '.png" border="0" title="' . $text . '" />';
             exit(0);
         }
-        
+
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
@@ -117,15 +117,15 @@ switch($action) {
         Application::forward(SITE_URL_ADMIN.'/article.php?action=list&category='.$_REQUEST['category']);
         break;
     }
-    
+
     case 'list':
     default: {
         //$widgets = $cm->find_by_category('Widget', 3, 'fk_content_type=12 ', 'ORDER BY created DESC');
-        $widgets = $cm->find('Widget', 'fk_content_type=12', 'ORDER BY created DESC ');
-        
+        $widgets = $cm->find('Widget', 'fk_content_type=12', 'ORDER BY title ASC ');
+
         /*$items_page = 25;
         $page = (!isset($_REQUEST['page']))? 1: intval($_REQUEST['page']);
-        
+
         // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
@@ -134,16 +134,16 @@ switch($action) {
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => count($terms),
-        );        
+        );
         $pager = Pager::factory($pager_options);
-        
+
         $terms = array_slice($terms, ($page-1)*$items_page, $items_page);*/
-        
+
         $_SESSION['desde'] = 'widget';
-        
+
         $tpl->assign('widgets', $widgets);
         //$tpl->assign('pager', $pager);
         $tpl->display('widget/index.tpl');
         break;
-    } 
+    }
 }
