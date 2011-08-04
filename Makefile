@@ -17,7 +17,8 @@ all: default updatepofiles compiletranslations
 default:
 	@echo "Extracting translations";
 	@tsmarty2c $(TPL_FOLDER) > $(LOCALE_FOLDER)'extracted_strings.c'
-	@xgettext public/admin/include/menu.php public/core/*.php \
+	@xgettext public/admin/controllers/**/* \
+			  public/admin/include/menu.php public/core/*.php \
 			  public/libs/Onm/**/**/*.php **/**/*.php \
 			  public/admin/themes/default/**/*.php \
 			  $(LOCALE_FOLDER)'extracted_strings.c' \

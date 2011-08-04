@@ -2704,36 +2704,6 @@ gettext("File creation date");
 /* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Description:");
 
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Big Banner top left (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Banner top right (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Banner Column right 1 (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Robapágina (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Banner Column right 2 (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Big Banner bottom left (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_interior.tpl */
-gettext("Banner bottom right (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_positions_gallery.tpl */
-gettext("Big Banner Top (728X90)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_gallery_inner.tpl */
-gettext("Banner Column right 1 (Int.)");
-
-/* ./public/admin/themes/default/tpl//advertisement/partials/advertisement_map_positions_gallery_inner.tpl */
-gettext("Banner Column right 2 (Int.)");
-
 /* ./public/admin/themes/default/tpl//botonera_up.tpl */
 gettext("Save changes");
 

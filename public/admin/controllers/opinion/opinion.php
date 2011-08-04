@@ -216,7 +216,7 @@ if(isset($_REQUEST['action'])) {
 
             $photos = $aut->get_author_photos($opinion->fk_author);
             $tpl->assign('photos', $photos);
-            
+
             $tpl->display('opinion/new.tpl');
         break;
 
@@ -281,7 +281,7 @@ if(isset($_REQUEST['action'])) {
             require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
-            
+
             if($_SESSION['desde'] == 'search_advanced') {
                 if(isset($_GET['stringSearch'])){
                     Application::forward('/admin/controllers/search_advanced/search_advanced.php?'.
@@ -675,7 +675,7 @@ if(isset($_REQUEST['action'])) {
             $opinion->set_available($available, $_SESSION['userid']);
 
             if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-                list($img, $text)  = ($available)? array('g', _('PUBLICADO')): array('r', _('PENDIENTE'));
+                list($img, $text)  = ($available)? array('g', 'PUBLICADDO'): array('r', 'PENDIENTE');
 
                 echo '<img src="' . $tpl->image_dir . 'publish_' . $img . '.png" border="0" title="' . $text . '" />';
                 exit(0);
