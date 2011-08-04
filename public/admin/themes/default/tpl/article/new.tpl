@@ -311,14 +311,20 @@ if($('starttime')) {
 							</a>
 						{/if}
 					</label>
-					<textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia"
+					<textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:98%; min-height:70px;"
 						  onChange="countWords(this,document.getElementById('counter_summary'))"
 						  onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
 				</td>
 			</tr>
 			<tr style="padding:4px;">
 				<td style="padding-bottom: 5px; padding-top: 10px;" valign="top" colspan="2">
-					<label for="body">{t}Body{/t}</label>
+					<label for="body">{t}Body{/t}
+					{if is_object($article) && !$article->isClone()}
+						<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="Habilitar/Deshabilitar editor">
+							<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+						</a>
+					{/if}
+					</label>
 					<textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia"
 							  style="width:100%; height:20em;"
 							  onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>

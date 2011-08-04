@@ -1675,3 +1675,15 @@ ul#menu hr{
 	display:block;
 	width:90%;
 }
+
+
+/* -------------------------------------------------------------
+  Article form
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#img_portada,
+#img_interior,
+#video_interior
+{
+	display:block; border:1px solid #ccc; border-width:1px 0 1px 0; background:#eee; padding:10px;
+	margin-right:10px;
+}
