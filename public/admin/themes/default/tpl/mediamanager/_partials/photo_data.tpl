@@ -9,10 +9,21 @@
             <table style="width:100%">
                 <tr>
                     <td style="vertical-align:top; padding:20px 5px;">
-                        <div class="image-preview">
-                            <img src="{$MEDIA_IMG_URL}{$photo1->path_file}{$photo1->name}" id="change1" border="0"
-                                onunload="GUnload()" />
-                        </div>
+                        {if preg_match('/^swf$/i', $photo1->type_img)}
+                            <div class="image-preview">
+                                <object>
+                                    <param name="wmode" value="transparent"
+                                           value="{$MEDIA_IMG_URL}{$photo1->path_file}{$photo1->name}" />
+                                    <embed wmode="transparent"
+                                           src="{$MEDIA_IMG_URL}{$photo1->path_file}{$photo1->name}"></embed>
+                                </object>
+                           </div>
+                        {else}
+                            <div class="image-preview">
+                                <img src="{$MEDIA_IMG_URL}{$photo1->path_file}{$photo1->name}" id="change1" border="0"
+                                    onunload="GUnload()" />
+                            </div>
+                        {/if}
                     </td>
                     <td style="padding:20px 5px; width:380px;">
                         <div class="photo-static-info">
