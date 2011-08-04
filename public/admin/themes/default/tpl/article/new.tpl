@@ -10,6 +10,19 @@
     {/if}
 {/block}
 
+{block name="header-css" append}
+	<style type="text/css">
+	label {
+		display:block;
+		color:#666;
+		text-transform:uppercase;
+	}
+	.utilities-conf label {
+		text-transform:none;
+	}
+	</style>
+{/block}
+
 {block name="footer-js" append}
 <script type="text/javascript" language="javascript">
 document.observe('dom:loaded', function() {
@@ -83,12 +96,10 @@ if($('starttime')) {
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
 			<tbody>
 			<tr>
-				<td valign="top" align="right" style="padding:4px;">
+				<td style="padding:4px;" valign="top" >
 					<label for="title">{t}Frontpage title:{/t}</label>
-				</td>
-				<td style="padding:4px;" nowrap="nowrap" valign="top" >
 					<input type="text" id="title" name="title" title="Título de la noticia en portada"
-						value="{$article->title|clearslash|escape:"html"|default:""}" class="required" style="width:95%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
+						value="{$article->title|clearslash|escape:"html"|default:""}" class="required" style="width:98%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
 						onkeyup="countWords(this,document.getElementById('counter_title'))"
 						{if is_object($article)}
 						onChange="search_related('{$article->pk_article}',$('metadata').value);"
@@ -99,10 +110,10 @@ if($('starttime')) {
 					<div class="utilities-conf">
 						<table style="width:99%;">
 							<tr>
-								<td valign="top" align="right" nowrap="nowrap">
+								<td valign="top" align="right">
 								<label for="category">{t}Section:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top">
+								<td style="text-align:left;vertical-align:top">
 									<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="8">
 										<option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
 										{section name=as loop=$allcategorys}
@@ -121,47 +132,47 @@ if($('starttime')) {
 							</tr>
 							{if $smarty.session.desde != 'list_hemeroteca'}
 							 <tr>
-								<td valign="top"  align="right" nowrap="nowrap">
+								<td valign="top"  align="right">
 									<label for="with_comment">{t}Allow coments{/t}</label>
 								</td>
-								<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
+								<td  style="text-align:left;vertical-align:top">
 									<input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1 tabindex="9"/>
 								</td>
 							</tr>
 							 <tr>
-								<td valign="top"  align="right" nowrap="nowrap">
+								<td valign="top"  align="right">
 									<label for="available">{t}Available:{/t}</label>
 								</td>
 
-								<td  style="text-align:left;vertical-align:top" nowrap="nowrap">
+								<td  style="text-align:left;vertical-align:top">
 									<input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1 tabindex="10"/>
 									<span style="font-size:9px;">{t}(publish directly){/t}</span>
 								</td>
 							</tr>
 							<tr>
-								<td valign="top"  align="right" nowrap="nowrap">
+								<td valign="top"  align="right">
 									<label for="frontpage">{t}Put in section frontpage:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top">
+								<td style="text-align:left;vertical-align:top">
 									<input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="11"/>
 								</td>
 							</tr>
 							{if ($article->in_home neq 1)}
 							<tr>
-								<td valign="top"  align="right" nowrap="nowrap">
+								<td valign="top"  align="right">
 									<label for="in_home">{t}Suggest for frontpage:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top">
+								<td style="text-align:left;vertical-align:top">
 															<input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/>
 								</td>
 							</tr>
 							{/if}
 							{else} {* else if not list_hemeroteca *}
 							<tr>
-								<td valign="top"  align="right" nowrap="nowrap">
+								<td valign="top"  align="right">
 															<label for="content_status">{t}Archived:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top">
+								<td style="text-align:left;vertical-align:top">
 									<input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
 									<input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
 									<input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
@@ -175,7 +186,7 @@ if($('starttime')) {
 								<td valign="top" align="right">
 									<label for="counter_title">{t}Frontpage title:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
+								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
 										value="0"  size="3" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/>
 								</td>
@@ -184,7 +195,7 @@ if($('starttime')) {
 								<td valign="top" align="right">
 									<label for="counter_title">{t}Inner title{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
+								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
 										value="0" size="3" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/>
 								</td>
@@ -193,7 +204,7 @@ if($('starttime')) {
 								<td valign="top" align="right">
 									<label for="counter_subtitle">{t}Pretitle:{/t}</label>
 								</td>
-								<td nowrap="nowrap" style="text-align:left;vertical-align:top;" >
+								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
 										value="0"  size="3" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/>
 								</td>
@@ -202,7 +213,7 @@ if($('starttime')) {
 								<td valign="top" align="right">
 									<label for="counter_summary">{t}Summary:{/t}</label>
 								</td>
-								<td nowrap="nowrap"  style="text-align:left;vertical-align:top">
+								<td  style="text-align:left;vertical-align:top">
 									<input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
 										value="0" size="3"
 										   onChange="countWords(document.getElementById('summary'),this)"
@@ -213,7 +224,7 @@ if($('starttime')) {
 								<td valign="top" align="right">
 									<label for="counter_body">{t}Body:{/t}</label>
 								</td>
-								<td nowrap="nowrap"  style="text-align:left;vertical-align:top" >
+								<td  style="text-align:left;vertical-align:top" >
 									<input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
 										value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));" tabindex="-1"/>
 								</td>
@@ -231,12 +242,10 @@ if($('starttime')) {
 				</td>
 			</tr>
 			<tr>
-				 <td valign="top" align="right" style="padding:4px;" >
+				<td style="padding:4px;" valign="top" >
 					<label for="title">{t}Inner title:{/t}</label>
-				</td>
-				<td style="padding:4px;" nowrap="nowrap" valign="top" >
 					<input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
-							value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:95%"
+							value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:98%"
 							maxlength="256"
 							onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
 							onkeyup="countWords(this,document.getElementById('counter_title_int'))"
@@ -257,38 +266,31 @@ if($('starttime')) {
 				</td>
 			</tr>
 			<tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="metadata">{t}Keywords{/t}</label>
-				</td>
-				<td style="padding:4px;" nowrap="nowrap" >
+				<td style="padding:4px;" >
+					<label for="metadata">{t}Keywords{/t} <small>{t}(Separated by commas){/t}</small></label>
 					<input type="text" id="metadata" name="metadata"
 						   {if isset($article) && is_object($article)}
 						   value="{$article->metadata}"
 						   onChange="search_related('{$article->pk_article|default:""}',$('metadata').value);"
 						   {/if}
-						   style="width:70%" title="Metadatos" tabindex="3"/>
+						   style="width:98%" title="Metadatos" tabindex="3"/>
 
-					<sub>{t}Separated by commas{/t}</sub>
 				</td>
 			</tr>
 
 			<tr>
-				<td valign="top" align="right" style="padding:4px;">
+				<td style="padding:4px;" valign="top" >
 					<label for="subtitle">{t}Pretitle{/t}</label>
-				</td>
-				<td style="padding:4px;" valign="top" nowrap="nowrap" >
-					<input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:95%"
+					<input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:98%"
 						value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="4"/>
 				</td>
 			</tr>
 
 			<tr>
-				<td valign="top" align="right" style="padding:4px;">
+				<td style="padding:4px;" valign="top" >
 					<label for="agency">{t}Agency{/t}</label>
-				</td>
-				<td style="padding:4px;" valign="top" nowrap="nowrap" >
 					<input 	type="text" id="agency" name="agency" title="{t}Agency{/t}"
-							class="required" style="width:95%" tabindex="5"
+							class="required" style="width:98%" tabindex="5"
 							{if is_object($article)}
 								value="{$article->agency|clearslash|escape:"html"}"
 								onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
@@ -300,32 +302,29 @@ if($('starttime')) {
 			</tr>
 
 			<tr>
-				<td >
-					<label for="summary">{t}Summary{/t}</label><br />
-					{if is_object($article) && !$article->isClone()}
-						<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-							<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
-						</a>
-					{/if}
-				</td>
-				<td >
+				<td style="padding:4px;">
+					<label for="summary">
+						{t}Summary{/t}
+						{if is_object($article) && !$article->isClone()}
+							<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
+								<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+							</a>
+						{/if}
+					</label>
 					<textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia"
 						  onChange="countWords(this,document.getElementById('counter_summary'))"
 						  onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
 				</td>
 			</tr>
-			<tr>
-				<td valign="top" align="right" style="padding:4px;">
+			<tr style="padding:4px;">
+				<td style="padding-bottom: 5px; padding-top: 10px;" valign="top" colspan="2">
 					<label for="body">{t}Body{/t}</label>
-				</td>
-				<td style="padding-bottom: 5px; padding-top: 10px;" valign="top" nowrap="nowrap" colspan="2">
 					<textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia"
 							  style="width:100%; height:20em;"
 							  onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
 				</td>
 			</tr>
-			<tr>
-				<td></td>
+			<tr style="padding:4px;">
 				<td valign="top" align="left" colspan="2" >
 					<div id="article_images">
 						{include  file="article/partials/_images.tpl"}
@@ -342,14 +341,14 @@ if($('starttime')) {
 		</div>
 
 		{* Pestaña de parámetros de noticia ****************************************** *}
-		<div class="panel" id="edicion-extra" style="width:95%">
+		<div class="panel" id="edicion-extra" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
 			<tbody>
 			<tr>
 				<td valign="top" align="right" style="padding:4px;" >
 					<label for="starttime">{t}Publication start date:{/t}</label>
 				</td>
-				<td style="padding:4px;" nowrap="nowrap" >
+				<td style="padding:4px;" >
 					<div style="width:170px;">
 						<input type="text" id="starttime" name="starttime" size="18"
 							title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" /></div>
@@ -359,7 +358,7 @@ if($('starttime')) {
 				<td valign="top" align="right" style="padding:4px;" >
 					<label for="endtime">{t}Publication end date:{/t}</label>
 				</td>
-				<td style="padding:4px;" nowrap="nowrap" >
+				<td style="padding:4px;" >
 					<div style="width:170px;">
 						<input type="text" id="endtime" name="endtime" size="18"
 							title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" /></div>
@@ -371,7 +370,7 @@ if($('starttime')) {
 				<td valign="top" align="right" style="padding:4px;" >
 					<label for="description">{t}Description{/t}</label>
 				</td>
-				<td style="padding:4px;" nowrap="nowrap" >
+				<td style="padding:4px;" >
 					<textarea name="description" id="description"
 						title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
 				</td>
@@ -383,7 +382,7 @@ if($('starttime')) {
 
 
 		{if $smarty.request.action eq 'read'}
-		<div class="panel" id="comments" style="width:95%">
+		<div class="panel" id="comments" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
 			<tbody>
 			<tr>
@@ -417,7 +416,7 @@ if($('starttime')) {
 		</div>
 
 
-		<div class="panel" id="opiniones-relacionadas" style="width:95%">
+		<div class="panel" id="opiniones-relacionadas" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 				<tbody><tr>
 					<td colspan="2">
@@ -430,12 +429,12 @@ if($('starttime')) {
 		{/if}
 
 
-		<div class="panel" id="contenidos-relacionados" style="width:95%">
+		<div class="panel" id="contenidos-relacionados" style="width:98%">
 			{include file="article/partials/_related.tpl"}
 		</div>
 
 		{if isset($article) && is_object($article)}
-		<div class="panel" id="elementos-relacionados" style="width:95%">
+		<div class="panel" id="elementos-relacionados" style="width:98%">
 			<br />
 			Listado contenidos relacionados en Portada:  <br />
 			<div style="position:relative;" id="scroll-container2">
@@ -498,7 +497,7 @@ if($('starttime')) {
 			</div>
 		</div>
 		{else}
-			<div class="panel" id="elementos-relacionados" style="width:95%">
+			<div class="panel" id="elementos-relacionados" style="width:98%">
 				<div style="padding:10px; width:90% margin:0 auto;">
 					<h2>{t}Related contents in frontpage{/t}</h2>
 					<div style="position:relative;" id="scroll-container2">
@@ -519,7 +518,7 @@ if($('starttime')) {
 		{/if}
 
 		{if isset($clones)}
-		<div class="panel" id="clones" style="width:95%">
+		<div class="panel" id="clones" style="width:98%">
 			{include file="article/partials/_clones.tpl"}
 		</div>
 		{/if}

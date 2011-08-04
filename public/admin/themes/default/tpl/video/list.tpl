@@ -82,91 +82,107 @@
                         <th nowrap> Videos</th>
                     </tr>
                 </table>
-                <table class="adminlist">
-                    <thead>
-                        <th style="width:35px;"></th>
-                        <th class="title">{t}Title{/t}</th>
-                        <th align="center" style="width:35px;">{t}Views{/t}</th>
-                        <th align="center">{t}Service{/t}</th>
-                        <th align="center">Created</th>
-                        {if $category=='favorite'}<th align="center">{t}Section{/t}</th>{/if}
-                        <th align="center" style="width:35px;">{t}Published{/t}</th>
-                        <th align="center" style="width:35px;">{t}Favorite{/t}</th>
-                        <th align="center" style="width:35px;">{t}Actions{/t}</th>
-                    </thead>
-                    {section name=c loop=$videos}
-                        <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
-                            <td >
-                                <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
-                            </td>
-                            <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-                                {$videos[c]->title|clearslash}
-                            </td>
+				{if count($videos) > 0}
+					<table class="adminlist">
+						<thead>
+							<tr>
+								<th style="width:35px;"></th>
+								<th class="title">{t}Title{/t}</th>
+								<th align="center" style="width:35px;">{t}Views{/t}</th>
+								<th align="center">{t}Service{/t}</th>
+								<th align="center">Created</th>
+								{if $category=='favorite'}<th align="center">{t}Section{/t}</th>{/if}
+								<th align="center" style="width:35px;">{t}Published{/t}</th>
+								<th align="center" style="width:35px;">{t}Favorite{/t}</th>
+								<th align="center" style="width:35px;">{t}Actions{/t}</th>
+							</tr>
+						</thead>
+						{section name=c loop=$videos}
+							<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
+								<td >
+									<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
+								</td>
+								<td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+									{$videos[c]->title|clearslash}
+								</td>
 
-                            <td align="center">
-                                {$videos[c]->views}
-                            </td>
-                            <td align="center">
-                                {$videos[c]->author_name}
-                            </td>
-                            <td align="center">
-                                {$videos[c]->created}
-                            </td align="center">
-                            {if $category=='favorite'}
-                                <td >
-                                     {$videos[c]->category_title}
-                                </td>
-                            {/if}
-                            <td align="center">
-                                {acl isAllowed="VIDEO_AVAILABLE"}
-                                    {if $videos[c]->available == 1}
-                                        <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
-                                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                                    {else}
-                                        <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
-                                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                                    {/if}
-                                {/acl}
-                            </td>
-                            <td align="center">
-                                {acl isAllowed="VIDEO_FAVORITE"}
-                                        {if $videos[c]->favorite == 1}
-                                           <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de Portada"></a>
-                                        {else}
-                                            <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
-                                        {/if}
-                                 {/acl}
-                            </td>
-                            <td style="padding:1px; font-size:11px;" align="center">
-								<ul class="action-buttons">
-	                                {acl isAllowed="VIDEO_DELETE"}
-									<li>
-										<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
-											<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-									</li>
-	                                {/acl}
+								<td align="center">
+									{$videos[c]->views}
+								</td>
+								<td align="center">
+									{$videos[c]->author_name}
+								</td>
+								<td align="center">
+									{$videos[c]->created}
+								</td align="center">
+								{if $category=='favorite'}
+									<td >
+										 {$videos[c]->category_title}
+									</td>
+								{/if}
+								<td align="center">
+									{acl isAllowed="VIDEO_AVAILABLE"}
+										{if $videos[c]->available == 1}
+											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
+													<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
+										{else}
+											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
+													<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
+										{/if}
+									{/acl}
+								</td>
+								<td align="center">
+									{acl isAllowed="VIDEO_FAVORITE"}
+											{if $videos[c]->favorite == 1}
+											   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de Portada"></a>
+											{else}
+												<a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
+											{/if}
+									 {/acl}
+								</td>
+								<td style="padding:1px; font-size:11px;" align="center">
+									<ul class="action-buttons">
+										{acl isAllowed="VIDEO_DELETE"}
+										<li>
+											<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="Modificar">
+												<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+										</li>
+										{/acl}
 
-	                                {acl isAllowed="VIDEO_DELETE"}
-									<li>
-										<a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
-											<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-									</li>
-	                                {/acl}
-								</ul>
-                            </td>
-                        </tr>
+										{acl isAllowed="VIDEO_DELETE"}
+										<li>
+											<a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
+												<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+										</li>
+										{/acl}
+									</ul>
+								</td>
+							</tr>
 
-                    {sectionelse}
-                        <tr>
-                            <td align="center" colspan="8"><br><br><h2><b>Ningun video guardado</b></h2><br><br></td>
-                        </tr>
-                    {/section}
-                    <tfoot>
-                        <tr>
-                            <td colspan="10" align="center">{if !empty($pagination)}{$pagination} {/if}</td>
-                        </tr>
-                    </tfoot>
-                </table>
+						{sectionelse}
+
+						{/section}
+						<tfoot>
+							<tr>
+								<td colspan="10" align="center">{if !empty($pagination)}{$pagination} {/if}</td>
+							</tr>
+						</tfoot>
+					</table>
+				{else}
+					<table class="adminform">
+						<tbody>
+							<tr>
+								<td align="center" colspan="8"><br><br><h2><b>Ningun video guardado</b></h2><br><br></td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td></td>
+							</tr>
+						</tfoot>
+					</table>
+				{/if}
+
             </div>
 
         </div>

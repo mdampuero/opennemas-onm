@@ -1,0 +1,93 @@
+
+<table>
+
+    <tr>
+        <td valign="top">
+            <label for="title">{t}Title:{/t}</label>
+            <input  type="text" id="title" name="title" title="Título de la noticia"  style="width:70%"
+                    onChange="javascript:get_metadata(this.value);"
+                    {if (!empty($video->title))}
+                        value="{$video->title|clearslash|escape:"html"}"
+                    {else}
+                        value="{$information['title']|clearslash|escape:"html"}"
+                    {/if}
+                    class="required" />
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <label for="metadata">{t}Keywords:{/t} <small>{t}Comma separated{/t}</small></label>
+            <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata}" class="required"  style="width:70%" />
+
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <label for="title">Descripción:</label>
+            <textarea name="description" id="description" class="required" style="width:70%"
+                    title="{t}Video description{/t}">{$video->description|clearslash}</textarea>
+        </td>
+    </tr>
+    <tr>
+       <td valign="top">
+            <label for="title">{t}Service:{/t}</label>
+                <input type="text" id="author_name" name="author_name" title="author_name" style="width:70%"
+                    {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"}"
+                    {else} value="{$information['service']|clearslash|escape:"html"}" {/if} />
+       </td>
+    </tr>
+    {if (!empty($video->uri))}
+    <tr>
+       <td valign="top">
+            <label for="title">Enlace:</label>
+            <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">
+                {$smarty.const.SITE_URL}{$video->uri}
+            </a>
+       </td>
+    </tr>
+    {/if}
+    <tr>
+        <td style="padding:5px; text-align:left;">
+            <label>{t}Preview:{/t}</label>
+            <div class="video_player" style="width:80%">
+                 {$information['embedHTML']}
+            </div>
+
+            <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
+
+            <br>
+            <label for="title">{t}Other Information{/t}:</label>
+            <table style="width:80%; margin:20xp;">
+                <tr>
+                    <td>{t}Original Title{/t}</td>
+                    <td>{$information['title']}</td>
+                </tr>
+                <tr>
+                    <td>{t}FLV{/t}</td>
+                    <td>{$information['FLV']}</td>
+                </tr>
+                <tr>
+                    <td>{t}Download Url{/t}</td>
+                    <td>{$information['downloadUrl']}</td>
+                </tr>
+                <tr>
+                    <td>{t}Service{/t}</td>
+                    <td>{$information['service']}</td>
+                </tr>
+                <tr>
+                    <td>{t}Duration{/t}</td>
+                    <td>{$information['duration']}</td>
+                </tr>
+                <tr>
+                    <td>{t}Url Thumbnail{/t}</td>
+                    <td>{$information['thumbnail']}</td>
+                </tr>
+                <tr>
+                    <td>{t}Embed Url{/t}</td>
+                    <td>{$information['embedUrl']}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+</table>

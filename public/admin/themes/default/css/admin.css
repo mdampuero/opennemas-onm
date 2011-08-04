@@ -1643,3 +1643,18 @@ ul#menu hr{
 	#simplepager li a {
 		cursor:pointer;
 	}
+
+
+/* -------------------------------------------------------------
+  Video module
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.video_player {
+    background: none repeat scroll 0 0 #BFBFBF;
+    border: 10px solid #BFBFBF;
+    border-radius: 10px 10px 10px 10px;
+    text-align: center;
+    vertical-align: top;
+	display:block;
+	width:90%;
+}

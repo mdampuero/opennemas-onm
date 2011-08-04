@@ -5,6 +5,18 @@
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
 {/block}
 
+{block name="header-css" append}
+	<style type="text/css">
+	label {
+		display:block;
+		color:#666;
+		text-transform:uppercase;
+	}
+	.utilities-conf label {
+		text-transform:none;
+	}
+	</style>
+{/block}
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
@@ -60,121 +72,122 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td rowspan="6" valign="top" style="padding:4px;">
-                        <h2>{t}Article parameters{/t}</h2>
-                        <table style='background-color:#F5F5F5; padding:18px; width:100%;' border='0'>
-                            <tr>
-                                <td width="50%" valign="top" align="right" style="padding:4px;" >
-                                    <label for="title">{t}Available:{/t}</label>
-                                </td>
-                                <td valign="top" style="padding:4px;" >
+                    <td rowspan="6" valign="top" style="padding:4px; width:25%">
+                        <div class="utilities-conf">
+                            <h2>{t}Article parameters{/t}</h2>
+                            <table style='background-color:#F5F5F5; padding:18px; width:100%;' border='0'>
+                                <tr>
+                                    <td width="50%" valign="top" align="right" style="padding:4px;" >
+                                        <label for="title">{t}Available:{/t}</label>
+                                    </td>
+                                    <td valign="top" style="padding:4px;" >
                                         <select name="available" id="available" class="required">
                                             <option value="0" {if $opinion->available eq 0} selected {/if}>{t}No{/t}</option>
                                             <option value="1"  {if $opinion->available eq 1} selected {/if}>{t}Yes{/t}</option>
                                         </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="right" style="padding:4px;" >
-                                        <label for="title">{t}Put in homepage:{/t}</label>
-                                </td>
-                                <td valign="top" style="padding:4px;" >
-                                    <select name="in_home" id="in_home" class="required">
-                                        <option value="1"  {if $opinion->in_home eq 1} selected {/if}>{t}Yes{/t}</option>
-                                        <option value="0"  {if $opinion->in_home eq 0} selected {/if}>{t}No{/t}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top"  align="right" style="padding:4px;" >
-                                    <label for="title">{t}Allow comments:{/t}</label>
-                                </td>
-                                <td valign="top" style="padding:4px;" >
-                                    <select name="with_comment" id="with_comment" class="required">
-                                        <option value="0"  {if $opinion->with_comment eq 0} selected {/if}>{t}No{/t}</option>
-                                        <option value="1" {if $opinion->with_comment eq 1} selected {/if}>{t}Yes{/t}</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="right" style="padding:4px;">
-                                        <label for="title">{t}Title words-count:{/t}</label>
-                                </td>
-                                <td style="padding:4px;"  >
-                                    <input 	type="text" id="counter_title" name="counter_title" title="counter_title"
-                                            value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" align="right" style="padding:4px;">
-                                        <label for="title">{t}Body words-count:{/t}</label>
-                                </td>
-                                <td style="padding:4px;"  >
-                                        <input type="text" id="counter_body" name="counter_body" title="counter_body"
-                                                value="0" class="required" size="5"  onkeyup="counttiny(document.getElementById('counter_body'));"/>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right" style="padding:4px;" >
+                                            <label for="title">{t}Put in homepage:{/t}</label>
+                                    </td>
+                                    <td valign="top" style="padding:4px;" >
+                                        <select name="in_home" id="in_home" class="required">
+                                            <option value="1"  {if $opinion->in_home eq 1} selected {/if}>{t}Yes{/t}</option>
+                                            <option value="0"  {if $opinion->in_home eq 0} selected {/if}>{t}No{/t}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top"  align="right" style="padding:4px;" >
+                                        <label for="title">{t}Allow comments:{/t}</label>
+                                    </td>
+                                    <td valign="top" style="padding:4px;" >
+                                        <select name="with_comment" id="with_comment" class="required">
+                                            <option value="0"  {if $opinion->with_comment eq 0} selected {/if}>{t}No{/t}</option>
+                                            <option value="1" {if $opinion->with_comment eq 1} selected {/if}>{t}Yes{/t}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right" style="padding:4px;">
+                                            <label for="title">{t}Title words-count:{/t}</label>
+                                    </td>
+                                    <td style="padding:4px;"  >
+                                        <input 	type="text" id="counter_title" name="counter_title" title="counter_title"
+                                                value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right" style="padding:4px;">
+                                            <label for="title">{t}Body words-count:{/t}</label>
+                                    </td>
+                                    <td style="padding:4px;"  >
+                                            <input type="text" id="counter_body" name="counter_body" title="counter_body"
+                                                    value="0" class="required" size="5"  onkeyup="counttiny(document.getElementById('counter_body'));"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                         <br>
-                        <br>
+                        {if count($photos) >0}
+                        <div class="utilities-conf">
 
-                        <table border='0'>
-                            <tr>
-                                <td colspan=2><h2>{t}Image selection{/t}</h2></td>
-                            </tr>
-                            <tr>
-                                <td valign="top" style="padding:4px;border:1px solid #CCCCCC">
-                                    <div id="sel" style="padding:8px;min-height:70px; background-color:#eee">
-                                        <b>{t}Inner opinion photo:{/t}</b> <br />
-                                        <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img}" id="seleccionada" name="seleccionada"  border="1" align="top" />
-                                        <input type="hidden" id="fk_author_img" name="fk_author_img" value="{$opinion->fk_author_img}" />
-                                    </div>
-                                </td>
-                                <td valign="top" style="padding:4px;border:1px solid #CCCCCC;min-height:80px;">
-                                    <div id="div_widget" style="width:220px;min-height:70px; padding:8px; background-color:#bbb">
-                                        <b>{t}Widget photo:{/t}</b><br />
-                                        <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img}" id="widget" name="widget"  border="1" align="top" />
-                                        <input type="hidden" id="fk_author_img_widget" name="fk_author_img_widget" value="{$opinion->fk_author_img_widget}" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" colspan="2" style="padding:4px;border:1px solid #CCCCCC">
-                                    <b>{t}Choose one available photo for the widget:{/t}</b> <br>
-                                    <div id="photos" name="photos" class="photos">
-                                         <ul id='thelist'  class="gallery_list">
-                                                {section name=as loop=$photos}
-                                                    <li> <img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}"  border="1" /></li>
-                                                     {literal}
-                                                          <script type="text/javascript">
-                                                              new Draggable( {/literal}'{$photos[as]->pk_img}'{literal} ,{ revert:true } );
-                                                          </script>
-                                                     {/literal}
-                                                {/section}
-                                         </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                            <h2>{t}Image selection{/t}</h2>
+
+                            <table>
+                                <tr>
+                                    <td valign="top" style="padding:0 10px;;border:1px solid #CCCCCC">
+                                        <div id="sel" style="padding:8px;min-height:70px; background-color:#eee">
+                                            <b>{t}Inner opinion photo:{/t}</b> <br />
+                                            <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img}" id="seleccionada" name="seleccionada"  border="1" align="top" />
+                                            <input type="hidden" id="fk_author_img" name="fk_author_img" value="{$opinion->fk_author_img}" />
+                                        </div>
+                                    </td>
+                                    <td valign="top" style="padding:4px;border:1px solid #CCCCCC;min-height:80px;">
+                                        <div id="div_widget" style="width:220px;min-height:70px; padding:8px; background-color:#bbb">
+                                            <b>{t}Widget photo:{/t}</b><br />
+                                            <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img}" id="widget" name="widget"  border="1" align="top" />
+                                            <input type="hidden" id="fk_author_img_widget" name="fk_author_img_widget" value="{$opinion->fk_author_img_widget}" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" colspan="2" style="padding:4px;border:1px solid #CCCCCC">
+                                        <b>{t}Choose one available photo for the widget:{/t}</b> <br>
+                                        <div id="photos" name="photos" class="photos">
+                                             <ul id='thelist'  class="gallery_list">
+                                                    {section name=as loop=$photos}
+                                                        <li> <img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}"  border="1" /></li>
+                                                         {literal}
+                                                              <script type="text/javascript">
+                                                                  new Draggable( {/literal}'{$photos[as]->pk_img}'{literal} ,{ revert:true } );
+                                                              </script>
+                                                         {/literal}
+                                                    {/section}
+                                             </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        {/if}
+
 
                     </td>
                 </tr>
 
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
+                    <td style="padding:4px 10px;" colspan=2>
                         <label for="title">{t}Title:{/t}</label>
-                    </td>
-                    <td style="padding:4px;"  width="70%">
                         <input type="text" id="title" name="title" title="Titulo de la opinion" onkeyup="countWords(this,document.getElementById('counter_title'))"
-                            value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:80%" onBlur="javascript:get_metadata(this.value);" />
+                            value="{$opinion->title|clearslash|escape:"html"}" class="required"  style="width:96%" onBlur="javascript:get_metadata(this.value);" />
                         <input type="hidden" id="category" name="category" title="opinion" value="opinion" />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top"  align="right" style="padding:4px;" >
-                            <label for="title">{t}Type:{/t}</label>
-                    </td>
-                    <td valign="top" style="padding:4px;" >
+                    <td style="padding:4px 10px;" colspan=2>
+                        <label for="title">{t}Type:{/t}</label>
                         <select name="type_opinion" id="type_opinion" class="validate-selection"  onChange='show_authors(this.options[this.selectedIndex].value);'>
                             <option value="-1"></option>
                             <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
@@ -184,13 +197,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
-                            <div id="div_author1"  {if $opinion->type_opinion eq 0} style="display:inline;" {else} style="display:none;"{/if} > 	<label for="title">{t}Author:{/t}</label> </div>
-                    </td>
-                    <td style="padding:4px;"  width="70%">
+                    <td style="padding:4px 10px;" colspan=2>
+                        <div id="div_author1"  {if $opinion->type_opinion eq 0} style="display:inline;" {else} style="display:none;"{/if} >
+                            <label for="title">{t}Author:{/t}</label>
+                        </div>
                         <div id="div_author2" {if $opinion->type_opinion eq 0} style="display:inline;" {else} style="display:none;"{/if}>
                             <select id="fk_author" name="fk_author" class="validate-selection" onChange='changePhotos(this.options[this.selectedIndex].value);'>
-                                <option value="0" {if $author eq "0"}selected{/if}> </option>
+                                <option value="0" {if $author eq "0"}selected{/if}>{t} - Select one author - {/t}</option>
                                 {section name=as loop=$todos}
                                         <option value="{$todos[as]->pk_author}" {if $opinion->fk_author eq $todos[as]->pk_author}selected{/if}>{$todos[as]->name}</option>
                                 {/section}
@@ -200,20 +213,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;">
+                    <td style="padding:4px 10px;" colspan=2>
                         <label for="metadata">{t}Keywords:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" ">
                         <input type="text" id="metadata" name="metadata" style="width:80%" title="Metadatos" value="{$opinion->metadata|clearslash}" />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;" width="30%">
+                    <td style="padding:4px 10px;" colspan=2>
                         <label for="body">{t}Body:{/t}</label>
-                    </td>
-                    <td style="padding:4px;"  width="70%">
-                        <textarea name="body" id="body"
-                            title="Opinion" style="width:80%;">{$opinion->body|clearslash}</textarea>
+                        <textarea name="body" id="body" title="Opinion" rows=25 style="width:100%;">{$opinion->body|clearslash}</textarea><br>
+                        <br>
                     </td>
                 </tr>
 

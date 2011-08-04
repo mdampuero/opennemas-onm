@@ -257,7 +257,7 @@ function previewArticle(id,formID,type){
         return false;
 
     $(formID).id.value = id;
-   
+
     $('formulario').action.value = '';
     myLightWindow.activateWindow({
         href: '/controllers/preview_content.php?id='+id+'&action=article',
@@ -265,7 +265,7 @@ function previewArticle(id,formID,type){
         author: '',
         type: 'external'
     });
-   
+
 }
 /**
  * Eliminar desde botonera las cachés
@@ -641,22 +641,22 @@ function search_related(id, metadata,page) {
 // Muestra listado de la busqueda avanzada
 function search_adv(id, metadata,page) {
     var inputs = document.getElementsByTagName("input");
-    var cbs = []; //will contain all checkboxes  
-    var checked = []; //will contain all checked checkboxes  
-    for (var i = 0; i < inputs.length; i++) {  
-        if (inputs[i].type == "checkbox" && inputs[i].className == "search") {  
-            cbs.push(inputs[i]); 
+    var cbs = []; //will contain all checkboxes
+    var checked = []; //will contain all checked checkboxes
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type == "checkbox" && inputs[i].className == "search") {
+            cbs.push(inputs[i]);
             console.log(inputs[i].checked);
             if (inputs[i].checked) {
-                checked.push(inputs[i].id);  
-            } 
-        }  
-    } 
+                checked.push(inputs[i].id);
+            }
+        }
+    }
     if(metadata){
         new Ajax.Updater('search-div2', 'article.php?action=search_adv&id='+id+'&metadata='+metadata+'&page='+page+'&type='+checked,
         {
            onComplete: function() {
-               
+
                  //Posibilidad de marcar los que estan recien añadidos
                     var Nodes = $('thelist2').select('li');
                       for (var i=0;i < Nodes.length;i++) {
@@ -737,10 +737,10 @@ function  divs_hide(mydiv)
 	var divs=$$('div.div_lists');
 	for (var i=0;i < divs.length;i++) {
 		if(divs[i].id!=mydiv){
-			Effect.Fade(divs[i]);
+			Effect.DropOut(divs[i], { duration: 0.2 });
 		}
 	 }
-	 Effect.Appear(mydiv);
+	 Effect.Appear(mydiv,  { duration: 0.1 });
 	 return false;
 }
 

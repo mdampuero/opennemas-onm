@@ -1,5 +1,5 @@
-<div class="clearfix" style="width:100%">
-	<div id="selector" class="clearfix" style="width:100%">
+<div class="clearfix">
+	<div id="selector" class="clearfix">
 		{* onClick="{section start=$aux loop=$todos2 step=1 name=foo}Effect.Fade('interior#up{$smarty.section.foo.index}');{/section}Effect.Appear('imgint');return false;" *}
 		<ul id="tabs">
 			<li>
@@ -37,27 +37,27 @@
 	</div>
 	<div id="available-suggested-contents" class="clearfix" >
 
-		<div id='search-noticias' class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+		<div id='search-noticias' class='div_lists' style="display:none">
 			<h2>{t}Suggested articles{/t}</h2>
 		</div>
 
-		<div id="noticias_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br />
+		<div id="noticias_div" class='div_lists' style="display:none"><br />
 			{include file="menu_categorys.tpl" home=""}
 			<h2>{t}Articles by section{/t}</h2>
 
 		</div>
-		<div id="hemeroteca_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br />
+		<div id="hemeroteca_div" class='div_lists' style="display:none"><br />
 			{include file="menu_categorys.tpl" home=""}
 			<h2>{t}Articles in library{/t}</h2>
 
 		</div>
-                <div id="pendientes_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br />
+                <div id="pendientes_div" class='div_lists' style="display:none"><br />
                         {include file="menu_categorys.tpl" home=""}
 			<h2>{t}Pending articles{/t}</h2>
 
 		</div>
 
-		<div id="opinions_div" class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+		<div id="opinions_div" class='div_lists' style="display:none">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 				<tbody><tr>
 				<td colspan="2">
@@ -69,7 +69,7 @@
 		</div>
 
 
-		<div  id="albums_div"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+		<div  id="albums_div"  class='div_lists' style="display:none">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 				<tbody><tr>
 				<td colspan="2">
@@ -81,7 +81,7 @@
 			</table>
 		</div>
 
-		<div id='videos_div'  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none"><br/>
+		<div id='videos_div'  class='div_lists' style="display:none"><br/>
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 				<tbody><tr>
 				<td colspan="2">
@@ -94,7 +94,7 @@
 		</div>
 
 
-		<div id="adjuntos_div"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+		<div id="adjuntos_div"  class='div_lists' style="display:none">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
 			<tbody>
 			<tr>
@@ -106,28 +106,22 @@
 			</tbody>
 			</table>
 		</div>
-		<div id="search-div"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
-                    <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="80%">
-                        <tbody>
-                            <tr>
-                                <label for="title" >{t}Search in the information catalog:{/t}</label><br/><br/>
-                                <td>
-                                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
-                                           value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
-                                           size="80" onkeypress="onSearchAdvKeyEnter(event,{$article->pk_article|default:0});"/>
-                                </td>
-                                <td>
-                                    <a href="#" class="admin_add" 
-                                       onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); Effect.Appear('search-div2');" 
-                                       onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
-                                            <img border="0" src="{$params.IMAGE_DIR}icono-buscar.png" title="Search" alt="Search">
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+		<div id="search-div"  class='div_lists' style="display:none">
+			<div style="width:65%; margin:0 auto;">
+				<h2 >{t}Search in the information catalog:{/t}</h2>
+				<div>
+					<input 	type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+							value="{$smarty.request.stringSearch|escape:"html"|clearslash}"
+							size="80" onkeypress="onSearchAdvKeyEnter(event,{$article->pk_article|default:0});"/>
+					<a href="#" class="onm-button blue"
+					   onclick="search_adv({$article->pk_article|default:0}, $('stringSearch').value,1); Effect.Appear('search-div2');"
+					   onmouseover="return escape('<u>S</u>earch');" accesskey="N" tabindex="1" title="Search">
+					   {t}Search{/t}
+					</a>
+				</div>
+			</div>
 		</div>
-                <div id="search-div2"  class='div_lists' style="border:1px solid #ccc; padding:10px; display:none">
+                <div id="search-div2"  class='div_lists' style="display:none">
                     <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
                         <tbody>
                             <tr>

@@ -9,13 +9,13 @@
                 {is_module_activated name="IMAGE_MANAGER"}
                 <tr>
                     <td valign="top">
-                        <div id="img_portada" style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="img_portada" style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
+                            <table style="width:100%;">
                                 <tr>
                                     <td>
-                                        <h2>{t}Image for frontpage:{/t}</h2>
+                                        <label>{t}Image for frontpage:{/t}</label>
                                         <input type="hidden" id="input_video" name="fk_video" value="" size="70">
-                                    <td  align='center'>
+                                    <td  align='right'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img1');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -64,11 +64,11 @@
                         </div>
                         <br/>
                         <input type="hidden" id="posic" name="posic" value="0" />
-                        <div id="img_interior"  style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="img_interior"  style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
+                            <table style="width:100%;">
                                 <tr>
                                     <td>
-                                        <h2>{t}Image for inner article page:{/t}</h2>
+                                        <label>{t}Image for inner article page:{/t}</label>
                                     </td>
                                     <td  align='center'>
                                         <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
@@ -262,8 +262,8 @@
                 <br/>
                 <tr>
                     <td valign="top">
-                        <div id="video_interior" style="display:block;">
-                            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee;">
+                        <div id="video_interior" style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
+                            <table style="width:100%;">
                                 <tr>
                                     <td>
                                             <h2>{t}Video for inner article page:{/t}</h2>
