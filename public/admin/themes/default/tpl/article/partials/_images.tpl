@@ -1,11 +1,11 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<table align="center">
+<table style="width:100%">
 	<tr>
         <td colspan=2><h2>{t}Multimedia associated to this article:{/t}</h2></td>
 	</tr>
     <tr>
         <td>
-            <table>
+            <table style="width:100%">
                 {is_module_activated name="IMAGE_MANAGER"}
                 <tr>
                     <td valign="top">
@@ -70,7 +70,7 @@
                                     <td>
                                         <label>{t}Image for inner article page:{/t}</label>
                                     </td>
-                                    <td  align='center'>
+                                    <td  align='right'>
                                         <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -118,8 +118,8 @@
                             </table>
                         </div>
                     </td>
-                    <td valign="top">
-                        <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
+                    <td valign="top" style="width:430px">
+                        <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
                             <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
                         </div>
                         <div id="photos_container" class="photos"
@@ -127,13 +127,9 @@
                             <table>
                                 <tr>
                                     <td align="left">
-                                        <div class="cajaBusqueda">
-                                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                                               onclick="this.select();" value="{t}Search images by title...{/t}"/>
-                                        </div>
-                                    </td>
-                                    <td align="right">
+										<input id="stringImageSearch" name="stringImageSearch" type="text"
+										   onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
+										   onclick="this.select();" value="{t}Search images by title...{/t}" size=30/>
                                         <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listbyCategory',this.options[this.selectedIndex].value,'', 1);">
                                             <option value="0">GLOBAL</option>
                                                 {section name=as loop=$allcategorys}
@@ -268,7 +264,7 @@
                                     <td>
                                             <h2>{t}Video for inner article page:{/t}</h2>
                                     </td>
-                                    <td  align='center'>
+                                    <td  align='right'>
                                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">
                                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
                                         </a>
@@ -308,7 +304,7 @@
                         </div>
                     </td>
                     <td valign="top">
-                        <div style="cursor:pointer;  border:1px double #ccc; background-color:#EEE; padding:7px;">
+                        <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
                             <a style="cursor:pointer;" onclick="new Effect.toggle($('videos-container'),'blind')">
                                 <strong>Videos</strong>
                             </a>

@@ -1,4 +1,5 @@
 <?php
+use Onm\Message as m;
 
 /**
  * Setup app
@@ -66,7 +67,7 @@ if( isset($_REQUEST['action']) ) {
             if ($category == 'favorite') { //Widget video
                 $videos = $cm->find_all('Video', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
                 if (count($videos) != VIDEO_FAVORITES ) {
-                   $tpl->assign('msg', _("Should have ".VIDEO_FAVORITES." videos ")) ;
+                    m::add( sprintf(_("You must put %d videos in the HOME widget"), VIDEO_FAVORITES));
                 }
                 if(!empty($videos)){
                     foreach ($videos as &$video) {

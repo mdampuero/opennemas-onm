@@ -68,6 +68,7 @@
                 showMsgContainer({ 'warn':['  {$msg} , {$msgdel}, {$errors} '] },'inline','messageBoard');
             </script>
         {/if}
+        {render_messages}
 
         <div id="{$category}">
             <table class="adminheading">

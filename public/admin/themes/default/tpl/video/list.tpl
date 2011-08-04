@@ -60,7 +60,6 @@
 	</div>
 
         <div class="wrapper-content">
-
             <ul class="tabs2" style="margin-bottom: 28px;">
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >WIDGET HOME</a>
@@ -76,6 +75,7 @@
                 </script>
             {/if}
 
+			{render_messages}
             <div id="{$category}">
                 <table class="adminheading">
                     <tr>

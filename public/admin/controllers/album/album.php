@@ -1,5 +1,5 @@
 <?php
-
+use Onm\Message as m;
 /**
  * Setup app
 */
@@ -58,7 +58,7 @@ if( isset($_REQUEST['action']) ) {
             if ($category == 'favorite') {
                 $albums = $cm->find_all('Album', 'favorite =1 AND available =1', 'ORDER BY  created DESC '.$limit);
                 if (count($albums) != ALBUM_FAVORITES ) {
-                   $tpl->assign('msg', _("Should have ".ALBUM_FAVORITES." ALBUMS ")) ;
+					m::add( sprintf(_("You must put %d albums in the HOME widget"), ALBUM_FAVORITES));
                 }
                 if(!empty($albums)) {
                     foreach ($albums as &$album) {
