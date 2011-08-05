@@ -1294,7 +1294,7 @@ a img.calendar {
 /* Root = Horizontal, Secondary = Vertical */
 ul#menu {
   margin: 0;
-  margin-top:7px;
+  margin-top:0px;
   padding: 0;
 /*  width: 500px;*/ /*For KHTML*/
   list-style: none;
@@ -1309,12 +1309,12 @@ ul#menu li {
   display: inline;
   list-style: none;
   position: relative;
-  height: 22px;
+  padding-bottom:3px
 }
-ul#menu li{
-	padding-bottom:3px;
-}
-ul#menu li:hover{
+ul#menu > li {
+	border:1px solid #464646;
+	height:100%;
+	padding:0;
 }
 
 ul#menu  ul {
@@ -1324,13 +1324,11 @@ ul#menu  ul {
   list-style: none;
   display: none;
   position: absolute;
-  top: 25px;
+  top: 34px;
   left: 0px;
   background:#464646;
-  -moz-border-radius: 5px 5px 5px 5px;
-  border-radius:5px;
-  -webkit-border-radius:5px;
-  border:1px solid #464646;
+  border-radius:0px 0px 5px 5px;
+  border:1px solid  #464646;
   padding-top:2px;
 
 }
@@ -1363,8 +1361,15 @@ ul#menu a {
 }
 
 ul#menu > li > a {
-	padding: 5px 25px 5px;
+	padding: 10px 25px;
 }
+	ul#menu > li:hover > a {
+		background: #555555; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#464646'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#555555), to(#464646)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #555555, #464646); /* for firefox 3.6+ */
+		text-shadow:0 1px 0 #000;
+	}
 ul#menu ul > li > a {
 	min-width: 180px;
 	width:180px;
@@ -1376,8 +1381,7 @@ ul#menu ul > li > a {
 ul#menu a:hover,
 ul#menu li:hover a,
 ul#menu li.iehover a {
-color: White;
-
+	color: White;
 }
 
 /* 2nd Menu */
@@ -1451,10 +1455,11 @@ ul#menu .selected{
 }
 
 ul#menu hr{
-	border: 1px solid #DDDDDD;
+	border:0 none;
+	border-top: 1px solid #DDDDDD;
     height: 0px !important;
     width: 100%;
-	margin:4px;
+	margin:4px 0;
 }
 
 /* -------------------------------------------------------------
