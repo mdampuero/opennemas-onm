@@ -92,7 +92,9 @@ class Opinion extends Content {
 
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
-
+        (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
+        (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
+        
         parent::create($data);
 
         $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,`fk_author_img`,`with_comment`, type_opinion,fk_author_img_widget) VALUES (?,?,?,?,?,?,?)';
