@@ -1,6 +1,6 @@
 <table  id="{$category->pk_content_category}" style="width:100%">
     <tr {cycle values="class=row0,class=row1"} >
-        <td>
+        <td style="width:26.5%;">
              <strong> {$category->title|clearslash|escape:"html"}</strong>
         </td>
         <td style="width:10%;" align="center">
@@ -8,11 +8,11 @@
         </td>
         <td style="width:10%;" align="center">
           {if $category->internal_category eq 7}
-             <img style="width:20%;" src="{$params.IMAGE_DIR}album.png" border="0" title="Sección de Album" alt="Sección de Album" />
+             <img style="width:15%;" src="{$params.IMAGE_DIR}album.png" border="0" title="Sección de Album" alt="Sección de Album" />
           {elseif $category->internal_category eq 9}
-             <img  style="width:20%;" src="{$params.IMAGE_DIR}video.png" border="0" title="Sección de Videos"  alt="Sección de Videos" />
+             <img  style="width:15%;" src="{$params.IMAGE_DIR}video.png" border="0" title="Sección de Videos"  alt="Sección de Videos" />
           {else}
-              <img  style="width:20%;" src="{$params.IMAGE_DIR}advertisement.png" border="0" title="Sección Global"  alt="Sección Global" />
+              <img  style="width:15%;" src="{$params.IMAGE_DIR}advertisement.png" border="0" title="Sección Global"  alt="Sección Global" />
           {/if}
         </td>
          <td style="width:8%;" align="center">
@@ -35,25 +35,29 @@
 
         </td>
         <td style="width:8%;" align="center">
-            {if $category->internal_category != 0 && $category->internal_category != 2}
-                <a href="{$smarty.server.PHP_SELF}?action=read&id={$category->pk_content_category}" title="Modificar">
-                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                </a>
-            {/if}
-        </td>
-        <td style="width:8%;" align="center">
-            {if $category->internal_category != 0}
-                <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? \n ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$category->pk_content_category}); {rdelim}" title="Vaciar">
-                    <img src="{$params.IMAGE_DIR}removecomment.png" border="0" alt="vaciar" />
-                </a>
-            {/if}
-        </td>
-        <td style="width:8%;" align="center">
-            {if $category->internal_category != 0 && $category->internal_category != 2}
-                <a href="#" onClick="javascript:confirmar(this, {$category->pk_content_category});" title="Eliminar">
-                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                </a>
-            {/if}
+            <ul class="action-buttons">
+                <li>
+                {if $category->internal_category != 0 && $category->internal_category != 2}
+                    <a href="{$smarty.server.PHP_SELF}?action=read&id={$category->pk_content_category}" title="Modificar">
+                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                    </a>
+                {/if}                
+                </li>
+                <li>
+                {if $category->internal_category != 0}
+                    <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? \n ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$category->pk_content_category}); {rdelim}" title="Vaciar">
+                        <img src="{$params.IMAGE_DIR}removecomment.png" border="0" alt="vaciar" />
+                    </a>
+                {/if}                
+                </li>
+                <li>
+                {if $category->internal_category != 0 && $category->internal_category != 2}
+                    <a href="#" onClick="javascript:confirmar(this, {$category->pk_content_category});" title="Eliminar">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                    </a>
+                {/if}                
+                </li>
+            </ul>
         </td>
     </tr>
     {if !empty($subcategorys)}
@@ -68,11 +72,11 @@
                 </td>
                  <td align="center" style="width:10%;">
                       {if $subcategorys[su]->internal_category eq 7}
-                         <img style="width:20%;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
+                         <img style="width:15%;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
                       {elseif $subcategorys[su]->internal_category eq 9}
-                         <img  style="width:20%;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
+                         <img  style="width:15%;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
                       {else}
-                          <img  style="width:20%;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
+                          <img  style="width:15%;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
                       {/if}
                 </td>
                 <td align="center" style="width:8%;">
@@ -93,23 +97,27 @@
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
                     {/if}
                 </td>
-                <td style="width:8%" align="center">
-                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$subcategorys[su]->pk_content_category});" title="Modificar">
-                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                    </a>
-                </td>
+                
                 <td style="width:8%;" align="center">
-
-                    {if ($subcategorys[su]->internal_category==1) && ($num_sub_contents[su].articles!=0 || $num_sub_contents[su].photos!=0 || $num_sub_contents[su].advertisement!=0)}
-                        <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$subcategorys[su]->pk_content_category}); {rdelim}" title="Vaciar">
-                            <img src="{$params.IMAGE_DIR}removecomment.png" border="0" alt="vaciar" />
-                        </a>
-                    {/if}
-                </td>
-                <td style="width:8%;" align="center">
-                    <a href="#" onClick="javascript:confirmar(this, {$subcategorys[su]->pk_content_category});" title="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                    </a>
+                    <ul class="action-buttons">
+                        <li>
+                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$subcategorys[su]->pk_content_category});" title="Modificar">
+                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                            </a>                
+                        </li>
+                        <li>
+                        {if ($subcategorys[su]->internal_category==1) && ($num_sub_contents[su].articles!=0 || $num_sub_contents[su].photos!=0 || $num_sub_contents[su].advertisement!=0)}
+                            <a href="#" onClick="if( confirm('¿Está usted seguro que desea vaciar la sección? ¡Atención! Eliminará todos sus contenidos') ) {ldelim} enviar(this, '_self', 'empty', {$subcategorys[su]->pk_content_category}); {rdelim}" title="Vaciar">
+                                <img src="{$params.IMAGE_DIR}removecomment.png" border="0" alt="vaciar" />
+                            </a>
+                        {/if}             
+                        </li>
+                        <li>
+                            <a href="#" onClick="javascript:confirmar(this, {$subcategorys[su]->pk_content_category});" title="Eliminar">
+                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                            </a>          
+                        </li>
+                    </ul>
                 </td>
             </tr>
       {/section}

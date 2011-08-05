@@ -48,10 +48,10 @@
     {/if}
         <ul id="tabs">
             <li>
-                <a href="category.php#listado">Listar secciones</a>
+                    <a href="category.php#listado">Listar secciones</a>
             </li>
 <!--            <li>
-                <a href="#ordenar">Ordenar Secciones</a>
+                    <a href="#ordenar">Ordenar Secciones</a>
             </li>-->
         </ul>
 
@@ -72,9 +72,7 @@
                         <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,9 +113,7 @@
                         <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -157,9 +153,7 @@
                         <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -199,9 +193,7 @@
                         <th align="center" padding="0px 10px" width="100px">{t}Photos{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Advertisements{/t}</th>
                         <th align="center" padding="0px 10px" width="100px">{t}Published{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Edit{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Empty{/t}</th>
-                        <th align="center" padding="0px 10px" width="100px">{t}Delete{/t}</th>
+                        <th align="center" padding="0px 10px" width="100px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
