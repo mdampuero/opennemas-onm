@@ -52,45 +52,6 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("from facebook");
 
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Title:");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Keywords:");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Comma separated");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Video description");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Service:");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Other Information");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Original Title");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("FLV");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Download Url");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Service");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Duration");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Url Thumbnail");
-
-/* ./public/admin/themes/default/tpl//video/videoInformation.tpl */
-gettext("Enbed Url");
-
 /* ./public/admin/themes/default/tpl//video/new.tpl */
 gettext("Video manager");
 
@@ -119,16 +80,22 @@ gettext("Go Back");
 gettext("Enter video information");
 
 /* ./public/admin/themes/default/tpl//video/new.tpl */
-gettext("Video URL:");
-
-/* ./public/admin/themes/default/tpl//video/new.tpl */
 gettext("Section:");
 
 /* ./public/admin/themes/default/tpl//video/new.tpl */
 gettext("Available:");
 
 /* ./public/admin/themes/default/tpl//video/new.tpl */
-gettext("Only accepted videos from");
+gettext("For now OpenNeMas only accepts videos from:");
+
+/* ./public/admin/themes/default/tpl//video/new.tpl */
+gettext("Video URL:");
+
+/* ./public/admin/themes/default/tpl//video/new.tpl */
+gettext("Write the video url in the next input and push \"Get video information\"");
+
+/* ./public/admin/themes/default/tpl//video/new.tpl */
+gettext("Get video information");
 
 /* ./public/admin/themes/default/tpl//video/list.tpl */
 gettext("Video Manager :: Listing videos");
@@ -153,6 +120,48 @@ gettext("Favorite");
 
 /* ./public/admin/themes/default/tpl//video/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Title:");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Keywords:");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Comma separated");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Video description");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Service:");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Preview:");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Other Information");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Original Title");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("FLV");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Download Url");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Service");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Duration");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Url Thumbnail");
+
+/* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Embed Url");
 
 /* ./public/admin/themes/default/tpl//link_control/link_control.tpl */
 gettext("ALBUMS");
@@ -614,7 +623,7 @@ gettext("Inner title:");
 gettext("Keywords");
 
 /* ./public/admin/themes/default/tpl//article/new.tpl */
-gettext("Separated by commas");
+gettext("(Separated by commas)");
 
 /* ./public/admin/themes/default/tpl//article/new.tpl */
 gettext("Pretitle");
@@ -816,6 +825,9 @@ gettext("Files");
 
 /* ./public/admin/themes/default/tpl//article/partials/_related.tpl */
 gettext("Search in the information catalog:");
+
+/* ./public/admin/themes/default/tpl//article/partials/_related.tpl */
+gettext("Search");
 
 /* ./public/admin/themes/default/tpl//article/partials/_related.tpl */
 gettext("We cant find any content with your search criteria.");
@@ -1391,6 +1403,9 @@ gettext("Director's letter");
 gettext("Author:");
 
 /* ./public/admin/themes/default/tpl//opinion/new.tpl */
+gettext(" - Select one author - ");
+
+/* ./public/admin/themes/default/tpl//opinion/new.tpl */
 gettext("Keywords:");
 
 /* ./public/admin/themes/default/tpl//opinion/new.tpl */
@@ -1665,6 +1680,15 @@ gettext("File:");
 
 /* ./public/admin/themes/default/tpl//files/new.tpl */
 gettext("Upload");
+
+/* ./public/admin/themes/default/tpl//files/form.tpl */
+gettext("Files manager :: General statistics");
+
+/* ./public/admin/themes/default/tpl//files/form.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//files/form.tpl */
+gettext("Save");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Images manager :: General statistics");
@@ -2048,16 +2072,16 @@ gettext("No");
 gettext("New section");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Deleted succesfuly.");
+gettext("To delete a category previously you have to empty it");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Not deleted, the section is not empty.");
+gettext("Categoy deleted successfully");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Unable to create, section is already exists.");
+gettext("Error: you have some Database errors");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Successfully emptied.");
+gettext("Category has been emptied successfully");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Global categories");
