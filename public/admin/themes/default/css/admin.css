@@ -251,9 +251,6 @@ table.adminlist img{
 .action-buttons img {
 	max-height:16px;
 }
-table.adminlist tr {
-	cursor:pointer;
-}
 table.adminlist tr.row0,
 table.adminlist tr:nth-child(even) {
 	background-color: #f3f3f3;

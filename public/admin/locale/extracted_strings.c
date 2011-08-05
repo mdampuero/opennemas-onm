@@ -1148,6 +1148,12 @@ gettext("Logout from control panel");
 gettext("Log out");
 
 /* ./public/admin/themes/default/tpl//base/admin.tpl */
+gettext(" made by OpenHost S.L.");
+
+/* ./public/admin/themes/default/tpl//base/admin.tpl */
+gettext("All rights reserved ® 2008 - %1");
+
+/* ./public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Support & Help");
 
 /* ./public/admin/themes/default/tpl//base/admin.tpl */

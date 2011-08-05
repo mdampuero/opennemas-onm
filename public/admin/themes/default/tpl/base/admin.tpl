@@ -128,8 +128,8 @@
 
         <div class="company left">
             <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
-            made by OpenHost S.L.<br/>
-            All rights reserved ® 2008 - {strftime("%Y")}
+			{t} made by OpenHost S.L.{/t}<br/>
+            {t 1=strftime("%Y")}All rights reserved ® 2008 - %1{/t}
         </div>
 
         <ul class="support">
