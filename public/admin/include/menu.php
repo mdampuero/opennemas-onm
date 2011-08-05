@@ -198,28 +198,37 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/system_settings/system_settings.php"
             privilege="ONM_SETTINGS" />
         <node
+            title="&lt;hr/&gt;"
+            link="javascript:return false;"
+            privilege="BACKEND_ADMIN" />
+        <node
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
             link="controllers/tpl_manager/tpl_manager.php"
             privilege="CACHE_ADMIN" />
+        <node
+            module_name="PHP_CACHE_MANAGER"
+            title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
+            link="controllers/system_information/system_information.php?action=apc_iframe"
+            privilege="CACHE_ADMIN" />
+        <node
+            title="&lt;hr/&gt;"
+            link="javascript:return false;"
+            privilege="BACKEND_ADMIN" />
         <node
             module_name="SYSTEM_UPDATE_MANAGER"
             title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
             link="controllers/updatesystem/index.php"
             privilege="BACKEND_ADMIN" />
         <node
-            module_name="PHP_CACHE_MANAGER"
-            title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
-            link="controllers/system_information/apc.php"
-            privilege="CACHE_ADMIN" />
-        <node
             module_name="MYSQL_MANAGER"
             title="'.htmlspecialchars(_("Database Manager"), ENT_QUOTES).'"
-            link="controllers/system_information/mysql-check.php?action=check"
+            link="controllers/system_information/system_information.php?action=mysql_check"
             privilege="BACKEND_ADMIN" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
             link="http://www.openhost.es/"
-            privilege="BACKEND_ADMIN" />
+            privilege="BACKEND_ADMIN"
+            target="external"/>
     </submenu>
 </menu>';

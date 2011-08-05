@@ -84,8 +84,10 @@ class SimpleMenu {
                                 && (\Onm\Module\ModuleManager::isActivated((string)$submenu['module_name']))
                                 )
                             {
+
+                                $external = isset($submenu['target']);
                                 $html.= "<li>";
-                                    $html .= $this->getHref($submenu['title'],$submenu['link']);
+                                    $html .= $this->getHref($submenu['title'],$submenu['link'], $external);
                                 $html.= "</li>";
                             }
                         }
@@ -106,7 +108,7 @@ class SimpleMenu {
 
     }
 
-    private function getHref($title, $url) {
+    private function getHref($title, $url, $external = false) {
         if (preg_match("@#@",$url)) {
             $url = $url;
         }
@@ -114,7 +116,13 @@ class SimpleMenu {
             $url = SITE_URL_ADMIN."/".$url;
         }
 
-        return "<a href=\"$url\">".$title."</a>";
+        if ($external) {
+            $target = "target=\"_blank\"";
+        }
+
+        $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
+
+        return "<a href=\"$url\" $target $attrTitle>".$title."</a>";
     }
 
     private  function checkAcl($privilege)

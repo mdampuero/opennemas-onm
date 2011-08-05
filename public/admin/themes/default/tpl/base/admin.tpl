@@ -123,7 +123,8 @@
 
 
 
-    <div id="copyright" class="wrapper-content clearfix">
+    {block name="copyright"}
+	<div id="copyright" class="wrapper-content clearfix">
 
         <div class="company left">
             <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
@@ -136,6 +137,7 @@
         </ul>
 
     </div>
+	{/block}
 
 
 <script type="text/javascript">
