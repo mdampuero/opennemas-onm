@@ -650,14 +650,15 @@ div.ui-blocker-message {
     font-size:1.05em;
     z-index:99999;
     position:fixed;
-    top: 50%;
-    left: 0%;
-    width: 100%;
-    color:Black;
+    top: 47%;
+    left: 42%;
+    color:#222;
     clear:both;
-	font-weight:bold;
-    font-family:Arial, Verdana;
-    text-shadow: 0 0 4px #222;
+	padding:15px;
+	box-shadow: 0px 5px 80px #505050;
+	background: white;
+	border: 1px solid #BCC1D0;
+	border-radius: 5px;
 }
 
 div.ui-blocker-message img {
