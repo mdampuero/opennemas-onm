@@ -199,6 +199,21 @@ table.adminheading {
 	background: -moz-linear-gradient(top,  #f1f1f1, #d9d9d9); /* for firefox 3.6+ */
 	text-shadow:0 1px 0 #FFFFFF;
 }
+table.adminheading input,
+table.adminheading input:hover {
+	border:1px solid silver !important;
+	border-radius:3px;
+	box-shadow:none !important;
+	background:White;
+	padding:3px;
+}
+
+table.adminheading input[type='text']:focus,
+table.adminheading input[type='password']:focus,
+table.adminheading textarea:focus {
+	box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset;
+	border-color:#3079ED;
+}
 table.adminlist img, table.adminheading img { vertical-align:middle; }
 table.adminlist,
 table.adminform {
@@ -247,9 +262,6 @@ table.adminlist thead img {
 }
 table.adminlist img{
 	vertical-align:middle;
-}
-.action-buttons img {
-	max-height:16px;
 }
 table.adminlist tr.row0,
 table.adminlist tr:nth-child(even) {
@@ -617,72 +629,6 @@ div.spch-bub-outside {
     width: 0;
 }
 
-div.ui-blocker {
-    width:100%;
-    height:100%;
-    z-index:9999;
-    position:fixed;
-    top:0;
-    left:0;
-	opacity:0.6;
-	-webkit-transition: 0.25s opacity;
-	background-color:#cccccc;
-	background-image: -moz-radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
-	background-image: -webkit-radial-gradient(50% 50%, ellipse closest-side,rgba(127, 127, 127, 0.5) 0%,#000000 100%);
-	background-image: -o-radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
-	background-image: -ms-radial-gradient(50% 50%, ellipse closest-side,rgba(127, 127, 127, 0.5) 0%,#000000 100%);
-	background-image: radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
-	bottom: 0;
-	display: -webkit-box;
-	left: 0;
-	padding: 20px;
-	padding-bottom: 130px;
-	position: fixed;
-	right: 0;
-	top: 0;
-	z-index: 10;
-}
-
-div.ui-blocker-message {
-    margin:0 auto;
-    text-align:center;
-    display:block;
-    font-size:1.05em;
-    z-index:99999;
-    position:fixed;
-    top: 47%;
-    left: 42%;
-    color:#222;
-    clear:both;
-	padding:15px;
-	box-shadow: 0px 5px 80px #505050;
-	background: white;
-	border: 1px solid #BCC1D0;
-	border-radius: 5px;
-}
-
-div.ui-blocker-message img {
-    clear:both;
-    margin-bottom:10px;
-}
-
-
-div.action-bar {
-    text-align:right;
-	background: none repeat scroll 0 0 #F1F1F1;
-    border: 1px solid #D2D2D2;
-    border-bottom-width:1px;
-	border-top-width:0px;
-    padding:5px 0;
-    margin-bottom:20px;
-	width:100%
-}
-div.action-bar .right{
-	float:right;
-	margin-right:5px
-}
-
-
 /* -------------------------------------------------------------
   Content from styles.css
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -896,14 +842,6 @@ input.validation-passed, textarea.validation-passed {
 	font-weight: bold;
 }
 
-.custom-advice {
-	margin: 5px 0;
-	padding: 5px;
-	background-color: #C8AA00;
-	color : #FFF;
-	font-weight: bold;
-}
-
 fieldset {
 	padding: 1em;
 	margin-bottom: 0.5em;
@@ -912,11 +850,12 @@ fieldset {
 label {
 	font-weight: bold;
 }
+:focus { -moz-outline-style: none; }
 .form-row {
 	clear: both;
 	padding: 0.5em;
 }
-:focus { -moz-outline-style: none; }
+
 
 
 
@@ -949,70 +888,10 @@ table.aa tr td {
 	text-align:center;
 }
 
-
 /* -------------------------------------------------------------
-  Content from general.css
+  Top Bar admin definitions
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-/** stu nicholls solution for centering divs **/
-.container {clear:both; text-decoration:none;}
-* html .container {display:inline-block;}
-
-/** table solution for global config **/
-table.noshow   		 { width: 100%; border-collapse: collapse; padding: 0; margin: 0; }
-table.noshow tr 		 { vertical-align: top; }
-table.noshow td 		 { }
-table.noshow fieldset { margin: 15px 7px 7px 7px; }
-
-#editor-xtd-buttons { padding: 5px; }
-
-/* Tooltips */
-.tool-tip {
-	float: left;
-	background: #ffc;
-	border: 1px solid #D4D5AA;
-	padding: 5px;
-	max-width: 200px;
-}
-
-.tool-title {
-	padding: 0;
-	margin: 0;
-	font-size: 100%;
-	font-weight: bold;
-	margin-top: -15px;
-	padding-top: 15px;
-	padding-bottom: 5px;
-	background: url(../images/selector-arrow.png) no-repeat;
-}
-
-.tool-text {
-	font-size: 100%;
-	margin: 0;
-}
-
-/* Calendar */
-a img.calendar {
-	width: 16px;
-	height: 16px;
-	margin-left: 3px;
-	background: url(../images/calendar.png) no-repeat;
-	cursor: pointer;
-	vertical-align: middle;
-}
-
-/* System Standard Messages */
-#system-message dd.message ul { background: #C3D2E5 url(../images/notice-info.png) 4px center no-repeat;}
-
-/* System Error Messages */
-#system-message dd.error ul { color: #c00; background: #E6C0C0 url(../images/notice-alert.png) 4px top no-repeat; border-top: 3px solid #DE7A7B; border-bottom: 3px solid #DE7A7B;}
-
-/* System Notice Messages */
-#system-message dd.notice ul { color: #c00; background: #EFE7B8 url(../images/notice-note.png) 4px top no-repeat; border-top: 3px solid #F0DC7E; border-bottom: 3px solid #F0DC7E;}
-
-
-/* MENÚ */
 #topbar-admin{
 	background: #464646;
 	color:#ccc;
@@ -1023,7 +902,6 @@ a img.calendar {
 	z-index:999;
 }
 	#topbar-admin *{
-		font-size:12px !important;
 	}
 
 	#topbar-admin div.info-left {
@@ -1035,7 +913,7 @@ a img.calendar {
 	#topbaradmin a, #topbaradmin{
 		color:#ddd !important;
 	}
-	#logoonm{
+	#logoonm {
 		display:block;
 		width:160px;
 	}
@@ -1282,6 +1160,10 @@ a img.calendar {
 	list-style:none;
 }
 
+.action-buttons img {
+	max-height:16px;
+}
+
 
 
 
@@ -1294,9 +1176,8 @@ ul#menu {
   margin: 0;
   margin-top:0px;
   padding: 0;
-/*  width: 500px;*/ /*For KHTML*/
   list-style: none;
-  margin-left:20px
+  margin-left:20px;
 }
 
 ul#menu li {
@@ -1316,19 +1197,18 @@ ul#menu > li {
 }
 
 ul#menu  ul {
-  margin: 0;
-  border: 0 none;
-  padding: 0;
-  list-style: none;
-  display: none;
-  position: absolute;
-  top: 34px;
-  left: 0px;
-  background:#464646;
-  border-radius:0px 0px 5px 5px;
-  border:1px solid  #464646;
-  padding-top:2px;
-
+	margin: 0;
+	border: 0 none;
+	padding: 0;
+	list-style: none;
+	display: none;
+	position: absolute;
+	top: 34px;
+	left: 0px;
+	background:#464646;
+	border-radius:0px 0px 5px 5px;
+	border:1px solid  #464646;
+	padding-top:2px;
 }
 
 ul#menu ul:after /*From IE 7 lack of compliance*/{
@@ -1347,32 +1227,38 @@ ul#menu ul li {
 
 /* Root Menu */
 ul#menu a {
-  padding: 5px 15px 5px;
-  float: none !important; /*For Opera*/
-  float: left; /*For IE*/
-  display: block;
-  color: #CCCCCC;
-  text-decoration: none;
-  text-decoration: none;
-  height: auto !important;
-  height: 1%; /*For IE*/
+	padding: 5px 15px 5px;
+	float: none !important; /*For Opera*/
+	float: left; /*For IE*/
+	display: block;
+	color: #CCCCCC;
+	text-decoration: none;
+	text-decoration: none;
+	height: auto !important;
+	height: 1%; /*For IE*/
 }
 
 ul#menu > li > a {
-	padding: 10px 25px;
+	padding: 10px 20px;
 }
 	ul#menu > li:hover > a {
-		background: #555555; /* for non-css3 browsers */
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#464646'); /* for IE */
-		background: -webkit-gradient(linear, left top, left bottom, from(#555555), to(#464646)); /* for webkit browsers */
-		background: -moz-linear-gradient(top,  #555555, #464646); /* for firefox 3.6+ */
-		text-shadow:0 1px 0 #000;
+		background: #4f4f4f; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f4f4f', endColorstr='#464646'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#4f4f4f), to(#464646)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #4f4f4f, #464646); /* for firefox 3.6+ */
+		text-shadow:0 1px 1px #000;
 	}
 ul#menu ul > li > a {
 	min-width: 180px;
 	width:180px;
 	display:block;
 }
+ul#menu > li:hover {
+	border-top:1px solid White;
+}
+	ul#menu > li:hover > a {
+		padding-top:10px;
+	}
 
 
 /* Root Menu Hover Persistence */
@@ -1395,6 +1281,7 @@ ul#menu li:hover li:hover a,
 ul#menu li.iehover li a:hover,
 ul#menu li.iehover li.iehover a {
 	background:#555555;
+
 }
 
 /* 3rd Menu */
@@ -1689,4 +1576,79 @@ ul#menu hr{
 {
 	display:block; border:1px solid #ccc; border-width:1px 0 1px 0; background:#eee; padding:10px;
 	margin-right:10px;
+}
+
+
+/* -------------------------------------------------------------
+  UI Blocker definitions
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+
+div.ui-blocker {
+    width:100%;
+    height:100%;
+    z-index:9999;
+    position:fixed;
+    top:0;
+    left:0;
+	opacity:0.6;
+	-webkit-transition: 0.25s opacity;
+	background-color:#cccccc;
+	background-image: -moz-radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
+	background-image: -webkit-radial-gradient(50% 50%, ellipse closest-side,rgba(127, 127, 127, 0.5) 0%,#000000 100%);
+	background-image: -o-radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
+	background-image: -ms-radial-gradient(50% 50%, ellipse closest-side,rgba(127, 127, 127, 0.5) 0%,#000000 100%);
+	background-image: radial-gradient(50% 50%, ellipse closest-side, rgba(127, 127, 127, 0.5) 0%,#000000 100%);
+	bottom: 0;
+	display: -webkit-box;
+	left: 0;
+	padding: 20px;
+	padding-bottom: 130px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 10;
+}
+
+div.ui-blocker-message {
+    margin:0 auto;
+    text-align:center;
+    display:block;
+    font-size:1.05em;
+    z-index:99999;
+    position:fixed;
+    top: 47%;
+    left: 42%;
+    color:#222;
+    clear:both;
+	padding:15px;
+	box-shadow: 0px 5px 80px #505050;
+	background: white;
+	border: 1px solid #BCC1D0;
+	border-radius: 5px;
+}
+
+div.ui-blocker-message img {
+    clear:both;
+    margin-bottom:10px;
+}
+
+
+/* -------------------------------------------------------------
+  Action bar definitions
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+div.action-bar {
+    text-align:right;
+	background: none repeat scroll 0 0 #F1F1F1;
+    border: 1px solid #D2D2D2;
+    border-bottom-width:1px;
+	border-top-width:0px;
+    padding:5px 0;
+    margin-bottom:20px;
+	width:100%
+}
+div.action-bar .right{
+	float:right;
+	margin-right:5px
 }

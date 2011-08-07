@@ -6,24 +6,23 @@
         <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-					<a href="{$_SERVER['PHP_SELF']}?action=upload&category={$category}&op=view" title="{t}Upload file{/t}">
-						<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
-						{t}Upload file{/t}
-					</a>
-				</li>
+				<a href="{$smarty.server.PHP_SELF}?action=upload&category={$category}&op=view" title="{t}Upload file{/t}">
+					<img src="{$params.IMAGE_DIR}upload.png" border="0" /><br />
+					{t}Upload file{/t}
+				</a>
+			</li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 
 		<ul class="tabs2">
 			<li>
-				<a href="{$_SERVER['PHP_SELF']}?action=list&category=0" id="link_global"  {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}GLOBAL{/t}</a>
+				<a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}GLOBAL{/t}</a>
 			</li>
-			{include file="menu_categorys.tpl" home="{$_SERVER['PHP_SELF']}?action=list"}
-
+			{include file="menu_categorys.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
 		</ul>
 
 	<div id="{$category}">
@@ -83,13 +82,13 @@
 				<tfoot>
 					<tr>
 						<td colspan="7" class="pagination">
-							{$pagination->links}
+							{$pagination->links|default:""}
 						</td>
 					</tr>
 				</tfoot>
 			 </table>
 		{else}
-			{if {$smarty.request.msg}}
+			{if isset($smarty.request.msg)}
 			<div class="notice">
 				{$smarty.request.msg}
 			</div>
@@ -160,7 +159,7 @@
 		{/if}
 
 		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id}" />
+		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 	</form>
 </div><!--fin wrapper-content-->
 {/block}

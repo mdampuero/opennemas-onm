@@ -22,16 +22,16 @@ div#pagina td, div#pagina th {
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
 <script type="text/javascript" language="javascript">
 /* <![CDATA[ */
-{literal}
+
 document.observe('dom:loaded', function() {
     $('pagina').select('a.switchable').each(function(item){
         new SwitcherFlag(item);
     });
 });
-{/literal}
+
 </script>
 
-{literal}
+
 <script language="javascript">
 // <![CDATA[
 function enviar(frm, trg, acc, id) {
@@ -77,7 +77,7 @@ function confirmar() {
 }
 // ]]>
 </script>
-{/literal}
+
 {/block}
 
 {block name="content"}

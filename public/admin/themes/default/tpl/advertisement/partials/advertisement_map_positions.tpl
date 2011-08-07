@@ -1,4 +1,4 @@
-{literal}
+
 <style>
 #advertisement-mosaic {
     margin: 0;
@@ -20,7 +20,7 @@
 }
 
 </style>
-{/literal}
+
 
 <div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>

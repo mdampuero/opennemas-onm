@@ -180,12 +180,10 @@
                  </table>
              </div>
 
-         {literal}
              <script>
                  countWords(document.getElementById('title'), document.getElementById('counter_title'));
                  countWords(document.getElementById('body'), document.getElementById('counter_body'));
              </script>
-         {/literal}
 
          <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
          <script type="text/javascript" language="javascript">
@@ -201,7 +199,7 @@
         {dialogo script="print"}
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
 {/block}

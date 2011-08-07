@@ -132,7 +132,7 @@
         </table>
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
 

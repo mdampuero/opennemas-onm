@@ -88,7 +88,7 @@
     </ul>
 
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}
-    {if $smarty.get.alert eq 'ok'}
+    {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
     <script type="text/javascript" language="javascript">
         alert('{$smarty.get.msg}');
     </script>
@@ -254,7 +254,7 @@
 
 
             <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id}" />
+            <input type="hidden" name="id" id="id" value="{$id|default}" />
         </div>
     </form>
 </div>

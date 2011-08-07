@@ -12,27 +12,23 @@
         {/acl}
          <script type="text/javascript">
                 // <![CDATA[
-                    {literal}
                           Event.observe($('link_todos'), 'mouseover', function(event) {
                              $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
+                             e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 
                             });
                              Event.observe($('link_hunknown'), 'mouseover', function(event) {
                                 $('menu_subcats').setOpacity(0);
-                                e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
+                                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
                             });
-                    {/literal}
                 // ]]>
             </script>
         {include file="menu_categorys.tpl" home="article.php?action=list_agency"}
     </ul>
 
-    {if $smarty.get.alert eq 'ok'}
+    {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
         <script type="text/javascript" language="javascript">
-            {literal}
-                alert('{/literal}{$smarty.get.msg}{literal}');
-            {/literal}
+                alert('{$smarty.get.msg}');
         </script>
     {/if}
 

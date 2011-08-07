@@ -1,4 +1,4 @@
-{literal}
+
 <style>
 #advertisement-mosaic-opinion {
     margin: 0;
@@ -19,7 +19,7 @@
     background-color: #996633;
 }
 </style>
-{/literal}
+
 
 <div id="advertisement-mosaic-opinion" style="">
     <div id="advertisement-mosaic-frame-opinion"></div>

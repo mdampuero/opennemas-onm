@@ -80,7 +80,7 @@
 </table>
 
 <script type="text/javascript" language="javascript">
-/* <![CDATA[ */{literal}
+/* <![CDATA[ */
 var adPositionOpinionInterior = null;
 
 var positions_opinion_interior = new Array();
@@ -97,11 +97,11 @@ positions_opinion_interior[150] = '0,0,240,508';
 var options = {'positions': positions_opinion_interior, 'radios': $('ads_type_interior_opinion').select('input[name=type_advertisement]') };
 // adPositionOpinionInterior = new AdPosition('advertisement-mosaic-opinioninterior', options );
 document.observe('dom:loaded', function() {
-    {/literal}
+    
     {if !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100) && $category == '4'}
  //   adPositionOpinionInterior.selectPosition({$advertisement->type_advertisement});
     {/if}
-    {literal}
+    
 });
-/* ]]> */{/literal}
+/* ]]> */
 </script>

@@ -66,7 +66,7 @@
 </table>
 
 <script defer="defer" type="text/javascript" language="javascript">
-/* <![CDATA[ */{literal}
+/* <![CDATA[ */
 var adPositionVideo = null;
 
 var positions_video = new Array();
@@ -81,11 +81,11 @@ positions_video[250] = '0,0,240,401';
 var options = {'positions': positions_video, 'radios': $('ads_type_video').select('input[name=type_advertisement]') };
 // adPositionVideo = new AdPosition('advertisement-mosaic-video', options );
 document.observe('dom:loaded', function() {
-    {/literal}
+    
     {if !empty($advertisement->type_advertisement) && $category == '4'}
 //    adPositionVideo.selectPosition({$advertisement->type_advertisement});
     {/if}
-    {literal}
+    
 });
-/* ]]> */{/literal}
+/* ]]> */
 </script>

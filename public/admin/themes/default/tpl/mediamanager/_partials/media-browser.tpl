@@ -23,7 +23,7 @@
                 <td valign="top">
                         <div id="container-thumbnails" class="clearfix">
                             <br class="clearer" />
-                            {section name=n loop=$photo}
+                            {section name=n loop=$photo|default:array()}
                                 <div class="thumbnail"
                                     onmouseover="document.getElementById('header1-{$smarty.section.n.index}').style.display='inline';"
                                     onmouseout="document.getElementById('header1-{$smarty.section.n.index}').style.display='none';"
@@ -33,7 +33,7 @@
 
                                         <div id="header1-{$smarty.section.n.index}" style="display:none" class="thumbnail-file" z-index="1000">
                                             {*$photo[n]->name|truncate:20*}
-                                            <a onmouseout="UnTip()" onmouseover="Tip('<b>Descripción:</b> {$photo[n]->description_utf|clearslash|escape:'html'} <br /> <b>Metadatos:</b> {$photo[n]->metadata_utf|clearslash|escape:'html'} <br /> <b>Autor:</b> {$photo[n]->author_name|clearslash|escape:'html'} <br> <b>Tipo:</b> {$photo[n]->type_img}<br> <b>Creado:</b> {$photo[n]->date|date_format:"%Y-%m-%d %H:%M:%S"}', SHADOW, true, ABOVE, true, WIDTH, 400)" href="{$home}?action=image_data&amp;id={$photo[n]->pk_photo}&amp;category={$category}" title="Editar datos de la imagen" >
+                                            <a onmouseout="UnTip()" onmouseover="Tip('<b>Descripción:</b> {$photo[n]->description_utf|clearslash|escape:'html'|default:""} <br /> <b>Metadatos:</b> {$photo[n]->metadata_utf|clearslash|escape:'html'|default:""} <br /> <b>Autor:</b> {$photo[n]->author_name|clearslash|escape:'html'|default:""} <br> <b>Tipo:</b> {$photo[n]->type_img|default:""}<br> <b>Creado:</b> {$photo[n]->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}', SHADOW, true, ABOVE, true, WIDTH, 400)" href="{$home|default:""}?action=image_data&amp;id={$photo[n]->pk_photo|default:""}&amp;category={$category|default:""}" title="Editar datos de la imagen" >
                                                 Visualizar datos &nbsp;
                                             </a>
                                             {if $photo[n]->type_img == 'swf'}

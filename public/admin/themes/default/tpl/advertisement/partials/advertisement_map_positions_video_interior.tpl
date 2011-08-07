@@ -1,4 +1,4 @@
-{literal}
+
 <style>
 #advertisement-mosaic-videointerior {
     margin: 0;
@@ -19,7 +19,7 @@
     background-color: #996633;
 }
 </style>
-{/literal}
+
 
 <div id="advertisement-mosaic-videointerior" style=" ">
     <div id="advertisement-mosaic-videointerior-frame"></div>

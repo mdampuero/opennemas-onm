@@ -16,7 +16,7 @@ var searchEngine = null;
 var itemsList = {json_encode value=$items};
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
-{literal}
+
 document.observe('dom:loaded', function() {
     try {
         var itemsSelected = new Array();
@@ -77,7 +77,7 @@ document.observe('dom:loaded', function() {
         console.log(e);
     }
 });
-{/literal}
+
 </script>
 
 {/block}

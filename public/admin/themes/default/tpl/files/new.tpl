@@ -6,17 +6,17 @@
         <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$_SERVER['PHP_SELF']}?action=list" class="admin_add" value="Cancelar" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                 </a>
             </li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{$_SERVER['PHP_SELF']}" method="POST" enctype="multipart/form-data" style="margin-top:10px !important;">
+    <form action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" style="margin-top:10px !important;">
 
-        {if $message neq ""}
+        {if isset($message) && $message neq ""}
             <div class="error">
                 {$message}
             </div>
@@ -42,9 +42,9 @@
                     <td style="padding:4px;" nowrap="nowrap" width="70%">
                         <input type="text" id="title" name="title" title="Título" autocomplete="off" value="" class="required" size="50" />
 
-                        <input type="hidden" id="category" name="category" value="{$smarty.request.category}" />
-                        <input type="hidden" id="related"  name="related"  value="{$smarty.request.related}" />
-                        <input type="hidden" id="desde"    name="desde"    value="{$smarty.request.desde}" />
+                        <input type="hidden" id="category" name="category" value="{$smarty.request.category|default:""}}" />
+                        <input type="hidden" id="related"  name="related"  value="{$smarty.request.related|default:""}}" />
+                        <input type="hidden" id="desde"    name="desde"    value="{$smarty.request.desde|default:""}}" />
                     </td>
                 </tr>
                 <tr>

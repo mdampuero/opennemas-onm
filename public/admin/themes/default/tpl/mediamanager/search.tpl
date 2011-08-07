@@ -1,5 +1,56 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css">
+table th, table label {
+    color: #888;
+    text-shadow: white 0 1px 0;
+    font-size: 13px;
+}
+th {
+    vertical-align: top;
+    text-align: left;
+    padding: 10px;
+    width: 200px;
+    font-size: 13px;
+}
+label{
+    font-weight:normal;
+}
+.panel {
+    background:White;
+}
+fieldset {
+    border:none;
+    border-top:1px solid #ccc;
+}
+legend {
+    color:#666;
+    text-transform:uppercase;
+    font-size:13px;
+    padding:0 10px;
+}
+
+.awesome {
+    border:0;
+}
+.panel {
+    margin:0;
+}
+.default-value {
+    display:inline;
+    color:#666;
+    margin-left:10px;
+    vertical-align:middle
+}
+input[type="text"],
+textarea{
+    width:400px;
+    max-height:80%
+}
+</style>
+{/block}
+
 
 {block name="footer-js" append}
     <script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
@@ -27,7 +78,7 @@
     <script type="text/javascript" language="javascript">
         if($('starttime')) {
             new Control.DatePicker($('starttime'), {
-                icon: './themes/default/images/template_manager/update16x16.png',
+                icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
                 locale: 'es_ES',
                 timePicker: true,
                 timePickerAdjacent: true,
@@ -41,7 +92,7 @@
 
         if($('endtime')) {
             new Control.DatePicker($('endtime'), {
-                icon: './themes/default/images/template_manager/update16x16.png',
+                icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
                 locale: 'es_ES',
                 timePicker: true,
                 timePickerAdjacent: true,
@@ -86,13 +137,13 @@
 
             <ul class="tabs2">
                 <li>
-                    <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+                    <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
                         {t}Global{/t}</a>
                 </li>
                 {if $smarty.server.PHP_SELF eq '/admin/controllers/mediamanager/mediamanager.php'}
                 {acl isAllowed="ADVERTISEMENT_ADMIN"}
                     <li>
-                        <a href="mediamanager.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                        <a href="mediamanager.php?listmode={$listmode|default:""}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                             {t}Advertisement{/t}</a>
                     </li>
                 {/acl}
@@ -103,14 +154,14 @@
             <table class="adminform" >
                 <tbody >
                     <tr>
-                        <td style="width:35%;" align='right'> <strong>{t}Image name:{/t}</strong></td>
+                        <th align='right'> <strong>{t}Image name:{/t}</strong></td>
                         <td align='left'>
                                 <input type="text" id="stringSearch" name="stringSearch" size="60" value="{$smarty.request.stringSearch}" />
                             <br />
                         </td>
                     </tr>
                     <tr>
-                        <td align='right'> <strong>{t}Section{/t}</strong></td>
+                        <th align='right'> <strong>{t}Section{/t}</strong></td>
                         <td align='left'>
                             <select name="categ" id="categ" />
                                 <option value="todas" {if $photo1->color eq "todas"} selected {/if}>{t}All{/t}</option>
@@ -125,46 +176,44 @@
                          </td>
                     </tr>
                      <tr>
-                        <td align='right'> <strong>{t}Size:{/t}</strong> </td>
+                        <th align='right'> <strong>{t}Size:{/t}</strong> </td>
                         <td align='left'>
 
                             <label for="anchoMax">{t}Max width:{/t} </label>
                             <input type="text" id="anchoMax" name="anchoMax" size="10" />
-
+                            <br>
+                            <label for="anchoMin">{t}Min width:{/t}</label>
+                            <input type="text" id="anchoMin" name="anchoMin" size="10" />
+                            <br><br>
                             <label for="altoMax">{t}Max height:{/t}</label>
                             <input type="text" id="altoMax" name="altoMax" size="10" />
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align='right'>   </td>
-                        <td align='left'>
-
-                            <label for="anchoMin">{t}Min weight:{/t}</label>
-                            <input type="text" id="anchoMin" name="anchoMin" size="10" />
-
+                            <br>
                             <label for="altoMin">{t}Min height:{/t}</label>
                             <input type="text" id="altoMin" name="altoMin" size="10" />
 
                         </td>
                     </tr>
                     <tr>
-                        <td align='right'> <strong>{t}File size:{/t}</strong> </td>
+                        <th align='right'></td>
+                        <td align='left'></td>
+                    </tr>
+                    <tr>
+                        <th align='right'> <strong>{t}File size:{/t}</strong> </td>
                         <td align='left'>
 
-                            <label for="pesoMax">{t}Max file size:{/t}</label>
+                            <label for="pesoMax">{t}Max:{/t}</label>
                             <input type="text" id="pesoMax" name="pesoMax" size="18" />  Kb
                         </td>
                     </tr>
                     <tr>
                         <td align='right'></td>
                         <td align='left'>
-                            <label for="pesoMin">{t}Min file size:{/t}</label>
+                            <label for="pesoMin">{t}Min:{/t}</label>
                             <input type="text" id="pesoMin" name="pesoMin" size="18" />  Kb
                         </td>
                     </tr>
                     <tr>
-                        <td align='right'> <strong>{t}Type:{/t}</strong></td>
+                        <th align='right'> <strong>{t}Type:{/t}</strong></td>
                         <td align='left'>
                             <select name="tipo" id="tipo" />
                                 <option value="" selected >{t} - All types - {/t}</option>
@@ -178,7 +227,7 @@
                          </td>
                     </tr>
                     <tr>
-                        <td align='right'> <strong>{t}Color:{/t}</strong></td>
+                        <th align='right'> <strong>{t}Color:{/t}</strong></td>
                         <td align='left'>
                             <select name="color" id="color" />
                                  <option value="" selected  >{t} - All types - {/t}</option>
@@ -188,14 +237,14 @@
                          </td>
                     </tr>
                     <tr>
-                        <td align='right'> <strong>{t}Author:{/t}</strong></td>
+                        <th align='right'> <strong>{t}Author:{/t}</strong></td>
                         <td align='left'>
                             <input type="text" id="author" name="author"
                             value='{$photo1->author_name|clearslash|escape:'html'}' size="15"  title="Autor" />
                         </td>
                     </tr>
                     <tr>
-                        <td align='right' style="vertical-align:top;"><strong>Periodo:</strong></td>
+                        <th align='right' style="vertical-align:top;"><strong>Periodo:</strong></td>
                         <td align='left'>
                             {t}From:{/t}<input type="text" size="18" id="starttime" name="starttime"
                             value=""  title="Fecha" />
@@ -219,7 +268,7 @@
         </div>
 
         <input type="hidden" id="action" name="action" value="searchResults" />
-        <input type="hidden" name="id" id="id" value="{$id}" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
 

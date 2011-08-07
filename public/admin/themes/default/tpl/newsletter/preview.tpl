@@ -12,7 +12,7 @@
 <script type="text/javascript">
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
-{literal}
+
 document.observe('dom:loaded', function() {
     // Set postmaster value
     $('postmaster').value = Object.toJSON(postData);
@@ -41,7 +41,7 @@ document.observe('dom:loaded', function() {
 		});
 	});
 });
-{/literal}
+
 </script>
 
 {/block}

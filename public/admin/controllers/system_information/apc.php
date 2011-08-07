@@ -483,7 +483,7 @@ EOB;
 <head><title>APC INFO <?php echo $host ?></title>
 <style><!--
 body { background:white; font-size:100.01%; margin:0; padding:0; }
-body,p,td,th,input,submit { font-size:0.8em;font-family:arial,helvetica,sans-serif; }
+body,p,td,th,input,submit { font-size:0.8em;font-family:arial,verdana,sans-serif; }
 * html body   {font-size:0.8em}
 * html p      {font-size:0.8em}
 * html td     {font-size:0.8em}
@@ -495,7 +495,7 @@ a { color:black; font-weight:none; text-decoration:none; }
 a:hover { text-decoration:underline; }
 div.content { padding:1em 1em 1em 1em; position:absolute; width:97%; z-index:100; }
 
-
+div.head {border-bottom:1px solid #D2D2D2; color: #bfbfbf}
 div.head div.login {
 	position:absolute;
 	right: 1em;
@@ -503,36 +503,25 @@ div.head div.login {
 	color:white;
 	width:6em;
 	}
-div.head div.login a {
-	position:absolute;
-	right: 0em;
-	background:rgb(119,123,180);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
-	font-weight:bold;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	text-decoration:none;
-	}
-div.head div.login a:hover {
-	background:rgb(193,193,244);
-	}
 
-h1.apc { background:rgb(153,153,204); margin:0; padding:0.5em 1em 0.5em 1em; }
+h1.apc { background:#f1f1f1; margin:0; padding:0.5em 1em 0.5em 1em;}
 * html h1.apc { margin-bottom:-7px; }
 h1.apc a:hover { text-decoration:none; color:rgb(90,90,90); }
-h1.apc div.logo span.logo {
-	background:rgb(119,123,180);
-	color:black;
-	border-right: solid black 1px;
-	border-bottom: solid black 1px;
-	font-style:italic;
-	font-size:1em;
-	padding-left:1.2em;
-	padding-right:1.2em;
-	text-align:right;
+h1.apc div.logo span.logo {color: #464646;
+    font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: normal;
+    margin: 0;
+    padding: 14px 15px 3px 0;
+    text-shadow: 0 1px 0 #FFFFFF;
+    vertical-align: bottom;
+	font-size: 20px;
+    margin: 0;
+    padding: 22px 0;
 	}
 h1.apc div.logo span.name { color:white; font-size:0.7em; padding:0 0.8em 0 2em; }
-h1.apc div.nameinfo { color:white; display:inline; font-size:0.4em; margin-left: 3em; }
+h1.apc div.nameinfo { color: #999; text-shadow:none; display:inline; font-size:0.4em;  }
 h1.apc div.copy { color:black; font-size:0.4em; position:absolute; right:1em; }
 hr.apc {
 	background:white;
@@ -543,21 +532,25 @@ hr.apc {
 	margin:0;
 	margin-top:1px;
 	padding:0;
+	display:none !important
 }
 
 ol,menu { margin:1em 0 0 0; padding:0.2em; margin-left:1em;}
 ol.menu li { display:inline; margin-right:0.7em; list-style:none; font-size:85%}
-ol.menu a {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:white;
+ol.menu a,
+div.head div.login a{
+	border-radius:4px;
+	background:#ccc;
+	border:solid #aaa 1px;
+	color:Black;
 	font-weight:bold;
 	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
+	padding:4px 9px;
 	text-decoration:none;
 	margin-left: 5px;
 	}
-ol.menu a.child_active {
+ol.menu a.child_active,
+div.head div.login a:hover {
 	background:rgb(153,153,204);
 	border:solid rgb(102,102,153) 2px;
 	color:white;
@@ -569,15 +562,14 @@ ol.menu a.child_active {
 	margin-left: 0px;
 	}
 ol.menu span.active {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
-	color:black;
+	border-radius:4px;
+	background:#aaa;
+	border:solid #494949 1px;
+	color:Black;
 	font-weight:bold;
-	margin-right:0em;
-	padding:0.1em 0.5em 0.1em 0.5em;
+	padding:4px 9px;
 	text-decoration:none;
-	border-left: solid black 5px;
-	}
+}
 ol.menu span.inactive {
 	background:rgb(193,193,244);
 	border:solid rgb(182,182,233) 2px;
@@ -589,7 +581,7 @@ ol.menu span.inactive {
 	margin-left: 5px;
 	}
 ol.menu a:hover {
-	background:rgb(193,193,244);
+	background:#999;
 	text-decoration:none;
 	}
 
@@ -605,24 +597,49 @@ div.info h2 {
 	font-size:1em;
 	margin:0;
 	padding:0.1em 1em 0.1em 1em;
+	background-repeat: repeat;
+	font-size: 11px;
+	color: #000;
+	padding: 1px;
+	background: #e1e2e1; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e1e2e1'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e1e2e1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #fefefe,  #e1e2e1); /* for firefox 3.6+ */
+	padding:4px 4px;
+	text-shadow:0 1px 0 #FFFFFF;
 	}
 div.info table {
-	border:solid rgb(204,204,204) 1px;
-	border-spacing:0;
 	width:100%;
+	background-color: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+	border-top:none;
+    border-spacing: 0;
+	color: #333;
 	}
 div.info table th {
 	background:rgb(204,204,204);
-	color:white;
+	color:black;
+	font-size:1em;
 	margin:0;
 	padding:0.1em 1em 0.1em 1em;
+	background-repeat: repeat;
+	font-size: 11px;
+	color: #000;
+	padding: 1px;
+	background: #e1e2e1; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e1e2e1'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#e1e2e1)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #fefefe,  #e1e2e1); /* for firefox 3.6+ */
+	padding:4px 4px;
+	text-shadow:0 1px 0 #FFFFFF;
 	}
 div.info table th a.sortable { color:black; }
 div.info table tr.tr-0 { background:rgb(238,238,238); }
 div.info table tr.tr-1 { background:rgb(221,221,221); }
 div.info table td { padding:0.3em 1em 0.3em 1em; }
-div.info table td.td-0 { border-right:solid rgb(102,102,153) 1px; white-space:nowrap; }
-div.info table td.td-n { border-right:solid rgb(102,102,153) 1px; }
+div.info table td.td-0 { border-right:#bfbfbf solid 1px; white-space:nowrap; }
+div.info table td.td-n { border-right:solid #bfbfbf 1px; }
 div.info table td h3 {
 	color:black;
 	font-size:1.1em;
@@ -668,20 +685,26 @@ div.authneeded {
 	}
 
 input {
-	background:rgb(153,153,204);
-	border:solid rgb(102,102,153) 2px;
+	background:White;
+	border:1px solid #bfbfbf;
 	color:white;
-	font-weight:bold;
 	margin-right:1em;
-	padding:0.1em 0.5em 0.1em 0.5em;
-	}
+	padding:4px 9px;
+	color:Black;
+	font-size:13px;
+	border-radius:3px;
+
+}
+select {
+	margin-right:3px;
+}
 //-->
 </style>
 </head>
 <body>
 <div class="head">
 	<h1 class="apc">
-		<div class="logo"><span class="logo"><a href="http://pecl.php.net/package/APC">APC</a></span></div>
+		<div class="logo"><span class="logo"><a href="http://pecl.php.net/package/APC">APC cache manager</a></span></div>
 		<div class="nameinfo">Opcode Cache</div>
 	</h1>
 	<div class="login">

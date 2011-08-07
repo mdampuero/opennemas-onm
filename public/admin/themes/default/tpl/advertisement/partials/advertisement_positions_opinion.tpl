@@ -56,7 +56,7 @@
 </table>
 
 <script type="text/javascript" language="javascript">
-/* <![CDATA[ */{literal}
+/* <![CDATA[ */
 var adPositionOpinion = null;
 
 var positions_opinion = new Array();
@@ -71,11 +71,11 @@ positions_opinion[50] = '0,0,240,327';
 var options = {'positions': positions_opinion, 'radios': $('ads_type_opinion').select('input[name=type_advertisement]') };
 //adPositionOpinion = new AdPosition('advertisement-mosaic-opinion', options );
 document.observe('dom:loaded', function() {
-    {/literal}
+    
     {if !empty($advertisement->type_advertisement) && $category == '4'}
   //  adPositionOpinion.selectPosition({$advertisement->type_advertisement});
     {/if}
-    {literal}
+    
 });
-/* ]]> */{/literal}
+/* ]]> */
 </script>

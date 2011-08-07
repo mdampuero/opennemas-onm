@@ -159,11 +159,11 @@
                                              <ul id='thelist'  class="gallery_list">
                                                     {section name=as loop=$photos}
                                                         <li> <img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}"  border="1" /></li>
-                                                         {literal}
+                                                         
                                                               <script type="text/javascript">
-                                                                  new Draggable( {/literal}'{$photos[as]->pk_img}'{literal} ,{ revert:true } );
+                                                                  new Draggable( '{$photos[as]->pk_img}' ,{ revert:true } );
                                                               </script>
-                                                         {/literal}
+                                                         
                                                     {/section}
                                              </ul>
                                         </div>
@@ -281,13 +281,13 @@
     {* FORMULARIO PARA ENGADIR ************************************** *}
 
     <script type="text/javascript" language="javascript">
-    {literal}
+    
         document.observe('dom:loaded', function() {
             if($('title')){
                 new OpenNeMas.Maxlength($('title'), {});
             }
         });
-    {/literal}
+    
     </script>
 
     <input type="hidden" id="action" name="action" value="" />

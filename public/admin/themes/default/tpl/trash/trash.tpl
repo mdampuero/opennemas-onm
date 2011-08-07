@@ -31,7 +31,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 {block name="admin_menu"}{/block}
 	<div class="wrapper-content">
 

@@ -67,45 +67,41 @@
             <a href="article.php?action=list_pendientes&category=20" id='link_unknown' {if $category=='20'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
         </li>
         {/acl}
-         <script type="text/javascript">
-                // <![CDATA[
-                    {literal}
-                          Event.observe($('link_todos'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-
-                            });
-                             Event.observe($('link_hunknown'), 'mouseover', function(event) {
-                                $('menu_subcats').setOpacity(0);
-                                e = setTimeout("show_subcat('{/literal}{$category}','{$home|urlencode}{literal}');$('menu_subcats').setOpacity(1);",1000);
-                            });
-                    {/literal}
-                // ]]>
-            </script>
+        <script type="text/javascript">
+        // <![CDATA[
+        Event.observe($('link_todos'), 'mouseover', function(event) {
+            $('menu_subcats').setOpacity(0);
+            e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
+        });
+        Event.observe($('link_hunknown'), 'mouseover', function(event) {
+            $('menu_subcats').setOpacity(0);
+            e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
+        });
+        // ]]>
+        </script>
         {include file="menu_categorys.tpl" home="article.php?action=list_pendientes"}
     </ul>
 
-    {if $smarty.get.alert eq 'ok'}
+    {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
         <script type="text/javascript" language="javascript">
             alert('{$smarty.get.msg}');
         </script>
     {/if}
 
-
     <div id="{$category}">
         <table class="adminheading">
             <tr>
-                <td><strong>Noticias Pendientes</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
-                <td align='right'>Ir a secci&oacute;n:
+                <td><strong>{t}Pending articles{/t}</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
+                <td align='right'>{t}Go to section:{/t}
                     <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
                         {if $category eq "todos"}
-                           <option value="todos" selected="selected" name="{$allcategorys[as]->title}" >TODOS</option>
+                           <option value="todos" selected="selected" name="{$allcategorys[as]->title}" >{t}All{/t}</option>
                         {else}
-                           <option value="" selected="selected">Lista de Categorias</option>
-                           <option value="todos" name="{$allcategorys[as]->title}" >TODOS</option>
+                           <option value="" selected="selected">{t}Category list{/t}</option>
+                           <option value="todos" name="{$allcategorys[as]->title}" >{t}All{/t}</option>
                         {/if}
-                        <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >UNKNOWN</option>
-                        <option value="opinion" {if $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >OPINION</option>
+                        <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unasigned{/t}</option>
+                        <option value="opinion" {if $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >{t}Opinion{/t}</option>
                         {section name=as loop=$allcategorys}
                             <option value="{$allcategorys[as]->pk_content_category}" {if $article->category eq $allcategorys[as]->pk_content_category}selected="selected"{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
@@ -349,7 +345,7 @@
 
 
             <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id}" />
+            <input type="hidden" name="id" id="id" value="{$id|default:""}" />
         </div>
     </form>
 </div>
