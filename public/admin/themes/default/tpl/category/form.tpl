@@ -23,7 +23,7 @@
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
         <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-            
+
 		<div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
 		<ul class="old-button">
 			<li>
@@ -42,7 +42,7 @@
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+				<a href="{$smarty.server.PHP_SELF}?desde={$smarty.session.desde}" class="admin_add" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
 				</a>
 			</li>
@@ -51,7 +51,7 @@
 </div>
 <div class="wrapper-content">
 
-   
+
 
         <div id="warnings-validation"></div>
 

@@ -2,14 +2,14 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2>{if $smarty.request.action eq "new"}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
             <ul class="old-button">
                 <li>
                     {if isset($author->pk_author)}
-                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$author->pk_author}, 'formulario');">
+                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$author->pk_author|default:""}, 'formulario');">
                     {else}
                     <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
                     {/if}
@@ -17,20 +17,20 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$author->pk_author}', 'formulario');" value="Validar" title="Validar">
+                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$author->pk_author|default:""}', 'formulario');" value="Validar" title="Validar">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
                     </a>
                 </li>
                 <li class="separator"></li>
                 <li>
                     {if $smarty.session._from eq 'opinion.php'}
-                            <a href="opinion.php" class="admin_add">
-                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                        </a>
+                    <a href="opinion.php" class="admin_add">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    </a>
                     {else}
-                        <a href="{$_SERVER['PHP_SELF']}?action=list&page=0" class="admin_add" title="Cancelar">
-                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                        </a>
+                    <a href="{$smarty.server.PHP_SELF}?action=list&page=0" class="admin_add" title="Cancelar">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
+                    </a>
                     {/if}
                 </li>
 
@@ -51,7 +51,7 @@
                     </td>
                     <td >
                         <input type="text" id="name" name="name" title="{t}Author name{/t}"
-                            value="{$author->name}" class="required"  size="50"/>
+                            value="{$author->name|default:""}" class="required"  size="50"/>
                     </td>
                 </tr>
                 <tr>
@@ -59,7 +59,7 @@
                         <label for="phone">{t}Condition{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition}"  size="50"/>
+                        <input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition|default:""}"  size="50"/>
                     </td>
                 </tr>
 
@@ -80,7 +80,7 @@
                         <label for="phone">{t}Blog name:{/t}</label>
                     </td>
                     <td>
-                        <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politcs}"  size="50"/>
+                        <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politcs|default:""}"  size="50"/>
                     </td>
     {*				<td style="padding:4px;" nowrap="nowrap">
                         <select name="politics" id="politics" class="required" title="Tendencia politica">
@@ -119,7 +119,7 @@
                         <div id="contenedor" name="contenedor" style="display:none; "> </div>
                         <div class="photos" >
                                  <ul id='thelist'  class="gallery_list">
-                                        {section name=as loop=$photos}
+                                        {section name=as loop=$photos|default:array()}
                                         <li id='{$photos[as]->pk_img}'>
                                                 <div style="float: left;width:90px;">
                                                         <a><img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}" width="67"  border="1" /></a>

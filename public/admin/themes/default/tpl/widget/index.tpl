@@ -56,7 +56,7 @@ function validateForm(formID)
         return false;
     } else {
         if($$('.validation-advice') && $('warnings-validation')) {
-            $('warnings-validation').setStyle({display: 'none'});
+            $('warnings-validation').setStyle({ display: 'none' });
         }
     }
     return true;

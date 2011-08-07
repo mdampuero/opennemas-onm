@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{$params.JS_DIR}prototype.js" language="javascript"></script>
 <script type="text/javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js" language="javascript"></script>
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
-{$script}
+{$script|default:""}
 
 </head>
 
@@ -33,11 +33,11 @@
                         </tr>
                     </table>
                 </p>
-                <input type="hidden" id="nameAuthor" name="nameAuthor" title="nameAuthor" value="{$nameAuthor}" size="40" />
+                <input type="hidden" id="nameAuthor" name="nameAuthor" title="nameAuthor" value="{$nameAuthor|default:""}" size="40" />
                 <div id="fotosContenedor">
                     <div class="marcoFoto" id="foto0"><input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-                        <input type="hidden" id="nameCat" name="nameCat" title="nameCat" value="{$nameCat}" size="40" />
-                        <input type="hidden" id="category" name="category" title="category" value="{$category}" size="40" />
+                        <input type="hidden" id="nameCat" name="nameCat" title="nameCat" value="{$nameCat|default:""}" size="40" />
+                        <input type="hidden" id="category" name="category" title="category" value="{$category|default:""}" size="40" />
                         <p style="font-weight: bold;">Foto #0:
                             <input type="file" name="file[0]" id="fFile0" class="required" size="50" onChange="ckeckName(this,'fileCat[0]');"/>
                             <div id="fileCat[0]" name="fileCat[0]" style="display:none;">

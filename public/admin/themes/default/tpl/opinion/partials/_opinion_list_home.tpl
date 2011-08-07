@@ -238,32 +238,32 @@
 					{$opinions[c]->views}
 				</td>
 				<td align="center" style="width:80px;">
-										   {$op_rating[c]}
-									</td>
+						{$op_rating[c]|default:""}
+				 </td>
 				<td style="width:70px;" align="center">
-										   {$op_comment[c]}
-									</td>
+					{$op_comment[c]}
+				</td>
 				<td align="center" style="width:80px;">
 					{$opinions[c]->created}
 				</td>
 				<td align="center" style="width:55px;">
 					{if $opinions[c]->in_home == 1}
-						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
+						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" ></a>
 					{else}
-						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
+						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category|default:""}" class="go_home" title="Meter en portada" ></a>
 					{/if}
 				</td>
 				<td align="center" style="width:74px;">
 					<ul class="action-buttons">
 						<li>
 							{if $opinions[c]->content_status == 1}
-								<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
-									<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-								</a>
+							<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:""}" title="Publicado">
+								<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+							</a>
 							{else}
-								<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
-									<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-								</a>
+							<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage|default:""}" title="Pendiente">
+								<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+							</a>
 							{/if}
 						</li>
 						<li>

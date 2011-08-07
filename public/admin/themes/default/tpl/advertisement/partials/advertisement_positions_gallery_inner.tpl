@@ -78,14 +78,14 @@ positions_galleryInner[10] = '178,297,55,24';
 positions_galleryInner[50] = '0,0,240,352';
 
 
-var options = {'positions': positions_galleryInner, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
+var options = { 'positions': positions_galleryInner, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
 // adPositionGalleryInner = new AdPosition('advertisement-mosaic-gallery-inner', options );
 document.observe('dom:loaded', function() {
-    
+
     {if !empty($advertisement->type_advertisement) && $category == '3'}
    //     adPositionGalleryInner.selectPosition({$advertisement->type_advertisement});
     {/if}
-    
+
 });
 /* ]]> */
 </script>

@@ -1254,7 +1254,7 @@ ul#menu ul > li > a {
 	display:block;
 }
 ul#menu > li:hover {
-	border-top:1px solid White;
+	border-top:1px solid White !important;
 }
 	ul#menu > li:hover > a {
 		padding-top:10px;
@@ -1287,7 +1287,7 @@ ul#menu li.iehover li.iehover a {
 /* 3rd Menu */
 ul#menu li:hover li:hover li a,
 ul#menu li.iehover li.iehover li a {
-  background: #555555;;
+  background: #555555;
 }
 
 /* 3rd Menu Hover Persistence */

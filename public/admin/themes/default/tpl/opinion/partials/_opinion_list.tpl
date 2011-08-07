@@ -4,9 +4,9 @@
 		<th nowrap>{t}Opinion articles{/t}</th>
 		<th> {t}Select an author{/t}
 		<select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
-			<option value="0" {if $author eq "0"} selected {/if}> {t}All{/t} </option>
+			<option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
 			{section name=as loop=$autores}
-				<option value="{$autores[as]->pk_author}" {if $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
+				<option value="{$autores[as]->pk_author}" {if isset($author) && $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
 			{/section}
 		</select>
 		</th>
@@ -52,10 +52,10 @@
 				{$opinions[c]->views}
 			</td>
 			<td style="width:70px;" align="center">
-				{$op_rating[c]}
+				{$op_rating[c]|default:""}
 			</td>
 			<td style="width:70px;" align="center">
-				{$op_comment[c]}
+				{$op_comment[c]|default:""}
 			</td>
 			<td style="width:70px;" align="center">
 					{$opinions[c]->created}
@@ -79,7 +79,7 @@
 			<td style="width:70px;" align="center">
 				<ul class="action-buttons">
 					<li>
-						<a href="{$_SERVER['PHP_SELF']}?action=read&id={$opinions[c]->id}" title="Modificar">
+						<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 					</li>
 					<li>
@@ -94,7 +94,7 @@
 	<tfoot>
 		<tr class="pagination">
 			<td colspan="10" align="center">
-				{$paginacion->links}
+				{$paginacion->links|default:""}
 			</td>
 		</tr>
 	</tfoot>

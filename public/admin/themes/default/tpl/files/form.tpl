@@ -7,7 +7,7 @@
         <div class="title"><h2>{t}Files manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$_SERVER['PHP_SELF']}?action=list" class="admin_add" value="Cancelar" title="Cancelar">
+                <a href="{$smarty.server.PHP_SELF}?action=list" class="admin_add" value="Cancelar" title="Cancelar">
                     <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                 </a>
             </li>

@@ -140,15 +140,15 @@
                                     <td valign="top" style="padding:0 10px;;border:1px solid #CCCCCC">
                                         <div id="sel" style="padding:8px;min-height:70px; background-color:#eee">
                                             <b>{t}Inner opinion photo:{/t}</b> <br />
-                                            <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img}" id="seleccionada" name="seleccionada"  border="1" align="top" />
-                                            <input type="hidden" id="fk_author_img" name="fk_author_img" value="{$opinion->fk_author_img}" />
+                                            <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img|default:""}" id="seleccionada" name="seleccionada"  border="1" align="top" />
+                                            <input type="hidden" id="fk_author_img" name="fk_author_img" value="{$opinion->fk_author_img|default:""}" />
                                         </div>
                                     </td>
                                     <td valign="top" style="padding:4px;border:1px solid #CCCCCC;min-height:80px;">
                                         <div id="div_widget" style="width:220px;min-height:70px; padding:8px; background-color:#bbb">
                                             <b>{t}Widget photo:{/t}</b><br />
-                                            <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img}" id="widget" name="widget"  border="1" align="top" />
-                                            <input type="hidden" id="fk_author_img_widget" name="fk_author_img_widget" value="{$opinion->fk_author_img_widget}" />
+                                            <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img|default:""}" id="widget" name="widget"  border="1" align="top" />
+                                            <input type="hidden" id="fk_author_img_widget" name="fk_author_img_widget" value="{$opinion->fk_author_img_widget|default:""}" />
                                         </div>
                                     </td>
                                 </tr>
@@ -157,13 +157,13 @@
                                         <b>{t}Choose one available photo for the widget:{/t}</b> <br>
                                         <div id="photos" name="photos" class="photos">
                                              <ul id='thelist'  class="gallery_list">
-                                                    {section name=as loop=$photos}
-                                                        <li> <img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}"  border="1" /></li>
-                                                         
+                                                    {section name=as loop=$photos|default:""}
+                                                        <li> <img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img|default:""}" id="{$photos[as]->pk_img}"  border="1" /></li>
+
                                                               <script type="text/javascript">
                                                                   new Draggable( '{$photos[as]->pk_img}' ,{ revert:true } );
                                                               </script>
-                                                         
+
                                                     {/section}
                                              </ul>
                                         </div>
@@ -189,7 +189,7 @@
                     <td style="padding:4px 10px;" colspan=2>
                         <label for="title">{t}Type:{/t}</label>
                         <select name="type_opinion" id="type_opinion" class="validate-selection"  onChange='show_authors(this.options[this.selectedIndex].value);'>
-                            <option value="-1"></option>
+                            <option value="-1">{t}-- Pick an author --{/t}</option>
                             <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
                             <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
                             <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
@@ -203,13 +203,13 @@
                         </div>
                         <div id="div_author2" {if $opinion->type_opinion eq 0} style="display:inline;" {else} style="display:none;"{/if}>
                             <select id="fk_author" name="fk_author" class="validate-selection" onChange='changePhotos(this.options[this.selectedIndex].value);'>
-                                <option value="0" {if $author eq "0"}selected{/if}>{t} - Select one author - {/t}</option>
+                                <option value="0" {if isset($author) && $author eq "0"}selected{/if}>{t} - Select one author - {/t}</option>
                                 {section name=as loop=$todos}
                                         <option value="{$todos[as]->pk_author}" {if $opinion->fk_author eq $todos[as]->pk_author}selected{/if}>{$todos[as]->name}</option>
                                 {/section}
                             </select>
                         </div>
-                        <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" title="publisher" value="{$publisher}"  size="60" />
+                        <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" title="publisher" value="{$publisher|default:""}"  size="60" />
                     </td>
                 </tr>
                 <tr>
@@ -281,13 +281,13 @@
     {* FORMULARIO PARA ENGADIR ************************************** *}
 
     <script type="text/javascript" language="javascript">
-    
+
         document.observe('dom:loaded', function() {
             if($('title')){
-                new OpenNeMas.Maxlength($('title'), {});
+                new OpenNeMas.Maxlength($('title'), { });
             }
         });
-    
+
     </script>
 
     <input type="hidden" id="action" name="action" value="" />

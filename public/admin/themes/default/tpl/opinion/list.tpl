@@ -130,7 +130,7 @@
 {/block}
 
 {block name="footer-js" append}
-{if $smarty.get.msgdelete eq 'ok'}
+{if isset($smarty.get.msgdelete) && $smarty.get.msgdelete eq 'ok'}
     <script type="text/javascript" language="javascript">
         alert('{$smarty.get.msg}');
     </script>

@@ -14,7 +14,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add"  accesskey="N" tabindex="1">
+					<a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add"  accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}advertisement.png" title="Nueva Sección" alt="Nueva Sección"><br />{t}New section{/t}
 					</a>
 				</li>
@@ -41,7 +41,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="{$_SERVER['PHP_SELF']}?desde={$_SESSION['desde']}" class="admin_add" value="Cancelar" title="Cancelar">
+				<a href="{$smarty.server.PHP_SELF}?desde={$smarty.session.desde}" class="admin_add" value="Cancelar" title="Cancelar">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
 				</a>
 			</li>

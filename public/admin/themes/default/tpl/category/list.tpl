@@ -20,7 +20,7 @@
         <div class="title"><h2>{$titulo_barra}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$_SERVER['PHP_SELF']}?action=new" class="admin_add" accesskey="N" tabindex="1">
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
                     <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
                 </a>
             </li>

@@ -2,13 +2,13 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 	<div class="top-action-bar">
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion Manager :: Author list{/t}</div>
             <ul class="old-button">
                 <li>
-                    <a href="{$_SERVER['PHP_SELF']}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
+                    <a href="{$smarty.server.PHP_SELF}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="{t}New author{/t}" alt="{t}New author{/t}"><br />{t}New author{/t}
                     </a>
                 </li>
@@ -67,7 +67,7 @@
                     <td style="text-align:center;">
 						<ul class="action-buttons">
 							<li>
-								<a href="{$_SERVER['PHP_SELF']}?action=read&id={$authors[c]->pk_author}" title="Modificar">
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$authors[c]->pk_author}" title="Modificar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 								</a>
 							</li>

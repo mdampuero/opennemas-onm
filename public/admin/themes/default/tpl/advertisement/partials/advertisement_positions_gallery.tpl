@@ -88,14 +88,14 @@ positions_gallery[10] = '178,297,55,24';
 positions_gallery[50] = '0,0,240,352';
 
 
-var options = {'positions': positions_gallery, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
+var options = { 'positions': positions_gallery, 'radios': $('ads_type_gallery').select('input[name=type_advertisement]') };
 //adPositionGallery = new AdPosition('advertisement-mosaic-gallery', options );
 document.observe('dom:loaded', function() {
-    
+
     {if !empty($advertisement->type_advertisement) && $category == '3'}
   //      adPositionGallery.selectPosition({$advertisement->type_advertisement});
     {/if}
-    
+
 });
 /* ]]> */
 </script>
