@@ -6,17 +6,18 @@
         <div class="title"><h2>{t}ePaper Manager{/t} :: {t}Editing ePaper{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
-                    <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />Cancelar
-                </a>
-            </li>
-            <li>
             {if isset($kiosko->id)}
                 <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$kiosko->id}', 'formulario');">
             {else}
                 <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
             {/if}
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}"><br />{t}Save{/t}
+                </a>
+            </li>
+            <li class="separator"></li>
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=list" onmouseover="return escape('<u>C</u>ancelar');" value="Cancelar" title="Cancelar">
+                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                 </a>
             </li>
         </ul>
@@ -121,4 +122,3 @@
 </form>
 
 {/block}
-

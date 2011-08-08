@@ -116,6 +116,7 @@ class SimpleMenu {
             $url = SITE_URL_ADMIN."/".$url;
         }
 
+        $target = '';
         if ($external) {
             $target = "target=\"_blank\"";
         }

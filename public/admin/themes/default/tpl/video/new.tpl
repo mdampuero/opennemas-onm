@@ -27,7 +27,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+<form action="#" method="post" name="formulario" id="formulario">
 
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -36,7 +36,7 @@
 			<li>
 			{if isset($video->id)}
 				{acl isAllowed="VIDEO_UPDATE"}
-					<a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id}', 'formulario');" >
+					<a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id|default:""}', 'formulario');" >
 				{/acl}
 			{else}
 				{acl isAllowed="VIDEO_CREATE"}
@@ -48,14 +48,14 @@
 			</li>
 			{acl isAllowed="VIDEO_CREATE"}
 			<li>
-				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id}', 'formulario');" value="Validar" title="Validar">
+				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
 					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
 				</a>
 			</li>
 			{/acl}
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
 				</a>
 			</li>
@@ -85,9 +85,9 @@
 										<td>
 											<select name="category" id="category">
 												{section name=as loop=$allcategorys}
-													<option value="{$allcategorys[as]->pk_content_category}" {if $video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+													<option value="{$allcategorys[as]->pk_content_category}" {if isset($video) && ($video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
 													{section name=su loop=$subcat[as]}
-														<option value="{$subcat[as][su]->pk_content_category}" {if $video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+														<option value="{$subcat[as][su]->pk_content_category}" {if isset($video) && ($video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
 													{/section}
 												{/section}
 											</select>
@@ -98,8 +98,8 @@
 										<td>
 											<select name="available" id="available"
 												{acl isNotAllowed="ALBUM_AVAILABLE"} disabled="disabled" {/acl} class="required">
-												 <option value="1" {if $video->available eq '1'} selected {/if}>Si</option>
-												 <option value="0" {if $video->available eq '0'} selected {/if}>No</option>
+												 <option value="1" {if isset($video) && $video->available eq '1'} selected {/if}>Si</option>
+												 <option value="0" {if isset($video) && $video->available eq '0'} selected {/if}>No</option>
 											</select>
 										</td>
 									</tr>
@@ -205,7 +205,7 @@
 			</table>
 
 		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$video->id}" />
+		<input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
 	</div>
 </form>
 {/block}

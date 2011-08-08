@@ -113,19 +113,19 @@ input[type="text"] {
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menu manager{/t} :: {t}Editing menu{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="#" class="admin_add" onClick="saveMenu();sendFormValidate(this, '_self', 'validate', '{$menu->pk_menu}', 'formulario');" value="Validar" title="Validar">
+                    <a href="#" class="admin_add" onClick="saveMenu();sendFormValidate(this, '_self', 'validate', '{$menu->pk_menu|default:""}', 'formulario');" value="Validar" title="Validar">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </a>
                 </li>
                 <li>
                     {if isset($menu->pk_menu)}
-                       <a href="#" onClick="javascript:saveMenu();sendFormValidate(this, '_self', 'update', '{$menu->pk_menu}', 'formulario');">
+                       <a href="#" onClick="javascript:saveMenu();sendFormValidate(this, '_self', 'update', '{$menu->pk_menu|default:""}', 'formulario');">
                     {else}
                        <a href="#" onClick="javascript:saveMenu();sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                     {/if}
@@ -149,11 +149,13 @@ input[type="text"] {
     <div class="wrapper-content">
         <table class="adminheading">
             <tr>
-                <td>{t}Menu {$name} Frontpage{/t}: </td>
+                <td>{t 1=$name|default:""}Menu %1 Frontpage{/t}: </td>
             </tr>
         </table>
         <table class="adminform">
-            {assign var=menuParams value=$menu->params|unserialize}
+            {if isset($menu)}
+                {assign var=menuParams value=$menu->params|unserialize}
+            {/if}
             <tbody>
                  <tr>
                     <td>
@@ -163,30 +165,30 @@ input[type="text"] {
                                     <label for="name">{t}Name{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" name="name" id="name" value="{$menu->name}" />
+                                    <input type="text" name="name" id="name" value="{$menu->name|default:""}" />
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="description">{t}Description{/t}</label></th>
                                 <td>
-                                    <textarea name="description" id="description" cols="60">{$menuParams['description']|clearslash}</textarea>
+                                    <textarea name="description" id="description" cols="60">{$menuParams['description']|clearslash|default:""}</textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <th><label for="description">{t}Father menu{/t}</label></th>
                                 <td>
                                     <select id='pk_father' name='pk_father'>
-                                        <option value="0" title="Ninguno"> </option>
+                                        <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
                                         {section loop=$menues name=m}
-                                            <option value="{$menues[m]->pk_menu}" name="{$menues[m]->name}"
-                                                {if $menu->pk_father eq  $menues[m]->pk_menu} selected {/if}>
+                                            <option value="{$menues[m]->pk_menu}" name="{$menues[m]->name|default:""}"
+                                                {if isset($menu) && $menu->pk_father eq  $menues[m]->pk_menu} selected {/if}>
                                                     {$menues[m]->name}
                                             </option>
                                             {assign var=items value=$menues[m]->items}
-                                            {if !empty($items)}
+                                            {if isset($items) && !empty($items)}
                                                 {section name=su loop=$items}
-                                                    <option value="{$items[su]->pk_item}" name="{$items[su]->name}"
-                                                    {if $menu->pk_father eq $items[su]->pk_item} selected {/if}>
+                                                    <option value="{$items[su]->pk_item}" name="{$items[su]->name|default:""}"
+                                                    {if isset($menu) && $menu->pk_father eq $items[su]->pk_item} selected {/if}>
                                                         &nbsp;&nbsp;&nbsp;&nbsp;{$items[su]->title}
                                                     </option>
                                                 {/section}
@@ -201,7 +203,7 @@ input[type="text"] {
                                     <div class="left">
                                         <h3>{t}Menu elements{/t}</h3>
                                         <ul id="menuelements">
-                                        {if !empty($menu->items)}
+                                        {if isset($menu) && !empty($menu->items)}
                                             {section name=c loop=$menu->items}
                                                 <li id="item_{$menu->items[c]->pk_item}" pk_item="{$menu->items[c]->pk_item}" title="{$menu->items[c]->title}"
                                                     link="{$menu->items[c]->link}" type="{$menu->items[c]->type}"
@@ -326,7 +328,7 @@ input[type="text"] {
         </div>
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" size="100" name="items" id="items" value="" />
-        <input type="hidden" name="id" id="id" value="{$menu->pk_menu}" />
+        <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
     </div><!--fin wrapper-content-->
 </form>
 {/block}

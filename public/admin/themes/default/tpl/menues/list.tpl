@@ -32,8 +32,8 @@
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
-        <div id="{$category}">
+    <form action="#" method="post" name="formulario" id="formulario">
+        <div>
             <table class="adminheading">
                 <tr>
                     <td>{t}Menues{/t}</td>
@@ -59,7 +59,7 @@
                                 </a>
                             </td>
                         </tr>
-                    
+
                         {foreach key=k item=subMenu from=$subMenues}
                             {if $k eq $menues[m]->pk_menu}
                                 {section loop=$subMenu name=s}

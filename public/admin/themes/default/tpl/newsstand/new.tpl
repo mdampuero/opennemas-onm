@@ -33,7 +33,7 @@
                             <label for="title">Titulo:</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap">
-                            <input type="text" id="title" name="title" title="Portada" size="80" value="{$kiosko->title|clearslash}" class="required" onBlur="javascript:get_metadata(this.value);" />
+                            <input type="text" id="title" name="title" title="Portada" size="80" value="{$kiosko->title|clearslash|default:""}" class="required" onBlur="javascript:get_metadata(this.value);" />
                         </td>
                     </tr>
                     <tr>
@@ -41,7 +41,7 @@
                             <label for="metadata">Palabras clave: </label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap"">
-                            <input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$kiosko->metadata|clearslash}" /><br>
+                            <input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$kiosko->metadata|clearslash|default:""}" /><br>
                             <label align='right'><sub>Separadas por comas</sub></label><br>
                         </td>
                         <td rowspan=3>
@@ -53,7 +53,7 @@
                                     <td nowrap="nowrap">
                                         <select name="category" id="category" class="required">
                                             {section name=as loop=$allcategorys}
-                                                <option value="{$allcategorys[as]->pk_content_category}" {if $kiosko->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                                <option value="{$allcategorys[as]->pk_content_category}" {if isset($kiosko) && $kiosko->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                                             {/section}
                                         </select>
                                     </td>
@@ -103,7 +103,7 @@
                             <label for="title">Fecha:</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap">
-                             <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date}" tabindex="-1" class="required" /></div>
+                             <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" /></div>
                         </td>
                     </tr>
                     <tr>

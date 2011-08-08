@@ -78,20 +78,19 @@ class Message
      */
     static public function getAll($priority = null)
     {
+
+        self::initMessageHandler();
+
         if (!isset($_SESSION)
             || !is_array($_SESSION)
             || !array_key_exists('messages', $_SESSION))
         {
-            $output =  array(
-                self::NOTICE => array(),
-                self::ERROR => array(),
-                self::SUCCESS => array(),
-            );
+
         }
         if (is_null($priority)) {
             $output =  $_SESSION['messages'];
         } else {
-            $output =  $_SESSION['messages'][$priority];
+                $output =  $_SESSION['messages'][$priority];
         }
 
         return $output;
@@ -108,6 +107,8 @@ class Message
         $notices = self::getAll(self::NOTICE);
         $errors  = self::getAll(self::ERROR);
         $sucess  = self::getAll(self::SUCCESS);
+
+        $noticeHTML = '';
 
         if (count($notices) > 0) {
             $messages = '<ul>';

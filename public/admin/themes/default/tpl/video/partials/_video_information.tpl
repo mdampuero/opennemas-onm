@@ -17,7 +17,7 @@
     <tr>
         <td valign="top">
             <label for="metadata">{t}Keywords:{/t} <small>{t}Comma separated{/t}</small></label>
-            <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata}" class="required"  style="width:70%" />
+            <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata|default:""}" class="required"  style="width:70%" />
 
         </td>
     </tr>
@@ -25,15 +25,15 @@
         <td>
             <label for="title">Descripción:</label>
             <textarea name="description" id="description" class="required" style="width:70%"
-                    title="{t}Video description{/t}">{$video->description|clearslash}</textarea>
+                    title="{t}Video description{/t}">{$video->description|clearslash|default:""}</textarea>
         </td>
     </tr>
     <tr>
        <td valign="top">
             <label for="title">{t}Service:{/t}</label>
                 <input type="text" id="author_name" name="author_name" title="author_name" style="width:70%"
-                    {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"}"
-                    {else} value="{$information['service']|clearslash|escape:"html"}" {/if} />
+                    {if (!empty($video->author_name))} value="{$video->author_name|clearslash|escape:"html"|default:""}"
+                    {else} value="{$information['service']|clearslash|escape:"html"|default:""}" {/if} />
        </td>
     </tr>
     {if (!empty($video->uri))}

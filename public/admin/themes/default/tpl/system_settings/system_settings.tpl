@@ -67,7 +67,7 @@ textarea{
 
     {render_messages}
 
-    <form action="{$smarty.server.SCRIPT_NAME}" method="post" name="formulario" id="formulario" {$formAttrs}>
+    <form action="{$smarty.server.SCRIPT_NAME}" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 
         <ul id="tabs">

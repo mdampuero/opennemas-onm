@@ -146,7 +146,7 @@
 
                             <div class="photo-geolocation-canvas" id="map_canvas[{$photo1->id}]" style="height:200px"></div>
 
-                            <script src="http://maps.google.com/maps?file=api&sensor=true&key={setting google_maps_api_key}" type="text/javascript"></script>
+                            <script src="http://maps.google.com/maps?file=api&sensor=true&key={setting name=google_maps_api_key}" type="text/javascript"></script>
                             <script defer="defer" type="text/javascript" charset="utf-8">
                                 var map = new GMap2(document.getElementById("map_canvas[{$photo1->id}]"));
                                 map.setCenter(new GLatLng(42.339806,-7.866068), 13);

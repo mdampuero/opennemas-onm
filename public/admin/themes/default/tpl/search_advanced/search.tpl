@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">

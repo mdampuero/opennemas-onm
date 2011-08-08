@@ -17,8 +17,8 @@
             <tr>
                 <td>
                     {if isset($return) && !empty($return)}
-                        <h3>{if $action == 'check'}{t}Mysql checking{/t}{/if}</h3>
-                        <strong>{$checkout}</strong>
+                        <h3>{t}Mysql checking{/t}</h3>
+                        <strong>{$checkout|default:""}</strong>
                         <pre>
                         {foreach from=$return item=foo}
                         {$foo}

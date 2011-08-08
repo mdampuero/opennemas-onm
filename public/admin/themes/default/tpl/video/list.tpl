@@ -19,7 +19,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -123,10 +123,10 @@
 								<td align="center">
 									{acl isAllowed="VIDEO_AVAILABLE"}
 										{if $videos[c]->available == 1}
-											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
+											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
 													<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
 										{else}
-											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
+											<a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
 													<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
 										{/if}
 									{/acl}
@@ -134,9 +134,9 @@
 								<td align="center">
 									{acl isAllowed="VIDEO_FAVORITE"}
 											{if $videos[c]->favorite == 1}
-											   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Quitar de Portada"></a>
+											   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="Quitar de Portada"></a>
 											{else}
-												<a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Meter en Portada"></a>
+												<a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="Meter en Portada"></a>
 											{/if}
 									 {/acl}
 								</td>
@@ -151,7 +151,7 @@
 
 										{acl isAllowed="VIDEO_DELETE"}
 										<li>
-											<a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage}');" title="Eliminar">
+											<a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage|default:""}');" title="Eliminar">
 												<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 										</li>
 										{/acl}
@@ -164,7 +164,7 @@
 						{/section}
 						<tfoot>
 							<tr>
-								<td colspan="10" align="center">{if !empty($pagination)}{$pagination} {/if}</td>
+								<td colspan="10" align="center">{$pagination|default:""}</td>
 							</tr>
 						</tfoot>
 					</table>
@@ -188,7 +188,6 @@
         </div>
 
     <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$video->id}" />
 </form>
 
 {/block}

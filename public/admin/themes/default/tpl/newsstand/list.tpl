@@ -94,7 +94,7 @@
                     <td align="center">
                         <ul class="action-buttons">
                             <li>
-                                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$portadas[as]->pk_kiosko}');" title="Modificar">
+                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$portadas[as]->pk_kiosko}" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
                             </li>

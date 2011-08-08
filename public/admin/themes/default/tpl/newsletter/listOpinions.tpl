@@ -24,7 +24,7 @@ document.observe('dom:loaded', function() {
             itemsSelected = postData.opinions;
         }
 
-        manager = new Newsletter.Manager('items-selected', {items: itemsSelected});
+        manager = new Newsletter.Manager('items-selected', { items: itemsSelected });
 
         searchEngine = new Newsletter.SearchEngine('items-list', {
             'items': itemsList,
