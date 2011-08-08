@@ -21,7 +21,7 @@
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-   <div id="{$category}">
+   <div id="{$category|default:""}">
 
         <table class="adminheading">
 			<tr>

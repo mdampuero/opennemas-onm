@@ -111,7 +111,7 @@
 					<div class='fisgona' id='fisgona' name='fisgona'></div>
 					{* Provisional - comentarios en encuestas en la solapa todos *}
 
-					{section name=c loop=$comments}
+					{section name=c loop=$comments|default:array()}
 					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 						<td >
 							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
@@ -154,16 +154,16 @@
 							<ul class="action-buttons">
 								<li>
 									{if $category eq 'todos' || $comments[c]->content_status eq 0}
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Publicar">
 												<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Rechazar">
 												<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
 									{elseif $comments[c]->content_status eq 2}
-										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Publicar">
+										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Publicar">
 											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
 										</a>
 									{else}
-										<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage}" title="Rechazar">
+										<a class="publishing" href="?id={$comments[c]->id}&amp;action=change_status&amp;status=2&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Rechazar">
 											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
 										</a>
 									{/if}
@@ -191,7 +191,7 @@
 				{if count($comments) > 0}
 				<tfoot>
 					<tr class="pagination" >
-						<td colspan="13" align="center">{$paginacion->links}</td>
+						<td colspan="13" align="center">{$paginacion->links|default:""}</td>
 					</tr>
 				</tfoot>
 				{/if}

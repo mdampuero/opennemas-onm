@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}</h2></div>
@@ -80,7 +80,7 @@
                         <td colspan="10">
                             {section name=c loop=$categorys}
                                 {if $categorys[c]->internal_category eq 1}
-                                    {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                                    {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]|default:array()}
                                 {/if}
                             {sectionelse}
                                 <h2><strong>{t}No available sections{/t}</strong></h2>
@@ -90,7 +90,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="10" align="center">{$paginacion->links}</td>
+                        <td colspan="10" align="center">{$paginacion->links|default:""}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -220,7 +220,7 @@
 
 
         <div class="panel" id="ordenar" style="width:95%">
-                    
+
             {include file="botonera_up.tpl" type="order"}
             <div id="warnings-validation"></div>
             <table class="adminheading">
@@ -240,10 +240,10 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td colspan="5">   
+                    <td colspan="5">
                         <div id="cates" class="seccion" style="float:left;width:100%;"> <br />
                             {section name=c loop=$ordercategorys}
-                          
+
                             {*NO album(3) , NO planConecta(9)*}
                                 {if $ordercategorys[c]->internal_category neq "4" && $ordercategorys[c]->pk_content_category neq "9" && $ordercategorys[c]->pk_content_category neq "3"}
                                     <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >

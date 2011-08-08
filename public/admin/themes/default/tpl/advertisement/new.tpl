@@ -43,7 +43,7 @@
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={$_REQUEST['desde']}&category={$_REQUEST['category']|default:0}&page={$_GET['page']|default:0}" value="Cancelar" title="Cancelar">
+				<a href="{$smarty.server.PHP_SELF}?action={$smarty.request.desde|default:""}&category={$_REQUEST['category']|default:0}&page={$_GET['page']|default:0}" value="Cancelar" title="Cancelar">
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
@@ -70,7 +70,7 @@
                     <td valign="top">
                         <input  type="text" id="title" name="title" title="Publicidad"
 								tabindex=1
-                                value="{$advertisement->title|clearslash|escape:"html"}"
+                                value="{$advertisement->title|clearslash|escape:"html"|default:""}"
                                 class="required"
                                 style="width:90%"
                                 onBlur="javascript:get_metadata(this.value);"/>
@@ -86,8 +86,8 @@
                                     <td>
                                         <select name="available" id="available"
                                             {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"} disabled="disabled" {/acl} >
-                                            <option value="1" {if $advertisement->available == 1}selected="selected"{/if}>Si</option>
-                                            <option value="0" {if $advertisement->available == 0}selected="selected"{/if}>No</option>
+                                            <option value="1" {if isset($advertisement->available) &&  $advertisement->available == 1}selected="selected"{/if}>Si</option>
+                                            <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -97,7 +97,7 @@
                                         <label for="overlap">{t}Hide Flash events:{/t}</label>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="overlap" id="overlap" value="1" {if $advertisement->overlap == 1}checked="checked"{/if} />
+                                        <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -106,21 +106,21 @@
                                     </td>
                                     <td align="left">
                                         <input type="radio" id="non" name="type_medida" value="NULL"
-                                            {if !isset($advertisement->type_medida) || $advertisement->type_medida == 'NULL'} checked="checked"{/if} onClick="permanencia(this);"/>
+                                            {if !isset($advertisement) || is_null($advertisement->type_medida)} checked="checked"{/if} onClick="permanencia(this);"/>
                                         <label>{t}Undefined{/t}</label>
                                         <br>
                                         <span id="div_permanencia" style="display:{if $advertisement->with_script==1}none{/if};">
                                             <input type="radio" id="clic" name="type_medida" value="CLIC"
-                                                {if $advertisement->type_medida == 'CLIC'}checked="checked"{/if} onClick="permanencia(this);"/>
+												{if isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}checked="checked"{/if} onClick="permanencia(this);"/>
                                             <label>Nº Clicks</label>
                                             <br>
                                             <input id="view" type="radio" name="type_medida" value="VIEW"
-                                                {if $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" />
+												{if isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" />
                                             <label>Nº Visitas</label>
                                         </span>
                                         <br>
                                         <input type="radio" id="fecha" name="type_medida" value="DATE"
-                                            {if $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
+											{if isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
                                         <label>Por Fechas</label>
                                     </td>
                                 </tr>
@@ -237,7 +237,7 @@
 					</td>
 					<td>
 						<textarea id="metadata" name="metadata" style="width:90%" tabindex=2
-						   title="Metadatos" value="">{$advertisement->metadata|strip}</textarea>
+						   title="Metadatos" value="">{$advertisement->metadata|strip|default:""}</textarea>
 					</td>
 				</tr>
 
@@ -526,9 +526,9 @@
             }
         </script>
 
-        <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement}" />
-        <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available}" />
-        <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type}" />
+        <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
+        <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
+        <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
     {/if}
 
         <input type="hidden" id="action" name="action" value="" />

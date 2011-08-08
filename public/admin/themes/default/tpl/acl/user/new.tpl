@@ -143,11 +143,6 @@ function showGroupUsers(elto) {
 
 
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <td>{t}Editing user information{/t}</td>
-            </tr>
-        </table>
         <table class="adminform"  width="100%">
             <tr>
                 <td valign="top">
@@ -161,6 +156,12 @@ function showGroupUsers(elto) {
                                 <td>
                                     <input type="text" id="login" name="login" title="Login del usuario"
                                         value="{$user->login}" class="required"  size="14" maxlength="20" />
+                                </td>
+                                <td rowspan="12">
+                                    <div class="help-block margin-left-1">
+                                        <div class="title"><h4>Complete user information</h4></div>
+                                        <div class="content">{t escape=off}Please complete the user information by filling the aside form.{/t}</div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr valign="top">

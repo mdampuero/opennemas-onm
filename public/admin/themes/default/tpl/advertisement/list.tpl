@@ -33,7 +33,7 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs} >
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -60,7 +60,7 @@
                 </li>
 
                 <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$_REQUEST['category']}&page={$_GET['page']}"
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page}"
                        class="admin_add" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
                     </a>
@@ -86,17 +86,32 @@
                     <th nowrap="nowrap" align="right">
                         <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
                         <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.type_advertisement selected=$smarty.request.filter.type_advertisement}
+                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
+                                {assign var=filterType value=""}
+                            {else}
+                                {assign var=filterType value=$smarty.request.filter.type_advertisement|default:""}
+                            {/if}
+                            {html_options options=$filter_options.type_advertisement selected=$filterType}
                         </select>
                         &nbsp;&nbsp;&nbsp;
                         <label>{t}Status:{/t}</label>
                         <select name="filter[available]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.available selected=$smarty.request.filter.available}
+                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
+                                {assign var=filterAvailable value=""}
+                            {else}
+                                {assign var=filterAvailable value=$smarty.request.filter.available|default:""}
+                            {/if}
+                            {html_options options=$filter_options.available selected=$filterAvailable}
                         </select>
                          &nbsp;&nbsp;&nbsp;
                         <label>{t}Type:{/t}</label>
                         <select name="filter[type]" onchange="submitFilters(this.form);">
-                            {html_options options=$filter_options.type selected=$smarty.request.filter.type}
+                            {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
+                                {assign var=filterType value=""}
+                            {else}
+                                {assign var=filterType value=$smarty.request.filter.type|default:""}
+                            {/if}
+                            {html_options options=$filter_options.type selected=$filterType}
                         </select>
                         <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
                     </th>
@@ -117,7 +132,7 @@
                 </thead>
 
                 <tbody>
-                    {section name=c loop=$advertisements}
+                    {section name=c loop=$advertisements|default:""}
                     <tr {cycle values="class=row0,class=row1"}>
                         <td style="text-align:center;">
                             <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"

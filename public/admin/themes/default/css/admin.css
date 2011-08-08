@@ -1254,7 +1254,7 @@ ul#menu ul > li > a {
 	display:block;
 }
 ul#menu > li:hover {
-	border-top:1px solid White !important;
+	border-top:2px solid White !important;
 }
 	ul#menu > li:hover > a {
 		padding-top:10px;

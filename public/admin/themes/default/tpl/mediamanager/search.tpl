@@ -1,7 +1,22 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+<script type="text/javascript">
+function toggleAdvanced() {
+    var results = $$('tr.advanced');
+    results.each(function(elem){
+        elem.toggleClassName('nodisplay');
+    });
+}
+</script>
+{/block}
+
 {block name="header-css" append}
 <style type="text/css">
+.nodisplay {
+    display:none;
+}
+
 table th, table label {
     color: #888;
     text-shadow: white 0 1px 0;
@@ -45,7 +60,6 @@ legend {
 }
 input[type="text"],
 textarea{
-    width:400px;
     max-height:80%
 }
 </style>
@@ -151,6 +165,11 @@ textarea{
                 {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
             </ul>
 
+            <table class="adminheading">
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
             <table class="adminform" >
                 <tbody >
                     <tr>
@@ -175,7 +194,12 @@ textarea{
                             </select>
                          </td>
                     </tr>
-                     <tr>
+
+                    <tr>
+                        <th></th>
+                        <td><a href="javascript:toggleAdvanced();" id="show-advanced">{t escape=off}Show advanced search &darr;{/t}</a></td>
+                    </tr>
+                    <tr class="advanced nodisplay">
                         <th align='right'> <strong>{t}Size:{/t}</strong> </td>
                         <td align='left'>
 
@@ -193,11 +217,7 @@ textarea{
 
                         </td>
                     </tr>
-                    <tr>
-                        <th align='right'></td>
-                        <td align='left'></td>
-                    </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <th align='right'> <strong>{t}File size:{/t}</strong> </td>
                         <td align='left'>
 
@@ -205,14 +225,14 @@ textarea{
                             <input type="text" id="pesoMax" name="pesoMax" size="18" />  Kb
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <td align='right'></td>
                         <td align='left'>
                             <label for="pesoMin">{t}Min:{/t}</label>
                             <input type="text" id="pesoMin" name="pesoMin" size="18" />  Kb
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <th align='right'> <strong>{t}Type:{/t}</strong></td>
                         <td align='left'>
                             <select name="tipo" id="tipo" />
@@ -226,7 +246,7 @@ textarea{
                             </select>
                          </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <th align='right'> <strong>{t}Color:{/t}</strong></td>
                         <td align='left'>
                             <select name="color" id="color" />
@@ -236,14 +256,14 @@ textarea{
                             </select>
                          </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <th align='right'> <strong>{t}Author:{/t}</strong></td>
                         <td align='left'>
                             <input type="text" id="author" name="author"
                             value='{$photo1->author_name|clearslash|escape:'html'}' size="15"  title="Autor" />
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <th align='right' style="vertical-align:top;"><strong>Periodo:</strong></td>
                         <td align='left'>
                             {t}From:{/t}<input type="text" size="18" id="starttime" name="starttime"
@@ -253,11 +273,12 @@ textarea{
                             value=""  title="Fecha" />
                          </td>
                     </tr>
-                    <tr>
+                    <tr class="advanced nodisplay">
                         <td colspan='2' align='center' style="padding:20px 0;">
                             <input type="hidden" name="acti"  id="acti" value="searchResult" />
                         </td>
                     </tr>
+                    </div>
                 </tbody>
             </table>
             <div class="action-bar clearfix">
