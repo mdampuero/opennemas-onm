@@ -45,7 +45,7 @@ function enviar(frm, trg, acc, id) {
 
 function validateForm(formID)
 {
-    var checkForm = new Validation(formID, {immediate:true, onSubmit:true});
+    var checkForm = new Validation(formID, { immediate:true, onSubmit:true });
     if(!checkForm.validate()) {
         if($$('.validation-advice')) {
             if($('warnings-validation')) {
