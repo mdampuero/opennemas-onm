@@ -10,17 +10,17 @@ function smarty_function_renderarticlecondition($params, &$smarty) {
     $odd_editors    =$params['odd_editors'];
     $odd_publishers =$params['odd_publishers'];
 
-    $category_name = $smarty->get_template_vars('category');
+    $category_name = $smarty->getTemplateVars('category');
     $property = ($category_name=='home')? 'home_placeholder': 'placeholder';
     $varname = (!isset($params['varname']))? 'item': $params['varname'];
     $filter  = '$__condition__ = '.$params['condition'].';';
     $condition =$params['condition'];
 
-    foreach($items as $i => $item) {      
+    foreach($items as $i => $item) {
         if($condition){
             eval($filter);
         }
-        if(!$condition OR $__condition__){                     
+        if(!$condition OR $__condition__){
             $smarty->clear_assign($varname);
             $smarty->assign($varname, $items[$i]);
             $smarty->assign(odd_rating, $odd_rating[$i]);
@@ -32,7 +32,7 @@ function smarty_function_renderarticlecondition($params, &$smarty) {
             $output .= $smarty->fetch( $tpl);
         }
     }
-    
-  
+
+
     return( $output );
 }

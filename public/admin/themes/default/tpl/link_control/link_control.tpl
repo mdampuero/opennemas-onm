@@ -26,7 +26,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario">
 
 	{block name="admin_menu"}{/block}
 	<div class="wrapper-content">
@@ -42,7 +42,6 @@
 			{section name=as loop=$allcategorys}
 			<li>
 				{assign var=ca value=$allcategorys[as]->pk_content_category}
-				<a href="link_control.php?listmode={$listmode}&category={$ca}" {if $category==$ca} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if} {/if} >{$allcategorys[as]->title}</a>
 			</li>
 			{/section}
 			<li>

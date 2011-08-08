@@ -5,7 +5,7 @@
 		<div class="title"><h2>{t}Article manager :: Creating new article{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
+				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
 				<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 				</a>
 			</li>
@@ -21,7 +21,7 @@
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={if isset($smarty.session.desde)}{$smarty.session.desde}{else}list_pendientes{/if}&category={$_REQUEST['category']}&page={$_GET['page']}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+				<a href="{$smarty.server.PHP_SELF}?action={if isset($smarty.session.desde)}{$smarty.session.desde|default:""}{else}list_pendientes{/if}&category={$smarty.request.category|default:"todas"}&page={$smarty.get.page|default:0}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
@@ -37,19 +37,19 @@
 		<ul class="old-button">
 			{if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
+                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
                     <img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
                 </a>
             </li>
             {/if}
 
 		    <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
+                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
 		    </li>
             <li>
-                <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id}', 'formulario');" id="button_save">
+                <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
@@ -74,7 +74,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 					</a>
                 {else}
-                    <a href="#" class="admin_add" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                    <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&category={$smarty.request.category|default:""}&page={$smarty.get.page|default:""}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 					</a>
                 {/if}

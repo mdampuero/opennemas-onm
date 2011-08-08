@@ -14,7 +14,7 @@
                 </li>
                 <li>
                 {if isset($user_group->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user_group->id}, 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$user_group->id|default:""}, 'formulario');">
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0,'formulario');">
                 {/if}
@@ -23,7 +23,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smaty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                    <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>

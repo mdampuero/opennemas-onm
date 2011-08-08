@@ -17,7 +17,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{$titulo_barra}</h2></div>
+        <div class="title"><h2>{t}Category manager{/t} :: {t}Listing categories{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
@@ -90,7 +90,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="10" align="center">{$paginacion->links|default:""}</td>
+                        <td colspan="10" align="center">{$paginaion->links|default:""}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -131,7 +131,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="10" align="center">{$paginacion->links}</td>
+                        <td colspan="10" align="center">{$paginacion->links|default:""}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -171,7 +171,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="5" align="center">{$paginacion->links}</td>
+                        <td colspan="5" align="center">{$paginacion->links|default:""}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -212,7 +212,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="5" align="center">{$paginacion->links}</td>
+                        <td colspan="5" align="center">{$paginacion->links|default:""}</td>
                     </tr>
                 </tfoot>
             </table>

@@ -22,18 +22,18 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
-        <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+        <form action="#" method="post" name="formulario" id="formulario">
 
 		<div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category}', 'formulario');" value="Validar" title="Validar">
+				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category|default:""}', 'formulario');" value="Validar" title="Validar">
 					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
 				</a>
 			</li>
 			<li>
 			{if isset($category->pk_content_category)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category}, 'formulario');">
+			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category|default:""}, 'formulario');">
 			{else}
 			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
 			{/if}
@@ -62,25 +62,25 @@
                 </tr>
             </tbody>
         </table>
-        <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
+        <table class="adminform" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
             <tbody>
                 <tr>
                     <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
                         <label for="title">{t}Title{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap"  colspan="2">
-                        <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash}"
+                        <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
                             class="required" size="100" />
                     </td>
                 </tr>
-                {if !empty($category->name)}
+                {if isset($category) && !empty($category->name)}
                     <tr>
                         <td valign="middle"  style="padding:4px;text-align:right; width:100px;">
                                 <label for="title">{t}Internal name:{/t}</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap"   colspan="2">
                             <input type="text" id="name" name="name" title="carpeta categoria" readonly
-                                        value="{$category->name|clearslash}" class="required" size="100" />
+                                        value="{$category->name|clearslash|default:""}" class="required" size="100" />
                         </td>
                     </tr>
                 {/if}
@@ -90,9 +90,9 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" >
                         <select name="subcategory" class="required" size="12">
-                            <option value="0" {if empty($category->fk_content_category) || $category->fk_content_category eq '0'}selected{/if}> -- </option>
+                            <option value="0" {if isset($category) && (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
                             {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}" {if $category->fk_content_category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
                             {/section}
                         </select>
                     </td>
@@ -105,24 +105,24 @@
                                     <td  style="padding:4px;"> Global:</td>
                                     <td>
                                         <input type="radio" id="internal_category" name="internal_category"  value="1"
-                                        {if empty($category->fk_content_category) || $category->internal_category eq 1} checked="checked"{/if}>
+                                        {if isset($category) && (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>
                                     </td>
                                     <td  style="padding:4px;"> </td>
                                     <td  style="padding:4px;"> Álbumes:</td>
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="7"
-                                        {if $category->internal_category eq 7} checked="checked"{/if}>
+                                        {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>
                                     </td>
 
                                 </tr>
                                  <tr>
                                     <td  style="padding:4px;"> Vídeos:</td>
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="9"
-                                        {if $category->internal_category eq 9} checked="checked"{/if}>
+                                        {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>
                                     </td>
                                    <td  style="padding:4px;"> </td>
                                     <td style="padding:4px;" > Kiosco: </td>
                                     <td> <input type="radio" id="internal_category" name="internal_category"  value="14"
-                                        {if $category->internal_category eq 14} checked="checked"{/if}>
+                                        {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>
                                     </td>
                                 </tr>
                             </table>
@@ -168,7 +168,7 @@
                             <label>{t}Subsections:{/t}</label>
                         </td>
                         <td nowrap="nowrap" colspan="2">
-                            <table border="0" class="adminlist" id="cates" style="margin:0 10px 10px 0; width:90%">
+                            <table class="adminlist" id="cates">
                                 <thead>
                                     <tr>
 
@@ -176,15 +176,14 @@
                                         <th style="width:120px;text-align:left;" >{t}Internal name:{/t}</th>
                                         <th  style="width:80px;">{t}Type:{/t}</th>
                                         <th align="center"  style="width:80px;">{t}In menu:{/t}</th>
-                                        <th align="center" style="width:80px;">{t}Edit{/t}</th>
-                                        <th align="center" style="width:80px">{t}Delete{/t}</th>
+                                        <th align="center" style="width:80px;">{t}Actions{/t}</th>
                                     </tr>
                                 </thead>
                                 <tr>
                                     <td colspan="6">
                                         <div id="subcates" class="seccion" style="float:left;width:100%;">
                                             {section name=s loop=$subcategorys}
-                                                <table width="100%" class="tabla" style="padding:0px;cursor:pointer;" id="{$subcategorys[s]->pk_content_category}">
+                                                <table style="width:100%" id="{$subcategorys[s]->pk_content_category}">
                                                     <tr>
                                                         <td style="font-size: 11px;text-align:left;">
                                                              {$subcategorys[s]->title}
@@ -205,14 +204,20 @@
                                                             {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
                                                         </td>
                                                         <td style="font-size: 11px;width:80px;" align="center">
-                                                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
-                                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                                            </a>
-                                                        </td>
-                                                        <td style="font-size: 11px;width:80px;" align="center">
-                                                            <a href="#" onClick="javascript:confirmar(this, {$subcategorys[s]->pk_content_category});" title="Eliminar">
-                                                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                                            </a>
+															<ul class="action-buttons">
+																<li>
+																	<a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
+																		<img src="{$params.IMAGE_DIR}edit.png" border="0" />
+																	</a>
+																</li>
+																<li>
+																	<a href="#" onClick="javascript:confirmar(this, {$subcategorys[s]->pk_content_category});" title="Eliminar">
+																		<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+																	</a>
+																</li>
+															</ul>
+
+
                                                         </td>
                                                     </tr>
                                                 </table>

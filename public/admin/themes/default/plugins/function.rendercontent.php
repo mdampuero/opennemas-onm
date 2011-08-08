@@ -11,7 +11,7 @@ function smarty_function_rendercontent($params, &$smarty) {
     $odd_editors    =   $params['odd_editors'];
     $odd_publishers =   $params['odd_publishers'];
 
-    $category_name  =   $smarty->get_template_vars('category');
+    $category_name  =   $smarty->getTemplateVars('category');
     $property       =   ($category_name=='home')? 'home_placeholder': 'placeholder';
     $varname        =   (!isset($params['varname']))? 'item': $params['varname'];
 

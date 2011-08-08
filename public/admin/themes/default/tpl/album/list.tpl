@@ -11,7 +11,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2></div>
@@ -114,10 +114,10 @@
                     <td align="center">
                         {acl isAllowed="ALBUM_AVAILABLE"}
                             {if $albums[as]->available == 1}
-                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title={t}"Published"{/t}>
+                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
                                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
                             {else}
-                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title={t}"Pending{/t}>
+                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
                                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
                             {/if}
                         {/acl}
@@ -126,9 +126,9 @@
                     <td align="center">
                         {acl isAllowed="ALBUM_FAVORITE"}
                             {if $albums[as]->favorite == 1}
-                               <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
+                               <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
                             {else}
-                                <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
+                                <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
                             {/if}
                         {/acl}
                     </td>
@@ -140,7 +140,7 @@
                     </td>
                     <td align="center">
                         {acl isAllowed="ALBUM_DELETE"}
-                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage}');" title={t}Delete{/t}>
+                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                         {/acl}
                     </td>
@@ -152,7 +152,7 @@
                 </tr>
             {/section}
                 <tfoot>
-                  <td colspan="9"> {if !empty($pagination)} {$paginacion->links} {/if}</td>
+                  <td colspan="9"> {if !empty($pagination)} {$paginacion->links|default:""} {/if}</td>
                 </tfoot>
             </table>
         </div>

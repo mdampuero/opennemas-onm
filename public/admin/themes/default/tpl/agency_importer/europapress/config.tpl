@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
+   <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario">
         <br>
 
         {if $message}
@@ -51,7 +51,7 @@
         </div>
         {/if}
 
-        <div id="{$category}">
+        <div>
 
              <table class="adminheading">
                  <tr>

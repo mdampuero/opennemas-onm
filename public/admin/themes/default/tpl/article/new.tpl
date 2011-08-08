@@ -115,7 +115,7 @@ if($('starttime')) {
 								</td>
 								<td style="text-align:left;vertical-align:top">
 									<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="8">
-										<option value="20" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unknown{/t}</option>
+										<option value="20" {if !isset($category)}selected{/if} name="{t}Unknown{/t}" >{t}Unknown{/t}</option>
 										{section name=as loop=$allcategorys}
 										{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
 										<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
@@ -295,7 +295,7 @@ if($('starttime')) {
 								value="{$article->agency|clearslash|escape:"html"}"
 								onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
 							{else}
-								value="{setting site_agency}"
+								value="{setting name=site_agency}"
 							{/if}
 						/>
 				</td>

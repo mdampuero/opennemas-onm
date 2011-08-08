@@ -25,7 +25,7 @@
                                 <tr>
                                     <td align='center'>
                                         <div id="droppable_div1">
-                                            {if $photo1->name}
+                                            {if isset($photo1) && $photo1->name}
                                                 {if strtolower($photo1->type_img)=='swf'}
                                                     <object id="change1"  name="{$article->img1}" >
                                                         <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}"></param>
@@ -80,7 +80,7 @@
                                 <tr>
                                     <td align='center'>
                                         <div id="droppable_div2">
-                                            {if $photo2->name}
+                                            {if isset($photo1) && $photo2->name}
                                                 {if strtolower($photo2->type_img)=='swf'}
                                                     <object id="change2"  name="{$article->img1}" >
                                                         <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo2->path_file}{$photo2->name}"></param>
@@ -274,7 +274,7 @@
                                 <tr>
                                     <td align='center'>
                                         <div id="droppable_div3">
-                                            {if $video2->videoid}
+                                            {if isset($video2) && $video2->videoid}
                                                 <img src="http://i4.ytimg.com/vi/{$video2->videoid}/default.jpg"  id="change3" name="{$article->fk_video2}" border="0" width="120px" />
                                             {else}
                                                 <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change3" name="default_img" border="0" width="300px" />

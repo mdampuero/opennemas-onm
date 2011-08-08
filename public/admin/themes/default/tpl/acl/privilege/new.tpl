@@ -85,7 +85,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 			<ul class="old-button">
 				<li>
                 {if isset($privilege->id)}
-                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$privilege->id}', 'formulario');">
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$privilege->id|default:""}', 'formulario');">
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
@@ -125,7 +125,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 					</td>
 					<td style="padding:4px;" nowrap="nowrap" width="70%">
 						<input type="text" id="module" name="module" title="Módulo" size="20" maxlength="40"
-							value="{$privilege->module}" class="required" />
+							value="{$privilege->module|default:""}" class="required" />
 					</td>
 				</tr>
 
@@ -135,7 +135,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 						<label for="description">{t}Name:{/t}</label>
 					</td>
 					<td style="padding:4px;" nowrap="nowrap" width="70%">
-						<input type="text" id="name" name="name" title="Nombre" value="{$privilege->name}" class="required" />
+						<input type="text" id="name" name="name" title="Nombre" value="{$privilege->name|default:""}" class="required" />
 						<sub>{t}(recomendation: MODULE_ACTION){/t}</sub>
 					</td>
 				</tr>
@@ -147,7 +147,7 @@ new PrivilegeHelper('module', 'name', { modules: {json_encode value=$modules} })
 					</td>
 					<td style="padding:4px;" nowrap="nowrap" width="70%">
 						<input type="text" id="description" name="description" title="Descripci&oacute;n" size="80" maxlength="100"
-							value="{$privilege->description}" class="required" />
+							value="{$privilege->description|default:""}" class="required" />
 					</td>
 				</tr>
 				</tbody>
