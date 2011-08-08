@@ -13,7 +13,8 @@ function smarty_function_include_google_analytics_code($params, &$smarty) {
 
     // Only return anything if the Ganalytics is setted in the configuration
     if (is_array($gAnalyticsConfigs)
-        && array_key_exists('api_key', $gAnalyticsConfigs) )
+        && array_key_exists('api_key', $gAnalyticsConfigs)
+        && !empty($gAnalyticsConfigs['api_key']  ))
     {
         $output = "<script type=\"text/javascript\">
             var _gaq = _gaq || [];
