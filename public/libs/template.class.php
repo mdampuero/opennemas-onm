@@ -27,6 +27,8 @@ class Template extends Smarty
         // Call the parent constructor
         parent::__construct();
 
+        $this->error_reporting = E_ALL & ~E_NOTICE;
+
         /**
          * Add global plugins path
          */
