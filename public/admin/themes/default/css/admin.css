@@ -1696,36 +1696,38 @@ div.action-bar .right{
 			
 		#media-browser .photo-data {
 			background:#4787ED;
-			background-image: linear-gradient(top,#005991,#4787ED);
+			background: #005991; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #005991,  #4787ED); /* for firefox 3.6+ */
 			padding-left:160px;
 			position:absolute;
 			top:0;
 			left:0;
 			z-index:10;
 			display:none;
+			box-shadow: 0 0 10px rgba(20, 20, 20, 0.8);
+			border-radius:3px;
 		}
 			#media-browser .photo-data ul {
 				min-width:175px;
 				margin:0;
 				padding:0;
+				padding-right:10px;
 				margin-right:10px;
 				margin-top:5px;
 			}
 				#media-browser .photo-data ul li {
 					list-style:none;
-					color:white;	
+					color:white;
+					margin-bottom:3px;
 				}
-					#media-browser .photo-data .delete-button {
-						text-align:right;
-						display:block;
-						margin:5px;
-						color:White;
-						font-weight:bold;
-						vertical-align:middle
+					#media-browser .photo-data img {
+						vertical-align:middle;
 					}
 			
 			#media-browser .photo-data .actions {
-				margin:8px 0;
+				margin:8px;
 				text-align:right;
 			}
 			#media-browser .photo-data .actions img{
@@ -1739,6 +1741,10 @@ div.action-bar .right{
 				color:White;
 				font-weight:bold;
 				display:inline;
+			}
+			#media-browser .photo-data .actions a:hover {
+				text-shadow:0 0 3px Black;
+				text-decoration:none;
 			}
 		#media-browser .photo-hovered {
 			z-index:999;

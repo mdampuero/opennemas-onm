@@ -53,12 +53,15 @@
             <div class="photo-data">
                 
                 <ul>
-                    <li><strong>Descripción:</strong> {$photo[n]->description_utf|clearslash|escape:'html'|default:""}</li>
-                    <li><strong>Metadatos:</strong> {$photo[n]->metadata_utf|clearslash|escape:'html'|default:""}</li>
-                    <li><strong>Autor:</strong> {$photo[n]->author_name|clearslash|escape:'html'|default:""}</li>
-                    <li><strong>Tipo:</strong> {$photo[n]->type_img|default:""}<br></li>
-                    <li><strong>Creado:</strong> {$photo[n]->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}<br></li>
-                    <li><strong>Tamaño:</strong> {$photo[n]->size}KB ({$photo[n]->width}x{$photo[n]->height})</li>
+                    <li><h3>{if !empty($photo[n]->description)}{$photo[n]->description_utf|clearslash|escape:'html'} {else} {t}No available description{/t} {/if}</h3></li>
+                    <li><img src="{$params.IMAGE_DIR}icons/tag_red.png" /> {$photo[n]->metadata_utf|clearslash|escape:'html'|default:""}</li>
+                    {if !empty($photo[n]->author_name)}
+                        <li><strong>{t}Author:{/t}</strong> {$photo[n]->author_name|clearslash|escape:'html'|default:""}</li>
+                    {/if}
+                    <li><strong>{t}Type:{/t}</strong> {$photo[n]->type_img|default:""}<br></li>
+                    <li><strong>{t}Created:{/t}</strong> {$photo[n]->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}<br></li>
+                    <li><strong>{t}Image size:{/t}</strong> {$photo[n]->width}x{$photo[n]->height}</li>
+                    <li><strong>{t}File size:{/t}</strong> {$photo[n]->size}KB</li>
                 </ul>
                 
                 
