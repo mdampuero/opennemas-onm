@@ -102,11 +102,11 @@ positions_interior[150] = '0,0,240,550';
 //var options = {'positions': positions_interior, 'radios': $('ads_type_interior').select('input[name=type_advertisement]') };
 //adPositionInterior = new AdPosition('advertisement-mosaic-interior', options );
 document.observe('dom:loaded', function() {
-    
-    {if !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100)} {* && $category != '4' *}
+
+    {if isset($advertisement) && !empty($advertisement->type_advertisement) && ($advertisement->type_advertisement gt 100)} {* && $category != '4' *}
   //  adPositionInterior.selectPosition({$advertisement->type_advertisement});
     {/if}
-    
+
 });
 /* ]]> */
 </script>

@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-js" append}
+{block name="footer-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
@@ -8,6 +8,36 @@
     {if $smarty.request.action == 'list_pendientes' || $smarty.request.action == 'list_agency'}
         <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
     {/if}
+
+    <script type="text/javascript" language="javascript">
+    document.observe('dom:loaded', function() {
+        if($('title')){
+            new OpenNeMas.Maxlength($('title'), {});
+            $('title').focus(); // Set focus first element
+        }
+        getGalleryImages('listByCategory','{$category}','','1');
+        getGalleryVideos('listByCategory','{$category}','','1');
+    });
+
+    if($('starttime')) {
+        new Control.DatePicker($('starttime'), {
+            icon: './themes/default/images/template_manager/update16x16.png',
+            locale: 'es_ES',
+            timePicker: true,
+            timePickerAdjacent: true,
+            dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        new Control.DatePicker($('endtime'), {
+            icon: './themes/default/images/template_manager/update16x16.png',
+            locale: 'es_ES',
+            timePicker: true,
+            timePickerAdjacent: true,
+            dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+        });
+    }
+    </script>
+
 {/block}
 
 {block name="content"}
@@ -51,7 +81,7 @@
             </li>
         </ul>
     </div>
-</div>
+</div>-
 
 <div class="wrapper-content">
         <div id="content-wrapper">
@@ -83,9 +113,9 @@
     </ul>
 
     {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
-        <script type="text/javascript" language="javascript">
-            alert('{$smarty.get.msg}');
-        </script>
+        <div class="notice">
+            {$smarty.get.msg}
+        </div>
     {/if}
 
     <div id="{$category}">
@@ -95,17 +125,17 @@
                 <td align='right'>{t}Go to section:{/t}
                     <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
                         {if $category eq "todos"}
-                           <option value="todos" selected="selected" name="{$allcategorys[as]->title}" >{t}All{/t}</option>
+                           <option value="todos" selected="selected" name="{$allcategorys[as]->title|default:""}" >{t}All{/t}</option>
                         {else}
                            <option value="" selected="selected">{t}Category list{/t}</option>
-                           <option value="todos" name="{$allcategorys[as]->title}" >{t}All{/t}</option>
+                           <option value="todos" name="{$allcategorys[as]->title|default:""}" >{t}All{/t}</option>
                         {/if}
-                        <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unasigned{/t}</option>
-                        <option value="opinion" {if $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >{t}Opinion{/t}</option>
+                        <option value="20" {if isset($category) && $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unasigned{/t}</option>
+                        <option value="opinion" {if isset($category) && $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >{t}Opinion{/t}</option>
                         {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if $article->category eq $allcategorys[as]->pk_content_category}selected="selected"{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
+                            <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && $article->category eq $allcategorys[as]->pk_content_category}selected="selected"{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
-                                <option value="{$subcat[as][su]->pk_content_category}" {if $article->category  eq $subcat[as][su]->pk_content_category} selected="selected"{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                <option value="{$subcat[as][su]->pk_content_category}" {if isset($category) && $article->category  eq $subcat[as][su]->pk_content_category} selected="selected"{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                             {/section}
                         {/section}
                     </select>
@@ -127,7 +157,7 @@
                 <th align="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
             <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
-            {if $articles}
+            {if isset($articles)}
             {section name=c loop=$articles}
                 <tr {cycle values="class=row1,class=row0"} />
                     <td>
@@ -178,7 +208,7 @@
                         <ul class="action-buttons">
                             {if $category!=20 && $articles[c]->category !=20}
                             <li>
-                                <a href="?id={$articles[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
+                                <a href="?id={$articles[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
                                     <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
                                 </a>
                             </li>
@@ -194,15 +224,19 @@
                         </ul>
                     </td>
                 </tr>
+            {sectionelse}
+                <tr>
+                    <td align="center" colspan="10" style="height:180px;" >{t}No pending articles to publish.{/t}</td>
+                </tr>
             {/section}
         {else}
             {if $category neq 'opinion'}
                 <tr>
-                    <td align="center" colspan="10" style="height:180px;" >Ninguna noticia pendiente de publicar.</td>
+                    <<td align="center" colspan="10" style="height:180px;" >{t}No pending opinion to publish.{/t}</td>
                 </tr>
             {else}
                 <tr>
-                    <td align="center" colspan="10" style="height:180px;" >No hai ningún artículo pendiente de publicar.</td>
+                    <td align="center" colspan="10" style="height:180px;" >{t}No pending article to publish.{/t}</td>
                 </tr>
             {/if}
         {/if}
@@ -314,34 +348,6 @@
 
     </div>
 
-            <script type="text/javascript" language="javascript">
-            document.observe('dom:loaded', function() {
-                if($('title')){
-                    new OpenNeMas.Maxlength($('title'), {});
-                    $('title').focus(); // Set focus first element
-                }
-                getGalleryImages('listByCategory','{$category}','','1');
-                getGalleryVideos('listByCategory','{$category}','','1');
-            });
-
-            if($('starttime')) {
-                new Control.DatePicker($('starttime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-
-                new Control.DatePicker($('endtime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-            }
-            </script>
 
 
             <input type="hidden" id="action" name="action" value="" />

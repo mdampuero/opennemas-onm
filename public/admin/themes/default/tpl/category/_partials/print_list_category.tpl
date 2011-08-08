@@ -60,7 +60,7 @@
             </ul>
         </td>
     </tr>
-    {if !empty($subcategorys)}
+    {if count($subcategorys) >0}
     <tr>
         {section name=su loop=$subcategorys|default:array()}
             <tr {cycle values="class=row0,class=row1"}>

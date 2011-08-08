@@ -4,7 +4,7 @@
         <td align="right" colspan="2">
             <label>
                 Banner Intersticial - Opinion Frontpage (800X600)
-                <input type="radio" name="type_advertisement" value="50" {if $advertisement->type_advertisement == 50}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="50" {if isset($advertisement) && $advertisement->type_advertisement == 50}checked="checked" {/if}/>
             </label>
         </td>
         <td rowspan="7" align="right" width="340">
@@ -18,13 +18,13 @@
         <td align="right">
             <label>
                 Big Banner Top (728X90)
-                <input type="radio" name="type_advertisement" value="1" {if $advertisement->type_advertisement == 1}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="1" {if isset($advertisement) && $advertisement->type_advertisement == 1}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
                 Banner Top  Right (234X90)
-                <input type="radio" name="type_advertisement" value="2" {if $advertisement->type_advertisement == 2}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="2" {if isset($advertisement) && $advertisement->type_advertisement == 2}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -33,7 +33,7 @@
         <td align="right">
             <label>
                 Banner Column Right (300X*)
-                <input type="radio" name="type_advertisement" value="3" {if $advertisement->type_advertisement == 3}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="3" {if isset($advertisement) && $advertisement->type_advertisement == 3}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -42,13 +42,13 @@
         <td align="right">
             <label>
                 Big Banner Bottom (728X90)
-                <input type="radio" name="type_advertisement" value="9" {if $advertisement->type_advertisement == 9}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="9" {if isset($advertisement) && $advertisement->type_advertisement == 9}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
                 Banner Bottom Right (234X90)
-                <input type="radio" name="type_advertisement" value="10" {if $advertisement->type_advertisement == 10}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="10" {if isset($advertisement) && $advertisement->type_advertisement == 10}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -71,11 +71,11 @@ positions_opinion[50] = '0,0,240,327';
 var options = {'positions': positions_opinion, 'radios': $('ads_type_opinion').select('input[name=type_advertisement]') };
 //adPositionOpinion = new AdPosition('advertisement-mosaic-opinion', options );
 document.observe('dom:loaded', function() {
-    
-    {if !empty($advertisement->type_advertisement) && $category == '4'}
+
+    {if isset($advertisement) && !empty($advertisement->type_advertisement) && $category == '4'}
   //  adPositionOpinion.selectPosition({$advertisement->type_advertisement});
     {/if}
-    
+
 });
 /* ]]> */
 </script>

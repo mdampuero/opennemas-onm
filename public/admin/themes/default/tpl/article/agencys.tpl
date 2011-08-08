@@ -3,7 +3,7 @@
 {if !isset($smarty.post.action) || $smarty.post.action eq "list_agencys"}
     <ul class="tabs2" style="margin-bottom: 28px;">
         <li>
-            <a href="article.php?action=list_agency&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
+            <a href="article.php?action=list_agency&category=ALL" id="link_ALL"  {if $category=='ALL'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}ALL{/t}</font></a>
         </li>
         {acl hasCategoryAccess=20}
         <li>
@@ -12,7 +12,7 @@
         {/acl}
          <script type="text/javascript">
                 // <![CDATA[
-                          Event.observe($('link_todos'), 'mouseover', function(event) {
+                          Event.observe($('link_ALL'), 'mouseover', function(event) {
                              $('menu_subcats').setOpacity(0);
                              e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 
@@ -41,14 +41,14 @@
                 <td><strong>Noticias {* y Opiniones *} de Agencias</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
                 <td align='right'>Ir a secci&oacute;n:
                     <select name="category" id="category" class="" onChange="javascript:location.href='article.php?action=list_pendientes&category='+this.options[this.selectedIndex].value;">
-                        {if $category eq "todos"}
-                           <option value="todos" selected="selected" name="{$allcategorys[as]->title}" >TODOS</option>
+                        {if $category eq "ALL"}
+                           <option value="ALL" selected="selected" name="{$allcategorys[as]->title}" >{t}ALL{/t}</option>
                         {else}
                            <option value="" selected="selected">Lista de Categorias</option>
-                           <option value="todos" name="{$allcategorys[as]->title}" >TODOS</option>
+                           <option value="ALL" name="{$allcategorys[as]->title}" >{t}ALL{/t}</option>
                         {/if}
-                        <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >UNKNOWN</option>
-                        <option value="opinion" {if $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >OPINION</option>
+                        <option value="20" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t}Unasigned{/t}</option>
+                        <option value="opinion" {if $category eq 'opinion'}selected{/if} name="{$allcategorys[as]->title}" >{t}Opinion{/t}</option>
                         {section name=as loop=$allcategorys}
                             <option value="{$allcategorys[as]->pk_content_category}" {if $article->category eq $allcategorys[as]->pk_content_category}selected="selected"{/if} name="{$allcategorys[as]->title}">{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
@@ -63,7 +63,7 @@
             <tr style="border-bottom: 2px solid #000;">
                 <th style="width:50px;"></th>
                 <th align="left" style="padding:5px;font-size: 11px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
-                {if $category eq 'todos' || $category eq 'opinion'} <th align="left" style="width:170px;">
+                {if $category eq 'ALL' || $category eq 'opinion'} <th align="left" style="width:170px;">
                     <img src="themes/default/images/newsletter/editar.gif" border="0">Secci&oacute;n</th>
                  {/if}
                 <th  align="left" style="padding:10px;font-size: 11px;width:230px;"><img src="themes/default/images/newsletter/editar.gif" border="0">Agencia/Autor</th>
@@ -91,7 +91,7 @@
                             // ]]>
                         </script>
                     </td>
-                    {if $category eq 'todos'}
+                    {if $category eq 'ALL'}
                         <td style="padding:5px;font-size: 11px;">
                               <span title="category" old_cat="{$articles[c]->category}" name="{$articles[c]->id}" id="cat_{$articles[c]->id}" {if $articles[c]->category eq 20} style="padding:4px;background-color:#FFA6A6;cursor:pointer;"{else} style="cursor:pointer;"{/if} > {$articles[c]->category_name|upper|clearslash}
                               </span>
@@ -144,7 +144,7 @@
         {/if}
     {/if}
     {if $opinions}
-        {if $category eq 'todos'}
+        {if $category eq 'ALL'}
             <tr>
                 <td align="left" colspan="4"><br><br><h2><b>Opiniones:</b></h2></td>
             </tr>

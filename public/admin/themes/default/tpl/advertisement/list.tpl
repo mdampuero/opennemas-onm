@@ -60,7 +60,7 @@
                 </li>
 
                 <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page}"
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page|default:0}"
                        class="admin_add" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
                     </a>

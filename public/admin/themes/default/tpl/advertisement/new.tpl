@@ -111,16 +111,16 @@
                                         <br>
                                         <span id="div_permanencia" style="display:{if $advertisement->with_script==1}none{/if};">
                                             <input type="radio" id="clic" name="type_medida" value="CLIC"
-												{if isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}checked="checked"{/if} onClick="permanencia(this);"/>
+												{if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}checked="checked"{/if} onClick="permanencia(this);"/>
                                             <label>Nº Clicks</label>
                                             <br>
                                             <input id="view" type="radio" name="type_medida" value="VIEW"
-												{if isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" />
+												{if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}checked="checked"{/if} onClick="permanencia(this);" />
                                             <label>Nº Visitas</label>
                                         </span>
                                         <br>
                                         <input type="radio" id="fecha" name="type_medida" value="DATE"
-											{if isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
+											{if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}checked="checked"{/if} onClick="permanencia(this);" />
                                         <label>Por Fechas</label>
                                     </td>
                                 </tr>
@@ -128,7 +128,7 @@
                                 <tr>
                                     <td valign="top" colspan="2">
 
-                                        <div id="porfecha" style="{if $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
+                                        <div id="porfecha" style="{if isset($advertisement) && $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                                             <table width="95%">
                                             <tr>
                                                 <td valign="top" align="right" >
@@ -136,7 +136,7 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" id="starttime" style="width:100%" name="starttime" title="Fecha inicio publicacion"
-                                                        value="{if $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
+                                                        value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
 
                                                 </td>
                                             </tr>
@@ -146,7 +146,7 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" id="endtime" style="width:100%" name="endtime" title="Fecha fin publicacion"
-                                                        value="{if $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
+                                                        value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
 
                                                 </td>
                                             </tr>
@@ -161,13 +161,13 @@
                                                     </td>
                                                     <td style="padding:4px;" nowrap="nowrap" width="60%">
                                                         <input type="text" id="num_clic" name="num_clic" title="Numero de clic"
-                                                            value="{$advertisement->num_clic}" />
+                                                            value="{$advertisement->num_clic|default:""}" />
                                                         {if $smarty.request.action eq "read"}
-                                                            {if $advertisement->type_medida == 'CLIC'}
+                                                            {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}
                                                                 Actuales: {$advertisement->num_clic_count}
                                                             {/if}
                                                             <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
-                                                                value="{$advertisement->num_clic_count}" />
+                                                                value="{$advertisement->num_clic_count|default:""}" />
                                                         {/if}
                                                     </td>
                                                 </tr>
@@ -184,7 +184,7 @@
                                                         <input type="text" id="num_view" name="num_view" title="Numero de visionados"
                                                             value="{$advertisement->num_view}" />
                                                         {if $smarty.request.action eq "read"}
-                                                            {if $advertisement->type_medida == 'VIEW'}
+                                                            {if isset($advertisement) && $advertisement->type_medida == 'VIEW'}
                                                                 Actuales: {$advertisement->views}
                                                             {/if}
                                                         {/if}
@@ -199,7 +199,7 @@
 
                                 <tr>
                                     <td valign="top" colspan="2">
-                                        <div id="timeout_container" style="margin-top: 10px; border-top: 1px solid #CCC;width:95%;display:{if $advertisement->type_advertisement!=50}none{/if};">
+										<div id="timeout_container" style="margin-top: 10px; border-top: 1px solid #CCC;width:95%;display:{if isset($advertisement) && $advertisement->type_advertisement!=50}none{/if};">
 
                                         <label for="timeout">{t}Time scheduling:{/t}</label>
 
@@ -223,7 +223,7 @@
 
                         {if $smarty.request.action eq "read"}
                             <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic"
-                                value="{$advertisement->num_clic_count}" />
+								value="{$advertisement->num_clic_count|default:""}" />
                         {/if}
 
                     </td>
@@ -243,12 +243,12 @@
 
                 <tr>
                     <td valign="top" align="right" >
-                        <div id="div_url1" style="display:{if $advertisement->with_script==1}none{/if};">
+						<div id="div_url1" style="display:{if isset($advertisement) && $advertisement->with_script==1}none{/if};">
                             <label for="title">{t}URL:{/t}</label>
                         </div>
                     </td>
                     <td valign="top">
-                        <div id="div_url2" style="display:{if $advertisement->with_script==1}none{/if};">
+						<div id="div_url2" style="display:{if isset($advertisement) && $advertisement->with_script==1}none{/if};">
                             <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
                                 style="width:90%" value="{$advertisement->url|default:"http://"}" tabindex=3 />
                         </div>
@@ -262,17 +262,17 @@
                     <td valign="top" style="height:20px;padding:4px;">
                         <select name="category[]" id="category" class="required" multiple tabindex=4>
                         {if $smarty.request.action eq "read"}
-                            <option value="0" {if in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
-                            <option value="4" {if in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            <option value="3" {if in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Gallery{/t}</option>
+                            <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
+                            <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+                            <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Gallery{/t}</option>
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
-                                    {if in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                    {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                                     {$allcategorys[as]->title}
                                 </option>
                                 {section name=su loop=$subcat[as]}
                                     <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
+                                        {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                                         &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                                     </option>
                                 {/section}
@@ -310,8 +310,8 @@
                     </td>
                     <td valign="top" style="height:20px;padding:4px;">
                         <input type="checkbox" id="with_script" name="with_script" value="1" tabindex=5
-                            {if $advertisement->with_script == 1}checked="checked"{/if} onClick="with_without_script(this);" />
-                        <div id="div_script" style="display:{if $advertisement->with_script!=1}none{/if}; text-align: right;">
+                            {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if} onClick="with_without_script(this);" />
+                        <div id="div_script" style="{if isset($advertisement) && $advertisement->with_script!=1}display:none{/if}; text-align: right;">
                             <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:100%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
                             <br />
 

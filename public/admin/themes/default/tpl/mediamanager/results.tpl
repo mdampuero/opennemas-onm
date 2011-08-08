@@ -30,7 +30,8 @@
 
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2> {t}Media manager{/t} :: {t}Editing photo {/t}{$datos_cat[0]->title}</h2></div>
+            <div style='float:left;margin-left:10px;margin-top:10px;'><h2></h2></div>
+            <div class="title"><h2> {t}Media manager{/t} :: {t 1=$datos_cat[0]->title}Editing image '%1'{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
@@ -54,18 +55,18 @@
 
         <ul class="tabs2">
             <li>
-                <a href="mediamanager.php?listmode={$listmode}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+                <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
                     {t}ALL{/t}</a>
             </li>
             {* <li>
-                 <a href="{$home}?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                 <a href="{$home}?listmode={$listmode|default:""}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                      ALBUMS</a>
              </li>
              *}
 
             {acl isAllowed="ADVERTISEMENT_ADMIN"}
              <li>
-                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode|default:""}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
                      PUBLICIDAD</a>
              </li>
              {/acl}

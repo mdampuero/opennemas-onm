@@ -86,7 +86,7 @@
                 <tr>
 
                     <td style="vertical-align:top; padding:10px">
-                        {if $photo1->myiptc}
+                        {if isset($photo1->myiptc)}
                         <div id="iptc" class="photo-static-info">
                           <table>
                               <tr>

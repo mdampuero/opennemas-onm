@@ -1,8 +1,8 @@
 <table class="adminlist">
 	<tr>
 		<td valign="top">
-			<div id="div_img_publi"  style="{if $advertisement->with_script == 1} display:none;{else}display:block;{/if}">
-				{if $photo1->name}
+			<div id="div_img_publi"  style="{if isset($advertisement) && $advertisement->with_script == 1} display:none;{else}display:block;{/if}">
+				{if isset($photo1) && $photo1->name}
 					<table border="0">
 						<tr>
 							<td>
@@ -11,19 +11,19 @@
 							<td style="text-align:right;">
 								<a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img');">
 									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
-								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70" />
+								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img|default:""}" size="70" />
 							</td>
 						</tr>
 						<tr>
 							<td align='left'>
 								<div id="droppable_div1">
 									{if strtolower($photo1->type_img)=='swf'}
-									<object id="change1"  name="{$advertisement->img}" >
+									<object id="change1"  name="{$advertisement->img|default:""}" >
 										<param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}"></param>
-										<embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" width="300" ></embed>
+										<embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name|default:""}" width="300" ></embed>
 									</object>
 									{else}
-									<img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img}" id="change1" border="0" width="300px" />
+									<img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img|default:""}" id="change1" border="0" width="300px" />
 									{/if}
 								</div>
 							</td>
@@ -32,7 +32,7 @@
 									</div>
 									<div id="noimag2" style="display: inline; width:380px; height:30px;">	</div>
 								<div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
-		
+
 								<div id="informa" style="display: inline; width:380px; height:30px;">
 										<p><strong>{t}File:{/t}</strong> {$photo1->name}</p>
 										<p><strong>{t}Size:{/t}</strong> {$photo1->width} x {$photo1->height}</p>
@@ -79,19 +79,19 @@
 				{/if}
 			</div>
 		</td>
-	
+
 		<td style="max-width:400px; text-align: center;">
-	
+
 			<div id="id" style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
 					<strong>{t}Available multimedia for ads{/t}</strong>
 			</div>
-	
-			<div id="photos" class="photos clearfix" 
-                 style="border:1px solid #ccc; {if $advertisement->with_script == 1}display:none;
+
+			<div id="photos" class="photos clearfix"
+                 style="border:1px solid #ccc; {if isset($advertisement) && $advertisement->with_script == 1}display:none;
                                                 {else} display:block; {/if}" >
- 
+
 			</div>
-	
+
 		</td>
 	</tr>
 </table>
@@ -136,7 +136,7 @@
                                             "<p><strong>{t}File creation date{/t}:</strong> " + element.getAttribute('de:created') + "</p>"+
                                             "<p><strong>{t}Description:{/t}</strong> " + element.getAttribute('de:description') +"</p>"+
                                             "<p><strong>Tags:</strong> "+ element.getAttribute('de:tags')+"</p> ";
-                                            
+
 			}
 	  }
   });
@@ -158,5 +158,5 @@
 	#photos {
 		min-height:250px;
 	}
-	
+
 </style>

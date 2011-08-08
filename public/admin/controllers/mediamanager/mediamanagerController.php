@@ -40,7 +40,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
      * Constants for thumbnails resolution & max frontpage size
     */
     const THUMB_WIDTH  = 140;
-    const THUMB_HEIGHT = 100;    
+    const THUMB_HEIGHT = 100;
     const INNER_WIDTH = 480;
     const INNER_HEIGHT = 250;
     const FRONT_WIDTH = 350;
@@ -70,7 +70,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $this->category = $_REQUEST['category'];
 
         list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu($this->category);
-        if($this->category != 'GLOBAL' && $this->category != 0) {
+		if($this->category != 'GLOBAL' && $this->category != 0 && array_key_exists($this->category, $ccm->categories)) {
             $this->category_name = $ccm->categories[$this->category]->name;
         }
         $this->tpl->assign('subcat', $this->subcat);
@@ -92,7 +92,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
 
         $num_sub_photos = array();
 
-        $num_photos_totalJPG=0; 
+        $num_photos_totalJPG=0;
         $num_photos_totalGIF=0;
         $num_photos_totalPNG=0;
         $num_photos_totalOTHER=0;
@@ -107,7 +107,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $num_sub_photos_totalBN=0;
         $num_sub_photos_totalCOLOR=0;
         $num_sub_photos_totalSIZE=0;
-        
+
         foreach($this->parentCategories as $k => $v) {
             if(isset($photoSet[$v->pk_content_category])) {
                 $num_photos[$k] = $photoSet[$v->pk_content_category];
@@ -262,14 +262,14 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
     {
         $cm = new ContentManager();
         $ayer = 'DATE_SUB(CURDATE(), INTERVAL 1 DAY)';
-        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;		
+        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 
         list($photos, $pager)= $cm->find_pages('Photo',
                                                'contents.fk_content_type=8 and photos.media_type="image" and created >=' .
                                                $ayer.' ',
                                                'ORDER BY created DESC ',
                                                $page, 40, $this->category);
-		
+
 
         foreach($photos as $photo) {
             $photo->description_utf = html_entity_decode(($photo->description));
@@ -292,11 +292,11 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 		$photos = $cm->find('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
                                                 'ORDER BY  created DESC ');
-		
+
         list($photos, $pager) = $cm->find_pages('Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
                                                 'ORDER BY  created DESC ', $page, 40, $this->category);
 
-		
+
         foreach($photos as $photo) {
 
             $extension = strtolower($photo->type_img);
@@ -420,7 +420,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                             //THUMBNAIL
                             $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
                             //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);                            
+                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
                         }
                     }
 
