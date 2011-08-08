@@ -1652,3 +1652,94 @@ div.action-bar .right{
 	float:right;
 	margin-right:5px
 }
+
+
+/* -------------------------------------------------------------
+  media-browser
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#media-browser {
+	border:1px solid #bfbfbf;
+}
+	#media-browser .photo {
+		position:relative;
+		float:left;
+	}
+	#media-browser .photo:hover {
+		z-index:999;
+	}
+	#media-browser .photo:hover .photo-image {
+		border:5px solid transparent;
+	}
+	#media-browser .photo:hover .photo-data {
+		display:block
+	}
+		#media-browser .photo-image {
+			width:140px;
+			position:relative;
+			border:5px solid transparent;
+			z-index:20;
+		}
+			#media-browser .photo-image img {
+				width:140px;
+				height:80px;
+				border:1px solid #bfbfbf;
+				padding:2px;
+			}
+				#media-browser .photo:hover .photo-image img {
+					border:1px solid White;
+				}
+			#media-browser .photo-image input[type="checkbox"] {
+				position:absolute;
+				top:5px;
+				left:5px;
+			}
+			
+		#media-browser .photo-data {
+			background:#4787ED;
+			background-image: linear-gradient(top,#005991,#4787ED);
+			padding-left:160px;
+			position:absolute;
+			top:0;
+			left:0;
+			z-index:10;
+			display:none;
+		}
+			#media-browser .photo-data ul {
+				min-width:175px;
+				margin:0;
+				padding:0;
+				margin-right:10px;
+				margin-top:5px;
+			}
+				#media-browser .photo-data ul li {
+					list-style:none;
+					color:white;	
+				}
+					#media-browser .photo-data .delete-button {
+						text-align:right;
+						display:block;
+						margin:5px;
+						color:White;
+						font-weight:bold;
+						vertical-align:middle
+					}
+			
+			#media-browser .photo-data .actions {
+				margin:8px 0;
+				text-align:right;
+			}
+			#media-browser .photo-data .actions img{
+				width:16px;
+				height:16px;
+				border:0 none !important;
+				padding:0 !important;
+				vertical-align:middle;
+			}
+			#media-browser .photo-data .actions a {
+				color:White;
+				font-weight:bold;
+				display:inline;
+			}
+		#media-browser .photo-hovered {
+			z-index:999;
+		}

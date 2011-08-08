@@ -86,7 +86,7 @@
         {include file="mediamanager/_partials/categories.tpl"}
 
         <div id="{$category}" class="categ" style="padding: 6px 2px;">
-                {include file="mediamanager/_partials/media-browser.tpl"}
+            {include file="mediamanager/_partials/media-browser.tpl"}
         </div>
 
         <input type="hidden" id="action" name="action" value="" />
