@@ -1659,6 +1659,7 @@ div.action-bar .right{
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 #media-browser {
 	border:1px solid #bfbfbf;
+	background:White;
 }
 	#media-browser .photo {
 		position:relative;
