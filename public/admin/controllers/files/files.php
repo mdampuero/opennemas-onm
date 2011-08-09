@@ -47,14 +47,23 @@ if( isset($_REQUEST['action']) ) {
         case 'list': {
             if($category == 0) {
                 $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
+                $cm = new ContentManager();
 
                 $fullcat = $ccm->order_by_posmenu($ccm->categories);
                 foreach($parentCategories as $k => $v) {
                     $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, 3);
-
+                    $files[$v->pk_content_category] = $cm->find_all('Attachment',
+                                             'fk_content_type = 3 AND category = '.$v->pk_content_category ,
+                                             'ORDER BY created DESC' );
+                    
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
-                            $num_sub_photos[$k][] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $num_sub_photos[$k][$child->pk_content_category] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $sub_files[$child->pk_content_category][] = $cm->find_all('Attachment',
+                                             'fk_content_type = 3 AND category = '.$child->pk_content_category ,
+                                             'ORDER BY created DESC' );
+                            $aux_categories[] = $child->pk_content_category;
+                            $sub_size[$k][$child->pk_content_category] = 0;
                             $tpl->assign('num_sub_photos', $num_sub_photos);
                         }
                     }
@@ -69,6 +78,37 @@ if( isset($_REQUEST['action']) ) {
                     $j++;
                 }
 
+                //Calculo del tamaño de los ficheros por categoria/subcategoria
+                $i = 0;
+                foreach ($files as $categories => $contenido) {
+                    $size[$i] = 0;
+                    if (!empty($contenido)) {
+                        foreach ($contenido as $value) {
+                            if ($categories == $value->category) {
+                                $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                            }
+                        }
+                    }
+                    $i++;
+                }
+                
+                foreach($parentCategories as $k => $v) {                                  
+                    foreach ($aux_categories as $ind) {
+                        if (!empty ($sub_files[$ind][0])) {
+                            foreach ($sub_files[$ind][0] as $value) {                                
+                                if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
+                                    if ($ccm->get_id($ccm->get_father($value->catName)) ) {
+                                        //$sub_size[$k][$ind] .= $value->title;
+                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                $tpl->assign('size', $size);
+                $tpl->assign('sub_size', $sub_size);
                 $tpl->assign('especials', $especials);
                 $tpl->assign('num_especials', $num_especials);
                 $tpl->assign('num_photos', $num_photos);

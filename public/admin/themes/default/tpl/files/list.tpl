@@ -3,7 +3,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+        <div class="title"><h2>{t}Files manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
 				<a href="{$smarty.server.PHP_SELF}?action=upload&category={$category}&op=view" title="{t}Upload file{/t}">
@@ -24,12 +24,12 @@
 			</li>
 			{include file="menu_categorys.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
 		</ul>
-
+                <br style="clear:both;">
 	<div id="{$category}">
 		{if $category eq 0}
 			<table class="adminheading">
 				<tr>
-					<th>&nbsp;</th>
+					<th>{t}Files statistics{/t}</th>
 				</tr>
 			</table>
 			<table class="adminlist">
@@ -37,6 +37,7 @@
 					<tr>
 						<th width="300" class="title" align="left">{t}Title{/t}</th>
 						<th width="40px" align="left">{t}Files (#){/t}</th>
+						<th width="40px" align="left">{t}Size (MB){/t}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -48,14 +49,21 @@
 						<td style="padding: 0px 10px; width:10%;" align="left">
 							{$num_photos[c]}</a>
 						</td>
+                                                <td style="padding: 0px 10px; width:10%;" align="left">
+                                                        {math equation="x / y" x=$size[c]|default:0 y=1024*100 format="%.2f"} MB</a>
+						</td>
+                                                
 					</tr>
 					{section name=su loop=$subcategorys[c]}
 					<tr>
-						<td style="padding: 0px 30px; width:300;">
+						<td style="padding: 5px 5px 5px 30px; width:300;">
 							<strong>{$subcategorys[c][su]->title} </blockquote></strong>
 						</td>
 						<td style="padding: 0px 10px; width:10%;" align="left">
-							{$num_sub_photos[c][su]}
+							{$num_sub_photos[c][$subcategorys[c][su]->pk_content_category]}
+						</td>
+                                                <td style="padding: 0px 10px; width:10%;" align="left">
+							{math equation="x / y" x=$sub_size[c][$subcategorys[c][su]->pk_content_category]|default:0 y=1024*100 format="%.2f"} MB</a>
 						</td>
 					 </tr>
 					{/section}
