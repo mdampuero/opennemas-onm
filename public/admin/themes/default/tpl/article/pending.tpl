@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
+{block name="header-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsarticle.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}editables.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
@@ -175,7 +175,12 @@
                     </td>
                     {if $category eq 'todos'}
                         <td align="center">
-                              <span title="category" old_cat="{$articles[c]->category}" name="{$articles[c]->id}" id="cat_{$articles[c]->id}" {if $articles[c]->category eq 20} style="padding:4px;background-color:#FFA6A6;cursor:pointer;"{else} style="cursor:pointer;"{/if} > {$articles[c]->category_name|upper|clearslash}
+                              <span title="category" old_cat="{$articles[c]->category}" name="{$articles[c]->id}" id="cat_{$articles[c]->id}" {if $articles[c]->category eq 20} style="padding:4px;background-color:#FFA6A6;cursor:pointer;"{else} style="cursor:pointer;"{/if} >
+                                {if $articles[c]->category_name == 'unknown'}
+                                    {t}Unasigned{/t}
+                                {else}
+                                    {$articles[c]->category_name|upper|clearslash}
+                                {/if}
                               </span>
                               <script type="text/javascript">
                                 // <![CDATA[

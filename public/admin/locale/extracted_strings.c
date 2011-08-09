@@ -190,6 +190,18 @@ gettext("ePaper Manager");
 /* ./public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("Editing ePaper");
 
+/* ./public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Save");
+
+/* ./public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Save");
+
+/* ./public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Save");
+
+/* ./public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Go back");
+
 /* ./public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("ePaper Manager");
 
@@ -428,6 +440,9 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Menu %1 Frontpage");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Name");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
@@ -435,6 +450,9 @@ gettext("Description");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Father menu");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("- Root menu -");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Elements");
@@ -515,6 +533,27 @@ gettext("Publish to frontpage");
 gettext("New article");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Pending articles");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Go to section:");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("All");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Category list");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("All");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Unasigned");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Opinion");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Section");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
@@ -533,10 +572,22 @@ gettext("Last Editor");
 gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Unasigned");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Edit");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Edit");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("No pending articles to publish.");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("No pending opinion to publish.");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("No pending article to publish.");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Opinions");
@@ -576,6 +627,9 @@ gettext("Frontpage title:");
 
 /* ./public/admin/themes/default/tpl//article/new.tpl */
 gettext("Section:");
+
+/* ./public/admin/themes/default/tpl//article/new.tpl */
+gettext("Unknown");
 
 /* ./public/admin/themes/default/tpl//article/new.tpl */
 gettext("Unknown");
@@ -768,6 +822,21 @@ gettext("NOT IN FRONTPAGE OF %1");
 
 /* ./public/admin/themes/default/tpl//article/list.tpl */
 gettext("Please, remember save positions after finish.");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("ALL");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("ALL");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("ALL");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("Unasigned");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("Opinion");
 
 /* ./public/admin/themes/default/tpl//article/partials/_related.tpl */
 gettext("Suggested articles");
@@ -1397,6 +1466,9 @@ gettext("Title:");
 gettext("Type:");
 
 /* ./public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("-- Pick an author --");
+
+/* ./public/admin/themes/default/tpl//opinion/new.tpl */
 gettext("Opinion from author");
 
 /* ./public/admin/themes/default/tpl//opinion/new.tpl */
@@ -1671,6 +1743,18 @@ gettext("Content types:");
 
 /* ./public/admin/themes/default/tpl//files/new.tpl */
 gettext("Images manager :: General statistics");
+
+/* ./public/admin/themes/default/tpl//files/new.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//files/new.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//files/new.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//files/new.tpl */
+gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//files/new.tpl */
 gettext("Go back");
@@ -2063,16 +2147,19 @@ gettext("Type:");
 gettext("In menu:");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//category/form.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
 gettext("Yes");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
 gettext("No");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Category manager");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Listing categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("New section");
@@ -2114,13 +2201,7 @@ gettext("Advertisements");
 gettext("Published");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Empty");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("No available sections");
@@ -2150,13 +2231,7 @@ gettext("Advertisements");
 gettext("Published");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Empty");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("No available sections");
@@ -2186,13 +2261,7 @@ gettext("Advertisements");
 gettext("Published");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Empty");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("No available sections");
@@ -2222,13 +2291,7 @@ gettext("Advertisements");
 gettext("Published");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Empty");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("No available sections");
@@ -2794,6 +2857,12 @@ gettext("Total Size (MB)");
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
 gettext("# photos");
 
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/categories.tpl */
+gettext("GLOBAL");
+
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/categories.tpl */
+gettext("ADS");
+
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/photo_data.tpl */
 gettext("Photo information");
 
@@ -2867,10 +2936,10 @@ gettext("Help OpenNeMas to get all the photos geolocalized. In the future you wi
 gettext("List of images");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
-gettext("Description:");
+gettext("No available description");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
-gettext("Metadata:");
+gettext("Author:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
 gettext("Type:");
@@ -2879,10 +2948,16 @@ gettext("Type:");
 gettext("Created:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
-gettext("See data");
+gettext("Image size:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
-gettext("Zoom");
+gettext("File size:");
+
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Edit");
+
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
+gettext("Delete");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/media-browser.tpl */
 gettext("No available images to list here");
@@ -2903,7 +2978,7 @@ gettext("Image manager:: Images for category «GLOBAL»");
 gettext("Media manager");
 
 /* ./public/admin/themes/default/tpl//mediamanager/results.tpl */
-gettext("Editing photo ");
+gettext("Editing image '%1'");
 
 /* ./public/admin/themes/default/tpl//mediamanager/results.tpl */
 gettext("Save");
@@ -2961,6 +3036,12 @@ gettext("Images manager :: General statistics");
 
 /* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
 gettext("Search");
+
+/* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
+gettext("GLOBAL");
+
+/* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
+gettext("ADS");
 
 /* ./public/admin/themes/default/tpl//mediamanager/image_data.tpl */
 gettext("Image manager:: Editing \"%1\"");
@@ -3080,16 +3161,19 @@ gettext("All");
 gettext("Advertisement");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
+gettext("Show advanced search &darr;");
+
+/* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
 gettext("Size:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
 gettext("Max width:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("Max height:");
+gettext("Min width:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("Min weight:");
+gettext("Max height:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
 gettext("Min height:");
@@ -3098,10 +3182,10 @@ gettext("Min height:");
 gettext("File size:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("Max file size:");
+gettext("Max:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
-gettext("Min file size:");
+gettext("Min:");
 
 /* ./public/admin/themes/default/tpl//mediamanager/search.tpl */
 gettext("Type:");
@@ -3173,10 +3257,10 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//acl/user/new.tpl */
-gettext("Editing user information");
+gettext("Login:");
 
 /* ./public/admin/themes/default/tpl//acl/user/new.tpl */
-gettext("Login:");
+gettext("Please complete the user information by filling the aside form.");
 
 /* ./public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("Password:");
@@ -3240,6 +3324,9 @@ gettext("Sections:");
 
 /* ./public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("HOME");
+
+/* ./public/admin/themes/default/tpl//acl/user/list.tpl */
+gettext("New user");
 
 /* ./public/admin/themes/default/tpl//acl/user/list.tpl */
 gettext("Filter by name");

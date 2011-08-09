@@ -98,3 +98,9 @@
     <!-- .pagination -->
 </div>
 <input type="hidden" name="listmode" value="weeks" />
+
+
+<script type="text/javascript">
+
+</script>
+
