@@ -356,7 +356,7 @@ Newsletter.AccountManager = Class.create({
     renderItem: function(item) {
         var newItem = new Element('li', {
             'rel': item.email
-        }).update(item.name);
+        }).update(item.email);
 
         newItem.observe('dblclick', this.onItemDblClick.bindAsEventListener(this));
 

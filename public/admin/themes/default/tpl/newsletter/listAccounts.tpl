@@ -125,7 +125,7 @@ document.observe('dom:loaded', function() {
 	</div>
 
 	<table class="adminheading">
-		<tr style="text-align:center;">
+		<tr style="text-align:center;font-size: 0.85em;">
 			<th nowrap>{t}Subscriptors available (please double click over a subscritor to add to recipients){/t}</th>
 			<th nowrap>{t}Subscriptors selected (please double click over a subscritor to delete from recipients){/t}</th>
 		</tr>

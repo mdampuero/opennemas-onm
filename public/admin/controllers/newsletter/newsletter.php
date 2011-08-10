@@ -102,6 +102,14 @@ switch($action) {
      */
     case 'listArticles':
 
+        $configurations = s::get('newsletter_maillist');
+        foreach ($configurations as $key => $value) {
+            if ($value == '') {
+                     m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
+                     break;
+            }
+        }
+        
         $items = $newsletter->getItemsProvider();
 
         // Get articles in frontpage

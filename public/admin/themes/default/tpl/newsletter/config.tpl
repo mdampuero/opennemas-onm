@@ -56,6 +56,10 @@
                                 <label for="newsletter_maillist[name]">{t}Maillist name:{/t}</label>
                                 <input type="text" class="required" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
                             </div>
+                            <div>
+                                <label for="newsletter_maillist[receiver]">{t}Maillist receiver:{/t}</label>
+                                <input type="text" class="required" id="name" name="newsletter_maillist[receiver]" value="{$configs['newsletter_maillist']['receiver']|default:""}" />
+                            </div>
                         </div>
                     </td>
                 </tr>
