@@ -99,7 +99,7 @@ positions_interior[110] = '177,518,55,23';
 positions_interior[150] = '0,0,240,550';
 
 
-//var options = {'positions': positions_interior, 'radios': $('ads_type_interior').select('input[name=type_advertisement]') };
+//var options = { 'positions': positions_interior, 'radios': $('ads_type_interior').select('input[name=type_advertisement]') };
 //adPositionInterior = new AdPosition('advertisement-mosaic-interior', options );
 document.observe('dom:loaded', function() {
 

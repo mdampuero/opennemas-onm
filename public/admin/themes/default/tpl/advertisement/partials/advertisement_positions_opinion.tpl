@@ -68,7 +68,7 @@ positions_opinion[10] = '178,276,55,24';
 positions_opinion[50] = '0,0,240,327';
 
 
-var options = {'positions': positions_opinion, 'radios': $('ads_type_opinion').select('input[name=type_advertisement]') };
+var options = { 'positions': positions_opinion, 'radios': $('ads_type_opinion').select('input[name=type_advertisement]') };
 //adPositionOpinion = new AdPosition('advertisement-mosaic-opinion', options );
 document.observe('dom:loaded', function() {
 

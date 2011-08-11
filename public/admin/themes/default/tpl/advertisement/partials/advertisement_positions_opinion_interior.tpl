@@ -94,7 +94,7 @@ positions_opinion_interior[110] = '178,479,55,24';
 positions_opinion_interior[150] = '0,0,240,508';
 
 
-var options = {'positions': positions_opinion_interior, 'radios': $('ads_type_interior_opinion').select('input[name=type_advertisement]') };
+var options = { 'positions': positions_opinion_interior, 'radios': $('ads_type_interior_opinion').select('input[name=type_advertisement]') };
 // adPositionOpinionInterior = new AdPosition('advertisement-mosaic-opinioninterior', options );
 document.observe('dom:loaded', function() {
 
