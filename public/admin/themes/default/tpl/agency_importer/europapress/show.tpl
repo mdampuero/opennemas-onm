@@ -6,7 +6,7 @@
         <div class="title"><h2>{t}EuropaPress importer{/t} :: {t}Article information{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{$smarty.server.PHP_SELF}?action=import&id={$element->id}" class="admin_add" value="{t}Import{/t}" title="{t}Import{/t}">
+                <a href="{$smarty.server.PHP_SELF}?action=import&id={$element->xmlFile}" class="admin_add" value="{t}Import{/t}" title="{t}Import{/t}">
                 <img border="0" src="{$params.IMAGE_DIR}archive_no.png" title="{t}Import{/t}" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
