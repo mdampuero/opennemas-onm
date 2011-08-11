@@ -24,14 +24,14 @@
    <div id="{$category|default:""}">
 
         <table class="adminheading">
-			<tr>
+	    <tr>
                 <th align="left">&nbsp;</th>
-			</tr>
-		</table>
+	    </tr>
+	</table>
 
-		<table class="adminlist" border=0>
+	<table class="adminform" border=0>
 
-			<tr>
+	    <tr>
                 <td>
                     <div id="{$element->id}" style="width:70%; margin:0 auto; margin-top:5px; font-size:13px;">
                         <div style=" border:1px solid #ccc; padding:15px;">
@@ -141,14 +141,13 @@
                 </td>
             </tr>
 
-
             <tfoot>
                  <tr class="pagination" >
                      <td colspan="13" align="center">&nbsp;</td>
                  </tr>
             </tfoot>
 
-	   </table>
+	</table>
    </div>
 
    <input type="hidden" id="action" name="action" value="list" />

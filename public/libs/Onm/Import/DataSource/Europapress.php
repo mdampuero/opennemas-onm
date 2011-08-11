@@ -33,6 +33,17 @@ class Europapress {
 
 
     private $data = null;
+    
+    static private $priorityMap = array(
+        '10'  => 4,
+        '20' => 3,
+        '25' => 2,
+        '30' => 1,
+        // From Pandora
+        'U' => 4,
+        'R' => 3,
+        'B' => 2,
+    );
 
     /**
     * Ensures that we always get one single instance
@@ -100,6 +111,10 @@ class Europapress {
             case 'priority':
                 return self::matchPriority((string) $this->data->PRIORIDAD);
                 break;
+            
+            case 'priorityNumber':
+                return self::$priorityMap[(string) $this->data->PRIORIDAD];
+                break;
 
             case 'service':
                 return (string) $this->data->SERVICIO;
@@ -107,6 +122,10 @@ class Europapress {
 
             case 'category':
                 return self::matchCategoryName((string) $this->data->SECCION);
+                break;
+            
+            case 'originalCategory':
+                return (string) $this->data->SECCION;
                 break;
 
             case 'informationType':

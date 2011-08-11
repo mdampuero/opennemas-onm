@@ -68,7 +68,19 @@ switch($action) {
                     'server'    => $serverAuth['server'],
                     'username' => $serverAuth['username'],
                     'password' => $serverAuth['password'],
-                    'message' => $message
+                    'message' => $message,
+                    'sync_from' => array(
+                        'no_limits' => _('No limit'),
+                        '86400' => _('1 day'),
+                        '172800' => sprintf(_('%d days'),'2'),
+                        '259200' => sprintf(_('%d days'),'3'),
+                        '345600' => sprintf(_('%d days'),'4'),
+                        '432000' => sprintf(_('%d days'),'5'),
+                        '518400' => sprintf(_('%d days'),'6'),
+                        '604800' => sprintf(_('%d week'),'1'),
+                        '1209600' => sprintf(_('%d weeks'),'2'),
+                    ),
+                    'sync_from_setting'=> s::get('europapress_sync_from_limit'),
                 ));
 
             }
@@ -79,17 +91,25 @@ switch($action) {
             $server     = filter_input( INPUT_POST, 'server' , FILTER_SANITIZE_STRING );
             $username   = filter_input( INPUT_POST, 'username' , FILTER_SANITIZE_STRING );
             $password   = filter_input( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
+            $syncFrom   = filter_input( INPUT_POST, 'sync_from' , FILTER_SANITIZE_STRING );
 
             if (!isset($server) || !isset($username) || !isset($password)) {
                 Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=config');
             }
 
-            $serverAuth = array(
+            $serverAuth =  array(
                 'server'    => $server,
                 'username' => $username,
                 'password' => $password,
             );
-            s::set('europapress_server_auth', $serverAuth);
+            
+            if (s::set('europapress_server_auth', $serverAuth)
+                && s::set('europapress_sync_from_limit', $syncFrom))
+            {
+                m::add(_('Europapress configuration saved successfully'), m::SUCCESS);
+            } else {
+                m::add(_('There was an error while saving Europapress configuration'), m::ERROR);
+            }
 
             Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=list');
         }
@@ -110,41 +130,39 @@ switch($action) {
         $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
 
         $find_params = array(
-            'category' => filter_input ( INPUT_GET,
-                                        'filter[category]' ,
-                                        FILTER_SANITIZE_STRING,
+            'category' => filter_input ( INPUT_GET, 'filter_category' , FILTER_SANITIZE_STRING,
                                         array('options' => array('default' => '*')) ),
-            'title' => filter_input ( INPUT_GET,
-                                     'filter[title]',
-                                     FILTER_SANITIZE_STRING,
+            'title' => filter_input ( INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
                                      array('options' => array('default' => '*')) ),
         );
+        
+        
 
         $elements = $europapress->findAll($find_params);
 
+        $items_page = s::get('items_per_page') ?: 20;
+        // Pager
         $pager_options = array(
             'mode'        => 'Sliding',
-            'perPage'     => 15,
+            'perPage'     => $items_page,
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => count($elements),
         );
-        //$pager = Pager::factory($pager_options);
+        $pager = Pager::factory($pager_options);
 
-        $message   = filter_input ( INPUT_GET, 'message' , FILTER_SANITIZE_STRING );
-        if (isset($_SESSION['error']) && !empty($_SESSION['error'])) {
-            $error = $_SESSION['error'];
-        } else {
-            $error = '';
-        }
-
-        $tpl->assign('elements', $elements);
-        $tpl->assign('categories', $categories);
-        $tpl->assign('minutes', $minutesFromLastSync);
-        //$tpl->assign('pagination', $pager);
-        $tpl->assign('message', $message);
-        $tpl->assign('error', $error);
+        $elements = array_slice($elements, ($page-1)*$items_page, $items_page);
+        
+        $tpl->assign(
+            array(
+                'elements'      =>  $elements,
+                'categories'    =>  $categories,
+                'minutes'       =>  $minutesFromLastSync,
+                'pagination'    =>  $pager,
+            )
+        );
+        
         $tpl->display('agency_importer/europapress/list.tpl');
 
         break;
@@ -226,50 +244,42 @@ switch($action) {
 
     case 'sync': {
         try {
-            try {
 
-                try {
+            $serverAuth = s::get('europapress_server_auth');
 
-                    $serverAuth = s::get('europapress_server_auth');
+            $ftpConfig = array(
+                'server'    => $serverAuth['server'],
+                'user'      => $serverAuth['username'],
+                'password'  => $serverAuth['password']
+            );
 
+            $epSynchronizer = \Onm\Import\Europapress::getInstance();
+            $message = $epSynchronizer->sync($ftpConfig);
+            $epSynchronizer->updateSyncFile();
+            
+            m::add(
+                sprintf( _('Downloaded %d new articles and deleted %d old ones.'),
+                        $message['downloaded'],
+                        $message['deleted'])
+            );
 
-                    $ftpConfig = array(
-                        'server'    => $serverAuth['server'],
-                        'user'      => $serverAuth['username'],
-                        'password'  => $serverAuth['password']
-                    );
-
-                    $epSynchronizer = \Onm\Import\Europapress::getInstance();
-                    $message = $epSynchronizer->sync($ftpConfig);
-                    $epSynchronizer->updateSyncFile();
-
-                } catch (\Onm\Import\SynchronizationException $e) {
-                    $_SESSION['error'] = $e->getMessage();
-                }
-
-            } catch (\Onm\Import\Synchronizer\LockException $e) {
-                $_SESSION['error'] = $e->getMessage()
-                                    .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),$_SERVER['PHP_SELF']);
-            }
+        } catch (\Onm\Import\SynchronizationException $e) {
+            m::add($e->getMessage(), m::ERROR);
+        } catch (\Onm\Import\Synchronizer\LockException $e) {
+            $errorMessage = $e->getMessage()
+                   .sprintf(_('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),$_SERVER['PHP_SELF']);
+            m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
+            m::add($e->getMessage(), m::ERROR);
             $e = new \Onm\Import\Europapress();
             $e->unlockSync();
         }
-
+        
         $httpParams = array(
                             array('action' => 'list'),
                             array('page' => $page),
                             );
-        if( isset($message)) {
-            $httpParams []= array(
-                                  'message' => urlencode(sprintf(
-                                                      _('Downloaded %d new articles and deleted %d old ones.'),
-                                                        $message['downloaded'],
-                                                        $message['deleted']
-                                                        ))
-                                );
-        }
+        
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
     } break;

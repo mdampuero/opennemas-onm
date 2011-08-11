@@ -276,13 +276,13 @@ class Europapress implements \Onm\Import\Importer
             }
 
             if ((($params['title'] != '*'))
-                && !(preg_match('@'.$params['title'].'@', $element->title) > 0))
+                && !(preg_match('@'.strtolower($params['title']).'@', strtolower($element->title)) > 0))
             {
                 continue;
             }
 
             if ((($params['category'] != '*'))
-                && !(preg_match('@'.$params['category'].'@', $element->title) > 0))
+                && !(preg_match('@'.$params['category'].'@', $element->originalCategory) > 0))
             {
                 continue;
             }

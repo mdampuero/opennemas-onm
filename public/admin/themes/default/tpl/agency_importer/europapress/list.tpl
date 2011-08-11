@@ -1,4 +1,13 @@
 {extends file="base/admin.tpl"}
+
+{block name="header-css" append}
+    <style type="text/css">
+    .adminlist td {
+	padding-top:4px;
+	padding-bottom:4px;
+    }
+    </style>
+{/block}
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -30,19 +39,19 @@
 
 	{if ($message || ($minutes > 10))}
 	<div class="notice">
-		 <ul>
-			 {if $minutes > 10}
-			 <p>
-				 {if $minutes > 100}
-				 <span class="red">{t}A long time ago from synchronization.{/t}</span>
-				 {else}
-				 <span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-				 {/if}
-				 {t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-			 </p>
-			 {/if}
-			 {if $message}<p>{$message}</p>{/if}
-		 </ul>
+	    <ul>
+		{if $minutes > 10}
+		<p>
+			{if $minutes > 100}
+			<span class="red">{t}A long time ago from synchronization.{/t}</span>
+			{else}
+			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
+			{/if}
+			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
+		</p>
+		{/if}
+		{render_messages}
+	    </ul>
 	</div>
 	{/if}
 
@@ -54,93 +63,91 @@
 
 	<div id="{$category|default:""}">
 
-		 <table class="adminheading">
-			 <tr>
-				 <th align="left">Total: {$elements|count} articles.</th>
-				 <th nowrap="nowrap" align="right">
+	    <table class="adminheading">
+		<tr>
+		    <th align="left">Total: {$pagination->_totalItems} articles.</th>
+		    <th nowrap="nowrap" align="right">
+			<label for="username">{t}Filter by title{/t}</label>
+			<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
 
-					  <label for="username">{t}Filter by title{/t}</label>
-					  {if isset($smarty.request.filter)
-						 && isset($smarty.request.filter.name)}
-						 {assign var=filterName value=$smarty.request.filter.name}
-					  {/if}
-					  <input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$filterName|default:""}" />
+			<label for="usergroup">{t}and category:{/t}</label>
+			<select id="usergroup" name="filter_category" onchange="this.form.submit();">
+			     <option value="*">{t}All{/t}</option>
+			     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+			</select>
+ 
+			<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
+			<input type="submit" value="{t}Search{/t}">
+		    </th>
+		</tr>
+	    </table>
 
-					 <label for="usergroup">{t}and category:{/t}</label>
-					 <select id="usergroup" name="filter[category]" onchange="$('action').value='list';this.form.submit();">
-						 {html_options options=$categories selected=$smarty.request.filter.group|default:""}
-					 </select>
-
-					 <input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-					 <input type="submit" value="{t}Search{/t}">
-				 </th>
-			 </tr>
-		 </table>
-
-		 <table class="adminlist" border=0>
-			 {if count($elements) >0}
-			 <thead>
-				 <tr>
-					 <th  style='width:1%;' align="center">{t}Priority{/t}</th>
-					 <th>{t}Title{/t}</th>
-					 <th align="center" style="width:5%;">{t}Date{/t}</th>
-					 <th  style='width:6%;' align="center">{t}Section{/t}</th>
-					 <th  style='width:6%;' align="center">{t}Actions{/t}</th>
-				 </tr>
-			 </thead>
-			 {/if}
-
-
-			 {section name=c loop=$elements}
-			 <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-
-				 <td align="center">{$elements[c]->priority}</td>
-				 <td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-					 <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
-						 {$elements[c]->title}
-					 </a>
-				 </td>
-				 <td align="center">
-						 {$elements[c]->created_time->getTimestamp()|relative_date}
-				 </td>
-
-				 <td align="center">
-					 {$elements[c]->category|default:""}
-				 </td>
-
-				 <td style="font-size: 11px;width:100px;" align="center">
-						<ul class="action-buttons">
-							<li>
-								<a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
-								   <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
-								</a>
-							</li>
-						</ul>
-				 </td>
-
+	    <table class="adminlist" border=0>
+		{if count($elements) >0}
+		<thead>
+			<tr>
+				<th  style='width:1%;' align="center">{t}Priority{/t}</th>
+				<th>{t}Title{/t}</th>
+				<th align="center" style="width:10%;">{t}Date{/t}</th>
+				<th  style='width:6%;' align="center">{t}Section{/t}</th>
+				<th  style='width:6%;' align="center">{t}Actions{/t}</th>
 			</tr>
+		</thead>
+		{/if}
 
-			 {sectionelse}
-			 <tr>
-				 <td align="center" colspan=10>
-					 <br><br>
-					 <p>
-						 <h2>
-							 <b>{t}There is no elements to import{/t}</b>
-						 </h2>
-						 <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
-					 </p>
-					 <br><br>
-				 </td>
+
+		{section name=c loop=$elements}
+		<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
+
+			<td align="center">
+			   <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
+			</td>
+			<td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
+				<a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
+					{$elements[c]->title}
+				</a>
+			</td>
+			<td align="center">
+					{$elements[c]->created_time->getTimestamp()|relative_date}
+			</td>
+
+			<td align="center">
+				{$elements[c]->category|default:""}
+			</td>
+
+			<td style="font-size: 11px;width:100px;" align="center">
+				       <ul class="action-buttons">
+					       <li>
+						       <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
+							  <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+						       </a>
+					       </li>
+				       </ul>
+			</td>
+
+	       </tr>
+
+		{sectionelse}
+		<tr>
+			<td align="center" colspan=10>
+				<br><br>
+				<p>
+					<h2>
+						<b>{t}There is no elements to import{/t}</b>
+					</h2>
+					<p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
+				</p>
+				<br><br>
+			</td>
+		</tr>
+		{/section}
+		<tfoot>
+			 <tr class="pagination" >
+				 <td colspan="13" align="center">{$pagination->links|default:""}</td>
 			 </tr>
-			 {/section}
-			 <tfoot>
-				  <tr class="pagination" >
-					  <td colspan="13" align="center">{$paginacion->links|default:""}</td>
-				  </tr>
-			 </tfoot>
+		</tfoot>
 
-		</table>
+	   </table>
 	</div>
 
 	<input type="hidden" id="action" name="action" value="list" />
