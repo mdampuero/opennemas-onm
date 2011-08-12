@@ -31,9 +31,6 @@ if(isset($slug) ) {
     //$page->setNumViews();
     Content::setNumViews($page->pk_static_page);
     
-    // Set head metatags for this page
-    $tpl->setMeta('keywords', $page->metadata);
-    $tpl->setMeta('description', $page->description);
     
     $tpl->assign('category_real_name', $page->title);
     $tpl->assign('page', $page);   
