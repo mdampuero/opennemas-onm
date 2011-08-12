@@ -1781,7 +1781,7 @@ gettext("Go back");
 gettext("Save");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
-gettext("Images manager :: General statistics");
+gettext("Files manager :: General statistics");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Upload file");
@@ -1793,10 +1793,16 @@ gettext("Upload file");
 gettext("GLOBAL");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
+gettext("Files statistics");
+
+/* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Files (#)");
+
+/* ./public/admin/themes/default/tpl//files/list.tpl */
+gettext("Size (MB)");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("File manager");
@@ -3677,6 +3683,9 @@ gettext("Username:");
 gettext("Password:");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/config.tpl */
+gettext("Sync elements newer than:");
+
+/* ./public/admin/themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("Save");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
@@ -3746,6 +3755,9 @@ gettext("Filter by title");
 gettext("and category:");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("All");
+
+/* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Search");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
@@ -3762,6 +3774,12 @@ gettext("Section");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Priority %1");
+
+/* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Priority %1");
 
 /* ./public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("There is no elements to import");
@@ -4248,6 +4266,9 @@ gettext("Maillist email:");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Maillist name:");
+
+/* ./public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Maillist receiver:");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Save");
