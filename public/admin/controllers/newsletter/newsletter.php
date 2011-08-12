@@ -24,8 +24,6 @@ use Onm\Settings as s,
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-error_reporting(E_ALL);
-
 // Check ACL
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 if(!Acl::check('NEWSLETTER_ADMIN')) {
@@ -101,15 +99,27 @@ switch($action) {
      * Step 1: list all articles available in frontpage
      */
     case 'listArticles':
-
+    /**
+     * Check if module is configured, if not redirect to configuration form
+    */
+    if (is_null(s::get('newsletter_maillist'))) {
+        m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
+        $httpParams [] = array(
+                            'action'=>'config',
+                        );
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+    } else {
         $configurations = s::get('newsletter_maillist');
-        foreach ($configurations as $key => $value) {
-            if ($value == '') {
-                     m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
-                     break;
+            foreach ($configurations as $key => $value) {
+            if ($key != 'receiver' && empty($value)) {
+                m::add(_('Your newsletter configuration is not complete. Please go to settings and complete the form.'), m::ERROR);
+                $httpParams [] = array(
+                    'action'=>'config',
+                );
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
             }
         }
-        
+    }
         $items = $newsletter->getItemsProvider();
 
         // Get articles in frontpage
@@ -225,11 +235,11 @@ switch($action) {
             // Replace name destination
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
 
-            //if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
+            if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
                 $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-            //} else {
-            //    $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
-            //}
+            } else {
+                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+            }
         }
 
         $tpl->assign(array(
