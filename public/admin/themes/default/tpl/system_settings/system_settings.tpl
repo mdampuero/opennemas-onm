@@ -111,7 +111,7 @@ textarea{
                             <label for="site_title">{t}Site keywords:{/t}</label>
                         </th>
                         <td>
-                            <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_description']|default:""}</textarea>
+                            <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
                         </td>
                         <td>
 
