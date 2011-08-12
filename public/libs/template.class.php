@@ -263,10 +263,12 @@ class TemplateAdmin extends Template {
 
 
         // Template variables
-        $this->locale_dir	= $baseDir.'locale/';
-        $this->css_dir	        = $baseDir.'css/';
-        $this->image_dir	= $baseDir.'images/';
-        $this->js_dir	        = $baseDir.'js/';
+        $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
+        
+        $this->locale_dir	= $baseUrl.'locale/';
+        $this->css_dir	        = $baseUrl.'css/';
+        $this->image_dir	= $baseUrl.'images/';
+        $this->js_dir	        = $baseUrl.'js/';
 
         $this->assign('params',
                 array(
