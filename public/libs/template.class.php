@@ -7,20 +7,20 @@
 class Template extends Smarty
 {
     // Private properties
-    var $theme          = null;
-    var $locale_dir	= null;
-    var $css_dir	= null;
-    var $image_dir      = null;
-    var $js_dir         = null;
-    var $js_includes    = array( 'head' => array() );
-    var $css_includes   = array( 'head' => array() );
-    var $metatags       = array();
-    var $filters        = array( 'pre'    => array(),
+    public $theme          = null;
+    public $locale_dir	= null;
+    public $css_dir	= null;
+    public $image_dir      = null;
+    public $js_dir         = null;
+    public $js_includes    = array( 'head' => array() );
+    public $css_includes   = array( 'head' => array() );
+    public $metatags       = array();
+    public $filters        = array( 'pre'    => array(),
                           'post'   => array(),
                           'output' => array(), );
 
-    var $relative_path = null;
-    static $registry = array();
+    public $relative_path = null;
+    static public $registry = array();
 
     function __construct($theme, $filters=array())
     {
@@ -58,13 +58,15 @@ class Template extends Smarty
         $this->loadFilter("output","trimwhitespace");
 
 
-        $this->assign(  'params',
-                            array(
-                                'LOCALE_DIR' =>    $this->locale_dir,
-                                'CSS_DIR'	 =>    $this->css_dir,
-                                'IMAGE_DIR'  =>    $this->image_dir,
-                                'JS_DIR'	 =>    $this->js_dir
-                            )
+        $this->assign(
+            'params',
+                array(
+                    'LOCALE_DIR' =>    $this->locale_dir,
+                    'CSS_DIR'	 =>    $this->css_dir,
+                    'IMAGE_DIR'  =>    $this->image_dir,
+                    'JS_DIR'	 =>    $this->js_dir,
+                    'THEME'      =>    $theme,
+                )
         );
 
         $this->theme = $theme;
@@ -231,40 +233,6 @@ class Template extends Smarty
         $this->caching = $config['caching'];
         $this->cache_lifetime = $config['cache_lifetime'];
     }
-
-    public function setMeta($name, $content=null)
-    {
-        if (is_array($name) && is_null($content)) {
-
-            $this->metatags = array_merge($this->metatags, $name);
-        } else {
-
-            $this->metatags[$name] = $content;
-        }
-    }
-
-    public function getMeta($name=null)
-    {
-        if (is_null($name)) {
-            return $this->metatags;
-        }
-
-        return (isset($this->metatags[$name]))? $this->metatags[$name]: null;
-    }
-
-    public function isHttpEquiv($name)
-    {
-        $valuesHttpEquiv = array('pragma', 'refresh', 'expires', 'content-type',
-                                 'content-language', 'cache-control');
-        $name = strtolower($name);
-
-        return in_array($name, $valuesHttpEquiv);
-    }
-
-    public function get_template_vars($varname=null)
-    {
-        return $this->getTemplateVars($varname, $_ptr = null, $search_parents=true);
-    }
 }
 
 class TemplateAdmin extends Template {
@@ -295,10 +263,10 @@ class TemplateAdmin extends Template {
 
 
         // Template variables
-        $this->locale_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'locale/';
-        $this->css_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'css/';
-        $this->image_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'images/';
-        $this->js_dir	= SITE_URL_ADMIN.SS.'themes'.SS.$theme.SS.'js/';
+        $this->locale_dir	= $baseDir.'locale/';
+        $this->css_dir	        = $baseDir.'css/';
+        $this->image_dir	= $baseDir.'images/';
+        $this->js_dir	        = $baseDir.'js/';
 
         $this->assign('params',
                 array(

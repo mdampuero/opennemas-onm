@@ -18,7 +18,7 @@ require_once('./advertisement_events.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Advertisement Management');
 
-$tpl->addScript( array('prototype.js', 'scriptaculous/scriptaculous.js', 'AdPosition.js') );
+//$tpl->addScript( array('prototype.js', 'scriptaculous/scriptaculous.js', 'AdPosition.js') );
 
 function buildFilter($filter) {
     $filters = array();

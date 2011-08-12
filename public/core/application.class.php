@@ -135,7 +135,6 @@ class Application {
 
     /**
      * Set up gettext translations.
-     *
      */
     static public function initGettext()
     {
@@ -148,8 +147,8 @@ class Application {
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-	    $locale = s::get('site_language'). ".UTF-8";
-	    $domain = 'messages';
+        $locale = s::get('site_language'). ".UTF-8";
+        $domain = 'messages';
 
         if (self::isBackend()) {
             $localeDir = SITE_ADMIN_PATH.DS.'locale'.DS;

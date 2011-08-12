@@ -12,24 +12,17 @@ require_once('./session_bootstrap.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 // Eliminar scripts y estilos predefinidos; añadir necesarios
-$scripts = array('utils.js', 'photos.js', 'swfobject.js', 'validation.js', 'fabtabulous.js', 'jsvalidate/jsvalidate_beta04.js');
-$tpl->removeScript( $scripts );
-$tpl->removeScript( 'wz_tooltip.js', 'body');
+//$scripts = array('utils.js', 'photos.js', 'swfobject.js', 'validation.js', 'fabtabulous.js', 'jsvalidate/jsvalidate_beta04.js');
+//$tpl->removeScript( $scripts );
+//$tpl->removeScript( 'wz_tooltip.js', 'body');
 
-$tpl->addScript('base64.js');
-
-$stylesheets = array('calendar_date_select.css', 'mediamanager.css', 'uploader.css', 'botonera.css') ;
-$tpl->removeStyle( $stylesheets );
+//$stylesheets = array('calendar_date_select.css', 'mediamanager.css', 'uploader.css', 'botonera.css') ;
+//$tpl->removeStyle( $stylesheets );
 
 
 
 //$tpl->assign('titulo_barra', 'Boletín de Noticias');
 $titulo_barra = 'Newsletter';
-
-//if( !in_array('NEWSLETTER_ADMIN', $_SESSION['privileges']))
-//{
-//    Application::forward($_SERVER['HTTP_REFERER'].'?action=list_pendientes');
-//}
 
 // Actions by XHR
 if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
