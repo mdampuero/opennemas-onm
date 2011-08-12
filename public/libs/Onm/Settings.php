@@ -59,12 +59,14 @@ class Settings {
                 $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
                 $rs = $GLOBALS['application']->conn->GetOne( $sql );
 
-
+                    
                 if (!$rs) {
-                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                    if (!empty($errorMsg)) {
+                        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                    }
+                    
                     return false;
                 }
 
