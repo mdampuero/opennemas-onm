@@ -85,7 +85,9 @@ if( isset($_REQUEST['action']) ) {
                     if (!empty($contenido)) {
                         foreach ($contenido as $value) {
                             if ($categories == $value->category) {
-                                $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                                if (file_exists(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path)) {
+                                    $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                                }
                             }
                         }
                     }
