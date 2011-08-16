@@ -36,8 +36,8 @@ class String_Utils {
                         '<'=>'', '>'=>'', '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
                         '.'=>'', ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n');
         $name = strtr($name, $trade);
-        $name = preg_replace('/[\-]+/', '-', $name);
-        $name = preg_replace('/[\ ]+/', '', $name);
+        $name = rtrim($name);
+        $name = preg_replace('/[\- ]+/', '-', $name);
         return $name;
     }
 
@@ -118,7 +118,7 @@ class String_Utils {
 
         $titule = String_Utils::setSeparator($titule, '-');
         $titule = preg_replace('/[\-]+/', '-', $titule);
-
+        
         return $titule;
     }
 
