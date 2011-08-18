@@ -262,7 +262,9 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::check('CONTENT_OTHER_UPDATE') && $opinionCheck->fk_user != $_SESSION['userid']) {
+            if(!Acl::isAdmin() &&  
+                    !Acl::check('CONTENT_OTHER_UPDATE') &&
+                    $opinionCheck->fk_user != $_SESSION['userid']) {
                 $msg ="Only read";
             }
 
@@ -322,7 +324,9 @@ if(isset($_REQUEST['action'])) {
                 $opinionCheck = new Opinion();
                 $opinionCheck->read($_REQUEST['id']);
 
-                if(!Acl::check('CONTENT_OTHER_UPDATE') && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+                if( !Acl::isAdmin() &&
+                        !Acl::check('CONTENT_OTHER_UPDATE') &&
+                        $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                     Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
                 }
 
@@ -346,7 +350,7 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if($opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+            if(!Acl::isAdmin() && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
                 Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
             }
 

@@ -52,6 +52,20 @@ class Acl
         return true;
 
     }
+
+    /**
+     * Check if is admin session
+     * @return boolean
+    */
+    public static function isAdmin()
+    {
+         if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
+                return true;
+         }
+         
+         return false;
+    }
+
     /**
      * Shortcut to check access to category
      *
