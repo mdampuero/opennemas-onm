@@ -96,7 +96,7 @@ submitForm = function() {
                 <label>{t}Content{/t}:</label>
             </td>
             <td>
-                <textarea cols="80" rows="20" name="content">{$widget->content|default:""}</textarea>
+                <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
                 <br/><br/>
             </td>
         </tr>
@@ -110,4 +110,14 @@ submitForm = function() {
         </div>
     </div>
 </form>
+<script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+<script type="text/javascript" language="javascript">
+        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+
+        OpenNeMas.tinyMceConfig.simple.elements = "description";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+
+        OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+</script>
 {/block}
