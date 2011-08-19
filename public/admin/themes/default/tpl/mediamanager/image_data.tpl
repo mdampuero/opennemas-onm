@@ -23,10 +23,34 @@
         alert("NO SE PUEDE ELIMINAR {$smarty.request.name} .\n Esta imagen está siendo utilizada en: {$smarty.request.alerta}.");
     </script>
     {/if}
+    <script type="text/javascript">
+        try {
+                // Activar la validación
+                new Validation('form_upload', { immediate : true });
+                Validation.addAllThese([
+                        ['validate-password',
+                                '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}', {
+                                minLength : 6,
+                                notOneOf : ['password','PASSWORD','Password'],
+                                notEqualToField : 'login'
+                        }],
+                        ['validate-password-confirm',
+                                '{t}Please check your first password and check again.{/t}', {
+                                equalToField : 'password'
+                        }]
+                ]);
+
+                // Para activar los separadores/tabs
+                $fabtabs = new Fabtabs('tabs');
+        } catch(e) {
+                // Escondemos los errores
+                //console.log( e );
+                    }
+    </script>    
 {/block}
 
 {block name="content"}
-<form id="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
+<form id="form_upload" name="form_upload" action="{$smarty.server.SCRIPT_NAME}?action=updateDatasPhotos" method="POST">
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
