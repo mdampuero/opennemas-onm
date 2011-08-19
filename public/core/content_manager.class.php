@@ -1507,10 +1507,6 @@ class ContentManager
             $append=false;
             $path = SITE_URL.$params;
 
-            if($params=='/seccion/opinion') {
-                //En listado de opinion, hay dos pages. List autors y list opinions.
-                $page='pageop';
-            }
 
         } elseif($function != "null") {
             if($params=='null') {

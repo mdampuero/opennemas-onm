@@ -88,7 +88,7 @@ if (isset($_REQUEST['action'])) {
 				//define('ITEMS_PAGE', 2);
 
                 $_limit='LIMIT '.(($page-1)*ITEMS_PAGE).', '.(($page)*ITEMS_PAGE);
-                $url='/seccion/opinion';
+                $url='opinion';
 
 				$total_opinions = $cm->count('Opinion','in_home=1 and available=1 and type_opinion=0',
                                       'ORDER BY type_opinion DESC, position ASC, created DESC ');
