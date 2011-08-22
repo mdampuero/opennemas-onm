@@ -190,6 +190,9 @@ class Album extends Content{
      */
     function cropImageFront($data) {
 
+        $configurations = \Onm\Settings::get('album_settings');
+        $this->widthCover = $configurations['crop_width'];
+        $this->heightCover = $configurations['crop_height'];
 
         if ($data['path_img'] && $data['name_img']) {
 

@@ -1,5 +1,6 @@
 <?php
-use Onm\Message as m;
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
@@ -37,8 +38,7 @@ $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 
 $tpl->assign('datos_cat', $categoryData);
-
- define('ALBUM_FAVORITES', 4);
+ 
 /******************* GESTION CATEGORIAS  *****************************/
 
 if( isset($_REQUEST['action']) ) {
@@ -49,6 +49,9 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('ALBUM_ADMIN');
             $cm = new ContentManager();
 
+            $configurations = s::get('album_settings');
+            $numFavorites = $configurations['total_widget'];
+
             if (empty($page)) {
                 $limit= "LIMIT ".(ITEMS_PAGE+1);
             } else {
@@ -57,8 +60,8 @@ if( isset($_REQUEST['action']) ) {
 
             if ($category == 'favorite') {
                 $albums = $cm->find_all('Album', 'favorite =1 AND available =1', 'ORDER BY  created DESC '.$limit);
-                if (count($albums) != ALBUM_FAVORITES ) {
-					m::add( sprintf(_("You must put %d albums in the HOME widget"), ALBUM_FAVORITES));
+                if (count($albums) != $numFavorites ) {
+					m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
                 }
                 if(!empty($albums)) {
                     foreach ($albums as &$album) {
@@ -87,12 +90,25 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'new':
+
+            $configurations = s::get('album_settings');
+
+            $tpl->assign( array(
+                            'crop_width' => $configurations['crop_width'],
+                            'crop_height' => $configurations['crop_height'] ));
+           
 			$tpl->display('album/new.tpl');
 		break;
 
 		case 'read':
 
             Acl::checkOrForward('ALBUM_UPDATE');
+
+            $configurations = s::get('album_settings');
+            $tpl->assign( array(
+                            'crop_width' => $configurations['crop_width'],
+                            'crop_height' => $configurations['crop_height'] ));
+           
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             if(empty($id)) { //because forwards
@@ -137,7 +153,7 @@ if( isset($_REQUEST['action']) ) {
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
 			$album = new Album($id);
-            if(!Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
                 $msg ="Only read";
             }
 			$album->update( $_POST );
@@ -157,7 +173,7 @@ if( isset($_REQUEST['action']) ) {
 			} else {
                 Acl::checkOrForward('ALBUM_UPDATE');
 				$album = new Album($id);
-                if(!Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
                     $msg ="Only read";
                 }
 				$album->update( $_POST );
@@ -295,6 +311,42 @@ if( isset($_REQUEST['action']) ) {
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&alert='.$alert.'&msgdel='.$msg.'&page='.$page);
 		break;
+
+        case 'config':
+
+            $configurationsKeys = array(
+                                        'album_settings',
+                                        );
+
+            $configurations = s::get($configurationsKeys);
+
+            $tpl->assign(
+                         array(
+                                'configs'   => $configurations,
+                            )
+                        );
+
+            $tpl->display('album/config.tpl');
+
+        break;
+
+        case 'save_config':
+
+            unset($_POST['action']);
+            unset($_POST['submit']);
+
+            foreach ($_POST as $key => $value ) {
+                s::set($key, $value);
+            }
+
+            m::add(_('Settings saved.'), m::SUCCESS);
+
+            $httpParams = array(
+                                array('action'=>'list'),
+                                );
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+        break;
 
 		default:
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);

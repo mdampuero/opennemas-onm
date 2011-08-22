@@ -1,6 +1,6 @@
 <?php
-use Onm\Message as m;
-
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
@@ -18,14 +18,11 @@ Acl::checkOrForward('VIDEO_ADMIN');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Video Management');
-
-
+ 
 //Testing Panorama
 set_include_path(get_include_path(). PATH_SEPARATOR. SITE_LIBS_PATH.DIRECTORY_SEPARATOR.'Panorama');
 require_once(implode(DIRECTORY_SEPARATOR, array('Zend','Gdata','YouTube.php')));
 require_once( implode(DIRECTORY_SEPARATOR, array('Panorama','Panorama','Video.php')));
-
-define('VIDEO_FAVORITES', 4);
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
@@ -58,6 +55,10 @@ if( isset($_REQUEST['action']) ) {
 
 			$cm = new ContentManager();
 
+            $configurations = s::get('video_settings');
+
+            $numFavorites = $configurations['total_widget'];
+
             if (empty($page)) {
                 $limit= "LIMIT ".(ITEMS_PAGE+1);
             } else {
@@ -66,8 +67,8 @@ if( isset($_REQUEST['action']) ) {
 
             if ($category == 'favorite') { //Widget video
                 $videos = $cm->find_all('Video', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
-                if (count($videos) != VIDEO_FAVORITES ) {
-                    m::add( sprintf(_("You must put %d videos in the HOME widget"), VIDEO_FAVORITES));
+                if (count($videos) != $numFavorites ) {
+                    m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
                 }
                 if(!empty($videos)){
                     foreach ($videos as &$video) {
@@ -173,11 +174,11 @@ if( isset($_REQUEST['action']) ) {
 
             $_POST['information'] = json_decode($_POST['information'], true);
 
-            if(!Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
-                $msg ="Only read";
+            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
+                m::add( _("Only read. You isn't ownner. ") );
+            }else{
+                $video->update( $_POST );
             }
-            $video->update( $_POST );
-
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
 		break;
@@ -198,10 +199,11 @@ if( isset($_REQUEST['action']) ) {
             } else {
                 Acl::checkOrForward('VIDEO_UPDATE');
                 $video = new Video($id);
-                if(!Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
-                    $msg ="Only read";
+                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
+                      m::add( _("Only read. You isn't ownner. ") );
+                }else{
+                    $video->update( $_POST );
                 }
-                $video->update( $_POST );
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
@@ -270,6 +272,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'change_status':
 
             Acl::checkOrForward('VIDEO_AVAILABLE');
+            
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 			$video = new Video($id);
 			//Publicar o no,
@@ -292,7 +295,7 @@ if( isset($_REQUEST['action']) ) {
             if ($video->available==1) {
                 $video->set_favorite($status);
             }else{
-                $msg="No se puede esta despublicado";
+                m::add( _("You can define as favorite, it is unpublished") );
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
 
@@ -322,13 +325,14 @@ if( isset($_REQUEST['action']) ) {
 		case 'mdelete':
 
             Acl::checkOrForward('VIDEO_DELETE');
+            $msg='';
 			if (isset($_REQUEST['selected_fld'])
 				&& count($_REQUEST['selected_fld'])>0)
 			{
 			    $fields = $_REQUEST['selected_fld'];
 				if(is_array($fields)) {
-					$msg="Los videos ";
-					$alert='';
+					$msg = _("Selected videos ");
+
 				    foreach($fields as $i ) {
 						$video = new Video($i);
 						$rel= new Related_content();
@@ -338,7 +342,7 @@ if( isset($_REQUEST['action']) ) {
 
 						if(!empty($relationes)){
 							$nodels[] =$i;
-							$alert='ok';
+
 							$msg .= " \"".$video->title."\", ";
 
 						}else{
@@ -348,10 +352,50 @@ if( isset($_REQUEST['action']) ) {
 				}
 			}
 
-            $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&alert='.$alert.'&msgdel='.$msg.'&page='.$page);
+            $msg.= _(" have relations with other contents.");
+            $msg.=_("You can delete one by one!");
+            m::add( $msg );
+
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
 		break;
+
+        case 'config':
+
+                $configurationsKeys = array(
+                                            'video_settings',
+                                            );
+
+                $configurations = s::get($configurationsKeys);
+
+                $tpl->assign(
+                             array(
+                                    'configs'   => $configurations,
+                                )
+                            );
+
+                $tpl->display('video/config.tpl');
+
+            break;
+
+            case 'save_config':
+
+                unset($_POST['action']);
+                unset($_POST['submit']);
+
+                foreach ($_POST as $key => $value ) {
+                    s::set($key, $value);
+                }
+
+                m::add(_('Settings saved.'), m::SUCCESS);
+
+                $httpParams = array(
+                                    array('action'=>'list'),
+                                    );
+                Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+            break;
+
 
 		default:
 

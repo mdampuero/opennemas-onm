@@ -49,6 +49,15 @@
                     </a>
                 </li>
                 {/acl}
+                {acl isAllowed="ALBUM_SETTINGS"}
+                <li class="separator"></li>
+                    <li>
+                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Configurations{/t}
+                        </a>
+                    </li>
+                {/acl}
             </ul>
         </div>
     </div>
@@ -60,14 +69,7 @@
             </li>
            {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
-
-        <div id="messageBoard"></div>
-
-        {if (!empty($msg) || !empty($msgdel) || !empty($errors) )}
-            <script type="text/javascript">
-                showMsgContainer({ 'warn':['  {$msg} , {$msgdel}, {$errors} '] },'inline','messageBoard');
-            </script>
-        {/if}
+ 
         {render_messages}
 
         <div id="{$category}">
@@ -134,7 +136,7 @@
                     </td>
                     <td align="center">
                         {acl isAllowed="ALBUM_UPDATE"}
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title={t}"Edit"{/t}>
+                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                         {/acl}
                     </td>

@@ -172,7 +172,7 @@
 
 <tr>
     <td colspan="3">
-        <label{t}Cut the image that is in frontpage view.(300x250 px){/t} </label>
+        <label>{t}Cut the image that is in frontpage view. ({$crop_width}x{$crop_height} px){/t} </label>
         <div id="testWrap">
             <img src="{$params.IMAGE_DIR}default_img.jpg" alt={t}"test image"{/t} 
                  id="testImage"  width="300" />
@@ -189,6 +189,9 @@
 
             <input type="hidden" name="width" id="width" value="" />
             <input type="hidden" name="height" id="height" value=""/>
+
+            <input type="hidden" name="cropWidth" id="cropWidth" value="{$crop_width}" />
+            <input type="hidden" name="cropHeight" id="cropHeight" value="{$crop_height}"/>
 
             <input type="hidden" name="path_img" id="path_img" value=""/>
             <input type="hidden" name="name_img" id="name_img" value=""/>

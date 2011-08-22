@@ -169,10 +169,12 @@ var crop = null;
 
 
 function cropcreate() {
+    var cropWidth = $('cropWidth').value;
+    var cropHeight = $('cropHeight').value;
     crop = new Cropper.ImgWithPreview('testImage', {
-        minWidth: 300,
-        minHeight: 240,
-        ratioDim: { x: 300, y: 240 },
+        minWidth: cropWidth,
+        minHeight: cropHeight,
+        ratioDim: { x: cropWidth, y: cropHeight },
         displayOnInit: true,
         onEndCrop: onEndCrop,
         previewWrap: 'previewArea'
@@ -234,9 +236,11 @@ function define_crop(element) {
         }
     }
 
-    if (b[0]<300) { alert('La foto escogida para portada no supera los 300px de ancho');
+    if (b[0]< $('cropWidth').value) {
+        alert('La foto escogida para portada no supera los '+ $('cropWidth').value +'px de ancho');
     }else{
-        if(c[0]<240){ alert('La foto escogida para portada no supera los 240px de alto');}
+        if(c[0]< $('cropHeight').value){
+            alert('La foto escogida para portada no supera los '+ $('cropHeight').value +'px de alto');}
     }
 
     cropcreate();
