@@ -94,7 +94,7 @@
 	<tfoot>
 		<tr class="pagination">
 			<td colspan="10" align="center">
-				{$paginacion->links|default:""}
+				{$paginacion|default:""}
 			</td>
 		</tr>
 	</tfoot>
