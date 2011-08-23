@@ -24,9 +24,12 @@ class ContentCategory {
 
     function create($data) {
 
-        //if($data['subcategory']!=0){$sub="-".$data['subcategory'];}
         $data['name'] = strtolower($data['title']);
         $data['name'] = String_Utils::normalize_name( $data['name']);
+
+        $data['logo_path'] = (isset($data['logo_path']))?$data['logo_path']:'';
+        $data['color'] =(isset($data['color']))?$data['color']:'';
+
         $ccm = new ContentCategoryManager();
         
         if( $ccm->exists($data['name'])) {
@@ -53,12 +56,12 @@ class ContentCategory {
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
-            return(false);
+            return false;
         }
 
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
-
-        return(true);
+         
+        return true;
     }
 
     function read($id) {
@@ -99,9 +102,11 @@ class ContentCategory {
     function update($data) {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
         $data['name'] = String_Utils::normalize_name( $data['title']);
+
         if(empty($data['logo_path'])){
-                $data['logo_path']=$this->logo_path;
+                $data['logo_path'] = $this->logo_path;
         }
+        $data['color'] =(isset($data['color']))? $data['color']: $this->color;
         $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?,`logo_path`=?,`color`=?
                     WHERE pk_content_category=".($data['id']);
 
@@ -127,6 +132,8 @@ class ContentCategory {
             }
         }
 
+        return true;
+
     }
 
 
@@ -139,27 +146,16 @@ class ContentCategory {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-                return("BD");
+                
+                return false;
             }
 
-            $padre = "";
-            if(isset($data['subcategory']) && !empty($data['subcategory'])) {
-                $cat   = $this->read($data['subcategory']);
-                $padre = $cat['name'];
-            }
-
-            return("SI");
+            return true;
         } else {
-            return("NO");
+            return false;
         }
 
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
-            return("BD");
-        }
     }
 
     function empty_category($id) {
@@ -170,7 +166,7 @@ class ContentCategory {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-                return("BD");
+                return false;
             }
             $array_contents= array();
             while(!$rs->EOF) {
@@ -179,9 +175,6 @@ class ContentCategory {
             }
             if(!empty($array_contents)){
                 $contents = implode(', ', $array_contents);
-
-
-
 
                 $sql1 = 'DELETE FROM contents  WHERE `pk_content` IN ('.$contents .') ';
                 $sql2 =' DELETE FROM articles  WHERE `pk_article` IN ('.$contents .') ';
@@ -207,12 +200,12 @@ class ContentCategory {
                     $sql='sql'.$i;
 
                      if($GLOBALS['application']->conn->Execute($$sql)===false){
-                         echo '<br> - '.$$sql;
+                       //  echo '<br> - '.$$sql;
                      }
 
                 }
             }
-            return("EMPTY");
+            return true;
 
     }
 

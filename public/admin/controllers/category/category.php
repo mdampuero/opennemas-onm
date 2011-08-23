@@ -1,5 +1,6 @@
 <?php
-
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
@@ -13,22 +14,10 @@ Acl::checkOrForward('CATEGORY_ADMIN');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Section Manager'));
 
-$content_types = array('article' => 1 , 'album' => 7, 'video' => 9, 'opinion' => 4, 'kiosko'=>14);
-//$contentType = Content::getIDContentType('advertisement');
+$ccm = ContentCategoryManager::get_instance();
 
-$ccm = new ContentCategoryManager();
-
-//$ccm = ContentCategoryManager::get_instance();
-//list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $pages[$name]);
-
-$allcategorys = $ccm->find('internal_category != 0 AND fk_content_category =0 ', 'ORDER BY  inmenu DESC, posmenu');
+$allcategorys = $ccm->categories;
 $tpl->assign('allcategorys', $allcategorys);
-
- 
-$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
- 
-
-$inmenu = filter_input(INPUT_GET,'inmenu',FILTER_VALIDATE_INT, array('options' => array('default' => 0)));
 
 
 if( isset($_REQUEST['action']) ) {
@@ -53,11 +42,10 @@ if( isset($_REQUEST['action']) ) {
                          $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
 
-                         $categorys[$i]=$cate;
+                         $categorys[$i] = $cate;
 
-                         $resul = $ccm->find('internal_category != 0 AND fk_content_category ='.$cate->pk_content_category, 'ORDER BY  inmenu DESC, posmenu ASC');
+                         $resul = $ccm->getSubcategories( $cate->pk_content_category);
                          $j=0;
-
                          foreach($resul as $cate) {
                               $num_sub_contents[$i][$j]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                               $num_sub_contents[$i][$j]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
@@ -85,37 +73,62 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
 
+            $categories = array();
+            foreach($allcategorys as $cate) {
+               if($cate->internal_category != 0 && $cate->fk_content_category == 0) {
+                   $categories[] = $cate;
+               }
+            }
+            $tpl->assign('allcategorys', $categories);
+
             $tpl->display('category/form.tpl');
 
 		break;
 
-		case 'read': //habrá que tener en cuenta el tipo
+		case 'read':
             Acl::checkOrForward('CATEGORY_UPDATE');
 
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
             $category = new ContentCategory( $_REQUEST['id'] );
             $tpl->assign('category', $category);
-            $subcategorys = $ccm->find('fk_content_category ='.$_REQUEST['id'], 'ORDER BY fk_content_category,posmenu');
+            $subcategorys = $ccm->getSubcategories( $_REQUEST['id'] );
             $tpl->assign('subcategorys', $subcategorys);
+            $categories = array();
+            foreach($allcategorys as $cate) {
+               if($cate->internal_category != 0 && $cate->fk_content_category == 0) {
+                   $categories[] = $cate;
+               }
+            }
+            $tpl->assign('allcategorys', $categories);
+            $tpl->assign('configurations',s::get('section_settings'));
+
+
             $tpl->display('category/form.tpl');
 
 		break;
 
 		case 'update':
+            
             Acl::checkOrForward('CATEGORY_UPDATE');
-            $category = new ContentCategory();
-            $nameFile = $_FILES['logo_path']['name'];
-            if(!empty($nameFile)){
 
-              $uploaddir="../media/sections/".$nameFile;
-              if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                  $_REQUEST['logo_path'] = $nameFile;
-              }else{
-                  $_REQUEST['logo_path'] ='';
-              }
+            $configurations = s::get('section_settings');
+            if($configurations['allowLogo'] == 1 ) {
+                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
+ 
+                if(!empty($_FILES) && isset($_FILES['logo_path'])) {
+                    $nameFile = $_FILES['logo_path']['name'];
+                    $uploaddir = MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
+
+                    if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                      $_REQUEST['logo_path'] = $nameFile;
+                    }
+                }
             }
 
-            $category->update( $_REQUEST );
+            $category = new ContentCategory();
+            if($category->update( $_REQUEST )) {
+                $ccm->reloadCategories();
+            }
 
             /* Limpiar la cache de portada de todas las categorias */
             if(isset ($_REQUEST['inmenu']) && $_REQUEST['inmenu']==1) {
@@ -130,25 +143,27 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('CATEGORY_CREATE');
 
             $category = new ContentCategory();
-            $nameFile = $_FILES['logo_path']['name'];
-            $uploaddir="../media/sections/".$nameFile;
 
-            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-               $_POST['logo_path'] = $nameFile;
-            }else{
-                $_POST['logo_path'] ='';
+            $configurations = s::get('section_settings');
+            if($configurations['allowLogo'] == 1 ) {
+                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
+
+                if(!empty($_FILES) && isset($_FILES['logo_path'])) {
+                    $nameFile = $_FILES['logo_path']['name'];
+                    $uploaddir= MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
+
+                    if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                       $_POST['logo_path'] = $nameFile;
+                    }
+                }
             }
 
-            if($men = $category->create( $_POST )) {
-               /* Limpiar la cache de portada de todas las categorias */
-               if($_POST['inmenu']==1) {
-                   $refresh = Content::refreshFrontpageForAllCategories();
-               }
-               Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$men);
-            } else {
-               $tpl->assign('errors', $category->errors);
+            if($category->create( $_POST )) {
+                $ccm->reloadCategories();
             }
-
+  
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+            
             $tpl->display('category/form.tpl');
 
         break;
@@ -157,18 +172,26 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('CATEGORY_DELETE');
 
             $category = new ContentCategory();
-            $resp = $category->delete( $_POST['id'] );
+             
+            if($category->delete( $_POST['id'] )) {
+                $ccm->reloadCategories();
+                $msg = _("Categoy deleted successfully");
+            }else{
+                $msg = _("To delete a category previously you have to empty it");
+            }
+            m::add( $msg );
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$resp);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;
 
 		case 'empty':
 
 		    $category = new ContentCategory();
-			$resp = $category->empty_category( $_POST['id'] );
+			if( $category->empty_category( $_POST['id'] ))
+                m::add( _("Category has been emptied successfully") );
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&resp='.$resp);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		  break;
 
@@ -179,47 +202,92 @@ if( isset($_REQUEST['action']) ) {
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $category->set_inmenu($status);
             /* Limpiar la cache de portada de todas las categorias */
-            $refresh = Content::refreshFrontpageForAllCategories();
+         //   $refresh = Content::refreshFrontpageForAllCategories();
 
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list_pendientes&category='.$_REQUEST['id'].'&page='.$page);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;
 
 		case 'validate':
 
-            $nameFile = $_FILES['logo_path']['name'];
-            $uploaddir="../media/sections/".$nameFile;
+            $configurations = s::get('section_settings');
 
-            if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-              $_POST['logo_path'] = $nameFile;
-              $_REQUEST['logo_path'] = $nameFile;
-            }else{
-              $_POST['logo_path'] = '';
-              $_REQUEST['logo_path'] = '';
+            if($configurations['allowLogo'] == 1 ) {
+                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
+
+                if(!empty($_FILES) && isset($_FILES['logo_path'])) {
+                    $nameFile = $_FILES['logo_path']['name'];
+                    $uploaddir = MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
+
+                    if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                      $_POST['logo_path'] = $nameFile;
+
+                    }else{
+                      $_POST['logo_path'] = '';
+
+                    }
+                }
             }
-
             if(empty($_POST['id'])) {
                $category = new ContentCategory();
-               if(!$category->create( $_POST )) {
-                   $tpl->assign('errors', $category->errors);
-               }else{
-                   /* Limpiar la cache de portada de todas las categorias */
-                   if($_POST['inmenu']==1) {
-                       $refresh = Content::refreshFrontpageForAllCategories();
-                   }
+               if($category->create( $_POST )) {
+                   $ccm->reloadCategories();
                }
             } else {
                $category = new ContentCategory();
-               $category->update( $_REQUEST );
-               /* Limpiar la cache de portada de todas las categorias */
-               if(isset ($_REQUEST['inmenu']) && $_REQUEST['inmenu']==1) {
-                   $refresh = Content::refreshFrontpageForAllCategories();
+               if($category->update( $_POST ) ){
+                   $ccm->reloadCategories();
+                   /* Limpiar la cache de portada de todas las categorias */
+                   if(isset ($_REQUEST['inmenu']) && $_REQUEST['inmenu']==1) {
+                       $refresh = Content::refreshFrontpageForAllCategories();
+                   }
                }
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$category->pk_content_category);
 
 		break;
+
+        case 'config':
+
+            $configurationsKeys = array(
+                                        'section_settings',
+                                        );
+
+            $configurations = s::get($configurationsKeys);
+
+            $tpl->assign(
+                         array(
+                                'configs'   => $configurations,
+                            )
+                        );
+
+            $tpl->display('category/config.tpl');
+
+        break;
+
+        case 'save_config':
+
+            unset($_POST['action']);
+            unset($_POST['submit']);
+
+            if($_POST['section_settings']['allowLogo'] == 1 && !empty($_POST['section_settings']['logoDir'])){
+                $path = MEDIA_PATH.'/'.$_POST['section_settings']['logoDir'];
+                FilesManager::createDirectory($path);
+            }
+
+            foreach ($_POST as $key => $value ) {
+                s::set($key, $value);
+            }
+ 
+            m::add(_('Settings saved.'), m::SUCCESS);
+
+            $httpParams = array(
+                                array('action'=>'list'),
+                                );
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+        break;
 
 		default:
 

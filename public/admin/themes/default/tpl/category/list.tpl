@@ -15,6 +15,7 @@
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+    
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Category manager{/t} :: {t}Listing categories{/t}</h2></div>
@@ -24,35 +25,28 @@
                     <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
                 </a>
             </li>
+            {acl isAllowed="CATEGORY_SETTINGS"}
+                <li class="separator"></li>
+                    <li>
+                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Configurations{/t}
+                        </a>
+                    </li>
+                {/acl}
         </ul>
     </div>
 </div>
 
 <div class="wrapper-content">
-    {if !empty($smarty.get.resp) && $smarty.get.resp == "NO"}
-        <div class="notice" style="margin-top:3px;">
-            <p>{t}To delete a category previously you have to empty it{/t}</p>
-        </div>
-    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "SI"}
-        <div class="success" style="margin-top:3px;">
-            <p>{t}Categoy deleted successfully{/t}</p>
-        </div>
-    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "BD"}
-        <div class="error" style="margin-top:3px;">
-            <p>{t}Error: you have some Database errors{/t}</p>
-        </div>
-    {elseif !empty($smarty.get.resp) && $smarty.get.resp == "EMPTY"}
-        <div class="success" style="margin-top:3px;">
-            <p>{t}Category has been emptied successfully{/t}</p>
-        </div>
-    {/if}
+
+       {render_messages}
+    
         <ul id="tabs">
             <li>
                     <a href="category.php#listado">Listar secciones</a>
             </li>
-<!--            <li>
-                    <a href="#ordenar">Ordenar Secciones</a>
-            </li>-->
+ 
         </ul>
 
         <div class="panel" id="listado">
@@ -79,7 +73,7 @@
                     <tr>
                         <td colspan="10">
                             {section name=c loop=$categorys}
-                                {if $categorys[c]->internal_category eq 1}
+                                {if $categorys[c]->internal_category eq '1'}
                                     {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]|default:array()}
                                 {/if}
                             {sectionelse}
@@ -90,7 +84,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="10" align="center">{$paginaion->links|default:""}</td>
+                        <td colspan="10" align="center"> </td>
                     </tr>
                 </tfoot>
             </table>
@@ -120,7 +114,7 @@
                     <tr>
                         <td colspan="10">
                             {section name=c loop=$categorys}
-                                {if $categorys[c]->internal_category eq 7}
+                                {if $categorys[c]->internal_category eq '7'}
                                     {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                                 {/if}
                             {sectionelse}
@@ -131,7 +125,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="10" align="center">{$paginacion->links|default:""}</td>
+                        <td colspan="8" align="center"> </td>
                     </tr>
                 </tfoot>
             </table>
@@ -160,7 +154,7 @@
                     <tr>
                         <td colspan="10">
                         {section name=c loop=$categorys}
-                            {if $categorys[c]->internal_category eq 9}
+                            {if $categorys[c]->internal_category eq '9'}
                                 {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
@@ -171,7 +165,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="5" align="center">{$paginacion->links|default:""}</td>
+                        <td colspan="8" align="center"> </td>
                     </tr>
                 </tfoot>
             </table>
@@ -200,7 +194,7 @@
                     <tr>
                         <td colspan="10">
                         {section name=c loop=$categorys}
-                            {if $categorys[c]->internal_category eq 14}
+                            {if $categorys[c]->internal_category eq '14'}
                                 {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
@@ -212,106 +206,14 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="5" align="center">{$paginacion->links|default:""}</td>
+                        <td colspan="8" align="center"> </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-
-
-        <div class="panel" id="ordenar" style="width:95%">
-
-            {include file="botonera_up.tpl" type="order"}
-            <div id="warnings-validation"></div>
-            <table class="adminheading">
-                <tr>
-                    <td>&nbsp;</td>
-                </tr>
-            </table>
-
-            <table class="adminlist" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
-                <thead>
-                    <tr>
-                        <th width="20%" class="title">T&iacute;tulo</th>
-                        <th width="25%" align="center">Nombre interno</th>
-                        <th align="center" width="10%">Ver En menu</th>
-                        <th align="center" width="15%">Modificar</th>
-                        <th align="center" width="15%">Eliminar</th>
-                    </tr>
-                </thead>
-                <tr>
-                    <td colspan="5">
-                        <div id="cates" class="seccion" style="float:left;width:100%;"> <br />
-                            {section name=c loop=$ordercategorys}
-
-                                {*NO album(3) , NO planConecta(9)*}
-                                {if $ordercategorys[c]->internal_category neq "4" && $ordercategorys[c]->pk_content_category neq "9" && $ordercategorys[c]->pk_content_category neq "3"}
-                                    <table width="100%"  id="{$ordercategorys[c]->pk_content_category}" class="tabla" cellpadding=0 cellspacing=0 >
-                                        <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;border:0px; padding:0px;margin:0px;">
-                                            <td style="padding:10px;font-size: 11px;width:20%;">
-                                                 {if $categorys[c]->internal_category eq 7}
-                                                     <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
-                                                 {elseif $categorys[c]->internal_category eq 9}
-                                                     <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
-                                                 {/if}
-                                                {$ordercategorys[c]->title}
-                                            </td>
-                                            <td align="center" style="padding:10px;font-size: 11px;width:25%;">
-                                                {$ordercategorys[c]->name|clearslash}
-                                            </td>
-                                            <td align="center" style="padding:10px;font-size: 11px;width:10%;">
-                                                {if $ordercategorys[c]->inmenu==1}
-                                                    <a href="?id={$ordercategorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=0" title="En menu">
-                                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                                                {else}
-                                                    <a href="?id={$ordercategorys[c]->pk_content_category}&amp;action=set_inmenu&amp;status=1" title="No en menu">
-                                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                                                {/if}
-                                            </td>
-                                            <td style="padding: 0px 10px; height: 40px;width:15%;" align="center">
-                                                {if $ordercategorys[c]->internal_category==1}
-                                                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', {$ordercategorys[c]->pk_content_category});" title="Modificar">
-                                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                                    </a>
-                                                {/if}
-                                            </td>
-                                            <td style="padding: 0px 10px; height: 40px;width:15%;" align="center">
-                                                {if $ordercategorys[c]->internal_category==1}
-                                                    <a href="#" onClick="javascript:confirmar(this, {$ordercategorys[c]->pk_content_category});" title="Eliminar">
-                                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                                    </a>
-                                                    {else} &nbsp;
-                                                {/if}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                {/if}
-                            {sectionelse}
-                                <h2><strong>Ning&uacute;na secci&oacute;n guardada</strong></h2>
-                            {/section}
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <script type="text/javascript">
-                // <![CDATA[
-                    Sortable.create('cates',
-                                    {
-                                        tag:'table',
-                                        dropOnEmpty: true,
-                                        containment:["cates"],
-                                        onChange: function(item) {
-                                            $('warnings-validation').update('<div class="notice">Por favor, recuerde guardar posiciones antes de terminar.</div>');
-                                        },
-                                        constraint:false
-                                    }
-                        );
-                // ]]>
-            </script>
-        </div>
-
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </form>
-</div><!--fin wrapper-content-->
+ </div>
+<input type="hidden" id="action" name="action" value="" />
+<input type="hidden" name="id" id="id" value="{$id|default:""}" />
+</form>
+<!--fin wrapper-content-->
 {/block}

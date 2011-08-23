@@ -20,40 +20,39 @@
 {/block}
 
 {block name="content"}
-<div class="top-action-bar clearfix">
-	<div class="wrapper-content">
-        <form action="#" method="post" name="formulario" id="formulario">
 
-		<div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
-		<ul class="old-button">
-			<li>
-				<a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category|default:""}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-				</a>
-			</li>
-			<li>
-			{if isset($category->pk_content_category)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category|default:""}, 'formulario');">
-			{else}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
-			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
-				</a>
-			</li>
-			<li class="separator"></li>
-			<li>
-				<a href="{$smarty.server.PHP_SELF}?desde={$smarty.session.desde}" class="admin_add" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
-				</a>
-			</li>
-		</ul>
-	</div>
-</div>
-<div class="wrapper-content">
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
 
+            <div class="title"><h2>{t}Category manager{/t} :: {t}Editing category{/t}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <a href="#" class="admin_add" onClick="javascript:savePriority();sendFormValidate(this, '_self', 'validate', '{$category->pk_content_category|default:""}', 'formulario');" value="Validar" title="Validar">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                    </a>
+                </li>
+                <li>
+                {if isset($category->pk_content_category)}
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', {$category->pk_content_category|default:""}, 'formulario');">
+                {else}
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
+                {/if}
+                        <img border="0" src="{$params.IMAGE_DIR}save.gif" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?desde={$smarty.session.desde}" class="admin_add" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-        <div id="warnings-validation"></div>
+    <div class="wrapper-content">
 
         <table class="adminheading">
             <tbody>
@@ -62,7 +61,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="adminform" id="tabla"  width="99%" cellpadding=0 cellspacing=0 >
+        <table class="adminform" id="tabla"  width="99%" cellpadding="0" cellspacing="0" >
             <tbody>
                 <tr>
                     <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
@@ -90,9 +89,9 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" >
                         <select name="subcategory" class="required" size="12">
-                            <option value="0" {if isset($category) && (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
+                            <option value="0" {if !isset($category) || (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
                             {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
+                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
                             {/section}
                         </select>
                     </td>
@@ -105,7 +104,7 @@
                                     <td  style="padding:4px;"> Global:</td>
                                     <td>
                                         <input type="radio" id="internal_category" name="internal_category"  value="1"
-                                        {if isset($category) && (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>
+                                        {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>
                                     </td>
                                     <td  style="padding:4px;"> </td>
                                     <td  style="padding:4px;"> Álbumes:</td>
@@ -140,27 +139,30 @@
                             {t}If this option is activated this category will be showed in menu{/t}
                     </td>
                 </tr>
-                 <tr>
-                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
-                        <label for="inmenu">{t}Frontpage logo:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap" >
-                        <input type="file" id="logo_path" name="logo_path"  />
-                    </td>
-                     <td style="padding:4px;" nowrap="nowrap" rowspan="2" >
-                         {if !empty($category->logo_path)}<img src="../media/sections/{$category->logo_path}" >{/if}
-                     </td>
-                </tr>
-                <tr>
-                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
-                        <label for="inmenu">{t}Color:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" colspan="2" >
-                        <script type="application/x-javascript">
-                            initPicker('color','{$category->color}', 24);
-                        </script>
-                    </td>
-                </tr>
+             
+                {if isset($configurations) && !empty($configurations['allowLogo'])}
+                     <tr>
+                        <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                            <label for="inmenu">{t}Frontpage logo:{/t}</label>
+                        </td>
+                        <td style="padding:4px;" nowrap="nowrap" >
+                            <input type="file" id="logo_path" name="logo_path"  />
+                        </td>
+                         <td style="padding:4px;" nowrap="nowrap" rowspan="2" >
+                             {if !empty($category->logo_path)}<img src="../media/sections/{$category->logo_path}" >{/if}
+                         </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                            <label for="inmenu">{t}Color:{/t}</label>
+                        </td>
+                        <td style="padding:4px;" colspan="2" >
+                            <script type="application/x-javascript">
+                                initPicker('color','{$category->color}', 24);
+                            </script>
+                        </td>
+                    </tr>
+                {/if}
 
                 {if !empty($subcategorys)}
                     <tr>
@@ -168,7 +170,7 @@
                             <label>{t}Subsections:{/t}</label>
                         </td>
                         <td nowrap="nowrap" colspan="2">
-                            <table class="adminlist" id="cates">
+                            <table class="adminlist" id="cates" style="width:90%;margin:10px; ">
                                 <thead>
                                     <tr>
 
@@ -179,52 +181,42 @@
                                         <th align="center" style="width:80px;">{t}Actions{/t}</th>
                                     </tr>
                                 </thead>
-                                <tr>
-                                    <td colspan="6">
-                                        <div id="subcates" class="seccion" style="float:left;width:100%;">
-                                            {section name=s loop=$subcategorys}
-                                                <table style="width:100%" id="{$subcategorys[s]->pk_content_category}">
-                                                    <tr>
-                                                        <td style="font-size: 11px;text-align:left;">
-                                                             {$subcategorys[s]->title}
-                                                        </td>
-                                                        <td style="font-size: 11px;width:120px;text-align:left;">
-                                                             {$subcategorys[s]->name}
-                                                        </td>
-                                                        <td style="font-size: 11px;width:80px;" align="center">
-                                                          {if $subcategorys[s]->internal_category eq 3}
-                                                             <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
-                                                          {elseif $subcategorys[s]->internal_category eq 5}
-                                                             <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
-                                                          {else}
-                                                              <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
-                                                          {/if}
-                                                        </td>
-                                                        <td style="font-size: 11px;width:80px;"  align="center">
-                                                            {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
-                                                        </td>
-                                                        <td style="font-size: 11px;width:80px;" align="center">
-															<ul class="action-buttons">
-																<li>
-																	<a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
-																		<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-																	</a>
-																</li>
-																<li>
-																	<a href="#" onClick="javascript:confirmar(this, {$subcategorys[s]->pk_content_category});" title="Eliminar">
-																		<img src="{$params.IMAGE_DIR}trash.png" border="0" />
-																	</a>
-																</li>
-															</ul>
-
-
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                    {section name=s loop=$subcategorys}
+                                          <tr>
+                                                <td style="font-size: 11px;text-align:left;">
+                                                     {$subcategorys[s]->title}
+                                                </td>
+                                                <td style="font-size: 11px;width:120px;text-align:left;">
+                                                     {$subcategorys[s]->name}
+                                                </td>
+                                                <td style="font-size: 11px;width:80px;" align="center">
+                                                  {if $subcategorys[s]->internal_category eq 3}
+                                                     <img style="width:20px;" src="{$params.IMAGE_DIR}album.png" border="0" alt="Sección de Album" />
+                                                  {elseif $subcategorys[s]->internal_category eq 5}
+                                                     <img  style="width:20px;" src="{$params.IMAGE_DIR}video.png" border="0" alt="Sección de Videos" />
+                                                  {else}
+                                                      <img  style="width:20px;" src="{$params.IMAGE_DIR}advertisement.png" border="0" alt="Sección Global" />
+                                                  {/if}
+                                                </td>
+                                                <td style="font-size: 11px;width:80px;"  align="center">
+                                                    {if $subcategorys[s]->inmenu==1} {t}Yes{/t} {else}{t}No{/t}{/if}
+                                                </td>
+                                                <td style="font-size: 11px;width:80px;" align="center">
+                                                    <ul class="action-buttons">
+                                                        <li>
+                                                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
+                                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" onClick="javascript:confirmar(this, {$subcategorys[s]->pk_content_category});" title="Eliminar">
+                                                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
                                     {/section}
-                                        </div>
-                                    </td>
-                                </tr>
                             </table>
 
                         </td>
@@ -237,8 +229,21 @@
                 </tr>
             </tfoot>
         </table>
-    <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </form>
-</div><!--fin wrapper-content-->
+        <input type="hidden" id="action" name="action" value="" />
+        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+  
+    </div><!--fin wrapper-content-->
+ </form>
+{/block}
+    
+{block name="footer-js" append}
+       <script type="text/javascript">
+        try {
+                // Activar la validación
+                new Validation('form_upload', { immediate : true });
+        } catch(e) {
+                // Escondemos los errores
+                //console.log( e );
+        }
+    </script>
 {/block}

@@ -20,7 +20,7 @@ class ContentCategoryManager {
     function __construct() {
         if( is_null(self::$instance) ) {
             // Posibilidad de cachear resultados de métodos
-            $this->cache = new MethodCacheManager($this, array('ttl' => 30));
+            $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
             // Rellenar categorías dende caché
             $this->categories = $this->cache->populate_categories();
@@ -41,6 +41,31 @@ class ContentCategoryManager {
         } else {
             return self::$instance;
         }
+
+    }
+
+    /**
+     *  reload internal array $this->categories and
+     *  delete APC cache
+     *  call when change or create categories
+     *
+     * @return array Array with Content_category objects
+    */
+    function reloadCategories() {
+
+        $this->categories = null;
+        $method ='populate_categories';
+        $args = array();
+        $key = 'ContentCategoryManager'.$method.md5(serialize($args));
+        if(defined('APC_PREFIX')) {
+            $key = APC_PREFIX . $key;
+        }
+ 
+        $result = apc_delete($key);
+        $result = call_user_func_array(array('ContentCategoryManager', $method), $args);
+        apc_store($key, serialize($result), 300);
+
+        return( $result );
 
     }
 
@@ -821,6 +846,32 @@ class ContentCategoryManager {
         }
 
         return array($parentCategories, $subcat, $categoryData);
+    }
+
+
+   /**
+     *
+     * Get array with subcategories info from a category id
+     *
+     * @param int $category_id
+     *
+     * @return array  childs categorys
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    function getSubcategories($category_id) {
+        if( is_null($this->categories) ) {
+            $this->categories = $this->cache->populate_categories();
+        }
+ 
+        $items = array();
+        foreach($this->categories as $category) {
+            if( $category->fk_content_category == $category_id) {
+                    $items[]=$category;
+            }
+        }
+
+        return $items;
     }
 
 
