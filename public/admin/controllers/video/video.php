@@ -216,32 +216,25 @@ if( isset($_REQUEST['action']) ) {
 
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 			$video = new Video($id);
-            $rel= new Related_content();
             $relationes=array();
             $msg ='';
-            $relationes = $rel->get_content_relations($id);
+            $relationes = Related_content::get_content_relations($id);
             if (!empty($relationes)) {
-                 $msg = "El video '".$video->title."', está relacionado con los siguientes articulos:  ";
+                 $msg = _(" The video ").$video->title. _(" have some relations").'\n';
                  $cm= new ContentManager();
                  $relat = $cm->getContents($relationes);
                  foreach($relat as $contents) {
                        $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
                  }
-                 $msg.="  ¡Ojo! Si lo borra, se eliminaran las relaciones del video con los articulos";
-                 $msg.="  ¿Desea eliminarlo igualmente?";
-                  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-                  $msg.='   <a href="#" onClick="hideMsgContainer(\'messageBoard\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                 echo $msg;
-                 exit(0);
+                 $msg.="\n \n "._("¡Atention! Are you sure that Do you want delete this video and this relations?");
+
             } else {
-                 $msg.="¿Está seguro que desea eliminar '".$video->title."' ?";
-                 $msg.='  <a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'"><img src="'.SITE_URL_ADMIN.'/themes/default/images/ok.png" alt="SI"> </a> ';
-                 $msg.='   <a href="#" onClick="hideMsgContainer(\'messageBoard\');"> <img src="'.SITE_URL_ADMIN.'/themes/default/images/no.png" alt="NO"></a></p>';
-                 echo $msg;
-                 exit(0);
+                $msg =_("Do you want delete ").$video->title." ?";
             }
 
-
+            echo $msg;
+            exit(0);
+       
 		break;
 
         case 'yesdel':
@@ -279,6 +272,9 @@ if( isset($_REQUEST['action']) ) {
 			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
 			//$video->set_status($status,$_SESSION['userid']);
 			$video->set_available($status, $_SESSION['userid']);
+             if($status == 0){
+                $video->set_favorite($status);
+            }
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
@@ -313,8 +309,10 @@ if( isset($_REQUEST['action']) ) {
 				if(is_array($fields)) {
 					foreach($fields as $i ) {
 						$video = new Video($i);
-						//$video->set_status($_REQUEST['id'],$_SESSION['userid']);   //Se reutiliza el id para pasar el estatus
-						$video->set_available($status, $_SESSION['userid']);
+                        $video->set_available($status, $_SESSION['userid']);
+                        if($status == 0){
+                            $video->set_favorite($status);
+                        }
 					}
 				}
 			}
@@ -330,32 +328,30 @@ if( isset($_REQUEST['action']) ) {
 				&& count($_REQUEST['selected_fld'])>0)
 			{
 			    $fields = $_REQUEST['selected_fld'];
-				if(is_array($fields)) {
-					$msg = _("Selected videos ");
+				if (is_array($fields)) {
+					
+                    $msg = _("Next albums have relations. Delete one by one");
 
 				    foreach($fields as $i ) {
-						$video = new Video($i);
-						$rel= new Related_content();
-						$relationes=array();
+						$video = new Video($i);						
+						$relations=array();
+						$relations = Related_content::get_content_relations( $i ); 
 
-						$relationes = $rel->get_content_relations( $i );//de portada
-
-						if(!empty($relationes)){
-							$nodels[] =$i;
-
+						if(!empty($relations)){
+                            $alert =1;
 							$msg .= " \"".$video->title."\", ";
 
 						}else{
 						   $video->delete( $i,$_SESSION['userid'] );
 						}
+                        if (isset($alert) && !empty($alert)) {
+                            $msg.=_("You can delete one by one!");
+                            m::add( $msg );
+                        }
 					}
 				}
 			}
-
-            $msg.= _(" have relations with other contents.");
-            $msg.=_("You can delete one by one!");
-            m::add( $msg );
-
+ 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
 		break;
@@ -379,6 +375,7 @@ if( isset($_REQUEST['action']) ) {
             break;
 
             case 'save_config':
+                 Acl::checkOrForward('VIDEO_SETTINGS');
 
                 unset($_POST['action']);
                 unset($_POST['submit']);

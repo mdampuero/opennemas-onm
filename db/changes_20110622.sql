@@ -1,3 +1,12 @@
+-- 22-August-2011
+
+INSERT INTO `privileges` ( `name`, `description`, `module`) VALUES
+( 'CATEGORY_SETTINGS', 'Cambiar config de secciones', 'CATEGORY'),
+( 'ALBUM_SETTINGS', 'Cambiar config de album', 'ALBUM'),
+( 'VIDEO_SETTINGS', 'Cambiar config de video', 'VIDEO'),
+( 'OPINION_SETTINGS', 'Cambiar config de opinion', 'OPINION');
+
+
 --27-July-2011
 
 DROP TABLE IF EXISTS `menu_items`;

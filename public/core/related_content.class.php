@@ -181,7 +181,7 @@ class Related_content {
 
     }
 
-     function get_content_relations($id_content){
+    static public function get_content_relations($id_content){
         $related = array();
          if($id_content){
 		    	$sql = 'select pk_content1 from related_contents where  pk_content2 = ' .($id_content).' ORDER BY position ASC';
@@ -193,7 +193,7 @@ class Related_content {
 			        }
 		        }
          }
-         $related=array_unique($related);
+         $related = array_unique($related);
         return $related;
 
     }

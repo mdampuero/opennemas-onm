@@ -39,7 +39,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list">
+                    <a href="{$smarty.server.PHP_SELF}?action=list&category={$smarty.request.category}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>

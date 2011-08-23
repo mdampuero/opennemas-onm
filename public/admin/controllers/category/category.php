@@ -267,6 +267,7 @@ if( isset($_REQUEST['action']) ) {
         break;
 
         case 'save_config':
+            Acl::checkOrForward('CATEGORY_SETTINGS');
 
             unset($_POST['action']);
             unset($_POST['submit']);

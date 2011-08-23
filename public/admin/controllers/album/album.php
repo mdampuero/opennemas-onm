@@ -31,7 +31,9 @@ if(empty($category)) {
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+
 if(empty($category)) {$category ='favorite';}
+
 $tpl->assign('category', $category);
 
 $tpl->assign('subcat', $subcat);
@@ -143,7 +145,7 @@ if( isset($_REQUEST['action']) ) {
 			if($album->create( $_POST )) {
 				Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 			}else{
-				$tpl->assign('errors', $album->errors);
+				 m::add(_($album->errors) );
 			}
 			$tpl->display('album/new.tpl');
 		break;
@@ -154,7 +156,7 @@ if( isset($_REQUEST['action']) ) {
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
 			$album = new Album($id);
             if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
-                $msg ="Only read";
+                 m::add(_("You can only read this album") );
             }
 			$album->update( $_POST );
 
@@ -169,12 +171,12 @@ if( isset($_REQUEST['action']) ) {
                 Acl::checkOrForward('ALBUM_CREATE');
 				$album = new Album();
 				if(!$album->create( $_POST ))
-					$tpl->assign('errors', $album->errors);
+					m::add(_($album->errors));
 			} else {
                 Acl::checkOrForward('ALBUM_UPDATE');
 				$album = new Album($id);
                 if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
-                    $msg ="Only read";
+                    m::add(_("You can only read this album") );
                 }
 				$album->update( $_POST );
 			}
@@ -189,32 +191,25 @@ if( isset($_REQUEST['action']) ) {
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 
 			$album = new Album($id);
-            $rel= new Related_content();
+
             $relations=array();
             $msg ='';
-            $relations = $rel->get_content_relations( $id );
+            $relations = Related_content::get_content_relations( $id );
             if (!empty($relations)) {
-                 $msg = "El album  '".$album->title."' , está relacionado con los siguientes articulos:  \n";
+                 $msg = _(" The album ").$album->title. _(" have some relations").'\n';
                  $cm= new ContentManager();
                  $relat = $cm->getContents($relations);
                  foreach($relat as $contents) {
                        $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title.'\n';
                  }
-                 $msg.="\n \n ¡Ojo! Si lo borra, se eliminar&aacute;n las relaciones del album con los articulos";
-                 $msg.="\n ¿Desea eliminarlo igualmente?";
-               //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-                // $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                 echo $msg;
-                 exit(0);
-            }else{
-                $msg.="¿Está seguro que desea eliminar  '".$album->title."' ?";
-              //  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-              //  $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                echo $msg;
-                exit(0);
+                 $msg.="\n \n "._("¡Atention! Are you sure that Do you want delete this album and this relations?");
+                
+            } else {
+                $msg =_("Do you want delete ").$album->title." ?";
             }
-
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+            echo $msg;
+            exit(0);
+ 
 		break;
 
         case 'yesdel':
@@ -226,7 +221,7 @@ if( isset($_REQUEST['action']) ) {
                 //Delete relations
                 $rel= new Related_content();
                 $rel->delete_all($id);
-                $album->delete($id,$_SESSION['userid'] );
+                $album->delete($id,$_SESSION['userid'] );               
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$_REQUEST['page']);
@@ -241,6 +236,9 @@ if( isset($_REQUEST['action']) ) {
                                    array('options' => array('default'=> 0)));
 			$album = new Album($id);
             $album->set_available($status, $_SESSION['userid']);
+            if($status == 0){
+                $album->set_favorite($status);
+            }
 
 			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 
@@ -251,14 +249,13 @@ if( isset($_REQUEST['action']) ) {
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                    array('options' => array('default'=> 0)));
-            $album = new Album($id);
-            $msg = '';
+            $album = new Album($id);            
             if($album->available == 1){
                     $album->set_favorite($status);
             }else{
-                    $msg = "No se puede esta despublicado";
+               m::add(_("You can't select this album, it's unpublished") );
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 
 		break;
 
@@ -275,6 +272,9 @@ if( isset($_REQUEST['action']) ) {
                     {
                         $album = new Album($i);
                         $album->set_available($status, $_SESSION['userid']);
+                        if($status == 0){
+                            $album->set_favorite($status);
+                        }
                     }
                 }
             }
@@ -287,29 +287,30 @@ if( isset($_REQUEST['action']) ) {
 			if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
 			    $fields = $_REQUEST['selected_fld'];
                 if (is_array($fields)) {
-                    $msg="Los albumes ";
-                    $alert='';
+
+                    $msg = _("Next albums have relations. Delete one by one");
+
                     foreach ($fields as $i ) {
                         $album = new Album($i);
-                        $rel= new Related_content();
-                        $relationes=array();
-
-                        $relationes = $rel->get_content_relations( $i );//de portada
-
-                        if(!empty($relationes)){
-                             $nodels[] =$i;
-                             $alert='ok';
+                        $relations=array();
+                        $relations = Related_content::get_content_relations( $i );
+                        
+                        if(!empty($relations)){       
+                             $alert =1;
                              $msg .= " \"".$album->title."\", ";
-
+                             
                         }else{
                             $album->delete( $i,$_SESSION['userid'] );
                         }
                     }
+                    if (isset($alert) && !empty($alert)) {
+                        $msg.=_("You can delete one by one!");
+                        m::add( $msg );
+                    }
                 }
             }
-            $msg.=" tiene relacionados.  !Eliminelos uno a uno!";
-
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&alert='.$alert.'&msgdel='.$msg.'&page='.$page);
+           
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.' &page='.$page);
 		break;
 
         case 'config':
@@ -331,6 +332,8 @@ if( isset($_REQUEST['action']) ) {
         break;
 
         case 'save_config':
+
+            Acl::checkOrForward('ALBUM_SETTINGS');
 
             unset($_POST['action']);
             unset($_POST['submit']);

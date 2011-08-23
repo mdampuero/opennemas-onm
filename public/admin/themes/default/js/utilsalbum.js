@@ -230,16 +230,16 @@ function define_crop(element) {
                 });
         }else{
          $('testImage').setStyle({
-                  height: c[0]+'px',
+                 height: c[0]+'px',
                  width :  b[0]+'px'
                 });
         }
     }
 
-    if (b[0]< $('cropWidth').value) {
+    if (b[0] < $('cropWidth').value) {
         alert('La foto escogida para portada no supera los '+ $('cropWidth').value +'px de ancho');
     }else{
-        if(c[0]< $('cropHeight').value){
+        if(c[0] < $('cropHeight').value){
             alert('La foto escogida para portada no supera los '+ $('cropHeight').value +'px de alto');}
     }
 
