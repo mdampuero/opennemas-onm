@@ -74,7 +74,10 @@ class Widget extends Content {
 
         $sql = 'INSERT INTO widgets (`pk_widget`, `content`, `renderlet`)
                 VALUES (?, ?, ?)';
-
+        
+        if ( $data['renderlet'] != 'html') {
+            $data['content'] = strip_tags($data['content']);
+        }
         // Sort values
         $values = array($this->id,
                         $data['content'],
@@ -205,7 +208,9 @@ class Widget extends Content {
         parent::update($data);
 
         $sql = "UPDATE `widgets` SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
-
+        if ( $data['renderlet'] != 'html') {
+            $data['content'] = strip_tags($data['content']);
+        }
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
 
