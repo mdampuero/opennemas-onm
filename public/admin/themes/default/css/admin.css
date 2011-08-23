@@ -510,16 +510,6 @@ a.unpublishing:hover {
 	font-size:.85em !important;
 }
 
-#user_activity {
-	background:transparent url(../images/users_activity.png) top right no-repeat;
-	cursor: pointer;
-	text-align: right;
-	padding:2px 20px 2px 2px ;
-	float: left;
-	margin:0 5px;
-	color:#ccc;
-}
-
 #user_mailbox {
 	text-align: right;
 	float:right;
@@ -532,16 +522,9 @@ a.unpublishing:hover {
 	text-decoration:none;
 }
 #user_mailbox img {
-	vertical-align:middle;
+	
 }
 
-#user_box {
-	color: #0B55C4;
-	font-size: 12px;
-	font-weight: bold;
-	float: right;
-	margin-right: 4px;
-}
 
 #user_live {
 	float: left;
@@ -551,6 +534,7 @@ a.unpublishing:hover {
 
 	width: 20px;
 	padding: 2px 2px 2px 2px;
+	z-index:99999;
 }
 
 #user_live:hover {
@@ -574,9 +558,9 @@ a.spch-bub-outside {
     font-style: normal;
 }
 .spch-bub-inside em {
-    background: #980101;
-    color: #FFF;
-    padding: 0 0.4em;
+    background: White;
+    color: Black;
+    padding: 0px 6px;
     -moz-border-radius: 0.25em;
     -webkit-border-radius: 0.25em;
     border-radius: 0.25em;
@@ -587,10 +571,10 @@ a.spch-bub-outside {
     width: 0;
     height: 0;
     position: absolute;
-    top: 1.1em;
+    bottom: -5px;
     left: 0.4em;
     display: block;
-    border-left: 0.45em solid #980101;
+    border-left: 0.45em solid White;
     border-bottom: 0.45em solid #FFF; /* IE fix */
     border-bottom: 0.45em solid rgba(0,0,0,0);
     overflow: hidden; /* IE fix */
@@ -612,17 +596,17 @@ a.spch-bub-outside {
 }
 a.spch-bub-inside:hover,
 a.spch-bub-outside:hover {
-    color: #F00;
+    color: White;
 }
 a.spch-bub-inside:hover em,
 a.spch-bub-outside:hover .bubble  {
     cursor: pointer;
-    background: #F00;
-    color: #FF0;
+    background: White;
+    color: Black;
 }
 a.spch-bub-inside:hover .point,
 a.spch-bub-outside:hover .point {
-    border-left: 0.5em solid #F00;
+    border-left: 0.5em solid White;
 }
 div.spch-bub-outside {
     height: 1.5em;
@@ -894,42 +878,55 @@ table.aa tr td {
 
 #topbar-admin{
 	background: #464646;
-	color:#ccc;
-	position:fixed;
-	top:0;
-	left:0;
-	width:100%;
-	z-index:999;
-}
-	#topbar-admin *{
-	}
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: visible;
+	z-index:99;
+	
+	background: #222;
+    background-color: #222222;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+    background-image: -moz-linear-gradient(#333333, #222222);
+    background-image: -ms-linear-gradient(#333333, #222222);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
+    background-image: -webkit-linear-gradient(#333333, #222222);
+    background-image: -o-linear-gradient(#333333, #222222);
+    background-image: linear-gradient(#333333, #222222);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}	
 
 	#topbar-admin div.info-left {
 		position:absolute;
-		top:10px;
+		top:0px;
 		right:10px;
+		height:100%
 	}
 
-	#topbaradmin a, #topbaradmin{
-		color:#ddd !important;
+	#topbar-admin a, #topbar-admin{
+		color:#ddd;
 	}
-	#logoonm {
+	#topbar-admin #logoonm {
 		display:block;
 		width:160px;
 	}
-		#logoonm a{
+		#topbar-admin #logoonm a{
 			color: White;
 			font-family:Georgia;
 		}
-		#logoonm div{
+		#topbar-admin #logoonm div{
 			display:block;
 			float:left;
 		}
-		#logoonm img{
+		#topbar-admin #logoonm img{
 			margin:5px;
 			vertical-align:middle
 		}
-		#logoonm div.site-name{
+		#topbar-admin #logoonm div.site-name{
 			padding-top:10px;
 		}
 
@@ -1188,10 +1185,13 @@ ul#menu li {
   display: inline;
   list-style: none;
   position: relative;
-  padding-bottom:3px
+  padding-bottom:3px;
+}
+#menu li.divider {
+	padding:0;
+	height:1px;
 }
 ul#menu > li {
-	border:1px solid #464646;
 	height:100%;
 	padding:0;
 }
@@ -1203,12 +1203,15 @@ ul#menu  ul {
 	list-style: none;
 	display: none;
 	position: absolute;
-	top: 34px;
+	top: 38px;
 	left: 0px;
-	background:#464646;
-	border-radius:0px 0px 5px 5px;
-	border:1px solid  #464646;
-	padding-top:2px;
+	background-color: #333;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 ul#menu ul:after /*From IE 7 lack of compliance*/{
@@ -1238,26 +1241,35 @@ ul#menu a {
 	height: 1%; /*For IE*/
 }
 
+ul#menu li ul li {
+	clear: both;
+    display: block;
+    float: none;
+    font-size: 12px;
+}
+
 ul#menu > li > a {
-	padding: 10px 20px;
+	padding: 12px 15px;
 }
 	ul#menu > li:hover > a {
-		background: #4f4f4f; /* for non-css3 browsers */
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f4f4f', endColorstr='#464646'); /* for IE */
-		background: -webkit-gradient(linear, left top, left bottom, from(#4f4f4f), to(#464646)); /* for webkit browsers */
-		background: -moz-linear-gradient(top,  #4f4f4f, #464646); /* for firefox 3.6+ */
-		text-shadow:0 1px 1px #000;
+		background-color: #333;
+		text-decoration: none;
+		background-color: rgba(255, 255, 255, 0.1);
+		color: #FFFFFF;
+		-webkit-transition:background 0.07s linear;  
+		-moz-transition:background 0.07s linear;  
+		-o-transition:background 0.07s linear;  
+		transition:background 0.07s linear;  
 	}
 ul#menu ul > li > a {
 	min-width: 180px;
 	width:180px;
 	display:block;
+	
 }
 ul#menu > li:hover {
-	border-top:2px solid White !important;
 }
 	ul#menu > li:hover > a {
-		padding-top:10px;
 	}
 
 
@@ -1607,7 +1619,7 @@ div.ui-blocker {
 	position: fixed;
 	right: 0;
 	top: 0;
-	z-index: 10;
+	z-index:100000;
 }
 
 div.ui-blocker-message {
@@ -1750,3 +1762,144 @@ div.action-bar .right{
 		#media-browser .photo-hovered {
 			z-index:999;
 		}
+		
+		
+/* -------------------------------------------------------------
+  Experimental User box
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#user_box > ul {
+	display:block;
+	padding:0;
+	margin:0;
+}
+#user_box a {
+	text-decoration:none
+}
+#user_box > ul > li > a {
+	display:block;
+	padding: 12px 15px;
+}
+
+#user_box > ul > li > a:hover {
+	-webkit-transition:background 0.07s linear;  
+	-moz-transition:background 0.07s linear;  
+	-o-transition:background 0.07s linear;  
+	transition:background 0.07s linear;  
+}
+#user_box *{
+	vertical-align:middle;
+}
+#user_box ul > li {
+	display:inline-block;
+}
+#user_box ul li a.menu {
+	padding: 10px 10px;
+	margin:0;
+}
+#user_box ul li.menu {
+  position: relative;
+}
+#user_box ul li.menu a.menu:after {
+  width: 0px;
+  height: 0px;
+  display: inline-block;
+  content: "&darr;";
+  text-indent: -99999px;
+  vertical-align: top;
+  margin-top: 6px;
+  margin-left: 4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #fff;
+  filter: alpha(opacity=50);
+  -khtml-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+#user_box ul li.menu:hover a.menu, #user_box ul li.menu:hover a:hover {
+  background-color: #444;
+  background-color: rgba(255, 255, 255, 0.1);
+  *background-color: #444;
+  /* IE6-7 */
+
+  color: #fff;
+}
+#user_box ul li.menu:hover ul {
+  display: block;
+  position:absolute;
+}
+#user_box ul li.menu:hover ul li a {
+  background-color: transparent;
+  font-weight: normal;
+}
+#user_box ul li.menu:hover ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  *background-color: #444;
+  /* IE6-7 */
+
+  color: #fff;
+}
+#user_box ul li.menu:hover ul li.active a {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+}
+#user_box ul li ul {
+  background-color: #333;
+  float: left;
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  max-width: 220px;
+  _width: 160px;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  text-align: left;
+  border: 0;
+  zoom: 1;
+  -webkit-border-radius: 0 0 5px 5px;
+  -moz-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  right:0;
+}
+#user_box ul li ul li {
+  float: none;
+  clear: both;
+  display: block;
+  background: none;
+  font-size: 12px;
+}
+#user_box ul li ul li a {
+  display: block;
+  padding: 6px 15px;
+  clear: both;
+  font-weight: normal;
+  line-height: 19px;
+  color: #bbb;
+}
+#user_box ul li ul li a:hover {
+  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+#menu li.divider,
+#user_box ul li ul li.divider {
+	height:1px;
+	overflow: hidden;
+	background: #222;
+	background: rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	margin: 5px 0;
+}
+#user_box ul li ul li span {
+  clear: both;
+  display: block;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 6px 15px;
+  cursor: default;
+  color: #808080;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}

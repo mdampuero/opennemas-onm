@@ -56,57 +56,53 @@
 
     <div id="topbar-admin">
         <div id="logoonm">
-			<a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" title="{t}Go to admin main page{/t}">
-			   <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="ONM"/></div>
-			   <!--<div class="site-name">{$smarty.const.SITE_FULLNAME}</div>-->
-			</a>
+	    <a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" title="{t}Go to admin main page{/t}">
+	       <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas"/></div>
+	       <!--<div class="site-name">{$smarty.const.SITE_FULLNAME}</div>-->
+	    </a>
         </div>
 
         {admin_menu}
 
         <div class="info-left">
-            <div id="user_box" style="width:auto;">
-            {if {count_pending_comments} gt 0}
-                <div style="padding-right:8px; float:left;" nowrap="nowrap">
-                    <div id="pending_comments" title="{t}Pending comments{/t}">
-                        <a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
-                            <span class="point"></span>
-                            <em>&nbsp;{count_pending_comments}&nbsp;</em>
-                        </a>
-                    </div>
-                        &nbsp;&nbsp;&nbsp;
-                </div>
-            {/if}
-
-
-                <div id="name-box" style="float:left; margin-right:5px;">
-                  <strong>
-                    {t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}Welcome <a title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">%2</a>{/t}
-
-                    {if isset($smarty.session.isAdmin)}
-                        <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/key.png" border="0" align="absmiddle"
-                            title="{t}Admin privileges{/t}" alt="" />
-                    {/if}
-					{gmail_mailbox}
-                  </strong>
-                </div><!--end name-box-->
-
-                {if Acl::check('BACKEND_ADMIN') eq true}
-                <div style="padding-right:4px; float:left;" nowrap="nowrap">
-                    <div id="user_activity" title="{t}Active users in backend{/t}">
-                        {count_sessions}
-                    </div>
-					&nbsp;&nbsp;&nbsp;
-                </div>
-                {/if}
-
-                <div id="session-actions" style="float:left;">
-                  <a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" class="logout" title="{t}Logout from control panel{/t}">
-						{t}Log out{/t}
-						<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logout.png" border="0"
-							align="absmiddle" alt="Salir del Panel de Administración" />
-                  </a>
-                </div><!--end session-actions-->
+            <div id="user_box">
+		<ul>
+		    {if {count_pending_comments} gt 0}
+		    <li class="menu">
+			<a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
+			    <em>{count_pending_comments} <span class="point"></span></em>
+			</a>
+		    </li>
+		    {/if}
+		    
+		    {if Acl::check('BACKEND_ADMIN') eq true}
+        	    <li class="menu" title="{t}Active users in backend{/t}">
+			<a href="#" id="user_activity">
+			    {count_sessions}
+			    <img src="{$params.IMAGE_DIR}/users_activity.png" alt="" />
+			</a>
+		    </li>
+		    {/if}
+		    <li>
+			{gmail_mailbox}
+		    </li>
+		    
+		    <li class="menu">
+			<a href="#" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
+			<ul>
+			    <li>
+				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
+			    </li>
+			    <li class="divider"></li>
+			    <li>
+				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" class="logout" title="{t}Logout from control panel{/t}">
+				    {t}Log out{/t}
+				</a>
+			    </li>
+			</ul>
+		    </li>
+		</ul>
+                
             </div>
 
         </div>

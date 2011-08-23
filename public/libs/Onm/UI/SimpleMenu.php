@@ -68,8 +68,8 @@ class SimpleMenu {
                     && (\Onm\Module\ModuleManager::isActivated((string)$menu['module_name']))
                     )
                 {
-
-                    $html.= "<li>";
+                    $class = $this->getclass($menu['class']);
+                    $html.= "<li {$class}>";
                     $html .= $this->getHref($menu['title'], $menu['link']);
 
                     // If there are elements in this submenu and user can see it, print them
@@ -86,7 +86,8 @@ class SimpleMenu {
                             {
 
                                 $external = isset($submenu['target']);
-                                $html.= "<li>";
+                                $class = $this->getclass($submenu['class']);
+                                $html.= "<li {$class}>";
                                     $html .= $this->getHref($submenu['title'],$submenu['link'], $external);
                                 $html.= "</li>";
                             }
@@ -107,8 +108,21 @@ class SimpleMenu {
         }
 
     }
+    
+    private function getClass($class)
+    {
+        if (isset($class) && !empty($class)) {
+            return "class=\"{$class}\"";
+        }
+        
+    }
 
     private function getHref($title, $url, $external = false) {
+        if (empty($title)
+            && empty($url))
+        {
+            return;
+        }
         if (preg_match("@#@",$url)) {
             $url = $url;
         }

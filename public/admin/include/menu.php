@@ -145,10 +145,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Keywords"), ENT_QUOTES).'"
             link="controllers/keywords/keywords.php"
             privilege="PCLAVE_ADMIN" />
-        <node
-            title="&lt;hr/&gt;"
-            link="javascript:return false;"
-            privilege="BACKEND_ADMIN" />
+        <node class="divider" />
         <node
             module_name="EUROPAPRESS_IMPORTER"
             title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
@@ -166,10 +163,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
             link="controllers/agency_importer/importXML.php?action=info"
         />
-        <node
-            title="&lt;hr/&gt;"
-            link="javascript:return false;"
-            privilege="BACKEND_ADMIN" />
+        <node class="divider" />
         <node
             module_name="TRASH_MANAGER"
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
@@ -180,10 +174,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"
             link="controllers/link_control/link_control.php"
             privilege="BACKEND_ADMIN" />
-        <node
-            title="&lt;hr/&gt;"
-            link="javascript:return false;"
-            privilege="BACKEND_ADMIN" />
+        <node class="divider" />
         <node
             module_name="ONM_STATISTICS"
             title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
@@ -197,10 +188,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
             link="controllers/system_settings/system_settings.php"
             privilege="ONM_SETTINGS" />
-        <node
-            title="&lt;hr/&gt;"
-            link="javascript:return false;"
-            privilege="BACKEND_ADMIN" />
+        <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
@@ -211,10 +199,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
             link="controllers/system_information/system_information.php?action=apc_iframe"
             privilege="CACHE_ADMIN" />
-        <node
-            title="&lt;hr/&gt;"
-            link="javascript:return false;"
-            privilege="BACKEND_ADMIN" />
+        <node class="divider" />
         <node
             module_name="SYSTEM_UPDATE_MANAGER"
             title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
