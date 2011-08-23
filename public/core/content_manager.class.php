@@ -749,7 +749,7 @@ class ContentManager
                 WHERE contents.fk_content_type=1 AND contents.pk_content IN
                       (SELECT fk_content
                        FROM `comments`,contents
-                       WHERE comments.fk_content = contents.pk_content
+                       WHERE comments.pk_comment = contents.pk_content AND contents.available = 1 AND contents.content_status = 1
                        ORDER BY pk_comment DESC)
                 ORDER BY contents.created DESC
                 LIMIT '. $num;
