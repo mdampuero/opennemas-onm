@@ -290,9 +290,9 @@ switch($action) {
         $e->unlockSync();
         unset($_SESSION['error']);
         $httpParams = array(
-                            array('action' => 'list'),
-                            array('page' => $page),
-                            );
+            array('action' => 'list'),
+            array('page' => $page),
+        );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
     } break;
@@ -301,9 +301,9 @@ switch($action) {
 
     default: {
         $httpParams = array(
-                            array('action','list'),
-                            array('page',$page),
-                            );
+            array('action','list'),
+            array('page',$page),
+        );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($params));
     } break;
 }
