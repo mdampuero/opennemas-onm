@@ -52,6 +52,39 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("from facebook");
 
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("video :: Configuration");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Sync list  with server");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Information about video module settings");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Total in widget home:");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Total in video frontpage column:");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Total in video gallery:");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext("Save");
+
 /* ./public/admin/themes/default/tpl//video/new.tpl */
 gettext("Video manager");
 
@@ -101,6 +134,12 @@ gettext("Get video information");
 gettext("Video Manager :: Listing videos");
 
 /* ./public/admin/themes/default/tpl//video/list.tpl */
+gettext("Config video module");
+
+/* ./public/admin/themes/default/tpl//video/list.tpl */
+gettext("Configurations");
+
+/* ./public/admin/themes/default/tpl//video/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//video/list.tpl */
@@ -120,6 +159,9 @@ gettext("Favorite");
 
 /* ./public/admin/themes/default/tpl//video/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//video/list.tpl */
+gettext("Edit");
 
 /* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Title:");
@@ -238,6 +280,42 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("There is no stands");
 
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Album :: Configuration");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Sync list  with server");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Information about album module settings");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Total in album frontpage:");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Total in widget home:");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Cover width in widget album:");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Cover height in widget album:");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Save");
+
 /* ./public/admin/themes/default/tpl//album/album_images.tpl */
 gettext("Album images (Double click to select and cut images)");
 
@@ -282,9 +360,6 @@ gettext("Image");
 
 /* ./public/admin/themes/default/tpl//album/album_images.tpl */
 gettext("Footer image:");
-
-/* ./public/admin/themes/default/tpl//album/album_images.tpl */
-gettext("Cut the image that is in frontpage view.(300x250 px)");
 
 /* ./public/admin/themes/default/tpl//album/album_images.tpl */
 gettext("\"test image\"");
@@ -353,6 +428,12 @@ gettext("\"Metadata\"");
 gettext("Separated by coma");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
+gettext("Config album module");
+
+/* ./public/admin/themes/default/tpl//album/list.tpl */
+gettext("Configurations");
+
+/* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Albums");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
@@ -398,7 +479,7 @@ gettext("\"Take out from frontpage\"");
 gettext("\"Put in frontpage\"");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("\"Edit\"");
+gettext("Edit");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Delete");
@@ -1196,16 +1277,10 @@ gettext("Restore to available");
 gettext("Go to admin main page");
 
 /* ./public/admin/themes/default/tpl//base/admin.tpl */
-gettext("Pending comments");
-
-/* ./public/admin/themes/default/tpl//base/admin.tpl */
-gettext("Welcome <a title=\"See my user preferences\" href=\"%3/controllers/acl/user.php?action=read&id=%1\">%2</a>");
-
-/* ./public/admin/themes/default/tpl//base/admin.tpl */
-gettext("Admin privileges");
-
-/* ./public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Active users in backend");
+
+/* ./public/admin/themes/default/tpl//base/admin.tpl */
+gettext("<a title=\"See my user preferences\" href=\"%3/controllers/acl/user.php?action=read&id=%1\">Settings</a>");
 
 /* ./public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Do you really want to exit from backend?");
@@ -1742,7 +1817,7 @@ gettext("Search");
 gettext("Content types:");
 
 /* ./public/admin/themes/default/tpl//files/new.tpl */
-gettext("Images manager :: General statistics");
+gettext("Files manager :: General statistics");
 
 /* ./public/admin/themes/default/tpl//files/new.tpl */
 gettext("Go back");
@@ -2092,6 +2167,42 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//frontpage/blocks/opinions_available.tpl */
 gettext("Edit");
 
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Sections :: Configuration");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Sync list  with server");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Information about sections module settings");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Allow change headers and color in frontpages:");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("No");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Yes");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Name header images directory:");
+
+/* ./public/admin/themes/default/tpl//category/config.tpl */
+gettext("Save");
+
 /* ./public/admin/themes/default/tpl//category/form.tpl */
 gettext("Category manager");
 
@@ -2171,16 +2282,10 @@ gettext("Listing categories");
 gettext("New section");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("To delete a category previously you have to empty it");
+gettext("Config album module");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Categoy deleted successfully");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Error: you have some Database errors");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Category has been emptied successfully");
+gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Global categories");
@@ -3048,6 +3153,12 @@ gettext("GLOBAL");
 
 /* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
 gettext("ADS");
+
+/* ./public/admin/themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
+
+/* ./public/admin/themes/default/tpl//mediamanager/image_data.tpl */
+gettext("Please check your first password and check again.");
 
 /* ./public/admin/themes/default/tpl//mediamanager/image_data.tpl */
 gettext("Image manager:: Editing \"%1\"");

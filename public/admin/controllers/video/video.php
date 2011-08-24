@@ -1,14 +1,21 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 use Onm\Settings as s,
     Onm\Message as m;
 /**
  * Setup app
-*/
+ */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 //Check if module is activated in this onm instance
- \Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
+\Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
 
 // Check if the user can admin video
 Acl::checkOrForward('VIDEO_ADMIN');
@@ -49,11 +56,11 @@ $tpl->assign('datos_cat', $categoryData);
 /* GESTION CATEGORIAS  */
 
 if( isset($_REQUEST['action']) ) {
-	switch($_REQUEST['action']) {
+    switch($_REQUEST['action']) {
 
-		case 'list':
+	case 'list':
 
-			$cm = new ContentManager();
+	    $cm = new ContentManager();
 
             $configurations = s::get('video_settings');
 
@@ -87,35 +94,36 @@ if( isset($_REQUEST['action']) ) {
 
             $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
             $tpl->assign( array(
-                            'pagination' => $pagination,
-                            'videos' => $videos ));
+		'pagination' => $pagination,
+		'videos' => $videos )
+	    );
 
-			$tpl->display('video/list.tpl');
+	    $tpl->display('video/list.tpl');
 
-		break;
+	break;
 
-		case 'new':
+	case 'new':
 
-			$tpl->display('video/new.tpl');
+	    $tpl->display('video/new.tpl');
 
-		break;
+	break;
 
-		case 'read':
+	case 'read':
             Acl::checkOrForward('VIDEO_UPDATE');
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             if (empty($id)) {
                 $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
             }
-			$video = new Video( $id );
+	    $video = new Video( $id );
 
             $tpl->assign('information', $video->information);
 
             $tpl->assign('video', $video);
 
-			$tpl->display('video/new.tpl');
+	    $tpl->display('video/new.tpl');
 
-		break;
+	break;
 
         case 'getVideoInformation':
 
@@ -130,27 +138,27 @@ if( isset($_REQUEST['action']) ) {
                     try {
 
                         $videoP = new \Panorama\Video($url);
-
                         $information = $videoP->getVideoDetails();
 
                     } catch (Exception $e) {
-                           $html_out = _( "Can't get video information. Check url");
+                        $html_out = _( "Can't get video information. Check url");
                     }
                 }
+		
                 $tpl->assign('information', $information);
                 $html_out = $tpl->fetch('video/partials/_video_information.tpl');
                 if (extension_loaded('apc')) {
                     apc_store(APC_PREFIX ."video_".$url, $information);
                 }
             }  else {
-                 $html_out =  _("Please, Check url");
+                 $html_out =  _("Please check the video url, seems to be incorrect");
             }
             Application::ajax_out($html_out);
 
 
         break;
 
-		case 'create':
+	case 'create':
 
             Acl::checkOrForward('VIDEO_CREATE');
             $video = new Video();
@@ -160,42 +168,44 @@ if( isset($_REQUEST['action']) ) {
             } else {
                 $tpl->assign('errors', $video->errors);
             }
-			$tpl->display('video/new.tpl');
+	    $tpl->display('video/new.tpl');
 
-		break;
+	break;
 
-		case 'update':
+	case 'update':
 
             Acl::checkOrForward('VIDEO_UPDATE');
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             $video = new Video($id);
 
-
             $_POST['information'] = json_decode($_POST['information'], true);
 
-            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
+            if (!Acl::isAdmin()
+		&& !Acl::check('CONTENT_OTHER_UPDATE')
+		&& $video->pk_user != $_SESSION['userid']) {
                 m::add( _("Only read. You isn't ownner. ") );
-            }else{
+            } else {
                 $video->update( $_POST );
             }
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-		break;
+	break;
 
-		case 'validate':
+	case 'validate':
 
 
             $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
             $_POST['information'] = json_decode($_POST['information'],true);
 
             if (!$id) {
+		
                 Acl::checkOrForward('VIDEO_CREATE');
                 $video = new Video();
 
                 //Estamos creando un nuevo artículo
-                if(!$video->create( $_POST ))
-                    $tpl->assign('errors', $video->errors);
+                if(!$video->create( $_POST )) $tpl->assign('errors', $video->errors);
+		
             } else {
                 Acl::checkOrForward('VIDEO_UPDATE');
                 $video = new Video($id);
@@ -208,7 +218,7 @@ if( isset($_REQUEST['action']) ) {
 
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
 
-		break;
+	break;
 
         case 'delete':
 
@@ -220,22 +230,22 @@ if( isset($_REQUEST['action']) ) {
             $msg ='';
             $relationes = Related_content::get_content_relations($id);
             if (!empty($relationes)) {
-                 $msg = _(" The video ").$video->title. _(" have some relations").'\n';
+                 $msg = sprintf(_("The video %s has some relations:",$video->title));
                  $cm= new ContentManager();
                  $relat = $cm->getContents($relationes);
                  foreach($relat as $contents) {
                        $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
                  }
-                 $msg.="\n \n "._("¡Atention! Are you sure that Do you want delete this video and this relations?");
+                 $msg.="\n \n "._("Caution! Are you sure that you want to delete this video and its relations?");
 
             } else {
-                $msg =_("Do you want delete ").$video->title." ?";
+                $msg = sprintf(_("Do you want delete %s?",$video->title));
             }
 
             echo $msg;
             exit(0);
        
-		break;
+	break;
 
         case 'yesdel':
 
@@ -251,34 +261,34 @@ if( isset($_REQUEST['action']) ) {
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-         break;
+        break;
 
-		case 'set_position':
+	case 'set_position':
 
-			$video = new Video($_REQUEST['id']);
-			$video->set_position($_REQUEST['posicion'],$_SESSION['userid']);
+	    $video = new Video($_REQUEST['id']);
+	    $video->set_position($_REQUEST['posicion'],$_SESSION['userid']);
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-		break;
+	break;
 
-		case 'change_status':
+	case 'change_status':
 
             Acl::checkOrForward('VIDEO_AVAILABLE');
             
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-			$video = new Video($id);
-			//Publicar o no,
-			$status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-			//$video->set_status($status,$_SESSION['userid']);
-			$video->set_available($status, $_SESSION['userid']);
-             if($status == 0){
+	    $video = new Video($id);
+	    //Publicar o no,
+	    $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+	    //$video->set_status($status,$_SESSION['userid']);
+	    $video->set_available($status, $_SESSION['userid']);
+            if($status == 0){
                 $video->set_favorite($status);
             }
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-		break;
+	break;
 
         case 'change_favorite':
 
@@ -287,121 +297,116 @@ if( isset($_REQUEST['action']) ) {
 			$video = new Video($id);
             $msg = '';
              //Publicar o no,
-            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
+            $status = ($_REQUEST['status']==1) ? 1: 0; // Evitar otros valores
             if ($video->available==1) {
                 $video->set_favorite($status);
-            }else{
-                m::add( _("You can define as favorite, it is unpublished") );
+            } else {
+		m::add(_("This video is not published so you can't define it as favorite.") );
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
 
-		break;
+	break;
 
 
-		case 'mfrontpage':
+	case 'mfrontpage':
 
             Acl::checkOrForward('VIDEO_AVAILABLE');
-			if (isset($_REQUEST['selected_fld'])
-				&& count($_REQUEST['selected_fld'])>0)
-			{
-				$fields = $_REQUEST['selected_fld'];
-				$status = ($_REQUEST['status']==1)? 1: 0;
-				if(is_array($fields)) {
-					foreach($fields as $i ) {
-						$video = new Video($i);
-                        $video->set_available($status, $_SESSION['userid']);
-                        if($status == 0){
-                            $video->set_favorite($status);
-                        }
-					}
-				}
-			}
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+	    if (isset($_REQUEST['selected_fld'])
+		    && count($_REQUEST['selected_fld'])>0)
+	    {
+		    $fields = $_REQUEST['selected_fld'];
+		    $status = ($_REQUEST['status']==1)? 1: 0;
+		    if(is_array($fields)) {
+			    foreach($fields as $i ) {
+				    $video = new Video($i);
+	    $video->set_available($status, $_SESSION['userid']);
+	    if($status == 0){
+		$video->set_favorite($status);
+	    }
+			    }
+		    }
+	    }
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-		break;
+	break;
 
-		case 'mdelete':
+	case 'mdelete':
 
             Acl::checkOrForward('VIDEO_DELETE');
             $msg='';
-			if (isset($_REQUEST['selected_fld'])
-				&& count($_REQUEST['selected_fld'])>0)
-			{
-			    $fields = $_REQUEST['selected_fld'];
-				if (is_array($fields)) {
+	    if (isset($_REQUEST['selected_fld'])
+		&& count($_REQUEST['selected_fld'])>0)
+	    {
+		$fields = $_REQUEST['selected_fld'];
+		if (is_array($fields)) {
 					
                     $msg = _("Next albums have relations. Delete one by one");
 
-				    foreach($fields as $i ) {
-						$video = new Video($i);						
-						$relations=array();
-						$relations = Related_content::get_content_relations( $i ); 
+		    foreach($fields as $i ) {
+			$video = new Video($i);						
+			$relations=array();
+			$relations = Related_content::get_content_relations( $i ); 
 
-						if(!empty($relations)){
+			if(!empty($relations)){
                             $alert =1;
-							$msg .= " \"".$video->title."\", ";
-
-						}else{
-						   $video->delete( $i,$_SESSION['userid'] );
-						}
+			    $msg .= " \"".$video->title."\", ";
+			} else {
+			   $video->delete( $i,$_SESSION['userid'] );
+			}
                         if (isset($alert) && !empty($alert)) {
                             $msg.=_("You can delete one by one!");
                             m::add( $msg );
                         }
-					}
-				}
-			}
+		    }
+		}
+	    }
  
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-		break;
+	break;
 
         case 'config':
 
-                $configurationsKeys = array(
-                                            'video_settings',
-                                            );
+	    $configurationsKeys = array(
+		'video_settings',
+	    );
 
-                $configurations = s::get($configurationsKeys);
+	    $configurations = s::get($configurationsKeys);
 
-                $tpl->assign(
-                             array(
-                                    'configs'   => $configurations,
-                                )
-                            );
+	    $tpl->assign(array(
+		'configs'   => $configurations,
+	    ));
 
-                $tpl->display('video/config.tpl');
+            $tpl->display('video/config.tpl');
 
-            break;
+        break;
 
-            case 'save_config':
-                 Acl::checkOrForward('VIDEO_SETTINGS');
+        case 'save_config':
+	    Acl::checkOrForward('VIDEO_SETTINGS');
+    
+	    unset($_POST['action']);
+	    unset($_POST['submit']);
+    
+	    foreach ($_POST as $key => $value ) {
+		s::set($key, $value);
+	    }
+    
+	    m::add(_('Settings saved.'), m::SUCCESS);
+    
+	    $httpParams = array(
+				array('action'=>'list'),
+				);
+	    Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
-                unset($_POST['action']);
-                unset($_POST['submit']);
-
-                foreach ($_POST as $key => $value ) {
-                    s::set($key, $value);
-                }
-
-                m::add(_('Settings saved.'), m::SUCCESS);
-
-                $httpParams = array(
-                                    array('action'=>'list'),
-                                    );
-                Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
-
-            break;
+        break;
 
 
-		default:
+	default:
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
+	    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
-		break;
-	}
+	break;
+    }
 } else {
-
-	Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
-
+    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }
