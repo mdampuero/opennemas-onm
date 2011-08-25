@@ -53,10 +53,14 @@ $tpl->assign('allcategorys', $parentCategories);
 //TODO: ¿datoscat?¿
 $tpl->assign('datos_cat', $categoryData);
 
-/* GESTION CATEGORIAS  */
+/******************* GESTION CATEGORIAS  *****************************/
 
-if( isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {
+
+$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+if (!isset($action)) {
+    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+}
+switch ($action) {
 
     case 'list':
 
@@ -184,7 +188,7 @@ if( isset($_REQUEST['action']) ) {
             && !Acl::check('CONTENT_OTHER_UPDATE')
             && $video->pk_user != $_SESSION['userid'])
         {
-            m::add( _("Only read. You isn't ownner. ") );
+            m::add(_("You can't modify this article because you don't have enought privileges.") );
         } else {
             $video->update( $_POST );
         }
@@ -209,7 +213,7 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('VIDEO_UPDATE');
             $video = new Video($id);
             if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
-                  m::add( _("Only read. You isn't ownner. ") );
+                m::add(_("You can't modify this article because you don't have enought privileges.") );
             }else{
                 $video->update( $_POST );
             }
@@ -230,7 +234,7 @@ if( isset($_REQUEST['action']) ) {
         $relationes = Related_content::get_content_relations($id);
         if (!empty($relationes)) {
             $msg = sprintf(_("The video %s has some relations:",$video->title));
-            $cm= new ContentManager();
+            $cm = new ContentManager();
             $relat = $cm->getContents($relationes);
             foreach($relat as $contents) {
                 $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
@@ -398,13 +402,9 @@ if( isset($_REQUEST['action']) ) {
 
     break;
 
-
     default:
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
     break;
-    }
-} else {
-    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 }

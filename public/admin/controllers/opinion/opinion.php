@@ -19,6 +19,7 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
+use Onm\Message as m;
 /**
  * Setup app
 */
@@ -91,16 +92,19 @@ if(isset($_REQUEST['action'])) {
 
                 $tpl->assign('paginacion', $pager->links);
                 $_SESSION['type'] = $_REQUEST['type_opinion'];
-
+                $number = 2;
+                
                 $opinion=new Opinion();
                 $total=$opinion->count_inhome_type($_REQUEST['type_opinion']);
                 $alert="";
+
                 if(($_REQUEST['type_opinion'] == 1) && ($total != 2)) {
-                    $alert = 'Tiene que poner dos opiniones de editorial. Actualmente hay: '.$total.' editorial';
+                    $type = 'editorial';
                 } elseif(($_REQUEST['type_opinion'] == 2) && ($total != 1)) {
-                     $alert = 'Tiene que poner una opinión del director. Actualmente hay: '.$total.' opinion del director';
+                     $type = 'opinion del director';
                 }
-                $tpl->assign('msg_alert',$alert);
+                m::add( sprintf(_("You must put %d %s in the HOME widget"), $number, $type, $total) );
+               // $tpl->assign('msg_alert',$alert);
             } else {
                 $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
                                       'ORDER BY type_opinion DESC, '.$order.' ');

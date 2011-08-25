@@ -85,9 +85,9 @@
                                      <td valign="top" style="padding:4px;" nowrap="nowrap">
                                          <select name="category" id="category"  >
                                             {section name=as loop=$allcategorys}
-                                                <option value="{$allcategorys[as]->pk_content_category}" {if $video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                                <option value="{$allcategorys[as]->pk_content_category}" {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                                                 {section name=su loop=$subcat[as]}
-                                                    <option value="{$subcat[as][su]->pk_content_category}" {if $video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                    <option value="{$subcat[as][su]->pk_content_category}" {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                                                 {/section}
                                             {/section}
                                          </select>
@@ -162,6 +162,7 @@
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
-    </div>
-</form>
+ 
+    </form>
+</div>
 {/block}

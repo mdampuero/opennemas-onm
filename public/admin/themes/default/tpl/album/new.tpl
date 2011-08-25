@@ -91,8 +91,9 @@
                                 <td valign="top" nowrap="nowrap">
                                         <select name="available" id="available"
                                             class="required" {acl isNotAllowed="ALBUM_AVAILABLE"} disabled="disabled" {/acl}>
-                                            <option value="0">{t}No{/t}</option>
-                                            <option value="1" selected>{t}Yes{/t}</option>
+                                            <option value="0" {if $album->available eq 0} selected {/if}>{t}No{/t}</option>
+                                            <option value="1" {if $album->available eq 1} selected {/if}>{t}Yes{/t}</option>
+
                                         </select>
                                 </td>
                             </tr>

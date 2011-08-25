@@ -81,15 +81,15 @@
             <table class="adminlist">
                 <thead>
                     <tr>
-                        <th class="title" style="width:35px;"></th>
-                        <th>{t}Title{/t}</th>
-                        <th>{t}Created{/t}</th>
+                         
+                        <th style="width:35px;"></th>
+                        <th class="title">{t}Title{/t}</th>
                         <th align="center" style="width:35px;">{t}Views{/t}</th>
-                        {if $category=='favorite'}<th align="center">{t}Section{/t}</th> {/if}
-                        <th align="center">{t}Published{/t}</th>
+                        <th align="center">Created</th>
+                        {if $category=='favorite'}<th align="center">{t}Section{/t}</th>{/if}
+                        <th align="center" style="width:35px;">{t}Published{/t}</th>
                         <th align="center" style="width:35px;">{t}Favorite{/t}</th>
-                        <th align="center" style="width:35px;">{t}Edit{/t}</th>
-                        <th align="center" style="width:35px;">{t}Delete{/t}</th>
+                        <th align="center" style="width:35px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
 
@@ -102,12 +102,13 @@
                             <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
                              {$albums[as]->title|clearslash}</a>
                     </td>
-                    <td align="center">
-                             {$albums[as]->created}
-                    </td>
                      <td align="center">
                              {$albums[as]->views}
                     </td>
+                    <td align="center">
+                             {$albums[as]->created}
+                    </td>
+                    
                     {if $category=='favorite'}
                             <td align="center">
                                  {$albums[as]->category_title}
@@ -134,17 +135,22 @@
                             {/if}
                         {/acl}
                     </td>
-                    <td align="center">
-                        {acl isAllowed="ALBUM_UPDATE"}
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
-                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                        {/acl}
-                    </td>
-                    <td align="center">
-                        {acl isAllowed="ALBUM_DELETE"}
-                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                        {/acl}
+                    <td style="padding:1px; font-size:11px;" align="center">
+						 <ul class="action-buttons">
+                            {acl isAllowed="ALBUM_UPDATE"}
+                             <li>
+                                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
+                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                            </li>
+                            {/acl}
+
+                            {acl isAllowed="ALBUM_DELETE"}
+                            <li>
+                                <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
+                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                            </li>
+                            {/acl}
+                         </ul>
                     </td>
 
                 </tr>
