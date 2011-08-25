@@ -113,6 +113,14 @@ if( isset($_REQUEST['action']) ) {
 
             $advertisementsCleaned = array();
             foreach($advertisements as $adv) {
+                //Distinguir entre flash o no flash
+                $img = new Photo($adv->path);
+                //$img->read($adv->pk_advertisement);
+                if ($img->type_img == "swf"){
+                    $adv->is_flash = 1;
+                } else {
+                    $adv->is_flash = 0;
+                }
                 $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
 
                 if(in_array($category, $adv->fk_content_categories)

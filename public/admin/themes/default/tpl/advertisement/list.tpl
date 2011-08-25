@@ -143,9 +143,12 @@
                                 {if $advertisements[c]->with_script == 1}
                                     <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
                                          alt="Javascript" title="Javascript" />
+                                {elseif $advertisements[c]->is_flash == 1}
+                                    <img src="{$params.IMAGE_DIR}flash.gif" border="0" alt="{t}Media flash{/t}"
+                                         title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
                                 {else}
                                     <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="{t}Media{/t}"
-                                         title="{t}Media element (flash, image, gif){/t}" />
+                                         title="{t}Media element (jpg, image, gif){/t}" />
                                 {/if}
                                 {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
                                 {$map.$type_advertisement}
