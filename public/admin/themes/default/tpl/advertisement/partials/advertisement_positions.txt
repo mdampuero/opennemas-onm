@@ -3,6 +3,10 @@ FRONTPAGE
 
 1 Top Left LeaderBoard (728X90)
 2 Top Right LeaderBoard  (234X90)
+3 Center Left LeaderBoard (728X90)
+4 Center Right LeaderBoard (234x90)
+5 Bottom Left LeaderBoard (728X90)
+6 Bottom Right LeaderBoard (234X90)
 11 Button Column 1 position 1 (300X*)
 12 Button Column 1 position 2  (300X*)
 21 Button Column 2 position 1 (300X*)
@@ -11,8 +15,6 @@ FRONTPAGE
 32 Button Column 3 position 2  (300X*)
 13 Button Column 1 position 3  (200x200)
 33 Button Column 3 position 3 (200x200)
-3 Center Left LeaderBoard (728X90)
-4 Center Right LeaderBoard (234x90)
 14 Button Column 1 position 4 (300X*)
 15 Button Column 1 position 5  (300X*)
 24 Button Column 2 position 4 (300X*)
@@ -21,14 +23,11 @@ FRONTPAGE
 35 Button Column 3 position 5  (300X*)
 16 Button Column 1 position 6  (200x200)
 36 Button Column 3 position 6 (200x200)
-5 Bottom Left LeaderBoard (728X90)
-6 Bottom Right LeaderBoard (234X90)
 
 50 Frontpage Intersticial (800X600)
 
 
-
-//ARTICLE INNER - OPINION INNER
+//ARTICLE INNER
 
 101 Big  Banner Top(I) (728X90)
 102 Banner Top Right(I) (728X90)
@@ -39,24 +38,12 @@ FRONTPAGE
 110 Banner Bottom Right(I) (234X90)
 150 Banner Intersticial - Inner (800X600)
 
-//FRONT OPINION
-1 Big Banner Top (728X90)
-2 Banner Top  Right (234X90)
-3 Banner Column Right (300X*)
-9 Big Banner Bottom (728X90)
-10 Banner Bottom Right (234X90)
-
-50 Banner Intersticial - Opinion Frontpage (800X600)
-
-
-
 //VIDEO FRONTPAGE
 201 Big Banner Top (728X90)
 202 Banner Top  Right (234X90)
 203 Banner Column Right (300X*)
 209 Big Banner Bottom (728X90)
 210 Banner Bottom Right (234X90)
-
 250 Banner Intersticial - Video Frontpage (800X600)
 
 
@@ -67,7 +54,6 @@ FRONTPAGE
 303 Banner Column Right (300X*)
 309 Big Banner Bottom (728X90)
 310 Banner Bottom Right (234X90)
-
 350 Banner Intersticial - Video Inner (800X600)
 
 
@@ -80,7 +66,6 @@ FRONTPAGE
 405 Banner2 Column Right(II) (300X*)
 409 Big Banner Bottom (728X90)
 410 Banner Bottom Right (234X90)
-
 450 Banner Intersticial - Album Frontpage (800X600)
 
 
@@ -91,5 +76,24 @@ FRONTPAGE
 503 Banner Column Right (300X*)
 509 Big Banner Bottom (728X90)
 510 Banner Bottom Right (234X90)
-
 550 Banner Intersticial - Album Frontpage (800X600)
+
+//FRONT OPINION
+601 Big Banner Top (728X90)
+602 Banner Top  Right (234X90)
+603 Banner Column Right (300X*)
+605 Banner Column Right 2 (300X*)
+609 Big Banner Bottom (728X90)
+610 Banner Bottom Right (234X90)
+650 Banner Intersticial - Opinion Frontpage (800X600)
+
+//OPINION INNER
+
+701 Big  Banner Top(I) (728X90)
+702 Banner Top Right(I) (728X90)
+703 Banner1 Column Right (I) (300X*)
+704 Robapágina (650X*)
+705 Banner2 Column Right(I) (300X*)
+709 Big Banner Bottom(I) (728X90)
+710 Banner Bottom Right(I) (234X90)
+750 Banner Intersticial - Inner (800X600)

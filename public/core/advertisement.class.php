@@ -119,7 +119,33 @@ class Advertisement extends Content
 
         509 => "[AI] Big Banner Inferior",
         510 => "[AI] Banner Inferior Derecho",
- 
+        
+        /* Intersticial banner opinion front */
+        650 => "[O] Banner Interticial",
+
+        /* Opinions Front banners > 500 */
+        601 => "[O] Big banner superior",
+        602 => "[O] Banner superior derecho",
+
+        603 => "[O] Banner1 Column Right",
+        605 => "[O] Banner1 2Column Right",
+
+        609 => "[O] Big Banner Inferior",
+        610 => "[O] Banner Inferior Derecho",
+             
+        /* Intersticial banner opinion inner */
+        750 => "[OI] Banner Intersticial - Inner (800X600)",
+
+        /* Opinion Interior banners > 700 */
+        701 => "[OI] Big  Banner Top(I) (728X90)",
+        702 => "[OI] Banner Top Right(I) (234X90)",
+
+        703 => "[OI] Banner1 Column Right (I) (300X*)",
+        704 => "[OI] Robapágina (650X*)",
+        705 => "[OI] Banner2 Column Right(I) (300X*)",
+
+        709 => "[OI] Big Banner Bottom(I) (728X90)",
+        710 => "[OI] Banner Bottom Right(I) (234X90)",
     );
 
     /**

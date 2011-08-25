@@ -9,14 +9,14 @@ $category = (!isset($category) || ($category=='home'))? 0: $category;
 $advertisement = Advertisement::getInstance();
 
 /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 5, 10, 12, 11, 13, 101), $category); */
-$banners = $advertisement->getAdvertisements(array(101, 102, 103, 104, 105, 109, 110), $category);
+$banners = $advertisement->getAdvertisements(array(701, 702, 703, 704, 705, 709, 710), $category);
   $cm = new ContentManager();
 $banners = $cm->getInTime($banners);
 //$advertisement->render($banners, &$tpl);
 $advertisement->render($banners, $advertisement);
 
 // Get intersticial banner
-$intersticial = $advertisement->getIntersticial(150, $category);
+$intersticial = $advertisement->getIntersticial(750, $category);
 if (!empty($intersticial)) {
     $advertisement->render(array($intersticial), $advertisement);
 }
