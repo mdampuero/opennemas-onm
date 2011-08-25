@@ -1,275 +1,209 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Start up and setup the app
 */
 require_once('../bootstrap.php');
 
-// redirect to /mobile/ if it's mobile device request
-$app->mobileRouter();
-
+/**
+ * Setup view
+ */
 $tpl = new Template(TEMPLATE_USER);
 
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
-/**************************************  SECURITY  *******************************************/
-//Is category initialized redirect the user to /
-/* $category_name = $_GET['category_name'];
-$subcategory_name = $_GET['subcategory_name']; */
+/**
+ * Setting up available categories for menu.
+*/
 
-$poll_id = filter_input(INPUT_POST,'poll_id', FILTER_SANITIZE_STRING);
-if(empty($poll_id)) {
-    $poll_id = filter_input(INPUT_GET,'poll_id', FILTER_SANITIZE_STRING);
+$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
+if(empty($category)) {
+    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
 }
-if( isset($_REQUEST['op']) ) {
-    switch($_REQUEST['op']) {
-        case 'votar':
-
-
-
-
-            $poll = new Poll($poll_id);
-
-            if(!empty($poll)){
-                $cookie="polls".$poll_id;
-                if (isset($_COOKIE[$cookie])){
-                    $_REQUEST['op']='votar';
-                    $tpl->assign('msg','ya ha votado');
-                }
-                if($_POST['respEncuesta'] /* && !isset($_COOKIE[$cookie]) */){
-                    $ip = $_SERVER['REMOTE_ADDR'];
-                   // $poll=new Poll($_REQUEST['id']);
-                    $poll->vote($_POST['respEncuesta'],$ip);
-                    $tpl->assign('msg','Gracias por su voto'.$_COOKIE[$cookie]);
-                }
-            }
-
-            $tpl->assign('op', 'votar'); //conecta_CZonaEncuesta.tpl
-        break;
-
-        default:
-            $tpl->assign('op', 'visulizar'); //conecta_CZonaVisionadoMedia.tpl
-        break;
-    }
+if(empty($category_name)) {
+    $contentType = Content::getIDContentType('poll');
+    //Get first category
+    list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $contentType);
+    $category_name = $categoryData[0]->name;
+    $category = $categoryData[0]->pk_content_category;
 }
-
-if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
-    $category_name = 'home';
-    $subcategory_name = null;
-// If $action == 'rss' desnormalize process
-}else{
-    if($_REQUEST['action']=='rss' ) {
-        $category_name = $_REQUEST['category_name'];
-        $subcategory_name = $_REQUEST['subcategory_name'];
-    } else {
-        if(!empty($_REQUEST['poll_id'])){
-            $poll = new Poll($poll_id);
-
-            $poll->category_name = $poll->loadCategoryName($_REQUEST['poll_id']);
-
-            $category_name = $poll->category_name;
-            $subcategory_name = null;
-            $category = $ccm->get_id($category_name);
-            $polls = $cm->find_by_category('Poll',$category, 'available=1 AND pk_content != '.$_REQUEST['poll_id'].' ', 'ORDER BY created DESC LIMIT 0,7');
-
-        }else{
-            $category_name = $_GET['category_name'];
-        }
-    }
-
-    if(empty($category_name)){
-        $category_name =$_REQUEST['category_name'];
-    }
-    if(empty($subcategory_name) && isset($_REQUEST['subcategory_name'])){
-        $subcategory_name = $_REQUEST['subcategory_name'];
-    } else {
-        $subcategory_name = '';
-    }
-    // Normalizar os nomes
-    list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
-    $_GET['category_name'] = $category_name;
-    $_GET['subcategory_name'] = $subcategory_name;
-
-    $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
-    $section = (is_null($section))? 'home': $section;
+$actual_category = $category_name;
 
 
-    if (isset($category_name) && !empty($category_name)) {
+$tpl->assign(array( 'category'=>$category ,
+                    'category_name'=>$category_name , ) );
 
-        if (!$ccm->exists($category_name)) {
-            Application::forward301('/');
-        } else {
-            $category = $ccm->get_id($category_name);
-        }
+/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-        if ( isset($subcategory_name)
-           && !empty($subcategory_name))
-        {
-            if (!$ccm->exists($subcategory_name)) {
-                Application::forward301('/');
-            } else {
-                $subcategory = $ccm->get_id($subcategory_name);
-            }
-        }
-    } elseif(isset($_REQUEST["action"]) && ($_REQUEST["action"]=="rss")) {
-        $_GET['category_name'] = $category_name = 'home';
-    } elseif( isset($_REQUEST["action"])
-             && ($_REQUEST["action"]!="rating" && $_REQUEST["action"]!="vote"
-             && $_REQUEST["action"]!="rss" && $_REQUEST["action"]!="get_plus"))
-    {
-        Application::forward301('/');
-    }
-     if(!isset($poll_id) || empty($poll_id)){
 
-         $polls = $cm->find_by_category('Poll',$category, 'available=1  ',
-                                        'ORDER BY created DESC LIMIT 0,7');
-         if(empty($polls)){Application::forward301('/');}
-         $poll=array_shift($polls);
-
-         $poll->category_name = $poll->loadCategoryName($_REQUEST['poll_id']);
-
-         $category_name = $poll->category_name;
-         $subcategory_name = null;
-         $poll_id = $poll->pk_poll;
-         $_REQUEST["action"] = 'read';
-
-     }
-
-}
-$tpl->assign('polls',$polls);
-
+//TODO: define dir to save xml
+$tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.'/polls/');
 
 /**************************************  SECURITY  *******************************************/
 
+$action = filter_input(INPUT_POST,'action', FILTER_SANITIZE_STRING);
+if(empty($action)) {
+    $action = filter_input(INPUT_GET,'action', FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+}
 
-if(isset($_REQUEST['action']) ) {
-    switch($_REQUEST['action']) {
-        case 'read':
+switch($action) {
+    case 'frontpage':
 
-              // Load config
-            $tpl->setConfig('polls');
+        $tpl->setConfig('poll-frontpage');
 
-             /******************************  BREADCRUB *********************************/
+        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
+								 array('options'=> array('default' => 0)));
 
-            $str = new String_Utils();
-            $title = $str->get_title($poll->title);
+        $cacheID = $tpl->generateCacheId('poll-frontpage', $page);
 
-            // print URL
-            $print_url = '/imprimir/' . $title. '/' . $category_name . '/';
+        /**
+         * Don't execute action logic if was cached before
+         */
+        if ( ($tpl->caching == 0)
+           && (!$tpl->isCached('poll/poll-frontpage.tpl',$cacheID))){
 
-            $breadcrub   = array();
-            $breadcrub[] = array('text' => $ccm->get_title($category_name),
-                                 'link' => '/seccion/' . $category_name . '/' );
-            if(!empty($subcategory_name)) {
-                $breadcrub[] = array(
-                    'text' => $ccm->get_title($subcategory_name),
-                    'link' => '/seccion/' . $category_name . '/' . $subcategory_name . '/'
-                );
+                $polls = $cm->find_by_category('Poll',$category, 'available=1  ',
+                                            'ORDER BY created DESC LIMIT 0,7');
+           
+             $tpl->assign('polls', $polls);
 
-                $print_url .= $subcategory_name . '/';
-            }
+ 
+        }
+ 
+        $tpl->display('poll/poll_frontpage.tpl', $cacheID);
 
-            $print_url .= $poll->pk_content . '.html';
-            $tpl->assign('print_url', $print_url);
+    break;
 
-            // Check if $section is "in menu" then show breadcrub
-            $cat = $ccm->getByName($section);
-            if(!is_null($cat) && $cat->inmenu) {
-                $tpl->assign('breadcrub', $breadcrub);
-            }
+    case 'show':
 
-            /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-            require_once ("index_sections.php");
-            /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
+        $tpl->setConfig('poll-inner');
+ 
+        $poll_id = filter_input(INPUT_GET,'id');
+        if (empty($poll_id)) {
+            $category = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+        }
 
-            $tpl->assign('category_name', $_GET['category_name']);
-
-            $cm = new ContentManager();
+        $poll = new Poll($poll_id);
+ 
+        if(!empty($poll)){
 
             if(($poll->available==1) && ($poll->in_litter==0)) {
-
-                $items=$poll->get_items($poll_id);
-                $tpl->assign('items', $items);
-                 $data_rows = array();
-                 $max_value = 0;
-
-                 if(!empty($items)){
-                    foreach($items as $item){
-                        $data_rows[] = "['".$item['item']."',".$item['votes']."]";
-                        if($max_value < $item['votes']) {$max_value = $item['votes'];}
-                    }
-
-                    $data_rows = '['.implode(', ',$data_rows).']';
-                 }
-
-                 $tpl->assign('max_value', $max_value);
-                 $tpl->assign('data_rows', $data_rows);
-
-
                 // Increment numviews if it's accesible
-                $poll->setNumViews($_GET['poll_id']);
-                if(isset($subcategory_name) && !empty($category_name)){
-                    $actual_category = $subcategory_name;
-                }else{
-                    $actual_category =$category_name;
-                }
-                $actual_category_id = $ccm->get_id($actual_category);
-                $actual_category_title = $ccm->get_title($actual_category);
-                $tpl->assign('actual_category_title',$actual_category_title);
+                $poll->setNumViews($poll_id);
 
+                $cacheID= $tpl->generateCacheId($category_name, $poll_id );
 
-                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['poll_id']);
+                if( ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cacheID) ) {
 
-                if(  ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cache_id) ) {
+                    $items=$poll->get_items($poll_id);
 
-                    $video = $cm->find_by_category_name('Video',  $actual_category, 'contents.content_status=1', 'ORDER BY created DESC LIMIT 0 , 1');
-                    if(isset($video[0])){
-                        $tpl->assign('videoInt', $video[0]);
-                    }
-                    /**************** PHOTOs ****************/
-
-                    /******* RELATED  CONTENT *******/
+                    $tpl->assign('items', $items);
 
                     $comment = new Comment();
-                    $comments = $comment->get_public_comments($_REQUEST['poll_id']);
+                    $comments = $comment->get_public_comments($poll_id);
 
                     $tpl->assign('num_comments', count($comments));
 
+                    $tpl->assign('poll', $poll);
+ 
+                    //TODO save name in db
+                    if ($poll->visualization == '0') { // pie
+                         $tpl->assign('type_poll','pie');
+                    } else {
+                         $tpl->assign('type_poll','bars');
+                    }
+ 
+                    $xml = $tpl->fetch('poll/graphic_poll.tpl');
+
+                    $file =  MEDIA_PATH.'/polls/'.$poll_id.'.xml';
+                    FilesManager::mkFile($file);
+
+                    FilesManager::writeInFile($file, $xml);
+                
+
                 } // end if $tpl->is_cached
-                $tpl->assign('poll', $poll);
-
-                /************* COLUMN-LAST *******************************/
-
-                $other_news = $cm->find_by_category_name('Article', $actual_category, 'contents.frontpage=1 AND contents.content_status=1 AND contents.available=1  AND contents.fk_content_type=1  AND contents.pk_content != '.$_REQUEST['article_id'].'', 'ORDER BY views DESC, placeholder ASC, position ASC, created DESC LIMIT 1,3');
-
-                $tpl->assign('other_news', $other_news);
-
-                require_once('widget_headlines_past.php');
-               // require_once('widget_media.php');
 
 
-                 /************* END COLUMN-LAST *******************************/
+                $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
 
-                // Advertisements for single article NO CACHE
-                require_once('article_advertisement.php');
+                $tpl->display('poll/poll.tpl', $cacheID);
 
-                 require_once("widget_static_pages.php");
-             } else {
-                Application::forward301('/404.html');
             }
 
+            /************* COLUMN-LAST *******************************/
+            require_once('index_advertisement.php');
 
-        break;
+            require_once("widget_static_pages.php");
+         } else {
+            Application::forward301('/404.html');
+        }
 
-        default: {
-          //  Application::forward301('index.php');
-        } break;
-    }
 
-} else {
-    Application::forward301('index.php');
+    break;
+
+    case 'addVote':
+ 
+        $poll_id = filter_input(INPUT_GET,'id');
+        if(empty($poll_id)) {
+            $poll_id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+        }
+
+        $poll = new Poll($poll_id);
+
+        if(!empty($poll->id)){
+
+            $cookie="polls".$poll_id;
+            if (isset($_COOKIE[$cookie])) {
+                $tpl->assign('msg','Ya ha votado esta encuesta');
+            }
+            if(isset($_POST['respEncuesta']) && !empty($_POST['respEncuesta'])  && !isset($_COOKIE[$cookie]) ){
+                $ip = $_SERVER['REMOTE_ADDR'];
+               // $poll=new Poll($_REQUEST['id']);
+                $poll->vote($_POST['respEncuesta'],$ip);
+                $tpl->assign('msg','Gracias por su voto ');
+            }
+            $items = $poll->get_items($poll_id);
+            $tpl->assign('items', $items);
+
+            $tpl->assign('poll', $poll);
+
+            //TODO save name in db
+            if ($poll->visualization == '0') { // pie
+                 $tpl->assign('type_poll','pie');
+            } else {
+                 $tpl->assign('type_poll','bars');
+            }
+
+            $xml = $tpl->fetch('poll/graphic_poll.tpl');
+
+            $file =  MEDIA_PATH.'/polls/'.$poll_id.'.xml';
+            FilesManager::mkFile($file);
+            FilesManager::writeInFile($file, $xml);
+
+            $comment = new Comment();
+            $comments = $comment->get_public_comments($poll_id);
+            $tpl->assign('num_comments', count($comments));
+
+            $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
+
+            $poll->setNumViews($poll_id);
+
+            $cacheID= $tpl->generateCacheId($category_name, $poll_id );
+
+
+            $tpl->display('poll/poll.tpl', $cacheID);
+        }
+       
+    break;
+
+    default:
+      //  Application::forward301('index.php');
+    break;
 }
-$tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
-
-$tpl->display('poll/poll.tpl', $cache_id);

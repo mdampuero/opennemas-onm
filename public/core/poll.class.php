@@ -153,7 +153,8 @@ class Poll extends Content {
     }
 
     function get_items($pk_poll){
-        $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata FROM poll_items WHERE fk_pk_poll = '.($pk_poll);
+        $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata '
+                .'FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
         $i=0;
         while (!$rs->EOF) {

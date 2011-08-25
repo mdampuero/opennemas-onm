@@ -54,6 +54,7 @@ class FilesManager {
     static public function createDirectory($path) {
 
         $created =  mkdir($path, 0777, true);
+        chmod($path, 0755);
         if(!$created) {
             // Register a critical error
             echo '<br> error'.$path;
@@ -87,6 +88,43 @@ class FilesManager {
               $GLOBALS['application']->logger->emerg("Error deleting directory: " . $path);
            }
         }
+    }
+
+    /**
+     * Create a file in some path
+     *
+     * @param string $path Directory concat with filename
+     */
+     static public function mkFile($filename){
+        if(!is_file($filename)) {
+            $handle = fopen($filename,"x");
+            if ($handle){
+                fclose($handle);
+                return true;
+            }else{
+                return false;
+            }
+        } else {
+            return true; //file already exists
+        }
+    }
+
+    /**
+     * Write some content in a file
+     *
+     * @param string $file name
+     * @param string $input content to save in a file
+     */
+    static public function writeInFile($file, $input){
+        chmod($file, 0755);
+        $handle = fopen($file, "w");
+        if (!fwrite($handle, $input)) {
+            return false; // failed.
+        } else {
+            return true; //success.
+            fclose($handle);
+        }
+
     }
 
 }
