@@ -1,206 +1,177 @@
 <?php
-
-if(preg_match('/BLP_bbot/i', $_SERVER['HTTP_USER_AGENT'])) {
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+if (preg_match('/BLP_bbot/i', $_SERVER['HTTP_USER_AGENT'])) {
     header('Location: /404.html');
     exit(0);
 }
 
 /**
  * System setup
-*/
+ **/
+define('STATUS', "1");
+define('CHARSET', "text/html; charset=UTF-8");
+define('SS', "/");
+define(
+    'DS',
+    (strtoupper(substr(PHP_OS, 0, 3) == 'WIN'))
+    ? DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+    : DIRECTORY_SEPARATOR        
+);
 
-define ('STATUS', "1");
-define ('CHARSET', "text/html; charset=UTF-8");
-define ('SS', "/");
-define ('DS', ( strtoupper(substr(PHP_OS, 0,3) == 'WIN') )
-                ? DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
-                : DIRECTORY_SEPARATOR );
 $protocol = 'http://';
-if(preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
+if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
     $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
 }
 
 /**
  * Site Information settings
-*/
-define ('SITE_TITLE_MOBILE', "Nueva Tribuna");                       // Title to use in the frontend
-define ('SITE_FULLNAME', "Nueva Tribuna");                        // Human readable site name
-define ('SITE_NAME', "nuevatribuna");                                  // Canonical name, should be lowcase and without spaces
-define ('SITE_DOMAIN', "nuevatribuna.es");
-define ('SITE_AGENCY', "nuevatribuna.es");
+ **/
+define('SITE_TITLE_MOBILE', "Nueva Tribuna");   // Title to use in the frontend
+define('SITE_FULLNAME', "Nueva Tribuna");           // Human readable site name
+define('SITE_NAME', "nuevatribuna");    // Should be lowcase and without spaces
+define('SITE_DOMAIN', "nuevatribuna.es");
 
 /**
  * Database settings
-*/
-define ('BD_TYPE', "mysql");
-define ('BD_HOST', "localhost");
-define ('BD_USER', "root");
-define ('BD_PASS', "1234");
-define ('BD_INST', "onmbranch");
-define ('BD_DSN', BD_TYPE."://".BD_USER.":".BD_PASS."@".BD_HOST."/".BD_INST);
-define ('APC_PREFIX', SITE_NAME);
+ **/
+define('BD_TYPE', "mysql");
+define('BD_HOST', "localhost");
+define('BD_USER', "root");
+define('BD_PASS', "1234");
+define('BD_INST', "onmbranch");
+define('BD_DSN', BD_TYPE."://".BD_USER.":".BD_PASS."@".BD_HOST."/".BD_INST);
+define('APC_PREFIX', SITE_NAME);
 
 /**
  * Paths settings
-*/
-define ('SITE', $_SERVER['SERVER_NAME']);
-define ('SITE_PATH',  realpath(dirname(__FILE__).DS.'..'.DS."public").DS );
+ **/
+define('SITE', $_SERVER['SERVER_NAME']);
+define('SITE_PATH', realpath(dirname(__FILE__).DS.'..'.DS."public").DS);
 
-define ('SITE_LIBS_PATH', realpath(SITE_PATH.DS."libs").DS);
-define ('SITE_CORE_PATH', realpath(SITE_PATH.DS."core").DS);
+define('SITE_LIBS_PATH', realpath(SITE_PATH.DS."libs").DS);
+define('SITE_CORE_PATH', realpath(SITE_PATH.DS."core").DS);
 
-define ('BASE_URL','/');
-define ('ADMIN_DIR', "admin");
-define ('SITE_URL', $protocol.SITE.BASE_URL);
-define ('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
+define('BASE_URL', '/');
+define('ADMIN_DIR', "admin");
+define('SITE_URL', $protocol.SITE.BASE_URL);
+define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
 
-define ('SITE_ADMIN_DIR', "admin");
-define ('SITE_ADMIN_TMP_DIR', "tmp");
-define ('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
-define ('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
-define ('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS) );
+define('SITE_ADMIN_DIR', "admin");
+define('SITE_ADMIN_TMP_DIR', "tmp");
+define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
+define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
+define('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS));
 
 /**
  * Include path settings
-*/
+ **/
 ini_set('include_path', get_include_path().":".SITE_LIBS_PATH);
 
 /**
  * Logging settings
-*/
-define ('SYS_LOG_DEBUG', "1");
-define ('SYS_LOG_VERBOSE', "0");
-define ('SYS_LOG_INFO', "1");
-define ('LOG_ENABLE', 1);
-define ('SYS_LOG_EMAIL', 'fran@localhost');
-define ('SYS_LOG_PATH', SITE_PATH.DS.'..'.DS."tmp/logs");
-define ('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
-define ('SYS_SESSION_TIME', "15");
-define ('SYS_SESSION_PATH', SITE_PATH.DS.'..'.DS."tmp/sessions".DS);
-define ('SYS_NAME_GROUP_ADMIN', 'Administrador');
+ **/
+define('SYS_LOG_DEBUG', "1");
+define('SYS_LOG_VERBOSE', "0");
+define('SYS_LOG_INFO', "1");
+define('LOG_ENABLE', 1);
+define('SYS_LOG_EMAIL', 'fran@localhost');
+define('SYS_LOG_PATH', SITE_PATH.DS.'..'.DS."tmp/logs");
+define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
+define('SYS_SESSION_TIME', "15");
+define('SYS_SESSION_PATH', SITE_PATH.DS.'..'.DS."tmp/sessions".DS);
+define('SYS_NAME_GROUP_ADMIN', 'Administrador');
 
 /**
  * Media paths and urls configurations
-*/
-define ('MEDIA_UPLOAD', "0");
-define ('MEDIA_UPLOAD_FLASH', "1");
-define ('MEDIA_UPLOAD_VIDEO', "0");
-define ('MEDIA_EXTENSIONS', "bmp,csv,doc,epg,gif,ico,jpg,odg,odp,ods,odt,pdf,png,ppt,swf,txt,xcf,xls");
-define ('MEDIA_MAX_SIZE', "200000");
-define ('MEDIA_URL',"http://www.retrincos.info/");              // Set this to a external server like http://example.com or keep it blank
+ **/
+define('MEDIA_UPLOAD', "0");
+define('MEDIA_UPLOAD_FLASH', "1");
+define('MEDIA_UPLOAD_VIDEO', "0");
+define(
+    "MEDIA_EXTENSIONS",
+    "bmp,csv,doc,epg,gif,ico,jpg,odg,odp,ods,odt,pdf,png,ppt,swf,txt,xcf,xls"
+);
+define('MEDIA_MAX_SIZE', "200000");
+define('MEDIA_URL', "http://www.retrincos.info/");
+// Set this to a external server like http://example.com or keep it blank
 
-define ('MEDIA_DIR', "media");                                  // Set this to a external server like 'media' or write a local dir
-define ('MEDIA_PATH',SITE_PATH);                                // Set this to the local path where write media, like  /path/to/media
-define ('IMG_DIR', "images");
-define ('FILE_DIR', "files");
-define ('ADS_DIR', "advertisements");
-define ('OPINION_DIR', "opinions");
+define('MEDIA_DIR', "media");    // External server or a local dir
+define('MEDIA_PATH', SITE_PATH); // local path to write media (/path/to/media)
+define('IMG_DIR', "images");
+define('FILE_DIR', "files");
+define('ADS_DIR', "advertisements");
+define('OPINION_DIR', "opinions");
 
 // TODO: A Eliminar
-define ('MEDIA_IMG_PATH',  	  MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR);
-define ('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); //SITE_URL.SS.MEDIA_DIR.SS.IMG_DIR
-define ('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // /SITE_URL.SS.MEDIA_DIR.SS.IMG_DIR
+define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR);
+define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
+define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
 
 /**
  * Template settings
-*/
-define ('TEMPLATE_USER', "nuevatribuna");
-define ('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-define ('TEMPLATE_USER_PATH_WEB', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-define ('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
+ **/
+define('TEMPLATE_USER', "nuevatribuna");
+define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+define('TEMPLATE_USER_PATH_WEB', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
 
-define ('TEMPLATE_ADMIN', "default");
-define ('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.ADMIN_DIR."themes".DS.TEMPLATE_ADMIN);
-define ('TEMPLATE_ADMIN_PATH_WEB', SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN', "default");
+define(
+    'TEMPLATE_ADMIN_PATH',
+    SITE_PATH.DS.ADMIN_DIR."themes".DS.TEMPLATE_ADMIN
+);
+define(
+    'TEMPLATE_ADMIN_PATH_WEB',
+    SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS
+);
 
-define('',false);
-
-/**
- * App settings
-*/
-define('RECAPTCHA_PUBLIC_KEY', '6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is');
-define('RECAPTCHA_PRIVATE_KEY', '6LfpY8ISAAAAAHzsd8Pa-VrsB_tFkaDIA2bhTKfH ');
-
-$activatedModules = array(
-                'ADS_MANAGER',
-                'ADVANCED_SEARCH',
-                //'ALBUM_MANAGER',
-                'ARTICLE_MANAGER',
-                'CACHE_MANAGER',
-                'CATEGORY_MANAGER',
-                'COMMENT_MANAGER',
-                'EUROPAPRESS_IMPORTER',
-                'FILE_MANAGER',
-                'FRONTPAGE_MANAGER',
-                'IMAGE_MANAGER',
-                'KEYWORD_MANAGER',
-                //'KIOSKO_MANAGER',
-                //'LINK_CONTROL_MANAGER',
-                //'MYSQL_MANAGER',
-                'NEWSLETTER_MANAGER',
-                'ONM_STATISTICS',
-                'OPINION_MANAGER',
-                //'PAPER_IMPORT',
-                //'PHP_CACHE_MANAGER',
-                //'POLL_MANAGER',
-                'PRIVILEGE_MANAGER',
-                'SETTINGS_MANAGER',
-                'STATIC_PAGES_MANAGER',
-                'SYSTEM_UPDATE_MANAGER',
-                'TRASH_MANAGER',
-                'USER_GROUP_MANAGER',
-                'USER_MANAGER',
-                //'VIDEO_MANAGER',
-                'WIDGET_MANAGER',
-                'MENU_MANAGER',
-
-            );
+define('', false);
 
 /**
- * Repository settings
-*/
-define ('REPOSITORY_URL', 'http://git.openhost.es/nueva-tribuna.git/');
-
-
-/**
-* Uri settings
-**/
+ * Uri settings
+ **/ 
 $GLOBALS['url_configurations'] = array(
-    'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_' ),
-    'section'   =>  array( 'seccion/_ID_' ),
-    'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
-    'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html' ),
+    'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+    'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+    'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
+    'section'   =>  array( 'seccion/_ID_'),
+    'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+    'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
     'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    'static_page'=> array( 'static_page/_SLUG_.html' ),
-    'ad'        =>  array( 'publicidad/_ID_.html' ),
+    'static_page'=> array( 'static_page/_SLUG_.html'),
+    'ad'        =>  array( 'publicidad/_ID_.html'),
 );
 
 /**
- * Facebook settings
-*/
-define ('FB_APP_APIKEY', '');
-define ('FB_APP_SECRET', '7c012877eefb97adfebb27457c5ec722');
-
-/**
  * Mail settings
-*/
-define ('MAIL_HOST', "localhost"); // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
-define ('MAIL_USER', "");
-define ('MAIL_PASS', "");
+ **/
+define('MAIL_HOST', "localhost");
+// 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
+define('MAIL_USER', "");
+define('MAIL_PASS', "");
 define('MAIL_FROM', 'noreply@opennemas.com');
 
 
+/**
+ * Advertisement
+ **/
+define('ADVERTISEMENT_ENABLE', 1);
 
-/* [ADVERTISEMENT] ********************************************************** */
-define ('ADVERTISEMENT_ENABLE', 1);
-
-/* [ SESION USUARIO ] ******************************************************** */
+/**
+ * Session de usuario
+ **/
 $GLOBALS['USER_ID'] = NULL;
 $GLOBALS['conn'] = NULL;
 
-define ('ITEMS_PAGE', "20");
+define('ITEMS_PAGE', "20");
 
-/* [ASSSET SERVERS] *********************************************************  */
-define('ASSET_HOST','assets%02d.opennemas.com');
+/**
+ * Asset servers
+ **/
+define('ASSET_HOST', 'assets%02d.opennemas.com');
