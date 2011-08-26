@@ -3,7 +3,7 @@
 LOCALE_FOLDER = './public/admin/locale/'
 
 TPL_FOLDER = './public/admin/themes/default/tpl/'
-CACHE_FOLDER = './tmp/cache'
+CACHE_FOLDER = 'tmp/cache'
 SESSIONS_FOLDERS = \
 	tmp/sessions/backend \
 	tmp/sessions/frontend
@@ -12,9 +12,11 @@ LINGUAS = \
 	es_ES \
 	gl_ES
 
-all: default updatepofiles compiletranslations
+all: l10n
 
-default:
+l10n: extracttrans updatepofiles compiletranslations
+
+extracttrans:
 	@echo "Extracting translations";
 	@tsmarty2c $(TPL_FOLDER) > $(LOCALE_FOLDER)'extracted_strings.c'
 	@xgettext public/admin/controllers/**/* \
@@ -40,15 +42,17 @@ compiletranslations:
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-clean: cleancache cleansessions
+clean: cleancache cleansessions cleanlogs
 
 cleancache:
 	@echo "Cleaning cache...";
-	rm -r $(CACHE_FOLDER)'/*'
+	rm -rf $(CACHE_FOLDER)/*
 
 cleansessions:
 	@echo "Cleaning sessions..."
-	@for i in $(SESSIONS_FOLDERS); do \
-		echo " - $$i: " && \
-		rm "$$i/*" \
-	done
+	rm tmp/sessions/backend/* -f
+	rm tmp/sessions/frontend/* -f
+
+cleanlogs:
+	@echo "Cleaning logs..."
+	rm tmp/logs/*.log -f
