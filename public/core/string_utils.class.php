@@ -1,29 +1,48 @@
 <?php
-class String_Utils {
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Library for handling unusual string operations.
+ *
+ * @package    Onm
+ * @subpackage String
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
+class String_Utils
+{
 
     var $stringTest = NULL;
 
     /**
-    * Constructor for String_Utils class
-    *
-    * @access public
-    * @param string $string
-    */
-    public function __construct($string=NULL){
+      * Constructor for String_Utils class
+      *
+      * @access public
+      * @param string $string
+     **/
+    public function __construct($string = null)
+    {
         //echo $stringTest." si<br>";
-        if(!is_null($string))
-            {$this->stringTest=$string;}
-        else {$this->stringTest="";}
+        if(!is_null($string)) {
+            $this->stringTest = $string;
+        } else {
+            $this->stringTest = "";
+        }
     }
 
     /**
-    * Delete disallowed chars from a sentence and transform it to a url friendly name
-    *
-    * @access static
-    * @param string $name, the string to clen
-    * @return string, the string cleaned
-    */
-    static public function normalize_name($name) {
+     * Delete disallowed chars from a sentence and transform it to a url friendly name
+     *
+     * @access static
+     * @param string $name, the string to clen
+     * @return string, the string cleaned
+     **/
+    static public function normalize_name($name)
+    {
         $name = mb_strtolower($name);
         $trade = array( 'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A', 'À'=>'A', 'Ã'=>'A',
                         'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e', 'ë'=>'e', 'ê'=>'e', 'É'=>'E', 'È'=>'E',
@@ -42,38 +61,39 @@ class String_Utils {
     }
 
     /**
-    * Sets the variable string
-    *
-    * @access public
-    * @param string $name
-    */
+     * Sets the variable string
+     *
+     * @access public
+     * @param string $name
+     **/
     public function setString($string)
     {
         $this->stringTest=$string;
     }
 
     /**
-    * Gets the variable string
-    *
-    * @access public
-    * @param string $name
-    */
+     * Gets the variable string
+     *
+     * @access public
+     * @param string $name
+     **/
     public function getString()
     {
         return $this->stringTest;
     }
 
     /**
-    * Clean the special chars into a given string
-    *
-    * Performs a html_entity_encode, mb_strtolower and mb_ereg_replace
-    * disallowed chars
-    *
-    * @access static
-    * @param string $str, the string to clen
-    * @return string, the string cleaned
-    */
-    static public function clearSpecialChars($str) {
+     * Clean the special chars into a given string
+     *
+     * Performs a html_entity_encode, mb_strtolower and mb_ereg_replace
+     * disallowed chars
+     *
+     * @access static
+     * @param string $str, the string to clen
+     * @return string, the string cleaned
+     **/
+    static public function clearSpecialChars($str)
+    {
         $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
         $str = mb_strtolower($str, 'UTF-8');
         $str = mb_ereg_replace('[^a-z0-9áéíóúñüç_\,\- ]', ' ', $str);
@@ -82,13 +102,14 @@ class String_Utils {
     }
 
     /**
-    * Deletes disallowed chars from a sentence and transform it to a url friendly name
-    *
-    * @access static
-    * @param string $name, the string to clen
-    * @return string, the string cleaned
-    */
-    static public function setSeparator($str, $separator='-') {
+     * Deletes disallowed chars from a sentence and transform it to a url friendly name
+     *
+     * @access static
+     * @param string $name, the string to clen
+     * @return string, the string cleaned
+     **/
+    static public function setSeparator($str, $separator='-')
+    {
         $str = trim($str);
         $str = preg_replace('/[ ]+/', $separator, $str);
 
@@ -101,8 +122,9 @@ class String_Utils {
      * @param string $title
      * @param boolean $useStopList
      * @return string
-     */
-    static public function get_title($title, $useStopList=true) {
+     **/
+    static public function get_title($title, $useStopList=true)
+    {
         $title = String_Utils::clearSpecialChars($title);
         $title = String_Utils::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
@@ -118,18 +140,18 @@ class String_Utils {
 
         $titule = String_Utils::setSeparator($titule, '-');
         $titule = preg_replace('/[\-]+/', '-', $titule);
-        
+
         return $titule;
     }
 
     /**
-    * Prevent duplicate metadata
-    *
-    * @access static
-    * @param string $metadata
-    * @param string $separator By default ','
-    * @return string
-    */
+     * Prevent duplicate metadata
+     *
+     * @access static
+     * @param string $metadata
+     * @param string $separator By default ','
+     * @return string
+     **/
     static public function normalize_metadata($metadata, $separator=',')
     {
         $items = explode(',', $metadata);
@@ -147,13 +169,14 @@ class String_Utils {
 
 
     /**
-    * Generate a string of key words separated by semicolon
-    *
-    * @access static
-    * @param string $title
-    * @return string
-    */
-    static public function get_tags($title) {
+     * Generate a string of key words separated by semicolon
+     *
+     * @access static
+     * @param string $title
+     * @return string
+     **/
+    static public function get_tags($title)
+    {
         $tags = String_Utils::clearSpecialChars($title);
 
         // Remove stop list
@@ -170,10 +193,11 @@ class String_Utils {
     }
 
     /**
-      * Modified from Meneame:
-      * @link http://svn.meneame.net/index.cgi/branches/version3/www/libs/uri.php
-    */
-    static public function remove_shorts($string) {
+     * Modified from Meneame:
+     * @link http://svn.meneame.net/index.cgi/branches/version3/www/libs/uri.php
+     **/
+    static public function remove_shorts($string)
+    {
         $shorts = file( dirname(__FILE__).'/string_utils_stoplist.txt');
 
         $size = count($shorts);
@@ -188,7 +212,8 @@ class String_Utils {
         return $string;
     }
 
-    static public function str_stop($string, $max_length=30, $suffix='...'){
+    static public function str_stop($string, $max_length=30, $suffix='...')
+    {
         if (strlen($string) > $max_length) {
             $string = substr($string, 0, $max_length);
             $pos = strrpos($string, " ");
@@ -201,7 +226,8 @@ class String_Utils {
         }
     }
 
-    static public function unhtmlentities($string) {
+    static public function unhtmlentities($string)
+    {
         // replace numeric entities
         $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
         $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
@@ -215,8 +241,9 @@ class String_Utils {
      * Disable magic quotes if it is enabled
      *
      * @param array $data
-     */
-    static public function disabled_magic_quotes( &$data=NULL ) {
+     **/
+    static public function disabled_magic_quotes( &$data=NULL )
+    {
         if( get_magic_quotes_gpc() ) {
             function stripslashes_deep($value) {
                 $value = is_array($value) ?
@@ -244,15 +271,16 @@ class String_Utils {
     }
 
     /**
-    * Gets "n" first words from a given text
-    *
-    * @access static
-    * @param string $text
-    * @param integer $num_words
-    * @return string
-    * @example String_Utils::get_num_words('hello world', 1)
-    */
-    static public function get_num_words($text,$num_words) {
+     * Gets "n" first words from a given text
+     *
+     * @access static
+     * @param string $text
+     * @param integer $num_words
+     * @return string
+     * @example String_Utils::get_num_words('hello world', 1)
+     **/
+    static public function get_num_words($text,$num_words)
+    {
         $no_html = strip_tags($text ); //Quita etiquetas html.
         $description = explode(" ",$no_html,$num_words);
         $sobra = array_pop($description);
@@ -278,8 +306,8 @@ class String_Utils {
     }
 
     /**
-    * filterBadWords
-    */
+     * filterBadWords
+     **/
     static public function filterBadWords($text, $weight=0, $replaceStr=' ')
     {
         $words = String_Utils::loadBadWords();
@@ -297,8 +325,8 @@ class String_Utils {
     }
 
     /**
-    * getWeightBadWords
-    */
+     * getWeightBadWords
+     **/
     static public function getWeightBadWords($text)
     {
         $words = String_Utils::loadBadWords();
@@ -318,8 +346,7 @@ class String_Utils {
     /*
      * implodes a two dimension array to a http params string
      * @param $array
-     */
-
+     **/
     static public function toHttpParams(Array $httpParams)
     {
 
@@ -345,31 +372,32 @@ class String_Utils {
             throw new ArgumentError();
         }
     }
-    
+
     static public function ext_str_ireplace($findme, $replacewith, $subject)
     {
-         // Replaces $findme in $subject with $replacewith
-         // Ignores the case and do keep the original capitalization by using $1 in $replacewith
-         // Required: PHP 5
+        // Replaces $findme in $subject with $replacewith
+        // Ignores the case and do keep the original capitalization by using $1 in $replacewith
+        // Required: PHP 5
 
-         $rest = $subject;
-         $result = '';
+        $rest = $subject;
+        $result = '';
 
-         while (stripos($rest, $findme) !== false) {
-              $pos = stripos($rest, $findme);
+        while (stripos($rest, $findme) !== false) {
+             $pos = stripos($rest, $findme);
 
-              // Remove the wanted string from $rest and append it to $result
-              $result .= substr($rest, 0, $pos);
-              $rest = substr($rest, $pos, strlen($rest)-$pos);
+             // Remove the wanted string from $rest and append it to $result
+             $result .= substr($rest, 0, $pos);
+             $rest = substr($rest, $pos, strlen($rest)-$pos);
 
-              // Remove the wanted string from $rest and place it correctly into $result
-              $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
-              $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
-         }
+             // Remove the wanted string from $rest and place it correctly into $result
+             $result .= str_replace('$1', substr($rest, 0, strlen($findme)), $replacewith);
+             $rest = substr($rest, strlen($findme), strlen($rest)-strlen($findme));
+        }
 
-         // After the last match, append the rest
-         $result .= $rest;
+        // After the last match, append the rest
+        $result .= $rest;
 
-         return $result;
+        return $result;
     }
+    
 }

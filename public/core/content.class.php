@@ -1,77 +1,75 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 /**
- * Content
+ * Explanation for this class.
  *
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: content.class.php 1 2009-11-30 18:16:56Z vifito $
- */
-class Content {
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
+class Content
+{
 
-    var $id = null;
-    var $content_type = null;
-    var $title = null;
-    var $description = null;
-    var $metadata = null;
-    var $starttime = null;
-    var $endtime = null;
-    var $created = null;
-    var $changed = null;
-    var $fk_user = null;
-    var $fk_publisher = null;
-    var $fk_user_last_editor = null;
-    var $category = null;
-    var $category_name = null;
-    var $views = null;
-    var $archive = null;
-    var $permalink= null;
-    var $position = null;
-    var $in_home= null;
-    var $home_pos= null;
-    var $available= null;
-    var $frontpage= null;
-    var $in_litter= null;
-    var $content_status = null;
-    var $placeholder = null;
-    var $home_placeholder = null;
-    var $paper_page = null;
-    
-    function __construct($id=null) {
+    public $id = null;
+    public $content_type = null;
+    public $title = null;
+    public $description = null;
+    public $metadata = null;
+    public $starttime = null;
+    public $endtime = null;
+    public $created = null;
+    public $changed = null;
+    public $fk_user = null;
+    public $fk_publisher = null;
+    public $fk_user_last_editor = null;
+    public $category = null;
+    public $category_name = null;
+    public $views = null;
+    public $archive = null;
+    public $permalink= null;
+    public $position = null;
+    public $in_home= null;
+    public $home_pos= null;
+    public $available= null;
+    public $frontpage= null;
+    public $in_litter= null;
+    public $content_status = null;
+    public $placeholder = null;
+    public $home_placeholder = null;
+    public $paper_page = null;
+    public $cache = null;
+
+    /**
+     * Initializes the content for a given id.
+     *
+     * @param string $id the content id to initilize.
+     **/
+    public function __construct($id=null)
+    {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-        
+
         if (!is_null($id)) {
             $this->read($id);
         }
     }
 
-
+    /**
+     * Magic function to get uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
     public function __get($name)
     {
-
         switch ($name) {
-
-            case 'uri': {
+            case 'uri':
                 $uri =  Uri::generate(
                     strtolower($this->content_type_name),
                     array(
@@ -85,13 +83,12 @@ class Content {
                 return ($uri !== '') ? $uri : $this->permalink;
 
                 break;
-            }
-            case 'slug': {
+
+            case 'slug':
                 return String_Utils::get_title($this->title);
                 break;
-            }
 
-            case 'content_type_name': {
+            case 'content_type_name':
                 $contentTypeName = $GLOBALS['application']->conn->
                     Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
                     if (isset($contentTypeName->fields['name'])) {
@@ -103,15 +100,14 @@ class Content {
                     return $returnValue;
 
                 break;
-            }
 
-            default: {
+            default:
                 break;
-            }
         }
     }
 
-    function create( $data ) {
+    public function create($data)
+    {
         // Fire event
         $GLOBALS['application']->dispatch('onBeforeCreate', $this);
 
@@ -155,14 +151,14 @@ class Content {
         $data['changed'] = date("Y-m-d H:i:s");
 
         if (empty($data['description'])
-            && !isset ($data['description']))
-        {
+            && !isset ($data['description'])
+        ) {
             $data['description']='';
         }
-        if (empty($data['metadata'])&& !isset ($data['metadata'])) {$data['metadata']='';}
+        if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
 
         $data['fk_user'] =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
-        
+
         $data['fk_user_last_editor'] =  $data['fk_user'];
 
         $data['fk_publisher'] = (empty($data['available']))? '': $data['fk_user'];
@@ -179,9 +175,9 @@ class Content {
                         $data['in_home'], $data['home_pos'],$data['available'],$data['permalink']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
@@ -194,19 +190,19 @@ class Content {
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
 
         /* Notice log of this action */
         $logger = Application::getLogger();
-        if(isset ($_SESSION['username']) && isset ($_SESSION['userid'])) {
+        if (isset ($_SESSION['username']) && isset ($_SESSION['userid'])) {
             $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Create '.$this->content_type.' at '.$catName.' Id '.$this->id);
         }
-        
+
         // Fire event
         $GLOBALS['application']->dispatch('onAfterCreate', $this);
 
@@ -214,7 +210,8 @@ class Content {
     }
 
 
-    function read($id) {
+    public function read($id)
+    {
         // Fire event onBeforeXxx
         $GLOBALS['application']->dispatch('onBeforeRead', $this);
 
@@ -222,9 +219,9 @@ class Content {
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
@@ -234,76 +231,13 @@ class Content {
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
-        
+
     }
 
-    function loadCategoryName($pk_content) {
-        require_once( dirname(__FILE__).'/content_category_manager.class.php' );
-        $ccm = ContentCategoryManager::get_instance();
 
-        if (empty($this->category)) {
-            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
-            $this->category = $rs;
-        }
 
-        return $ccm->get_name($this->category);
-    }
-
-    function loadCategoryTitle($pk_content) {
-        require_once( dirname(__FILE__).'/content_category_manager.class.php' );
-        $ccm = ContentCategoryManager::get_instance();
-
-        $category_name = $this->category_name;
-        if (empty($this->category_name)) {
-            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
-            $this->category = $rs;
-            $category_name = $this->loadCategoryName( $this->category );
-        }
-
-        return $ccm->get_title($category_name);
-    }
-
-    // FIXME: check funcionality
-    function load($properties) {
-        if (is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-
-        // Special properties
-        if (isset($this->pk_content)) {
-            $this->id = $this->pk_content;
-        } else{
-            $this->id = null;
-        }
-
-        if (isset($this->fk_content_type)) {
-            $this->content_type = $this->fk_content_type;
-        }else{
-            $this->content_type = null;
-        }
-
-        if ( isset($this->pk_fk_content_category) ) {
-            // INFO: Se ven como propiedade pk_fk_content_category despois evítase unha consulta
-            $this->category = $this->pk_fk_content_category;
-        }
-
-        //$this->category_name = $this->loadCategoryName($this->pk_content);
-    }
-
-    function update($data) {
+    public function update($data)
+    {
         // $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
 
         $name_type = $this->content_type;
@@ -327,12 +261,12 @@ class Content {
         $data['placeholder'] = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
         $data['home_placeholder'] = (empty($this->home_placeholder))? 'placeholder_0_1': $this->home_placeholder;
 
-        if (empty($data['description'])&& !isset ($data['description'])) {$data['description']='';}
+        if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
 
 
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
 
-        if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) {$data['fk_user_last_editor']= $_SESSION['userid'];}
+        if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) $data['fk_user_last_editor']= $_SESSION['userid'];
 
         // FIXME: os permalinks deben establecerse dende a clase deriva e existir un método
         // na clase pai que se poda sobreescribir --> sustituir os if por unha chamada do estilo $this->buildPermalink()
@@ -346,9 +280,9 @@ class Content {
             $data['permalink'] = $this->permalink;
         }
 
-        if (empty($data['description'])&& !isset ($data['description'])) {$data['description']='';}
-        if (empty($data['metadata'])&& !isset ($data['metadata'])) {$data['metadata']='';}
-        if (empty($data['pk_author'])&& !isset ($data['pk_author'])) { $data['pk_author']=''; }
+        if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
+        if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
+        if (empty($data['pk_author'])&& !isset ($data['pk_author'])) $data['pk_author']='';
 
         $values = array( $data['title'], $data['description'],
             $data['metadata'], $data['starttime'], $data['endtime'],
@@ -357,9 +291,9 @@ class Content {
             $data['fk_user_last_editor'], $data['permalink'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return;
         }
@@ -372,18 +306,18 @@ class Content {
         $values = array($data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return(false);
         }
-        
+
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Update '.$name_type.' at '.$catName.' Id '.$this->id);
-       
-//        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
+
+        //$GLOBALS['application']->dispatch('onAfterUpdate', $this);
     }
 
     /**
@@ -391,27 +325,28 @@ class Content {
     *
     * This simulates a trash system by setting their available flag to false
     *
-    * @access public
     * @param integer $id
     * @param integer $last_editor
+    *
     * @return null
     */
-    public function remove($id) {
+    public function remove($id)
+    {
         $sql = 'DELETE FROM contents WHERE pk_content='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
 
         $sql = 'DELETE FROM contents_categories WHERE pk_fk_content='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return;
         }
@@ -423,17 +358,17 @@ class Content {
 
 
     /**
-    * Make unavailable one content, but without deleting it
-    *
-    * This simulates a trash system by setting their available flag to false
-    *
-    * @access public
-    * @param integer $id
-    * @param integer $last_editor
-    * @return null
-    */
-
-    function delete($id, $last_editor=null) {
+     * Make unavailable one content, but without deleting it
+     *
+     * This simulates a trash system by setting their available flag to false
+     *
+     * @param integer $id
+     * @param integer $last_editor
+     *
+     * @return null
+     **/
+    public function delete($id, $last_editor=null)
+    {
         $changed = date("Y-m-d H:i:s");
 
         $data = array(0, 0, $last_editor, $changed, $id);
@@ -445,9 +380,9 @@ class Content {
         $values = array(1, $changed, $last_editor);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
              return;
          }
@@ -463,12 +398,14 @@ class Content {
     * This "restores" the content from the trash system by setting their
     * available flag to true
     *
-    * @access public
     * @param integer $id
     * @param integer $last_editor
+    *
     * @return null
-    */
-    function no_delete($id, $last_editor) {
+    **/
+    // FIXME:  change name
+    public function no_delete($id, $last_editor)
+    {
       $changed = date("Y-m-d H:i:s");
       $sql  =   'UPDATE contents SET `in_litter`=?, `available`=?, '
                 .'`content_status`=?, `changed`=?, `fk_user_last_editor`=? '
@@ -477,15 +414,84 @@ class Content {
           $values = array(0,1,1, $changed, $last_editor);
 
          if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return;
         }
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Recover from litter (no_delete) at '.$this->content_type.' Id '.$this->id);
+    }
+
+    // FIXME:  move to ContentCategory class
+    public function loadCategoryName($pk_content)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+
+        if (empty($this->category)) {
+            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
+            $this->category = $rs;
+        }
+
+        return $ccm->get_name($this->category);
+    }
+
+    // FIXME:  move to ContentCategory class
+    public function loadCategoryTitle($pk_content)
+    {
+        $ccm = ContentCategoryManager::get_instance();
+
+        $category_name = $this->category_name;
+        if (empty($this->category_name)) {
+            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
+            $this->category = $rs;
+            $category_name = $this->loadCategoryName( $this->category );
+        }
+
+        return $ccm->get_title($category_name);
+    }
+
+    // FIXME: check funcionality
+    public function load($properties)
+    {
+        if (is_array($properties)) {
+            foreach ($properties as $k => $v) {
+                if ( !is_numeric($k) ) {
+                    $this->{$k} = $v;
+                }
+            }
+        } elseif (is_object($properties)) {
+            $properties = get_object_vars($properties);
+            foreach ($properties as $k => $v) {
+                if ( !is_numeric($k) ) {
+                    $this->{$k} = $v;
+                }
+            }
+        }
+
+        // Special properties
+        if (isset($this->pk_content)) {
+            $this->id = $this->pk_content;
+        } else {
+            $this->id = null;
+        }
+
+        if (isset($this->fk_content_type)) {
+            $this->content_type = $this->fk_content_type;
+        } else {
+            $this->content_type = null;
+        }
+
+        if ( isset($this->pk_fk_content_category) ) {
+            // INFO: Se ven como propiedade pk_fk_content_category despois evítase unha consulta
+            $this->category = $this->pk_fk_content_category;
+        }
+
+        //$this->category_name = $this->loadCategoryName($this->pk_content);
     }
 
     /**
@@ -496,8 +502,8 @@ class Content {
      * apc.enable_cli = 1
      *
      * @return string    A valid pk_content
-     */
-    public function generatePk()
+     **/
+    private function generatePk()
     {
         $t = gettimeofday();
         $micro = intval(substr($t['usec'], 0, 3));
@@ -546,8 +552,9 @@ class Content {
      * @param string $starttime the initial time from it will be available
      * @param string $starttime the initial time until it will be available
      * @param string $starttime time to compare with the previous parameters
+     *
      * @return boolean
-    */
+     **/
     public function isInTime($starttime=null, $endtime=null, $time=null)
     {
 
@@ -589,6 +596,7 @@ class Content {
         return (($now < $end) && ($now > $start));
     }
 
+    // FIXME:  change function name
     static public function isInTime2($starttime=null, $endtime=null, $time=null)
     {
 
@@ -705,21 +713,22 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
         }
-        
+
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set_status  at '.$this->content_type.' Id '.$this->id);
     }
 
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
-    public function set_available($status,$last_editor) {
+    public function set_available($status,$last_editor)
+    {
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
         if (($this->id == null) && !is_array($status)) {
             return false;
@@ -738,9 +747,9 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
@@ -779,9 +788,9 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
@@ -799,9 +808,9 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
@@ -820,7 +829,8 @@ class Content {
     }
 
 
-    public function set_frontpage($status, $last_editor) {
+    public function set_frontpage($status, $last_editor)
+    {
       //  $GLOBALS['application']->dispatch('onBeforeSetFrontpage', $this);
 
         $changed = date("Y-m-d H:i:s");
@@ -839,24 +849,25 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return false;
             }
         }
-        
+
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set frontpage at '.$this->content_type.' Id '.$this->id);
 
-   //     $GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
+        //$GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
     }
 
 
 
-    public function set_position($position, $last_editor) {
+    public function set_position($position, $last_editor)
+    {
         $GLOBALS['application']->dispatch('onBeforePosition', $this);
 
         $changed = date("Y-m-d H:i:s");
@@ -873,9 +884,9 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
@@ -885,13 +896,14 @@ class Content {
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set position at '.$this->content_type.' Id '.$this->id);
-        
+
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
 
         return true;
     }
 
-    public function set_inhome($status, $last_editor) {
+    public function set_inhome($status, $last_editor)
+    {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
         $changed = date("Y-m-d H:i:s");
@@ -910,14 +922,14 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
         }
-        
+
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set in home at '.$this->content_type.' Id '.$this->id);
@@ -945,9 +957,9 @@ class Content {
 
         if (count($values)>0) {
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                 return;
             }
@@ -956,7 +968,7 @@ class Content {
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Set home position at '.$this->content_type.' Id '.$this->id);
-        
+
         // $GLOBALS['application']->dispatch('onAfterHomePosition', $this);
 
     }
@@ -1003,7 +1015,7 @@ class Content {
                     apc_store(APC_PREFIX . "__getContentTypes", $resultArray);
                 }
         }
-        
+
         return $resultArray;
     }
 
@@ -1019,7 +1031,7 @@ class Content {
         $contenTypes = self::getContentTypes();
 
          foreach ($contenTypes as $types) {
-             if($types['name'] == $name) {
+             if ($types['name'] == $name) {
                  return $types['pk_content_type'];
              }
          }
@@ -1046,9 +1058,9 @@ class Content {
 
             if (count($values)>0) {
                 if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                     return;
                 }
@@ -1068,9 +1080,9 @@ class Content {
 
             if (count($values)>0) {
                 if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                     return;
                 }
@@ -1083,8 +1095,8 @@ class Content {
         return true;
     }
 
-    static public function setNumViews($id=null) {
-
+    static public function setNumViews($id=null)
+    {
         $botStrings = array(
                             "google",
                             "bot",
@@ -1110,26 +1122,21 @@ class Content {
                             "mechanize",
                           );
 
-        foreach ($botStrings as $bot)
-        {
+        foreach ($botStrings as $bot) {
             $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
             if (preg_match( "@".strtolower($httpUserAgent)."@", $bot) > 0) {
                 return false;
             }
         }
 
-
-        if (is_null($id) ) {
-            return false;
-        }
-
+        if (is_null($id) )  return false;
 
         // Multiple exec SQL
         if (is_array($id) && count($id)>0) {
             // Recuperar todos los IDs a actualizar
             $ads = array();
 
-            foreach($id as $item) {
+            foreach ($id as $item) {
                 if (is_object($item)
                    && isset($item->pk_advertisement)
                    && !empty($item->pk_advertisement)) {
@@ -1143,7 +1150,6 @@ class Content {
                 return false;
             }
 
-
             $sql =  'UPDATE `contents` SET `views`=`views`+1'
                     .' WHERE  `pk_content` IN ('.implode(',', $ads).')';
 
@@ -1153,15 +1159,16 @@ class Content {
         }
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-          $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-          $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-          $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+          $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+          $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+          $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
           return;
         }
     }
 
-    function put_permalink($end, $type, $title, $cat) {
+    public function put_permalink($end, $type, $title, $cat)
+    {
         //Definimos el permalink para la url.
         // Ejemplo: http://urlbase.com/2008/09/29/deportes/premio/Singapur/Alonso/proclama/campeon/2008092917564334523.html
         //artigo/2008/11/18/galicia/santiago/encuentran-tambre-cadaver-santiagues-desaparecido-lunes/2008111802293425694.html
@@ -1183,7 +1190,7 @@ class Content {
                   GetOne('SELECT name FROM `content_categories` WHERE pk_content_category = "'. $padre.'"');
                   $namecat = strtolower($cats)."/".$namecat;
             }
-        }else{
+        } else {
             $namecat=$type;
         } //Para que no ponga //
 
@@ -1211,6 +1218,7 @@ class Content {
      * Check if $pk_content exists in database
      *
      * @param string $pk_content
+     *
      * @return array Array with code status (array[0] == 200|404), and permalink or null (array[1])
     */
     public static function pkExists($pk_content)
@@ -1253,8 +1261,8 @@ class Content {
     }
 
     /* ## CALLBACKS ########################################################### */
-    public function onUpdateClearCacheContent() {
-        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
+    public function onUpdateClearCacheContent()
+    {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if (property_exists($this, 'pk_article')) {
@@ -1279,25 +1287,32 @@ class Content {
         }
     }
 
-    public function refreshFrontpage() {
-        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
+    /**
+     * Regenerates the homepage cache.
+     **/
+    public function refreshFrontpage()
+    {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if (isset($_REQUEST['category'])) {
 
             $ccm = ContentCategoryManager::get_instance();
             $category_name = $ccm->get_name($_REQUEST['category']);
-
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name) . '|RSS');
-
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name) . '|0');
+
             $tplManager->fetch(SITE_URL . '/seccion/' . $category_name);
 
         }
     }
 
-    static public function refreshFrontpageForAllCategories() {
-        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
+    /**
+     * Regenerate cache files for all categories homepages.
+     *
+     * @return string Explanation for which elements were deleted
+     **/
+    static public function refreshFrontpageForAllCategories()
+    {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         $ccm = ContentCategoryManager::get_instance();
@@ -1305,44 +1320,47 @@ class Content {
         $availableCategories = $ccm->categories;
         $output ='';
 
-        foreach($availableCategories as $category) {
-
-
+        foreach ($availableCategories as $category) {
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
-
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $output .= "$category->name cleaned.\n";
-
+            $output .= sprintf(_("Homepage for category '%s' cleaned sucessfully.\n", $category->name));
         }
         return $output;
 
     }
 
-    public function refreshHome($params = '') {
-
-        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
+    /**
+     * Deletes the homepage cache.
+     *
+     * @param array $params parameters for changing the behaviour of the func.
+     **/
+    public function refreshHome($params = '')
+    {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
+        // Delete all the available Homepage cache files
         $tplManager->delete('home|RSS');
-
         $tplManager->delete('home|0');
+
+        // Generate the cache file again
         $tplManager->fetch(SITE_URL);
     }
 
     /**
      * Change current value of available property
      *
-     * @param string $id
-     * @return boolean
-    */
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
     public function toggleAvailable($id)
     {
         $sql = 'UPDATE `contents` SET `available` = (`available` + 1) % 2 WHERE `pk_content`=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
@@ -1354,6 +1372,14 @@ class Content {
         return true;
     }
 
+    /**
+     * Removes element with $contentPK from homepage of category.
+     *
+     * @param string $category the id of the category where remove the element.
+     * @param string $contentPK the pk of the content.
+     *
+     * @return boolean true if was removed successfully
+     **/
     public function dropFromHomePageOfCategory($category,$pk_content)
     {
         $ccm = ContentCategoryManager::get_instance();
@@ -1361,7 +1387,7 @@ class Content {
         if ($category == 'home') {
             $category_name = 'home';
             $category = 0;
-        }else{
+        } else {
             $category_name = $ccm->get_name($category);
         }
 
@@ -1371,9 +1397,9 @@ class Content {
 
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
@@ -1384,19 +1410,26 @@ class Content {
         }
     }
 
-    public function unpublishFromHomePage($pk_content)
+    /**
+     * Removes element with $contentPK from Homepage.
+     *
+     * @param string $contentPK the pk of the content.
+     *
+     * @return boolean true if was removed successfully
+     **/
+    public function unpublishFromHomePage($contentPK)
     {
         $cm = new ContentManager();
 
-        $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$pk_content;
-        $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$pk_content;
+        $sql = 'UPDATE contents SET `available`=0 WHERE pk_content='.$contentPK;
+        $sql2 = 'DELETE FROM content_positions WHERE pk_fk_content = '.$contentPK;
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $rs2 = $GLOBALS['application']->conn->Execute($sql2);
 
         if (!$rs || !$rs2) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
@@ -1407,35 +1440,4 @@ class Content {
         }
     }
 
-}
-
-// FIXME: mover a un novo script que cargue todo o sistema por defecto "bootstrap"
-function __autoload($className) {
-
-    $filename = strtolower($className);
-    if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-        require dirname(__FILE__).'/'.$filename.'.class.php';
-
-    } else{
-
-        // Try convert MethodCacheManager to method_cache_manager
-        $filename = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $className));
-
-        if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
-            require dirname(__FILE__).'/'.$filename.'.class.php';
-        }
-    }
-
-}
-
-//class "titulares" para listados portada
-class Headline extends Content
-{
-    public $id; // For paginates
-    public $title;
-    public $permalink;
-    public $created;
-    public $changed;
-    public $starttime;
-    public $endtime;
 }

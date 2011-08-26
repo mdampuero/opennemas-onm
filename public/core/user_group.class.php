@@ -1,158 +1,219 @@
 <?php
-class User_group {
-	/**Id del grupo*/
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles UserGroup CRUD actions.
+ *
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
+class User_group
+{
+
+    /**Id del grupo*/
     var $id = NULL;
+
     /**Nombre del grupo*/
     var $name = NULL;
+
     /**Lista de permisos activos para este grupo de usuarios*/
     var $privileges = NULL;
 
-    function __construct($id=NULL){
-        if(!is_null($id)) {
+    public function __construct($id = NULL)
+    {
+
+
+        if (!is_null($id)) {
             $this->read($id);
         }
     }
 
-    function create($data) {
-    	//Se inserta el grupo
-        $sql = "INSERT INTO user_groups (`name`)
-                    VALUES (?)";
-        $values = array($data['name']);
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+    public function create($data)
+    {
 
-            return(false);
+
+        //Se inserta el grupo
+        $sql = "INSERT INTO user_groups (`name`) VALUES (?)";
+        $values = array($data['name']);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+            return (false);
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
         $this->name = $data['name'];
-		//Se insertan los privilegios
-		if((!is_null($data['privileges'])) && (count($data['privileges'] > 0))){
-			return $this->insert_privileges($data['privileges']);
-		}
-        return(true);
+
+        //Se insertan los privilegios
+
+        if ((!is_null($data['privileges']))
+            && (count($data['privileges'] > 0))
+        ) {
+            return $this->insert_privileges($data['privileges']);
+        }
+        return (true);
     }
 
-    function read($id) {
-        $sql = 'SELECT * FROM user_groups WHERE pk_user_group = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+    public function read($id)
+    {
 
+        $sql = 'SELECT * FROM user_groups WHERE pk_user_group = ' . intval($id);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;
         }
         $this->set_values($rs->fields);
+
         //Se cargan los privileges asociados
-        $sql = 'SELECT pk_fk_privilege FROM user_groups_privileges WHERE pk_fk_user_group = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $sql =  "SELECT pk_fk_privilege"
+                ." FROM user_groups_privileges"
+                ." WHERE pk_fk_user_group = ?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;
         }
-         while(!$rs->EOF) {
-        	$this->privileges[] = $rs->fields['pk_fk_privilege'];
-          	$rs->MoveNext();
+        while (!$rs->EOF) {
+            $this->privileges[] = $rs->fields['pk_fk_privilege'];
+            $rs->MoveNext();
         }
     }
 
-    function update($data) {
-    	if(!is_null($data['id'])){
-    		$this->id = $data['id'];
-    		//print('Antes de update:' . $this->id . ';'.$data['id']);
-        	$sql = "UPDATE user_groups SET `name`=?
-                    WHERE pk_user_group=".intval($data['id']);
-        	$values = array($data['name']);
+    public function update($data)
+    {
 
-	        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-	            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-	            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-	            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-	            return;
-	        }
-	        //Se actualizan los privileges
-	        $this->delete_privileges($data['id']);
-	        if((!is_null($data['privileges'])) && (count($data['privileges'] > 0))){
-	        	//print 'Insertamos los privilegios';
-				return $this->insert_privileges($data['privileges']);
-			}
-    	}
-    	return(false);
+
+        if (!is_null($data['id'])) {
+            $this->id = $data['id'];
+
+            //print('Antes de update:' . $this->id . ';'.$data['id']);
+            $sql = "UPDATE user_groups SET `name`=?
+                    WHERE pk_user_group=" . intval($data['id']);
+            $values = array($data['name']);
+
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+            if ( !$rs) {
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                return;
+            }
+
+            //Se actualizan los privileges
+            $this->delete_privileges($data['id']);
+
+            if ((!is_null($data['privileges']))
+                && (count($data['privileges'] > 0))
+            ) {
+                //print 'Insertamos los privilegios';
+                return $this->insert_privileges($data['privileges']);
+            }
+        }
+        return (false);
     }
 
-    function delete($id) {
-        $sql = 'DELETE FROM user_groups WHERE pk_user_group='.intval($id);
+    public function delete($id)
+    {
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        $sql = 'DELETE FROM user_groups WHERE pk_user_group=' . intval($id);
+
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;
         }
+
         //Se eliminan las referencias de los privileges
         $this->delete_privileges($id);
     }
-    
-    public static function getGroupName($fk_user_group) {
+
+    public static function getGroupName($userGroupFK)
+    {
+
         $sql = 'SELECT name FROM user_groups WHERE pk_user_group=?';
-        $rs  = $GLOBALS['application']->conn->GetOne($sql, $fk_user_group);        
-        
-        return( $rs );
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $userGroupFK);
+        return ($rs);
     }
 
-    function get_user_groups(){
+    public function get_user_groups()
+    {
 
         $types = array();
         $sql = 'SELECT pk_user_group, name FROM user_groups';
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        while(!$rs->EOF) {
-        	$user_group = new User_Group();
-        	$user_group->set_values($rs->fields);
-        	$types[] = $user_group;
-          	$rs->MoveNext();
+        while (!$rs->EOF) {
+            $userGroup = new User_Group();
+            $userGroup->set_values($rs->fields);
+            $types[] = $userGroup;
+            $rs->MoveNext();
         }
-        return( $types );
+        return ($types);
     }
 
-    function contains_privilege($id_privilege){
-		if(isset($this->privileges)){
-    	return in_array(intval($id_privilege), $this->privileges);
-		}
-    	return false;
-    }
+    public function contains_privilege($privilegeID)
+    {
 
-    //Funciones privadas
-    private function insert_privileges($data){
-		$sql = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`)
-                    VALUES (?,?)";
-        for($i=0;$i<count($data);$i++){
-        	$values = array($this->id, $data[$i]);
-        	if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            	$error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            	$GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            	$GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            	return(false);
-        	}
+
+        if (isset($this->privileges)) {
+            return in_array(intval($privilegeID), $this->privileges);
         }
-        return(true);
+        return false;
     }
 
-     private function delete_privileges($id) {
-        $sql = 'DELETE FROM user_groups_privileges WHERE pk_fk_user_group='.intval($id);
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+    private function insert_privileges($data)
+    {
+
+        $sql =  "INSERT INTO user_groups_privileges"
+                ."            (`pk_fk_user_group`, `pk_fk_privilege`)"
+                ." VALUES (?,?)";
+        for ($i = 0;$i < count($data);$i++) {
+            $values = array($this->id, $data[$i]);
+
+            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+            if (!$rs) {
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
+                return (false);
+            }
+        }
+        return (true);
+    }
+
+    private function delete_privileges($id)
+    {
+
+        $sql = 'DELETE FROM user_groups_privileges WHERE pk_fk_user_group=?';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        if (!$rs) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;
         }
     }
 
-    private function set_values($data){
-    	$this->id		= $data['pk_user_group'];
-        $this->name	= $data['name'];
+    private function set_values($data)
+    {
+
+        $this->id = $data['pk_user_group'];
+        $this->name = $data['name'];
     }
 }

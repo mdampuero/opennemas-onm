@@ -4,15 +4,15 @@ define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
 
 class SessionManager implements ArrayAccess
 {
-    
+
     /**
      * The singleton instance for this object.
      *
      * @var SessionManager
      **/
     protected static $_singleton = null;
-    
-    
+
+
     /**
      * Initializes this object.
      *
@@ -20,9 +20,9 @@ class SessionManager implements ArrayAccess
      */
     private function __construct($sessionSavePath)
     {
-        $this->dirSess = realpath($sessionSavePath);
+        $this->sessionDirectory = realpath($sessionSavePath);
     }
-    
+
     /**
      * Retrieves the singleton instance and initializes it if not available.
      *
@@ -31,122 +31,123 @@ class SessionManager implements ArrayAccess
      * @return SessionManager The instance for SessionManager
      *
      **/
-    static function getInstance($sessionSavePath) {
-        
+    static function getInstance($sessionSavePath)
+    {
         if (isset($sessionSavePath)) {
             $sessionSavePath = session_save_path();
         }
         if ( is_null(self::$_singleton)) {
             self::$_singleton = new SessionManager($sessionSavePath);
         }
-        
         return( self::$_singleton );
     }
-    
+
     public function bootstrap($lifetime=null)
     {
         if (is_null($lifetime)
-            && !isset($_COOKIE['default_expire']))
-        {
+            && !isset($_COOKIE['default_expire'])
+        ) {
             $lifetime = 15; // 15 minutes by default
-        } elseif( isset($_COOKIE['default_expire']) ) {
+        } elseif (isset($_COOKIE['default_expire'])) {
             $lifetime = intval($_COOKIE['default_expire']);
         }
-        
+
         // Set session_save_path
-        session_save_path( $this->dirSess );
-        
+        session_save_path($this->sessionDirectory);
+
         // set the cache expire to $lifetime minutes
         session_cache_expire($lifetime);
-        
+
         // public, private, nocache, private_no_expire
-        //  http://cz.php.net/manual/en/function.session-cache-limiter.php 
+        //  http://cz.php.net/manual/en/function.session-cache-limiter.php
         session_cache_limiter('nocache');
-        
+
         // Now we can call to session_start
         session_start();
     }
-    
-    function __set($name, $value)
+
+    public function __set($name, $value)
     {
         $_SESSION[$name] = $value;
     }
-    
-    function __get($name)
+
+    public function __get($name)
     {
         if (!isset($_SESSION[$name])) return null;
-        
         return($_SESSION[$name]);
     }
-    
-    
-    /** 
-    * Defined by ArrayAccess interface 
-    * Set a value given it's key e.g. $A['title'] = 'foo'; 
-    * @param mixed key (string or integer) 
-    * @param mixed value 
-    * @return void 
-    */ 
+
+
+    /**
+    * Defined by ArrayAccess interface
+    * Set a value given it's key e.g. $A['title'] = 'foo';
+    * @param mixed key (string or integer)
+    * @param mixed value
+    * @return void
+    */
     function offsetSet($key, $value)
-    { 
-        $_SESSION[$key] = $value; 
-    } 
-    
-    /** 
-    * Defined by ArrayAccess interface 
-    * Return a value given it's key e.g. echo $A['title']; 
-    * @param mixed key (string or integer) 
-    * @return mixed value 
-    */ 
-    function offsetGet($key)
-    { 
-        return($_SESSION[$key]);
-    } 
-    
-    /** 
-    * Defined by ArrayAccess interface 
-    * Unset a value by it's key e.g. unset($A['title']); 
-    * @param mixed key (string or integer) 
-    * @return void 
-    */ 
-    function offsetUnset($key)
-    { 
-        unset($_SESSION[$key]); 
-    } 
-    
-    /** 
-    * Defined by ArrayAccess interface 
-    * Check value exists, given it's key e.g. isset($A['title']) 
-    * @param mixed key (string or integer) 
-    * @return boolean 
-    */ 
-    function offsetExists($offset)
-    { 
-        return isset($_SESSION[$key]); 
+    {
+        $_SESSION[$key] = $value;
     }
-    
-    
-    
-    /* Métodos para el control de la sesión y los usuarios activos */        
+
+    /**
+    * Defined by ArrayAccess interface
+    * Return a value given it's key e.g. echo $A['title'];
+    * @param mixed key (string or integer)
+    * @return mixed value
+    */
+    function offsetGet($key)
+    {
+        return($_SESSION[$key]);
+    }
+
+    /**
+    * Defined by ArrayAccess interface
+    * Unset a value by it's key e.g. unset($A['title']);
+    * @param mixed key (string or integer)
+    * @return void
+    */
+    function offsetUnset($key)
+    {
+        unset($_SESSION[$key]);
+    }
+
+    /**
+    * Defined by ArrayAccess interface
+    * Check value exists, given it's key e.g. isset($A['title'])
+    * @param mixed key (string or integer)
+    * @return boolean
+    */
+    function offsetExists($offset)
+    {
+        return isset($_SESSION[$key]);
+    }
+
+
+
+    /* Métodos para el control de la sesión y los usuarios activos */
     public function getSessions()
     {
-        $dirSess = $this->dirSess;
-        $sessions = array();            
-        
-        if (file_exists($dirSess) && is_dir($dirSess)) {
-            if ($dh = opendir($dirSess)) {
+        $sessionDirectory = $this->sessionDirectory;
+        $sessions = array();
+
+        if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
+            if ($dh = opendir($sessionDirectory)) {
                 while (($file = readdir($dh)) !== false) {
-                    if( preg_match('/^sess_/', $file) ) {
-                        $contents = file_get_contents($dirSess.$file);
-                        if(!empty($contents)) {
-                            $session = SessionManager::unserializesession( $contents );
-                       
-                            if( isset($session['userid']) ) {
-                                $sessions[] = array( 'userid'     => $session['userid'],
-                                                     'username'   => $session['username'],
-                                                     'isAdmin'    => $session['isAdmin'],
-                                                     'expire'     => $session['expire'],
-                                                     'authMethod' => $session['authMethod'],);
+                    if (preg_match('/^sess_/', $file)) {
+                        $contents = file_get_contents($sessionDirectory.$file);
+                        if (!empty($contents)) {
+                            $session =
+                                SessionManager::unserializesession($contents);
+
+                            if (isset($session['userid'])) {
+                                $sessions[] = array(
+                                    'userid'     => $session['userid'],
+                                    'username'   => $session['username'],
+                                    'isAdmin'    => $session['isAdmin'],
+                                    'expire'     => $session['expire'],
+                                    'authMethod' => $session['authMethod'],
+                                );
                             }
                         }
                     }
@@ -154,34 +155,35 @@ class SessionManager implements ArrayAccess
                 closedir($dh);
             }
         }
-        
+
         return( $sessions );
     }
-    
+
     public function purgeSession( $userid )
     {
-        $dirSess = $this->dirSess;
-        
-        if (file_exists($dirSess) && is_dir($dirSess)) {
-            if ($dh = opendir($dirSess)) {
+        $sessionDirectory = $this->sessionDirectory;
+
+        if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
+            if ($dh = opendir($sessionDirectory)) {
                 while (($file = readdir($dh)) !== false) {
-                    if( preg_match('/^sess_/', $file) ) {
-                        $contents = file_get_contents($dirSess.$file);
+                    if (preg_match('/^sess_/', $file)) {
+                        $contents = file_get_contents($sessionDirectory.$file);
                         if (!empty($contents)) {
-                            $session = SessionManager::unserializesession($contents);
+                            $session =
+                                SessionManager::unserializesession($contents);
                             if (isset($session['userid'])
-                                && ($session['userid']==$userid))
-                            {
-                                @unlink( $dirSess.$file );
+                                && ($session['userid']==$userid)
+                            ) {
+                                @unlink($sessionDirectory.$file);
                             }
                         }
                     }
                 }
                 closedir($dh);
             }
-        }                
+        }
     }
-    
+
     // http://es2.php.net/manual/en/function.session-decode.php#79244
     public function unserializesession($data)
     {
@@ -191,7 +193,7 @@ class SessionManager implements ArrayAccess
             -1,
             PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
         );
-        
+
         $i=0;
         while (isset($vars[$i])) {
             //TODO: the @ was written cause eht unserialize raises an notice
@@ -201,5 +203,5 @@ class SessionManager implements ArrayAccess
         }
         return $result;
     }
-    
+
 }

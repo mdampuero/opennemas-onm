@@ -7,36 +7,29 @@
  * file that was distributed with this source code.
  */
 /**
- *
- *
- * @package    Onm
- * @subpackage TemplateCache
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://www.openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */
-/**
  * TemplateCacheManager class manage the smarty cache.
  *
  * @package    Onm
- * @subpackage TemplateCache
+ * @subpackage Template
  * @author     Fran Dieguez <fran@openhost.es>
- * @version    Git: $Id: template_cache_manager.class.php 28842 Mar Xuñ 28 21:22:13 2011 frandieguez $
  */
+
 class TemplateCacheManager
 {
     public $cacheGroups = array();
-    protected $cacheDir = null;
-    protected $smarty   = null;
+    public $properties = array();
+    protected $_cacheDir = null;
+    protected $_smarty = null;
 
     /**
      * Construct
      * @param string $themeDir Path to smarty theme
      * @param Smarty $smarty Smarty class
      */
-    public function __construct($themeDir, $smarty=null)
-    {
-        $this->smarty   = (!is_null($smarty))? $smarty: new Template($themeDir);
-        $this->cacheDir = $themeDir . 'cache/';
+    public function __construct($themeDir, $smarty = null) {
+
+        $this->_smarty = (!is_null($smarty)) ? $smarty : new Template($themeDir);
+        $this->_cacheDir = $themeDir . 'cache/';
     }
 
     /**
@@ -45,38 +38,31 @@ class TemplateCacheManager
      * @param string $filter A regular expression to filter cache file names
      * @return array Array of cache files
      */
-    public function scan($filter=null)
+    public function scan($filter = null)
     {
-        $caches = array();
-        $matches =array();
 
+        $caches = array();
+        $matches = array();
         $dirIt = new DirectoryIterator($this->cacheDir);
-        foreach($dirIt as $item) {
-            if($item->isDot()) {
+        foreach ($dirIt as $item) {
+
+            if ($item->isDot()) {
                 continue;
             }
-
             $filename = $item->current()->getFilename();
 
-            if( preg_match('/^(?P<category>[^\^]+)\^([^\^]+)\^/', $filename, $matches)) {
+            if (preg_match('/^(?P<category>[^\^]+)\^([^\^]+)\^/', $filename, $matches)) {
                 $this->cacheGroups[] = $matches['category'];
+            }
 
-             }
+            if (empty($filter) || preg_match($filter, $filename)) {
+                preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)?\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/', $filename, $matches);
 
-            if(empty($filter) || preg_match($filter, $filename)) {
-                preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)?\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/',
-                       $filename, $matches);
-
-                if(isset($matches['category'])) {
-                    $caches[] = array('category' => $matches['category'],
-                                      'resource' => $matches['resource'],
-                                      'template' => $matches['tplname'],
-                                      'size'     => $item->current()->getSize(),
-                                      'filename' => $filename);
+                if (isset($matches['category'])) {
+                    $caches[] = array('category' => $matches['category'], 'resource' => $matches['resource'], 'template' => $matches['tplname'], 'size' => $item->current()->getSize(), 'filename' => $filename);
                 }
             }
         }
-
         return $caches;
     }
 
@@ -85,8 +71,10 @@ class TemplateCacheManager
      *
      * @param array $caches
      */
-    public function parseList(array &$caches) {
-        for($i=0, $total=count($caches); $i<$total; $i++) {
+    public function parseList($caches)
+    {
+
+        for ($i = 0, $total = count($caches);$i < $total;$i++) {
             $data = $this->parse($caches[$i]['filename']);
             $caches[$i]['expires'] = $data['expires'];
             $caches[$i]['created'] = $data['timestamp'];
@@ -97,49 +85,58 @@ class TemplateCacheManager
      * Parse a cache file and extract smarty information
      *
      * @param string $cacheFileName Name of cache
+     *
      * @return array Array smarty information
      */
     public function parse($cacheFileName)
     {
+
+
         // Clear cache of filesystem to get updated information
         /* clearstatcache(); */
 
         $data = null;
-        if( file_exists($this->cacheDir.$cacheFileName) ) {
-            $data = $this->getHeaderInfoFromCacheFile($this->cacheDir.$cacheFileName);
-            $data['timestamp'] = filectime($this->cacheDir.$cacheFileName);
+
+        if (file_exists($this->_cacheDir . $cacheFileName)) {
+            $data = $this->getHeaderInfoFromCacheFile($this->_cacheDir . $cacheFileName);
+            $data['timestamp'] = filectime($this->_cacheDir . $cacheFileName);
             $data['expires'] = $data['timestamp'] + $data['cache_lifetime'];
         }
-
         return $data;
     }
 
-    public $properties = array();
-
     /**
-    * Decodes information of smarty cache files
-    *
-    * @param mixed $properties, array containing imported properties from cachefile
-    * @return void
-    */
-    public function decodeProperties($properties) {
+     * Decodes information of smarty cache files
+     *
+     * @param mixed $properties, array containing imported properties from cachefile
+     *
+     * @return void
+     */
+    public function decodeProperties($properties)
+    {
+
         $this->properties['has_nocache_code'] = $properties['has_nocache_code'];
         $this->properties['nocache_hash'] = $properties['nocache_hash'];
+
         if (isset($properties['cache_lifetime'])) {
             $this->properties['cache_lifetime'] = $properties['cache_lifetime'];
         }
+
         if (isset($properties['file_dependency'])) {
             $this->properties['file_dependency'] = $properties['file_dependency'];
         }
     }
 
     /**
-    * Obtains the cache information from one Smarty cache file.
-    *
-    * @param string $filename, the path to the cache file where extract info
-    * @return mixed, an array containing information of smarty cache files
-    */
-    public function getHeaderInfoFromCacheFile($file) {
+     * Obtains the cache information from one Smarty cache file.
+     *
+     * @param string $filename, the path to the cache file where extract info
+     *
+     * @return mixed, an array containing information of smarty cache files
+     */
+    public function getHeaderInfoFromCacheFile($file)
+    {
+
         $this->properties = array();
         preg_match_all("/(<\?php \/\*%%SmartyHeaderCode:(.+?)%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\?>\n)/s", file_get_contents($file), $result);
         $_smarty_tpl = $this;
@@ -153,32 +150,34 @@ class TemplateCacheManager
      * @see function scan
      * @param $cacheId Cache ID
      * @param $tplFilename Template file name, extension must be included (sample: index.tpl)
+     *
      * @return string Return a cache file name
      */
-    public function getCacheFileName($cacheId, $tplFilename=null)
+    public function getCacheFileName($cacheId, $tplFilename = null)
     {
         // Smarty convert the "|" character for a "^" character
         $cacheId = str_replace('|', '^', $cacheId);
 
         // Make a regular expression to filter
         $filter = '/^' . preg_quote($cacheId) . '\^.*?';
-        if(!is_null($tplFilename)) {
-            $filter .= preg_quote($tplFilename).'\.php$';
+
+        if (!is_null($tplFilename)) {
+            $filter.= preg_quote($tplFilename) . '\.php$';
         }
-        $filter .= '/';
+        $filter.= '/';
 
         // Scan directory applying the filter
         $caches = $this->scan($filter);
 
-        if(count($caches) > 1) {
+        if (count($caches) > 1) {
             $names = array();
-            foreach($caches as $cache) {
+            foreach ($caches as $cache) {
                 $names[] = $cache['filename'];
             }
 
             // Return an array of names of cache
             return $names;
-        } elseif(count($caches) == 0) {
+        } elseif (count($caches) == 0) {
 
             // Fail searching filename
             return null;
@@ -193,23 +192,24 @@ class TemplateCacheManager
      *
      * @param string $cachefile Cache file or cache Id
      * @param string $tplFilename Template file name
+     *
      * @return boolean Return a boolean information of operation performed
      */
-    public function delete($cachefile, $tplFilename=null) {
+    public function delete($cachefile, $tplFilename = null)
+    {
+
         $cachefile = $this->getCacheFileName($cachefile, $tplFilename);
 
-        if(is_array($cachefile) && count($cachefile) > 1) {
-            foreach($cachefile as $name) {
-                $filename = $this->cacheDir.$name;
+        if (is_array($cachefile) && count($cachefile) > 1) {
+            foreach ($cachefile as $name) {
+                $filename = $this->_cacheDir . $name;
                 $this->removeFile($filename);
             }
-        } elseif(!empty($cachefile)) {
-            $cachefile = $this->cacheDir.$cachefile;
-
+        } elseif (!empty($cachefile)) {
+            $cachefile = $this->_cacheDir . $cachefile;
             $this->removeFile($cachefile);
             return true;
         }
-
         return false;
     }
 
@@ -218,8 +218,10 @@ class TemplateCacheManager
      *
      * @param string $cacheGroup Name of group
      */
-    public function clearGroupCache($cacheGroup) {
-        $this->smarty->clear_cache(null, $cacheGroup);
+    public function clearGroupCache($cacheGroup)
+    {
+
+        $this->_smarty->clear_cache(null, $cacheGroup);
     }
 
     /**
@@ -228,43 +230,42 @@ class TemplateCacheManager
      * @param int $timestamp New timestamp to expires
      * @param string $cachefile Name of cache file or cache Id
      * @param string $tplFilename Optional name of template
+     * 
      * @return boolean Return true if action is performed
      */
-    public function update($timestamp, $cachefile, $tplFilename=null)
+    public function update($timestamp, $cachefile, $tplFilename = null)
     {
+
+
         // To understand this section it's necessary knowledge of smarty internals
-        if(!is_null($tplFilename)) {
+
+        if (!is_null($tplFilename)) {
+
             // $cachefile is $cacheId if $tplFilenama isn't null
             $cachefile = $this->getCacheFileName($cachefile, $tplFilename);
 
-            if(is_array($cachefile)) {
+            if (is_array($cachefile)) {
                 throw new Exception('TemplateCacheManager::Update operation only supports one cache file at once.');
             }
         }
-        $cachefile = $this->cacheDir.$cachefile;
+        $cachefile = $this->_cacheDir . $cachefile;
 
-
-        if( file_exists($cachefile) ) {
+        if (file_exists($cachefile)) {
 
             // Get ctime of the file
             $ctime = filectime($cachefile);
 
             // Calculate the new expire time
-            $expireTime  = $timestamp - $ctime;
+            $expireTime = $timestamp - $ctime;
 
             // modify file contents with the new expireTime
             $cacheFileConents = file_get_contents($cachefile);
-
-            $contents = preg_replace( '@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@' ,
-                                      '\'cache_lifetime\' => '.$expireTime.',',
-                                      $cacheFileConents );
+            $contents = preg_replace('@\'cache_lifetime\'\ \=\>\ [0-9]{1,},@', '\'cache_lifetime\' => ' . $expireTime . ',', $cacheFileConents);
 
             // write modified file contents
             file_put_contents($cachefile, $contents);
-
             return true;
         }
-
         return false;
     }
 
@@ -273,44 +274,47 @@ class TemplateCacheManager
      *
      * @param string $uri URI to fetch
      */
-    public function fetch($uri) {
+    public function fetch($uri)
+    {
         // cURL Handle
         $ch = curl_init();
 
         // Options
-        curl_setopt($ch, CURLOPT_URL,            $uri);
+        curl_setopt($ch, CURLOPT_URL, $uri);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, false); // Capture output
-        curl_setopt($ch, CURLOPT_HEADER,         false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Don't verify certificate
-        curl_setopt($ch, CURLOPT_USERAGENT,      'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0');
 
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Don't verify certificate
+
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0');
         ob_start();
+
         // Exec
         $html = curl_exec($ch);
         ob_end_clean();
-
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        return $http_code==200;
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        return $httpCode == 200;
     }
 
-    public function getResources($items=array()) {
+    public function getResources($items = array())
+    {
         $pk_contents = array();
         $pk_authors = array();
-
-        foreach($items as $item) {
-            if(preg_match('/[0-9]{14,19}/', $item['resource'])) {
+        foreach ($items as $item) {
+            if (preg_match('/[0-9]{14,19}/', $item['resource'])) {
                 $pk_contents[] = $item['resource'];
-            } elseif( preg_match('/RSS([0-9]+)/', $item['resource'], $matches) ) {
+            } elseif (preg_match('/RSS([0-9]+)/', $item['resource'], $matches)) {
                 $pk_authors[] = $matches[1];
             }
         }
-
-        return array( $pk_contents, $pk_authors );
+        return array($pk_contents, $pk_authors);
     }
 
     protected function removeFile($filename)
     {
-        if(file_exists($filename)) {
+
+
+        if (file_exists($filename)) {
             unlink($filename);
             return true;
         }
@@ -318,24 +322,27 @@ class TemplateCacheManager
 
     public function dumpConfig()
     {
-        $filename = $this->smarty->config_dir . 'cache.conf';
+
+        $filename = $this->_smarty->config_dir . 'cache.conf';
         return parse_ini_file($filename, true);
     }
 
     public function saveConfig($config)
     {
-        $filename = $this->smarty->config_dir . 'cache.conf';
+
+        $filename = $this->_smarty->config_dir . 'cache.conf';
         $fp = @fopen($filename, 'w');
 
-        if($fp !== false) {
-            foreach($config as $section => $entry) {
+        if ($fp !== false) {
+            foreach ($config as $section => $entry) {
                 fputs($fp, '[' . $section . ']' . "\n");
                 fputs($fp, 'caching = ' . $entry['caching'] . "\n");
-                fputs($fp, 'cache_lifetime = ' . $entry['cache_lifetime'] . "\n\n");
+                fputs($fp, 'cache_lifetime = '.$entry['cache_lifetime']."\n\n");
             }
             fclose($fp);
         } else {
             throw new Exception('Error open file: ' . $filename);
         }
     }
+
 }

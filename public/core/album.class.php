@@ -24,7 +24,7 @@ class Album extends Content
         if (!is_null($id)) {
             $this->read($id);
         }
-           $this->content_type = __CLASS__;
+        $this->content_type = __CLASS__;
     }
 
     /**
@@ -65,7 +65,7 @@ class Album extends Content
                     .'WHERE pk_content_type = "'. $this->content_type
                     .'" LIMIT 1'
                 );
-                
+
                 if (isset($contentTypeName->fields['name'])) {
                     $returnValue = $contentTypeName;
                 } else {
@@ -381,7 +381,7 @@ class Album extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs->fields) {
-            
+
             $photoAlbum['pk_photo'] = $rs->fields['pk_photo'];
             $photoAlbum['description'] = $rs->fields['description'];
 
@@ -398,9 +398,9 @@ class Album extends Content
 
             $photoAlbum['name'] = $queryExec->fields['name'];
             $photoAlbum['path_file'] = $queryExec->fields['path_file'];
-            
+
         }
-        
+
         return $photoAlbum;
 
     }
