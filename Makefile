@@ -13,7 +13,10 @@ LINGUAS = \
 	gl_ES
 
 DOC_FOLDERS = public/core \
-	public/controllers
+	public/controllers \
+	public/libs/Onm/ \
+	public/libs/Panorama/Panorama/ \
+	
 
 all: l10n
 
@@ -45,11 +48,11 @@ compiletranslations:
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-documentation:
-	make doc/html -p
-	phpdoc --directory $(DOC_FOLDERS) --target doc/html #-o HTML:Smarty/Evolve:default -s on
+generate-doc:
+	mkdir doc/html -p
+	phpdoc --directory $(DOC_FOLDERS) --target doc/html
 
-documentation-with-apigen:
+generate-apigen-doc:
 	mkdir doc/apigen log/ -p
 	apigen --config doc/apigen.conf
 	rm -r log
