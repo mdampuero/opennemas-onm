@@ -1,17 +1,20 @@
 <?php
-/**
- * pclave.class.php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * 03/06/2009 11:03:13
- * vifito  <vifito@openhost.es>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 use \Onm\Settings as s;
 
 /**
- * PClave
+ * Handles all the CRUD operations over Keywords
  *
- * @version 0.2
- */
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class PClave {
     /**
      * @var int Identifier of class

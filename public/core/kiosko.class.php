@@ -1,5 +1,18 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles all the CRUD actions over kisko elements.
+ *
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class Kiosko extends Content {
     var $pk_kiosko  = NULL;
     var $name  = NULL;
@@ -41,7 +54,7 @@ class Kiosko extends Content {
             $msg->push();
 
             $this->initialize($data);
-            
+
             return false;
         }
 
@@ -57,9 +70,9 @@ class Kiosko extends Content {
         $sql = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`,
                                `date`, `favorite`) " .
                         "VALUES (?,?,?,?,?)";
-        
+
         $path = $data['path'];
-        
+
         $paper_pdf_path = MEDIA_DIR.'/files/kiosko'.$path;
         $paper_image_path = MEDIA_DIR.'/images/kiosko'.$path;
 
@@ -132,7 +145,7 @@ class Kiosko extends Content {
     }
 
     function remove($id) {
-        
+
         parent::remove($this->id);
         $sql = 'DELETE FROM kioskos WHERE pk_kiosko='.($this->id);
 
@@ -176,7 +189,7 @@ class Kiosko extends Content {
                 `kioskos`.`pk_kiosko` IN (SELECT `contents_categories`.`pk_fk_content` FROM `contents_categories`
                                           WHERE `contents_categories`.`pk_fk_content_category`='.$category.')';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         $sql = "UPDATE kioskos SET `favorite`=? WHERE pk_kiosko=".$this->id;
         $values = array($status);
 
@@ -248,7 +261,7 @@ class Kiosko extends Content {
             $rs->MoveNext();
         }
 
-        return $items;        
+        return $items;
     }
 
 }

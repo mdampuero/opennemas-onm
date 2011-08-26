@@ -12,6 +12,9 @@ LINGUAS = \
 	es_ES \
 	gl_ES
 
+DOC_FOLDERS = public/core \
+	public/controllers
+
 all: l10n
 
 l10n: extracttrans updatepofiles compiletranslations
@@ -41,6 +44,9 @@ compiletranslations:
 		msgfmt -vf "public/admin/locale/$$i/LC_MESSAGES/messages.po" \
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
+
+documentation:
+	phpdoc --directory $(DOC_FOLDERS) --target doc/ #-o HTML:Smarty/Evolve:default -s on
 
 clean: cleancache cleansessions cleanlogs
 

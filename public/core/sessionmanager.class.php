@@ -1,7 +1,21 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
 define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
 
+/**
+ * Explanation for this class.
+ *
+ * @package    Onm
+ * @subpackage Utils
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class SessionManager implements ArrayAccess
 {
 
@@ -11,7 +25,6 @@ class SessionManager implements ArrayAccess
      * @var SessionManager
      **/
     protected static $_singleton = null;
-
 
     /**
      * Initializes this object.
@@ -42,6 +55,11 @@ class SessionManager implements ArrayAccess
         return( self::$_singleton );
     }
 
+    /**
+     * Initiliazes the session handler with all the settings.
+     *
+     * @param int $lifetime the time in seconds that the sessions will be valid.
+     **/
     public function bootstrap($lifetime=null)
     {
         if (is_null($lifetime)
@@ -66,6 +84,12 @@ class SessionManager implements ArrayAccess
         session_start();
     }
 
+    /**
+     * Magic method for setting a key-value in the session variable.
+     *
+     * @param string $name the name of the variable.
+     * @param string $value the value for the variable.
+     **/
     public function __set($name, $value)
     {
         $_SESSION[$name] = $value;
@@ -126,6 +150,11 @@ class SessionManager implements ArrayAccess
 
 
     /* Métodos para el control de la sesión y los usuarios activos */
+    /**
+     * Returns array of sessions openned.
+     *
+     * @return array the array of sessions
+     **/
     public function getSessions()
     {
         $sessionDirectory = $this->sessionDirectory;
@@ -138,7 +167,7 @@ class SessionManager implements ArrayAccess
                         $contents = file_get_contents($sessionDirectory.$file);
                         if (!empty($contents)) {
                             $session =
-                                SessionManager::unserializesession($contents);
+                                SessionManager::unserializeSession($contents);
 
                             if (isset($session['userid'])) {
                                 $sessions[] = array(
@@ -159,7 +188,12 @@ class SessionManager implements ArrayAccess
         return( $sessions );
     }
 
-    public function purgeSession( $userid )
+    /**
+     * Removes one user session given an user id.
+     *
+     * @param int $userid the user id.
+     **/
+    public function purgeSession($userid)
     {
         $sessionDirectory = $this->sessionDirectory;
 
@@ -170,7 +204,7 @@ class SessionManager implements ArrayAccess
                         $contents = file_get_contents($sessionDirectory.$file);
                         if (!empty($contents)) {
                             $session =
-                                SessionManager::unserializesession($contents);
+                                SessionManager::unserializeSession($contents);
                             if (isset($session['userid'])
                                 && ($session['userid']==$userid)
                             ) {
@@ -184,8 +218,13 @@ class SessionManager implements ArrayAccess
         }
     }
 
-    // http://es2.php.net/manual/en/function.session-decode.php#79244
-    public function unserializesession($data)
+    /**
+     * Unserializes the session information.
+     * http://es2.php.net/manual/en/function.session-decode.php#79244
+
+     * @param string $data the serialized data for the session.
+     **/
+    public function unserializeSession($data)
     {
         $vars = preg_split(
             '/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',

@@ -1,5 +1,17 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Class for handling content-category relations operations
+ *
+ * @package Onm
+ * @subpackage Model
+ */
 class ContentCategoryManager {
 
     /**
@@ -60,7 +72,7 @@ class ContentCategoryManager {
         if(defined('APC_PREFIX')) {
             $key = APC_PREFIX . $key;
         }
- 
+
         $result = apc_delete($key);
         $result = call_user_func_array(array('ContentCategoryManager', $method), $args);
         apc_store($key, serialize($result), 300);
@@ -657,28 +669,28 @@ class ContentCategoryManager {
     }
 
     //Returns true if there is no contents in that category name
-    function isEmpty($category) { 
-        $pk_category = $this->get_id($category);               
+    function isEmpty($category) {
+        $pk_category = $this->get_id($category);
         $sql1 = 'SELECT count( * )
                  FROM `content_positions`
                  WHERE `fk_category` ='.$pk_category;
         $rs1 = $GLOBALS['application']->conn->Execute( $sql1 );
-        
+
         if (!$rs1) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return;
         }
-        
-        
+
+
         $sql = 'SELECT count(pk_content) AS number FROM `contents`, `contents_categories`
-                WHERE `contents`.`fk_content_type`=1 
-                AND `contents`.`in_litter`=0 
-                AND `contents_categories`.`pk_fk_content_category`=? 
+                WHERE `contents`.`fk_content_type`=1
+                AND `contents`.`in_litter`=0
+                AND `contents_categories`.`pk_fk_content_category`=?
                 AND `contents`.`pk_content`=`contents_categories`.`pk_fk_content`';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($pk_category) );
-        
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -842,7 +854,7 @@ class ContentCategoryManager {
 
 
         if ( empty($category)  ) {
-             $categoryData[] = $parentCategories[0]; 
+             $categoryData[] = $parentCategories[0];
         }
 
         return array($parentCategories, $subcat, $categoryData);
@@ -863,7 +875,7 @@ class ContentCategoryManager {
         if( is_null($this->categories) ) {
             $this->categories = $this->cache->populate_categories();
         }
- 
+
         $items = array();
         foreach($this->categories as $category) {
             if( $category->fk_content_category == $category_id) {

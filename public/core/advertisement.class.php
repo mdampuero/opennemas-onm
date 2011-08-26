@@ -7,21 +7,13 @@
  * file that was distributed with this source code.
  */
 /**
- * Advertisement file, contains class to manage site advertiments
- *
- * @package OpenNeMas
- * @version 0.1
- * @author Tomás Vilariño <vifito@openhost.es>
- * @link http://www.openhost.es
- */
-/**
  * Advertisement class
  *
  * Handles all the CRUD operations with advertisement content.
  * The class use MethodCacheManager for better performance.
  *
- * @package OpenNeMas
- * @version 0.1
+ * @package Onm
+ * @subpackage Model
  **/
 class Advertisement extends Content
 {

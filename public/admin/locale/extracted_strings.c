@@ -440,9 +440,6 @@ gettext("Albums");
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("Created");
-
-/* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Views");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
@@ -455,10 +452,7 @@ gettext("Published");
 gettext("Favorite");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("Edit");
-
-/* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("Delete");
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("\"Published\"");
@@ -2774,10 +2768,16 @@ gettext("Views");
 gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("Media flash");
+
+/* ./public/admin/themes/default/tpl//advertisement/list.tpl */
+gettext("Media flash element (swf)");
+
+/* ./public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Media");
 
 /* ./public/admin/themes/default/tpl//advertisement/list.tpl */
-gettext("Media element (flash, image, gif)");
+gettext("Media element (jpg, image, gif)");
 
 /* ./public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Undefined");

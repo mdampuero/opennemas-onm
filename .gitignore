@@ -14,3 +14,4 @@ public/admin/themes/default/compile/*
 public/themes/*
 nbproject/*
 nbproject/**/*
+doc/*

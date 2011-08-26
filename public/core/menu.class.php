@@ -11,6 +11,8 @@
  *
  * Class to manage frontpage menu in OpenNeMas
  *
+ * @package Onm
+ * @subpackage Model
  */
 class Menu
 {
@@ -27,7 +29,7 @@ class Menu
      * Constructor
      *
      * @param int $id Privilege Id
-    */
+     */
     public function __construct($id=null)
     {
         if (!is_null($id)) {

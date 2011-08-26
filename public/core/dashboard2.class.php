@@ -1,5 +1,16 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Class for handling configuration operations
+ *
+ * @package Onm
+ */
 class Configuration
 {
   private $configFile = 'config.inc.php';
@@ -15,7 +26,7 @@ class Configuration
 
   function set_items($vbles) { $this->items = $vbles;
 
-	foreach ($this->items as $key => $vb) 
+	foreach ($this->items as $key => $vb)
 	{
 		if ( $key == "SITE_URL" ) $this->items['SITE_URL'] = '\'http://\'.SITE';
 		if ( $key == "SITE_URL_SSL" ) $this->items['SITE_URL_SSL'] = '\'https://\'.SITE';
@@ -52,13 +63,13 @@ class Configuration
                 preg_match( '/^define\(\'(.*?)\', \'(.*?)\'\);.*/');
                 $this->items[ $found[1] ] = $found[2];
             } else {
-              
+
                 if ( preg_match( '/^define \(\'(.*?)\', \'(.*?)\'\);$/', $l, $found ) == true ) {
                       $this->items[ $found[1] ] = $found[2];
                 } else {
                     if ( preg_match( '/^define \(\'(.*?)\', (.*?)\);$/', $l, $found ) == true )
                     $this->items[ $found[1] ] = $found[1];
-                }  
+                }
             }
         }
     }
@@ -69,7 +80,7 @@ class Configuration
     function save()
     {
         //$vbles = $this->items;
-    
+
         $nf = '';
         $fh = fopen( $this->configFile, 'r' );
         while( $l = fgets( $fh ) )
@@ -86,7 +97,7 @@ class Configuration
                 $nf .= $l;
             }
         }
-        
+
         fclose( $fh );
         copy( $this->configFile, $this->configFile.'.bak' );
         $fh = fopen( $this->configFile, 'w' );

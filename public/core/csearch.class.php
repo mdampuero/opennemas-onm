@@ -1,30 +1,39 @@
 <?php
-
-require_once(SITE_LIBS_PATH.'Pager/Pager.php');
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Class for handling searching operations
+ *
+ * @package Onm
+ */
 class cSearch
 {
     const _ParseString = '/[\s,;]+/'; // caracteres por el cual separar cada elemento de la cadena.
 
     const _FullTextColumn = 'contents.metadata';
     const _FullTextColumn2 = 'contents.title';
-    
+
     const _ITEMS_PAGE = 10;
 
     static $int=0;
 	static private $Instance;
-  
+
 	/*
 	 * Name: __construct
-	 * 
+	 *
 	 * Input:  void
 	 *
 	 * Output: void
 	 *
 	*/
 	private function __construct()
-	{		
-		
+	{
+
 	}
 
 	/*
@@ -37,24 +46,24 @@ class cSearch
 	 * Output: Instancia al propio objeto.
 	 *
 	*/
-	static public function Instance() 
+	static public function Instance()
 	{
        if (!isset(self::$Instance)) {
           self::$Instance = new cSearch ();
        }
        return self::$Instance;
-    }   
-	
-  
+    }
+
+
 	/*
 	 * Name: SearchContents
-	 * 
+	 *
 	 * Description: Busca en la base de datos todos los contenidos que sean del tipo indicado en
 	 *	szContentsType y los tag tenga alguna coincidencia con los proporcionados en szSource.
-	 * 
+	 *
 	 * Input: szSource.......: (string) Cadena fuente a buscar.
 	 * 	  szContentsType..: (strings) Tipos de contenidos en donde buscar.
-	 * 
+	 *
 	 * Output: pk_content de todos los contendios ordenado por el numero de coincidencias.
 	*/
 	public function SearchRelatedContents($szSourceTags, $szContentsTypeTitle,$iLimit=NULL,$_where=NULL)
@@ -73,7 +82,7 @@ class cSearch
         } else {
             $szMatch2 = '1=1';
         }
-        
+
         $szMatch = $this->DefineMatchOfSentence($szSourceTags); //Match con metadata
         $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel FROM contents, contents_categories";
         $szSqlWhere = " WHERE " . (($szMatch)) .' AND '.(($szMatch2));
@@ -91,26 +100,26 @@ class cSearch
 
         // $result= $resultSet->GetArray();
         $i=0;
-     
+
         $result = false;
-     
-        if($resultSet->fields){        
+
+        if($resultSet->fields){
              while(!$resultSet->EOF)
-             {	
-                 $result[$i]['id'] = $resultSet->fields['pk_content'];          	 
-                 $result[$i]['pk_content'] = $resultSet->fields['pk_content'];  
-                 $result[$i]['title'] = htmlentities(strip_tags($resultSet->fields['title']),ENT_QUOTES,'UTF-8',false);  
+             {
+                 $result[$i]['id'] = $resultSet->fields['pk_content'];
+                 $result[$i]['pk_content'] = $resultSet->fields['pk_content'];
+                 $result[$i]['title'] = htmlentities(strip_tags($resultSet->fields['title']),ENT_QUOTES,'UTF-8',false);
                  $result[$i]['pk_fk_content_category'] = $resultSet->fields['pk_fk_content_category'];
                  if ($resultSet->fields['catName'] == null) {
                      $result[$i]['catName'] = 'OPINIÓN';
                  } else {
-                    $result[$i]['catName'] = $resultSet->fields['catName']; 
+                    $result[$i]['catName'] = $resultSet->fields['catName'];
                  }
-                 $result[$i]['created'] = $resultSet->fields['created'];  
-                 $result[$i]['rel'] = $resultSet->fields['rel']; 
-                 $result[$i]['available'] = $resultSet->fields['available']; 
-                 $result[$i]['metadata'] = $resultSet->fields['metadata']; 
-                 
+                 $result[$i]['created'] = $resultSet->fields['created'];
+                 $result[$i]['rel'] = $resultSet->fields['rel'];
+                 $result[$i]['available'] = $resultSet->fields['available'];
+                 $result[$i]['metadata'] = $resultSet->fields['metadata'];
+
                  $resultSet->MoveNext();
                  $i++;
              }
@@ -139,13 +148,13 @@ class cSearch
         $szSqlSentence .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ")";
         $szSqlSentence .= " ORDER BY _height DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;
-        
+
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
         if($resultSet!=null)
             return $resultSet->GetArray();
 
         return null;
-	}     
+	}
 
     /*
 	 * Name: SearchContentsSelectMerge
@@ -198,7 +207,7 @@ class cSearch
         $szSqlSentence .= " WHERE " . $szMatch.' AND '. $szMatch2;
         $szSqlSentence .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
         $szSqlSentence .= " ORDER BY _height DESC, created DESC";
-        $szSqlSentence .= " LIMIT " . $iLimit;        
+        $szSqlSentence .= " LIMIT " . $iLimit;
 
 
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
@@ -231,7 +240,7 @@ class cSearch
         $szSqlSentence .= " AND available = 1";
         $szSqlSentence .= " ORDER BY _height DESC";
         $szSqlSentence .= " LIMIT " . $iLimit;
-       
+
         $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
 
         if($resultSet!=null)
@@ -253,16 +262,16 @@ class cSearch
 	 *
 	 * EJEMPLO:
 	 * SELECT pk_content, title, metadata, created, permalink, MATCH ( metadata) AGAINST ( 'primer, ministro, tailandés, envía, ejército, multitud, mundo ') AS rel FROM contents, contents_categories WHERE MATCH ( metadata) AGAINST ( 'primer, ministro, tailandés, envía, ejército, multitud, mundo IN BOOLEAN MODE') AND ( ( FALSE OR fk_content_type LIKE '1' )) AND pk_fk_content_category= 12 AND contents.available=1 AND pk_content = pk_fk_content AND available = 1 AND in_litter = 0 AND pk_content = pk_fk_content ORDER BY rel DESC, created DESC LIMIT 0, 6
-	 * 
+	 *
 	 * Output: pk_content de todos los contendios ordenado por el número de coincidencias.
 	*/
 	public function SearchSuggestedContents($szSourceTags, $szContentsTypeTitle, $filter, $iLimit)
 	{
-        
+
 	    if( is_null($filter) ) {
 		    $filter = "1=1";
 	    }
-            
+
             //Transform the input string to search like: 'La via del tren' => '+via +tren'
             $szSourceTags = explode(', ', String_Utils::get_tags($szSourceTags));
             $szSourceTags2=array();
@@ -286,15 +295,15 @@ class cSearch
 	    $szSqlWhere .= " AND `contents`.`available` = 1 AND `contents`.`in_litter` = 0 AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`";
 	    $szSqlSentence .= $szSqlWhere;
 	    $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ".$iLimit;
-        
+
 	    $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
-    
+
 	    $result= $resultSet->GetArray();
 
   	    return $result;
 	}
-        
-	
+
+
     /*
 	 * Name: 	Paginate
 	 *
@@ -316,7 +325,7 @@ class cSearch
 
         foreach($cItems as $v)
             $_items[] = $v[$szId];
-        
+
         $params = array(
                         'itemData' => $_items,
                         'perPage' => $items_page,
@@ -338,7 +347,7 @@ class cSearch
 
         $pager = &Pager::factory($params);
         $data  = $pager->getPageData();
-        
+
         $aResult = array();
         foreach($cItems as $k => $v)
         {
@@ -369,7 +378,7 @@ class cSearch
             ") AGAINST ( '" . $szSourceTags . "' IN BOOLEAN MODE)";
         return $szSqlMatch;
 	}
-    
+
     /*
 	 * Name: 	DefineMatchOfSentence2
 	 *
@@ -398,7 +407,7 @@ class cSearch
 	 * Input:
 	 * 		szSource: (string) Cadena a parsear.
 	 *
-	 * Output: (Array de String) 
+	 * Output: (Array de String)
 	 *
 	*/
 	private function ParserTypes($szSource)
@@ -406,16 +415,16 @@ class cSearch
 	  $szSource = trim($szSource);
 	  if(($szSource == '') || ($szSource == null) || ($szSource == ' '))
 	    return 'TRUE';
-	  $szColumn = 'fk_content_type';	  
+	  $szColumn = 'fk_content_type';
 	  //Obtener los id de los tipos a traves de su titulo.
 	  $szContentsTypeId = $this->GetPkContentsType($szSource);
-	  
+
 	  $vWordsTemp = preg_split(cSearch::_ParseString,
 				$szContentsTypeId);
 
 	  $szIdTypes  = "( FALSE ";
 	  foreach($vWordsTemp as $szId)
-	  {  
+	  {
 	      $szIdTypes .= " OR " . $szColumn . " LIKE '" . $szId . "'";
 	  }
 	  $szIdTypes .= " )";
@@ -424,12 +433,12 @@ class cSearch
 
 	/*
 	 * Name: GetPkContentsType
-	 * 
+	 *
 	 * Description: Busca en la base de datos todos los pk de la tabla Contents_type cuyo titulo
 	 *	coincida con los proporcionados en el parametro de entrada.
-	 * 
+	 *
 	 * Input: szContentsType.: (string) Cadena fuente con los titulos de los tipos de contenido.
-	 * 
+	 *
 	 * Output: pk_contentType de todas las coincidencias con los titulos.
 	*/
 	public function GetPkContentsType($szContentsType)
@@ -438,7 +447,7 @@ class cSearch
 	  $szSqlContentTypes = "SELECT `pk_content_type` FROM `content_types`";
 	  $vWordsTemp = preg_split(cSearch::_ParseString,
 				strtolower($szContentsType));
-	  
+
 	  $szSqlContentTypes .= " WHERE FALSE ";
 	  for($iIndex=0; $iIndex<sizeof($vWordsTemp); $iIndex++)
 	  {
@@ -447,11 +456,11 @@ class cSearch
 	  $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
 	  if(!$resultSet)
 	  {
-	    printf("Get Content Types: Error al obtener el record Set.<br/>" . 
+	    printf("Get Content Types: Error al obtener el record Set.<br/>" .
 		    "<pre>" . $szSqlContentTypes . "</pre><br/><br/>");
 	    return null;
 	  }
-	 
+
 	  try
 	  {
 	    $resultArray = $resultSet->GetArray();

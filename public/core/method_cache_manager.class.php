@@ -1,4 +1,18 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles caching functionality over function and class calling.
+ *
+ * @package    Onm
+ * @subpackage Cache
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class MethodCacheManager
 {
     private $ttl       = 300; // cache life time in seconds, by default 5 minutes
