@@ -46,7 +46,13 @@ compiletranslations:
 	done
 
 documentation:
-	phpdoc --directory $(DOC_FOLDERS) --target doc/ #-o HTML:Smarty/Evolve:default -s on
+	make doc/html -p
+	phpdoc --directory $(DOC_FOLDERS) --target doc/html #-o HTML:Smarty/Evolve:default -s on
+
+documentation-with-apigen:
+	mkdir doc/apigen log/ -p
+	apigen --config doc/apigen.conf
+	rm -r log
 
 clean: cleancache cleansessions cleanlogs
 
