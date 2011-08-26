@@ -1,25 +1,11 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
- 
-
 /**
  *
  * IMPORTANTE: revisar método Attachment::delete desta clase que sobreescribe o de Content
@@ -30,12 +16,9 @@
  * Attachment
  *
  * Handles all the functionality of Attachments and asociations with contents
- * 
+ *
  * @package    Onm
- * @subpackage 
- * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: attachment.class.php 1 2010-10-02 00:22:37Z vifito $
+ * @subpackage Model
  */
 class Attachment extends Content  {
     var $pk_attachment   = null;
@@ -47,23 +30,23 @@ class Attachment extends Content  {
      * category Id
     */
     var $category        = null;
-    
+
     /**
      * category name text
     */
     // var $category_name   = null;
-    
+
     var $cache = null;
-    
+
     /*  var $categories_name = array(); // el índice será el id de categoría para recuperar el name o title
                                       //array( 10 => array('name' => 'galicia', 'title' => 'Galicia') )
-   */ 
-   
+   */
+
     /**
     * Constructor for the Attachment class
     *
     * Description
-    * 
+    *
     * @access public
     * @param integer $id, the id of the Attachment
     * @return null
@@ -73,24 +56,22 @@ class Attachment extends Content  {
     {
         $this->content_type = 'attachment';
         parent::__construct($id);
-        
+
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-        
-        if( !is_null($id) ) {
-            // FIXED: use a registry pattern to have a global repository 
-           // $this->getCategoriesName();
+
+        if ( !is_null($id) ) {
             $this->read($id);
         }
-        
-        $this->content_type = 'attachment'; //PAra utilizar la funcion find de content_manager     
+
+        $this->content_type = 'attachment'; //PAra utilizar la funcion find de content_manager
         $this->file_path = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR;
     }
-    
+
     /**
     * Creates a new attachment from the given data
     *
     * Description
-    * 
+    *
     * @access public
     * @param $data mixed, the data for create the new Attachment
     * @return bool, if it is true all went well, if it is false something went wrong
@@ -99,59 +80,59 @@ class Attachment extends Content  {
     {
         //Si es portada renovar cache
         $GLOBALS['application']->dispatch('onBeforeCreateAttach', $this);
-        
+
         $dir_date = date("/Y/m/d/");
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
-        if( $this->exists($data['path'], $data['category']) ) {
+        if ( $this->exists($data['path'], $data['category']) ) {
             $msg = new Message('Un fichero con el mismo nombre ya existe.<br />' .
                                'Para subir un fichero con el mismo nombre elimine el existente.', 'error');
             $msg->push();
-            
+
             return false;
         }
-        
+
         $data['pk_author'] = $_SESSION['userid'];
-        
+
         // all the data is ready to save into the database, so create the general
         // entry for this content
         parent::create($data);
-        
-        
+
+
         // now save all the specific information into the attachment table
         $sql = "INSERT INTO attachments (`pk_attachment`,`title`, `path`, `category`) " .
                     "VALUES (?,?,?,?)";
-        
+
         $values = array($this->id, $data['title'], $data['path'], $data['category']);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
-            return false;  
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
+            return false;
         }
-        
+
         // Check if exist thumbnail for this PDF
-        if( preg_match('/\.pdf$/', $data['path']) ) {
+        if ( preg_match('/\.pdf$/', $data['path']) ) {
             //$media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($data['category']);
             $dir_date =date("/Y/m/d/");
             $media_path = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR;
 
             $img_name   = basename($data['path'], ".pdf") . '.jpg';
-            
-            if(file_exists($media_path . '/' . $img_name)) {
+
+            if (file_exists($media_path . '/' . $img_name)) {
                 // Remove existent thumbnail for PDF
                 unlink($media_path . '/' . $img_name);
             }
         }
-        
-        if($data['category']==8){
+
+        if ($data['category']==8){
             $GLOBALS['application']->dispatch('onAfterCreateAttach', $this, array('category'=>$data['category']));
         }
         return true;
     }
-    
+
     /**
      * Check if a attachment exists yet
      *
@@ -163,18 +144,18 @@ class Attachment extends Content  {
     {
         $sql = 'SELECT count(*) AS total FROM attachments WHERE `path`=? ';
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($path));
-        
+
         return intval($rs) > 0;
     }
-    
-    
+
+
     /**
     * Fetch the information from one attachment given an id
     *
-    * 
+    *
     * @access public
     * @param integer $id
-    * @return  
+    * @return
     * @author nameofauthor
     * Other available tags: @tutorial, @version, @copyright, @deprecated,
     * @example, @ignore, @link, @see, @since
@@ -185,156 +166,156 @@ class Attachment extends Content  {
         parent::read($id);
         $sql = 'SELECT * FROM attachments WHERE pk_attachment = '.($id);
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
-        
+
         $this->load($rs->fields);
     }
-    
+
     public function update($data)
     {
         parent::update($data);
-        
+
         $sql = "UPDATE attachments SET `title`=?
                     WHERE pk_attachment=".($data['id']);
         $values = array($data['title']);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
     }
-    
+
     public function remove($id)
     {
         //$media_path = MEDIA_PATH.'/files/'.$this->getCategoryName($this->category);
         $dir_date =preg_replace("/\-/", '/', substr($this->created, 0, 10));
-         
+
         $media_path = MEDIA_PATH.FILE_DIR.'/'.$dir_date ;
 
         $filename   = $media_path.'/'.$this->path;
 
-        if(file_exists($filename)) {
+        if (file_exists($filename)) {
             unlink($filename);
         }
-        
+
         parent::remove($id);
-        
+
         $sql = 'DELETE FROM `attachments` WHERE `pk_attachment`=?';
-    
-        if($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
     }
-    
+
     public function readone($id)
     {
         $sql = 'SELECT * FROM attachments WHERE pk_attachment = '.($id);
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-        
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
-        
+
         $att->pk_attachment = $rs->fields['pk_attachment'];
         $att->title = $rs->fields['title'];
         $att->path = $rs->fields['path'];
         $att->category = $rs->fields['category'];
         return $att;
     }
-    
+
     public function allread($cat)
     {
         $sql = 'SELECT * FROM attachments WHERE category='.$cat.' ORDER BY pk_attachment DESC';
         $rs  = $GLOBALS['application']->conn->Execute( $sql );
-        
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
-        
+
         while(!$rs->EOF) {
             $att[] = array(
                     'id'    => $rs->fields['pk_attachment'],
                     'title' => $rs->fields['title'],
                     'path'  => $rs->fields['path'],
             );
-            
+
             $rs->MoveNext();
         }
-       
-        return( $att);  
+
+        return( $att);
     }
-    
+
     public function find_lastest($cat)
     {
         $sql = 'SELECT * FROM `contents`, `attachments` WHERE `pk_content`=`pk_attachment` AND `category`=?
                 AND `in_litter`=0 ORDER BY pk_attachment DESC';
         $rs = $GLOBALS['application']->conn->GetRow( $sql, array($cat) );
-        
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            if(!empty($error_msg)) {
-                $GLOBALS['application']->logger->debug('Error: ' . $error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            }            
-            
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            if (!empty($errorMsg)) {
+                $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            }
+
             return NULL;
-        }        
-        
+        }
+
         $obj = new stdClass();
         $obj->pk_attachment = $rs['pk_attachment'];
         $obj->title         = $rs['title'];
         $obj->path          = $rs['path'];
         $obj->category      = $rs['category'];
-        
+
         $img_name = null;
-        
-        if( preg_match('/\.pdf$/', $obj->path) ) {
+
+        if ( preg_match('/\.pdf$/', $obj->path) ) {
           //  $media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($cat);
             $dir_date =date("/Y/m/d/");
             $media_path = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
 
             $img_name   = basename($obj->path, ".pdf") . '.jpg';
             $tmp_name   = '/tmp/' . basename($obj->path, ".pdf") . '.png';
-            
-            if(!file_exists($media_path . '/' . $img_name)) {
+
+            if (!file_exists($media_path . '/' . $img_name)) {
                 // Check if exists media_path
-                if( !file_exists($media_path) ) {
+                if ( !file_exists($media_path) ) {
                     FilesManager::createDirectory($media_path);
                 }
-                
+
                 $file_path = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
                 // Thumbnail first page (see [0])
                 if ( file_exists($file_path. $obj->path)) {
                     try {
                         $imagick = new Imagick($file_path.$obj->path . '[0]');
                         $imagick->thumbnailImage(180, 0);
-                        
-                        // First, save to PNG (*.pdf => /tmp/xxx.png)  
-                        $imagick->writeImage($tmp_name); 
-                        
+
+                        // First, save to PNG (*.pdf => /tmp/xxx.png)
+                        $imagick->writeImage($tmp_name);
+
                         // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
-                        $imagick = new Imagick($tmp_name);                
+                        $imagick = new Imagick($tmp_name);
                         $imagick->writeImage($media_path . '/' . $img_name);
                     } catch(Exception $e) {
                         // Nothing
@@ -342,94 +323,77 @@ class Attachment extends Content  {
                 }
             }
         }
-       
-        return array($obj, $img_name);  
-    }    
+
+        return array($obj, $img_name);
+    }
 
     public function readid($ruta, $cat)
     {
         $sql = 'SELECT * FROM attachments WHERE path = "'.$ruta.'" AND category="'.$cat.'"';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
-        if(!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
+        if (!$rs) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
-        
+
         $att = array();
-        $att['id'] = $rs->fields['pk_attachment']; 
-        $att['titulo'] = $rs->fields['title'];  
-        
+        $att['id'] = $rs->fields['pk_attachment'];
+        $att['titulo'] = $rs->fields['title'];
+
        return $att;
     }
-    
+
     public function readids($ruta) {
         $sql = 'SELECT * FROM attachments WHERE path = "'.$ruta.'"';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
             return;
         }
-        
+
         $att = array();
-        $att['id'] = $rs->fields['pk_attachment']; 
-        $att['titulo'] = $rs->fields['title'];  
-        
+        $att['id'] = $rs->fields['pk_attachment'];
+        $att['titulo'] = $rs->fields['title'];
+
        return $att;
     }
-    
+
     public function updatetitle($id, $title)
     {
         $sql = "UPDATE attachments SET `title`=? WHERE pk_attachment=?";
         $values = array($title, $id);
-        
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
-        }
-    }
-    
-    /**
-     * getCategoriesName, get categories name 
-     *
-     *  @return array, Return an array with follow syntax: array( 10 => array('name' => 'galicia', 'title' => 'Galicia') )
-    */
-    private function getCategoriesName()
-    {
-        $ccm = ContentCategoryManager::get_instance();
-        
-        foreach($ccm->categories as $category) {
-            $this->categories_name[ $category->pk_content_category ] = array(
-                'name'  => $category->name,
-                'title' => $category->title
-            );
         }
     }
 
 
     // TODO: eliminar ya no existe directorios por categorias
-    private function getCategoryName($category_id)
+    private function getCategoryName($categoryID)
     {
         $ccm = ContentCategoryManager::get_instance();
-        foreach($ccm->categories as $category) {
-            if ($category->pk_content_category == $category_id) {
+        foreach ($ccm->categories as $category) {
+            if ($category->pk_content_category == $categoryID) {
                 return $category->name;
             }
         }
     }
-    
+
     public function refreshHome($category = '')
     {
-        if($category == 8) {
+        if ($category == 8) {
             parent::refreshHome();
         }
     }

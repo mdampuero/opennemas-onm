@@ -1,17 +1,19 @@
 <?php
-// TODO: documentar
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
- * Privileges_check class
+ * Class for handling user access to sections in backend
  *
  * Explanation of this class
  *
  * @package    Onm
- * @subpackage
+ * @subpackage Acl
  * @version    $Id: privileges_check.class.php 1 2010-10-07 17:44:01Z Fran Dieguez $
- */
-/**
- * Shortcut static class to test privileges
  */
 class Acl
 {
@@ -22,35 +24,34 @@ class Acl
      * @param string $rule
      * @param string $module
      * @return boolean
-    */
+     **/
     public static function check($rule, $module=null)
     {
-        if(!is_null($module)) {
+        if (!is_null($module)) {
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
         return Privileges_check::CheckPrivileges($rule);
     }
 
-     /**
+    /**
      * Shortcut to check privilege and forward
      *
      * @see Privileges_check::CheckPrivileges()
      * @param string $rule
      * @param string $module
      * @return boolean
-    */
+     **/
     public static function checkOrForward($rule, $module=null)
     {
-        if(!is_null($module)) {
+        if (!is_null($module)) {
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
-        if( !Privileges_check::CheckPrivileges($rule)) {
+        if ( !Privileges_check::CheckPrivileges($rule)) {
              Application::forward('/admin/welcome.php');
         }
         return true;
-
     }
 
     /**
@@ -59,11 +60,13 @@ class Acl
     */
     public static function isAdmin()
     {
-         if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
-                return true;
-         }
-         
-         return false;
+        if (isset($_SESSION['isAdmin'])
+            && $_SESSION['isAdmin']
+        ) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -82,7 +85,7 @@ class Acl
 
     public static function deny($message='Acceso no permitido')
     {
-        if(strlen($message) > 0) {
+        if (strlen($message) > 0) {
             $message = new Message($message, 'error');
             $message->push();
         }

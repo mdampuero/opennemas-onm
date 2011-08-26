@@ -1,17 +1,34 @@
 <?php
-class Bulletin {
-    var $id         = null;
-    var $pk_bulletin = null;
-    var $data       = null;
-    var $contact_list = null;
-    var $attach_pdf = null;
-    var $created    = null;
-    var $cron_timestamp = null;
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles all the Bulletin CRUD actions
+ *
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
+class Bulletin
+{
 
-    var $HTML = null; // Contenido del boletín
-    var $errors = null;
+    public $id         = null;
+    public $pk_bulletin = null;
+    public $data       = null;
+    public $contact_list = null;
+    public $attach_pdf = null;
+    public $created    = null;
+    public $cron_timestamp = null;
 
-    function __construct($id=null) {
+    public $HTML = null; // Contenido del boletín
+    public $errors = null;
+
+    public function __construct($id=null)
+    {
         // If not exists the schema then setup
         if(!$this->schema_exists()) {
             $this->setup();
@@ -22,11 +39,13 @@ class Bulletin {
         }
     }
 
-    function Bulletin($id=null) {
+    public function Bulletin($id=null)
+    {
         $this->__construct($id);
     }
 
-    function create($request) {
+    public function create($request)
+    {
         $data = array();
         $data['data'] = clearslash($request['data_bulletin']);
         $data['contact_list'] = '';
@@ -53,9 +72,10 @@ class Bulletin {
         return(true);
     }
 
-    function read($id) {
+    public function read($id)
+    {
         $sql = 'SELECT * FROM bulletins_archive WHERE pk_bulletin = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -72,41 +92,44 @@ class Bulletin {
         $this->attach_pdf     = $rs->fields['attach_pdf'];
         $this->created        =  $rs->fields['created'];
         $this->cron_timestamp =  $rs->fields['cron_timestamp'];
-        
+
         //return( $this );
     }
 
-    function search($filter=null) {
+    public function search($filter=null)
+    {
         $bulletins = array();
-        
+
         if(is_null($filter)) {
             $filter = '1=1';
         }
-        
+
         $sql = 'SELECT * FROM bulletins_archive WHERE '.$filter;
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-        
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return( $bulletins );
         }
-        
+
         while(!$rs->EOF) {
             $bulletins[] = new Bulletin( $rs->fields['pk_bulletin'] );
             $rs->MoveNext();
         }
-        
+
         return( $bulletins );
     }
 
-    function update() {
+    public function update()
+    {
         // Nothing
     }
 
-    function delete($id) {
+    public function delete($id)
+    {
 		$sql = 'DELETE FROM bulletins_archive WHERE pk_bulletin='.intval($id);
 
         if($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -118,7 +141,8 @@ class Bulletin {
         }
     }
 
-    function purge_mailboxes($destinatarios) {
+    public function purge_mailboxes($destinatarios)
+    {
         $output = array();
 
 		$destinatarios = preg_replace('/\s\s+/', ' ', $destinatarios);
@@ -141,13 +165,14 @@ class Bulletin {
 
 		return( $output );
     }
-    
-    function prependItems($items_id, $type="Article") {
+
+    public function prependItems($items_id, $type="Article")
+    {
         $bulk_data = array();
         if(is_array($items_id)) {
             foreach($items_id as $i => $id) {
                 $tmp = new stdClass();
-                
+
                 //$obj = new $type($id);
                 //$properties = get_object_vars($obj);
                 //foreach($properties as $property => $value) {
@@ -161,52 +186,55 @@ class Bulletin {
                     $tmp->pk_content = $article->id;
                     $tmp->title      = base64_encode($article->title);
                     $tmp->subtitle   = base64_encode($article->subtitle);
-                    $tmp->summary    = base64_encode($article->summary);                                         
+                    $tmp->summary    = base64_encode($article->summary);
                     $tmp->permalink  = base64_encode($article->permalink);
-                    
+
                 } else {
                     $opinion = new Opinion($id); // new $type($id);
                     $tmp->id         = $i;
                     $tmp->pk_content = $opinion->id;
                     $tmp->title      = base64_encode($opinion->title);
-                    
+
                     $summary         = Bulletin::filterString($opinion->body);
                     $tmp->summary    = base64_encode( $summary );
-                    
+
                 }
-                
+
                 $bulk_data[] = $tmp;
             }
-        }      
-        
+        }
+
         return($bulk_data);
     }
-    
-    function filterString($string) {        
+
+    public function filterString($string)
+    {
         $string  = String_Utils::str_stop( strip_tags( stripslashes($string) ), 60);
-        
-        //$string  = utf8_encode( html_entity_decode($string) ); 
-        
+
+        //$string  = utf8_encode( html_entity_decode($string) );
+
         //$string =  String_Utils::unhtmlentities($string);
         $string  = preg_replace('/&[^;]+;/', '', $string);
-        
+
         return($string);
     }
-    
-    function sortArticles($articles) {        
+
+    public function sortArticles($articles)
+    {
         $grouped_by_category = array();
         foreach($articles as $article) {
             if($article->content_status == 1) { // Publicado
                 $grouped_by_category[ $article->category_name ][] = $article;
             }
         }
-        
-        return( $grouped_by_category );
-    }    
-    
-    
 
-    function send($mailboxes, $htmlcontent, $params) {
+        return( $grouped_by_category );
+    }
+
+
+
+    public function send($mailboxes, $htmlcontent, $params)
+    {
         $mailboxes = $this->purge_mailboxes($mailboxes);
 
         foreach($mailboxes as $mailbox) {
@@ -214,7 +242,8 @@ class Bulletin {
         }
     }
 
-	function send_to_user( $destinatario, $htmlcontent, $params ) {
+	public function send_to_user( $destinatario, $htmlcontent, $params )
+    {
         require_once(SITE_LIBS_PATH.'phpmailer/class.phpmailer.php');
 
 		$mail = new PHPMailer();
@@ -233,7 +262,7 @@ class Bulletin {
         $this->HTML = $htmlcontent;
 
 		$mail->AddAddress($destinatario, $destinatario);
-        
+
         // Embeber el logotipo
         // FIXME: crear una plantilla de boletín donde se especifiquen los detalles, logo, dirección destinatario, ...
         $mail->AddEmbeddedImage(PATH_APP.'../media/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
@@ -241,7 +270,7 @@ class Bulletin {
 		/* for($i=0; $i < count($this->imgs); $i++) {
 			$imaxen = preg_replace('', '<img src="cid:my-photo" />', $this->HTML);
 			$mail->AddEmbeddedImage(dirname(__FILE__).'/'.$imaxen, 'img'.($i+1), $imaxen);
-            
+
             // <img src="cid:my-photo-cid" alt="my-photo" />
             // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo-cid', 'Name'));
 		} */
@@ -275,7 +304,8 @@ class Bulletin {
 		}
 	}
 
-    function get_pdf($htmlcontent, $filename, $action='F') {
+    public function get_pdf($htmlcontent, $filename, $action='F')
+    {
         // Descargar as fontes dende http://developer.jelix.org/browser/trunk/lib/fonts?rev=677
         require_once(SITE_LIBS_PATH.'tcpdf/tcpdf.php');
 
@@ -326,14 +356,16 @@ class Bulletin {
         $pdf->Output($filename, $action);
     }
 
-    function schema_exists() {
+    public function schema_exists()
+    {
         $dict = NewDataDictionary($GLOBALS['application']->conn);
         $tables = $dict->MetaTables();
 
         return( in_array('bulletins_archive', $tables) );
     }
 
-    function setup() {
+    public function setup()
+    {
         require_once(SITE_LIBS_PATH.'adodb5/adodb-xmlschema.inc.php');
         $schema = new adoSchema( $GLOBALS['application']->conn );
 
@@ -373,4 +405,3 @@ class Bulletin {
         $result = $schema->ExecuteSchema();
     }
 }
-

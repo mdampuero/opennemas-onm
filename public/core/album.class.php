@@ -1,7 +1,8 @@
 <?php
 //album de fotos
 
-class Album extends Content{
+class Album extends Content
+{
     public $pk_album = NULL;
     public $subtitle = NULL;
     public $agency = NULL;
@@ -12,33 +13,42 @@ class Album extends Content{
 
 
     /**
-      * Constructor PHP5
-    */
-
-    function __construct($id=NULL){
-
+     * Initializes the Album class.
+     *
+     * @param strin $id the id of the album.
+     **/
+    public function __construct($id=NULL)
+    {
         parent::__construct($id);
 
         if (!is_null($id)) {
             $this->read($id);
         }
-       	$this->content_type = __CLASS__;
+           $this->content_type = __CLASS__;
     }
 
-	public function __get($name)
+    /**
+     * Magic function to get uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
+    public function __get($name)
     {
 
         switch ($name) {
 
             case 'uri': {
-                $uri =  Uri::generate( 'album',
-                            array(
-                                'id' => $this->id,
-                                'date' => date('Y-m-d', strtotime($this->created)),
-                                'category' => $this->category_name,
-                                'slug' => $this->slug,
-                            )
-                        );
+                $uri =  Uri::generate(
+                    'album',
+                    array(
+                        'id' => $this->id,
+                        'date' => date('Y-m-d', strtotime($this->created)),
+                        'category' => $this->category_name,
+                        'slug' => $this->slug,
+                    )
+                );
 
                 return ($uri !== '') ? $uri : $this->permalink;
 
@@ -50,15 +60,19 @@ class Album extends Content{
             }
 
             case 'content_type_name': {
-				$contentTypeName = $GLOBALS['application']->conn->
-                    Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
-                    if(isset($contentTypeName->fields['name'])) {
-                        $returnValue = $contentTypeName;
-                    } else {
-                        $returnValue = $this->content_type;
-                    }
-					$this->content_type_name = $returnValue;
-                    return $returnValue;
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $this->content_type
+                    .'" LIMIT 1'
+                );
+                
+                if (isset($contentTypeName->fields['name'])) {
+                    $returnValue = $contentTypeName;
+                } else {
+                    $returnValue = $this->content_type;
+                }
+                $this->content_type_name = $returnValue;
+                return $returnValue;
 
                 break;
             }
@@ -68,18 +82,18 @@ class Album extends Content{
             }
         }
 
-		parent::__get($name);
+        parent::__get($name);
     }
 
-	/**
-     * Explanation for this function.
+    /**
+     * Creates an album from array and stores it in db
      *
-     * @param array $data  .
+     * @param array $data the data of the album
      *
-     * @return bool If create in database
+     * @return bool true if the object was stored
      */
-
-    function create($data) {
+    public function create($data)
+    {
 
         parent::create($data);
 
@@ -88,29 +102,34 @@ class Album extends Content{
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
         $data['fuente'] = (empty($data['fuente']))? '': $data['fuente'];
 
-		$sql = "INSERT INTO albums ".
-               " (`pk_album`,`subtitle`, `agency`,`fuente`,`cover`) " .
-			   " VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO albums "
+                ." (`pk_album`,`subtitle`, `agency`,`fuente`,`cover`) "
+                ." VALUES (?,?,?,?,?)";
 
-        $values = array($this->id,$data["subtitle"],$data["agency"],$data["fuente"],$this->cover);
+        $values = array(
+            $this->id,
+            $data["subtitle"],
+            $data["agency"],
+            $data["fuente"],
+            $this->cover
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return(false);
         }
 
         $data['id']=$this->id;
 
-        if(isset($data['ordenAlbum'])){
-            $tok = strtok($data['ordenAlbum'],"++");
+        if (isset($data['ordenAlbum'])) {
+            $tok = strtok($data['ordenAlbum'], "++");
             $pos=1;
             $album=new Album_photo();
             while (($tok !== false) AND ($tok !=" ")) {
-                    $infor=explode("::",$tok);
-                    $album->create($this->id,$infor[0],$pos,$infor[1]);
+                    $infor=explode("::", $tok);
+                    $album->create($this->id, $infor[0], $pos, $infor[1]);
 
                     $tok = strtok("++");
                     $pos++;
@@ -120,18 +139,23 @@ class Album extends Content{
         return true;
     }
 
-    function read($id) {
+    /**
+     * Fetches one Album by its id.
+     *
+     * @param string $id the album id to get info from.
+     **/
+    public function read($id)
+    {
 
         parent::read($id);
 
         $sql = 'SELECT * FROM albums WHERE pk_album = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
 
@@ -143,43 +167,54 @@ class Album extends Content{
 
     }
 
-    function update($data) {
+    /**
+     * Updates the information of the album given an array of key-values
+     *
+     * @param array $data the new data to update the album
+     **/
+    public function update($data)
+    {
 
         parent::update($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? 0: $data['subtitle'];
         $data['fuente'] = (empty($data['fuente']))? 0: $data['fuente'];
 
-        $sql = "UPDATE albums SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover`=? ".
-        		" WHERE pk_album=".($data['id']);
+        $sql = "UPDATE albums "
+                ."SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover`=? "
+                ." WHERE pk_album=".($data['id']);
 
         if (!empty($data['name_img'])) {
             $this->cover =  $this->cropImageFront($data);
         }
 
-        $values = array( $data['subtitle'],$data['agency'], $data['fuente'], $this->cover );
+        $values = array(            $data['subtitle'],
+            $data['agency'],
+            $data['fuente'],
+            $this->cover
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
 
         $album=new Album_photo();
-		$album->delete_album($data['id']);
+        $album->delete_album($data['id']);
 
-        if(isset($data['ordenAlbum'])){
-            $tok = strtok($data['ordenAlbum'],"++");
+        if (isset($data['ordenAlbum'])) {
+            $tok = strtok($data['ordenAlbum'], "++");
             $pos=1;
             while (($tok !== false) AND ($tok !=" ")) {
-                $infor = preg_split("@::@",$tok);
-                $album->create($this->id,$infor[0],$pos,$infor[1]);
+                $infor = preg_split("@::@", $tok);
+                $album->create($this->id, $infor[0], $pos, $infor[1]);
                 $tok = strtok("++");
                 $pos++;
             }
         }
-	}
+    }
 
     /**
      * Create a cover for frontpage widget
@@ -188,7 +223,8 @@ class Album extends Content{
      *
      * @return bool if cover was create
      */
-    function cropImageFront($data) {
+    public function cropImageFront($data)
+    {
 
         $configurations = \Onm\Settings::get('album_settings');
         $this->widthCover = $configurations['crop_width'];
@@ -205,14 +241,14 @@ class Album extends Content{
 
             // Scale original image for crop with visor size
             if ($height>0 and $width>0) {
-                if($height>400 OR $width>600){
-                    if( $width > $height) {
+                if ($height>400 OR $width>600) {
+                    if ($width > $height) {
                         $w = 600;
-                        $h = floor( ($height*$w) / $width );
+                        $h = floor(($height*$w) / $width);
                         $picture->scaleImage($w, $h, true);
                     } else {
                         $h = 400;
-                        $w = floor( ($width*$h) / $height );
+                        $w = floor(($width*$h) / $height);
                         $picture->scaleImage($w, $h, true);
                     }
                     $height = $h;
@@ -220,15 +256,21 @@ class Album extends Content{
                 }
             }
 
-            $picture->resizeImage($width, $height,Imagick::FILTER_LANCZOS,1);
-            $picture->cropImage($data['width'], $data['height'], $data['x1'], $data['y1']);
-            $picture->resizeImage($this->widthCover, $this->heightCover,Imagick::FILTER_LANCZOS,1);
+            $picture->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 1);
+            $picture->cropImage(
+                $data['width'], $data['height'],
+                $data['x1'], $data['y1']
+            );
+            $picture->resizeImage(
+                $this->widthCover, $this->heightCover,
+                Imagick::FILTER_LANCZOS,
+                1
+            );
 
-
-            $datos = pathinfo($image);     //sacamos infor del archivo
+            $datos = pathinfo($image);     // Fetch file info
             $extension = strtolower($datos['extension']);
-            $t = gettimeofday(); //Sacamos los microsegundos
-            $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+            $t = gettimeofday();             // Fetch the actual microsecs
+            $micro = intval(substr($t['usec'], 0, 5)); // Get just 5 digits
             $name = date("YmdHis") . $micro . "." . $extension;
             $cover = '/'.$this->widthCover."-".$this->heightCover.'-'. $name;
 
@@ -244,24 +286,36 @@ class Album extends Content{
     }
 
 
-    function remove($id) {
+    /**
+     * Removes an album by a given id.
+     *
+     * @param string $id the album id
+     **/
+    public function remove($id)
+    {
 
         parent::remove($id);
 
         $sql = 'DELETE FROM albums WHERE pk_album='.($id);
-
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
-        $album=new Album_photo();
-		$album->delete_album($id);
-	}
+        $album = new Album_photo();
+        $album->delete_album($id);
+    }
 
-    function set_favorite($status) {
+    /**
+     * Sets the album as favorite
+     *
+     * @param string $status the status of the favorite flag
+     *
+     * @return boolean true if the action was executed successfully
+     **/
+    public function set_favorite($status)
+    {
         $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
 
         if ($this->id == NULL) {
@@ -272,9 +326,9 @@ class Album extends Content{
         $values = array($status);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return;
         }
@@ -284,59 +338,70 @@ class Album extends Content{
 
     }
 
-	//Lee de la tabla la relacion de galeria y fotos
-    function get_album($id_album) {
+    //Lee de la tabla la relacion de galeria y fotos
+    public function get_album($albumID)
+    {
 
-        if ($id_album == NULL) {
+        if ($albumID == NULL) {
             return(false);
         }
-        $album_photos = array();
+        $photosAlbum = array();
 
-    	$sql = 'SELECT DISTINCT pk_photo, description, position FROM albums_photos '.
-               'WHERE pk_album = ' .($id_album).' ORDER BY position ASC';
+        $sql = 'SELECT DISTINCT pk_photo, description, position'
+                .' FROM albums_photos '
+               .'WHERE pk_album = ' .($albumID).' ORDER BY position ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $i=0;
         while (!$rs->EOF) {
-        	$album_photos[$i][] = $rs->fields['pk_photo'];
-        	$album_photos[$i][] = $rs->fields['position'];
-        	$album_photos[$i][] = $rs->fields['description'];
-          	$rs->MoveNext();
-          	$i++;
+            $photosAlbum[$i][] = $rs->fields['pk_photo'];
+            $photosAlbum[$i][] = $rs->fields['position'];
+            $photosAlbum[$i][] = $rs->fields['description'];
+              $rs->MoveNext();
+              $i++;
         }
 
-        return($album_photos);
+        return($photosAlbum);
 
     }
 
+    /**
+     * Gets the first photo from album.
+     *
+     * @param string $albumID the id of the album.
+     *
+     * @return array key-value array with properties of the image
+     **/
+    public function get_firstfoto_album($albumID)
+    {
 
-    function get_firstfoto_album($id_album) {
-
-        $album_photo = array();
-        $sql = 'SELECT * from albums_photos WHERE pk_album = ' .($id_album).
+        $photoAlbum = array();
+        $sql = 'SELECT * from albums_photos WHERE pk_album = ' .($albumID).
                ' ORDER BY position ASC LIMIT 1';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs->fields) {
-        	$album_photo['pk_photo'] = $rs->fields['pk_photo'];
-        	$album_photo['description'] = $rs->fields['description'];
+            
+            $photoAlbum['pk_photo'] = $rs->fields['pk_photo'];
+            $photoAlbum['description'] = $rs->fields['description'];
 
-        	$sql = 'SELECT * FROM photos WHERE pk_photo = '.($rs->fields['pk_photo']);
-       		$rs2 = $GLOBALS['application']->conn->Execute( $sql );
+            $sql = 'SELECT * FROM photos'
+                    .' WHERE pk_photo = '.($rs->fields['pk_photo']);
+            $queryExec = $GLOBALS['application']->conn->Execute($sql);
 
-			if (!$rs2) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+            if (!$queryExec) {
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
                 return;
-			}
+            }
 
-            $album_photo['name'] = $rs2->fields['name'];
-            $album_photo['path_file'] = $rs2->fields['path_file'];
+            $photoAlbum['name'] = $queryExec->fields['name'];
+            $photoAlbum['path_file'] = $queryExec->fields['path_file'];
+            
         }
-
-        return $album_photo;
+        
+        return $photoAlbum;
 
     }
 }

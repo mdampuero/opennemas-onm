@@ -1,4 +1,11 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Advertisement file, contains class to manage site advertiments
  *
@@ -6,9 +13,7 @@
  * @version 0.1
  * @author Tomás Vilariño <vifito@openhost.es>
  * @link http://www.openhost.es
- * @copyright Copyright (c) 2009, Openhost S.L.
  */
-
 /**
  * Advertisement class
  *
@@ -17,153 +22,28 @@
  *
  * @package OpenNeMas
  * @version 0.1
- */
+ **/
 class Advertisement extends Content
 {
 
     const ADVERTISEMENT_CATEGORY = 2;
 
-    // FIXME: modificado para versión demo
-    public static $map = array(
-        /* Intersticial banners frontpages */
-        50 => "Banner Interticial en portada",
-
-        /* Frontpages banners < 100 */
-        1 => "Top Left LeaderBoard",
-        2 => "Top Right LeaderBoard",
-
-        3 => "Center Left LeaderBoard",
-        4 => "Center Right LeaderBoard",
-
-        5 => "Bottom Left LeaderBoard",
-        6 => "Bottom Right LeaderBoard",
-		
-        11 => "Button Colunm 1 Position 1",
-        12 => "Button Colunm 1 Position 2",
-        13 => "Button Colunm 1 Position 3",
-        14 => "Button Colunm 1 Position 4",
-        15 => "Button Colunm 1 Position 5",
-        16 => "Button Colunm 1 Position 6",
-
-        21 => "Button Colunm 2 Position 1",
-        22 => "Button Colunm 2 Position 2",
-        24 => "Button Colunm 2 Position 4",
-        25 => "Button Colunm 2 Position 5",
-
-        31 => "Button Colunm 3 Position 1",
-        32 => "Button Colunm 3 Position 2",
-        33 => "Button Colunm 3 Position 3",
-        34 => "Button Colunm 3 Position 4",
-        35 => "Button Colunm 3 Position 5",
-        36 => "Button Colunm 3 Position 6",
-
-
-        /* Intersticial banner noticia interior */
-        150 => "[I] Banner Interticial noticia interior",
-
-        /* Noticia Interior banners > 100 */
-        101 => "[I] Big banner superior",
-        102 => "[I] Banner superior Derecho",
-
-        103 => "[I] Banner Columna Derecha 1",
-        104 => "[I] Robapágina",
-        105 => "[I] Banner Columna Derecha 2",
-
-        109 => "[I] Big Banner Inferior",
-        110 => "[I] Banner Inferior Derecho",
-
- 	/* Intersticial banner video front */
-        250 => "[V] Banner Interticial",
-
-        /* Videos Front banners > 200 */
-        201 => "[V] Big banner superior",
-        202 => "[V] Banner superior derecho",
-        203 => "[V] Banner Video Button",
-
-        209 => "[V] Big Banner Inferior",
-        210 => "[V] Banner Inferior Derecho",
-
-	/* Intersticial banner video inner */
-        350 => "[VI] Banner Interticial",
-
-        /* Video Interior banners > 300 */
-        301 => "[VI] Big banner superior",
-        302 => "[VI] Banner superior Derecho",
-
-        303 => "[VI] Banner Video Button",
-
-        309 => "[VI] Big Banner Inferior",
-        310 => "[VI] Banner Inferior Derecho",
-
-	/* Intersticial banner album front */
-        450 => "[V] Banner Interticial",
-
-        /* Albums Front banners > 400 */
-        401 => "[A] Big banner superior",
-        402 => "[A] Banner superior derecho",
-
-        403 => "[A] Banner1 Column Right",
-        405 => "[A] Banner1 2Column Right",
-
-        409 => "[A] Big Banner Inferior",
-        410 => "[A] Banner Inferior Derecho",
-
-	/* Intersticial banner album inner */
-        550 => "[AI] Banner Interticial",
-
-        /* Video Interior banners > 500 */
-        501 => "[AI] Big banner superior",
-        502 => "[AI] Banner superior Derecho",
-
-        503 => "[AI] Banner Video Button",
-
-        509 => "[AI] Big Banner Inferior",
-        510 => "[AI] Banner Inferior Derecho",
-        
-        /* Intersticial banner opinion front */
-        650 => "[O] Banner Interticial",
-
-        /* Opinions Front banners > 500 */
-        601 => "[O] Big banner superior",
-        602 => "[O] Banner superior derecho",
-
-        603 => "[O] Banner1 Column Right",
-        605 => "[O] Banner1 2Column Right",
-
-        609 => "[O] Big Banner Inferior",
-        610 => "[O] Banner Inferior Derecho",
-             
-        /* Intersticial banner opinion inner */
-        750 => "[OI] Banner Intersticial - Inner (800X600)",
-
-        /* Opinion Interior banners > 700 */
-        701 => "[OI] Big  Banner Top(I) (728X90)",
-        702 => "[OI] Banner Top Right(I) (234X90)",
-
-        703 => "[OI] Banner1 Column Right (I) (300X*)",
-        704 => "[OI] Robapágina (650X*)",
-        705 => "[OI] Banner2 Column Right(I) (300X*)",
-
-        709 => "[OI] Big Banner Bottom(I) (728X90)",
-        710 => "[OI] Banner Bottom Right(I) (234X90)",
-    );
-
     /**
      * @access public
      * @var long
-     */
+     **/
     public $pk_advertisement = null;
 
     /**
      * @access public
      * @var int
-     */
+     **/
     public $type_advertisement = null;
 
     /**
      * @access public
      * @var int
-     */
+     **/
     public $fk_content_categories = null;
 
     public $img  = null;
@@ -182,34 +62,39 @@ class Advertisement extends Content
 
     /**
      * @var MethodCacheManager Instance of MethodCacheManager
-    */
+     **/
     var $cache = NULL;
+
+
 
     /**
      * @var Advertisement instance, singleton pattern
-     */
-    static private $instance = null;
+     **/
+    static private $singleton = null;
 
     /**
      * @var registry of banners
-     */
-    protected $registry = array();
+     **/
+    protected $_registry = array();
 
     /**
-     * Constructor
+     * Initializes the Advertisement class
      *
      * @param int $id, ID of the Advertisement
-    */
+     *
+     * return Advertisement the instance of the advertisement class
+     **/
     function __construct($id=null)
     {
+        // Fetch information from Content class
         parent::__construct($id);
 
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             $this->read($id);
         }
 
         // Store this object into the cache manager for better performance
-        if( is_null($this->cache) ) {
+        if ( is_null($this->cache) ) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->set_cache_life(20); // 20 seconds
@@ -224,48 +109,47 @@ class Advertisement extends Content
     /**
      * Method to fetch or create the object by the singleton pattern
      *
-     * @return Advertisement, instance of Advertisement
-    */
+     * @see Advertisement::__construct()
+     **/
     static function getInstance()
     {
-        if( is_null(self::$instance) ) {
-            $instance = new Advertisement();
-            self::$instance = $instance;
-            return self::$instance;
-        } else {
-            return self::$instance;
+        // Create a unique instance if not available
+        if ( is_null(self::$singleton) ) {
+            self::$singleton = new Advertisement();
         }
 
+        return self::$singleton;
     }
 
     /**
      * Create and save into database the ad instance from one array
      *
-     * @param array $data, the needed data for create a new ad.
+     * @param array $data the needed data for create a new ad.
+     *
      * @return Advertisement
-     */
+     **/
     function create($data)
     {
         // Clear magic_quotes String_Utils::fixScriptDeclaration & String_Utils::disabled_magic_quotes
-        String_Utils::disabled_magic_quotes( $data );
+        String_Utils::disabled_magic_quotes($data);
 
         parent::create($data);
 
-        if(!empty($data['script'])) {
-            $data['script'] = base64_encode( $data['script'] );
+        if (!empty($data['script'])) {
+            $data['script'] = base64_encode($data['script']);
         }
 
-        if(!isset($data['with_script'])) {
+        if (!isset($data['with_script'])) {
             $data['with_script'] = 0;
         }
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: -1;
 
-        $sql = 'INSERT INTO advertisements (`pk_advertisement`, `type_advertisement`, `fk_content_categories`,
+        $sql = "INSERT INTO advertisements (`pk_advertisement`, `type_advertisement`, `fk_content_categories`,
                                             `path`, `url`, `type_medida`, `num_clic`, `num_clic_count`,
                                             `num_view`, `with_script`, `script`, `overlap`, `timeout`)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // $this->id was setted in parent::create($data)
         $values = array($this->id, $data['type_advertisement'], $data['category'],
@@ -273,24 +157,24 @@ class Advertisement extends Content
                         0, $data['num_view'], $data['with_script'], $data['script'], $data['overlap'],
                         $data['timeout']);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return null;
         }
 
         $rel = new Related_content();
-        if(isset($data['selectos'])){
+        if (isset($data['selectos'])) {
             $pos = 1;
-            foreach($data['selectos'] as $relac) {
+            foreach ($data['selectos'] as $relac) {
                 $rel->set_rel_position($this->id, $pos, $relac);
                 $pos++;
             }
         }
 
-        // Necesarios para evento
+        // Needed for onAfterCreateAdvertisement callback
         $this->pk_advertisement = $this->id;
         $this->available        = $data['available'];
         $this->type_advertisement    = $data['type_advertisement'];
@@ -306,7 +190,9 @@ class Advertisement extends Content
      * Get an instance of a particular ad from its ID
      *
      * @param int $id, the ID of the Advertisement
-    */
+     *
+     * @return Advertisement the instance for the Ad
+     **/
     function read($id)
     {
         parent::read($id); // Read content of Content
@@ -315,9 +201,9 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return;
         }
@@ -332,7 +218,9 @@ class Advertisement extends Content
      * Load object properties
      *
      * @param array $properties
-    */
+     *
+     * @return void
+     **/
     function load($properties)
     {
         $this->category = self::ADVERTISEMENT_CATEGORY;
@@ -349,16 +237,18 @@ class Advertisement extends Content
      * Update the data of the ad from one array.
      *
      * @param array $data
+     *
      * @return Advertisement Return the instance to chaining method
-    */
+     **/
     function update($data)
     {
         parent::update($data);
 
-        // Remove magic_quotes, String_Utils::fixScriptDeclaration & String_Utils::disabled_magic_quotes
+        // Remove magic_quotes, String_Utils::fixScriptDeclaration
+        // & String_Utils::disabled_magic_quotes
         String_Utils::disabled_magic_quotes( $data );
 
-        if(!empty($data['script'])){
+        if (!empty($data['script'])) {
             //$data['script'] = String_Utils::fixScriptDeclaration($data['script']);
             $data['script'] = base64_encode( $data['script'] );
         }
@@ -374,24 +264,28 @@ class Advertisement extends Content
                     `script`=?, `overlap`=?, `timeout`=?
                 WHERE pk_advertisement=".($data['id']);
 
-        $values = array($data['type_advertisement'], $data['category'], $data['img'],
-                        $data['url'], $data['type_medida'], $data['num_clic'],
-                        $data['num_clic_count'], $data['num_view'], $data['with_script'],
-                        $data['script'], $data['overlap'], $data['timeout'] );
+        $values = array(
+            $data['type_advertisement'], $data['category'],
+            $data['img'], $data['url'], $data['type_medida'],
+            $data['num_clic'], $data['num_clic_count'],
+            $data['num_view'], $data['with_script'], $data['script'],
+            $data['overlap'], $data['timeout']
+        );
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return null;
         }
 
         $rel = new Related_content();
         $rel->delete($data['id']);
-        if(isset($data['selectos'])){
+        if (isset($data['selectos'])) {
             $pos=1;
-            foreach($data['selectos'] as $relac) {
+            foreach ($data['selectos'] as $relac) {
                 $rel->set_rel_position($data['id'], $pos, $relac);
                 $pos++;
             }
@@ -409,16 +303,25 @@ class Advertisement extends Content
         return $this;
     }
 
+
+    /**
+     * Deletes one advertisement from db given an id.
+     *
+     * @param string $id the id of the ad to delete from db.
+     *
+     * @return void
+     *
+     **/
     function remove($id)
     {
         parent::remove($id);
 
         $sql = 'DELETE FROM advertisements WHERE pk_advertisement ='.($id);
 
-        if($GLOBALS['application']->conn->Execute($sql)===false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
     }
@@ -427,24 +330,26 @@ class Advertisement extends Content
      * Get url of advertisement
      *
      * @param int $id Advertisement Id
+     *
      * @return string
-    */
+     **/
     function getUrl($id)
     {
-        // Try to minimize the database overload if this object was preloaded or
-        // doesn't fit the rules
-        if(isset($this) && isset($this->url) && ($this->id == $id)) {
+        // Try to minimize the database overload if this object was preloaded
+        // or doesn't fit the rules
+        if (isset($this) && isset($this->url) && ($this->id == $id)) {
             return $this->url;
         }
 
         // Fetch data for the ad from the database
-        $sql = 'SELECT url FROM `advertisements` WHERE `advertisements`.`pk_advertisement`=?';
+        $sql = 'SELECT url FROM `advertisements` '
+                .'WHERE `advertisements`.`pk_advertisement`=?';
         $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return null;
         }
@@ -453,26 +358,32 @@ class Advertisement extends Content
     }
 
     /**
-     * Set clicks
+     * Increase by one click the number of clicks given an advertisement id
      *
-     * @param int $id
-    */
+     * @param int $id the id of the advertisement ot increase num_count
+     *
+     * @return void
+     **/
     static function setNumClics($id)
     {
-        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 WHERE `pk_advertisement`=?";
+        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 '
+                .'WHERE `pk_advertisement`=?";
         $values = array($id);
 
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
 
-	$ad = new Advertisement($id);
+        $ad = new Advertisement($id);
 
         //No publicado
-        if(($ad->type_medida=='CLIC' ) AND ($ad->num_clic <= $ad->num_clic_count)){
+        if (
+            ($ad->type_medida=='CLIC' )
+            && ($ad->num_clic <= $ad->num_clic_count)
+        ) {
             $status = 0;
             parent::set_status($status, 'NULL');
         }
@@ -482,53 +393,60 @@ class Advertisement extends Content
      * Set num views
      *
      * @param int $id
-    */
+     **/
     static function setNumViews($id=null)
     {
-        //FIXME: error Using $this when not in object // comentar con Tomas
-        if(is_null($id)) {
-            // $id = $this->id;
-            return null;
-        }
+        // if $id was not given return null and do nothing
+        if (is_null($id)) { return null; }
 
         parent::setNumViews($id);
 
-        if(is_array($id)) {
-            foreach($id as $banner) {
+        // if this ad has views limit and it has reached unpublish it
+        if (is_array($id)) {
+            foreach ($id as $banner) {
 
-                if((isset($banner) && property_exists($banner, 'type_medida')) &&
-                    (($banner->type_medida == 'VIEW') AND ($banner->num_view <= $banner->views)))
-                {
-                    $banner->set_status($status=0, 'NULL');
+                // if this ad has views limit and it has reached unpublish it
+                if (
+                    (isset($banner) && property_exists($banner, 'type_medida'))
+                    && (
+                        ($banner->type_medida == 'VIEW')
+                        AND ($banner->num_view <= $banner->views)
+                        )
+                ) {
+                    $banner->set_status($status = 0, 'NULL');
 
                 }
             }
         } else {
             $ad = new Advertisement($id);
-            if(($ad->type_medida == 'VIEW') AND ($ad->num_view <= $ad->views)) {
-                parent::set_status($status=0, 'NULL');
+            if (
+                ($ad->type_medida == 'VIEW')
+                && ($ad->num_view <= $ad->views)
+            ) {
+                parent::set_status($status = 0, 'NULL');
             }
         }
     }
 
     /**
-     * Get advertisement for a type and a category
+     * Get advertisement for a given type and category
      *
      * @param array $types Types of advertisement
      * @param string $category Category of advertisement
+     *
      * @return array Array of Advertisement objects
-    */
+     **/
     function getAdvertisements($types=array(), $category='home')
     {
         $banners = array();
 
         // FIXME: falla
-        if(is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
+        if (is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
             $category = (empty($category) || ($category=='home'))? 0: $category;
             $types = implode(',', $types);
 
             $cm = new ContentManager();
-            if($category!=0) {
+            if ($category!=0) {
                 $rsBanner = $cm->find('Advertisement', ' type_advertisement IN ('.$types.') AND available=1 AND
                                                     (fk_content_categories LIKE \'%'.$category.'%\' OR fk_content_categories=0)',
                                         'ORDER BY type_advertisement, created');
@@ -540,33 +458,32 @@ class Advertisement extends Content
 
             // $advertisements is an array of banners, grouped by advertisement type
             $advertisements = array();
-            foreach($rsBanner as $adv) {
-		
-		$adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-		
-		if(!in_array($category, $adv->fk_content_categories)
-		   && $adv->fk_content_categories != array(0))
-		{
-		    continue;
-		}
-		
-		
-                if(!isset($advertisements[$adv->type_advertisement])) {
+            foreach ($rsBanner as $adv) {
+
+                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+
+                if (
+                    !in_array($category, $adv->fk_content_categories)
+                    && $adv->fk_content_categories != array(0)
+                ) {
+                    continue;
+                }
+
+                if (!isset($advertisements[$adv->type_advertisement])) {
                     $advertisements[$adv->type_advertisement] = array();
                 }
-		
-		
+
                 // Colocar primeiro os da propia sección
-                if($adv->fk_content_categories == array(0)) {
+                if ($adv->fk_content_categories == array(0)) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
                 } else {
                     array_unshift($advertisements[$adv->type_advertisement], $adv);
                 }
-		
-            }	    
+
+            }
 
             // Perform operations for each advertisement type
-            foreach($advertisements as $type_advertisement => $advs) {
+            foreach ($advertisements as $type_advertisement => $advs) {
                 //Select a random banner
                 $banners[] = $advs[ array_rand($advs) ];
 
@@ -578,25 +495,36 @@ class Advertisement extends Content
         return $banners;
     }
 
+    /**
+     * Return banners for the interstitial position.
+     *
+     * @param array $type the list of positions to get banners from.
+     * @param string $category the category to get banners from.
+     *
+     * @return array
+     **/
     public function getIntersticial($type, $category='home')
     {
         $interstitial = null;
 
-        if(in_array($type, array(50, 150)) && ADVERTISEMENT_ENABLE) {
+        if (in_array($type, array(50, 150)) && ADVERTISEMENT_ENABLE) {
             $category = (empty($category) || ($category=='home'))? 0: $category;
 
             $cm = new ContentManager();
-            $rsBanner = $cm->find('Advertisement', ' `type_advertisement`=' . $type . ' AND
-                                                     `available`=1 AND
-                                                     `fk_content_categories`='.$category,
-                                        'ORDER BY type_advertisement, created');
+            $rsBanner = $cm->find(
+                'Advertisement',
+                ' `type_advertisement`=' . $type
+                .' AND `available`=1'
+                .' AND `fk_content_categories`='.$category,
+                ' ORDER BY type_advertisement, created'
+            );
 
-            //if(count($rsBanner) == 1) {
+            //if (count($rsBanner) == 1) {
             //    $interstitial = $rsBanner[0];
             //}
 
             $numBanner = array_rand($rsBanner);
-            if (!is_null($numBanner)){
+            if (!is_null($numBanner)) {
                 $interstitial = $rsBanner[$numBanner];
             } else {
                 $interstitial = null;
@@ -613,32 +541,39 @@ class Advertisement extends Content
      *
      * @param array $banners Array of Advertisement objects
      * @param Smarty $tpl Template
-    */
+     **/
     function render($banners, $tpl)
     {
         // Extract pk_photos to perform one query
         $pk_photos = array();
-        foreach($banners as $banner) {
-            if(!empty($banner->path)) {
+        foreach ($banners as $banner) {
+            if (!empty($banner->path)) {
                 $pk_photos[] = $banner->path;
             }
         }
         $banners_selected =array();
         //Get photos
         $cm = new ContentManager();
-        $objs = $cm->cache->find('Photo', "pk_content IN ('" . implode("','", $pk_photos) . "')");
+        $objs = $cm->cache->find(
+            'Photo',
+            "pk_content IN ('" . implode("','", $pk_photos) . "')"
+        );
 
-        // Array of photos objects, key is pk_content array( 'pk_content' => object )
+        // Array of photos objects,
+        // key is pk_content array( 'pk_content' => object )
         $photos = array();
-        foreach($objs as $obj) {
+        foreach ($objs as $obj) {
             $photos[ $obj->pk_content ] = $obj;
         }
 
-        foreach($banners as $banner) {
+        foreach ($banners as $banner) {
             // Save selected banners to process after
             $banners_selected[] = $banner;
 
-            if (isset($banner->type_advertisement) && property_exists($banner, 'type_advertisement')){
+            if (
+                isset($banner->type_advertisement)
+                && property_exists($banner, 'type_advertisement')
+            ) {
                 $tpl->assign('banner'.$banner->type_advertisement, $banner);
             }
 
@@ -648,21 +583,24 @@ class Advertisement extends Content
             // We should change de content class to return values initialized allways.
             (isset($banner->with_script))?($with_script = $banner->with_script):($with_script = null);
 
-            if($with_script) {
+            if ($with_script) {
                 $tpl->assign('script_b'.$banner->type_advertisement, $banner->script);
             } else {
 
-                if (isset($banner->path) && property_exists($banner, 'path')){
-                    $adv = $banner->path; // "path" is Photo ID, $banner->img is similar but deprecated
+                if (isset($banner->path) && property_exists($banner, 'path')) {
+                    // "path" is Photo ID, $banner->img is similar but deprecated
+                    $adv = $banner->path;
                 }
                 //Evitar undefined index
-                if(isset($photos[$adv])) {
-                    $tpl->assign('photo'.$banner->type_advertisement, $photos[$adv]);
+                if (isset($photos[$adv])) {
+                    $tpl->assign(
+                        'photo'.$banner->type_advertisement, $photos[$adv]
+                    );
                 }
             }
         }
         // Update numviews
-        Advertisement::setNumViews( $banners_selected );
+        Advertisement::setNumViews($banners_selected);
     }
 
     /**
@@ -671,10 +609,10 @@ class Advertisement extends Content
      *
      * @param string $entry
      * @param mixed $value
-    */
+     **/
     public function assign($entry, $value)
     {
-        $this->registry[$entry] = $value;
+        $this->_registry[$entry] = $value;
     }
 
     /**
@@ -683,7 +621,7 @@ class Advertisement extends Content
      *
      * @param string $entry
      * @return mixed
-    */
+     **/
     public function fetch($entry)
     {
         return (isset($this->registry[$entry]))? $this->registry[$entry]: null;
@@ -695,7 +633,7 @@ class Advertisement extends Content
     */
     function onPublish()
     {
-        if(!empty($this->available) && (intval($this->available)>0)) {
+        if (!empty($this->available) && (intval($this->available)>0)) {
             // Documentation: http://www.xaprb.com/blog/2006/06/23/how-to-select-from-an-update-target-in-mysql/
             $sql = 'UPDATE `contents` SET `available`=0 WHERE pk_content IN (
                         SELECT `pk_advertisement` FROM (
@@ -710,7 +648,7 @@ class Advertisement extends Content
                     )';
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if($rs === false) {
+            if ($rs === false) {
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
