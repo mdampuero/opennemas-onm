@@ -25,7 +25,7 @@ class Uri
     /**
      * Uri settings
      **/
-    private $_urlConfigurations = array(
+    static private $_urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
@@ -51,7 +51,7 @@ class Uri
     {
         if (isset($GLOBALS['url_configurations'])) {
             $config = array_merge(
-                Uri::$_urlConfigurations,
+                self::$_urlConfigurations,
                 $GLOBALS['url_configurations'],
                 $params
             );
