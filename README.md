@@ -38,6 +38,7 @@ and go to the folder
 
         doc/doxygen/latex
 and issue:
+
         make
 
 This will create a refman.pdf file with all the documentation generated.
