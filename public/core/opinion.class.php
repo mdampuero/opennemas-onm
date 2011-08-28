@@ -1,7 +1,20 @@
 <?php
-
-
-class Opinion extends Content {
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles all the CRUD operations over opinions.
+ *
+ * @package    Onm
+ * @subpackage Model
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
+class Opinion extends Content
+{
 
 	var $pk_opinion             = NULL;
 	var $fk_content_categories  = NULL;
@@ -94,7 +107,7 @@ class Opinion extends Content {
         $data['position']   =  1;
         (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
-        
+
         parent::create($data);
 
         $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,`fk_author_img`,`with_comment`, type_opinion,fk_author_img_widget) VALUES (?,?,?,?,?,?,?)';

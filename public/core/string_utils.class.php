@@ -10,7 +10,7 @@
  * Library for handling unusual string operations.
  *
  * @package    Onm
- * @subpackage String
+ * @subpackage Utils
  * @author     Fran Dieguez <fran@openhost.es>
  **/
 class String_Utils
@@ -399,5 +399,5 @@ class String_Utils
 
         return $result;
     }
-    
+
 }

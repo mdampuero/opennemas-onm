@@ -9,10 +9,8 @@
 /**
  * Handles all the CRUD actions of Comments
  *
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: comment.class.php 1 2009-12-03 17:09:33Z vifito $
+ * @package    Onm
+ * @subpackage Model
  **/
 class Comment extends Content
 {

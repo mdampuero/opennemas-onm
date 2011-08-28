@@ -9,7 +9,8 @@
 /**
  * Class MenuItems
  *
- * 
+ * @package Onm
+ * @subpackage Model
  */
 class MenuItems {
     public $pk_item    = null;
@@ -29,7 +30,7 @@ class MenuItems {
     */
     public function __construct($id=null)
     {
-         
+
     }
 
     /**
@@ -41,7 +42,7 @@ class MenuItems {
      */
 
     public function create($data) {
- 
+
 		$sql = "INSERT INTO menu_items ".
                " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) " .
 			   " VALUES (?,?,?,?,?,?)";
@@ -113,7 +114,7 @@ class MenuItems {
     * @return null
     */
     public function delete($id) {
-        
+
         $sql = 'DELETE FROM menu_items WHERE pk_item ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -169,7 +170,7 @@ class MenuItems {
           	$rs->MoveNext();
           	$i++;
         }
-        
+
         return $menu;
 
     }
@@ -187,7 +188,7 @@ class MenuItems {
         $config['pk_father'] = !empty($params_config['pk_father'])? $params_config['pk_father']: 0;
 
         $items = json_decode($items);
-  
+
         if(!empty($id) && !empty($items)){
 
             MenuItems::emptyMenu($id);
@@ -198,16 +199,16 @@ class MenuItems {
 
             $values =array();
             $i=1;
-           
+
             foreach($items as $item) {
-    
+
                 $values[] = array($id, $item->title,
                                   $item->link, $item->type,
                                   $i, $config['pk_father']);
                 $i++;
 
             }
- 
+
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);

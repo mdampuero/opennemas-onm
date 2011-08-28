@@ -1,28 +1,28 @@
 <?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 /**
  * Class Privilege
  *
- * Class to manage privileges in OpenNeMas
- * @see Privileges_check
- */
+ * Class to manage privileges
+ *
+ * @package    Onm
+ * @subpackage Acl
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class Privilege
 {
-    /**#@+
-     * @var int
-    */ 
     var $id           = null;
     var $pk_privilege = null;
-    /**#@-*/
-    
-    /**#@+
-     * @access public
-     * @var string
-    */    
     var $description = null;
     var $name        = null;
     var $module      = null;
-    /**#@-*/
-    
+
     /**
      * Constructor
      *
@@ -33,7 +33,7 @@ class Privilege
     {
         $this->Privilege($id);
     }
-    
+
     /**
      * Contructor for PHP4 complaint
      *
@@ -49,7 +49,7 @@ class Privilege
 
     /**
      * Create a new Privilege
-     * 
+     *
      * @param array $data Data values to insert into database
      * @return boolean
      */
@@ -57,17 +57,17 @@ class Privilege
     {
         $sql = 'INSERT INTO `privileges` (`name`, `module`, `description`) VALUES (?, ?, ?)';
         $values = array($data['name'], $data['module'], $data['description']);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return false;
         }
-        
+
         $this->id = $GLOBALS['application']->conn->Insert_ID();
-        
+
         return true;
     }
 
@@ -75,29 +75,29 @@ class Privilege
      * Read a privilege
      *
      * @param int $id Privilege Id
-     * @return 
+     * @return
      */
     function read($id)
     {
         $sql = 'SELECT * FROM `privileges` WHERE `pk_privilege`=?';
-        
+
         // Set fetch method to ADODB_FETCH_ASSOC
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));        
+
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return;
         }
-        
+
         $this->load($rs->fields);
-        
+
         return $this;
     }
-    
+
     /**
      * Load properties in this instance
      *
@@ -110,14 +110,14 @@ class Privilege
         if(!is_array($data)) {
             $properties = get_object_vars($data);
         }
-        
+
         foreach($properties as $k => $v) {
             $this->{$k} = $v;
         }
-        
+
         // Lazy setting
         $this->id = $this->pk_privilege;
-        
+
         return $this; // chaining methods
     }
 
@@ -130,19 +130,19 @@ class Privilege
     function update($data)
     {
         $sql = "UPDATE `privileges` SET `name`=?, `module`=?, `description`=? WHERE `pk_privilege`=?";
-        
+
         $values = array($data['name'], $data['module'], $data['description'], $data['id']);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return false;
         }
-        
+
         $this->load($values);
-        
+
         return $this;
     }
 
@@ -155,15 +155,15 @@ class Privilege
     function delete($id)
     {
         $sql = 'DELETE FROM `privileges` WHERE `pk_privilege`=?';
-        
+
         if($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -180,23 +180,23 @@ class Privilege
         } else {
             $sql = 'SELECT * FROM privileges WHERE '.$filter.' ORDER BY module';
         }
-        
+
         // Set fetch method to ADODB_FETCH_ASSOC
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        
+
         while(!$rs->EOF) {
             $privilege = new Privilege();
             $privilege->load( $rs->fields );
-            
-            $privileges[]  = $privilege;            
+
+            $privileges[]  = $privilege;
             $rs->MoveNext();
         }
-        
+
         return $privileges;
     }
-    
+
     /**
      * Get modules name
      *
@@ -206,17 +206,17 @@ class Privilege
     {
         $modules = array();
         $sql = 'SELECT `module` FROM `privileges` WHERE (`module` IS NOT NULL) AND (`module`<> "") GROUP BY `module`';
-        
+
         // Set fetch method to ADODB_FETCH_ASSOC
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        
-        while(!$rs->EOF) {            
-            $modules[] = $rs->fields['module'];            
+
+        while(!$rs->EOF) {
+            $modules[] = $rs->fields['module'];
             $rs->MoveNext();
         }
-        
+
         return $modules;
     }
 
@@ -225,7 +225,7 @@ class Privilege
      *
      * @param string $filter where condition for check.
      *
-     * @return array modules with each privileges 
+     * @return array modules with each privileges
      *
      */
     function getPrivilegesByModules($filter=null)
@@ -251,7 +251,7 @@ class Privilege
     }
 
     /**
-     * @deprecated 0.5     
+     * @deprecated 0.5
     */
     static function get_privileges_by_user($id_user){
         $privileges = array();
@@ -266,5 +266,5 @@ class Privilege
         }
         return( $privileges);
     }
-    
+
 }

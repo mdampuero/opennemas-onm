@@ -22,7 +22,18 @@ require_once( dirname(__FILE__).'/../session_bootstrap.php' );
 * http://www.gnu.org/licenses/gpl.html
 *
 */
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Class for handling calendar operations
+ *
+ * @package Onm
+ */
 class CaptchaSecurityImages {
 
 	var $font = '';
@@ -41,10 +52,10 @@ class CaptchaSecurityImages {
 
 	function CaptchaSecurityImages($width='120', $height='40', $characters='6', $ttfont) {
         $this->font = $ttfont;
-		
+
         $code = $this->generateCode($characters);
-        $_SESSION['security_code'] = $code;               
-        
+        $_SESSION['security_code'] = $code;
+
 		/* font size will be 75% of the image height */
 		$font_size = $height * 0.75;
 		$image = @imagecreate($width, $height) or die('Cannot initialize new GD image stream');

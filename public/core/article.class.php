@@ -7,11 +7,6 @@
  * file that was distributed with this source code.
  */
 /**
- * Article
- *
- * @package    OpenNeMas
- */
-/**
  * Class for handling articles.
  *
  * @package    Onm
@@ -44,7 +39,7 @@ class Article extends Content
     /**#@-*/
 
     static $clonesHash = null;
-    
+
     /**
       * Constructor PHP5
     */
@@ -76,11 +71,11 @@ class Article extends Content
 
                 return $uri;
                 break;
-            
+
             case 'slug':
                 return String_Utils::get_title($this->title);
                 break;
-        
+
             default:
                 break;
         }
@@ -128,7 +123,7 @@ class Article extends Content
             $data['img2'], $data['img2_footer'], $data['fk_video'],
             $data['fk_video2'], $data['footer_video2'], $data['columns'],
             $data['home_columns'], $data['with_comment'], $data['title_int']);
- 
+
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
@@ -202,7 +197,7 @@ class Article extends Content
         if (isset($data['available']) and !isset($data['content_status'])) {
             $data['content_status'] = $data['available'];
         }
-        
+
         // If it's clone use special update {{{
         if ($this->isClone($data['id'])) {
             $data = $this->updateClone($data['id'], $data);
@@ -217,7 +212,7 @@ class Article extends Content
                 50
             );
         }
- 
+
         $data['subtitle']=mb_strtoupper($data['subtitle'], 'UTF-8');
         $data['img1_footer'] =
             (!isset($data['img1_footer']) || empty($data['img1_footer']))
@@ -722,7 +717,7 @@ n     * @param string $originalPK
     }
 
     /**
-     * 
+     *
      */
     public function getClones($contentPK=null)
     {

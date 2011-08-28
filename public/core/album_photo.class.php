@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -8,10 +9,10 @@
  */
 /**
  * This class handles Album photo elements
- * 
+ *
  * @package Onm
- * @subpackage Album
-*/
+ * @subpackage Model
+ **/
 class Album_photo
 {
 
@@ -19,7 +20,7 @@ class Album_photo
     public $pk_photo = NULL;
     public $position = NULL;
     public $description = NULL;
-    
+
 
     /**
      * Initializes the Album class.
@@ -27,7 +28,7 @@ class Album_photo
      * @param strin $id the id of the album.
      **/
     public function __construct($id=NULL)
-    {        
+    {
         if (!is_null($id)) {
             $this->read($id);
         }
@@ -45,12 +46,12 @@ class Album_photo
     */
     public function create($albumID, $photoID, $position, $description)
     {
-        
+
         $sql = "INSERT INTO albums_photos '
                 .'(`pk_album`, `pk_photo`, `position`, `description`) "
                 ." VALUES (?,?,?,?)";
 
-        $values = array($albumID, $photoID, $position, $description);      
+        $values = array($albumID, $photoID, $position, $description);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
@@ -58,10 +59,10 @@ class Album_photo
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
-        }        
+        }
         return true;
     }
-    
+
     /**
     * Reads the info of a photo from a particular Album
     *
@@ -72,13 +73,13 @@ class Album_photo
     */
     public function read($albumID, $photoID)
     {
-        
+
         $sql = 'SELECT * FROM albums_photos '
              . ' WHERE pk_album = '.($albumID)
              . ' AND pk_photo='.($data['pk_photo']);
-             
+
         if (!$GLOBALS['application']->conn->Execute($sql)) {
-            
+
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
@@ -87,16 +88,16 @@ class Album_photo
 
         $this->pk_album = $rs->fields['pk_album'];
         $this->pk_photo = $rs->fields['pk_photo'];
-        $this->position = $rs->fields['position'];       
+        $this->position = $rs->fields['position'];
         $this->description = $rs->fields['description'];
-        
+
         return $this;
-       
+
     }
 
     public function update($data)
     {
-        
+
         $sql = "UPDATE  albums_photos "
              . "SET     `pk_album`=?, `pk_photo`=?,'
              .'         `position`=?, `description`=? "
@@ -109,7 +110,7 @@ class Album_photo
             $data['position'],
             $data['description']
         );
-  
+
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
@@ -127,7 +128,7 @@ class Album_photo
     */
     public function delete($albumID, $photoID)
     {
- 
+
         $sql = 'DELETE FROM albums_photos '
         .'WHERE pk_album='.($albumID).' AND pk_photo='.($photoID);
 
@@ -139,8 +140,8 @@ class Album_photo
             return;
         }
     }
-    
-    
+
+
     /**
     * Loads the photos from a given album id.
     *
@@ -149,7 +150,7 @@ class Album_photo
     *                album with their information
     */
     public function read_album($albumID)
-    {       
+    {
         $sql = 'SELECT * FROM albums_photos '
              . 'WHERE pk_album = ' .($albumID)
              .' ORDER BY position ASC';
@@ -158,17 +159,17 @@ class Album_photo
 
         $i=0;
         while (!$rs->EOF) {
-            $album[$i][] = $rs->fields['pk_album']; 
-            $album[$i][] = $rs->fields['pk_photo'];  
-            $album[$i][] = $rs->fields['position'];  
-            $album[$i][] = $rs->fields['description']; 
+            $album[$i][] = $rs->fields['pk_album'];
+            $album[$i][] = $rs->fields['pk_photo'];
+            $album[$i][] = $rs->fields['position'];
+            $album[$i][] = $rs->fields['description'];
               $rs->MoveNext();
               $i++;
         }
- 
-        return $album;        
+
+        return $album;
     }
-    
+
     /**
     * Delete one album by a given id
     *
@@ -177,7 +178,7 @@ class Album_photo
     */
     public function delete_album($albumID)
     {
- 
+
         $sql = 'DELETE FROM albums_photos WHERE pk_album='.($albumID);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
@@ -189,7 +190,7 @@ class Album_photo
 
         return true;
     }
-    
+
     /**
     * Sets the position of one photo relatively to its container album
     *
@@ -199,7 +200,7 @@ class Album_photo
     * * @return boolean, true if the position was set, false if it wasn/t
     */
     public function set_position($albumID,$photoID,$position)
-    {    
+    {
         $sql = "UPDATE albums_photos SET  `position`=" .$position.
                  " WHERE pk_album=".($albumID).' AND pk_photo='.($photoID);
 

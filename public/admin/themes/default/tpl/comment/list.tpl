@@ -47,44 +47,63 @@
 			<li>
 			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
 			</li>
-			<script type="text/javascript"><![CDATA[
+			<script type="text/javascript">
+            //<![CDATA[
 				Event.observe($('link_todos'), 'mouseover', function(event) {
 					$('menu_subcats').setOpacity(0);
-					e = setTimeout("show_subcat('{$category}','{$home|urlencode}');
-					$('menu_subcats').setOpacity(1);",1000);
+					e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 				});
 				Event.observe($('link_home'), 'mouseover', function(event) {
 					$('menu_subcats').setOpacity(0);
 					e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
 				});
-			]]></script>
+			//]]>
+            </script>
 			{include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
 		</ul>
 
 
 		<div class="clearfix">
-            {if $category neq "todos"}
-                <ul class="tabs">
-					<li>
-						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0" {if $comment_status==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Pendientes </font></a>
-					</li>
-					<li>
-						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1" {if $comment_status==1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Publicados </font></a>
-					</li>
-
-					<li>
-						<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2" {if $comment_status==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}> Rechazados </font></a>
-					</li>
-                </ul>
-            {/if}
+        {if $category neq "todos"}
+            <ul id="tabs">
+                <li>
+						<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0">{t}Pending{/t}</a>
+                </li>
+                <li>
+						<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1">{t}Published{/t}</a>
+                </li>
+                <li>
+						<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2">{t}Rejected{/t}</a>
+                </li>
+            </ul>
+        {/if}
         </div>
-
-
+        
+        <script type="text/javascript">
+				document.observe('dom:loaded', function() {
+                    {if $comment_status==0}
+                        $('pending-tab').setAttribute('class', 'active-tab');
+					{elseif $comment_status==1}
+                        $('published-tab').setAttribute('class', 'active-tab');
+                        $('pending-tab').setAttribute('class', '');
+                    {elseif $comment_status==2}
+                        $('rejected-tab').setAttribute('class', 'active-tab');
+                        $('pending-tab').setAttribute('class', '');
+                    {/if}
+				});
+        </script>
+            
 		<div id="{$category}">
 
-			<table class="adminheading">
+			<table class="adminheading" style="border-top-left-radius:0px;">
 				<tr>
-					<th>{t}Comments pending for publishing{/t}</th>
+                    {if $comment_status==0}
+                        <th>{t}Comments pending for publishing{/t}</th>
+                    {elseif $comment_status==1}
+                        <th>{t}Comments already published{/t}</th>
+                    {else}
+                        <th>{t}Comments rejected{/t}</th>
+                    {/if}    
 				</tr>
 			</table>
 

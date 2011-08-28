@@ -23,13 +23,13 @@ function &MonitorContentStatus($db, $sql, $inputarray)
     $a=null;
     return $a;
 }
-
 /**
- * Application
+ * Main application class, handles all the initialization of the app
  *
  * @package    Onm
- * @subpackage Application
- */
+ * @subpackage Core
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class Application
 {
     var $conn           = null;

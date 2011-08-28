@@ -1,7 +1,7 @@
 <?php
 /**
  * DatabaseIterator, API to transversal manipulation of databases
- * 
+ *
  * @package DatabaseIterator
  * @version 0.1
  * @author Tomás Vilariño <vifito@openhost.es>
@@ -17,7 +17,7 @@
  * ArrayAccess interfaces; and extends of ArrayObject
  * <code>
  * // $conn is an ADOConnection object
- * $dbIt = new DatabaseIterator($conn); 
+ * $dbIt = new DatabaseIterator($conn);
  * foreach($dbIt as $table) { // loop tables
  *     foreach($table as $row) { // loop rows
  *         echo $row; // call to __toString() method
@@ -27,13 +27,14 @@
  * $dbIt['tablename']->select('field1, field2')->where('field1 LIKE "%number%"')->limit('0, 10');
  * foreach($dbIt['tablename'] as $row) {
  *    echo $row->field1;
- *    
+ *
  *    $row->field2 += 1;
  *    $row->update();
  * }
  * </code>
- * 
- * @package DatabaseIterator
+ *
+ * @package Onm
+ * @subpackage DatabaseIterator
  * @version 0.1
  * @see TableIterator
  * @see RowIterator
@@ -43,72 +44,72 @@ class DatabaseIterator extends ArrayObject implements Iterator, ArrayAccess {
     /**
      * @var ADOConnection ADOdb connection instance
      * @access public
-     */     
+     */
     public $conn = null;
-    
+
     /**
      * @var string Database name
      * @access public
      */
     public $databasename = null;
-    
+
     /**
      * @var array Internal array of TableIterator objects
      * @access private
-     */ 
+     */
     private $_tables = null;
-    
+
     /**
      * @param ADOConnection
      * @see DatabaseIterator::setConnection()
     */
-    public function __construct($conn=null) {                
+    public function __construct($conn=null) {
         if(!is_null($conn)) {
-            $this->setConnection($conn);            
+            $this->setConnection($conn);
         }
     }
-    
+
     /**
      * Set a internal connection instance
      *
      * @param ADOConnection $conn ADOConnection instance
-    */ 
+    */
     public function setConnection($conn) {
         $this->databasename = $conn->database;
-        
-        $this->conn = $conn;        
+
+        $this->conn = $conn;
         $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        
+
         $this->loadTables();
-        
+
         parent::__construct( $this->_tables );
     }
-    
+
     /**
      * Set $_tables internal array with TableIterator objects
-     * 
+     *
      * @see TableIterator
     */
     public function loadTables() {
         $tables = $this->conn->MetaTables('TABLES');
-        
+
         $this->_tables = array();
         foreach($tables as $tablename) {
             $this->_tables[$tablename] = new TableIterator($tablename, $this);
         }
     }
-    
+
     /**
      * Test if $_tables internal array has data, otherwise call to loadTables
-     * 
-     * @uses loadTables() 
+     *
+     * @uses loadTables()
     */
     protected function checkLoadTables() {
         if(is_null($this->_tables)) {
             $this->loadTables();
         }
     }
-    
+
     /**
      * Select a table
      *
@@ -118,7 +119,7 @@ class DatabaseIterator extends ArrayObject implements Iterator, ArrayAccess {
         $this->checkLoadTables();
         return isset($this->_tables[$tablename])? $this->_tables[$tablename]: null;
     }
-    
+
     /**
      * Iterate across tables calling to $callback with table parameter
      * <code>
@@ -129,14 +130,14 @@ class DatabaseIterator extends ArrayObject implements Iterator, ArrayAccess {
      * @param string $callback Callback name or lambda function (create_function)
      * @link www.php.net/create_function
     */
-    public function each($callback) {        
+    public function each($callback) {
         $it = $this->getIterator();
         while($it->valid()) {
             $callback($it->current());
             $it->next();
         }
     }
-    
+
     /* Implements Iterator */
     function rewind() {
         $this->checkLoadTables();
@@ -162,29 +163,29 @@ class DatabaseIterator extends ArrayObject implements Iterator, ArrayAccess {
         $this->checkLoadTables();
         return key($this->_tables) !== null;
     }
-    
+
     /* Implements ArrayAccess */
     public function offsetSet($offset, $value) {
         $this->checkLoadTables();
         // Value must be an instance of TableIterator class
-        $this->_tables[$offset] = $value;        
+        $this->_tables[$offset] = $value;
     }
-    
+
     public function offsetExists($offset) {
         $this->checkLoadTables();
         return isset($this->_tables[$offset]);
     }
-    
+
     public function offsetUnset($offset) {
         $this->checkLoadTables();
         unset($this->_tables[$offset]);
     }
-    
+
     public function offsetGet($offset) {
         $this->checkLoadTables();
         return isset($this->_tables[$offset]) ? $this->_tables[$offset] : null;
-    }    
-    
+    }
+
 }
 
 /**
@@ -199,8 +200,9 @@ class DatabaseIterator extends ArrayObject implements Iterator, ArrayAccess {
  * $table = $dbIt['tablename']; // TableIterator
  * echo $table[0]->field1; // Access to field1 column of the first row
  * </code>
- * 
- * @package DatabaseIterator
+ *
+ * @package Onm
+ * @subpackage DatabaseIterator
  * @version 0.1
  * @see DatabaseIterator
  */
@@ -209,25 +211,25 @@ class TableIterator implements Iterator, ArrayAccess {
      * @var string
     */
     public $name = null;
-    
+
     /**
      * @var ADOConnection
     */
     public $db   = null;
-    
+
     /**
      * @var array
-    */ 
+    */
     private $_rows = null;
-    
+
     /**
      * @var array
-    */ 
-    private $_cols = null;    
-        
+    */
+    private $_cols = null;
+
     /**#@+
      * SQL params
-     * 
+     *
      * @access private
      * @var string
      */
@@ -236,7 +238,7 @@ class TableIterator implements Iterator, ArrayAccess {
     private $_limit    = null;
     private $_order_by = null;
     /**#@-*/
-    
+
     /**
      * Constructor
      *
@@ -245,13 +247,13 @@ class TableIterator implements Iterator, ArrayAccess {
     */
     public function __construct($name, $db) {
         $this->name = $name; // tablename
-        
+
         $this->setDatabase($db);
-        
+
         // After set database object it's possible get columns
         $this->loadCols();
     }
-    
+
     /**
      * Reset internal array of rows $_rows and reset conditions to SQL execution
      * if $conditions is true
@@ -265,19 +267,19 @@ class TableIterator implements Iterator, ArrayAccess {
             $this->_limit    = null;
             $this->_order_by = null;
         }
-        
+
         $this->_rows = null;
     }
-    
+
     /**
      * Set database object (ADOConnection)
      *
-     * @param ADOConnection $db 
+     * @param ADOConnection $db
     */
     public function setDatabase($db) {
         $this->db = $db;
     }
-    
+
     /**
      * Iterate across rows calling to $callback with row parameter
      * <code>
@@ -288,15 +290,15 @@ class TableIterator implements Iterator, ArrayAccess {
      * @param string $callback Callback name or lambda function (create_function)
      * @link www.php.net/create_function
     */
-    public function each($callback) {        
+    public function each($callback) {
         $it = $this->getIterator();
-        
+
         while($it->valid()) {
             $callback($it->current());
             $it->next();
         }
     }
-    
+
     /**
      * Return the number of rows in this table. This method don't use "where"
      * conditions to recover total rows number.
@@ -307,10 +309,10 @@ class TableIterator implements Iterator, ArrayAccess {
     public function total() {
         $sql = 'SELECT COUNT(*) FROM `'.$this->name.'`';
         $total = $this->db->conn->GetOne($sql);
-        
+
         return intval($total);
     }
-    
+
     /**
      * Set select parameter to internal SQL
      * <code>
@@ -330,34 +332,34 @@ class TableIterator implements Iterator, ArrayAccess {
      *
      * @param string $where Where sentence to SQL query
      * @return RowIterator Return $this reference to perform chaining method
-    */    
+    */
     public function where($where) {
         $this->_where = $where;
         return $this;
     }
-    
+
     /**
      * Set limit parameter to internal SQL
      *
      * @param string $limit Limit sentence to SQL query
      * @return RowIterator Return $this reference to perform chaining method
-    */    
+    */
     public function limit($limit) {
         $this->_limit = $limit;
         return $this;
     }
-    
+
     /**
      * Set "order by" parameter to internal SQL
      *
      * @param string $order_by "Order by" sentence to SQL query
      * @return RowIterator Return $this reference to perform chaining method
-    */    
+    */
     public function order_by($order_by) {
         $this->_order_by = $order_by;
         return $this;
     }
-    
+
     /**
      * Count internal rows
      *
@@ -366,7 +368,7 @@ class TableIterator implements Iterator, ArrayAccess {
     public function length() {
         return count($this->_rows);
     }
-    
+
     /**
      * Perform SQL query and return a Iterator object
      *
@@ -375,7 +377,7 @@ class TableIterator implements Iterator, ArrayAccess {
     */
     public function execute() {
         $sql = $this->_buildSQL();
-        
+
         $rs = $this->db->conn->Execute($sql);
         $this->_rows = array();
         if($rs !== false) {
@@ -383,19 +385,19 @@ class TableIterator implements Iterator, ArrayAccess {
                 // FIXME: dependency injection
                 $rowIt = new RowIterator($this);
                 $rowIt->load($rs->fields);
-                
+
                 $this->_rows[] = $rowIt;
-                
+
                 $rs->MoveNext();
             }
         }
-                
+
         return( $this->getIterator() );
     }
-    
+
     /**
      * Make a ArrayObject with internal array of rows and return the
-     * ArrayIterator 
+     * ArrayIterator
      *
      * @see TableIterator::execute()
      * @return ArrayIterator
@@ -404,23 +406,23 @@ class TableIterator implements Iterator, ArrayAccess {
         if(is_null($this->_rows)) {
             $this->loadRows();
         }
-        
+
         $obj = new ArrayObject($this->_rows);
         return $obj->getIterator();
     }
-    
+
     /**
      * Load rows, perform a call to execute method
      *
      * @uses TableIterator::execute()
     */
     public function loadRows() {
-        $this->execute();                
+        $this->execute();
     }
-    
+
     /**
      * Test if rows was loaded, otherwise try load rows
-     * 
+     *
      * @uses TableIterator::loadRows()
     */
     private function checkLoadRows() {
@@ -428,7 +430,7 @@ class TableIterator implements Iterator, ArrayAccess {
             $this->loadRows();
         }
     }
-    
+
     /**
      * Load columns into $_cols internal array
      *
@@ -439,11 +441,11 @@ class TableIterator implements Iterator, ArrayAccess {
         foreach($cols as $col) {
             $colIt = new ColumnIterator($this);
             $colIt->load( $col );
-            
+
             $this->_cols[ $colIt->name ] = $colIt;
         }
     }
-    
+
     /**
      * Return columns for this table
      *
@@ -452,27 +454,27 @@ class TableIterator implements Iterator, ArrayAccess {
     public function getColumns() {
         return $this->_cols;
     }
-    
+
     /**
      * Get primary keys for this table
      *
      * @return array Return array with primary keys ('columnName' => ColumnIterator object)
     */
     public function getPrimaryKeys() {
-        if(is_null($this->_cols)) {            
+        if(is_null($this->_cols)) {
             return null;
         }
-        
+
         $pk = array();
         foreach($this->_cols as $col) {
             if( $col->isPK() ) {
                 $pk[ $col->name ] = $col;
             }
         }
-        
+
         return $pk;
     }
-    
+
     /**
      * Get SQL syntax of CREATE TABLE sentence for this table
      *
@@ -484,19 +486,19 @@ class TableIterator implements Iterator, ArrayAccess {
         if($rs===false) {
             throw new Exception('getCreateTable method throw exception over table: ' . $this->name);
         }
-        
+
         return $rs['Create Table'];
     }
-    
+
     /**
      * Return a empty row to process a insert operation
-     * 
+     *
      * @return RowIterator Return a new RowIterator object
     */
     public function newRow() {
         return new RowIterator($this);
     }
-    
+
     /**
      * Create a new RowIterator object an insert $data into database.
      *
@@ -508,7 +510,7 @@ class TableIterator implements Iterator, ArrayAccess {
      *     $std->pk_field = ($i+1);
      *     $std->integer = 0;
      *     $std->text = 'Testing '.$i;
-     *     
+     *
      *     $dbIt['tablename']->insert($std);
      * }
      * </code>
@@ -524,7 +526,7 @@ class TableIterator implements Iterator, ArrayAccess {
         // reset internal data
         $this->init();
     }
-    
+
     /**
      * Build SQL
      *
@@ -537,29 +539,29 @@ class TableIterator implements Iterator, ArrayAccess {
     */
     private function _buildSQL() {
         $sql = 'SELECT ';
-        
+
         if(is_null($this->_select)) {
             $this->_select = '*';
         }
         $sql .= $this->_select . ' ';
-        
+
         $sql .= 'FROM `' . $this->name . '`';
-        
+
         if(!is_null($this->_where)) {
             $sql .= ' WHERE ' . $this->_where;
         }
-        
+
         if(!is_null($this->_order_by)) {
             $sql .= ' ORDER BY ' . $this->_order_by;
         }
-        
+
         if(!is_null($this->_limit)) {
             $sql .= ' LIMIT ' . $this->_limit;
         }
-        
+
         return( $sql );
-    }    
-    
+    }
+
     /* Implements Iterator */
     function rewind() {
         $this->checkLoadRows();
@@ -585,23 +587,23 @@ class TableIterator implements Iterator, ArrayAccess {
         $this->checkLoadRows();
         return key($this->_rows) !== null;
     }
-    
+
     /* Implements ArrayAccess */
     public function offsetSet($offset, $value) {
         $this->checkLoadRows();
-        $this->_rows[$offset] = $value;        
+        $this->_rows[$offset] = $value;
     }
-    
+
     public function offsetExists($offset) {
         $this->checkLoadRows();
         return isset($this->_rows[$offset]);
     }
-    
+
     public function offsetUnset($offset) {
         $this->checkLoadRows();
         unset($this->_rows[$offset]);
     }
-    
+
     public function offsetGet($offset) {
         $this->checkLoadRows();
         return isset($this->_rows[$offset]) ? $this->_rows[$offset] : null;
@@ -619,33 +621,34 @@ class TableIterator implements Iterator, ArrayAccess {
  * $dbIt = new DatabaseIterator($conn);
  * $table = $dbIt['tablename']; // TableIterator
  * $table[0]; // This object is a RowIterator
- * 
+ *
  * $table[0]->field1 = 'Other string';
  * $table[0]->update(); // Update into database
  *
  * $table[0]->delete(); // Delete value
  * </code>
- * 
- * @package DatabaseIterator
+ *
+ * @package Onm
+ * @subpackage DatabaseIterator
  * @version 0.1
  * @see TableIterator
  */
 class RowIterator {
     /**
      * @var string
-    */ 
+    */
     public $tablename = null;
-    
+
     /**
      * @var TableIterator
-    */ 
+    */
     public $table = null;
-    
+
     /**
      * @var array
-    */ 
+    */
     private $_internalData = null;
-    
+
     /**
      * Constructor
      *
@@ -655,10 +658,10 @@ class RowIterator {
     */
     public function __construct($table) {
         $this->tablename = $table->name;
-                
+
         $this->setTable($table);
     }
-    
+
     /**
      * Set TableIterator object reference
      *
@@ -666,8 +669,8 @@ class RowIterator {
     */
     public function setTable($table) {
         $this->table = $table;
-    }       
-    
+    }
+
     /**
      * Load properties into internal array
      *
@@ -679,8 +682,8 @@ class RowIterator {
                 $this->_internalData[$k] = $value;
             }
         }
-    }        
-    
+    }
+
     /**
      * Dump internal data, for this row, to database
      *
@@ -688,9 +691,9 @@ class RowIterator {
     */
     public function update() {
         $sql  = 'UPDATE `' . $this->tablename . '` SET ';
-        
+
         $data = $values = array();
-        
+
         $cols = $this->table->getColumns();
         foreach($cols as $col) {
             if(!$col->isPK() && !is_null($this->{$col->name})) {
@@ -698,13 +701,13 @@ class RowIterator {
                 $values[] = $this->{$col->name};
             }
         }
-        
-        $sql .= implode(', ', $data);        
+
+        $sql .= implode(', ', $data);
         $sql .= ' WHERE ' . $this->_buildWhereCondition();
-        
+
         return $this->execute($sql, $values);
     }
-    
+
     /**
      * Perform a insert operation into database with $data array. $data must
      * have exact fields to perform operation
@@ -712,22 +715,22 @@ class RowIterator {
      * @param array $data Associative array with exact properties for this row
      * @return mixed Return result set for this operation
     */
-    public function insert($data) {                
+    public function insert($data) {
         // Check $data
         $iFields = array_keys($this->table->getColumns());
-        
+
         if(is_object($data)) {
             $data = get_object_vars($data);
         }
         $eFields = array_keys($data);
-        
+
         if(count(array_diff($iFields, $eFields)) != 0) {
             throw new Exception('Insert data don\'t match', 1);
         }
-        
+
         $sql  = 'INSERT INTO `' . $this->tablename . '` (';
         $sql .= '`' . implode('`, `', $iFields) . '`) VALUES (';
-        
+
         $values = array();
         $cols = $this->table->getColumns();
         foreach($cols as $col) {
@@ -735,24 +738,24 @@ class RowIterator {
                         $data[ $col->name ], get_magic_quotes_gpc()
                       );
         }
-        
+
         $sql .= implode(', ', $values) . ')';
-        
+
         return $this->execute($sql);
     }
-    
+
     /**
      * Remove current row of database
-     * 
+     *
      * @return mixed Return result set for this operation
     */
     public function delete() {
         $sql  = 'DELETE FROM `' . $this->tablename . '` ';
         $sql .= 'WHERE ' . $this->_buildWhereCondition();
-        
+
         return $this->execute($sql);
     }
-    
+
     /**
      * Perform a SQL query against database
      *
@@ -764,13 +767,13 @@ class RowIterator {
         if($rs === false) {
             throw new Exception('Error executing SQL sentence: ' . $sql, 2);
         }
-        
+
         // reset internal data
         $this->table->init();
-        
+
         return $this->table->db->conn->Affected_Rows();
     }
-    
+
     /**
      * Build SQL sentence to perform a query
      *
@@ -778,7 +781,7 @@ class RowIterator {
     */
     private function _buildWhereCondition() {
         $pks = $this->table->getPrimaryKeys();
-        
+
         $conditions = array();
         if( count($pks)>0 ) {
             foreach($pks as $pk) {
@@ -788,35 +791,35 @@ class RowIterator {
         } else {
             throw new Exception('Primary key not found', 3);
         }
-        
+
         return implode(' AND ', $conditions);
     }
 
     /**
      * Magic method __get
-     * 
+     *
      * @param string $name
      * @return string Return data from row for this property
-    */ 
+    */
     public function __get($name) {
         return isset($this->_internalData[$name])? $this->_internalData[$name]: null;
     }
-    
+
     /**
      * Magic method __set
-     * 
+     *
      * @param string $name
      * @param string $value
-    */ 
+    */
     public function __set($name, $value) {
         if(isset($this->_internalData[$name])) {
             $this->_internalData[$name] = $value;
         }
     }
-    
+
     /**
      * Magic method __toString
-    */ 
+    */
     public function __toString() {
         $html = '<dl>';
         foreach($this->_internalData as $key => $value) {
@@ -824,10 +827,10 @@ class RowIterator {
             $html .= '<dd>' . $value . '</dd>';
         }
         $html .= '</dl>';
-        
+
         return $html;
-    }    
-    
+    }
+
     /* Implements Iterator */
     function rewind() {
         reset($this->_internalData);
@@ -848,32 +851,33 @@ class RowIterator {
     function valid() {
         return key($this->_internalData) !== null;
     }
-    
+
     /* Implements ArrayAccess */
     public function offsetSet($offset, $value) {
         // Check that $offset isn't a primary key
-        $this->_internalData[$offset] = $value;        
+        $this->_internalData[$offset] = $value;
     }
-    
+
     public function offsetExists($offset) {
         return isset($this->_internalData[$offset]);
     }
-    
+
     public function offsetUnset($offset) {
         unset($this->_internalData[$offset]);
     }
-    
+
     public function offsetGet($offset) {
         return isset($this->_internalData[$offset]) ? $this->_internalData[$offset] : null;
-    }    
+    }
 }
 
 /**
  * Class ColumnIterator
  *
  * This class hold information of table columns
- * 
- * @package DatabaseIterator
+ *
+ * @package Onm
+ * @subpackage DatabaseIterator
  * @version 0.1
  * @see TableIterator
  */
@@ -887,16 +891,16 @@ class ColumnIterator {
     public $type     = null;
     public $not_null = null;
     public $max_length     = null;
-    public $auto_increment = null;    
+    public $auto_increment = null;
     public $primary_key    = false;
     /**#@-*/
-    
+
     /**
      * @var TableIterator
      * @access private
-    */ 
+    */
     private $table = null;
-    
+
     /**
      * Constructor
      *
@@ -906,7 +910,7 @@ class ColumnIterator {
     public function __construct($table) {
         $this->setTable($table);
     }
-    
+
     /**
      * load
      *
@@ -928,9 +932,9 @@ class ColumnIterator {
                     $this->{$k} = $v;
                 }
             }
-        }      
+        }
     }
-    
+
     /**
      * setTable
      *
@@ -941,7 +945,7 @@ class ColumnIterator {
     public function setTable($table) {
         $this->table = $table;
     }
-    
+
     /**
      * isPK
      *
@@ -952,16 +956,16 @@ class ColumnIterator {
     public function isPK() {
         return $this->primary_key;
     }
-    
+
     /**
      * __get
      *
      * Magic method
-     * 
+     *
      * @link http://es2.php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
      * @param string $name Name of property
      * @return mixed Value of property, otherwise null
-    */ 
+    */
     public function __get($name) {
         return isset($this->$name)? $this->$name: null;
     }
@@ -1000,7 +1004,7 @@ class ColumnIterator {
 //    $std->summary = 'Testing '.$i;
 //    $std->body = 'Proba '.$i;
 //    $std->img = 0;
-//    
+//
 //    $databaseIt['events']->insert($std);
 //}
 
@@ -1025,4 +1029,3 @@ class ColumnIterator {
 //echo('Done.');
 //
 //$conn->RollbackTrans(); // or $conn->CommitTrans();
-

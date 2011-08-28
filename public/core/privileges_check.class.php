@@ -1,16 +1,35 @@
 <?php
-
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+/**
+ * Handles all the operations with Privilege checking.
+ *
+ * @package    Onm
+ * @subpackage Acl
+ * @author     Fran Dieguez <fran@openhost.es>
+ **/
 class Privileges_check
 {
 
-    public static function CheckAccessCategories($CategoryId)
+    /**
+     * Checks if the current user has access to category given its id.
+     *
+     * @param string $categoryID the category id.
+     *
+     * @return boolean true if the user has access
+     **/
+    public static function CheckAccessCategories($categoryID)
     {
         try {
             if (
-                !isset($CategoryId)
-                || is_null($CategoryId)
-                )
-            {
+                !isset($categoryID)
+                || is_null($categoryID)
+            ) {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
                 return true;
             }
@@ -18,18 +37,15 @@ class Privileges_check
             if (
                 isset($_SESSION['isAdmin'])
                 && $_SESSION['isAdmin']
-                )
-            {
+            ) {
                 return true;
             }
-            //var_dump(!in_array($CategoryId,$_SESSION['accesscategories']));die();
 
             if (
                 !isset($_SESSION['accesscategories'])
                 || empty($_SESSION['accesscategories'])
-                || !in_array($CategoryId,$_SESSION['accesscategories'])
-                )
-            {
+                || !in_array($categoryID, $_SESSION['accesscategories'])
+            ) {
                 return false;
             }
 
@@ -42,26 +58,37 @@ class Privileges_check
         return true;
     }
 
-
-    public static function CheckPrivileges($Privilege, $category = null)
+    /**
+     * Checks if the current user has access to one privilege and category.
+     *
+     * @param string $privilege the privelege token.
+     * @param string $categoryID the category id
+     *
+     * @return boolean true if the user has access
+     **/
+    public static function CheckPrivileges($privilege, $categoryID = null)
     {
         try {
-            if( !isset($_SESSION['userid']) || Privileges_check::CheckSessionExpireTime() ) {
+            if (!isset($_SESSION['userid'])
+                || Privileges_check::CheckSessionExpireTime()
+            ) {
                 Privileges_check::SessionExpireTimeAction();
             }
 
-            if( isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] ) {
+            if (isset($_SESSION['isAdmin'])
+                && $_SESSION['isAdmin']
+            ) {
                 return true;
             }
 
-            if (
-                !isset($_SESSION['privileges'])
+            if (!isset($_SESSION['privileges'])
                 || empty($_SESSION['userid'])
-                || !in_array($Privilege,$_SESSION['privileges'])
-                || (!is_null($category) && !(Privileges_check::CheckAccessCategories($category)))
-                )
-            {
-                    return false;
+                || !in_array($privilege, $_SESSION['privileges'])
+                || (!is_null($categoryID)
+                    && !(Privileges_check::CheckAccessCategories($category))
+                    )
+            ) {
+                return false;
             }
 
         } catch(Exception $e) {
@@ -72,26 +99,49 @@ class Privileges_check
         return true;
     }
 
-    private static function SessionExpireTimeAction() {
+    /**
+     * Redirects the user to the login page.
+     *
+     **/
+    private static function SessionExpireTimeAction()
+    {
         Application::forwardTargetParent("/admin/login.php");
     }
 
-    public static function AccessDeniedAction() {
-        Application::forward('/admin/controllers/accessdenied/accessdenied.php'.'?action=list_pendientes&category='.$_REQUEST['category']);
+    /**
+     * Redirects the user to the accessdenied controller.
+     *
+     **/
+    public static function AccessDeniedAction()
+    {
+        Application::forward(
+            '/admin/controllers/accessdenied/accessdenied.php'
+            .'?action=list_pendientes&category='.$_REQUEST['category']
+        );
     }
 
-    public static function AccessCategoryDeniedAction() {
-        Application::forward('/admin/controllers/accessdenied/accesscategorydenied.php');
+    public static function AccessCategoryDeniedAction()
+    {
+        Application::forward(
+            '/admin/controllers/accessdenied/accesscategorydenied.php'
+        );
     }
 
-    public static function LoadSessionExpireTime() {
-        if(isset($_SESSION) && isset($_SESSION['default_expire'])) {
+    public static function LoadSessionExpireTime()
+    {
+        if (isset($_SESSION)
+            && isset($_SESSION['default_expire'])
+        ) {
             $_SESSION['expire'] = time()+($_SESSION['default_expire']*60);
         }
     }
 
-    private static function CheckSessionExpireTime() {
-        if(isset($_SESSION) && array_key_exists('expire', $_SESSION) && (time() > $_SESSION['expire'])) {
+    private static function CheckSessionExpireTime()
+    {
+        if (isset($_SESSION)
+            && array_key_exists('expire', $_SESSION)
+            && (time() > $_SESSION['expire'])
+        ) {
             session_destroy();
             unset($_SESSION);
             return true;
@@ -102,16 +152,15 @@ class Privileges_check
     }
 
     // Comprobación de session caducada y privilegios
-    function HandleError($errno, $errstr, $errfile, $errline) {
-        //no difference between excpetions and E_WARNING
-        /*echo "<pre>user error handler:<il><li>e_warning=".E_WARNING."<li>num=".$errno." <li>msg=".$errstr.
-            " <li>line=".$errline." <li>file=".$errfile."</il></pre>\n\n\n";*/
+    public function HandleError($errno, $errstr, $errfile, $errline)
+    {
         throw new Exception($errstr, $errno);
         return true;
         //change to return false to make the "catch" block execute;
     }
 
-    function InitHandleErrorPrivileges() {
+    public function InitHandleErrorPrivileges()
+    {
         set_error_handler('handleError');
     }
 }

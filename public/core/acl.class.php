@@ -21,8 +21,10 @@ class Acl
      * Shortcut to check privilege
      *
      * @see Privileges_check::CheckPrivileges()
+     *
      * @param string $rule
      * @param string $module
+     * 
      * @return boolean
      **/
     public static function check($rule, $module=null)
@@ -65,7 +67,7 @@ class Acl
         ) {
             return true;
         }
-        
+
         return false;
     }
 

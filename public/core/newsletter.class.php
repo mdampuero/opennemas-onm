@@ -1,31 +1,17 @@
 <?php
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
 /**
  * Newsletter
  *
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: newsletter.class.php 1 2009-10-05 09:36:13Z vifito $
- */
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class Newsletter
 {
     const ITEMS_MAX_LIMIT = 50;
@@ -327,6 +313,12 @@ class Newsletter
     }
 }
 
+/**
+ * Account item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class Newsletter_Account
 {
     public $email = null;
@@ -353,6 +345,12 @@ class Newsletter_Account
     }
 }
 
+/**
+ * Newsletter item
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class Newsletter_Item
 {
     protected $values = null;
@@ -377,7 +375,12 @@ class Newsletter_Item
     }
 }
 
-/* Abstract Classes ********************************************************** */
+/**
+ * Abstract class for implement accounts provider
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 abstract class Newsletter_Accounts_Provider
 {
     protected $conn     = null;
@@ -442,6 +445,12 @@ abstract class Newsletter_Accounts_Provider
     }
 }
 
+/**
+ * Abstract class that implements items provider
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 abstract class Newsletter_Items_Provider
 {
     protected $conn     = null;
@@ -513,8 +522,12 @@ abstract class Newsletter_Items_Provider
     }
 }
 
-/* *************************************************************************** */
-/* Implementation of Concrete Classes for Xornal.com  ************************ */
+/**
+ * Specialization of Accounts provider for PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 {
     public function __construct()
@@ -554,12 +567,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 //                $rs->moveNext();
 //            }
 //        }
-        
+
         $receiver = array();
         $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations) 
+        if (!is_null($configurations)
             && array_key_exists('receiver', $configurations)
-            && !empty($configurations['receiver'])) 
+            && !empty($configurations['receiver']))
         {
             $this->accounts[] = new Newsletter_Account(
                 $configurations['receiver'],
@@ -567,7 +580,7 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
             );
 
         }
-        
+
         return $receiver;
     }
 
@@ -589,7 +602,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
     }
 }
 
-
+/**
+ * Specialization of items provider for PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 {
     public function __construct()
@@ -740,6 +758,12 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
     }
 }
 
+/**
+ * Article item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Article_Newsletter_Item extends Newsletter_Item
 {
     public $pk_content;
@@ -751,6 +775,12 @@ class PConecta_Article_Newsletter_Item extends Newsletter_Item
     public $category_name;
 }
 
+/**
+ * Opinion item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Opinion_Newsletter_Item extends Newsletter_Item
 {
     public $pk_content;

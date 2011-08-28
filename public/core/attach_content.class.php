@@ -11,7 +11,7 @@ use Onm\Message as m;
  * Class for managing attached contents.
  *
  * @package    Onm
- * @subpackage Modles
+ * @subpackage Model
  * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Attach_content
