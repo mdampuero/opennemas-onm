@@ -10,7 +10,7 @@
  * TemplateCacheManager class manage the smarty cache.
  *
  * @package    Onm
- * @subpackage Template
+ * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
  */
 
@@ -230,7 +230,7 @@ class TemplateCacheManager
      * @param int $timestamp New timestamp to expires
      * @param string $cachefile Name of cache file or cache Id
      * @param string $tplFilename Optional name of template
-     * 
+     *
      * @return boolean Return true if action is performed
      */
     public function update($timestamp, $cachefile, $tplFilename = null)

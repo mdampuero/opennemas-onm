@@ -48,7 +48,7 @@ compiletranslations:
 			-o "public/admin/locale/$$i/LC_MESSAGES/messages.mo"; \
 	done
 
-doc: generate-phpdoc-doc generate-doxygen-doc generate-apigen-doc
+doc: generate-phpdoc-doc generate-doxygen-doc generate-apigen-doc generate-docblox-doc
 
 generate-phpdoc-doc:
 	@echo "Generating documentation using PHP_Documentator..."
@@ -63,6 +63,11 @@ generate-apigen-doc:
 	mkdir doc/apigen log/ -p
 	apigen --config doc/apigen.conf
 	rm -r log
+
+generate-docblox-doc:
+	@echo "Generating documentation using DocBlox..."
+	mkdir -p doc/docblox/log
+	docblox -c doc/docblox.xml --title="OpenNemas"
 
 clean: cleancache cleansessions cleanlogs cleandocs
 
@@ -81,4 +86,4 @@ cleanlogs:
 
 cleandocs:
 	@echo "Cleaning generated documentations..."
-	rm doc/doxygen doc/phpdoc doc/apigen -r
+	rm doc/doxygen doc/phpdoc doc/apigen doc/docblox -r

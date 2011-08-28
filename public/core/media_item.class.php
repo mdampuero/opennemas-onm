@@ -14,7 +14,7 @@
  * to the swf file.
  *
  * @package Onm
- * @package Model
+ * @subpackage Model
  */
 class MediaItem
 {
@@ -39,7 +39,8 @@ class MediaItem
     var $description = null;
     var $tags = null;
 
-    function __construct($file) {
+    public function __construct($file)
+    {
         $this->filename = realpath( $file );
         $this->basename = basename($this->filename);
 
@@ -56,7 +57,8 @@ class MediaItem
         $this->internalType = $dimensions[2];
     }
 
-    function getDimensions($filename=null) {
+    public function getDimensions($filename=null)
+    {
         if(is_null($filename)) {
             if(is_null($this->filename)) {
                 return(null);
@@ -70,7 +72,8 @@ class MediaItem
         return($details);
     }
 
-    function getExtension($filename=null) {
+    public function getExtension($filename=null)
+    {
         if(is_null($filename)) {
             if(is_null($this->filename)) {
                 return(null);
@@ -84,7 +87,8 @@ class MediaItem
         return( strtoupper($_d['extension']) );
     }
 
-    function getHTMLTag() {
+    public function getHTMLTag()
+    {
 
     }
 }

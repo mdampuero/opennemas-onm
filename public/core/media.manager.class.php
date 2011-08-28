@@ -6,6 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+define('MEDIA_PER_PAGE', 24);
+
 /**
  * Handles all the operations over media manager.
  *
@@ -13,9 +15,6 @@
  * @subpackage Utils
  * @author     Fran Dieguez <fran@openhost.es>
  **/
-define('MEDIA_PER_PAGE', 24);
-
-
 class MediaManager
 {
     var $_dirs = array();

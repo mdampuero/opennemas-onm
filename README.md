@@ -5,14 +5,29 @@ There are 3 different systems to generate ONM documentation:
 - Doxygen
 - PHPDocumentor
 - APIGen
+- Docblox
 
 Software requirements
 ---------------------
 You must have installed in your system:
 
-* APIGen: http://apigen.org/#installation
-* doxygen: sudo apt-get install doxygen
-* PhpDocumentor: sudo pear install PhpDocumentor
+* APIGen:
+
+        http://apigen.org/#installation
+
+* doxygen:
+
+        sudo apt-get install doxygen
+
+* PhpDocumentor:
+
+        sudo pear install PhpDocumentor
+
+* Docblox:
+
+        sudo pear  channel-discover pear.docblox-project.org
+        sudo pear  channel-discover pear.michelf.com
+        sudo pear install docblox/docblox-beta
 
 Generating all the documentation
 --------------------------------
@@ -26,6 +41,7 @@ You can generate each one separately by issuing:
         make generate-apigen-doc
         make generate-phpdoc-doc
         make generate-doxygen-doc
+        make generate-docblox-doc
 
 Compiling PDF documentation file
 --------------------------------

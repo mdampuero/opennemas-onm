@@ -10,7 +10,7 @@
  * Newsletter
  *
  * @package    Onm
- * @subpackage Model
+ * @subpackage ControllerHelper
  **/
 class Newsletter
 {
@@ -312,6 +312,13 @@ class Newsletter
         }
     }
 }
+
+/**
+ * Account item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class Newsletter_Account
 {
     public $email = null;
@@ -338,6 +345,12 @@ class Newsletter_Account
     }
 }
 
+/**
+ * Newsletter item
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class Newsletter_Item
 {
     protected $values = null;
@@ -362,7 +375,12 @@ class Newsletter_Item
     }
 }
 
-/* Abstract Classes ********************************************************** */
+/**
+ * Abstract class for implement accounts provider
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 abstract class Newsletter_Accounts_Provider
 {
     protected $conn     = null;
@@ -427,6 +445,12 @@ abstract class Newsletter_Accounts_Provider
     }
 }
 
+/**
+ * Abstract class that implements items provider
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 abstract class Newsletter_Items_Provider
 {
     protected $conn     = null;
@@ -498,8 +522,12 @@ abstract class Newsletter_Items_Provider
     }
 }
 
-/* *************************************************************************** */
-/* Implementation of Concrete Classes for Xornal.com  ************************ */
+/**
+ * Specialization of Accounts provider for PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 {
     public function __construct()
@@ -574,7 +602,12 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
     }
 }
 
-
+/**
+ * Specialization of items provider for PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
 {
     public function __construct()
@@ -725,6 +758,12 @@ class PConecta_Newsletter_Items_Provider extends Newsletter_Items_Provider
     }
 }
 
+/**
+ * Article item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Article_Newsletter_Item extends Newsletter_Item
 {
     public $pk_content;
@@ -736,6 +775,12 @@ class PConecta_Article_Newsletter_Item extends Newsletter_Item
     public $category_name;
 }
 
+/**
+ * Opinion item for newsletter in PConecta
+ *
+ * @package    Onm
+ * @subpackage ControllerHelper
+ **/
 class PConecta_Opinion_Newsletter_Item extends Newsletter_Item
 {
     public $pk_content;

@@ -10,9 +10,9 @@
 /**
  * Uri Class that implements the Uri generation for every content type
  *
- * @category Onm
  * @package Onm
- * @subpackage Uri
+ * @subpackage Utilities
+ * @author Fran Dieguez <fran@openhost.es>
  */
 class Uri
 {

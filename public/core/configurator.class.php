@@ -10,7 +10,7 @@
  * Configurator
  *
  * @package    Onm
- * @subpackage
+ * @subpackage Utils
  * @copyright  Copyright (c) 2010 Openhost S.L. (http://openhost.es)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id: PHP-1.php 1 2010-04-15 09:38:59Z vifito $
