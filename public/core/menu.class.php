@@ -256,11 +256,12 @@ class Menu
 
         $menu = self::getMenu($name);
 
-        foreach ($menu->items as &$item) {
-            $item->submenu =
-                MenuItems::getMenuItems('pk_father='.$item->pk_item);
+        if (!empty($menu->items)) {
+            foreach ($menu->items as &$item) {
+                $item->submenu =
+                    MenuItems::getMenuItems('pk_father='.$item->pk_item);
+            }
         }
-
         return $menu;
 
     }

@@ -31,9 +31,9 @@ class Uri
        'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
        'section'   =>  array( 'seccion/_ID_'),
        'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-       'album'     =>  array( 'galeria/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
+       'album'     =>  array( 'album/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-       'static_page'=> array( 'static_page/_SLUG_.html'),
+       'static_page'=> array( 'estaticas/_SLUG_.html'),
        'ad'        =>  array( 'publicidad/_ID_.html'),
     );
 

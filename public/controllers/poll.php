@@ -43,6 +43,10 @@ $tpl->assign(array( 'category'=>$category ,
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 
+  $menuFrontpage= Menu::renderMenu('encuesta');
+  $tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+
 //TODO: define dir to save xml
 $tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.'/polls/');
 
