@@ -121,13 +121,13 @@ class MenuItems {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return false;
+            return false; 
         }
         return true;
 
         /* Notice log of this action */
         $logger = Application::getLogger();
-        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$this->id);
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$id);
     }
 
 
@@ -175,6 +175,33 @@ class MenuItems {
 
     }
 
+    static public function getPkItems($id)
+    {
+         // ver en europapress
+        //config para sacar solo padres, solo hijos, todo...
+       // $config = array_merge(self::config, $params_config);
+
+        $sql = "SELECT pk_item FROM menu_items WHERE pk_menu = ? ORDER BY position ASC";
+        $rs = $GLOBALS['application']->conn->Execute( $sql, array($id) );
+
+        if (!$rs) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return false;
+        }
+
+       // $menu =  $rs->GetRows();
+        $menu = array();
+        while (!$rs->EOF) {
+        	$menu[]  = $rs->fields['pk_item'];
+            $rs->MoveNext();
+        }
+
+        return $menu;
+
+    }
 
     /**
      * Update menu in the frontpage
@@ -190,33 +217,58 @@ class MenuItems {
         $items = json_decode($items);
 
         if(!empty($id) && !empty($items)){
+            
 
-            MenuItems::emptyMenu($id);
+            $menu = MenuItems::getPkItems($id);
 
             $stmt = $GLOBALS['application']->conn->Prepare("INSERT INTO menu_items ".
                            " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
                            " VALUES (?,?,?,?,?,?)");
 
+            $stmtUpdate = $GLOBALS['application']->conn->Prepare("UPDATE INTO menu_items ".
+                           " SET  `title` =?, `position` =?  ".
+                           " WHERE pk_item = ?" );
+
+ 
             $values =array();
+            $valuesUpdate =array();
             $i=1;
 
-            foreach($items as $item) {
+            foreach ($items as $item) {
+                //update item if exists in menu
+                $update = 0;
 
-                $values[] = array($id, $item->title,
-                                  $item->link, $item->type,
-                                  $i, $config['pk_father']);
+                if (!empty($item->pk_item) && in_array( $item->pk_item, $menu ) ) {
+                    $valuesUpdate[] = array(  $item->title, $i,
+                         $item->pk_item );
+                    $update = 1;
+
+                }
+
+                if ($update != 1) {
+                    $values[] = array($id, $item->title,
+                                      $item->link, $item->type,
+                                      $i, $config['pk_father']);
+                }
                 $i++;
 
             }
-
+          
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
                 $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-                return;
+ 
             }
 
+            if ($GLOBALS['application']->conn->Execute($stmtUpdate, $valuesUpdate) === false) {
+                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+
+            }
+             
             return true;
         }
 
@@ -247,6 +299,26 @@ class MenuItems {
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$id);
     }
+
+    static public function deleteItems($items) {
+
+        $stmt = $GLOBALS['application']->conn->Prepare('DELETE FROM menu_items WHERE pk_item = ?');
+  
+        if ($GLOBALS['application']->conn->Execute($stmt, $items) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            
+        }
+
+
+        return true;
+
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at menu_item Id '.$id);
+    }
+
 
 
 }

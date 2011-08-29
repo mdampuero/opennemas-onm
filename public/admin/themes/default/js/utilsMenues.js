@@ -111,10 +111,13 @@ editLink = function(id) {
 
 deleteLink = function(id) {
 
+        $('forDelete').value = $('forDelete').value + ","+ $(id).getAttribute('pk_item');
         var li = $(id);
 		if (li) {
 			li.parentNode.removeChild(li)
 		}
+
+      
 }
 
 updateLink = function(id) {
