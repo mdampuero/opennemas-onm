@@ -92,7 +92,7 @@ class Content
                 $contentTypeName = $GLOBALS['application']->conn->
                     Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
                     if (isset($contentTypeName->fields['name'])) {
-                        $returnValue = $contentTypeName;
+                        $returnValue = mb_strtolower($contentTypeName);
                     } else {
                         $returnValue = $this->content_type;
                     }
