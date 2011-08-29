@@ -107,6 +107,8 @@ define('IMG_DIR', "images");
 define('FILE_DIR', "files");
 define('ADS_DIR', "advertisements");
 define('OPINION_DIR', "opinions");
+define ('POLL_DIR', "polls");
+define ('INTERNAL_DIR', "media/internal");
 
 // TODO: A Eliminar
 define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR);

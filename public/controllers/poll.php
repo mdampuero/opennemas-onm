@@ -47,8 +47,11 @@ $tpl->assign(array( 'category'=>$category ,
   $tpl->assign('menuFrontpage',$menuFrontpage->items);
 
 
-//TODO: define dir to save xml
-$tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.'/polls/');
+//TODO: define dir to save xml and charts.swf dir
+//TODO: widget others polls
+
+$tpl->assign('chartPolls', MEDIA_URL.SS.INTERNAL_DIR);
+$tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.SS.POLL_DIR.SS);
 
 /**************************************  SECURITY  *******************************************/
 
@@ -74,7 +77,7 @@ switch($action) {
            && (!$tpl->isCached('poll/poll-frontpage.tpl',$cacheID))){
 
                 $polls = $cm->find_by_category('Poll',$category, 'available=1  ',
-                                            'ORDER BY created DESC LIMIT 0,7');
+                                            'ORDER BY created DESC LIMIT 0,5');
            
              $tpl->assign('polls', $polls);
 
@@ -167,7 +170,9 @@ switch($action) {
             if (isset($_COOKIE[$cookie])) {
                 $tpl->assign('msg','Ya ha votado esta encuesta');
             }
-            if(isset($_POST['respEncuesta']) && !empty($_POST['respEncuesta'])  && !isset($_COOKIE[$cookie]) ){
+            if (isset($_POST['respEncuesta'])
+                    && !empty($_POST['respEncuesta'])
+                    /* && !isset($_COOKIE[$cookie])*/ ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
                // $poll=new Poll($_REQUEST['id']);
                 $poll->vote($_POST['respEncuesta'],$ip);
@@ -200,8 +205,7 @@ switch($action) {
             $poll->setNumViews($poll_id);
 
             $cacheID= $tpl->generateCacheId($category_name, $poll_id );
-
-
+              
             $tpl->display('poll/poll.tpl', $cacheID);
         }
        

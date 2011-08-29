@@ -148,8 +148,9 @@ Deny from all
 
     #Encuesta/2011/08/24/sociedad/hola-caracola/2011082412490700947.html
     RewriteRule ^poll/?$ controllers/poll.php?action=frontpage [L,NC]
+    RewriteRule ^encuesta/?$ controllers/poll.php?action=frontpage [L,NC]
     RewriteRule ^poll/([a-z0-9\-]+)/?$ controllers/poll.php?action=frontpage&category_name=$1 [L,NC]
-    RewriteRule ^Encuesta/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$4 [L,NC]
+    RewriteRule ^encuesta/([0-9]{4})/([0-1][0-9])/([0-3][0-9])/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$4 [L,NC]
 
 
     #Files
