@@ -50,8 +50,10 @@ $tpl->assign(array( 'category'=>$category ,
 //TODO: define dir to save xml and charts.swf dir
 //TODO: widget others polls
 
+$poll_path = MEDIA_PATH . DIRECTORY_SEPARATOR . MEDIA_DIR . DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
 $tpl->assign('chartPolls', MEDIA_URL.SS.INTERNAL_DIR);
 $tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.SS.POLL_DIR.SS);
+
 
 /**************************************  SECURITY  *******************************************/
 
@@ -129,7 +131,7 @@ switch($action) {
  
                     $xml = $tpl->fetch('poll/graphic_poll.tpl');
 
-                    $file =  MEDIA_PATH.'/polls/'.$poll_id.'.xml';
+                    $file =  $poll_path. $poll_id.'.xml';
                     FilesManager::mkFile($file);
 
                     FilesManager::writeInFile($file, $xml);
@@ -192,7 +194,7 @@ switch($action) {
 
             $xml = $tpl->fetch('poll/graphic_poll.tpl');
 
-            $file =  MEDIA_PATH.'/polls/'.$poll_id.'.xml';
+            $file =  $poll_path.$poll_id.'.xml';
             FilesManager::mkFile($file);
             FilesManager::writeInFile($file, $xml);
 
