@@ -24,7 +24,7 @@ $ccm = ContentCategoryManager::get_instance();
 */
 
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if(empty($category)) {
+if(empty($category_name)) {
     $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
 }
 if(empty($category_name)) {
@@ -33,12 +33,15 @@ if(empty($category_name)) {
     list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $contentType);
     $category_name = $categoryData[0]->name;
     $category = $categoryData[0]->pk_content_category;
+}else{
+     $category = $ccm->get_id($category_name);
+ 
 }
+
 $actual_category = $category_name;
 
 
-$tpl->assign(array( 'category'=>$category ,
-                    'category_name'=>$category_name , ) );
+$tpl->assign(array( 'category_name'=>$category_name , ) );
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
@@ -51,8 +54,11 @@ $tpl->assign(array( 'category'=>$category ,
 //TODO: widget others polls
 
 $poll_path = MEDIA_PATH . DIRECTORY_SEPARATOR . MEDIA_DIR . DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
-$tpl->assign('chartPolls', MEDIA_URL.SS.INTERNAL_DIR);
-$tpl->assign('xmlDirPolls', MEDIA_URL.SS.MEDIA_DIR.SS.POLL_DIR.SS);
+
+$tpl->assign(array ('chartPolls'  => MEDIA_URL.SS.INTERNAL_DIR ,
+                    'xmlDirPolls' => MEDIA_URL.SS.MEDIA_DIR.SS.POLL_DIR.SS,
+                    'poll_path'   => $poll_path,
+            ) );
 
 
 /**************************************  SECURITY  *******************************************/
@@ -82,7 +88,7 @@ switch($action) {
                                             'ORDER BY created DESC LIMIT 0,5');
            
              $tpl->assign('polls', $polls);
-
+              
  
         }
  

@@ -79,6 +79,17 @@
                                      </td>
                                  </tr>
                                  <tr>
+                                    <td valign="top"  align="right" style="padding:4px;" >
+                                        <label for="title">{t}Allow comments:{/t}</label>
+                                    </td>
+                                    <td valign="top" style="padding:4px;" >
+                                        <select name="with_comment" id="with_comment" class="required">
+                                            <option value="0"  {if $poll->with_comment eq 0} selected {/if}>{t}No{/t}</option>
+                                            <option value="1" {if $poll->with_comment eq 1} selected {/if}>{t}Yes{/t}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                 <tr>
                                      <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
                                          <label for="title"> Sección: </label>
                                      </td>
