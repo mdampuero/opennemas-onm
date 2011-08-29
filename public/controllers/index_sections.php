@@ -76,15 +76,23 @@ $tpl->assign('categories_styles', $styles);
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-/* new menu*/
-if (preg_match('/videos\.php/', $_SERVER['SCRIPT_NAME'])) {
-    $menuFrontpage= Menu::renderMenu('video');
-    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+/* TODO: a mejorar*/
 
-} elseif (preg_match('/gallery\.php/', $_SERVER['SCRIPT_NAME'])) {
-    $menuFrontpage= Menu::renderMenu('album');
-    $tpl->assign('menuFrontpage',$menuFrontpage->items);
-}else{
-    $menuFrontpage= Menu::renderMenu('frontpage');
-    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+$frontpages = array('video'=>'/videos.php/', 
+                    'album'=>'/album.php/',
+                    'opinion'=>'/opinion_inner.php/',
+                    'opinion'=>'/opinion_index.php/',
+                    'frontpage'=>'/index.php/');
+
+foreach($frontpages as $name=>$pattern) {
+
+    if (preg_match($pattern, $_SERVER['SCRIPT_NAME'])) {
+        $menuFrontpage= Menu::renderMenu($name);
+    }
 }
+
+if (!isset($menuFrontpage) || empty($menuFrontpage->items)) {
+    $menuFrontpage= Menu::renderMenu('frontpage');
+}
+
+$tpl->assign('menuFrontpage',$menuFrontpage->items);

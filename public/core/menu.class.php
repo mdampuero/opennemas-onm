@@ -122,7 +122,13 @@ class Menu
         $config = array('pk_father'=> $data['pk_father']);
 
         MenuItems::setMenu($data['id'], $data['items'], $config);
+        if(!empty($data['forDelete'])){
+            $forDelete = explode(',', $data['forDelete']);
+            array_shift($forDelete); //first is empty FIXME
+            MenuItems::deleteItems($forDelete);
 
+        }
+    
         return true;
     }
 

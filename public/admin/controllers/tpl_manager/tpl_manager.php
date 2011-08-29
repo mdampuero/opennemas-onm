@@ -115,6 +115,7 @@ function buildFilter()
                         'articles' => 'article\.tpl\.php$',
                         'rss' => '\^RSS[0-9]*\^',
                         'mobilepages' => 'frontpage-mobile\.tpl\.php$',
+                        'poll' => 'poll\.tpl\.php$',
                         'video-frontpage' => 'video_frontpage\.tpl\.php$',
                         'video-inner' => 'video_inner\.tpl\.php$'
                     );
@@ -136,7 +137,7 @@ function buildFilter()
     if(!empty($filter)) {
         $filter = '@'.$filter.'@';
     }
-
+ 
     // return $filter and URI $params
     return array( $filter, implode('&', $params), $page, $items_page);
 }
@@ -270,7 +271,10 @@ switch($action) {
 
     case 'list':
     default: {
-        $caches = $tplManager->scan($filter);
+        $caches = array();
+        
+        if(!empty($filter))
+            $caches = $tplManager->scan($filter);
 
 
         // Pager
@@ -287,7 +291,7 @@ switch($action) {
         );
         $pager = Pager::factory($pager_options);
 
-        $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
+            $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
 
         $tplManager->parseList($caches);
 

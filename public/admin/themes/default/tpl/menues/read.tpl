@@ -269,9 +269,9 @@ input[type="text"] {
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}" title="{$page}" link="{if $page neq 'frontpage'}{$page}{else}home{/if}"
+                                                    <li id="page_{$value}" title="{$page}" link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
-                                                       {t}{$page}{/t}
+                                                       {if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}
                                                     </li>
                                                 {/foreach}
                                             </ul>
@@ -329,6 +329,7 @@ input[type="text"] {
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" size="100" name="items" id="items" value="" />
         <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
+        <input type="hidden" id="forDelete" name="forDelete" value="" />
     </div><!--fin wrapper-content-->
 </form>
 {/block}
