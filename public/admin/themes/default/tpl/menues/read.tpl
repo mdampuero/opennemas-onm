@@ -269,7 +269,9 @@ input[type="text"] {
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}" title="{$page}" link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
+                                                    <li id="page_{$value}" 
+                                                        title="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
+                                                        link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
                                                        {if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}
                                                     </li>
