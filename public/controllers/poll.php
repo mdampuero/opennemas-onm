@@ -27,15 +27,31 @@ $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if(empty($category_name)) {
     $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
 }
+
+
+
+  $menuFrontpage= Menu::renderMenu('encuesta');
+  $tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+if (!empty($menuFrontpage->items) && (empty($category_name)) ) {
+    foreach ($menuFrontpage->items as  $item){
+        if(empty($category_name) && $item->type == 'category') {
+             $category_name = $item->link;
+             $category = $ccm->get_id($category_name);
+        }
+    }
+
+}
+
 if(empty($category_name)) {
     $contentType = Content::getIDContentType('poll');
     //Get first category
-    list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0, $contentType);
+    list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
     $category_name = $categoryData[0]->name;
     $category = $categoryData[0]->pk_content_category;
-}else{
+} else {
      $category = $ccm->get_id($category_name);
- 
+
 }
 
 $actual_category = $category_name;
@@ -44,11 +60,6 @@ $actual_category = $category_name;
 $tpl->assign(array( 'category_name'=>$category_name , ) );
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-
-  $menuFrontpage= Menu::renderMenu('encuesta');
-  $tpl->assign('menuFrontpage',$menuFrontpage->items);
-
 
 //TODO: define dir to save xml and charts.swf dir
 //TODO: widget others polls

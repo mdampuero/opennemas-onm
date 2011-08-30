@@ -329,7 +329,7 @@ input[type="text"] {
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" size="100" name="items" id="items" value="" />
         <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
-        <input type="hidden" id="forDelete" name="forDelete" value="" />
+        <input type="text" id="forDelete" name="forDelete" value="" />
     </div><!--fin wrapper-content-->
 </form>
 {/block}

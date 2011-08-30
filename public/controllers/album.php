@@ -23,42 +23,10 @@ $tpl = new Template(TEMPLATE_USER);
 $ccm = new ContentCategoryManager();
 
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
-if (is_null($category_name)) {
-
-	$the_categorys = $ccm->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, inmenu DESC, posmenu ASC LIMIT 0,6');
-
-	foreach($the_categorys as $categ){
-	   if(!$ccm->isEmpty($categ->name)){
-		   $this_category_data = $categ;
-		   break;
-	   }
-	}
-	$category_name 	= $this_category_data->name;
-	$category_title = $this_category_data->title;
-	$category 		= $this_category_data->pk_content_category;
-
-	$_GET['category_name'] = $category_name;
-}
-
-$actual_category = $category_name;
-
-if (isset($_GET['subcategory_name'])) {
-    $subcategory_name = $_GET['subcategory_name'];
-    $actual_category = $_GET['subcategory_name'];
-
-}
+ 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 require_once ("index_sections.php");
-
-if (!isset ($_GET['subcategory_name'])) {
-    $actual_category = $_GET['category_name'];
-} else {
-    $actual_category = $_GET['subcategory_name'];
-}
-
-$tpl->assign('actual_category',$actual_category);
-$actual_category_id=$ccm->get_id($actual_category);
-$tpl->assign('actual_category_id',$actual_category_id);
+ 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //Getting articles
@@ -90,15 +58,15 @@ if (!is_null($action) ) {
 			 */
             if(($tpl->caching == 0)
 			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl',$cacheID))){
+ 
 
-				$albums = $cm->find('Album', 'fk_content_type=7 AND available=1',
+				$albums = $cm->find_by_category('Album',
+									$category, 'fk_content_type=7 AND available=1',
                                     'ORDER BY  created DESC LIMIT 2');
-
-
-
+ 
 				foreach ($albums as &$album) {
 					//TODO: mirar porque no sale esto de DB
-					$album->category_name = 'generic';
+					$album->category_name = $category_name;
 				}
 
 				$tpl->assign('albums', $albums);
