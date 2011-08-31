@@ -68,7 +68,7 @@ switch ($action) {
         ) {
 
             $videosSettings = s::get('video_settings');
-            $totalVideosFrontpage = $videosSettings['total_front'];
+            $totalVideosFrontpage = $videosSettings['total_front'] ?: 2;
 
             $videos = $cm->find_all(
                 'Video',
