@@ -3,6 +3,7 @@
  * Start up and setup the app
  */
 require_once ('../bootstrap.php');
+use \Onm\Settings as s;
 
 /**
  * Setup view
@@ -65,10 +66,14 @@ switch ($action) {
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
+
+            $videosSettings = s::get('video_settings');
+            $totalVideosFrontpage = $videosSettings['total_front'];
+
             $videos = $cm->find_all(
                 'Video',
                 'available=1 AND `contents_categories`.`pk_fk_content_category` ='
-                . $actual_category_id . '', 'ORDER BY created DESC LIMIT 0, 6'
+                . $actual_category_id . '', 'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
             );
 
             if (count($videos) > 0) {
@@ -193,41 +198,33 @@ switch ($action) {
     break;
 
     case 'videos_incategory':
+
         $video = NULL;
 
+        $items_page = 6;
         if ($_GET['page'] > 0) {
             $page = $_GET['page'];
         } else {
             $page = 1;
         }
         $category = $_GET['category'];
-        $items_page = 6;
+
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
         $cm = new ContentManager();
-        $videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $category . '', 'ORDER BY created DESC ' . $_limit);
+        $videos = $cm->find_all(
+            'Video',
+            'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $category . '',
+            'ORDER BY created DESC ' . $_limit
+        );
 
         if (count($videos) > 0) {
             foreach ($videos as $video) {
-
-                //miramos el fuente youtube o vimeo
-
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         } else {
             $page = 1;
-            Application::forward('/videos.php?action=videos_incategory&category=' . $category . '&page=1');
+            Application::forward('/controllers/videos.php?action=videos_incategory&category=' . $category . '&page=1');
         }
         $tpl->assign('videos', $videos);
         $tpl->assign('page', $page);
@@ -252,24 +249,14 @@ switch ($action) {
         $items_page = 3;
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
         $cm = new ContentManager();
-        $others_videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $category . '', 'ORDER BY created DESC ' . $_limit);
+        $others_videos = $cm->find_all(
+            'Video',
+            'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $category . '',
+            'ORDER BY created DESC ' . $_limit
+        );
 
         if (count($others_videos) > 0) {
             foreach ($others_videos as $video) {
-
-                //miramos el fuente youtube o vimeo
-
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -280,7 +267,7 @@ switch ($action) {
         $tpl->assign('page', $page);
         $tpl->assign('category', $category);
         $tpl->assign('total_more', '4');
-        $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
+        $html = $tpl->fetch('video/partials/_widget_video_more_interesting.tpl');
         echo $html;
         exit(0);
     break;
