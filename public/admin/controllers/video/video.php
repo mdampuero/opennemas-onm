@@ -25,7 +25,7 @@ Acl::checkOrForward('VIDEO_ADMIN');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Video Management');
- 
+
 //Testing Panorama
 set_include_path(get_include_path(). PATH_SEPARATOR. SITE_LIBS_PATH.DIRECTORY_SEPARATOR.'Panorama');
 require_once(implode(DIRECTORY_SEPARATOR, array('Zend','Gdata','YouTube.php')));
@@ -88,8 +88,11 @@ switch ($action) {
             }
 
         } else {
-            $videos = $cm->find_by_category('Video', $category, 'fk_content_type = 9 ',
-                                            'ORDER BY created DESC '.$limit);
+            $videos = $cm->find_by_category(
+                'Video',
+                $category,
+                'fk_content_type = 9 ', 'ORDER BY created DESC '.$limit
+            );
         }
         $params = array(
             'page'=>$page, 'items'=>ITEMS_PAGE,
@@ -147,7 +150,7 @@ switch ($action) {
                     $html_out = _( "Can't get video information. Check url");
                 }
             }
-    
+
             $tpl->assign('information', $information);
             $html_out = $tpl->fetch('video/partials/_video_information.tpl');
             if (extension_loaded('apc')) {
@@ -202,13 +205,13 @@ switch ($action) {
         $_POST['information'] = json_decode($_POST['information'],true);
 
         if (!$id) {
-    
+
             Acl::checkOrForward('VIDEO_CREATE');
             $video = new Video();
 
             //Estamos creando un nuevo artículo
             if(!$video->create( $_POST )) $tpl->assign('errors', $video->errors);
-    
+
         } else {
             Acl::checkOrForward('VIDEO_UPDATE');
             $video = new Video($id);
@@ -247,7 +250,7 @@ switch ($action) {
 
         echo $msg;
         exit(0);
-       
+
     break;
 
     case 'yesdel':
@@ -278,7 +281,7 @@ switch ($action) {
     case 'change_status':
 
         Acl::checkOrForward('VIDEO_AVAILABLE');
-            
+
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         $video = new Video($id);
         //Publicar o no,
@@ -343,12 +346,12 @@ switch ($action) {
             $fields = $_REQUEST['selected_fld'];
             if (is_array($fields)) {
                 $msg = _("Next albums have relations. Delete one by one");
-    
+
                 foreach($fields as $i ) {
-                    $video = new Video($i);                        
+                    $video = new Video($i);
                     $relations=array();
-                    $relations = Related_content::get_content_relations( $i ); 
-        
+                    $relations = Related_content::get_content_relations( $i );
+
                     if(!empty($relations)){
                         $alert =1;
                         $msg .= " \"".$video->title."\", ";
@@ -362,7 +365,7 @@ switch ($action) {
                 }
             }
         }
- 
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
     break;
@@ -385,16 +388,16 @@ switch ($action) {
 
     case 'save_config':
         Acl::checkOrForward('VIDEO_SETTINGS');
-    
+
         unset($_POST['action']);
         unset($_POST['submit']);
-    
+
         foreach ($_POST as $key => $value ) {
             s::set($key, $value);
         }
-    
+
         m::add(_('Settings saved.'), m::SUCCESS);
-    
+
         $httpParams = array(
             array('action'=>'list'),
         );

@@ -153,7 +153,7 @@
 									<ul class="action-buttons">
 										{acl isAllowed="VIDEO_UPDATE"}
 										<li>
-											<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$videos[c]->id}');" title="{t}Edit{/t}" >
+											<a href="{$smarty.server.PHP_SELF}?action=read&id={$videos[c]->id}" title="{t}Edit{/t}" >
 												<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 										</li>
 										{/acl}
