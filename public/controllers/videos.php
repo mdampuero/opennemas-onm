@@ -49,6 +49,13 @@ $tpl->assign('actual_category', $actual_category);
 $actual_category_id = $ccm->get_id($actual_category);
 $tpl->assign('actual_category_id', $actual_category_id);
 
+
+
+if (!isset($menuFrontpage) || empty($menuFrontpage->items)) {
+    $menuFrontpage= Menu::renderMenu('video');
+}
+$tpl->assign('menuFrontpage',$menuFrontpage->items);
+
 /**
  * Getting request params
  */

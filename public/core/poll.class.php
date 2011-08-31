@@ -31,6 +31,34 @@ class Poll extends Content {
         $this->content_type = 'Poll';
     }
 
+
+	public function __get($name) {
+
+        switch ($name) {
+            case 'uri': {
+  
+				$uri =  Uri::generate('poll',
+                            array(
+                                'id' => $this->id,
+                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'slug' => $this->slug,
+                                'category' => $this->category_name,
+                            )
+                        );
+				return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            }
+            case 'slug': {
+                return String_Utils::get_title($this->title);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+    
     function create($data) {
         //Modificamos los metadatos con los tags de cada item
         $tags = '';
@@ -39,7 +67,7 @@ class Poll extends Content {
 			$data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = String_Utils::get_tags($data['metadata']);
     	}
-
+ 
     	parent::create($data);
 
 		$i=1;

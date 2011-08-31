@@ -1173,7 +1173,7 @@ class Content
         // Ejemplo: http://urlbase.com/2008/09/29/deportes/premio/Singapur/Alonso/proclama/campeon/2008092917564334523.html
         //artigo/2008/11/18/galicia/santiago/encuentran-tambre-cadaver-santiagues-desaparecido-lunes/2008111802293425694.html
 
-        $fecha=date("Y/m/d");
+        $fecha=date("Y-m-d");
         //Miramos el type.
         $tipo = $GLOBALS['application']->conn->GetOne('SELECT title FROM `content_types` WHERE name = "'. $type.'"');
 
@@ -1196,7 +1196,7 @@ class Content
 
         //funcion quita los sencillos al titulo
         $stringutils=new String_Utils();
-        $titule=$stringutils->get_title($title);
+        $titule=strtolower($stringutils->get_title($title));
 
         // $permalink=SITE_URL ."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
         if ($tipo=="album") {
