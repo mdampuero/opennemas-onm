@@ -43,7 +43,7 @@ class TemplateCacheManager
 
         $caches = array();
         $matches = array();
-        $dirIt = new DirectoryIterator($this->cacheDir);
+        $dirIt = new DirectoryIterator($this->_cacheDir);
         foreach ($dirIt as $item) {
 
             if ($item->isDot()) {
