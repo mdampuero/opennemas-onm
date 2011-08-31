@@ -233,7 +233,7 @@ switch ($action) {
         $tpl->assign('page', $page);
         $tpl->assign('category', $category);
         $tpl->assign('total_incategory', '9');
-        $html = $tpl->fetch('video/widget_video_incategory.tpl');
+        $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
         echo $html;
         exit(0);
 
@@ -280,7 +280,7 @@ switch ($action) {
         $tpl->assign('page', $page);
         $tpl->assign('category', $category);
         $tpl->assign('total_more', '4');
-        $html = $tpl->fetch('video/widget_video_more.tpl');
+        $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
         echo $html;
         exit(0);
     break;
