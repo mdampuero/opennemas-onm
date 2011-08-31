@@ -87,7 +87,11 @@ switch ($action) {
                 }
             }
 
-            $others_videos = $cm->find_all('Video', 'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $actual_category_id . '', 'ORDER BY created DESC LIMIT 0, 3');
+            $others_videos = $cm->find_all(
+                'Video',
+                'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $actual_category_id . '',
+                'ORDER BY created DESC LIMIT 0, 3'
+            );
             foreach ($others_videos as &$video) {
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
@@ -96,7 +100,6 @@ switch ($action) {
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);
             $tpl->assign('page', '1');
-            require_once ('widget_videos_lastest.php');
         }
 
         // Get last comments to show in video frontpage
