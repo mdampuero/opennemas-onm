@@ -94,6 +94,10 @@ submitForm = function() {
         <tr class="widget-content">
             <td valign="top" align="right" style="padding:4px;">
                 <label>{t}Content{/t}:</label>
+                {if isset($widget) && $widget->renderlet == 'html'}
+                <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('widget_content');return false;" href="#">
+                    <img border="0" alt="" src="http://www.retrincos.info/admin/themes/default/images//users_edit.png"></a>
+                {/if}
             </td>
             <td>
                 <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
@@ -112,12 +116,11 @@ submitForm = function() {
 </form>
 <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
 <script type="text/javascript" language="javascript">
+{if isset($widget) && $widget->renderlet == 'html'}
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-        OpenNeMas.tinyMceConfig.simple.elements = "description";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
 
         OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
         tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+{/if}
 </script>
 {/block}
