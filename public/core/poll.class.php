@@ -32,11 +32,12 @@ class Poll extends Content {
     }
 
 
-	public function __get($name) {
+	public function __get($name)
+    {
 
         switch ($name) {
             case 'uri': {
-  
+
 				$uri =  Uri::generate('poll',
                             array(
                                 'id' => $this->id,
@@ -58,7 +59,7 @@ class Poll extends Content {
             }
         }
     }
-    
+
     function create($data) {
         //Modificamos los metadatos con los tags de cada item
         $tags = '';
@@ -67,7 +68,7 @@ class Poll extends Content {
 			$data['metadata'] = $data['metadata'].','.$tags;
             $data['metadata'] = String_Utils::get_tags($data['metadata']);
     	}
- 
+
     	parent::create($data);
 
 		$i=1;

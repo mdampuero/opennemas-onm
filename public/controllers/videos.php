@@ -131,33 +131,35 @@ switch ($action) {
 
         if (isset($videoID) && !empty($videoID)) {
             $videos = $cm->find('Video', 'available=1 and pk_content !=' . $videoID, 'ORDER BY created DESC LIMIT 0 , 2');
-            $thisvideo = new Video($videoID);
+            $video = new Video($videoID);
             $tpl->assign('contentId', $videoID); // Used on module_comments.tpl
 
 
         } else {
             $videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 2');
-            $thisvideo = array_shift($videos); //Extrae el primero
+            $video = array_shift($videos); //Extrae el primero
 
 
         }
-        $cacheID = $tpl->generateCacheId($actual_category, $subcategory_name, $thisvideo->id);
+        $cacheID = $tpl->generateCacheId($actual_category, '', $video->id);
         /**
          * Fetch comments for this opinion
          */
-        $tpl->assign('contentId', $thisvideo->id);
+        $tpl->assign('contentId', $video->id);
 
         # If is not cached process this action
 
-        if (($tpl->caching == 0) || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])) {
-            $category = $thisvideo->category;
+        if (($tpl->caching == 0)
+            || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])
+        ) {
 
-            //$thisvideo->setNumViews();
-            Content::setNumViews($thisvideo->id);
-            $thisvideo->category_name = $thisvideo->loadCategoryName($thisvideo->id);
-            $thisvideo->category_title = $thisvideo->loadCategoryTitle($thisvideo->id);
+            $category = $video->category;
+
+            Content::setNumViews($video->id);
+            $video->category_name = $video->loadCategoryName($video->id);
+            $video->category_title = $video->loadCategoryTitle($video->id);
             $tpl->assign('category', $category);
-            $tpl->assign('category_name', $thisvideo->category_name);
+            $tpl->assign('category_name', $video->category_name);
             foreach ($videos as $video) {
 
                 if ($video->author_name == 'vimeo') {
@@ -192,12 +194,11 @@ switch ($action) {
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
             $tpl->assign('contentId', $videoID);
-            $tpl->assign('video', $thisvideo);
+            $tpl->assign('video', $video);
             $tpl->assign('videos', $videos);
             $tpl->assign('others_videos', $others_videos);
             $tpl->assign('action', 'inner');
             require_once ("video_inner_advertisement.php");
-            require_once ('widget_videos_lastest.php');
         } //end iscached
 
         $tpl->display('video/video_inner.tpl', $cacheID);
