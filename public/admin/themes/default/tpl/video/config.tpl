@@ -13,8 +13,11 @@
     }
     .form-wrapper {
         margin:10px auto;
-        width:50%;
+        width:90%;
     }
+     .help-block {
+        max-width: 300px;
+     }
     </style>
 {/block}
 
@@ -64,6 +67,18 @@
                             </div>
                             <br />
                              
+                        </div>
+                    </td>
+                    <td> <br/>
+                        <div class="help-block">
+								<div class="title"><h4>Definition values</h4></div>
+                                <div class="content">
+                                    <ul>
+                                        <li>{t} Use  total in widget home for define how many videos can see in widgets in newspaper frontpage{/t}</li>
+                                        <li> {t} Use  total in video frontpage column for define how many videos can see in the column left in video frontpage categories{/t}</li>
+                                        <li> {t} Use  Total in video gallery for define how many videos can see in the gallery when you edit or create one article{/t}</li>
+                                    </ul>
+                                </div>
                         </div>
                     </td>
                 </tr>

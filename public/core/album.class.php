@@ -138,10 +138,10 @@ class Album extends Content
         if (isset($data['ordenAlbum'])) {
             $tok = strtok($data['ordenAlbum'], "++");
             $pos=1;
-            $album=new Album_photo();
+            $albumPhoto=new Album_photo();
             while (($tok !== false) AND ($tok !=" ")) {
                     $infor=explode("::", $tok);
-                    $album->create($this->id, $infor[0], $pos, $infor[1]);
+                    $albumPhoto->create($this->id, $infor[0], $pos, $infor[1]);
 
                     $tok = strtok("++");
                     $pos++;

@@ -85,7 +85,7 @@ if (!is_null($action) ) {
         case 'show':
 
 			$albumID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
-
+ 
 			/**
 			 * Redirect to album frontpage if id_album wasn't provided
 			 */

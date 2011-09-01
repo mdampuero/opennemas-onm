@@ -13,7 +13,10 @@
     }
     .form-wrapper {
         margin:10px auto;
-        width:50%;
+        width:90%;
+    }
+    .help-block {
+        max-width: 300px;
     }
     </style>
 {/block}
@@ -47,15 +50,15 @@
             <table class="adminform" border="0">
                 <tr>
                     <td>
-                        <div class="form-wrapper">                           
-                            <div>
-                                <label for="album[total_front]">{t}Total in album frontpage:{/t}</label>
-                                <input type="text" class="required" id="name" name="album_settings[total_front]" value="{$configs['album_settings']['total_front']|default:"2"}" />
-                            </div>
-                            <br />
+                        <div class="form-wrapper">                                                     
                             <div>
                                 <label for="album[total_widget]">{t}Total in widget home:{/t}</label>
                                 <input type="text" class="required" name="album_settings[total_widget]" value="{$configs['album_settings']['total_widget']|default:"4"}" />
+                            </div>
+                            <br />
+                            <div>
+                                <label for="album[total_front]">{t}Total in album frontpage:{/t}</label>
+                                <input type="text" class="required" id="name" name="album_settings[total_front]" value="{$configs['album_settings']['total_front']|default:"2"}" />
                             </div>
                             <br />
                             <div>
@@ -69,6 +72,19 @@
                             </div>
                             <br />
                              
+                        </div>
+                    </td>
+                    <td> <br/>
+                        <div class="help-block">
+								<div class="title"><h4>Definition values</h4></div>
+                                <div class="content">
+                                    <ul>
+                                        <li>{t} Use  total in widget album for define how many videos can see in widgets in newspaper frontpage{/t}</li>
+                                        <li>{t} Use  total in album frontpage column for define how many albums can see in the  frontpage albums{/t}</li>
+                                        <li>{t} Cover width in widget album  define image width for crop the cover used in widgets{/t}</li>
+                                        <li>{t} Cover height in widget album  define image height for crop the cover used in widgets{/t}</li>
+                                    </ul>
+                                </div>
                         </div>
                     </td>
                 </tr>

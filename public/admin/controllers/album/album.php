@@ -85,7 +85,7 @@ switch($action) {
 
         } else {
             $albums = $cm->find_by_category('Album', $category, 'fk_content_type=7',
-                           'ORDER BY created '.$limit);
+                           'ORDER BY created DESC '.$limit);
         }
 
         $params = array(

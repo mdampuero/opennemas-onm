@@ -490,8 +490,10 @@ class Content
             // INFO: Se ven como propiedade pk_fk_content_category despois evítase unha consulta
             $this->category = $this->pk_fk_content_category;
         }
-
-        //$this->category_name = $this->loadCategoryName($this->pk_content);
+        
+        $ccm = ContentCategoryManager::get_instance();
+        $this->category_name = $ccm->get_name($this->category);
+         
     }
 
     /**
@@ -1196,7 +1198,7 @@ class Content
 
         //funcion quita los sencillos al titulo
         $stringutils=new String_Utils();
-        $titule=strtolower($stringutils->get_title($title));
+        $titule = mb_strtolower($stringutils->get_title($title));
 
         // $permalink=SITE_URL ."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
         if ($tipo=="album") {

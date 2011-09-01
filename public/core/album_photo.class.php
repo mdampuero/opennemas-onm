@@ -47,8 +47,8 @@ class Album_photo
     public function create($albumID, $photoID, $position, $description)
     {
 
-        $sql = "INSERT INTO albums_photos '
-                .'(`pk_album`, `pk_photo`, `position`, `description`) "
+        $sql = "INSERT INTO albums_photos "
+                ."(`pk_album`, `pk_photo`, `position`, `description`) "
                 ." VALUES (?,?,?,?)";
 
         $values = array($albumID, $photoID, $position, $description);
