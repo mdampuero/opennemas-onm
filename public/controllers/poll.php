@@ -191,7 +191,7 @@ switch($action) {
             }
             if (isset($_POST['respEncuesta'])
                     && !empty($_POST['respEncuesta'])
-                    /* && !isset($_COOKIE[$cookie])*/ ) {
+                     && !isset($_COOKIE[$cookie]) ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
                // $poll=new Poll($_REQUEST['id']);
                 $poll->vote($_POST['respEncuesta'],$ip);

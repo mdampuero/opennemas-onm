@@ -11,7 +11,7 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
+ * @author     Sandra Pereira <sandra@openhost.es>
  **/
 class Poll extends Content {
     var $pk_poll = NULL;
@@ -50,14 +50,13 @@ class Poll extends Content {
 
                 break;
             }
-            case 'slug': {
-                return String_Utils::get_title($this->title);
-                break;
-            }
+
             default: {
                 break;
             }
         }
+        
+        return parent::__get($name);
     }
 
     function create($data) {

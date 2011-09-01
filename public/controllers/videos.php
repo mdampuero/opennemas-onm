@@ -50,7 +50,7 @@ $actual_category_id = $ccm->get_id($actual_category);
 $tpl->assign('actual_category_id', $actual_category_id);
 
 
-
+$tpl->assign('category_name', $category_name);
 if (!isset($menuFrontpage) || empty($menuFrontpage->items)) {
     $menuFrontpage= Menu::renderMenu('video');
 }
