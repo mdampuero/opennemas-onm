@@ -6,7 +6,7 @@ html{
 	min-height:100%
 }
 body {
-	font-size:12px;	
+	font-size:12px;
 	background:none;
 	width:100%;
 	margin:0;
@@ -518,7 +518,7 @@ a.unpublishing:hover {
 	text-decoration:none;
 }
 #user_mailbox img {
-	
+
 }
 
 
@@ -880,7 +880,7 @@ table.aa tr td {
     right: 0;
     overflow: visible;
 	z-index:99;
-	
+
 	background: #222;
     background-color: #222222;
     background-repeat: repeat-x;
@@ -894,7 +894,7 @@ table.aa tr td {
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-}	
+}
 
 	#topbar-admin div.info-left {
 		position:absolute;
@@ -1199,7 +1199,7 @@ ul#menu  ul {
 	list-style: none;
 	display: none;
 	position: absolute;
-	top: 38px;
+	top: 37px;
 	left: 0px;
 	background-color: #333;
 	-webkit-border-radius: 0 0 5px 5px;
@@ -1252,16 +1252,16 @@ ul#menu > li > a {
 		text-decoration: none;
 		background-color: rgba(255, 255, 255, 0.1);
 		color: #FFFFFF;
-		-webkit-transition:background 0.07s linear;  
-		-moz-transition:background 0.07s linear;  
-		-o-transition:background 0.07s linear;  
-		transition:background 0.07s linear;  
+		-webkit-transition:background 0.07s linear;
+		-moz-transition:background 0.07s linear;
+		-o-transition:background 0.07s linear;
+		transition:background 0.07s linear;
 	}
 ul#menu ul > li > a {
 	min-width: 180px;
 	width:180px;
 	display:block;
-	
+
 }
 ul#menu > li:hover {
 }
@@ -1614,7 +1614,7 @@ div.ui-blocker {
 	position: fixed;
 	right: 0;
 	top: 0;
-	z-index:100000;
+	z-index:9999;
 }
 
 div.ui-blocker-message {
@@ -1701,7 +1701,7 @@ div.action-bar .right{
 				top:5px;
 				left:5px;
 			}
-			
+
 		#media-browser .photo-data {
 			background:#4787ED;
 			background: #005991; /* for non-css3 browsers */
@@ -1733,7 +1733,7 @@ div.action-bar .right{
 					#media-browser .photo-data img {
 						vertical-align:middle;
 					}
-			
+
 			#media-browser .photo-data .actions {
 				margin:8px;
 				text-align:right;
@@ -1757,8 +1757,8 @@ div.action-bar .right{
 		#media-browser .photo-hovered {
 			z-index:999;
 		}
-		
-		
+
+
 /* -------------------------------------------------------------
   Experimental User box
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1776,10 +1776,10 @@ div.action-bar .right{
 }
 
 #user_box > ul > li > a:hover {
-	-webkit-transition:background 0.07s linear;  
-	-moz-transition:background 0.07s linear;  
-	-o-transition:background 0.07s linear;  
-	transition:background 0.07s linear;  
+	-webkit-transition:background 0.07s linear;
+	-moz-transition:background 0.07s linear;
+	-o-transition:background 0.07s linear;
+	transition:background 0.07s linear;
 }
 #user_box *{
 	vertical-align:middle;

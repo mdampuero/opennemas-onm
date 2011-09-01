@@ -139,7 +139,7 @@ Deny from all
     RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
-    RewriteRule ^video/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$4 [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6 [L,NC]
 
     #Polls
     #encuesta/deportes/2011-08-24/quien-gana-la-liga-2012/2011082410083600163.html
