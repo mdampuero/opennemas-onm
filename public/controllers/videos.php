@@ -123,7 +123,7 @@ switch ($action) {
 
     case 'inner':
 
-        $videoID =filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
+        $videoID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
 
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId($actual_category, '', $videoID);
