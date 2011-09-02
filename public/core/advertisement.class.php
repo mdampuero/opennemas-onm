@@ -93,7 +93,7 @@ class Advertisement extends Content
         310 => "[VI] Banner Inferior Derecho",
 
         /* Intersticial banner album front */
-        450 => "[V] Banner Interticial",
+        450 => "[A] Banner Interticial",
 
         /* Albums Front banners > 400 */
         401 => "[A] Big banner superior",
@@ -108,15 +108,45 @@ class Advertisement extends Content
         /* Intersticial banner album inner */
         550 => "[AI] Banner Interticial",
 
-        /* Video Interior banners > 500 */
+        /* Album Interior banners > 500 */
         501 => "[AI] Big banner superior",
         502 => "[AI] Banner superior Derecho",
 
-        503 => "[AI] Banner Video Button",
+        503 => "[AI] Banner Columna Derecha",
 
         509 => "[AI] Big Banner Inferior",
         510 => "[AI] Banner Inferior Derecho",
 
+         /* Intersticial banner polls front */
+        650 => "[E] Banner Interticial",
+        
+        /* Polls Front banners > 600 */
+        601 => "[E] Big banner superior",
+        602 => "[E] Banner superior derecho",
+
+        603 => "[E] Banner1 Column Right",
+        605 => "[E] Banner1 2Column Right",
+
+        609 => "[E] Big Banner Inferior",
+        610 => "[E] Banner Inferior Derecho",
+
+        /* Intersticial banner album inner */
+        750 => "[EI] Banner Interticial",
+
+        /* Polls  Interior banners > 700 */
+        701 => "[EI] Big banner superior",
+        702 => "[EI] Banner superior Derecho",
+
+        703 => "[EI] Banner Columna Derecha",
+
+        709 => "[EI] Big Banner Inferior",
+        710 => "[EI] Banner Inferior Derecho",
+
+         /* Bulletin  > 800 */
+        801 => "[B] Big banner superior",
+        
+        809 => "[B] Big Banner Inferior",
+        
     );
 
     /**

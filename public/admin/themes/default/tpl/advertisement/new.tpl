@@ -355,6 +355,13 @@
                             <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
                             <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
                             {/is_module_activated}
+                            {is_module_activated name="POLL_MANAGER"}
+                            <li><a href="#publi-poll">{t}Poll{/t}</a></li>
+                            <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
+                            {/is_module_activated}
+                            {is_module_activated name="NEWSLETTER_MANAGER"}
+                            <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
+                            {/is_module_activated}
                         </ul>
 
                         <div id="publi-portada" class="panel-ads">
@@ -387,6 +394,20 @@
                         <div id="publi-gallery-inner" class="panel-ads">
                             {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                         </div>
+                        {/is_module_activated}
+                        {is_module_activated name="POLL_MANAGER"}
+                        <div id="publi-poll" class="panel-ads">
+                            {include file="advertisement/partials/advertisement_positions_poll.tpl"}
+                        </div>
+                        <div id="publi-poll-inner" class="panel-ads">
+                            {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                        </div>
+                        {/is_module_activated}
+                        {is_module_activated name="NEWSLETTER_MANAGER"}
+                        <div id="publi-newsletter" class="panel-ads">
+                            {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                        </div>
+
                         {/is_module_activated}
 
                     </td>
@@ -440,12 +461,14 @@
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none'});
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none'});
                         this.changePropertyTabs('a[href$=publi-gallery], a[href$=publi-gallery-inner]', { display: 'none' });
+                        this.changePropertyTabs('a[href$=publi-poll],a[href$=publi-gallery-poll]', { display: 'none' });
 
                      } else {
                         this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: '' });
                         this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: '' });
                         this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
                         this.changePropertyTabs('a[href$=publi-gallery],a[href$=publi-gallery-inner]', { display: '' });
+                        this.changePropertyTabs('a[href$=publi-poll],a[href$=publi-gallery-poll]', { display: '' });
                     }
 
 

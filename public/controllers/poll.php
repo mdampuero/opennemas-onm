@@ -102,7 +102,8 @@ switch($action) {
               
  
         }
- 
+        require_once('poll_advertisement.php');
+        
         $tpl->display('poll/poll_frontpage.tpl', $cacheID);
 
     break;
@@ -156,6 +157,7 @@ switch($action) {
 
                 } // end if $tpl->is_cached
 
+                  require_once('poll_inner_advertisement.php');
 
                 $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
 
@@ -164,8 +166,7 @@ switch($action) {
             }
 
             /************* COLUMN-LAST *******************************/
-            require_once('index_advertisement.php');
-
+          
             require_once("widget_static_pages.php");
          } else {
             Application::forward301('/404.html');
@@ -224,6 +225,8 @@ switch($action) {
             $poll->setNumViews($poll_id);
 
             $cacheID= $tpl->generateCacheId($category_name, $poll_id );
+
+            require_once('poll_inner_advertisement.php');
               
             $tpl->display('poll/poll.tpl', $cacheID);
         }
