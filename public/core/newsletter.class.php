@@ -27,10 +27,10 @@ class Newsletter
     public function __construct($config)
     {
       $this->setup($config['namespace']);
- /* 
+
         if(!$this->schema_exists()) {
             $this->setupDatabaseTable();
-        }*/
+        } 
     }
 
     public function setup($namespace)
