@@ -65,11 +65,11 @@ $action = filter_input(
 );
 
 switch ($action) {
+
     case 'list':
-        $cacheID = $tpl->generateCacheId($actual_category, null, '');
 
         # If is not cached process this action
-
+        $cacheID = $tpl->generateCacheId($actual_category, null, '');
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
@@ -90,9 +90,7 @@ switch ($action) {
                 }
             } else {
 
-                if (isset($subcategory_name)
-                    && !empty($subcategory_name)
-                ) {
+                if (isset($subcategory_name) && !empty($subcategory_name)) {
                     Application::forward301('/video/' . $category_name . '/');
                 } else {
                     Application::forward301('/video/');
@@ -125,82 +123,36 @@ switch ($action) {
 
     case 'inner':
 
-        $video = NULL;
-        $cm = new ContentManager();
-        $videoID = $_REQUEST['id'];
-
-        if (isset($videoID) && !empty($videoID)) {
-            $videos = $cm->find('Video', 'available=1 and pk_content !=' . $videoID, 'ORDER BY created DESC LIMIT 0 , 2');
-            $video = new Video($videoID);
-            $tpl->assign('contentId', $videoID); // Used on module_comments.tpl
-
-
-        } else {
-            $videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0 , 2');
-            $video = array_shift($videos); //Extrae el primero
-
-
-        }
-        $cacheID = $tpl->generateCacheId($actual_category, '', $video->id);
-        /**
-         * Fetch comments for this opinion
-         */
-        $tpl->assign('contentId', $video->id);
+        $videoID =filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
 
         # If is not cached process this action
-
+        $cacheID = $tpl->generateCacheId($actual_category, '', $videoID);
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])
         ) {
 
+            $video = new Video($videoID);
+            $tpl->assign('contentId', $videoID); // Used on module_comments.tpl
             $category = $video->category;
 
             Content::setNumViews($video->id);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
-            $tpl->assign('category', $category);
-            $tpl->assign('category_name', $video->category_name);
-            foreach ($videos as $video) {
-
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-            $others_videos = $cm->find('Video', 'available=1', 'ORDER BY created DESC LIMIT 0, 3');
-            foreach ($others_videos as $video) {
-
-                if ($video->author_name == 'vimeo') {
-                    $url = "  http://vimeo.com/api/v2/video/'.$video->videoid.'.php";
-                    $curl = curl_init('http://vimeo.com/api/v2/video/' . $video->videoid . '.php');
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_TIMEOUT, 50);
-                    $return = curl_exec($curl);
-                    $return = unserialize($return);
-                    curl_close($curl);
-                    $video->thumbnail_medium = $return[0]['thumbnail_medium'];
-                    $video->thumbnail_small = $return[0]['thumbnail_small'];
-                }
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-            $tpl->assign('contentId', $videoID);
-            $tpl->assign('video', $video);
-            $tpl->assign('videos', $videos);
-            $tpl->assign('others_videos', $others_videos);
-            $tpl->assign('action', 'inner');
+            $tpl->assign(array(
+                'category' => $category,
+                'category_name' => $video->category_name,
+                'contentId' => $videoID,
+                'video' => $video,
+                'action' => 'inner',
+            ));
             require_once ("video_inner_advertisement.php");
+
         } //end iscached
 
+        //Fetch comments for this opinion
+        $tpl->assign('contentId', $videoID);
+
+        Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
 
     break;

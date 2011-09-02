@@ -114,6 +114,7 @@ class ModuleManager {
                 'USER_MANAGER',
                 'VIDEO_MANAGER',
                 'WIDGET_MANAGER',
+                'LOG_SQL',
 
             );
         }

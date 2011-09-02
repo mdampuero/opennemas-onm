@@ -206,6 +206,11 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/updatesystem/index.php"
             privilege="BACKEND_ADMIN" />
         <node
+            module_name="LOG_SQL"
+            title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
+            link="controllers/system_information/sql_error_log.php"
+            privilege="BACKEND_ADMIN" />
+        <node
             module_name="MYSQL_MANAGER"
             title="'.htmlspecialchars(_("Database Manager"), ENT_QUOTES).'"
             link="controllers/system_information/system_information.php?action=mysql_check"
