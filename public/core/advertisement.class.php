@@ -769,8 +769,8 @@ class Advertisement extends Content
      * @return mixed
      **/
     public function fetch($entry)
-    {
-        return (isset($this->registry[$entry]))? $this->registry[$entry]: null;
+    {         
+        return (isset($this->_registry[$entry]))? $this->_registry[$entry]: null;
     }
 
     /**
