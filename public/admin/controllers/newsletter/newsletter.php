@@ -196,7 +196,7 @@ switch($action) {
      * Step 4: preview the message
      */
     case 'preview':
-
+ 
         $htmlContent = $newsletter->render();
         $tpl->assign('htmlContent', $htmlContent);
         $tpl->display('newsletter/preview.tpl');

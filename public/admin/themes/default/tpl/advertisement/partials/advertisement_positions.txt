@@ -97,3 +97,25 @@ FRONTPAGE
 709 Big Banner Bottom(I) (728X90)
 710 Banner Bottom Right(I) (234X90)
 750 Banner Intersticial - Inner (800X600)
+
+ // POLL FRONT
+801 Big Banner Top (728X90)
+802 Banner Top  Right (234X90)
+803 Banner Column Right (300X*)
+805 Banner Column Right 2 (300X*)
+809 Big Banner Bottom (728X90)
+810 Banner Bottom Right (234X90)
+850 Banner Intersticial - Poll Frontpage (800X600)
+
+// POLL INNER
+901 Big Banner Top (728X90)
+902 Banner Top  Right (234X90)
+903 Banner Column Right (300X*)
+909 Big Banner Bottom (728X90)
+910 Banner Bottom Right (234X90)
+950 Banner Intersticial - Poll Frontpage (800X600)
+
+// NEWSLETTER
+1001 Big Banner Top (728X90)
+1009 Big Banner Bottom (728X90)
+

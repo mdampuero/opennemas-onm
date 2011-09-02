@@ -4,7 +4,7 @@
         <td align="right" colspan="2">
             <label>
                 Banner Intersticial - Gallery (800X600)
-                <input type="radio" name="type_advertisement" value="650" {if isset($advertisement) && $advertisement->type_advertisement == 650}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="850" {if isset($advertisement) && $advertisement->type_advertisement == 850}checked="checked" {/if}/>
             </label>
         </td>
         <td rowspan="7" align="right" width="340">
@@ -21,13 +21,13 @@
         <td align="right">
             <label>
                 Big Banner Top (728X90)
-                <input type="radio" name="type_advertisement" value="601" {if isset($advertisement) && $advertisement->type_advertisement == 601}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="801" {if isset($advertisement) && $advertisement->type_advertisement == 801}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
                 Banner Top Right (234X90)
-                <input type="radio" name="type_advertisement" value="602" {if isset($advertisement) && $advertisement->type_advertisement == 602}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="802" {if isset($advertisement) && $advertisement->type_advertisement == 802}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -40,7 +40,7 @@
         <td align="right" colspan="2">
             <label>
                 Banner1 Column Right (I) (300X*)
-                <input type="radio" name="type_advertisement" value="603" {if isset($advertisement) && $advertisement->type_advertisement == 603}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="803" {if isset($advertisement) && $advertisement->type_advertisement == 803}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -50,7 +50,7 @@
         <td height="50" align="right" colspan="2">
             <label>
                 Banner2 Column Right(II) (300X*)
-                <input type="radio" name="type_advertisement" value="605" {if isset($advertisement) && $advertisement->type_advertisement == 605}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="805" {if isset($advertisement) && $advertisement->type_advertisement == 805}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
@@ -64,13 +64,13 @@
         <td align="right">
             <label>
                 Big Banner Bottom (728X90)
-                <input type="radio" name="type_advertisement" value="609" {if isset($advertisement) && $advertisement->type_advertisement == 609}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="809" {if isset($advertisement) && $advertisement->type_advertisement == 809}checked="checked" {/if}/>
             </label>
         </td>
         <td align="right">
             <label>
                 Banner Bottom Right (234X90)
-                <input type="radio" name="type_advertisement" value="610" {if isset($advertisement) && $advertisement->type_advertisement == 610}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="810" {if isset($advertisement) && $advertisement->type_advertisement == 810}checked="checked" {/if}/>
             </label>
         </td>
     </tr>

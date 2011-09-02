@@ -26,11 +26,11 @@ class Newsletter
 
     public function __construct($config)
     {
-        $this->setup($config['namespace']);
-
+      $this->setup($config['namespace']);
+ /* 
         if(!$this->schema_exists()) {
             $this->setupDatabaseTable();
-        }
+        }*/
     }
 
     public function setup($namespace)
@@ -70,12 +70,25 @@ class Newsletter
             $i++;
         }
         $i = 0;
-        foreach ($data->opinions as $tok){
-            $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
-            $i++;
+        if (isset($data->opinions) && !empty($data->opinions)) {
+            foreach ($data->opinions as $tok){
+                $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
+                $i++;
+            }
         }
-
         $tpl->assign('data', $data);
+
+        //render menu
+        $menuFrontpage= Menu::renderMenu('frontpage');
+        $tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+        //render ads
+        $advertisement = Advertisement::getInstance();
+        $banners = $advertisement->getAdvertisements(array(1001, 1009), 0);
+        $cm = new ContentManager();
+        $banners = $cm->getInTime($banners);
+ 
+        $advertisement->render($banners, $advertisement);
 
         /*Fetch inmenu categorys*/
         $inmenu_categorys = $ccm->find('internal_category != 0 AND fk_content_category =0 AND inmenu=1', 'ORDER BY posmenu');

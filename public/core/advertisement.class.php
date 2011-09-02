@@ -117,35 +117,58 @@ class Advertisement extends Content
         509 => "[AI] Big Banner Inferior",
         510 => "[AI] Banner Inferior Derecho",
 
-         /* Intersticial banner polls front */
-        650 => "[E] Banner Interticial",
+       /* Intersticial banner opinion front */
+        650 => "[O] Banner Interticial",
         
-        /* Polls Front banners > 600 */
-        601 => "[E] Big banner superior",
-        602 => "[E] Banner superior derecho",
+        /* Opinions Front banners > 600 */
+        601 => "[O] Big banner superior",
+        602 => "[O] Banner superior derecho",
+        603 => "[O] Banner1 Column Right",
+        605 => "[O] Banner1 2Column Right",
+        609 => "[O] Big Banner Inferior",
+        610 => "[O] Banner Inferior Derecho",
 
-        603 => "[E] Banner1 Column Right",
-        605 => "[E] Banner1 2Column Right",
+        /* Intersticial banner opinion inner */
+        750 => "[OI] Banner Intersticial - Inner (800X600)",
 
-        609 => "[E] Big Banner Inferior",
-        610 => "[E] Banner Inferior Derecho",
+        /* Opinion Interior banners > 700 */
+        701 => "[OI] Big Banner Top(I) (728X90)",
+        702 => "[OI] Banner Top Right(I) (234X90)",
+        703 => "[OI] Banner1 Column Right (I) (300X*)",
+        704 => "[OI] Robapágina (650X*)",
+        705 => "[OI] Banner2 Column Right(I) (300X*)",
+        709 => "[OI] Big Banner Bottom(I) (728X90)",
+        710 => "[OI] Banner Bottom Right(I) (234X90)",
 
-        /* Intersticial banner album inner */
-        750 => "[EI] Banner Interticial",
+          /* Intersticial banner polls front */
+        850 => "[E] Banner Interticial",
 
-        /* Polls  Interior banners > 700 */
-        701 => "[EI] Big banner superior",
-        702 => "[EI] Banner superior Derecho",
+         /* Polls Front banners > 800 */
+        801 => "[E] Big banner superior",
+        802 => "[E] Banner superior derecho",
 
-        703 => "[EI] Banner Columna Derecha",
+        803 => "[E] Banner1 Column Right",
+        805 => "[E] Banner1 2Column Right",
 
-        709 => "[EI] Big Banner Inferior",
-        710 => "[EI] Banner Inferior Derecho",
+        809 => "[E] Big Banner Inferior",
+        810 => "[E] Banner Inferior Derecho",
 
-         /* Bulletin  > 800 */
-        801 => "[B] Big banner superior",
-        
-        809 => "[B] Big Banner Inferior",
+        /* Intersticial banner poll inner */
+        950 => "[EI] Banner Interticial",
+
+        /* Polls  Interior banners > 900 */
+        901 => "[EI] Big banner superior",
+        902 => "[EI] Banner superior Derecho",
+
+        903 => "[EI] Banner Columna Derecha",
+
+        909 => "[EI] Big Banner Inferior",
+        910 => "[EI] Banner Inferior Derecho",
+
+          /* Newsletter  > 1000 */
+        1001 => "[B] Big banner superior",
+
+        1009 => "[B] Big Banner Inferior",
         
     );
 
@@ -266,6 +289,7 @@ class Advertisement extends Content
 
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: -1;
+        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         $sql = "INSERT INTO advertisements (`pk_advertisement`, `type_advertisement`, `fk_content_categories`,
                                             `path`, `url`, `type_medida`, `num_clic`, `num_clic_count`,
@@ -377,6 +401,7 @@ class Advertisement extends Content
         $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
         $data['timeout'] = (isset($data['timeout']))? $data['timeout']: 0;
         $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
+        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
