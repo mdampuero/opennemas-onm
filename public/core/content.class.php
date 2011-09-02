@@ -430,7 +430,7 @@ class Content
     {
         $ccm = ContentCategoryManager::get_instance();
 
-        if (empty($this->category)) {
+        if (empty($this->category)  && !empty($pk_content)) {
             $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
             $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
             $this->category = $rs;
@@ -445,7 +445,7 @@ class Content
         $ccm = ContentCategoryManager::get_instance();
 
         $category_name = $this->category_name;
-        if (empty($this->category_name)) {
+        if (empty($this->category)  && !empty($pk_content)) {
             $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
             $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
             $this->category = $rs;
