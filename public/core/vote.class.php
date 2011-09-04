@@ -251,7 +251,7 @@ class Vote
     private function renderImg($i)
     {
 
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
+        $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $imageTpl = '<img src="%s%s.png" style="vertical-align:middle;" alt="%s" title="%s" /> ( %d ) ';
         return sprintf($imageTpl, $imgPath, ($i % 2 == 0) ? "vote-up" : "vote-down", $this->_messages[$i], $this->_messages[$i], ($i % 2 == 1) ? $this->value_pos : $this->value_neg);
     }
@@ -271,7 +271,7 @@ class Vote
      **/
     private function renderLink($i, $votePK, $value)
     {
-        $imgPath = TEMPLATE_USER_PATH_WEB . "images/utilities/";
+        $imgPath = TEMPLATE_USER_URL . "images/utilities/";
         $linkTpl = <<< LINKTPLDOC
             <a href="#votar" onclick="javascript:vote_comment('%s', '%s', '%s'); return false;" title="%s">
                 <img id="%s_%s" style="vertical-align:middle;"
