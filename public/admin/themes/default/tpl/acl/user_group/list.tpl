@@ -19,26 +19,22 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     {block name="action_buttons"}{/block}
     <div class="wrapper-content">
-
-        <table class="adminheading">
-            <tr>
-                <th nowrap></th>
-            </tr>
-        </table>
-        <table class="adminlist">
+        <table class="listing-table">
             <thead>
                 <tr>
-                <th class="title" style="text-align:left; padding-left:10px">{t}Group name{/t}</th>
-                <th class="title">{t}Actions{/t}</th>
+                    <th>{t}Group name{/t}</th>
+                    <th class="right">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
                 {section name=c loop=$user_groups}
-                <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-                    <td style="padding:10px;">
-                        {$user_groups[c]->name}
+                <tr>
+                    <td>
+                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$user_groups[c]->id}" title="{t}Edit group{/t}">
+                            {$user_groups[c]->name}
+                        </a>
                     </td>
-                    <td style="padding:10px;width:75px; text-align:center">
+                    <td class="right">
 						<ul class="action-buttons">
 							<li>
 								<a href="#" onClick="javascript:enviar(this, '_self', 'read', {$user_groups[c]->id});" title="{t}Edit group{/t}">
@@ -55,13 +51,17 @@
                 </tr>
                 {sectionelse}
                 <tr>
-                    <td align="center"><b>{t}There is no groups created yet.{/t}</b></td>
+                    <td colspa=2 class="empty">
+                        {t}There is no groups created yet.{/t}
+                    </td>
                 </tr>
                 {/section}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" align="center">{$paginacion->links|default:""}</td>
+                    <td colspan="3">
+                        {$paginacion->links|default:""}&nbsp;
+                    </td>
                 </tr>
             </tfoot>
         </table>

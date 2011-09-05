@@ -33,60 +33,63 @@
                     </label>
                 </th>
             </tr>
-        </table>
+        </table><!--.adminheading-->
 
-        <table border="0" cellpadding="8" cellspacing="0" class="adminlist">
+        <table class="listing-table">
             <thead>
                 <tr>
-                    <th align="left">{t}Privilege name{/t}</th>
-                    <th align="left"><description></description></th>
-                    <th align="left">{t}Módule{/t}</th>
-                    <th align="center">{t}Actions{/t}</th>
+                    <th>{t}Privilege name{/t}</th>
+                    <th>{t}Description{/t}</th>
+                    <th>{t}Módule{/t}</th>
+                    <th class="center" style="width:30px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody>
                 {section name=c loop=$privileges}
-                    <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-                        <td>
+                <tr>
+                    <td>
+                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
                             {$privileges[c]->name}
-                        </td>
+                        </a>
+                    </td>
 
-                        <td>
-                            {$privileges[c]->description}
-                        </td>
+                    <td>
+                        {$privileges[c]->description}
+                    </td>
 
-                        <td>
-                            {$privileges[c]->module}
-                        </td>
+                    <td>
+                        {$privileges[c]->module}
+                    </td>
 
-                        <td align="center">
-                            <ul class="action-buttons">
-								<li>
-									<a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
-										<img src="{$params.IMAGE_DIR}edit.png" border="0" />
-									</a>
-								</li>
-								<li>
-									<a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-									</a>
-								</li>
-							</ul>
-                        </td>
-                    </tr>
+                    <td class="right">
+                        <ul class="action-buttons">
+                            <li>
+                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$privileges[c]->id}" title="{t}Edit privilege{/t}">
+                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" onClick="javascript:confirmar(this, '{$privileges[c]->id}');" title="{t}Delete privilege{/t}">
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
                 {sectionelse}
-                    <tr>
-                        <td colspan="5" align="center"><b>{t}No available privileges to list here.{/t}</b></td>
-                    </tr>
+                <tr>
+                    <td colspan="5" align="center"><b>{t}No available privileges to list here.{/t}</b></td>
+                </tr>
                 {/section}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" align="center">{$paginacion->links|default:""}</td>
+                    <td colspan="5" align="center">
+                        {$paginacion->links|default:""}&nbsp;
+                    </td>
                 </tr>
             </tfoot>
-        </table>
-
+        </table> <!--.listing-table-->
 
     	<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />

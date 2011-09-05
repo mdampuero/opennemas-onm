@@ -82,19 +82,14 @@
 
 		</div>
 
-		<div id="{$category}" class="categ" style="width:100%; padding: 6px 2px;">
-
-			{* Vista en miniatura de los ficheros ***************************************************************************** *}
+        {* Vista en miniatura de los ficheros ***************************************************************************** *}
 			{if $listmode == 'weeks'}
 				<form action="{$smarty.server.SCRIPT_NAME}">
-					<table class="adminheading">
-						<tr>
-							<th nowrap>{t}Trash{/t}</th>
-						</tr>
-					</table>
-					<table class="adminlist" border=0>
+					<table class="listing-table">
 						<thead>
-							<th style="width:5%;"> </th>
+							<th style="width:5%;">
+                                <input type="checkbox" class="minput" id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo[n]->pk_photo}"  >
+                            </th>
 							<th style="width:20%;" align='left'>Nombre</th>
 							<th style="width:40%;" align='left'>Ruta</th>
 							<th style="width:10%;" >Tipo</th>
@@ -105,7 +100,7 @@
 						<tbody>
 							{section name=n loop=$photo}
 								{if $photo[n]->content_status eq 0}
-								   <tr {cycle values="class=row0,class=row1"}>
+								   <tr>
 										<td style="text-align: left;">
 											<input type="checkbox" class="minput" id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo[n]->pk_photo}"  >
 										</td>
@@ -128,12 +123,17 @@
 										</td>
 									</tr>
 								{/if}
+                            {sectionelse}
+                                <tr >
+                                    <td colspan=7 class="empty">
+                                        {t}There is no broken links.{/t}
+                                    </td>
+                                </tr>
 							{/section}
 						</tbody>
 						<tfoot>
 							<tr>
 								<td colspan="7" class="pagination">
-
 									{$paginacion->links} &nbsp;
 								</td>
 							</tr>
@@ -143,7 +143,6 @@
 				   <input type="hidden" name="listmode" value="weeks" />
 			</form>
 		{/if}
-	</div>
 
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />

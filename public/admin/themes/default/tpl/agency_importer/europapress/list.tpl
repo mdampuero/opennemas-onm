@@ -75,77 +75,79 @@
 			     <option value="*">{t}All{/t}</option>
 			     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
 			</select>
- 
+
 			<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
 			<input type="submit" value="{t}Search{/t}">
 		    </th>
 		</tr>
 	    </table>
 
-	    <table class="adminlist" border=0>
-		{if count($elements) >0}
-		<thead>
-			<tr>
-				<th  style='width:1%;' align="center">{t}Priority{/t}</th>
-				<th>{t}Title{/t}</th>
-				<th align="center" style="width:10%;">{t}Date{/t}</th>
-				<th  style='width:6%;' align="center">{t}Section{/t}</th>
-				<th  style='width:6%;' align="center">{t}Actions{/t}</th>
-			</tr>
-		</thead>
-		{/if}
+	    <table class="listing-table">
+            <thead>
+                <tr>
+                {if count($elements) >0}
+                    <th style='width:10px !important;'>{t}Priority{/t}</th>
+                    <th>{t}Title{/t}</th>
+                    <th align="center">{t}Date{/t}</th>
+                    <th>{t}Section{/t}</th>
+                    <th style="width:20px;">{t}Actions{/t}</th>
+                </tr>
+                {else}
+                <tr>
+                    <th coslpan=5>&nbsp;</th>
+                </tr>
+                {/if}
+            </thead>
 
 
-		{section name=c loop=$elements}
-		<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
+            <tbody>
+                {section name=c loop=$elements}
+                <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
-			<td align="center">
-			   <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
-			</td>
-			<td style="font-size: 12px;" onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-				<a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
-					{$elements[c]->title}
-				</a>
-			</td>
-			<td align="center">
-					{$elements[c]->created_time->getTimestamp()|relative_date}
-			</td>
+                    <td style="text-align:center;">
+                       <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
+                    </td>
+                    <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
+                        <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
+                            {$elements[c]->title}
+                        </a>
+                    </td>
+                    <td align="center">
+                            {$elements[c]->created_time->getTimestamp()|relative_date}
+                    </td>
 
-			<td align="center">
-				{$elements[c]->category|default:""}
-			</td>
+                    <td align="center">
+                        {$elements[c]->category|default:""}
+                    </td>
 
-			<td style="font-size: 11px;width:100px;" align="center">
-				       <ul class="action-buttons">
-					       <li>
-						       <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
-							  <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
-						       </a>
-					       </li>
-				       </ul>
-			</td>
+                    <td class="right">
+                        <ul class="action-buttons">
+                            <li>
+                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
+                               <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
 
-	       </tr>
+                   </tr>
 
-		{sectionelse}
-		<tr>
-			<td align="center" colspan=10>
-				<br><br>
-				<p>
-					<h2>
-						<b>{t}There is no elements to import{/t}</b>
-					</h2>
-					<p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
-				</p>
-				<br><br>
-			</td>
-		</tr>
-		{/section}
-		<tfoot>
-			 <tr class="pagination" >
-				 <td colspan="13" align="center">{$pagination->links|default:""}</td>
-			 </tr>
-		</tfoot>
+                {sectionelse}
+                <tr>
+                    <td colspan=5 class="empty">
+                        <h2>
+                            <b>{t}There is no elements to import{/t}</b>
+                        </h2>
+                        <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
+                    </td>
+                </tr>
+                {/section}
+            </tbody>
+            <tfoot>
+                 <tr class="pagination" >
+                     <td colspan="13" align="center">{$pagination->links|default:""}&nbsp;</td>
+                 </tr>
+            </tfoot>
 
 	   </table>
 	</div>

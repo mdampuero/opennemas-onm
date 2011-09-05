@@ -34,10 +34,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 {block name="admin_menu"}{/block}
 	<div class="wrapper-content">
-
-
-
-		<ul class="tabs2">
+		<ul class="tabs2 clearfix">
 			{*{section name=as loop=$types_content}
 				<li>
 					 {assign var=ca value=`$types_content[as]`}
@@ -54,76 +51,68 @@
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=attachment" {if $mytype=='attachment'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Files{/t}</a></li>
 		</ul>
 
-		<br><br><br>
+        <table class="listing-table">
 
-		<table class="adminheading">
-			<tr>
-				<th nowrap>{t}Trash{/t}</th>
-			</tr>
-		</table>
+            <thead>
+               <tr>
+                    <th style="width:2%;"><input type="checkbox" class="minput"></th>
+                    <th style="width:75%;" align='left'>{t}Title{/t}</th>
+                    <th style="width:5%;">{t}Section{/t}</th>
+                    <th style="width:3%;">{t}Views{/t}</th>
+                    <th style="width:8%;">{t}Date{/t}</th>
+                    <th class="center" style="width:20px;">{t}Actions{/t}</th>
+               </tr>
+            </thead>
 
-		<div id="pagina">
+            <tbody>
+                {section name=c loop=$litterelems}
+                <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
+                    <td style="text-align: left;width:20px;">
+                        <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+                    </td>
+                    <td style="text-align: left;width:75%;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+                        {$litterelems[c]->title|clearslash}
+                    </td>
+                    <td style="text-align: center;width:5%;">{$secciones[c]}</td>
+                    <td >{$litterelems[c]->views}</td>
+                    <td >{$litterelems[c]->created}</td>
+                    <td class="right">
+                        <ul class="action-buttons">
+                            <li>
+                               <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                                   <img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="{t}Restore{/t}" />
+                               </a>
+                            </li>
+                            <li>
+                                <a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="{t}Delete{/t}">
+                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                   </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                {sectionelse}
+                <tr >
+                    <td class="empty"colspan=6>
+                        {t}There is no elements in the trash{/t}
+                    </td>
+                </tr>
+                {/section}
+            </tbody>
 
-		<table class="adminlist">
-				<thead>
-					<tr>
-						<th style="width:2%;"> &nbsp;</th>
-						<th style="width:75%;" align='left'>{t}Title{/t}</th>
-						<th style="width:5%;">{t}Section{/t}</th>
-						<th style="width:3%;">{t}Views{/t}</th>
-						<th style="width:7%;">{t}Date{/t}</th>
-						<th style="width:10%;">{t}Actions{/t}</th>
-					</tr>
-				</thead>
+            <tfoot>
+                <tr class="pagination">
+                    <td colspan="6">
+                        {$paginacion->links}&nbsp;
+                    </td>
+                </tr>
+            </tfoot>
 
-				<tbody>
-					{section name=c loop=$litterelems}
-					<tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
-						 <td style="text-align: left;width:2%;">
-							 <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
-						 </td>
-						 <td style="text-align: left;width:75%;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
-							 {$litterelems[c]->title|clearslash}
-						 </td>
-						 <td style="text-align: center;width:5%;">{$secciones[c]}</td>
-						 <td style="text-align: center;width:3%;">{$litterelems[c]->views}</td>
-						 <td style="text-align: center;width:8%;">{$litterelems[c]->created}</td>
-						 <td style="text-align: center;width:10%;">
-							 <ul class="action-buttons">
-								 <li>
-									 <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar"><img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="Recuperar" width='24px' /></a>
-								 </li>
-								 <li>
-									 <a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-								 </li>
-							 </ul>
-						 </td>
-					 </tr>
-					{sectionelse}
-					<tr>
-						<td align="center" colspan=6><br><br><p><h3><b>Ningun elemento en la papelera</b></h3></p><br><br></td>
-					</tr>
-					{/section}
-				</tbody>
+        </table>
 
-				<tfoot>
-					<tr class="pagination">
-						<td colspan="6" align="center">{$paginacion->links}</td>
-					</tr>
-				</tfoot>
+    </div>
 
-			</table>
-			</div>
-			 </td></tr>
-		</table>
-
-		</div>
-
-
-		</div>
-
-		<input type="hidden" id="action" name="action" value="" />
-		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-	</form>
-</div>
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+</form>
 {/block}

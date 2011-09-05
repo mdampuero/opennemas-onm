@@ -27,12 +27,7 @@
                 <br style="clear:both;">
 	<div id="{$category}">
 		{if $category eq 0}
-			<table class="adminheading">
-				<tr>
-					<th>{t}Files statistics{/t}</th>
-				</tr>
-			</table>
-			<table class="adminlist">
+			<table class="listing-table">
 				<thead>
 					<tr>
 						<th width="300" class="title" align="left">{t}Title{/t}</th>
@@ -52,7 +47,7 @@
                                                 <td style="padding: 0px 10px; width:10%;" align="left">
                                                         {math equation="x / y" x=$size[c]|default:0 y=1024*100 format="%.2f"} MB</a>
 						</td>
-                                                
+
 					</tr>
 					{section name=su loop=$subcategorys[c]}
 					<tr>
@@ -101,42 +96,37 @@
 				{$smarty.request.msg}
 			</div>
 			{/if}
-			<table class="adminheading">
-				<tr>
-					<th>{t}File manager{/t}</th>
-				</tr>
-			</table>
 
-			<table class="adminlist">
+			<table class="listing-table">
 				<thead>
 					<tr>
-						<th class="title">{t}Title{/t}</th>
-						<th class="title">{t}Path{/t}</th>
-						<th align="center">{t}Availability{/t}</th>
-						<th align="center">{t}Actions{/t}</th>
+						<th>{t}Title{/t}</th>
+						<th>{t}Path{/t}</th>
+						<th>{t}Availability{/t}</th>
+						<th>{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					{section name=c loop=$attaches}
 					<tr {cycle values="class=row0,class=row1"}>
-						<td style="padding:10px;">
+						<td>
 							{$attaches[c]->title|clearslash}
 						</td>
-						<td style="padding:10px;">
+						<td>
 							{$attaches[c]->path}
 						</td>
-						<td style="padding:10px;width: 84px;" align="center">
+						<td >
 							{if $status[c] eq 1}
 								<img src="{$params.IMAGE_DIR}publish_g.png"  border="0" alt="Si"/>
 							{else}
 								<img src="{$params.IMAGE_DIR}icon_aviso.gif" border="0" alt="No" />
 							{/if}
 						</td>
-						<td style="padding:10px;width: 84px;" align="center">
+						<td clas="right">
 							<ul class="action-buttons">
 								<li>
-									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$attaches[c]->id}');" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+									<a href="{$smarty.server.PHP_SELF}?action=read&id={$attaches[c]->id}" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
 								<li>
 									<a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
@@ -146,8 +136,8 @@
 					</tr>
 					{sectionelse}
 					<tr>
-						<td align="center" colspan="5">
-							<div style="margin:50px">{t}There is not files available here.{/t}</div>
+						<td class="empty" colspan="5">
+							{t}There is not files available here.{/t}>
 						</td>
 					</tr>
 					{/section}
@@ -156,6 +146,7 @@
 					<tr>
 						<td colspan="7" class="pagination">
 							{$pagination->links}
+                            &nbsp;
 						</td>
 					</tr>
 				</tfoot>

@@ -77,7 +77,7 @@ switch($action) {
 
         $tpl->assign('pclaves', $terms);
         $tpl->assign('pager', $pager);
-        $tpl->display('keywords/index.tpl');
+        $tpl->display('keywords/list.tpl');
     } break;
 
     case 'search': {

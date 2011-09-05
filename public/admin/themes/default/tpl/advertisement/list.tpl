@@ -70,8 +70,7 @@
     </div>
     <div class="wrapper-content">
 
-
-        <ul class="tabs2">
+        <ul class="tabs2 clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
@@ -118,21 +117,21 @@
                 </tr>
             </table>
 
-            <table class="adminlist">
+            <table class="listing-table">
                 <thead>
                     <tr>
                         <th  style="width:10px"></th>
                         <th class="title"  style="width:250px">{t}Type{/t}</th>
                         <th>{t}Title{/t}</th>
-                        <th align="center" style="width:30px">{t}Permanence{/t}</th>
-                        <th align="center" style="width:40px">{t}Clicks{/t}</th>
-                        <th align="center" style="width:40px">{t}Views{/t}</th>
-                        <th align="center" style="width:70px">{t}Actions{/t}</th>
+                        <th class="center" style="width:30px">{t}Permanence{/t}</th>
+                        <th class="center" style="width:40px">{t}Clicks{/t}</th>
+                        <th class="center" style="width:40px">{t}Views{/t}</th>
+                        <th class="center" style="width:70px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {section name=c loop=$advertisements|default:""}
+                    {section name=c loop=$advertisements}
                     <tr {cycle values="class=row0,class=row1"}>
                         <td style="text-align:center;">
                             <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
@@ -158,7 +157,7 @@
                             {$advertisements[c]->title|clearslash}
                         </td>
 
-                        <td style="text-align:center;" align="center">
+                        <td style="text-align:center;" class="center">
                             {if $advertisements[c]->type_medida == 'NULL'} {t}Undefined{/t} {/if}
                             {if $advertisements[c]->type_medida == 'CLIC'} {t}Clicks:{/t} {$advertisements[c]->num_clic} {/if}
                             {if $advertisements[c]->type_medida == 'VIEW'} {t}Viewed:{/t} {$advertisements[c]->num_view} {/if}
@@ -173,7 +172,7 @@
                         <td style="text-align:center;" align="right">
                              {$advertisements[c]->views}
                         </td>
-                        <td style="text-align:center;" align="center">
+                        <td style="text-align:center;" class="center">
                             <ul class="action-buttons">
                                 <li>
                                     {if $advertisements[c]->available == 1}
@@ -202,8 +201,8 @@
                     </tr>
                     {sectionelse}
                     <tr>
-                        <td align="center" colspan="10">
-                            <h2>{t}There is no advertisement stored in this section{/t}</h2>
+                        <td class="empty" colspan="10">
+                            {t}There is no advertisement stored in this section{/t}
                         </td>
                     </tr>
                     {/section}
@@ -212,7 +211,7 @@
                 <tfoot >
                     <tr class="pagination">
                         <td colspan="10">
-                            {$paginacion->links}
+                            {$paginacion->links}&nbsp;
                         </td>
                     </tr>
                 </tfoot>

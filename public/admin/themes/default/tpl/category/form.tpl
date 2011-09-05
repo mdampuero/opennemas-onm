@@ -73,16 +73,36 @@
                     </td>
                 </tr>
                 {if isset($category) && !empty($category->name)}
-                    <tr>
-                        <td valign="middle"  style="padding:4px;text-align:right; width:100px;">
-                                <label for="title">{t}Internal name:{/t}</label>
-                        </td>
-                        <td style="padding:4px;" nowrap="nowrap"   colspan="2">
-                            <input type="text" id="name" name="name" title="carpeta categoria" readonly
-                                        value="{$category->name|clearslash|default:""}" class="required" size="100" />
-                        </td>
-                    </tr>
+                <tr>
+                    <td valign="middle"  style="padding:4px;text-align:right; width:100px;">
+                            <label for="title">{t}Internal name:{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap"   colspan="2">
+                        <input type="text" id="name" name="name" title="carpeta categoria" readonly
+                                    value="{$category->name|clearslash|default:""}" class="required" size="100" />
+                    </td>
+                </tr>
                 {/if}
+                <tr>
+                    <td>
+                        <label for="internal_category">{t}Category available for:{/t}</label>
+
+                    </td>
+                    <td>
+                        <select name="internal_category" id="internal_category" >
+                            <option value="1"
+                                {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>{t}Global{/t}</option>
+                            <option value="7"
+                                {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
+
+                            <option value="9"
+                                {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
+                            <option value="14"
+                                {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
+                        </select>
+
+                    </td>
+                </tr>
                 <tr>
                     <td align="right" valign="top" style="padding:4px;text-align:right; width:100px;">
                         <label for="title">{t}Subsection of:{/t}</label>
@@ -94,38 +114,6 @@
                                  <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
                             {/section}
                         </select>
-                    </td>
-                    {* TODO: gestionar dinamicamente, con tabla content_type *}
-                    <td valign="top" style="text-align:left; width:340px;">
-                        <h3>{t}Category available for:{/t}</h3>
-                        <div class="utilities-conf" style="width:60%;">
-                            <table style="padding:4px; margin-left:10px;">
-                                <tr>
-                                    <td  style="padding:4px;"> Global:</td>
-                                    <td>
-                                        <input type="radio" id="internal_category" name="internal_category"  value="1"
-                                        {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>
-                                    </td>
-                                    <td  style="padding:4px;"> </td>
-                                    <td  style="padding:4px;"> Álbumes:</td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="7"
-                                        {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>
-                                    </td>
-
-                                </tr>
-                                 <tr>
-                                    <td  style="padding:4px;"> Vídeos:</td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="9"
-                                        {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>
-                                    </td>
-                                   <td  style="padding:4px;"> </td>
-                                    <td style="padding:4px;" > Kiosco: </td>
-                                    <td> <input type="radio" id="internal_category" name="internal_category"  value="14"
-                                        {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>
-                                    </td>
-                                </tr>
-                            </table>
-                         </div>
                     </td>
                 </tr>
                 <tr>
@@ -139,7 +127,7 @@
                             {t}If this option is activated this category will be showed in menu{/t}
                     </td>
                 </tr>
-             
+
                 {if isset($configurations) && !empty($configurations['allowLogo'])}
                      <tr>
                         <td valign="middle" style="padding:4px;text-align:right; width:100px;">
@@ -231,11 +219,11 @@
         </table>
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-  
+
     </div><!--fin wrapper-content-->
  </form>
 {/block}
-    
+
 {block name="footer-js" append}
        <script type="text/javascript">
         try {

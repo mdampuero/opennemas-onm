@@ -63,107 +63,102 @@
     </div>
     <div class="wrapper-content">
 
-        <ul class="tabs2" style="margin-bottom: 28px;">
+        <ul class="tabs2 clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >WIDGET HOME</a>
             </li>
            {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
- 
+
         {render_messages}
 
-        <div id="{$category}">
-            <table class="adminheading">
+        <table class="listing-table">
+            <thead>
                 <tr>
-                    <th nowrap>{t}Albums{/t}</th>
+
+                    <th style="width:15px;"><input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" ></th>
+                    <th class="title">{t}Title{/t}</th>
+                    <th class="center" style="width:35px;">{t}Views{/t}</th>
+                    {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                    <th class="center" style="width:100px;">Created</th>
+                    <th class="center" style="width:35px;">{t}Published{/t}</th>
+                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                    <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
-            </table>
-            <table class="adminlist">
-                <thead>
-                    <tr>
-                         
-                        <th style="width:35px;"></th>
-                        <th class="title">{t}Title{/t}</th>
-                        <th align="center" style="width:35px;">{t}Views{/t}</th>
-                        <th align="center">Created</th>
-                        {if $category=='favorite'}<th align="center">{t}Section{/t}</th>{/if}
-                        <th align="center" style="width:35px;">{t}Published{/t}</th>
-                        <th align="center" style="width:35px;">{t}Favorite{/t}</th>
-                        <th align="center" style="width:35px;">{t}Actions{/t}</th>
-                    </tr>
-                </thead>
+            </thead>
 
-                {section name=as loop=$albums}
-                <tr {cycle values="class=row0,class=row1"}>
-                    <td align="center">
-                            <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+            {section name=as loop=$albums}
+            <tr {cycle values="class=row0,class=row1"}>
+                <td class="center">
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+                </td>
+                <td>
+                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
+                        {$albums[as]->title|clearslash}
+                    </a>
+                </td>
+                 <td class="center">
+                    {$albums[as]->views}
+                </td>
+                {if $category=='favorite'}
+                    <td class="center">
+                         {$albums[as]->category_title}
                     </td>
-                    <td>
-                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
-                             {$albums[as]->title|clearslash}</a>
-                    </td>
-                     <td align="center">
-                             {$albums[as]->views}
-                    </td>
-                    <td align="center">
-                             {$albums[as]->created}
-                    </td>
-                    
-                    {if $category=='favorite'}
-                            <td align="center">
-                                 {$albums[as]->category_title}
-                            </td>
-                    {/if}
-                    <td align="center">
-                        {acl isAllowed="ALBUM_AVAILABLE"}
-                            {if $albums[as]->available == 1}
-                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
-                                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
-                            {else}
-                                    <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
-                                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
-                            {/if}
-                        {/acl}
-                    </td>
+                {/if}
+                <td class="center">
+                         {$albums[as]->created}
+                </td>
+                <td class="center">
+                    {acl isAllowed="ALBUM_AVAILABLE"}
+                        {if $albums[as]->available == 1}
+                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
+                        {else}
+                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
+                        {/if}
+                    {/acl}
+                </td>
 
-                    <td align="center">
-                        {acl isAllowed="ALBUM_FAVORITE"}
-                            {if $albums[as]->favorite == 1}
-                               <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
-                            {else}
-                                <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
-                            {/if}
-                        {/acl}
-                    </td>
-                    <td style="padding:1px; font-size:11px;" align="center">
-						 <ul class="action-buttons">
-                            {acl isAllowed="ALBUM_UPDATE"}
-                             <li>
-                                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
-                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                            </li>
-                            {/acl}
+                <td class="center">
+                    {acl isAllowed="ALBUM_FAVORITE"}
+                        {if $albums[as]->favorite == 1}
+                           <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
+                        {else}
+                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
+                        {/if}
+                    {/acl}
+                </td>
+                <td class="center">
+                    <ul class="action-buttons">
+                       {acl isAllowed="ALBUM_UPDATE"}
+                        <li>
+                           <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
+                                   <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                       </li>
+                       {/acl}
 
-                            {acl isAllowed="ALBUM_DELETE"}
-                            <li>
-                                <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                            </li>
-                            {/acl}
-                         </ul>
-                    </td>
+                       {acl isAllowed="ALBUM_DELETE"}
+                       <li>
+                           <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
+                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                       </li>
+                       {/acl}
+                    </ul>
+                </td>
 
-                </tr>
-                {sectionelse}
-                <tr>
-                        <td align="center" colspan=9><br><br><h2>{t}No album saved{/t}</h2><br><br></td>
-                </tr>
-            {/section}
-                <tfoot>
-                  <td colspan="9"> {if !empty($pagination)} {$paginacion->links|default:""} {/if}</td>
-                </tfoot>
-            </table>
-        </div>
+            </tr>
+            {sectionelse}
+            <tr>
+                <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
+            </tr>
+        {/section}
+            <tfoot>
+              <td colspan="9">
+                {$paginacion->links|default:""}&nbsp;
+              </td>
+            </tfoot>
+        </table>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />

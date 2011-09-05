@@ -1,22 +1,4 @@
 {extends file="base/admin.tpl"}
-{block name="footer-js" append}
-{/block}
-{block name="header-css" append}
-<style type="text/css">
-.errorexplanation{
-    padding:6px 0;
-}
-.number {
-    padding:0 5px;
-}
-.errorexplanation .title {
-    font-size:1.12em;
-    margin-bottom:3px;
-    display:block;
-}
-</style>
-{/block}
-
 {block name="content"}
     <div class="top-action-bar">
         <div class="wrapper-content">
@@ -42,20 +24,21 @@
 
 
          <div id="{$category}">
-
-            <table class="adminheading">
-                <tr>
-                    <th nowrap>{$total_errors} registered SQL errors</th>
-                    <th scope="col" style="text-align:right;">
+            <div class="table-info clearfix">
+                <div>
+                    <div class="left">
+                        {$total_errors} registered SQL errors
+                    </div>
+                    <div class="right">
                         <form method="GET" action="{$smarty.server.PHP_SELF}">
                             <input type="text" name="search" value="{$search}">
                             <button type="submit">{t}Search{/t}</button>
                         </form>
-                    </th>
-                </tr>
-            </table>
+                    </div>
+                </div>
+            </div>
 
-            <table class="adminlist">
+            <table class="listing-table">
 
                 <thead>
                    <tr>
@@ -66,8 +49,13 @@
                    </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan=4 scope=col class="family_type">
+                            asdfasdf
+                        </td>
+                    </tr>
                     {foreach from=$errors item=error name=errors}
-                    <tr {cycle values="class=row0,class=row1"} colspan=3>
+                    <tr>
                         <td class="number">
                             {$smarty.foreach.errors.iteration+$elements_page}
                         </td>
@@ -75,7 +63,7 @@
                             {$error['created']}
                         </td>
                         <td class="errorexplanation">
-                            <span class="title">{$error['tracer']}</span>
+                            <strong>{$error['tracer']}</strong>
                             <br>
                             <strong>SQL:</strong> {$error['sql1']}
                             <br>
@@ -89,20 +77,20 @@
                     </tr>
                     {foreachelse}
                         <tr>
-                            <td>
+                            <td colspan=4 class="empty">
                                 {t}There is no SQL errors registered in database.{/t}
                             </td>
                         </tr>
                     {/foreach}
                 </tbody>
 
+                {if $pagination->_totalItems > 0}
                 <tfoot>
-                    {if count($errors) gt 0}
                     <tr class="pagination">
-                        <td colspan="9" align="center">{$pagination->links}</td>
+                        <td colspan="4">{$pagination->links}</td>
                     </tr>
-                    {/if}
                 </tfoot>
+                {/if}
 
              </table>
 

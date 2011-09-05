@@ -698,6 +698,11 @@ class ContentManager
             $rs->Close(); # optional
         }
 
+        $filter = (isset($filter)) ? $filter : "";
+        $_order_by = (isset($_order_by)) ? $_order_by : "";
+
+
+
         $comment_title = $this->find($content_type, $filter, $_order_by, $fields);
         foreach($items as $item) {
             $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,

@@ -68,7 +68,7 @@ switch($action) {
         list($pages, $pager) = $cm->find_pages('Static_Page', $filter, 'ORDER BY created DESC ', $page, 10);
 
         $tpl->assign( array('pages' => $pages,'pager' => $pager));
-        $tpl->display('static_pages/index.tpl');
+        $tpl->display('static_pages/list.tpl');
 
     break;
 

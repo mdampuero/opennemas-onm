@@ -142,19 +142,21 @@
                 </td>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="listing-table">
             <thead>
                 <th style="width:15px;"></th>
-                <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
+                <th class="left" >
+                    <img src="themes/default/images/newsletter/editar.gif" border="0">
+                    {t}Title{/t}
+                </th>
                 {if $category eq 'todos' || $category eq 'opinion'}
-                    <th align="center" style="width:100px;">{t}Section{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                    <th  align="center" style="width:70px;">{t}Page{/t}</th>
+                    <th class="center" style="width:100px;">{t}Section{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
+                    <th  class="center" style="width:70px;">{t}Page{/t}</th>
                 {/if}
-                <th  align="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                <th align="center" style="width:80px;">{t}Created{/t}</th>
-                {*  <th align="center" style="padding:5px;font-size: 11px;width:50px;">Publisher</th>*}
-                <th align="center" style="width:80px;">{t}Last Editor{/t}</th>
-                <th align="center" style="width:70px;">{t}Actions{/t}</th>
+                <th  class="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
+                <th class="center" style="width:80px;">{t}Created{/t}</th>
+                <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
+                <th class="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
             <input type="hidden"  name="user_name"  id="user_name" value="{$smarty.session.username}">
             {if isset($articles)}
@@ -164,7 +166,7 @@
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$articles[c]->id}"  style="cursor:pointer;" />
                         <input type="hidden"  name="permit_{$articles[c]->id}"  id="permit_{$articles[c]->id}"     {if $articles[c]->category !=20} value="1" {else} value="0" {/if}  />
                     </td>
-                    <td style="padding:3px;">
+                    <td>
                         {if isset($articles[c]->paper_page) && !empty($articles[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
                         <span style="cursor:pointer;" title="title" id="title_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->title|clearslash} </span>
                         <script type="text/javascript">
@@ -174,7 +176,7 @@
                         </script>
                     </td>
                     {if $category eq 'todos'}
-                        <td align="center">
+                        <td class="center">
                               <span title="category" old_cat="{$articles[c]->category}" name="{$articles[c]->id}" id="cat_{$articles[c]->id}" {if $articles[c]->category eq 20} style="padding:4px;background-color:#FFA6A6;cursor:pointer;"{else} style="cursor:pointer;"{/if} >
                                 {if $articles[c]->category_name == 'unknown'}
                                     {t}Unasigned{/t}
@@ -188,7 +190,7 @@
                                 // ]]>
                               </script>
                         </td>
-                        <td  align="center">
+                        <td  class="center">
                               {if $articles[c]->category neq 20}  {$articles[c]->paper_page} - (pos: {$articles[c]->position}) {/if}
                         </td>
                     {/if}
@@ -200,16 +202,16 @@
                             // ]]>
                         </script>
                     </td>
-                    <td align="center" >
+                    <td class="center">
                         {$articles[c]->created}
                     </td>
-                    {*	<td align="center" >
+                    {*	<td class="center" >
                              {$art_publishers[c]}
                     </td> *}
-                    <td align="center" >
+                    <td class="center">
                         <span style="cursor:pointer;" title="editor" id="editor_{$articles[c]->id}">{$art_editors[c]}</span>
                     </td>
-                    <td style="padding-right:15px" align="right">
+                    <td class="center">
                         <ul class="action-buttons">
                             {if $category!=20 && $articles[c]->category !=20}
                             <li>
@@ -231,129 +233,126 @@
                 </tr>
             {sectionelse}
                 <tr>
-                    <td align="center" colspan="10" style="height:180px;" >{t}No pending articles to publish.{/t}</td>
+                    <td class="empty" colspan="10">{t}No pending articles to publish.{/t}</td>
                 </tr>
             {/section}
-        {else}
-            {if $category neq 'opinion'}
-                <tr>
-                    <<td align="center" colspan="10" style="height:180px;" >{t}No pending opinion to publish.{/t}</td>
-                </tr>
             {else}
-                <tr>
-                    <td align="center" colspan="10" style="height:180px;" >{t}No pending article to publish.{/t}</td>
-                </tr>
+                {if $category neq 'opinion'}
+                    <tr>
+                        <td class="empty" colspan="10">{t}No pending opinion to publish.{/t}</td>
+                    </tr>
+                {else}
+                    <tr>
+                        <td class="empty" colspan="10">{t}No pending article to publish.{/t}</td>
+                    </tr>
+                {/if}
             {/if}
-        {/if}
 
 
-		<tfoot>
-			<tr>
-				<td colspan="10" class="pagination">
-					{$pagination->links}
-				</td>
-			</tr>
-		</tfoot>
+            <tfoot>
+                <tr>
+                    <td colspan="10" class="pagination">
+                        {$pagination->links}&nbsp;
+                    </td>
+                </tr>
+            </tfoot>
         </table>
+        
         <br>
 
-
         {if $opinions && $category eq 'todos'}
-            <table class="adminheading">
-                <tr>
-                    <td><strong>{t}Opinions{/t}</strong></td>
-                </tr>
-            </table>
-            <table class="adminlist">
-                <thead>
-                    <th style="width:15px;"></th>
-                    <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
-                    {if $category eq 'todos' || $category eq 'opinion'}
-                        <th align="center" style="width:100px;">{t}Type{/t}</th>
-                    {/if}
-                    <th  align="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
-                    <th align="center" style="width:120px;">{t}Created{/t}</th>
-                    {*  <th align="center" style="padding:5px;font-size: 11px;width:50px;">Publisher</th>*}
-                    <th align="center" style="width:80px;">{t}Last Editor{/t}</th>
-                    <th align="center" style="width:70px;">{t}Actions{/t}</th>
-                </thead>
-                <tbody>
-                    {section name=c loop=$opinions}
-                    <tr {cycle values="class=row0,class=row1"}   >
-                        <td style="font-size: 11px;">
-                              <input type="checkbox" class="minput"  id="selected_opin_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;">
-                              <input type="hidden"  name="permit_{$opinions[c]->id}"  id="permit_{$opinions[c]->id}" value="1"    />
-                        </td>
-                        <td  onClick="javascript:document.getElementById('selected_opin_{$smarty.section.c.iteration}').click();">
-                            {if isset($opinions[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
-                            <span style="cursor:pointer;"  title="opinion" id="op_{$opinions[c]->id}" name="{$opinions[c]->id}" >{$opinions[c]->title|clearslash} </span>
-                            <script type="text/javascript">
-                                // <![CDATA[
-                                    new Editable('op_{$opinions[c]->id}','input');
-                                // ]]>
-                            </script>
-                        </td>
-                      <td  >
-                                OPINION {if $opinions[c]->type_opinion eq '0'} Autor{elseif $opinions[c]->type_opinion eq '0'}Director{else}Editorial{/if}
-                        </td>
-                         <td  >
-                               <span  title="author" old_author="{$opinions[c]->fk_author}" name="{$opinions[c]->id}" id="author_{$opinions[c]->id}"  {if $opin_names[c]} style="cursor:pointer;"> {$opin_names[c]}  {else} style="padding:4px;background-color:#FFA6A6;cursor:pointer;" >Unknown  {/if}
-                                  </span>
-                      <script type="text/javascript">
-                        // <![CDATA[
-                                new Editable('author_{$opinions[c]->id}','select');
-                        // ]]>
+        <table class="adminheading">
+            <tr>
+                <td><strong>{t}Opinions{/t}</strong></td>
+            </tr>
+        </table>
+        <table class="listing-table">
+            <thead>
+                <th style="width:15px;"></th>
+                <th align="left" ><img src="themes/default/images/newsletter/editar.gif" border="0">Título</th>
+                {if $category eq 'todos' || $category eq 'opinion'}
+                    <th class="center" >{t}Type{/t}</th>
+                {/if}
+                <th  class="center" style="width:100px;">{t}Author{/t} <img src="themes/default/images/newsletter/editar.gif" border="0"></th>
+                <th class="center" style="width:80px;">{t}Created{/t}</th>
+                <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
+                <th class="center" style="width:70px;">{t}Actions{/t}</th>
+            </thead>
+            <tbody>
+                {section name=c loop=$opinions}
+                <tr {cycle values="class=row0,class=row1"}   >
+                    <td style="font-size: 11px;">
+                          <input type="checkbox" class="minput"  id="selected_opin_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;">
+                          <input type="hidden"  name="permit_{$opinions[c]->id}"  id="permit_{$opinions[c]->id}" value="1"    />
+                    </td>
+                    <td  onClick="javascript:document.getElementById('selected_opin_{$smarty.section.c.iteration}').click();">
+                        {if isset($opinions[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
+                        <span style="cursor:pointer;"  title="opinion" id="op_{$opinions[c]->id}" name="{$opinions[c]->id}" >{$opinions[c]->title|clearslash} </span>
+                        <script type="text/javascript">
+                            // <![CDATA[
+                                new Editable('op_{$opinions[c]->id}','input');
+                            // ]]>
                         </script>
-                        </td>
-                        <td align="center" >
-                                 {$opinions[c]->created}
-                        </td>
-                     {*  <td align="center" >
-                                 {$opin_publishers[c]}
-                        </td> *}
-                        <td align="center" >
-                            <span style="cursor:pointer;" title="editor" id="editor_{$opinions[c]->id}">{$opin_editors[c]}</span>
-                        </td>
+                    </td>
+                  <td  >
+                            OPINION {if $opinions[c]->type_opinion eq '0'} Autor{elseif $opinions[c]->type_opinion eq '0'}Director{else}Editorial{/if}
+                    </td>
+                     <td  >
+                           <span  title="author" old_author="{$opinions[c]->fk_author}" name="{$opinions[c]->id}" id="author_{$opinions[c]->id}"  {if $opin_names[c]} style="cursor:pointer;"> {$opin_names[c]}  {else} style="padding:4px;background-color:#FFA6A6;cursor:pointer;" >Unknown  {/if}
+                              </span>
+                  <script type="text/javascript">
+                    // <![CDATA[
+                            new Editable('author_{$opinions[c]->id}','select');
+                    // ]]>
+                    </script>
+                    </td>
+                    <td class="center" >
+                             {$opinions[c]->created}
+                    </td>
+                 {*  <td class="center" >
+                             {$opin_publishers[c]}
+                    </td> *}
+                    <td class="center" >
+                        <span style="cursor:pointer;" title="editor" id="editor_{$opinions[c]->id}">{$opin_editors[c]}</span>
+                    </td>
 
-                        <td  align="center">
-                            <ul class="action-buttons">
-                                <li>
-                                    {if $opinions[c]->content_status == 1}
-                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                                    </a>
-                                    {else}
-                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                                    </a>
-                                    {/if}
-                                </li>
-                                <li>
-                                    <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
-                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                    </a>
-                                </li>
-                                <li>
-                                     <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
-                                    </a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {/section}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan=7></td>
-                    </tr>
-                </tfoot>
-            </table>
-        {/if}
+                    <td  class="center">
+                        <ul class="action-buttons">
+                            <li>
+                                {if $opinions[c]->content_status == 1}
+                                <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
+                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                                </a>
+                                {else}
+                                <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
+                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                                </a>
+                                {/if}
+                            </li>
+                            <li>
+                                <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=read&amp;category={$category}" title="Modificar">
+                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                </a>
+                            </li>
+                            <li>
+                                 <a href="controllers/opinion/opinion.php?id={$opinions[c]->id}&amp;action=yesdel&amp;category={$category}"  title="Eliminar">
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {/section}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan=7></td>
+                </tr>
+            </tfoot>
+        </table>
+    {/if}
 
     </div>
-
-
 
             <input type="hidden" id="action" name="action" value="" />
             <input type="hidden" name="id" id="id" value="{$id|default:""}" />

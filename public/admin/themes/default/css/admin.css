@@ -174,21 +174,15 @@ table {
 }
 
 table.adminheading {
-    border: 1px solid #BFBFBF;
-	border-bottom-width:0px;
 	margin:0 auto;
 	/*margin-top:3px;*/
 	background-color: #FFF;
-	font-family:Georgia !important;
 	width: 100%;
 	text-align: left;
 	height: 30px;
 	width: 100%;
-	padding-left: 5px;
-	border: 1px solid #ccc;
-	border-bottom:0px;
-	-moz-border-radius: 6px 6px 0 0;
-	-webkit-border-radius: 6px 6px 0 0;
+	padding: 5px;
+	border-top:1px solid #d9d9d9;
 	background: #f1f1f1; /* for non-css3 browsers */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#d9d9d9)); /* for webkit browsers */
@@ -623,6 +617,9 @@ div.spch-bub-outside {
 	margin: 1em;
 }
 
+.panel .listing-table {
+	margin: 0;
+}
 
 .panel.active-tab-body {
 	display: block;
@@ -1501,7 +1498,8 @@ ul#menu hr{
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 #copyright {
 	vertical-align:top;
-	margin-top:10px
+	margin-top:10px;
+	margin-bottom:50px;
 }
 	#copyright .company {
 		color:#888;
@@ -1898,3 +1896,78 @@ div.action-bar .right{
   color: #808080;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
+
+/* -------------------------------------------------------------
+  New layout for listing tables.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.listing-table {
+	border:0 none;
+	border-collapse:collapse;
+	border-bottom: 1px dotted #D9D9D9;
+    border-left: 1px solid #FFFFFF;
+    color: #424E51;
+    font-size: 11px;
+    line-height: 140%;
+    padding: 8px 5px;
+    text-align: left;
+    vertical-align: middle;
+	width:100%;
+}
+.listing-table td {
+    border-bottom: 1px dotted #D9D9D9;
+    color: #424E51;
+    font-size: 11px;
+    line-height: 140%;
+    padding: 8px 5px;
+    text-align: left;
+    vertical-align: middle;
+	border-collapse:collapse
+}
+
+.listing-table th,
+.listing-table tfoot td {
+    background: #343434;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 9px;
+    text-align: left;
+}
+.listing-table tr:hover { background:#F1F1F1; }
+.listing-table th td { text-align:center; }
+.listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
+.listing-table td a { color:#1792D9; font-weight: bold; text-decoration:none; }
+.listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
+.listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
+
+.listing-table th img, .listing-table td img { vertical-align:middle; }
+
+.listing-table .left { text-align:left !important; }
+.listing-table .right { text-align:right !important; }
+.listing-table .center { text-align:center !important; }
+
+
+.listing-table .pagination { color:Red !important; }
+.listing-table .pagination a { background: #3f3f3f; border: 1px solid #666; color:White; }
+.listing-table .pagination a:hover { background:#3c3c3c; }
+
+/* -------------------------------------------------------------
+  upper header for filtering... no yet investigated. NEEDS WORK.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.table-info {
+	background:#F1F1F1;
+    border:1px solid #D2D2D2;
+	border-right:none;
+	border-left:none;
+    clear: both;
+    margin:5px 0;
+    position: relative;
+    width: 100%;
+	font-size: 12px;
+}
+.table-info > div { padding:5px; }
+.table-info div {vertical-align:middle; height:100% }
+.table-info .right { float:right; text-align:right; }
+.table-info .left { float:left; text-align:left; }
+.table-info .center { text-align:center }

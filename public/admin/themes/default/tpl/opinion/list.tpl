@@ -69,7 +69,7 @@
     <div class="wrapper-content">
 
         <div>
-            <ul class="tabs2">
+            <ul class="tabs2 clearfix">
                 <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" {if $type_opinion==-1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOME{/t}</font></a>
                 </li>
@@ -84,7 +84,6 @@
                 </li>
             </ul>
 
-            <br />
             {if $type_opinion eq '0'}
                 {assign value='Opinión del Autor' var='accion'}
             {elseif $type_opinion eq '1'}
@@ -94,8 +93,6 @@
               {elseif $type_opinion eq '-1'}
                 {assign value='Home' var='accion'}
             {/if}
-            <br>
-            <br>
 
             {if (isset($smarty.get.alert) && ($smarty.get.alert neq "")) or (isset($msg_alert) && ($msg_alert neq ""))}
             <div class="notice" style="margin-top:3px;">

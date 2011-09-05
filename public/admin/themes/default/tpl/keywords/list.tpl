@@ -29,10 +29,10 @@
 					</td>
 				</tr>
 			</table>
-			<table class="adminlist">
+			<table class="listing-table">
 				<thead>
 					<tr>
-						<th style="width:40px;">{t}Type{/t}</th>
+						<th style="width:20px;">{t}Type{/t}</th>
 						<th scope=col>{t}Keyword{/t}</th>
 						<th scope=col>{t}Replacement value{/t}</th>
 						<th scope=col style="width:40px;">{t}Actions{/t}</th>
@@ -42,7 +42,7 @@
 				<tbody>
 					{section name=k loop=$pclaves|default:array()}
 					<tr>
-						<td align="center" style="padding:3px;">
+						<td class="center">
 							<img src="{$params.IMAGE_DIR}iconos/{$pclaves[k]->tipo}.gif" border="0" alt="{$pclaves[k]->tipo}" />
 						</td>
 						<td>
@@ -52,7 +52,7 @@
 							{$pclaves[k]->value|default:"-"}
 						</td>
 
-						<td align="center">
+						<td class="right">
 							<ul class="action-buttons">
 								<li>
 									<a href="{$smarty.server.PHP_SELF}?action=read&id={$pclaves[k]->id}" title="{t}Modify{/t}">
@@ -67,15 +67,15 @@
 					</tr>
 					{sectionelse}
 					<tr>
-						<td align="center"><b>Ninguna palabra guardada.</b></td>
+						<td class="empty" align="center"><b>Ninguna palabra guardada.</b></td>
 					</tr>
 					{/section}
 				</tbody>
 
 				<tfoot class="pagination">
 					<tr>
-						<td colspan="5" align="center">
-							{$pager->links}
+						<td colspan="5" class="center">
+							{$pager->links}&nbsp;
 						</td>
 					</tr>
 				</tfoot>
