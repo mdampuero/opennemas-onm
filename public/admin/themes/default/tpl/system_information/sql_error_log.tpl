@@ -42,27 +42,22 @@
 
                 <thead>
                    <tr>
-                        <th scope="col">#</th>
-                        <th style="width:120px; text-align:center;">{t}Date{/t}</th>
+                        <th scope="col" style="width:5px;">#</th>
+                        <th class="center" style="width:120px; text-align:center;">{t}Creation date{/t}</th>
                         <th >{t}Error explanation{/t}</th>
-                        <th style="width:80px; text-align:center;">{t}Execution time{/t}</th>
+                        <th class="center" style="width:80px; text-align:center;">{t}Execution time{/t}</th>
                    </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan=4 scope=col class="family_type">
-                            asdfasdf
-                        </td>
-                    </tr>
                     {foreach from=$errors item=error name=errors}
                     <tr>
-                        <td class="number">
+                        <td class="center">
                             {$smarty.foreach.errors.iteration+$elements_page}
                         </td>
-                        <td style="text-align:center;">
+                        <td class="center">
                             {$error['created']}
                         </td>
-                        <td class="errorexplanation">
+                        <td>
                             <strong>{$error['tracer']}</strong>
                             <br>
                             <strong>SQL:</strong> {$error['sql1']}
@@ -71,7 +66,7 @@
                             <br>
                             <strong>Other info:</strong> {$error['sql0']}
                         </td>
-                        <td style="text-align:center;">
+                        <td class="center">
                             {$error['timer']}
                         </td>
                     </tr>

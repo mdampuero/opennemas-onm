@@ -1,3 +1,6 @@
+-- 5-September-2011
+ALTER TABLE `videos` ADD `favorite` TINYINT( 1 ) NOT NULL AFTER `information`
+
 -- 26-August-2011
 ALTER TABLE `poll_items` CHANGE `votes` `votes` INT( 10 ) UNSIGNED NULL DEFAULT '0';
 ALTER TABLE `polls` ADD `with_comment` SMALLINT( 1 ) NULL DEFAULT '1';

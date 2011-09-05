@@ -15,7 +15,7 @@
     <tbody>
         {section name=c loop=$categorys}
         <tr>
-            <td><strong>{$categorys[c]->title|clearslash|escape:"html"}</strong></td>
+            <td><a href="{$smarty.server.PHP_SELF}?category={$categorys[c]->id}">{$categorys[c]->title|clearslash|escape:"html"}</a></td>
             <td class="center">{$num_photos[c]->jpg|default:0}</td>
             <td class="center">{$num_photos[c]->gif|default:0}</td>
             <td class="center">{$num_photos[c]->png|default:0}</td>
@@ -27,7 +27,7 @@
         </tr>
         {section name=su loop=$subcategorys[c]}
         <tr>
-            <td><strong>&nbsp;&nbsp;&nbsp;|_&nbsp;{$subcategorys[c][su]->title}</strong></td>
+            <td style="padding-left:25px;">&rArr; <a href="{$smarty.server.PHP_SELF}?category={$subcategorys[c][su]->id}">{$subcategorys[c][su]->title}</a></td>
             <td class="center">{$num_sub_photos[c][su]->jpg|default:0}</td>
             <td class="center">{$num_sub_photos[c][su]->gif|default:0}</td>
             <td class="center">{$num_sub_photos[c][su]->png|default:0}</td>
@@ -39,10 +39,13 @@
         </tr>
         {/section}
         {/section}
+        <tr>
+            <td class="family_type" scope="col" colspan="9">{t}Specials{/t}</td>
+        </tr>
 
         {section name=c loop=$num_especials}
         <tr>
-            <td><strong> {$num_especials[c]->title|upper|clearslash|escape:"html"}</strong></td>
+            <td><a href="{$smarty.server.PHP_SELF}?category={$num_especials[c]->id}">{$num_especials[c]->title|clearslash|escape:"html"}</a></td>
             <td class="center">{$num_especials[c]->jpg|default:0}</td>
             <td class="center">{$num_especials[c]->gif|default:0}</td>
             <td class="center">{$num_especials[c]->png|default:0}</td>
@@ -57,7 +60,7 @@
 
     <tfoot>
         <tr>
-            <td class="right"><strong> TOTALES </strong></td>
+            <td class="left"><strong>{t}TOTAL{/t}</strong></td>
             <td class="center">{$total_jpg|default:0}</td>
             <td class="center">{$total_gif|default:0}</td>
             <td class="center">{$total_png|default:0}</td>
