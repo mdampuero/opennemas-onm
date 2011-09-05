@@ -20,7 +20,22 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Pending");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Published");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Rejected");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("Comments pending for publishing");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Comments already published");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Comments rejected");
 
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("Author");
@@ -52,6 +67,9 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("from facebook");
 
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("There is no comments here.");
+
 /* ./public/admin/themes/default/tpl//video/config.tpl */
 gettext("video :: Configuration");
 
@@ -81,6 +99,15 @@ gettext("Total in video frontpage column:");
 
 /* ./public/admin/themes/default/tpl//video/config.tpl */
 gettext("Total in video gallery:");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext(" Use  total in widget home for define how many videos can see in widgets in newspaper frontpage");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext(" Use  total in video frontpage column for define how many videos can see in the column left in video frontpage categories");
+
+/* ./public/admin/themes/default/tpl//video/config.tpl */
+gettext(" Use  Total in video gallery for define how many videos can see in the gallery when you edit or create one article");
 
 /* ./public/admin/themes/default/tpl//video/config.tpl */
 gettext("Save");
@@ -163,6 +190,9 @@ gettext("Actions");
 /* ./public/admin/themes/default/tpl//video/list.tpl */
 gettext("Edit");
 
+/* ./public/admin/themes/default/tpl//video/list.tpl */
+gettext("There is no videos yet.");
+
 /* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Title:");
 
@@ -212,7 +242,7 @@ gettext("ALBUMS");
 gettext("ADS");
 
 /* ./public/admin/themes/default/tpl//link_control/link_control.tpl */
-gettext("Trash");
+gettext("There is no broken links.");
 
 /* ./public/admin/themes/default/tpl//newsstand/new.tpl */
 gettext("ePaper Manager");
@@ -302,16 +332,28 @@ gettext("Go back to list");
 gettext("Information about album module settings");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
-gettext("Total in album frontpage:");
+gettext("Total in widget home:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
-gettext("Total in widget home:");
+gettext("Total in album frontpage:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Cover width in widget album:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Cover height in widget album:");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext(" Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext(" Use  total in album frontpage column for define how many albums can see in the  frontpage albums");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext(" Cover width in widget album  define image width for crop the cover used in widgets");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext(" Cover height in widget album  define image height for crop the cover used in widgets");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Save");
@@ -434,9 +476,6 @@ gettext("Config album module");
 gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("Albums");
-
-/* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
@@ -479,13 +518,13 @@ gettext("Edit");
 gettext("Delete");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
-gettext("No album saved");
+gettext("There is no albums yet");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Menu manager");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
-gettext("Editing menu");
+gettext("Editing menu \"%1\"");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Save and continue");
@@ -513,9 +552,6 @@ gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Go back");
-
-/* ./public/admin/themes/default/tpl//menues/read.tpl */
-gettext("Menu %1 Frontpage");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Name");
@@ -572,13 +608,22 @@ gettext("Listing menues");
 gettext("New menu");
 
 /* ./public/admin/themes/default/tpl//menues/list.tpl */
-gettext("Menues");
-
-/* ./public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Edit");
+
+/* ./public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
+
+/* ./public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Edit\"");
+
+/* ./public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
+
+/* ./public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Edit\"");
 
 /* ./public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Edit page '%1'");
@@ -627,6 +672,9 @@ gettext("Unasigned");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Opinion");
+
+/* ./public/admin/themes/default/tpl//article/pending.tpl */
+gettext("Title");
 
 /* ./public/admin/themes/default/tpl//article/pending.tpl */
 gettext("Section");
@@ -1312,8 +1360,20 @@ gettext("Creating a poll");
 /* ./public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Go back");
 
+/* ./public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Allow comments:");
+
+/* ./public/admin/themes/default/tpl//polls/new.tpl */
+gettext("No");
+
+/* ./public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Yes");
+
 /* ./public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//polls/list.tpl */
+gettext("There is no polls yet.");
 
 /* ./public/admin/themes/default/tpl//login/login.tpl */
 gettext("Control Panel - %1");
@@ -1601,9 +1661,6 @@ gettext("Editorial");
 gettext("Director opinion");
 
 /* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
-gettext("Opinion articles");
-
-/* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Select an author");
 
 /* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
@@ -1635,6 +1692,9 @@ gettext("Published");
 
 /* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list.tpl */
+gettext("There is no opinions yet.");
 
 /* ./public/admin/themes/default/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Director Articles");
@@ -1862,9 +1922,6 @@ gettext("Upload file");
 gettext("GLOBAL");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
-gettext("Files statistics");
-
-/* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
@@ -1872,9 +1929,6 @@ gettext("Files (#)");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Size (MB)");
-
-/* ./public/admin/themes/default/tpl//files/list.tpl */
-gettext("File manager");
 
 /* ./public/admin/themes/default/tpl//files/list.tpl */
 gettext("Title");
@@ -2225,10 +2279,22 @@ gettext("Title");
 gettext("Internal name:");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
-gettext("Subsection of:");
+gettext("Category available for:");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
-gettext("Category available for:");
+gettext("Global");
+
+/* ./public/admin/themes/default/tpl//category/form.tpl */
+gettext("Albums");
+
+/* ./public/admin/themes/default/tpl//category/form.tpl */
+gettext("Video");
+
+/* ./public/admin/themes/default/tpl//category/form.tpl */
+gettext("ePaper");
+
+/* ./public/admin/themes/default/tpl//category/form.tpl */
+gettext("Subsection of:");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
 gettext("Show in menu:");
@@ -2282,76 +2348,46 @@ gettext("Config album module");
 gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Global categories");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Title");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Name");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Type");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Articles");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Photos");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Advertisements");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Actions");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("No available sections");
+gettext("Article categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Album categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Title");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Name");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Type");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Articles");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Photos");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Advertisements");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Published");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Actions");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("No available sections");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Video categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("ePapel categories");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Name");
+gettext("Internal name");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Type");
+gettext("Articles");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Photos");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Advertisements");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Published");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("No available categories for listing");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Title");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Internal name");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Articles");
@@ -2372,16 +2408,10 @@ gettext("Actions");
 gettext("No available sections");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("ePaper categories");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Name");
-
-/* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("Type");
+gettext("Internal name");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Articles");
@@ -2399,7 +2429,25 @@ gettext("Published");
 gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
-gettext("No available sections");
+gettext("Title");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Internal name");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Articles");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Photos");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Advertisements");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Published");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Creating new widget");
@@ -2464,47 +2512,44 @@ gettext("Content");
 /* ./public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Save");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Widget Manager");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("New widget");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("New");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
-gettext("Widgets");
-
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Name");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Type");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Published");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Published");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Published");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Unpublished");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Unpublished");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Edit");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Delete");
 
-/* ./public/admin/themes/default/tpl//widget/index.tpl */
-gettext("No widget found");
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
+gettext("There is no available widgets");
 
 /* ./public/admin/themes/default/tpl//trash/trash.tpl */
 gettext("Articles");
@@ -2531,9 +2576,6 @@ gettext("Videos");
 gettext("Files");
 
 /* ./public/admin/themes/default/tpl//trash/trash.tpl */
-gettext("Trash");
-
-/* ./public/admin/themes/default/tpl//trash/trash.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//trash/trash.tpl */
@@ -2547,6 +2589,15 @@ gettext("Date");
 
 /* ./public/admin/themes/default/tpl//trash/trash.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//trash/trash.tpl */
+gettext("Restore");
+
+/* ./public/admin/themes/default/tpl//trash/trash.tpl */
+gettext("Delete");
+
+/* ./public/admin/themes/default/tpl//trash/trash.tpl */
+gettext("There is no elements in the trash");
 
 /* ./public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("Welcome to %1");
@@ -2577,6 +2628,33 @@ gettext("News from \"%1\"");
 
 /* ./public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("You don't have RSS configured to show here");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("SQL error log");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Clean");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Refresh the list for getting newest error list");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Refresh list");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Search");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Creation date");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Error explanation");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("Execution time");
+
+/* ./public/admin/themes/default/tpl//system_information/sql_error_log.tpl */
+gettext("There is no SQL errors registered in database.");
 
 /* ./public/admin/themes/default/tpl//system_information/mysql-check.tpl */
 gettext("Database manager");
@@ -2706,6 +2784,15 @@ gettext("Galleries");
 
 /* ./public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Gallery Inner");
+
+/* ./public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Poll");
+
+/* ./public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Poll Inner");
+
+/* ./public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Newsletter");
 
 /* ./public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Delete");
@@ -2939,9 +3026,6 @@ gettext("Photo catalog");
 gettext("Today photos");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
-gettext("Image statistics");
-
-/* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
@@ -2967,6 +3051,12 @@ gettext("Total Size (MB)");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
 gettext("# photos");
+
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("Specials");
+
+/* ./public/admin/themes/default/tpl//mediamanager/_partials/list_information.tpl */
+gettext("TOTAL");
 
 /* ./public/admin/themes/default/tpl//mediamanager/_partials/categories.tpl */
 gettext("GLOBAL");
@@ -3149,10 +3239,10 @@ gettext("Images manager :: General statistics");
 gettext("Search");
 
 /* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
-gettext("GLOBAL");
+gettext("Global statistics");
 
 /* ./public/admin/themes/default/tpl//mediamanager/index.tpl */
-gettext("ADS");
+gettext("Advertisement");
 
 /* ./public/admin/themes/default/tpl//mediamanager/image_data.tpl */
 gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
@@ -3443,6 +3533,9 @@ gettext("Sections:");
 gettext("HOME");
 
 /* ./public/admin/themes/default/tpl//acl/user/list.tpl */
+gettext("User Manager");
+
+/* ./public/admin/themes/default/tpl//acl/user/list.tpl */
 gettext("New user");
 
 /* ./public/admin/themes/default/tpl//acl/user/list.tpl */
@@ -3557,10 +3650,16 @@ gettext("-- All --");
 gettext("Privilege name");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
+gettext("Description");
+
+/* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Módule");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
+gettext("Edit privilege");
 
 /* ./public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Edit privilege");
@@ -3644,6 +3743,9 @@ gettext("Edit group");
 gettext("Edit group");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/list.tpl */
+gettext("Edit group");
+
+/* ./public/admin/themes/default/tpl//acl/user_group/list.tpl */
 gettext("Delete group");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/list.tpl */
@@ -3679,34 +3781,34 @@ gettext("Keyword information");
 /* ./public/admin/themes/default/tpl//keywords/new.tpl */
 gettext("Save");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Keyword Manager");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Listing keywords");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("New");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Search keyworks containing ");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Type");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Keyword");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Replacement value");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Actions");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Modify");
 
-/* ./public/admin/themes/default/tpl//keywords/index.tpl */
+/* ./public/admin/themes/default/tpl//keywords/list.tpl */
 gettext("Delete");
 
 /* ./public/admin/themes/default/tpl//acessdenied/accessdenied.tpl */
@@ -4300,55 +4402,55 @@ gettext("Keywords");
 /* ./public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("Page content");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Static Pages Manager");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Listing static pages");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("New static page");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("New page");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Title:");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Search");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Title");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("URL");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Visits");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Published");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Actions");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Open in a new window");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Published");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Unpublished");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Modify");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("Delete");
 
-/* ./public/admin/themes/default/tpl//static_pages/index.tpl */
+/* ./public/admin/themes/default/tpl//static_pages/list.tpl */
 gettext("There is no static pages.");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
