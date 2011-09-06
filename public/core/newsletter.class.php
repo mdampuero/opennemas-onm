@@ -27,10 +27,11 @@ class Newsletter
     public function __construct($config)
     {
       $this->setup($config['namespace']);
-
+/*
         if(!$this->schema_exists()) {
             $this->setupDatabaseTable();
-        } 
+        }
+ */
     }
 
     public function setup($namespace)
@@ -554,47 +555,33 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 
     public function fetch()
     {
-//        $sql = $this->buildQuery();
-//
-//        $order_by = ' ORDER BY firstname, lastname, name, email';
-//        $sql .= $order_by;
-//
-//        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-//        $rs = $this->conn->Execute($sql);
-//
-//        $this->accounts = array();
-//
-//        if($rs!==false) {
-//            while(!$rs->EOF) {
-//                $this->accounts[] = new Newsletter_Account(
-//                    /* email */
-//                    $rs->fields['email'],
-//
-//                    /* firstname lastname, name */
-//                    $this->buildName($rs->fields['firstname'],
-//                                     $rs->fields['lastname'],
-//                                     $rs->fields['name'],
-//                                     $rs->fields['email'])
-//                ); // Newsletter_Account
-//
-//                $rs->moveNext();
-//            }
-//        }
+        $sql = $this->buildQuery();
 
-        $receiver = array();
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations)
-            && array_key_exists('receiver', $configurations)
-            && !empty($configurations['receiver']))
-        {
-            $this->accounts[] = new Newsletter_Account(
-                $configurations['receiver'],
-                ''
-            );
+        $order_by = ' ORDER BY firstname, lastname, name, email';
+        $sql .= $order_by;
 
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->Execute($sql);
+
+        $this->accounts = array();
+
+        if($rs!==false) {
+            while(!$rs->EOF) {
+                $this->accounts[] = new Newsletter_Account(
+                    /* email */
+                    $rs->fields['email'],
+
+                    /* firstname lastname, name */
+                    $this->buildName($rs->fields['firstname'],
+                                     $rs->fields['lastname'],
+                                     $rs->fields['name'],
+                                     $rs->fields['email'])
+                ); // Newsletter_Account
+
+                $rs->moveNext();
+            }
         }
-
-        return $receiver;
+  
     }
 
     private function buildName($firstname, $lastname, $name, $email)

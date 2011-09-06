@@ -24,11 +24,7 @@ use Onm\Settings as s,
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-// Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('NEWSLETTER_ADMIN')) {
-    Acl::deny();
-}
+Acl::checkOrForward('NEWSLETTER_ADMIN');
 
 require_once(SITE_CORE_PATH.'string_utils.class.php');
 String_Utils::disabled_magic_quotes();
@@ -47,7 +43,6 @@ function buildFilter($filters)
 
     $fltr = array('`available`=1');
     $order_by = 'created DESC';
-
 
     switch($filters['options']) {
         case 'in_home': {
@@ -178,6 +173,21 @@ switch($action) {
         $account = $newsletter->getAccountsProvider();
         $accounts = $account->getAccounts();
 
+        $receiver = array();
+        $mailList = array();
+        $configurations = \Onm\Settings::get('newsletter_maillist');
+        if (!is_null($configurations)
+            && array_key_exists('email', $configurations)
+            && !empty($configurations['email']))
+        {
+            $mailList[] = new Newsletter_Account(
+                $configurations['email'],
+                $configurations['name']
+            );
+
+        }
+        $tpl->assign('mailList', $mailList);
+       
         // Ajax request
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
            ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
@@ -196,7 +206,7 @@ switch($action) {
      * Step 4: preview the message
      */
     case 'preview':
- 
+        
         $htmlContent = $newsletter->render();
         $tpl->assign('htmlContent', $htmlContent);
         $tpl->display('newsletter/preview.tpl');
@@ -232,6 +242,22 @@ switch($action) {
         // Mail user by user
         foreach($data->accounts as $mailbox) {
 
+            // Replace name destination
+            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+            if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
+                $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
+            } else {
+                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+            }
+        }
+        
+        foreach($data->lists as $email) {
+            $mailbox = new stdClass();
+            $name = preg_split('/@/',$email);
+            $mailbox->name = $name[0];
+            $mailbox->email =trim($email);
+ 
             // Replace name destination
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
 

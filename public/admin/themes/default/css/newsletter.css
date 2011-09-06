@@ -5,7 +5,8 @@ ul#items-selected {
 }
 
 ul#items-list li,
-ul#items-selected li {
+ul#items-selected li,
+ul#items-list3 li {
 	padding: 5px;
 	list-style: none;
 	display:block !important;
@@ -19,9 +20,10 @@ ul#items-list li:nth-child(odd) {
 	background-color: #fff;
 }
 
-ul#items-list li:hover,
+ul#items-list li:hover, ul#items-list3 li:hover,
 ul#items-selected li:hover{
 	background-color: #bfbfbf;
+    cursor: pointer;
 }
 
 ul#items-selected li,

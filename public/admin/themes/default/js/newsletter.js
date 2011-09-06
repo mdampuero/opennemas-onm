@@ -437,6 +437,20 @@ Newsletter.AccountManager = Class.create({
         data[source] = this.accounts;
 
         this.postmaster.value = Object.toJSON(data);
+    },
+
+     getTextarea: function(source, area) {
+        var data = this.postmaster.value.evalJSON();
+        if(data == null) {
+            data = {};
+        }
+
+        var textarea = $(area).value;
+        var list = textarea.gsub(',', '\n').split('\n');
+
+        data[source] = list;
+
+        this.postmaster.value = Object.toJSON(data);
     }
 });
 
