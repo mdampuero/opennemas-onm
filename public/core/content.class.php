@@ -490,10 +490,10 @@ class Content
             // INFO: Se ven como propiedade pk_fk_content_category despois evítase unha consulta
             $this->category = $this->pk_fk_content_category;
         }
-        
+
         $ccm = ContentCategoryManager::get_instance();
         $this->category_name = $ccm->get_name($this->category);
-         
+
     }
 
     /**
@@ -1440,6 +1440,26 @@ class Content
             $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Unpublish from homepage at '.$type.' Id '.$pk_content);
             return true;
         }
+    }
+
+
+
+    public function set_favorite($status)
+    {
+        if ($this->id == null) return false;
+
+        $changed = date("Y-m-d H:i:s");
+
+        $sql = "UPDATE contents SET `favorite`=? WHERE pk_content=".$this->id;
+        $values = array($status);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            return;
+        }
+        return true;
     }
 
 }

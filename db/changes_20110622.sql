@@ -1,5 +1,7 @@
+ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
+ALTER TABLE `videos` DROP COLUMN `favorite`;
 -- 5-September-2011
-ALTER TABLE `videos` ADD `favorite` TINYINT( 1 ) NOT NULL AFTER `information`
+ALTER TABLE `videos` ADD `favorite` TINYINT( 1 ) NOT NULL AFTER `information`;
 
 -- 26-August-2011
 ALTER TABLE `poll_items` CHANGE `votes` `votes` INT( 10 ) UNSIGNED NULL DEFAULT '0';
