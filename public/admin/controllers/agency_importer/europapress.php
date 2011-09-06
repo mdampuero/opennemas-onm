@@ -102,7 +102,7 @@ switch($action) {
                 'username' => $username,
                 'password' => $password,
             );
-            
+
             if (s::set('europapress_server_auth', $serverAuth)
                 && s::set('europapress_sync_from_limit', $syncFrom))
             {
@@ -135,8 +135,8 @@ switch($action) {
             'title' => filter_input ( INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
                                      array('options' => array('default' => '*')) ),
         );
-        
-        
+
+
 
         $elements = $europapress->findAll($find_params);
 
@@ -153,7 +153,7 @@ switch($action) {
         $pager = Pager::factory($pager_options);
 
         $elements = array_slice($elements, ($page-1)*$items_page, $items_page);
-        
+
         $tpl->assign(
             array(
                 'elements'      =>  $elements,
@@ -162,7 +162,7 @@ switch($action) {
                 'pagination'    =>  $pager,
             )
         );
-        
+
         $tpl->display('agency_importer/europapress/list.tpl');
 
         break;
@@ -250,13 +250,16 @@ switch($action) {
             $ftpConfig = array(
                 'server'    => $serverAuth['server'],
                 'user'      => $serverAuth['username'],
-                'password'  => $serverAuth['password']
+                'password'  => $serverAuth['password'],
+                'allowed_file_extesions' => array(
+                    'xml', 'XML',
+                )
             );
 
             $epSynchronizer = \Onm\Import\Europapress::getInstance();
             $message = $epSynchronizer->sync($ftpConfig);
             $epSynchronizer->updateSyncFile();
-            
+
             m::add(
                 sprintf( _('Downloaded %d new articles and deleted %d old ones.'),
                         $message['downloaded'],
@@ -274,12 +277,12 @@ switch($action) {
             $e = new \Onm\Import\Europapress();
             $e->unlockSync();
         }
-        
+
         $httpParams = array(
                             array('action' => 'list'),
                             array('page' => $page),
                             );
-        
+
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
     } break;

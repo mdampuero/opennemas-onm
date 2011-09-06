@@ -119,7 +119,7 @@
     {/if}
 
     <div id="{$category}">
-        <table class="adminheading">
+        <!--<table class="adminheading">
             <tr>
                 <td><strong>{t}Pending articles{/t}</strong><span style="font-size: 10px;"><em>(estos articulos <b>NO</b> est&aacute;n aceptadas por lo que no estar&aacute;n inclu&iacute;dos en el almac&eacute;n de noticias. Ac&eacute;ptelos para poder publicarlos)</em></span></td>
                 <td align='right'>{t}Go to section:{/t}
@@ -141,7 +141,7 @@
                     </select>
                 </td>
             </tr>
-        </table>
+        </table>-->
         <table class="listing-table">
             <thead>
                 <th style="width:15px;"></th>
@@ -257,7 +257,7 @@
                 </tr>
             </tfoot>
         </table>
-        
+
         <br>
 
         {if $opinions && $category eq 'todos'}
