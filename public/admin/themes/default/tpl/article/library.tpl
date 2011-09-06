@@ -43,10 +43,10 @@
 	</div>
 
 	<div class="wrapper-content">
-	<ul class="tabs2" style="margin-bottom: 28px;">
+	<ul class="pills">
 
 		<li>
-			<a href="article.php?action=list_hemeroteca&category=todos" id="link_todos" {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
+			<a href="article.php?action=list_hemeroteca&category=todos" id="link_todos" {if $category=='todos'}class="active"{/if}>TODOS</font></a>
 		</li>
 		<script type="text/javascript">
 		// <![CDATA[
@@ -56,7 +56,7 @@
 		});
 		// ]]>
 		</script>
-		{include file="menu_categorys.tpl" home="article.php?action=list_hemeroteca"}
+		{include file="menu_categories.tpl" home="article.php?action=list_hemeroteca"}
 	</ul>
 
 	{if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
@@ -66,13 +66,8 @@
 	{/if}
 
 	<div id="{$category}">
-		<table class="adminheading">
-			<tr>
-				<td><strong>{t}Articles in library{/t}</strong></td>
-			</tr>
-		</table>
 
-		<table class="adminlist">
+		<table class="listing-table">
 			<thead>
 				<th style="width:30px">&nbsp;</th>
 				<th class="title">{t}Title{/t}</th>
@@ -148,13 +143,13 @@
 				</tr>
 				{sectionelse}
 				<tr>
-					<td align="center" colspan=10><br><br><p><h2><strong>Ninguna noticia guardada</strong></h2></p><br><br></td>
+					<td class="empty" colspan=10>{t}There is no article saved{/t}</td>
 				</tr>
 				{/section}
 				</tbody>
 
 				<tfoot>
-					<td class="pagination" colspan=10>{if count($articles) gt 0}{$paginacion->links}{/if}</td>
+					<td class="pagination" colspan=10>{if count($articles) gt 0}{$paginacion->links}{/if}&nbsp;</td>
 				</tfoot>
 
 			</table>

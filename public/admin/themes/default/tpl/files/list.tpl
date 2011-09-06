@@ -18,13 +18,12 @@
 
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 
-		<ul class="tabs2">
+		<ul class="pills">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}GLOBAL{/t}</a>
+				<a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0}class="active"{/if}>{t}GLOBAL{/t}</a>
 			</li>
-			{include file="menu_categorys.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
+			{include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
 		</ul>
-                <br style="clear:both;">
 	<div id="{$category}">
 		{if $category eq 0}
 			<table class="listing-table">

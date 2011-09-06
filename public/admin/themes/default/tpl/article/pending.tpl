@@ -86,15 +86,15 @@
 <div class="wrapper-content">
         <div id="content-wrapper">
 
-    <ul class="tabs2" style="margin-bottom:28px;">
+    <ul class="pills" style="margin-bottom:28px;">
         {acl hasCategoryAccess=0}
         <li>
-            <a href="article.php?action=list_pendientes&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODOS</font></a>
+            <a href="article.php?action=list_pendientes&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>TODOS</font></a>
         </li>
         {/acl}
         {acl hasCategoryAccess=20}
         <li>
-            <a href="article.php?action=list_pendientes&category=20" id='link_unknown' {if $category=='20'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
+            <a href="article.php?action=list_pendientes&category=20" id='link_unknown' {if $category=='20'} class="active"{/if}>UNKNOWN</font></a>
         </li>
         {/acl}
         <script type="text/javascript">
@@ -109,7 +109,7 @@
         });
         // ]]>
         </script>
-        {include file="menu_categorys.tpl" home="article.php?action=list_pendientes"}
+        {include file="menu_categories.tpl" home="article.php?action=list_pendientes"}
     </ul>
 
     {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}
@@ -168,7 +168,7 @@
                     </td>
                     <td>
                         {if isset($articles[c]->paper_page) && !empty($articles[c]->paper_page)} <img width="16px" align="absmiddle" src="themes/default/images/xml_24.png" border="0" alt="De ImportXML" /> {/if}
-                        <span style="cursor:pointer;" title="title" id="title_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->title|clearslash} </span>
+                            <span style="cursor:pointer;" title="title" id="title_{$articles[c]->id}" name="{$articles[c]->id}" >{$articles[c]->title|clearslash} </span>
                         <script type="text/javascript">
                             // <![CDATA[
                                 new Editable('title_{$articles[c]->id}','input');

@@ -37,15 +37,15 @@
     <div class="wrapper-content">
 
 
-        <ul class="tabs2 clearfix">
+        <ul class="pills clearfix">
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>{t}ALL{/t}</a>
 			</li>
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
 			</li>
 			<li>
-			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
+			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'}class="active"{/if}>{t}OPINION{/t}</a>
 			</li>
 			<script type="text/javascript">
             //<![CDATA[
@@ -59,7 +59,7 @@
 				});
 			//]]>
             </script>
-			{include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+			{include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
 		</ul>
 
 

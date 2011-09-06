@@ -41,8 +41,8 @@
 
     <div class="wrapper-content">
 
-        <ul class="tabs2" style="margin-bottom: 28px;">
-            {include file="menu_categorys.tpl" home="poll.php?action=list"}
+        <ul class="pills" style="margin-bottom: 28px;">
+            {include file="menu_categories.tpl" home="poll.php?action=list"}
         </ul>
 
         <table class="listing-table">

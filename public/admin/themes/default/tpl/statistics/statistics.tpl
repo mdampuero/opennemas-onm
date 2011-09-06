@@ -15,20 +15,11 @@
 </div>
 <div class="wrapper-content">
     {* ZONA MENU CATEGORIAS ******* *}
-    <ul class="tabs2">
+    <ul class="pills">
         <li>
-            <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>TODAS</a>
+            <a href="statistics.php?action=index&category=0" id="link_global" {if $category==0}class="active"{/if}>TODAS</a>
         </li>
-        <script type="text/javascript">
-        // <![CDATA[
-        Event.observe($('link_global'), 'mouseover', function(event) {
-           $('menu_subcats').setOpacity(0);
-           e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-
-         });
-        // ]]>
-        </script>
-        {include file="menu_categorys.tpl" home="statistics.php?action=index"}
+        {include file="menu_categories.tpl" home="statistics.php?action=index"}
     </ul>
 
     <div id="dashboard_enlaces">

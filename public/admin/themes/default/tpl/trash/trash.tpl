@@ -34,21 +34,21 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 {block name="admin_menu"}{/block}
 	<div class="wrapper-content">
-		<ul class="tabs2 clearfix">
+		<ul class="pills clearfix">
 			{*{section name=as loop=$types_content}
 				<li>
 					 {assign var=ca value=`$types_content[as]`}
-					<a href="litter.php?action=list&mytype={$ca}" {if $mytype==$ca} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{$types_content[as]}</a>
+					<a href="litter.php?action=list&mytype={$ca}" {if $mytype==$ca}class="active"{/if}>{$types_content[as]}</a>
 				</li>
 			{/section} *}
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=article" {if $mytype=='article'} style="font-weight:bold; background-color:#BFD9BF" {/if}>{t}Articles{/t}</a></li>
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=opinion" {if $mytype=='opinion'} style="font-weight:bold; background-color:#BFD9BF" {/if}>{t}Opinions{/t}</a></li>
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=advertisement" {if $mytype=='advertisement'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Ads{/t}</a></li>
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=comment" {if $mytype=='comment'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Coments{/t}</a></li>
-			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=album" {if $mytype=='album'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Albums{/t}</a></li>-->
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=photo" {if $mytype=='photo'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Photographies{/t}</a></li>
-			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=video" {if $mytype=='video'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Videos{/t}</a></li>-->
-			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=attachment" {if $mytype=='attachment'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}Files{/t}</a></li>
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=article" {if $mytype=='article'}class="active"{/if}>{t}Articles{/t}</a></li>
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=opinion" {if $mytype=='opinion'}class="active"{/if}>{t}Opinions{/t}</a></li>
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=advertisement" {if $mytype=='advertisement'}class="active"{/if}>{t}Ads{/t}</a></li>
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=comment" {if $mytype=='comment'}class="active"{/if}>{t}Coments{/t}</a></li>
+			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=album" {if $mytype=='album'}class="active"{/if}>{t}Albums{/t}</a></li>-->
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=photo" {if $mytype=='photo'}class="active"{/if}>{t}Photographies{/t}</a></li>
+			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=video" {if $mytype=='video'}class="active"{/if}>{t}Videos{/t}</a></li>-->
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=attachment" {if $mytype=='attachment'}class="active"{/if}>{t}Files{/t}</a></li>
 		</ul>
 
         <table class="listing-table">

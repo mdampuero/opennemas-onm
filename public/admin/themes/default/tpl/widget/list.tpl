@@ -77,7 +77,10 @@ function confirmar() {
                 {section name=wgt loop=$widgets}
                 <tr>
                     <td>
-                        {$widgets[wgt]->title}
+                        <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
+                            {$widgets[wgt]->title}
+                        </a>
+
                     </td>
 
                     <td>

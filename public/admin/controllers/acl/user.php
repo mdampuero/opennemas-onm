@@ -38,7 +38,7 @@ if( isset($_REQUEST['action']) ) {
             $user = new User();
 
             $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
-            $users = $user->get_users($filters);
+            $users = $user->get_users($filters, ' ORDER BY login ');
 
             $users = $cm->paginate_num($users,12);
 

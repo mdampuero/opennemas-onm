@@ -3,7 +3,7 @@
 {block name="admin_menu"}
 	<div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{$titulo_barra}</h2></div>
+        <div class="title"><h2>{t}Break link control{/t} :: {t 1=$category_name}Listing elements in "%1"{/t}</h2></div>
         <ul class="old-button">
             <li>
 				<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelFiles', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
@@ -38,47 +38,15 @@
 			</script>
 		{/if}
 		<div>
-		<ul class="tabs2">
-			{section name=as loop=$allcategorys}
+		<ul class="pills">
 			<li>
-				{assign var=ca value=$allcategorys[as]->pk_content_category}
-			</li>
-			{/section}
-			<li>
-				<a href="link_control.php?listmode={$listmode}&category=3" {if $category==3} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}ALBUMS{/t}</a>
+				<a href="link_control.php?listmode={$listmode}&category=3" {if $category==3}class="active"{/if}>{t}ALBUMS{/t}</a>
 			</li>
 			<li>
-			   <a href="link_control.php?listmode={$listmode}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>{t}ADS{/t}</a>
+                <a href="link_control.php?listmode={$listmode}&category=2" {if $category==2}class="active"{/if}>{t}ADS{/t}</a>
 			</li>
+            {include file="menu_categories.tpl" home="link_control.php?action=list"}
 		</ul>
-		<br>
-		<div style="clear:left;">
-			{section name=as loop=$allcategorys}
-				<div id="{$allcategorys[as]->name}" style="display:inline ">
-					<ul class="tabs2">
-					{section name=su loop=$subcat[as]}
-					{if $allcategorys[as]->pk_content_category eq $category}
-						{assign var=subca value=$subcat[as][su]->pk_content_category}
-						<li>
-							<a href="{$home}?action=list&category={$subcat[as][su]->pk_content_category}" {if $category==$subca} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if} >
-								  <span style="color:#222 ;margin-left: 12px;margin-right: 12px;">{$subcat[as][su]->title}</span></a>
-						</li>
-					{else}
-						{if $subcat[as][su]->fk_content_category eq $datos_cat[0]->fk_content_category}
-							{assign var=subca value=$subcat[as][su]->pk_content_category}
-							<li>
-								<a href="{$home}?action=list&category={$subcat[as][su]->pk_content_category}" {if $category==$subca} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if} >
-									<span style="color:#222 ;margin-left: 12px;margin-right: 12px;">{$subcat[as][su]->title}</span></a>
-							</li>
-						{/if}
-					{/if}
-					{/section}
-					</ul>
-				</div>
-			{/section}
-			<br/><br/><br/>
-		</div>
-
 
 		</div>
 

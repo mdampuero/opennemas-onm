@@ -3,24 +3,6 @@
 {block name="footer-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
-
-
-    <script defer="defer" type="text/javascript">
-    // <![CDATA[
-        Event.observe($('link_home'), 'mouseover', function(event) {
-            $('menu_subcats').setOpacity(0);
-                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-            });
-        Event.observe($('link_opinion'), 'mouseover', function(event) {
-            $('menu_subcats').setOpacity(0);
-                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-            });
-        Event.observe($('link_gallery'), 'mouseover', function(event) {
-            $('menu_subcats').setOpacity(0);
-                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-            });
-    // ]]>
-    </script>
     <script type="text/javascript">
         function submitFilters(frm) {
             $('action').value='list';
@@ -70,12 +52,11 @@
     </div>
     <div class="wrapper-content">
 
-        <ul class="tabs2 clearfix">
+        <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOMEPAGE{/t}</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t}</font></a>
             </li>
-
-            {include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
         <div id="{$category}">

@@ -78,7 +78,7 @@
 			<thead>
 				<tr>
 					<th style="width:10px; margin-left:-10px;"><input type="checkbox"></th>
-					<th class="left">{t}Name Surname{/t}</th>
+					<th class="left">{t}Full name{/t}</th>
 					<th class="center">{t}Username{/t}</th>
 					<th class="center">{t}Group{/t}</th>
 					<th class="right">{t}Actions{/t}</th>
@@ -100,7 +100,7 @@
 					</td>
 					<td class="center">
 						{section name=u loop=$user_groups}
-							{if $user_groups[u]->id == $users[c]->fk_user_group}
+							{if $user_groups[u]->id == $user->fk_user_group}
 								{$user_groups[u]->name}
 							{/if}
 						{/section}

@@ -1,21 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-	<style type="text/css">
-		table.adminlist label {
-			padding-right:10px;
-			width:100px !important;
-			display:inline-block;
-		}
-		table.adminlist input, table.adminlist textarea{
-			width:70%;
-		}
-	</style>
-{/block}
-
 {block name="header-js" append}
     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsVideo.js"></script>
-
 {/block}
 
 {block name="content"}
@@ -69,12 +55,12 @@
 	</div>
 
     <div class="wrapper-content">
-        <ul class="tabs2 clearfix">
+        <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $datos_cat[0]->fk_content_category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >WIDGET HOME</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}class="active"{/if} >WIDGET HOME</a>
             </li>
 
-            {include file="menu_categorys.tpl" home="video.php?action=list"}
+            {include file="menu_categories.tpl" home="video.php?action=list"}
         </ul>
         <div id="messageBoard"></div>
 

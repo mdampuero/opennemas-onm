@@ -31,36 +31,35 @@
 
 	<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
-		<div style="width:100%">
+		<div style="width:700px; margin:0 auto;">
             <table class="listing-table">
                 <thead>
                     <tr>
+						<th class="center" style="width:10px">{t}Activate{/t}</th>
 						<th >{t}Cache group{/t}</th>
-						<th class="center">{t}Activate{/t}</th>
 						<th class="right">{t}Expire time{/t}</th>
 					</tr>
                 </thead>
                 <tbody>
 					{foreach from=$config key="k" item="v"}
-                    <tr style="background:{cycle values="#f1f1f1,#fff"} !important">
-                        <td style="padding-left:30px;">
+                    <tr>
+                        <td class="center">
+                            <input type="checkbox" name="caching[{$k|default:""}]" value="1" {if $v.caching}checked="checked"{/if}/>
+                        </td>
+                        <td>
                             <img src="{$params.IMAGE_DIR}template_manager/{$groupIcon.$k|default:""}" border="0" title="Caché de opinión interior" />
                             {$groupName.$k|default:$k}
                             <input type="hidden" name="group[]" value="{$k|default:""}" />
                         </td>
 
-                        <td class="center">
-                            <input type="checkbox" name="caching[{$k|default:""}]" value="1" {if $v.caching}checked="checked"{/if}/>
-                        </td>
-
                         <td class="right">
-                            <input type="text" size="12" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" /> <sub>segundos</sub>
+                            <input type="text" size="7" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" /> {t}seconds{/t}
                         </td>
                     </tr>
                     {foreachelse}
                     <tr>
-						<td colspan=3>
-							<h1>{t}There is no cache configuration available{/t}</h1>
+						<td class="empty" colspan=3>
+							{t}There is no cache configuration available{/t}
 						</td>
 					</tr>
 					{/foreach}

@@ -53,9 +53,9 @@
     </div>
     <div class="wrapper-content">
 
-        <ul class="tabs2">
+        <ul class="pills">
             <li>
-                <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
+                <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}class="active"{/if}>
                     {t}ALL{/t}</a>
             </li>
             {* <li>
@@ -66,14 +66,13 @@
 
             {acl isAllowed="ADVERTISEMENT_ADMIN"}
              <li>
-                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode|default:""}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
+                 <a href="{$smarty.server.PHP_SELF}?listmode={$listmode|default:""}&category=2" {if $category==2}class="active"{/if}>
                      PUBLICIDAD</a>
              </li>
              {/acl}
-            {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
+            {include file="menu_categories.tpl" home="mediamanager.php?listmode="}
 
         </ul>
-
 
         <input type="hidden" name="category" value="{$category}" />
 

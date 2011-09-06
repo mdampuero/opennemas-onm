@@ -69,18 +69,18 @@
     <div class="wrapper-content">
 
         <div>
-            <ul class="tabs2 clearfix">
+            <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" {if $type_opinion==-1} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOME{/t}</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" {if $type_opinion==-1}class="active"{/if}>{t}HOME{/t}</font></a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" {if $type_opinion=='0'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}Author Opinions{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</font></a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" {if $type_opinion=='1'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}Editorial{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" {if $type_opinion=='1'}class="active"{/if}>{t}Editorial{/t}</font></a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" {if $type_opinion=='2'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}Director opinion{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</font></a>
                 </li>
             </ul>
 
