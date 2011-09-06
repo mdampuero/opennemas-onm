@@ -23,7 +23,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{$titulo_barra}</h2></div>
+			<div class="title"><h2>{t}User Manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
@@ -51,87 +51,91 @@
 			<tr>
 				<th align="right">
 
-					<label for="username">{t}Filter by name{/t}</label>
-					<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name|default:""}" />
+					<label for="username">{t}Filter by name{/t}
+						<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name|default:""}" />
+					</label>
 
-					<label for="userlogin">{t}or username:{/t}</label>
-					<input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login|default:""}" />
+					<label for="userlogin">{t}or username:{/t}
+						<input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login|default:""}" />
+					</label>
 
-					<label for="usergroup">{t}and group:{/t}</label>
-					<select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
-						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
-							{assign var=filter_selected value=$smarty.request.filter.group}
-						{/if}
-						{html_options options=$groupsOptions selected=$filter_selected|default:""}
-					</select>
-
-					<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-					<input type="submit" value="{t}Search{/t}">
+					<label for="usergroup">{t}and group:{/t}
+						<select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
+							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
+								{assign var=filter_selected value=$smarty.request.filter.group}
+							{/if}
+							{html_options options=$groupsOptions selected=$filter_selected|default:""}
+						</select>
+					</label>
+					<input type="hidden" name="page" value="{$smarty.request.page}" />
+					<button type="submit">{t}Search{/t}</button>
 				</th>
 			</tr>
 		</table>
 
-		<table border="0" cellpadding="4" cellspacing="0" class="adminlist">
+		<table class="listing-table">
 			{if count($users) gt 0}
 			<thead>
 				<tr>
-					<th class="title" align="left" style="width:40%;padding:4px;">{t}Name Surname{/t}</th>
-					<th class="title" style="padding:4px;">{t}Username{/t}</th>
-					<th class="title" style="padding:4px;">{t}Group{/t}</th>
-					<th class="title" style="width:50px;padding:4px;" align="right">{t}Actions{/t}</th>
+					<th style="width:10px; margin-left:-10px;"><input type="checkbox"></th>
+					<th class="left">{t}Full name{/t}</th>
+					<th class="center">{t}Username{/t}</th>
+					<th class="center">{t}Group{/t}</th>
+					<th class="right">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			{/if}
-
 			<tbody>
-				{section name=c loop=$users}
-				<tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-
-					<td style="padding:4px;">
-								<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$users[c]->id}"  style="cursor:pointer;" ">
-						<a href="?action=read&id={$users[c]->id}" title="{t}Edit user{/t}">
-							{$users[c]->name}&nbsp;{$users[c]->firstname}&nbsp;{$users[c]->lastname}</a>
+			{foreach from=$users item=user name=user_listing}
+				<tr>
+					<td>
+						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$user->id}"  style="cursor:pointer;" ">
 					</td>
-					<td style="padding:4px;">
-						{$users[c]->login}
+					<td class="left">
+						<a href="?action=read&id={$user->id}" title="{t}Edit user{/t}">
+							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
 					</td>
-					<td style="padding:4px;">
+					<td class="center">
+						{$user->login}
+					</td>
+					<td class="center">
 						{section name=u loop=$user_groups}
-							{if $user_groups[u]->id == $users[c]->fk_user_group}
-									{$user_groups[u]->name}
+							{if $user_groups[u]->id == $user->fk_user_group}
+								{$user_groups[u]->name}
 							{/if}
 						{/section}
 					</td>
-					<td style="padding:4px;" align="right">
+					<td class="right">
 						<ul class="action-buttons">
 							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&id={$users[c]->id}&page={$page|default:0}" title="{t}Edit user{/t}">
+								<a href="{$smarty.server.PHP_SELF}?action=read&id={$user->id}&page={$page|default:0}" title="{t}Edit user{/t}">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/>
 								</a>
 							</li>
 							<li>
-								<a href="#" onClick="javascript:confirmar(this, {$users[c]->id});" title="{t}Delete user{/t}">
+								<a href="#" onClick="javascript:confirmar(this, {$user->id});" title="{t}Delete user{/t}">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/>
 								</a>
 							</li>
 						</ul>
-
 					</td>
 				</tr>
-				{sectionelse}
-				<tr >
-					<td align="center" colspan="4"><h2>{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}</h2><br>
-					</td>
-				</tr>
-				{/section}
-			</tbody>
 
-			<tfoot>
+				{foreachelse}
 				<tr>
-					<td colspan="5" align="center">{if count($users) gt 0}{$paginacion->links}{/if}</td>
+					<td colspan="5" class="empty">
+						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
+					</td>
 				</tr>
-			</tfoot>
-
+				{/foreach}
+				<tfoot>
+					<tr>
+						<td colspan="5">
+							&nbsp;
+						</td>
+					</tr>
+				</tfoot>
+			</tbody>
 		</table>
 
 		<input type="hidden" id="action" name="action" value="" />

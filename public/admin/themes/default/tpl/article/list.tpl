@@ -70,21 +70,13 @@
 
 <div class="wrapper-content">
 
-    <ul class="tabs2" style="margin-bottom: 28px;">
+    <ul class="pills">
         {acl hasCategoryAccess=0}
         <li>
-            <a href="article.php?action=list&category=home" id='link_home' {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}HOME{/t}</a>
+            <a href="article.php?action=list&category=home" id='link_home' {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
         </li>
-        <script type="text/javascript">
-        // <![CDATA[
-            Event.observe($('link_home'), 'mouseover', function(event) {
-                $('menu_subcats').setOpacity(0);
-                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-            });
-        // ]]>
-        </script>
         {/acl}
-        {include file="menu_categorys.tpl" home="article.php?action=list"}
+        {include file="menu_categories.tpl" home="article.php?action=list"}
     </ul>
 
     {*PROVISIONAL alert eliminar varias noticias con relacionados*}

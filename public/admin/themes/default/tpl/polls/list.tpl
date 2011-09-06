@@ -41,111 +41,110 @@
 
     <div class="wrapper-content">
 
-        <ul class="tabs2" style="margin-bottom: 28px;">
-            {include file="menu_categorys.tpl" home="poll.php?action=list"}
+        <ul class="pills" style="margin-bottom: 28px;">
+            {include file="menu_categories.tpl" home="poll.php?action=list"}
         </ul>
 
-         <div id="{$category}">
+        <table class="listing-table">
 
-            <table class="adminheading">
-                <tr>
-                    <th nowrap>Encuestas</th>
+            <thead>
+               <tr>
+                    {if count($polls) > 0}
+                    <th style="width:15px;"><input type="checkbox" class="minput"></th>
+                    <th>T&iacute;tulo</th>
+                    <th>Subt&iacute;tulo</th>
+                    <th class="center">Votos</th>
+                    <th class="center">Visto</th>
+                    <th style="width:110px;" class="center">Fecha</th>
+                    <th style="width:40px;" class="center">Favorito</th>
+                    <th style="width:40px;" class="center">Publicado</th>
+                    <th style="width:40px;" class="center">{t}Actions{/t}</th>
+                    {else}
+                    <th scope="col" colspan=9>&nbsp;</th>
+                    {/if}
                 </tr>
-            </table>
-
-            <table class="adminlist">
-
-                <thead>
-                   <tr>
-                       <th class="title"></th>
-                       <th class="title">T&iacute;tulo</th>
-                       <th class="title">Subt&iacute;tulo</th>
-                       <th align="center">Votos</th>
-                       <th align="center">Visto</th>
-                       <th align="center">Fecha</th>
-                       <th align="center">Favorito</th>
-                       <th align="center">Publicado</th>
-                       <th align="center">{t}Actions{/t}</th>
-                   </tr>
-                </thead>
-                <tbody>
-                    {section name=c loop=$polls}
-                    <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                     <td>
-                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$polls[c]->id}"  style="cursor:pointer;" >
-                     </td>
+            </thead>
+            <tbody>
+                {section name=c loop=$polls}
+                <tr >
+                    <td>
+                        <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$polls[c]->id}"  style="cursor:pointer;" >
+                    </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();" >
-                         {$polls[c]->title|clearslash}
-                     </td>
-                      <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();"  >
-                         {$polls[c]->subtitle|clearslash}
-                     </td>
-                      <td align="center">
-                          {$polls[c]->total_votes}
-                     </td>
-                     <td align="center">
-                         {$polls[c]->views}
-                     </td>
-                     <td style="" align="center">
-                             {$polls[c]->created}
-                     </td>
-                    <td  align="center">
+                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$polls[c]->id}" title="Modificar">
+                            {$polls[c]->title|clearslash}
+                        </a>
+                    </td>
+                    <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();"  >
+                        {$polls[c]->subtitle|clearslash}
+                    </td>
+                    <td class="center">
+                        {$polls[c]->total_votes}
+                    </td>
+                    <td class="center">
+                        {$polls[c]->views}
+                    </td>
+                    <td class="center">
+                        {$polls[c]->created}
+                    </td>
+                    <td class="center">
                         {if $polls[c]->favorite == 1}
-                            <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado"></a>
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado"></a>
                         {else}
-                            <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente"></a>
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente"></a>
                         {/if}
                     </td>
 
-                     <td  align="center">
-                         {if $polls[c]->available == 1}
-                             <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
-                         {else}
-                             <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
-                         {/if}
-                    </td>
-                    <td style="" align="center">
+                    <td class="center">
+                        {if $polls[c]->available == 1}
+                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                        </a>
+                        {else}
+                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                        </a>
+                        {/if}
+                   </td>
+                   <td class="center">
                         <ul class="action-buttons">
                             <li>
-                                <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Archivar a Hemeroteca">
+                               <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Archivar a Hemeroteca">
                                     <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar a Hemeroteca" />
-                                </a>
+                               </a>
                             </li>
                             <li>
-                                <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$polls[c]->id}');" title="Modificar">
+                                <a href="{$smarty.server.PHP_SELF}?action=read&id={$polls[c]->id}" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
-                            </li>
+                           </li>
                             <li>
                                 <a href="#" onClick="javascript:confirmar(this, '{$polls[c]->id}');" title="Eliminar">
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                 </a>
                             </li>
-                        </ul>
-                     </td>
-                 </tr>
+                       </ul>
+                    </td>
+                </tr>
 
-                 {sectionelse}
-                 <tr>
-                     <td align="center" colspan=10><br><br><p><h2><b>Ninguna encuesta guardada</b></h2></p><br><br></td>
-                 </tr>
-                 {/section}
-                 </tbody>
+               {sectionelse}
+               <tr>
+                   <td class="empty" colspan=10>
+                        {t}There is no polls yet.{/t}
+                   </td>
+               </tr>
+               {/section}
+            </tbody>
 
-                <tfoot>
-                    {if count($polls) gt 0}
-                    <tr>
-                        <td colspan="9" align="center">{$paginacion->links}</td>
-                    </tr>
-                    {/if}
-                </tfoot>
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        {$paginacion->links}&nbsp;
+                    </td>
+                </tr>
+            </tfoot>
 
-             </table>
-
-         </div>
-
+         </table>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />

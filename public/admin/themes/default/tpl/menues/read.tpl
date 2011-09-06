@@ -116,7 +116,7 @@ input[type="text"] {
 <form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Menu manager{/t} :: {t}Editing menu{/t}</h2></div>
+            <div class="title"><h2>{t}Menu manager{/t} :: {t 1=$menu->name}Editing menu "%1"{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="saveMenu();sendFormValidate(this, '_self', 'validate', '{$menu->pk_menu|default:""}', 'formulario');" value="Validar" title="Validar">
@@ -144,14 +144,10 @@ input[type="text"] {
                     </a>
                 </li>
             </ul>
-        
+        </div>
+
     </div>
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <td>{t 1=$name|default:""}Menu %1 Frontpage{/t}: </td>
-            </tr>
-        </table>
         <table class="adminform">
             {if isset($menu)}
                 {assign var=menuParams value=$menu->params|unserialize}
@@ -269,7 +265,7 @@ input[type="text"] {
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}" 
+                                                    <li id="page_{$value}"
                                                         title="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">

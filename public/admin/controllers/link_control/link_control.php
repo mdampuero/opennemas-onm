@@ -11,8 +11,6 @@ require_once('../../session_bootstrap.php');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-$tpl->assign('titulo_barra', 'Control de enlaces rotos');
-
 if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = 10;}
 $category=$_REQUEST['category'];
 $tpl->assign('category', $_REQUEST['category']);

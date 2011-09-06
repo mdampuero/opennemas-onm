@@ -1,73 +1,74 @@
+{if $type_opinion eq '0'}
 <table class="adminheading">
 	<tr>
-	{if $type_opinion eq '0'}
-		<th nowrap>{t}Opinion articles{/t}</th>
-		<th> {t}Select an author{/t}
-		<select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
-			<option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
-			{section name=as loop=$autores}
-				<option value="{$autores[as]->pk_author}" {if isset($author) && $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
-			{/section}
-		</select>
+		<th align="right">
+            {t}Select an author{/t}
+            <select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
+                <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
+                {section name=as loop=$autores}
+                    <option value="{$autores[as]->pk_author}" {if isset($author) && $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
+                {/section}
+            </select>
 		</th>
-		<th  style="padding:10px;width:55%;"></th>
-	{else}
-		<th></th>
-	{/if}
 	</tr>
 </table>
-<table class="adminlist">
+{/if}
+<table class="listing-table">
 	<thead>
 		<tr>
-			<th class="title"  style="width:30px;"></th>
+			<th style="width:15px;"></th>
 			{if  $type_opinion eq '0'}
 			<th style="width:150px;">{t}Author name{/t}</th> {/if}
-			<th class="title">{t}Title{/t}</th>
-			<th style="width:70px;">{t}View{/t}</th>
-			<th style="width:70px;">{t}Ratings{/t}</th>
-			<th style="width:70px;">{t}Comments{/t}</th>
-			<th style="width:70px;">{t}Created in{/t}</th>
-			<th style="width:70px;">{t}In home{/t}</th>
-			<th style="width:70px;">{t}Published{/t}</th>
-			<th style="width:70px;">{t}Actions{/t}</th>
+			<th>{t}Title{/t}</th>
+			<th class="center" style="width:40px;">{t}View{/t}</th>
+			<th style="width:40px;">{t}Ratings{/t}</th>
+			<th style="width:40px;">{t}Comments{/t}</th>
+			<th class="center" style="width:110px;">{t}Created in{/t}</th>
+			<th style="width:80px;">{t}In home{/t}</th>
+			<th style="width:40px;">{t}Published{/t}</th>
+			<th class="right" style="width:40px;">{t}Actions{/t}</th>
 	  </tr>
 	</thead>
 	<tbody>
 		{section name=c loop=$opinions}
-		<tr {cycle values="class=row0,class=row1"} >
-			<td style="width:30px;">
+		<tr>
+			<td>
 				<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$opinions[c]->id}">
 			</td>
 			 {if  $type_opinion eq '0'}
-			<td style="width:150px;" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-				<a href="author.php?action=read&id={$opinions[c]->fk_author}"><img src="{$params.IMAGE_DIR}author.png" border="0" alt="Publicado" alt='Editar autor' title='Editar autor'/></a>
-				 {$names[c]}
+			<td  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+                <a href="author.php?action=read&id={$opinions[c]->fk_author}">
+                    {$names[c]}
+                </a>
+
 			</td>
 			{/if}
-			  <td style="" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-				{$opinions[c]->title|clearslash}
+			<td style="" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
+				<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
+					{$opinions[c]->title|clearslash}
+                </a>
 			</td>
 
-			<td style="width:70px;" align="center">
+			<td class="center">
 				{$opinions[c]->views}
 			</td>
-			<td style="width:70px;" align="center">
-				{$op_rating[c]|default:""}
+			<td class="center">
+				{$op_rating[c]|default:0}
 			</td>
-			<td style="width:70px;" align="center">
-				{$op_comment[c]|default:""}
+			<td class="center">
+				{$op_comment[c]|default:0}
 			</td>
-			<td style="width:70px;" align="center">
-					{$opinions[c]->created}
+			<td class="center">
+				{$opinions[c]->created}
 			</td>
-			<td style="width:70px" align="center">
-					{if $opinions[c]->in_home == 1}
-					<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="Sacar de portada" ></a>
-					{else}
-						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="Meter en portada" ></a>
-					{/if}
+			<td class="center">
+                {if $opinions[c]->in_home == 1}
+                <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="Sacar de portada" ></a>
+                {else}
+                <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="Meter en portada" ></a>
+                {/if}
 			</td>
-			<td style="width:70px;" align="center">
+			<td class="center">
 				{if $opinions[c]->content_status == 1}
 					<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
 						<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
@@ -76,7 +77,7 @@
 						<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
 				{/if}
 			</td>
-			<td style="width:70px;" align="center">
+			<td class="right">
 				<ul class="action-buttons">
 					<li>
 						<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
@@ -89,12 +90,18 @@
 				</ul>
 			</td>
 		</tr>
+        {sectionelse}
+        <tr>
+            <td class="empty" colspan=10>
+                {t}There is no opinions yet.{/t}
+            </td>
+        </tr>
 		{/section}
 	</tbody>
 	<tfoot>
 		<tr class="pagination">
-			<td colspan="10" align="center">
-				{$paginacion|default:""}
+			<td colspan="10">
+				{$paginacion|default:""}&nbsp;
 			</td>
 		</tr>
 	</tfoot>

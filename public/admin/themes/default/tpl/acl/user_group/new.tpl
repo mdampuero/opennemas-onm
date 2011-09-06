@@ -5,7 +5,7 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Keyword Manager{/t} :: {t}Listing keywords{/t}</h2></div>
+            <div class="title"><h2>{t}User group manager{/t} :: {t 1=$user_group->name}Editing %1{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user_group->id}', 'formulario');" value="Validar" title="Validar">
@@ -31,11 +31,6 @@
         </div>
     </div>
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <th nowrap></th>
-            </tr>
-        </table>
         <table class="adminform">
             <tbody>
             <!-- Id -->
@@ -67,30 +62,32 @@
 
                 <td style="padding:4px;" nowrap="nowrap" width="80%">
                     {foreach item=privileges from=$modules key=mod name=priv}
-                    <div  style="float:left;width:45%; margin-right:10px;">
-                        <div style="background-color: #EEE;">
-                            <a style="cursor:pointer;" onClick="Element.toggle('{$mod}');">
-                                <h3 style="padding:4px;"> {t}{$mod}{/t} </h3>
-                            </a>
-                            <table border="0" cellpadding="0" cellspacing="0" id="{$mod}" class="fuente_cuerpo" width="100%" style="display:none;">
-                                <tbody>
+                    <div style="width:90%">
+                        <div>
+                            <table  class="listing-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan=2 onClick="Element.toggle('{$mod}');">{t}{$mod}{/t}</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="{$mod}" style="display:none">
                                 {section name=privilege loop=$privileges}
                                     <tr>
-                                    <td style="padding:4px;" nowrap="nowrap" width="5%">
+                                        <td style="padding:4px;" nowrap="nowrap" width="5%">
 
-                                    {if $user_group->contains_privilege($privileges[privilege]->id)}
-                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
-                                       <script  type="text/javascript">
-                                            $('{$mod}').setStyle('display:block');
-                                       </script>
+                                        {if $user_group->contains_privilege($privileges[privilege]->id)}
+                                           <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
+                                           <script  type="text/javascript">
+                                                $('{$mod}').setStyle('display:block');
+                                           </script>
 
-                                    {else}
-                                       <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
-                                    {/if}
-                                    </td>
-                                    <td valign="top" align="left" style="padding:4px;" width="95%">
-                                            {t}{$privileges[privilege]->description}{/t}
-                                    </td>
+                                        {else}
+                                           <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
+                                        {/if}
+                                        </td>
+                                        <td valign="top" align="left" style="padding:4px;" width="95%">
+                                                {t}{$privileges[privilege]->description}{/t}
+                                        </td>
                                     </tr>
                                 {/section}
                             </tbody>

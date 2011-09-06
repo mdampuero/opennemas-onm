@@ -121,7 +121,9 @@ if(isset($_REQUEST['action']) ) {
 
             $cm = new ContentManager();
 
-            if(($article->available==1) && ($article->in_litter==0) && ($article->isStarted())) {
+            if (($article->available==1) && ($article->in_litter==0)
+                && ($article->isStarted())
+            ) {
 
                 // Increment numviews if it's accesible
                 Content::setNumViews($article->pk_article);
@@ -142,7 +144,9 @@ if(isset($_REQUEST['action']) ) {
                 $tpl->assign('num_comments', count($comments));
 
 
-                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['article_id']);
+                $cache_id = $tpl->generateCacheId(
+                    $category_name, $subcategory_name, $_GET['article_id']
+                );
 
                 // Advertisements for single article NO CACHE
                 require_once('article_advertisement.php');
@@ -167,10 +171,12 @@ if(isset($_REQUEST['action']) ) {
                         $tpl->assign('videoInt', $videoInt);
                     }else{
                         $video =
-                            $cm->find_by_category_name('Video',
-                                                        $actual_category,
-                                                        'contents.content_status=1',
-                                                        'ORDER BY created DESC LIMIT 0 , 1');
+                            $cm->find_by_category_name(
+                                'Video',
+                                $actual_category,
+                                'contents.content_status=1',
+                                'ORDER BY created DESC LIMIT 0 , 1'
+                            );
                         if(isset($video[0])){ $tpl->assign('videoInt', $video[0]); }
                     }
 
@@ -198,11 +204,13 @@ if(isset($_REQUEST['action']) ) {
 
                     /******* SUGGESTED CONTENTS *******/
                     $objSearch = cSearch::Instance();
-                    $arrayResults=$objSearch->SearchSuggestedContents($article->metadata,
-                                                                      'Article',
-                                                                      "pk_fk_content_category= ".$article->category.
-                                                                      " AND contents.available=1 AND pk_content = pk_fk_content",
-                                                                      4);
+                    $arrayResults=$objSearch->SearchSuggestedContents(
+                        $article->metadata,
+                        'Article',
+                        "pk_fk_content_category= ".$article->category.
+                        " AND contents.available=1 AND pk_content = pk_fk_content",
+                        4
+                    );
                    // $arrayResults= $cm->getInTime($arrayResults);
                     $tpl->assign('suggested', $arrayResults);
 
@@ -402,7 +410,7 @@ if(isset($_REQUEST['action']) ) {
             exit(0);
         } break;
 
-        
+
 
         case 'vote': {
 
@@ -545,7 +553,7 @@ if(isset($_REQUEST['action']) ) {
 
             // Send article to friend
             require(SITE_LIBS_PATH."/phpmailer/class.phpmailer.php");
-            
+
             $tplMail = new Template(TEMPLATE_USER);
 
             $mail = new PHPMailer();
@@ -563,15 +571,15 @@ if(isset($_REQUEST['action']) ) {
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
             $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
-            
+
             $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
             $article = new Article($_REQUEST['article_id']);
-            
+
             $tplMail->assign('mail', $mail);
             $tplMail->assign('article', $article);
-            
+
 
             // Filter tags before send
             $permalink = preg_replace('@([^:])//@', '\1/', SITE_URL . $article->permalink);
@@ -612,7 +620,7 @@ if(isset($_REQUEST['action']) ) {
             $params['article'] = $article;
             $date = smarty_function_articledate($params,$tpl);
             $tplMail->assign('date', $date);
-            
+
             $tplMail->caching = 0;
             $mail->Body = $tplMail->fetch('article/email_send_to_friend.tpl');
 
@@ -621,10 +629,10 @@ if(isset($_REQUEST['action']) ) {
             /*
              * Implementacion para enviar a multiples destinatarios separados por coma
              */
-            $destinatarios = explode(',', $_REQUEST['destination']);     
+            $destinatarios = explode(',', $_REQUEST['destination']);
 
             foreach ($destinatarios as $dest) {
-                //$mail->AddAddress(trim($dest));    
+                //$mail->AddAddress(trim($dest));
                 $mail->AddBCC(trim($dest));
             }
 

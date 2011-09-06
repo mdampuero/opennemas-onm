@@ -34,26 +34,24 @@
 <div class="wrapper-content">
     <form action="#" method="post" name="formulario" id="formulario">
         <div>
-            <table class="adminheading">
-                <tr>
-                    <td>{t}Menues{/t}</td>
-                </tr>
-            </table>
-            <table class="adminlist">
+            <table class="listing-table">
                 <thead>
                     <tr>
-                        <th style="text-align:left; padding-left:10px">{t}Title{/t}</th>
-                        <th align="center">{t}Edit{/t}</th>
+                        <th>{t}Title{/t}</th>
+                        <th align="center" style="width:30px;">{t}Edit{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {section loop=$menues name=m}
-                        <tr {cycle values="class=row0,class=row1"}>
-                            <td style="padding-left:10px">
-                                {$menues[m]->name|capitalize}
+                        <tr>
+                            <td>
+                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[s]->name}"
+                                    title="{t 1=$menues[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                     {$menues[m]->name|capitalize}
+                                 </a>
                             </td>
 
-                            <td style="padding:5px; width:100px;" align="center">
+                            <td class="center">
                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
@@ -63,18 +61,22 @@
                         {foreach key=k item=subMenu from=$subMenues}
                             {if $k eq $menues[m]->pk_menu}
                                 {section loop=$subMenu name=s}
-                                    <tr {cycle values="class=row0,class=row1"}>
-                                        <td style="padding-left:50px">
+                                <tr>
+                                    <td style="padding-left:20px">
+                                        <strong>&rArr; </strong>
+                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
+                                           title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             {$subMenu[s]->name|capitalize}
-                                        </td>
+                                        </a>
+                                    </td>
 
-                                        <td style="padding:5px; width:100px;" align="center">
-                                            <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
-                                               title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                                                <img src="{$params.IMAGE_DIR}edit.png" border="0" />
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    <td class="center">
+                                        <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
+                                           title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                            <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                        </a>
+                                    </td>
+                                </tr>
                                  {/section}
                              {/if}
                         {/foreach}
@@ -82,7 +84,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan=2></td>
+                        <td colspan=2>&nbsp;</td>
                     </tr>
                 </tfoot>
             </table>

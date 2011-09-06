@@ -1,11 +1,11 @@
-<table class="adminlist">
+<table class="listing-table">
     <thead>
         <th class="title" style="width:50%;">{t}Title{/t}</th>
-        <th align="center" style="width:30px;">{t}Type{/t}</th>
-        <th align="center" style="width:50px;">{t}Category{/t}</th>
-        <th align="center" style="width:50px;">{t}Creation date{/t}</th>
-        <th align="center" style="width:20px;">{t}Status{/t}</th>
-        <th align="center" style="width:50px;">{t}Actions{/t}</th>
+        <th class="center" style="width:30px;">{t}Type{/t}</th>
+        <th class="center" style="width:50px;">{t}Category{/t}</th>
+        <th class="center" style="width:50px;">{t}Creation date{/t}</th>
+        <th class="center" style="width:20px;">{t}Status{/t}</th>
+        <th class="center" style="width:50px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
         {section name=c loop=$arrayResults}
@@ -15,18 +15,18 @@
                     <font size="1"><b>{t}Metatags:{/t}</b>  {$arrayResults[c].metadata|clearslash}</font>
                 {/if}
             </td>
-            <td  align="center">
+            <td  class="center">
                 {$arrayResults[c].type}
             </td>
-            <td align="center">
+            <td class="center">
                 {$arrayResults[c].catName}
             </td>
-            <td align="center">
+            <td class="center">
                 {$arrayResults[c].created}
             </td>
-            <td align="center">
+            <td class="center">
                 {if ($arrayResults[c].in_litter == 1)}
-                    <img src="{$params.IMAGE_DIR}trash.png" border="0" alt="En Papelera" title="En Papelera"/>
+                    <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera"/>
                 {else}
                     {if ($arrayResults[c].type == 'artigo')}
                         {if ($arrayResults[c].available eq 1) && ($arrayResults[c].content_status eq 1)}
@@ -51,7 +51,7 @@
                         {/if}
                  {/if}
             </td>
-            <td align="center">
+            <td class="center">
                 <ul class="action-buttons">
                     <li>
                         {assign var="ct" value=$arrayResults[c].content_type}
@@ -84,15 +84,16 @@
                       {/if}
                     </li>
                 </ul>
+            </td>
+        </tr>
 
-          </td>
-      </tr>
-
-      {sectionelse}
-      <tr>
-          <td align="center" colspan=4><br><br><p><h2><b>{t}There isn't any existent elements that matches your search criteria{/t}</b></h2></p><br><br></td>
-      </tr>
-      {/section}
+        {sectionelse}
+        <tr>
+            <td class="empty" colspan=4>
+                {t}There isn't any existent elements that matches your search criteria{/t}
+            </td>
+        </tr>
+        {/section}
     </tbody>
 
     <tfoot>

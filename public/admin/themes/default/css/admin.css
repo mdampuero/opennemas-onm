@@ -174,21 +174,15 @@ table {
 }
 
 table.adminheading {
-    border: 1px solid #BFBFBF;
-	border-bottom-width:0px;
 	margin:0 auto;
 	/*margin-top:3px;*/
 	background-color: #FFF;
-	font-family:Georgia !important;
 	width: 100%;
 	text-align: left;
 	height: 30px;
 	width: 100%;
-	padding-left: 5px;
-	border: 1px solid #ccc;
-	border-bottom:0px;
-	-moz-border-radius: 6px 6px 0 0;
-	-webkit-border-radius: 6px 6px 0 0;
+	padding: 5px;
+	border-top:1px solid #d9d9d9;
 	background: #f1f1f1; /* for non-css3 browsers */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#d9d9d9)); /* for webkit browsers */
@@ -623,6 +617,9 @@ div.spch-bub-outside {
 	margin: 1em;
 }
 
+.panel .listing-table {
+	margin: 0;
+}
 
 .panel.active-tab-body {
 	display: block;
@@ -1400,7 +1397,7 @@ ul#menu hr{
 				background: transparent;
 				width: auto;
 				border:1px solid transparent;
-				padding:4px;
+				padding:5px;
 
 			}
 				#menu-acciones-admin ul li a img {
@@ -1420,9 +1417,15 @@ ul#menu hr{
 
 				#menu-acciones-admin ul li a:hover,
 				.old-button li a:hover{
-					cursor: pointer;
-					background: #d0d0d0;
-					border-radius:5px;
+                    color:Black;
+                    background:#e4e4e4;
+                    border: 1px solid #D9D9D9;
+                    cursor: pointer;
+                    outline: medium none;
+                    position: relative;
+                    text-align: center;
+                    text-decoration: none;
+                    border-radius:4px;
 				}
 
 				div#menu-acciones-admin li.separator,
@@ -1501,7 +1504,8 @@ ul#menu hr{
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 #copyright {
 	vertical-align:top;
-	margin-top:10px
+	margin-top:10px;
+	margin-bottom:50px;
 }
 	#copyright .company {
 		color:#888;
@@ -1646,18 +1650,23 @@ div.ui-blocker-message img {
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 div.action-bar {
-    text-align:right;
+    /*text-align:right;
 	background: none repeat scroll 0 0 #F1F1F1;
-    border: 1px solid #D2D2D2;
-    border-bottom-width:1px;
-	border-top-width:0px;
+    border:0 none;
+    border-top: 1px solid #D2D2D2;
     padding:5px 0;
-    margin-bottom:20px;
-	width:100%
+    margin-bottom:20px;*/
+	width:100%;
+    background: none repeat scroll 0 0 #ececec/*#F5F5F5*/;
+    /*border-radius: 0 0 3px 3px;*/
+    /*border-top: 1px solid #DDDDDD;*/
+    margin-bottom: 18px;
 }
 div.action-bar .right{
 	float:right;
-	margin-right:5px
+    text-align:right;
+	padding: 17px 20px 18px 150px;
+
 }
 
 
@@ -1897,4 +1906,187 @@ div.action-bar .right{
   cursor: default;
   color: #808080;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* -------------------------------------------------------------
+  New layout for listing tables.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.listing-table {
+	border:0 none;
+	border-collapse:collapse;
+	border-bottom: 1px dotted #D9D9D9;
+    border-left: 1px solid #FFFFFF;
+    color: #424E51;
+    font-size: 11px;
+    line-height: 140%;
+    padding: 8px 5px;
+    text-align: left;
+    vertical-align: middle;
+	width:100%;
+}
+.listing-table td {
+    border-bottom: 1px dotted #D9D9D9;
+    color: #424E51;
+    font-size: 11px;
+    line-height: 140%;
+    padding: 8px 5px;
+    text-align: left;
+    vertical-align: middle;
+	border-collapse:collapse
+}
+
+.listing-table th,
+.listing-table tfoot td {
+    background: #343434;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 9px;
+    text-align: left;
+}
+.listing-table tr:hover { background:#F1F1F1; }
+.listing-table th td { text-align:center; }
+.listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
+.listing-table td a { color:#1792D9; font-weight: bold; text-decoration:none; }
+.listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
+.listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
+
+.listing-table th img, .listing-table td img { vertical-align:middle; }
+
+.listing-table .left { text-align:left !important; }
+.listing-table .right { text-align:right !important; }
+.listing-table .center { text-align:center !important; }
+
+
+.listing-table .pagination { color:#aaa !important; }
+.listing-table .pagination a { background: #3f3f3f; border: 1px solid #666; color:White; }
+.listing-table .pagination a:hover { background:#3c3c3c; }
+
+/* -------------------------------------------------------------
+  upper header for filtering... no yet investigated. NEEDS WORK.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.table-info {
+	background:#F1F1F1;
+    border:1px solid #D2D2D2;
+	border-right:none;
+	border-left:none;
+    clear: both;
+    margin:5px 0;
+    position: relative;
+    width: 100%;
+	font-size: 12px;
+}
+.table-info > div { padding:5px; }
+.table-info div {vertical-align:middle; height:100% }
+.table-info .right { float:right; text-align:right; }
+.table-info .left { float:left; text-align:left; }
+.table-info .center { text-align:center }
+
+/* -------------------------------------------------------------
+  pills experiment
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.pills {
+    list-style: none outside none;
+    margin: 0pt 0pt 18px;
+    padding: 0pt;
+}
+
+.pills:before, .tabs:after, .pills:after {
+    content: "";
+    display: table;
+}
+
+.pills:after {
+    clear: both;
+}
+
+.pills > li {
+    float: left;
+    position:relative;
+}
+
+.pills > li > a {
+    display: block;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.pills a {
+    border-radius: 10px;
+    line-height: 30px;
+    margin: 5px 3px 5px 0pt;
+    padding: 0pt 10px;
+}
+
+.pills > li.with-subcategories:hover > a,
+.pills a:hover {
+    background: none repeat scroll 0% 0% #0050A3;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.pills  a.active {
+    background: none repeat scroll 0% 0% #0069D6;
+    color: #FFFFFF;
+    text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.pills > li.active:hover > a,
+.pills > li.with-subcategories:hover > a{
+    border-radius:10px 10px 0 0;
+}
+
+.pills ul {
+    margin:0;
+    padding:0;
+    position:absolute;
+    top:35px;
+    left:0;
+    display:none;
+}
+.pills ul li {
+    list-style:none;
+    margin:0;
+
+}
+.pills ul li a {
+    border:1px solid transparent;
+    display:block;
+    border-radius:0;
+    margin:0;
+    background: none repeat scroll 0% 0% #0069D6;
+    color: #FFFFFF;
+    text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    padding:0px 25px;
+}
+.pills ul li:first-child a {
+    border-top-right-radius: 5px;
+}
+.pills ul li:last-child a{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.pills li:hover ul {
+    display:block;
+}
+
+.pills > li.with-subcategories > a:after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #0069D6;
+    content: "&darr";
+    display: inline-block;
+    height: 0;
+    margin-left: 4px;
+    margin-top: 13px;
+    opacity: 0.5;
+    text-indent: -99999px;
+    vertical-align: top;
+    width: 0;
+}
+.pills > li.with-subcategories > a:hover:after {
+    border-top: 4px solid White;
+    color:White;
 }

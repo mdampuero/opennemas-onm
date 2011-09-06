@@ -8,18 +8,18 @@
 	</tr>
 </table>
 
-<table class="adminlist">
+<table class="listing-table">
 	<thead>
 		<tr>
-			<th class="title" style="width:30px;"></th>
-			<th class="title" style="width:160px;">{t}Author{/t}</th>
-			<th class="title">{t}Title{/t}</th>
-			<th align="center" style="width:70px;">{t}Views{/t}</th>
-			<th align="center" style="width:70px;">{t}Votes{/t}</th>
-			<th align="center" style="width:74px;">{t}Comments{/t}</th>
-			<th align="center" style="width:70px;">{t}Date{/t}</th>
-			<th align="center" style="width:50px;">{t}Home{/t}</th>
-			<th align="center" style="width:70px;">{t}Actions{/t}</th>
+			<th style="width:30px;"></th>
+			<th style="width:160px;">{t}Author{/t}</th>
+			<th>{t}Title{/t}</th>
+			<th class="center" style="width:70px;">{t}Views{/t}</th>
+			<th class="center" style="width:70px;">{t}Votes{/t}</th>
+			<th class="center" style="width:74px;">{t}Comments{/t}</th>
+			<th class="center" style="width:70px;">{t}Date{/t}</th>
+			<th class="center" style="width:50px;">{t}Home{/t}</th>
+			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 		</tr>
 	</thead>
 	<tr>
@@ -36,26 +36,26 @@
 					<td onClick="javascript:document.getElementById('selected_0').click();" >
 						{$director[0]->title|clearslash}
 					</td>
-					<td align="center" style="width:80px;">
+					<td class="center" style="width:80px;">
 						{$director[0]->views}
 					</td>
-					<td align="center" style="width:80px;">
+					<td class="center" style="width:80px;">
 						{$director[0]->ratings}
 					</td>
-					<td align="center" style="width:70px;">
+					<td class="center" style="width:70px;">
 						{$director[0]->comments}
 					</td>
-					<td align="center" style="width:78px;">
+					<td class="center" style="width:78px;">
 						{$director[0]->created}
 					</td>
-					<td align="center" style="width:55px;">
+					<td class="center" style="width:55px;">
 						{if $director[0]->in_home == 1}
 								<a href="?id={$director[0]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
 						{else}
 								<a href="?id={$director[0]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
 						{/if}
 					</td>
-					<td align="center" style="width:72px;">
+					<td class="center" style="width:72px;">
 						<ul class="action-buttons">
 							<li>
 								{if $director[0]->content_status == 1}
@@ -96,18 +96,18 @@
 		</td>
 	</tr>
 </table>
-<table class="adminlist">
+<table class="listing-table">
 	<thead>
 		<tr>
-			<th class="title" style="width:30px;"></th>
-			<th class="title" style="width:160px;">{t}Author{/t}</th>
-			<th class="title">{t}Title{/t}</th>
-			<th align="center" style="width:70px;">{t}Views{/t}</th>
-			<th align="center" style="width:70px;">{t}Votes{/t}</th>
-			<th align="center" style="width:74px;">{t}Comments{/t}</th>
-			<th align="center" style="width:70px;">{t}Date{/t}</th>
-			<th align="center" style="width:50px;">{t}Home{/t}</th>
-			<th align="center" style="width:70px;">{t}Actions{/t}</th>
+			<th  style="width:30px;"></th>
+			<th  style="width:160px;">{t}Author{/t}</th>
+			<th >{t}Title{/t}</th>
+			<th class="center" style="width:70px;">{t}Views{/t}</th>
+			<th class="center" style="width:70px;">{t}Votes{/t}</th>
+			<th class="center" style="width:74px;">{t}Comments{/t}</th>
+			<th class="center" style="width:70px;">{t}Date{/t}</th>
+			<th class="center" style="width:50px;">{t}Home{/t}</th>
+			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -127,26 +127,26 @@
 							<td onClick="javascript:document.getElementById('selected_{$cont}').click();">
 								{$editorial[c]->title|clearslash}
 							</td>
-							<td align="center" style="width:80px;">
+							<td class="center" style="width:80px;">
 								{$editorial[c]->views}
 							</td>
-							<td align="center" style="width:80px;">
+							<td class="center" style="width:80px;">
 								{$editorial[c]->ratings}
 							</td>
-							<td align="center" style="width:70px;">
+							<td class="center" style="width:70px;">
 								{$editorial[c]->comments}
 							</td>
-							<td align="center" style="width:80px;">
+							<td class="center" style="width:80px;">
 								{$editorial[c]->created}
 							</td>
-							<td align="center" style="width:55px;">
+							<td class="center" style="width:55px;">
 								{if $editorial[c]->in_home == 1}
 									<a href="?id={$editorial[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
 								{else}
 									<a href="?id={$editorial[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
 								{/if}
 							</td>
-							<td align="center" style="width:72px;">
+							<td class="center" style="width:72px;">
 								<ul class="action-buttons">
 									<li>
 										{if $editorial[c]->content_status == 1}
@@ -170,11 +170,6 @@
 										</a>
 									</li>
 								</ul>
-
-								&nbsp;
-
-								&nbsp;
-
 							</td>
 						</tr>
 				</table>
@@ -195,18 +190,18 @@
 		</td>
 	</tr>
 </table>
-<table class="adminlist">
+<table class="listing-table">
 	<thead>
 		<tr>
-			<th class="title" style="width:30px;"></th>
-			<th class="title" style="width:140px;">Autor</th>
-			<th class="title">T&iacute;tulo</th>
-			<th align="center" style="width:70px;">Visto</th>
-			<th align="center" style="width:70px;">Votaci&oacute;n</th>
-			<th align="center" style="width:74px;">Comentarios</th>
-			<th align="center" style="width:70px;">Fecha</th>
-			<th align="center" style="width:50px;">Home</th>
-			<th align="center" style="width:70px;">{t}Actions{/t}</th>
+			<th  style="width:30px;"></th>
+			<th  style="width:140px;">Autor</th>
+			<th >T&iacute;tulo</th>
+			<th class="center" style="width:70px;">Visto</th>
+			<th class="center" style="width:70px;">Votaci&oacute;n</th>
+			<th class="center" style="width:74px;">Comentarios</th>
+			<th class="center" style="width:70px;">Fecha</th>
+			<th class="center" style="width:50px;">Home</th>
+			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 		</tr>
 	</thead>
 	<tr>
@@ -234,26 +229,26 @@
 					{$opinions[c]->title|clearslash}
 				</td>
 
-				<td align="center" style="width:80px;">
+				<td class="center" style="width:80px;">
 					{$opinions[c]->views}
 				</td>
-				<td align="center" style="width:80px;">
+				<td class="center" style="width:80px;">
 						{$op_rating[c]|default:""}
 				 </td>
-				<td style="width:70px;" align="center">
+				<td style="width:70px;" class="center">
 					{$op_comment[c]}
 				</td>
-				<td align="center" style="width:80px;">
+				<td class="center" style="width:80px;">
 					{$opinions[c]->created}
 				</td>
-				<td align="center" style="width:55px;">
+				<td class="center" style="width:55px;">
 					{if $opinions[c]->in_home == 1}
 						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" ></a>
 					{else}
 						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category|default:""}" class="go_home" title="Meter en portada" ></a>
 					{/if}
 				</td>
-				<td align="center" style="width:74px;">
+				<td class="center" style="width:74px;">
 					<ul class="action-buttons">
 						<li>
 							{if $opinions[c]->content_status == 1}
@@ -287,8 +282,8 @@
 </tr>
 <tfoot>
 	<tr class="pagination">
-		<td colspan="11" align="center">
-			{$paginacion->links}
+		<td colspan="11" class="center">
+			{$paginacion->links}&nbsp;
 		</td>
 	</tr>
 </tfoot>

@@ -93,7 +93,7 @@ if(isset($_REQUEST['action'])) {
                 $tpl->assign('paginacion', $pager->links);
                 $_SESSION['type'] = $_REQUEST['type_opinion'];
                 $number = 2;
-                
+
                 $opinion=new Opinion();
                 $total=$opinion->count_inhome_type($_REQUEST['type_opinion']);
                 $alert="";
@@ -103,7 +103,7 @@ if(isset($_REQUEST['action'])) {
                 } elseif(($_REQUEST['type_opinion'] == 2) && ($total != 1)) {
                      $type = 'opinion del director';
                 }
-                m::add( sprintf(_("You must put %d %s in the HOME widget"), $number, $type, $total) );
+                m::add( sprintf(_("You must put %d opinions in the HOME widget"), $number) );
                // $tpl->assign('msg_alert',$alert);
             } else {
                 $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
@@ -266,7 +266,7 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::isAdmin() &&  
+            if(!Acl::isAdmin() &&
                     !Acl::check('CONTENT_OTHER_UPDATE') &&
                     $opinionCheck->fk_user != $_SESSION['userid']) {
                 $msg ="Only read";

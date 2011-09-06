@@ -143,7 +143,7 @@ switch($action) {
 
         $tpl->assign('widgets', $widgets);
         //$tpl->assign('pager', $pager);
-        $tpl->display('widget/index.tpl');
+        $tpl->display('widget/list.tpl');
         break;
     }
 }

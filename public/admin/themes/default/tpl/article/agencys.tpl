@@ -1,29 +1,15 @@
 
 {* LISTADO ******************************************************************* *}
 {if !isset($smarty.post.action) || $smarty.post.action eq "list_agencys"}
-    <ul class="tabs2" style="margin-bottom: 28px;">
+    <ul class="pills">
         <li>
-            <a href="article.php?action=list_agency&category=ALL" id="link_ALL"  {if $category=='ALL'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>{t}ALL{/t}</font></a>
+            <a href="article.php?action=list_agency&category=ALL" id="link_ALL"  {if $category=='ALL'}class="active"{/if}>{t}ALL{/t}</font></a>
         </li>
         {acl hasCategoryAccess=20}
         <li>
-            <a href="article.php?action=list_agency&category=20" id='link_unknown' {if $category=='20'} style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>UNKNOWN</font></a>
+            <a href="article.php?action=list_agency&category=20" id='link_unknown' {if $category=='20'}class="active"{/if}>{t}UNKNOWN{/t}</font></a>
         </li>
-        {/acl}
-         <script type="text/javascript">
-                // <![CDATA[
-                          Event.observe($('link_ALL'), 'mouseover', function(event) {
-                             $('menu_subcats').setOpacity(0);
-                             e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-
-                            });
-                             Event.observe($('link_hunknown'), 'mouseover', function(event) {
-                                $('menu_subcats').setOpacity(0);
-                                e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-                            });
-                // ]]>
-            </script>
-        {include file="menu_categorys.tpl" home="article.php?action=list_agency"}
+        {include file="menu_categories.tpl" home="article.php?action=list_agency"}
     </ul>
 
     {if isset($smarty.get.alert) && ($smarty.get.alert eq 'ok')}

@@ -40,21 +40,22 @@
 </div>
 <div class="wrapper-content">
 
-    <ul class="tabs2">
+    <ul class="pills">
         <li>
-            <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}style="color:#000000; font-weight:bold; background-color:#BFD9BF"{/if}>
-                {t}GLOBAL{/t}</a>
+            <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}class="active"{/if}>
+                {t}Global statistics{/t}
+            </a>
         </li>
         {if $smarty.server.PHP_SELF eq '/admin/controllers/mediamanager/mediamanager.php'}
         {acl isAllowed="ADVERTISEMENT_ADMIN"}
             <li>
-                <a href="mediamanager.php?listmode={$listmode|default:""}&category=2" {if $category==2} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>
-                    {t}ADS{/t}</a>
+                <a href="mediamanager.php?listmode={$listmode|default:""}&category=2" {if $category==2}class="active"{/if}>
+                    {t}Advertisement{/t}
+                </a>
             </li>
         {/acl}
         {/if}
-        {include file="menu_categorys.tpl" home="mediamanager.php?listmode="}
-
+        {include file="menu_categories.tpl" home="mediamanager.php?listmode="}
     </ul>
     {include file="mediamanager/_partials/list_information.tpl"}
 </div>

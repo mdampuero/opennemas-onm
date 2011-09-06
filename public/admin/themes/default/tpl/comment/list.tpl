@@ -37,15 +37,15 @@
     <div class="wrapper-content">
 
 
-        <ul class="tabs2" style="margin-bottom: 28px;">
+        <ul class="pills clearfix">
 			<li>
-				   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>TODOS</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>{t}ALL{/t}</a>
 			</li>
 			<li>
-				   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>HOME</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
 			</li>
 			<li>
-			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}>OPINION</a>
+			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'}class="active"{/if}>{t}OPINION{/t}</a>
 			</li>
 			<script type="text/javascript">
             //<![CDATA[
@@ -59,7 +59,7 @@
 				});
 			//]]>
             </script>
-			{include file="menu_categorys.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
+			{include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
 		</ul>
 
 
@@ -67,35 +67,35 @@
         {if $category neq "todos"}
             <ul id="tabs">
                 <li>
-						<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0">{t}Pending{/t}</a>
+					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0">{t}Pending{/t}</a>
                 </li>
                 <li>
-						<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1">{t}Published{/t}</a>
+					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1">{t}Published{/t}</a>
                 </li>
                 <li>
-						<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2">{t}Rejected{/t}</a>
+					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2">{t}Rejected{/t}</a>
                 </li>
             </ul>
         {/if}
         </div>
-        
+
         <script type="text/javascript">
-				document.observe('dom:loaded', function() {
-                    {if $comment_status==0}
-                        $('pending-tab').setAttribute('class', 'active-tab');
-					{elseif $comment_status==1}
-                        $('published-tab').setAttribute('class', 'active-tab');
-                        $('pending-tab').setAttribute('class', '');
-                    {elseif $comment_status==2}
-                        $('rejected-tab').setAttribute('class', 'active-tab');
-                        $('pending-tab').setAttribute('class', '');
-                    {/if}
-				});
+            document.observe('dom:loaded', function() {
+                {if $comment_status==0}
+                    $('pending-tab').setAttribute('class', 'active-tab');
+                {elseif $comment_status==1}
+                    $('published-tab').setAttribute('class', 'active-tab');
+                    $('pending-tab').setAttribute('class', '');
+                {elseif $comment_status==2}
+                    $('rejected-tab').setAttribute('class', 'active-tab');
+                    $('pending-tab').setAttribute('class', '');
+                {/if}
+            });
         </script>
-            
+
 		<div id="{$category}">
 
-			<table class="adminheading" style="border-top-left-radius:0px;">
+			<!--<table class="adminheading" style="border-top-left-radius:0px;">
 				<tr>
                     {if $comment_status==0}
                         <th>{t}Comments pending for publishing{/t}</th>
@@ -103,28 +103,34 @@
                         <th>{t}Comments already published{/t}</th>
                     {else}
                         <th>{t}Comments rejected{/t}</th>
-                    {/if}    
+                    {/if}
 				</tr>
-			</table>
+			</table>-->
 
-			<table class="adminlist" border=0>
-			{if count($comments) > 0}
+			<table class="listing-table">
 				<thead>
-				   <tr>
-					   <th  style='width:30px'></th>
-					   <th  style='width:100px;'>{t}Author{/t}</th>
-					   <th  style='width:200px;'>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
-					   <th style='width:200px;'>{t}Commented on{/t}</th>
-					   <th  style='width:6%;' align="center">{t}IP{/t}</th>
-					   {if $category eq 'todos' || $category eq 'home'}
-						   <th align="center" style="width:5%;">{t}Category{/t}</th>
-					   {/if}
-					   <th  style='width:110px;' align="center">{t}Date{/t}</th>
-					   <th style='width:20px;' align="center">{t}Votes{/t}</th>
-					   <th style='width:80px;' align="center">{t}Actions{/t}</th>
+        			{if count($comments) > 0}
+                    <tr>
+                        <th  style='width:30px'></th>
+                        <th  style='width:100px;'>{t}Author{/t}</th>
+                        <th  style='width:200px;'>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
+                        <th style='width:200px;'>{t}Commented on{/t}</th>
+                        <th  style='width:6%;' class="center">{t}IP{/t}</th>
+                        {if $category eq 'todos' || $category eq 'home'}
+                            <th class="center" style="width:5%;">{t}Category{/t}</th>
+                        {/if}
+                        <th  style='width:110px;' class="center">{t}Date{/t}</th>
+                        <th style='width:20px;' class="center">{t}Votes{/t}</th>
+                        <th style='width:40px;' class="center">{t}Actions{/t}</th>
 				   </tr>
-			   </thead>
-			   {/if}
+                   {else}
+                   <tr>
+                        <th>
+                            &nbsp;
+                        </th>
+                   </tr>
+    			   {/if}
+                </thead>
 
 				<tbody>
 					<div class='fisgona' id='fisgona' name='fisgona'></div>
@@ -155,21 +161,21 @@
 							{$articles[c]->title|strip_tags|clearslash}
 							</a>
 						</td>
-						<td align="center">
+						<td class="center">
 							{$comments[c]->ip}
 						</td>
 						{if $category eq 'todos' || $category eq 'home'}
-						<td align="center">
+						<td class="center">
 							{$articles[c]->category_name} {if $articles[c]->content_type==4}Opini&oacute;n{/if}
 						</td>
 						{/if}
-						<td align="center">
+						<td class="center">
 							{$comments[c]->created}
 						</td>
-						<td align="center">
+						<td class="center">
 							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
 						</td>
-						<td align="center">
+						<td class="center">
 							<ul class="action-buttons">
 								<li>
 									{if $category eq 'todos' || $comments[c]->content_status eq 0}
@@ -201,19 +207,19 @@
 
 					{sectionelse}
 					<tr>
-						<td align="center" colspan=10>
-							<h3 style="margin:50px">No hay ningun comentario <br/>pendiente de moderación</h3>
+						<td class="empty" colspan=10>
+							{t}There is no comments here.{/t}
 						</td>
 					</tr>
 					{/section}
 				</tbody>
-				{if count($comments) > 0}
 				<tfoot>
-					<tr class="pagination" >
-						<td colspan="13" align="center">{$paginacion->links|default:""}</td>
+					<tr class="pagination">
+						<td colspan="13">
+                            {$paginacion->links|default:""}&nbsp;
+                        </td>
 					</tr>
 				</tfoot>
-				{/if}
 
 			</table>
 		</div>

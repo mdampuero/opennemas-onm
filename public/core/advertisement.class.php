@@ -119,7 +119,7 @@ class Advertisement extends Content
 
        /* Intersticial banner opinion front */
         650 => "[O] Banner Interticial",
-        
+
         /* Opinions Front banners > 600 */
         601 => "[O] Big banner superior",
         602 => "[O] Banner superior derecho",
@@ -169,7 +169,7 @@ class Advertisement extends Content
         1001 => "[B] Big banner superior",
 
         1009 => "[B] Big Banner Inferior",
-        
+
     );
 
     /**
@@ -512,8 +512,8 @@ class Advertisement extends Content
      **/
     static function setNumClics($id)
     {
-        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 '
-                .'WHERE `pk_advertisement`=?";
+        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 "
+                ." WHERE `pk_advertisement`=?";
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -769,7 +769,7 @@ class Advertisement extends Content
      * @return mixed
      **/
     public function fetch($entry)
-    {         
+    {
         return (isset($this->_registry[$entry]))? $this->_registry[$entry]: null;
     }
 

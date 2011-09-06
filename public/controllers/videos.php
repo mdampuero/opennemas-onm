@@ -152,6 +152,16 @@ switch ($action) {
         //Fetch comments for this opinion
         $tpl->assign('contentId', $videoID);
 
+        /******* SUGGESTED CONTENTS *******/
+        $objSearch = cSearch::Instance();
+        $arrayResults=$objSearch->SearchSuggestedContents(
+            $video->metadata, 'Video',
+            "pk_fk_content_category= ".$video->category.
+            " AND contents.available=1 AND pk_content = pk_fk_content",
+            4
+        );
+        $tpl->assign('suggested', $arrayResults);
+
         Content::setNumViews($videoID);
         $tpl->display('video/video_inner.tpl', $cacheID);
 

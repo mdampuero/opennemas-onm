@@ -137,7 +137,7 @@ function buildFilter()
     if(!empty($filter)) {
         $filter = '@'.$filter.'@';
     }
- 
+
     // return $filter and URI $params
     return array( $filter, implode('&', $params), $page, $items_page);
 }
@@ -272,10 +272,8 @@ switch($action) {
     case 'list':
     default: {
         $caches = array();
-        
-        if(!empty($filter))
-            $caches = $tplManager->scan($filter);
 
+        $caches = $tplManager->scan($filter);
 
         // Pager
         $pager_options = array(
@@ -291,7 +289,7 @@ switch($action) {
         );
         $pager = Pager::factory($pager_options);
 
-            $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
+        $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
 
         $tplManager->parseList($caches);
 
@@ -303,7 +301,7 @@ switch($action) {
         $cm = new ContentManager();
         $articles = $cm->getContents( $pk_contents );
         $articleTitles = array();
-        if(count($articles)>0) {
+        if (count($articles)>0) {
             foreach($articles as $a) {
                 $articleTitles[$a->pk_content] = $a->title;
             }
@@ -324,13 +322,16 @@ switch($action) {
             $sections[ $cacheGroup ] = (empty($category_name))? 'PORTADA': $category_name;
         }
 
-        $tpl->assign('authors', $authors);
-        $tpl->assign('paramsUri', $params);
-        $tpl->assign('pager', $pager);
-        $tpl->assign('sections', $sections);
-        $tpl->assign('ccm', $ccm);
-        $tpl->assign('titles', $articleTitles);
-        $tpl->assign('caches', $caches);
+        $tpl->assign(array(
+            'authors' => $authors,
+            'paramsUri' => $params,
+            'pager' => $pager,
+            'sections' => $sections,
+            'ccm' => $ccm,
+            'titles' => $articleTitles,
+            'caches' => $caches,
+        ));
+
     } break;
 }
 

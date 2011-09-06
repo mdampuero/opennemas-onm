@@ -27,11 +27,17 @@ class Newsletter
     public function __construct($config)
     {
       $this->setup($config['namespace']);
-/*
+
         if(!$this->schema_exists()) {
             $this->setupDatabaseTable();
         }
- */
+
+        // This is causing an E_STRICT error, we should reimplement this class
+        // cause it has a lot of counterparts inherited from Xornal.
+        //if(!$this->schema_exists()) {
+        //    $this->setupDatabaseTable();
+        //}
+ 
     }
 
     public function setup($namespace)
@@ -88,7 +94,7 @@ class Newsletter
         $banners = $advertisement->getAdvertisements(array(1001, 1009), 0);
         $cm = new ContentManager();
         $banners = $cm->getInTime($banners);
- 
+
         $advertisement->render($banners, $advertisement);
 
         /*Fetch inmenu categorys*/

@@ -26,35 +26,40 @@
             </tr>
         </table><!--menu-heading-->
 
-        <table class="adminlist">
-            {if count($pages) > 0}
+        <table class="listing-table">
             <thead>
                 <tr>
+                {if count($pages) > 0}
                     <th>{t}Title{/t}</th>
                     <th>{t}URL{/t}</th>
-                    <th>{t}Visits{/t}</th>
-                    <th>{t}Published{/t}</th>
-                    <th>{t}Actions{/t}</th>
+                    <th class="center" style="width:20px;">{t}Visits{/t}</th>
+                    <th class="center" style="width:20px;">{t}Published{/t}</th>
+                    <th class="center" style="width:20px;">{t}Actions{/t}</th>
+                {else}
+                    <th scope="col" colspan=4>&nbsp;</th>
+                {/if}
                 </tr>
             </thead>
-            {/if}
             <tbody>
                 {section name=k loop=$pages}
-                <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
-                    <td style="padding:5px;">
+                <tr>
+
+                    <td>
                         {$pages[k]->title}
                     </td>
-                    <td>&raquo;
+
+                    <td>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html" target="_blank" title="{t}Open in a new window{/t}">
-                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html</a>
+                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}{$pages[k]->slug}.html
+                        </a>
                     </td>
 
-                    <td width="44" align="right">
+                    <td class="center">
                         {$pages[k]->views}
                         &nbsp;&nbsp;
                     </td>
 
-                    <td width="44" align="center">
+                    <td class="center">
                         <a href="?action=chg_status&id={$pages[k]->id}" class="available">
                             {if $pages[k]->available eq 1}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
@@ -64,7 +69,7 @@
                         </a>
                     </td>
 
-                    <td width="64" align="center">
+                    <td class="center">
 						<ul class="action-buttons">
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">

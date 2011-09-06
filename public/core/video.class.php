@@ -157,22 +157,4 @@ class Video extends Content
         }
     }
 
-    public function set_favorite($status)
-    {
-        if ($this->id == null) return false;
-
-        $changed = date("Y-m-d H:i:s");
-
-        $sql = "UPDATE videos SET `favorite`=? WHERE pk_video=".$this->id;
-        $values = array($status);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return;
-        }
-        return true;
-    }
-
 }
