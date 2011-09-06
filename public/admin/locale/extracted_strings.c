@@ -20,6 +20,15 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("ALL");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("HOME");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
+gettext("OPINION");
+
+/* ./public/admin/themes/default/tpl//comment/list.tpl */
 gettext("Pending");
 
 /* ./public/admin/themes/default/tpl//comment/list.tpl */
@@ -234,6 +243,12 @@ gettext("Url Thumbnail");
 
 /* ./public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Embed Url");
+
+/* ./public/admin/themes/default/tpl//link_control/link_control.tpl */
+gettext("Break link control");
+
+/* ./public/admin/themes/default/tpl//link_control/link_control.tpl */
+gettext("Listing elements in \"%1\"");
 
 /* ./public/admin/themes/default/tpl//link_control/link_control.tpl */
 gettext("ALBUMS");
@@ -474,6 +489,9 @@ gettext("Config album module");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Configurations");
+
+/* ./public/admin/themes/default/tpl//album/list.tpl */
+gettext("WIDGET HOME");
 
 /* ./public/admin/themes/default/tpl//album/list.tpl */
 gettext("Title");
@@ -950,6 +968,9 @@ gettext("Please, remember save positions after finish.");
 gettext("ALL");
 
 /* ./public/admin/themes/default/tpl//article/agencys.tpl */
+gettext("UNKNOWN");
+
+/* ./public/admin/themes/default/tpl//article/agencys.tpl */
 gettext("ALL");
 
 /* ./public/admin/themes/default/tpl//article/agencys.tpl */
@@ -1286,9 +1307,6 @@ gettext("Go back");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//article/library.tpl */
-gettext("Articles in library");
-
-/* ./public/admin/themes/default/tpl//article/library.tpl */
 gettext("Title");
 
 /* ./public/admin/themes/default/tpl//article/library.tpl */
@@ -1314,6 +1332,9 @@ gettext("Actions");
 
 /* ./public/admin/themes/default/tpl//article/library.tpl */
 gettext("Restore to available");
+
+/* ./public/admin/themes/default/tpl//article/library.tpl */
+gettext("There is no article saved");
 
 /* ./public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Go to admin main page");
@@ -1958,13 +1979,16 @@ gettext("Cancel");
 gettext("Go back");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
-gettext("Cache group");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
 gettext("Activate");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
+gettext("Cache group");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
 gettext("Expire time");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
+gettext("seconds");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/config.tpl */
 gettext("There is no cache configuration available");
@@ -2051,6 +2075,9 @@ gettext("All sections");
 gettext("Update list");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Type");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Resource");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
@@ -2072,76 +2099,49 @@ gettext("Actions");
 gettext("Inner article cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Article");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Mobile frontpage cache file");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Mobile inner article:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Inner video cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video Inner:");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Video inner cache file");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video Frontpage:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Opinion inner article file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion inner:");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Frontpage article cache file");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion inner:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Inner gallery cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion inner:");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("RSS Opinion author cache file ");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("RSS:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("RSS frontpage author of opinion");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion Author Index:");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Author ID %1");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Caché RSS");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("RSS:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Mobile frontpage cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Mobile Frontpage:");
-
-/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Section Frontpage cache file");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Section Frontpage cache file");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Frontpage %1");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Author ID %1");
+
+/* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("RSS:");
 
 /* ./public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("(Page %1)");
@@ -2529,6 +2529,9 @@ gettext("Type");
 
 /* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Published");
+
+/* ./public/admin/themes/default/tpl//widget/list.tpl */
+gettext("Edit");
 
 /* ./public/admin/themes/default/tpl//widget/list.tpl */
 gettext("Published");
@@ -3551,7 +3554,7 @@ gettext("and group:");
 gettext("Search");
 
 /* ./public/admin/themes/default/tpl//acl/user/list.tpl */
-gettext("Name Surname");
+gettext("Full name");
 
 /* ./public/admin/themes/default/tpl//acl/user/list.tpl */
 gettext("Username");
@@ -3671,10 +3674,10 @@ gettext("Delete privilege");
 gettext("No available privileges to list here.");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
-gettext("Keyword Manager");
+gettext("User group manager");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
-gettext("Listing keywords");
+gettext("Editing %1");
 
 /* ./public/admin/themes/default/tpl//acl/user_group/new.tpl */
 gettext("Save and continue");
