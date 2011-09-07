@@ -212,7 +212,7 @@ class Poll extends Content {
             $rs->MoveNext();
             $i++;
         }
-        var_dump($total);
+ 
         //TODO: improvement calc percents
             foreach ($items as &$item) {
                 $item['percent'] =0;
