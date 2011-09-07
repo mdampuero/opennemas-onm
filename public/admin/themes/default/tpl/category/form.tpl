@@ -92,13 +92,22 @@
                         <select name="internal_category" id="internal_category" >
                             <option value="1"
                                 {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>{t}Global{/t}</option>
-                            <option value="7"
-                                {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
-
-                            <option value="9"
-                                {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
-                            <option value="14"
-                                {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
+                            {is_module_activated name="ALBUM_MANAGER"}
+                                <option value="7"
+                                    {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
+                            {/is_module_activated}
+                            {is_module_activated name="VIDEO_MANAGER"}
+                                <option value="9"
+                                    {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
+                            {/is_module_activated}
+                            {is_module_activated name="POLL_MANAGER"}
+                                <option value="11"
+                                    {if isset($category) && ($category->internal_category eq 11)} checked="checked"{/if}>{t}Poll{/t}</option>
+                            {/is_module_activated}
+                            {is_module_activated name="KIOSKO_MANAGER"}
+                                <option value="14"
+                                    {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
+                            {/is_module_activated}
                         </select>
 
                     </td>
