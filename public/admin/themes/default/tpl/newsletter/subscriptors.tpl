@@ -131,6 +131,12 @@
                                 Nuevo Usuario
                         </a>
                     </li>
+                    <li class="separator"></li>
+                    <li>
+                        <a href="newsletter.php" value="Cancelar" title="Cancelar">
+                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Newsletter{/t}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
