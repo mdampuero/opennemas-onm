@@ -37,7 +37,9 @@ class Poll extends Content {
 
         switch ($name) {
             case 'uri': {
-
+                if (empty($this->category_name)) {
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                }
 				$uri =  Uri::generate('poll',
                             array(
                                 'id' => $this->id,
@@ -197,17 +199,28 @@ class Poll extends Content {
 
     function get_items($pk_poll){
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, poll_items.metadata '
-                .'FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
+                .' FROM poll_items WHERE fk_pk_poll = '.($pk_poll).' ORDER BY poll_items.pk_item';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
         $i=0;
+        $total=0;
         while (!$rs->EOF) {
             $items[$i]['pk_item']=$rs->fields['pk_item'];
             $items[$i]['item']=$rs->fields['item'];
             $items[$i]['votes']=$rs->fields['votes'];
             $items[$i]['metadata']=$rs->fields['metadata'];
+            $total += $items[$i]['votes'];
             $rs->MoveNext();
             $i++;
         }
+        var_dump($total);
+        //TODO: improvement calc percents
+            foreach ($items as &$item) {
+                $item['percent'] =0;
+                if(!empty($item['votes'])) {
+                    $item['percent'] = sprintf("%.0f",($item['votes']*100 / $total) );
+                }
+            }
+
         return $items;
     }
 

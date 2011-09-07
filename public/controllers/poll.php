@@ -26,7 +26,7 @@ $ccm = ContentCategoryManager::get_instance();
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if(empty($category_name)) {
     $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
-}
+} 
 
 
 
@@ -36,13 +36,13 @@ if(empty($category_name)) {
 if (!empty($menuFrontpage->items) && (empty($category_name)) ) {
     foreach ($menuFrontpage->items as  $item){
         if(empty($category_name) && $item->type == 'category') {
-             $category_name = $item->link;
-             $category = $ccm->get_id($category_name);
+           //  $category_name = $item->link;
+           //  $category = $ccm->get_id($category_name);
         }
     }
 
 }
-
+/*
 if(empty($category_name)) {
     $contentType = Content::getIDContentType('poll');
     //Get first category
@@ -55,10 +55,11 @@ if(empty($category_name)) {
 }
 
 $actual_category = $category_name;
-
-
-$tpl->assign(array( 'category_name'=>$category_name , ) );
-
+*/
+if(!empty($category_name)) {
+    $category = $ccm->get_id($category_name);
+    $tpl->assign(array( 'category_name'=>$category_name , ) );
+}
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //TODO: define dir to save xml and charts.swf dir
@@ -87,21 +88,28 @@ switch($action) {
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
 								 array('options'=> array('default' => 0)));
 
-        $cacheID = $tpl->generateCacheId('poll-frontpage', $page);
+        $cacheID = $tpl->generateCacheId('poll-frontpage',$category_name, $page);
 
         /**
          * Don't execute action logic if was cached before
          */
         if ( ($tpl->caching == 0)
-           && (!$tpl->isCached('poll/poll-frontpage.tpl',$cacheID))){
-
-                $polls = $cm->find_by_category('Poll',$category, 'available=1  ',
-                                            'ORDER BY created DESC LIMIT 0,5');
-           
-             $tpl->assign('polls', $polls);
-              
- 
+           && (!$tpl->isCached('poll/poll-frontpage.tpl',$cacheID))) {
+            if (isset($category) && !empty($category)) {
+                $polls = $cm->find_by_category('Poll', $category, 'available=1 ',
+                                            'ORDER BY created DESC LIMIT 2');
+                $otherPolls = $cm->find('Poll', 'available=1 ',
+                                            'ORDER BY created DESC LIMIT 5');
+            } else {
+                 $polls = $cm->find('Poll', 'available=1 ',
+                                            'ORDER BY created DESC LIMIT 2');
+                 $otherPolls = $cm->find('Poll', 'available=1 ',
+                                            'ORDER BY created DESC LIMIT 2,7');
+            }
+            $tpl->assign( array('polls'=> $polls, 'otherPolls'=> $otherPolls ) );
+               
         }
+        
         require_once('poll_advertisement.php');
         
         $tpl->display('poll/poll_frontpage.tpl', $cacheID);
@@ -114,31 +122,35 @@ switch($action) {
  
         $poll_id = filter_input(INPUT_GET,'id');
         if (empty($poll_id)) {
-            $category = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+            $poll_id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
         }
 
         $poll = new Poll($poll_id);
  
-        if(!empty($poll)){
+        if (!empty($poll)) {
 
-            if(($poll->available==1) && ($poll->in_litter==0)) {
+            if (($poll->available==1) && ($poll->in_litter==0)) {
                 // Increment numviews if it's accesible
                 $poll->setNumViews($poll_id);
 
-                $cacheID= $tpl->generateCacheId($category_name, $poll_id );
+                $cacheID = $tpl->generateCacheId($category_name, $poll_id );
 
-                if( ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cacheID) ) {
+                if( 1 || ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cacheID) ) {
 
-                    $items=$poll->get_items($poll_id);
-
-                    $tpl->assign('items', $items);
-
+                    $items = $poll->get_items($poll_id);
+                   
+ 
                     $comment = new Comment();
                     $comments = $comment->get_public_comments($poll_id);
 
-                    $tpl->assign('num_comments', count($comments));
-
-                    $tpl->assign('poll', $poll);
+                    $otherPolls = $cm->find('Poll', 'available=1 ',
+                                            'ORDER BY created DESC LIMIT 5');
+ 
+                    $tpl->assign( array( 'poll'=>$poll,
+                        'items' => $items,
+                        'num_comments'=> count($comments),
+                        'otherPolls'=>$otherPolls,
+                        ) );
  
                     //TODO save name in db
                     if ($poll->visualization == '0') { // pie
@@ -172,7 +184,6 @@ switch($action) {
             Application::forward301('/404.html');
         }
 
-
     break;
 
     case 'addVote':
@@ -199,9 +210,15 @@ switch($action) {
                 $tpl->assign('msg','Gracias por su voto ');
             }
             $items = $poll->get_items($poll_id);
-            $tpl->assign('items', $items);
+            
 
-            $tpl->assign('poll', $poll);
+            $otherPolls = $cm->find('Poll', 'available=1 ',
+                                    'ORDER BY created DESC LIMIT 5');
+
+            $tpl->assign( array( 'poll'=>$poll,
+                'items' => $items,                 
+                'otherPolls'=>$otherPolls,
+                ) );
 
             //TODO save name in db
             if ($poll->visualization == '0') { // pie
