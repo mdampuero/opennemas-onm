@@ -30,6 +30,7 @@ class Uri
        'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
        'static_page'=> array( 'estaticas/_SLUG_.html'),
        'ad'        =>  array( 'publicidad/_ID_.html'),
+       'articleNewsletter' => array( 'seccion/_CATEGORY_/#_ID_'),
     );
 
     /**
