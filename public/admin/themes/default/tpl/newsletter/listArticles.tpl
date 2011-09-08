@@ -107,6 +107,12 @@
 					{t}Configurations{/t}
 				</a>
 			</li>
+
+            <li >
+                <a href="subscriptors.php?action=list" class="admin_add" name="submit_mult" value="{t}Subscriptors{/t} title="{t}Subscriptors{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}authors.png" title="{t}Subscriptors{/t}" alt="{t}Subscriptors{/t}"><br />{t}Subscriptors{/t}
+                </a>
+            </li>
 		</ul>
 
 	</div>

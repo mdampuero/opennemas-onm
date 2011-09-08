@@ -74,11 +74,14 @@ switch($action) {
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         $albumCategories = array();
         $videoCategories = array();
+        $pollCategories = array();
         foreach($ccm->categories as $category) {
             if($category->internal_category == $pages['album']) {
                 $albumCategories[] = $category;
             } else if($category->internal_category == $pages['video']) {
                 $videoCategories[] = $category;
+            } else if($category->internal_category == $pages['poll']) {
+                $pollCategories[] = $category;
             }
         }
         $cm = new ContentManager();
@@ -89,6 +92,7 @@ switch($action) {
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
                             'videoCategories'=>$videoCategories,
+                            'pollCategories'=>$pollCategories,
                             'staticPages'=> $staticPages,
                             'menues'=> $menues,
                             'pages'=> $pages ));
@@ -111,6 +115,8 @@ switch($action) {
                 $albumCategories[] = $category;
             } else if($category->internal_category == $pages['video']) {
                 $videoCategories[] = $category;
+            } else if($category->internal_category == $pages['poll']) {
+                $pollCategories[] = $category;
             }
         }
         $cm = new ContentManager();
@@ -121,6 +127,7 @@ switch($action) {
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
                             'videoCategories'=>$videoCategories,
+                            'pollCategories'=>$pollCategories,
                             'staticPages'=> $staticPages,
                             'menues'=> $menues,
                             'pages'=> $pages ));

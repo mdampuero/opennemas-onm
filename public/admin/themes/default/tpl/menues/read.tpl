@@ -216,12 +216,21 @@ input[type="text"] {
                                             <li>
                                                 <a href="#listado">{t}Global Categories{/t}</a>
                                             </li>
+                                            {is_module_activated name="ALBUM_MANAGER"}
                                             <li>
                                                 <a href="#listadoAlbum">{t}Album Categories{/t}</a>
                                             </li>
+                                            {/is_module_activated}
+                                            {is_module_activated name="VIDEO_MANAGER"}
                                             <li>
                                                 <a href="#listadoVideo">{t}Video Categories{/t}</a>
                                             </li>
+                                            {/is_module_activated}
+                                            {is_module_activated name="Poll_MANAGER"}
+                                             <li>
+                                                <a href="#listadoPoll">{t}Poll Categories{/t}</a>
+                                            </li>
+                                            {/is_module_activated}
                                             <li>
                                                 <a href="#frontpages">{t}Available Frontpages{/t}</a>
                                             </li>
@@ -258,6 +267,16 @@ input[type="text"] {
                                                         <li id="video_{$videoCategories[as]->pk_content_category}" title="{$videoCategories[as]->title}"
                                                             type="videoCategory" link="{$videoCategories[as]->name}"  class="drag-category" pk_menu="">
                                                             {$videoCategories[as]->title}
+                                                        </li>
+                                                {/section}
+                                            </ul>
+                                         </div>
+                                         <div class="panel" id="listadoPoll">
+                                            <ul id='pollCategories' class="elementsContainer">
+                                                {section name=as loop=$pollCategories}
+                                                        <li id="video_{$pollCategories[as]->pk_content_category}" title="{$pollCategories[as]->title}"
+                                                            type="pollCategory" link="{$pollCategories[as]->name}"  class="drag-category" pk_menu="">
+                                                            {$pollCategories[as]->title}
                                                         </li>
                                                 {/section}
                                             </ul>

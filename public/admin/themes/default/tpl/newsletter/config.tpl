@@ -47,18 +47,15 @@
             <table class="adminform" border=0>
                 <tr>
                     <td>
-                        <div class="form-wrapper">
-                            <div>
-                                <label for="newsletter_maillist[email]">{t}Maillist email:{/t}</label>
-                                <input type="text" class="required" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" />
-                            </div>
+                        <div class="form-wrapper">                           
                             <div>
                                 <label for="newsletter_maillist[name]">{t}Maillist name:{/t}</label>
                                 <input type="text" class="required" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
                             </div>
-                            <div>
-                                <label for="newsletter_maillist[receiver]">{t}Maillist receiver:{/t}</label>
-                                <input type="text" class="required" id="name" name="newsletter_maillist[receiver]" value="{$configs['newsletter_maillist']['receiver']|default:""}" />
+                            <br />
+                             <div>
+                                <label for="newsletter_maillist[email]">{t}Maillist email:{/t}</label>
+                                <input type="text" class="required" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" />
                             </div>
                         </div>
                     </td>

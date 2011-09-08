@@ -46,15 +46,26 @@
             <li>
                 <a href="#global" id="global-tab" class="active-tab">{t}Article categories{/t}</a>
             </li>
+            {is_module_activated name="ALBUM_MANAGER"}
             <li>
                 <a href="#album" id="album-tab">{t}Album categories{/t}</a>
             </li>
+            {/is_module_activated}
+            {is_module_activated name="VIDEO_MANAGER"}
             <li>
                 <a href="#video" id="video-tab">{t}Video categories{/t}</a>
             </li>
+            {/is_module_activated}
+            {is_module_activated name="KIOSKO_MANAGER"}
             <li>
                 <a href="#epapel" id="epapel-tab">{t}ePapel categories{/t}</a>
             </li>
+            {/is_module_activated}
+            {is_module_activated name="POLL_MANAGER"}
+            <li>
+                <a href="#poll" id="poll-tab">{t}Poll categories{/t}</a>
+            </li>
+            {/is_module_activated}
         </ul>
 
         <div class="panel" id="global">
@@ -182,8 +193,38 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="8">
-                            &nbsp;
+                        <td colspan="8">                            
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+         <div class="panel" id="poll">
+            <table class="listing-table">
+                <thead>
+                    <tr>
+                        <th>{t}Title{/t}</th>
+                        <th>{t}Internal name{/t}</th>
+                        <th style="width:15px;">{t}Articles{/t}</th>
+                        <th style="width:15px;">{t}Photos{/t}</th>
+                        <th style="width:15px;">{t}Advertisements{/t}</th>
+                        <th style="width:15px;">{t}Published{/t}</th>
+                        <th style="width:15px;">{t}Actions{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {section name=c loop=$categorys}
+                        {if $categorys[c]->internal_category eq '11'}
+                            {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                        {/if}
+                    {sectionelse}
+                        {t}There aren't sections specifics for polls. {/t}
+                    {/section}
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="8">                     
                         </td>
                     </tr>
                 </tfoot>

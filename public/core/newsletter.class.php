@@ -28,11 +28,12 @@ class Newsletter
     {
       $this->setup($config['namespace']);
 
-        // This is causing an E_STRICT error, we should reimplement this class
+      // This is causing an E_STRICT error, we should reimplement this class
         // cause it has a lot of counterparts inherited from Xornal.
         //if(!$this->schema_exists()) {
         //    $this->setupDatabaseTable();
         //}
+ 
     }
 
     public function setup($namespace)
@@ -556,47 +557,33 @@ class PConecta_Newsletter_Accounts_Provider extends Newsletter_Accounts_Provider
 
     public function fetch()
     {
-//        $sql = $this->buildQuery();
-//
-//        $order_by = ' ORDER BY firstname, lastname, name, email';
-//        $sql .= $order_by;
-//
-//        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-//        $rs = $this->conn->Execute($sql);
-//
-//        $this->accounts = array();
-//
-//        if($rs!==false) {
-//            while(!$rs->EOF) {
-//                $this->accounts[] = new Newsletter_Account(
-//                    /* email */
-//                    $rs->fields['email'],
-//
-//                    /* firstname lastname, name */
-//                    $this->buildName($rs->fields['firstname'],
-//                                     $rs->fields['lastname'],
-//                                     $rs->fields['name'],
-//                                     $rs->fields['email'])
-//                ); // Newsletter_Account
-//
-//                $rs->moveNext();
-//            }
-//        }
+        $sql = $this->buildQuery();
 
-        $receiver = array();
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (!is_null($configurations)
-            && array_key_exists('receiver', $configurations)
-            && !empty($configurations['receiver']))
-        {
-            $this->accounts[] = new Newsletter_Account(
-                $configurations['receiver'],
-                ''
-            );
+        $order_by = ' ORDER BY firstname, lastname, name, email';
+        $sql .= $order_by;
 
+        $this->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->conn->Execute($sql);
+
+        $this->accounts = array();
+
+        if($rs!==false) {
+            while(!$rs->EOF) {
+                $this->accounts[] = new Newsletter_Account(
+                    /* email */
+                    $rs->fields['email'],
+
+                    /* firstname lastname, name */
+                    $this->buildName($rs->fields['firstname'],
+                                     $rs->fields['lastname'],
+                                     $rs->fields['name'],
+                                     $rs->fields['email'])
+                ); // Newsletter_Account
+
+                $rs->moveNext();
+            }
         }
-
-        return $receiver;
+  
     }
 
     private function buildName($firstname, $lastname, $name, $email)
