@@ -101,7 +101,7 @@ document.observe('dom:loaded', function() {
 		<tr>
 			<td>
 				<div style="width:75%; margin:0 auto;">
-					<div style="border:1px solid #ccc; padding:20px;">
+					<div style="border:1px solid #ccc; padding:20px;background-color: white;">
 						{$htmlContent}
 					</div>
 					<br>
