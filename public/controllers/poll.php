@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Settings as s;
 /**
  * Start up and setup the app
 */
@@ -16,6 +17,7 @@ require_once('../bootstrap.php');
  */
 $tpl = new Template(TEMPLATE_USER);
 
+/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
@@ -27,38 +29,19 @@ $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if(empty($category_name)) {
     $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
 } 
+ 
+$menuFrontpage= Menu::renderMenu('encuesta');
+$tpl->assign('menuFrontpage',$menuFrontpage->items);
 
-
-
-  $menuFrontpage= Menu::renderMenu('encuesta');
-  $tpl->assign('menuFrontpage',$menuFrontpage->items);
-
-if (!empty($menuFrontpage->items) && (empty($category_name)) ) {
-    foreach ($menuFrontpage->items as  $item){
-        if(empty($category_name) && $item->type == 'category') {
-           //  $category_name = $item->link;
-           //  $category = $ccm->get_id($category_name);
-        }
-    }
-
-}
-/*
-if(empty($category_name)) {
-    $contentType = Content::getIDContentType('poll');
-    //Get first category
-    list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
-    $category_name = $categoryData[0]->name;
-    $category = $categoryData[0]->pk_content_category;
-} else {
-     $category = $ccm->get_id($category_name);
-
-}
-
-$actual_category = $category_name;
-*/
 if(!empty($category_name)) {
     $category = $ccm->get_id($category_name);
-    $tpl->assign(array( 'category_name'=>$category_name , ) );
+    $actual_category_id = $category; // FOR WIDGETS
+    $category_real_name = $ccm->get_title($category_name); //used in title
+    $tpl->assign(array( 'category_name' => $category_name ,
+                        'category' => $category ,
+                        'actual_category_id' => $actual_category_id ,
+                        'category_real_name' => $category_real_name ,
+                ) );
 }
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
@@ -73,6 +56,12 @@ $tpl->assign(array ('chartPolls'  => MEDIA_URL.SS.INTERNAL_DIR ,
             ) );
 
 
+   $pollSettings = s::get('poll_settings');
+  
+   $tpl->assign(array (
+                        'settings' =>$pollSettings
+                ) );
+        
 /**************************************  SECURITY  *******************************************/
 
 $action = filter_input(INPUT_POST,'action', FILTER_SANITIZE_STRING);

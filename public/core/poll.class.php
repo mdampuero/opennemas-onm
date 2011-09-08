@@ -136,7 +136,7 @@ class Poll extends Content {
 
     	parent::update($data);
         $tags=explode(', ',$tags);//Reinicia los indices del array
-
+  
         if($data['item']){
             //Eliminamos los antiguos
             $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($data['id']);
@@ -149,11 +149,10 @@ class Poll extends Content {
             $i=1;
             $totalvotes=0;
 
-
+            $votes = $data['votes'];
             foreach($data['item'] as $item){
-
-                $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`) VALUES (?,?)';
-                $values = array($data['id'], $item);
+                $sql='INSERT INTO poll_items (`fk_pk_poll`, `item`,`votes`) VALUES (?,?,?)';
+                $values = array($data['id'], $item, $votes[$i]);
                 $i++;
 
                 if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
