@@ -35,6 +35,15 @@
                         <img border="0" src="{$params.IMAGE_DIR}/poll-new.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />Nueva Encuesta
                     </a>
                 </li>
+                 {acl isAllowed="POLL_SETTINGS"}
+                <li class="separator"></li>
+                    <li>
+                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Configurations{/t}
+                        </a>
+                    </li>
+                {/acl}
             </ul>
         </div>
     </div>

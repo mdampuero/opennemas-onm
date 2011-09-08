@@ -218,6 +218,35 @@ switch ($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
 
+    case 'config':
+
+        Acl::checkOrForward('POLL_SETTINGS');
+        
+        $configurationsKeys = array('poll_settings',);
+        $configurations = s::get($configurationsKeys);
+        $tpl->assign(array(
+            'configs'   => $configurations,
+        ));
+
+        $tpl->display('polls/config.tpl');
+
+    break;
+
+    case 'save_config':
+
+        Acl::checkOrForward('POLL_SETTINGS');
+
+        unset($_POST['action']);
+        unset($_POST['submit']);
+
+        foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+        m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+        $httpParams = array(array('action'=>'list'),);
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
     break;

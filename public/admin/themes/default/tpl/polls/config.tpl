@@ -25,7 +25,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="POST" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Album :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Poll :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
@@ -43,7 +43,7 @@
 
             <table class="adminheading">
                  <tr>
-                     <th align="left">{t}Information about album module settings{/t}</th>
+                     <th align="left">{t}Information about poll module settings{/t}</th>
                  </tr>
             </table>
 
@@ -52,31 +52,25 @@
                     <td>
                         <div class="form-wrapper">                                                     
                             <div>
-                                <label for="album[total_widget]">{t}Total in widget home:{/t}</label>
-                                <input type="text" class="required" name="album_settings[total_widget]" value="{$configs['album_settings']['total_widget']|default:"4"}" />
+                                <label for="poll[typeValue]">{t}Type values:{/t}</label>
+                                <select name="poll_settings[typeValue]" id="poll_settings[typeValue]" class="required">
+                                    <option value="percent" {if $configs['poll_settings']['typeValue'] eq 'percent'} selected {/if}>{t}Percents{/t}</option>
+                                    <option value="vote" {if $configs['poll_settings']['typeValue'] eq 'vote'} selected {/if}>{t}Votes{/t}</option>
+                                 </select>
+                                 
                             </div>
                             <br />                            
                             <div>
-                                <label for="album[crop_width]">{t}Cover width in widget album:{/t}</label>
-                                <input type="text" class="required" id="name" name="album_settings[crop_width]" value="{$configs['album_settings']['crop_width']|default:"300"}" />
+                                <label for="poll[widthPoll]">{t}Charts width:{/t}</label>
+                                <input type="text" class="required" id="name" name="poll_settings[widthPoll]" value="{$configs['poll_settings']['widthPoll']|default:"600"}" />
                             </div>
                             <br />
                             <div>
-                                <label for="album[crop_height]">{t}Cover height in widget album:{/t}</label>
-                                <input type="text" class="required" id="name" name="album_settings[crop_height]" value="{$configs['album_settings']['crop_height']|default:"240"}" />
+                                <label for="poll[heightPoll]">{t}Charts height:{/t}</label>
+                                <input type="text" class="required" id="name" name="poll_settings[heightPoll]" value="{$configs['poll_settings']['heightPoll']|default:"500"}" />
                             </div>
                             <br />
-                            <div>
-                                <label for="album[total_front]">{t}Total in album frontpage:{/t}</label>
-                                <input type="text" class="required" id="name" name="album_settings[total_front]" value="{$configs['album_settings']['total_front']|default:"2"}" />
-                            </div>
-                            <br />
-                            <div>
-                                <label for="album[time_last]">{t}Time of the last album most viewed (days):{/t}</label>
-                                <input type="text" class="required" id="name" name="album_settings[time_last]" value="{$configs['album_settings']['time_last']|default:"1"}" />
-                            </div>
-                            <br />
-                             
+                           
                         </div>
                     </td>
                     <td> <br/>
@@ -84,10 +78,8 @@
 								<div class="title"><h4>Definition values</h4></div>
                                 <div class="content">
                                     <ul>
-                                        <li>{t} Use  total in widget album for define how many videos can see in widgets in newspaper frontpage{/t}</li>                                       
-                                        <li>{t} Cover width in widget album  define image width for crop the cover used in widgets{/t}</li>
-                                        <li>{t} Cover height in widget album  define image height for crop the cover used in widgets{/t}</li>
-                                         <li>{t}Used to define the frontpage albums, the time range of the latest albums are the most viewed{/t}</li>
+                                        <li>{t} Use type results if you want that results is showed percents or integer values{/t}</li>
+
                                     </ul>
                                 </div>
                         </div>
