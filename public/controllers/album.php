@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Settings as s;
 /**
  * Start up and setup the app
 */
@@ -16,17 +17,29 @@ require_once('../bootstrap.php');
  */
 $tpl = new Template(TEMPLATE_USER);
 
-
+/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 /**
  * Setting up available categories for menu.
 */
 $ccm = new ContentCategoryManager();
 
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
- 
-/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-require_once ("index_sections.php");
- 
+if(empty($category_name)) {
+    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
+}
+
+$menuFrontpage = Menu::renderMenu('album');
+$tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+if(!empty($category_name)) {
+    $category = $ccm->get_id($category_name);
+    $actual_category_id = $category; // FOR WIDGETS
+    $category_real_name = $ccm->get_title($category_name); //used in title
+    $tpl->assign(array( 'category_name' => $category_name ,
+                         'category' => $category ,
+                ) );
+}
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 //Getting articles
@@ -51,24 +64,30 @@ if (!is_null($action) ) {
 			 **/
 			$tpl->setConfig('gallery-frontpage');
 
-			$cacheID = $tpl->generateCacheId('gallery-frontpage', $page);
+			$cacheID = $tpl->generateCacheId('gallery-frontpage',$category_name, $page);
 
 			/**
 			 * Don't execute action logic if was cached before
 			 */
-            if(($tpl->caching == 0)
-			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl',$cacheID))){
- 
-
-				$albums = $cm->find_by_category('Album',
-									$category, 'fk_content_type=7 AND available=1',
-                                    'ORDER BY  created DESC LIMIT 2');
- 
-				foreach ($albums as &$album) {
-					//TODO: mirar porque no sale esto de DB
-					$album->category_name = $category_name;
-				}
-
+            if ( ($tpl->caching == 0)
+			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
+                
+                $albumSettings = s::get('album_settings');
+                $total = isset($albumSettings['total_front'])?:2;
+                $days = isset( $albumSettings['time_last'])?:4;
+                
+                if ( isset($category) && !empty($category) ) {
+                    $albums = $cm->find_by_category('Album',
+                                        $category, 'fk_content_type=7 AND available=1',
+                                        'ORDER BY  created DESC LIMIT 2');
+                } else {
+                    $albums = $cm->find('Album',
+                                        'fk_content_type=7 AND available=1 AND '.
+                                        'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                                        ' ORDER BY views DESC,  created DESC LIMIT '.$total);
+                   
+                }
+              
 				$tpl->assign('albums', $albums);
 
 			}
@@ -115,10 +134,15 @@ if (!is_null($action) ) {
 				/**
 				 * Get the other albums for the albums widget
 				 **/
-				$otherAlbums = $cm->find_by_category('Album',
-												$actual_category_id,
-												'available=1 and pk_content !='.$albumID,
-												'ORDER BY created DESC LIMIT 0 , 5');
+                $configurations = s::get('album_settings');
+                $total = isset($configurations['total_front'])?($configurations['total_front']):2;
+                $days = isset( $configurations['time_last'])?($configurations['time_last']):4;
+                
+				$otherAlbums = $cm->find('Album',
+												$category,
+												'available=1 and pk_content !='.$albumID.
+												' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                                                ' ORDER BY views DESC,  created DESC LIMIT '.$total);
 				$tpl->assign('gallerys', $otherAlbums);
 
 				$album->category_name = $album->loadCategoryName($album->id);
