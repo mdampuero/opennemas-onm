@@ -10,51 +10,39 @@ use \Onm\Settings as s;
  */
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('video');
+
 $cm = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-if (isset($_GET['category_name'])) {
-    $category_name = $_GET['category_name'];
-} else {
-    $the_categorys = $ccm->find(' fk_content_category=0 AND inmenu=1 AND (internal_category =1 OR internal_category = 5)', 'ORDER BY internal_category DESC, inmenu DESC, posmenu ASC LIMIT 0,6');
-    foreach ($the_categorys as $categ) {
+/******************************  CATEGORIES & SUBCATEGORIES  *********************************/
+/**
+ * Setting up available categories for menu.
+*/
+$ccm = new ContentCategoryManager();
 
-        if (!$ccm->isEmpty($categ->name)) {
-            $this_category_data = $categ;
-            break;
-        }
-    }
-    $category_name = $this_category_data->name;
-    $category_title = $this_category_data->title;
-    $category = $this_category_data->pk_content_category;
-    $_GET['category_name'] = $category_name;
+$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
+if(empty($category_name)) {
+    $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
 }
-$actual_category = $category_name;
+$actual_category_id = $category = 0; //NEED CODE WIDGETS
 
-if (isset($_GET['subcategory_name'])) {
-    $subcategory_name = $_GET['subcategory_name'];
-    $actual_category = $_GET['subcategory_name'];
+$menuFrontpage = Menu::renderMenu('video');
+$tpl->assign('menuFrontpage',$menuFrontpage->items);
+
+if(!empty($category_name)) {
+    $category = $ccm->get_id($category_name);
+    $actual_category_id = $category;
+    $category_real_name = $ccm->get_title($category_name);
+    $tpl->assign(array( 'category_name' => $category_name ,
+                        'category' => $category ,
+                        'actual_category_id' => $actual_category_id ,
+                        'category_real_name' => $category_real_name ,
+                ) );
 }
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
-
-if (!isset($_GET['subcategory_name'])) {
-    $actual_category = $_GET['category_name'];
-} else {
-    $actual_category = $_GET['subcategory_name'];
-}
-$tpl->assign('actual_category', $actual_category);
-$actual_category_id = $ccm->get_id($actual_category);
-$tpl->assign('actual_category_id', $actual_category_id);
-
-
-$tpl->assign('category_name', $category_name);
-if (!isset($menuFrontpage) || empty($menuFrontpage->items)) {
-    $menuFrontpage= Menu::renderMenu('video');
-}
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
 
 /**
  * Getting request params
@@ -69,19 +57,56 @@ switch ($action) {
     case 'list':
 
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId($actual_category, null, '');
+        $cacheID = $tpl->generateCacheId('video-frontpage', $category_name, '');
+        
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
 
             $videosSettings = s::get('video_settings');
-            $totalVideosFrontpage = $videosSettings['total_front'] ?: 2;
+            
+            $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
+            $days = isset( $videosSettings['time_last'])?:124;
 
-            $videos = $cm->find_all(
-                'Video',
-                'available=1 AND `contents_categories`.`pk_fk_content_category` ='
-                . $actual_category_id . '', 'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
-            );
+            if (isset($category_name) && !empty($category_name) ) {
+              
+                $front_videos = $cm->find_all(
+                    'Video',
+                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='
+                    . $actual_category_id . '', 'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
+                );
+
+                $videos = $cm->find_all(
+                    'Video',
+                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='
+                    . $actual_category_id . '', 'ORDER BY views DESC LIMIT 3'
+                );
+
+                $others_videos = $cm->find_all(
+                    'Video',
+                    'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    'ORDER BY views DESC LIMIT 3'
+                );
+                
+                if (count($front_videos) > 0) {
+                    foreach ($front_videos as &$video) {
+                        $video->category_name = $video->loadCategoryName($video->id);
+                        $video->category_title = $video->loadCategoryTitle($video->id);
+                    }
+                }
+                $tpl->assign( 'front_videos', $front_videos);
+               
+            } else {
+                $videos = $cm->find_all( 'Video',
+                    ' available=1 ',
+                    'ORDER BY created DESC LIMIT 3'
+                );
+
+                $others_videos = $cm->find_all('Video',
+                    ' available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    'ORDER BY views DESC LIMIT 8'
+                );
+            }
 
             if (count($videos) > 0) {
                 foreach ($videos as &$video) {
@@ -89,44 +114,41 @@ switch ($action) {
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
             } else {
-
-                if (isset($subcategory_name) && !empty($subcategory_name)) {
-                    Application::forward301('/video/' . $category_name . '/');
-                } else {
-                    Application::forward301('/video/');
+                   // Application::forward301('/video/');
+            }
+            
+            if (count($others_videos) > 0) {
+                foreach ($others_videos as &$video) {
+                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->category_title = $video->loadCategoryTitle($video->id);
                 }
             }
 
-            $others_videos = $cm->find_all(
-                'Video',
-                'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $actual_category_id . '',
-                'ORDER BY created DESC LIMIT 0, 3'
-            );
-            foreach ($others_videos as &$video) {
-                $video->category_name = $video->loadCategoryName($video->id);
-                $video->category_title = $video->loadCategoryTitle($video->id);
-            }
-
-            $tpl->assign('videos', $videos);
-            $tpl->assign('others_videos', $others_videos);
-            $tpl->assign('page', '1');
+            $tpl->assign( array( 'videos' => $videos,
+                                 'others_videos' => $others_videos,
+                                 'page' => '1' ) );
         }
+
+        require_once("video_advertisement.php");
 
         // Get last comments to show in video frontpage
         $latestComments = $cm->cache->getLastComentsContent('Video', true, $actual_category_id, 4);
         $tpl->assign('lasts_comments', $latestComments);
-        require_once ("video_advertisement.php");
 
-        $tpl->display('video/video_frontpage.tpl', $cacheID);
-
+        if (isset($category_name) && !empty($category_name) ) {
+            $tpl->display('video/video_frontpage.tpl', $cacheID);
+        } else {
+            $tpl->display('video/video_main_frontpage.tpl', $cacheID);
+        }
         break;
 
     case 'inner':
 
-        $videoID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
+        $videoID = filter_input( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
 
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId($actual_category, '', $videoID);
+        $cacheID = $tpl->generateCacheId('video-inner', $category_name, $videoID);
+
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])
         ) {
@@ -172,15 +194,11 @@ switch ($action) {
         $video = NULL;
 
         $items_page = 6;
-        if ($_GET['page'] > 0) {
-            $page = $_GET['page'];
-        } else {
-            $page = 1;
-        }
-        $category = $_GET['category'];
+
+        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
 
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
-        $cm = new ContentManager();
+       
         $videos = $cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $category . '',
@@ -188,7 +206,7 @@ switch ($action) {
         );
 
         if (count($videos) > 0) {
-            foreach ($videos as $video) {
+            foreach ($videos as &$video) {
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -209,16 +227,13 @@ switch ($action) {
     case 'videos_more':
 
         $video = NULL;
-        $category = $_GET['category'];
+        
+        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
 
-        if ($_GET['page'] > 0) {
-            $page = $_GET['page'];
-        } else {
-            $page = 1;
-        }
         $items_page = 3;
+
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
-        $cm = new ContentManager();
+
         $others_videos = $cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $category . '',
@@ -226,7 +241,7 @@ switch ($action) {
         );
 
         if (count($others_videos) > 0) {
-            foreach ($others_videos as $video) {
+            foreach ($others_videos as &$video) {
                 $video->category_name = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
