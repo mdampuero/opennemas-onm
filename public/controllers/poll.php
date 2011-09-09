@@ -32,7 +32,7 @@ if(empty($category_name)) {
  
 $menuFrontpage= Menu::renderMenu('encuesta');
 $tpl->assign('menuFrontpage',$menuFrontpage->items);
-
+ 
 if(!empty($category_name)) {
     $category = $ccm->get_id($category_name);
     $actual_category_id = $category; // FOR WIDGETS
@@ -40,6 +40,11 @@ if(!empty($category_name)) {
     $tpl->assign(array( 'category_name' => $category_name ,
                         'category' => $category ,
                         'actual_category_id' => $actual_category_id ,
+                        'category_real_name' => $category_real_name ,
+                ) );
+} else {
+     $category_real_name = 'Portada';
+     $tpl->assign(array(
                         'category_real_name' => $category_real_name ,
                 ) );
 }

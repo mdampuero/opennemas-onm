@@ -11,8 +11,6 @@ use \Onm\Settings as s;
 $tpl = new Template(TEMPLATE_USER);
 $tpl->setConfig('video');
 
-$cm = new ContentManager();
-$ccm = ContentCategoryManager::get_instance();
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
@@ -20,7 +18,8 @@ $ccm = ContentCategoryManager::get_instance();
 /**
  * Setting up available categories for menu.
 */
-$ccm = new ContentCategoryManager();
+$cm = new ContentManager();
+$ccm = ContentCategoryManager::get_instance();
 
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if(empty($category_name)) {
@@ -38,6 +37,11 @@ if(!empty($category_name)) {
     $tpl->assign(array( 'category_name' => $category_name ,
                         'category' => $category ,
                         'actual_category_id' => $actual_category_id ,
+                        'category_real_name' => $category_real_name ,
+                ) );
+} else {
+     $category_real_name = 'Portada';
+     $tpl->assign(array(
                         'category_real_name' => $category_real_name ,
                 ) );
 }
