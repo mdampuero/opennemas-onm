@@ -2012,6 +2012,8 @@ div.action-bar .right{
 }
 
 .pills a {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
     border-radius: 10px;
     line-height: 30px;
     margin: 5px 3px 5px 0pt;

@@ -322,37 +322,6 @@ class Album extends Content
         $album->delete_album($id);
     }
 
-    /**
-     * Sets the album as favorite
-     *
-     * @param string $status the status of the favorite flag
-     *
-     * @return boolean true if the action was executed successfully
-     **/
-    public function set_favorite($status)
-    {
-        $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
-
-        if ($this->id == NULL) {
-            return(false);
-        }
-
-        $sql = "UPDATE albums SET `favorite`=? WHERE pk_album=".$this->id;
-        $values = array($status);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
-            return;
-        }
-        $GLOBALS['application']->dispatch('onAfterSetFavorite', $this);
-
-        return(true);
-
-    }
-
     //Lee de la tabla la relacion de galeria y fotos
     public function get_album($albumID)
     {

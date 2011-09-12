@@ -61,7 +61,8 @@ if($('starttime')) {
 		{if is_object($article) && $article->isClone()}
 		<div class="notice">
 			{assign var="original" value=$article->getOriginal()}
-			Este artículo fue <strong>clonado</strong>. <br /> Para editar contenidos propios del artículo ir al&nbsp; <a href="article.php?action=read&id={$original->id}">artículo original</a>.
+            This article was <strong>cloned</strong>. <br> For editing the content you must go to
+            <a href="article.php?action=read&id={$original->id}">the original article</a>.
 		</div>
 		{/if}
 
