@@ -142,7 +142,7 @@
 			<thead>
 				<tr align="left">
 					<th  style="width:10px;">
-                        <input type="checkbox" value="" onclick="$('tabla').select('tbody input[type=checkbox]');" />
+                        <input type="checkbox" value="" onclick="$('table.listing-table').select('tbody input[type=checkbox]');" />
                     </th>
                     <th scope="col" class="center" style="width:15px;">{t}Type{/t}</th>
 					<th>{t}Resource{/t}</th>
@@ -307,7 +307,7 @@
                         </div>
                     </td>
                     <td class="center">
-                        {$caches[c].size} B
+                        {$caches[c].size} KB
                     </td>
                     <td class="center">
                        <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"

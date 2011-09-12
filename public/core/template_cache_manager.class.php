@@ -59,7 +59,13 @@ class TemplateCacheManager
                 preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)?\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/', $filename, $matches);
 
                 if (isset($matches['category'])) {
-                    $caches[] = array('category' => $matches['category'], 'resource' => $matches['resource'], 'template' => $matches['tplname'], 'size' => $item->current()->getSize(), 'filename' => $filename);
+                    $caches[] = array(
+                        'category' => $matches['category'],
+                        'resource' => $matches['resource'],
+                        'template' => $matches['tplname'],
+                        'size' => number_format($item->current()->getSize()/1024, 2),
+                        'filename' => $filename,
+                    );
                 }
             }
         }
