@@ -103,7 +103,7 @@ class Menu
 
     public function update($data)
     {
-
+       
         $sql = "UPDATE menues"
                 ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=? "
                 ." WHERE pk_menu= ?" ;
@@ -120,14 +120,14 @@ class Menu
             return false;
         }
         $config = array('pk_father'=> $data['pk_father']);
-
-        MenuItems::setMenu($data['id'], $data['items'], $config);
+       
         if(!empty($data['forDelete'])){
             $forDelete = explode(',', $data['forDelete']);
             array_shift($forDelete); //first is empty FIXME
+            var_dump($forDelete);
             MenuItems::deleteItems($forDelete);
-
         }
+         MenuItems::setMenu($data['id'], $data['items'], $config);
     
         return true;
     }

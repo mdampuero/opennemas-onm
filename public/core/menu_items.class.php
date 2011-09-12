@@ -218,14 +218,14 @@ class MenuItems {
 
         if(!empty($id) && !empty($items)){
             
-
+            
             $menu = MenuItems::getPkItems($id);
 
             $stmt = $GLOBALS['application']->conn->Prepare("INSERT INTO menu_items ".
                            " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
                            " VALUES (?,?,?,?,?,?)");
 
-            $stmtUpdate = $GLOBALS['application']->conn->Prepare("UPDATE INTO menu_items ".
+            $stmtUpdate = $GLOBALS['application']->conn->Prepare("UPDATE menu_items ".
                            " SET  `title` =?, `position` =?  ".
                            " WHERE pk_item = ?" );
 
@@ -268,7 +268,7 @@ class MenuItems {
 
 
             }
-             
+
             return true;
         }
 

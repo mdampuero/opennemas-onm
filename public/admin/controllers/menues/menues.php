@@ -97,7 +97,7 @@ switch($action) {
                             'menues'=> $menues,
                             'pages'=> $pages ));
 
-        $tpl->display('menues/read.tpl');
+        $tpl->display('menues/readjQuery.tpl');
 
     break;
 
@@ -110,6 +110,7 @@ switch($action) {
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         $albumCategories = array();
         $videoCategories = array();
+        $pollCategories = array();
         foreach($ccm->categories as $category) {
             if($category->internal_category == $pages['album']) {
                 $albumCategories[] = $category;
@@ -136,7 +137,7 @@ switch($action) {
 
         $tpl->assign('menu', $menu);
 
-        $tpl->display('menues/read.tpl');
+        $tpl->display('menues/readjQuery.tpl');
 
     break;
 

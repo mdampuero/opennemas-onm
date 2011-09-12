@@ -1,0 +1,128 @@
+
+    /*
+ * jQuery UI Tabs 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Tabs#theming
+ */
+.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px;
+background: white 50% 50% repeat-x;
+font-weight: bold;
+color: #EB8F00;
+outline: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+
+
+
+
+table th, table label {
+    color: #888;
+    text-shadow: white 0 1px 0;
+    font-size: 13px;
+}
+tbody th {
+    vertical-align: top;
+    text-align: left;
+    padding: 10px;
+    width: 200px;
+    font-size: 13px;
+}
+label{
+    font-weight:normal;
+}
+.panel {
+    background:White;
+}
+fieldset {
+    border:none;
+    border-top:1px solid #ccc;
+}
+
+legend {
+    color:#666;
+    text-transform:uppercase;
+    font-size:13px;
+    padding:0 10px;
+}
+
+.awesome {
+    border:0;
+}
+.panel {
+    margin:0;
+    border:none;
+    padding:0 !important;
+}
+.default-value {
+    display:inline;
+    color:#666;
+    margin-left:10px;
+    vertical-align:middle
+}
+input[type="text"] {
+    width:340px;
+    max-height:80%
+}
+#menuelements, .elementsContainer { width:100%; margin:0; padding:10px 0; min-height:60px; border:1px solid #ccc; width:100%}
+#menuelements li, .elementsContainer li { padding:4px; list-style:none; border:1px solid #ddd; cursor:pointer; margin:3px; display:inline-block;}
+#menuelements li:hover, .elementsContainer li:hover { background:#eee}
+.left { margin-right:10px;  }
+
+.reveal-modal {
+
+    top: 90px;
+    left: 50%;
+    margin-left: -300px;
+    width: 440px;
+    height: 80px;
+    background: #FFF;
+    background: rgba(255,255,255,.9);
+    position: absolute;
+    z-index: 101;
+    padding: 30px 40px 34px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
+    -box-shadow: 0 0 10px rgba(0,0,0,.4);
+    }
+
+.reveal-modal .close-reveal-modal {
+    font-size: 22px;
+    line-height: .5;
+    position: absolute;
+    top: 8px;
+    right: 11px;
+    color: #aaa;
+    text-shadow: 0 -1px 1px rbga(0,0,0,.6);
+    font-weight: bold;
+    cursor: pointer;
+    }
+.save-button{
+    position: absolute;
+    top: 110px;
+    right: 20px;
+    cursor: pointer;
+		}
+
+.div-actions {
+    background: #CCCCCC;
+    background: rgba(255,255,255,.9);
+    -moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
+    -box-shadow: 0 0 10px rgba(0,0,0,.4);
+    padding: 5px;
+    }
+ 
