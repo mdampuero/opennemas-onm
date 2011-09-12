@@ -90,18 +90,6 @@
 
 		<div id="{$category}">
 
-			<!--<table class="adminheading" style="border-top-left-radius:0px;">
-				<tr>
-                    {if $comment_status==0}
-                        <th>{t}Comments pending for publishing{/t}</th>
-                    {elseif $comment_status==1}
-                        <th>{t}Comments already published{/t}</th>
-                    {else}
-                        <th>{t}Comments rejected{/t}</th>
-                    {/if}
-				</tr>
-			</table>-->
-
 			<table class="listing-table">
 				<thead>
         			{if count($comments) > 0}
@@ -109,8 +97,7 @@
                         <th  style='width:30px'>
                             <input type="checkbox" id="toggleallcheckbox">
                         </th>
-                        <th  style='width:100px;'>{t}Author{/t}</th>
-                        <th  style='width:200px;'>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
+                        <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
                         <th style='width:200px;'>{t}Commented on{/t}</th>
                         <th  style='width:6%;' class="center">{t}IP{/t}</th>
                         {if $category eq 'todos' || $category eq 'home'}
@@ -138,25 +125,24 @@
 						<td >
 							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
 						</td>
-						<td >
-							{$comments[c]->author|strip_tags}
-							{if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
-								&lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
-							{else}
-								&lt;{$comments[c]->email}&gt;
-							{/if}
-						</td>
 						<td onmouseout="UnTip()" onmouseover="Tip('{$comments[c]->body|nl2br|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 600)" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-							{if $title}
+							<a href="{$smarty.server.PHP_SELF}?action=read&id={$comments[c]->pk_comment}" title="{t 1=$articles[c]->title}Edit article %1{/t}">
+                                {$comments[c]->author|strip_tags}
+                                {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
+                                    &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
+                                {else}
+                                    &lt;{$comments[c]->email}&gt;
+                                {/if}<br>
+                                {if $title}
 								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:30:"..."}]</strong>
-							{/if} {$comments[c]->body|strip_tags|clearslash|truncate:50}
+    							{/if}
+                                {$comments[c]->body|strip_tags|clearslash|truncate:50}
+                            </a>
 						</td>
 						 {assign var=type value=$articles[c]->content_type}
 						<td >
 							<strong>[{$content_types[$type]}]</strong>
-							<a style="cursor:pointer;"  onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->pk_comment}');new Effect.BlindUp('edicion-contenido'); new Effect.BlindDown('article-info'); return false;">
 							{$articles[c]->title|strip_tags|clearslash}
-							</a>
 						</td>
 						<td class="center">
 							{$comments[c]->ip}

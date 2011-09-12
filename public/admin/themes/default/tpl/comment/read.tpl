@@ -34,7 +34,7 @@
                     </li>
                     <li class="separator"></li>
                     <li>
-                        <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                        <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                         </a>
                     </li>

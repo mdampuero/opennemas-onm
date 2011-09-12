@@ -388,32 +388,32 @@ a.no_suggest:hover {
 a.favourite_on {
 	background-image: url("../images/selected.png");
 	display: block;
-	width: 20px;
-	height: 20px;
+	width: 17px;
+	height: 17px;
+    display:inline-block;
+    text-indent:-9999px;
 }
 
 a.favourite_on:hover {
 	text-decoration:none;
 	background-image: url("../images/no_selected.png");
-	width: 20px;
-	height: 20px;
+	width: 17px;
+	height: 17px;
 }
 
 a.favourite_off {
 	background-image: url("../images/no_selected.png");
-	display: block;
-	width: 20px;
-	height: 20px;
+    display:inline-block;
+	width: 17px;
+	height: 17px;
 }
 
 a.favourite_off:hover {
 	text-decoration:none;
 	background-image: url("../images/selected.png");
-	width: 20px;
-	height: 20px;
+	width: 17px;
+	height: 17px;
 }
-
-
 
 a.publishing {
 	background-image: url("../images/publish_g.png");
@@ -531,78 +531,9 @@ a.unpublishing:hover {
 	background-color: #FFF;
 }
 
-
-/* New css properties to print pending comments counter  */
-
-.spch-bub-inside,
-.spch-bub-outside {
-    position: relative;
+.comments-available {
+    font-weight:bold;
 }
-a.spch-bub-inside,
-a.spch-bub-outside {
-    color: #00F;
-    text-decoration: none;
-}
-.spch-bub-inside em,
-.spch-bub-outside em {
-    font-style: normal;
-}
-.spch-bub-inside em {
-    background: White;
-    color: Black;
-    padding: 0px 6px;
-    -moz-border-radius: 0.25em;
-    -webkit-border-radius: 0.25em;
-    border-radius: 0.25em;
-    position: relative;
-}
-.spch-bub-inside .point,
-.spch-bub-outside .point {
-    width: 0;
-    height: 0;
-    position: absolute;
-    bottom: -5px;
-    left: 0.4em;
-    display: block;
-    border-left: 0.45em solid White;
-    border-bottom: 0.45em solid #FFF; /* IE fix */
-    border-bottom: 0.45em solid rgba(0,0,0,0);
-    overflow: hidden; /* IE fix */
-}
-.spch-bub-outside {
-    padding-left: 2.0em;
-}
-.spch-bub-outside .bubble {
-    top: 0;
-    left: 0;
-    display: block;
-    position: absolute;
-    height: 1.1em;
-    width: 1.8em;
-    background: #00F;
-    -moz-border-radius: 0.25em;
-    -webkit-border-radius: 0.25em;
-    border-radius: 0.25em;
-}
-a.spch-bub-inside:hover,
-a.spch-bub-outside:hover {
-    color: White;
-}
-a.spch-bub-inside:hover em,
-a.spch-bub-outside:hover .bubble  {
-    cursor: pointer;
-    background: White;
-    color: Black;
-}
-a.spch-bub-inside:hover .point,
-a.spch-bub-outside:hover .point {
-    border-left: 0.5em solid White;
-}
-div.spch-bub-outside {
-    height: 1.5em;
-    width: 0;
-}
-
 /* -------------------------------------------------------------
   Content from styles.css
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

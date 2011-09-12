@@ -35,7 +35,9 @@
             <table class="listing-table">
                 <thead>
                     <tr>
-						<th class="center" style="width:10px">{t}Activate{/t}</th>
+						<th class="center" style="width:10px">
+                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                        </th>
 						<th >{t}Cache group{/t}</th>
 						<th class="right">{t}Expire time{/t}</th>
 					</tr>

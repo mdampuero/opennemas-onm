@@ -69,9 +69,11 @@
 		<ul>
 		    {if {count_pending_comments} gt 0}
 		    <li class="menu">
-			<a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
-			    <em>{count_pending_comments} <span class="point"></span></em>
-			</a>
+                <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos"
+                    title="{t}There are new comments to moderate{/t}">
+                    <img src="{$params.IMAGE_DIR}/messaging_system/messages_red.png" alt="" />
+                    {count_pending_comments}
+                </a>
 		    </li>
 		    {/if}
 
