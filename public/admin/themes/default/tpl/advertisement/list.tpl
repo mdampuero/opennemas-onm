@@ -102,8 +102,8 @@
                         <th class="title"  style="width:250px">{t}Type{/t}</th>
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:30px">{t}Permanence{/t}</th>
-                        <th class="center" style="width:40px">{t}Clicks{/t}</th>
-                        <th class="center" style="width:40px">{t}Views{/t}</th>
+                        <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
+                        <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                         <th class="center" style="width:70px">{t}Actions{/t}</th>
                     </tr>
                 </thead>

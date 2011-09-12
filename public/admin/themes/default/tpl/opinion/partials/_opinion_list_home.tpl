@@ -1,4 +1,4 @@
-<div id="msg"></div>
+{if $num_dir > 0}
 
 <table class="adminheading">
 	<tr>
@@ -89,6 +89,10 @@
 
 <br />
 
+{/if}
+
+{if count($editorial) > 0}
+
 <table class="adminheading">
 	<tr>
 		<td>
@@ -99,14 +103,14 @@
 <table class="listing-table">
 	<thead>
 		<tr>
-			<th  style="width:30px;"></th>
-			<th  style="width:160px;">{t}Author{/t}</th>
-			<th >{t}Title{/t}</th>
-			<th class="center" style="width:70px;">{t}Views{/t}</th>
-			<th class="center" style="width:70px;">{t}Votes{/t}</th>
-			<th class="center" style="width:74px;">{t}Comments{/t}</th>
-			<th class="center" style="width:70px;">{t}Date{/t}</th>
-			<th class="center" style="width:50px;">{t}Home{/t}</th>
+			<th style="width:15px;"></th>
+			<th style="width:160px;">{t}Author{/t}</th>
+			<th>{t}Title{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+			<th class="center" style="width:80px;">{t}Votes{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
+			<th class="center" style="width:100px;">Fecha</th>
+			<th class="center" style="width:30px;">Home</th>
 			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 		</tr>
 	</thead>
@@ -118,28 +122,28 @@
 				{section name=c loop=$editorial}
 					<table width="100%" cellpadding=0 cellspacing=0  id="{$editorial[c]->id}" border=0 class="edits_sort">
 						<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-							<td style="width:30px;">
+							<td style="width:15px;">
 								<input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$editorial[c]->id}"  style="cursor:pointer;" >
 							</td>
-							<td onClick="javascript:document.getElementById('selected_{$cont}').click();"  style="width:160px;">
+							<td onClick="javascript:document.getElementById('selected_{$cont}').click();" style="width:160px;">
 								Editorial
 							</td>
 							<td onClick="javascript:document.getElementById('selected_{$cont}').click();">
 								{$editorial[c]->title|clearslash}
 							</td>
-							<td class="center" style="width:80px;">
+							<td class="center" style="width:40px;">
 								{$editorial[c]->views}
 							</td>
-							<td class="center" style="width:80px;">
+							<td class="center" style="width:90px;">
 								{$editorial[c]->ratings}
 							</td>
-							<td class="center" style="width:70px;">
+							<td class="center" style="width:40px;">
 								{$editorial[c]->comments}
 							</td>
-							<td class="center" style="width:80px;">
+							<td class="center" style="width:130px;">
 								{$editorial[c]->created}
 							</td>
-							<td class="center" style="width:55px;">
+							<td class="center" style="width:30px;">
 								{if $editorial[c]->in_home == 1}
 									<a href="?id={$editorial[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
 								{else}
@@ -182,6 +186,9 @@
 </table>
 
 <br>
+{/if}
+
+{if count($num_edit)}
 
 <table class="adminheading">
 	<tr>
@@ -193,14 +200,14 @@
 <table class="listing-table">
 	<thead>
 		<tr>
-			<th  style="width:30px;"></th>
-			<th  style="width:140px;">Autor</th>
-			<th >T&iacute;tulo</th>
-			<th class="center" style="width:70px;">Visto</th>
-			<th class="center" style="width:70px;">Votaci&oacute;n</th>
-			<th class="center" style="width:74px;">Comentarios</th>
-			<th class="center" style="width:70px;">Fecha</th>
-			<th class="center" style="width:50px;">Home</th>
+			<th style="width:15px;"></th>
+			<th style="width:160px;">{t}Author{/t}</th>
+			<th>{t}Title{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+			<th class="center" style="width:90px;">{t}Votes{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
+			<th class="center" style="width:100px;">Fecha</th>
+			<th class="center" style="width:30px;">Home</th>
 			<th class="center" style="width:70px;">{t}Actions{/t}</th>
 		</tr>
 	</thead>
@@ -211,11 +218,11 @@
 		{section name=c loop=$opinions}
 		 <table id="{$opinions[c]->id}" border=0 {if $opinions[c]->type_opinion==0}class="sortable"{/if} style="width:100%">
 			<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-				<td style="width:35px;">
+				<td style="width:15px;">
 				   <input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$opinions[c]->id}"  style="cursor:pointer;" >
 				</td>
 				{if $type_opinion=='-1' ||  $type_opinion=='0'}
-				<td style="width:160px;" onClick="javascript:document.getElementById('selected_{$cont}').click();">
+				<td onClick="javascript:document.getElementById('selected_{$cont}').click();" style="width:160px;">
 					{if $opinions[c]->type_opinion==1} Editorial{elseif $opinions[c]->type_opinion==2}
 						{t}Director{/t}
 					{else}
@@ -229,26 +236,30 @@
 					{$opinions[c]->title|clearslash}
 				</td>
 
-				<td class="center" style="width:80px;">
+				<td class="center" style="width:40px;">
 					{$opinions[c]->views}
 				</td>
-				<td class="center" style="width:80px;">
-						{$op_rating[c]|default:""}
+				<td class="center" style="width:90px;">
+					{$op_rating[c]|default:""}
 				 </td>
 				<td style="width:70px;" class="center">
 					{$op_comment[c]}
 				</td>
-				<td class="center" style="width:80px;">
+				<td class="center" style="width:100px;">
 					{$opinions[c]->created}
 				</td>
-				<td class="center" style="width:55px;">
+				<td class="center" style="width:40px;">
 					{if $opinions[c]->in_home == 1}
-						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" ></a>
+						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" >
+                            &nbsp;
+                        </a>
 					{else}
-						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category|default:""}" class="go_home" title="Meter en portada" ></a>
+						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category|default:""}" class="go_home" title="Meter en portada" >
+                            &nbsp;
+                        </a>
 					{/if}
 				</td>
-				<td class="center" style="width:74px;">
+				<td class="center" style="width:70px;">
 					<ul class="action-buttons">
 						<li>
 							{if $opinions[c]->content_status == 1}
@@ -288,6 +299,7 @@
 	</tr>
 </tfoot>
 </table>
+{/if}
 
 {if $type_opinion=='-1'}
 <script type="text/javascript">

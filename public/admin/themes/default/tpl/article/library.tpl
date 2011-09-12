@@ -70,23 +70,24 @@
                 </th>
 				<th class="title">{t}Title{/t}</th>
 				{if $category=='todos'}<th align="center">{t}Section{/t}</th>{/if}
-				<th align="center">{t}Modification time{/t}</th>
-				<th align="center">{t}Views{/t}</th>
-				<th align="center">{t}Comments{/t}</th>
-				<th align="center">Votaci&oacute;n</th>
-				<th align="center">{t}Author{/t}</th>
-				<th align="center">{t}Last Editor{/t}</th>
-				<th align="center" style="width:100px;">{t}Actions{/t}</th>
+				<th align="center" style="width:130px">{t}Modification time{/t}</th>
+
+                <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
+				<th align="center" style="width:80px">{t}Votes{/t}</th>
+				<th align="center" style="width:80px">{t}Author{/t}</th>
+				<th align="center" style="width:80px">{t}Last Editor{/t}</th>
+				<th align="right" style="width:100px;">{t}Actions{/t}</th>
 			</thead>
 			<tbody>
 				<input type="hidden"  id="category" name="category" value="{$category}">
 
 				{section name=c loop=$articles}
 				<tr {cycle values="class=row0,class=row1"}>
-					<td style="width:30px">
+					<td>
 						 <input type="checkbox" class="minput" pos=1 id="selected_fld_des_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$articles[c]->id}"  style="cursor:pointer;" >
 					</td>
-					<td style="width:50%;">
+					<td >
 						<a href="{$smarty.server.PHP_SELF}?action=only_read&id={$articles[c]->id}" title="{$articles[c]->title|clearslash}"> {$articles[c]->title|clearslash}</a>
 					</td>
 					{if $category=='todos'}

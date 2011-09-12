@@ -47,7 +47,7 @@
             <table class="adminform" border=0>
                 <tr>
                     <td>
-                        <div class="form-wrapper">                           
+                        <div class="form-wrapper">
                             <div>
                                 <label for="newsletter_maillist[name]">{t}Maillist name:{/t}</label>
                                 <input type="text" class="required" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
@@ -61,8 +61,10 @@
                     </td>
                 </tr>
             </table>
-            <div class="action-bar">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="action-bar clearfix">
+                <div class="right">
+                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+                </div>
             </div>
         </div>
 

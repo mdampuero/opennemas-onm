@@ -145,24 +145,21 @@
 
             <table class="adminheading">
                 <tr>
-                    <th>
+                    <th class="right">
                         <label>
-                            Buscar: <input type="text" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" />
+                            {t}Search:{/t} <input type="text" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" />
                         </label>
 
                         <select name="filters[subscription]" id="filters_subscription">
-                            <option value="-1">--Suscripción boletín--</option>
-                            <option value="1"{if $smarty.request.filters.subscription==1} selected="selected"{/if}>SI</option>
-                            <option value="0"{if isset($smarty.request.filters.subscription) && $smarty.request.filters.subscription==0} selected="selected"{/if}>NO</option>
+                            <option value="-1">{t}Subscribed to newsletter?{/t}</option>
+                            <option value="1"{if $smarty.request.filters.subscription==1} selected="selected"{/if}>{t}Yes{/t}</option>
+                            <option value="0"{if isset($smarty.request.filters.subscription) && $smarty.request.filters.subscription==0} selected="selected"{/if}>{t}No{/t}</option>
                         </select>
 
-                        <input type="hidden" name="page" id="filters_page"
-                             value="{$smarty.request.page|default:'1'}" />
+                        <input type="hidden" name="page" id="filters_page" value="{$smarty.request.page|default:'1'}" />
 
-                        <input type="button" onclick="filterList();"
-                             value="Filtrar" />
-                        <input type="button" onclick="resetForm();"
-                             value="Limpiar" />
+                        <button type="button" onclick="filterList();">{t}Filter list{/t}</button>
+                        <button type="button" onclick="resetForm();">Clean</button>
                     </th>
                 </tr>
               </table>
@@ -243,7 +240,7 @@
          </table>
           <input type="hidden" id="action" name="action" value="" />
           <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    
+
         </div>
     </form>
 {/block}

@@ -11,7 +11,7 @@
 {/block}
 
 {block name="footer-js" append}
-  
+
     </script>
 {/block}
 
@@ -46,11 +46,6 @@
         </div>
 
         <div class="wrapper-content">
-            <table class="adminheading">
-                <tr align="right">
-                    <td>&nbsp;</td>
-                </tr>
-            </table>
             <table  class="adminform">
                 <!-- Email -->
                 <tr>
@@ -96,40 +91,27 @@
                      <tr>
                     <td valign="middle" align="right" style="padding:4px">
                         <label>
-                            {t}Subscription{/t}:
+                            {t}Subscribed{/t}:
                         </label>
                     </td>
                     <td style="padding:10px;">
-                        <label>
-                            <img src="{$params.IMAGE_DIR}subscription_1-16x16.png" border="0" title="Está suscrito al boletín" />
-                            Si: <input type="radio" name="subscription" value="1"
-                                   {if !(isset($user->subscription)) || $user->subscription eq 1 }checked="checked"{/if} />
-                        </label>
-
-                        <label>
-                            <img src="{$params.IMAGE_DIR}subscription_0-16x16.png" border="0" title="No está suscrito al boletín" />
-                            No: <input type="radio" name="subscription" value="0"
-                                   {if (isset($user->subscription)) && $user->subscription eq 0}checked="checked"{/if} />
-                        </label>
+                        <select name="subscription">
+                            <option value="1" {if !(isset($user->subscription)) || $user->subscription eq 1 }checked="checked"{/if}>{t}Yes{/t}</option>
+                            <option value="0" {if (isset($user->subscription)) && $user->subscription eq 0}checked="checked"{/if}>{t}No{/t}</option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding:10px;" width="200" align="right">
                         <label>
-                            {t}Status{/t}
+                            {t}Activated{/t}
                         </label>
                     </td>
-                    <td style="padding:10px;">                        
-                        <label>
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Aceptar" />
-                            Deshabilitado: <input type="radio" name="status" value="3"
-                                  {if $user->status eq 3 }checked="checked"{/if} />
-                        </label>
-                        <label>
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Aceptar" />
-                            Aceptado: <input type="radio" name="status" value="2"
-                                   {if !isset($user) || $user->status eq 2 || $user->status eq 1 }checked="checked"{/if} />
-                        </label>
+                    <td style="padding:10px;">
+                        <select name="status">
+                            <option value="3" {if $user->status eq 3 }checked="checked"{/if}>{t}Yes{/t}</option>
+                            <option value="2" {if !isset($user) || $user->status eq 2 || $user->status eq 1 }checked="checked"{/if}>{t}No{/t}</option>
+                        </select>
                     </td>
                 </tr>
             </table>
