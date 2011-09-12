@@ -118,8 +118,8 @@
                         <option value="opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Inner opinion{/t}</option>
                         <option value="video-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
                         <option value="video-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
-                        <option value="gallery-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
-                        <option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
+                        <option value="gallery-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Album frontpage{/t}</option>
+                        <option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Album inner{/t}</option>
                     </select>
 
                     {t}and from{/t}
@@ -141,10 +141,10 @@
 		<table class="listing-table">
 			<thead>
 				<tr align="left">
-					<th  width="5">
+					<th  style="width:10px;">
                         <input type="checkbox" value="" onclick="$('tabla').select('tbody input[type=checkbox]');" />
                     </th>
-                    <th scope="col" class="center">{t}Type{/t}</th>
+                    <th scope="col" class="center" style="width:15px;">{t}Type{/t}</th>
 					<th>{t}Resource{/t}</th>
 					<th class="center" scope=col style="width:30px;">{t}Category{/t}</th>
 					<th class="center" scope=col style="width:160px;">{t}Created in{/t}</th>
@@ -165,43 +165,45 @@
 					{assign var="resource" value=$caches[c].resource}
 						{* Inner Article *}
                         {if isset($titles.$resource) && ($caches[c].template == 'article')}
-                            <img src="{$params.IMAGE_DIR}template_manager/article16x16.png" border="0" title="{t}Inner article cache file{/t}" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" border="0" title="{t}Inner article cache file{/t}" />
 						{* Frontpage mobile *}
 						{elseif ($caches[c].template == 'mobile-article-inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
 						{* Video inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Inner video cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Inner video cache file{/t}" />
 						{* Video frontpage *}
 						{elseif ($caches[c].template == 'video_frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/video16x16.png" border="0" title="{t}Video inner cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Video inner cache file{/t}" />
 						{* Opinion inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-						<img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
 						{* Gallery frontpage *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Frontpage article cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Frontpage article cache file{/t}" />
 						{* Gallery inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/gallery16x16.png" border="0" title="{t}Inner gallery cache file{/t}" />
+						{elseif isset($titles.$resource) && ($caches[c].template == 'album')}
+						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Inner gallery cache file{/t}" />
 						{* RSS opinion *}
 						{elseif isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}RSS Opinion author cache file {/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}RSS Opinion author cache file {/t}" />
 						{* Opinion author index*}
 						{elseif ($caches[c].template == 'opinion_author_index')}
-						<img src="{$params.IMAGE_DIR}template_manager/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
 						{* RSS *}
 						{elseif $resource eq "RSS"}
-						<img src="{$params.IMAGE_DIR}template_manager/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
 						{* Frontpage mobile *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-						<img src="{$params.IMAGE_DIR}template_manager/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
 						{* Frontpages *}
 						{elseif ($caches[c].template == 'frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+                        {elseif ($caches[c].template == 'album')}
+						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 						{* Other kind of resources *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 					{/if}
                     </td>
 
@@ -240,10 +242,10 @@
 							{$titles.$resource|clearslash}
 						</a>
 						{* Gallery inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-inner')}
+						{elseif isset($titles.$resource) && ($caches[c].template == 'album')}
 						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
 							 target="_blank">
-							{$titles.$resource|clearslash}
+                            {$titles.$resource|clearslash}
 						</a>
 						{* RSS opinion *}
 						{elseif isset($authors.$resource)}

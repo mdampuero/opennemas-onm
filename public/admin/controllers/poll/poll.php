@@ -72,6 +72,7 @@ switch ($action) {
     break;
 
     case 'new':
+        
         Acl::checkOrForward('POLL_CREATE');
 
         $tpl->display('polls/new.tpl');
@@ -160,7 +161,7 @@ switch ($action) {
         //Publicar o no,
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
         $poll->set_favorite($status);
-        if ($_GET['from']=='index') {
+        if (isset($_GET['from']) && $_GET['from'] =='index') {
             Application::forward('index.php?action=list&msg='.$msg);
         }else{
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
@@ -221,7 +222,7 @@ switch ($action) {
     case 'config':
 
         Acl::checkOrForward('POLL_SETTINGS');
-        
+
         $configurationsKeys = array('poll_settings',);
         $configurations = s::get($configurationsKeys);
         $tpl->assign(array(
@@ -251,4 +252,3 @@ switch ($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
     break;
 }
-

@@ -117,7 +117,9 @@ function buildFilter()
                         'mobilepages' => 'frontpage-mobile\.tpl\.php$',
                         'poll' => 'poll\.tpl\.php$',
                         'video-frontpage' => 'video_frontpage\.tpl\.php$',
-                        'video-inner' => 'video_inner\.tpl\.php$'
+                        'video-inner' => 'video_inner\.tpl\.php$',
+                        'gallery-frontpage' => 'album_frontpage\.tpl\.php$',
+                        'gallery-inner' => 'album\.tpl\.php$',
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
@@ -298,7 +300,7 @@ switch($action) {
 
         $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
 
-        $tplManager->parseList($caches);
+        $caches = $tplManager->parseList($caches);
 
         // ContentCategoryManager manager to handle categories
         $ccm = ContentCategoryManager::get_instance();

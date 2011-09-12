@@ -57,7 +57,7 @@ class Poll extends Content {
                 break;
             }
         }
-        
+
         return parent::__get($name);
     }
 
@@ -118,7 +118,6 @@ class Poll extends Content {
         $this->pk_poll       			= $rs->fields['pk_poll'];
         $this->subtitle       			= $rs->fields['subtitle'];
         $this->total_votes       		= $rs->fields['total_votes'];
-        $this->favorite                 = $rs->fields['favorite'];
         $this->with_comment             = $rs->fields['with_comment'];
         $this->visualization            = $rs->fields['visualization'];
         $this->used_ips       			= unserialize($rs->fields['used_ips']);
@@ -136,7 +135,7 @@ class Poll extends Content {
 
     	parent::update($data);
         $tags=explode(', ',$tags);//Reinicia los indices del array
-  
+
         if($data['item']){
             //Eliminamos los antiguos
             $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($data['id']);
@@ -211,7 +210,7 @@ class Poll extends Content {
             $rs->MoveNext();
             $i++;
         }
- 
+
         //TODO: improvement calc percents
             foreach ($items as &$item) {
                 $item['percent'] =0;
@@ -309,28 +308,5 @@ class Poll extends Content {
         return(true);
     }
 
-     function set_favorite($status) {
-            $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
-	    if($this->id == NULL) {
-	    	return(false);
-	    }
-            $changed = date("Y-m-d H:i:s");
-           // $sql = 'UPDATE albums SET `favorite`=0';
 
-           //$rs = $GLOBALS['application']->conn->Execute( $sql );
-            $sql = "UPDATE polls SET `favorite`=? WHERE pk_poll=".$this->id;
-            $values = array($status);
-
-            if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-                return;
-            }
-            $GLOBALS['application']->dispatch('onAfterSetFavorite', $this);
-            return(true);
-
-
-        }
 }
