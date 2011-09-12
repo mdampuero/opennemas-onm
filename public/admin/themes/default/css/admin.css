@@ -1947,11 +1947,13 @@ div.action-bar .right{
 .listing-table tr:hover { background:#F1F1F1; }
 .listing-table th td { text-align:center; }
 .listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
-.listing-table td a { color:#1792D9; font-weight: bold; text-decoration:none; }
+.listing-table td a { color:#0069D6; font-weight: bold; text-decoration:none; }
 .listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
 .listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
 
 .listing-table th img, .listing-table td img { vertical-align:middle; }
+
+.listing-table th input[type="checkbox"]{ margin-left:0px; }
 
 .listing-table .left { text-align:left !important; }
 .listing-table .right { text-align:right !important; }

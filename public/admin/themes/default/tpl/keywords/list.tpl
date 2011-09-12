@@ -67,7 +67,7 @@
 					</tr>
 					{sectionelse}
 					<tr>
-						<td class="empty" align="center"><b>Ninguna palabra guardada.</b></td>
+						<td class="empty" align="center" colspan=4>{t}No available keywords yet.{/t}</td>
 					</tr>
 					{/section}
 				</tbody>

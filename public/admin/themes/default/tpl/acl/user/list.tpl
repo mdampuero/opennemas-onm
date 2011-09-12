@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js"}
+{block name="footer-js" append}
     <script type="text/javascript">
         document.observe('dom:loaded', function(){
             onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
@@ -29,11 +29,6 @@
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
 						<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
 					</a>
-				</li>
-				<li>
-					<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-						<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todos" status="0">
-					</button>
 				</li>
 				<li class="separator"></li>
 				<li>
@@ -77,7 +72,9 @@
 			{if count($users) gt 0}
 			<thead>
 				<tr>
-					<th style="width:10px; margin-left:-10px;"><input type="checkbox"></th>
+					<th style="width:15px;">
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="center">{t}Username{/t}</th>
 					<th class="center">{t}Group{/t}</th>

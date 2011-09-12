@@ -29,7 +29,7 @@ if (empty($action)) {
 switch($action) {
 
     case 'list':
-  
+
         Acl::checkOrForward('MENU_LIST');
 
         $tpl->assign('pages', $pages);
@@ -37,7 +37,7 @@ switch($action) {
         $subMenues = array();
         $list = array();
         $subList = array();
-        
+
         foreach($menues as $menu) {
             if(empty($menu->pk_father)) {
                 $list[] = $menu;
@@ -47,7 +47,7 @@ switch($action) {
         }
 
 
-        foreach($subMenues as $submenu){            
+        foreach($subMenues as $submenu){
             //TODO: mejorar, buscamos su menu padre ya que solo sabemos el item
               foreach($list as $menu) {
                     foreach($menu->items as $item){
@@ -110,6 +110,7 @@ switch($action) {
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
         $albumCategories = array();
         $videoCategories = array();
+        $pollCategories = array();
         foreach($ccm->categories as $category) {
             if($category->internal_category == $pages['album']) {
                 $albumCategories[] = $category;
@@ -127,7 +128,7 @@ switch($action) {
                             'subcat'=> $subcat,
                             'albumCategories'=>$albumCategories,
                             'videoCategories'=>$videoCategories,
-                            'pollCategories'=>$pollCategories,
+                            'pollCategories'=> $pollCategories,
                             'staticPages'=> $staticPages,
                             'menues'=> $menues,
                             'pages'=> $pages ));
@@ -150,7 +151,7 @@ switch($action) {
             if(empty($id)) {
                 Acl::checkOrForward('MENU_CREATE');
 
-                $mn = new Menu();                
+                $mn = new Menu();
                 $mn->create($_POST);
 
             } else {
@@ -195,7 +196,7 @@ switch($action) {
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
     break;
- 
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;

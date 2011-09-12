@@ -37,12 +37,8 @@
                     </a>
                 </li>
                 {/acl}
-                <li>
-                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                        <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todos" status="0">
-                    </button>
-                </li>
                 {acl isAllowed="ALBUM_CREATE"}
+                <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Album');" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />Nuevo Album
@@ -76,7 +72,9 @@
             <thead>
                 <tr>
 
-                    <th style="width:15px;"><input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" ></th>
+                    <th style="width:15px;">
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
                     <th class="title">{t}Title{/t}</th>
                     <th class="center" style="width:35px;">{t}Views{/t}</th>
                     {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}

@@ -74,7 +74,7 @@
 			</a>
 		    </li>
 		    {/if}
-		    
+
 		    {if Acl::check('BACKEND_ADMIN') eq true}
         	    <li class="menu" title="{t}Active users in backend{/t}">
 			<a href="#" id="user_activity">
@@ -86,7 +86,7 @@
 		    <li>
 			{gmail_mailbox}
 		    </li>
-		    
+
 		    <li class="menu">
 			<a href="#" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
 			<ul>
@@ -102,7 +102,7 @@
 			</ul>
 		    </li>
 		</ul>
-                
+
             </div>
 
         </div>
@@ -182,6 +182,8 @@
     {/if}
  </script>
 	{block name="footer-js"}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}footer-functions.js"></script>
+
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">
         	try {

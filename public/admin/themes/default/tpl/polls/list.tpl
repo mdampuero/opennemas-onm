@@ -11,31 +11,26 @@
             <ul class="old-button">
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
                     </a>
                 </li>
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />{t}Publish{/t}
                     </a>
-                </li>
-                <li>
-                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                        <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-                    </button>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="#" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva carta');" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/poll-new.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />Nueva Encuesta
+                        <img border="0" src="{$params.IMAGE_DIR}/poll-new.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />{t}New poll{/t}
                     </a>
                 </li>
-                 {acl isAllowed="POLL_SETTINGS"}
+                {acl isAllowed="POLL_SETTINGS"}
                 <li class="separator"></li>
                     <li>
                         <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
@@ -59,14 +54,16 @@
             <thead>
                <tr>
                     {if count($polls) > 0}
-                    <th style="width:15px;"><input type="checkbox" class="minput"></th>
-                    <th>T&iacute;tulo</th>
-                    <th>Subt&iacute;tulo</th>
-                    <th class="center">Votos</th>
-                    <th class="center">Visto</th>
-                    <th style="width:110px;" class="center">Fecha</th>
-                    <th style="width:40px;" class="center">Favorito</th>
-                    <th style="width:40px;" class="center">Publicado</th>
+                    <th style="width:15px;">
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
+                    <th>{t}Title{/t}</th>
+                    <th>{t}Subtitle{/t}</th>
+                    <th class="center">{t}Votes{/t}</th>
+                    <th class="center">{t}Views{/t}</th>
+                    <th style="width:110px;" class="center">{t}Date{/t}</th>
+                    <th style="width:40px;" class="center">{t}Favorite{/t}</th>
+                    <th style="width:40px;" class="center">{t}Published{/t}</th>
                     <th style="width:40px;" class="center">{t}Actions{/t}</th>
                     {else}
                     <th scope="col" colspan=9>&nbsp;</th>
@@ -98,9 +95,13 @@
                     </td>
                     <td class="center">
                         {if $polls[c]->favorite == 1}
-                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado"></a>
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado">
+                            &nbsp;
+                        </a>
                         {else}
-                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente"></a>
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente">
+                            &nbsp;
+                        </a>
                         {/if}
                     </td>
 

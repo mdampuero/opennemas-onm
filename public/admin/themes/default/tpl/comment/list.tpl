@@ -26,11 +26,6 @@
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
                    </a>
                </li>
-               <li>
-                   <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                       <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-                   </button>
-               </li>
             </ul>
         </div>
     </div>
@@ -111,7 +106,9 @@
 				<thead>
         			{if count($comments) > 0}
                     <tr>
-                        <th  style='width:30px'></th>
+                        <th  style='width:30px'>
+                            <input type="checkbox" id="toggleallcheckbox">
+                        </th>
                         <th  style='width:100px;'>{t}Author{/t}</th>
                         <th  style='width:200px;'>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
                         <th style='width:200px;'>{t}Commented on{/t}</th>

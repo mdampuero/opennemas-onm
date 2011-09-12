@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js"}
+{block name="footer-js" append}
     <script type="text/javascript">
     var previousValue = null;
     document.observe('dom:loaded', function() {
@@ -142,7 +142,7 @@
 			<thead>
 				<tr align="left">
 					<th  style="width:10px;">
-                        <input type="checkbox" value="" onclick="$('table.listing-table').select('tbody input[type=checkbox]');" />
+                        <input type="checkbox" id="toggleallcheckbox" value="" />
                     </th>
                     <th scope="col" class="center" style="width:15px;">{t}Type{/t}</th>
 					<th>{t}Resource{/t}</th>

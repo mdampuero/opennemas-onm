@@ -226,7 +226,7 @@ input[type="text"] {
                                                 <a href="#listadoVideo">{t}Video Categories{/t}</a>
                                             </li>
                                             {/is_module_activated}
-                                            {is_module_activated name="Poll_MANAGER"}
+                                            {is_module_activated name="POLL_MANAGER"}
                                              <li>
                                                 <a href="#listadoPoll">{t}Poll Categories{/t}</a>
                                             </li>
