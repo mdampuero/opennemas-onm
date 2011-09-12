@@ -59,7 +59,13 @@ class TemplateCacheManager
                 preg_match('/^(?P<category>[^\^]+)\^(?P<resource>[^\^]+)?\^(.*?)(?P<tplname>[^%^.]+)\.tpl\.php$/', $filename, $matches);
 
                 if (isset($matches['category'])) {
-                    $caches[] = array('category' => $matches['category'], 'resource' => $matches['resource'], 'template' => $matches['tplname'], 'size' => $item->current()->getSize(), 'filename' => $filename);
+                    $caches[] = array(
+                        'category' => $matches['category'],
+                        'resource' => $matches['resource'],
+                        'template' => $matches['tplname'],
+                        'size' => number_format($item->current()->getSize()/1024, 2),
+                        'filename' => $filename,
+                    );
                 }
             }
         }
@@ -79,6 +85,8 @@ class TemplateCacheManager
             $caches[$i]['expires'] = $data['expires'];
             $caches[$i]['created'] = $data['timestamp'];
         }
+
+        return $caches;
     }
 
     /**
@@ -102,6 +110,7 @@ class TemplateCacheManager
             $data['timestamp'] = filectime($this->_cacheDir . $cacheFileName);
             $data['expires'] = $data['timestamp'] + $data['cache_lifetime'];
         }
+
         return $data;
     }
 
@@ -115,15 +124,17 @@ class TemplateCacheManager
     public function decodeProperties($properties)
     {
 
-        $this->properties['has_nocache_code'] = $properties['has_nocache_code'];
+        $this->has_nocache_code = $properties['has_nocache_code'];
         $this->properties['nocache_hash'] = $properties['nocache_hash'];
-
         if (isset($properties['cache_lifetime'])) {
             $this->properties['cache_lifetime'] = $properties['cache_lifetime'];
         }
-
         if (isset($properties['file_dependency'])) {
             $this->properties['file_dependency'] = $properties['file_dependency'];
+        }
+        if (!empty($properties['function'])) {
+            $this->properties['function'] = array_merge($this->properties['function'], $properties['function']);
+            $this->smarty->template_functions = array_merge($this->smarty->template_functions, $properties['function']);
         }
     }
 
@@ -138,9 +149,13 @@ class TemplateCacheManager
     {
 
         $this->properties = array();
-        preg_match_all("/(<\?php \/\*%%SmartyHeaderCode:(.+?)%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\?>\n)/s", file_get_contents($file), $result);
+
         $_smarty_tpl = $this;
-        eval($result[3][0]);
+
+        preg_match_all("/%%SmartyHeaderCode:(?:.+?)%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%/s", file_get_contents($file), $result);
+
+        eval($result[1][0]);
+
         return $this->properties;
     }
 

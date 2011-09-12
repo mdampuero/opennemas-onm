@@ -35,7 +35,9 @@
             <table class="listing-table">
                 <thead>
                     <tr>
-						<th class="center" style="width:10px">{t}Activate{/t}</th>
+						<th class="center" style="width:10px">
+                            <input type="checkbox" id="toggleallcheckbox" value="" />
+                        </th>
 						<th >{t}Cache group{/t}</th>
 						<th class="right">{t}Expire time{/t}</th>
 					</tr>
@@ -47,7 +49,7 @@
                             <input type="checkbox" name="caching[{$k|default:""}]" value="1" {if $v.caching}checked="checked"{/if}/>
                         </td>
                         <td>
-                            <img src="{$params.IMAGE_DIR}template_manager/{$groupIcon.$k|default:""}" border="0" title="Caché de opinión interior" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/{$groupIcon.$k}" border="0" title="Caché de opinión interior" />
                             {$groupName.$k|default:$k}
                             <input type="hidden" name="group[]" value="{$k|default:""}" />
                         </td>

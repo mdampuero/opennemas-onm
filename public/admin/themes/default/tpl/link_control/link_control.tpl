@@ -119,8 +119,7 @@
 {/block}
 
 
-{block name="footer-js"}
-{$smarty.block.parent}
+{block name="footer-js" append}
     <script type="text/javascript">
         function confirmar(url) {
             if(confirm('¿Está seguro de querer eliminar este fichero?')) {

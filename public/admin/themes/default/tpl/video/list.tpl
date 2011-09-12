@@ -29,12 +29,8 @@
 					</a>
 				</li>
 				{/acl}
-				<li>
-					<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-						<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-					</button>
-				</li>
 				{acl isAllowed="VIDEO_CREATE"}
+                <li class="separator"></li>
 				<li>
 					<a href="{$smarty.server.SCRIPT_NAME}?action=new&category={$category}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />Nuevo Video
@@ -76,7 +72,9 @@
             <thead>
                 <tr>
                     {if count($videos) > 0}
-                    <th style="width:15px;"></th>
+                    <th style="width:15px;">
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
                     <th>{t}Title{/t}</th>
                     <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center">{t}Service{/t}</th>

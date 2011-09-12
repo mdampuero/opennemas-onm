@@ -69,12 +69,14 @@
 		<ul>
 		    {if {count_pending_comments} gt 0}
 		    <li class="menu">
-			<a class="spch-bub-inside" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos">
-			    <em>{count_pending_comments} <span class="point"></span></em>
-			</a>
+                <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos"
+                    title="{t}There are new comments to moderate{/t}">
+                    <img src="{$params.IMAGE_DIR}/messaging_system/messages_red.png" alt="" />
+                    {count_pending_comments}
+                </a>
 		    </li>
 		    {/if}
-		    
+
 		    {if Acl::check('BACKEND_ADMIN') eq true}
         	    <li class="menu" title="{t}Active users in backend{/t}">
 			<a href="#" id="user_activity">
@@ -86,7 +88,7 @@
 		    <li>
 			{gmail_mailbox}
 		    </li>
-		    
+
 		    <li class="menu">
 			<a href="#" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
 			<ul>
@@ -102,7 +104,7 @@
 			</ul>
 		    </li>
 		</ul>
-                
+
             </div>
 
         </div>
@@ -182,6 +184,8 @@
     {/if}
  </script>
 	{block name="footer-js"}
+    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}footer-functions.js"></script>
+
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">
         	try {

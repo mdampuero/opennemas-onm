@@ -24,15 +24,11 @@
 					</a>
 				</li>
 				<li>
-					<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-						<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
-					</button>
-				</li>
-				<li>
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_restore', 1);" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
 						<img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="recuperar"><br />Recuperar
 					</a>
 				</li>
+                <li class="separator"></li>
 				<li>
 					<a title="Advanced Search" tabindex="1" accesskey="N" class="admin_add" href="{$smarty.const.SITE_URL}admin/controllers/search_advanced/search_advanced.php">
 					<img border="0" alt="Advanced Search" title="Advanced Search" src="{$smarty.const.SITE_URL}/admin/themes/default/images/search.png"><br>Search
@@ -69,7 +65,9 @@
 
 		<table class="listing-table">
 			<thead>
-				<th style="width:30px">&nbsp;</th>
+				<th style="width:30px">
+                    <input type="checkbox" id="toggleallcheckbox">
+                </th>
 				<th class="title">{t}Title{/t}</th>
 				{if $category=='todos'}<th align="center">{t}Section{/t}</th>{/if}
 				<th align="center">{t}Modification time{/t}</th>
@@ -92,42 +90,43 @@
 						<a href="{$smarty.server.PHP_SELF}?action=only_read&id={$articles[c]->id}" title="{$articles[c]->title|clearslash}"> {$articles[c]->title|clearslash}</a>
 					</td>
 					{if $category=='todos'}
-						<td align="center">
+						<td class="center">
 							{$articles[c]->category_name}
 						</td>
 					{/if}
-					<td align="center">
+					<td class="center">
 						{$articles[c]->changed}
 					</td>
-					<td>
+					<td class="center">
 						{$articles[c]->views}
 					</td>
-					<td align="center">
+					<td class="center">
 						{$articles[c]->comment}
 					</td>
-					<td align="center">
+					<td class="center">
 						{$articles[c]->rating}
 					</td>
-					<td>
+					<td class="center">
 						{$articles[c]->publisher}
 					</td>
-					<td >
+					<td class="center">
 						{$articles[c]->editor}
 					</td>
-					<td align="center">
+					<td class="center">
 						<ul class="action-buttons">
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?id={$articles[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="{t}Restore to available{/t}">
 									<img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Publicar" />
 								</a>
 							</li>
+                            <!--
 							<li>
 								<a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}"
 								   target="_blank" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');"
 								   onclick="UserVoice.PopIn.showPublic('{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}');return false;" >
 									<img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />
 								</a>
-							</li>
+							</li>-->
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />

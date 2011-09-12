@@ -350,25 +350,28 @@ gettext("Information about album module settings");
 gettext("Total in widget home:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
-gettext("Total in album frontpage:");
-
-/* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Cover width in widget album:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Cover height in widget album:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
-gettext(" Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
+gettext("Total in album frontpage:");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
-gettext(" Use  total in album frontpage column for define how many albums can see in the  frontpage albums");
+gettext("Time of the last album most viewed (days):");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext(" Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext(" Cover width in widget album  define image width for crop the cover used in widgets");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext(" Cover height in widget album  define image height for crop the cover used in widgets");
+
+/* ./public/admin/themes/default/tpl//album/config.tpl */
+gettext("Used to define the frontpage albums, the time range of the latest albums are the most viewed");
 
 /* ./public/admin/themes/default/tpl//album/config.tpl */
 gettext("Save");
@@ -597,6 +600,9 @@ gettext("Album Categories");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Video Categories");
+
+/* ./public/admin/themes/default/tpl//menues/read.tpl */
+gettext("Poll Categories");
 
 /* ./public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Available Frontpages");
@@ -1375,6 +1381,48 @@ gettext("Your password must contain 5 characters and dont contain the word <pass
 /* ./public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Please check your first password and check again.");
 
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Poll :: Configuration");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Sync list  with server");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Go back to list");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Information about poll module settings");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Type values:");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Percents");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Votes");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Charts width:");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Charts height:");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext(" Use type results if you want that results is showed percents or integer values");
+
+/* ./public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Save");
+
 /* ./public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Creating a poll");
 
@@ -1389,6 +1437,12 @@ gettext("No");
 
 /* ./public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Yes");
+
+/* ./public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Config album module");
+
+/* ./public/admin/themes/default/tpl//polls/list.tpl */
+gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Actions");
@@ -2291,6 +2345,9 @@ gettext("Albums");
 gettext("Video");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
+gettext("Poll");
+
+/* ./public/admin/themes/default/tpl//category/form.tpl */
 gettext("ePaper");
 
 /* ./public/admin/themes/default/tpl//category/form.tpl */
@@ -2358,6 +2415,9 @@ gettext("Video categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("ePapel categories");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Poll categories");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Title");
@@ -2448,6 +2508,30 @@ gettext("Published");
 
 /* ./public/admin/themes/default/tpl//category/list.tpl */
 gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Title");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Internal name");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Articles");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Photos");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Advertisements");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Published");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//category/list.tpl */
+gettext("There aren't sections specifics for polls. ");
 
 /* ./public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Creating new widget");
@@ -4478,13 +4562,10 @@ gettext("Go back to list");
 gettext("Information about newsletter receipt");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
-gettext("Maillist email:");
-
-/* ./public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Maillist name:");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
-gettext("Maillist receiver:");
+gettext("Maillist email:");
 
 /* ./public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Save");
@@ -4526,6 +4607,21 @@ gettext("Config newsletter module");
 gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Subscriptors");
+
+/* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Subscriptors");
+
+/* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Subscriptors");
+
+/* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Subscriptors");
+
+/* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
+gettext("Subscriptors");
+
+/* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Article selection");
 
 /* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
@@ -4558,6 +4654,36 @@ gettext("Available articles (please, double click over one element to send it)")
 /* ./public/admin/themes/default/tpl//newsletter/listArticles.tpl */
 gettext("Selected articles (please doucle click over one element to discart it)");
 
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Go back");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Newsletter");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Name");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Email");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Subscription");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Status");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Actions");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("Edit user");
+
+/* ./public/admin/themes/default/tpl//newsletter/subscriptors.tpl */
+gettext("There is no subscriptors yet");
+
 /* ./public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Newsletter management");
 
@@ -4584,6 +4710,12 @@ gettext("Select all the opinions available");
 
 /* ./public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Select all");
+
+/* ./public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Config newsletter module");
+
+/* ./public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
+gettext("Configurations");
 
 /* ./public/admin/themes/default/tpl//newsletter/listOpinions.tpl */
 gettext("Opinion selection");
@@ -4637,6 +4769,12 @@ gettext("Select all the opinions available");
 gettext("Select all");
 
 /* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Config newsletter module");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Configurations");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Recipient selection");
 
 /* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
@@ -4647,6 +4785,18 @@ gettext("Subscriptors available (please double click over a subscritor to add to
 
 /* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
 gettext("Subscriptors selected (please double click over a subscritor to delete from recipients)");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("MailList Account");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("DataBase Accounts");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("Write others receivers");
+
+/* ./public/admin/themes/default/tpl//newsletter/listAccounts.tpl */
+gettext("(Separated by commas or different lines)");
 
 /* ./public/admin/themes/default/tpl//newsletter/preview.tpl */
 gettext("Newsletter management");
@@ -4665,4 +4815,22 @@ gettext("Previous step");
 
 /* ./public/admin/themes/default/tpl//newsletter/preview.tpl */
 gettext("Email subject");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Email");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Name");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Surname");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Lastname");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Subscription");
+
+/* ./public/admin/themes/default/tpl//newsletter/newSubscriptor.tpl */
+gettext("Status");
 

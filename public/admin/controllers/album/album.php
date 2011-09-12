@@ -47,7 +47,7 @@ $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 
 $tpl->assign('datos_cat', $categoryData);
- 
+
 /******************* GESTION CATEGORIAS  *****************************/
 
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
@@ -372,4 +372,4 @@ switch($action) {
 
     break;
 }
- 
+

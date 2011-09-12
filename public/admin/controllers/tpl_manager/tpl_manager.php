@@ -117,7 +117,9 @@ function buildFilter()
                         'mobilepages' => 'frontpage-mobile\.tpl\.php$',
                         'poll' => 'poll\.tpl\.php$',
                         'video-frontpage' => 'video_frontpage\.tpl\.php$',
-                        'video-inner' => 'video_inner\.tpl\.php$'
+                        'video-inner' => 'video_inner\.tpl\.php$',
+                        'gallery-frontpage' => 'album_frontpage\.tpl\.php$',
+                        'gallery-inner' => 'album\.tpl\.php$',
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
@@ -239,16 +241,19 @@ switch($action) {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);
             $tpl->assign('groupName', array(
-                'frontpages'        => 'Frontpage',
-                'frontpage-mobile'  => 'Frontpage mobile version',
-                'articles'          => 'Inner Article',
-                'articles-mobile'   => 'Inner Article mobile version',
-                'opinion'           => 'Inner Opinion',
-                'rss'               => 'RSS',
-                'video'             => 'Frontpage videos',
-                'video-inner'       => 'Inner video',
-                'gallery-frontpage' => 'Gallery frontpage',
-                'gallery-inner'     => 'Gallery Inner',
+                'frontpages'        => _('Frontpage'),
+                'frontpage-mobile'  => _('Frontpage mobile version'),
+                'articles'          => _('Inner Article'),
+                'articles-mobile'   => _('Inner Article mobile version'),
+                'opinion'           => _('Inner Opinion'),
+                'rss'               => _('RSS'),
+                'video'             => _('Frontpage videos'),
+                'video-inner'       => _('Inner video'),
+                'gallery-frontpage' => _('Gallery frontpage'),
+                'gallery-inner'     => _('Gallery Inner'),
+                'poll-frontpage'    => _('Polls frontpage'),
+                'poll-inner'        => _('Poll inner'),
+                'sitemap'           => _('Sitemap'),
             ));
 
             $tpl->assign('groupIcon', array(
@@ -260,8 +265,12 @@ switch($action) {
                 'rss'               => 'rss16x16.png',
                 'video'             => 'video16x16.png',
                 'video-inner'       => 'video16x16.png',
-                'gallery-frontpage'       => 'gallery16x16.png',
-                'gallery-inner'       => 'gallery16x16.png',
+                'gallery-frontpage' => 'gallery16x16.png',
+                'gallery-inner'     => 'gallery16x16.png',
+                'poll-frontpage'    => 'polls.png',
+                'poll-inner'        => 'polls.png',
+                'sitemap'           => 'sitemap.png',
+
             ));
 
             $tpl->display('tpl_manager/config.tpl');
@@ -291,7 +300,7 @@ switch($action) {
 
         $caches = array_slice($caches, ($page-1)*$items_page, $items_page);
 
-        $tplManager->parseList($caches);
+        $caches = $tplManager->parseList($caches);
 
         // ContentCategoryManager manager to handle categories
         $ccm = ContentCategoryManager::get_instance();

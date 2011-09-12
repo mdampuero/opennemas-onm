@@ -1,4 +1,3 @@
-
 // JavaScript Document
 function sinFrames() {
 	if (top.location != self.location) {
@@ -83,7 +82,7 @@ function get_metadata(title)
 {
 	 //instanciamos el objetoAjax
 	   ajax=objetoAjax();
-           
+
 	   var tags= document.getElementById('metadata').value;
 
 	   //uso del medotod GET
@@ -106,7 +105,7 @@ function get_metadata_imagen(description,id)
 {
 	 //instanciamos el objetoAjax
 	   ajax=objetoAjax();
-           
+
 	   var tags= document.getElementById('metadata['+id+']').value;
 
 	   //uso del medotod GET

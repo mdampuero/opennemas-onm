@@ -35,12 +35,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
                     </a>
                 </li>
-                <li>
-                    <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-                        <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-                    </button>
-                </li>
-
+                <li class="separator"></li>
                 <li>
                     <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page|default:0}"
                        class="admin_add" accesskey="N" tabindex="1">
@@ -101,7 +96,9 @@
             <table class="listing-table">
                 <thead>
                     <tr>
-                        <th  style="width:10px"></th>
+                        <th  style="width:15px">
+                            <input type="checkbox" id="toggleallcheckbox" />
+                        </th>
                         <th class="title"  style="width:250px">{t}Type{/t}</th>
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:30px">{t}Permanence{/t}</th>
