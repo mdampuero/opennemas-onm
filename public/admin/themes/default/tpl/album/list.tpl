@@ -76,7 +76,7 @@
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
-                    <th class="center" style="width:35px;">{t}Views{/t}</th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
