@@ -94,7 +94,7 @@
 				<thead>
         			{if count($comments) > 0}
                     <tr>
-                        <th  style='width:30px'>
+                        <th style='width:15px'>
                             <input type="checkbox" id="toggleallcheckbox">
                         </th>
                         <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
@@ -105,7 +105,7 @@
                         {/if}
                         <th  style='width:110px;' class="center">{t}Date{/t}</th>
                         <th style='width:20px;' class="center">{t}Votes{/t}</th>
-                        <th style='width:40px;' class="center">{t}Actions{/t}</th>
+                        <th style='width:90px;' class="center">{t}Actions{/t}</th>
 				   </tr>
                    {else}
                    <tr>
@@ -158,7 +158,7 @@
 						<td class="center">
 							{$votes[c]->value_pos} /  {$votes[c]->value_pos}
 						</td>
-						<td class="center">
+						<td class="right">
 							<ul class="action-buttons">
 								<li>
 									{if $category eq 'todos' || $comments[c]->content_status eq 0}

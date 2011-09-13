@@ -32,7 +32,7 @@
                 {if count($pages) > 0}
                     <th>{t}Title{/t}</th>
                     <th>{t}URL{/t}</th>
-                    <th class="center" style="width:20px;">{t}Visits{/t}</th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:20px;">{t}Published{/t}</th>
                     <th class="center" style="width:20px;">{t}Actions{/t}</th>
                 {else}
@@ -56,7 +56,6 @@
 
                     <td class="center">
                         {$pages[k]->views}
-                        &nbsp;&nbsp;
                     </td>
 
                     <td class="center">

@@ -29,7 +29,7 @@
 			<table class="listing-table">
 				<thead>
 					<tr>
-						<th width="300" class="title" align="left">{t}Title{/t}</th>
+						<th class="title" align="left">{t}Title{/t}</th>
 						<th width="40px" align="left">{t}Files (#){/t}</th>
 						<th width="40px" align="left">{t}Size (MB){/t}</th>
 					</tr>
@@ -37,40 +37,40 @@
 				<tbody>
 					{section name=c loop=$categorys}
 					<tr>
-						<td style="padding: 0px 10px; width:300; padding:5px;">
-							 <strong> {$categorys[c]->title|clearslash|escape:"html"}</strong>
+						<td style="width:300;">
+							<a href="{$smarty.server.PHP_SELF}?action=list&category={$categorys[c]->pk_content_category}">{$categorys[c]->title|clearslash|escape:"html"}</a>
 						</td>
-						<td style="padding: 0px 10px; width:10%;" align="left">
-							{$num_photos[c]}</a>
+						<td style="width:10%;" class="center">
+							{$num_photos[c]}
 						</td>
-                                                <td style="padding: 0px 10px; width:10%;" align="left">
-                                                        {math equation="x / y" x=$size[c]|default:0 y=1024*100 format="%.2f"} MB</a>
+                        <td style="width:10%;" class="center">
+                            {math equation="x / y" x=$size[c]|default:0 y=1024*100 format="%.2f"} MB
 						</td>
 
 					</tr>
-					{section name=su loop=$subcategorys[c]}
-					<tr>
-						<td style="padding: 5px 5px 5px 30px; width:300;">
-							<strong>{$subcategorys[c][su]->title} </blockquote></strong>
-						</td>
-						<td style="padding: 0px 10px; width:10%;" align="left">
-							{$num_sub_photos[c][$subcategorys[c][su]->pk_content_category]}
-						</td>
-                                                <td style="padding: 0px 10px; width:10%;" align="left">
-							{math equation="x / y" x=$sub_size[c][$subcategorys[c][su]->pk_content_category]|default:0 y=1024*100 format="%.2f"} MB</a>
-						</td>
-					 </tr>
-					{/section}
+                        {section name=su loop=$subcategorys[c]}
+                        <tr>
+                            <td style="padding: 5px 5px 5px 20px; width:300;">
+                                <strong>=></strong> <a href="{$smarty.server.PHP_SELF}?action=list&category={$subcategorys[c][su]->pk_content_category}">{$subcategorys[c][su]->title|clearslash|escape:"html"}</a>
+                            </td>
+                            <td style="padding: 0px 10px; width:10%;" class="center">
+                                {$num_sub_photos[c][$subcategorys[c][su]->pk_content_category]}
+                            </td>
+                            <td style="padding: 0px 10px; width:10%;" class="center">
+                                {math equation="x / y" x=$sub_size[c][$subcategorys[c][su]->pk_content_category]|default:0 y=1024*100 format="%.2f"} MB</a>
+                            </td>
+                         </tr>
+                        {/section}
 					{/section}
 					<tr>
 						<td colspan="2">
 						{section name=c loop=$num_especials}
-							<table width="100%" cellpadding=0 cellspacing=0 >
-							<tr {cycle values="class=row0,class=row1"}>
-								<td style="padding: 0px 10px; width:300;">
+							<table width="100%">
+							<tr>
+								<td >
 									 <b> {$num_especials[c].title|upper|clearslash|escape:"html"}</b>
 								</td>
-								<td style="padding: 0px 10px; width:10%;" align="left">
+								<td style="width:40px;" align="left">
 									{$num_especials[c].num}</a>
 								</td>
 							 </tr>
@@ -101,8 +101,8 @@
 					<tr>
 						<th>{t}Title{/t}</th>
 						<th>{t}Path{/t}</th>
-						<th>{t}Availability{/t}</th>
-						<th>{t}Actions{/t}</th>
+						<th class="center" style="width:40px">{t}Availability{/t}</th>
+						<th style="width:40px">{t}Actions{/t}</th>
 					</tr>
 				</thead>
 
@@ -115,14 +115,14 @@
 						<td>
 							{$attaches[c]->path}
 						</td>
-						<td >
+						<td class="center">
 							{if $status[c] eq 1}
 								<img src="{$params.IMAGE_DIR}publish_g.png"  border="0" alt="Si"/>
 							{else}
 								<img src="{$params.IMAGE_DIR}icon_aviso.gif" border="0" alt="No" />
 							{/if}
 						</td>
-						<td clas="right">
+						<td class="center">
 							<ul class="action-buttons">
 								<li>
 									<a href="{$smarty.server.PHP_SELF}?action=read&id={$attaches[c]->id}" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>

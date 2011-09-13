@@ -15,15 +15,11 @@
 					<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />Eliminar
 				</a>
 			</li>
+            <li class="separator"></li>
 			<li>
 				<a href="#" class="admin_add" onClick="javascript:enviar3(this, '_self', 'm_no_in_litter', 0);" name="submit_mult" value="Recuperar" title="Recuperar">
 				    <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />Recuperar
 				</a>
-			</li>
-			<li>
-				<button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
-					<img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" title="Seleccionar Todo" alt="Seleccionar Todo"  status="0">
-				</button>
 			</li>
 		</ul>
 	</div>
@@ -55,28 +51,30 @@
 
             <thead>
                <tr>
-                    <th style="width:2%;"><input type="checkbox" class="minput"></th>
-                    <th style="width:75%;" align='left'>{t}Title{/t}</th>
-                    <th style="width:5%;">{t}Section{/t}</th>
-                    <th style="width:3%;">{t}Views{/t}</th>
-                    <th style="width:8%;">{t}Date{/t}</th>
+                    <th style="width:15px;">
+                        <input type="checkbox" id="toggleallcheckbox">
+                    </th>
+                    <th class='left'>{t}Title{/t}</th>
+                    <th style="width:40px">{t}Section{/t}</th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <th class="center" style="width:110px;">{t}Date{/t}</th>
                     <th class="center" style="width:20px;">{t}Actions{/t}</th>
                </tr>
             </thead>
 
             <tbody>
                 {section name=c loop=$litterelems}
-                <tr {cycle values="class=row0,class=row1"} style="cursor:pointer;" >
-                    <td style="text-align: left;width:20px;">
+                <tr>
+                    <td >
                         <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
                     </td>
-                    <td style="text-align: left;width:75%;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+                    <td onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
                         {$litterelems[c]->title|clearslash}
                     </td>
-                    <td style="text-align: center;width:5%;">{$secciones[c]}</td>
-                    <td >{$litterelems[c]->views}</td>
-                    <td >{$litterelems[c]->created}</td>
-                    <td class="right">
+                    <td class="center">{$secciones[c]}</td>
+                    <td class="center">{$litterelems[c]->views}</td>
+                    <td class="center">{$litterelems[c]->created}</td>
+                    <td class="center">
                         <ul class="action-buttons">
                             <li>
                                <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">

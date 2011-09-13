@@ -59,8 +59,8 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Subtitle{/t}</th>
-                    <th class="center">{t}Votes{/t}</th>
-                    <th class="center">{t}Views{/t}</th>
+                    <th class="center" style="width:40px">{t}Votes{/t}</th>
+                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th style="width:110px;" class="center">{t}Date{/t}</th>
                     <th style="width:40px;" class="center">{t}Favorite{/t}</th>
                     <th style="width:40px;" class="center">{t}Published{/t}</th>

@@ -20,9 +20,10 @@
 			{if  $type_opinion eq '0'}
 			<th style="width:150px;">{t}Author name{/t}</th> {/if}
 			<th>{t}Title{/t}</th>
-			<th class="center" style="width:40px;">{t}View{/t}</th>
+
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
 			<th style="width:40px;">{t}Ratings{/t}</th>
-			<th style="width:40px;">{t}Comments{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
 			<th class="center" style="width:110px;">{t}Created in{/t}</th>
 			<th style="width:80px;">{t}In home{/t}</th>
 			<th style="width:40px;">{t}Published{/t}</th>
