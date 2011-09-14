@@ -10,8 +10,8 @@ $_SESSION = array();
 if (isset($_COOKIE[session_name()])) {
     setcookie(session_name(), '', time()-42000, '/');
 }
-//Application::forward(SITE_URL.'index.php');
-
+//Delete the cache that handles the number of active sessions
+apc_delete(APC_PREFIX ."numSessions_");
 session_destroy();
 header ('Location: ' . SITE_URL );
 

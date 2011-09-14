@@ -167,18 +167,6 @@
                     width: 300
                 });
             });
-
-            new PeriodicalExecuter( function(pe) {
-                $('user_activity').update('<img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/loading.gif" border="0" width="16" height="16" />');
-                new Ajax.Request('index.php', {
-                    onSuccess: function(transport) {
-                        // Actualizar o número de usuarios en liña e gardar o array en users_online
-                        eval('users_online = ' + transport.responseText + ';');
-                        $('user_activity').update( users_online.length +'  '+ '<img src="{$params.IMAGE_DIR}/users_activity.png" alt="" />' );
-                    }
-                });
-                //pe.stop();
-            }, 5*60); // Actualizar cada 2*60 segundos
         }
     });
     {/if}
