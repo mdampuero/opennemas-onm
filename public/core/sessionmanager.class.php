@@ -18,7 +18,13 @@ define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
  **/
 class SessionManager implements ArrayAccess
 {
-
+    /**
+     * The directory where sessions are saved.
+     *
+     * @var sessionDirectory
+     **/
+    protected $sessionDirectory = SYS_SESSION_PATH;
+    
     /**
      * The singleton instance for this object.
      *
@@ -46,7 +52,7 @@ class SessionManager implements ArrayAccess
      **/
     static function getInstance($sessionSavePath)
     {
-        if (isset($sessionSavePath)) {
+        if (!isset($sessionSavePath)) {
             $sessionSavePath = session_save_path();
         }
         if ( is_null(self::$_singleton)) {
@@ -164,7 +170,7 @@ class SessionManager implements ArrayAccess
             if ($dh = opendir($sessionDirectory)) {
                 while (($file = readdir($dh)) !== false) {
                     if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.$file);
+                        $contents = file_get_contents($sessionDirectory.'/'.$file);
                         if (!empty($contents)) {
                             $session =
                                 SessionManager::unserializeSession($contents);
@@ -178,6 +184,8 @@ class SessionManager implements ArrayAccess
                                     'authMethod' => $session['authMethod'],
                                 );
                             }
+                        } else {
+                            @unlink($sessionDirectory.'/'.$file); 
                         }
                     }
                 }
@@ -201,14 +209,15 @@ class SessionManager implements ArrayAccess
             if ($dh = opendir($sessionDirectory)) {
                 while (($file = readdir($dh)) !== false) {
                     if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.$file);
+                        $contents = file_get_contents($sessionDirectory.'/'.$file);
                         if (!empty($contents)) {
                             $session =
                                 SessionManager::unserializeSession($contents);
                             if (isset($session['userid'])
                                 && ($session['userid']==$userid)
                             ) {
-                                @unlink($sessionDirectory.$file);
+                                @unlink($sessionDirectory.'/'.$file);  
+                                apc_delete(APC_PREFIX ."numSessions_");
                             }
                         }
                     }

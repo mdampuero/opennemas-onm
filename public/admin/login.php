@@ -51,37 +51,39 @@ if( isset($_REQUEST['action'])){
                  * Check if user account is activated
                  */
                 if($user->authorize == 1){
+                    // Load session
+                    require_once('session_bootstrap.php');
+                    
+                    //Delete the cache that handles the number of active sessions
+                    apc_delete(APC_PREFIX ."numSessions_");
 
-					// Load session
-					require_once('session_bootstrap.php');
+                    $_SESSION = array(
+                        'userid' 			 => $user->id,
+                        'username' 		 => $user->login,
+                        'email' 			 => $user->email,
+                        'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)==SYS_NAME_GROUP_ADMIN ),
+                        'privileges' 		 => Privilege::get_privileges_by_user($user->id),
+                        'accesscategories' => $user->get_access_categories_id(),
+                        'authMethod' 		 => $user->authMethod,
+                        'default_expire'    => $user->sessionexpire,
+                    );
 
-					$_SESSION = array(
-									  'userid' 			 => $user->id,
-									  'username' 		 => $user->login,
-									  'email' 			 => $user->email,
-									  'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)==SYS_NAME_GROUP_ADMIN ),
-									  'privileges' 		 => Privilege::get_privileges_by_user($user->id),
-									  'accesscategories' => $user->get_access_categories_id(),
-									  'authMethod' 		 => $user->authMethod,
-									  'default_expire'    => $user->sessionexpire,
-									  );
+                    /**
+                     * Available authentication methods:  database, google_clientlogin
+                     * Check if user auth is google_clientlogin stablish its auth for Gmail
+                     */
+                    if($user->authMethod == 'google_clientlogin') {
+                            $_SESSION['authGmail']  = base64_encode($login.':'.$password);
+                    }
 
-					/**
-					 * Available authentication methods:  database, google_clientlogin
-					 * Check if user auth is google_clientlogin stablish its auth for Gmail
- 					 */
-					if($user->authMethod == 'google_clientlogin') {
-						$_SESSION['authGmail']  = base64_encode($login.':'.$password);
-					}
+                    /**
+                     * Store default expire time
+                     */
+                    $app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
 
-					/**
-					 * Store default expire time
-					 */
-					$app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
+                    Privileges_check::loadSessionExpireTime();
 
-					Privileges_check::loadSessionExpireTime();
-
-					//initHandleErrorPrivileges();
+                    //initHandleErrorPrivileges();
                     Application::forward(SITE_URL_ADMIN.SS.'index.php');
                 } else{
                     $tpl->assign('message', _('This user was deactivated. Please ask your administrator.'));
