@@ -35,17 +35,15 @@
         $('formulario').submit();
     }
 
-    function selectAll(indicator, checkboxes) {
-        for(var i=0; i<checkboxes.length; i++) {
-            if(indicator) {
-                checkboxes[i].setAttribute('checked', 'checked');
-                checkboxes[i].selected = true;
-            } else {
-                checkboxes[i].removeAttribute('checked');
-                checkboxes[i].selected = false;
-            }
-        }
-    }
+    if($('expires[]')) {
+	new Control.DatePicker($('starttime'), {
+		icon: './themes/default/images/template_manager/update16x16.png',
+		locale: 'es_ES',
+		timePicker: true,
+		timePickerAdjacent: true,
+		dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+	});
+}
     </script>
 {/block}
 {block name="header-css" append}

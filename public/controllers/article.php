@@ -142,6 +142,7 @@ if(isset($_REQUEST['action']) ) {
                 $comment = new Comment();
                 $comments = $comment->get_public_comments($_REQUEST['article_id']);
                 $tpl->assign('num_comments', count($comments));
+                $tpl->assign('comments', $comments);
 
 
                 $cache_id = $tpl->generateCacheId(
@@ -151,11 +152,13 @@ if(isset($_REQUEST['action']) ) {
                 // Advertisements for single article NO CACHE
                 require_once('article_advertisement.php');
 
+                $tpl->assign('article', $article);
+
                 if (($tpl->caching == 0)
                     || !$tpl->isCached('article/article.tpl', $cache_id) )
                 {
 
-                    $tpl->assign('article', $article);
+                    
 
                     if (isset($article->img2)
                        && ($article->img2 != 0))
