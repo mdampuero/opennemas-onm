@@ -328,11 +328,9 @@ class Author
                        `authors`.`gender` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition`
-                FROM `authors` WHERE ? ?';
+                FROM `authors` WHERE '.$_where. ' '.$_orderBy ;
 
-        $values = array($_where, $_orderBy);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
         while (!$rs->EOF) {
             $items[$i] = new stdClass;
