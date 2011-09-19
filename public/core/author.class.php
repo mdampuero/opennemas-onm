@@ -330,7 +330,7 @@ class Author
                        `authors`.`condition`
                 FROM `authors` WHERE ? ?';
 
-        $values = array($where, $orderBy);
+        $values = array($_where, $_orderBy);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         $i  = 0;
