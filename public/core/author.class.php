@@ -373,11 +373,11 @@ class Author
 
         $sql = 'SELECT authors.pk_author, authors.name
                 FROM authors
-                WHERE ? ?';
-                $values = array($_where, $_orderBy);
+                WHERE '.$_where.' '.$_orderBy;
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
         $i  = 0;
+        
         while (!$rs->EOF) {
             $items[$i] = new stdClass;
             $items[$i]->id         = $rs->fields['pk_author'];
