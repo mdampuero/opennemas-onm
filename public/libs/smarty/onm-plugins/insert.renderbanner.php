@@ -176,7 +176,7 @@ JSINTERSTICIAL;
             }
         } else {
             // Image
-            $output .= '<a target="_blank" href="'.MEDIA_IMG_PATH_WEB.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+            $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
             $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
                     alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
         }
