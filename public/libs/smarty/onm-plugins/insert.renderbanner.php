@@ -11,7 +11,6 @@
 function smarty_insert_renderbanner($params, &$smarty) {
     // nested function to render intersticial
     // FIXME: include function into Advertisement static method
- 
     if(!function_exists('render_output')) {
         function render_output($content, $banner) {
             if( is_object($banner)
@@ -57,7 +56,6 @@ JSINTERSTICIAL;
     $banner = $advertisement->fetch('banner' . $type);
     $photo  = $advertisement->fetch('photo' . $type);
  
-     
     if(!isset($params['cssclass'])) {
         $smarty->trigger_error("renderbanner: missing 'cssclass' parameter");
         return;
@@ -76,6 +74,7 @@ JSINTERSTICIAL;
     /**
      * If the Ad is Flash based try to get the width and height fixed
      */
+    if (isset ($photo)) {
     if ( ($photo->width <= $width) 
          && ($photo->height <= $height)
          && ($photo->type_img === 'swf'))
@@ -83,7 +82,7 @@ JSINTERSTICIAL;
         $width = $photo->width;
         $height = $photo->height;
     }
-
+    }
     // If $height is equals to * then calculate using GD
     if($height == '*') {
         if(file_exists(MEDIA_IMG_PATH. $photo->path_file. $photo->name)) {
@@ -120,9 +119,9 @@ JSINTERSTICIAL;
         // $output .= $banner->script;
 
         // Parallelized method using iframes
-        $output .= '<iframe src="/publicidade/get/' . $banner->pk_content  . '.html" ' .
+        $output .= '<iframe src="'.MEDIA_IMG_PATH_WEB.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
                    'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
-                   'marginwidth="0" marginheight="0" rel="nofollow">Publicidad Xornal.com</iframe>';
+                   'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
 
     } elseif( !empty($banner->pk_advertisement) ) {
 
@@ -132,7 +131,7 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-                $output .= '<a target="_blank" href="/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+                $output .= '<a target="_blank" href="'.MEDIA_IMG_PATH_WEB.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
                 $output .= '<object>
                         <param name="wmode" value="transparent" />
                         <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
@@ -146,12 +145,12 @@ JSINTERSTICIAL;
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.MEDIA_IMG_PATH_WEB.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 } else {
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.MEDIA_IMG_PATH_WEB.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 }
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
@@ -177,7 +176,7 @@ JSINTERSTICIAL;
             }
         } else {
             // Image
-            $output .= '<a target="_blank" href="/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+            $output .= '<a target="_blank" href="'.MEDIA_IMG_PATH_WEB.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
             $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
                     alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
         }
