@@ -119,7 +119,7 @@ JSINTERSTICIAL;
         // $output .= $banner->script;
 
         // Parallelized method using iframes
-        $output .= '<iframe src="'.MEDIA_IMG_PATH_WEB.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
+        $output .= '<iframe src="'.SITE_URL.'/publicidade/get/' . $banner->pk_content  . '.html" ' .
                    'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
                    'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
 
@@ -131,7 +131,7 @@ JSINTERSTICIAL;
             if(!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-                $output .= '<a target="_blank" href="'.MEDIA_IMG_PATH_WEB.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
+                $output .= '<a target="_blank" href="'.SITE_URL.'/publicidade/'. $banner->pk_advertisement .'.html" rel="nofollow">';
                 $output .= '<object>
                         <param name="wmode" value="transparent" />
                         <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
@@ -145,12 +145,12 @@ JSINTERSTICIAL;
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.MEDIA_IMG_PATH_WEB.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 } else {
                     $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.MEDIA_IMG_PATH_WEB.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
+                            onclick="javascript:window.open(\''.SITE_URL.'/publicidade/'.$banner->pk_advertisement.'.html\', \'_blank\');return false;"></div>';
                 }
 
                 $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
