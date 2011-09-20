@@ -145,10 +145,10 @@
                         </td>
 
                         <td style="text-align:center;" align="right">
-                            {$advertisements[c]->num_clic_count}
+                            {$advertisements[c]->num_clic_count|number_format:0:',':'.'}
                         </td>
                         <td style="text-align:center;" align="right">
-                             {$advertisements[c]->views}
+                             {$advertisements[c]->views|number_format:0:',':'.'}
                         </td>
                         <td style="text-align:center;" class="center">
                             <ul class="action-buttons">
