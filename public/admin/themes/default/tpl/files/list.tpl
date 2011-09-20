@@ -82,11 +82,17 @@
 				</tbody>
 
 				<tfoot>
-					<tr>
-						<td colspan="7" class="pagination">
-							{$pagination->links|default:""}
+                    <tr>
+                        <td class="left">
+							<strong>{t}TOTAL{/t}</strong>
 						</td>
-					</tr>
+						<td style="width:10%;" class="center">
+							{$total_img}
+						</td>
+                        <td style="width:10%;" class="center">
+                            {math equation="x / y" x=$total_size|default:0 y=1024*100 format="%.2f"} MB
+						</td>
+                    </tr>
 				</tfoot>
 			 </table>
 		{else}

@@ -48,10 +48,11 @@ if( isset($_REQUEST['action']) ) {
             if($category == 0) {
                 $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
                 $cm = new ContentManager();
-
+                $total_num_photos=0;
                 $fullcat = $ccm->order_by_posmenu($ccm->categories);
                 foreach($parentCategories as $k => $v) {
                     $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, 3);
+                    $total_num_photos += $num_photos[$k];
                     $files[$v->pk_content_category] = $cm->find_all('Attachment',
                                              'fk_content_type = 3 AND category = '.$v->pk_content_category ,
                                              'ORDER BY created DESC' );
@@ -59,6 +60,7 @@ if( isset($_REQUEST['action']) ) {
                     foreach($fullcat as $child) {
                         if($v->pk_content_category == $child->fk_content_category) {
                             $num_sub_photos[$k][$child->pk_content_category] = $ccm->count_content_by_type($child->pk_content_category, 3);
+                            $total_num_photos += $num_sub_photos[$k][$child->pk_content_category];
                             $sub_files[$child->pk_content_category][] = $cm->find_all('Attachment',
                                              'fk_content_type = 3 AND category = '.$child->pk_content_category ,
                                              'ORDER BY created DESC' );
@@ -70,16 +72,17 @@ if( isset($_REQUEST['action']) ) {
                 }
 
                 //Especiales
-                $j = 0;
-                $especials = array( 8 => 'portadas' );
-                foreach($especials as $key => $cat) {
-                    $num_especials[$j]['title'] = $cat;
-                    $num_especials[$j]['num']   = $ccm->count_content_by_type($key,3);
-                    $j++;
-                }
+//                $j = 0;
+//                $especials = array( 8 => 'portadas' );
+//                foreach($especials as $key => $cat) {
+//                    $num_especials[$j]['title'] = $cat;
+//                    $num_especials[$j]['num']   = $ccm->count_content_by_type($key,3);
+//                    $j++;
+//                }
 
                 //Calculo del tamaño de los ficheros por categoria/subcategoria
                 $i = 0;
+                $total_size = 0;
                 foreach ($files as $categories => $contenido) {
                     $size[$i] = 0;
                     if (!empty($contenido)) {
@@ -87,6 +90,7 @@ if( isset($_REQUEST['action']) ) {
                             if ($categories == $value->category) {
                                 if (file_exists(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path)) {
                                     $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                                    $total_size += $size[$i];
                                 }
                             }
                         }
@@ -102,17 +106,20 @@ if( isset($_REQUEST['action']) ) {
                                     if ($ccm->get_id($ccm->get_father($value->catName)) ) {
                                         //$sub_size[$k][$ind] .= $value->title;
                                         $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                                        $total_size += $sub_size[$k][$ind];
                                     }
                                 }
                             }
                         }
                     }
                 }
-                
+
+                $tpl->assign('total_img', $total_num_photos);
+                $tpl->assign('total_size', $total_size);
                 $tpl->assign('size', $size);
                 $tpl->assign('sub_size', $sub_size);
-                $tpl->assign('especials', $especials);
-                $tpl->assign('num_especials', $num_especials);
+//                $tpl->assign('especials', $especials);
+//                $tpl->assign('num_especials', $num_especials);
                 $tpl->assign('num_photos', $num_photos);
                 $tpl->assign('categorys', $parentCategories);
                 $tpl->assign('subcategorys', $subcat);
