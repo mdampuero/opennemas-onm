@@ -21,7 +21,7 @@ class Version
     /**
      * Current Doctrine Version
      */
-    const VERSION = '0.8.1';
+    const VERSION = '0.8.3';
 
     /**
      * Compares a Onm version with the current one.
