@@ -122,13 +122,13 @@ class Application
     static public function initDatabase()
     {
         // Database
-        $GLOBALS['application']->conn = ADONewConnection(BD_TYPE);
+        $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(
-            BD_HOST, BD_USER, BD_PASS, BD_INST
+            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
         );
 
         // Check if adodb is log enabled
-        if (  s::get('log_db_enabled') == 1 ) {
+        if (s::get('log_db_enabled') == 1) {
             $GLOBALS['application']->conn->LogSQL();
         }
     }
@@ -300,7 +300,12 @@ class Application
         define('SITE_ADMIN_TMP_DIR', "tmp");
         define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
         define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
-        define('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS));
+        global $siteIDName;
+        $cachepath = SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS.$siteIDName;
+        if (!file_exists($cachepath)) {
+            mkdir($cachepath);
+        }
+        define('CACHE_PATH', realpath($cachepath));
         
         /**
         * Logging settings

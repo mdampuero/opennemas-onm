@@ -20,11 +20,21 @@ $configFile = dirname(__FILE__).DIRECTORY_SEPARATOR
             .DIRECTORY_SEPARATOR. 'config.inc.php';
 
 if (file_exists($configFile)) {
+    
     require($configFile);
     require_once(SITE_CORE_PATH.'application.class.php');
+    \Application::initAutoloader();
+    
+    // Loads one ONM instance from database
+    $instance = \Onm\Instance\InstanceManager::load($_SERVER['SERVER_NAME']);
+    if (!$instance) {
+        // This instance
+        echo 'instance not found';
+    }
 
-    Application::initAutoloader('*');
-    $app = Application::load();
+    \Application::initAutoloader('*');
+    $app = \Application::load();
+    
 } else {
     $errorPage =  file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
     echo $errorPage;

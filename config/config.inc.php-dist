@@ -7,46 +7,29 @@
  * file that was distributed with this source code.
  */
 
-
-/**
-* Paths settings
-**/
+// Paths settings
 define('SITE_PATH', realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
 define('SITE_LIBS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."libs").DIRECTORY_SEPARATOR);
 define('SITE_CORE_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
 
-        
-/**
-* Include path settings
-**/
+// Include path settings
 ini_set('include_path', get_include_path().":".SITE_LIBS_PATH);
 
-/**
- * Site Information settings
- **/
+// Site Information settings
 $siteIDName = preg_replace('@\.@', '_', $_SERVER['SERVER_NAME']);
 define('APC_PREFIX', $siteIDName);
-
-//$instance = Onm\InstanceManager::load();
-//if ($instance) {
-//    // This instance was loaded so continue the execution
-//} else {
-//    // This instance is not loaded so rise an error
-//}
 
 /**
  * Database settings
 */
-define('BD_TYPE', "mysqli");
-define('BD_HOST', "localhost");
-define('BD_USER', "root");
-define('BD_PASS', "1234");
-define('BD_INST', "idealgallego");
-define('BD_DIRECTORY_SEPARATORN', BD_TYPE."://".BD_USER.":".BD_PASS."@".BD_HOST."/".BD_INST);
-
-
+$onmInstancesConnection = array(
+    'BD_TYPE' => "mysqli",
+    'BD_HOST' => "localhost",
+    'BD_USER' => "root",
+    'BD_PASS' => "1234",
+    'BD_DATABASE' => "onm-instances",
+);
 
 define('ADVERTISEMENT_ENABLE', true);
-define('TEMPLATE_USER', "idealgallego");
 define('SITE_TITLE_MOBILE', "Nueva Tribuna");   // Title to use in the frontend
 define('SITE_FULLNAME', "Nueva Tribuna");           // Human readable site name

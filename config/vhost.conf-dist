@@ -1,23 +1,18 @@
 <VirtualHost *:80>
 
-	ServerAdmin fran.dieguez@mabishu.com
-	ServerName onm.branch
-	ServerAlias onm.local
+	ServerAdmin server@administrator.local
+	ServerName opennemas.local
+	ServerAlias instance.local otherinstance.local
+	DocumentRoot /path/to/onm-instance/public
+	ErrorLog /path/to/onm-instance/tmp/logs/error.log
+	CustomLog /path/to/onm-instance/tmp/logs/access.log combined
+	LogLevel warn
 
-	DocumentRoot /home/fran/Projects/OpenHost/onm-v8/public
-	<Directory /home/fran/Projects/OpenHost/onm-v8/public>
+	<Directory /path/to/onm-instance/public>
 		Options Indexes FollowSymLinks MultiViews
 		AllowOverride All
 		Order allow,deny
 		allow from all
 	</Directory>
-
-	LogLevel warn
-
-	ErrorLog /home/fran/Projects/OpenHost/onm-v8/tmp/logs/apache-errors.log
-	CustomLog /home/fran/Projects/OpenHost/onm-v8/tmp/logs/apache-access.log combined
-	RewriteLog /home/fran/Projects/OpenHost/onm-v8/tmp/logs/apache-access.log
-
-	ServerSignature On
 
 </VirtualHost>

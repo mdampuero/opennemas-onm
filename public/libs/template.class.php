@@ -33,13 +33,21 @@ class Template extends Smarty
          * Add global plugins path
          */
         $this->plugins_dir[]= realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
-
+        
+        
         // Parent variables
         $baseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->template_dir     = realpath($baseDir.'tpl/').'/';
-        $this->compile_dir      = realpath($baseDir.'compile/').'/';
         $this->config_dir       = realpath($baseDir.'config/').'/';
-        $this->cache_dir        = realpath($baseDir.'cache/').'/';
+        
+        foreach (array('cache', 'compile') as $key => $value ) {
+            $directory = CACHE_PATH.DS.'smarty'.DS.$value;
+            if (!file_exists($directory)) {
+                mkdir($directory, 755, true);
+            }
+            $this->{$value."_dir"} = realpath($directory).'/';
+        }
+        
         $this->plugins_dir[]    = realpath($baseDir.'plugins/').'/';
         $this->caching          = false;
         $this->allow_php_tag    = true;
