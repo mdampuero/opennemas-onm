@@ -68,8 +68,9 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
 
         $ccm = ContentCategoryManager::get_instance();
         $this->category = $_REQUEST['category'];
-
-        list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu($this->category);
+        $contentType = Content::getIDContentType('album');
+        ////All global categories & album categories can use photos
+        list($this->parentCategories, $this->subcat, $datos_cat) = $ccm->getArraysMenu($this->category,$contentType);
 		if($this->category != 'GLOBAL' && $this->category != 0 && array_key_exists($this->category, $ccm->categories)) {
             $this->category_name = $ccm->categories[$this->category]->name;
         }

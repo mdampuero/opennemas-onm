@@ -49,6 +49,10 @@ if( isset($_REQUEST['action']) ) {
                 $nameCat = 'GLOBAL'; //Se mete en litter pq category 0
                 $cm = new ContentManager();
                 $total_num_photos=0;
+                $files = array();
+                $size = array();
+                $sub_size = array();
+                $num_photos = array();
                 $fullcat = $ccm->order_by_posmenu($ccm->categories);
                 foreach($parentCategories as $k => $v) {
                     $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, 3);

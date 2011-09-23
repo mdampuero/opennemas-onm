@@ -118,21 +118,21 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:15px;">{t}Actions{/t}</th>
+                        <th style="width:50px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="10">
-                            {section name=c loop=$categorys}
-                                {if $categorys[c]->internal_category eq '7'}
-                                    {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
-                                {/if}
-                            {sectionelse}
-                                <h2><strong>{t}No available sections{/t}</strong></h2>
-                            {/section}
-                        </td>
-                    </tr>
+                    {section name=c loop=$categorys}
+                        {if $categorys[c]->internal_category eq '7'}
+                            {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                        {/if}
+                    {sectionelse}
+                            <tr>
+                            <td class="empty">
+                                {t}No available categories for listing{/t}
+                            </td>
+                        </tr>
+                    {/section}
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
@@ -152,7 +152,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:15px;">{t}Actions{/t}</th>
+                        <th style="width:50px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,8 +160,14 @@
                         {if $categorys[c]->internal_category eq '9'}
                             {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                         {/if}
-                    {/section}
+                    {sectionelse}
+                    <tr>
+                        <td class="empty">
+                            {t}No available categories for listing{/t}
+                        </td>
                     </tr>
+                    {/section}
+                     
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
@@ -181,7 +187,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:15px;">{t}Actions{/t}</th>
+                        <th style="width:50px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -189,6 +195,12 @@
                         {if $categorys[c]->internal_category eq '14'}
                             {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                         {/if}
+                    {sectionelse}
+                    <tr>
+                        <td class="empty">
+                            {t}No available categories for listing{/t}
+                        </td>
+                    </tr>
                     {/section}
                 </tbody>
                 <tfoot>
@@ -210,7 +222,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:15px;">{t}Actions{/t}</th>
+                        <th style="width:50px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -219,7 +231,11 @@
                             {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                         {/if}
                     {sectionelse}
-                        {t}There aren't sections specifics for polls. {/t}
+                    <tr>
+                        <td class="empty">
+                            {t}No available categories for listing{/t}
+                        </td>
+                    </tr>
                     {/section}
                 </tbody>
                 <tfoot>
