@@ -217,7 +217,7 @@ class SessionManager implements ArrayAccess
                                 && ($session['userid']==$userid)
                             ) {
                                 @unlink($sessionDirectory.'/'.$file);  
-                                apc_delete(APC_PREFIX ."numSessions_");
+                                apc_delete(APC_PREFIX ."_"."num_sessions");
                             }
                         }
                     }

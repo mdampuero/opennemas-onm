@@ -90,11 +90,11 @@ if( isset($_REQUEST['action']) ) {
                             if ($categories == $value->category) {
                                 if (file_exists(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path)) {
                                     $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
-                                    $total_size += $size[$i];
+                                    
                                 }
                             }
                         }
-                    }
+                    }$total_size += $size[$i];
                     $i++;
                 }
                 
@@ -104,16 +104,18 @@ if( isset($_REQUEST['action']) ) {
                             foreach ($sub_files[$ind][0] as $value) {                                
                                 if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
                                     if ($ccm->get_id($ccm->get_father($value->catName)) ) {
-                                        //$sub_size[$k][$ind] .= $value->title;
-                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
-                                        $total_size += $sub_size[$k][$ind];
+                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);     
+                                        
                                     }
                                 }
                             }
                         }
+                        if (isset($sub_size[$k][$ind])) {
+                            $total_size += $sub_size[$k][$ind];
+                        }
                     }
                 }
-
+                
                 $tpl->assign('total_img', $total_num_photos);
                 $tpl->assign('total_size', $total_size);
                 $tpl->assign('size', $size);

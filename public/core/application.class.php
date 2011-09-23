@@ -73,6 +73,10 @@ class Application
     static public function load()
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
+            
+            
+            // Setting up static Constants
+            self::initInternalContants();
 
             $GLOBALS['application'] = new Application();
 
@@ -263,6 +267,101 @@ class Application
             require $fileName;
         }
 
+    }
+    
+    
+    /*
+     * Initializes all the internal application constans
+     * 
+     */
+    static public function initInternalContants()
+    {
+        /**
+         * System setup
+         **/
+        define('STATUS', "1");
+        define('CHARSET', "text/html; charset=UTF-8");
+
+        $protocol = 'http://';
+        if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
+            $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        }
+        
+        define('SS', "/");
+
+        define('SITE', $_SERVER['SERVER_NAME']);
+        
+        define('BASE_URL', '/');
+        define('ADMIN_DIR', "admin");
+        define('SITE_URL', $protocol.SITE.BASE_URL);
+        define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
+        
+        define('SITE_ADMIN_DIR', "admin");
+        define('SITE_ADMIN_TMP_DIR', "tmp");
+        define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
+        define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
+        define('CACHE_PATH', realpath(SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS));
+        
+        /**
+        * Logging settings
+        **/
+        define('SYS_LOG_PATH', SITE_PATH.DS.'..'.DS."tmp/logs");
+        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
+        define('SYS_SESSION_PATH', SITE_PATH.DS.'..'.DS."tmp/sessions".DS);
+        define('SYS_NAME_GROUP_ADMIN', 'Administrador'); // TODO: delete from application
+                
+        /**
+        * Media paths and urls configurations
+        **/
+        define('MEDIA_URL', "http://webdev-ideal.opennemas.com/");
+        // Set this to a external server like http://example.com or keep it blank
+        
+        define('MEDIA_DIR', "media");    // External server or a local dir
+        define('MEDIA_PATH', SITE_PATH); // local path to write media (/path/to/media)
+        define('IMG_DIR', "images");
+        define('FILE_DIR', "files");
+        define('ADS_DIR', "advertisements");
+        define('OPINION_DIR', "opinions");
+        
+        // TODO: A Eliminar
+        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR); // TODO: delete from application
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
+
+        /**
+        * Template settings
+        **/
+        define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+        define('TEMPLATE_USER_PATH_WEB', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+        define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
+        
+        define('TEMPLATE_ADMIN', "default");
+        define(
+           'TEMPLATE_ADMIN_PATH',
+           SITE_PATH.DS.ADMIN_DIR."themes".DS.TEMPLATE_ADMIN
+        );
+        define(
+           'TEMPLATE_ADMIN_PATH_WEB',
+           SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS
+        );
+        
+        
+        /**
+        * Mail settings
+        **/
+        define('MAIL_HOST', "localhost");
+        // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
+        define('MAIL_USER', "");
+        define('MAIL_PASS', "");
+        define('MAIL_FROM', 'noreply@opennemas.com');
+        
+        /**
+        * Session de usuario
+        **/
+        $GLOBALS['USER_ID'] = NULL;
+        $GLOBALS['conn'] = NULL;
+        
+        define('ITEMS_PAGE', "20"); // TODO: delete from application    
     }
 
     /**

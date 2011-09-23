@@ -52,7 +52,7 @@ class Uri
                 $params
             );
         } else {
-            $config = $GLOBALS['url_configurations'];
+            $config = self::$_urlConfigurations;
         }
         return $config;
     }
