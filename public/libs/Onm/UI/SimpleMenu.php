@@ -70,7 +70,7 @@ class SimpleMenu {
                 {
                     $class = $this->getclass($menu['class']);
                     $html.= "<li {$class}>";
-                    $html .= $this->getHref($menu['title'], $menu['link']);
+                    $html .= $this->getHref($menu['title'], 'menu_'.$menu['id'], $menu['link']);
 
                     // If there are elements in this submenu and user can see it, print them
                     if ( $menu->count() > 0 )
@@ -88,7 +88,7 @@ class SimpleMenu {
                                 $external = isset($submenu['target']);
                                 $class = $this->getclass($submenu['class']);
                                 $html.= "<li {$class}>";
-                                    $html .= $this->getHref($submenu['title'],$submenu['link'], $external);
+                                    $html .= $this->getHref($submenu['title'], 'submenu_'.$submenu['id'], $submenu['link'], $external);
                                 $html.= "</li>";
                             }
                         }
@@ -117,7 +117,7 @@ class SimpleMenu {
         
     }
 
-    private function getHref($title, $url, $external = false) {
+    private function getHref($title, $id, $url, $external = false) {
         if (empty($title)
             && empty($url))
         {
@@ -136,8 +136,9 @@ class SimpleMenu {
         }
 
         $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
+        $attrId = "id=\"".sprintf(_("%s"), $id)."\"";
 
-        return "<a href=\"$url\" $target $attrTitle>".$title."</a>";
+        return "<a href=\"$url\" $target $attrTitle $attrId>".$title."</a>";
     }
 
     private  function checkAcl($privilege)

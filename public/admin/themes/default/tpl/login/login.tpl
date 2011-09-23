@@ -60,7 +60,7 @@
 							{if isset($smarty.cookies.login_username)}checked="checked" {/if}/>{t}Remember me{/t}</label>
 					</div>
 					<div class="span-8 last right">
-						<button type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+						<button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
 					</div>
 				</div>
 				{if isset($captcha)}
