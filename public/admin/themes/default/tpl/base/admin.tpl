@@ -56,7 +56,7 @@
 
     <div id="topbar-admin">
         <div id="logoonm">
-	    <a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" title="{t}Go to admin main page{/t}">
+	    <a  href="{$smarty.const.SITE_URL_ADMIN}/index.php" id="logo-onm" title="{t}Go to admin main page{/t}">
 	       <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas"/></div>
 	       <!--<div class="site-name">{$smarty.const.SITE_FULLNAME}</div>-->
 	    </a>
@@ -90,14 +90,14 @@
 		    </li>
 
 		    <li class="menu">
-			<a href="#" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
+			<a href="#" id="menu" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
 			<ul>
 			    <li>
-				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
+				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
 			    </li>
 			    <li class="divider"></li>
 			    <li>
-				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" class="logout" title="{t}Logout from control panel{/t}">
+				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" id="logout" class="logout" title="{t}Logout from control panel{/t}">
 				    {t}Log out{/t}
 				</a>
 			    </li>

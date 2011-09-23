@@ -246,9 +246,9 @@ if(isset($action)) {
                 $comment = new Comment();
                 $comment->delete($_POST['id'], $_SESSION['userid']);
             }
-
+            //Al borrar un comentario para que vuelva a la misma pestaña
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $category . '&page=' . $page);
+                                 $category . '&page=' . $page .'&comment_status='.$_GET['comment_status']);
         } break;
 
         case 'change_status': {

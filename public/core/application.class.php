@@ -336,14 +336,9 @@ class Application
         define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
         
         define('TEMPLATE_ADMIN', "default");
-        define(
-           'TEMPLATE_ADMIN_PATH',
-           SITE_PATH.DS.ADMIN_DIR."themes".DS.TEMPLATE_ADMIN
-        );
-        define(
-           'TEMPLATE_ADMIN_PATH_WEB',
-           SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS
-        );
+        define('TEMPLATE_ADMIN_PATH',SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
+        define('TEMPLATE_ADMIN_PATH_WEB',SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
+        define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
         
         
         /**
