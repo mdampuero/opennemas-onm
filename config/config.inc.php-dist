@@ -31,7 +31,7 @@ define('APC_PREFIX', $siteIDName);
 //if ($instance) {
 //    // This instance was loaded so continue the execution
 //} else {
-//    // This instance 
+//    // This instance is not loaded so rise an error
 //}
 
 /**
