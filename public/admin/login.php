@@ -55,7 +55,7 @@ if( isset($_REQUEST['action'])){
                     require_once('session_bootstrap.php');
                     
                     //Delete the cache that handles the number of active sessions
-                    apc_delete(APC_PREFIX ."numSessions_");
+                    apc_delete(APC_PREFIX ."_"."num_sessions");
 
                     $_SESSION = array(
                         'userid' 			 => $user->id,
