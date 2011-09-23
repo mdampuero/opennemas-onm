@@ -247,7 +247,7 @@ if (isset($_REQUEST['action']) ) {
             $art_editors = array();
 
             if ($_REQUEST['category'] == 'todos') {
-                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0', 'ORDER BY paper_page ASC, position ASC, created DESC ');
+                $articles = $cm->find('Article', 'fk_content_type=1 AND available=0', 'ORDER BY position ASC, created DESC ');
                 $tpl->assign('articles', $articles);
                 if(Acl::check('OPINION_ADMIN ')){
                     $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
@@ -310,7 +310,7 @@ if (isset($_REQUEST['action']) ) {
 
         break;
 
-        case 'list_agency': //$data['paper_page']=-1;
+        case 'list_agency': 
             if( !Privileges_check::CheckPrivileges('ARTICLE_LIST_PEND')) {
                 Privileges_check::AccessDeniedAction();
             }

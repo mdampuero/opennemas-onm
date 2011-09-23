@@ -73,13 +73,7 @@ if(isset($_REQUEST['action'])) {
             $order = ' position ASC, created DESC';
             $opinion = new Opinion();
 
-            $algoritm = $opinion->get_opinion_algoritm();
-            if($algoritm=='orden') {
-                $order=' position ASC, created DESC';
-            }
 
-
-            $tpl->assign('algoritm', $algoritm);
             $comment = new Comment();
 
 
@@ -148,7 +142,7 @@ if(isset($_REQUEST['action'])) {
             }
 
             $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
-            $tpl->assign('algoritm', $algoritm);
+
             $rating = new Rating();
 
             $op_comment = $names = array();

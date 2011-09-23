@@ -35,7 +35,7 @@ if(empty($category)) {
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
-if(empty($category))
+if(empty($category) && !empty($categoryData) )
     $category = $categoryData[0]->pk_content_category;
 
 $tpl->assign('category', $category);

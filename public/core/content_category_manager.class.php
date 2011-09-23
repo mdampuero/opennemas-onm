@@ -853,7 +853,7 @@ class ContentCategoryManager {
         }
 
 
-        if ( empty($category)  ) {
+        if ( empty($category) && !empty($parentCategories) ) {
              $categoryData[] = $parentCategories[0];
         }
 

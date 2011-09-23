@@ -264,7 +264,7 @@
                         {if $smarty.request.action eq "read"}
                             <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                             <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Gallery{/t}</option>
+                            
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
                                     {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
@@ -282,9 +282,7 @@
                             {is_module_activated name="OPINION_MANAGER"}
                             <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                             {/is_module_activated}
-                            {is_module_activated name="ALBUM_MANAGER"}
-                            <option value="3" {if $category eq 3}selected="selected"{/if}>{t}Gallery{/t}</option>
-                            {/is_module_activated}
+                            
 
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"

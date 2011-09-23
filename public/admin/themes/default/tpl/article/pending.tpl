@@ -191,7 +191,7 @@
                               </script>
                         </td>
                         <td  class="center">
-                              {if $articles[c]->category neq 20}  {$articles[c]->paper_page} - (pos: {$articles[c]->position}) {/if}
+                              
                         </td>
                     {/if}
                     <td >

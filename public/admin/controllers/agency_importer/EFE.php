@@ -198,7 +198,6 @@ function createArticle($elementXML,$numCategories,$check='1')
        
     }
 
-    $data['paper_page']='-1';
 
     $current_category = strtolower(String_Utils::normalize_name($elementXML['category']));
 
@@ -354,8 +353,7 @@ function createOpinion($elementXML,$numCategories,$check='1')
                  $data['available']=0;
                  $data['in_home']=0;
             }
-
-            $data['paper_page'] = 0;
+ 
             $data['fk_publisher'] = $_SESSION['userid'];
             $data['metadata']=""; $data['category']=""; $data['description']="";
             $data['with_comment']="1";  

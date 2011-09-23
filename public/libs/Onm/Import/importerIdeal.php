@@ -83,9 +83,7 @@ class importerIdeal {
                             if($eleto->attributes()->name =='year'){
                                 $year = $eleto->attributes()->content;
                             }
-                            if($eleto->attributes()->name =='page'){
-                                $data['paper_page'] =$eleto->attributes()->content;
-                            }
+                          
                 }else{
                     foreach($eleto->attributes() as $a => $b) {
 
