@@ -7,12 +7,6 @@
  * file that was distributed with this source code.
  */
 
-/**
- * System setup
- **/
-define('STATUS', "1");
-define('CHARSET', "text/html; charset=UTF-8");
-
 
 /**
 * Paths settings
@@ -32,6 +26,13 @@ ini_set('include_path', get_include_path().":".SITE_LIBS_PATH);
  **/
 $siteIDName = preg_replace('@\.@', '_', $_SERVER['SERVER_NAME']);
 define('APC_PREFIX', $siteIDName);
+
+//$instance = Onm\InstanceManager::load();
+//if ($instance) {
+//    // This instance was loaded so continue the execution
+//} else {
+//    // This instance 
+//}
 
 /**
  * Database settings
