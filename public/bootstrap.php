@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Defining application, libs, and other internal constants.
+*/
+
 // Define path to application directory
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
@@ -8,31 +12,34 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
+// Paths settings
+define('SITE_PATH',        realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR . "public" ).DIRECTORY_SEPARATOR);
+define('SITE_LIBS_PATH',   realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
+define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
+define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
+define('SITE_MODELS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
+
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(APPLICATION_PATH . '/../libs'),
-    get_include_path(),
+    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, get_include_path(),
 )));
 
-
-$configFile = dirname(__FILE__).DIRECTORY_SEPARATOR
-            .'..'.DIRECTORY_SEPARATOR.'config'
-            .DIRECTORY_SEPARATOR. 'config.inc.php';
+$configFile = implode(DIRECTORY_SEPARATOR, array(
+    APPLICATION_PATH, 'config', 'config.inc.php'
+));
 
 if (file_exists($configFile)) {
     
     require($configFile);
     require_once(SITE_CORE_PATH.'application.class.php');
-    \Application::initAutoloader();
+    \Application::initAutoloader('*');
     
     // Loads one ONM instance from database
     $instance = \Onm\Instance\InstanceManager::load($_SERVER['SERVER_NAME']);
     if (!$instance) {
         // This instance
-        echo 'instance not found';
+        echo 'Instance not found';
     }
-
-    \Application::initAutoloader('*');
     $app = \Application::load();
     
 } else {

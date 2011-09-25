@@ -7,14 +7,6 @@
  * file that was distributed with this source code.
  */
 
-// Paths settings
-define('SITE_PATH', realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR."public").DIRECTORY_SEPARATOR);
-define('SITE_LIBS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."libs").DIRECTORY_SEPARATOR);
-define('SITE_CORE_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
-
-// Include path settings
-ini_set('include_path', get_include_path().":".SITE_LIBS_PATH);
-
 // Site Information settings
 $siteIDName = preg_replace('@\.@', '_', $_SERVER['SERVER_NAME']);
 define('APC_PREFIX', $siteIDName);

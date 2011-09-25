@@ -22,8 +22,6 @@ require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 $RESOURCES_PATH = TEMPLATE_ADMIN_PATH_WEB;
 
-
-
 if( Privileges_check::CheckPrivileges('USER_ADMIN') ) {
     // Peticiones por Ajax
     if( isset($_SERVER['HTTP_X_REQUESTED_WITH'])

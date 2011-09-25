@@ -29,7 +29,10 @@ $tpl->assign('titulo_barra', 'Video Management');
 //Testing Panorama
 set_include_path(get_include_path(). PATH_SEPARATOR. SITE_LIBS_PATH.DIRECTORY_SEPARATOR.'Panorama');
 require_once(implode(DIRECTORY_SEPARATOR, array('Zend','Gdata','YouTube.php')));
-require_once( implode(DIRECTORY_SEPARATOR, array('Panorama','Panorama','Video.php')));
+set_include_path(implode(PATH_SEPARATOR, array(
+    get_include_path(),
+    implode(DIRECTORY_SEPARATOR, array( SITE_VENDOR_PATH,'Panorama')))
+));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 

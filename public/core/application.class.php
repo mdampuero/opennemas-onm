@@ -76,7 +76,7 @@ class Application
             
             
             // Setting up static Constants
-            self::initInternalContants();
+            self::initInternalConstants();
 
             $GLOBALS['application'] = new Application();
 
@@ -89,8 +89,6 @@ class Application
             // Setting up Gettext
             self::initGettext();
         }
-
-
 
         return( $GLOBALS['application'] );
     }
@@ -105,7 +103,7 @@ class Application
         // Composite Logger (file + mail)
         // http://www.indelible.org/php/Log/guide.html#composite-handlers
         if ( s::get('log_enabled') == 1) {
-            $GLOBALS['application']->logger = &Log::singleton('composite');
+            $GLOBALS['application']->logger = \Log::singleton('composite');
 
             $conf = array('mode' => 0600,
                           'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
@@ -115,7 +113,7 @@ class Application
             );
             $GLOBALS['application']->logger->addChild($fileLogger);
         } else {
-            $GLOBALS['application']->logger = &Log::singleton('null');
+            $GLOBALS['application']->logger = \Log::singleton('null');
         }
     }
 
@@ -180,11 +178,11 @@ class Application
         // Register Onm_ Namespace
         $autoloader->registerNamespace('Onm_');
 
-        $libs = array(  'adodb'    => SITE_LIBS_PATH.'/adodb5/adodb.inc.php',
-                        'log'      => SITE_LIBS_PATH.'/Log.php',
-                        'pager'    => SITE_LIBS_PATH.'/Pager/Pager.php',
+        $libs = array(  'adodb'    => SITE_VENDOR_PATH.'/adodb5/adodb.inc.php',
+                        'pager'    => SITE_VENDOR_PATH.'/Pager/Pager.php',
                         'template' => array(
                                         SITE_LIBS_PATH.'/smarty/smarty-legacy/Smarty.class.php',
+                                        SITE_VENDOR_PATH.'/Log.php',
                                         SITE_LIBS_PATH.'/template.class.php'
                                     ),
                      );
@@ -236,6 +234,9 @@ class Application
         if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
             require dirname(__FILE__).'/'.$filename.'.class.php';
             return true;
+        } elseif ( file_exists(SITE_MODELS_PATH.'/'.$filename.'.class.php') ) {
+            require SITE_MODELS_PATH.'/'.$filename.'.class.php';
+            return true;
         } else {
             // Try convert MethodCacheManager to method_cache_manager
             $filename = strtolower(
@@ -274,7 +275,7 @@ class Application
      * Initializes all the internal application constans
      * 
      */
-    static public function initInternalContants()
+    static public function initInternalConstants()
     {
         /**
          * System setup
