@@ -30,14 +30,8 @@ require_once('../../session_bootstrap.php');
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
-require_once(SITE_LIBS_PATH.'Pager/Pager.php');
-require_once(SITE_CORE_PATH.'string_utils.class.php');
-
 // Check ACL
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('PCLAVE_ADMIN')) {
-    Acl::deny();
-}
+if(!Acl::check('PCLAVE_ADMIN')) { Acl::deny(); }
 
 // Build redirect with filter params
 $_redirect = '';

@@ -12,11 +12,6 @@ require_once(dirname(__FILE__).'/../../session_bootstrap.php');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Gestor de Widgets');
 
-require_once(SITE_LIBS_PATH.'Pager/Pager.php');
-require_once(SITE_CORE_PATH.'string_utils.class.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-
-
 // Widget instance
 $widget = new Widget();
 $c = new Content();
@@ -24,7 +19,6 @@ $cm = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
 
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
-
 
 switch($action) {
     case 'edit': {
@@ -47,7 +41,6 @@ switch($action) {
     case 'delete': {
         $id = $_REQUEST['id'];
         $widget->delete($id);
-
 
         Application::forward('?action=list');
         break;

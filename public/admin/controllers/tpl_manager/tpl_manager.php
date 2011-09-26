@@ -33,8 +33,6 @@ if(!Acl::check('BACKEND_ADMIN')) {
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Cache manager');
 
-require_once(SITE_LIBS_PATH.'Pager/Pager.php');
-
 /**
  * Utility functions
  */

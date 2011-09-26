@@ -19,10 +19,6 @@ $sessions = $GLOBALS['Session']->getSessions();
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'User Groups Management');
 
-require_once(SITE_CORE_PATH.'user_group.class.php');
-require_once(SITE_CORE_PATH.'privilege.class.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-
 Acl::checkOrForward('GROUP_ADMIN');
 
 if( isset($_REQUEST['action']) ) {

@@ -13,9 +13,7 @@ require_once('../../bootstrap.php');
 require_once('../session_bootstrap.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
-
 $tpl->assign('titulo_barra', _('Trash'));
-require_once(SITE_CORE_PATH.'album_photo.class.php');
 
 if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
 if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = 1;}
@@ -32,12 +30,6 @@ $tpl->assign('datos_cat', $datos_cat);
 
 if (!isset($_REQUEST['mytype'])) {$_REQUEST['mytype'] = 'article';}
 $tpl->assign('mytype', $_REQUEST['mytype']);
-
-
-//if( !in_array('USR_ADMIN',$_SESSION['privileges']))
-//{
-//    Application::forward($_SERVER['HTTP_REFERER'].'?action=list_pendientes');
-//}
 
 if(isset($_REQUEST['action']) ) {
 	switch($_REQUEST['action']) {

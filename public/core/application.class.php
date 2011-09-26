@@ -246,6 +246,9 @@ class Application
             if ( file_exists(dirname(__FILE__).'/'.$filename.'.class.php') ) {
                 require dirname(__FILE__).'/'.$filename.'.class.php';
                 return true;
+            } elseif ( file_exists(SITE_MODELS_PATH.'/'.$filename.'.class.php') ) {
+                require SITE_MODELS_PATH.'/'.$filename.'.class.php';
+                return true;
             }
         }
 
