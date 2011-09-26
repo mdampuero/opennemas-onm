@@ -256,6 +256,8 @@ if(($tpl->caching == 0)
     //for ( $c = 0,$aux = 0; $articles_home[$aux]->title != "" ; $c++, $aux ++ ) {
     $c = 0;
     $aux = 0;
+    //Flag para saber si hay una noticia destacada
+    $has_highlighted = false;
     while(isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
         $column[$c] = $articles_home[$aux];
         $column[$c]->category_name = $column[$c]->loadCategoryName($articles_home[$aux]->id);
@@ -272,6 +274,10 @@ if(($tpl->caching == 0)
                     }
                 }
             }
+        }
+        //Si hay noticia destacada, ponemos el flag a true
+        if ($column[$c]->home_placeholder == 'placeholder_highlighted_0') {
+            $has_highlighted = true;
         }
         /***** GET OBJECT VIDEO *****/
         if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
@@ -321,6 +327,7 @@ if(($tpl->caching == 0)
     //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
     //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
+    $tpl->assign('has_highlighted', $has_highlighted);
 
 
 
