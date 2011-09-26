@@ -12,7 +12,7 @@
  * @package    Onm
  * @subpackage Model
  **/
-class Comment extends Content
+class Comment extends \Content
 {
     var $pk_comment = null;
     var $author = null;
