@@ -1,11 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
+{css_tag href="/newsletter.css" media="screen"}
 {/block}
 
 {block name="header-js" append}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}newsletter.js?cacheburst=1259855452"></script>
+{script_tag src="/newsletter.js" language="javascript"}
 {/block}
 {block name="footer-js" append}
 <script type="text/javascript">

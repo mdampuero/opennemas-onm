@@ -1,14 +1,14 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}calendar_date_select.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
-<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}newsletter.css" media="screen" />
+{css_tag href="/admin.css"}
+{css_tag href="/calendar_date_select.css"}
+{css_tag href="/mediamanager.css"}
+{css_tag href="/newsletter.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}newsletter.js?cacheburst=1259855452"></script>
+{script_tag src="/newsletter.js" language="javascript"}
 <script type="text/javascript">
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
@@ -73,13 +73,11 @@ document.observe('dom:loaded', function() {
 	</div>
 </div>
 <div class="wrapper-content">
-
 	<table class="adminheading">
 		<th>
 			<td></td>
 		</th>
 	</table>
-
 	<table class="adminlist">
 		<tr>
 			<td>
@@ -118,7 +116,7 @@ document.observe('dom:loaded', function() {
 
 
 
-		</div>
+</div>
 	</div>
 
 
