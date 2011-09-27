@@ -5,13 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 
-<link rel="stylesheet" href="{$params.CSS_DIR}admin.css" type="text/css" />
-<!--[if IE]>
-    <link rel="stylesheet" href="{$params.CSS_DIR}ieadmin.css" type="text/css" />
-<![endif]-->
-<script type="text/javascript" src="{$params.JS_DIR}prototype.js" language="javascript"></script>
-<script type="text/javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js" language="javascript"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+{css_tag href="/admin.css"}
+{*[if IE]{css_tag href="/ieadmin.css.css"}[endif]*}
+{script_tag src="/prototype.js" language="javascript"}
+{script_tag src="/scriptaculous/scriptaculous.js" language="javascript"}
+{script_tag src="/scriptaculous/photos.js" language="javascript"}
 {$script|default:""}
 
 </head>

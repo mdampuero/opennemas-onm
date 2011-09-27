@@ -32,9 +32,9 @@
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A"></script>
-<script type="text/javascript" src="{$params.JS_DIR}/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="{$params.JS_DIR}feed/feed.js"></script>
+{script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1 }
+{script_tag src="/jquery/jquery.min.js"}
+{script_tag src="/feed/feed.js"}
 
 <script type="text/javascript">
 $.noConflict();
