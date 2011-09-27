@@ -22,16 +22,18 @@ function smarty_function_script_tag($params, &$smarty) {
     } else {
         //Si no es externno, calculamos el mtime del fichero
         $mtime = '?';        
-        $server = TEMPLATE_ADMIN_URL.'js';
+        $server = '';
         if ($smarty->theme == 'default') {
             $file = TEMPLATE_ADMIN_PATH.'/js'.$src;
             if (file_exists($file)) {
                 $mtime .= filemtime($file);
+                $server = TEMPLATE_ADMIN_URL.'js';
             }
         } else {
             $file = TEMPLATE_USER_PATH.'/js'.$src;
             if (file_exists($file)) {
                 $mtime .= filemtime($file);
+                $server = TEMPLATE_USER_URL.'js';
             }
         }
     }
