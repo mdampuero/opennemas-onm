@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsMenues.js"></script>
+    {script_tag src="/utilsMenues.js" language="javascript"}
     <script type="text/javascript">
          document.observe('dom:loaded', function() {
             makeSortable();

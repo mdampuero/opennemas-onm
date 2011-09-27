@@ -185,7 +185,7 @@
                  countWords(document.getElementById('body'), document.getElementById('counter_body'));
              </script>
 
-         <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+         {script_tag src="/tiny_mce/opennemas-config.js"}
          <script type="text/javascript" language="javascript">
              tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
          </script>

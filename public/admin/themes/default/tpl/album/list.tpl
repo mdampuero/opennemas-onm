@@ -1,13 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsalbum.js"></script>
+    {script_tag src="/utilsalbum.js" language="javascript"}
 
 {/block}
 
 {block name="footer-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}cropper.js"></script>
-     <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
+    {script_tag src="/cropper.js" language="javascript"}
+    {script_tag src="/utilsGallery.js" language="javascript"}
 {/block}
 
 {block name="content"}

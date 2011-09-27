@@ -97,7 +97,7 @@
 {/block}
 
 {block name="footer-js"}
-<script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+{script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript" language="javascript">
 /* <![CDATA[ */
 tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );

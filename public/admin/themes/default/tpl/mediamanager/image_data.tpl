@@ -2,7 +2,7 @@
 
 
 {block name="footer-js" append}
-    <script defer="defer" type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+    {script_tag src="/photos.js" language="javascript"}
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
         <div class="message" id="console-info">{$smarty.request.message}</div>
         <script defer="defer" type="text/javascript">

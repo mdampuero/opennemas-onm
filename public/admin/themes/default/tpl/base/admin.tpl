@@ -43,14 +43,13 @@
         {* FIXME: corregir para que pille bien el path *}
         {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
             lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
-<!--        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>-->
             {script_tag language="javascript" src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
 <body>
 	{* scriptsection name="body" *}
-	<script type="text/javascript" src="{$params.JS_DIR}wz_tooltip.js"></script>
+    {script_tag src="/wz_tooltip.js"}
 	{* /scriptsection *}
 
     <div id="topbar-admin">
@@ -171,7 +170,7 @@
     {/if}
  </script>
 	{block name="footer-js"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}footer-functions.js"></script>
+    {script_tag src="/footer-functions.js" language="javascript"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">

@@ -1,8 +1,8 @@
  {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+    {script_tag src="/utilsadvertisement.js" language="javascript"}
+    {script_tag src="/AdPosition.js" language="javascript"}
 {/block}
 
 

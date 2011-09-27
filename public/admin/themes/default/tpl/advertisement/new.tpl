@@ -1,11 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsadvertisement.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}AdPosition.js"></script>
+    {script_tag src="/utilsadvertisement.js" language="javascript"}
+    {script_tag src="/AdPosition.js" language="javascript"}
 {/block}
 {block name="footer-js" append}
-      <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsGallery.js"></script>
+    {script_tag src="/utilsGallery.js" language="javascript"}
 {/block}
 {block name="header-css" append}
 <style type="text/css">
@@ -317,7 +317,7 @@
                                 <span id="geoip_select"></span>
                             </label>
 
-                            <script type="text/javascript" src="{$params.JS_DIR}GeoipHelper.js?cacheburst=1258404035" charset="utf-8"></script>
+                            {script_tag src="/GeoipHelper.js" charset="utf-8"}
                             <script type="text/javascript">
                                 new GeoipHelper('geoip_select', 'script');
                             </script>
