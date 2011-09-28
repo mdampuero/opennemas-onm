@@ -140,7 +140,7 @@ class Author
     public function update($data)
     {
 
-        $data = array_merge($this->defaultValues, $data);
+        $data = array_merge($this->_defaultValues, $data);
 
         $sql = "UPDATE `authors`
                 SET `name`=?, `gender`=?, `politics`=?, `condition`=?
