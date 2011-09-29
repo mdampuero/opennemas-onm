@@ -20,7 +20,16 @@ $ccm = ContentCategoryManager::get_instance();
 /**
  * Getting request params
  **/
-$articleID = filter_input(INPUT_GET,'article_id',FILTER_SANITIZE_STRING);
+$dirtyID = filter_input(INPUT_GET,'article_id',FILTER_SANITIZE_STRING);
+if(empty($dirtyID)) {
+    $dirtyID = filter_input(INPUT_POST,'article_id',FILTER_SANITIZE_STRING);
+}
+if(!empty($dirtyID)){
+    $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+    $articleID= (int)$matches["digit"];
+}
+ 
+
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 
 if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
@@ -32,10 +41,9 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
         $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
         $subcategory_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
     } else {
-        if(!empty($_REQUEST['article_id'])){
-            $article = new Article($_REQUEST['article_id']);
-            $article->category_name = $article->loadCategoryName($_REQUEST['article_id']);
-
+        if(!empty($articleID)){
+            $article = new Article($articleID);
+            $article->category_name = $article->loadCategoryName($articleID);
             $category_name = $article->category_name;
             $subcategory_name = null;
         }
@@ -51,10 +59,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 
 
     if (isset($category_name) && !empty($category_name)) {
-        if ($category_name == 'politica') {
-            $category_name = 'polItica';
-        }
-
+        
         if (!$ccm->exists($category_name)) {
             Application::forward301('/');
         } else {
@@ -140,13 +145,13 @@ if(isset($_REQUEST['action']) ) {
                  * Getting comments for current article
                  **/
                 $comment = new Comment();
-                $comments = $comment->get_public_comments($_REQUEST['article_id']);
+                $comments = $comment->get_public_comments($articleID);
                 $tpl->assign('num_comments', count($comments));
                 $tpl->assign('comments', $comments);
 
 
                 $cache_id = $tpl->generateCacheId(
-                    $category_name, $subcategory_name, $_GET['article_id']
+                    $category_name, $subcategory_name, $articleID
                 );
 
                 // Advertisements for single article NO CACHE
@@ -189,7 +194,7 @@ if(isset($_REQUEST['action']) ) {
                     $rel= new Related_content();
 
                     $relationes =
-                        $rel->cache->get_relations_int($_REQUEST['article_id']);
+                        $rel->cache->get_relations_int($articleID);
                     $relat = $cm->cache->getContents($relationes);
 
                     // Filter by scheduled {{{
@@ -206,14 +211,17 @@ if(isset($_REQUEST['action']) ) {
                     $tpl->assign('relationed', $relat);
 
                     /******* SUGGESTED CONTENTS *******/
-                    $objSearch = cSearch::Instance();
-                    $arrayResults=$objSearch->SearchSuggestedContents(
-                        $article->metadata,
-                        'Article',
-                        "pk_fk_content_category= ".$article->category.
-                        " AND contents.available=1 AND pk_content = pk_fk_content",
-                        4
-                    );
+                    $arrayResults =null;
+                    if(!empty($article->metadata)) {
+                        $objSearch = cSearch::Instance();
+                        $arrayResults=$objSearch->SearchSuggestedContents(
+                            $article->metadata,
+                            'Article',
+                            "pk_fk_content_category= ".$article->category.
+                            " AND contents.available=1 AND pk_content = pk_fk_content",
+                            4
+                        );
+                    }
                    // $arrayResults= $cm->getInTime($arrayResults);
                     $tpl->assign('suggested', $arrayResults);
 
@@ -231,7 +239,7 @@ if(isset($_REQUEST['action']) ) {
                                                 .' AND contents.content_status=1'
                                                 .' AND contents.available=1'
                                                 .' AND contents.fk_content_type=1'
-                                                .' AND contents.pk_content != '.$_REQUEST['article_id'].''
+                                                .' AND contents.pk_content != '.$articleID.''
                                                 ,'ORDER BY views DESC, placeholder ASC,'
                                                 .'       position ASC, created DESC'
                                                 .' LIMIT 1,3');
@@ -455,7 +463,7 @@ if(isset($_REQUEST['action']) ) {
                     $html_out .= '<div class="CNoticiaMas">';
                     $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
                     $html_out .= '<div class="iconoNoticiaMas"></div>';
-                    $html_out .= '<div class="textoNoticiaMas"><a href="'.$article["permalink"].'">'.stripslashes($article["title"]).'</a> ('.$article["num"].' comentarios)</div>';
+                    $html_out .= '<div class="textoNoticiaMas"><a href="'.$article["uri"].'">'.stripslashes($article["title"]).'</a> ('.$article["num"].' comentarios)</div>';
                     $html_out .= '</div>';
                     $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH_WEB.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
                     $html_out .= '</div>';
@@ -471,7 +479,7 @@ if(isset($_REQUEST['action']) ) {
                     $html_out .= '<div class="CNoticiaMas">';
                     $html_out .= '<div class="CContainerIconoTextoNoticiaMas">';
                     $html_out .= '<div class="iconoNoticiaMas"></div>';
-                    $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->permalink.'">'.stripslashes($article->title).'</a></div>';
+                    $html_out .= '<div class="textoNoticiaMas"><a href="'.$article->uri.'">'.stripslashes($article->title).'</a></div>';
                     $html_out .= '</div>';
                     $html_out .= '<div class="fileteNoticiaMas"><img src="'.TEMPLATE_USER_PATH_WEB.MEDIA_IMG_DIR.'/noticiasRecomendadas/fileteRecomendacion.gif" alt=""/></div>';
                     $html_out .= '</div>';
@@ -484,7 +492,7 @@ if(isset($_REQUEST['action']) ) {
 
         case 'print': {
             // Article
-            $article = new Article($_REQUEST['article_id']);
+            $article = new Article($articleID);
 
             // Breadcrub/Pathway
             $breadcrub   = array();
@@ -531,7 +539,7 @@ if(isset($_REQUEST['action']) ) {
             $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
             //Ya se iniciliza en la linea 50
-            //$article = new Article($_REQUEST['article_id']);
+             //$article = new Article($_REQUEST['article_id']);
             $tpl->assign('article', $article);
 
             $tpl->assign('token', $token);
@@ -578,7 +586,7 @@ if(isset($_REQUEST['action']) ) {
             $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
-            $article = new Article($_REQUEST['article_id']);
+            $article = new Article($articleID);
 
             $tplMail->assign('mail', $mail);
             $tplMail->assign('article', $article);

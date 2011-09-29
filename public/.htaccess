@@ -132,13 +132,14 @@ Deny from all
     RewriteRule ^album/?$ controllers/album.php?action=frontpage [L,NC]
     RewriteRule ^album/([0-9])?$ controllers/album.php?action=frontpage&c=$1 [L,NC]
     RewriteRule ^album/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$6&category_name=$1 [L,NC]
+    RewriteRule ^album/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/album.php?action=show&album_id=$3&category_name=$1 [L,NC]
     RewriteRule ^album/([a-z0-9\-]+)/?$ controllers/album.php?action=frontpage&category_name=$1 [L,NC]
 
     #Video
     #/video/0/2008/12/08/200812081741363340.html
     RewriteRule ^video/?$ controllers/videos.php?action=list [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/?$ controllers/videos.php?action=list&category_name=$1 [L,NC]
-    RewriteRule ^video/([a-z0-9\-]+)/([a-z0-9-]+)/?$ controllers/videos.php?action=list&category_name=$1&subcategory_name=$2 [L,NC]
+    RewriteRule ^video/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$3&category_name=$1 [L,NC]
     RewriteRule ^video/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/videos.php?action=inner&id=$6&category_name=$1 [L,NC]
 
     #Polls
@@ -147,6 +148,7 @@ Deny from all
     RewriteRule ^encuesta/?$ controllers/poll.php?action=frontpage [L,NC]
     RewriteRule ^encuesta/([a-z0-9\-]+)/?$ controllers/poll.php?action=frontpage&category_name=$1 [L,NC]
     RewriteRule ^encuesta/([a-z0-9\-]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$6&category_name=$1 [L,NC]
+    RewriteRule ^encuesta/([a-z0-9\-]+)/(.*)/([0-9]+).html$ controllers/poll.php?action=show&id=$3&category_name=$1 [L,NC]
 
 
     #Files

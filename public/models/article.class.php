@@ -65,8 +65,8 @@ class Article extends Content
                 $uri =  Uri::generate(
                     'article',
                     array(
-                        'id' => $this->id,
-                        'date' => date('Y-m-d', strtotime($this->created)),
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug' => $this->slug,
                     )

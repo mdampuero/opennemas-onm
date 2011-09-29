@@ -42,8 +42,8 @@ class Poll extends Content {
                 }
 				$uri =  Uri::generate('poll',
                             array(
-                                'id' => $this->id,
-                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'id' => sprintf('%06d',$this->id),
+                                'date' => date('YmdHis', strtotime($this->created)),
                                 'slug' => $this->slug,
                                 'category' => $this->category_name,
                             )
@@ -87,9 +87,9 @@ class Poll extends Content {
 		        }
 			}
 		}
-       	$sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `favorite`, `visualization`, `with_comment`)
-                VALUES (?,?,?,?,?,?)';
-        $values = array($this->id,$data['subtitle'], 0, $data['favorite'],$data['visualization'],$data['with_comment']);
+       	$sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
+                VALUES (?,?,?,?,?)';
+        $values = array($this->id,$data['subtitle'], 0,$data['visualization'],$data['with_comment']);
 
     	if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -161,10 +161,10 @@ class Poll extends Content {
                 }
             }
         }
-    	$sql = "UPDATE polls SET `subtitle`=?,`favorite`=?, `visualization`=?, `with_comment`=?
-	                    WHERE pk_poll=".($data['id']);
+    	$sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
+	                    WHERE pk_poll= ?";
 
-        $values = array($data['subtitle'], $data['favorite'], $data['visualization'],$data['with_comment']);
+        $values = array($data['subtitle'],  $data['visualization'],$data['with_comment'], $data['id']);
 		if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);

@@ -79,8 +79,8 @@ class Opinion extends Content
 
 				$uri =  Uri::generate('opinion',
                             array(
-                                'id' => $this->id,
-                                'date' => date('Y-m-d', strtotime($this->created)),
+                                'id' => sprintf('%06d',$this->id),
+                                'date' => date('YmdHis', strtotime($this->created)),
                                 'slug' => $this->slug,
                                 'category' => String_Utils::get_title($authorName),
                             )
@@ -128,7 +128,7 @@ class Opinion extends Content
     function read($id) {
         parent::read($id);
                   //Saca todos los datos de opinion, tiene que ser con left join por si no tiene autor (p.ej editorial) o foto.
-        $sql = 'SELECT opinions.*, authors.name, authors.condition, authors.gender, authors.politics, author_imgs.path_img  FROM opinions '
+        $sql = 'SELECT opinions.*, authors.name, authors.condition, authors.blog, authors.politics, author_imgs.path_img  FROM opinions '
                 .'LEFT JOIN authors ON (opinions.fk_author=authors.pk_author)'
                 .'LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img ) WHERE pk_opinion = '.($id).' ';
         //  $sql = 'SELECT opinions.*, authors.name, authors.condition, authors.gender, authors.politics FROM opinions, authors WHERE pk_opinion = '.($id).' and opinions.fk_author=authors.pk_author  ';

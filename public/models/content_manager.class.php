@@ -557,13 +557,13 @@ class ContentManager
 
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         //public function find($content_type, $filter=null, $_order_by='ORDER BY 1', $fields='*')
-        $items = $this->find($content_type,'pk_content IN('.$pk_list.')',$_limit,'`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
+        $items = $this->find($content_type,'pk_content IN('.$pk_list.')',$_limit,'`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
         if (empty($items)) {
             return array();
         }
 
         foreach ($items as $item) {
-            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'num'=>0,'title'=>$item->title,'permalink'=>$item->permalink);
+            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'num'=>0,'title'=>$item->title,'permalink'=>$item->slug, 'uri'=>$item->uri);
         }
 
         foreach($comments as $comment) {
@@ -676,7 +676,7 @@ class ContentManager
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
         $pk_comment_list = substr($pk_comment_list, 0, strlen($pk_comment_list)-1);
 
-        $items = $this->find($content_type,'pk_content IN('.$pk_list.')','','`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
+        $items = $this->find($content_type,'pk_content IN('.$pk_list.')','','`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
         if (empty($items)) {
             return array();
         }
@@ -708,7 +708,7 @@ class ContentManager
             $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,
                                                 'comment'=>'',
                                                 'title'=>$item->title,
-                                                'permalink'=>$item->permalink,
+                                                'slug'=>$item->slug,
                                                 'pk_comment'=>'',
                                                 'author'=>'',
                                                 'comment_title' =>'');
@@ -832,7 +832,7 @@ class ContentManager
         $items = array();
 
         $_tables = '`contents`, `ratings` ';
-      //  $_fields = '`contents`.pk_content, `contents`.title, `contents`.permalink, `ratings`.total_votes, `ratings`.total_value ';
+      //  $_fields = '`contents`.pk_content, `contents`.title, `contents`.slug, `ratings`.total_votes, `ratings`.total_value ';
         $_fields = '*';
         $_where = '`contents`.in_litter=0 ';
         if(!$all) {
@@ -952,15 +952,15 @@ class ContentManager
         }
         $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
 
-       // $items = $this->find($content_type,'pk_content IN('.$pk_list.')',null,'`contents`.`pk_content`, `contents`.`title`, `contents`.`permalink`');
-        $sql = 'SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`permalink` FROM   contents, comments WHERE available=1 AND pk_content IN('.$pk_list.')';
+       // $items = $this->find($content_type,'pk_content IN('.$pk_list.')',null,'`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`');
+        $sql = 'SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`slug` FROM   contents, comments WHERE available=1 AND pk_content IN('.$pk_list.')';
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $items = $this->load_obj($rs, 'content');
         if (empty($items)) {
             return array();
         }
         foreach($items as $item) {
-            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'num'=>0,'title'=>$item->title,'permalink'=>$item->permalink);
+            $articles[$item->pk_content] = array('pk_content'=>$item->pk_content,'num'=>0,'title'=>$item->title,'slug'=>$item->slug);
         }
         foreach($comments as $comment) {
             if (array_key_exists($comment->fk_content, $articles)) {
@@ -1332,7 +1332,7 @@ class ContentManager
     }
 
 
-    //Find title, date and permalink from category id.
+    //Find title, date and slug from category id.
     // Assing values to new object call Headline
     public function find_category_headline($pk_fk_content_category, $filter=null, $_order_by='ORDER BY 1')
     {
@@ -1346,7 +1346,7 @@ class ContentManager
             }
         }
 
-        $sql = 'SELECT contents.pk_content, contents.title, contents.permalink, contents.created, contents.changed,
+        $sql = 'SELECT contents.pk_content, contents.title, contents.slug, contents.created, contents.changed,
                        contents.starttime, contents.endtime  FROM contents_categories, contents ' .
                'WHERE contents.fk_content_type=1 and '.$_where.' AND pk_fk_content_category=\'' .
                $pk_fk_content_category.'\'  AND  pk_fk_content = pk_content '.$_order_by;
@@ -1358,10 +1358,10 @@ class ContentManager
     }
 
 
-    //this function returns title,catName and permalinks of last headlines from Subcategories of a given category
+    //this function returns title,catName and slugs of last headlines from Subcategories of a given category
     public function findHeadlines(/*$filter=null, $_order_by='ORDER BY 1'*/)
     {
-        $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` , `contents`.`created` ,  `contents`.`permalink` , `contents`.`starttime` ,
+        $sql = 'SELECT `contents`.`title`, `contents`.`pk_content` , `contents`.`created` ,  `contents`.`slug` , `contents`.`starttime` ,
                        `contents`.`endtime` , `contents_categories`.`pk_fk_content_category` AS `category_id`
                 FROM `contents`
                     LEFT JOIN contents_categories ON ( `contents`.`pk_content` = `contents_categories`.`pk_fk_content` )
@@ -1380,7 +1380,7 @@ class ContentManager
             $items[] = array(
                 'title'=>$rs->fields['title'],
                 'catName'=> $ccm->get_name($rs->fields['category_id']),
-                'permalink'=> $rs->fields['permalink'],
+                'slug'=> $rs->fields['slug'],
                 'created'=> $rs->fields['created'],
                 'category_title'=> $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
                 'id' =>$rs->fields['pk_content'],
@@ -1399,7 +1399,7 @@ class ContentManager
     }
 
 
-    //this function returns title,catName and permalinks of last headlines from Subcategories of a given category
+    //this function returns title,catName and slugs of last headlines from Subcategories of a given category
     public function find_listAuthors($filter=null, $_order_by='ORDER BY 1')
     {
 
@@ -1418,7 +1418,7 @@ class ContentManager
         //necesita el as id para paginacion
 
          $sql= 'SELECT contents.pk_content, contents.position, opinions.pk_opinion as id, authors.name, authors.pk_author,authors.condition, contents.title,
-                    author_imgs.path_img, contents.permalink, opinions.type_opinion, opinions.body, contents.changed, contents.created, contents.starttime,
+                    author_imgs.path_img, contents.slug, opinions.type_opinion, opinions.body, contents.changed, contents.created, contents.starttime,
                     contents.endtime
                 FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
@@ -1426,10 +1426,14 @@ class ContentManager
                 WHERE `contents`.`fk_content_type`=4 and contents.pk_content=opinions.pk_opinion
                     AND '.$_where.' '.$_order_by;
 
+
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $items = $rs->GetArray();
+        $items =null;
+        if (!empty($rs)) {
+            $items = $rs->GetArray();
+        }
 
         return( $items );
     }
@@ -1450,7 +1454,7 @@ class ContentManager
             $_where = $filter.' AND in_litter=0';
         }
 
-        $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.permalink, opinions.type_opinion,
+        $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.slug, opinions.type_opinion,
                       opinions.body,contents.created
                FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
@@ -1460,7 +1464,10 @@ class ContentManager
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $items = $rs->GetArray();
+        $items =null;
+        if (!empty($rs)) {
+            $items = $rs->GetArray();
+        }
 
         return $items;
     }
@@ -1821,7 +1828,7 @@ class ContentManager
             $_where = $filter . ' AND in_litter=0';
         }
 
-        $sql    =   'SELECT contents.pk_content, contents.title, contents.permalink, '
+        $sql    =   'SELECT contents.pk_content, contents.title, contents.slug, '
                     .'      contents_categories.catName, contents.created, contents.changed, '
                     .'      contents.metadata, contents.starttime, contents.endtime '
                     .'FROM  contents, contents_categories '
@@ -1862,7 +1869,7 @@ class ContentManager
         // METER TB LEFT JOIN
         //necesita el as id para paginacion
 
-         $sql= 'SELECT contents.pk_content as id, contents.title, authors.name, contents.metadata,contents.permalink,contents.changed,contents.starttime,contents.endtime
+         $sql= 'SELECT contents.pk_content as id, contents.title, authors.name, contents.metadata,contents.slug,contents.changed,contents.starttime,contents.endtime
                 FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
                     LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img)

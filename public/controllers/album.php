@@ -110,8 +110,16 @@ if (!is_null($action) ) {
 
         case 'show':
 
-			$albumID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
- 
+			//$albumID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
+
+            $dirtyID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
+            if(empty($dirtyID)) {
+                $dirtyID = filter_input(INPUT_POST,'album_id',FILTER_SANITIZE_STRING);
+            }
+            if(!empty($dirtyID)){
+                $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+                $albumID = (int)$matches["digit"];
+            }
 			/**
 			 * Redirect to album frontpage if id_album wasn't provided
 			 */
@@ -161,11 +169,13 @@ if (!is_null($action) ) {
 				 **/
 				$i=0;
 				$albumPhotos = array();
-				foreach($_albumArray as $ph){
-				   $albumPhotos[$i]['photo'] = new Photo($ph[0]);
-				   $albumPhotos[$i]['description']=$ph[2];
-				   $i++;
-				}
+                if(!empty($_albumArray)) {
+                    foreach($_albumArray as $ph){
+                       $albumPhotos[$i]['photo'] = new Photo($ph[0]);
+                       $albumPhotos[$i]['description']=$ph[2];
+                       $i++;
+                    }
+                }
 				$tpl->assign('album_photos', $albumPhotos);
 
 			} // END iscached

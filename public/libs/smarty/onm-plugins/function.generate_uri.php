@@ -14,8 +14,8 @@ function smarty_function_generate_uri($params, &$smarty) {
 
     $output = Uri::generate( $params['content_type'],
                             array(
-                                'id' => $params['id'],
-                                'date' => date('Y-m-d', strtotime($params['date'])),
+                                'id' => sprintf('%06d',$params['id']),
+                                'date' => date('YmdHis', strtotime($params['date'])),
                                 'category' => $params['category_name'],
                                 'slug' => $slug,
                             )

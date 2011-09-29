@@ -21,7 +21,17 @@ $cm = new ContentManager();
  * Fetch HTTP variables
 */
 $category_name = $_GET['category_name'] = 'opinion';
-$opinionID = filter_input(INPUT_GET,'opinion_id',FILTER_SANITIZE_STRING);
+
+$dirtyID = filter_input(INPUT_GET,'opinion_id',FILTER_SANITIZE_STRING);
+if(empty($dirtyID)) {
+    $dirtyID = filter_input(INPUT_POST,'opinion_id',FILTER_SANITIZE_STRING);
+}
+if(!empty($dirtyID)){
+    $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+    $opinionID = (int)$matches["digit"];
+}
+
+
 $tpl->assign('contentId',$opinionID); // Used on module_comments.tpl
 
 
@@ -35,8 +45,12 @@ require_once ("opinion_inner_advertisement.php");
 if(isset($_REQUEST['action']) ) {
     switch($_REQUEST['action']) {
         case 'read': { //Opinion de un autor
+             /**
+             * Redirect to album frontpage if id_album wasn't provided
+             */
+            if (is_null($opinionID)) { Application::forward301('/opinion/'); }
 
-            $opinion = new Opinion( $_REQUEST['opinion_id'] );
+            $opinion = new Opinion($opinionID );
 
             Content::setNumViews($opinionID);
 
@@ -52,7 +66,7 @@ if(isset($_REQUEST['action']) ) {
 
             if(($opinion->available==1) and ($opinion->in_litter==0 )){
 
-                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $_GET['opinion_id']);
+                $cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $opinionID);
 
                 if( ($tpl->caching == 0) || !$tpl->isCached('opinion.tpl', $cache_id) ) {
 
@@ -133,7 +147,7 @@ if(isset($_REQUEST['action']) ) {
         case 'print': {
 
             // Article
-            $opinion = new Opinion($_REQUEST['opinion_id']);
+            $opinion = new Opinion($opinionID);
             $opinion->category_name = 'opinion';
             $opinion->author_name_slug = String_Utils::get_title($opinion->name);
 
@@ -158,7 +172,7 @@ if(isset($_REQUEST['action']) ) {
             require_once('session_bootstrap.php');
             $token = $_SESSION['sendformtoken'] = md5(uniqid('sendform'));
 
-            $opinion = new Opinion($_REQUEST['opinion_id']);
+            $opinion = new Opinion($opinionID);
             $tpl->assign('opinion', $opinion);
 
             $tpl->assign('token', $token);
@@ -205,7 +219,7 @@ if(isset($_REQUEST['action']) ) {
             $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
-            $opinion = new Opinion($_REQUEST['opinion_id']);
+            $opinion = new Opinion($opinionID);
 
             $tplMail->assign('mail', $mail);
             $tplMail->assign('opinion', $opinion);

@@ -45,8 +45,8 @@ class Video extends Content
                 $uri =  Uri::generate(
                     'video',
                     array(
-                        'id' => $this->id,
-                        'date' => date('Y-m-d', strtotime($this->created)),
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug' => $this->slug,
                     )

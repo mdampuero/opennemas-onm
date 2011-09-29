@@ -52,6 +52,8 @@ if(!empty($category_name)) {
 
 //TODO: define dir to save xml and charts.swf dir
 //TODO: widget others polls
+define ('POLL_DIR', "polls");
+define ('INTERNAL_DIR', "media/internal");
 
 $poll_path = MEDIA_PATH . DIRECTORY_SEPARATOR . MEDIA_DIR . DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
 
@@ -113,11 +115,21 @@ switch($action) {
     case 'show':
 
         $tpl->setConfig('poll-inner');
- 
-        $poll_id = filter_input(INPUT_GET,'id');
-        if (empty($poll_id)) {
-            $poll_id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+
+        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+        if(empty($dirtyID)) {
+            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
         }
+        if(!empty($dirtyID)){
+            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+            $poll_id = (int)$matches["digit"];
+        }
+        /**
+         * Redirect to album frontpage if id_album wasn't provided
+         */
+        if (is_null($poll_id)) { Application::forward301('/encuesta/'); }
+
+
 
         $poll = new Poll($poll_id);
  
@@ -182,10 +194,18 @@ switch($action) {
 
     case 'addVote':
  
-        $poll_id = filter_input(INPUT_GET,'id');
-        if(empty($poll_id)) {
-            $poll_id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+        if(empty($dirtyID)) {
+            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
         }
+        if(!empty($dirtyID)){
+            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+            $poll_id = (int)$matches["digit"];
+        }
+        /**
+         * Redirect to album frontpage if id_album wasn't provided
+         */
+        if (is_null($poll_id)) { Application::forward301('/encuesta/'); }
 
         $poll = new Poll($poll_id);
 

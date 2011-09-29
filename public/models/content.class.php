@@ -42,7 +42,9 @@ class Content
     public $content_status = null;
     public $placeholder = null;
     public $home_placeholder = null;
-    public $paper_page = null;
+    public $params = null;
+    public $slug = null;
+    public $favorite = null;
     public $cache = null;
 
     /**
@@ -77,8 +79,8 @@ class Content
                 $uri =  Uri::generate(
                     strtolower($this->content_type_name),
                     array(
-                        'id' => $this->id,
-                        'date' => date('Y-m-d', strtotime($this->created)),
+                        'id' => sprintf('%06d',$this->id),
+                        'date' => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
                         'slug' => $this->slug,
                     )
@@ -115,15 +117,15 @@ class Content
         // Fire event
         $GLOBALS['application']->dispatch('onBeforeCreate', $this);
 
-        $this->id = $this->generatePk();
+        //$this->id = $this->generatePk();
 
-        $sql = "INSERT INTO contents (`pk_content`,`fk_content_type`, `title`, `description`,
+        $sql = "INSERT INTO contents (`fk_content_type`, `title`, `description`,
                                       `metadata`, `starttime`, `endtime`,
                                       `created`, `changed`, `content_status`,
-                                      `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,`paper_page`,
+                                      `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,
                                       `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-                                      `in_home`, `home_pos`,`available`,`permalink`)".
-                   " VALUES (?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?,?, ?,?,?, ?,?,?,?)";
+                                      `in_home`, `home_pos`,`available`,`slug`, `category_name`)".
+                   " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?)";
 
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime']   = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
@@ -135,20 +137,9 @@ class Content
         $data['position']  = (empty($data['position']))? '2': $data['position'];
         $data['in_home']   = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos'] = 100;
-        $data['paper_page'] = (!isset($data['paper_page']) || empty($data['paper_page']))? '0': $data['paper_page'];
 
-        //meter url permalink
-        if ($this->content_type == 'attachment') {
-            $data['permalink'] = $this->put_permalink($data['path'], $this->content_type, $data['title'], $data['category']) ;
-        } elseif ($this->content_type == 'Photo') {
-            $data['permalink'] = $this->put_permalink($data['path_file'], $this->content_type, $data['name'], $data['category']) ;
-        } elseif ($this->content_type == 'Kiosko') {
-            $data['permalink'] = '/media/files/kiosko'.$data['path'].$data['name'];
-        } elseif ($this->content_type == 'Static_Page') {
-              $data['permalink'] = '';
-        } else {
-            $data['permalink'] = $this->put_permalink($this->id, $this->content_type, $data['title'], $data['category']) ;
-        }
+        if(empty($data['slug'] ) || !isset($data['slug']) )
+            $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
 
         $data['views'] = 1;
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
@@ -170,13 +161,18 @@ class Content
         $fk_content_type = $GLOBALS['application']->conn->
             GetOne('SELECT * FROM `content_types` WHERE name = "'. $this->content_type.'"');
 
-        $values = array($this->id, $fk_content_type, $data['title'], $data['description'],
+        //$catName = $GLOBALS['application']->conn->GetOne('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
+
+        $ccm = ContentCategoryManager::get_instance();
+        $catName = $ccm->get_name($data['category']);
+
+        $values = array($fk_content_type, $data['title'], $data['description'],
                         $data['metadata'], $data['starttime'], $data['endtime'],
                         $data['created'], $data['changed'], $data['content_status'],
                         $data['views'], $data['position'],$data['frontpage'],
-                        $data['placeholder'],$data['home_placeholder'],$data['paper_page'],
+                        $data['placeholder'],$data['home_placeholder'], 
                         $data['fk_user'], $data['fk_publisher'], $data['fk_user_last_editor'],
-                        $data['in_home'], $data['home_pos'],$data['available'],$data['permalink']);
+                        $data['in_home'], $data['home_pos'],$data['available'], $data['slug'], $catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
@@ -186,10 +182,8 @@ class Content
             return false;
         }
 
-        // $this->id = $GLOBALS['application']->conn->Insert_ID();
-        $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
-
-        $catName = $cats->fields['name'];
+        $this->id = $GLOBALS['application']->conn->Insert_ID();
+      
         $sql = "INSERT INTO contents_categories (`pk_fk_content` ,`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
         $values = array($this->id, $data['category'],$catName);
 
@@ -218,7 +212,9 @@ class Content
     {
         // Fire event onBeforeXxx
         $GLOBALS['application']->dispatch('onBeforeRead', $this);
-
+        if (empty($id)) {
+            return false;
+        }
         $sql = 'SELECT * FROM contents, contents_categories WHERE pk_content = '.($id).' AND pk_content = pk_fk_content';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
@@ -250,8 +246,8 @@ class Content
                                       `metadata`=?, `starttime`=?, `endtime`=?,
                                       `changed`=?, `in_home`=?, `frontpage`=?, `available`=?, `content_status`=?,
                                       `placeholder`=?, `home_placeholder`=?,
-                                       `fk_user_last_editor`=?, `permalink`=?
-                    WHERE pk_content=".($data['id']);
+                                       `fk_user_last_editor`=?, `slug`=?, `category_name`=?
+                    WHERE pk_content= ?";
 
         $this->read( $data['id']); //????
 
@@ -271,28 +267,41 @@ class Content
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) $data['fk_user_last_editor']= $_SESSION['userid'];
+    
+        if(empty($data['slug'] ) || !isset($data['slug']) )
+            $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
 
-        // FIXME: os permalinks deben establecerse dende a clase deriva e existir un método
-        // na clase pai que se poda sobreescribir --> sustituir os if por unha chamada do estilo $this->buildPermalink()
-        if (($this->content_type != 'attachment') && ($this->category != $data['category'])) {
-            $data['permalink'] = $this->put_permalink($this->id, $name_type, $data['title'], $data['category']) ;
-        } elseif ($this->content_type == 'Photo') {
-            $data['permalink'] = $this->put_permalink($data['path_file'], $this->content_type, $data['name'], $data['category']) ;
-        } elseif ($this->content_type == 'Static_Page') {
-            $data['permalink'] = '';
-        } else {
-            $data['permalink'] = $this->permalink;
-        }
 
         if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
         if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
         if (empty($data['pk_author'])&& !isset ($data['pk_author'])) $data['pk_author']='';
+     
+        if ($data['category'] != $this->category) {
+            
+            $ccm = ContentCategoryManager::get_instance();
+            $catName = $ccm->get_name($data['category']);
+     
+            $sql = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
+                   "WHERE pk_fk_content= ?";
+            $values = array($data['category'], $catName, $data['id']);
+
+
+            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+
+                return(false);
+            }
+        }else{
+            $catName = $this->category_name;
+        }
 
         $values = array( $data['title'], $data['description'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'], $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user_last_editor'], $data['permalink'] );
+            $data['fk_user_last_editor'], $data['slug'],$this->category_name, $data['id'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
@@ -302,20 +311,7 @@ class Content
             return;
         }
 
-        $cats = $GLOBALS['application']->conn->Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $data['category'].'"');
-        $catName = $cats->fields['name'];
-
-        $sql = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
-               "WHERE pk_fk_content=".($data['id']);
-        $values = array($data['category'],$catName);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
-            return(false);
-        }
+     
 
         /* Notice log of this action */
         $logger = Application::getLogger();
@@ -432,15 +428,19 @@ class Content
     // FIXME:  move to ContentCategory class
     public function loadCategoryName($pk_content)
     {
-        $ccm = ContentCategoryManager::get_instance();
+        if(!empty($this->category_name)) {
+            return $this->category_name;
+        } else {
+            $ccm = ContentCategoryManager::get_instance();
 
-        if (empty($this->category)  && !empty($pk_content)) {
-            $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
-            $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
-            $this->category = $rs;
+            if (empty($this->category)  && !empty($pk_content)) {
+                $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
+                $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
+                $this->category = $rs;
+            }
         }
-
         return $ccm->get_name($this->category);
+
     }
 
     // FIXME:  move to ContentCategory class
@@ -495,9 +495,12 @@ class Content
             $this->category = $this->pk_fk_content_category;
         }
 
-        $ccm = ContentCategoryManager::get_instance();
-        $this->category_name = $ccm->get_name($this->category);
+        if ( isset($this->category_name) ) {
+            $ccm = ContentCategoryManager::get_instance();
+            $this->category_name = $ccm->get_name($this->category);
+        }
 
+        $this->permalink = '';//$this->uri;
     }
 
     /**
@@ -1018,7 +1021,7 @@ class Content
             }
 
             if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . "__getContentTypes", $resultArray);
+                    apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
                 }
         }
 
@@ -1135,22 +1138,23 @@ class Content
             }
         }
 
-        if (is_null($id) )  return false;
+        if (is_null($id) || empty($id) )  return false;
 
         // Multiple exec SQL
-        if (is_array($id) && count($id)>0) {
+        if (is_array($id) ) {
             // Recuperar todos los IDs a actualizar
             $ads = array();
 
-            foreach ($id as $item) {
-                if (is_object($item)
-                   && isset($item->pk_advertisement)
-                   && !empty($item->pk_advertisement)) {
-                    $ads[] = $item->pk_advertisement;
+            if ( count($id)>0) {
+                foreach ($id as $item) {
+                    if (is_object($item)
+                       && isset($item->pk_advertisement)
+                       && !empty($item->pk_advertisement)) {
+                        $ads[] = $item->pk_advertisement;
 
+                    }
                 }
             }
-
             if (empty($ads)  ) {
 
                 return false;
@@ -1173,53 +1177,7 @@ class Content
         }
     }
 
-    public function put_permalink($end, $type, $title, $cat)
-    {
-        //Definimos el permalink para la url.
-        // Ejemplo: http://urlbase.com/2008/09/29/deportes/premio/Singapur/Alonso/proclama/campeon/2008092917564334523.html
-        //artigo/2008/11/18/galicia/santiago/encuentran-tambre-cadaver-santiagues-desaparecido-lunes/2008111802293425694.html
-
-        $fecha=date("Y-m-d");
-        //Miramos el type.
-        $tipo = $GLOBALS['application']->conn->GetOne('SELECT title FROM `content_types` WHERE name = "'. $type.'"');
-
-        //Miramos la categoria y si eso padre.
-        $cats = $GLOBALS['application']->conn->
-            Execute('SELECT * FROM `content_categories` WHERE pk_content_category = "'. $cat.'"');
-
-        $namecat=strtolower($cats->fields['name']);
-
-        if ($namecat) {
-            $padre=$cats->fields['fk_content_category'];
-            if (($padre != 0) && ($tipo!="ficheiro")) { //Es subcategoria
-                      $cats = $GLOBALS['application']->conn->
-                  GetOne('SELECT name FROM `content_categories` WHERE pk_content_category = "'. $padre.'"');
-                  $namecat = strtolower($cats)."/".$namecat;
-            }
-        } else {
-            $namecat=$type;
-        } //Para que no ponga //
-
-        //funcion quita los sencillos al titulo
-        $stringutils=new String_Utils();
-        $titule = mb_strtolower($stringutils->get_title($title));
-
-        // $permalink=SITE_URL ."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
-        if ($tipo=="album") {
-                // /album/YYYY/MM/DD/foto/fechaIDlargo.html Ejem: /album/2008/11/28/foto/2008112811271251594.html
-                $permalink="/".$tipo."/". $fecha."/foto/".$this->id.'.html';
-        } elseif ($tipo=="video") {
-                $permalink="/".$tipo."/". $fecha."/".$this->id.'.html';
-        } elseif ($tipo=="ficheiro") {
-                $permalink="/media/files".$end; //En el end esta pasando el nombre del pdf
-        } elseif ($tipo=="imaxe") {
-                $permalink="/media/images" .$end . $title;
-        } else {
-                $permalink="/".$tipo."/". $fecha."/". $namecat."/".$titule ."/".$this->id.'.html';
-        }
-        return $permalink;
-    }
-
+//TODO Check (xornal function)
     /**
      * Check if $pk_content exists in database
      *
@@ -1229,15 +1187,13 @@ class Content
     */
     public static function pkExists($pk_content)
     {
-        $sql = 'SELECT permalink FROM `contents` WHERE `pk_content`=?';
-
-        $rs  = $GLOBALS['application']->conn->GetOne($sql, array($pk_content));
-        if ($rs === false) {
+       $content = new Content($pk_content);
+        if (empty($content)) {
             $code = 404;
             $url  = null;
         } else {
             $code = 200;
-            $url  = $rs;
+            $url =   $content->uri;
         }
 
         return array($code, $url);
@@ -1329,7 +1285,7 @@ class Content
         foreach ($availableCategories as $category) {
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $output .= sprintf(_("Homepage for category '%s' cleaned sucessfully.\n", $category->name));
+            $output .= sprintf(_("Homepage for category %s cleaned sucessfully.\n"), $category->name);
         }
         return $output;
 

@@ -148,13 +148,27 @@ switch ($action) {
 
     case 'inner':
 
-        $videoID = filter_input( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
+       // $videoID = filter_input( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
+
+        $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+        if(empty($dirtyID)) {
+            $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
+        }
+        if(!empty($dirtyID)){
+            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+            $videoID = (int)$matches["digit"];
+        }
+        /**
+         * Redirect to album frontpage if id_album wasn't provided
+         */
+        if (is_null($videoID)) { Application::forward301('/video/'); }
+
 
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId('video-inner', $category_name, $videoID);
 
         if (($tpl->caching == 0)
-            || !$tpl->isCached('video/video_inner.tpl', $_REQUEST['id'])
+            || !$tpl->isCached('video/video_inner.tpl', $videoID)
         ) {
 
             $video = new Video($videoID);
