@@ -51,7 +51,7 @@
                 <td style="padding:4px;" nowrap="nowrap" width="80%">
                     <input type="text" id="name" name="name" title="{t}Group name{/t}"
                         value="{$user_group->name}" class="required"
-                        {if $user_group->name eq $smarty.const.NAME_GROUP_ADMIN}disabled="disabled"{/if} />
+                        {if $user_group->name eq $smarty.const.SYS_NAME_GROUP_ADMIN}disabled="disabled"{/if} />
                 </td>
             </tr>
             <!-- Privileges -->
