@@ -12,8 +12,7 @@
             width:200px;
         }
     </style>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsMenues.js"></script>
-
+    {script_tag src="/utilsMenues.js" language="javascript"}
 {/block}
 
 

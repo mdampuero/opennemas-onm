@@ -1,11 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
+    {css_tag href="/admin.css"}
 {/block}
 
 {block name="footer-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
+    {script_tag src="/switcher_flag.js" language="javascript"}
     <script type="text/javascript" language="javascript">
     /* <![CDATA[ */
     {literal}

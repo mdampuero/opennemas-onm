@@ -1,12 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
+{script_tag src="/prototype.js" language="javascript"}
+{script_tag src="/prototype-date-extensions.js" language="javascript"}
 <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop"></script>
-
 {* Ajax button to change availability *}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
+{script_tag src="/switcher_flag.js" language="javascript"}
 <script type="text/javascript" language="javascript">
 /* <![CDATA[ */
 

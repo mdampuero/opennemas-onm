@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css" />
+    {css_tag href="/admin.css"}
     <style>
     input[type="text"]  {
         max-height: 80%;

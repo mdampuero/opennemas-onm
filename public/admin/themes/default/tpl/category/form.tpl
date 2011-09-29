@@ -6,8 +6,8 @@
     </style>
 {/block}
 {block name="header-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilscategory.js"></script>
-    <script type="text/javascript" src="{$params.JS_DIR}MiniColorPicker.js"></script>
+    {script_tag src="/utilscategory.js" language="javascript"}
+    {script_tag src="/MiniColorPicker.js"}
     <script type="text/javascript">
     // <![CDATA[
         Sortable.create('subcates',{

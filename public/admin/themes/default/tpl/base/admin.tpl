@@ -12,46 +12,44 @@
         <title>OpenNeMaS - Admin section</title>
     {/block}
 
-    {block name="header-css"}
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}admin.css"/>
-		<!--[if IE]><link rel="stylesheet" href="{$params.CSS_DIR}ie.css" type="text/css" /><![endif]-->
-		<link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}buttons.css" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}datepicker.css"/>
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightview.css" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}lightwindow.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}mediamanager.css" />
-        <link rel="stylesheet" type="text/css" href="{$params.CSS_DIR}messageboard.css" media="screen" />
+    {block name="header-css"}     
+        {css_tag href="/admin.css"}
+        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
+        {css_tag href="/buttons.css"}
+        {css_tag href="/datepicker.css"}
+        {css_tag href="/lightview.css"}
+        {css_tag href="/lightwindow.css" media="screen"}
+        {css_tag href="/mediamanager.css"}
+        {css_tag href="/messageboard.css" media="screen"}
 
 	{/block}
 
     {block name="header-js"}
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/effects.js"></script>
-
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}lightview.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}fabtabulous.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}control.maxlength.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}datepicker.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}MessageBoard.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utils_header.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
-        <script type="text/javascript" language="javascript" src="{$params.JS_DIR}validation.js"></script>
-		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}lightwindow.js"></script>
-		<script type="text/javascript" defer="defer" language="javascript" src="{$params.JS_DIR}/modalbox.js"></script>
-
+        {script_tag language="javascript" src="/prototype.js"}
+        {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
+        {script_tag language="javascript" src="/scriptaculous/effects.js"}
+        {script_tag language="javascript" src="/lightview.js"}
+        {script_tag language="javascript" src="/prototype-date-extensions.js"}
+        {script_tag language="javascript" src="/fabtabulous.js"}
+        {script_tag language="javascript" src="/control.maxlength.js"}
+        {script_tag language="javascript" src="/datepicker.js"}
+        {script_tag language="javascript" src="/MessageBoard.js"}
+        {script_tag language="javascript" src="/utils.js"}
+        {script_tag language="javascript" src="/utils_header.js"}
+        {script_tag language="javascript" src="/utilsopinion.js"}
+        {script_tag language="javascript" src="/validation.js"}
+        {script_tag language="javascript" src="/lightwindow.js" defer="defer"}
+        {script_tag language="javascript" src="/modalbox.js" defer="defer"}
         {* FIXME: corregir para que pille bien el path *}
         {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
             lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
-        <script language="javascript" type="text/javascript" src="{$params.JS_DIR}tiny_mce/tiny_mce_gzip.js"></script>
+            {script_tag language="javascript" src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
 <body>
 	{* scriptsection name="body" *}
-	<script type="text/javascript" src="{$params.JS_DIR}wz_tooltip.js"></script>
+    {script_tag src="/wz_tooltip.js"}
 	{* /scriptsection *}
 
     <div id="topbar-admin">
@@ -172,7 +170,7 @@
     {/if}
  </script>
 	{block name="footer-js"}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}footer-functions.js"></script>
+    {script_tag src="/footer-functions.js" language="javascript"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">

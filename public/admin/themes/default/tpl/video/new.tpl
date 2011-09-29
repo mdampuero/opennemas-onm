@@ -22,7 +22,7 @@
 {/block}
 
 {block name="header-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsVideo.js"></script>
+    {script_tag src="/utilsVideo.js" language="javascript"}
 
 {/block}
 

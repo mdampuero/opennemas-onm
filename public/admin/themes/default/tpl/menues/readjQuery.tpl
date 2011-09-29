@@ -1,13 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-  <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsMenues.js"></script> {* Prototype *}
- 
-    <script type="text/javascript" src="{$params.JS_DIR}/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="{$params.JS_DIR}/jquery/jquery-ui.js"></script>
-    {*<script type="text/javascript" src="{$params.JS_DIR}/jquery/jquery.json-2.2.min.js"></script> *}
-    <script type="text/javascript" src="{$params.JS_DIR}/jquery/jquery-menues.js"></script>
-
+    {script_tag src="/utilsMenues.js" language="javascript"}
+    {script_tag src="/jquery/jquery.min.js"}
+    {script_tag src="/jquery/jquery-ui.js"}
+    {*{script_tag src="/jquery/jquery.json-2.2.min.js"}*}
+    {script_tag src="/jquery/jquery-menues.js"}
     <script type="text/javascript">
         $.noConflict();
         jQuery(document).ready(function() {
@@ -23,7 +21,7 @@
 {/block}
 
 {block name="header-css" append}
-    <link rel="stylesheet" href="{$params.CSS_DIR}/managerMenu.css" type="text/css" media="screen,projection" />
+    {css_tag href="/managerMenu.css" media="screen,projection"}
 {/block}
 
 {block name="content"}

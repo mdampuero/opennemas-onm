@@ -7,14 +7,13 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
 	<meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
-
-	<link rel="stylesheet" href="{$params.CSS_DIR}/bp/screen.css" type="text/css" media="screen, projection" />
-    <link rel="stylesheet" href="{$params.CSS_DIR}/bp/print.css" type="text/css" media="print" />
-    <!--[if lt IE 8]><link rel="stylesheet" href="{$params.CSS_DIR}/bp/ie.css" type="text/css" media="screen, projection" /><![endif]-->
-
-	<link rel="stylesheet" href="{$params.CSS_DIR}loginadmin.css?version=2" type="text/css" />
-	<link rel="stylesheet" href="{$params.CSS_DIR}buttons.css?version=2" type="text/css" />
-
+    
+    {css_tag href="/bp/screen.css" media="screen, projection"}
+    {css_tag href="/bp/print.css"}
+    <!--[if lt IE 8]{css_tag href="/bp/ie.css" media="screen, projection"}[endif]-->
+    {css_tag href="/loginadmin.css"}
+    {css_tag href="/buttons.css"}
+    
 <body id="loginpage">
 	<!-- Content -->
 	<div id="content-wrapper"  class="span-16 last clearfix">

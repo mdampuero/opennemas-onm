@@ -114,7 +114,7 @@ submitForm = function() {
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+{script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript" language="javascript">
 {if isset($widget) && $widget->renderlet == 'html'}
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );

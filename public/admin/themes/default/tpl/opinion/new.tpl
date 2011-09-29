@@ -1,8 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+    {script_tag src="/utilsopinion.js" language="javascript"}
+    {script_tag src="/photos.js" language="javascript"}
 {/block}
 
 {block name="header-css" append}
@@ -266,7 +266,7 @@
 
         </script>
 
-        <script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
+        {script_tag src="/tiny_mce/opennemas-config.js"}
         <script type="text/javascript" language="javascript">
             tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
         </script>

@@ -1,8 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}utilsopinion.js"></script>
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}photos.js"></script>
+    {script_tag src="/utilsopinion.js" language="javascript"}
+    {script_tag src="/photos.js" language="javascript"}
 {/block}
 
 

@@ -2,7 +2,7 @@
 
 {block name="header-js"}
     {$smarty.block.parent}
-    <script type="text/javascript" language="javascript" src="{$params.JS_DIR}swfobject.js"></script>
+    {script_tag src="/swfobject.js" language="javascript"}
 {/block}
 
 {block name="content"}

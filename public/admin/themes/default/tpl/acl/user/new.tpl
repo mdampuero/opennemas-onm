@@ -93,8 +93,8 @@ input[type="password"]{
 {/block}
 
 {block name="footer-js" append}
-<script language="javascript" type="text/javascript" src="{$params.JS_DIR}SpinnerControl.js"></script>
-<script language="javascript" type="text/javascript" src="{$params.JS_DIR}modalbox.js"></script>
+{script_tag src="/SpinnerControl.js" language="javascript"}
+{script_tag src="/modalbox.js" language="javascript"}
 
 {* FIXME: separar todo a un fichero js que tenga las funcionalidades de los usuarios *}
 <script type="text/javascript">

@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
- <script type="text/javascript" language="javascript" src="{$params.JS_DIR}addFiles.js"></script>
+ {script_tag src="/addFiles.js" language="javascript"}
 
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
