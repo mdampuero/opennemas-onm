@@ -6,7 +6,7 @@
 
 
 {css_tag href="/admin.css"}
-{*[if IE]{css_tag href="/ieadmin.css.css"}[endif]*}
+<!--[if IE]{css_tag href="/ieadmin.css.css"}[endif]-->
 {script_tag src="/prototype.js" language="javascript"}
 {script_tag src="/scriptaculous/scriptaculous.js" language="javascript"}
 {script_tag src="/scriptaculous/photos.js" language="javascript"}

@@ -14,7 +14,7 @@
 
     {block name="header-css"}     
         {css_tag href="/admin.css"}
-        {*[if IE]{css_tag href="/ie.css"}[endif]*}
+        <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
         {css_tag href="/datepicker.css"}
         {css_tag href="/lightview.css"}
