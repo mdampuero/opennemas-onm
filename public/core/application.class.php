@@ -322,7 +322,7 @@ class Application
         /**
         * Media paths and urls configurations
         **/
-        define('MEDIA_URL', "http://webdev-ideal.opennemas.com/");
+        define('MEDIA_URL', "");// "http://webdev-ideal.opennemas.com/");
         // Set this to a external server like http://example.com or keep it blank
         
         define('MEDIA_DIR', "media");    // External server or a local dir

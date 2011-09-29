@@ -11,7 +11,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 */
 Acl::checkOrForward('AUTHOR_CREATE');
 
-require_once(SITE_LIBS_PATH.'Pager/Pager.php');
+//require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 

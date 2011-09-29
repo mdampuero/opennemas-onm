@@ -139,7 +139,8 @@
                     </td>
                 </tr>
                 <input type="hidden" id="img_des" value="" size="60">
-                <tr>
+                <input type="hidden" id="input_img" value="" size="60">
+                 <tr>
                     <td align='center'>
                         <div id="droppable_div1">
                             <img src="{$params.IMAGE_DIR}default_img.jpg"

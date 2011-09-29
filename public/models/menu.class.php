@@ -124,10 +124,10 @@ class Menu
         if(!empty($data['forDelete'])){
             $forDelete = explode(',', $data['forDelete']);
             array_shift($forDelete); //first is empty FIXME
-            var_dump($forDelete);
+
             MenuItems::deleteItems($forDelete);
         }
-         MenuItems::setMenu($data['id'], $data['items'], $config);
+        MenuItems::setMenu($data['id'], $data['items'], $config);
     
         return true;
     }

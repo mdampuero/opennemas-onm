@@ -341,26 +341,28 @@ if(($tpl->caching == 0)
     $tpl->assign('articles_home_express', $articles_home_express);
 
 
-    /************************************ TITULARES TENDENCIAS  ************************************/
-    $titular_gente =
-        $cm->find_by_category_name('Article',
-                                    'entrevistas'
-                                    , 'content_status=1 AND frontpage=1'
-                                    . ' AND available=1 AND fk_content_type=1'
-                                    . ' AND (starttime="0000-00-00 00:00:00" '
-                                    . '      OR (starttime != "0000-00-00 00:00:00" '
-                                    . '      AND starttime<"'.$now.'"))'
-                                    . ' AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))'
-                                    , 'ORDER BY changed DESC LIMIT 0 , 3');
+    /************************************ TITULARES TENDENCIAS/ENTREVISTAS  ************************************/
+    //TODO: create a widget
+    if ($ccm->exists('entrevistas')) {
+        $titular_gente =
+            $cm->find_by_category_name('Article',
+                                        'entrevistas'
+                                        , 'content_status=1 AND frontpage=1'
+                                        . ' AND available=1 AND fk_content_type=1'
+                                        . ' AND (starttime="0000-00-00 00:00:00" '
+                                        . '      OR (starttime != "0000-00-00 00:00:00" '
+                                        . '      AND starttime<"'.$now.'"))'
+                                        . ' AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'"))'
+                                        , 'ORDER BY changed DESC LIMIT 0 , 3');
 
-    foreach ($titular_gente as $gente) {
-        $img = new Photo($gente->img2);
-        $gente->path_img = $img->path_file."".$img->name;
-        $gente->category_name = $ccm->get_name($gente->category);
+        foreach ($titular_gente as $gente) {
+            $img = new Photo($gente->img2);
+            $gente->path_img = $img->path_file."".$img->name;
+            $gente->category_name = $ccm->get_name($gente->category);
+        }
+
+        $tpl->assign('titulares_gente', $titular_gente);
     }
-
-    $tpl->assign('titulares_gente', $titular_gente);
-
     /**
      * Fetch information for Albums
     */

@@ -220,7 +220,7 @@
                                          <div class="panel" id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
-                                                    <li id="page_{$value}"   pk_item="{$value}" 
+                                                    <li id="page_{$page}"   pk_item="{$value}"
                                                         title="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">

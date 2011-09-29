@@ -216,10 +216,8 @@ class MenuItems {
 
         $items = json_decode($items);
 
+
         if(!empty($id) && !empty($items)){
-            
-            
-            $menu = MenuItems::getPkItems($id);
 
             $stmt = $GLOBALS['application']->conn->Prepare("INSERT INTO menu_items ".
                            " (`pk_menu`,`title`,`link_name`, `type`,`position`,`pk_father`) ".
@@ -229,12 +227,15 @@ class MenuItems {
                            " SET  `title` =?, `position` =?  ".
                            " WHERE pk_item = ?" );
 
- 
+
+            $menu = MenuItems::getPkItems($id);
+            
             $values =array();
             $valuesUpdate =array();
             $i=1;
 
             foreach ($items as $item) {
+          
                 //update item if exists in menu
                 $update = 0;
 
@@ -253,20 +254,22 @@ class MenuItems {
                 $i++;
 
             }
-          
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
- 
+
+            if (!empty($values)) {
+                if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$error_msg . print_r($valuesUpdate, true));
+                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg . print_r($valuesUpdate, true);
+                }
             }
+            if (!empty($valuesUpdate)) {
+                if ($GLOBALS['application']->conn->Execute($stmtUpdate, $valuesUpdate) === false) {
+                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$error_msg. print_r($valuesUpdate, true) );
+                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg. print_r($valuesUpdate, true);
 
-            if ($GLOBALS['application']->conn->Execute($stmtUpdate, $valuesUpdate) === false) {
-                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
-
+                }
             }
 
             return true;

@@ -205,42 +205,47 @@ function define_crop(element) {
     var a = element.getAttribute('de:dimensions');
     var b = a.split(' x ');
     var c = b[1].split(' (px)');
-    $('testImage').width=b[0];
-    $('testImage').height=c[0];
-    if(c[0]>b[0]){
-        if (c[0]>400) {
-            var w=Math.floor( (b[0]*400) / c[0] );
+    var wh = parseInt(b[0]);
+    var ht = parseInt(c[0]);
+
+    $('testImage').width = wh;
+    $('testImage').height = ht;
+
+    if(ht>wh){
+        if (ht>400) {
+            var w = Math.floor( (wh * 400) / ht );
              $('testImage').setStyle({
                   height: '400px',
-                 width :  w +"px"
-                });
-         }else{
+                  width :  w +"px"
+             });
+         } else {
              $('testImage').setStyle({
-                      height: c[0]+'px',
-                     width :  b[0]+'px'
+                      height: ht +'px',
+                      width : wh +'px'
                     });
         }
 
     } else {
-        if(b[0]>600){
-               var h=Math.floor( (c[0]*600) / b[0] );
+        if(wh>600){
+               var h = Math.floor( (ht * 600) / wh );
                 $('testImage').setStyle({
                   width: '600px',
                   height : h +"px"
                 });
         }else{
          $('testImage').setStyle({
-                 height: c[0]+'px',
-                 width :  b[0]+'px'
+                 height: ht+'px',
+                 width :  wh +'px'
                 });
         }
     }
+ 
 
-    if (b[0] < $('cropWidth').value) {
-        alert('La foto escogida para portada no supera los '+ $('cropWidth').value +'px de ancho');
+    if ( wh < parseInt($('cropWidth').value) ) {
+        alert('La foto escogida para portada no supera los '+ $('cropWidth').value +'px de ancho ('+ wh +').' );
     }else{
-        if(c[0] < $('cropHeight').value){
-            alert('La foto escogida para portada no supera los '+ $('cropHeight').value +'px de alto');}
+        if(ht <  parseInt($('cropHeight').value) ) {
+            alert('La foto escogida para portada no supera los '+ $('cropHeight').value +'px de alto ('+ ht +').' ); }
     }
 
     cropcreate();
@@ -329,7 +334,8 @@ function del_img(id) {
 		if (li) {
 			li.parentNode.removeChild(li);
 		}
-		$('image_view').src= "../media/images/default_img.jpg";
+		$('image_view').src= "/admin/themes/default/images/default_img.jpg";
+        $('image_view').setAttribute('width',300);
 		$('informa').innerHTML="<b>Archivo: default_img.jpg</b> <br><b>Dimensiones:</b> 300 x 208 (px)<br><b>Peso:</b> 4.48 Kb<br><b>Fecha de creaci&oacute;n:</b> 11/06/2008<br><b>Descripcion:</b>  Imagen por defecto.  <br><b>Tags:</b> Imagen<br>";
 		$('img_footer').value= ""; 
 		$('img_des').value= ""; 
@@ -342,7 +348,7 @@ function album_get_order(){
 	
 	//coge el orden de las phtos en el album
     var orden = $('ordenAlbum');
-    orden.value ="";
+    orden.value =" ";
    
     Nodes = document.getElementById('album_list').getElementsByTagName("img");
     for (var i=0;i < Nodes.length;i++) {
@@ -351,7 +357,7 @@ function album_get_order(){
         // mirar si vacio
         if(pkfoto!=' '){ // el ultimo es espacio
                 //	orden.value = orden.value + pkfoto + ", ";
-                        orden.value = orden.value + pkfoto + "::" + footer +"++";
+                        orden.value = orden.value + pkfoto + "::" + footer + "++";
         }
 
      }
@@ -399,7 +405,7 @@ function delete_album(id,page){
 
 //Eliminar y recuperar imagen en articulos.
  function recuperar_eliminar(field){
-	  var nombre='input_'+field;
+	  var nombre='img_des';
 	  if (document.getElementById( nombre ).value ==''){
 	  	 recuperarOpacity(field);
 	  }else{
@@ -409,11 +415,11 @@ function delete_album(id,page){
 
 //Vaciar foto y meter img_default.
 function vaciarImg(field){
- 		var nombre='remove_'+field;   //Icono papelera-recuperar
+ 	/*	var nombre='remove_'+field;   //Icono papelera-recuperar
 		document.getElementById( nombre ).src='themes/default/images/trash_no.png';
 	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
 	    document.getElementById( nombre ).setAttribute('title','Recuperar');
-
+*/
 		if(field=='img'){
 				document.getElementById( 'input_img' ).value ='';				 
 				document.getElementById('image_view').setAttribute('style','opacity:0.4;');
@@ -426,9 +432,9 @@ function vaciarImg(field){
 
  function recuperarOpacity(field){
 	    var nombre='remove_'+field;
-		document.getElementById( nombre ).src='themes/default/images/trash.png';
-	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
-	    document.getElementById( nombre ).setAttribute('title','Eliminar');
+//		document.getElementById( nombre ).src='themes/default/images/trash.png';
+//	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
+//	    document.getElementById( nombre ).setAttribute('title','Eliminar');
 		if(field=='img'){
 				document.getElementById( 'input_img' ).value =document.getElementById( 'image_view' ).name;
  				document.getElementById('image_view').setAttribute('style','opacity:1;');

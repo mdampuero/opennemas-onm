@@ -287,7 +287,7 @@ class cSearch
             $szMatch = $this->DefineMatchOfSentence($szSourceTags2); //Match con metadata
             $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
 
-	    $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`metadata`, `contents`.`created`, `contents`.`permalink`, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
+	    $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents`.`metadata`, `contents`.`created`,  " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
 	    //$szSqlWhere  = " WHERE MATCH ( " . cSearch::_FullTextColumn . ") AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
             $szSqlWhere = " WHERE " . $szMatch.' + '. $szMatch2;
 	    $szSqlWhere .= " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
@@ -297,9 +297,10 @@ class cSearch
 	    $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ".$iLimit;
 
 	    $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
-
-	    $result= $resultSet->GetArray();
-
+        $result = null;
+        if (!empty($resultSet)) {
+            $result= $resultSet->GetArray();
+        }
   	    return $result;
 	}
 

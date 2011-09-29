@@ -21,8 +21,8 @@ $tpl->setConfig('opinion');
 */
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 $subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
-$authorID = filter_input(INPUT_GET,'author_id',FILTER_SANITIZE_STRING);
-
+$authorID = (int) filter_input(INPUT_GET,'author_id',FILTER_SANITIZE_STRING);
+ 
 /**
  * Redirect to home if category_name is not opinion
 */
@@ -123,7 +123,7 @@ if (isset($_REQUEST['action'])) {
         break;
 
         case 'list_op_author':  // Author frontpage
-
+ 
             // Don't execute the app logic if there are caches available
             if (!$tpl->isCached('opinion/frontpage_author.tpl', $cacheID)) {
 
@@ -135,22 +135,24 @@ if (isset($_REQUEST['action'])) {
                     $opinions = $cm->find_listAuthorsEditorial('contents.available=1  AND contents.content_status=1', 'ORDER BY created DESC '.$_limit);
                     $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=1 and contents.available=1  and contents.content_status=1');
                     $name_author= 'editorial';
-					foreach ($opinions as &$opinion) {
-						$opinion['pk_author'] = 1;
-						$opinion['author_name_slug']  = $name_author;
-					}
-
+                    if (!empty($opinions)) {
+                        foreach ($opinions as &$opinion) {
+                            $opinion['pk_author'] = 1;
+                            $opinion['author_name_slug']  = $name_author;
+                        }
+                    }
                 // Fetch director opinions
                 } elseif ($authorID == 2) { //Director
 
                     $opinions = $cm->find_listAuthors('opinions.type_opinion=2 and contents.available=1 and contents.content_status=1', 'ORDER BY created DESC '.$_limit);
                     $total_opinions = $cm->cache->count('Opinion','opinions.type_opinion=2 and contents.available=1  and contents.content_status=1');
                     $name_author = 'director';
-					foreach ($opinions as &$opinion) {
-						$opinion['pk_author'] = 2;
-						$opinion['author_name_slug']  = $name_author;
-					}
-
+                    if (!empty($opinions)) {
+                        foreach ($opinions as &$opinion) {
+                            $opinion['pk_author'] = 2;
+                            $opinion['author_name_slug']  = $name_author;
+                        }
+                    }
                 // Fetch common author opinions
                 } else { //Author
 
@@ -163,9 +165,11 @@ if (isset($_REQUEST['action'])) {
 													  'ORDER BY created DESC '.$_limit);
                     $aut = new Author($authorID);
                     $name_author = String_Utils::get_title($aut->name);
-					foreach ($opinions as &$opinion) {
-						$opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
-					}
+                    if (!empty($opinions)) {
+                        foreach ($opinions as &$opinion) {
+                            $opinion['author_name_slug']  = String_Utils::get_title($opinion['name']);
+                        }
+                    }
 
                 }
 

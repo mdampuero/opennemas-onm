@@ -37,7 +37,7 @@ if( isset($_REQUEST['action']) ) {
             $groups['advertisements'] = $ccm->count_content_by_type_group(2);
 
             foreach($allcategorys as $cate) {
-               if($cate->internal_category !=0 ) {
+               if($cate->internal_category !=0 && $cate->fk_content_category == 0 ) {
                          $num_contents[$i]['articles']       = (isset($groups['articles'][$cate->pk_content_category]))? $groups['articles'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['photos']         = (isset($groups['photos'][$cate->pk_content_category]))? $groups['photos'][$cate->pk_content_category] : 0;
                          $num_contents[$i]['advertisements'] = (isset($groups['advertisements'][$cate->pk_content_category]))? $groups['advertisements'][$cate->pk_content_category] : 0;
