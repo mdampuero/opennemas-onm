@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Message as m;
 /**
  * Class for handling user access to sections in backend
  *
@@ -51,7 +52,8 @@ class Acl
         }
 
         if ( !Privileges_check::CheckPrivileges($rule)) {
-             Application::forward('/admin/welcome.php');
+            m::add( _("Sorry, you don't have enought privileges") );
+            Application::forward('/admin/');
         }
         return true;
     }
@@ -62,8 +64,28 @@ class Acl
     */
     public static function isAdmin()
     {
+        if (isset($_SESSION['isMaster'])
+            && $_SESSION['isMaster']
+        ) {
+            return true;
+        }
         if (isset($_SESSION['isAdmin'])
             && $_SESSION['isAdmin']
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if is master session
+     * @return boolean
+    */
+    public static function isMaster()
+    {
+        if (isset($_SESSION['isMaster'])
+            && $_SESSION['isMaster']
         ) {
             return true;
         }
@@ -92,6 +114,7 @@ class Acl
             $message->push();
         }
 
-        Application::forward('/admin/welcome.php');
+        m::add( _("Sorry, you don't have enought privileges") );
+        Application::forward('/admin/');
     }
 }

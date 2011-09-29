@@ -76,8 +76,10 @@ textarea{
                 <a href="#mail">{t}Mail{/t}</a>
                 <a href="#log">{t}Log{/t}</a>
                 <a href="#external">{t}External Services{/t}</a>
-                <a href="#misc">{t}Miscelanous{/t}</a>
-                <a href="#modules">{t}Modules{/t}</a>
+                <a href="#misc">{t}Miscelanous{/t}</a
+                {acl isAllowed="ONLY_MASTERS"}
+                    <a href="#modules">{t}Modules{/t}</a>
+                {/acl}
             </li>
         </ul>
 
@@ -340,7 +342,7 @@ textarea{
                     </tbody>
                 </table>
             </fieldset>
-
+            {acl isAllowed="ONLY_MASTERS"}
             <fieldset>
                 <legend>{t}Piwik Statistics{/t}</legend>
                 <table>
@@ -371,7 +373,7 @@ textarea{
                     </tbody>
                 </table>
             </fieldset>
-
+            {/acl}
             <fieldset>
                 <legend>{t}Recaptcha{/t}</legend>
                 <table>

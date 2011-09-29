@@ -219,23 +219,37 @@ class User
     private function readAccessCategories($id=null)
     {
         $id = (!is_null($id))? $id: $this->id;
-        $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = ?';
-        $rs = $GLOBALS['application']->conn->Execute( $sql, $id );
-
-        if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return null;
+        $fetchedFromAPC = false;
+        if (extension_loaded('apc')) {
+            $contentCategories = apc_fetch(APC_PREFIX . "_readAccessCategories", $fetchedFromAPC);
         }
 
-        $contentCategories = array();
-        while(!$rs->EOF) {
-            $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
-            $contentCategories[] = $contentCategory;
-              $rs->MoveNext();
+        // If was not fetched from APC now is turn of DB
+        if (!$fetchedFromAPC) {
+
+
+            $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = ?';
+            $rs = $GLOBALS['application']->conn->Execute( $sql, $id );
+
+            if (!$rs) {
+                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+                return null;
+            }
+
+            $contentCategories = array();
+            while(!$rs->EOF) {
+                $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
+                $contentCategories[] = $contentCategory;
+                  $rs->MoveNext();
+            }
+            if (extension_loaded('apc')) {
+                apc_store(APC_PREFIX . "_readAccessCategories", $contentCategories);
+            }
         }
+
 
         return $contentCategories;
     }
@@ -529,11 +543,11 @@ class User
 
     private function buildFilter($filter)
     {
-        $newFilter = '';
+        $newFilter = ' WHERE fk_user_group != 4';
 
         if(!is_null($filter) && is_string($filter)) {
             if(preg_match('/^[ ]*where/i', $filter)) {
-                $newFilter = ' WHERE ' . $filter;
+                $newFilter .= '  AND ' . $filter;
             }
         } elseif(!is_null($filter) && is_array($filter)) {
             $parts = array();
@@ -550,7 +564,7 @@ class User
             }
 
             if(count($parts) > 0) {
-                $newFilter = ' WHERE ' . implode(' OR ', $parts);
+                $newFilter .= ' AND ' . implode(' OR ', $parts);
             }
         }
 

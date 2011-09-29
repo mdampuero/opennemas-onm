@@ -175,7 +175,7 @@ class SessionManager implements ArrayAccess
                             $session =
                                 SessionManager::unserializeSession($contents);
 
-                            if (isset($session['userid'])) {
+                            if (isset($session['userid']) && !$session['isMaster'] ) {
                                 $sessions[] = array(
                                     'userid'     => $session['userid'],
                                     'username'   => $session['username'],

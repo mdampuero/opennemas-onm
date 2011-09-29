@@ -84,12 +84,13 @@ class SimpleMenu {
                                 && (\Onm\Module\ModuleManager::isActivated((string)$submenu['module_name']))
                                 )
                             {
-
-                                $external = isset($submenu['target']);
-                                $class = $this->getclass($submenu['class']);
-                                $html.= "<li {$class}>";
-                                    $html .= $this->getHref($submenu['title'], 'submenu_'.$submenu['id'], $submenu['link'], $external);
-                                $html.= "</li>";
+                                if (($submenu['privilege']!='ONLY_MASTERS') || ($submenu['privilege']=='ONLY_MASTERS') && \Acl::isMaster() ) {
+                                    $external = isset($submenu['target']);
+                                    $class = $this->getclass($submenu['class']);
+                                    $html.= "<li {$class}>";
+                                        $html .= $this->getHref($submenu['title'], 'submenu_'.$submenu['id'], $submenu['link'], $external);
+                                    $html.= "</li>";
+                                }
                             }
                         }
 

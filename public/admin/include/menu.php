@@ -134,7 +134,7 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="PRIVILEGE_MANAGER"
-            privilege="USER_ADMIN"
+            privilege="ONLY_MASTERS"
             title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
             id="privilege_manager"    
             link="controllers/acl/privileges.php"
@@ -200,7 +200,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"
             id="link_control_manager"
             link="controllers/link_control/link_control.php"
-            privilege="BACKEND_ADMIN" />
+            privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
             module_name="ONM_STATISTICS"
@@ -229,26 +229,26 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
             id="php_cache__manager"
             link="controllers/system_information/system_information.php?action=apc_iframe"
-            privilege="CACHE_ADMIN" />
+            privilege="ONLY_MASTERS" />
         <node class="divider" />
         <node
             module_name="SYSTEM_UPDATE_MANAGER"
             title="'.htmlspecialchars(_("Update System"), ENT_QUOTES).'"
             id="system_update__manager"
             link="controllers/updatesystem/index.php"
-            privilege="BACKEND_ADMIN" />
+            privilege="ONLY_MASTERS" />
         <node
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
             link="controllers/system_information/sql_error_log.php"
-            privilege="BACKEND_ADMIN" />
+            privilege="ONLY_MASTERS" />
         <node
             module_name="MYSQL_MANAGER"
             title="'.htmlspecialchars(_("Database Manager"), ENT_QUOTES).'"
             id="mysql_manager"
             link="controllers/system_information/system_information.php?action=mysql_check"
-            privilege="BACKEND_ADMIN" />
+            privilege="ONLY_MASTERS" />
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
             id="support_help"

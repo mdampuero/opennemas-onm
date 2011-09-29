@@ -61,7 +61,8 @@ if( isset($_REQUEST['action'])){
                         'userid' 			 => $user->id,
                         'username' 		 => $user->login,
                         'email' 			 => $user->email,
-                        'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)==SYS_NAME_GROUP_ADMIN ),
+                        'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
+                        'isMaster' 		 =>  ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
                         'privileges' 		 => Privilege::get_privileges_by_user($user->id),
                         'accesscategories' => $user->get_access_categories_id(),
                         'authMethod' 		 => $user->authMethod,
@@ -76,7 +77,7 @@ if( isset($_REQUEST['action'])){
                             $_SESSION['authGmail']  = base64_encode($login.':'.$password);
                     }
 
-                    /**
+                     /**
                      * Store default expire time
                      */
                     $app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');

@@ -3,8 +3,11 @@ require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-    Privileges_check::AccessDeniedAction();
+
+use Message as m;
+
+if(!Acl::isMaster()) {
+    m::add("You don't have permissions");
 }
 
 

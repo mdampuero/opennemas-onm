@@ -7,9 +7,10 @@ use Onm\Message as m;
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-    Privileges_check::AccessDeniedAction();
+ 
+if(!Acl::isMaster()) {
+    m::add("You don't have permissions");
+    Application::forward('/admin/');
 }
 
 $cm = new ContentManager();
@@ -33,7 +34,7 @@ switch($action) {
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
-        if (!$rsTotalErrors) {
+        if (is_null($rsTotalErrors) ) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;

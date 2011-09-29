@@ -34,6 +34,12 @@ class Privileges_check
                 return true;
             }
 
+            if ( isset($_SESSION['isMaster'])
+                && $_SESSION['isMaster']
+            ) {
+                return true;
+            }
+
             if (
                 isset($_SESSION['isAdmin'])
                 && $_SESSION['isAdmin']
@@ -75,8 +81,15 @@ class Privileges_check
                 Privileges_check::SessionExpireTimeAction();
             }
 
+            if (isset($_SESSION['isMaster'])
+            && $_SESSION['isMaster']
+            ) {
+                return true;
+            }
+
             if (isset($_SESSION['isAdmin'])
                 && $_SESSION['isAdmin']
+                && ($privilege !='ONLY_MASTERS')
             ) {
                 return true;
             }

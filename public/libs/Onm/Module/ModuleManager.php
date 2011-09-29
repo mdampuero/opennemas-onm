@@ -185,7 +185,8 @@ class ModuleManager {
             }
         } catch (ModuleException $e) {
              $_SESSION['error'] = $e->getMessage();
-             Application::forward('/admin/welcome.php');
+             m::add( _("Sorry, you don't have enought privileges") );
+             Application::forward('/admin/');
         }
 
     }

@@ -14,8 +14,8 @@ require_once('../../session_bootstrap.php');
 
 // Check ACL {{{
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
-if(!Acl::check('USER_ADMIN')) {
-    Acl::deny();
+if(!Acl::checkOrForward('USER_ADMIN')) {
+    
     }
     // }}}
 /**

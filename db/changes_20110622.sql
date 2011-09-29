@@ -1,3 +1,23 @@
+-- CREATE MASTERS GROUP
+
+UPDATE  `user_groups` SET `pk_user_group` = '8' WHERE `pk_user_group` ='4';
+INSERT INTO `nueva-tribuna`.`user_groups` (
+`pk_user_group` ,
+`name`
+)
+VALUES (
+4 , 'Masters'
+);
+UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`fk_user_group` ='4';
+UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='macada';
+UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='alex';
+UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='fran';
+UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='sandra';
+
+
+
+
+----------------------------------------------------------------------------------
 ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
 ALTER TABLE `videos` DROP COLUMN `favorite`;
 -- 5-September-2011

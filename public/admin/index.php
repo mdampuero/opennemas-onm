@@ -64,7 +64,8 @@ TPLADMIN;
                 $authMethodTitles = array('database' => 'Logged in with OpenNemas', 'google_clientlogin' => 'Logged in from Google account');
                 foreach($sessions as $session) {
                     $authMethod = (isset($session['authMethod']))? $session['authMethod']: 'database';
-                    if(($session['userid']!=$_SESSION['userid']) && ($_SESSION['isAdmin'])) {
+
+                    if(($session['userid']!=$_SESSION['userid']) && (Acl::isAdmin())) {
                         $html .= sprintf($tpl_user, $session['username'],  date(' H:i ', $session['expire']),
                                          $session['userid'], $session['userid'], $authMethod, $authMethodTitles[$authMethod]);
                     } else {

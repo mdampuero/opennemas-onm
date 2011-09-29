@@ -155,12 +155,12 @@ class User_group
     {
 
         $types = array();
-        $sql = 'SELECT pk_user_group, name FROM user_groups';
+        $sql = "SELECT pk_user_group, name FROM user_groups WHERE name <>'Masters'";
         $rs = $GLOBALS['application']->conn->Execute($sql);
         while (!$rs->EOF) {
-            $userGroup = new User_Group();
-            $userGroup->set_values($rs->fields);
-            $types[] = $userGroup;
+                $userGroup = new User_Group();
+                $userGroup->set_values($rs->fields);
+                $types[] = $userGroup;
             $rs->MoveNext();
         }
         return ($types);

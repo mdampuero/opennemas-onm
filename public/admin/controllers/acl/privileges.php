@@ -11,10 +11,14 @@
 */
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
-require_once(SITE_CORE_PATH.'privileges_check.class.php');
+ 
 
 use Message as m;
 
+if(!Acl::isMaster()) {
+    m::add("You don't have permissions");
+    Application::forward('/admin/');
+}
 
 function buildFilter() {
 
