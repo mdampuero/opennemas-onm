@@ -1,3 +1,4 @@
+-- 29-september-2011
 -- CREATE MASTERS GROUP
 
 UPDATE  `user_groups` SET `pk_user_group` = '8' WHERE `pk_user_group` ='4';
@@ -14,8 +15,36 @@ UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='alex';
 UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='fran';
 UPDATE `users` SET `fk_user_group` = '4' WHERE `users`.`login` ='sandra';
 
+--27-September - 2011
+ALTER TABLE `albums` AUTO_INCREMENT =1;
+ALTER TABLE `albums` ADD INDEX ( `pk_album` ) ;
+ALTER TABLE `albums` CHANGE `pk_album` `pk_album` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `articles_clone` ADD INDEX ( `pk_clone` ) ;
+ALTER TABLE `comments` CHANGE `pk_comment` `pk_comment` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `contents` CHANGE `permalink` `slug` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+ALTER TABLE `contents` ADD `params` LONGTEXT NULL ;
+ALTER TABLE `contents` ADD `category_name` VARCHAR( 255 ) NOT NULL COMMENT 'name category';
+ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NULL ;
+ALTER TABLE `contents` DROP `archive` ;
+ALTER TABLE `contents` DROP `paper_page` ;
 
 
+INSERT INTO `content_types` (`pk_content_type` , `name` , `title` , `fk_template_default`)
+VALUES (14 , 'book', 'libro', NULL);
+
+ALTER TABLE `kioskos` CHANGE `pk_kiosko` `pk_kiosko` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `polls` CHANGE `pk_poll` `pk_poll` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `ratings` CHANGE `pk_rating` `pk_rating` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `static_pages` CHANGE `pk_static_page` `pk_static_page` BIGINT( 20 ) NOT NULL AUTO_INCREMENT COMMENT 'BIGINT(20)';
+
+INSERT INTO  `user_groups` (`pk_user_group` ,`name`) VALUES ('4', 'Masters');
+
+ALTER TABLE `votes` CHANGE `pk_vote` `pk_vote` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `widgets` CHANGE `pk_widget` `pk_widget` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `albums` DROP `favorite` ;
+ 
 
 ----------------------------------------------------------------------------------
 ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
