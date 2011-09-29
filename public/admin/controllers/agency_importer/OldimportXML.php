@@ -28,7 +28,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Import new articles from paper XML');
 
 

@@ -9,7 +9,7 @@ require_once('../../session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = 10;}
 $category=$_REQUEST['category'];

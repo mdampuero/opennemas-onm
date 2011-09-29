@@ -11,6 +11,6 @@ require_once('../../session_bootstrap.php');
  */
 $lastUrl = $_SESSION['lasturl'];
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('linkReturn', $lastUrl);
 $tpl->display('accessdenied/accessdenied.tpl');

@@ -30,7 +30,7 @@ Acl::checkOrForward('IMPORT_EFE');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Import Agency EFE news from XML files');
 
 

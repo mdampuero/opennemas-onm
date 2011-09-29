@@ -36,7 +36,7 @@ Acl::checkOrForward('OPINION_ADMIN');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Opinion Manager'));
 
 // FIXME: usar en template {$smarty.const.MEDIA_IMG_PATH_URL}

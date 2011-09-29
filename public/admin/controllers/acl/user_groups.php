@@ -16,7 +16,7 @@ $sessions = $GLOBALS['Session']->getSessions();
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'User Groups Management');
 
 Acl::checkOrForward('GROUP_ADMIN');

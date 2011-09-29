@@ -11,7 +11,7 @@ use Onm\Settings as s;
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Author Opinion Management');
 

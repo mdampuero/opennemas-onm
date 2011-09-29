@@ -13,7 +13,7 @@ if (!isset($_REQUEST['category']) || empty($_REQUEST['category'])) {
 $lastUrl = $_SESSION['lasturlcategory'];
 $lastCategory = $_REQUEST['category'];
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('linkReturn', $lastUrl);
 $tpl->assign('category', $lastCategory);

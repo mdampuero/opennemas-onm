@@ -9,7 +9,7 @@ require_once('../../session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'FILE MANAGEMENT');
 
@@ -19,7 +19,7 @@ require_once('../../attachments_events.php');
 
 Acl::checkOrForward('FILE_ADMIN');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));
 

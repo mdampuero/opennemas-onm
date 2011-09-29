@@ -18,7 +18,7 @@ require_once('../../session_bootstrap.php');
 
 Acl::checkOrForward('POLL_ADMIN');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Polls Management');
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => 1)));

@@ -24,7 +24,7 @@ ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 // Initialize request parameters
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );

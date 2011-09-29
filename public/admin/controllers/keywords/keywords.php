@@ -28,7 +28,7 @@ require_once('../../session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 // Check ACL
 if(!Acl::check('PCLAVE_ADMIN')) { Acl::deny(); }

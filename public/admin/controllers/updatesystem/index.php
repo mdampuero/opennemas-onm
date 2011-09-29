@@ -11,7 +11,7 @@ if(!Acl::isMaster()) {
 }
 
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Update system');
 
 function test_url($url) {

@@ -9,7 +9,7 @@ require_once('../../session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 require_once(SITE_LIBS_PATH.'ofc1/open-flash-chart.php');
 require_once(SITE_LIBS_PATH.'ofc1/open_flash_chart_object.php');

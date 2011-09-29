@@ -9,7 +9,7 @@ require_once(dirname(__FILE__).'/../../session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Gestor de Widgets');
 
 // Widget instance

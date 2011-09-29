@@ -32,7 +32,7 @@ function buildFilter() {
 
 
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Grant management');
 
 $privilege = new Privilege();

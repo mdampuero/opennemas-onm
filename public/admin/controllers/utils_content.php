@@ -13,7 +13,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 

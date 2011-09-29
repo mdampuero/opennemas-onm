@@ -9,7 +9,7 @@ require_once('./session_bootstrap.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 require(SITE_CORE_PATH.'media.manager.class.php');
 

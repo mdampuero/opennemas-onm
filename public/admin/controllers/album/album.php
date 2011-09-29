@@ -23,7 +23,7 @@ Acl::checkOrForward('ALBUM_ADMIN');
 // Register events
 require_once('./albums_events.php');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Album Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);

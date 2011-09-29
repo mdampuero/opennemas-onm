@@ -35,7 +35,7 @@ Acl::checkOrForward('COMMENT_ADMIN');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Comment Management');
 

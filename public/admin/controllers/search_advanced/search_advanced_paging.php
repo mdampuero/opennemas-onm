@@ -12,7 +12,7 @@
 require_once('../bootstrap.php');
 require_once('./session_bootstrap.php');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 if(isset($_REQUEST['action']) )
 {

@@ -15,7 +15,7 @@ if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'
     /**
      * Setup view
     */
-    $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+    $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
     $cm = new ContentManager();
 }
 /*

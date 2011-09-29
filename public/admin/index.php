@@ -9,7 +9,7 @@ $sessions = $GLOBALS['Session']->getSessions();
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 /**
  * Setup number of pending comments

@@ -15,7 +15,7 @@ require_once('./advertisement_events.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Advertisement Management');
 
 //$tpl->addScript( array('prototype.js', 'scriptaculous/scriptaculous.js', 'AdPosition.js') );

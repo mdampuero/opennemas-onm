@@ -12,7 +12,7 @@ require_once('../album/albums_events.php');
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Portadas del periódico');
 
 if( !Privileges_check::CheckPrivileges('MUL_ADMIN')) {

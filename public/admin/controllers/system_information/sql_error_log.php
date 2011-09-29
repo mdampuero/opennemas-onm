@@ -18,7 +18,7 @@ $cm = new ContentManager();
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $action = filter_input ( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 'list')) );
 $page = filter_input ( INPUT_GET, 'page' , FILTER_SANITIZE_STRING, array( 'options' => array('default' => 1)) );

@@ -13,7 +13,7 @@ Acl::checkOrForward('AUTHOR_CREATE');
 
 //require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Nuevas Fotos Autor Opinion');
 

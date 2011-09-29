@@ -30,7 +30,7 @@ if(!Acl::check('BACKEND_ADMIN')) {
 /**
  * Setup view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Cache manager');
 
 /**

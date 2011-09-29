@@ -35,7 +35,7 @@ if(!Acl::check('STATIC_ADMIN')) {
 /**
  * Setup view
  */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 
 // Build redirect with filter params

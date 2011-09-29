@@ -29,7 +29,7 @@ Acl::checkOrForward('NEWSLETTER_ADMIN');
 require_once(SITE_CORE_PATH.'string_utils.class.php');
 String_Utils::disabled_magic_quotes();
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('application_name', 'Boletín de Noticias');
 
 $newsletter = new Newsletter(array('namespace' => 'PConecta_'));

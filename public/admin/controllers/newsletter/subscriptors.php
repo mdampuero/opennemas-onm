@@ -7,7 +7,7 @@ require_once('../../session_bootstrap.php');
 
 Acl::checkOrForward('NEWSLETTER_ADMIN');
 
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Newsletter Subscriptor');
 
 function compileFilter($filters)

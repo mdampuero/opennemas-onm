@@ -21,7 +21,7 @@ if(!Acl::checkOrForward('USER_ADMIN')) {
 /**
  * Set up view
 */
-$tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'User Management');
 
 $ccm = new ContentCategoryManager();
