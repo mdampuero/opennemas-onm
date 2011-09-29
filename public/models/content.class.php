@@ -82,7 +82,7 @@ class Content
                         'id' => sprintf('%06d',$this->id),
                         'date' => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug,
+                        'slug' => $this->slug2,
                     )
                 );
 
@@ -90,7 +90,7 @@ class Content
 
                 break;
 
-            case 'slug':
+            case 'slug2':
                 return String_Utils::get_title($this->title);
                 break;
 

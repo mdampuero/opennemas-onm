@@ -1181,6 +1181,7 @@ ul#menu a {
 	height: auto !important;
 	height: 1%; /*For IE*/
 }
+ul#menu.manager a { color:White !important; }
 
 ul#menu li ul li {
 	clear: both;

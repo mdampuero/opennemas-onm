@@ -23,7 +23,7 @@ switch($action) {
         $tpl->assign('instance', $instance);
         $tpl->display('instances/edit.tpl');
         break;
-    } // Executa tamén new
+    }
 
     case 'new': {
         
@@ -43,6 +43,7 @@ switch($action) {
         $data = array(
                 'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
                 'name' => filter_input(INPUT_POST, 'name' , FILTER_SANITIZE_STRING),
+                'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
                 'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
                 'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
                 'settings' => serialize($_POST['settings'])

@@ -59,6 +59,7 @@ class Article extends Content
     {
         switch ($name) {
             case 'uri':
+                
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
@@ -68,14 +69,14 @@ class Article extends Content
                         'id' => sprintf('%06d',$this->id),
                         'date' => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug,
+                        'slug' => $this->slug2,
                     )
                 );
 
                 return $uri;
                 break;
 
-            case 'slug':
+            case 'slug2':
                 return String_Utils::get_title($this->title);
                 break;
 

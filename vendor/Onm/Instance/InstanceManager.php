@@ -171,6 +171,7 @@ class InstanceManager {
         $sql = "UPDATE instances SET name=?, domains=?, activated=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
+            $data['internal_name'],
             $data['domains'],
             $data['activated'],
             $data['settings'],
@@ -211,10 +212,11 @@ class InstanceManager {
     {
         $connection = self::getConnection();
         
-        $sql = "INSERT INTO instances (name, domains, activated, settings)
+        $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
                 VALUES (?, ?, ?, ?)";
         $values = array(
             $data['name'],
+            $data['internal_name'],
             $data['domains'],
             $data['activated'],
             $data['settings'],
