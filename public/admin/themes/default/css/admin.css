@@ -871,6 +871,18 @@ table.aa tr td {
 	text-decoration:underline;
 }
 
+#topbar-admin.manager {
+    background: #049CDB !important;
+    background-color: #049CDB !important;
+    background-repeat: repeat-x !important;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#049CDB), to(#0064CD)) !important;
+    background-image: -moz-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -ms-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049CDB), color-stop(100%, #0064CD)) !important;
+    background-image: -webkit-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -o-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: linear-gradient(#049CDB, #0064CD) !important;
+}
 
 /* -------------------------------------------------------------
   Content from modalbox.css
@@ -1098,11 +1110,12 @@ table.aa tr td {
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Root = Horizontal, Secondary = Vertical */
 ul#menu {
-  margin: 0;
-  margin-top:0px;
-  padding: 0;
-  list-style: none;
-  margin-left:20px;
+    margin: 0;
+    margin-top:0px;
+    padding: 0;
+    list-style: none;
+    margin-left:20px;
+    font-size: 12px;
 }
 
 ul#menu li {
@@ -1593,6 +1606,8 @@ div.action-bar {
     margin-bottom:20px;*/
 	width:100%;
     background: none repeat scroll 0 0 #ececec/*#F5F5F5*/;
+    border:1px solid #ececec;
+    border-bottom-color:#BFBFBF !important;
     /*border-radius: 0 0 3px 3px;*/
     /*border-top: 1px solid #DDDDDD;*/
     margin-bottom: 18px;

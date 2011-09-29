@@ -2,7 +2,7 @@
 -- CREATE MASTERS GROUP
 
 UPDATE  `user_groups` SET `pk_user_group` = '8' WHERE `pk_user_group` ='4';
-INSERT INTO `nueva-tribuna`.`user_groups` (
+INSERT INTO `user_groups` (
 `pk_user_group` ,
 `name`
 )

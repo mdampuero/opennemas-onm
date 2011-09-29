@@ -8,21 +8,6 @@
  */
 use Onm\Settings as s;
 
-function &MonitorContentStatus($db, $sql, $inputarray)
-{
-    if (
-        preg_match('/content_status/', $sql)
-        && preg_match('/^[ ]*update/i', $sql)
-    ) {
-        $GLOBALS['application']->workflow->log(
-            'SQL content_status - ' . $_SESSION['username']
-            . ' - ' . $sql . ' ' . print_r($inputarray, true), PEAR_LOG_INFO
-        );
-    }
-
-    $a=null;
-    return $a;
-}
 /**
  * Main application class, handles all the initialization of the app
  *

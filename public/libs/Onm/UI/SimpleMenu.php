@@ -28,9 +28,14 @@ class SimpleMenu {
      *
      * @return void
      */
-    public function __construct($menuXMLFile) {
+    public function __construct($menuXMLFile, $baseUrl = null) {
 
         $menu = simplexml_load_string($menuXMLFile);
+        
+        if (!isset($baseUrl)) {
+            $baseUrl = SITE_URL_ADMIN;
+        }
+        $this->baseUrl = $baseUrl;
 
         // If there were errors while loading the menu store them
         // otherwise store the menu
@@ -128,7 +133,7 @@ class SimpleMenu {
             $url = $url;
         }
         if (!preg_match("@^http@",$url) && !preg_match("@#@",$url)) {
-            $url = SITE_URL_ADMIN."/".$url;
+            $url = $this->baseUrl."/".$url;
         }
 
         $target = '';

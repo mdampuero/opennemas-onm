@@ -39,6 +39,15 @@ if (file_exists($configFile)) {
     if (!$instance) {
         // This instance
         echo 'Instance not found';
+        die();
+    } else {
+        if (
+            $instance->activated != 1
+            && !preg_match("@manager@", $_SERVER["PHP_SELF"])
+        ) {
+            echo 'Instance not activated. Pay for it, bitch!';
+            die();
+        }
     }
     $app = \Application::load();
     
