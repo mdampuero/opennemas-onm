@@ -72,6 +72,7 @@ class InstanceManager
         foreach ($rs->fields as $key => $value ) {
             $instance->{$key} = $value;
         }
+        define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
         $instance->settings = unserialize($instance->settings);
         foreach ($instance->settings as $key => $value ) {
             define($key, $value);

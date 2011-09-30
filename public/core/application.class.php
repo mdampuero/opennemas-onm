@@ -289,6 +289,8 @@ class Application
         }
         
         define('SS', "/");
+        
+        define('APC_PREFIX', INSTANCE_UNIQUE_NAME);
 
         define('SITE', $_SERVER['SERVER_NAME']);
         
@@ -301,10 +303,9 @@ class Application
         define('SITE_ADMIN_TMP_DIR', "tmp");
         define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
         define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
-        global $siteIDName;
-        $cachepath = SITE_PATH.'..'.DS.'tmp'.DS.'cache'.DS.$siteIDName;
+        $cachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
-            mkdir($cachepath);
+            mkdir($cachepath, 755, true);
         }
         define('CACHE_PATH', realpath($cachepath));
         

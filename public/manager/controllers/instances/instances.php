@@ -64,7 +64,7 @@ switch($action) {
     }
 
     case 'changeactivated': {
-        $instance = im::read($_REQUEST['id']);
+        $instance = $im->read($_REQUEST['id']);
 
         $available = ($instance->activated+1) % 2;
         $im->changeActivated($instance->id, $available);
