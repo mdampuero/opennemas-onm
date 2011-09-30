@@ -53,8 +53,9 @@
             <div class="photo-data">
                 
                 <ul>
-                    <li><h3>{if !empty($photo[n]->description)}{$photo[n]->description_utf|clearslash|escape:'html'} {else} {t}No available description{/t} {/if}</h3></li>
-                    <li><img src="{$params.IMAGE_DIR}icons/tag_red.png" /> {$photo[n]->metadata_utf|clearslash|escape:'html'|default:""}</li>
+                    <li><h3>{if !empty($photo[n]->title)}{$photo[n]->title|clearslash|escape:'html'} {else} {t}No available title{/t} {/if}</h3></li>
+                    <li>{if !empty($photo[n]->description)}{$photo[n]->description_utf|clearslash|escape:'html'} {else} {t}No available description{/t} {/if}</h3></li>
+                    <li><img src="{$params.IMAGE_DIR}icons/tag_red.png" /> {$photo[n]->metadata_utf|clearslash|escape:'html'|default:"No tags"}</li>
                     {if !empty($photo[n]->author_name)}
                         <li><strong>{t}Author:{/t}</strong> {$photo[n]->author_name|clearslash|escape:'html'|default:""}</li>
                     {/if}
