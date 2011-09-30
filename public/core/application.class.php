@@ -31,6 +31,7 @@ class Application
     var $cache          = null;
     var $image          = null;
     var $events         = array();
+    static $request        = null;
 
     /**
      * Initializes the Application class.
@@ -72,10 +73,21 @@ class Application
             self::initLogger();
 
             // Setting up Gettext
-            self::initGettext();
+            self::initL10nSystem();
+            
         }
 
         return( $GLOBALS['application'] );
+    }
+    
+    /*
+     * Initializes the Request object and register it inside Application object
+     * 
+     * @param $
+     */
+    static public function getRequest()
+    {
+        return \Onm\Request::getInstance();
     }
 
     static public function initLogger()
@@ -119,7 +131,7 @@ class Application
     /**
      * Set up gettext translations.
      */
-    static public function initGettext()
+    static public function initL10nSystem()
     {
         $timezone = s::get('time_zone');
         if (isset($timezone)) {
@@ -166,9 +178,9 @@ class Application
         $libs = array(  'adodb'    => SITE_VENDOR_PATH.'/adodb5/adodb.inc.php',
                         'pager'    => SITE_VENDOR_PATH.'/Pager/Pager.php',
                         'template' => array(
-                                        SITE_LIBS_PATH.'/smarty/smarty-legacy/Smarty.class.php',
+                                        SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php',
                                         SITE_VENDOR_PATH.'/Log.php',
-                                        SITE_LIBS_PATH.'/template.class.php'
+                                        SITE_VENDOR_PATH.'/Template.php'
                                     ),
                      );
 
@@ -389,7 +401,7 @@ class Application
         /*
 
         // Browscap library
-        require dirname(__FILE__) . '/../libs/Browscap.php';
+        require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
 
         // Creates a new Browscap object (loads or creates the cache)
         $bc = new Browscap( dirname(__FILE__) . '/../cache');
