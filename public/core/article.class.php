@@ -197,8 +197,8 @@ class Article extends Content
 
     public function update($data)
     {
-        if (isset($data['available']) and !isset($data['content_status'])) {
-            $data['content_status'] = $data['available'];
+        if (isset($data['content_status']) && !isset($data['available'])) {
+            $data['available'] = $data['content_status'];
         }
 
         // If it's clone use special update {{{
