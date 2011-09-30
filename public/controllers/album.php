@@ -80,9 +80,10 @@ if (!is_null($action) ) {
 			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
                 
                 $albumSettings = s::get('album_settings');
-                $total = isset($albumSettings['total_front'])?:2;
-                $days = isset( $albumSettings['time_last'])?:4;
-                
+                $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
+                $days = isset( $albumSettings['time_last'])?$albumSettings['time_last']:4;
+                 
+                echo $total.'-'.$days;
                 if ( isset($category) && !empty($category) ) {
                     $albums = $cm->find_by_category('Album',
                                         $category, 'fk_content_type=7 AND available=1',
@@ -92,7 +93,8 @@ if (!is_null($action) ) {
                                         'fk_content_type=7 AND available=1 AND '.
                                         'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                                         ' ORDER BY views DESC,  created DESC LIMIT '.$total);
-                   
+                        var_dump($albums);
+                        var_dump($albumSettings);
                 }
               
 				$tpl->assign('albums', $albums);
