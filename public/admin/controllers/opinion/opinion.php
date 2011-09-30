@@ -189,7 +189,7 @@ if(isset($_REQUEST['action'])) {
             $opinion->available = 1;
             $opinion->in_home   = 1;
             $opinion->with_comment = 1;
-
+            $_REQUEST['category'] = 'opinion';
             $tpl->assign('todos', $todos);
             $tpl->assign('opinion', $opinion);
             $_SESSION['desde'] = 'new';
