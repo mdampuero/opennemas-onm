@@ -1,10 +1,14 @@
 <table class="adminlist">
     <thead>
         <tr>
-            <th align="center" style="width:15px;"></th>
-            <th align="left">{t}Title{/t}</th>
-            <th align="center" style="width:60px;">{t}Category{/t}</th>
-            <th align="center" style="width:80px;">{t}Actions{/t}</th>
+            <th align="left" style="width:2%;"></th>
+            <th align="left" style="width:40%;">{t}Title{/t}</th>
+            <th style="width:5%;">{t}Views{/t}</th>
+            <th style="width:10%;">{t}Created{/t}</th>
+            <th style="width:10%;">{t}Author{/t}</th>
+            <th style="width:10%;">{t}Last editor{/t}</th>
+            <th style="width:10%;">{t}Category{/t}</th>
+            <th style="width:6%;">{t}Actions{/t}</th>
         </tr>
     </thead>
     <tr><td colspan="13">
@@ -14,10 +18,10 @@
 
                     <table id='tabla{$aux}' name='tabla{$aux}' value="{$suggestedArticles[d]->id}" data="{$suggestedArticles[d]->content_type}" width="100%" class="tabla" style="text-align:center;padding:0px;padding-bottom:4px;">
                         <tr class="row1{schedule_class item=$suggestedArticles[d]}" style="cursor:pointer;">
-                            <td style="text-align: left; width:10px;">
+                            <td align="left" style="width:2%;">
                                 <input type="checkbox" class="minput" pos={$aux} id="selected_{$placeholder}_{$aux}" name="selected_fld[]" value="{$suggestedArticles[d]->id}"  style="cursor:pointer;" />
                             </td>
-                             <td style="text-align: left;"  onmouseout="UnTip()" onmouseover="Tip('<b>Creado:</b>{$suggestedArticles[d]->created}<br /><b>Vistos:</b>{$suggestedArticles[d]->views}<br /><b>Votos:</b>{$suggestedArticles[d]->rating}<br /><b>Comentarios:</b>{$suggestedArticles[d]->comment}<br /><b>Publisher:</b>{$suggestedArticles[d]->publisher}<br /><b>Last Editor:</b>{$suggestedArticles[d]->editor}<br />{schedule_info item=$suggestedArticles[d]}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
+                             <td align="left" style="width:40%;"  onmouseout="UnTip()" onmouseover="Tip('<b>Creado:</b>{$suggestedArticles[d]->created}<br /><b>Vistos:</b>{$suggestedArticles[d]->views}<br /><b>Metadata:</b>{$suggestedArticles[d]->metadata}<br /><b>Publisher:</b>{$suggestedArticles[d]->authorName}<br /><b>Last Editor:</b>{$suggestedArticles[d]->lastEditorName}<br />{schedule_info item=$suggestedArticles[d]}', SHADOW, true, ABOVE, true, WIDTH, 300)" onClick="javascript:document.getElementById('selected_{$placeholder}_{$aux}').click();">
 
                                 {is_clone item=$suggestedArticles[d]}{$suggestedArticles[d]->title|clearslash}
                             </td>
@@ -37,11 +41,23 @@
                                     </div>
                                 </td>
                             {else}
-                                <td align="center">
-                                    {$suggestedArticles[d]->category_name}
+                                <td align="center" style="width:5%;" >
+                                    {$suggestedArticles[d]->views}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$suggestedArticles[d]->created}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$suggestedArticles[d]->authorName}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$suggestedArticles[d]->lastEditorName}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$suggestedArticles[d]->catName}
                                 </td>
                             {/if}
-                            <td style="width:80px; text-align:right; padding-right:10px;">
+                            <td align="center" style="width:6%;">
 
                                 <ul class="action-buttons">
                                     <li>
