@@ -93,7 +93,8 @@ if (!is_null($action) ) {
                                         'fk_content_type=7 AND available=1 AND '.
                                         'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                                         ' ORDER BY views DESC,  created DESC LIMIT '.$total);
-                   
+                        var_dump($albums);
+                        var_dump($albumSettings);
                 }
               
 				$tpl->assign('albums', $albums);
