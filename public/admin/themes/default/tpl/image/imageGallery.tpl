@@ -16,7 +16,8 @@
                                     de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}"
                                     de:type_img="{$photos[n]->type_img}"
                                     de:description="{$photos[n]->description}"
-                                    title="{$photos[n]->title} - {$photos[n]->description}">
+                                    onmouseout="UnTip()" 
+                                    onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)">
                             </embed>
                         </object>
                         <span  style="float:right; clear:none;">
@@ -29,7 +30,9 @@
                                  de:peso="{$photos[n]->size}" de:created="{$photos[n]->created}"
                                  de:type_img="{$photos[n]->type_img}"
                                  de:description="{$photos[n]->description}"
-                                 title="Desc: {$photos[n]->description}  Tags: {$photos[n]->metadata}" />
+                                 onmouseout="UnTip()" 
+                                 onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)"
+                                 />
                         </span>
                     {else}
                         <img style="{cssphotoscale width=$photos[n]->width height=$photos[n]->height resolution=67 photo=$photos[n]}"
@@ -43,8 +46,8 @@
                             de:created="{$photos[n]->created}"
                             de:description="{$photos[n]->description|clearslash|escape:'html'}"
                             de:tags="{$photos[n]->metadata}"
-                            onmouseover="return escape('Descripcion:{$photos[n]->description|clearslash|escape:'html'}<br>Etiquetas:{$photos[n]->metadata}');"
-                            title="Desc:{$photos[n]->description|clearslash|escape:'html'} - Tags:{$photos[n]->metadata}" />
+                            onmouseout="UnTip()"
+                            onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)"
                     {/if}
                 </a>
             </div>
