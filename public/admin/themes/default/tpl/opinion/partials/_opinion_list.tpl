@@ -16,7 +16,7 @@
 <table class="listing-table">
 	<thead>
 		<tr>
-			<th style="width:15px;"></th>
+			<th style="width:15px;">  <input type="checkbox" id="toggleallcheckbox"> </th>
 			{if  $type_opinion eq '0'}
 			<th style="width:150px;">{t}Author name{/t}</th> {/if}
 			<th>{t}Title{/t}</th>

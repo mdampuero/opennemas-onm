@@ -11,7 +11,7 @@
 <table class="listing-table">
 	<thead>
 		<tr>
-			<th style="width:30px;"></th>
+			<th style="width:30px;"> <input type="checkbox" id="toggleallcheckbox"></th>
 			<th style="width:160px;">{t}Author{/t}</th>
 			<th>{t}Title{/t}</th>
 			<th class="center" style="width:70px;">{t}Views{/t}</th>
