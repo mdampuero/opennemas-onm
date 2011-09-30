@@ -45,7 +45,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />{t}Cancel{/t}
                      </a>
                 {else}
-                    <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.get.page}');" title="{t}Go back{/t}">
+                    <a href="#" onClick="cancel('{$smarty.session.desde}','{$smarty.request.category}','{$smarty.request.page}');" title="{t}Go back{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
 
