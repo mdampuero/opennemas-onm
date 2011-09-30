@@ -15,7 +15,38 @@ namespace Onm\Instance;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    Git: $Id: Settings.php Mér Xul 13 01:06:01 2011 frandieguez $
  */
-class InstanceManager {
+class InstanceManager
+{
+    
+    private $_connnection = null;
+    
+    /**
+     * @var Onm\Request Singleton instance
+     */
+    protected static $_instance;
+    
+    /*
+     * Initializes the Request object
+     * 
+     */
+    public function __construct()
+    {
+        $this->_connection = self::getConnection();
+        return $this;
+    }
+    
+    /**
+     * Retrieve singleton instance
+     *
+     * @return Zend_Loader_Autoloader
+     */
+    public static function getInstance()
+    {
+        if (null === self::$_instance) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
     
     /**
      * Fetches one onm instance from DB given a server name
@@ -26,16 +57,14 @@ class InstanceManager {
      * @return stdClass dummy object with properties for the loaded instance
      * @return false  if the instance doesn't exists
      */
-    static public function load( $serverName )
+    public function load( $serverName )
     {
-        $connection = self::getConnection();
-        
         //TODO: improve search for allowing subdomains with wildcards
         $sql = "SELECT * FROM instances WHERE domains LIKE '%{$serverName}%' LIMIT 1";
-        $rs = $connection->Execute($sql);
+        $rs = $this->_connection->Execute($sql);
         
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $errorMsg = $this->_connection->ErrorMsg();
             return false;
         }
 
@@ -83,14 +112,13 @@ class InstanceManager {
      * Gets a list of instances
      * 
      */
-    static public function getListOfInstances()
+    public function getListOfInstances()
     {
         
         $instances = array();
-        $connection = self::getConnection();
         
-                $sql = "SELECT * FROM instances";
-        $rs = $connection->Execute($sql);
+        $sql = "SELECT * FROM instances";
+        $rs = $this->_connection->Execute($sql);
         
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
@@ -114,17 +142,16 @@ class InstanceManager {
      * Gets one instances
      * 
      */
-    static public function read($id)
+    public function read($id)
     {
         
         $instances = array();
-        $connection = self::getConnection();
         
         $sql = "SELECT * FROM instances WHERE id = ?";
-        $rs = $connection->Execute($sql, array($id));
+        $rs = $this->_connection->Execute($sql, array($id));
         
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $errorMsg = $rs->ErrorMsg();
             return false;
         }
 
@@ -134,8 +161,6 @@ class InstanceManager {
         }
         $instance->settings = unserialize($instance->settings);
         
-        
-
         return $instance;
     }
     
@@ -144,12 +169,10 @@ class InstanceManager {
      * 
      * @param $id
      */
-    static public function changeActivated($id, $flag)
+    public function changeActivated($id, $flag)
     {
-        $connection = self::getConnection();
-        
         $sql = "UPDATE instances SET activated = ? WHERE id = ?";
-        $rs = $connection->Execute($sql, array($flag, $id));
+        $rs = $this->_connection->Execute($sql, array($flag, $id));
         
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
@@ -164,10 +187,8 @@ class InstanceManager {
      * 
      * @param $data
      */
-    static public function update($data)
+    public function update($data)
     {
-        $connection = self::getConnection();
-        
         $sql = "UPDATE instances SET name=?, domains=?, activated=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
@@ -177,7 +198,7 @@ class InstanceManager {
             $data['settings'],
             $data['id']
         );
-        $rs = $connection->Execute($sql, $values);
+        $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
             return false;
@@ -190,14 +211,12 @@ class InstanceManager {
      * 
      * @param $id
      */
-    static public function delete($id)
+    public function delete($id)
     {
-        $connection = self::getConnection();
-        
         $sql = "DELETE FROM instances WHERE id=?";
-        $rs = $connection->Execute($sql, array($id));
+        $rs = $this->_connection->Execute($sql, array($id));
         if (!$rs) {
-            $errorMsg = $connection->ErrorMsg();
+            $errorMsg = $this->_connection->ErrorMsg();
             return false;
         }
         return true;
@@ -208,10 +227,8 @@ class InstanceManager {
      * 
      * @param $id
      */
-    static public function create($data)
+    public function create($data)
     {
-        $connection = self::getConnection();
-        
         $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
                 VALUES (?, ?, ?, ?)";
         $values = array(
@@ -221,9 +238,9 @@ class InstanceManager {
             $data['activated'],
             $data['settings'],
         );
-        $rs = $connection->Execute($sql, $values);
+        $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
-            echo $connection->ErrorMsg();
+            echo $this->_connection->ErrorMsg();
             return false;
         }
         

@@ -35,7 +35,8 @@ if (file_exists($configFile)) {
     \Application::initAutoloader('*');
     
     // Loads one ONM instance from database
-    $instance = \Onm\Instance\InstanceManager::load($_SERVER['SERVER_NAME']);
+    $im = \Onm\Instance\InstanceManager::getInstance();
+    $instance = $im->load($_SERVER['SERVER_NAME']);
     if (!$instance) {
         // This instance
         echo 'Instance not found';
