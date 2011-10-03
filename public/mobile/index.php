@@ -1,5 +1,5 @@
 <?php
-require('../libs/urldispatcher.class.php');
+require('../../vendor/UrlDispatcher.php');
 define('BASE_PATH', '/mobile');
 
 $routes = array(
