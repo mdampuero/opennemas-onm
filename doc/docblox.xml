@@ -28,7 +28,8 @@
     </transformations>
     <files>
         <directory>public/core</directory>
-        <directory>public/libs/Panorama/</directory>
-        <directory>public/libs/Onm/</directory>
+        <directory>public/models</directory>
+        <directory>vendor/Panorama/</directory>
+        <directory>vendor/Onm/</directory>
     </files>
 </docblox>

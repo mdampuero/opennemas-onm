@@ -68,17 +68,23 @@ class InstanceManager
             return false;
         }
 
-        $instance = new \stdClass();
-        foreach ($rs->fields as $key => $value ) {
-            $instance->{$key} = $value;
+        //If found matching instance initialize it
+        if ($rs->fields) {
+            $instance = new \stdClass();
+            foreach ($rs->fields as $key => $value ) {
+                $instance->{$key} = $value;
+            }
+            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+            $instance->settings = unserialize($instance->settings);
+            foreach ($instance->settings as $key => $value ) {
+                define($key, $value);
+            }
+    
+            return $instance;   
+        } else {
+            return false;
         }
-        define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-        $instance->settings = unserialize($instance->settings);
-        foreach ($instance->settings as $key => $value ) {
-            define($key, $value);
-        }
-
-        return $instance;
+        
     }
     
     /*
@@ -190,15 +196,16 @@ class InstanceManager
      */
     public function update($data)
     {
-        $sql = "UPDATE instances SET name=?, domains=?, activated=?, settings=? WHERE id=?";
+        $sql = "UPDATE instances SET name=?, internal_name=?, domains=?, activated=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
             $data['activated'],
-            $data['settings'],
+            serialize($data['settings']),
             $data['id']
         );
+        
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
             $errorMsg = $connection->ErrorMsg();
@@ -231,33 +238,39 @@ class InstanceManager
     public function create($data)
     {
         $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
-                VALUES (?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?)";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
             $data['activated'],
-            $data['settings'],
+            serialize($data['settings']),
         );
+        
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
             echo $this->_connection->ErrorMsg();
             return false;
         }
         
+        global $onmInstancesConnection;
+        $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
+        $conn->Connect(
+            $onmInstancesConnection['BD_HOST'],
+            $onmInstancesConnection['BD_USER'],
+            $onmInstancesConnection['BD_PASS']
+        );
         
-        $connection2 = self::getConnection($data['settings']);
-        $rs = $connection2->Execute("CREATE DATABASE {$data['settings']['BD_DATABASE']}");
-        if (!$rs) {
-            echo $connection2->ErrorMsg();
-        }
         
-        $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-        $sql = file_get_contents($exampleDatabasePath);
-        $rs = $connection2->Execute($sql);
-        if (!$rs) {
-            echo $connection2->ErrorMsg();
+        $rs = $conn->Execute("CREATE DATABASE {$data['settings']['BD_DATABASE']}");
+        
+        if ($rs) {
+            $connection2 = self::getConnection($data['settings']);
+            $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
+            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']} -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
+            exec($execLine);
         }
+        mkdir(SITE_PATH.DS.'media'.DS.$data['internal_name']);
         
         return true;
     }
