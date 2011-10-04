@@ -123,7 +123,7 @@ if($('starttime')) {
 										{section name=su loop=$subcat[as]}
 											{if $subcat[as][su]->internal_category eq 1}
 												<option value="{$subcat[as][su]->pk_content_category}"
-												{if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+												{if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
 											{/if}
 										{/section}
 										{/acl}
