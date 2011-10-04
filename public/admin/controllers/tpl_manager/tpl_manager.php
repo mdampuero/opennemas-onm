@@ -142,7 +142,8 @@ function buildFilter()
     return array( $filter, implode('&', $params), $page, $items_page);
 }
 
-$tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH, new Template(TEMPLATE_USER));
+$template = new Template(TEMPLATE_USER);
+$tplManager = new TemplateCacheManager($template->templateBaseDir, $template);
 // Get $filter and $params values
 list($filter, $params, $page, $items_page) = buildFilter();
 

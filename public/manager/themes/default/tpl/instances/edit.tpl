@@ -137,7 +137,8 @@ table.adminform {
                             <label for="internal_name">{t}Internal name:{/t}</label>
                         </th>
                         <td>
-                            <input type="text" id="internal_name" name="internal_name" value="{$instance->internal_name|default:""}">
+                            <input type="text" id="internal_name" name="internal_name" value="{$instance->internal_name}" {if isset($instance)}readonly="readonly"{/if}>
+                                
                         </td>
                         <td>
                             <div class="help-block margin-left-1 red">
@@ -149,9 +150,18 @@ table.adminform {
                     
                     <tr>
                         <th scope="row">
-                            <label for="internal_name">{t}Template:{/t}</label>
+                            <label for="template_user">{t}Template:{/t}</label>
                         </th>
-                        <td><input name="settings[TEMPLATE_USER]" value="{$instance->settings['TEMPLATE_USER']}" type="text"></input></td>
+                        <td>
+                            {html_options name="settings[TEMPLATE_USER]" options=$templates selected=$instance->settings['TEMPLATE_USER']}
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="media_url">{t}External media url:{/t}</label>
+                        </th>
+                        <td><input name="settings[MEDIA_URL]" value="{$instance->settings['MEDIA_URL']}" type="text"></input></td>
                     </tr>
                 </tbody>
             </table>

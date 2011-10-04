@@ -26,29 +26,40 @@ class Template extends Smarty
     {
         // Call the parent constructor
         parent::__construct();
-
-        $this->error_reporting = E_ALL & ~E_NOTICE;
-
-        /**
-         * Add global plugins path
-         */
-        $this->plugins_dir[]= realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
         
-        
+        if (!file_exists(CACHE_PATH.DS.'smarty')) {
+            mkdir(CACHE_PATH.DS.'smarty');
+        }
+
         // Parent variables
-        $baseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
-        $this->template_dir     = realpath($baseDir.'tpl/').'/';
-        $this->config_dir       = realpath($baseDir.'config/').'/';
+        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
+        $this->template_dir     = realpath($this->templateBaseDir.'tpl/').'/';
         
+        // If config dir exists copy it to cache directory to make instance aware.
+        if (!file_exists(CACHE_PATH.DS.'smarty'.DS.'config')
+            && file_exists($this->templateBaseDir.'config')
+        ) {
+            $this->copyDefaultConfigDir(
+                $this->templateBaseDir.'config',
+                CACHE_PATH.DS.'smarty'.DS.'config'
+            );
+        }
+        $this->config_dir       = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
+            
+        // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
             if (!file_exists($directory)) {
-                mkdir($directory, 755, true);
+                mkdir($directory);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
         
-        $this->plugins_dir[]    = realpath($baseDir.'plugins/').'/';
+        $this->error_reporting = E_ALL & ~E_NOTICE;
+
+        // Add global plugins path
+        $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
+        $this->plugins_dir[]    = realpath($this->templateBaseDir.'plugins/').'/';
         $this->caching          = false;
         $this->allow_php_tag    = true;
 
@@ -80,6 +91,33 @@ class Template extends Smarty
         $this->theme = $theme;
         $this->assign('THEME', $theme);
 
+    }
+    
+    /*
+     * Copy default template config to cache directory
+     * 
+     */
+    public function copyDefaultConfigDir($source, $target)
+    {
+        if ( is_dir( $source ) ) {
+            @mkdir( $target );
+            $d = dir( $source );
+            while ( FALSE !== ( $entry = $d->read() ) ) {
+                if ( $entry == '.' || $entry == '..' ) {
+                    continue;
+                }
+                $Entry = $source . '/' . $entry; 
+                if ( is_dir( $Entry ) ) {
+                    $this->copyDefaultConfigDir( $Entry, $target . '/' . $entry );
+                    continue;
+                }
+                copy( $Entry, $target . '/' . $entry );
+            }
+     
+            $d->close();
+        }else {
+            copy( $source, $target );
+        }   
     }
 
     function setFilters( $filters=array() )
@@ -187,13 +225,8 @@ class TemplateAdmin extends Template {
 
         $this->setFilters($filters);
 
-        // Trying to unload indent_html
-        //$this->loadFilter("output","indent_html");
-        //$this->unregisterFilter("output", "")
-        //unset($smarty->autoload_filters["output"]["indent_html"]);
-
         // Parent variables
-        $baseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
+        $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
         
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
@@ -203,9 +236,9 @@ class TemplateAdmin extends Template {
             $this->{$value."_dir"} = realpath($directory).'/';
         }
         
-        $this->template_dir	= $baseDir.'tpl/';
-        $this->config_dir	= $baseDir.'config/';
-        $this->plugins_dir[]= $baseDir.'plugins/';
+        $this->template_dir	= $this->templateBaseDir.'tpl/';
+        $this->config_dir	= $this->templateBaseDir.'config/';
+        $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
         $this->caching	= false;
         $this->allow_php_tag = true;
 
@@ -259,7 +292,7 @@ class TemplateManager extends Template {
         $this->setFilters($filters);
 
         // Parent variables
-        $baseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
+        $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
         
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
@@ -269,10 +302,10 @@ class TemplateManager extends Template {
             $this->{$value."_dir"} = realpath($directory).'/';
         }
         
-        $this->template_dir	= $baseDir.'tpl/';
+        $this->template_dir	= $this->templateBaseDir.'tpl/';
         
-        $this->config_dir	= $baseDir.'config/';
-        $this->plugins_dir[]= $baseDir.'plugins/';
+        $this->config_dir	= $this->templateBaseDir.'config/';
+        $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
         $this->caching	= false;
         $this->allow_php_tag = true;
 

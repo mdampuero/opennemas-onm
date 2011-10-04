@@ -15,7 +15,7 @@
             <tbody>
                 <tr valign="top">
                     <td class="center">
-                        Here you can manager global settings about this onm-multiinstance.
+                        Here you can manage global settings about this onm-multiinstance.
                     </td>
                 </tr>
             </tbody>

@@ -15,55 +15,56 @@ $im = im::getInstance();
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
+// Change this to get dinamically templates from folder
+$templates = array('idealgallego' => 'idealgallego', 'nuevatribuna' => 'nuevatribuna');
+$tpl->assign('templates', $templates);
+
 switch($action) {
     
-    case 'edit': {
+    case 'edit':
         $id = $_REQUEST['id'];
         $instance = $im->read($id);
         
         $tpl->assign('instance', $instance);
         $tpl->display('instances/edit.tpl');
         break;
-    }
 
-    case 'new': {
+    case 'new':
         
         $tpl->display('instances/edit.tpl');
         break;
-    }
 
-    case 'delete': {
+    case 'delete':
         $id = $_REQUEST['id'];
         $deletion = $im->delete($id);
 
         Application::forward('?action=list');
         break;
-    }
 
-    case 'save': {
+    case 'save':
+        
         $data = array(
-                'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
-                'name' => filter_input(INPUT_POST, 'name' , FILTER_SANITIZE_STRING),
-                'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
-                'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
-                'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-                'settings' => serialize($_POST['settings'])
-            );
+            'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
+            'name' => filter_input(INPUT_POST, 'name' , FILTER_SANITIZE_STRING),
+            'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
+            'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
+            'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
+            'settings' => $_POST['settings']
+        );
             
         if (intval($data['id']) > 0) {
             
             $instance = $im->update($data);
             
         } else {
-            $instance = $im->reate($data);
+            $instance = $im->create($data);
         }
 
         Application::forward('?action=list');
 
         break;
-    }
 
-    case 'changeactivated': {
+    case 'changeactivated':
         $instance = $im->read($_REQUEST['id']);
 
         $available = ($instance->activated+1) % 2;
@@ -78,10 +79,9 @@ switch($action) {
 
         Application::forward($_SERVER['PHP_SELF'].'?action=list');
         break;
-    }
 
     case 'list':
-    default: {
+    default:
         //$widgets = $cm->find_by_category('Widget', 3, 'fk_content_type=12 ', 'ORDER BY created DESC');
         
         $instances = $im->getListOfInstances();
@@ -91,5 +91,4 @@ switch($action) {
         $tpl->assign('instances', $instances);
         $tpl->display('instances/list.tpl');
         break;
-    }
 }

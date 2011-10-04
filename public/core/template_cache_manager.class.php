@@ -29,7 +29,8 @@ class TemplateCacheManager
     public function __construct($themeDir, $smarty = null) {
 
         $this->_smarty = (!is_null($smarty)) ? $smarty : new Template($themeDir);
-        $this->_cacheDir = $themeDir . 'cache/';
+        $this->_cacheDir = $this->_smarty->cache_dir;
+        
     }
 
     /**
