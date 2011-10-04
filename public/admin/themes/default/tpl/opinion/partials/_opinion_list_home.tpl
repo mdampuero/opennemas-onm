@@ -1,4 +1,4 @@
-{if $num_dir > 0}
+{if count($director) > 0}
 
 <table class="adminheading">
 	<tr>
@@ -24,33 +24,33 @@
 	</thead>
 	<tr>
 		<td colspan='11'>
-			{if $num_dir > 0}
-		    <table id="{$director[0]->id}" style="width:100%">
+            {section name=c loop=$director}
+		    <table id="{$director[c]->id}" style="width:100%">
 				<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 					<td style="width:35px;">
-						<input type="checkbox" class="minput"  id="selected_0" name="selected_fld[]" value="{$director[0]->id}"  style="cursor:pointer;">
+						<input type="checkbox" class="minput"  id="selected_0" name="selected_fld[]" value="{$director[c]->id}"  style="cursor:pointer;">
 					</td>
 					<td onClick="javascript:document.getElementById('selected_0').click();" style="width:165px;">
 						{t}Director{/t}
 					</td>
 					<td onClick="javascript:document.getElementById('selected_0').click();" >
-						{$director[0]->title|clearslash}
+						{$director[c]->title|clearslash}
 					</td>
 					<td class="center" style="width:80px;">
-						{$director[0]->views}
+						{$director[c]->views}
 					</td>
 					<td class="center" style="width:80px;">
-						{$director[0]->ratings}
+						{$director[c]->ratings}
 					</td>
 					<td class="center" style="width:70px;">
-						{$director[0]->comments}
+						{$director[c]->comments}
 					</td>
 					<td class="center" style="width:78px;">
-						{$director[0]->created}
+						{$director[c]->created}
 					</td>
 					<td class="center" style="width:55px;">
-						{if $director[0]->in_home == 1}
-								<a href="?id={$director[0]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
+						{if $director[c]->in_home == 1}
+								<a href="?id={$director[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category}" class="no_home" title="Sacar de portada" ></a>
 						{else}
 								<a href="?id={$director[0]->id}&amp;action=inhome_status&amp;status=1&amp;category={$category}" class="go_home" title="Meter en portada" ></a>
 						{/if}
@@ -59,22 +59,22 @@
 						<ul class="action-buttons">
 							<li>
 								{if $director[0]->content_status == 1}
-									<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+									<a href="?id={$director[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
 										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
 									</a>
 								{else}
-									<a href="?id={$director[0]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+									<a href="?id={$director[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
 										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
 									</a>
 								{/if}
 							</li>
 							<li>
-								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$director[0]->id}');" title="Modificar">
+								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$director[c]->id}');" title="Modificar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 								</a>
 							</li>
 							<li>
-								<a href="#" onClick="javascript:delete_opinion('{$director[0]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
+								<a href="#" onClick="javascript:delete_opinion('{$director[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
@@ -82,7 +82,7 @@
 					</td>
 				</tr>
 			</table>
-			{/if}
+            {/section}
 		</td>
 	</tr>
 </table>
@@ -187,8 +187,8 @@
 
 <br>
 {/if}
-
-{if count($num_edit)}
+ 
+{if  count($opinions) > 0}
 
 <table class="adminheading">
 	<tr>

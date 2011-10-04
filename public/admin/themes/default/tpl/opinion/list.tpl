@@ -56,6 +56,15 @@
                     </a>
                 </li>
             {/if}
+            {acl isAllowed="OPINION_SETTINGS"}
+                <li class="separator"></li>
+                    <li>
+                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Configurations{/t}
+                        </a>
+                    </li>
+             {/acl}
              <li class="separator"> </li>
 
             <li >
@@ -68,38 +77,24 @@
 </div>
     <div class="wrapper-content">
 
+        {render_messages}
+     
         <div>
             <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}HOME{/t}</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}HOME{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" id="editorial" {if $type_opinion=='1'}class="active"{/if}>{t}Editorial{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" id="editorial" {if $type_opinion=='1'}class="active"{/if}>{t}Editorial{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" id="director" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</font></a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" id="director" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</a>
                 </li>
             </ul>
-
-            {if $type_opinion eq '0'}
-                {assign value='Opinión del Autor' var='accion'}
-            {elseif $type_opinion eq '1'}
-                {assign value='Editorial' var='accion'}
-            {elseif $type_opinion eq '2'}
-                {assign value='Opinión del Director' var='accion'}
-              {elseif $type_opinion eq '-1'}
-                {assign value='Home' var='accion'}
-            {/if}
-
-            {if (isset($smarty.get.alert) && ($smarty.get.alert neq "")) or (isset($msg_alert) && ($msg_alert neq ""))}
-            <div class="notice" style="margin-top:3px;">
-                <p>{$smarty.get.alert|default:""}</p>
-                <p>{$msg_alert|default:""}</p>
-            </div>
-            {/if}
+ 
             <div id="list_opinion">
                  {if $type_opinion=='-1'}
                      {include file="opinion/partials/_opinion_list_home.tpl"}

@@ -1,32 +1,22 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-use Onm\Message as m;
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-
+//Check if module is activated in this onm instance
+\Onm\Module\ModuleManager::checkActivatedOrForward('OPINION_MANAGER');
 
 /**
  * Check privileges
@@ -49,15 +39,13 @@ if (!isset($_SESSION['desde'])) {
     $_SESSION['desde'] = 'opinion';
 }
 
+$page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
 
-if (!isset($_REQUEST['page'])) {
-     $_REQUEST['page'] = 1;
-}
 
 if (!isset($_SESSION['type'])) {
      $_SESSION['type'] = 0;
 }
-
+ 
 if (!isset($_REQUEST['type_opinion'])) {
     $_REQUEST['type_opinion'] = -1;
 }
@@ -67,74 +55,85 @@ $cm = new ContentManager();
 $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
 
 
-if(isset($_REQUEST['action'])) {
-    switch($_REQUEST['action']) {
+$action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+if (!isset($action)) {
+    $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
+}
+
+
+    switch($action) {
         case 'list':
-            $order = ' position ASC, created DESC';
-            $opinion = new Opinion();
 
-
-            $comment = new Comment();
-
+            $configurations = s::get('opinion_settings');
+            
+            $numEditorial = $configurations['total_editorial'];
+            $numDirector = $configurations['total_director'];
 
             $cm = new ContentManager();
-            if($_REQUEST['type_opinion']!=-1) {
+            $rating = new Rating();
+            $comment = new Comment();
+
+            if($_REQUEST['type_opinion'] != -1) {
                 //Para visualizar la HOME
                 // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
                 list($opinions, $pager)= $cm->find_pages('Opinion', 'type_opinion=\''.$_REQUEST['type_opinion'].'\'',
-                                                         'ORDER BY created DESC ', $_REQUEST['page'], 16);
+                                                         'ORDER BY created DESC ', $page, 16);
 
                 $tpl->assign('paginacion', $pager->links);
                 $_SESSION['type'] = $_REQUEST['type_opinion'];
                 $number = 2;
 
                 $opinion=new Opinion();
-                $total=$opinion->count_inhome_type($_REQUEST['type_opinion']);
+                $total = $opinion->count_inhome_type($_REQUEST['type_opinion']);
                 $alert="";
 
-                if(($_REQUEST['type_opinion'] == 1) && ($total != 2)) {
+                if (($_REQUEST['type_opinion'] == 1) && ($total != $numEditorial)) {
                     $type = 'editorial';
-                } elseif(($_REQUEST['type_opinion'] == 2) && ($total != 1)) {
+                    $number = $numEditorial;
+                } elseif (($_REQUEST['type_opinion'] == 2) && ($total != $numDirector)) {
                      $type = 'opinion del director';
+                     $number = $numDirector;
                 }
-                m::add( sprintf(_("You must put %d opinions in the HOME widget"), $number) );
-               // $tpl->assign('msg_alert',$alert);
+                if (!empty($type)) {
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $number, $type) );
+                }
             } else {
+
                 $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                      'ORDER BY type_opinion DESC, '.$order.' ');
-
+                                      'ORDER BY type_opinion DESC, position ASC, created DESC');
+ 
                 $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
-                                       'ORDER BY created DESC LIMIT 0,2');
+                                       'ORDER BY created DESC LIMIT 0,'.$numEditorial);
 
-                $num_edit = count($editorial); //Para manipular el section
-                $tpl->assign('num_edit', $num_edit);
+
                 $director = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=2',
-                                      'ORDER BY created DESC LIMIT 0,1');
-
-                $num_dir = count($director); //Para manipular el section
-                $tpl->assign('num_dir', $num_dir);
-
-                $rating = new Rating();
-
-                foreach($editorial as $opin) {
-                    $todos = $comment->get_comments( $opin->id );
-                    $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                                      'ORDER BY created DESC LIMIT 0,'.$numDirector);
+ 
+                if ((count($editorial) != $numEditorial)) {
+                    $type = 'editorial';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                }
+                if ((count($director) != $numDirector)) {
+                     $type = 'opinion del director';
+                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
                 }
 
-                foreach($director as $opin) {
-                    $todos = $comment->get_comments( $opin->id );
-                    $opin->comments = count($todos);
-                    $opin->ratings = $rating->get_value($opin->id);
+                if (!empty($editorial)) {
+                    foreach($editorial as $opin) {
+                        $todos = $comment->get_comments( $opin->id );
+                        $opin->comments = count($todos);
+                        $opin->ratings = $rating->get_value($opin->id);
+                    }
                 }
-                $alert ="";
-                 if($num_edit != 2) {
-                    $alert .= 'Tiene que poner dos opiniones de editorial. Actualmente hay: '.$num_edit.' editorial <br /> ';
+
+                if (!empty($director)) {
+                    foreach($director as $opin) {
+                        $todos = $comment->get_comments( $opin->id );
+                        $opin->comments = count($todos);
+                        $opin->ratings = $rating->get_value($opin->id);
+                    }
                 }
-                if($num_dir!= 1) {
-                     $alert .= 'Tiene que poner una opinión del director. Actualmente hay: '.$num_dir.' opinion del director <br /> ';
-                }
-                $tpl->assign('msg_alert',$alert);
+              
                 $tpl->assign('editorial', $editorial);
                 $tpl->assign('director', $director);
 
@@ -142,18 +141,17 @@ if(isset($_REQUEST['action'])) {
             }
 
             $tpl->assign('type_opinion', $_REQUEST['type_opinion']);
-
-            $rating = new Rating();
-
+ 
             $op_comment = $names = array();
 
-
-            foreach ( $opinions as $opin) {
-                $todos = $comment->get_comments( $opin->id );
-                $aut = new Author($opin->fk_author);
-                $names[] = $aut->name;
-                $op_comment[] = count($todos);
-                $ratings[] = $rating->get_value($opin->id);
+            if (!empty($opinions)) {
+                foreach ( $opinions as $opin) {
+                    $todos = $comment->get_comments( $opin->id );
+                    $aut = new Author($opin->fk_author);
+                    $names[] = $aut->name;
+                    $op_comment[] = count($todos);
+                    $ratings[] = $rating->get_value($opin->id);
+                }
             }
 
             $tpl->assign('op_comment', $op_comment);
@@ -161,11 +159,13 @@ if(isset($_REQUEST['action'])) {
             if(isset($op_rating)){
                 $tpl->assign('ratings', $op_rating);
             }
+
             $aut = new Author();
             $autores = $aut->all_authors(NULL,'ORDER BY name');
             $tpl->assign('autores', $autores);
 
             $tpl->assign('opinions', $opinions);
+
             $_SESSION['desde'] = 'opinion';
             $_SESSION['_from'] = 'opinion.php';
 
@@ -222,29 +222,35 @@ if(isset($_REQUEST['action'])) {
             Acl::checkOrForward('OPINION_CREATE');
             $opin = new Opinion();
             $_POST['publisher'] = $_SESSION['userid'];
-
-            $alert = '';
-
-            if($opin->create($_POST)) {
+ 
+            if ($opin->create($_POST)) {
                 // FIXME: buscar otra forma de hacerlo
                 /* Eliminar caché opinion cuando se crean nuevas opiniones */
-                require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            /*    require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
                 $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
                 $tplManager->delete('opinion|1');
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
                 }
+             * 
+             */
                 $opinion = new Opinion($opin->id);
                 $total = $opinion->count_inhome_type();
 
-                if(($opinion->type_opinion == 1) && ($total != 2)) {
-                    $alert = 'Tiene que poner dos opiniones de editorial. Actualmente hay: '.$total.' editorial';
-                } elseif(($opinion->type_opinion == 2) && ($total != 1)) {
-                     $alert = 'Tiene que poner una opinión del director. Actualmente hay: '.$total.' opinion del director';
+                $configurations = s::get('opinion_settings');
+                $numEditorial = $configurations['total_editorial'];
+                $numDirector = $configurations['total_director'];
+
+                if (($opinion->type_opinion == 1) && ($total != $numEditorial)) {
+                    $type = 'editorial';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                } elseif (($opinion->type_opinion == 2) && ($total != $numDirector)) {
+                     $type = 'opinion del director';
+                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
                 }
 
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                     $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
+                                     $_SESSION['type'] .  '&page=' . $page);
             } else {
                 $tpl->assign('errors', $opinion->errors);
             }
@@ -265,15 +271,11 @@ if(isset($_REQUEST['action'])) {
                     $opinionCheck->fk_user != $_SESSION['userid']) {
                 $msg ="Only read";
             }
+            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $opinionCheck->fk_user != $_SESSION['userid']) {
+                m::add(_("You can't modify this opinion because you don't have enought privileges.") );
+            }
 
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-
-            //Gestion del autor
-            if($_REQUEST['type_opinion'] == 2){
-                $_REQUEST['fk_author'] = 58; //Director, para que coja las fotos.
-            } elseif ($_REQUEST['type_opinion'] == 1){
-                $_REQUEST['fk_author'] = '';
-            }
 
             $opinion = new Opinion();
             $opinion->update($_REQUEST);
@@ -288,7 +290,7 @@ if(isset($_REQUEST['action'])) {
                         'action=search&'.
                         'stringSearch='.$_GET['stringSearch'].'&'.
                         'category='.$_SESSION['_from'].'&'.
-                        'page=' . $_REQUEST['page']);
+                        'page=' . $page);
                 } else {
                     $_SESSION['desde'] = 'list';
                     $_SESSION['type'] = $_REQUEST['type_opinion'];
@@ -298,12 +300,12 @@ if(isset($_REQUEST['action'])) {
             if($_SESSION['desde'] == 'index_portada') {
                 Application::forward('index.php');
             }elseif( $_SESSION['desde']=='list_pendientes'){
-                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$_REQUEST['page']);
+                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$page);
             }elseif ($_SESSION['desde'] == 'list') {
-                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$_REQUEST['page']);
+                Application::forward('/admin/article.php?action='.$_SESSION['desde'].'&category='.$_SESSION['categoria'].'&page='.$page);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                 $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
+                                 $_SESSION['type'] . '&alert=' . $alert . '&page=' . $page);
             }
         break;
 
@@ -325,15 +327,10 @@ if(isset($_REQUEST['action'])) {
                 if( !Acl::isAdmin() &&
                         !Acl::check('CONTENT_OTHER_UPDATE') &&
                         $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
-                    Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
+                    m::add(_("You can't modify this opinion because you don't have enought privileges.") );
                 }
 
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-                if($_REQUEST['type_opinion'] == 2) {
-                    $_REQUEST['fk_author'] = 58; //Director, para que coja las fotos.
-                }elseif($_REQUEST['type_opinion'] == 1){
-                      $_REQUEST['fk_author'] = '';
-                }
 
                 $opinion = new Opinion();
                 $opinion->update($_REQUEST);
@@ -348,8 +345,10 @@ if(isset($_REQUEST['action'])) {
             $opinionCheck = new Opinion();
             $opinionCheck->read($_REQUEST['id']);
 
-            if(!Acl::isAdmin() && $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
-                Acl::Deny('Acceso no permitido. Usted no es el editor de esta opinión');
+            if( !Acl::isAdmin() &&
+                    !Acl::check('CONTENT_OTHER_UPDATE') &&
+                    $opinionCheck->fk_user_last_editor != $_SESSION['userid']) {
+                m::add(_("You can't delete this opinion because you don't have enought privileges.") );
             }
 
             $opinion = new Opinion($_REQUEST['id']);
@@ -394,10 +393,10 @@ if(isset($_REQUEST['action'])) {
                 $tplManager->delete('opinion|1');
             }
             if( $_SESSION['desde']=='list_pendientes'){
-                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$page);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $opinion->category . '&page=' . $_REQUEST['page']);
+                                 $opinion->category . '&page=' . $page);
             }
         break;
 
@@ -416,10 +415,10 @@ if(isset($_REQUEST['action'])) {
                 $opinion->set_inhome($status,$_SESSION['userid']);
             }
             if( $_SESSION['desde']=='list_pendientes'){
-                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$page);
             }else{
                 Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                 $_SESSION['type'] . '&page=' . $_REQUEST['page']);
+                                 $_SESSION['type'] . '&page=' . $page);
             }
         break;
 
@@ -439,7 +438,7 @@ if(isset($_REQUEST['action'])) {
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                 $_SESSION['type'] . '&page=' . $_REQUEST['page']);
+                                 $_SESSION['type'] . '&page=' . $page);
         break;
 
         case 'mdelete':
@@ -448,7 +447,6 @@ if(isset($_REQUEST['action'])) {
                 $fields = $_REQUEST['selected_fld'];
 
                 $msg = 'Las opiniones ';
-                $alert = '';
 
                 if(is_array($fields)) {
                     foreach($fields as $i) {
@@ -466,11 +464,12 @@ if(isset($_REQUEST['action'])) {
                     }
                 }
             }
-
-            $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
+            if($alert =='ok') {
+                $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
+                m::add($msg);
+            }
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                 $_SESSION['type'] . '&msgdelete=' . $alert . '&msg=' . $msg .
-                                 '&page=' . $_REQUEST['page']);
+                                 $_SESSION['type'] .'&page=' . $page);
         break;
 
         case 'inhome_status':
@@ -480,31 +479,30 @@ if(isset($_REQUEST['action'])) {
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $total = $opinion->count_inhome_type();
-            if($status == 1) {
-                if(($opinion->type_opinion == 1) && ($total >= 2)) {
-                    $alert = 'No se pueden poner más opiniones de editorial';
-
-                } elseif(($opinion->type_opinion == 2) && ($total >= 1)) {
-                    $alert = 'Solo puede poner una opinión del director';
-                } else {
-                     $total++;
+            if (($status == 1) && ($opinion->type_opinion != 1) && ($opinion->type_opinion != 2)) {
+                    $total++;
                     $opinion->set_inhome($status,$_SESSION['userid']);
                     $opinion->set_status($status, $_SESSION['userid']);
                     $opinion->set_available($status, $_SESSION['userid']);
-                }
             } else {
                 $opinion->set_inhome($status, $_SESSION['userid']);
                 $total--;
             }
-            if(($opinion->type_opinion == 1) && ($total < 2)) {
-                 $alert = 'Tiene que poner dos opiniones de editorial';
-            } elseif(($opinion->type_opinion == 2) && ($total < 1)) {
-                 $alert = 'Tiene que poner una opinión del director';
+            $configurations = s::get('opinion_settings');
+            $numEditorial = $configurations['total_editorial'];
+            $numDirector = $configurations['total_director'];
+
+            if (($opinion->type_opinion == 1) && ($total != $numEditorial)) {
+                $type = 'editorial';
+                m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+            } elseif (($opinion->type_opinion == 2) && ($total != $numDirector)) {
+                 $type = 'opinion del director';
+                 m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                                  $_SESSION['type'] . '&alert=' . $alert .
-                                 '&page=' . $_REQUEST['page']);
+                                 '&page=' . $page);
         break;
 
         case 'm_inhome_status':
@@ -519,36 +517,28 @@ if(isset($_REQUEST['action'])) {
                 foreach($fields as $i) {
                     $opinion = new Opinion($i);
                     // FIXME: evitar otros valores erróneos
-                    if($status == 1) {
-                        $total = $opinion->count_inhome_type();
-
-                        if(($opinion->type_opinion == 1) && ($total >= 2)) {
-                            $alert = 'No se pueden poner más opiniones de editorial';
-
-                        } elseif(($opinion->type_opinion == 2) && ($total >= 1)) {
-                            $alert = 'Solo puede poner una opinión del director';
-
-                        } else {
+                    if (($status == 1) && ($opinion->type_opinion != 1)  && ($opinion->type_opinion != 2))  {
                             $opinion->set_inhome($status, $_SESSION['userid']);
                             $opinion->set_status($status, $_SESSION['userid']);
                             $opinion->set_available($status, $_SESSION['userid']);
-                            $total++;
-                        }
-
                     } else {
-                        $opinion->set_inhome($status, $_SESSION['userid']);
-                        //$total--;
+                        $opinion->set_inhome($status, $_SESSION['userid']);                        
                     }
-                    if(($opinion->type_opinion == 1) && ($total < 2)) {
-                        $alert = 'Tiene que poner dos opiniones de editorial';
-                    } elseif(($opinion->type_opinion == 2) && ($total < 1)) {
-                        $alert = 'Tiene que poner una opinión del director';
-                    }
+                }
+                $total = $opinion->count_inhome_type(1);
+                if ($total != $numEditorial) {
+                    $type = 'editorial';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                }
+                $total = $opinion->count_inhome_type(2);
+                if ($total != $numDirector) {
+                     $type = 'opinion del director';
+                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
                 }
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                                 $_SESSION['type'] . '&alert=' . $alert . '&page=' . $_REQUEST['page']);
+                                 $_SESSION['type'] . '&alert=' . $alert . '&page=' . $page);
         break;
 
         case 'save_positions':
@@ -585,12 +575,12 @@ if(isset($_REQUEST['action'])) {
                 $_REQUEST['action'] = 'list'; //Para que sea correcta la paginacion.
 
                 list($opinions, $pager)= $cm->find_pages('Opinion', 'type_opinion=0', 'ORDER BY  created DESC ',
-                                                         $_REQUEST['page'], 16);
+                                                         $page, 16);
             } else {
                 // $opinions = $cm->find('Opinion', 'opinions.fk_author=\''.$_REQUEST['author'].'\' and type_opinion=0',
                 //                                  'ORDER BY created DESC LIMIT 0,20');
                 list($opinions, $pager)= $cm->find_pages('Opinion', 'opinions.fk_author="'.$_REQUEST['author'].'" AND type_opinion=0',
-                                                         'ORDER BY  created DESC ', $_REQUEST['page'], 16);
+                                                         'ORDER BY  created DESC ', $page, 16);
 
                 $params = $_REQUEST['author'];
 
@@ -626,7 +616,7 @@ if(isset($_REQUEST['action'])) {
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])  && ($_SERVER['HTTP_X_REQUESTED_WITH']=="XMLHttpRequest")){
                 $tpl->display('opinion/partials/_opinion_list.tpl');
                 exit(0);
-                // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&type_opinion=0&page='.$_REQUEST['page']);
+                // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&type_opinion=0&page='.$page);
             }
 
         break;
@@ -646,7 +636,7 @@ if(isset($_REQUEST['action'])) {
             foreach($photos as $photo) {
                  if($photo->width < 70) {
                     $_REQUEST['fk_author_img_widget']=$photo->pk_img;
-                 }else{
+                 } else {
                       $_REQUEST['fk_author_img']= $photo->pk_img;
                  }
             }
@@ -726,10 +716,37 @@ if(isset($_REQUEST['action'])) {
             Application::ajax_out($out);
         break;
 
+
+        case 'config':
+
+            $configurationsKeys = array('opinion_settings',);
+            $configurations = s::get($configurationsKeys);
+            $tpl->assign(array(
+                'configs'   => $configurations,
+            ));
+
+            $tpl->display('opinion/config.tpl');
+
+        break;
+
+        case 'save_config':
+
+            Acl::checkOrForward('OPINION_SETTINGS');
+
+            unset($_POST['action']);
+            unset($_POST['submit']);
+ 
+            foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+            m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+            $httpParams = array(array('action'=>'list'),);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+        break;
+
         default:
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
         break;
     }
-} else {
-    Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list');
-}
+ 
