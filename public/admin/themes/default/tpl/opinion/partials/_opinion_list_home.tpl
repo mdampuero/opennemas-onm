@@ -294,7 +294,7 @@
 <tfoot>
 	<tr class="pagination">
 		<td colspan="11" class="center">
-			{$paginacion->links}&nbsp;
+			{$paginacion}&nbsp;
 		</td>
 	</tr>
 </tfoot>

@@ -106,8 +106,9 @@ if(isset($_REQUEST['action'])) {
                 m::add( sprintf(_("You must put %d opinions in the HOME widget"), $number) );
                // $tpl->assign('msg_alert',$alert);
             } else {
-                $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                      'ORDER BY type_opinion DESC, '.$order.' ');
+                list($opinions, $pager)= $cm->find_pages('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+                                         'ORDER BY created DESC ', $_REQUEST['page'], 16);
+                $tpl->assign('paginacion', $pager->links);
 
                 $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
                                        'ORDER BY created DESC LIMIT 0,2');
