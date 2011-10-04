@@ -20,8 +20,8 @@ $slug = filter_input(INPUT_GET,'slug',FILTER_SANITIZE_STRING);
 
 if(isset($slug) ) {
     
-    $page = Static_Page::getPageBySlug($_REQUEST['slug']);
-    
+    $page = Static_Page::getPageBySlug($slug);
+ 
     // if static page doesn't exist redirect to 404 error page.
     if(is_null($page) || (!$page->available)) {
         Application::forward('/404.html');

@@ -234,7 +234,12 @@ class Static_Page extends Content
 
         $slug = preg_replace('/\*%_\?/', '', $slug);
         $sql = 'SELECT pk_static_page
-                FROM `static_pages` WHERE `static_pages`.`slug` LIKE ?';
+                FROM `static_pages`, `contents` WHERE
+                in_litter = 0 AND
+                `contents`.`pk_content`= `static_pages`.`pk_static_page` AND
+                `static_pages`.`slug` LIKE ?
+                ORDER BY  pk_static_page DESC';
+         
         $id = $GLOBALS['application']->conn->GetOne($sql, array($slug));
 
         if ($id === false) {
