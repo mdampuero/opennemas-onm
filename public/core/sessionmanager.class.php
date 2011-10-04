@@ -6,9 +6,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
-define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
-
 /**
  * Explanation for this class.
  *
@@ -68,6 +65,9 @@ class SessionManager implements ArrayAccess
      **/
     public function bootstrap($lifetime=null)
     {
+        // Save the actual lifetime for this session in the session manager
+        $this->lifetime = $lifetime;
+        
         if (is_null($lifetime)
             && !isset($_COOKIE['default_expire'])
         ) {
