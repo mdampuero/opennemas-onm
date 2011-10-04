@@ -41,10 +41,13 @@
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=opinion" {if $mytype=='opinion'}class="active"{/if}>{t}Opinions{/t}</a></li>
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=advertisement" {if $mytype=='advertisement'}class="active"{/if}>{t}Ads{/t}</a></li>
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=comment" {if $mytype=='comment'}class="active"{/if}>{t}Coments{/t}</a></li>
-			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=album" {if $mytype=='album'}class="active"{/if}>{t}Albums{/t}</a></li>-->
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=album" {if $mytype=='album'}class="active"{/if}>{t}Albums{/t}</a></li>
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=photo" {if $mytype=='photo'}class="active"{/if}>{t}Photographies{/t}</a></li>
-			<!--<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=video" {if $mytype=='video'}class="active"{/if}>{t}Videos{/t}</a></li>-->
+			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=video" {if $mytype=='video'}class="active"{/if}>{t}Videos{/t}</a></li>
 			<li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=attachment" {if $mytype=='attachment'}class="active"{/if}>{t}Files{/t}</a></li>
+            <li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=poll" {if $mytype=='poll'}class="active"{/if}>{t}Polls{/t}</a></li>
+            <li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=static_page" {if $mytype=='static_page'}class="active"{/if}>{t}Static Pages{/t}</a></li>
+            <li><a href="{$smarty.server.PHP_SELF}?action=list&mytype=widget" {if $mytype=='widget'}class="active"{/if}>{t}Widgets{/t}</a></li>
 		</ul>
 
         <table class="listing-table">
@@ -66,23 +69,23 @@
                 {section name=c loop=$litterelems}
                 <tr>
                     <td >
-                        <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
+                        <input type="checkbox" class="minput"  id="selected{$smarty.section.c.iteration}" name="selected_fld[]" value="{$litterelems[c]->id}"  style="cursor:pointer;" >
                     </td>
                     <td onClick="javascript:document.getElementById('selected{$smarty.section.c.iteration}').click();">
                         {$litterelems[c]->title|clearslash}
                     </td>
-                    <td class="center">{$secciones[c]}</td>
+                    <td class="center">{$litterelems[c]->category_title}</td>
                     <td class="center">{$litterelems[c]->views}</td>
                     <td class="center">{$litterelems[c]->created}</td>
                     <td class="center">
                         <ul class="action-buttons">
                             <li>
-                               <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
+                               <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=no_in_litter&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="Recuperar">
                                    <img class="portada" src="{$params.IMAGE_DIR}trash_no.png" border="0" alt="{t}Restore{/t}" />
                                </a>
                             </li>
                             <li>
-                                <a href="#" onClick="javascript:vaciar(this, '{$litterelems[c]->id}');" title="{t}Delete{/t}">
+                                <a href="{$smarty.server.PHP_SELF}?id={$litterelems[c]->id}&amp;action=remove&amp;mytype={$mytype}&amp;page={$paginacion->_currentPage}" title="{t}Delete{/t}">
                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                    </a>
                             </li>

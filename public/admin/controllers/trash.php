@@ -43,24 +43,20 @@ if(isset($_REQUEST['action']) ) {
 			$tpl->assign('types_content', $types_content);
 
 			// ContentManager::find(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>);
-            $secciones=array();
+
 			//$litterelems= $cm->find($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY archive DESC ');
             list($litterelems, $pager)= $cm->find_pages($_REQUEST['mytype'], 'in_litter=1', 'ORDER BY changed DESC ',$_REQUEST['page'],20);
             $content = new Content();
+ 
+            foreach($litterelems as &$elem ) {
 
-            foreach($litterelems as $elem ) {
-
-				$category = $content->loadCategoryName($elem->id);
-				$nameCat = $content->loadCategoryTitle($elem->id);
-				$secciones[]= $nameCat;
-
+				$elem->category_name =  $content->loadCategoryName($elem->id);
+				$elem->category_title = $content->loadCategoryTitle($elem->id);
+ 
             }
-
-
-			//  $litterelems = $cm->paginate($litterelems);
+           
 			$tpl->assign('paginacion', $pager);
-			$tpl->assign('secciones', $secciones);
-			//$litterelems = $cm->paginate($litterelems);
+
 			$tpl->assign('litterelems', $litterelems);
 			/* Ponemos en la plantilla la referencia al objeto pager */
 
@@ -155,18 +151,20 @@ if(isset($_REQUEST['action']) ) {
 
 		case 'remove':
 
-			$contenido = new Content($_POST['id']);
+            $id = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
+			$contenido = new Content($id);
+             
+			$type = $contenido->content_type;
 
-			$type=$contenido->content_type;
 			$name = $GLOBALS['application']->conn->
 				GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "'. $type.'"');
 
-			$name_type=ucwords($name); //Nombre de la clase
-			$eleto=new $name_type($_POST['id']); //Llamamos a la clase
+			$name_type = ucwords($name); //Nombre de la clase
+			$eleto = new $name_type($id); //Llamamos a la clase
 
-			$eleto->remove($_POST['id']); // eliminamos
+			$eleto->remove($id); // eliminamos
 
-			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$_REQUEST['page']);
+			Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&mytype='.$_REQUEST['mytype'].'&page='.$_REQUEST['page']);
 
 		break;
 

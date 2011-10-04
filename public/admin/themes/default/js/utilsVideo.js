@@ -6,12 +6,12 @@ function delete_videos(id,page){
             onSuccess: function(transport) {
                  var msg = transport.responseText;
               //   showMsg({'warn':[msg ]},'growl');
-                showMsgContainer({ 'warn':[ msg ] },'inline','messageBoard');
-             /* if(confirm(msg)) {
+               // showMsgContainer({ 'warn':[ msg ] },'inline','messageBoard');
+              if(confirm(msg)) {
                       var ruta='video.php?action=yesdel&id='+id+'&page='+page;
                       location.href= ruta;
                    }
-                   return false; */
+                   return false; 
             } 
         });
 

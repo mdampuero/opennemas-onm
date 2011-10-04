@@ -437,7 +437,7 @@ class Content
                 $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
                 $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
                 $this->category = $rs;
-            }
+            } 
         }
         return $ccm->get_name($this->category);
 
@@ -448,15 +448,15 @@ class Content
     {
         $ccm = ContentCategoryManager::get_instance();
 
-        $category_name = $this->category_name;
-        if (empty($this->category)  && !empty($pk_content)) {
+         if (empty($this->category_title) && !empty($pk_content)) {
             $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
             $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
             $this->category = $rs;
-            $category_name = $this->loadCategoryName( $this->category );
+            $this->category_name = $this->loadCategoryName( $this->category );
+
         }
 
-        return $ccm->get_title($category_name);
+        return $ccm->get_title($this->category_name);
     }
 
     // FIXME: check funcionality

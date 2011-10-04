@@ -131,7 +131,7 @@ function enviar2(elto, trg, acc, id) {
     if ((alguno != 1) && (id != 6)){
         alert("No hay ninguna noticia seleccionada");
     }else{
-        if((acc=='mdelete')){
+        if((acc=='mdelete') || (acc=='mremove')){
             if(id == 6){
                 var res = confirm('¿Está seguro de eliminar TODOS los elementos?');
             }else{

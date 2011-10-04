@@ -248,7 +248,7 @@ switch ($action) {
             $msg.="\n \n "._("Caution! Are you sure that you want to delete this video and its relations?");
 
         } else {
-            $msg = sprintf(_("Do you want delete %s?",$video->title));
+            $msg = sprintf(_("Do you want delete %s ?"),$video->title);
         }
 
         echo $msg;

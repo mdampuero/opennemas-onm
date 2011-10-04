@@ -58,13 +58,7 @@
 
             {include file="menu_categories.tpl" home="video.php?action=list"}
         </ul>
-        <div id="messageBoard"></div>
-
-        {if (!empty($msg) || !empty($msgdel) || !empty($errors) )}
-            <script type="text/javascript">
-                showMsgContainer({ 'warn':['  {$msg} , {$msgdel}, {$errors} '] },'inline','messageBoard');
-            </script>
-        {/if}
+    
 
         {render_messages}
 

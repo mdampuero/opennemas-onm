@@ -132,6 +132,7 @@ class Widget extends Content
             return null;
         }
         $this->load($rs->fields);
+        $this->id = array($id);
     }
     /**
      * Load properties into this instance
@@ -158,6 +159,7 @@ class Widget extends Content
                 }
             }
         }
+        $this->id = $this->pk_widget;
     }
     /**
      * Update
@@ -217,7 +219,7 @@ class Widget extends Content
      * @param int $id Identifier
      * @return boolean
      */
-    public function delete($id, $editor = null)
+    public function remove($id, $editor = null)
     {
 
         $sql = "DELETE FROM `widgets` WHERE `pk_widget`=?";
