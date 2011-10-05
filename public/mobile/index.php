@@ -1,4 +1,5 @@
 <?php
+require('../bootstrap.php');
 require('../../vendor/UrlDispatcher.php');
 define('BASE_PATH', '/mobile');
 
@@ -101,7 +102,7 @@ class MobileRouter {
 }
 
 $router = new URLDispatcher( $routes );
-//$router->run();
+$router->run();
 
 
  header('Location: /');
