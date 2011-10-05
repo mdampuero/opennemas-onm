@@ -56,6 +56,47 @@ $tpl->assign('allcategorys', $parentCategories);
 //TODO: ¿datoscat?¿
 $tpl->assign('datos_cat', $categoryData);
 
+
+function addVideo($file, $baseUploadpath) {
+    
+    if (empty($file["tmp_name"])) {
+        m::add(sprintf(
+            _('Seems that the server limits file uploads up to %s Mb.'
+                .' Try to upload files smaller than that size or contact with your administrator'),
+            (int)(ini_get('upload_max_filesize'))
+        ));
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+    }
+    $uploads = array();
+
+    $originalFileName = $file["name"];
+    if(!empty($originalFileName)) {
+        
+        // Calculate upload directory and create it if not exists
+        $relativeUploadDir = 'video'.DS.date("/Y/m/d/").DS;
+        $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir;
+        if(!is_dir($absoluteUploadpath)) FilesManager::createDirectory($absoluteUploadpath);
+        
+        // Calculate the final video name by its extension, current data, ...
+        $fileData = pathinfo($originalFileName);     //sacamos infor del archivo
+        $fileExtension = strtolower($fileData['extension']);
+        $t = gettimeofday(); //Sacamos los microsegundos
+        $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+        $fileName = date("YmdHis") . $micro . "." . $fileExtension;
+        
+        // Compose absolute path to the new video file
+        $videoSavePath = $absoluteUploadpath.$fileName;
+
+        // Finally move uploaded file to the new location
+        if (move_uploaded_file($file["tmp_name"], $videoSavePath)) {
+            return $relativeUploadDir.$fileName;
+        }
+        
+    } //if empty
+
+    return false;
+}
+
 /******************* GESTION CATEGORIAS  *****************************/
 
 
@@ -177,14 +218,57 @@ switch ($action) {
 
         Acl::checkOrForward('VIDEO_CREATE');
         
-        $video = new Video();
-        $_POST['information'] = json_decode($_POST['information'], true);
-        if($video->create( $_POST )) {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+        $path_upload = MEDIA_PATH.DS.MEDIA_DIR.DS;
+        
+        if (
+            isset($_FILES)
+            && count($_FILES) >0
+            && count($_FILES["video_file"]) >= 1
+            && !empty($_FILES["video_file"]["name"])
+        ) {
+            $video = new Video();
+            
+            //Mirar el tema de mensajes en los fallos que deberia devolver.
+            $filePath = addVideo($_FILES["video_file"], $path_upload);
+            $_POST["video_url"] = $filePath;
+            $_POST["information"] = null;
+            $_POST["author_name"] = 'internal';
+            if($video->create( $_POST )) {
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+            } else {
+                $tpl->assign('errors', $video->errors);
+            }
+            $tpl->display('video/new.tpl');
+            die();
+            
+        } elseif (!empty($_POST['information'])) {
+            
+            $video = new Video();
+            $_POST['information'] = json_decode($_POST['information'], true);
+            
+            if($video->create( $_POST )) {
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+            } else {
+                $tpl->assign('errors', $video->errors);
+            }
+            $tpl->display('video/new.tpl');
+            die();
+            
         } else {
-            $tpl->assign('errors', $video->errors);
+            //m::add('Form not uploaded properly');
+            //$type = \Onm\Request::getInstance()->getParam('type', 'file');
+            //
+            //Application::forward(
+            //    $_SERVER['SCRIPT_NAME'] ."?action=create&type={$type}"
+            //);  
         }
-        $tpl->display('video/new.tpl');
+
+        $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
+        Application::forward(
+            $_SERVER['SCRIPT_NAME']
+            . '?action=list_today&category='.$category
+            . '&page=' . $page . '&mensaje=' . 'mensagepordefinir'
+        );
 
         break;
 
@@ -212,7 +296,6 @@ switch ($action) {
     case 'validate':
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        $_POST['information'] = json_decode($_POST['information'],true);
 
         if (!$id) {
 

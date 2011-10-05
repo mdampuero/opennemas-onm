@@ -8,6 +8,7 @@
         width:50%;
     }
     .video-type-selector li {
+        border-radius:3px;
         border:1px solid #ccc;
         background:#eee;
         margin:5px;
@@ -47,7 +48,7 @@
     <div class="wrapper-content">
         <ul class="video-type-selector">
             <li class="file">
-                <a href="#" class="clearfix">
+                <a href="{$smarty.server.PHP_SELF}?action=new&type=file&category={$category}" class="clearfix">
                     <img src="{$params.IMAGE_DIR}video/video-file-source.png" alt="" />
                     {t}Upload file from my computer{/t}
                 </a>

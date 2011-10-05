@@ -5,6 +5,7 @@
 {/block}
 
 {block name="content"}
+{render_messages}
 <form action="#" method="post" name="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
@@ -51,6 +52,9 @@
 	</div>
 
     <div class="wrapper-content">
+
+        {render_messages}
+
         <ul class="pills clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}class="active"{/if} >WIDGET HOME</a>
@@ -58,9 +62,6 @@
 
             {include file="menu_categories.tpl" home="video.php?action=list"}
         </ul>
-    
-
-        {render_messages}
 
         <table class="listing-table">
             <thead>

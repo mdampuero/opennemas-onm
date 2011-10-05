@@ -23,11 +23,11 @@
 
 {block name="header-js" append}
     {script_tag src="/utilsVideo.js" language="javascript"}
-
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+
+<form action="{$smarty.server.PHP_SELF}?action=create" method="post" name="formulario" id="formulario" enctype="multipart/form-data">
 
 <div class="top-action-bar clearfix">
 	<div class="wrapper-content">
@@ -43,7 +43,7 @@
 					<a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');" >
 				{/acl}
 			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+					<img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
 				</a>
 			</li>
 			{acl isAllowed="VIDEO_CREATE"}
@@ -65,7 +65,7 @@
 
         <div class="wrapper-content">
 
-
+            {render_messages}
 			<table class="adminheading">
 				<tr>
 					<td>{t}Enter video information{/t}</td>
@@ -109,61 +109,14 @@
 							<br>
 
 							<input type="hidden" value="1" name="content_status">
+                            {if $smarty.get.type != "file" || (isset($video) && $video->author_name != 'internal')}
 							<div class="help-block">
 								<div class="title"><h4>Get API keys</h4></div>
 								<div class="content">
 									{t}For now OpenNeMas only accepts videos from:{/t}:
-									<table style="padding:10px;">
-										<tr style="width:40%">
-											<td><strong>Youtube</strong></td>
-											<td>http://www.youtube.com</td>
-										</tr>
-										<tr>
-											<td><strong>Vimeo</strong></td>
-											<td>http://vimeo.com</td>
-										</tr>
-										<tr>
-											<td><strong>Metacafe</strong></td>
-											<td>http://metacafe.com</td>
-										</tr>
-										<tr>
-											<td><strong>Dailymotion</strong></td>
-											<td>http://dailymotion.com</td>
-										</tr>
-										<tr>
-											<td><strong>Collegehumor</strong></td>
-											<td>http://collegehumor.com</td>
-										</tr>
-										<tr>
-											<td><strong>Blip.tv</strong></td>
-											<td>http://blip.tv</td>
-										</tr>
-										<tr>
-											<td><strong>Myspace</strong></td>
-											<td>http://vids.myspace.com</td>
-										</tr>
-										<tr>
-											<td><strong>Ted Talks</strong></td>
-											<td>http://www.ted.com/talks</td>
-										</tr>
-										<tr>
-											<td><strong>11870.com</strong></td>
-											<td>http://11870.com</td>
-										</tr>
-										<tr>
-											<td><strong>Marca.tv</strong></td>
-											<td>http://www.marca.tv</td>
-										</tr>
-										<tr>
-											<td><strong>Dalealplay</strong></td>
-											<td>http://www.dalealplay.com</td>
-										</tr>
-										<tr>
-											<td><strong>Rutube</strong></td>
-											<td>http://www.rutube.ru</td>
-										</tr>
-									</table>
+									{include file="video/partials/_sourceinfo.tpl"}
 								</div>
+                                {/if}
 							</div>
 
 						</td>
@@ -197,7 +150,7 @@
                                  <tr>
                                     <td>
                                         <label for="title">Pick a file to upload:</label>
-                                        <input type="file" name="filename">
+                                        <input type="file" name="video_file">
                                     </td>
                                 </tr>       
                             </table>
