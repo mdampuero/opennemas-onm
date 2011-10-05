@@ -16,8 +16,11 @@ $im = im::getInstance();
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
 // Change this to get dinamically templates from folder
-$templates = array('idealgallego' => 'Idealgallego', 'nuevatribuna' => 'Nueva Tribuna',
-                   'retrincos' => 'Retrincos', 'cronicas' => 'Cronicas');
+foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value ) {
+    $parts= preg_split("@/@",$value);
+    $name = $parts[count($parts)-1];
+    $templates [$name]= ucfirst($name);
+}
 $tpl->assign('templates', $templates);
 
 switch($action) {
