@@ -20,7 +20,7 @@ class Opinion extends Content
 	var $fk_content_categories  = NULL;
 	var $fk_author              = NULL;
 	var $body                   = NULL;
-        var $author                 = NULL;
+    var $author                 = NULL;
 	var $fk_author_img          = NULL;
 	var $with_comment           = NULL;
 	var $fk_author_img_widget   = NULL;
@@ -105,6 +105,7 @@ class Opinion extends Content
 
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
+        if(isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
         (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
 
@@ -142,8 +143,18 @@ class Opinion extends Content
             return;
         }
 
-          $this->author =  $rs->fields['name'] ; //Used front opinion.
-          $this->load( $rs->fields );
+
+        if ($this->fk_author == 0) {
+            if ((int)$this->type_opinion == 1) {
+                $this->author = 'Editorial';
+            } elseif ((int)$this->type_opinion == 2) {
+                $this->author = 'Director';
+            }
+        } else {
+             $this->author =  $rs->fields['name'] ; //Used front opinion.
+        }
+
+      $this->load( $rs->fields );
 
     }
 
@@ -194,6 +205,7 @@ class Opinion extends Content
 
     function update($data) {
         $data['content_status']= $data['available'];
+        if(isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
         parent::update($data);
         $sql = "UPDATE opinions SET `fk_author`=?, `body`=?,`fk_author_img`=?, `with_comment`=?, `type_opinion`=?, `fk_author_img_widget`=?
                     WHERE pk_opinion=".($data['id']);
@@ -214,7 +226,7 @@ class Opinion extends Content
     function remove($id) { //Elimina definitivamente
         parent::remove($id);
 
-	$sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
+        $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
 
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -237,9 +249,9 @@ class Opinion extends Content
 		$i = 0;
 
 	    while(!$rs->EOF) {
-                $items[$i]->pk_opinion       = $rs->fields['pk_opinion'];
-                $items[$i]->permalink       = $rs->fields['permalink'];
-                $items[$i]->title			= $rs->fields['title'];
+            $items[$i]->pk_opinion       = $rs->fields['pk_opinion'];
+            $items[$i]->permalink       = $rs->fields['permalink'];
+            $items[$i]->title			= $rs->fields['title'];
 	        $items[$i]->name       		= $rs->fields['name'];
 	        $items[$i]->fk_author       		= $rs->fields['fk_author'];
 	        $items[$i]->fk_author_img       	= $rs->fields['fk_author_img'];
@@ -318,10 +330,17 @@ class Opinion extends Content
 
 		$tpl = new Template(TEMPLATE_USER);
 
-		$aut = new Author($this->fk_author);
-		$this->name = String_Utils::get_title($aut->name);
-		$this->author_name_slug = $this->name;
+        if ((int)$this->type_opinion == 1) {
+             $this->author_name_slug = 'editorial';
+        } elseif ((int)$this->type_opinion == 2) {
+             $this->author_name_slug = 'director';
+        } else {
 
+            $aut = new Author($this->fk_author);
+            $this->name = String_Utils::get_title($aut->name);
+            $this->author_name_slug = $this->name;
+        }
+        
 		$tpl->assign('item',$this);
 		$tpl->assign('cssclass', 'opinion');
 
