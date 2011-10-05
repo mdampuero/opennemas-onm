@@ -199,7 +199,7 @@ function define_crop(element) {
         $('crop_img').src='';
     }
     $$('#previewArea img').each( function(e) { e.src=''; } ); //Para ocultar las de debajo
-    $('testImage').src = '/media/images/'+element.getAttribute('de:path') + element.getAttribute('de:mas');
+    $('testImage').src = $('media_path').value +element.getAttribute('de:path') + element.getAttribute('de:mas');
     $('path_img').value = element.getAttribute('de:path');
     $('name_img').value = element.getAttribute('de:mas');
     var a = element.getAttribute('de:dimensions');

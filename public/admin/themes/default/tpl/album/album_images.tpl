@@ -32,8 +32,8 @@
                                  <a class="album" title="{t}Show image{/t}"
                                     onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
                                      <object id="change2" >
-                                        <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photoData[n]->path_file}{$photoData[n]->name}"></param>
-                                        <embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photoData[n]->path_file}{$photoData[n]->name}" width="68" height="50" ></embed>
+                                        <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"></param>
+                                        <embed src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}" width="68" height="50" ></embed>
                                     </object>
                                      <span  style="float:right; clear:none;">
                                         <img id="img{$photoData[n]->pk_photo}" class="draggable2" style="width:16px;height:16px;"
@@ -194,6 +194,7 @@
             <input type="hidden" name="cropWidth" id="cropWidth" value="{$crop_width}" />
             <input type="hidden" name="cropHeight" id="cropHeight" value="{$crop_height}"/>
 
+            <input type="hidden" name="media_path" id="media_path" value="{$smarty.const.MEDIA_IMG_PATH_WEB}"/>
             <input type="hidden" name="path_img" id="path_img" value=""/>
             <input type="hidden" name="name_img" id="name_img" value=""/>
         </div>
