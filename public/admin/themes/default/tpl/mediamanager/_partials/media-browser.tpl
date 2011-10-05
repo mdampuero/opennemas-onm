@@ -25,7 +25,7 @@
                                    src="{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}"
                                    width="140" height="80" ></embed>
                         </object>
-                        <img class="flash-flag"  src="themes/default/images/flash.gif" />
+                        <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
                         
                     {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo[n]->type_img)}
 
