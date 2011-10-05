@@ -168,24 +168,64 @@
 
 						</td>
 					</tr>
-					<tr>
-						<td style="padding:10px; vertical-align:top;">
-							<label for="video_url">
-							{if isset($video)}
-								{t}Video URL:{/t}
-							{else}
-								{t}Write the video url in the next input and push "Get video information"{/t}
-							{/if}
-							</label>
-							<input type="text" id="video_url" name="video_url" title="Video url"
-									value="{$video->video_url|default:""}" class="required" style="width:70%"
-									onChange="javascript:loadVideoInformation(this.value);"/> &nbsp;
-							<a href="#" class="onm-button blue"
-								 onClick="javascript:loadVideoInformation($('video_url').value); return false;">
-								{t}Get video information{/t}
-							</a>
-						</td>
-					</tr>
+                    {if $smarty.get.type == "file" || (isset($video) && $video->author_name == 'internal')}
+                    <tr>
+                        <td valign=top>
+                            <table>
+                                <tr>
+                                    <td valign="top">
+                                        <label for="title">{t}Title:{/t}</label>
+                                        <input  type="text" id="title" name="title" title="Título de la noticia" class="required" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">
+                                        <label for="metadata">{t}Keywords:{/t} <small>{t}Comma separated{/t}</small></label>
+                                        <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata|default:""}" class="required" />
+                                
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <label for="title">Descripción:</label>
+                                        <textarea name="description" id="description" class="required" 
+                                                title="{t}Video description{/t}">{$video->description|clearslash|default:""}</textarea>
+                                    </td>
+                                </tr>
+                                 
+                                </tr>
+                                 <tr>
+                                    <td>
+                                        <label for="title">Pick a file to upload:</label>
+                                        <input type="file" name="filename">
+                                    </td>
+                                </tr>       
+                            </table>
+                            <input type="hidden" value="internal"/>
+                        </td>
+                    </tr>
+
+                    {else}
+                    <tr>
+                    <td style="padding:10px; vertical-align:top;">
+                        <label for="video_url">
+                        {if isset($video)}
+                            {t}Video URL:{/t}
+                        {else}
+                            {t}Write the video url in the next input and push "Get video information"{/t}
+                        {/if}
+                        </label>
+                        <input type="text" id="video_url" name="video_url" title="Video url"
+                                value="{$video->video_url|default:""}" class="required" style="width:70%"
+                                onChange="javascript:loadVideoInformation(this.value);"/> &nbsp;
+                        <a href="#" class="onm-button blue"
+                             onClick="javascript:loadVideoInformation($('video_url').value); return false;">
+                            {t}Get video information{/t}
+                        </a>
+                    </td>
+                    </tr>
+                    {/if}
+						
 					<tr>
 						<td style="width:100%; padding:10px"colspan="2">
 							<div id="video-information">

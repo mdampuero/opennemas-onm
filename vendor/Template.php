@@ -231,7 +231,7 @@ class TemplateAdmin extends Template {
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
             if (!file_exists($directory)) {
-                mkdir($directory, 755, true);
+                mkdir($directory);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
@@ -297,7 +297,7 @@ class TemplateManager extends Template {
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
             if (!file_exists($directory)) {
-                mkdir($directory, 755, true);
+                mkdir($directory);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }

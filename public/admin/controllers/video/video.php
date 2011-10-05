@@ -111,13 +111,19 @@ switch ($action) {
 
         $tpl->display('video/list.tpl');
 
-    break;
+        break;
+
+    case 'selecttype':
+        
+        $tpl->display('video/selecttype.tpl');
+        
+        break;
 
     case 'new':
 
         $tpl->display('video/new.tpl');
 
-    break;
+        break;
 
     case 'read':
         Acl::checkOrForward('VIDEO_UPDATE');
@@ -132,7 +138,7 @@ switch ($action) {
         $tpl->assign('video', $video);
         $tpl->display('video/new.tpl');
 
-    break;
+        break;
 
     case 'getVideoInformation':
 
@@ -165,11 +171,12 @@ switch ($action) {
         Application::ajax_out($html_out);
 
 
-    break;
+        break;
 
     case 'create':
 
         Acl::checkOrForward('VIDEO_CREATE');
+        
         $video = new Video();
         $_POST['information'] = json_decode($_POST['information'], true);
         if($video->create( $_POST )) {
@@ -179,7 +186,7 @@ switch ($action) {
         }
         $tpl->display('video/new.tpl');
 
-    break;
+        break;
 
     case 'update':
 
@@ -200,7 +207,7 @@ switch ($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-    break;
+        break;
 
     case 'validate':
 
@@ -227,7 +234,7 @@ switch ($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
 
-    break;
+        break;
 
     case 'delete':
 
@@ -254,7 +261,7 @@ switch ($action) {
         echo $msg;
         exit(0);
 
-    break;
+        break;
 
     case 'yesdel':
 
@@ -270,7 +277,7 @@ switch ($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-    break;
+        break;
 
     case 'set_position':
 
@@ -279,7 +286,7 @@ switch ($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-    break;
+        break;
 
     case 'change_status':
 
@@ -297,7 +304,7 @@ switch ($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
-    break;
+        break;
 
     case 'change_favorite':
 
@@ -314,7 +321,7 @@ switch ($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category);
 
-    break;
+        break;
 
 
     case 'mfrontpage':
@@ -337,7 +344,7 @@ switch ($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-    break;
+        break;
 
     case 'mdelete':
 
@@ -371,7 +378,7 @@ switch ($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
-    break;
+        break;
 
     case 'config':
 
@@ -387,7 +394,7 @@ switch ($action) {
 
         $tpl->display('video/config.tpl');
 
-    break;
+        break;
 
     case 'save_config':
         Acl::checkOrForward('VIDEO_SETTINGS');
@@ -406,11 +413,11 @@ switch ($action) {
         );
         Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
 
-    break;
+        break;
 
     default:
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
-    break;
+        break;
 }
