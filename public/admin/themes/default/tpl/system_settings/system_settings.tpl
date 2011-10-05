@@ -71,16 +71,14 @@ textarea{
 
 
         <ul id="tabs">
-            <li>
-                <a href="#general">{t}General{/t}</a>
-                <a href="#mail">{t}Mail{/t}</a>
-                <a href="#log">{t}Log{/t}</a>
-                <a href="#external">{t}External Services{/t}</a>
-                <a href="#misc">{t}Miscelanous{/t}</a
-                {acl isAllowed="ONLY_MASTERS"}
-                    <a href="#modules">{t}Modules{/t}</a>
-                {/acl}
-            </li>
+            <li><a href="#general">{t}General{/t}</a></li>
+            <li><a href="#mail">{t}Mail{/t}</a></li>
+            <li><a href="#log">{t}Log{/t}</a></li>
+            <li><a href="#external">{t}External Services{/t}</a></li>
+            <li><a href="#misc">{t}Miscelanous{/t}</a</li>
+            {acl isAllowed="ONLY_MASTERS"}
+                <li><a href="#modules">{t}Modules{/t}</a></li>
+            {/acl}
         </ul>
 
         <div id="general" class="panel">
@@ -450,6 +448,7 @@ textarea{
             </table>
         </div>
 
+        {acl isAllowed="ONLY_MASTERS"}
         <div id="modules" class="panel">
            <table>
                 <tbody>
@@ -470,6 +469,7 @@ textarea{
                 </tbody>
             </table>
         </div>
+        {/acl}
 
 
         <div class="action-bar clearfix">
