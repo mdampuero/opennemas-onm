@@ -64,7 +64,7 @@ class Attachment extends Content  {
         }
 
         $this->content_type = 'attachment'; //PAra utilizar la funcion find de content_manager
-        $this->file_path = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR;
+        $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
     }
 
     /**
@@ -117,7 +117,7 @@ class Attachment extends Content  {
         if ( preg_match('/\.pdf$/', $data['path']) ) {
             //$media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($data['category']);
             $dir_date =date("/Y/m/d/");
-            $media_path = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR;
+            $media_path = $this->file_path.DIRECTORY_SEPARATOR.FILE_DIR.$dir_date;
 
             $img_name   = basename($data['path'], ".pdf") . '.jpg';
 
@@ -199,7 +199,7 @@ class Attachment extends Content  {
         //$media_path = MEDIA_PATH.'/files/'.$this->getCategoryName($this->category);
         $dir_date =preg_replace("/\-/", '/', substr($this->created, 0, 10));
 
-        $media_path = MEDIA_PATH.FILE_DIR.'/'.$dir_date ;
+        $media_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dir_date ;
 
         $filename   = $media_path.'/'.$this->path;
 
@@ -293,7 +293,7 @@ class Attachment extends Content  {
         if ( preg_match('/\.pdf$/', $obj->path) ) {
           //  $media_path = MEDIA_PATH.'/images/'.$this->getCategoryName($cat);
             $dir_date =date("/Y/m/d/");
-            $media_path = MEDIA_PATH.MEDIA_IMG_DIR.$dir_date ;
+            $media_path = MEDIA_IMG_PATH.DIRECTORY_SEPARATOR.$dir_date ;
 
             $img_name   = basename($obj->path, ".pdf") . '.jpg';
             $tmp_name   = '/tmp/' . basename($obj->path, ".pdf") . '.png';
@@ -304,7 +304,7 @@ class Attachment extends Content  {
                     FilesManager::createDirectory($media_path);
                 }
 
-                $file_path = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
+                $file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.MEDIA_FILE_DIR.$dir_date ;
                 // Thumbnail first page (see [0])
                 if ( file_exists($file_path. $obj->path)) {
                     try {

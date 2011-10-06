@@ -5,7 +5,7 @@ if( !function_exists('smarty_function_cssimagescale') ) {
         $resolution = $params['resolution'];
         
         $filename = realpath( MEDIA_IMG_PATH. $params['photo']->path_file. $params['photo']->name );
-            
+
         list($width, $height, $type, $attr) = getimagesize( $filename );
         if($height>0 and $width>0){        //No divide by 0
 	        if( $width > $height) {

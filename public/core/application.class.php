@@ -340,7 +340,7 @@ class Application
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
-        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR); // TODO: delete from application        
+        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application        
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
      
         /**
