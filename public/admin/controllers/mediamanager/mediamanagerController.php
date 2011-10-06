@@ -60,7 +60,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
     public function action_init()
     {
         $this->tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-        $this->path_upload = MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR.DS;
+        $this->path_upload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->img_url = MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR.SS;
 
         $this->tpl->assign('titulo_barra', 'Gestor de Imágenes');

@@ -332,17 +332,17 @@ class Application
         * Media paths and urls configurations
         **/
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
-        define('MEDIA_PATH', SITE_PATH); // local path to write media (/path/to/media)
+        define('MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
         define('ADS_DIR', "advertisements");
         define('OPINION_DIR', "opinions");
-        
-        // TODO: A Eliminar
-        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR); // TODO: delete from application
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
 
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
+        // TODO: A Eliminar
+        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.MEDIA_DIR.DS.IMG_DIR); // TODO: delete from application        
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
+     
         /**
         * Template settings
         **/
