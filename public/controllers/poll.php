@@ -53,12 +53,12 @@ if(!empty($category_name)) {
 //TODO: define dir to save xml and charts.swf dir
 //TODO: widget others polls
 define ('POLL_DIR', "polls");
-define ('INTERNAL_DIR', "media/internal");
+define ('INTERNAL_DIR', "internal");
 
-$poll_path = MEDIA_PATH . DIRECTORY_SEPARATOR . MEDIA_DIR . DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
+$poll_path = MEDIA_PATH .  DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
 
 $tpl->assign(array ('chartPolls'  => MEDIA_URL.SS.INTERNAL_DIR ,
-                    'xmlDirPolls' => MEDIA_URL.SS.MEDIA_DIR.SS.POLL_DIR.SS,
+                    'xmlDirPolls' => MEDIA_URL.SS.POLL_DIR.SS,
                     'poll_path'   => $poll_path,
             ) );
 
