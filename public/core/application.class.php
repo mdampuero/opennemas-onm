@@ -331,7 +331,7 @@ class Application
         /**
         * Media paths and urls configurations
         **/
-        define('MEDIA_DIR', "media".DS.INSTANCE_UNIQUE_NAME);    // External server or a local dir
+        define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_PATH', SITE_PATH); // local path to write media (/path/to/media)
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
