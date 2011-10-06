@@ -407,18 +407,11 @@ class Application
     {
         $isMobileDevice = false;
 
-        /*
-
-        // Browscap library
-        require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
-
-        // Creates a new Browscap object (loads or creates the cache)
-        $bc = new Browscap( dirname(__FILE__) . '/../cache');
-        $browser = $bc->getBrowser(); //isBanned
+        $browser = get_browser(null); //isBanned
 
         if (
-            !empty($browser->isMobileDevice)
-            && ($browser->isMobileDevice == 1)
+            !empty($browser->ismobiledevice)
+            && ($browser->ismobiledevice == 1)
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
             if ($autoRedirect) {
@@ -427,9 +420,7 @@ class Application
                 $isMobileDevice = true;
             }
         }
-
-        */
-
+        
         return $isMobileDevice;
     }
 
