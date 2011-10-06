@@ -31,7 +31,7 @@ ALTER TABLE `contents` DROP `paper_page` ;
 
 
 INSERT INTO `content_types` (`pk_content_type` , `name` , `title` , `fk_template_default`)
-VALUES (14 , 'book', 'libro', NULL);
+VALUES (15 , 'book', 'libro', NULL);
 
 ALTER TABLE `kioskos` CHANGE `pk_kiosko` `pk_kiosko` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
 ALTER TABLE `polls` CHANGE `pk_poll` `pk_poll` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
@@ -49,6 +49,9 @@ ALTER TABLE `albums` DROP `favorite` ;
 ----------------------------------------------------------------------------------
 ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
 ALTER TABLE `videos` DROP COLUMN `favorite`;
+
+
+
 -- 5-September-2011
 ALTER TABLE `videos` ADD `favorite` TINYINT( 1 ) NOT NULL AFTER `information`;
 

@@ -1,0 +1,1 @@
+sqlExecute function: Unknown column 'permalink' in 'contents'
