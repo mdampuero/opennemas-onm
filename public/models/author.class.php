@@ -67,7 +67,7 @@ class Author
         $data = array_merge($this->_defaultValues, $data);
 
         $sql = "INSERT INTO authors
-                (`name`, `fk_user`, `gender`,`politics`, `condition`,`date_nac`)
+                (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`)
                 VALUES ( ?,?,?,?,?,?)";
         $values = array(
             $data['name'], '0', $data['gender'],
@@ -113,7 +113,7 @@ class Author
     public function read($id)
     {
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`gender` , `authors`.`politics` ,
+                       `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition`
                 FROM authors
@@ -143,7 +143,7 @@ class Author
         $data = array_merge($this->_defaultValues, $data);
 
         $sql = "UPDATE `authors`
-                SET `name`=?, `gender`=?, `politics`=?, `condition`=?
+                SET `name`=?, `blog`=?, `politics`=?, `condition`=?
                 WHERE pk_author=?";
 
         $values = array(
@@ -247,7 +247,7 @@ class Author
     public function find($where, $orderBy='ORDER BY 1')
     {
         $sql =  'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`gender` , `authors`.`politics` ,
+                       `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition` FROM authors '.
                 'WHERE ? ?';
@@ -284,7 +284,7 @@ class Author
     public function get_author($id)
     {
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`gender` , `authors`.`politics` ,
+                       `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition` FROM authors
                 WHERE `author`.`fk_user` = ?';
@@ -300,7 +300,7 @@ class Author
         $author = new stdClass();
         $author->pk_author    = $rs->fields['pk_author'];
         $author->fk_user    = $rs->fields['fk_user'];
-        $author->gender    = $rs->fields['gender'];
+        $author->gender    = $rs->fields['blog'];
         $author->name    = $rs->fields['name'];
         $author->politics    = $rs->fields['politics'];
         $author->condition    = $rs->fields['condition'];
@@ -325,7 +325,7 @@ class Author
         if ( !is_null($filter) ) $_where = $filter;
 
         $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`gender` , `authors`.`politics` ,
+                       `authors`.`blog` , `authors`.`politics` ,
                        `authors`.`date_nac` , `authors`.`fk_user` ,
                        `authors`.`condition`
                 FROM `authors` WHERE '.$_where. ' '.$_orderBy ;
@@ -339,7 +339,7 @@ class Author
                 $items[$i]->pk_author     = $rs->fields['pk_author'];
                 $items[$i]->fk_user    = $rs->fields['fk_user'];
                 $items[$i]->name    = $rs->fields['name'];
-                $items[$i]->gender     = $rs->fields['gender'];
+                $items[$i]->gender     = $rs->fields['blog'];
                 $items[$i]->politics    = $rs->fields['politics'];
                 $items[$i]->condition    = $rs->fields['condition'];
                 $num = Author::count_author_photos($rs->fields['pk_author']);
