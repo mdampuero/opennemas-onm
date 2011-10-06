@@ -89,7 +89,7 @@ class User
             return(false);
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
-
+ 
         //Insertar las categorias de acceso.
         if(isset($data['ids_category'])) {
             $this->createAccessCategoriesDB($data['ids_category']);
@@ -209,7 +209,9 @@ class User
 
                 return false;
             }
-
+            
+            $this->readAccessCategories($this->id);
+            
             return true;
         }
 
@@ -221,12 +223,10 @@ class User
         $id = (!is_null($id))? $id: $this->id;
         $fetchedFromAPC = false;
         if (extension_loaded('apc')) {
-            $contentCategories = apc_fetch(APC_PREFIX . "_readAccessCategories", $fetchedFromAPC);
+            $contentCategories = apc_fetch(APC_PREFIX . "_readAccessCategories".$id, $fetchedFromAPC);
         }
-
-        // If was not fetched from APC now is turn of DB
+         // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
-
 
             $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = ?';
             $rs = $GLOBALS['application']->conn->Execute( $sql, $id );
@@ -241,16 +241,15 @@ class User
 
             $contentCategories = array();
             while(!$rs->EOF) {
-                $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
-                $contentCategories[] = $contentCategory;
-                  $rs->MoveNext();
+                 $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
+                 $contentCategories[] = $contentCategory;
+                 $rs->MoveNext();
             }
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "_readAccessCategories", $contentCategories);
+                apc_store(APC_PREFIX . "_readAccessCategories".$id, $contentCategories);
             }
         }
-
-
+  
         return $contentCategories;
     }
 
@@ -267,6 +266,7 @@ class User
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
             return false;
         }
+         apc_delete(APC_PREFIX . "_readAccessCategories".$this->id);
         return true;
     }
 
