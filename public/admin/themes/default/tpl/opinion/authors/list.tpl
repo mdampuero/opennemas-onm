@@ -7,16 +7,20 @@
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion Manager :: Author list{/t}</div>
             <ul class="old-button">
+                {acl isAllowed="AUTHOR_CREATE"}
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}authors_add.png" title="{t}New author{/t}" alt="{t}New author{/t}"><br />{t}New author{/t}
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="OPINION_ADMIN"}
                 <li >
                     <a href="opinion.php?action=list&desde=author" class="admin_add" name="submit_mult" value="Listado Opiniones" title="Listado Opiniones">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Listado Opiniones" alt="Listado Opiniones"><br />{t escape="off"}Go back{/t}
                     </a>
                 </li>
+                {/acl}
             </ul>
         </div>
 	</div>
@@ -66,16 +70,20 @@
                     </td>
                     <td style="text-align:center;">
 						<ul class="action-buttons">
+                            {acl isAllowed="AUTHOR_UPDATE"}
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?action=read&id={$authors[c]->pk_author}" title="Modificar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
+                            {acl isAllowed="AUTHOR_DELETE"}
 							<li>
 								<a href="#" onClick="javascript:confirmar(this, {$authors[c]->pk_author});" title="Eliminar">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
 						</ul>
                     </td>
                 </tr>

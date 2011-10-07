@@ -1,5 +1,21 @@
 {if count($director) > 0}
 
+
+<table class="listing-table">
+	<thead>
+		<tr>
+			<th style="width:30px;"><input type="checkbox" id="toggleallcheckbox"></th>
+			<th style="width:160px;">{t}Author{/t}</th>
+			<th>{t}Title{/t}</th>
+			 <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+			<th class="center" style="width:80px;">{t}Votes{/t}</th>
+            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
+			<th class="center" style="width:100px;">Fecha</th>
+			<th class="center" style="width:30px;">Home</th>
+			<th class="center" style="width:70px;">{t}Actions{/t}</th>
+		</tr>
+	</thead>
+    </table>
 <table class="adminheading">
 	<tr>
 		<td>
@@ -8,32 +24,21 @@
 	</tr>
 </table>
 
-<table class="listing-table">
-	<thead>
-		<tr>
-			<th style="width:30px;"></th>
-			<th style="width:160px;">{t}Author{/t}</th>
-			<th>{t}Title{/t}</th>
-			<th class="center" style="width:70px;">{t}Views{/t}</th>
-			<th class="center" style="width:70px;">{t}Votes{/t}</th>
-			<th class="center" style="width:74px;">{t}Comments{/t}</th>
-			<th class="center" style="width:70px;">{t}Date{/t}</th>
-			<th class="center" style="width:50px;">{t}Home{/t}</th>
-			<th class="center" style="width:70px;">{t}Actions{/t}</th>
-		</tr>
-	</thead>
+    <table class="listing-table">
 	<tr>
 		<td colspan='11'>
+            <div id="deldirector" class="seccion">
+            {assign var='cont' value=1}
             {section name=c loop=$director}
-		    <table id="{$director[c]->id}" style="width:100%">
+		    <table id="{$director[c]->id}" style="width:100%"  id="{$director[c]->id}" class="dir_sort">
 				<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 					<td style="width:35px;">
-						<input type="checkbox" class="minput"  id="selected_0" name="selected_fld[]" value="{$director[c]->id}"  style="cursor:pointer;">
+						<input type="checkbox" class="minput"  id="selected_{$cont}" name="selected_fld[]" value="{$director[c]->id}"  style="cursor:pointer;">
 					</td>
-					<td onClick="javascript:document.getElementById('selected_0').click();" style="width:165px;">
+					<td onClick="javascript:document.getElementById('selected_{$cont}').click();" style="width:165px;">
 						{t}Director{/t}
 					</td>
-					<td onClick="javascript:document.getElementById('selected_0').click();" >
+					<td onClick="javascript:document.getElementById('selected_{$cont}').click();" >
 						{$director[c]->title|clearslash}
 					</td>
 					<td class="center" style="width:80px;">
@@ -57,7 +62,8 @@
 					</td>
 					<td class="center" style="width:72px;">
 						<ul class="action-buttons">
-							<li>
+                            {acl isAllowed="OPINION_AVAILABLE"}
+							<li>                                
 								{if $director[0]->content_status == 1}
 									<a href="?id={$director[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
 										<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
@@ -66,23 +72,30 @@
 									<a href="?id={$director[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
 										<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
 									</a>
-								{/if}
+								{/if}                                
 							</li>
+                            {/acl}
+                            {acl isAllowed="OPINION_UPDATE"}
 							<li>
 								<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$director[c]->id}');" title="Modificar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
+                            {acl isAllowed="OPINION_DELETE"}
 							<li>
 								<a href="#" onClick="javascript:delete_opinion('{$director[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
 						</ul>
 					</td>
 				</tr>
 			</table>
+            {assign var='cont' value=$cont+1}
             {/section}
+            </div>
 		</td>
 	</tr>
 </table>
@@ -101,24 +114,12 @@
 	</tr>
 </table>
 <table class="listing-table">
-	<thead>
-		<tr>
-			<th style="width:15px;"></th>
-			<th style="width:160px;">{t}Author{/t}</th>
-			<th>{t}Title{/t}</th>
-            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-			<th class="center" style="width:80px;">{t}Votes{/t}</th>
-            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
-			<th class="center" style="width:100px;">Fecha</th>
-			<th class="center" style="width:30px;">Home</th>
-			<th class="center" style="width:70px;">{t}Actions{/t}</th>
-		</tr>
-	</thead>
+
 	<tbody>
 		<tr>
 			<td colspan='11'>
 				<div id="editoriales" class="seccion">
-				{assign var='cont' value=1}
+				
 				{section name=c loop=$editorial}
 					<table width="100%" cellpadding=0 cellspacing=0  id="{$editorial[c]->id}" border=0 class="edits_sort">
 						<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
@@ -152,6 +153,7 @@
 							</td>
 							<td class="center" style="width:72px;">
 								<ul class="action-buttons">
+                                    {acl isAllowed="OPINION_AVAILABLE"}
 									<li>
 										{if $editorial[c]->content_status == 1}
 											<a href="?id={$editorial[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
@@ -163,16 +165,21 @@
 											</a>
 										{/if}
 									</li>
+                                    {/acl}
+                                    {acl isAllowed="OPINION_UPDATE"}
 									<li>
 										<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$editorial[c]->id}');" title="Modificar">
 											<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 										</a>
 									</li>
+                                    {/acl}
+                                    {acl isAllowed="OPINION_DELETE"}
 									<li>
 										<a href="#" onClick="javascript:delete_opinion('{$editorial[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
 											<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 										</a>
 									</li>
+                                    {/acl}
 								</ul>
 							</td>
 						</tr>
@@ -198,23 +205,11 @@
 	</tr>
 </table>
 <table class="listing-table">
-	<thead>
-		<tr>
-			<th style="width:15px;"></th>
-			<th style="width:160px;">{t}Author{/t}</th>
-			<th>{t}Title{/t}</th>
-            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-			<th class="center" style="width:90px;">{t}Votes{/t}</th>
-            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
-			<th class="center" style="width:100px;">Fecha</th>
-			<th class="center" style="width:30px;">Home</th>
-			<th class="center" style="width:70px;">{t}Actions{/t}</th>
-		</tr>
-	</thead>
+ 
 	<tr>
 	<td colspan='11'>
 	<div id="cates" class="seccion">
-		{assign var='cont' value=$num_edit+1}
+	
 		{section name=c loop=$opinions}
 		 <table id="{$opinions[c]->id}" border=0 {if $opinions[c]->type_opinion==0}class="sortable"{/if} style="width:100%">
 			<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
@@ -226,9 +221,12 @@
 					{if $opinions[c]->type_opinion==1} Editorial{elseif $opinions[c]->type_opinion==2}
 						{t}Director{/t}
 					{else}
+
+                        {acl isAllowed="AUTHOR_UPDATE"}
 						<a href="author.php?action=read&id={$opinions[c]->fk_author}">
 							{$names[c]}
 						</a>
+                        {/acl}
 					{/if}
 				</td>
 				{/if}
@@ -249,6 +247,7 @@
 					{$opinions[c]->created}
 				</td>
 				<td class="center" style="width:40px;">
+                    {acl isAllowed="OPINION__FRONTPAGE"}
 					{if $opinions[c]->in_home == 1}
 						<a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" >
                             &nbsp;
@@ -258,9 +257,11 @@
                             &nbsp;
                         </a>
 					{/if}
+                    {/acl}
 				</td>
 				<td class="center" style="width:70px;">
 					<ul class="action-buttons">
+                        {acl isAllowed="OPINION_UPDATE"}
 						<li>
 							{if $opinions[c]->content_status == 1}
 							<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:""}" title="Publicado">
@@ -272,21 +273,26 @@
 							</a>
 							{/if}
 						</li>
+                        {/acl}
+                        {acl isAllowed="OPINION_UPDATE"}
 						<li>
 							<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$opinions[c]->id}');" title="Modificar">
 								<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 							</a>
 						</li>
+                        {/acl}
+                        {acl isAllowed="OPINION_DELETE"}
 						<li>
 							<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
 								<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 							</a>
 						</li>
+                        {/acl}
 					</ul>
 				</td>
 			</tr>
-	</table>
-	{assign var='cont' value=$cont+1}
+        </table>
+        {assign var='cont' value=$cont+1}
 	{/section}
 </div>
   </td>
@@ -294,7 +300,7 @@
 <tfoot>
 	<tr class="pagination">
 		<td colspan="11" class="center">
-			{$paginacion->links}&nbsp;
+		 
 		</td>
 	</tr>
 </tfoot>
@@ -318,22 +324,13 @@
 		containment:["editoriales"],
 		constraint:false
 	});
+    Sortable.create('deldirector',{
+		tag:'table',
+		only:'dir_sort',
+		dropOnEmpty: true,
+		containment:["deldirector"],
+		constraint:false
+	});
  // ]]>
 </script>
-{/if}
-{if $type_opinion eq 0}
-    <table class="adminheading">
-	    <tr>
-		    <th nowrap>Articulos de Opini&oacute;n</th>
-		    <th> Seleccione autor:
-		    <select name="autores" id="autores" class="" onChange='changeList(this.options[this.selectedIndex].value);'>
-				<option value="0" {if $author eq "0"} selected {/if}> Todos </option>
-				{section name=as loop=$autores}
-				<option value="{$autores[as]->pk_author}" {if $author eq $autores[as]->pk_author} selected {/if}>{$autores[as]->name}</option>
-				{/section}
-			</select>
-		    </th>
-		    <th  style="padding:10px;width:55%;"></th>
-	    </tr>
-    </table>
 {/if}

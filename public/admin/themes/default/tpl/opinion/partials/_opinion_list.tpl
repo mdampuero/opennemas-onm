@@ -16,7 +16,7 @@
 <table class="listing-table">
 	<thead>
 		<tr>
-			<th style="width:15px;"></th>
+			<th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
 			{if  $type_opinion eq '0'}
 			<th style="width:150px;">{t}Author name{/t}</th> {/if}
 			<th>{t}Title{/t}</th>
@@ -63,13 +63,16 @@
 				{$opinions[c]->created}
 			</td>
 			<td class="center">
+                {acl isAllowed="OPINION_FRONTPAGE"}
                 {if $opinions[c]->in_home == 1}
                 <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="Sacar de portada" ></a>
                 {else}
                 <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="Meter en portada" ></a>
                 {/if}
+                {/acl}
 			</td>
 			<td class="center">
+                {acl isAllowed="OPINION_AVAILABLE"}
 				{if $opinions[c]->content_status == 1}
 					<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
 						<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
@@ -77,17 +80,22 @@
 					<a href="?id={$opinions[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
 						<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
 				{/if}
+                {/acl}
 			</td>
 			<td class="right">
 				<ul class="action-buttons">
+                    {acl isAllowed="OPINION_UPDATE"}
 					<li>
 						<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 					</li>
+                    {/acl}
+                    {acl isAllowed="OPINION_DELETE"}
 					<li>
 						<a href="#" onClick="javascript:delete_opinion('{$opinions[c]->id}',{$paginacion->_currentPage|default:0});" title="Eliminar">
 							<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 					</li>
+                    {/acl}
 				</ul>
 			</td>
 		</tr>

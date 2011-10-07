@@ -15,7 +15,7 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $tpl->assign('titulo_barra', 'Author Opinion Management');
 
-Acl::checkOrForward('USER_ADMIN');
+Acl::checkOrForward('AUTHOR_ADMIN');
 
 $_REQUEST['page'] = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
 
