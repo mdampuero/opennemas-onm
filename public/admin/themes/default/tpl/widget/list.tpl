@@ -46,6 +46,7 @@ function confirmar() {
             <h2>{t}Widget Manager{/t}</h2>
         </div>
         <ul class="old-button">
+              {acl isAllowed="WIDGET_CREATE"}
             <li>
                 <a href="widget.php?action=new" class="admin_add"
                    title="{t}New widget{/t}">
@@ -53,6 +54,7 @@ function confirmar() {
                     <br />{t}New{/t}
                 </a>
             </li>
+            {/acl}
         </ul>
     </div>
 </div>
@@ -75,11 +77,8 @@ function confirmar() {
             <tbody>
                 {section name=wgt loop=$widgets}
                 <tr>
-                    <td>
-                        <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
-                            {$widgets[wgt]->title}
-                        </a>
-
+                    <td>                       
+                        {$widgets[wgt]->title}
                     </td>
 
                     <td>
@@ -87,6 +86,7 @@ function confirmar() {
                     </td>
 
                     <td class="center">
+                        {acl isAllowed="WIDGET_AVAILABLE"}
                         {if $widgets[wgt]->available == 1}
                         <a href="?id={$widgets[wgt]->pk_widget}&amp;action=changeavailable" class="switchable" title="{t}Published{/t}">
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
@@ -94,21 +94,24 @@ function confirmar() {
                         <a href="?id={$widgets[wgt]->pk_widget}&amp;action=changeavailable" class="switchable" title="{t}Unpublished{/t}">
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
                         {/if}
+                        {/acl}
                     </td>
 
                     <td>
-                        <ul class="action-buttons clearfix">
-
+                        <ul class="action-buttons clearfix">                            
                             {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
+                            {acl isAllowed="WIDGET_UPDATE"}
                             <li>
                                 <a href="widget.php?action=edit&id={$widgets[wgt]->pk_widget}" title="{t}Edit{/t}">
                                 <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
                             </li>
-
+                            {/acl}
+                            {acl isAllowed="WIDGET_DELETE"}
                             <li>
                                 <a href="widget.php?action=delete&id={$widgets[wgt]->pk_widget}" onclick="confirmar()" title="{t}Delete{/t}">
                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </li>
+                            {/acl}
                             {else}
                             <li></li>
                             {/if}

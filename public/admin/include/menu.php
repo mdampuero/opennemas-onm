@@ -194,7 +194,7 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
             id="trash_manager"
             link="controllers/trash.php"
-            privilege="NOT_ADMIN" />
+            privilege="TRASH_ADMIN" />
         <node
             module_name="LINK_CONTROL_MANAGER"
             title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"

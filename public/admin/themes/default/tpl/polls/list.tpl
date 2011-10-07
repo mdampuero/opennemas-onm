@@ -9,27 +9,35 @@
         <div class="wrapper-content">
             <div class="title"><h2>{$titulo_barra}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="POLL_DELETE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
                     </a>
                 </li>
+                {/acl}
+                  {acl isAllowed="POLL_AVAILABLE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
                         <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
+                {/acl}
+                 {acl isAllowed="POLL_AVAILABLE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
                         <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />{t}Publish{/t}
                     </a>
                 </li>
+                {/acl}
+                   {acl isAllowed="POLL_CREATE"}
                 <li class="separator"></li>
                 <li>
                     <a href="#" onclick="enviar(this, '_self', 'new', 0);" onmouseover="return escape('<u>N</u>ueva carta');" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}/poll-new.png" title="Nueva encuesta" alt="Nuevo Encuesta"><br />{t}New poll{/t}
                     </a>
                 </li>
+                {/acl}
                 {acl isAllowed="POLL_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -64,7 +72,7 @@
                     <th style="width:110px;" class="center">{t}Date{/t}</th>
                     <th style="width:40px;" class="center">{t}Favorite{/t}</th>
                     <th style="width:40px;" class="center">{t}Published{/t}</th>
-                    <th style="width:40px;" class="center">{t}Actions{/t}</th>
+                    <th style="width:70px;" class="center">{t}Actions{/t}</th>
                     {else}
                     <th scope="col" colspan=9>&nbsp;</th>
                     {/if}
@@ -77,9 +85,9 @@
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$polls[c]->id}"  style="cursor:pointer;" >
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();" >
-                        <a href="{$smarty.server.PHP_SELF}?action=read&id={$polls[c]->id}" title="Modificar">
+                    
                             {$polls[c]->title|clearslash}
-                        </a>
+                    
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();"  >
                         {$polls[c]->subtitle|clearslash}
@@ -94,6 +102,7 @@
                         {$polls[c]->created}
                     </td>
                     <td class="center">
+                        {acl isAllowed="POLL_AVAILABLE"}
                         {if $polls[c]->favorite == 1}
                         <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado">
                             &nbsp;
@@ -103,9 +112,11 @@
                             &nbsp;
                         </a>
                         {/if}
+                        {/acl}
                     </td>
 
                     <td class="center">
+                        {acl isAllowed="POLL_AVAILABLE"}
                         {if $polls[c]->available == 1}
                         <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
@@ -115,9 +126,11 @@
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
                         </a>
                         {/if}
+                        {/acl}
                    </td>
                    <td class="center">
                         <ul class="action-buttons">
+                            {acl isAllowed="POLL_UPDATE"}
                             <li>
                                <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Archivar a Hemeroteca">
                                     <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar a Hemeroteca" />
@@ -128,11 +141,14 @@
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
                            </li>
+                           {/acl}
+                              {acl isAllowed="POLL_DELETE"}
                             <li>
                                 <a href="#" onClick="javascript:confirmar(this, '{$polls[c]->id}');" title="Eliminar">
                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                 </a>
                             </li>
+                            {/acl}
                        </ul>
                     </td>
                 </tr>
