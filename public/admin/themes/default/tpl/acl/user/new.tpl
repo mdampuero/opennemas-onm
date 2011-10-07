@@ -162,6 +162,11 @@ function showGroupUsers(elto) {
                                         <div class="title"><h4>Complete user information</h4></div>
                                         <div class="content">{t escape=off}Please complete the user information by filling the aside form.{/t}</div>
                                     </div>
+                                    <br>
+                                    <div class="help-block margin-left-1">
+                                        <div class="title"><h4>Do you want a custom avatar?</h4></div>
+                                        <div class="content">{t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}</div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr valign="top">

@@ -88,7 +88,11 @@
 		    </li>
 
 		    <li class="menu">
-			<a href="#" id="menu" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
+                <a href="#" id="menu" class="menu">
+                    
+                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true}
+                    <strong>{$smarty.session.username|ucfirst}</strong>
+                </a>
 			<ul>
 			    <li>
 				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
