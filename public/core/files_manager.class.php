@@ -45,6 +45,35 @@ class FilesManager {
             $GLOBALS['application']->logger->emerg("Error creating directory: " . $path);
         }
     }
+    
+    /**
+     * Copy source path into destination path, and creates it if not exists.
+     *
+     * @param string $source fullpath for the copy 
+     * @param string $destination path to the new destination
+     */
+    static public function recursiveCopy($source, $destination)
+    {
+        // Delete destination if exists
+        if (file_exists($destination)) { unlink($destination); }
+        
+        // if is dir try to recursive copy it, if is a file copy it directly
+        if (is_dir($source)) {
+            if (!file_exists($destination)) { mkdir($destination,0755, true); }
+            $files = scandir($source);
+            foreach ($files as $file) {
+                if ($file != "." && $file != "..") {
+                    self::recursiveCopy(
+                        $source.DIRECTORY_SEPARATOR.$file,
+                        $destination.DIRECTORY_SEPARATOR.$file
+                    );
+                }
+            }
+        } elseif (file_exists($source)) {
+            copy($source, $destination);
+        };
+        return true;
+    }
 
      /**
      * Check if a directory is empty

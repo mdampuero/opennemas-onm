@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Instance;
+use \FilesManager as fm;
 /**
  * Class for manage ONM instances.
  *
@@ -270,7 +271,11 @@ class InstanceManager
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']} -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine);
         }
-        mkdir(SITE_PATH.DS.'media'.DS.$data['internal_name']);
+        
+        $mediaPath = SITE_PATH.DS.'media'.DS.$data['internal_name'];
+        if (!file_exists($mediaPath)) {
+            fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
+        }
         
         return true;
     }

@@ -38,15 +38,25 @@ if (file_exists($configFile)) {
     $im = \Onm\Instance\InstanceManager::getInstance();
     $instance = $im->load($_SERVER['SERVER_NAME']);
     if (!$instance) {
-        // This instance
-        echo 'Instance not found';
-        die();
+        if (!preg_match("@manager@", $_SERVER["PHP_SELF"])) {
+            echo 'Instance not found';
+            die();
+        } else {
+            $configs = array(
+                'INSTANCE_UNIQUE_NAME' => 'onm_manager',
+                'MEDIA_URL' => '',
+                'TEMPLATE_USER' => '',
+            );
+            foreach ($configs as $key => $value) {
+                define($key, $value);
+            }
+        }
     } else {
         if (
             $instance->activated != 1
             && !preg_match("@manager@", $_SERVER["PHP_SELF"])
         ) {
-            echo 'Instance not activated. Pay for it, bitch!';
+            echo 'Instance not activated.';
             die();
         }
     }

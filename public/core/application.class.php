@@ -65,15 +65,17 @@ class Application
             self::initInternalConstants();
 
             $GLOBALS['application'] = new Application();
-
-            // Setting up DataBase connection
-            self::initDatabase();
-
-            // Setting up Logger
-            self::initLogger();
-
-            // Setting up Gettext
-            self::initL10nSystem();
+            
+            if (INSTANCE_UNIQUE_NAME != 'onm_manager') {
+                // Setting up DataBase connection
+                self::initDatabase();
+            
+                // Setting up Logger
+                self::initLogger();
+    
+                // Setting up Gettext
+                self::initL10nSystem();
+            }
             
         }
 
@@ -305,7 +307,7 @@ class Application
         define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
         $cachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
-            mkdir($cachepath, 755, true);
+            mkdir($cachepath, 0755, true);
         }
         define('CACHE_PATH', realpath($cachepath));
         
