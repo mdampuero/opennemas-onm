@@ -81,7 +81,7 @@
                     </td>
                     <td> <br/>
                         <div class="help-block">
-								<div class="title"><h4>Definition values</h4></div>
+								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>
                                         <li>{t} Use  total in widget album for define how many videos can see in widgets in newspaper frontpage{/t}</li>                                       

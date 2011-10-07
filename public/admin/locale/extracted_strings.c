@@ -110,6 +110,9 @@ gettext("Total in video frontpage column:");
 gettext("Total in video gallery:");
 
 /* public/admin/themes/default/tpl//video/config.tpl */
+gettext("Definition values");
+
+/* public/admin/themes/default/tpl//video/config.tpl */
 gettext(" Use  total in widget home for define how many videos can see in widgets in newspaper frontpage");
 
 /* public/admin/themes/default/tpl//video/config.tpl */
@@ -156,6 +159,9 @@ gettext("Section:");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
 gettext("Available:");
+
+/* public/admin/themes/default/tpl//video/new.tpl */
+gettext("Get API keys");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
 gettext("For now OpenNeMas only accepts videos from:");
@@ -387,6 +393,9 @@ gettext("Total in album frontpage:");
 
 /* public/admin/themes/default/tpl//album/config.tpl */
 gettext("Time of the last album most viewed (days):");
+
+/* public/admin/themes/default/tpl//album/config.tpl */
+gettext("Definition values");
 
 /* public/admin/themes/default/tpl//album/config.tpl */
 gettext(" Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
@@ -726,6 +735,9 @@ gettext("Go back");
 
 /* public/admin/themes/default/tpl//menues/readjQuery.tpl */
 gettext("Name");
+
+/* public/admin/themes/default/tpl//menues/readjQuery.tpl */
+gettext("Help");
 
 /* public/admin/themes/default/tpl//menues/readjQuery.tpl */
 gettext(" Sort items from bottom lists into menu element list.  ");
@@ -1560,6 +1572,9 @@ gettext("Charts width:");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
 gettext("Charts height:");
+
+/* public/admin/themes/default/tpl//polls/config.tpl */
+gettext("Definition values");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
 gettext(" Use type results if you want that results is showed percents or integer values");
@@ -3374,7 +3389,7 @@ gettext("Description:");
 gettext("Keywords:");
 
 /* public/admin/themes/default/tpl//mediamanager/_partials/photo_data.tpl */
-gettext("HELP");
+gettext("Help");
 
 /* public/admin/themes/default/tpl//mediamanager/_partials/photo_data.tpl */
 gettext("Complete all the photo information for helping OpenNeMas to make better search results");
@@ -3734,7 +3749,13 @@ gettext("Go back");
 gettext("Login:");
 
 /* public/admin/themes/default/tpl//acl/user/new.tpl */
+gettext("Complete user information");
+
+/* public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("Please complete the user information by filling the aside form.");
+
+/* public/admin/themes/default/tpl//acl/user/new.tpl */
+gettext("Do you want a custom avatar?");
 
 /* public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("Sign up in <a href=\"http://www.gravatar.com\">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas");
@@ -4442,6 +4463,9 @@ gettext("Google Services");
 gettext("Google Maps API key:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Get API keys");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can get your Google Maps API Key from <a href=\"http://code.google.com/intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -4452,6 +4476,9 @@ gettext("Facebook");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("APP key:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Get API keys");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can get your Facebook App Keys from <a href=\"https://developers.facebook.com/apps\">Facebook Developers website</a>.");
@@ -4466,6 +4493,9 @@ gettext("Google Analytics Statistics");
 gettext("API key:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Get API keys");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can get your Google Analytics Site ID from <a href=\"https://www.google.com/analytics/\">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -4478,6 +4508,9 @@ gettext("Piwik Statistics");
 gettext("Page ID:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Get API keys");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can get your Piwik Site information from <a href=\"https://piwik.openhost.es/admin\">our Piwik server</a>.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -4488,6 +4521,9 @@ gettext("Recaptcha");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Public Key:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Get API keys");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can get your recaptcha API Keys from <a href=\"https://www.google.com/recaptcha/admin/create\">reCATPCHA website</a>.");
@@ -4515,6 +4551,9 @@ gettext("Default: 900 secs");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Activated modules");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Dragons Ahead!");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("This section is experimental and could not work as espected");

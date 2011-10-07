@@ -111,7 +111,7 @@
 							<input type="hidden" value="1" name="content_status">
                             {if $smarty.get.type != "file" || (isset($video) && $video->author_name != 'internal')}
 							<div class="help-block">
-								<div class="title"><h4>Get API keys</h4></div>
+								<div class="title"><h4>{t}Get API keys{/t}</h4></div>
 								<div class="content">
 									{t}For now OpenNeMas only accepts videos from:{/t}:
 									{include file="video/partials/_sourceinfo.tpl"}

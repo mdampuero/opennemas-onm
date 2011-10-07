@@ -214,7 +214,6 @@ class Europapress {
     static public function getOriginalCategories()
     {
         return array(
-                    'ABO' => _('RESUMEN'),
                     'ACE' => _('Society'),
                     'AGR' => _('Agriculture'),
                     'AYU' => _('Council'),

@@ -260,7 +260,7 @@ textarea{
                             </td>
                             <td rowspan=2 valign="top">
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                     <div class="content">{t escape=off}You can get your Google Maps API Key from <a href="http://code.google.com/intl/gl-GL/apis/maps/signup.html">Google maps sign up website</a>.{/t}</div>
                                 </div>
                             </td>
@@ -291,7 +291,7 @@ textarea{
                             </td>
                             <td rowspan=2>
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                     <div class="content">{t escape=off}You can get your Facebook App Keys from <a href="https://developers.facebook.com/apps">Facebook Developers website</a>.{/t}</div>
                                 </div>
                             </td>
@@ -323,7 +323,7 @@ textarea{
                             </td>
                             <td rowspan=2 valign="top">
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                     <div class="content">{t escape=off}You can get your Google Analytics Site ID from <a href="https://www.google.com/analytics/">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.{/t}</div>
                                 </div>
                             </td>
@@ -354,7 +354,7 @@ textarea{
                             </td>
                             <td rowspan=2 valign="top">
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                     <div class="content">{t escape=off}You can get your Piwik Site information from <a href="https://piwik.openhost.es/admin">our Piwik server</a>.{/t}</div>
                                 </div>
                             </td>
@@ -385,7 +385,7 @@ textarea{
                             </td>
                             <td rowspan=2 valign="top">
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>Get API keys</h4></div>
+                                    <div class="title"><h4>{t}Get API keys{/t}</h4></div>
                                     <div class="content">{t escape=off}You can get your recaptcha API Keys from <a href="https://www.google.com/recaptcha/admin/create">reCATPCHA website</a>.{/t}</div>
                                 </div>
                             </td>
@@ -461,7 +461,7 @@ textarea{
                         </td>
                         <td>
                             <div class="help-block warning margin-left-1">
-                                <div class="title"><h4>Dragons Ahead!</h4></div>
+                                <div class="title"><h4>{t}Dragons Ahead!{/t}</h4></div>
                                 <div class="content">{t escape=off}This section is experimental and could not work as espected{/t}</div>
                             </div>
                         </td>

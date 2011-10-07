@@ -75,7 +75,7 @@
                     </td>
                     <td> <br/>
                         <div class="help-block">
-								<div class="title"><h4>Definition values</h4></div>
+								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>
                                         <li>{t} Use type results if you want that results is showed percents or integer values{/t}</li>

@@ -77,7 +77,7 @@
                                 </td>
                                 <td rowspan="3" valign="top">
                                     <div class="help-block">
-                                            <div class="title"><h4>Help</h4></div>
+                                            <div class="title"><h4>{t}Help{/t}</h4></div>
                                             <div class="content">
                                                 <ul>
                                                     <li>{t} Sort items from bottom lists into menu element list.  {/t}</li>

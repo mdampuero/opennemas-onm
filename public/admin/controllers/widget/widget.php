@@ -77,7 +77,7 @@ switch($action) {
         $widget->set_available($available, $_SESSION['userid']);
 
         if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
-            list($img, $text)  = ($available)? array('g', _('PUBLICADO')): array('r', _('PENDIENTE'));
+            list($img, $text)  = ($available)? array('g', _('Published')): array('r', _('Pending'));
 
             echo '<img src="' . $tpl->image_dir . 'publish_' . $img . '.png" border="0" title="' . $text . '" />';
             exit(0);

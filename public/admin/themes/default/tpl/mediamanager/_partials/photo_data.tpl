@@ -72,7 +72,7 @@
                     </td>
                     <td style="width:300px;vertical-align:top; padding:20px 10px;">
                         <div class="help-block ">
-                            <div class="title"><h4>{t}HELP{/t}</h4></div>
+                            <div class="title"><h4>{t}Help{/t}</h4></div>
                             <div class="content">{t escape=off}Complete all the photo information for helping OpenNeMas to make better search results{/t}</div>
                         </div>
                     </td>
