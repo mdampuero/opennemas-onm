@@ -30,7 +30,7 @@ switch($action) {
 
     case 'list':
 
-        Acl::checkOrForward('MENU_LIST');
+        Acl::checkOrForward('MENU_ADMIN');
 
         $tpl->assign('pages', $pages);
         $menues = Menu::listMenues();
