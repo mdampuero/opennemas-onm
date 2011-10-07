@@ -328,9 +328,10 @@ table.adminform tfoot tr td{
 .gal{position:relative;margin-top:2em;clear:both;}
 
 div.wrapper-content {
-	width:1100px;
-	margin:0 auto;
-	position:relative;
+    margin: 0 auto;
+    max-width: 960px;
+    position: relative;
+    width: 100%;
 }
 
 
@@ -780,6 +781,23 @@ div.utilities-conf{
     border:1px solid #F5F5F5;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
+    vertical-align:middle;
+}
+div.utilities-color td *{
+    vertical-align:middle !important;
+}
+div.utilities-conf h3 {
+    color: #666666;
+    display: block;
+    text-transform: uppercase;
+    text-align:center;
+}
+div.utilities-conf input[type="text"]{
+    display:inline; 
+    background:none;
+    width:auto;
+    max-width:15px;
+    border:0 none;
 }
 
 

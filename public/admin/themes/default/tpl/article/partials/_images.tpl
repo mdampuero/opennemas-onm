@@ -127,9 +127,11 @@
                             <table>
                                 <tr>
                                     <td align="left">
-					<input id="stringImageSearch" name="stringImageSearch" type="text"
-					   onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-					   onclick="this.select();" value="{t}Search images by title...{/t}" size=30/>
+                                        <input id="stringImageSearch" name="stringImageSearch" type="text"
+                                           onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
+                                           onclick="this.select();" value="{t}Search images by title...{/t}" />
+                                    </td>
+                                    <td>
                                         <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listbyCategory',this.options[this.selectedIndex].value,'', 1);">
                                             <option value="0">GLOBAL</option>
                                                 {section name=as loop=$allcategorys}
@@ -142,7 +144,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div id="photos" class="photos" style="margin:5px;">
+                            <div id="photos" class="photos">
                                 {*AJAX imageGallery *}
                             </div>
                        </div>
@@ -323,18 +325,18 @@
                                     <td align="right">
                                         <select id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listbyCategory',this.options[this.selectedIndex].value,'', 1);">
                                             <option value="0">GLOBAL</option>
-                                                {section name=as loop=$allcategorys}
-                                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                                    {section name=su loop=$subcat[as]}
-                                                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                                    {/section}
+                                            {section name=as loop=$allcategorys}
+                                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                                {section name=su loop=$subcat[as]}
+                                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                                                 {/section}
+                                            {/section}
                                         </select>
                                     </td>
                                 </tr>
                             </table>
                             <br>
-                            <div id="videos" class="photos" style="margin: 5px;">
+                            <div id="videos" class="photos">
                                 {*AJAX videoGallery *}
                            </div>
                         </div>

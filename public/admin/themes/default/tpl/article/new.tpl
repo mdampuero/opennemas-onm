@@ -107,7 +107,7 @@ if($('starttime')) {
 					<div class="utilities-conf">
 						<table style="width:99%;">
 							<tr>
-								<td valign="top" align="right">
+								<td align="right">
 								<label for="category">{t}Section:{/t}</label>
 								</td>
 								<td style="text-align:left;vertical-align:top">
@@ -129,7 +129,7 @@ if($('starttime')) {
 							</tr>
 							{if $smarty.session.desde != 'list_hemeroteca'}
 							 <tr>
-								<td valign="top"  align="right">
+								<td align="right">
 									<label for="with_comment">{t}Allow coments{/t}</label>
 								</td>
 								<td  style="text-align:left;vertical-align:top">
@@ -137,17 +137,16 @@ if($('starttime')) {
 								</td>
 							</tr>
 							 <tr>
-								<td valign="top"  align="right">
+								<td align="right">
 									<label for="available">{t}Available:{/t}</label>
 								</td>
 
 								<td  style="text-align:left;vertical-align:top">
 									<input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1 tabindex="10"/>
-									<span style="font-size:9px;">{t}(publish directly){/t}</span>
 								</td>
 							</tr>
 							<tr>
-								<td valign="top"  align="right">
+								<td align="right">
 									<label for="frontpage">{t}Put in section frontpage:{/t}</label>
 								</td>
 								<td style="text-align:left;vertical-align:top">
@@ -179,46 +178,51 @@ if($('starttime')) {
 								</td>
 							</tr>
 							{/if}
+                            <tr>
+                                <td colspan="2">
+                                    <h3>Statistics</h3>
+                                </td>
+                            </tr>
 							<tr>
-								<td valign="top" align="right">
+								<td align="right">
 									<label for="counter_title">{t}Frontpage title:{/t}</label>
 								</td>
 								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
-										value="0"  size="3" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/>
+										value="0" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/> {t}words{/t}
 								</td>
 							</tr>
 							<tr>
-								<td valign="top" align="right">
+								<td align="right">
 									<label for="counter_title">{t}Inner title{/t}</label>
 								</td>
 								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
-										value="0" size="3" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/>
+										value="0" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/> {t}words{/t}
 								</td>
 							</tr>
 							<tr>
-								<td valign="top" align="right">
+								<td align="right">
 									<label for="counter_subtitle">{t}Pretitle:{/t}</label>
 								</td>
 								<td style="text-align:left;vertical-align:top;" >
 									<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
-										value="0"  size="3" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/>
+										value="0" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/> {t}words{/t}
 								</td>
 							</tr>
 							<tr colspan=2>
-								<td valign="top" align="right">
+								<td align="right">
 									<label for="counter_summary">{t}Summary:{/t}</label>
 								</td>
 								<td  style="text-align:left;vertical-align:top">
 									<input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
-										value="0" size="3"
+										value="0"
 										   onChange="countWords(document.getElementById('summary'),this)"
-										   onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/>
+										   onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/> {t}words{/t}
 								</td>
 							</tr>
 							<tr>
-								<td valign="top" align="right">
+								<td align="right">
 									<label for="counter_body">{t}Body:{/t}</label>
 								</td>
 								<td  style="text-align:left;vertical-align:top" >
