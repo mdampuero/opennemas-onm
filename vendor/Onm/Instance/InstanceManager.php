@@ -262,19 +262,22 @@ class InstanceManager
             $onmInstancesConnection['BD_PASS']
         );
         
-        
-        $rs = $conn->Execute("CREATE DATABASE {$data['settings']['BD_DATABASE']}");
+        $rs = $conn->Execute("CREATE DATABASE `{$data['settings']['BD_DATABASE']}`");
         
         if ($rs) {
+            
+            
             $connection2 = self::getConnection($data['settings']);
             $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']} -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine);
-        }
-        
-        $mediaPath = SITE_PATH.DS.'media'.DS.$data['internal_name'];
-        if (!file_exists($mediaPath)) {
-            fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
+            
+            $mediaPath = SITE_PATH.DS.'media'.DS.$data['internal_name'];
+            if (!file_exists($mediaPath)) {
+                fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
+            }   
+        } else {
+            return false;
         }
         
         return true;
