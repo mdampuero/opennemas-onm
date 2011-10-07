@@ -63,18 +63,7 @@
                     </td>
                 </tr>
 
-     {* 			<tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Sex:{/t}</label>
-                    </td>
-                        <td style="padding:4px;" nowrap="nowrap">
-                             <select name="gender" id="gender" class="required">
-                                <option value="Mujer" {if $author->gender eq 'Mujer'} selected {/if}>{t}Women{/t}</option>
-                                <option value="Hombre" {if $author->gender eq 'Hombre'} selected {/if}>{t}Men{/t}</option>
-                            </select>
-                        </td>
-                </tr> *}
-
+    
                 <tr>
                     <td valign="top" align="right">
                         <label for="phone">{t}Blog name:{/t}</label>
@@ -82,16 +71,7 @@
                     <td>
                         <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politcs|default:""}"  size="50"/>
                     </td>
-    {*				<td style="padding:4px;" nowrap="nowrap">
-                        <select name="politics" id="politics" class="required" title="Tendencia politica">
-                            <option value="Progresista" {if $author->politics eq 'Progresista'} selected {/if}>{t}Progresist{/t}</option>
-                            <option value="Conservador" {if $author->politics eq 'Conservador'} selected {/if}>{t}Conservative{/t}</option>
-                            <option value="Izquierdas" {if $author->politics eq 'Izquierdas'} selected {/if}>{t}Left-wind{/t}</option>
-                            <option value="Derechas" {if $author->politics eq 'Derechas'} selected {/if}>{t}Right-wind{/t}</option>
-                            <option value="Centro" {if $author->politics eq 'Centro'} selected {/if}>{t}Center-wind{/t}</option>
-                            <option value="Comunista" {if $author->politics eq 'Comunista'} selected {/if}>{t}Comunist{/t}</option>
-                         </select>
-                    </td>*}
+
                 </tr>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;">
@@ -102,14 +82,6 @@
                     </td>
                 </tr>
 
-     {*			<tr>
-                    <td valign="top" align="right" style="padding:4px;" width="40%">
-                        <label for="phone">{t}Birthday:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="date_nac" name="date_nac" size="18" title="{t}Birthday{/t}" value="{$author->date_nac}" /><button id="triggerend">...</button>
-                    </td>
-                </tr> *}
 
                 <tr>
                     <td valign="top" align="right">

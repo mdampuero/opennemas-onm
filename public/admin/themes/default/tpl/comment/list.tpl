@@ -11,11 +11,14 @@
                 </h2>
             </div>
             <ul class="old-button">
+                {acl isAllowed="COMMENT_DELETE"}
                <li>
                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />Eliminar
                    </a>
                </li>
+               {/acl}
+               {acl isAllowed="COMMENT_AVAILABLE"}
                <li>
                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 2);" name="submit_mult" value="noFrontpage" title="Rechazar">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="Rechazar" alt="Rechazar" ><br />Rechazar
@@ -26,6 +29,7 @@
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
                    </a>
                </li>
+               {/acl}
             </ul>
         </div>
     </div>
@@ -117,10 +121,7 @@
                 </thead>
 
 				<tbody>
-					<div class='fisgona' id='fisgona' name='fisgona'></div>
-					{* Provisional - comentarios en encuestas en la solapa todos *}
-
-					{section name=c loop=$comments|default:array()}
+                	{section name=c loop=$comments|default:array()}
 					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 						<td >
 							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$comments[c]->id}"  style="cursor:pointer;" >
@@ -160,6 +161,7 @@
 						</td>
 						<td class="right">
 							<ul class="action-buttons">
+                                 {acl isAllowed="COMMENT_AVAILABLE"}
 								<li>
 									{if $category eq 'todos' || $comments[c]->content_status eq 0}
 										<a href="?id={$comments[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;comment_status={$comment_status}&amp;page={$paginacion->_currentPage|default:0}" title="Publicar">
@@ -176,14 +178,19 @@
 										</a>
 									{/if}
 								</li>
+                                {/acl}
+                                 {acl isAllowed="COMMENT_UPDATE"}
 								<li>
 									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
 										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
+                                {/acl}
+                                {acl isAllowed="COMMENT_DELETE"}
 								<li>
 									<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
 										<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 								</li>
+                                {/acl}
 							</ul>
 						</td>
 					</tr>

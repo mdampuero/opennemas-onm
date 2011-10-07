@@ -14,16 +14,20 @@
 				<h2>{$titulo_barra} :: {if $category eq 'todos'}{$category|upper}{else}{$datos_cat[0]->title} {/if}</h2>
 			</div>
 			<ul class="old-button">
+                {acl isAllowed="ARTICLE_DELETE"}
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
 						<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
 					</a>
 				</li>
+                {/acl}
+                {acl isAllowed="ARTICLE_UPDATE"}
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_restore', 1);" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
 						<img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="recuperar"><br />Recuperar
 					</a>
 				</li>
+                {/acl}
                 <li class="separator"></li>
 				<li>
 					<a title="Advanced Search" tabindex="1" accesskey="N" class="admin_add" href="{$smarty.const.SITE_URL}admin/controllers/search_advanced/search_advanced.php">
@@ -111,11 +115,13 @@
 					</td>
 					<td class="center">
 						<ul class="action-buttons">
+                            {acl isAllowed="ARTICLE_AVAILABLE"}
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?id={$articles[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="{t}Restore to available{/t}">
 									<img src="{$params.IMAGE_DIR}archive_no2.png" border="0" alt="Publicar" />
 								</a>
 							</li>
+                            {/acl}
                             <!--
 							<li>
 								<a href="{$smarty.const.SITE_URL}{generate_uri content_type='article' id=$articles[c]->id date=$articles[c]->created category_name=$articles[c]->category_name title=$articles[c]->title}"
@@ -124,16 +130,19 @@
 									<img border="0" src="{$params.IMAGE_DIR}preview_small.png" title="Previsualizar" alt="Previsualizar" />
 								</a>
 							</li>-->
+                            
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?action=read&id={$articles[c]->id}" title="Editar">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
 								</a>
 							</li>
+                            {acl isAllowed="ARTICLE_DELETE"}
 							<li>
 								<a href="#" style="cursor:pointer" onClick="javascript:delete_article('{$articles[c]->id}','{$category}',0);" title="Eliminar">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
 						</ul>
 					</td>
 				</tr>

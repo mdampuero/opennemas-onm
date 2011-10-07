@@ -41,6 +41,7 @@
     <div class="wrapper-content">
         <div class="title"><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
         <ul class="old-button">
+            {acl isAllowed="ARTICLE_DELETE"}
              <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
@@ -51,6 +52,8 @@
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
+            {/acl}
+            {acl isAllowed="ARTICLE_AVAILABLE"}
             {if $category!=20}
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');" name="submit_mult" value="noFrontpage">
@@ -63,17 +66,20 @@
                 </a>
             </li>
             {/if}
+            {/acl}
             <li>
                 <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
                 </button>
             </li>
             <li class="separator"></li>
+            {acl isAllowed="ARTICLE_CREATE"}
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
                     <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
                 </a>
             </li>
+            {/acl}
         </ul>
     </div>
 </div>-

@@ -4,17 +4,21 @@
 	<div class="wrapper-content">
 		<div class="title"><h2>{t}Article manager :: Creating new article{/t}</h2></div>
 		<ul class="old-button">
+            {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
 				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
 				<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 				</a>
 			</li>
+            {/acl}
+            {acl isAllowed="ARTICLE_CREATE"}
 			<li>
 				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'create', 0, 'formulario');" id="button_save">
 				<img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
 				</a>
 			</li>
-
+             {/acl}
+            {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
 				<a href="#"  accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
 				<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
@@ -25,7 +29,7 @@
 					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
-
+            {/acl}
 		</ul>
 	</div>
 </div>
@@ -43,17 +47,21 @@
             </li>
             {/if}
 
+            {acl isAllowed="ARTICLE_UPDATE"}
 		    <li>
                 <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
 		    </li>
+             {/acl}
+            {acl isAllowed="ARTICLE_UPDATE"}
             <li>
                 <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
-
+             {/acl}
+            
             {if !$article->isClone()}
             <li>
                 <a href="#" onclick="recolectar(); sendFormValidate(this, '_blank', 'clone', '{$article->id}', 'formulario');" id="button_clone">
@@ -101,6 +109,8 @@
 	<div id="menu-acciones-admin" class="clearfix">
 		<div style='float:left;margin-left:10px;margin-top:10px;'><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
 		<ul>
+
+            {acl isAllowed="ARTICLE_DELETE"}
 			 <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />Eliminar todos
@@ -111,25 +121,28 @@
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />Eliminar
                 </a>
             </li>
+             {/acl}
+            {acl isAllowed="ARTICLE_AVAILABLE"}
             {if $category!=20}
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');" name="submit_mult" value="noFrontpage">
                     <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />Publicar
                 </a>
             </li>
-
             {/if}
+            {/acl}
             <li>
                 <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
                 </button>
             </li>
-
+            {acl isAllowed="IMPORT_ADMIN"}
             <li>
                 <a href="importAgencyXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
                     <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />Importar Agencia XML
                 </a>
             </li>
+            {/acl}
 		</ul>
 	</div>
 {/if}

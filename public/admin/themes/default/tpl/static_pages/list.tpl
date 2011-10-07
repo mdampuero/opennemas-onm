@@ -59,7 +59,9 @@
                     </td>
 
                     <td class="center">
+                        {acl isAllowed="STATIC_AVAILABLE"}
                         <a href="?action=chg_status&id={$pages[k]->id}" class="available">
+                        {/acl}
                             {if $pages[k]->available eq 1}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
                             {else}
@@ -70,16 +72,20 @@
 
                     <td class="center">
 						<ul class="action-buttons">
+                            {acl isAllowed="STATIC_UPDATE"}
 							<li>
 								<a href="{$smarty.server.PHP_SELF}?action=read&id={$pages[k]->id}" title="{t}Modify{/t}">
 									<img src="{$params.IMAGE_DIR}edit.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
+                            {acl isAllowed="STATIC_DELETE"}
 							<li>
 								<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{/t}">
 									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
+                            {/acl}
 						</ul>
                     </td>
                 </tr>

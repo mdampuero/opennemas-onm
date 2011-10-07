@@ -55,6 +55,7 @@
         <div class="wrapper-content">
             <div class="title"><h2> {t 1=$datos_cat[0]->title}Image manager:: Editing "%1"{/t}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="IMAGE_UPDATE"}
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$photo1->id}', 'form_upload');" value="Validar" title="Validar">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
@@ -67,6 +68,7 @@
                         {t}Save{/t}
                     </a>
                 </li>
+                {/acl}
                 <li class="separator"></li>
                 <li>
                     {if !isset($smarty.request.stringSearch)}

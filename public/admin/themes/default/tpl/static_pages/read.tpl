@@ -41,6 +41,7 @@
             </td>
             <td valign="top" style="padding:4px;" rowspan="3">
                 <div style="background-color:#F5F5F5;">
+                    {acl isAllowed="STATIC_AVAILABLE"}
                     <div style="padding:10px 15px;">
                         <label for="available">{t}Published:{/t}</label>
                         <select name="available" id="available" class="required" tabindex="4">
@@ -48,7 +49,7 @@
                             <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
                         </select>
                     </div>
-
+                    {/acl}
                     <div style="padding:10px 15px;">
                         <label for="available">{t}Description:{/t}</label> <br />
                         <textarea name="description" id="description" rows="4" cols="30" tabindex="5">{$page->description|default:""}</textarea>

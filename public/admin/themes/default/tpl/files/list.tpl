@@ -71,7 +71,7 @@
 									 <b> {$num_especials[c].title|upper|clearslash|escape:"html"}</b>
 								</td>
 								<td style="width:40px;" align="left">
-									{$num_especials[c].num}</a>
+									{$num_especials[c].num}
 								</td>
 							 </tr>
 
@@ -130,12 +130,16 @@
 						</td>
 						<td class="center">
 							<ul class="action-buttons">
+                                {acl isAllowed="FILE_UPDATE"}
 								<li>
 									<a href="{$smarty.server.PHP_SELF}?action=read&id={$attaches[c]->id}" title="Modificar"><img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
+                                {/acl}
+                                {acl isAllowed="FILE_DELETE"}
 								<li>
 									<a href="#" onClick="javascript:delete_fichero('{$attaches[c]->id}',1);" title="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 								</li>
+                                {/acl}
 							</ul>
 						</td>
 					</tr>

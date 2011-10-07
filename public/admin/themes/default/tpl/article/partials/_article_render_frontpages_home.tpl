@@ -48,7 +48,10 @@
             </div>
         </td>
         <td  align="center"  style="width:50px;">
-                <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar" alt="Eliminar"><img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+            {acl isAllowed="ARTICLE_DELETE"}
+                <a href="#" onClick="javascript:delete_article('{$item->id}','{$category}',0);" title="Eliminar" alt="Eliminar">
+            {/acl}
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
         </td>
     </tr>
 </table>

@@ -32,6 +32,7 @@
         <div class="title"><h2>{t}Image manager{/t} :: {t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2></div>
         <ul class="old-button">
             {if $action neq 'upload'}
+            {acl isAllowed="IMAGE_DELETE"}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
@@ -42,6 +43,7 @@
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
+            {/acl}
             <li>
                 <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
@@ -54,12 +56,13 @@
                     <img border="0"  src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
-
+            {acl isAllowed="IMAGE_CREATE"}
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
                     <img border="0"  src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />{t}Upload{/t}
                 </a>
             </li>
+            {/acl}
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
                     <img border="0"  src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}

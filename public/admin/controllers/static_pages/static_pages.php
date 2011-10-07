@@ -85,6 +85,7 @@ switch($action) {
 
     case 'new':
 
+        $page = new Static_Page(); //used define('STATIC_PAGE_PATH', 'estaticas/');
         $tpl->display('static_pages/read.tpl');
 
     break;

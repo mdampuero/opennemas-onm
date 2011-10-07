@@ -44,16 +44,19 @@
                     {section loop=$menues name=m}
                         <tr>
                             <td>
-                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[s]->name}"
+                            {acl isAllowed="MENU_UPDATE"}
+                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}"
+                             {/acl}
                                     title="{t 1=$menues[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                      {$menues[m]->name|capitalize}
                                  </a>
                             </td>
-
+                            {acl isAllowed="MENU_UPDATE"}
                             <td class="center">
                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                 </a>
+                            {/acl}
                             </td>
                         </tr>
 
@@ -63,17 +66,21 @@
                                 <tr>
                                     <td style="padding-left:20px">
                                         <strong>&rArr; </strong>
+                                        {acl isAllowed="MENU_UPDATE"}
                                         <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
+                                        {/acl}
                                            title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             {$subMenu[s]->name|capitalize}
                                         </a>
                                     </td>
 
                                     <td class="center">
+                                        {acl isAllowed="MENU_UPDATE"}
                                         <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$subMenu[s]->name}"
                                            title="{t 1=$subMenu[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                             <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                         </a>
+                                        {/acl}
                                     </td>
                                 </tr>
                                  {/section}

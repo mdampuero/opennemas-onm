@@ -20,11 +20,14 @@
         <div class="wrapper-content">
             <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
                         <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
@@ -35,6 +38,8 @@
                         <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="ADVERTISEMENT_CREATE"}
                 <li class="separator"></li>
                 <li>
                     <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page|default:0}"
@@ -42,6 +47,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
                     </a>
                 </li>
+                {/acl}
             </ul>
         </div>
     </div>
@@ -49,7 +55,7 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t}</font></a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
             </li>
             {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
@@ -152,6 +158,8 @@
                         </td>
                         <td style="text-align:center;" class="center">
                             <ul class="action-buttons">
+                          
+                                {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                                 <li>
                                     {if $advertisements[c]->available == 1}
                                         <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
@@ -163,16 +171,21 @@
                                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}" /></a>
                                     {/if}
                                 </li>
+                                {/acl}
+                                {acl isAllowed="ADVERTISEMENT_UPDATE"}
                                 <li>
                                     <a href="{$smarty.server.PHP_SELF}?action=read&id={$advertisements[c]->id}" title="{t}Edit{/t}">
                                         <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                     </a>
                                 </li>
+                                {/acl}
+                                {acl isAllowed="ADVERTISEMENT_DELETE"}
                                 <li>
                                     <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
                                         <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                     </a>
                                 </li>
+                                {/acl}
                             </ul>
                         </td>
 

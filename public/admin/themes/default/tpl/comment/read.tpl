@@ -72,7 +72,8 @@
                                  <input type="text" id="date" name="date" title="author"
                                  value="{$comment->created}" class="required" size="20" readonly /></td>
                          </tr>
-                       <tr>
+                          {acl isAllowed="COMMENT_AVAILABLE"}
+                         <tr>
                              <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
                                  <label for="title"> Publicado: </label>
                              </td>
@@ -83,6 +84,7 @@
                                     </select>
                          </td>
                          </tr>
+                          {/acl}
                          <tr>
                              <td valign="top" align="right" style="padding:4px;" nowrap>
                                  <label for="title">IP:</label>

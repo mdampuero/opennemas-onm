@@ -38,7 +38,7 @@
 					</a>
 				</li>
 				{/acl}
-                 {acl isAllowed="ALBUM_SETTINGS"}
+                {acl isAllowed="VIDEO_SETTINGS"}
                 <li class="separator"></li>
                     <li>
                         <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config video module{/t}">

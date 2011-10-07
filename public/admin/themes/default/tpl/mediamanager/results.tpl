@@ -33,6 +33,7 @@
             <div style='float:left;margin-left:10px;margin-top:10px;'><h2></h2></div>
             <div class="title"><h2> {t}Media manager{/t} :: {t 1=$datos_cat[0]->title}Editing image '%1'{/t}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="IMAGE_UPDATE"}
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self', 'updateDatasPhotos', '');">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir"  alt="Guardar y salir" />
@@ -40,6 +41,7 @@
                         {t}Save{/t}
                     </a>
                 </li>
+                {/acl}
                 <li class="separator"></li>
                 <li>
                     <a href="#" class="admin_add" onClick="enviar(this, '_self','{$smarty.session.desde}', 0);" value="Cancelar" title="Cancelar">

@@ -66,12 +66,16 @@
                 
                 
                 <div class="actions">
+                    {acl isAllowed="IMAGE_UPDATE"}
                     <a class="edit-button" href="{$smarty.server.PHP_SELF}?action=image_data&id={$photo[n]->pk_photo}&category={$category}">
                         <img src="{$params.IMAGE_DIR}edit.png" /> {t}Edit{/t}
                     </a>
+                    {/acl}
+                    {acl isAllowed="IMAGE_DELETE"}
                     <a class="delete-button" href="#" onclick="javascript:confirmar('?action=delFile&amp;id={$photo[n]->pk_photo}&amp;basename={$photo[n]->name}&amp;path={$photo[n]->path_file}&amp;listmode=weeks&amp;category={$category}&amp;page={$smarty.get.page|default:""}');" title="Eliminar fichero">
                         <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" /> {t}Delete{/t}
                     </a>
+                    {/acl}
                 </div>
             </div>
             
@@ -96,11 +100,6 @@
         {/if}
     </div>
     <!-- .pagination -->
-</div>
+ 
 <input type="hidden" name="listmode" value="weeks" />
-
-
-<script type="text/javascript">
-
-</script>
-
+ 

@@ -39,6 +39,7 @@
                 {t}Image manager:: Images for category «GLOBAL»{/t}
             {/if}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="IMAGE_DELETE"}
                 <li>
                     <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  name="submit_mult" value="Eliminar todos">
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />Eliminar todos
@@ -49,6 +50,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />Eliminar
                     </a>
                 </li>
+                {/acl}
                 <li>
                     <button type="button" style="cursor:pointer;  border: 0px;"
                             onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
@@ -61,12 +63,13 @@
                         <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />Buscar
                     </a>
                 </li>
-
+                {acl isAllowed="IMAGE_CREATE"}
                 <li>
                     <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
                         <img border="0" src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />Subir Fotos
                     </a>
                 </li>
+                {/acl}
                 <li>
                     <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
                         <img border="0" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Fotos

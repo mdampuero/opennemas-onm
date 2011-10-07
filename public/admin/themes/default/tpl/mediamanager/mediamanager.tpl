@@ -38,11 +38,13 @@
             </a>
         </li>
         {if $action eq 'searchResult'}
+            {acl isAllowed="IMAGE_DELETE"}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
+            {/acl}
             <li>
                 <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
@@ -51,6 +53,7 @@
         {/if}
     {else}
         {if $action neq 'upload'}
+            {acl isAllowed="IMAGE_DELETE"}
             <li>
                 <a class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />{t}Delete all{/t}
@@ -61,6 +64,7 @@
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
+            {/acl}
             <li>
                 <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
@@ -75,11 +79,13 @@
         </li>
 
         {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
+            {acl isAllowed="IMAGE_CREATE"}
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />{t}Upload media{/t}
                 </a>
             </li>
+            {/acl}
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
                     <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Media catalog{/t}
@@ -92,11 +98,13 @@
             </li>
 
         {else}
+            {acl isAllowed="IMAGE_CREATE"}
             <li>
                  <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos"   onmouseover="return escape('<u>S</u>ubir Fotos');" name="submit_mult" value="Subir Gráficos">
                      <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />Subir Gráficos
                  </a>
             </li>
+            {/acl}
             <li>
                  <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all#media-browser"   onmouseover="return escape('<u>C</u>atálogo de Fotos');" name="submit_mult" value="Catálogo de Gráficos">
                      <img border="0" style="width:50px;" src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />Catálogo de Gráficos

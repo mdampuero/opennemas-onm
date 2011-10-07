@@ -20,11 +20,13 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Category manager{/t} :: {t}Listing categories{/t}</h2></div>
             <ul class="old-button">
+                 {acl isAllowed="CATEGORY_CREATE"}
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
                     </a>
                 </li>
+                {/acl}
                 {acl isAllowed="CATEGORY_SETTINGS"}
                     <li class="separator"></li>
                         <li>
@@ -78,7 +80,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:15px;">{t}Actions{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -118,7 +120,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:50px;">{t}Actions{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,7 +154,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:50px;">{t}Actions{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -187,7 +189,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:50px;">{t}Actions{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,7 +224,7 @@
                         <th style="width:15px;">{t}Photos{/t}</th>
                         <th style="width:15px;">{t}Advertisements{/t}</th>
                         <th style="width:15px;">{t}Published{/t}</th>
-                        <th style="width:50px;">{t}Actions{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
                     </tr>
                 </thead>
                 <tbody>
