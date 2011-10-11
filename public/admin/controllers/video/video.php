@@ -194,7 +194,7 @@ switch ($action) {
             // IF not file provided try to redirect user.
             // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
             $_POST["video_url"] = $filePath['flvFile'];
-            $_POST["information"] = $filePath['thumbnails'];
+            $_POST["information"] = array('thumbnails' => $filePath['thumbnails']);
             $_POST["author_name"] = 'internal';
             if($video->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);

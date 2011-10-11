@@ -84,7 +84,7 @@ class Video extends Content
                     $information = $this->information;
                 }
                 if ($this->author_name == 'internal') {
-                    $thumbnail = MEDIA_URL.DIRECTORY_SEPARATOR.$information['small'];
+                    $thumbnail = MEDIA_URL.DIRECTORY_SEPARATOR.$information['thumbnails']['small'];
                 } else {
                     $thumbnail = $information['thumbnail'];
                 }
@@ -162,8 +162,15 @@ class Video extends Content
 
     public function remove($id)
     {
-        parent::remove($id);
+        
+        //if ($this->author_name == 'internal') {
+        //    var_dump($this->);
+        //    die();
+        //}
+        //unlink($this->information['thumbnails'])
 
+        parent::remove($id);
+        
         $sql = 'DELETE FROM videos WHERE pk_video='.$id;
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
