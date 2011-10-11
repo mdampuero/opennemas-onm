@@ -105,7 +105,7 @@ class Opinion extends Content
 
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
-        if(isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
+        if(!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
         (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
         (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
 
@@ -205,7 +205,9 @@ class Opinion extends Content
 
     function update($data) {
         $data['content_status']= $data['available'];
-        if(isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
+        if(!isset($data['fk_author'])) {$data['fk_author'] = $data['type_opinion'];} // Editorial o director
+        (isset($data['fk_author_img'])) ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
+        (isset($data['fk_author_img_widget'])) ? $data['fk_author_img_widget'] : $data['fk_author_img_widget'] = null ;
         parent::update($data);
         $sql = "UPDATE opinions SET `fk_author`=?, `body`=?,`fk_author_img`=?, `with_comment`=?, `type_opinion`=?, `fk_author_img_widget`=?
                     WHERE pk_opinion=".($data['id']);
@@ -314,7 +316,6 @@ class Opinion extends Content
     }
 
     function onUpdateClearCacheOpinion() {
-        require_once(dirname(__FILE__).'/template_cache_manager.class.php');
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
 
         if(property_exists($this, 'pk_opinion')) {

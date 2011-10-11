@@ -70,7 +70,7 @@ class Author
                 (`name`, `fk_user`, `blog`,`politics`, `condition`,`date_nac`)
                 VALUES ( ?,?,?,?,?,?)";
         $values = array(
-            $data['name'], '0', $data['gender'],
+            $data['name'], '0', $data['blog'],
             $data['politics'], $data['condition'], $data['date_nac']
         );
 
@@ -147,7 +147,7 @@ class Author
                 WHERE pk_author=?";
 
         $values = array(
-            $data['name'], $data['gender'],
+            $data['name'], $data['blog'],
             $data['politics'], $data['condition'],
             $data['id']
         );
@@ -409,6 +409,7 @@ class Author
                 while (!$rs->EOF) {
                     $photo = new stdClass();
                     $photo->path_img    = $rs->fields['path_img'];
+                    $photo->path_file    = $rs->fields['path_img'];
                     $photo->description    = $rs->fields['description'];
 
                     self::$_photos[ $rs->fields['pk_img'] ] = $photo;
@@ -416,7 +417,7 @@ class Author
                 }
             }
         }
-
+        
         if (isset(self::$_photos[$id])) return self::$_photos[$id];
 
         return null;
@@ -451,6 +452,7 @@ class Author
 
             $photos[$i]->pk_img = $rs->fields['pk_img'];
             $photos[$i]->path_img = $rs->fields['path_img'];
+            $photos[$i]->path_file = $rs->fields['path_img'];
             $photos[$i]->description = $rs->fields['description'];
             $photos[$i]->fk_author = $rs->fields['fk_author'];
 

@@ -178,13 +178,12 @@ if (!isset($action)) {
             $aut = new Author();
             $todos = $aut->all_authors(NULL,'ORDER BY name');
             $tpl->assign('todos', $todos);
-
+            
             $opinion = new Opinion();
             $opinion->available = 1;
             $opinion->in_home   = 1;
             $opinion->with_comment = 1;
 
-            $tpl->assign('todos', $todos);
             $tpl->assign('opinion', $opinion);
             $_SESSION['desde'] = 'new';
             $_SESSION['_from'] = 'opinion.php';
@@ -280,7 +279,6 @@ if (!isset($action)) {
             $opinion = new Opinion();
             $opinion->update($_REQUEST);
 
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
 
@@ -464,7 +462,7 @@ if (!isset($action)) {
                     }
                 }
             }
-            if($alert =='ok') {
+            if(isset($alert) && $alert =='ok') {
                 $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
                 m::add($msg);
             }

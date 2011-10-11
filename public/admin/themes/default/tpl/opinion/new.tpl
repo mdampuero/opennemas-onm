@@ -130,7 +130,7 @@
                             </table>
                         </div>
                         <br>
-                        {if count($photos) >0}
+                        {*if count($photos) >0*}
                         <div class="utilities-conf">
 
                             <h2>{t}Image selection{/t}</h2>
@@ -171,7 +171,7 @@
                                 </tr>
                             </table>
                         </div>
-                        {/if}
+                        {*/if*}
 
 
                     </td>
@@ -249,12 +249,8 @@
 
         Droppables.add('div_widget', {
             onDrop: function(element) {
-                if(element.width == 60){
                     $('widget').src=element.src;
                     $('fk_author_img_widget').value=element.id;
-                }else{
-                   alert('{t}Disallowed width, this element needs a 60px width photo.{/t}');
-                }
             }
         });
         Droppables.add('sel', {

@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
-
+{block name="header-js" append}
+    {script_tag src="/photos.js" defer="defer" language="javascript"}    
+{/block}
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
@@ -38,6 +40,7 @@
         </div>
     </div>
     <div class="wrapper-content">
+        <div id="warnings-validation"></div>
         <table class="adminheading">
             <tr align="right">
                 <td>&nbsp;</td>
@@ -56,54 +59,51 @@
                 </tr>
                 <tr>
                     <td valign="top" align="right">
-                        <label for="phone">{t}Condition{/t}</label>
+                        <label for="phone">{t}Condition{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="condition" name="condition" title="{t}Condition{/t}" value="{$author->condition|default:""}"  size="50"/>
                     </td>
                 </tr>
-
-    
                 <tr>
                     <td valign="top" align="right">
                         <label for="phone">{t}Blog name:{/t}</label>
                     </td>
                     <td>
-                        <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politcs|default:""}"  size="50"/>
+                        <input type="text" id="politics" name="politics" title="{t}Blog name{/t}" value="{$author->politics|default:""}"  size="50"/>
                     </td>
-
                 </tr>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;">
                         <label for="phone">{t}Blog url:{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="gender" name="gender" title="{t}Blog url{/t}" value="{$author->gender}"  size="50"/>
+                        <input type="text" id="blog" name="blog" title="{t}Blog url{/t}" value="{$author->blog}"  size="50"/>
                     </td>
                 </tr>
-
-
                 <tr>
                     <td valign="top" align="right">
-                        <b>{t}Author photos{/t}</b>
+                        <b>{t}Author photos{/t}:</b>
+                        {if $photos}
+                        </br>
+                        <b style="font-size:0.8em;">({t}Double click on image to delete{/t})</b>
+                        {/if}
                     </td>
                     <td style="padding:4px;">
                         <div id="contenedor" name="contenedor" style="display:none; "> </div>
-                        <div class="photos" >
-                                 <ul id='thelist'  class="gallery_list">
-                                        {section name=as loop=$photos|default:array()}
-                                        <li id='{$photos[as]->pk_img}'>
-                                                <div style="float: left;width:90px;">
-                                                        <a><img src="{$MEDIA_IMG_PATH_URL}{$photos[as]->path_img}" id="{$photos[as]->pk_img}" width="67"  border="1" /></a>
-                                                        <br>
-                                                        {$photos[as]->description}
-                                                </div>
-                                                <a href="#" onclick="javascript:del_photo('{$photos[as]->pk_img}');" title="{t}Delete photo{/t}">
-                                                        <img src="{$params.IMAGE_DIR}iconos/eliminar.gif" border="0" align="absmiddle" style="width:20px; height:20px;" />
-                                                </a>&nbsp;
-                                        </li>
-                                        {/section}
-                                 </ul>
+                        <div id="photos" class="photos" >
+                            <ul id='thelist'  class="gallery_list">
+                            {section name=as loop=$photos|default:array()}
+                                <li id='{$photos[as]->pk_img}'>
+                                    <a class="album" title="{t}Show image{/t}">
+                                         <img ondblclick="del_photo('{$photos[as]->pk_img}');"
+                                             style="{cssimagescale resolution=67 photo=$photos[as]}"
+                                             src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photos[as]->path_img}"
+                                          />
+                                     </a>
+                                 </li>   
+                            {/section}
+                            </ul>
                         </div>
                         <input type="hidden" id="action" name="action" value="">
                         <input type="hidden" id="del_img" name="del_img" value="">
@@ -111,33 +111,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" align="right">{t}Upload more files{/t}</td>
-                    <td>
+                    <td valign="top" align="right">
+                        <b>{t}Upload an image{/t}:</b>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap"    >
                         <div id="iframe" style="display: inline;">
                             <iframe src="newPhoto.php?nameCat=authors&category=7" style=" background:#fff; height:300px; width:100%" align="center" frameborder="0" framespacing="0" scrolling="none" border="0"></iframe>
                         </div>
                     </td>
                 </tr>
-                <div id="photograph" style="width:80%; margin:0 auto;">
-                </div>
             </tbody>
 
-            <tfoot>
-                <tr class="pagination">
-                    <td colspan=2></td>
-                </tr>
-            </tfoot>
-        </table>
-
-
-        {*dhtml_calendar inputField="date_nac" button="triggerend" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"*}
-
-        <style type="text/css">
-            .gallery_list {
-                width:auto !important;
-            }
-        </style>
-
-    </div><!--fin wrapper-content-->
+    <tfoot>
+        <tr class="pagination">
+            <td colspan=2></td>
+        </tr>
+    </tfoot>
+</table>
 </form>
 {/block}
