@@ -12,6 +12,10 @@
  * @package    Onm
  * @subpackage ControllerHelper
  **/
+
+use Onm\Settings as s,
+    Onm\Message  as m;
+
 class Newsletter
 {
     const ITEMS_MAX_LIMIT = 50;
@@ -76,6 +80,7 @@ class Newsletter
         if (isset($data->opinions) && !empty($data->opinions)) {
             foreach ($data->opinions as $tok){
                 $data->opinions[$i]->date= date('Y-m-d', strtotime(str_replace('/', '-', substr($tok->created, 6))));
+                $data->opinions[$i]->slug= String_Utils::get_title($data->opinions[$i]->author);
                 $i++;
             }
         }
@@ -107,7 +112,12 @@ class Newsletter
 
         $URL_PUBLIC = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $URL_PUBLIC);
-
+        
+        $configurations = s::get(array(
+                                    'newsletter_maillist',
+                                    ));
+        
+        $tpl->assign('conf', $configurations);
         $htmlContent = $tpl->fetch('newsletter/newsletter.tpl');
         return $htmlContent;
     }

@@ -57,6 +57,14 @@
                                 <label for="newsletter_maillist[email]">{t}Maillist email:{/t}</label>
                                 <input type="text" class="required" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" />
                             </div>
+                            <br />
+                             <div>
+                                <label for="newsletter_maillist[link]">{t}Maillist link:{/t}</label>
+                                <select name="newsletter_maillist[link]" id="newsletter_maillist[link]" class="required">
+                                  <option name="newsletter_maillist[link]" value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
+                                  <option name="newsletter_maillist[link]" value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
+                                </select>
+                            </div>
                         </div>
                     </td>
                 </tr>
