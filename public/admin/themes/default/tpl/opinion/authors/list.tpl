@@ -40,7 +40,7 @@
                 </th>
             </tr>
         </table>
-        <table class="adminlist">
+        <table class="listing-table">
             <thead>
                 <tr>
                     <th class="title">{t}Author name{/t}</th>

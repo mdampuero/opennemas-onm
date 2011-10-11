@@ -32,6 +32,7 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 $contentType = Content::getIDContentType('album');
 
 $category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
+
 if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
 }
@@ -71,7 +72,9 @@ switch($action) {
 
         $cm = new ContentManager();
 
-        if ($category == 'favorite') {
+        $rawCategory = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
+        $tpl->assign('raw_category', $rawCategory);
+        if ($rawCategory == 'favorite') {
             $albums = $cm->find_all('Album', 'favorite =1 AND available =1', 'ORDER BY  created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
@@ -83,6 +86,14 @@ switch($action) {
                 }
             }
 
+        } elseif ($rawCategory === 'all') {
+            $albums = $cm->find_all('Album', 'available =1', 'ORDER BY  created DESC '.$limit);
+            if(!empty($albums)) {
+                foreach ($albums as &$album) {
+                    $album->category_name = $ccm->get_name($album->category);
+                    $album->category_title = $ccm->get_title($album->category_name);
+                }
+            }
         } else {
             $albums = $cm->find_by_category('Album', $category, 'fk_content_type=7',
                            'ORDER BY created DESC '.$limit);

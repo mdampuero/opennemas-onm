@@ -72,6 +72,8 @@ switch ($action) {
 
         $configurations = s::get('video_settings');
         $numFavorites = $configurations['total_widget'];
+        
+        
 
         if (empty($page)) {
             $limit = "LIMIT ".(ITEMS_PAGE+1);
@@ -81,9 +83,11 @@ switch ($action) {
 
         if ($category == 'favorite') { //Widget video
             $videos = $cm->find_all('Video', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
+            
             if (count($videos) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
             }
+            
             if(!empty($videos)){
                 foreach ($videos as &$video) {
                     $video->category_name = $ccm->get_name($video->category);
@@ -91,6 +95,15 @@ switch ($action) {
                 }
             }
 
+        } elseif ($category == 'all') {
+            $videos = $cm->find_all('Video', 'available =1', 'ORDER BY created DESC '. $limit);
+            
+            if(!empty($videos)){
+                foreach ($videos as &$video) {
+                    $video->category_name = $ccm->get_name($video->category);
+                    $video->category_title = $ccm->get_title($video->category_name);
+                }
+            }
         } else {
             $videos = $cm->find_by_category(
                 'Video',

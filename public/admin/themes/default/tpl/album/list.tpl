@@ -61,7 +61,10 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $raw_category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
+            </li>
+            <li>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $raw_category==='all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if} >{t}All categories{/t}</a>
             </li>
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
