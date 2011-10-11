@@ -57,46 +57,6 @@ $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $categoryData);
 
 
-function addVideo($file, $baseUploadpath) {
-    
-    if (empty($file["tmp_name"])) {
-        m::add(sprintf(
-            _('Seems that the server limits file uploads up to %s Mb.'
-                .' Try to upload files smaller than that size or contact with your administrator'),
-            (int)(ini_get('upload_max_filesize'))
-        ));
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-    }
-    $uploads = array();
-
-    $originalFileName = $file["name"];
-    if(!empty($originalFileName)) {
-        
-        // Calculate upload directory and create it if not exists
-        $relativeUploadDir = 'video'.DS.date("/Y/m/d/").DS;
-        $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir;
-        if(!is_dir($absoluteUploadpath)) FilesManager::createDirectory($absoluteUploadpath);
-        
-        // Calculate the final video name by its extension, current data, ...
-        $fileData = pathinfo($originalFileName);     //sacamos infor del archivo
-        $fileExtension = strtolower($fileData['extension']);
-        $t = gettimeofday(); //Sacamos los microsegundos
-        $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
-        $fileName = date("YmdHis") . $micro . "." . $fileExtension;
-        
-        // Compose absolute path to the new video file
-        $videoSavePath = $absoluteUploadpath.$fileName;
-
-        // Finally move uploaded file to the new location
-        if (move_uploaded_file($file["tmp_name"], $videoSavePath)) {
-            return $relativeUploadDir.$fileName;
-        }
-        
-    } //if empty
-
-    return false;
-}
-
 /******************* GESTION CATEGORIAS  *****************************/
 
 
@@ -218,7 +178,7 @@ switch ($action) {
 
         Acl::checkOrForward('VIDEO_CREATE');
         
-        $path_upload = MEDIA_PATH.DS.MEDIA_DIR.DS;
+        $pathUpload = MEDIA_PATH.DS;
         
         if (
             isset($_FILES)
@@ -229,9 +189,12 @@ switch ($action) {
             $video = new Video();
             
             //Mirar el tema de mensajes en los fallos que deberia devolver.
-            $filePath = addVideo($_FILES["video_file"], $path_upload);
-            $_POST["video_url"] = $filePath;
-            $_POST["information"] = null;
+            $filePath = Video::uploadFLV($_FILES["video_file"], $pathUpload);
+            
+            // IF not file provided try to redirect user.
+            // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+            $_POST["video_url"] = $filePath['flvFile'];
+            $_POST["information"] = $filePath['thumbnails'];
             $_POST["author_name"] = 'internal';
             if($video->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);

@@ -1644,8 +1644,8 @@ div.action-bar {
     margin-bottom:20px;*/
 	width:100%;
     background: none repeat scroll 0 0 #ececec/*#F5F5F5*/;
-    border:1px solid #ececec;
-    border-bottom-color:#BFBFBF !important;
+    border:1px solid #BFBFBF;
+    border-top:0 none !important;
     /*border-radius: 0 0 3px 3px;*/
     /*border-top: 1px solid #DDDDDD;*/
     margin-bottom: 18px;

@@ -23,6 +23,8 @@
     <div class="wrapper-content">
 
 
+        {render_messages}
+
          <div id="{$category}">
             <div class="table-info clearfix">
                 <div>

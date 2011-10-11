@@ -76,6 +76,20 @@ class Video extends Content
                 return $returnValue;
 
                 break;
+            case 'thumb':
+                
+                if (!is_array($this->information)) {
+                    $information = unserialize($this->information);
+                } else {
+                    $information = $this->information;
+                }
+                if ($this->author_name == 'internal') {
+                    $thumbnail = MEDIA_URL.DIRECTORY_SEPARATOR.$information['small'];
+                } else {
+                    $thumbnail = $information['thumbnail'];
+                }
+                
+                return $thumbnail;
 
             default:
                 break;
@@ -158,6 +172,114 @@ class Video extends Content
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
+    }
+    
+    static public function uploadFLV($file, $baseUploadpath) {
+    
+        $return = array();
+        
+        if (empty($file["tmp_name"])) {
+            m::add(sprintf(
+                _('Seems that the server limits file uploads up to %s Mb.'
+                    .' Try to upload files smaller than that size or contact with your administrator'),
+                (int)(ini_get('upload_max_filesize'))
+            ));
+            return $return;
+        }
+        $uploads = array();
+    
+        $originalFileName = $file["name"];
+        if(!empty($originalFileName)) {
+            
+            // Calculate upload directory and create it if not exists
+            $relativeUploadDir = 'video'.DS.date("Y/m/d");
+            $absoluteUploadpath = $baseUploadpath.DS.$relativeUploadDir.DS;
+            if(!is_dir($absoluteUploadpath)) FilesManager::createDirectory($absoluteUploadpath);
+            
+            // Calculate the final video name by its extension, current data, ...
+            $fileData = pathinfo($originalFileName);     //sacamos infor del archivo
+            $fileExtension = strtolower($fileData['extension']);
+            $t = gettimeofday(); //Sacamos los microsegundos
+            $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+            $fileName = date("YmdHis") . $micro . "." . $fileExtension;
+            
+            // Compose absolute path to the new video file
+            $videoSavePath = $absoluteUploadpath.$fileName;
+    
+            // Finally move uploaded file to the new location
+            if (move_uploaded_file($file["tmp_name"], $videoSavePath)) {
+                $return['flvFile'] = $relativeUploadDir.DIRECTORY_SEPARATOR.$fileName;
+            }
+            
+            $thumbnails = self::createThumbnailsfromFLV($videoSavePath);
+            // We need to add relative path for every thumbnail
+            foreach ($thumbnails as $name => $value ) {
+                $return['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
+            }
+            
+            
+        } //if empty
+    
+        return $return;
+    }
+    
+    /*
+     * Function that creates thumbnails for one flv vídeo
+     * @param $flvPath, $sizes
+     */
+    
+    static public function createThumbnailsfromFLV($flvPath, $sizes = array())
+    {
+        $defaultThumbnailSizes = array(
+            'small'  =>  array( 'width' => 150, 'height' => 150 ),
+            'normal' =>  array( 'width' => 300, 'height' => 300 ),
+            'big'    =>  array( 'width' => 450, 'height' => 450 ),
+        );
+        
+        
+        // Create thumbs in the same directory as the video
+        $uploadDir = dirname($flvPath);
+        
+        // Get the thumbnail sizes
+        $sizes = array_merge($defaultThumbnailSizes, $sizes);
+        
+        // init ffmpeg object from flv for getting its thumbnail
+        $movie = new ffmpeg_movie($flvPath);
+        // Get the number of frames the video has
+        $frameCount = $movie->getFrameCount();
+        // Get The duration of the video in seconds
+        $duration = round($movie->getDuration(), 0);  
+        // Get the number of frames of the video  
+        $totalFrames = $movie->getFrameCount();  
+        
+        //$height = $movie->getFrameHeight();  
+        //$width = $movie->getFrameWidth();
+        
+        foreach ($sizes as $name => $sizeValues) {
+            
+            $thumbnailFrame = (int) round($totalFrames/2);
+        
+            // Need to create a GD image ffmpeg-php to work on it  
+            // Choose the frame you want to save as jpeg
+            $image = imagecreatetruecolor($sizeValues['width'], $sizeValues['height']);  
+            // Receives the frame  
+            $frame = $movie->getFrame($thumbnailFrame);  
+            // Convert to a GD image  
+            $image = $frame->toGDImage();
+            
+            // Getting file information from flv file
+            // for building  save path and final filename for the thumbnail
+            $flvFileInfo = pathinfo($flvPath);
+            
+            $basePath = $flvFileInfo['dirname'];
+            $baseName = $flvFileInfo['filename']."-".$name.'.jpg';
+            
+            // Save to disk.
+            $imageFile = $basePath.DIRECTORY_SEPARATOR.$baseName;
+            imagejpeg($image, $imageFile, 90);
+            $thumbs[$name] = $baseName;
+        }
+        return $thumbs;
     }
 
 }

@@ -147,12 +147,17 @@
                                 </tr>
                                  
                                 </tr>
-                                 <tr>
+                                {if (isset($video) && $video->author_name == 'internal')}
+                                
+                                {else}
+                                <tr>
                                     <td>
                                         <label for="title">Pick a file to upload:</label>
                                         <input type="file" name="video_file">
                                     </td>
-                                </tr>       
+                                </tr>    
+                                {/if}
+                                     
                             </table>
                             <input type="hidden" value="internal"/>
                         </td>
@@ -160,24 +165,23 @@
 
                     {else}
                     <tr>
-                    <td style="padding:10px; vertical-align:top;">
-                        <label for="video_url">
-                        {if isset($video)}
-                            {t}Video URL:{/t}
-                        {else}
-                            {t}Write the video url in the next input and push "Get video information"{/t}
-                        {/if}
-                        </label>
-                        <input type="text" id="video_url" name="video_url" title="Video url"
-                                value="{$video->video_url|default:""}" class="required" style="width:70%"
-                                onChange="javascript:loadVideoInformation(this.value);"/> &nbsp;
-                        <a href="#" class="onm-button blue"
-                             onClick="javascript:loadVideoInformation($('video_url').value); return false;">
-                            {t}Get video information{/t}
-                        </a>
-                    </td>
+                        <td style="padding:10px; vertical-align:top;">
+                            <label for="video_url">
+                            {if isset($video)}
+                                {t}Video URL:{/t}
+                            {else}
+                                {t}Write the video url in the next input and push "Get video information"{/t}
+                            {/if}
+                            </label>
+                            <input type="text" id="video_url" name="video_url" title="Video url"
+                                    value="{$video->video_url|default:""}" class="required" style="width:70%"
+                                    onChange="javascript:loadVideoInformation(this.value);"/> &nbsp;
+                            <a href="#" class="onm-button blue"
+                                 onClick="javascript:loadVideoInformation($('video_url').value); return false;">
+                                {t}Get video information{/t}
+                            </a>
+                        </td>
                     </tr>
-                    {/if}
 						
 					<tr>
 						<td style="width:100%; padding:10px"colspan="2">
@@ -189,6 +193,8 @@
 							</div>
 						</td>
 					</tr>
+                    {/if}
+
 				</tbody>
 				<tfooter>
 					<tr>
