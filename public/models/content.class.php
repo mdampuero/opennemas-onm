@@ -281,12 +281,12 @@ class Content
             $ccm = ContentCategoryManager::get_instance();
             $catName = $ccm->get_name($data['category']);
      
-            $sql = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
+            $sql2 = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
                    "WHERE pk_fk_content= ?";
             $values = array($data['category'], $catName, $data['id']);
 
 
-            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            if ($GLOBALS['application']->conn->Execute($sql2, $values) === false) {
                 $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
