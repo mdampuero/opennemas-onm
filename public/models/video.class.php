@@ -85,7 +85,7 @@ class Video extends Content
                     $information = $this->information;
                 }
                 if ($this->author_name == 'internal') {
-                    $thumbnail = MEDIA_URL.DIRECTORY_SEPARATOR.$information['thumbnails']['small'];
+                    $thumbnail = $information['thumbnails']['small'];
                 } else {
                     $thumbnail = $information['thumbnail'];
                 }
@@ -283,7 +283,7 @@ class Video extends Content
             }
             
             // Convert to a GD image
-           $image = $frame->toGDImage();
+            $image = $frame->toGDImage();
             
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail

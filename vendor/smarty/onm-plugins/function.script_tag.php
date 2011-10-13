@@ -54,7 +54,10 @@ function smarty_function_script_tag($params, &$smarty) {
         $properties .= " {$key}=\"{$value}\"";
     }
     
-    $output = "<script {$type} src=\"{$server}{$src}{$mtime}\" {$properties}></script>";
+    $resource = $server.DS.$src;
+    $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    
+    $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties}></script>";
     
     return $output;
 }

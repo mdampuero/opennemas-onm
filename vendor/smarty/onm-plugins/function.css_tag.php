@@ -57,7 +57,10 @@ function smarty_function_css_tag($params, &$smarty) {
         $properties .= " {$key}=\"{$value}\"";
     }
     
-    $output = "<link {$rel} {$type} href=\"{$server}{$href}{$mtime}\" {$properties}></link>";
+    $resource = $server.DS.$href;
+    $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    
+    $output = "<link {$rel} {$type} href=\"{$resource}{$mtime}\" {$properties}></link>";
     
     return $output;
 }

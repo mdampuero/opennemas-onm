@@ -36,30 +36,18 @@ if (file_exists($configFile)) {
     
     // Loads one ONM instance from database
     $im = \Onm\Instance\InstanceManager::getInstance();
-    $instance = $im->load($_SERVER['SERVER_NAME']);
-    if (!$instance) {
-        if (!preg_match("@manager@", $_SERVER["PHP_SELF"])) {
-            echo 'Instance not found';
-            die();
-        } else {
-            $configs = array(
-                'INSTANCE_UNIQUE_NAME' => 'onm_manager',
-                'MEDIA_URL' => '',
-                'TEMPLATE_USER' => '',
-            );
-            foreach ($configs as $key => $value) {
-                define($key, $value);
-            }
-        }
-    } else {
-        if (
-            $instance->activated != 1
-            && !preg_match("@manager@", $_SERVER["PHP_SELF"])
-        ) {
-            echo 'Instance not activated.';
-            die();
-        }
+    try {
+        
+        $instance = $im->load($_SERVER['SERVER_NAME']);
+        
+    } catch (\Onm\Instance\NotActivatedException $e) {
+        echo 'Instance not activated';
+        die();
+    } catch (\Onm\Instance\NotFoundException $e) {
+        echo 'Instance not found';
+        die();
     }
+    
     $app = \Application::load();
     
 } else {

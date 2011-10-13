@@ -306,34 +306,28 @@ class Application
         define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
         define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
         $cachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
-        if (!file_exists($cachepath)) {
-            mkdir($cachepath, 0755, true);
-        }
+        if (!file_exists($cachepath)) { mkdir($cachepath, 0755, true); }
         define('CACHE_PATH', realpath($cachepath));
         
         /**
-        * Logging settings
-        **/
+         * Logging settings
+         **/
         define('SYS_LOG_PATH', SITE_PATH.DS.'..'.DS."tmp/logs");
         define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
         define('SYS_SESSION_PATH', $cachepath.DS."/sessions".DS);
         define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
         define('OPENNEMAS_FRONTEND_SESSIONS', SYS_SESSION_PATH.'frontend/');
-        if (!file_exists(SYS_SESSION_PATH) ) {
-            mkdir(SYS_SESSION_PATH);
-        }
-        if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) {
-            mkdir(OPENNEMAS_BACKEND_SESSIONS);
-        }
-        if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) {
-            mkdir(OPENNEMAS_FRONTEND_SESSIONS);
-        }
+        if (!file_exists(SYS_SESSION_PATH) ) { mkdir(SYS_SESSION_PATH); }
+        if (!file_exists(OPENNEMAS_BACKEND_SESSIONS) ) { mkdir(OPENNEMAS_BACKEND_SESSIONS); }
+        if (!file_exists(OPENNEMAS_FRONTEND_SESSIONS)) { mkdir(OPENNEMAS_FRONTEND_SESSIONS); }
         define('SYS_NAME_GROUP_ADMIN', 'Administrador'); // TODO: delete from application
-                
+
         /**
-        * Media paths and urls configurations
-        **/
+         * Media paths and urls configurations
+         **/
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
+        define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
+
         define('MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
@@ -344,6 +338,11 @@ class Application
         // TODO: A Eliminar
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application        
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
+        
+        define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
+        define('INSTANCE_MEDIA_PATH', MEDIA_URL.DS.INSTANCE_UNIQUE_NAME.DS);
+
+        
      
         /**
         * Template settings
@@ -358,9 +357,10 @@ class Application
         define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
         
         
+        
         /**
-        * Mail settings
-        **/
+         * Mail settings
+         **/
         define('MAIL_HOST', "localhost");
         // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
         define('MAIL_USER', "");

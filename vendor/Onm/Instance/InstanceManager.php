@@ -69,22 +69,60 @@ class InstanceManager
             return false;
         }
 
-        //If found matching instance initialize it
+        //If found matching instance initialize its contants and return it
         if ($rs->fields) {
+            
             $instance = new \stdClass();
             foreach ($rs->fields as $key => $value ) {
                 $instance->{$key} = $value;
             }
             define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+            
+            // Transform all the intance settings into application constants.
             $instance->settings = unserialize($instance->settings);
+            if (empty($instance->settings['MEDIA_URL']))
+            {
+                $instance->settings['MEDIA_URL'] = implode(
+                    '/',
+                    array(
+                        'http://',
+                        $_SERVER['HTTP_HOST'],
+                        'media'.
+                        '/'
+                    )
+                );
+            }
             foreach ($instance->settings as $key => $value ) {
                 define($key, $value);
             }
-    
-            return $instance;   
+            
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                throw new \Onm\Instance\NotActivatedException(_('Instance not activated'));
+            }
+        
+        // If this instance doesn't exist check if the request is from manager
+        // in that case return a dummie instance.
         } else {
-            return false;
+            
+            if (!preg_match("@manager@", $_SERVER["PHP_SELF"])) {
+                throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+            } else {
+                $instance = new \stdClass();
+                $instance->interna_name = 'onm_manager';
+                $instance->activated = true;
+                $configs = array(
+                    'INSTANCE_UNIQUE_NAME' => $instance->interna_name,
+                    'MEDIA_URL' => '',
+                    'TEMPLATE_USER' => '',
+                );
+                foreach ($configs as $key => $value) {
+                    define($key, $value);
+                }
+            }
+            
         }
+        return $instance;
         
     }
     
@@ -281,6 +319,15 @@ class InstanceManager
         }
         
         return true;
+    }
+    
+    /*
+     * Returns true if the current loaded instance is activated
+     * 
+     */
+    public function isActivated()
+    {
+        return ($this->activated == 1);
     }
 
 
