@@ -7,7 +7,7 @@ function smarty_function_render_video($params, &$smarty) {
     if($video->author_name == 'internal') {
         
         $rand = rand();
-        $output = '<a class="flashplayer" href="'.INSTANCE_MEDIA.DS.'video'.DS.$video->video_url.'" style="display:block;width:'
+        $output = '<a class="flashplayer" href="'.$params['base_url'].DS.$video->video_url.'" style="display:block;width:'
                   .$params['width'].'px;height:'.$params['height'].'px;background: url(\''.$video->thumb.'\')" id="flashplayer-'.$rand.'"></a>'."\n";
         
         $output .= '
