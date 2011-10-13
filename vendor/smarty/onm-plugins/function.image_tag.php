@@ -29,6 +29,7 @@ function smarty_function_image_tag($params, &$smarty) {
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
     
     unset($params['src']);
+    unset($params['base_url']);
     $properties = '';
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
