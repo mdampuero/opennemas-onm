@@ -253,27 +253,37 @@ class Video extends Content
         
         // init ffmpeg object from flv for getting its thumbnail
         $movie = new ffmpeg_movie($flvPath);
-        // Get the number of frames the video has
-        $frameCount = $movie->getFrameCount();
         // Get The duration of the video in seconds
         $duration = round($movie->getDuration(), 0);  
         // Get the number of frames of the video  
-        $totalFrames = $movie->getFrameCount();  
+        $totalFrames = $movie->getFrameCount();
+        $frameRate = $movie->getFrameRate();
         
         //$height = $movie->getFrameHeight();  
         //$width = $movie->getFrameWidth();
         
         foreach ($sizes as $name => $sizeValues) {
             
-            $thumbnailFrame = (int) round($totalFrames/2);
+            $thumbnailFrameNumber = (int) round($totalFrames/4)%$frameRate;
         
             // Need to create a GD image ffmpeg-php to work on it  
             // Choose the frame you want to save as jpeg
             $image = imagecreatetruecolor($sizeValues['width'], $sizeValues['height']);  
-            // Receives the frame  
-            $frame = $movie->getFrame($thumbnailFrame);  
-            // Convert to a GD image  
-            $image = $frame->toGDImage();
+            // Receives the frame
+            
+            $frame = $movie->getFrame($thumbnailFrameNumber);
+            if (gettype($frame) != 'object') {
+                $thumbnailFrameNumber = 1;
+                do {
+                    if ($thumbnailFrameNumber > $totalFrames) { break 1; }
+                    $frame = $movie->getFrame($thumbnailFrameNumber);
+                    $valid = gettype($frame);
+                    $thumbnailFrameNumber++;
+                } while(gettype($frame) != 'object');                   
+            }
+            
+            // Convert to a GD image
+           $image = $frame->toGDImage();
             
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail
