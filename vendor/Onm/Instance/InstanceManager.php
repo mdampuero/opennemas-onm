@@ -68,6 +68,22 @@ class InstanceManager
             $errorMsg = $this->_connection->ErrorMsg();
             return false;
         }
+        
+        if (preg_match("@manager@", $_SERVER["PHP_SELF"])) {
+            $instance = new \stdClass();
+            $instance->interna_name = 'onm_manager';
+            $instance->activated = true;
+            $configs = array(
+                'INSTANCE_UNIQUE_NAME' => $instance->interna_name,
+                'MEDIA_URL' => '',
+                'TEMPLATE_USER' => '',
+            );
+            foreach ($configs as $key => $value) {
+                define($key, $value);
+            }
+            
+            return $instance;
+        }
 
         //If found matching instance initialize its contants and return it
         if ($rs->fields) {
@@ -105,21 +121,7 @@ class InstanceManager
         // in that case return a dummie instance.
         } else {
             
-            if (!preg_match("@manager@", $_SERVER["PHP_SELF"])) {
-                throw new \Onm\Instance\NotFoundException(_('Instance not found'));
-            } else {
-                $instance = new \stdClass();
-                $instance->interna_name = 'onm_manager';
-                $instance->activated = true;
-                $configs = array(
-                    'INSTANCE_UNIQUE_NAME' => $instance->interna_name,
-                    'MEDIA_URL' => '',
-                    'TEMPLATE_USER' => '',
-                );
-                foreach ($configs as $key => $value) {
-                    define($key, $value);
-                }
-            }
+            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
             
         }
         return $instance;
