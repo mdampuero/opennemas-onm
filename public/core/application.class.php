@@ -325,6 +325,12 @@ class Application
         /**
          * Media paths and urls configurations
          **/
+        
+        //TODO: All the MEDIA_* should be ported to use this constant
+        define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
+        define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
+        
+        
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
 
@@ -339,16 +345,10 @@ class Application
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application        
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
         
-        define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
-        define('INSTANCE_MEDIA_PATH', MEDIA_URL.DS.INSTANCE_UNIQUE_NAME.DS);
-
-        
-     
         /**
         * Template settings
         **/
-        define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-        define('TEMPLATE_USER_PATH_WEB', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
+        define('TEMPLATE_USER_PATH',     SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
         
         define('TEMPLATE_ADMIN', "default");

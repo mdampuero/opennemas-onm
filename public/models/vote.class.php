@@ -262,7 +262,7 @@ class Vote
      * @example
      *  <a href="javascript:vote_comment(IP,1,PK_VOTE)" title="A favor">
      *    <img id="$this->pk_vote_1"
-     *       src="TEMPLATE_USER_PATH_WEB."images/noticias/vote_pos.png "
+     *       src="TEMPLATE_USER_PATH."images/noticias/vote_pos.png "
      *       alt="A favor" />
      *  </a>
      *
