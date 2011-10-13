@@ -1,3 +1,13 @@
+--13-October-2011
+INSERT INTO `privileges` (
+`pk_privilege` ,
+`name` ,
+`description` ,
+`module`
+)
+VALUES (135, 'GROUP_CHANGE', 'Cambiar de grupo al usuario ', 'GROUP'),
+  ('136', 'USER_CATEGORY', 'Asignar categorias al usuario ', 'USER');
+
 -- 29-september-2011
 -- CREATE MASTERS GROUP
 

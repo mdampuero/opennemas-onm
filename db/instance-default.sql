@@ -1491,7 +1491,9 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (126, 'IMPORT_EPRESS', 'Leer Widget', 'IMPORT'),
 (127, 'IMPORT_XML', 'Modificar Widget', 'IMPORT'),
 (128, 'IMPORT_EFE', 'Eliminar Widget', 'IMPORT'),
-(134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM');
+(134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM'),
+(135, 'GROUP_CHANGE', 'Cambiar de grupo al usuario ', 'GROUP'),
+(136, 'USER_CATEGORY', 'Asignar categorias al usuario ', 'USER');
 
 -- --------------------------------------------------------
 
