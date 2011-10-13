@@ -67,7 +67,7 @@ switch ($action) {
             $szTags  = trim($_REQUEST['stringSearch']);
             $objSearch = cSearch::Instance();
             $arrayResults = $objSearch->SearchContentsSelectMerge(
-                "contents.title as titule, contents.metadata, contents.permalink,
+                "contents.title as titule, contents.metadata, contents.slug,
                 contents.description, contents.created, contents.pk_content as id,
                 contents_categories.catName, contents_categories.pk_fk_content_category as category,
                 content_types.title as type, contents.available, contents.content_status,
@@ -128,7 +128,7 @@ switch ($action) {
         $szTags  = trim($_REQUEST['stringSearch']);
         $objSearch = cSearch::Instance();
         $arrayResults = $objSearch->SearchContentsSelectMerge(
-            "contents.title as titule, contents.metadata, contents.permalink,
+            "contents.title as titule, contents.metadata, contents.slug,
             contents.description, contents.created, contents.pk_content as id,
             contents_categories.catName, contents_categories.pk_fk_content_category as category,
             content_types.title as type, contents.available, contents.content_status,

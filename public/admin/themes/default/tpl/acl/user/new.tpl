@@ -259,14 +259,14 @@ function showGroupUsers(elto) {
                                         value="{$user->phone}"  size="15"/>
                                 </td>
                             </tr>
-
+                           {acl isAllowed="GROUP_CHANGE"}
                             <tr valign="top">
                                 <th scope="row">
                                     <label for="id_user_group">{t}User group:{/t}</label>
                                 </th>
                                 <td>
                                     <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
-                                        <option  value ="" selected="selected"> </OPTION>
+                                        <option  value ="" selected="selected"> </option>
                                         {section name=user_group loop=$user_groups}
                                             {if $user_groups[user_group]->id == $user->id_user_group}
                                                 <option  value = "{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
@@ -280,6 +280,8 @@ function showGroupUsers(elto) {
                                         <img src="{$params.IMAGE_DIR}users_edit.png" border="0" style="vertical-align: middle;" /></a>
                                 </td>
                             </tr>
+                            {/acl}
+                            {acl isAllowed="USER_CATEGORY"}
                             <tr valign="top">
                                 <th scope="row">
                                     <label for="id_user_group">{t}Sections:{/t}</label>
@@ -305,24 +307,7 @@ function showGroupUsers(elto) {
                                                     {/foreach}
                                                 {/if}
                                             {/foreach}
-
-                                            {*section name=category loop=$content_categories}
-                                                {if  isset($content_categories_select) &&
-                                                    !empty($content_categories_select) &&
-                                                    in_array($content_categories[category]->pk_content_category, $content_categories_select)}
-                                                    {if $content_categories[category]->fk_content_category == 0}
-                                                        <option  value = "{$content_categories[category]->pk_content_category}" selected="selected">{$content_categories[category]->title}</option>
-                                                    {else}
-                                                        <option  value = "{$content_categories[category]->pk_content_category}" selected="selected">&nbsp;&nbsp;&nbsp;{$content_categories[category]->title}</option>
-                                                    {/if}
-                                                {else}
-                                                    {if $content_categories[category]->fk_content_category == 0}
-                                                        <option  value = "{$content_categories[category]->pk_content_category}">{$content_categories[category]->title}</option>
-                                                    {else}
-                                                        <option  value = "{$content_categories[category]->pk_content_category}">&nbsp;&nbsp;&nbsp;{$content_categories[category]->title}</option>
-                                                    {/if}
-                                                {/if}
-                                            {/section*}
+ 
                                         </select>
 
                                         <!--<select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
@@ -333,7 +318,7 @@ function showGroupUsers(elto) {
                                     </div>
                                 </td>
                             </tr>
-
+                           {/acl}
                         </tbody>
 
                     </table>
