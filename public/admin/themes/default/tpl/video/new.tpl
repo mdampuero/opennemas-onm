@@ -1,24 +1,42 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-	<style type="text/css">
-	table.adminlist label {
-		padding-right:10px;
-		width:100px !important;
-		display:inline-block;
-	}
-	table.adminlist input, table.adminlist textarea{
-		width:70%;
-	}
-	label {
-		display:block;
-		color:#666;
-		text-transform:uppercase;
-	}
+<style type="text/css">
 	.utilities-conf label {
 		text-transform:none;
 	}
-	</style>
+    table.adminform tbody {
+        padding:5px;
+    }
+
+    table th, table label {
+        color: #888;
+        text-shadow: white 0 1px 0;
+        font-size: 13px;
+    }
+    th {
+        vertical-align: top;
+        text-align: left;
+        padding: 10px;
+        width: 200px;
+        font-size: 13px;
+    }
+    label{
+        font-weight:normal;
+    }
+    legend {
+        color:#666;
+        text-transform:uppercase;
+        font-size:13px;
+        padding:0 10px;
+    }
+    
+    input[type="text"],
+    textarea{
+        width:400px;
+        max-height:80%
+    }
+</style>
 {/block}
 
 {block name="header-js" append}
@@ -29,42 +47,41 @@
 
 <form action="{$smarty.server.PHP_SELF}?action=create" method="post" name="formulario" id="formulario" enctype="multipart/form-data">
 
-<div class="top-action-bar clearfix">
-	<div class="wrapper-content">
-		<div class="title"><h2>{t}Video manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
-		<ul class="old-button">
-			<li>
-			{if isset($video->id)}
-				{acl isAllowed="VIDEO_UPDATE"}
-					<a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id|default:""}', 'formulario');" >
-				{/acl}
-			{else}
-				{acl isAllowed="VIDEO_CREATE"}
-					<a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');" >
-				{/acl}
-			{/if}
-					<img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
-				</a>
-			</li>
-			{acl isAllowed="VIDEO_CREATE"}
-			<li>
-				<a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
-					<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
-				</a>
-			</li>
-			{/acl}
-			<li class="separator"></li>
-			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
-				</a>
-			</li>
-		</ul>
-	</div>
-</div>
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Video manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating video{/t}{else}{t}Editing video{/t}{/if}</h2></div>
+            <ul class="old-button">
+                <li>
+                {if isset($video->id)}
+                    {acl isAllowed="VIDEO_UPDATE"}
+                        <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$video->id|default:""}', 'formulario');" >
+                    {/acl}
+                {else}
+                    {acl isAllowed="VIDEO_CREATE"}
+                        <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');" >
+                    {/acl}
+                {/if}
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
+                    </a>
+                </li>
+                {acl isAllowed="VIDEO_CREATE"}
+                <li>
+                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                    </a>
+                </li>
+                {/acl}
+                <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go Back{/t}" alt="{t}Go Back{/t}" ><br />{t}Go Back{/t}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
         <div class="wrapper-content">
-
             {render_messages}
 			<table class="adminheading">
 				<tr>
@@ -74,7 +91,7 @@
 			<table class="adminform">
 				<tbody>
 					<tr>
-						<td></td>
+                        <td></td>
 						<td rowspan=3 style="padding:10px; width:30%; vertical-align:top;">
 							<div class="utilities-conf">
 								<table>
@@ -123,24 +140,29 @@
 					</tr>
                     {if $smarty.get.type == "file" || (isset($video) && $video->author_name == 'internal')}
                     <tr>
-                        <td valign=top>
+                        <td valign=top style="padding:10px;">
                             <table>
                                 <tr>
                                     <td valign="top">
                                         <label for="title">{t}Title:{/t}</label>
-                                        <input  type="text" id="title" name="title" title="Título de la noticia" class="required" />
+                                    </td>
+                                    <td valign="top">
+                                        <input type="text" id="title" name="title" title="Título de la noticia" class="required" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td valign="top">
                                         <label for="metadata">{t}Keywords:{/t} <small>{t}Comma separated{/t}</small></label>
+                                    </td>
+                                    <td valign="top">
                                         <input type="text" id="metadata" name="metadata"title="Metadatos" value="{$video->metadata|default:""}" class="required" />
-                                
                                     </td>
                                 </tr>
                                  <tr>
-                                    <td>
+                                    <td valign="top">
                                         <label for="title">Descripción:</label>
+                                    </td>
+                                    <td valign="top">
                                         <textarea name="description" id="description" class="required" 
                                                 title="{t}Video description{/t}">{$video->description|clearslash|default:""}</textarea>
                                     </td>
@@ -148,11 +170,13 @@
                                  
                                 </tr>
                                 {if (isset($video) && $video->author_name == 'internal')}
-                                
+                                    
                                 {else}
                                 <tr>
                                     <td>
                                         <label for="title">Pick a file to upload:</label>
+                                    </td>
+                                    <td>
                                         <input type="file" name="video_file">
                                     </td>
                                 </tr>    

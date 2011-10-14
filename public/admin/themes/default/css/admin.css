@@ -116,6 +116,7 @@ input[readonly="readonly"] {
     background:#eee !important;
 }
 input[type='text'],
+input[type='file'],
 input[type='password'],
 textarea {
 	background:White;
@@ -126,6 +127,7 @@ textarea {
 	border-radius:2px;
 }
 input[type='text']:focus,
+input[type='file']:focus,
 input[type='password']:focus,
 textarea:focus {
 	box-shadow: 0 1px 3px rgba(0,0,0, 0.2) inset;

@@ -53,8 +53,6 @@
 
     <div class="wrapper-content">
 
-        
-
         <ul class="pills clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category==='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
