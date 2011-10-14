@@ -15,7 +15,7 @@
             
             <div id="image-{$smarty.section.n.index}" class="photo-image">
                 
-                <div class="image-preview" onClick="javascript:$('selected_{$smarty.section.n.iteration}').click(); console.log('ho')">
+                <div class="image-preview" onClick="javascript:$('selected_{$smarty.section.n.iteration}').click();">
                     {if preg_match('/^swf$/i', $photo[n]->type_img)}
 
                         <object>
@@ -25,7 +25,7 @@
                                    src="{$MEDIA_IMG_URL}{$photo[n]->path_file}{$photo[n]->name}"
                                    width="140" height="80" ></embed>
                         </object>
-                        <img class="flash-flag"  src="themes/default/images/flash.gif" />
+                        <img class="flash-flag"  src="{$params.IMAGE_DIR}flash.gif" />
                         
                     {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo[n]->type_img)}
 

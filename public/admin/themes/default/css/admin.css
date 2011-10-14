@@ -1690,6 +1690,11 @@ div.action-bar .right{
 				border:1px solid #bfbfbf;
 				padding:2px;
 			}
+			#media-browser .photo-image img.flash-flag {
+                width:16px;
+                height:16px;
+                border: none;
+			}
 				#media-browser .photo:hover .photo-image img {
 					border:1px solid White;
 				}
