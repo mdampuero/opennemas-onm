@@ -69,7 +69,7 @@ class InstanceManager
             return false;
         }
         
-        if (preg_match("@manager@", $_SERVER["PHP_SELF"])) {
+        if (preg_match("@\/manager@", $_SERVER["PHP_SELF"])) {
             $instance = new \stdClass();
             $instance->interna_name = 'onm_manager';
             $instance->activated = true;
@@ -81,7 +81,7 @@ class InstanceManager
             foreach ($configs as $key => $value) {
                 define($key, $value);
             }
-            
+
             return $instance;
         }
 
