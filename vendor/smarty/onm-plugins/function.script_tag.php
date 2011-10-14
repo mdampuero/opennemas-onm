@@ -53,8 +53,13 @@ function smarty_function_script_tag($params, &$smarty) {
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
+    //Comprobar si es external
+    if ($server == '') {
+        $resource = $src;
+    } else {
+        $resource = $server.DS.$src;
+    }
     
-    $resource = $server.DS.$src;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
     
     $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties}></script>";
