@@ -5,7 +5,7 @@
             <label for="title">{t}Title:{/t}</label>
         </td>
         <td valign="top">
-            <input  type="text" id="title" name="title" title="Título de la noticia"  style="width:70%"
+            <input  type="text" id="title" name="title" title="Título de la noticia"  style="width:60%"
                     onChange="javascript:get_metadata(this.value);"
                     {if (!empty($video->title))}
                         value="{$video->title|clearslash|escape:"html"}"

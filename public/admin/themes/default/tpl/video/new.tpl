@@ -147,7 +147,7 @@
                                         <label for="title">{t}Title:{/t}</label>
                                     </td>
                                     <td valign="top">
-                                        <input type="text" id="title" name="title" title="Título de la noticia" class="required" />
+                                        <input type="text"  value="{$video->title|default:""}" id="title" name="title" title="Título de la noticia" class="required" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -183,7 +183,7 @@
                                 {/if}
                                      
                             </table>
-                            <input type="hidden" value="internal"/>
+                            <input type="hidden" name="author_name" value="internal"/>
                         </td>
                     </tr>
 
