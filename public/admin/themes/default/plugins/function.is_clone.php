@@ -23,6 +23,10 @@ function smarty_function_is_clone($params, &$smarty)
         return;
     }
 
+    // As this funcitonality is not longer supported we must early return to avoid
+    // legacy code breaks.
+    return '';
+
     $item  = $params['item'];
 
     if( method_exists($item,'isClone') && $item->isClone()) {
