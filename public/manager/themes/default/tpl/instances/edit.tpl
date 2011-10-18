@@ -200,7 +200,7 @@ table.adminform {
                         <th>
                             <label for="settings_bd_database">{t}Database name:{/t}</label>
                         </th>
-                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']}" type="text"></input></td>
+                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:"onm-"}" type="text"></input></td>
                     </tr>
                     <tr>
                         <th>

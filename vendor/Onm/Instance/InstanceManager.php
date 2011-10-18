@@ -160,7 +160,7 @@ class InstanceManager
      * Gets a list of instances
      * 
      */
-    public function getListOfInstances()
+    public function findAll()
     {
         
         $instances = array();
@@ -258,7 +258,7 @@ class InstanceManager
     /*
      * Deletes one instance given its id
      * 
-     * @param $id
+     * @param string id the id for this instance
      */
     public function delete($id)
     {
@@ -271,12 +271,41 @@ class InstanceManager
         return true;
     }
     
-    /*
+    /**
      * Deletes one instance given its id
      * 
+     * @param  array the configuration for create the configuration file
+     * 
      * @param $id
-     */
+     **/
     public function create($data)
+    {
+        
+        $this->createInstanceReferenceInManager($data);
+        
+        // If the database is created continue with the proccess
+        $this->createDatabaseForInstance($data['settings']);
+            
+        $this->copyDefaultAssetsForInstance($data['internal_name']);
+        
+        $this->copyApacheAndReloadConfiguration($data);
+
+        // } else {
+        //     var_dump("Unable to create the database for '{$data['internal_name']}' with the settings: ".var_export($data['settings']));
+        //     return false;
+        // }
+        
+        return true;
+    }
+
+    /**
+     * Inserts the instance reference in the instances table.
+     *
+     * @param  array the configuration for create the configuration file
+     * 
+     * @return boolean/string true if all went well, string if not.
+     **/
+    public function createInstanceReferenceInManager($data)
     {
         $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
                 VALUES (?, ?, ?, ?, ?)";
@@ -290,10 +319,61 @@ class InstanceManager
         
         $rs = $this->_connection->Execute($sql, $values);
         if (!$rs) {
-            echo $this->_connection->ErrorMsg();
-            return false;
+            return "Unable to create new instance into the `instances` table: ".$this->_connection->ErrorMsg();
+        }
+        return true;
+    }
+
+    /**
+     * Creates apache configuration for this instance and reload Apache.
+     *
+     * @param  array the configuration for create the configuration file
+     * 
+     * @return boolean true if all went well
+     **/
+    public function copyApacheAndReloadConfiguration($data)
+    {
+        $configPath = realpath(APPLICATION_PATH.DS.'config');
+        var_dump($data, $configPath);
+
+        // If default file exists proceed
+        if (!empty($configPath)) {
+            $apacheConfString = file_get_contents($configPath.DS.'vhost.conf-dist');
+
+            // Replace wildcards with the proper settings.
+            $replacements = array(
+                '@{SITE_DOMAINS}@' => implode(' ', explode(',', $data['domains'])),
+                '@{SITE_PATH}@' => SITE_PATH,
+                '@{TMP_PATH}@' => SYS_LOG_PATH,
+                '@{ID}@' => $data['internal_name'],
+            );
+            $apacheConfString = preg_replace(
+                array_keys($replacements), array_values($replacements), 
+                $apacheConfString
+            );
+
+            $instanceConfigPath = $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
+
+            // If we can create the instance configuration file reload apache
+            if (file_put_contents( $instanceConfigPath, $apacheConfString)) {
+                exec("{APPLICATION_PATH}/scripts/reload-apache/httpd_reload.c",$output, $exitCode);
+                if ($exitCode > 0) {
+                    var_dump("Unable to reload apache configuration (exit code {$exitCode}): ".$output);
+                    return false;
+                }
+            }          
         }
         
+    }
+    
+    /**
+     * Creates and imports default database for the new instance
+     * 
+     * @param $arg
+     **/
+    public function createDatabaseForInstance($settings)
+    {
+        // Gets global database connection and creates the requested database
         global $onmInstancesConnection;
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
         $conn->Connect(
@@ -302,34 +382,56 @@ class InstanceManager
             $onmInstancesConnection['BD_PASS']
         );
         
-        $rs = $conn->Execute("CREATE DATABASE `{$data['settings']['BD_DATABASE']}`");
+        $rs = $conn->Execute("CREATE DATABASE `{$settings['BD_DATABASE']}`");
         
+        // If the database was created sucessfully now import the default data.
         if ($rs) {
-            
-            
-            $connection2 = self::getConnection($data['settings']);
+            $connection2 = self::getConnection($settings);
             $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']} -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
-            exec($execLine);
-            
-            $mediaPath = SITE_PATH.DS.'media'.DS.$data['internal_name'];
-            if (!file_exists($mediaPath)) {
-                fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
-            }   
+            $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']}"
+                       ." -p{$onmInstancesConnection['BD_PASS']} {$settings['BD_DATABASE']} < {$exampleDatabasePath}";
+            exec($execLine, $output, $exitCode);
+            if ($exitCode > 0) {
+                
+                return false;
+            }
         } else {
             return false;
         }
-        
         return true;
+        
     }
     
     /*
-     * Returns true if the current loaded instance is activated
+     * Copies the default assets for the new instance given its internal name
+     * 
+     * @param $name the name of the instance
+     */
+    public function copyDefaultAssetsForInstance($name)
+    {
+        $mediaPath = SITE_PATH.DS.'media'.DS.$name;
+        if (!file_exists($mediaPath)) {
+            return fm::recursiveCopy(SITE_PATH.DS.'media'.DS.'default', $mediaPath);
+        } else {
+            //TODO: return codes for handling this errors
+            return "The media folder {$name} already exists.";
+        }
+    }
+    
+    /*
+     * Get available templates
      * 
      */
-    public function isActivated()
+    static public function getAvailableTemplates()
     {
-        return ($this->activated == 1);
+        // Change this to get dinamically templates from folder
+        foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value ) {
+            $parts= preg_split("@/@",$value);
+            $name = $parts[count($parts)-1];
+            $templates [$name]= ucfirst($name);
+        }
+        
+        return $templates;
     }
 
 

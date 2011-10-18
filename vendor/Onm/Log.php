@@ -43,7 +43,8 @@ use Onm\Settings as s;
  */
 class Log extends  \Zend_Log {
     
-    public function __construct($loglevel='normal') {        
+    public function __construct($loglevel='normal') 
+    {        
         // set formatter, add %class% to save class name
         $format = date('Y-m-d H:i:s', time()).' (%priorityName%-%priority%) %message%'
         . PHP_EOL;

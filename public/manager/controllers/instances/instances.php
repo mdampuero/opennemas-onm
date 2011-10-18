@@ -15,17 +15,14 @@ $im = im::getInstance();
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
-// Change this to get dinamically templates from folder
-foreach (glob(SITE_PATH.DS.'themes'.DS.'*') as $value ) {
-    $parts= preg_split("@/@",$value);
-    $name = $parts[count($parts)-1];
-    $templates [$name]= ucfirst($name);
-}
-$tpl->assign('templates', $templates);
 
 switch($action) {
     
     case 'edit':
+        
+        $templates = im::getAvailableTemplates();
+        $tpl->assign('templates', $templates);
+        
         $id = $_REQUEST['id'];
         $instance = $im->read($id);
         
@@ -34,11 +31,15 @@ switch($action) {
         break;
 
     case 'new':
+
+        $templates = im::getAvailableTemplates();
+        $tpl->assign('templates', $templates);
         
         $tpl->display('instances/edit.tpl');
         break;
 
     case 'delete':
+        
         $id = $_REQUEST['id'];
         $deletion = $im->delete($id);
 
@@ -57,9 +58,7 @@ switch($action) {
         );
             
         if (intval($data['id']) > 0) {
-            
             $instance = $im->update($data);
-            
         } else {
             $instance = $im->create($data);
         }
@@ -69,6 +68,7 @@ switch($action) {
         break;
 
     case 'changeactivated':
+        
         $instance = $im->read($_REQUEST['id']);
 
         $available = ($instance->activated+1) % 2;
@@ -86,9 +86,8 @@ switch($action) {
 
     case 'list':
     default:
-        //$widgets = $cm->find_by_category('Widget', 3, 'fk_content_type=12 ', 'ORDER BY created DESC');
         
-        $instances = $im->getListOfInstances();
+        $instances = $im->findAll();
         
         $_SESSION['desde'] = 'instances';
 

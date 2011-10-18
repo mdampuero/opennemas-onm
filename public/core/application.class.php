@@ -312,7 +312,7 @@ class Application
         /**
          * Logging settings
          **/
-        define('SYS_LOG_PATH', SITE_PATH.DS.'..'.DS."tmp/logs");
+        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
         define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
         define('SYS_SESSION_PATH', $cachepath.DS."/sessions".DS);
         define('OPENNEMAS_BACKEND_SESSIONS', SYS_SESSION_PATH.'backend/');
