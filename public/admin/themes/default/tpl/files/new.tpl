@@ -40,11 +40,20 @@
                         <label for="title">{t}Title{/t}</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap" width="70%">
-                        <input type="text" id="title" name="title" title="Título" autocomplete="off" value="" class="required" size="50" />
+                        <input type="text" id="title" name="title" title="Título" autocomplete="off"
+                               onBlur="javascript:get_metadata(this.value);" value="" class="required" size="50" />
 
                         <input type="hidden" id="category" name="category" value="{$smarty.request.category|default:""}}" />
                         <input type="hidden" id="related"  name="related"  value="{$smarty.request.related|default:""}}" />
                         <input type="hidden" id="desde"    name="desde"    value="{$smarty.request.desde|default:""}}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" align="right" style="padding:4px;" width="30%">
+                        <label for="title">{t}Keywords:{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap" width="70%">
+                        <input id="metadata" name="metadata" type="text" class="required" size="50"/>
                     </td>
                 </tr>
                 <tr>

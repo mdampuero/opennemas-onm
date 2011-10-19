@@ -4,6 +4,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Files manager :: General statistics{/t}</h2></div>
+        {if $category!=0}
         <ul class="old-button">
             <li>
 				<a href="{$smarty.server.PHP_SELF}?action=upload&category={$category}&op=view" title="{t}Upload file{/t}">
@@ -12,6 +13,7 @@
 				</a>
 			</li>
         </ul>
+        {/if}
     </div>
 </div>
 <div class="wrapper-content">
