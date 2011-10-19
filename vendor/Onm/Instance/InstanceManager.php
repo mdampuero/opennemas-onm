@@ -298,16 +298,33 @@ class InstanceManager
             $this->copyApacheAndReloadConfiguration($data);
 
         } catch (InstanceNotRegisteredException $e) {
+
             $errors []= $e->getMessage();
+            $this->deleteInstanceWithInternalName($data['internal_name']);
+
         } catch (DatabaseForInstanceNotCreatedException $e) {
             $errors []= $e->getMessage();
+            $this->deleteDatabaseForInstance($data);
+            $this->deleteInstanceWithInternalName($data['internal_name']);
+
         } catch (DefaultAssetsForInstanceNotCopiedException $e) {
+            
             $errors []= $e->getMessage();
+            $this->deleteDefaultAssetsForInstance($data['internal_name']);
+            $this->deleteDatabaseForInstance($data);
+            $this->deleteInstanceWithInternalName($data['internal_name']);
+
         } catch (ApacheConfigurationNotCreatedException $e) {
+            
             $errors []= $e->getMessage();
+            $this->deleteDefaultAssetsForInstance($data['internal_name']);
+            $this->deleteDatabaseForInstance($data);
+            $this->deleteInstanceWithInternalName($data['internal_name']);
+            $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
+
         }
-        var_dump($errors);
-        die();
+
+        
 
         if (count($errors) > 0) {
             return $errors;
@@ -330,7 +347,7 @@ class InstanceManager
         $rs = $this->_connection->Execute($sql, array($data['internal_name']));
         
         // If doesn´t exist the instance in the database proceed
-        if ($rs && (bool)$rs->fields['instance_exists']) {
+        if ($rs && !(bool)$rs->fields['instance_exists']) {
             
             $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
                     VALUES (?, ?, ?, ?, ?)";
@@ -482,15 +499,13 @@ class InstanceManager
      * @return void
      * @author 
      **/
-    public function deleteDatabaseForInstance($data)
+    public function deleteDatabaseForInstance($settings)
     {
-        $sql = "SELECT * FROM `instances` WHERE  `internal_name` = ?";
-        $values = array($data['internal_name']);
+        return ;
+        $sql = "CREATE DATABASE `{$settings['BD_DATABASE']}`";
         
-        if (!$this->_connection->Execute($sql, $values)) {
-            throw new DatabaseForInstanceNotCreatedException(
-                "Could not create the database for the instance: {$this->_connection->ErrorMsg()}"
-            );
+        if (!$this->_connection->Execute($sql)) {
+            return false;
         }
         return true;
     }

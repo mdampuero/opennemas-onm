@@ -55,6 +55,10 @@ table.adminform {
 </style>
 {/block}
 
+{block name="footer-js"}
+    
+{/block}
+
 {block name="content" append}
 <div class="top-action-bar">
     <div class="wrapper-content">
@@ -219,7 +223,7 @@ table.adminform {
                 </tbody>
             </table>
         </div>
-                
+                   
         <div class="action-bar clearfix">
             <div class="right">
                 <button type="submit" class="onm-button red">{t}Save{/t}</button>
@@ -227,13 +231,4 @@ table.adminform {
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$params.JS_DIR}/tiny_mce/opennemas-config.js"></script>
-<script type="text/javascript" language="javascript">
-{if isset($instance) && $instance->renderlet == 'html'}
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-        OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-{/if}
-</script>
 {/block}
