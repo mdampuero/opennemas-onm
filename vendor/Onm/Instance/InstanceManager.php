@@ -19,6 +19,9 @@ use \FilesManager as fm;
 class InstanceManager
 {
     
+    /**
+     * The connection to the database
+     **/
     private $_connnection = null;
     
     /**
@@ -272,28 +275,43 @@ class InstanceManager
     }
     
     /**
-     * Deletes one instance given its id
+     * Creates one instance given some data
+     * 
+     * 
      * 
      * @param  array the configuration for create the configuration file
      * 
-     * @param $id
+     * @return boolean true if all went well
      **/
     public function create($data)
     {
-        
-        $this->createInstanceReferenceInManager($data);
-        
-        // If the database is created continue with the proccess
-        $this->createDatabaseForInstance($data['settings']);
-            
-        $this->copyDefaultAssetsForInstance($data['internal_name']);
-        
-        $this->copyApacheAndReloadConfiguration($data);
+        $errors = array();
 
-        // } else {
-        //     var_dump("Unable to create the database for '{$data['internal_name']}' with the settings: ".var_export($data['settings']));
-        //     return false;
-        // }
+        try {
+            
+            $this->createInstanceReferenceInManager($data);
+        
+            $this->createDatabaseForInstance($data['settings']);
+                
+            $this->copyDefaultAssetsForInstance($data['internal_name']);
+            
+            $this->copyApacheAndReloadConfiguration($data);
+
+        } catch (InstanceNotRegisteredException $e) {
+            $errors []= $e->getMessage();
+        } catch (DatabaseForInstanceNotCreatedException $e) {
+            $errors []= $e->getMessage();
+        } catch (DefaultAssetsForInstanceNotCopiedException $e) {
+            $errors []= $e->getMessage();
+        } catch (ApacheConfigurationNotCreatedException $e) {
+            $errors []= $e->getMessage();
+        }
+        var_dump($errors);
+        die();
+
+        if (count($errors) > 0) {
+            return $errors;
+        }
         
         return true;
     }
@@ -307,19 +325,54 @@ class InstanceManager
      **/
     public function createInstanceReferenceInManager($data)
     {
-        $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
-                VALUES (?, ?, ?, ?, ?)";
-        $values = array(
-            $data['name'],
-            $data['internal_name'],
-            $data['domains'],
-            $data['activated'],
-            serialize($data['settings']),
-        );
+        // Check if the instance already exists
+        $sql = "SELECT count(*) as instance_exists FROM instances WHERE `internal_name` = ?";
+        $rs = $this->_connection->Execute($sql, array($data['internal_name']));
         
-        $rs = $this->_connection->Execute($sql, $values);
-        if (!$rs) {
-            return "Unable to create new instance into the `instances` table: ".$this->_connection->ErrorMsg();
+        // If doesn´t exist the instance in the database proceed
+        if ($rs && (bool)$rs->fields['instance_exists']) {
+            
+            $sql = "INSERT INTO instances (name, internal_name, domains, activated, settings)
+                    VALUES (?, ?, ?, ?, ?)";
+            $values = array(
+                $data['name'],
+                $data['internal_name'],
+                $data['domains'],
+                $data['activated'],
+                serialize($data['settings']),
+            );
+            
+            $rs = $this->_connection->Execute($sql, $values);
+            if (!$rs) {
+                throw new InstanceNotRegisteredException(
+                    "Could not create the instance reference into the instance table: {$this->_connection->ErrorMsg()}"
+                );
+            }
+            return true;
+        }
+
+        return false;
+
+        
+    }
+
+    /**
+     * Delete one instance reference from the instances table.
+     * 
+     * @param string $internalName the internal name of the instance we need to delete
+     *
+     * @return boolean false if something went wrong
+     * @author 
+     **/
+    public function deleteInstanceWithInternalName($internalName)
+    {
+        $sql = "DELETE FROM `instances` WHERE  `internal_name` = ?";
+        $values = array($internalName);
+        
+        if (!$this->_connection->Execute($sql, $values)) {
+            throw new DatabaseForInstanceNotCreatedException(
+                "Could not create the database for the instance: {$this->_connection->ErrorMsg()}"
+            );
         }
         return true;
     }
@@ -334,7 +387,6 @@ class InstanceManager
     public function copyApacheAndReloadConfiguration($data)
     {
         $configPath = realpath(APPLICATION_PATH.DS.'config');
-        var_dump($data, $configPath);
 
         // If default file exists proceed
         if (!empty($configPath)) {
@@ -356,14 +408,35 @@ class InstanceManager
 
             // If we can create the instance configuration file reload apache
             if (file_put_contents( $instanceConfigPath, $apacheConfString)) {
-                exec("{APPLICATION_PATH}/scripts/reload-apache/httpd_reload.c",$output, $exitCode);
+                exec("sudo apachectl graceful",$output, $exitCode);
                 if ($exitCode > 0) {
                     var_dump("Unable to reload apache configuration (exit code {$exitCode}): ".$output);
                     return false;
                 }
-            }          
+            }   else {
+                throw new ApacheConfigurationNotCreatedException(
+                    "Could not create the Apache vhost config for the instance.",
+                    1
+                );
+            }        
         }
         
+    }
+
+    /**
+     * Deletes the vhost Apache configuration and forces to reload Apache conf
+     *
+     * @return boolean false if something went wrong
+     **/
+    public function deleteApacheConfAndReloadConfiguration($data)
+    {
+        $configPath = realpath(APPLICATION_PATH.DS.'config');
+        $instanceConfigPath = $configPath.DS.'vhosts.d'.DS.$data['internal_name'];
+
+        if (file_exists($instanceConfigPath)) {
+            return  unlink($instanceConfigPath);
+        }
+        return false;
     }
     
     /**
@@ -392,14 +465,34 @@ class InstanceManager
                        ." -p{$onmInstancesConnection['BD_PASS']} {$settings['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine, $output, $exitCode);
             if ($exitCode > 0) {
-                
-                return false;
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance:'
+                    .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}');
             }
         } else {
             return false;
         }
         return true;
         
+    }
+
+    /**
+     * Deletes the database given an intance internal_name
+     *
+     * @return void
+     * @author 
+     **/
+    public function deleteDatabaseForInstance($data)
+    {
+        $sql = "SELECT * FROM `instances` WHERE  `internal_name` = ?";
+        $values = array($data['internal_name']);
+        
+        if (!$this->_connection->Execute($sql, $values)) {
+            throw new DatabaseForInstanceNotCreatedException(
+                "Could not create the database for the instance: {$this->_connection->ErrorMsg()}"
+            );
+        }
+        return true;
     }
     
     /*
@@ -416,6 +509,20 @@ class InstanceManager
             //TODO: return codes for handling this errors
             return "The media folder {$name} already exists.";
         }
+    }
+
+    /*
+     * Copies the default assets for the new instance given its internal name
+     * 
+     * @param $name the name of the instance
+     */
+    public function deleteDefaultAssetsForInstance($name)
+    {
+        $mediaPath = SITE_PATH.DS.'media'.DS.$name;
+        if (file_exists($mediaPath)) {
+            return unlink($mediaPath);
+        }
+        return false;
     }
     
     /*
@@ -436,3 +543,11 @@ class InstanceManager
 
 
 }
+
+/**
+ * Exceptions for handling unsuccessfull instance creation
+ **/
+class InstanceNotRegisteredException extends \Exception { }
+class DatabaseForInstanceNotCreatedException extends \Exception { }
+class DefaultAssetsForInstanceNotCopiedException extends \Exception { }
+class ApacheConfigurationNotReloadedException extends \Exception { }
