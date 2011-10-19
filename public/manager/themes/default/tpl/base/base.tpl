@@ -87,10 +87,14 @@
     </div>
 	{/block}
 
-    {block name="header-js"}
+    {block name="js-library"}
         {script_tag language="javascript" src="/prototype.js"}
         {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
         {script_tag language="javascript" src="/scriptaculous/effects.js"}
+    {/block}
+
+    {block name="header-js"}
+        {block name="js-library"}{/block}
         {script_tag language="javascript" src="/lightview.js"}
         {script_tag language="javascript" src="/prototype-date-extensions.js"}
         {script_tag language="javascript" src="/fabtabulous.js"}
