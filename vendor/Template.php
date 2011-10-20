@@ -40,7 +40,7 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty'.DS.'config')
             && file_exists($this->templateBaseDir.'config')
         ) {
-            fm:recursiveCopy(
+            fm::recursiveCopy(
                 $this->templateBaseDir.'config',
                 CACHE_PATH.DS.'smarty'.DS.'config'
             );

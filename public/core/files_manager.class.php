@@ -59,7 +59,7 @@ class FilesManager {
         
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
-            if (!file_exists($destination)) { mkdir($destination,0755, true); }
+            if (!file_exists($destination)) { mkdir($destination,0775, true); }
             $files = scandir($source);
             foreach ($files as $file) {
                 if ($file != "." && $file != "..") {
