@@ -1,4 +1,5 @@
 <?php
+use FilesManager as fm;
 /**
  * Template class
  *
@@ -39,7 +40,7 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty'.DS.'config')
             && file_exists($this->templateBaseDir.'config')
         ) {
-            $this->copyDefaultConfigDir(
+            fm:recursiveCopy(
                 $this->templateBaseDir.'config',
                 CACHE_PATH.DS.'smarty'.DS.'config'
             );
@@ -92,40 +93,15 @@ class Template extends Smarty
         $this->assign('THEME', $theme);
 
     }
-    
-    /*
-     * Copy default template config to cache directory
-     * 
-     */
-    public function copyDefaultConfigDir($source, $target)
-    {
-        if ( is_dir( $source ) ) {
-            @mkdir( $target );
-            $d = dir( $source );
-            while ( FALSE !== ( $entry = $d->read() ) ) {
-                if ( $entry == '.' || $entry == '..' ) {
-                    continue;
-                }
-                $Entry = $source . '/' . $entry; 
-                if ( is_dir( $Entry ) ) {
-                    $this->copyDefaultConfigDir( $Entry, $target . '/' . $entry );
-                    continue;
-                }
-                copy( $Entry, $target . '/' . $entry );
-            }
-     
-            $d->close();
-        }else {
-            copy( $source, $target );
-        }   
-    }
 
-    function setFilters( $filters=array() )
+
+    public function setFilters($filters = array())
     {
         $this->filters = $filters;
         $this->autoload_filters = $filters;
     }
 
+    
     public function generateCacheId($seccion, $subseccion=null, $resource=null)
     {
         $cacheId = '';
@@ -140,7 +116,8 @@ class Template extends Smarty
         return $cacheId;
     }
 
-    function saveConfig($data, $configFile)
+
+    public function saveConfig($data, $configFile)
     {
         $filename = $this->config_dir . $configFile;
         if ( file_exists($filename) ) {
