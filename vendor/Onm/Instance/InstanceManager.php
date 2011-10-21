@@ -495,6 +495,7 @@ class InstanceManager
 
             // Replace wildcards with the proper settings.
             $replacements = array(
+                '@{IP}@' => $_SERVER['SERVER_ADDR'],
                 '@{SITE_DOMAINS}@' => implode(' ', explode(',', $data['domains'])),
                 '@{SITE_PATH}@' => SITE_PATH,
                 '@{TMP_PATH}@' => SYS_LOG_PATH,
