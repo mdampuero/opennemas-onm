@@ -4,15 +4,17 @@
 */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 
-use \Onm\Instance\InstanceManager as im;
-use \Onm\Module\ModuleManager as ModuleManager;
-
+use \Onm\Instance\InstanceManager as im,
+    \Onm\Module\ModuleManager as ModuleManager,
+    \Onm\Message as m;
 
 /**
  * Setup view
 */
 $tpl = new \TemplateManager(TEMPLATE_ADMIN);
 $im = im::getInstance();
+
+session_start();
 
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
@@ -32,7 +34,6 @@ switch($action) {
         
         $tpl->assign( 'instance', $instance);
 
-
         $tpl->assign(
              array(
                     'configs' => $instance->configs,
@@ -49,7 +50,20 @@ switch($action) {
     case 'new':
 
         $templates = im::getAvailableTemplates();
-        $tpl->assign('templates', $templates);
+        $tpl->assign(array(
+            'templates' => $templates,
+            'defaultDatabaseAuth' => $onmInstancesConnection,
+        ));
+
+        $tpl->assign(
+         array(
+                'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
+                'available_modules' => ModuleManager::getAvailableModules(),
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+                'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+            )
+        );
         
         $tpl->display('instances/edit.tpl');
         break;
@@ -64,19 +78,47 @@ switch($action) {
 
     case 'save':
         
+        if(isset($_POST['settings']) && !empty($_POST['settings']) ) {
+            $settings = $_POST['settings'];
+        } else {
+            $settings = array(
+                'TEMPLATE_USER' => "default",
+                'MEDIA_URL' => "",
+                'BD_TYPE' => "mysqli",
+                'BD_HOST' => "localhost",
+                'BD_USER' => "opennemas",
+                'BD_PASS' => "12OpenNeMaS34",
+                'BD_DATABASE' => "onm-".$_POST['internal_name'],
+            );
+        }
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
+            'contact_IP' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
             'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-            'settings' => $_POST['settings']
+            'settings' => $settings,
         );
-            
+        $errors = array();
+        
         if (intval($data['id']) > 0) {
-            $instance = $im->update($data);
+            $errors = $im->update($data);
+            if (is_array($errors) && count($errors) > 0) {
+                m::add($errors);
+                Application::forward('?action=edit&id='.$data['id']);
+            }
         } else {
-            $instance = $im->create($data);
+            $errors = $im->create($data);
+            $site_created = filter_input(INPUT_POST, 'site_created' , FILTER_DEFAULT);
+            
+            if (empty($site_created)){
+                $_POST['created'] = time();
+            }
+            if (is_array($errors) && count($errors) > 0) {
+                m::add($errors);
+                Application::forward('?action=new');
+            }
         }
         
         $configurationsKeys = array(
@@ -94,8 +136,15 @@ switch($action) {
                                     'log_enabled', 'log_db_enabled', 'log_level',
                                     'activated_modules'
                                     );
+                                    
+        foreach ($configurationsKeys as $key) {
+            if(!isset($_POST[$key])){
+                $_POST[$key]= ucfirst($key);
+            }
+        }
+        
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
-        $GLOBALS['application']->conn = $im->getConnection( $_POST['settings'] );
+        $GLOBALS['application']->conn = $im->getConnection( $settings );
 
         foreach ($_POST as $key => $value ) {
             if(in_array($key, $configurationsKeys)) {
@@ -103,6 +152,7 @@ switch($action) {
             }
         }
 
+        m::add('Instance saved successfully.');
         Application::forward('?action=list');
 
         break;
@@ -127,6 +177,10 @@ switch($action) {
     case 'list':
     default:
 
+        // QUIRK MODE: If I don't star the session Onm\Message doesn't show 
+        // available messages
+        // session_start();
+        
         $instances = $im->findAll();
 
         foreach($instances as $instance) {

@@ -75,6 +75,9 @@ table.adminform {
         </ul>
     </div>
 </div>
+<div class="wrapper-content">
+    {render_messages}
+</div><!-- / -->
 <form action="{$smarty.server.PHP_SELF}" method="post" name="formulario" id="formulario">
     <div class="wrapper-content">
         <input type="hidden" id="id" name="id" value="{$instance->id|default:""}" />
@@ -361,7 +364,7 @@ table.adminform {
                             <label for="settings_bd_host">{t}Database server:{/t}</label>
                         </th>
                         <td>
-                            <input name="settings[BD_HOST]" value="{$instance->settings['BD_HOST']|default:"localhost"}" type="text" />
+                            <input name="settings[BD_HOST]" value="{$instance->settings['BD_HOST']|default:$defaultDatabaseAuth['BD_HOST']}" type="text"></input>
                         </td>
                     </tr>
                     <tr>
@@ -375,14 +378,14 @@ table.adminform {
                             <label for="settings_bd_user">{t}Database user:{/t}</label>
                         </th>
                         <td>
-                            <input name="settings[BD_USER]" id="settings_bd_user" value="{$instance->settings['BD_USER']}" type="text" />
+                            <input name="settings[BD_USER]" id="settings_bd_user" value="{$instance->settings['BD_USER']|default:$defaultDatabaseAuth['BD_USER']}" type="text" readonly="readonly"></input>
                         </td>
                     </tr>
                     <tr>
                         <th>
                             <label for="settings_bd_password">{t}Database password:{/t}</label>
                         </th>
-                        <td><input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']}" type="password" /></td>
+                        <td><input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']|default:$defaultDatabaseAuth['BD_PASS']}" type="password" readonly="readonly"></input></td>
                     </tr>   
                 </tbody>
             </table>

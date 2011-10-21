@@ -1,6 +1,6 @@
-<VirtualHost *:80>
+<VirtualHost {IP}:80>
 
-	ServerAlias     {SITE_DOMAINS}
+	ServerName      {SITE_DOMAINS}
 	DocumentRoot    {SITE_PATH}
 	
 	ErrorLog        {TMP_PATH}/{ID}_error.log

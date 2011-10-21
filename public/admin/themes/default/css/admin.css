@@ -914,6 +914,9 @@ table.aa tr td {
     background-image: -o-linear-gradient(#049CDB, #0064CD) !important;
     background-image: linear-gradient(#049CDB, #0064CD) !important;
 }
+#topbar-admin.manager a {
+	color:White;
+}
 
 /* -------------------------------------------------------------
   Content from modalbox.css
@@ -1205,8 +1208,8 @@ ul#menu > li > a {
 }
 
 ul#menu > li > a:hover {
-        background:#333333;
-
+    background:#333333;
+    barckground:rgba(255,255,255,0.3);
 }
 /* Root Menu */
 ul#menu a {
@@ -1273,14 +1276,13 @@ ul#menu li:hover li a:hover,
 ul#menu li:hover li:hover a,
 ul#menu li.iehover li a:hover,
 ul#menu li.iehover li.iehover a {
-	background:#555555;
-
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 3rd Menu */
 ul#menu li:hover li:hover li a,
 ul#menu li.iehover li.iehover li a {
-  background: #555555;
+  	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 3rd Menu Hover Persistence */
@@ -1289,27 +1291,27 @@ ul#menu li:hover li:hover li a:hover,
 ul#menu li:hover li:hover li:hover a,
 ul#menu li.iehover li.iehover li a:hover,
 ul#menu li.iehover li.iehover li.iehover a {
-	background:#555555;
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 4th Menu */
 ul#menu li:hover li:hover li:hover li a,
 ul#menu li.iehover li.iehover li.iehover li a {
-	background:#555555;
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 4th Menu Hover */
 ul#menu li:hover li:hover li:hover li a:hover,
 ul#menu li.iehover li.iehover li.iehover li a:hover {
-	background:#555555;
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 ul#menu ul ul,
 ul#menu ul ul ul {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 200px;
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 200px;
 }
 
 /* Do Not Move - Must Come Before display:block for Gecko */
@@ -1317,7 +1319,7 @@ ul#menu li:hover ul ul,
 ul#menu li:hover ul ul ul,
 ul#menu li.iehover ul ul,
 ul#menu li.iehover ul ul ul {
-  display: none;
+	display: none;
 }
 
 ul#menu li:hover ul,

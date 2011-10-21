@@ -58,98 +58,97 @@ function confirmar() {
     </div>
 </div>
 <div class="wrapper-content">
+    {render_messages}
+</div><!-- / -->
+<div class="wrapper-content">
+    <table class="listing-table" >
 
-    <div id="pagina">
-        <table class="listing-table" >
+        <thead>
+            {if count($instances) > 0}
+            <th width="15px">{t}#{/t}</th>
+            <th width="200px">{t}Name{/t}</th>
+            <th>{t}Domains{/t}</th>
+            <th>{t}Contact{/t}</th>
+            <th>{t}Articles{/t}</th>
+            <th>{t}Images{/t}</th>
+            <th>{t}Ads{/t}</th>
+             <th>{t}Created{/t}</th>
+            <th class="center" width="50px">{t}Activated{/t}</th>
+            <th class="center" width="50px">{t}Actions{/t}</th>
+            {else}
+            <th scope="col" colspan=4>&nbsp;</th>
+            {/if}
+        </thead>
 
-            <thead>
-                {if count($instances) > 0}
-                <th width="15px">{t}#{/t}</th>
-                <th width="200px">{t}Name{/t}</th>
-                <th>{t}Domains{/t}</th>
-                <th>{t}Contact{/t}</th>
-                <th>{t}Articles{/t}</th>
-                <th>{t}Images{/t}</th>
-                <th>{t}Ads{/t}</th>
-                 <th>{t}Created{/t}</th>
-                <th class="center" width="50px">{t}Activated{/t}</th>
-                <th class="center" width="50px">{t}Actions{/t}</th>
-                {else}
-                <th scope="col" colspan=4>&nbsp;</th>
-                {/if}
-            </thead>
+        <tbody>
+            {foreach from=$instances item=instance name=instance_list}
+            <tr>
+                <td>
+                    {$instance->id}
+                </td>
+                <td>
+                    <a href="instances.php?action=edit&id={$instance->id}" title="{t}Edit{/t}">
+                        {$instance->name}
+                    </a>
 
-            <tbody>
-                {foreach from=$instances item=instance name=instance_list}
-                <tr>
-                    <td>
-                        {$instance->id}
-                    </td>
-                    <td>
-                        <a href="instances.php?action=edit&id={$instance->id}" title="{t}Edit{/t}">
-                            {$instance->name}
-                        </a>
+                </td>
+                <td>
+                    {$instance->domains}
+                </td>
+                <td>
+                    {$instance->configs['contact_mail']}
+                </td>
+                <td>
+                    {$instance->totals[1]} 
+                </td>
+                <td>
+                    {$instance->totals[8]}
+                </td>
+                <td>
+                    {$instance->totals[2]}
+                </td>
+                 <td>
+                    {$instance->configs['site_created']|default:$smarty.now|date_format:"%d-%m-%Y"}
+                </td>
+                <td class="center">
+                    {if $instance->activated == 1}
+                    <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Published{/t}">
+                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                    {else}
+                    <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Unpublished{/t}">
+                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
+                    {/if}
+                </td>
 
-                    </td>
-                    <td>
-                        {$instance->domains}
-                    </td>
-                    <td>
-                        {$instance->configs['contact_mail']}
-                    </td>
-                    <td>
-                        {$instance->totals[1]} 
-                    </td>
-                    <td>
-                        {$instance->totals[8]}
-                    </td>
-                    <td>
-                        {$instance->totals[2]}
-                    </td>
-                     <td>
-                        {$instance->configs['site_created']}
-                    </td>
-                    <td class="center">
-                        {if $instance->activated == 1}
-                        <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Published{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
-                        {else}
-                        <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Unpublished{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
-                        {/if}
-                    </td>
+                <td class="right">
+                    <ul class="action-buttons clearfix">
 
-                    <td class="right">
-                        <ul class="action-buttons clearfix">
+                        <li>
+                            <a href="instances.php?action=edit&id={$instance->id}" title="{t}Edit{/t}">
+                            <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                        </li>
 
-                            <li>
-                                <a href="instances.php?action=edit&id={$instance->id}" title="{t}Edit{/t}">
-                                <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                            </li>
+                        <li>
+                            <a href="instances.php?action=delete&id={$instance->id}" onclick="confirmar()" title="{t}Delete{/t}">
+                            <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            {foreachelse}
+            <tr>
+                <td class="empty" colspan="11">{t}There is no available instances yet{/t}</td>
+            </tr>
+            {/foreach}
+        </tbody>
 
-                            <li>
-                                <a href="instances.php?action=delete&id={$instance->id}" onclick="confirmar()" title="{t}Delete{/t}">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td class="empty" colspan="11">{t}There is no available instances yet{/t}</td>
-                </tr>
-                {/foreach}
-            </tbody>
-
-            <tfoot>
-                <tr class="pagination">
-                    <td colspan="11">
-                        {$pager->links}&nbsp;
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-    </div>
+        <tfoot>
+            <tr class="pagination">
+                <td colspan="11">
+                    {$pager->links}&nbsp;
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 {/block}
