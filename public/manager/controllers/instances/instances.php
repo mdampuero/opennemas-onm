@@ -78,14 +78,28 @@ switch($action) {
 
     case 'save':
         
+        if(isset($_POST['settings']) && !empty($_POST['settings']) ) {
+            $settings = $_POST['settings'];
+        } else {
+            $settings = array(
+                'TEMPLATE_USER' => "default",
+                'MEDIA_URL' => "",
+                'BD_TYPE' => "mysqli",
+                'BD_HOST' => "localhost",
+                'BD_USER' => "opennemas",
+                'BD_PASS' => "12OpenNeMaS34",
+                'BD_DATABASE' => "onm-".$_POST['internal_name'],
+            );
+        }
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
+            'contact_IP' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
             'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-            'settings' => $_POST['settings'],
-            );
+            'settings' => $settings,
+        );
         $errors = array();
         
         if (intval($data['id']) > 0) {
@@ -122,8 +136,15 @@ switch($action) {
                                     'log_enabled', 'log_db_enabled', 'log_level',
                                     'activated_modules'
                                     );
+                                    
+        foreach ($configurationsKeys as $key) {
+            if(!isset($_POST[$key])){
+                $_POST[$key]= ucfirst($key);
+            }
+        }
+        
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
-        $GLOBALS['application']->conn = $im->getConnection( $_POST['settings'] );
+        $GLOBALS['application']->conn = $im->getConnection( $settings );
 
         foreach ($_POST as $key => $value ) {
             if(in_array($key, $configurationsKeys)) {
