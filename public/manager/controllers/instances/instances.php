@@ -34,7 +34,6 @@ switch($action) {
         
         $tpl->assign( 'instance', $instance);
 
-
         $tpl->assign(
              array(
                     'configs' => $instance->configs,
@@ -80,13 +79,13 @@ switch($action) {
     case 'save':
         
         $data = array(
-            'id' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
+            'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
             'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
             'settings' => $_POST['settings'],
-        );
+            );
         $errors = array();
         
         if (intval($data['id']) > 0) {

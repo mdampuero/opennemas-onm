@@ -29,7 +29,7 @@ class Template extends Smarty
         parent::__construct();
         
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
-            mkdir(CACHE_PATH.DS.'smarty');
+            mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
 
         // Parent variables
@@ -51,7 +51,7 @@ class Template extends Smarty
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
             if (!file_exists($directory)) {
-                mkdir($directory);
+                mkdir($directory, 0755);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
