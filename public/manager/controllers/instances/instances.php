@@ -80,7 +80,7 @@ switch($action) {
     case 'save':
         
         $data = array(
-            'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
+            'id' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
             'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
@@ -88,7 +88,7 @@ switch($action) {
             'settings' => $_POST['settings'],
         );
         $errors = array();
-
+        
         if (intval($data['id']) > 0) {
             $errors = $im->update($data);
             if (is_array($errors) && count($errors) > 0) {
@@ -97,7 +97,9 @@ switch($action) {
             }
         } else {
             $errors = $im->create($data);
-            if (empty (filter_input(INPUT_POST, 'site_created' , FILTER_DEFAULT))){
+            $site_created = filter_input(INPUT_POST, 'site_created' , FILTER_DEFAULT);
+            
+            if (empty($site_created)){
                 $_POST['created'] = time();
             }
             if (is_array($errors) && count($errors) > 0) {
