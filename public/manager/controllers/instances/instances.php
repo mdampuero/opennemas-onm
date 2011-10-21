@@ -97,6 +97,9 @@ switch($action) {
             }
         } else {
             $errors = $im->create($data);
+            if (empty (filter_input(INPUT_POST, 'site_created' , FILTER_DEFAULT))){
+                $_POST['created'] = time();
+            }
             if (is_array($errors) && count($errors) > 0) {
                 m::add($errors);
                 Application::forward('?action=new');
