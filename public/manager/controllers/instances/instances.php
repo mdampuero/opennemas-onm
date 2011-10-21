@@ -55,6 +55,16 @@ switch($action) {
             'templates' => $templates,
             'defaultDatabaseAuth' => $onmInstancesConnection,
         ));
+
+        $tpl->assign(
+         array(
+                'configs' => array( 'activated_modules' => ModuleManager::getAvailableModules()),
+                'available_modules' => ModuleManager::getAvailableModules(),
+                'timezones' => \DateTimeZone::listIdentifiers(),
+                'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+                'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+            )
+        );
         
         $tpl->display('instances/edit.tpl');
         break;
