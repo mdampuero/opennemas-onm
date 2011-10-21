@@ -81,7 +81,7 @@
         </div>
 
         <ul class="support">
-            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
+            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a> </li>
         </ul>
 
     </div>

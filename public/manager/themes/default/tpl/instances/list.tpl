@@ -67,6 +67,11 @@ function confirmar() {
                 <th width="15px">{t}#{/t}</th>
                 <th width="200px">{t}Name{/t}</th>
                 <th>{t}Domains{/t}</th>
+                <th>{t}Contact{/t}</th>
+                <th>{t}Articles{/t}</th>
+                <th>{t}Images{/t}</th>
+                <th>{t}Ads{/t}</th>
+                 <th>{t}Created{/t}</th>
                 <th class="center" width="50px">{t}Activated{/t}</th>
                 <th class="center" width="50px">{t}Actions{/t}</th>
                 {else}
@@ -75,7 +80,7 @@ function confirmar() {
             </thead>
 
             <tbody>
-                {foreach from=$instances item=instance   name=instance_list}
+                {foreach from=$instances item=instance name=instance_list}
                 <tr>
                     <td>
                         {$instance->id}
@@ -86,11 +91,24 @@ function confirmar() {
                         </a>
 
                     </td>
-
                     <td>
                         {$instance->domains}
                     </td>
-
+                    <td>
+                        {$instance->configs['contact_mail']}
+                    </td>
+                    <td>
+                        {$instance->totals[1]} 
+                    </td>
+                    <td>
+                        {$instance->totals[8]}
+                    </td>
+                    <td>
+                        {$instance->totals[2]}
+                    </td>
+                     <td>
+                        {$instance->configs['site_created']}
+                    </td>
                     <td class="center">
                         {if $instance->activated == 1}
                         <a href="?id={$instance->id}&action=changeactivated" class="switchable" title="{t}Published{/t}">
@@ -118,14 +136,14 @@ function confirmar() {
                 </tr>
                 {foreachelse}
                 <tr>
-                    <td class="empty" colspan="5">{t}There is no available instances yet{/t}</td>
+                    <td class="empty" colspan="11">{t}There is no available instances yet{/t}</td>
                 </tr>
                 {/foreach}
             </tbody>
 
             <tfoot>
                 <tr class="pagination">
-                    <td colspan="5">
+                    <td colspan="11">
                         {$pager->links}&nbsp;
                     </td>
                 </tr>

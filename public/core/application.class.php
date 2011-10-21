@@ -118,6 +118,19 @@ class Application
 
     static public function initDatabase()
     {
+
+    /*     // Database
+        self::$conn = \ADONewConnection(BD_TYPE);
+        self::$conn->Connect(
+            BD_HOST, BD_USER, BD_PASS, BD_DATABASE
+        );
+
+        // Check if adodb log is enabled
+        if (s::get('log_db_enabled') == 1) {
+            self::$conn->LogSQL();
+        }
+     * 
+     */
         // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(
@@ -128,6 +141,32 @@ class Application
         if (s::get('log_db_enabled') == 1) {
             $GLOBALS['application']->conn->LogSQL();
         }
+    }
+
+    static public function getConnection($data = array())
+    {
+        if (self::$conn == null || !(self::$conn instanceof \ADOConnection)) {
+            // Database
+            self::$conn = \ADONewConnection($data['BD_TYPE']);
+            self::$conn->Connect(
+               $data[' BD_HOST'], $data['BD_USER'], $data['BD_PASS'], $data['BD_DATABASE']
+            );
+
+            // Check if adodb log is enabled
+            if (s::get('log_db_enabled') == 1) {
+                self::$conn->LogSQL();
+            }
+        }
+        return self::$conn;
+    }
+
+    static public function setConnection($connectionObject)
+    {
+        if ($connectionObject instanceof \ADOConnection) {
+            throw new \Exception('$connectionObject is not an instance of ADOConnection');
+        }
+        self::$conn = $connectionObject;
+        return self::$conn;
     }
 
     /**

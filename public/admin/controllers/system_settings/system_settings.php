@@ -19,8 +19,6 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 Acl::checkorForward('ONM_SETTINGS');
 
-ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
-
 /**
  * Setup view
 */
@@ -54,7 +52,7 @@ switch($action) {
 
         $tpl->assign(
                      array(
-                            'available_modules'          => ModuleManager::getAvailableModules(),
+                            'available_modules' => ModuleManager::getAvailableModules(),
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
                             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),

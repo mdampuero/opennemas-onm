@@ -214,7 +214,76 @@ class InstanceManager
         
         return $instance;
     }
-    
+
+     /*
+     * count total contents in one instance
+     *
+     * @param string id the id for this instance
+     */
+    public function getDBInformation($settings)
+    {
+
+        $fetchedFromAPC = false;
+        $fetchedFromAPCInfor = false;
+        $totals = array();
+        $information = array();
+
+        if (extension_loaded('apc')) {
+            $totals = apc_fetch(APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
+                    $fetchedFromAPC);
+            $information = apc_fetch(APC_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'], 
+                    $fetchedFromAPCInfor);
+        }
+
+        // If was not fetched from APC now is turn of DB
+        if (!$fetchedFromAPC) {
+
+            $DBConection = self::getConnection($settings);
+
+            $sql = 'SELECT count(*) as total, fk_content_type as type FROM contents'.
+               ' GROUP BY `fk_content_type`';
+            
+            $rs = $DBConection->Execute( $sql );
+
+           
+            if($rs !== false) {
+                while(!$rs->EOF) {
+                     
+                    $totals[ $rs->fields['type'] ] = $rs->fields['total'];
+                    $rs->MoveNext();
+                }
+            }
+            if (extension_loaded('apc')) {
+                apc_store(APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'], $totals, 300);
+            }
+        }
+
+         if (!$fetchedFromAPCInfor) {
+
+            if (!isset($DBConection) || empty($DBConection))  {
+                $DBConection = self::getConnection($settings);
+            }
+            
+            $sql = 'SELECT * FROM settings';
+
+            $rs = $DBConection->Execute( $sql );
+
+
+            if($rs !== false) {
+                while(!$rs->EOF) {
+
+                    $information[ $rs->fields['name'] ] = unserialize($rs->fields['value']);
+                    $rs->MoveNext();
+                }
+            }
+        }
+
+           
+        return array($totals, $information);
+
+      }
+
+
     /*
      * Change activated flag for one instance given its id
      * 

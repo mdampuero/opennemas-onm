@@ -5,6 +5,8 @@
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 
 use \Onm\Instance\InstanceManager as im;
+use \Onm\Module\ModuleManager as ModuleManager;
+
 
 /**
  * Setup view
@@ -25,8 +27,22 @@ switch($action) {
         
         $id = $_REQUEST['id'];
         $instance = $im->read($id);
+           
+        list($instance->totals, $instance->configs) = $im->getDBInformation($instance->settings);
         
-        $tpl->assign('instance', $instance);
+        $tpl->assign( 'instance', $instance);
+
+
+        $tpl->assign(
+             array(
+                    'configs' => $instance->configs,
+                    'available_modules' => ModuleManager::getAvailableModules(),
+                    'timezones' => \DateTimeZone::listIdentifiers(),
+                    'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
+                    'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
+                )
+            );
+
         $tpl->display('instances/edit.tpl');
         break;
 
@@ -50,7 +66,7 @@ switch($action) {
         
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
-            'name' => filter_input(INPUT_POST, 'name' , FILTER_SANITIZE_STRING),
+            'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
@@ -61,6 +77,30 @@ switch($action) {
             $instance = $im->update($data);
         } else {
             $instance = $im->create($data);
+        }
+        
+        $configurationsKeys = array(
+                                    'site_title', 'site_description','site_keywords',
+                                    'site_agency','site_name','site_created',
+                                    'contact_mail','contact_name','contact_IP',
+                                    'time_zone','site_language','mail_server',
+                                    'mail_username','mail_password','google_maps_api_key',
+                                    'google_custom_search_api_key','facebook',
+                                    'google_analytics','piwik',
+                                    'recaptcha',
+                                    'items_per_page',
+                                    'refresh_interval',
+                                    'advertisements_enabled',
+                                    'log_enabled', 'log_db_enabled', 'log_level',
+                                    'activated_modules'
+                                    );
+        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
+        $GLOBALS['application']->conn = $im->getConnection( $_POST['settings'] );
+
+        foreach ($_POST as $key => $value ) {
+            if(in_array($key, $configurationsKeys)) {
+                Onm\Settings::set($key, $value);
+            }
         }
 
         Application::forward('?action=list');
@@ -86,9 +126,14 @@ switch($action) {
 
     case 'list':
     default:
-        
+
         $instances = $im->findAll();
-        
+
+        foreach($instances as $instance) {
+             list($instance->totals, $instance->configs) =
+                     $im->getDBInformation($instance->settings);
+        }
+
         $_SESSION['desde'] = 'instances';
 
         $tpl->assign('instances', $instances);
