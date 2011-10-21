@@ -7,7 +7,8 @@
  * file that was distributed with this source code.
  */
 namespace Onm\Instance;
-use \FilesManager as fm;
+use \FilesManager as fm,
+    \Onm\Message as m;
 /**
  * Class for manage ONM instances.
  *
@@ -331,22 +332,29 @@ class InstanceManager
      * Deletes one instance given its id
      * 
      * @param string id the id for this instance
+     * 
+     * @return boolean
      */
     public function delete($id)
     {
+        $instance = $this->read($id);
+
         $sql = "DELETE FROM instances WHERE id=?";
-        $rs = $this->_connection->Execute($sql, array($id));
+        $rs = $this->_connection->Execute($sql, array($instance->id));
         if (!$rs) {
             $errorMsg = $this->_connection->ErrorMsg();
             return false;
         }
+        $this->deleteDefaultAssetsForInstance($instance->internal_name);
+        // $this->deleteDatabaseForInstance($data);
+        $this->deleteInstanceWithInternalName($instance->internal_name);
+        $this->deleteApacheConfAndReloadConfiguration($instance->internal_name);
+
         return true;
     }
     
     /**
      * Creates one instance given some data
-     * 
-     * 
      * 
      * @param  array the configuration for create the configuration file
      * 
@@ -393,8 +401,6 @@ class InstanceManager
 
         }
 
-        
-
         if (count($errors) > 0) {
             return $errors;
         }
@@ -405,12 +411,23 @@ class InstanceManager
     /**
      * Inserts the instance reference in the instances table.
      *
-     * @param  array the configuration for create the configuration file
+     * @param  array the configuration for creating the configuration file
      * 
      * @return boolean/string true if all went well, string if not.
      **/
     public function createInstanceReferenceInManager($data)
     {
+        if (
+            empty($data['name']) 
+            || empty($data['internal_name'])
+            || empty($data['domains'])
+            || empty($data['activated'])
+        ) {
+            throw new InstanceNotRegisteredException(
+                _("Instance data could not be blank.")
+            );
+        }
+
         // Check if the instance already exists
         $sql = "SELECT count(*) as instance_exists FROM instances WHERE `internal_name` = ?";
         $rs = $this->_connection->Execute($sql, array($data['internal_name']));
@@ -456,9 +473,7 @@ class InstanceManager
         $values = array($internalName);
         
         if (!$this->_connection->Execute($sql, $values)) {
-            throw new DatabaseForInstanceNotCreatedException(
-                "Could not create the database for the instance: {$this->_connection->ErrorMsg()}"
-            );
+            return false;
         }
         return true;
     }

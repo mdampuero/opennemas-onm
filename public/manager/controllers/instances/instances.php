@@ -4,15 +4,17 @@
 */
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 
-use \Onm\Instance\InstanceManager as im;
-use \Onm\Module\ModuleManager as ModuleManager;
-
+use \Onm\Instance\InstanceManager as im,
+    \Onm\Module\ModuleManager as ModuleManager,
+    \Onm\Message as m;
 
 /**
  * Setup view
 */
 $tpl = new \TemplateManager(TEMPLATE_ADMIN);
 $im = im::getInstance();
+
+session_start();
 
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
@@ -49,7 +51,10 @@ switch($action) {
     case 'new':
 
         $templates = im::getAvailableTemplates();
-        $tpl->assign('templates', $templates);
+        $tpl->assign(array(
+            'templates' => $templates,
+            'defaultDatabaseAuth' => $onmInstancesConnection,
+        ));
         
         $tpl->display('instances/edit.tpl');
         break;
@@ -70,13 +75,22 @@ switch($action) {
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-            'settings' => $_POST['settings']
+            'settings' => $_POST['settings'],
         );
-            
+        $errors = array();
+
         if (intval($data['id']) > 0) {
-            $instance = $im->update($data);
+            $errors = $im->update($data);
+            if (is_array($errors) && count($errors) > 0) {
+                m::add($errors);
+                Application::forward('?action=edit&id='.$data['id']);
+            }
         } else {
-            $instance = $im->create($data);
+            $errors = $im->create($data);
+            if (is_array($errors) && count($errors) > 0) {
+                m::add($errors);
+                Application::forward('?action=new');
+            }
         }
         
         $configurationsKeys = array(
@@ -103,6 +117,7 @@ switch($action) {
             }
         }
 
+        m::add('Instance saved successfully.');
         Application::forward('?action=list');
 
         break;
@@ -127,6 +142,10 @@ switch($action) {
     case 'list':
     default:
 
+        // QUIRK MODE: If I don't star the session Onm\Message doesn't show 
+        // available messages
+        // session_start();
+        
         $instances = $im->findAll();
 
         foreach($instances as $instance) {
