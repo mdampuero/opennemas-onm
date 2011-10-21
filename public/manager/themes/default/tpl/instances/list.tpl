@@ -108,7 +108,7 @@ function confirmar() {
                     {$instance->totals[2]}
                 </td>
                  <td>
-                    {$instance->configs['site_created']}
+                    {$instance->configs['site_created']|default:$smarty.now|date_format:"%d-%m-%Y"}
                 </td>
                 <td class="center">
                     {if $instance->activated == 1}
