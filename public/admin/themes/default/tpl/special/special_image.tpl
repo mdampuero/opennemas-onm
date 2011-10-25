@@ -132,10 +132,10 @@
                         <h2>{t}Image for frontpage:{/t}</h2>
                     </td>
                     <td  align='center'>
-                            <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png"
-                                     id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
-                            </a>
+                        <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png"
+                                 id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
+                        </a>                        
                     </td>
                 </tr>
                 <input type="hidden" id="img_des" value="" size="60">
@@ -167,53 +167,6 @@
                 </tr>
             </table>   
         </div>
-        <input type="hidden" id="ordenAlbum" name="ordenAlbum" value="" />
+
     </td>
 </tr>
-
-<tr>
-    <td colspan="3">
-        <label>{t}Cut the image that is in frontpage view. ({$crop_width}x{$crop_height} px){/t} </label>
-        <div id="testWrap">
-            <img src="{$params.IMAGE_DIR}default_img.jpg" alt={t}"test image"{/t} 
-                 id="testImage"  width="300" />
-        </div>
-        <div id="previewArea">
-            {if !empty($album->cover)}
-                <img id="crop_img" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"
-                     alt={t}"Frontpage image"{/t}  style="maxWidth:600px;maxHeight:400px;" />
-            {/if}
-        </div>
-        <div id="results">
-            <input type="hidden" name="x1" id="x1" value=""/>          
-            <input type="hidden" name="y1" id="y1" value=""/>
-
-            <input type="hidden" name="width" id="width" value="" />
-            <input type="hidden" name="height" id="height" value=""/>
-
-            <input type="hidden" name="cropWidth" id="cropWidth" value="{$crop_width}" />
-            <input type="hidden" name="cropHeight" id="cropHeight" value="{$crop_height}"/>
-
-            <input type="hidden" name="media_path" id="media_path" value="{$smarty.const.MEDIA_IMG_PATH_WEB}"/>
-            <input type="hidden" name="path_img" id="path_img" value=""/>
-            <input type="hidden" name="name_img" id="name_img" value=""/>
-        </div>
-    </td>
-</tr>
-
-
-{script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript">
-
-    document.observe('dom:loaded', function() {
-        getGalleryImages('listByCategory','{$category}','','1');
-    });
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.simple.elements = "summary";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-
-    album_make_mov();
-
-    
-</script>
- 

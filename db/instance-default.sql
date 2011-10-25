@@ -1024,17 +1024,19 @@ INSERT INTO `content_types` (`pk_content_type`, `name`, `title`, `fk_template_de
 (2, 'advertisement', 'Publicidad', NULL),
 (3, 'attachment', 'Fichero', NULL),
 (4, 'opinion', 'Opinión', NULL),
-(15, 'book', 'Libro', NULL),
+(5, 'event', 'Evento', NULL),
 (6, 'comment', 'Comentario', NULL),
 (7, 'album', 'Álbum', NULL),
 (8, 'photo', 'Imagen', NULL),
 (9, 'video', 'Vídeo', NULL),
-(10, 'specials', 'Especiales', NULL),
+(10, 'special', 'Especiales', NULL),
 (11, 'poll', 'Encuesta', NULL),
+(12, 'widget', 'Widget', NULL),
 (13, 'static_page', 'Página estática', NULL),
 (14, 'kiosko', 'Kiosko', NULL),
-(12, 'widget', 'Widget', NULL),
-(5, 'event', 'Evento', NULL);
+(15, 'book', 'Libro', NULL),
+(16, 'schedule', 'Agenda',NULL)
+;
 
 -- --------------------------------------------------------
 
@@ -2093,3 +2095,103 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (205, 'OtherOpinionsAuthor', 'intelligentwidget'),
 (206, 'PastHeadlinesMostViewed', 'intelligentwidget'),
 (207, 'TodayNews', 'intelligentwidget');
+
+-- New modules books & specials
+
+-- phpMyAdmin SQL Dump
+-- version 3.3.7deb5build0.10.10.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Oct 24, 2011 at 12:49 PM
+-- Server version: 5.1.49
+-- PHP Version: 5.3.3-1ubuntu9.5
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `onm-cronicas`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `books`
+--
+
+CREATE TABLE IF NOT EXISTS `books` (
+  `pk_book` bigint(20) unsigned NOT NULL,
+  `author` varchar(250) DEFAULT NULL,
+  `file` varchar(250) DEFAULT NULL,
+  `editorial` varchar(250) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `books`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `specials`
+--
+
+CREATE TABLE IF NOT EXISTS `specials` (
+  `pk_special` int(10) unsigned NOT NULL,
+  `subtitle` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
+  `pdf_path` varchar(250) CHARACTER SET utf8 DEFAULT '0',
+  `img1` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`pk_special`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `specials`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `special_contents`
+--
+
+CREATE TABLE IF NOT EXISTS `special_contents` (
+  `fk_content` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `fk_special` int(10) NOT NULL,
+  `name` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `position` int(10) DEFAULT '10',
+  `visible` smallint(1) DEFAULT '1',
+  `type_content` varchar(100) CHARACTER SET utf8 NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `special_contents`
+--
+
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(154, 'SCHEDULE_ADMIN', 'Gestionar la agenda ', 'SCHEDULE'),
+(153, 'SCHEDULE_SETTINGS', 'Gestionar la agenda ', 'SCHEDULE'),
+(152, 'SPECIAL_TRASH', 'Gestionar papelera especiales', 'SPECIAL'),
+(151, 'SPECIAL_DELETE', 'Eliminar especiales', 'SPECIAL'),
+(150, 'SPECIAL_UPDATE', 'Modificar especiales', 'SPECIAL'),
+(149, 'SPECIAL_SETTINGS', 'Configurar modulo de especiales', 'SPECIAL'),
+(148, 'SPECIAL_AVAILABLE', 'Aprobar especiales', 'SPECIAL'),
+(147, 'SPECIAL_FAVORITE', 'Gestionar widget especiales', 'SPECIAL'),
+(146, 'SPECIAL_CREATE', 'Crear especiales', 'SPECIAL'),
+(145, 'SPECIAL_ADMIN', 'Administrar modulo de especiales ', 'SPECIAL'),
+(144, 'BOOK_TRASH', 'Vaciar papelera de libros', 'BOOK'),
+(143, 'BOOK_DELETE', 'Eliminar libros', 'BOOK'),
+(142, 'BOOK_UPDATE', 'Modificar libros', 'BOOK'),
+(141, 'BOOK_SETTINGS', 'Configurar modulo de libros', 'BOOK'),
+(140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
+(139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
+(138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
+(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK');
+

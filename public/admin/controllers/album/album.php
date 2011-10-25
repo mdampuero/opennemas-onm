@@ -75,7 +75,8 @@ switch($action) {
         $rawCategory = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
         $tpl->assign('raw_category', $rawCategory);
         if ($rawCategory == 'favorite') {
-            $albums = $cm->find_all('Album', 'favorite =1 AND available =1', 'ORDER BY  created DESC '.$limit);
+            $albums = $cm->find_all('Album', 'favorite =1 AND available =1',
+                                'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
             }
@@ -117,6 +118,8 @@ switch($action) {
     break;
 
     case 'new':
+
+        Acl::checkOrForward('ALBUM_CREATE');
 
         $configurations = s::get('album_settings');
 
@@ -183,12 +186,14 @@ switch($action) {
         Acl::checkOrForward('ALBUM_UPDATE');
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-            $album = new Album($id);
-        if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
-            m::add(_("You can't modify this article because you don't have enought privileges.") );
-        }
-        $album->update( $_POST );
+        $album = new Album($id);
 
+        if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+            m::add(_("You can't modify this content because you don't have enought privileges.") );
+             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
+        } else {
+            $album->update( $_POST );
+        }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
     break;
@@ -296,7 +301,7 @@ switch($action) {
 
         break;
 
-        case 'mfrontpage':
+    case 'mfrontpage':
 
         Acl::checkOrForward('ALBUM_AVAILABLE');
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)

@@ -68,7 +68,18 @@
                 <a href="#poll" id="poll-tab">{t}Poll categories{/t}</a>
             </li>
             {/is_module_activated}
+            {is_module_activated name="SPECIAL_MANAGER"}
+            <li>
+                <a href="#epapel" id="epapel-tab">{t}Special categories{/t}</a>
+            </li>
+            {/is_module_activated}
+            {is_module_activated name="BOOK_MANAGER"}
+            <li>
+                <a href="#poll" id="poll-tab">{t}Book categories{/t}</a>
+            </li>
+            {/is_module_activated}
         </ul>
+        <br class="" />
 
         <div class="panel" id="global">
             <table class="listing-table">
@@ -248,6 +259,77 @@
                 </tfoot>
             </table>
         </div>
+
+        <div class="panel" id="special">
+            <table class="listing-table">
+                <thead>
+                    <tr>
+                        <th>{t}Title{/t}</th>
+                        <th>{t}Internal name{/t}</th>
+                        <th style="width:15px;">{t}Articles{/t}</th>
+                        <th style="width:15px;">{t}Photos{/t}</th>
+                        <th style="width:15px;">{t}Advertisements{/t}</th>
+                        <th style="width:15px;">{t}Published{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {section name=c loop=$categorys}
+                        {if $categorys[c]->internal_category eq '10'}
+                            {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                        {/if}
+                    {sectionelse}
+                    <tr>
+                        <td class="empty">
+                            {t}No available categories for listing{/t}
+                        </td>
+                    </tr>
+                    {/section}
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="8">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+         <div class="panel" id="book">
+            <table class="listing-table">
+                <thead>
+                    <tr>
+                        <th>{t}Title{/t}</th>
+                        <th>{t}Internal name{/t}</th>
+                        <th style="width:15px;">{t}Articles{/t}</th>
+                        <th style="width:15px;">{t}Photos{/t}</th>
+                        <th style="width:15px;">{t}Advertisements{/t}</th>
+                        <th style="width:15px;">{t}Published{/t}</th>
+                        <th style="width:70px;">{t}Actions{/t}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {section name=c loop=$categorys}
+                        {if $categorys[c]->internal_category eq '15'}
+                            {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
+                        {/if}
+                    {sectionelse}
+                    <tr>
+                        <td class="empty">
+                            {t}No available categories for listing{/t}
+                        </td>
+                    </tr>
+                    {/section}
+                </tbody>
+                <tfoot>
+                    <tr class="pagination">
+                        <td colspan="8">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
 
     </div>
     <input type="hidden" id="action" name="action" value="" />

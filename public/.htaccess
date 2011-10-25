@@ -13,6 +13,9 @@ Deny from all
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
+    # provisiona cronicas
+    RewriteRule ^agenda/?   http://www.cronicasdelaemigracion.com/agenda/
+
 
     #Inner Article
     RewriteRule ^noticia/([0-9]+)/($|.+/$|.+html$) /controllers/redirect-from-editmaker.php?content_type=article&content_id=$1 [L,NC]
@@ -165,10 +168,32 @@ Deny from all
     RewriteRule ^([a-z0-9\-]+)/([0-9]{4}-[0-1][0-9]-[0-3][0-9])/([0-9]+)/$ /seccion/$1/#$3 [R=301,NE,NC,L]
     RewriteRule ^newsletter/?$  controllers/subscripcionBoletin.php [L,NC]
 
+
+    #Books
+    #libros/titulo/200812081741363340.html
+    RewriteRule ^libro/([0-9]+).html$ controllers/books.php?action=view&id=$1 [L,NC]
+    RewriteRule ^libro/([a-z0-9\-]*)/([0-9]+).html$ controllers/books.php?action=view&id=$2 [L,NC]
+    RewriteRule ^libros/?$  controllers/books.php [L,NC]
+
+    #Especiales
+    #especial/galicia/2008-12-08/200812081741363340.html
+    RewriteRule ^especiales/([a-z]+)/[0-9]{4}-[0-1][0-9]-[0-3][0-9]/([0-9]+).html$ controllers/specials.php?action=read&category_name=$1&special_id=$2 [L,NC]
+    RewriteRule ^especiales/([a-z]+)/[0-9]{4}-[0-1][0-9]-[0-3][0-9]/[a-z0-9\-]*/([0-9]+).html$ controllers/specials.php?action=read&category_name=$1&special_id=$2 [L,NC]
+    RewriteRule ^especiales/([a-z]+)/$ controllers/specials.php?category_name=$1  [L,NC]
+    RewriteRule ^especiales/$ specials.php [L,NC]
+
+    # HEMEROTECA
+    #hemeroteca/galicia/2008-12-08/ -> /media/library/yyyymmdd/category_name.html
+    RewriteRule ^hemeroteca/([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/$ /media/library/$2$3$4/$1.html [L,NC]
+    RewriteRule ^hemeroteca/([a-z]+)/([0-9]{4})-([0-1][0-9])-([0-3][0-9])/#([0-9]+)$ /media/library/$2$3$4/$1.html#$5 [L,NC]
+    RewriteRule ^hemeroteca/([a-z]+)/([0-9\-]*)/?$ index.php?category_name=cronicas [L,NC]
+    RewriteRule ^hemeroteca/([a-z]+)/?$ index.php?category_name=cronicas [L,NC]
+
     #Default Rules
     # RewriteCond %{REQUEST_URI} !^/controllers/index.php
     RewriteCond %{REQUEST_URI} (/|\.php|\.html|\.htm|\.feed|\.pdf|\.raw|/[^.]*)$  [NC]
 
+    RewriteRule ^boletin.html$ newsletter/
 
     ErrorDocument 404 /controllers/404.html
 </IfModule>
