@@ -46,7 +46,7 @@
     {if (!empty($video->uri))}
     <tr>
         <td>
-            <label for="title">Enlace:</label>
+            <label for="title">{t}Link:{/t}</label>
         </td>
         <td valign="top">
             <a href="{$smarty.const.SITE_URL}{$video->uri}" target="_blank">
@@ -56,43 +56,51 @@
     </tr>
     {/if}
     <tr>
-        <td colspan=2 style="padding:5px; text-align:left;">
+        <td valign="top">
             <label>{t}Preview:{/t}</label>
-            <div class="video_player" style="width:80%">
+        </td>
+        <td colspan=2 style="padding:5px; text-align:left;">
+            
+            <div class="video_player" style="max-width:500px; overflow:hidden;">
                  {$information['embedHTML']}
             </div>
 
             <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
 
-            <br>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
             <label for="title">{t}Other Information{/t}:</label>
+        </td>
+        <td>
             <table style="width:80%; margin:20xp;">
                 <tr>
-                    <td>{t}Original Title{/t}</td>
+                    <td width="100px"><strong>{t}Original Title{/t}</strong></td>
                     <td>{$information['title']}</td>
                 </tr>
                 <tr>
-                    <td>{t}FLV{/t}</td>
+                    <td><strong>{t}FLV{/t}</strong></td>
                     <td>{$information['FLV']}</td>
                 </tr>
                 <tr>
-                    <td>{t}Download Url{/t}</td>
+                    <td><strong>{t}Download Url{/t}</strong></td>
                     <td>{$information['downloadUrl']}</td>
                 </tr>
                 <tr>
-                    <td>{t}Service{/t}</td>
+                    <td><strong>{t}Service{/t}</strong></td>
                     <td>{$information['service']}</td>
                 </tr>
                 <tr>
-                    <td>{t}Duration{/t}</td>
+                    <td><strong>{t}Duration{/t}</strong></td>
                     <td>{$information['duration']}</td>
                 </tr>
                 <tr>
-                    <td>{t}Url Thumbnail{/t}</td>
+                    <td><strong>{t}Url Thumbnail{/t}</strong></td>
                     <td>{$information['thumbnail']}</td>
                 </tr>
                 <tr>
-                    <td>{t}Embed Url{/t}</td>
+                    <td><strong>{t}Embed Url{/t}</strong></td>
                     <td>{$information['embedUrl']}</td>
                 </tr>
             </table>

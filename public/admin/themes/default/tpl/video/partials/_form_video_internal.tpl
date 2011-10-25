@@ -30,21 +30,30 @@
             </tr>
             {if isset($video)}
 
-                <tr>
-                    <td colspan="2">
-                        {render_video video=$video height=$height width=400 base_url=$smarty.const.INSTANCE_MEDIA}
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <label>
+                        {t}Preview:{/t}
+                    </label>
+                </td>
+                <td style="width:100%; padding:10px" colspan="2">
+                    <div id="video-information" style="text-align:center; margin:0 auto;">
+                        {script_tag src="/media/common_assets/fplayer/flowplayer-3.2.6.min.js" external=1}
+                        {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
+                    </div>
+                    
+                </td>
+            </tr>
                 
             {else}
             <tr>
                 <td>
                     <label for="title">Pick a file to upload:</label>
                 </td>
-                <td>
+                <td colspan="2">
                     <input type="file" name="video_file">
                 </td>
-            </tr>    
+            </tr>
             {/if}
                  
         </table>

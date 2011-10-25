@@ -1,5 +1,5 @@
 <tr>
-    <td style="padding:10px; vertical-align:top;">
+    <td style="padding:10px; vertical-align:top;" colspan="2">
         <label for="video_url">
         {if isset($video)}
             {t}Video URL:{/t}<br>
@@ -18,7 +18,7 @@
 </tr>
     
 <tr>
-    <td style="width:100%; padding:10px" colspan="3">
+    <td style="width:100%; padding:10px" colspan="2">
         <div id="video-information">
             {* AJAX LOAD *}
             {if $smarty.request.action eq "read"}

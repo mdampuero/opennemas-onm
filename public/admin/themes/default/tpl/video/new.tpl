@@ -91,7 +91,7 @@
 			<table class="adminform">
 				<tbody>
 					<tr>
-                        <td></td>
+                        <td colspan=2></td>
 						<td rowspan=3 style="padding:10px; width:30%; vertical-align:top;">
 							<div class="utilities-conf">
 								<table>
@@ -126,9 +126,9 @@
 							<br>
 
 							<input type="hidden" value="1" name="content_status">
-                            {if $smarty.get.type != "file" && (isset($video) && ($video->author_name != 'internal'))}
+                            {if $smarty.get.type != "file" && ( ($video->author_name != 'internal'))}
 							<div class="help-block">
-								<div class="title"><h4>{t}Get API keys{/t}</h4></div>
+								<div class="title"><h4>{t}Allowed video sources:{/t}</h4></div>
 								<div class="content">
 									{t}For now OpenNeMas only accepts videos from:{/t}:
 									{include file="video/partials/_sourceinfo.tpl"}

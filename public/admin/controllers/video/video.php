@@ -56,7 +56,6 @@ $tpl->assign('allcategorys', $parentCategories);
 //TODO: ¿datoscat?¿
 $tpl->assign('datos_cat', $categoryData);
 
-
 /******************* GESTION CATEGORIAS  *****************************/
 
 
@@ -177,7 +176,7 @@ switch ($action) {
             $tpl->assign('information', $information);
             $html_out = $tpl->fetch('video/partials/_video_information.tpl');
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX ."video_".$url, $information);
+               @apc_store(APC_PREFIX ."video_".$url, $information);
             }
         }  else {
             $html_out = _("Please check the video url, seems to be incorrect");
