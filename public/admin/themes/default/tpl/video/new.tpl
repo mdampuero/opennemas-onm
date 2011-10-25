@@ -64,6 +64,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
+                {if isset($video->id)}
                 {acl isAllowed="VIDEO_CREATE"}
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
@@ -72,6 +73,7 @@
                     </a>
                 </li>
                 {/acl}
+                {/if}
                 <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category|default:""}" value="{t}Go Back{/t}" title="{t}Go Back{/t}">

@@ -264,7 +264,7 @@ class Video extends Content
         
         foreach ($sizes as $name => $sizeValues) {
             
-            $thumbnailFrameNumber = (int) round($totalFrames/4)%$frameRate;
+            $thumbnailFrameNumber = (int) round($totalFrames*2/5);
         
             // Need to create a GD image ffmpeg-php to work on it  
             // Choose the frame you want to save as jpeg
