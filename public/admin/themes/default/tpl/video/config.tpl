@@ -71,7 +71,7 @@
                     </td>
                     <td> <br/>
                         <div class="help-block">
-								<div class="title"><h4>{t}Definition values{/t}</h4></div>
+								<div class="title"><h4>{t}Settings{/t}</h4></div>
                                 <div class="content">
                                     <ul>
                                         <li>{t} Use  total in widget home for define how many videos can see in widgets in newspaper frontpage{/t}</li>
@@ -83,8 +83,10 @@
                     </td>
                 </tr>
             </table>
-            <div class="action-bar">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="action-bar clearfix">
+                <div class="right">
+                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+                </div><!-- / -->
             </div>
         </div>
 

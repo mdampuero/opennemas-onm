@@ -5,7 +5,6 @@
 {/block}
 
 {block name="content"}
-{render_messages}
 <form action="#" method="post" name="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
@@ -51,6 +50,10 @@
 		</div>
 	</div>
 
+    <div class="wrapper-content">
+        {render_messages}
+    </div><!-- / -->        
+        
     <div class="wrapper-content">
 
         <ul class="pills clearfix">

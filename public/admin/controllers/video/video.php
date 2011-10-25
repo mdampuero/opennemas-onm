@@ -56,7 +56,6 @@ $tpl->assign('allcategorys', $parentCategories);
 //TODO: ¿datoscat?¿
 $tpl->assign('datos_cat', $categoryData);
 
-
 /******************* GESTION CATEGORIAS  *****************************/
 
 
@@ -177,7 +176,7 @@ switch ($action) {
             $tpl->assign('information', $information);
             $html_out = $tpl->fetch('video/partials/_video_information.tpl');
             if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX ."video_".$url, $information);
+               @apc_store(APC_PREFIX ."video_".$url, $information);
             }
         }  else {
             $html_out = _("Please check the video url, seems to be incorrect");
@@ -247,6 +246,10 @@ switch ($action) {
         );
 
         break;
+    
+    case 'validate':
+
+        $continue = true;
 
     case 'update':
 
@@ -265,33 +268,11 @@ switch ($action) {
         } else {
             $video->update( $_POST );
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-
-        break;
-
-    case 'validate':
-
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-
-        if (!$id) {
-
-            Acl::checkOrForward('VIDEO_CREATE');
-            $video = new Video();
-
-            //Estamos creando un nuevo artículo
-            if(!$video->create( $_POST )) $tpl->assign('errors', $video->errors);
-
+        if ($continue) {
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
         } else {
-            Acl::checkOrForward('VIDEO_UPDATE');
-            $video = new Video($id);
-            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $video->pk_user != $_SESSION['userid']) {
-                m::add(_("You can't modify this article because you don't have enought privileges.") );
-            }else{
-                $video->update( $_POST );
-            }
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         }
-
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$video->id);
 
         break;
 
@@ -301,13 +282,13 @@ switch ($action) {
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         $video = new Video($id);
-        $relationes=array();
+        $relations=array();
         $msg ='';
-        $relationes = Related_content::get_content_relations($id);
-        if (!empty($relationes)) {
+        $relations = Related_content::get_content_relations($id);
+        if (!empty($relations)) {
             $msg = sprintf(_("The video %s has some relations:",$video->title));
             $cm = new ContentManager();
-            $relat = $cm->getContents($relationes);
+            $relat = $cm->getContents($relations);
             foreach($relat as $contents) {
                 $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
             }

@@ -275,10 +275,7 @@ if(($tpl->caching == 0)
                 }
             }
         }
-        //Si hay noticia destacada, ponemos el flag a true
-        if ($column[$c]->home_placeholder == 'placeholder_highlighted_0') {
-            $has_highlighted = true;
-        }
+
         /***** GET OBJECT VIDEO *****/
         if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
             $video=$column[$c]->fk_video;
@@ -289,13 +286,10 @@ if(($tpl->caching == 0)
         }
 
         /***** COLUMN1 RELATED NEWS  ****/
-        $relationes = $relia->get_relations($articles_home[$aux]->id);
-
-        ////se le pasa el id de cada noticia de la column1
-        // devueve array con los id de las noticias relacionadas
+        $relations = $relia->get_relations($articles_home[$aux]->id);
 
         $relats = array();
-        foreach($relationes as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
+        foreach($relations as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
 
             $obj = new Content($id_rel);
             // Filter by scheduled {{{
@@ -307,34 +301,17 @@ if(($tpl->caching == 0)
         }
         $column[$c]->related_contents = $relats;
 
-        /***** COLUMN1 COMMENTS *******
-        if($articles_home[$aux]->with_comment) {
-            $comment = new Comment();
 
-            $numcomment1[$articles_home[$aux]->id] = $comment->count_public_comments($articles_home[$aux]->id);
-            $tpl->assign('numcomment1', $numcomment1);
-        }
-
-
-        /******* COLUMN1 RATINGS ********
-        $rating = new Rating($articles_home[$aux]->id);
-        $rating_bar_col1[$articles_home[$aux]->id] = $rating->render('home','vote');
-        /******* END COLUMN1 RATINGS **********/
 
         $c++; $aux ++;
     }
 
-    //  $tpl->assign('rating_bar_col1', $rating_bar_col1);
-    //  $tpl->assign('relationed_c1', $relat_c1);
     $tpl->assign('column', $column);
-    $tpl->assign('has_highlighted', $has_highlighted);
-
-
-
 
     /************************************ END COLUMN1 **************************************************/
 
     /************************************ ARTICLES EXPRESS **************************************/
+    //TODO: move to a widget, this is used in retrincos frontpage template
     $now= date('Y-m-d H:m:s',time()); //2009-02-28 21:00:13
     $articles_home_express = $cm->find('Article', 'content_status=1 AND available=1 AND fk_content_type=1 AND (starttime="0000-00-00 00:00:00" OR (starttime != "0000-00-00 00:00:00"  AND starttime<"'.$now.'")) AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 'ORDER BY created DESC LIMIT 0 , 5 ');
 
@@ -342,7 +319,7 @@ if(($tpl->caching == 0)
 
 
     /************************************ TITULARES TENDENCIAS/ENTREVISTAS  ************************************/
-    //TODO: create a widget
+    //TODO: move to a widget, this is used in nuevatribuna frontpage template
     if ($ccm->exists('entrevistas')) {
         $titular_gente =
             $cm->find_by_category_name('Article',
@@ -363,20 +340,12 @@ if(($tpl->caching == 0)
 
         $tpl->assign('titulares_gente', $titular_gente);
     }
-    /**
-     * Fetch information for Albums
-    */
-    $lastAlbum = $cm->find('Album',
-                            ' contents.fk_content_type=7 AND'
-                           .' contents.available=1'
-                           , 'ORDER BY favorite DESC, created DESC'
-                           .' LIMIT 0 , 5');
-    $tpl->assign('lastAlbum', $lastAlbum);
 
 
     /**
      * Fetch information for Static Pages
      */
+     //TODO: Move to a widget. Used in all templates
     require_once("widget_static_pages.php");
 
 } // $tpl->is_cached('index.tpl')

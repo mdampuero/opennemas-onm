@@ -448,8 +448,8 @@ class Application
     {
         $isMobileDevice = false;
 
-        $browser = get_browser(null); //isBanned
-
+        $browser = @get_browser(null); //isBanned
+        
         if (
             !empty($browser->ismobiledevice)
             && ($browser->ismobiledevice == 1)

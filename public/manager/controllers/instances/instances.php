@@ -103,6 +103,27 @@ switch($action) {
         $errors = array();
         
         if (intval($data['id']) > 0) {
+            $configurationsKeys = array(
+                    'site_title', 'site_description','site_keywords',
+                    'site_agency','site_name','site_created',
+                    'contact_mail','contact_name','contact_IP',
+                    'time_zone','site_language','mail_server',
+                    'mail_username','mail_password','google_maps_api_key',
+                    'google_custom_search_api_key','facebook',
+                    'google_analytics','piwik',
+                    'recaptcha',
+                    'items_per_page',
+                    'refresh_interval',
+                    'advertisements_enabled',
+                    'log_enabled', 'log_db_enabled', 'log_level',
+                    'activated_modules'
+            );
+                                    
+            foreach ($configurationsKeys as $key) {
+                if(!isset($_POST[$key])){
+                    $_POST[$key]= ucfirst($key);
+                }
+            }
             $errors = $im->update($data);
             if (is_array($errors) && count($errors) > 0) {
                 m::add($errors);
@@ -120,29 +141,7 @@ switch($action) {
                 Application::forward('?action=new');
             }
         }
-        
-        $configurationsKeys = array(
-                                    'site_title', 'site_description','site_keywords',
-                                    'site_agency','site_name','site_created',
-                                    'contact_mail','contact_name','contact_IP',
-                                    'time_zone','site_language','mail_server',
-                                    'mail_username','mail_password','google_maps_api_key',
-                                    'google_custom_search_api_key','facebook',
-                                    'google_analytics','piwik',
-                                    'recaptcha',
-                                    'items_per_page',
-                                    'refresh_interval',
-                                    'advertisements_enabled',
-                                    'log_enabled', 'log_db_enabled', 'log_level',
-                                    'activated_modules'
-                                    );
-                                    
-        foreach ($configurationsKeys as $key) {
-            if(!isset($_POST[$key])){
-                $_POST[$key]= ucfirst($key);
-            }
-        }
-        
+                
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
         $GLOBALS['application']->conn = $im->getConnection( $settings );
 
