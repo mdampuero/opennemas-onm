@@ -115,6 +115,9 @@ class ModuleManager {
                 'VIDEO_MANAGER',
                 'WIDGET_MANAGER',
                 'LOG_SQL',
+                'BOOK_MANAGER',
+                'SPECIAL_MANAGER',
+                'SCHEDULE_MANAGER'
 
             );
         }

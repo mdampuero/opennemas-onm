@@ -62,6 +62,13 @@ $menuXml = '<?xml version="1.0"?>
             id="static_pages_manager"    
             link="controllers/static_pages/static_pages.php"
         />
+         <node
+            module_name="SPECIAL_MANAGER"
+            privilege="SPECIAL_ADMIN"
+            title="'.htmlspecialchars(_("Specials"), ENT_QUOTES).'"
+            id="specials_manager"
+            link="controllers/specials/special.php"
+        />
         <node
             module_name="ARTICLE_MANAGER"
             privilege="ARCHIVE_ADMIN"
@@ -113,6 +120,13 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Albums"), ENT_QUOTES).'"
             id="album_manager"
             link="controllers/album/album.php"
+        />
+        <node
+            module_name="BOOK_MANAGER"
+            privilege="BOOK_ADMIN"
+            title="'.htmlspecialchars(_("Books"), ENT_QUOTES).'"
+            id="book_manager"
+            link="controllers/book/book.php"
         />
     </submenu>
 
@@ -168,6 +182,12 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/keywords/keywords.php"
             privilege="PCLAVE_ADMIN" />
         <node class="divider" />
+         <node
+            module_name="SCHEDULE_MANAGER"
+            title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
+            id="newsletter_manager"
+            link="http://www.cronicasdelaemigracion.com//agenda/"
+            privilege="SCHEDULE_ADMIN" />
         <node
             module_name="EUROPAPRESS_IMPORTER"
             title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"

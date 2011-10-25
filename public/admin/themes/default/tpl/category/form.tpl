@@ -108,6 +108,14 @@
                                 <option value="14"
                                     {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
                             {/is_module_activated}
+                            {is_module_activated name="SPECIAL_MANAGER"}
+                                <option value="11"
+                                    {if isset($category) && ($category->internal_category eq 10)} checked="checked"{/if}>{t}Special{/t}</option>
+                            {/is_module_activated}
+                            {is_module_activated name="BOOK_MANAGER"}
+                                <option value="14"
+                                    {if isset($category) && ($category->internal_category eq 15)} checked="checked"{/if}>{t}Book{/t}</option>
+                            {/is_module_activated}
                         </select>
 
                     </td>
