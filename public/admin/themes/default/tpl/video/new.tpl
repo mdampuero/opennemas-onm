@@ -67,7 +67,8 @@
                 {acl isAllowed="VIDEO_CREATE"}
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$video->id|default:""}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />
+                        {t}Save and continue{/t}
                     </a>
                 </li>
                 {/acl}
