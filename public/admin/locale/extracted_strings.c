@@ -110,7 +110,7 @@ gettext("Total in video frontpage column:");
 gettext("Total in video gallery:");
 
 /* public/admin/themes/default/tpl//video/config.tpl */
-gettext("Definition values");
+gettext("Settings");
 
 /* public/admin/themes/default/tpl//video/config.tpl */
 gettext(" Use  total in widget home for define how many videos can see in widgets in newspaper frontpage");
@@ -137,6 +137,9 @@ gettext("Editing video");
 gettext("Save");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//video/new.tpl */
 gettext("Go Back");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
@@ -161,31 +164,10 @@ gettext("Section:");
 gettext("Available:");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Get API keys");
+gettext("Allowed video sources:");
 
 /* public/admin/themes/default/tpl//video/new.tpl */
 gettext("For now OpenNeMas only accepts videos from:");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Title:");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Keywords:");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Comma separated");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Video description");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Video URL:");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Write the video url in the next input and push \"Get video information\"");
-
-/* public/admin/themes/default/tpl//video/new.tpl */
-gettext("Get video information");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Video Manager :: Listing videos");
@@ -207,6 +189,9 @@ gettext("Config video module");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Settings");
+
+/* public/admin/themes/default/tpl//video/list.tpl */
+gettext("All categories");
 
 /* public/admin/themes/default/tpl//video/list.tpl */
 gettext("Title");
@@ -251,6 +236,9 @@ gettext("Video description");
 gettext("Service:");
 
 /* public/admin/themes/default/tpl//video/partials/_video_information.tpl */
+gettext("Link:");
+
+/* public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Preview:");
 
 /* public/admin/themes/default/tpl//video/partials/_video_information.tpl */
@@ -276,6 +264,30 @@ gettext("Url Thumbnail");
 
 /* public/admin/themes/default/tpl//video/partials/_video_information.tpl */
 gettext("Embed Url");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_internal.tpl */
+gettext("Title:");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_internal.tpl */
+gettext("Keywords:");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_internal.tpl */
+gettext("Comma separated");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_internal.tpl */
+gettext("Video description");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_internal.tpl */
+gettext("Preview:");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_panorama.tpl */
+gettext("Video URL:");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_panorama.tpl */
+gettext("Write the video url in the next input and push \"Get video information\"");
+
+/* public/admin/themes/default/tpl//video/partials/_form_video_panorama.tpl */
+gettext("Get video information");
 
 /* public/admin/themes/default/tpl//link_control/link_control.tpl */
 gettext("Break link control");
@@ -531,6 +543,9 @@ gettext("Configurations");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("WIDGET HOME");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("All categories");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Title");
@@ -1697,10 +1712,13 @@ gettext("Blog url");
 gettext("Author photos");
 
 /* public/admin/themes/default/tpl//opinion/authors/new.tpl */
-gettext("Delete photo");
+gettext("Double click on image to delete");
 
 /* public/admin/themes/default/tpl//opinion/authors/new.tpl */
-gettext("Upload more files");
+gettext("Show image");
+
+/* public/admin/themes/default/tpl//opinion/authors/new.tpl */
+gettext("Upload an image");
 
 /* public/admin/themes/default/tpl//opinion/authors/list.tpl */
 gettext("Opinion Manager :: Author list");
@@ -1737,6 +1755,12 @@ gettext("Actions");
 
 /* public/admin/themes/default/tpl//opinion/authors/list.tpl */
 gettext("There is no available authors");
+
+/* public/admin/themes/default/tpl//opinion/newPhoto.tpl */
+gettext("Invalid image: the filename name contains spaces or special chars.");
+
+/* public/admin/themes/default/tpl//opinion/newPhoto.tpl */
+gettext("Upload photo");
 
 /* public/admin/themes/default/tpl//opinion/config.tpl */
 gettext("Opinion :: Configuration");
@@ -1884,9 +1908,6 @@ gettext("Keywords:");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
 gettext("Body:");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Disallowed width, this element needs a 60px width photo.");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Opinion Manager");
@@ -2145,6 +2166,9 @@ gettext("Add a title and attach a file from the form below.");
 
 /* public/admin/themes/default/tpl//files/new.tpl */
 gettext("Title");
+
+/* public/admin/themes/default/tpl//files/new.tpl */
+gettext("Keywords:");
 
 /* public/admin/themes/default/tpl//files/new.tpl */
 gettext("File:");
@@ -4796,6 +4820,15 @@ gettext("Maillist name:");
 gettext("Maillist email:");
 
 /* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Maillist link:");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Point to inner");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
+gettext("Point to frontpage");
+
+/* public/admin/themes/default/tpl//newsletter/config.tpl */
 gettext("Save");
 
 /* public/admin/themes/default/tpl//newsletter/send.tpl */
@@ -5114,10 +5147,25 @@ gettext("Go back");
 gettext("General");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Information");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Internals");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Database");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Mail");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Log");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("External Services");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Modules");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Instance name");
@@ -5141,6 +5189,36 @@ gettext("Domains:");
 gettext("List of domains separated by commas. You can use wildcards, i.e. *.example.com");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Created:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("User contact:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("User contact mail:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("User contact IP:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Site title:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Site description:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Site keywords:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Site agency:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Time Zone:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Language");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Internal name:");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
@@ -5151,6 +5229,24 @@ gettext("Template:");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("External media url:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Enable advertisements:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: true");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Items per page:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: 20 elements");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Refresh page every (secs):");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: 900 secs");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Database Type:");
@@ -5183,6 +5279,123 @@ gettext("Database user:");
 gettext("Database password:");
 
 /* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Mail server");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Username");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Password");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("System log");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Enable Log:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: true");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Log level:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: true");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Database log");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Enable Log:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Default: false");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Google Services");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Google Maps API key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Get API keys");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("You can get your Google Maps API Key from <a href=\"http://code.google.com/intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>.");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Google Search API key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Facebook");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("APP key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Get API keys");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("You can get your Facebook App Keys from <a href=\"https://developers.facebook.com/apps\">Facebook Developers website</a>.");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Secret key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Google Analytics Statistics");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("API key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Get API keys");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("You can get your Google Analytics Site ID from <a href=\"https://www.google.com/analytics/\">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3) you can left blank the base domain field.");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Base domain:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Piwik Statistics");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Page ID:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Get API keys");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("You can get your Piwik Site information from <a href=\"https://piwik.openhost.es/admin\">our Piwik server</a>.");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Private key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Recaptcha");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Public Key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Get API keys");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("You can get your recaptcha API Keys from <a href=\"https://www.google.com/recaptcha/admin/create\">reCATPCHA website</a>.");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Private key:");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Activated modules");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("Dragons Ahead!");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
+gettext("This section is experimental and could not work as espected");
+
+/* public/manager/themes/default/tpl/instances/edit.tpl */
 gettext("Save");
 
 /* public/manager/themes/default/tpl/instances/list.tpl */
@@ -5202,6 +5415,21 @@ gettext("Name");
 
 /* public/manager/themes/default/tpl/instances/list.tpl */
 gettext("Domains");
+
+/* public/manager/themes/default/tpl/instances/list.tpl */
+gettext("Contact");
+
+/* public/manager/themes/default/tpl/instances/list.tpl */
+gettext("Articles");
+
+/* public/manager/themes/default/tpl/instances/list.tpl */
+gettext("Images");
+
+/* public/manager/themes/default/tpl/instances/list.tpl */
+gettext("Ads");
+
+/* public/manager/themes/default/tpl/instances/list.tpl */
+gettext("Created");
 
 /* public/manager/themes/default/tpl/instances/list.tpl */
 gettext("Activated");
