@@ -59,7 +59,7 @@ function confirmar() {
 </div>
 <div class="wrapper-content">
     {render_messages}
-</div><!-- / -->
+</div>
 <div class="wrapper-content">
     <table class="listing-table" >
 
@@ -93,7 +93,9 @@ function confirmar() {
 
                 </td>
                 <td>
-                    {$instance->domains}
+                    {foreach from=$instance->domains item=domain name=instance_domains}
+                        <a href="http://{$domain}" title="{$instance->name}">{$domain}</a><br/>
+                    {/foreach}
                 </td>
                 <td>
                     {$instance->configs['contact_mail']}

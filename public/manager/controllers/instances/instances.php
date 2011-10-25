@@ -182,9 +182,12 @@ switch($action) {
         
         $instances = $im->findAll();
 
-        foreach($instances as $instance) {
+        foreach($instances as &$instance) {
              list($instance->totals, $instance->configs) =
                      $im->getDBInformation($instance->settings);
+            
+            $instance->domains = preg_split("@, @", $instance->domains);
+
         }
 
         $_SESSION['desde'] = 'instances';
