@@ -112,6 +112,13 @@ class Content
         }
     }
 
+    /**
+     * Creates one content given an array of data
+     * 
+     * @param array $data array with data for create the article
+     *
+     * @return void
+     **/
     public function create($data)
     {
         // Fire event

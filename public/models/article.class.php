@@ -41,8 +41,12 @@ class Article extends Content
     static $clonesHash = null;
 
     /**
-      * Constructor PHP5
-    */
+     * Initializes the Article object from an ID
+     * 
+     * @param int $id the id of the article we want to initialize
+     * 
+     * @return void
+     **/
     public function __construct($id=null)
     {
         parent::__construct($id);
@@ -55,6 +59,12 @@ class Article extends Content
         $this->content_type = 'Article';
     }
 
+    /**
+     * Magic method for populate properties on the fly
+     *
+     * @return mixed 
+     * @author 
+     **/
     public function __get($name)
     {
         switch ($name) {
@@ -87,6 +97,14 @@ class Article extends Content
 
     }
 
+    /**
+     * Creates one article from an array of properties
+     *
+     * @param mixed $data array of properties for the article
+     * 
+     * @return null if the article was not created
+     * @return int  the id of the article
+     **/
     public function create($data)
     {
         if (!isset($data['description'])) {
@@ -150,6 +168,15 @@ class Article extends Content
         return $this->id;
     }
 
+    /**
+     * Relates a list of content ids to another one
+     *
+     * @param string $data   list of related content IDs
+     * @param int    $id     the id of the content we want to relate other contents
+     * @param string $method the method to bind related contents 
+     * 
+     * @return void
+     **/
     public function saveRelated($data, $id, $method)
     {
         $rel = new Related_content();
@@ -167,6 +194,13 @@ class Article extends Content
     }
 
 
+    /**
+     * Reads the data for one article given one ID
+     *
+     * @param int $id the id to get its information
+     * 
+     * @return void
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -196,6 +230,12 @@ class Article extends Content
 
     }
 
+    /**
+     * Updates the information for one article given an array for the new data
+     *
+     * @return void
+     * @author 
+     **/
     public function update($data)
     {
         if (isset($data['available']) and !isset($data['content_status'])) {
@@ -305,6 +345,13 @@ class Article extends Content
         return true;
     }
 
+    /**
+     * Deletes permanently one article given one  id
+     *
+     * @param int $id the id of the article we want to delete
+     * 
+     * @return void
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -328,11 +375,12 @@ class Article extends Content
     }
 
     /**
-     * Rebuild permalink using pk_content and catName
+     * Rebuilds the article permalink given its id and catName
      *
-     * @param string $articlePK
-     * @param string $catName
-     * @return string New permalink
+     * @param string $articlePK the id of the article
+     * @param string $catName   the name of the article category
+     * 
+     * @return string The new permalink
      */
     public function rebuildPermalink($articlePK, $catName=null)
     {
@@ -353,11 +401,7 @@ class Article extends Content
         return $permalink;
     }
 
-    /* The Clone Methods: Methods to management clone articles {{{ */
-
-    /**
-     * Clone an article
-     */
+    
     public function createClone($content)
     {
         $id = null;
@@ -505,7 +549,7 @@ class Article extends Content
      * Update from original edition
      * Once that original save values update clone values
      *
-n     * @param string $originalPK
+     * @param string $originalPK
      */
     public function updateCloneFromOriginal($originalPK, $formValues)
     {

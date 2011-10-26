@@ -150,17 +150,12 @@ class Attachment extends Content  {
 
 
     /**
-    * Fetch the information from one attachment given an id
+    * Fetches information from one attachment given an id
     *
-    *
-    * @access public
-    * @param integer $id
-    * @return
-    * @author nameofauthor
-    * Other available tags: @tutorial, @version, @copyright, @deprecated,
-    * @example, @ignore, @link, @see, @since
+    * @param integer $id the id of the attachment we want to get information
+    * 
+    * @return void
     */
-
     public function read($id)
     {
         parent::read($id);
@@ -178,6 +173,13 @@ class Attachment extends Content  {
         $this->load($rs->fields);
     }
 
+    /**
+     * Updates the information for one attachment given an array of data
+     * 
+     * @param array $data the array of data for the attachment
+     *
+     * @return void
+     **/
     public function update($data)
     {
         parent::update($data);
@@ -194,6 +196,11 @@ class Attachment extends Content  {
         }
     }
 
+    /**
+     * Remoives permanently the attachment given its id
+     *
+     * @return int $id the attachement id for delete
+     **/
     public function remove($id)
     {
         //$media_path = MEDIA_PATH.'/files/'.$this->getCategoryName($this->category);
