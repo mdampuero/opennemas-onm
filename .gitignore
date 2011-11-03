@@ -5,7 +5,7 @@ tmp/xml/*
 tmp/cache/*
 tmp/sessions/backend/*
 tmp/sessions/frontend/*
-public/media
+public/media/*
 */cache/*
 */compile/*
 *komodo*
