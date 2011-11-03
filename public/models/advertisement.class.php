@@ -602,6 +602,9 @@ class Advertisement extends Content
                                         'ORDER BY type_advertisement, created');
             }
 
+            // If this banner is not in time don't add it to the final results
+           $rsBanner = $cm->getInTime($rsBanner);
+           
             // $advertisements is an array of banners, grouped by advertisement type
             $advertisements = array();
             foreach ($rsBanner as $adv) {
