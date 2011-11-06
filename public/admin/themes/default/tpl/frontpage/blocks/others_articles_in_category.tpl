@@ -1,13 +1,13 @@
 <table class="adminlist">
     <thead>
         <tr>
-            <th align="center" style="width:15px;"></th>
-            <th align="center">{t}Title{/t}</th>
-            <th align="center" style="width:70px;">{t}Date{/t}</th>
-            {if $other_category eq 'suggested'}
-                <th align="center" style="width:60px;">{t}Section{/t}</th>
-            {/if}
-            <th align="center" style="width:80px;">{t}Actions{/t}</th>
+            <th align="left" style="width:2%;"></th>
+            <th align="left" style="width:40%;">{t}Title{/t}</th>           
+            <th style="width:5%;">{t}Views{/t}</th>
+            <th style="width:10%;">{t}Created{/t}</th>
+            <th style="width:10%;">{t}Author{/t}</th>
+            <th style="width:10%;">{t}Last editor{/t}</th>
+            <th style="width:7%;">{t}Actions{/t}</th>
         </tr>
     </thead>
     <tr>
@@ -18,13 +18,13 @@
                 {section name=d loop=$articles}
                     <table id="tabla{$aux}" name="tabla{$aux}" width="100%" value="{$articles[d]->id}" class="tabla" style="text-align:center;padding:0px;">
                         <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
-                             <td align="left"  style="width:10px;" >
+                             <td align="left" style="width:2%;" >
                                 <input type="checkbox" class="minput" id="selected_fld_art_{$smarty.section.d.iteration}" name="no_selected_fld[]" value="{$articles[d]->id}" style="cursor:pointer;" >
                             </td>
-                            <td style="padding:2px;" align="left" onClick="javascript:document.getElementById('selected_fld_art_{$smarty.section.d.iteration}').click();">
+                            <td align="left" style="width:40%;" onClick="javascript:document.getElementById('selected_fld_art_{$smarty.section.d.iteration}').click();">
                                 {is_clone item=$articles[d]}{$articles[d]->title|clearslash}
                             </td>
-                            {if $other_category neq 'suggested'}
+                            {*if $other_category neq 'suggested'}
                             <td>
                                 <div class="noinhome" style="display:none;">
                                     {if $articles[d]->in_home == 1}
@@ -44,13 +44,22 @@
                                     {/if}
                                  </div>
                             </td>
-                            {/if}
-                            {if $other_category eq 'suggested'}
-                            <td style="width:60px;" align="center">
-                               {$articles[d]->category_name}
-                            </td>
-                            {/if}
-                            <td  style="width:80px; text-align:right; padding-right:10px;">
+                            {/if*}
+                            {*if $other_category eq 'suggested'}
+                            {/if*}
+                                <td align="center" style="width:5%;" >
+                                    {$articles[d]->views}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$articles[d]->created}
+                                </td>
+                                <td align="center" style="  width:10%;">
+                                    {$articles[d]->authorName}
+                                </td>
+                                <td align="center" style="width:10%;">
+                                    {$articles[d]->lastEditorName}
+                                </td>                            
+                            <td align="center" style="width:7%;">
                                 <ul class="action-buttons">
                                     <li>
                                         <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$articles[d]->id}');" title="Editar">

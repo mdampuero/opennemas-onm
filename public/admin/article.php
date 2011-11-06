@@ -106,7 +106,14 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('other_category','suggested');
 
                 // Get the suggested articles for homepage
+                $aut=new User();
                 $suggestedArticles = $cm->getSuggestedContentsForHomePage();
+                foreach ($suggestedArticles as $key => $value) {
+                    $suggestedArticles[$key]->catName = $ccm->get_title($value->catName);
+                    $suggestedArticles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
+                    $suggestedArticles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
+                    
+                }
                 $tpl->assign('suggestedArticles', $suggestedArticles);
 
             } else {
@@ -166,6 +173,11 @@ if (isset($_REQUEST['action']) ) {
 
             if(!isset($destacado)){
                 $destacado = null;
+            }
+            foreach ($articles as $key => $value) {
+                $articles[$key]->catName = $ccm->get_title($value->catName);
+                $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
             }
             $tpl->assign('destacado', $destacado);
             $tpl->assign('articles', $articles);
@@ -1217,11 +1229,10 @@ if (isset($_REQUEST['action']) ) {
             $rating = new Rating();
             $comment = new Comment();
             $aut=new User();
-            foreach ($articles as $art){
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
+            foreach ($articles as $key => $value) {
+                $articles[$key]->catName = $ccm->get_title($value->catName);
+                $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
             }
             $tpl->assign('articles', $articles);
 
@@ -1243,12 +1254,10 @@ if (isset($_REQUEST['action']) ) {
             $rating = new Rating();
             $comment = new Comment();
             $aut=new User();
-            foreach ($articles as $art){
-                $art->category_name= $art->loadCategoryName($art->id);
-                $art->publisher=$aut->get_user_name($art->fk_publisher);
-                $art->editor=$aut->get_user_name($art->fk_user_last_editor);
-                $art->rating= $rating->get_value($art->id);
-                $art->comment = $comment->count_public_comments( $art->id );
+            foreach ($articles as $key => $value) {
+                $articles[$key]->catName = $ccm->get_title($value->catName);
+                $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
             }
 
             $tpl->assign('articles', $articles);

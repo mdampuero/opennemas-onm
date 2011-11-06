@@ -239,6 +239,8 @@ function cancel(action,category,page) {
         location.href ='/admin/controllers/search_advanced/search_advanced.php';
     }else if(/widget/.test(action)) {
         location.href ='widget.php';
+    }else if (action=='new' && category=='opinion') {
+        location.href ='/admin/controllers/opinion/opinion.php';
     }else{
         location.href= '/admin/article.php?action='+action+'&category='+category+'&page='+page;
     }

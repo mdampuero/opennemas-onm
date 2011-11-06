@@ -276,6 +276,11 @@ if(($tpl->caching == 0)
             }
         }
 
+        //Si hay noticia destacada, ponemos el flag a true
+        if ($column[$c]->home_placeholder == 'placeholder_highlighted_0') {
+            $has_highlighted = true;
+        }
+
         /***** GET OBJECT VIDEO *****/
         if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
             $video=$column[$c]->fk_video;
@@ -307,6 +312,7 @@ if(($tpl->caching == 0)
     }
 
     $tpl->assign('column', $column);
+    $tpl->assign('has_highlighted', $has_highlighted);
 
     /************************************ END COLUMN1 **************************************************/
 

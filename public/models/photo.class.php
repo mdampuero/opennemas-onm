@@ -116,6 +116,7 @@ class Photo extends Content
         $photo->pk_photo = $this->pk_photo;
         $photo->id = $this->pk_photo ;
         $photo->name = $this->name ;
+        $photo->title = $this->title ;
         $photo->description = $this->description ;
         $photo->metadata = $this->metadata ;
         $photo->path_file = $this->path_file;

@@ -300,7 +300,7 @@
 <tfoot>
 	<tr class="pagination">
 		<td colspan="11" class="center">
-		 
+			{$paginacion}&nbsp;
 		</td>
 	</tr>
 </tfoot>

@@ -62,13 +62,13 @@
             </li>
              {/acl}
             
-            {if !$article->isClone()}
+            {*if !$article->isClone()}
             <li>
                 <a href="#" onclick="recolectar(); sendFormValidate(this, '_blank', 'clone', '{$article->id}', 'formulario');" id="button_clone">
                     <img border="0" src="{$params.IMAGE_DIR}clone.png" title="{t}Clone{/t}" /><br />{t}Clone{/t}
                 </a>
             </li>
-            {/if}
+            {/if*}
 
             <li>
                 <a href="#" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
