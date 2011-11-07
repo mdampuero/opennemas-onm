@@ -399,5 +399,14 @@ class String_Utils
 
         return $result;
     }
+    
+    static public function pass_gen($length = 8) {
+        $pass = '';
+        srand((float) microtime() * 10000000);
+        for ($i = 0; $i < $length; $i++) {
+            $pass .= chr(rand(32, 126));
+        }
+        return $pass;
+    }
 
 }
