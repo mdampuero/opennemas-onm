@@ -6,7 +6,8 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 
 use \Onm\Instance\InstanceManager as im,
     \Onm\Module\ModuleManager as ModuleManager,
-    \Onm\Message as m;
+    \Onm\Message as m,
+    \Onm\Settings as s;
 
 /**
  * Setup view
@@ -82,8 +83,8 @@ switch($action) {
             $settings = $_POST['settings'];
         } else {
             $settings = array(
-                'TEMPLATE_USER' => "default",
-                'MEDIA_URL' => "",
+                'TEMPLATE_USER' => "retrincos",
+                'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
                 'BD_USER' => "opennemas",
@@ -98,8 +99,28 @@ switch($action) {
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-            'settings' => $settings,
+            'settings' => $settings,     
         );
+        
+        // If comes from the openhost form
+        if (isset($_POST['contact_name'])
+            && isset($_POST['contact_mail'])
+            && isset($_POST['password'])) 
+        {
+            $data['user_name'] = $_POST['contact_name'];
+            $data['user_mail'] = $_POST['contact_mail'];
+            $data['user_pass'] = $_POST['password'];
+        }
+        if (isset($_POST['timezone']) && !empty ($_POST['timezone'])) {
+            $allTimezones = \DateTimeZone::listIdentifiers();
+            foreach ($allTimezones as $key => $value) {
+                if ($_POST['timezone'] == $value) {
+                    $data['timezone'] = $key;
+                }
+            }
+        }
+        
+        
         $errors = array();
         
         if (intval($data['id']) > 0) {
@@ -118,10 +139,13 @@ switch($action) {
                     'log_enabled', 'log_db_enabled', 'log_level',
                     'activated_modules'
             );
-                                    
-            foreach ($configurationsKeys as $key) {
-                if(!isset($_POST[$key])){
-                    $_POST[$key]= ucfirst($key);
+            
+            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
+            $GLOBALS['application']->conn = $im->getConnection( $settings );
+
+            foreach ($_POST as $key => $value ) {
+                if(in_array($key, $configurationsKeys)) {
+                   s::set($key, $value);
                 }
             }
             $errors = $im->update($data);
@@ -141,17 +165,10 @@ switch($action) {
                 Application::forward('?action=new');
             }
         }
-                
-        //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
-        $GLOBALS['application']->conn = $im->getConnection( $settings );
-
-        foreach ($_POST as $key => $value ) {
-            if(in_array($key, $configurationsKeys)) {
-                Onm\Settings::set($key, $value);
-            }
+        
+        if ($errors){
+            m::add('Instance saved successfully.');
         }
-
-        m::add('Instance saved successfully.');
         Application::forward('?action=list');
 
         break;
@@ -181,7 +198,7 @@ switch($action) {
         // session_start();
         
         $instances = $im->findAll();
-
+        
         foreach($instances as &$instance) {
              list($instance->totals, $instance->configs) =
                      $im->getDBInformation($instance->settings);

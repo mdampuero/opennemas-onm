@@ -8,7 +8,8 @@
  */
 namespace Onm\Instance;
 use \FilesManager as fm,
-    \Onm\Message as m;
+    \Onm\Message as m,
+    \Onm\Settings as s;
 /**
  * Class for manage ONM instances.
  *
@@ -368,7 +369,7 @@ class InstanceManager
             
             $this->createInstanceReferenceInManager($data);
         
-            $this->createDatabaseForInstance($data['settings']);
+            $this->createDatabaseForInstance($data);
                 
             $this->copyDefaultAssetsForInstance($data['internal_name']);
             
@@ -452,6 +453,13 @@ class InstanceManager
                 );
             }
             return true;
+        //If instance name already exists and comes from openhost form
+        } elseif (isset ($_POST['timezone'])){
+            echo $rs->fields['instance_exists'];
+            die();
+        //If instance name already exists and comes from manager    
+        } else {
+                m::add("Instance internal name is already in use.");
         }
 
         return false;
@@ -546,7 +554,7 @@ class InstanceManager
      * 
      * @param $arg
      **/
-    public function createDatabaseForInstance($settings)
+    public function createDatabaseForInstance($data)
     {
         // Gets global database connection and creates the requested database
         global $onmInstancesConnection;
@@ -557,15 +565,49 @@ class InstanceManager
             $onmInstancesConnection['BD_PASS']
         );
         
-        $rs = $conn->Execute("CREATE DATABASE `{$settings['BD_DATABASE']}`");
+        $rs = $conn->Execute("CREATE DATABASE `{$data['settings']['BD_DATABASE']}`");
         
         // If the database was created sucessfully now import the default data.
         if ($rs) {
-            $connection2 = self::getConnection($settings);
+            $connection2 = self::getConnection($data['settings']);
             $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']}"
-                       ." -p{$onmInstancesConnection['BD_PASS']} {$settings['BD_DATABASE']} < {$exampleDatabasePath}";
+                       ." -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine, $output, $exitCode);
+            
+            // Insert user with data from the openhost form                       
+            //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
+            $im = $this->getInstance();
+            $GLOBALS['application']->conn = $im->getConnection( $data['settings'] );
+            
+            if (isset($data['user_name'])
+                && isset ($data['user_pass'])
+                && isset ($data['user_mail']))
+            {
+                $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
+                                           `email`, `name`, `fk_user_group`)
+                        VALUES (?,?,?,?,?,?)";
+
+                $values = array($data['user_name'], md5($data['user_pass']),  60,
+                                $data['user_mail'], $data['user_name'],6);
+
+                if (!$connection2->Execute($sql, $values)) {
+                    return false;
+                }
+
+                s::set('contact_mail',$data['user_mail']);
+                s::set('contact_name',$data['user_name']);
+                s::set('contact_IP',$data['contact_IP']);
+            }
+            
+            //Change and insert some data with instance information 
+            s::set('site_title',$data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
+            s::set('site_description',$data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
+            s::set('site_keywords',$data['internal_name'].', openNemas, servicio, online, periódico, digital, service, newspapers');
+            s::set('site_agency',$data['internal_name'].'.opennemas.com');
+            s::set('time_zone',$data['timezone']);
+            
+                    
             if ($exitCode > 0) {
                 throw new DatabaseForInstanceNotCreatedException(
                     'Could not create the default database for the instance:'
@@ -573,7 +615,7 @@ class InstanceManager
             }
         } else {
             return false;
-        }
+        }      
         return true;
         
     }
