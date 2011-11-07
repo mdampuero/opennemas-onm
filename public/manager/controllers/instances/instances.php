@@ -121,8 +121,7 @@ switch($action) {
                 }
             }
         }
-        var_dump($_POST);
-        var_dump($data);die();
+
         $errors = array();
         
         if (intval($data['id']) > 0) {
