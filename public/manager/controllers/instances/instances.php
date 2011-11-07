@@ -82,7 +82,7 @@ switch($action) {
         if(isset($_POST['settings']) && !empty($_POST['settings']) ) {
             $settings = $_POST['settings'];
         } else {
-            $password = pass_gen(16);
+            $password = String_Utils::pass_gen(16);
             $usr = subst($_POST['contact_name'], 0, 4);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
