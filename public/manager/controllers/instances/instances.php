@@ -87,8 +87,8 @@ switch($action) {
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "opennemas",
-                'BD_PASS' => "12OpenNeMaS34",
+                'BD_USER' => "onm-manager-user",
+                'BD_PASS' => "VE-u23kuJ@D-4C?a",
                 'BD_DATABASE' => "onm-".$_POST['internal_name'],
             );
         }
