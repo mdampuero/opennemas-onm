@@ -27,7 +27,7 @@ if(empty($dirtyID)) {
     $dirtyID = filter_input(INPUT_POST,'opinion_id',FILTER_SANITIZE_STRING);
 }
 if(!empty($dirtyID)){
-    $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+    $items = preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
     $opinionID = (int)$matches["digit"];
 }
 

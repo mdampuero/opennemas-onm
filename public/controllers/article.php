@@ -25,7 +25,7 @@ if(empty($dirtyID)) {
     $dirtyID = filter_input(INPUT_POST,'article_id',FILTER_SANITIZE_STRING);
 }
 if(!empty($dirtyID)){
-    $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
+    $items = preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
     $articleID= (int)$matches["digit"];
 }
  
