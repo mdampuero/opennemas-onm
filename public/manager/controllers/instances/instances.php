@@ -83,7 +83,7 @@ switch($action) {
             $settings = $_POST['settings'];
         } else {
             $password = String_Utils::pass_gen(16);
-            $usr = subst($_POST['contact_name'], 0, 4);
+            $usr = substr($_POST['contact_name'], 0, 4);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
                 'MEDIA_URL' => "http://media.opennemas.com",
