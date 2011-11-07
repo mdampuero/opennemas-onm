@@ -82,13 +82,15 @@ switch($action) {
         if(isset($_POST['settings']) && !empty($_POST['settings']) ) {
             $settings = $_POST['settings'];
         } else {
+            $password = pass_gen(16);
+            $usr = subst($_POST['contact_name'], 0, 4);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "onm-manager-user",
-                'BD_PASS' => "VE-u23kuJ@D-4C?a",
+                'BD_USER' => "onm".$usr.'usr',
+                'BD_PASS' => $password,
                 'BD_DATABASE' => "onm-".$_POST['internal_name'],
             );
         }
