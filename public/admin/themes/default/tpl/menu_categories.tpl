@@ -40,7 +40,7 @@
             {/acl}
             {/section}
         </ul>
-    </li>
-    
+    </li>    
+
 {/acl}
 {/section}

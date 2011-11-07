@@ -119,11 +119,11 @@ class Article extends Content
         $data['img1_footer'] =
             (!isset($data['img1_footer']) || empty($data['img1_footer']))
                 ? ''
-                : intval($data['img1_footer']);
+                : $data['img1_footer'];
         $data['img2_footer'] =
                 (!isset($data['img2_footer']) || empty($data['img2_footer']))
                     ? ''
-                    : intval($data['img2_footer']);
+                    : $data['img2_footer'];
         $data['with_comment'] =
             (!isset($data['with_comment']) || empty($data['with_comment']))
                 ? ''
@@ -238,8 +238,8 @@ class Article extends Content
      **/
     public function update($data)
     {
-        if (isset($data['available']) and !isset($data['content_status'])) {
-            $data['content_status'] = $data['available'];
+        if (isset($data['content_status']) && !isset($data['available'])) {
+            $data['available'] = $data['content_status'];
         }
 
         // If it's clone use special update {{{

@@ -98,6 +98,9 @@ if (!isset($action)) {
                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $number, $type) );
                 }
             } else {
+                list($opinions, $pager)= $cm->find_pages('Opinion', 'in_home=1 and available=1 and type_opinion=0',
+                                         'ORDER BY created DESC ', $_REQUEST['page'], 16);
+                $tpl->assign('paginacion', $pager->links);
 
                 $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
                                       'ORDER BY type_opinion DESC, position ASC, created DESC');
@@ -183,7 +186,8 @@ if (!isset($action)) {
             $opinion->available = 1;
             $opinion->in_home   = 1;
             $opinion->with_comment = 1;
-
+            $_REQUEST['category'] = 'opinion';
+            $tpl->assign('todos', $todos);
             $tpl->assign('opinion', $opinion);
             $_SESSION['desde'] = 'new';
             $_SESSION['_from'] = 'opinion.php';

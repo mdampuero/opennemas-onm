@@ -75,16 +75,15 @@ generate-docblox-doc:
 	mkdir -p doc/docblox/log
 	docblox -c doc/docblox.xml --title="OpenNemas"
 
-clean: cleancache cleansessions cleanlogs cleandocs
+clean: cleancache cleaninstancefiles cleanlogs cleandocs
 
 cleancache:
 	@echo "Cleaning cache...";
 	rm -rf $(CACHE_FOLDER)/*
 
-cleansessions:
-	@echo "Cleaning sessions..."
-	rm tmp/sessions/backend/* -f
-	rm tmp/sessions/frontend/* -f
+cleaninstancefiles:
+	@echo "Cleaning temporal instance files..."
+	rm tmp/instances/* -f
 
 cleanlogs:
 	@echo "Cleaning logs..."

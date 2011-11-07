@@ -26,7 +26,8 @@
                         {/if}
                     </td>
                     <td style="padding:20px 5px; width:380px;">
-                        <div class="photo-static-info">
+                        <div class="photo-static-info"> 
+                            <p><label>{t}Name:{/t}</label> {$photo1->title}</p>
                             <p><label>{t}File:{/t}</label> {$photo1->name}</p>
                             <p><label>{t}Resolution:{/t}</label> {$photo1->width} x {$photo1->height} (px)</p>
                             <p><label>{t}Size:{/t}</label> {$photo1->size} Kb<br></p>
