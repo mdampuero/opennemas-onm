@@ -582,6 +582,11 @@ class InstanceManager
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']}"
                        ." -p{$onmInstancesConnection['BD_PASS']} {$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
             exec($execLine, $output, $exitCode);
+            if ($exitCode > 0) {
+                throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database for the instance:'
+                    .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}');
+            }
             
             // Insert user with data from the openhost form                       
             //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
@@ -615,12 +620,6 @@ class InstanceManager
             s::set('site_agency',$data['internal_name'].'.opennemas.com');
             s::set('time_zone',$data['timezone']);
             
-                    
-            if ($exitCode > 0) {
-                throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance:'
-                    .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}');
-            }
         } else {
             throw new DatabaseForInstanceNotCreatedException(
                     'Could not create the default database/user/grant/privileges for the instance/user...');
