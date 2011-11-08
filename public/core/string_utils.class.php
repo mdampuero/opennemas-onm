@@ -401,12 +401,16 @@ class String_Utils
     }
     
     static public function pass_gen($length = 8) {
-        $pass = '';
-        srand((float) microtime() * 10000000);
-        for ($i = 0; $i < $length; $i++) {
-            $pass .= chr(rand(60, 126));
+        $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $i = 0;
+        $password = "";
+        
+        while ($i <= $length) {
+            $password .= $chars{mt_rand(0,strlen($chars))};
+            $i++;
         }
-        return $pass;
+        
+        return $password;
     }
 
 }
