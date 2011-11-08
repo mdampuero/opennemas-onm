@@ -75,6 +75,8 @@ class Application
     
                 // Setting up Gettext
                 self::initL10nSystem();
+
+                self::initTimeZone();
             }
             
         }
@@ -201,6 +203,20 @@ class Application
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
 
+    }
+
+    /**
+     * Sets the timezone for this app from the instance settings
+     *
+     * @return void
+     * @author 
+     **/
+    static public function initTimeZone()
+    {
+        if ($timezone = s::get('time_zone')) {
+            $availableTimeZones = \DateTimeZone::listIdentifiers();
+            date_default_timezone_set($availableTimeZones[(int) $timezone]);
+        }
     }
 
     /**
