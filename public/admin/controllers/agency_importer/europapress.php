@@ -230,7 +230,7 @@ switch($action) {
         $newArticleID = $article->create($values);
         $_SESSION['desde']= 'europa_press_import';
 
-        if(is_string($newArticleID)) {
+        if(!empty($newArticleID)) {
 
             $httpParams []= array( 'id' => $newArticleID,
                                   'action' => 'read');
