@@ -451,7 +451,7 @@ class InstanceManager
                 throw new InstanceNotRegisteredException(
                     "Could not create the instance reference into the instance table: {$this->_connection->ErrorMsg()}"
                 );
-            }
+            } 
             return true;
         //If instance name already exists and comes from openhost form
         } elseif (isset ($_POST['timezone'])){
@@ -564,11 +564,19 @@ class InstanceManager
             $onmInstancesConnection['BD_USER'],
             $onmInstancesConnection['BD_PASS']
         );
+        $sql = "CREATE DATABASE `{$data['settings']['BD_DATABASE']}`";
+        $rs = $conn->Execute($sql);
         
-        $rs = $conn->Execute("CREATE DATABASE `{$data['settings']['BD_DATABASE']}`");
-        
+        //Create new mysql user for this instance and grant usage and privileges
+        $sql2 = "CREATE USER '".$data['settings']['BD_USER']."'@'localhost' IDENTIFIED BY '".$data['settings']['BD_PASS']."' ";
+        $sql3 = "GRANT USAGE ON `".$data['settings']['BD_DATABASE']."`.* TO '".$data['settings']['BD_USER']."'@'localhost' IDENTIFIED BY '".$data['settings']['BD_PASS']."' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
+        $sql4 = "GRANT ALL PRIVILEGES ON `".$data['settings']['BD_DATABASE']."`.* TO '".$data['settings']['BD_USER']."'@'localhost' WITH GRANT OPTION";
+        $rs2= $conn->Execute($sql2);
+        $rs3= $conn->Execute($sql3);
+        $rs4= $conn->Execute($sql4);
+
         // If the database was created sucessfully now import the default data.
-        if ($rs) {
+        if ($rs && $rs2 && $rs3 && $rs4) {
             $connection2 = self::getConnection($data['settings']);
             $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
             $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} -u {$onmInstancesConnection['BD_USER']}"
@@ -614,6 +622,8 @@ class InstanceManager
                     .' EXEC_LINE: {$execLine} \n OUTPUT: {$output}');
             }
         } else {
+            throw new DatabaseForInstanceNotCreatedException(
+                    'Could not create the default database/user/grant/privileges for the instance/user...');
             return false;
         }      
         return true;

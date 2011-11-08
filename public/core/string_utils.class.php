@@ -404,7 +404,7 @@ class String_Utils
         $pass = '';
         srand((float) microtime() * 10000000);
         for ($i = 0; $i < $length; $i++) {
-            $pass .= chr(rand(32, 126));
+            $pass .= chr(rand(60, 126));
         }
         return $pass;
     }
