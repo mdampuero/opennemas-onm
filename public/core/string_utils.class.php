@@ -405,7 +405,7 @@ class String_Utils
         $i = 0;
         $password = "";
         
-        while ($i <= $length) {
+        while ($i <= $length-1) {
             $password .= $chars{mt_rand(0,strlen($chars))};
             $i++;
         }

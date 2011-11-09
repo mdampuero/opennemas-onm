@@ -94,7 +94,7 @@ function confirmar() {
                 </td>
                 <td>
                     {foreach from=$instance->domains item=domain name=instance_domains}
-                        <a href="http://{$domain}" title="{$instance->name}">{$domain}</a><br/>
+                        <a href="http://{$domain}" target="_blank" title="{$instance->name}">{$domain}</a><br/>
                     {/foreach}
                 </td>
                 <td>

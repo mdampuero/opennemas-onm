@@ -618,7 +618,9 @@ class InstanceManager
             s::set('site_description',$data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
             s::set('site_keywords',$data['internal_name'].', openNemas, servicio, online, periódico, digital, service, newspapers');
             s::set('site_agency',$data['internal_name'].'.opennemas.com');
-            s::set('time_zone',$data['timezone']);
+            if (isset ($data['timezone'])) {
+                s::set('time_zone',$data['timezone']);
+            }
             
         } else {
             throw new DatabaseForInstanceNotCreatedException(

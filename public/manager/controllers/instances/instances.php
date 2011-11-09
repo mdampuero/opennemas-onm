@@ -51,9 +51,21 @@ switch($action) {
     case 'new':
 
         $templates = im::getAvailableTemplates();
+        
+        $usr = "test-".String_Utils::pass_gen(4);
+        $password = String_Utils::pass_gen(16);
         $tpl->assign(array(
             'templates' => $templates,
-            'defaultDatabaseAuth' => $onmInstancesConnection,
+            //'defaultDatabaseAuth' => $onmInstancesConnection,
+            'defaultDatabaseAuth' => array(
+                'TEMPLATE_USER' => "retrincos",
+                'MEDIA_URL' => "http://media.opennemas.com",
+                'BD_TYPE' => "mysqli",
+                'BD_HOST' => "localhost",
+                'BD_USER' => "onm".$usr."usr",
+                'BD_PASS' => $password,
+                'BD_DATABASE' => "onm-".$usr,
+            ),
         ));
 
         $tpl->assign(
@@ -94,16 +106,22 @@ switch($action) {
                 'BD_DATABASE' => "onm-".$_POST['internal_name'],
             );
         }
+        $siteName = filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING);
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
             'contact_IP' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
-            'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
+            'name' => $siteName,
+            'user_name' => filter_input(INPUT_POST, 'contact_name' , FILTER_SANITIZE_STRING),
+            'user_mail' => filter_input(INPUT_POST, 'contact_mail' , FILTER_SANITIZE_STRING),
             'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
             'settings' => $settings,     
         );
-        
+        if (empty($data['internal_name']) || !isset ($data['internal_name'])) {
+            $siteName = html_entity_decode($siteName);
+            $data['internal_name'] = preg_replace('/[-\"\' ]+/', '', String_Utils::normalize_name($siteName));
+        }
         // If comes from the openhost form
         if (isset($_POST['contact_name'])
             && isset($_POST['contact_mail'])

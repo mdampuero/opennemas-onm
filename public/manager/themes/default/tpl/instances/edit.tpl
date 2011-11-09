@@ -140,6 +140,18 @@ table.adminform {
 
                     <tr valign="top">
                         <th scope="row">
+                            <label for="contact">{t}User contact IP:{/t}</label>
+                        </th>
+                        <td>
+                            <input type="text" readonly id="contact_IP" name="contact_IP" value="{$configs['contact_IP']|default:""}">
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row">
                             <label for="site_title">{t}Created:{/t}</label>
                         </th>
                         <td>
@@ -152,10 +164,22 @@ table.adminform {
 
                     <tr valign="top">
                         <th scope="row">
-                            <label for="contact">{t}User contact:{/t}</label>
+                            <label for="contact">{t}User name:{/t}</label>
                         </th>
                         <td>
                             <input type="text" id="contact_name" name="contact_name" value="{$configs['contact_name']|default:""}">
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="contact">{t}User password:{/t}</label>
+                        </th>
+                        <td>
+                            <input type="password" id="password" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
                         </td>
                         <td>
 
@@ -168,17 +192,6 @@ table.adminform {
                         </th>
                         <td>
                             <input type="text" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}">
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="contact">{t}User contact IP:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" readonly id="contact_IP" name="contact_IP" value="{$configs['contact_IP']|default:""}">
                         </td>
                         <td>
 
@@ -371,7 +384,7 @@ table.adminform {
                         <th>
                             <label for="settings_bd_database">{t}Database name:{/t}</label>
                         </th>
-                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:"onm-"}" type="text" /></td>
+                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:$defaultDatabaseAuth['BD_DATABASE']}" type="text" /></td>
                     </tr>
                     <tr>
                         <th>
