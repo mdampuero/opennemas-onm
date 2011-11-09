@@ -569,8 +569,8 @@ class InstanceManager
         
         //Create new mysql user for this instance and grant usage and privileges
         $sql2 = "CREATE USER `{$data['settings']['BD_USER']}`@'localhost' IDENTIFIED BY '{$data['settings']['BD_PASS']}' ";
-        $sql3 = "GRANT USAGE ON `{$data['settings']['BD_DATABASE']}`.* TO `{$data['settings']['BD_USER']}`@'localhost' IDENTIFIED BY '{$data['settings']['BD_PASS']}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0";
-        $sql4 = "GRANT ALL PRIVILEGES ON `{$data['settings']['BD_DATABASE']}`.* TO `{$data['settings']['BD_USER']}`@'localhost' WITH GRANT OPTION";
+        $sql3 = "GRANT USAGE ON `{$data['settings']['BD_DATABASE']}`.* TO `{$data['settings']['BD_USER']}`@'localhost' ";
+        $sql4 = "GRANT ALL PRIVILEGES ON `{$data['settings']['BD_DATABASE']}` . * TO '{$data['settings']['BD_USER']}'@'localhost'";
         $rs2= $conn->Execute($sql2);
         $rs3= $conn->Execute($sql3);
         $rs4= $conn->Execute($sql4);
