@@ -400,13 +400,13 @@ class String_Utils
         return $result;
     }
     
-    static public function pass_gen($length = 8) {
+    static public function generatePassword($length = 8) {
         $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $i = 0;
         $password = "";
         
         while ($i <= $length-1) {
-            $password .= $chars{mt_rand(0,strlen($chars))};
+            $password .= $chars{mt_rand(0,strlen($chars)-1)};
             $i++;
         }
         

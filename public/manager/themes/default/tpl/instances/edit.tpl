@@ -86,6 +86,7 @@ table.adminform {
 
         <ul id="tabs">
             <li><a href="#general">{t}General{/t}</a> </li>
+            {if $smarty.get.action neq "new"}
             <li><a href="#general-information">{t}Information{/t}</a> </li>
             <li><a href="#internals">{t}Internals{/t}</a> </li>
             <li><a href="#database">{t}Database{/t}</a></li>
@@ -93,6 +94,7 @@ table.adminform {
             <li><a href="#log">{t}Log{/t}</a></li>
             <li><a href="#external">{t}External Services{/t}</a></li>
             <li><a href="#modules">{t}Modules{/t}</a></li>
+            {/if}
         </ul>
  
         <div id="general" class="panel">
@@ -377,28 +379,28 @@ table.adminform {
                             <label for="settings_bd_host">{t}Database server:{/t}</label>
                         </th>
                         <td>
-                            <input name="settings[BD_HOST]" value="{$instance->settings['BD_HOST']|default:$defaultDatabaseAuth['BD_HOST']}" type="text"></input>
+                            <input name="settings[BD_HOST]" value="{$instance->settings['BD_HOST']|default:""}" type="text"></input>
                         </td>
                     </tr>
                     <tr>
                         <th>
                             <label for="settings_bd_database">{t}Database name:{/t}</label>
                         </th>
-                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:$defaultDatabaseAuth['BD_DATABASE']}" type="text" /></td>
+                        <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:""}" type="text" /></td>
                     </tr>
                     <tr>
                         <th>
                             <label for="settings_bd_user">{t}Database user:{/t}</label>
                         </th>
                         <td>
-                            <input name="settings[BD_USER]" id="settings_bd_user" value="{$instance->settings['BD_USER']|default:$defaultDatabaseAuth['BD_USER']}" type="text" readonly="readonly"></input>
+                            <input name="settings[BD_USER]" id="settings_bd_user" value="{$instance->settings['BD_USER']|default:""}" type="text" readonly="readonly"></input>
                         </td>
                     </tr>
                     <tr>
                         <th>
                             <label for="settings_bd_password">{t}Database password:{/t}</label>
                         </th>
-                        <td><input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']|default:$defaultDatabaseAuth['BD_PASS']}" type="password" readonly="readonly"></input></td>
+                        <td><input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']|default:""}" type="password" readonly="readonly"></input></td>
                     </tr>   
                 </tbody>
             </table>
@@ -678,7 +680,8 @@ table.adminform {
             </table>
         </div>
 
-
+        <input type="hidden" name="action_name" id="action_name" value="{$smarty.get.action}"></input>
+        
         <div class="action-bar clearfix">
             <div class="right">
                 <button type="submit" class="onm-button red">{t}Save{/t}</button>

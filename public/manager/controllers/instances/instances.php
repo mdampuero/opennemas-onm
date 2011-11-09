@@ -51,21 +51,10 @@ switch($action) {
     case 'new':
 
         $templates = im::getAvailableTemplates();
-        
-        $usr = "test-".String_Utils::pass_gen(4);
-        $password = String_Utils::pass_gen(16);
+              
         $tpl->assign(array(
             'templates' => $templates,
             //'defaultDatabaseAuth' => $onmInstancesConnection,
-            'defaultDatabaseAuth' => array(
-                'TEMPLATE_USER' => "retrincos",
-                'MEDIA_URL' => "http://media.opennemas.com",
-                'BD_TYPE' => "mysqli",
-                'BD_HOST' => "localhost",
-                'BD_USER' => "onm".$usr."usr",
-                'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$usr,
-            ),
         ));
 
         $tpl->assign(
@@ -90,47 +79,48 @@ switch($action) {
         break;
 
     case 'save':
+        //Get internal_name from domains
+        $internal_name = "";
+        if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
+            $internal_name = $_POST['internal_name'];
+        } else {
+            $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
+            $internal_name = $internal[0];
+        }
         
-        if(isset($_POST['settings']) && !empty($_POST['settings']) ) {
+        //If is creating a new instance, get DB params on the fly
+        $action_name = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
+        $settings = "";
+        if($action_name == "edit") {
             $settings = $_POST['settings'];
         } else {
-            $password = String_Utils::pass_gen(16);
-            $usr = substr($_POST['contact_name'], 0, 4);
+            $password = String_Utils::generatePassword(16);
             $settings = array(
                 'TEMPLATE_USER' => "retrincos",
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "onm".$usr.'usr',
+                'BD_USER' => "onm".$internal_name.'usr',
                 'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$_POST['internal_name'],
+                'BD_DATABASE' => "onm-".$internal_name,
             );
         }
-        $siteName = filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING);
+        
+        //Get all the Post data
         $data = array(
             'id' => filter_input(INPUT_POST, 'id' , FILTER_SANITIZE_STRING),
             'contact_IP' => filter_input(INPUT_POST, 'contact_IP' , FILTER_SANITIZE_STRING),
-            'name' => $siteName,
+            'name' => filter_input(INPUT_POST, 'site_name' , FILTER_SANITIZE_STRING),
             'user_name' => filter_input(INPUT_POST, 'contact_name' , FILTER_SANITIZE_STRING),
             'user_mail' => filter_input(INPUT_POST, 'contact_mail' , FILTER_SANITIZE_STRING),
-            'internal_name' => filter_input(INPUT_POST, 'internal_name' , FILTER_SANITIZE_STRING),
+            'user_pass' => filter_input(INPUT_POST, 'password' , FILTER_SANITIZE_STRING),
+            'internal_name' => $internal_name,
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
             'settings' => $settings,     
         );
-        if (empty($data['internal_name']) || !isset ($data['internal_name'])) {
-            $siteName = html_entity_decode($siteName);
-            $data['internal_name'] = preg_replace('/[-\"\' ]+/', '', String_Utils::normalize_name($siteName));
-        }
-        // If comes from the openhost form
-        if (isset($_POST['contact_name'])
-            && isset($_POST['contact_mail'])
-            && isset($_POST['password'])) 
-        {
-            $data['user_name'] = $_POST['contact_name'];
-            $data['user_mail'] = $_POST['contact_mail'];
-            $data['user_pass'] = $_POST['password'];
-        }
+        
+        //Also get timezone if comes from openhost form
         if (isset($_POST['timezone']) && !empty ($_POST['timezone'])) {
             $allTimezones = \DateTimeZone::listIdentifiers();
             foreach ($allTimezones as $key => $value) {
