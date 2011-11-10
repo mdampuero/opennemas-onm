@@ -174,6 +174,35 @@ class Settings {
 
         return true;
     }
+    
+    /**
+     * Invalidates the apc_cache for a setting from its name.
+     *
+     * Example:
+     *  use Onm\Settings as s;
+     *  s::invalidate('opinion');
+     *
+     * @param string $settingName the name of the setting.
+     * @param string $instanceName the name of the instance.
+     *
+     * @return boolean true if the setting apc_cache was invalidated.
+     */
+    static public function invalidate($settingName, $instanceName = null)
+    {
+        if (is_null($instanceName)) {
+            $instanceName = APC_PREFIX;
+        }
+        // the setting name must be setted
+        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (extension_loaded('apc')) {
+            apc_delete($instanceName . "_".$settingName);
+        } else {
+            return false;
+        }
 
+        return true;
+    }
+
+    
 
 }

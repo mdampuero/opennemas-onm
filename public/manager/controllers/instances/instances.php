@@ -149,6 +149,9 @@ switch($action) {
                     'activated_modules'
             );
             
+            //Delete the 'activated_modules' apc_cache for this instance
+            s::invalidate('activated_modules', $data['internal_name']);
+            
             //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
             $GLOBALS['application']->conn = $im->getConnection( $settings );
 
