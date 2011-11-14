@@ -607,7 +607,14 @@ class InstanceManager
                 if (!$connection2->Execute($sql, $values)) {
                     return false;
                 }
+                
+                $sql2 = "INSERT INTO `users_content_categories` (`pk_fk_user`, `pk_fk_content_category`) 
+                         VALUES (134, 0), (134, 22), (134, 23), (134, 24), (134, 25), (134, 26), (134, 27), (134, 28), (134, 29), (134, 30), (134, 31)";
 
+                if (!$connection2->Execute($sql2)) {
+                    return false;
+                }
+                
                 s::set('contact_mail',$data['user_mail']);
                 s::set('contact_name',$data['user_name']);
                 s::set('contact_IP',$data['contact_IP']);
