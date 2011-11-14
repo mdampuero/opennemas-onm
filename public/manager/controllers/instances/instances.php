@@ -80,16 +80,17 @@ switch($action) {
 
     case 'save':
         //Get internal_name from domains
-        $internal_name = "";
+        $internalName = "";
         if (isset($_POST['internal_name']) && !empty($_POST['internal_name'])) {
-            $internal_name = $_POST['internal_name'];
+            $internalName = $_POST['internal_name'];
         } else {
             $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
-            $internal_name = $internal[0];
+            $internalName = $internal[0];
         }
         
         //If is creating a new instance, get DB params on the fly
         $action_name = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
+        $internalNameShort = substr($internalName, 0, 10);
         $settings = "";
         if($action_name == "edit") {
             $settings = $_POST['settings'];
@@ -100,9 +101,9 @@ switch($action) {
                 'MEDIA_URL' => "http://media.opennemas.com",
                 'BD_TYPE' => "mysqli",
                 'BD_HOST' => "localhost",
-                'BD_USER' => "onm".$internal_name.'usr',
+                'BD_USER' => "onm".$internalNameShort.'usr',
                 'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$internal_name,
+                'BD_DATABASE' => "onm-".$internalName,
             );
         }
         
@@ -114,7 +115,7 @@ switch($action) {
             'user_name' => filter_input(INPUT_POST, 'contact_name' , FILTER_SANITIZE_STRING),
             'user_mail' => filter_input(INPUT_POST, 'contact_mail' , FILTER_SANITIZE_STRING),
             'user_pass' => filter_input(INPUT_POST, 'password' , FILTER_SANITIZE_STRING),
-            'internal_name' => $internal_name,
+            'internal_name' => $internalName,
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
             'settings' => $settings,     
