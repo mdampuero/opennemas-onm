@@ -7,7 +7,7 @@ require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
 // Check if the user can frontpage menues admin
-Acl::checkOrForward('MENUES_ADMIN');
+//Acl::checkOrForward('MENUES_ADMIN');
 
 /**
  * Setup view
@@ -103,7 +103,7 @@ switch($action) {
 
     case 'read':
 
-        Acl::checkOrForward('MENU_READ');
+        Acl::checkOrForward('MENU_AVAILABLE');
 
         $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING );
 
