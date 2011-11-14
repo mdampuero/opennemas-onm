@@ -621,6 +621,7 @@ class InstanceManager
             }
             
             //Change and insert some data with instance information 
+            s::set('site_name',$data['name']);
             s::set('site_title',$data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
             s::set('site_description',$data['name'].' - OpenNemas - Servicio online para tu periódico digital - Online service for digital newspapers');
             s::set('site_keywords',$data['internal_name'].', openNemas, servicio, online, periódico, digital, service, newspapers');
