@@ -673,6 +673,35 @@ HTMLCODE;
 
         return $clientIp;
     }
+
+    /**
+     * Register in the log one event in the content
+     *
+     * @return void
+     * @author 
+     **/
+    static public function logContentEvent($action, $content)
+    {
+        $logger = Application::getLogger();
+        $logger->notice(
+            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
+            .'the action '.$action.' at '.get_class($content).' (ID:'.$content->id.')' );
+    }
+
+    /**
+     * Register in the Database error handler one error message
+     *
+     * @return boolean true if all was sucessfully performed
+     * @author 
+     **/
+    static public function logDatabaseError()
+    {
+        $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+        return $errorMsg;
+    }
+
 }
 
 /* Others commons functions */

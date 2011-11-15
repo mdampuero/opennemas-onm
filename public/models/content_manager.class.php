@@ -141,18 +141,12 @@ class ContentManager
                 // add all the additional properties related with positions and params
 
                 $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
-                $content->load(
-                                array(
-                                      $placeholder => $rs->fields['placeholder'],
-                                      'position'    => $rs->fields['position'],
-                                      'params'      => json_decode($rs->fields['params']),
-                                      )
-                               );
+                $content->load(array(
+                    $placeholder => $rs->fields['placeholder'],
+                    'position'    => $rs->fields['position'],
+                    'params'      => unserialize($rs->fields['params']),
+                ));
                 $contents[] = $content;
-
-
-
-
                 $rs->MoveNext();
             }
         }
@@ -1484,22 +1478,22 @@ class ContentManager
      */
     public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null')
     {
-        if(!isset($num_pages)) {
+        if (!isset($num_pages)) {
             $num_pages = 5;
         }
 
-        if(!isset($total_items)) {
+        if (!isset($total_items)) {
             $total_items = 40;
         }
 
-        if(!isset($delta)) {
+        if (!isset($delta)) {
             $delta = 2;
         }
 
-        $page='page';
-        $path='';
+        $page = 'page';
+        $path = '';
 
-        if($funcion == 'URL'){
+        if ($funcion == 'URL') {
             $fun="%d/";
             $append=false;
             $path = SITE_URL.$params;
@@ -1956,5 +1950,52 @@ class ContentManager
         }
 
         return $contentsOrdered;
+    }
+
+
+    /**
+     * Returns an array of image objects given an array/unique_id  of image
+     *
+     * @return void
+     **/
+    static public function getRelatedImagesForContentsWithIDs($relatedImagesIDs)
+    {
+        // If the given ids is an unique element transform it to an array.
+        if (!is_array($relatedImagesIDs) && !empty($relatedImagesIDs)) {
+            $relatedImagesIDs = array($relatedImagesIDs);
+        }
+
+        // If the related images id array is empty just return an empty array
+        if(!(count($relatedImagesIDs) > 0)) { return array(); }
+
+        // Fetch the images from SQL
+        $relatedImagesSQL = implode(',', $relatedImagesIDs);
+        $cm = new ContentManager();
+        $images = $cm->find('Photo', "pk_content IN ($relatedImagesSQL)");
+
+        return $images;
+    }
+
+    /**
+     * Returns an array of related contents for one content given its id
+     *
+     * @return array list of related content
+     **/
+    public function getRelatedContentFromContentID($contentID)
+    {
+        $rc  = new Related_content();
+        $ccm = new ContentCategoryManager();
+        $relatedContentIDs = $rc->get_relations($contentID);
+        $relatedContent = array();
+        foreach($relatedContentIDs as $contentID) {
+            $content = new Content($contentID);
+            // Filter by scheduled {{{
+            if ($content->isInTime() && $content->available==1 && $content->in_litter==0) {
+                $content->category_name = $ccm->get_name($content->category);
+                $relatedContent[] = $content;
+            }
+            // }}}
+        }
+        return $relatedContent;
     }
 }
