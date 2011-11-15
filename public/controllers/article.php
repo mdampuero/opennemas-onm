@@ -21,13 +21,12 @@ $ccm = ContentCategoryManager::get_instance();
  * Getting request params
  **/
 $dirtyID = filter_input(INPUT_GET,'article_id',FILTER_SANITIZE_STRING);
+
 if(empty($dirtyID)) {
     $dirtyID = filter_input(INPUT_POST,'article_id',FILTER_SANITIZE_STRING);
 }
-if(!empty($dirtyID)){
-    $items = preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
-    $articleID= (int)$matches["digit"];
-}
+
+$articleID = Content::resolveID($dirtyID);
  
 
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
@@ -43,6 +42,10 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
     } else {
         if(!empty($articleID)){
             $article = new Article($articleID);
+
+             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri) {
+                 Application::forward301('/'.$article->uri);
+             }
             $article->category_name = $article->loadCategoryName($articleID);
             $category_name = $article->category_name;
             $subcategory_name = null;

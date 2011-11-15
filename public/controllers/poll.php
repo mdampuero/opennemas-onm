@@ -120,34 +120,33 @@ switch($action) {
         if(empty($dirtyID)) {
             $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
         }
-        if(!empty($dirtyID)){
-            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
-            $poll_id = (int)$matches["digit"];
-        }
+
+        $pollId = Content::resolveID($dirtyID);
+
         /**
          * Redirect to album frontpage if id_album wasn't provided
          */
-        if (is_null($poll_id)) { Application::forward301('/encuesta/'); }
+        if (is_null($pollId)) { Application::forward301('/encuesta/'); }
 
 
 
-        $poll = new Poll($poll_id);
+        $poll = new Poll($pollId);
  
         if (!empty($poll)) {
 
             if (($poll->available==1) && ($poll->in_litter==0)) {
                 // Increment numviews if it's accesible
-                $poll->setNumViews($poll_id);
+                $poll->setNumViews($pollId);
 
-                $cacheID = $tpl->generateCacheId($category_name, $poll_id );
+                $cacheID = $tpl->generateCacheId($category_name, $pollId );
 
                 if( 1 || ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cacheID) ) {
 
-                    $items = $poll->get_items($poll_id);
+                    $items = $poll->get_items($pollId);
                    
  
                     $comment = new Comment();
-                    $comments = $comment->get_public_comments($poll_id);
+                    $comments = $comment->get_public_comments($pollId);
 
                     $otherPolls = $cm->find('Poll', 'available=1 ',
                                             'ORDER BY created DESC LIMIT 5');
@@ -167,7 +166,7 @@ switch($action) {
  
                     $xml = $tpl->fetch('poll/graphic_poll.tpl');
 
-                    $file =  $poll_path. $poll_id.'.xml';
+                    $file =  $poll_path. $pollId.'.xml';
                     FilesManager::mkFile($file);
 
                     FilesManager::writeInFile($file, $xml);
@@ -177,7 +176,7 @@ switch($action) {
 
                   require_once('poll_inner_advertisement.php');
 
-                $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
+                $tpl->assign('contentId', $pollId); // Used on module_comments.tpl
 
                 $tpl->display('poll/poll.tpl', $cacheID);
 
@@ -198,20 +197,18 @@ switch($action) {
         if(empty($dirtyID)) {
             $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
         }
-        if(!empty($dirtyID)){
-            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
-            $poll_id = (int)$matches["digit"];
-        }
+
+        $pollId = Content::resolveID($dirtyID);
         /**
          * Redirect to album frontpage if id_album wasn't provided
          */
-        if (is_null($poll_id)) { Application::forward301('/encuesta/'); }
+        if (is_null($pollId)) { Application::forward301('/encuesta/'); }
 
-        $poll = new Poll($poll_id);
+        $poll = new Poll($pollId);
 
         if(!empty($poll->id)){
 
-            $cookie="polls".$poll_id;
+            $cookie="polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
                 $tpl->assign('msg','Ya ha votado esta encuesta');
             }
@@ -223,7 +220,7 @@ switch($action) {
                 $poll->vote($_POST['respEncuesta'],$ip);
                 $tpl->assign('msg','Gracias por su voto ');
             }
-            $items = $poll->get_items($poll_id);
+            $items = $poll->get_items($pollId);
             
 
             $otherPolls = $cm->find('Poll', 'available=1 ',
@@ -243,19 +240,19 @@ switch($action) {
 
             $xml = $tpl->fetch('poll/graphic_poll.tpl');
 
-            $file =  $poll_path.$poll_id.'.xml';
+            $file =  $poll_path.$pollId.'.xml';
             FilesManager::mkFile($file);
             FilesManager::writeInFile($file, $xml);
 
             $comment = new Comment();
-            $comments = $comment->get_public_comments($poll_id);
+            $comments = $comment->get_public_comments($pollId);
             $tpl->assign('num_comments', count($comments));
 
-            $tpl->assign('contentId', $poll_id); // Used on module_comments.tpl
+            $tpl->assign('contentId', $pollId); // Used on module_comments.tpl
 
-            $poll->setNumViews($poll_id);
+            $poll->setNumViews($pollId);
 
-            $cacheID= $tpl->generateCacheId($category_name, $poll_id );
+            $cacheID= $tpl->generateCacheId($category_name, $pollId );
 
             require_once('poll_inner_advertisement.php');
               

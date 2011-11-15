@@ -110,16 +110,13 @@ if (!is_null($action) ) {
 
         case 'show':
 
-			//$albumID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
-
             $dirtyID = filter_input(INPUT_GET,'album_id',FILTER_SANITIZE_STRING);
+
             if(empty($dirtyID)) {
                 $dirtyID = filter_input(INPUT_POST,'album_id',FILTER_SANITIZE_STRING);
             }
-            if(!empty($dirtyID)){
-                $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
-                $albumID = (int)$matches["digit"];
-            }
+
+            $albumID = Content::resolveID($dirtyID);
 			/**
 			 * Redirect to album frontpage if id_album wasn't provided
 			 */

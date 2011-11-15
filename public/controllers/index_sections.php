@@ -61,9 +61,9 @@ foreach($frontpages as $name=>$pattern) {
 if (!isset($menuFrontpage) || empty($menuFrontpage->items)) {
     $menuFrontpage= Menu::renderMenu('frontpage');
 }
-
-$tpl->assign('menuFrontpage',$menuFrontpage->items);
-
+if (!empty($menuFrontpage->items)) {
+    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+}
 if (empty($category_name) && !empty($menuFrontpage->items)) {
     foreach ($menuFrontpage->items as  $item){
         if(empty($category_name) && $item->type == 'category') {

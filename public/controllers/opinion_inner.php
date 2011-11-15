@@ -23,13 +23,13 @@ $cm = new ContentManager();
 $category_name = $_GET['category_name'] = 'opinion';
 
 $dirtyID = filter_input(INPUT_GET,'opinion_id',FILTER_SANITIZE_STRING);
+
 if(empty($dirtyID)) {
     $dirtyID = filter_input(INPUT_POST,'opinion_id',FILTER_SANITIZE_STRING);
 }
-if(!empty($dirtyID)){
-    $items = preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
-    $opinionID = (int)$matches["digit"];
-}
+
+$opinionID = Content::resolveID($dirtyID);
+
 
 
 $tpl->assign('contentId',$opinionID); // Used on module_comments.tpl

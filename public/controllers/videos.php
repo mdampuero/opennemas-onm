@@ -151,13 +151,12 @@ switch ($action) {
        // $videoID = filter_input( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
 
         $dirtyID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+
         if(empty($dirtyID)) {
             $dirtyID = filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING);
         }
-        if(!empty($dirtyID)){
-            $items = preg_match("@(?P<dirtythings>\d{1,16})(?P<digit>\d+)@", $dirtyID, $matches);
-            $videoID = (int)$matches["digit"];
-        }
+
+        $videoID = Content::resolveID($dirtyID);
         /**
          * Redirect to album frontpage if id_album wasn't provided
          */
