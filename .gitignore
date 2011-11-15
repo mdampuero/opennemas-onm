@@ -16,3 +16,9 @@ nbproject/*
 nbproject/**/*
 doc/*
 *.sublime-*
+*patches_xornal*
+tmp/instances/*/smarty/compile*/*
+tmp/instances/*/sessions/backend/*
+tmp/instances/*/sessions/frontend/*
+tmp/instances/*/smarty/cache*
+/public/admin/themes/default/js/jquery/jquery.json-2.2.min.js

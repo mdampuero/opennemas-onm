@@ -908,6 +908,7 @@ CREATE TABLE IF NOT EXISTS `content_categories` (
   `posmenu` int(10) DEFAULT '10',
   `internal_category` smallint(1) NOT NULL DEFAULT '0' COMMENT 'equal content_type & global=0 ',
   `fk_content_category` int(10) DEFAULT '0',
+  `params` LONGTEXT DEFAULT NULL ,
   `logo_path` varchar(200) DEFAULT NULL,
   `color` varchar(10) DEFAULT '#638F38',
   PRIMARY KEY (`pk_content_category`)
@@ -1525,6 +1526,7 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (106, 'FILE_UPDATE', 'Modificar Fichero', 'FILE'),
 (107, 'FILE_DELETE', 'Eliminar Fichero', 'FILE'),
 (108, 'FILE_CREATE', 'Crear Fichero', 'FILE'),
+(109, 'MENU_CREATE', 'Crear menu', 'MENU'),
 (117, 'WIDGET_ADMIN', 'Listado de widgets', 'WIDGET'),
 (110, 'BADLINK_ADMIN', 'Control Link Admin', 'BADLINK'),
 (111, 'STATS_ADMIN', 'Admin EstadÃ­sticas', 'STATS'),

@@ -1,3 +1,7 @@
+-- 15-Nov-2011
+-- Params for categories
+ALTER TABLE `content_categories` ADD `params` LONGTEXT NULL ;
+
 -- New modules books, specials & agenda
 
 
@@ -30,10 +34,11 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 --
 
 CREATE TABLE IF NOT EXISTS `books` (
-  `pk_book` bigint(20) unsigned NOT NULL,
+  `pk_book` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `author` varchar(250) DEFAULT NULL,
   `file` varchar(250) DEFAULT NULL,
-  `editorial` varchar(250) DEFAULT NULL
+  `editorial` varchar(250) DEFAULT NULL,
+    PRIMARY KEY (`pk_book`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -48,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `books` (
 --
 
 CREATE TABLE IF NOT EXISTS `specials` (
-  `pk_special` int(10) unsigned NOT NULL,
+  `pk_special` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subtitle` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
   `pdf_path` varchar(250) CHARACTER SET utf8 DEFAULT '0',
   `img1` varchar(255) DEFAULT NULL,
