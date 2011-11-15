@@ -23,9 +23,10 @@
 /**
  * Setup app
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
 
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
+ 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 require(dirname(__FILE__).'/mediamanagerController.php');

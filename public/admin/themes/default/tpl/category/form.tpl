@@ -69,7 +69,16 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap"  colspan="2">
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
-                            class="required" size="100" />
+                            class="required" size="70" />
+                    </td>
+                    <td rowspan="4">
+                    <div class="help-block margin-left-1">
+                        <div class="title"><h4>Categorias</h4></div>
+                        <div class="content"> Title for short title name <br />
+                        Internal name for calculate slugs and uri <br />
+                        Title page for the long title used for seo & in widgets, menues...
+                        </div>
+                        </div>
                     </td>
                 </tr>
                 {if isset($category) && !empty($category->name)}
@@ -79,10 +88,19 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap"   colspan="2">
                         <input type="text" id="name" name="name" title="carpeta categoria" readonly
-                                    value="{$category->name|clearslash|default:""}" class="required" size="100" />
+                              value="{$category->name|clearslash|default:""}" class="required" size="70" />
                     </td>
                 </tr>
                 {/if}
+                 <tr>
+                    <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="title">{t}Page Title{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap"  colspan="2">
+                        <input type="text" id="params[title]" name="params['title']" title="Título" value="{$category->params['title']|clearslash|default:""}"
+                            class="required" size="70" />
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <label for="internal_category">{t}Category available for:{/t}</label>
@@ -109,11 +127,11 @@
                                     {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
                             {/is_module_activated}
                             {is_module_activated name="SPECIAL_MANAGER"}
-                                <option value="11"
+                                <option value="10"
                                     {if isset($category) && ($category->internal_category eq 10)} checked="checked"{/if}>{t}Special{/t}</option>
                             {/is_module_activated}
                             {is_module_activated name="BOOK_MANAGER"}
-                                <option value="14"
+                                <option value="15"
                                     {if isset($category) && ($category->internal_category eq 15)} checked="checked"{/if}>{t}Book{/t}</option>
                             {/is_module_activated}
                         </select>
@@ -154,7 +172,9 @@
                             <input type="file" id="logo_path" name="logo_path"  />
                         </td>
                          <td style="padding:4px;" nowrap="nowrap" rowspan="2" >
-                             {if !empty($category->logo_path)}<img src="../media/sections/{$category->logo_path}" >{/if}
+                             {if !empty($category->logo_path)}
+                                 <img src="{$smarty.const.MEDIA_URL}/sections/{$category->logo_path}" >
+                             {/if}
                          </td>
                     </tr>
                     <tr>

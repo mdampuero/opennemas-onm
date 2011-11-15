@@ -112,16 +112,13 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('CATEGORY_UPDATE');
 
             $configurations = s::get('section_settings');
-            if($configurations['allowLogo'] == 1 ) {
-                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
- 
-                if(!empty($_FILES) && isset($_FILES['logo_path'])) {
-                    $nameFile = $_FILES['logo_path']['name'];
-                    $uploaddir = MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
 
-                    if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                      $_REQUEST['logo_path'] = $nameFile;
-                    }
+            if(!empty($_FILES) && isset($_FILES['logo_path'])) {
+                $nameFile = $_FILES['logo_path']['name'];
+                $uploaddir = MEDIA_PATH.'/sections/'.$nameFile;
+
+                if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                  $_REQUEST['logo_path'] = $nameFile;
                 }
             }
 
@@ -145,19 +142,16 @@ if( isset($_REQUEST['action']) ) {
             $category = new ContentCategory();
 
             $configurations = s::get('section_settings');
-            if($configurations['allowLogo'] == 1 ) {
-                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
 
-                if(!empty($_FILES) && isset($_FILES['logo_path'])) {
-                    $nameFile = $_FILES['logo_path']['name'];
-                    $uploaddir= MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
+            if(!empty($_FILES) && isset($_FILES['logo_path'])) {
+                $nameFile = $_FILES['logo_path']['name'];
+                $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
 
-                    if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                       $_POST['logo_path'] = $nameFile;
-                    }
+                if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
+                   $_POST['logo_path'] = $nameFile;
                 }
             }
-
+            
             if($category->create( $_POST )) {
                 $ccm->reloadCategories();
             }

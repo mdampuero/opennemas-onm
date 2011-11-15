@@ -21,12 +21,12 @@
 			<li>
 				<a onclick="get_div_contents(0,'opinions',0,1);  divs_hide('opinions_div');" style="cursor:pointer;"><strong>{t}Opinions{/t}</strong></a><hr>
 			</li>
-<!--			<li>
+			<li>
 				<a onclick="get_div_contents(0,'albums',3,1); divs_hide('albums_div');" style="cursor:pointer;"><strong>{t}Albums{/t}</strong></a><hr>
 			</li>
 			<li>
 				<a onclick="get_div_contents(0,'videos',0,1);  divs_hide('videos_div');"  style="cursor:pointer;"><strong>{t}Videos{/t}</strong></a><hr>
-			</li>-->
+			</li>
 			<li>
 				<a onclick="get_div_contents(0,'adjuntos', '{$article->category}',1); divs_hide('adjuntos_div'); " style="cursor:pointer;"><strong>{t}Files{/t}</strong></a><hr>
 			</li>

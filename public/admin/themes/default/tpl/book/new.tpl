@@ -110,7 +110,23 @@
 
                 </td>
             </tr>
-
+            <tr>
+                <td valign="top" align="right" style="padding:4px;">
+                    <label for="title">Tapa libro:</label>
+                </td>
+                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                    {if (!isset($book->file_name) || empty($book->file_name) )}
+                         <input name="file_img" type="file"/>
+                         <div id="informa" style="display: none; width:100%; height:40px;">*Imagen</div>
+                         <br />
+                     {else}
+                         <input name="file_img" type="text" readonly="readonly" value="{$libro->file_img|default:''}"/>
+                         <div id="informa" style="display: none; width:100%; height:40px;"></div>
+                         <br /><br />
+                         <img src="{$smarty.const.URL_PUBLIC}/{$smarty.const.MEDIA_FILE}/libros/{$libro->file_img}" style=" width: 164px;" />
+                     {/if}
+                </td>
+            </tr>
 
                 <tr>
                     <td valign="top" align="right" style="padding:4px;" >

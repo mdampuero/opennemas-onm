@@ -156,11 +156,17 @@ switch($action) {
         $nombre_archivo = $_FILES['file']['name'];
         $archivo_temporal = $_FILES['file']['tmp_name'];
 
+        //Book image front
+        $nombre_archivo_img = $_FILES['file_img']['name'];
+        $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
+
         // Move uploaded pdf
         $uploadStatusPdf = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
+        $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
+
 
         $book = new Book();
-        if ( ($uploadStatusPdf !== false) && $book->create( $_POST )) {
+        if ( ($uploadStatusPdf !== false)  && ($uploadStatusPdf_img!== false) &&  $book->create( $_POST )) {
             $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
             exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
 
@@ -195,12 +201,16 @@ switch($action) {
 
             $nombre_archivo = $_FILES['file']['name'];
             $archivo_temporal = $_FILES['file']['tmp_name'];
+             //Book image front
+            $nombre_archivo_img = $_FILES['file_img']['name'];
+            $archivo_temporal_img = $_FILES['file_img']['tmp_name'];
 
             // Move uploaded pdf
             $uploadStatusPdf = @move_uploaded_file($archivo_temporal, $ruta.$nombre_archivo);
+            $uploadStatusPdf_img = @move_uploaded_file($archivo_temporal_img, $ruta.$nombre_archivo_img);
 
             $book = new Book();
-            if ( ($uploadStatusPdf !== false) && $book->create( $_POST )) {
+            if ( ($uploadStatusPdf !== false)  && ($uploadStatusPdf_img !== false) && $book->create( $_POST )) {
                 $nombre_archivo_swf = str_replace('pdf', 'swf', $nombre_archivo);
                 exec('pdf2swf -O 1 '.$ruta.$nombre_archivo.' -o '.$ruta.$nombre_archivo_swf);
 

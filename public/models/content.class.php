@@ -98,7 +98,7 @@ class Content
                 $contentTypeName = $GLOBALS['application']->conn->
                     Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
                     if (isset($contentTypeName->fields['name'])) {
-                        $returnValue = mb_strtolower($contentTypeName);
+                        $returnValue = mb_strtolower($contentTypeName->fields['name']);
                     } else {
                         $returnValue = $this->content_type;
                     }
@@ -1429,4 +1429,78 @@ class Content
         return true;
     }
 
+      /**
+     * Check if $pk_content exists in database
+     *
+     * @param string $pk_content
+     *
+     * @return pk_content or false
+    */
+     public static function searchContentID($oldID)
+    {
+        $sql="SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
+        $value= array($oldID);
+        $contentID = $GLOBALS['application']->conn->GetOne($sql,$value);
+ 
+        return $contentID;
+    }
+
+     /**
+     *  Search id in refactor_id table. (used for translate old format ids)
+     *
+     * @param string $oldID. Old id created with mktime
+     *
+     * @return int id in table refactor_id or false
+     *
+     */
+
+    public static function searchInRefactorID($oldID)
+    {
+        $sql="SELECT pk_content FROM `refactor_ids` WHERE pk_content_old = ?";
+        $value= array($oldID);
+        $refactorID = $GLOBALS['application']->conn->GetOne($sql,$value);
+
+        if(!empty($refactorID)) {
+            $content = new Content($refactorID);
+            Application::forward301('/'.$content->uri);
+        }
+        
+        return $oldID;
+    }
+
+    /**
+     * Clean id and search if exist in content table. 
+     * If not found search in refactor_id table. (used for translate old format ids 
+     *
+     * @param string $dirtyID. Vble with date in first 14 digits
+     *
+     * @return int id in table content or forward to 404
+     *  
+     */
+
+    public static function resolveID($dirtyID) {
+
+        if (!empty($dirtyID)){
+          
+            if (INSTANCE_UNIQUE_NAME == 'nuevatribuna') {
+                $contentID = self::searchInRefactorID($dirtyID);
+            }
+
+            $items = preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
+            $contentID = (int)$matches["digit"];
+
+            $contentID = self::searchContentID($contentID);
+ 
+            if (empty($contentID)) {
+               // header("HTTP/1.0 404 Not Found");
+
+            }
+
+            return $contentID;
+        } else {
+          // header("HTTP/1.0 404 Not Found");
+            //Can't do because sometimes id is empty, example rss in article.php
+        }
+ 
+    }
 }

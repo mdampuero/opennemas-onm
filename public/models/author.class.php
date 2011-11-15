@@ -33,6 +33,7 @@ class Author
     private $_defaultValues = array(
         'name'=>'',
         'gender'=>'',
+        'blog'=>'',
         'politics'=>'',
         'condition'=>'',
         'date_nac'=>'',

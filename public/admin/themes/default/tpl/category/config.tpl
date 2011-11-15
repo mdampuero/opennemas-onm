@@ -49,17 +49,17 @@
                     <td>
                         <div class="form-wrapper">                           
                             <div>
-                                <label for="section_settings[allowLogo]">{t}Allow change headers and color in frontpages:{/t}</label>
+                                <label for="section_settings[allowLogo]">{t}Show change headers and color in frontpages:{/t}</label>
                                  <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" class="required">
                                     <option value="0">{t}No{/t}</option>
                                     <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
                                 </select>
                             </div>
                             <br />
-                            <div>
+                       {*     <div>
                                 <label for="section_settings[logoDir]">{t}Name header images directory:{/t}</label>
                                 <input type="text" class="required" name="section_settings[logoDir]" value="{$configs['section_settings']['logoDir']|default:""}" />
-                            </div>
+                            </div> *}
                             <br />
                               
                         </div>
@@ -72,6 +72,7 @@
         </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />
+        </div>
    </form>
-</div>
+
 {/block}

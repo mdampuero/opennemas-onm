@@ -67,14 +67,14 @@
                             <table  class="listing-table">
                                 <thead>
                                     <tr>
-                                        <th colspan=2 onClick="Element.toggle('{$mod}');">{t}{$mod}{/t}</th>
+                                        <th colspan=2 onClick="Element.toggle('{$mod}');" style="cursor:pointer;">{t}{$mod}{/t}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="{$mod}" style="display:none">
                                 {section name=privilege loop=$privileges}
                                     <tr>
                                         <td style="padding:4px;" nowrap="nowrap" width="5%">
-
+                                         <label style="cursor:pointer;">
                                         {if $user_group->contains_privilege($privileges[privilege]->id)}
                                            <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}" checked>
                                            <script  type="text/javascript">
@@ -84,9 +84,7 @@
                                         {else}
                                            <input type="checkbox" name="privileges[]" id="privileges[]" value="{$privileges[privilege]->id}">
                                         {/if}
-                                        </td>
-                                        <td valign="top" align="left" style="padding:4px;" width="95%">
-                                                {t}{$privileges[privilege]->description}{/t}
+                                              {t}{$privileges[privilege]->description}{/t} </label>
                                         </td>
                                     </tr>
                                 {/section}
@@ -108,6 +106,6 @@
 
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </div>
+    
 </form>
 {/block}
