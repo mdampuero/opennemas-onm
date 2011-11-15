@@ -1,11 +1,11 @@
 <?php
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *
+ *
  */
 
 /**
- * Description of refactor_ids
+ * Clear content data which can't refactor id's
  *
  * @author sandra
  */
@@ -41,8 +41,58 @@ class Broom {
         }
 
     }
+    
+    /**
+     * Get data before drop  contents.
+     * This contents can't refactor id's 
+     */
 
-    public function sqlExecute() {
+    public function writeDataInLog() {
+
+        //$value = "200701010000000000";
+        $value = "201101010000000000"; //tribuna was in 03-2011 
+
+        $sqls = array();
+        $sqls[] ="SELECT * FROM `contents_categories` WHERE `contents_categories`.`pk_fk_content` >".$value;
+        $sqls []= 'SELECT * FROM contents  WHERE `pk_content` > '.$value;
+        $sqls []= 'SELECT * FROM articles  WHERE `pk_article`  > '.$value .'  OR `img1`  > '.$value .'  OR `img2`  > '.$value;
+        $sqls []= 'SELECT * FROM opinions  WHERE `pk_opinion`  > '.$value;
+        $sqls []= 'SELECT * FROM advertisements  WHERE `pk_advertisement`  > '.$value;
+        $sqls []= 'SELECT * FROM albums  WHERE `pk_album`  > '.$value;
+        $sqls []= 'SELECT * FROM albums_photos  WHERE `pk_album`  > '.$value.'  OR `pk_photo`  > '.$value;
+        $sqls []= 'SELECT * FROM videos  WHERE `pk_video`  > '.$value;
+        $sqls []= 'SELECT * FROM photos  WHERE `pk_photo`  > '.$value;
+        $sqls []= 'SELECT * FROM comments  WHERE `pk_comment`  > '.$value;
+        $sqls []= 'SELECT * FROM votes  WHERE `pk_vote`  > '.$value;
+        $sqls []= 'SELECT * FROM ratings  WHERE `pk_rating`  > '.$value;
+        $sqls []= 'SELECT * FROM attachments  WHERE `pk_attachment`  > '.$value;
+        $sqls []= 'SELECT * FROM polls  WHERE `pk_poll`  > '.$value;
+        $sqls []= 'SELECT * FROM poll_items  WHERE `fk_pk_poll`  > '.$value;
+        $sqls []= 'SELECT * FROM related_contents  WHERE `pk_content1` > '.$value. '   OR `pk_content2`  > '.$value;
+        $sqls []= 'SELECT * FROM kioskos  WHERE `pk_kiosko`  > '.$value;
+        $sqls []= 'SELECT * FROM static_pages  WHERE `pk_static_page`  > '.$value;
+
+
+        foreach ($sqls as $sql) {
+            $rs = $this->orig->conn->Execute($sql);
+            $this->log("GET content data before drop ". $sql. " \n");
+            while(!$rs->EOF) {
+                $this->log(" -  ". json_encode($rs->fields). " \n");
+                $rs->MoveNext();
+            }
+             $this->log("\n\n");
+           
+        }
+        return  true;
+
+    }
+
+    /**
+     * Delete dirty fields from all tables.
+     * 
+     */
+
+    public function clearExecute() {
         $value = "200701010000000000";
 
         $sqls = array();
@@ -73,14 +123,17 @@ class Broom {
                     $this->log($sql."-". $this->orig->conn->ErrorMsg() );
                     $fail= false;
                 }
-           
+
 
         }
         return $fail;
 
     }
 
-
+    /**
+     *  Write in log file
+     */
+    
     public function log($text = null) {
         if(isset($text) && !is_null($text) ) {
             $handle = fopen( $this->logFile , "a");

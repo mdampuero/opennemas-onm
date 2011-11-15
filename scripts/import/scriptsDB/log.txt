@@ -1,1 +1,3 @@
-sqlExecute function: Unknown column 'permalink' in 'contents'
+Duplicate entry '1' for key 'PRIMARY'Duplicate column name 'favorite'Duplicate column name 'authorize'Query was empty
+- UPDATE  `user_groups` SET `pk_user_group` = '8' WHERE `pk_user_group` ='4' - Duplicate entry '8' for key 'PRIMARY'
+- UPDATE  `user_groups` SET `pk_user_group` = '8' WHERE `pk_user_group` ='4' - Duplicate entry '4' for key 'PRIMARY'
