@@ -16,7 +16,7 @@ require_once('controllers/utils_content.php');
 // Assign a content types for don't reinvent the wheel into template
 $tpl->assign('content_types', array(1 => 'Noticia' , 7 => 'Galeria', 9 => 'Video', 4 => 'Opinion', 3 => 'Fichero'));
 
-/**
+/**dav
  * Fetch request variables
 */
 (!isset($_SESSION['desde'])) ? $_SESSION['desde'] = 'list' : null ;
@@ -786,15 +786,15 @@ if (isset($_REQUEST['action']) ) {
             $article = new Article($_REQUEST['id']);
 
             // FIXME: evitar otros valores erróneos
-            $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-            if($status==1){
+            $status = ($_REQUEST['status']==1) ? 1: 0; // Evitar otros valores
+            if ($status==1){
                     //Recuperar de hemeroteca
                    //$article->set_available(0,$_SESSION['userid']);
                    //  $_position=array(100,'placeholder_0_1',$_REQUEST['id']);
                     // $article->set_inhome(0,$_SESSION['userid']);
-                    $article->set_frontpage(0,$_SESSION['userid']);
+                    $article->set_frontpage(0, $_SESSION['userid']);
                     // $article->set_position($_position,$_SESSION['userid']);
-            }else{
+            } else {
                 //Enviar a la hemeroteca eliminar caches.
                 if($article->frontpage==1) {
                     $_position=array(100,'placeholder_0_1',$_REQUEST['id']);

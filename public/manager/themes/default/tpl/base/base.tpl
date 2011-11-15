@@ -85,7 +85,6 @@
             <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
         </ul>
     </footer>
-    {/block}
 
     {block name="footer-js"}
         {browser_update}
@@ -114,6 +113,64 @@
         </script>
         {/if}
     {/block}
+
+</head>
+<body>
+
+    <div id="topbar-admin" class="manager">
+        <div id="logoonm">
+    	    <a  href="{$smarty.const.SITE_URL}manager/index.php" id="logo-onm" title="{t}Go to admin main page{/t}">
+    	       <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas"/>
+    	    </a>
+        </div><!-- /logoonm -->
+
+        {admin_menu}
+
+        <div class="info-left">
+            <div id="user_box">
+        		<ul>
+        		    <li class="menu">
+        			<a href="#" id="menu" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
+        			<ul>
+        			    <li>
+        				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
+        			    </li>
+        			    <li class="divider"></li>
+        			    <li>
+        				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" id="logout" class="logout" title="{t}Logout from control panel{/t}">
+        				    {t}Log out{/t}
+        				</a>
+        			    </li>
+        			</ul>
+        		    </li>
+        		</ul>
+            </div><!-- /user_box -->
+        </div><!-- /info-left -->
+
+    </div><!-- /topbar-admin -->
+
+    <div id="content">
+    {block name="content"}
+    {/block}
+    </div><!-- /content -->
+
+
+
+    {block name="copyright"}
+	<div id="copyright" class="wrapper-content clearfix">
+
+        <div class="company left">
+            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
+			{t} made by OpenHost S.L.{/t}<br/>
+            {t 1=strftime("%Y")}All rights reserved ® 2008 - %1{/t}
+        </div><!-- /company -->
+
+        <ul class="support">
+            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a> </li>
+        </ul><!-- /support -->
+
+    </div><!-- /copyright -->
+	{/block}
 
 </body>
 </html>

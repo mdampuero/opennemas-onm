@@ -1,0 +1,207 @@
+#frontpagemanager .last {
+    margin-right: 0 auto !important;
+}
+#copyright {
+    margin-bottom:207px
+}
+
+#frontpagemanager .wrapper,
+#frontpagemanager .placeholder {
+    vertical-align:top;
+}
+#frontpagemanager .placeholder > div.title,
+#frontpagemanager .static {
+    background-color: #F0F0F0;
+    padding: 5px 5px;
+    border: 1px solid #D5D7DB;
+    color: black;
+    color: #333;
+    text-transform:uppercase;
+    text-align:center;
+    font-weight:bold !important;
+}
+#frontpagemanager .static {
+    padding:5px 0;
+    border:0 none !important;
+    margin:0;
+    margin-right: 10px;
+}
+#frontpagemanager .static.last {
+    margin-right:0;
+}
+#frontpagemanager  .placeholder {
+    box-shadow:0 0 5px rgba(100,100,100, 0.1);
+    margin-bottom:10px;
+}
+#frontpagemanager .placeholder,
+#frontpagemanager div.placeholder div.content {
+    min-height:50px;
+    background:#E7EBF2;
+}
+#frontpagemanager div.static {
+    background:#aaa;
+    margin-bottom:10px;
+}
+#frontpagemanager .placeholder div.content {
+    border:1px solid #D5D7DB;
+    border-top:0 none;
+    padding:5px;
+    background:#fff;
+}
+
+#frontpagemanager .placeholder div.content > div,
+div.content-provider-block > div{
+    margin:5px;
+    border:1px solid #aaa;
+    padding:5px;
+    background:#fff;
+    /*box-shadow:0 0  1px rgba(0,0,0, 0.3);*/
+}
+
+#frontpagemanager .placeholder div.content > div,
+div.content-provider-block > div {
+    cursor:pointer;
+}
+
+#frontpagemanager .placeholder-element {
+    min-height:20px;
+    margin:5px;
+    border:1px dashed #aaa !important;
+    padding:5px;
+    background:#eee;
+    cursor:pointer;
+    background-color:rgba(255,255,255,0.2) !important;
+}
+
+#content-provider {
+    position:fixed;
+    bottom:0;
+    z-index: 9999;
+}
+.ui-tabs .ui-tabs-panel {
+    padding:0 !important; 
+}
+
+div.content-provider-block {
+    max-height:150px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+}
+
+.delete-button {
+    height: 20px !important;
+    width: 17px !important;
+    margin-bottom: -1px !important;
+    text-indent:-9999px !important;
+    background:url(../images/archive.png) top left no-repeat !important;
+    display:block;
+}
+.edit-button {
+    height: 20px !important;
+    width: 17px !important;
+    margin-bottom: -1px !important;
+    text-indent:-9999px !important;
+    background:url(../images/edit.png) top left no-repeat !important;
+    display:block;
+}
+.home-button {
+    height: 20px !important;
+    width: 17px !important;
+    margin-bottom: -1px !important;
+    text-indent:-9999px !important;
+    background:url(../images/home.png) top left no-repeat !important;
+    display:block;
+}
+.settings-button {
+    height: 20px !important;
+    width: 17px !important;
+    margin-bottom: -1px !important;
+    text-indent:-9999px !important;
+    background:url(../images/settings.png) top left no-repeat !important;
+    display:block;
+}
+
+
+div#content-provider .ui-widget-header {
+    background:none !important;
+    border:0 none;
+}
+dic#content-provider .ui-tabs {
+    background:none;
+    padding:0;
+}
+#content-provider.ui-widget-content {
+    background:none;
+}
+
+#content-provider .ui-tabs-panel {
+    background:White;
+}
+#content-provider .ui-tabs-nav {
+    padding:0 !important;
+}
+
+div#content-provider input[type="checkbox"],
+div#content-provider ul.action-buttons {
+    display:none;
+}
+div.content ul.action-buttons{
+    display:none;
+    background:white;
+    position:absolute;
+    top:5px;
+    right:35px;
+    text-align:right;
+    padding:2px 8px;
+    width:auto;
+    max-height:18px;
+}
+#frontpagemanager div.content div:hover ul.action-buttons {
+    display:block;
+}
+#frontpagemanager div.content >div {
+    position:relative;
+}
+div.content div.description div {
+    width:80%;
+    display:inline-block;
+    white-space: nowrap;  
+    overflow: hidden;  
+    text-overflow: ellipsis;
+    vertical-align:middle
+}
+div.content div.description span.type {
+    font-weight:bold;
+}
+#frontpagemanager div.content-provider-element {
+    position:relative;
+}
+#frontpagemanager div.content-provider-element:hover .selectbutton {
+    background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
+    background-position: 0 -294px;
+    background-repeat: no-repeat;
+    display: block;
+    position:absolute;
+    top:-3px;
+    right: 10px;
+    height: 24px;
+    width: 21px;
+}
+
+div.content .selectbutton:hover {
+    background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
+    background-position: -21px -294px !important;
+    background-repeat: no-repeat;
+}
+.ui-sortable-helper .selectbutton,
+.ui-sortable-helper ul.action-buttons {
+    display:none !important;
+}
+
+.content-provider-element {
+    display:block;
+}
+
+div#content-provider span.type {
+    display:none;
+}
