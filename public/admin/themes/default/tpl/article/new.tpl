@@ -70,9 +70,9 @@ if($('starttime')) {
 			<li>
 				<a href="#edicion-extra">{t}Article parameters{/t}</a>
 			</li>
-            <li>
+<!--            <li>
 				<a href="#avanced-custom">{t}Article customize{/t}</a>
-			</li>
+			</li>-->
       
 			{if isset($article) && is_object($article) && !$article->isClone()}
 			<li>
@@ -405,7 +405,7 @@ if($('starttime')) {
 			</tbody>
 			</table>
 		</div>
-
+{*
         <div class="panel" id="avanced-custom" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
 			<tbody>
@@ -446,9 +446,7 @@ if($('starttime')) {
                     <label>{t}Size for title{/t}</label>
                 </td>
 				<td style="padding:4px;" >
-                    <input type="text" id="title" name="title" title="T&iacute;tulo de la noticia"
-                        value='{$article->title|clearslash}' class="required" size="100"  onChange="get_tags(this.value);" /> &nbsp;
-                         <select name="title_size" id="title_size" class="required" >
+                        <select name="title_size" id="title_size" class="required" >
                             <option value="22" {if $article->title_size eq "22"} selected{/if}>22px</option>
                             <option value="24" {if $article->title_size eq "24"} selected{/if}>24px</option>
                             <option value="26" {if $article->title_size eq "26" || !$article->title_size} selected{/if}>26px</option>
@@ -514,7 +512,7 @@ if($('starttime')) {
 			</tbody>
 			</table>
 		</div>
-        
+*}
     
 		{if $smarty.request.action eq 'read'}
 		<div class="panel" id="comments" style="width:98%">
