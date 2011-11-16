@@ -22,7 +22,7 @@ $menuXml = '<?xml version="1.0"?>
     <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#">
         <node
             module_name="ARTICLE_MANAGER"
-            privilege="ARTICLE_LIST_PEND"
+            privilege="ARTICLE_PENDINGS"
             title="'.htmlspecialchars(_("Articles"), ENT_QUOTES).'"
             id="article_manager"
             link="article.php?action=list_pendientes"
