@@ -14,7 +14,7 @@ function smarty_block_acl($params, $content, &$smarty, $open) {
     if( $open ) {
         // NADA
     } else {
-        require_once(SITE_PATH . '/core/privileges_check.class.php');
+       // require_once(SITE_PATH . '/core/privileges_check.class.php');
         $check = true;
 
         if(isset($params['isAllowed'])) {
