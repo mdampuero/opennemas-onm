@@ -228,7 +228,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'list_pendientes':
 
-            if( !Privileges_check::CheckPrivileges('ARTICLE_LIST_PEND')) {
+            if( !Privileges_check::CheckPrivileges('ARTICLE_PENDINGS')) {
                 Privileges_check::AccessDeniedAction();
             }
 
@@ -323,7 +323,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'list_agency': 
-            if( !Privileges_check::CheckPrivileges('ARTICLE_LIST_PEND')) {
+            if( !Privileges_check::CheckPrivileges('ARTICLE_PENDINGS')) {
                 Privileges_check::AccessDeniedAction();
             }
 
