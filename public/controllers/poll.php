@@ -57,10 +57,10 @@ define ('INTERNAL_DIR', "internal");
 
 $poll_path = MEDIA_PATH .  DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
 
-$tpl->assign(array ('chartPolls'  => MEDIA_URL.DIRECTORY_SEPARATOR.MEDIA_DIR.DIRECTORY_SEPARATOR.INTERNAL_DIR ,
-                    'xmlDirPolls' => MEDIA_URL.DIRECTORY_SEPARATOR.MEDIA_DIR.DIRECTORY_SEPARATOR.POLL_DIR.SS,
+$tpl->assign(array ('chartPolls'  => MEDIA_DIR_URL.DIRECTORY_SEPARATOR.INTERNAL_DIR ,
+                    'xmlDirPolls' => MEDIA_DIR_URL.DIRECTORY_SEPARATOR.POLL_DIR.SS,
                     'poll_path'   => $poll_path,
-            ) );
+             ) );
 
 
    $pollSettings = s::get('poll_settings');
