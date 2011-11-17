@@ -99,15 +99,18 @@ class Content
                 break;
 
             case 'content_type_name':
-                $contentTypeName = $GLOBALS['application']->conn->
-                    Execute('SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1');
-                    if (isset($contentTypeName->fields['name'])) {
-                        $returnValue = mb_strtolower($contentTypeName->fields['name']);
-                    } else {
-                        $returnValue = $this->content_type;
-                    }
 
-                    return $returnValue;
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` WHERE pk_content_type = "'. $this->content_type.'" LIMIT 1'
+                );
+
+                if (isset($contentTypeName->fields['name'])) {
+                    $returnValue = mb_strtolower($contentTypeName);
+                } else {
+                    $returnValue = $this->content_type;
+                }
+
+                return $returnValue;
 
                 break;
 
@@ -150,7 +153,6 @@ class Content
         $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
         $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
-
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
             $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
@@ -445,6 +447,43 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
 
         return true;
+    }
+
+    //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
+    public function set_available($status,$last_editor)
+    {
+        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
+        if (($this->id == null) && !is_array($status)) {
+            return false;
+        }
+        $changed = date("Y-m-d H:i:s");
+
+        $stmt = $GLOBALS['application']->conn->
+            Prepare('UPDATE contents SET `available`=?, `content_status`=?, `fk_user_last_editor`=?, '.
+                    '`changed`=? WHERE `pk_content`=?');
+
+        if (!is_array($status)) {
+            $values = array($status, $status, $last_editor, $changed, $this->id);
+        } else {
+            $values = $status;
+        }
+
+        if (count($values)>0) {
+            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+                $errorMsg = Application::logDatabaseError();
+                return false;
+            }
+        }
+
+        /* Notice log of this action */
+        $logger = Application::logContentEvent(__METHOD__, $this);
+
+        // Set status for it's updated to next event
+        if (!empty($this)) {
+            $this->available = $status;
+        }
+
+        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
     }
 
 
@@ -905,43 +944,6 @@ class Content
 
     }
 
-    //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
-    public function set_available($status,$last_editor)
-    {
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-        if (($this->id == null) && !is_array($status)) {
-            return false;
-        }
-        $changed = date("Y-m-d H:i:s");
-
-        $stmt = $GLOBALS['application']->conn->
-            Prepare('UPDATE contents SET `available`=?, `content_status`=?, `fk_user_last_editor`=?, '.
-                    '`changed`=? WHERE `pk_content`=?');
-
-        if (!is_array($status)) {
-            $values = array($status, $status, $last_editor, $changed, $this->id);
-        } else {
-            $values = $status;
-        }
-
-        if (count($values)>0) {
-            if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                $errorMsg = Application::logDatabaseError();
-                return false;
-            }
-        }
-
-        /* Notice log of this action */
-        $logger = Application::logContentEvent(__METHOD__, $this);
-
-        // Set status for it's updated to next event
-        if (!empty($this)) {
-            $this->available = $status;
-        }
-
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
-    }
-
     //New function - published directly in frontpages and no change position
     public function set_directly_frontpage($status,$last_editor)
     {
@@ -1023,7 +1025,8 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent('setFrontpage');
+
+        $logger = Application::logContentEvent(__METHOD__, $this);
 
         //$GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
     }
@@ -1192,54 +1195,6 @@ class Content
 
     }
 
-    //FIXME: Mezcla funciones set_home_position (ordena las que estan) + set_inhome (quita las no home) + refrescar cache home
-    public function  refresh_home($status, $position, $last_editor)
-    {
-        $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
-        $changed = date("Y-m-d H:i:s");
-
-        if (is_array($position)) {
-            $stmt = $GLOBALS['application']->conn->
-                Prepare('UPDATE contents SET `in_home`=1, `home_pos`=?, `home_placeholder`=? WHERE `pk_content`=?');
-
-            if (!is_array($position)) {
-                $values = array($position, $this->id);
-            } else {
-                $values =  $position;
-            }
-
-            if (count($values)>0) {
-                if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                    $errorMsg = Application::logDatabaseError();
-                    return false;
-                }
-            }
-        }
-
-        if (is_array($status)) {
-
-            $stmt = $GLOBALS['application']->conn->
-                Prepare('UPDATE `contents` SET `in_home`=?, `home_pos`=20 WHERE `pk_content`=?');
-
-            if (!is_array($status)) {
-                $values = array($status, $this->id);
-            } else {
-                $values = $status;
-            }
-
-            if (count($values)>0) {
-                if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                    $errorMsg = Application::logDatabaseError();
-                    return false;
-                }
-            }
-        }
-
-        //$GLOBALS['application']->dispatch('onAfterSetInhome', $this);
-        Content::refreshHome();
-
-        return true;
-    }
 
     static public function setNumViews($id=null)
     {
@@ -1470,9 +1425,7 @@ class Content
 
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);
@@ -1500,7 +1453,7 @@ class Content
         $rs2 = $GLOBALS['application']->conn->Execute($sql2);
 
         if (!$rs || !$rs2) {
-            $errorMsg = Application::logDatabaseError();
+            Application::logDatabaseError();
             return false;
         } else {
             $type = $cm->getContentTypeNameFromId($this->content_type,true);

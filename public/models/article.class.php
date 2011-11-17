@@ -90,6 +90,9 @@ class Article extends Content
                 return String_Utils::get_title($this->title);
                 break;
 
+            case 'content_type_name':
+                return 'Article';
+
             default:
                 break;
         }

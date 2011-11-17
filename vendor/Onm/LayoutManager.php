@@ -102,6 +102,7 @@ class LayoutManager
         $output  =  '<div class="placeholder clearfix '.$innerValues['class'].' span-'.$innerValues['width'].$last.'" data-placeholder="'.$innerValues['name'].'">'
                     .$description
                     .'<div class="content">'
+                    .$this->renderContentsForPlaceholder($innerValues['name'])
                     .'<!-- {placeholder-content-'.$innerValues['name']. '} --></div>'
                     .'</div><!-- end wrapper -->';
         return $output;
@@ -136,16 +137,27 @@ class LayoutManager
      *
      * @return string
      **/
-    public function renderContentsForPlaceholder($placeholder)
+    public function renderContentsForPlaceholder($placeholderName)
     {
         if (isset($this->contents) && count($this->contents) > 0) {
+
+            //$tpl = new \Template(TEMPLATE_ADMIN);
             $output = '';
+            $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
             foreach ($this->contents as $content) {
-                $output .= $content->render();
+                if ($content->placeholder == $placeholderName) {
+                    $contentTypeName = $content->content_type_name;
+                    if (!empty($contentTypeName)) {
+                        $tpl->assign('content',$content);
+                        $output .= $tpl->fetch('frontpagemanager/content-types/'.strtolower($content->content_type_name).".tpl");    
+                    }
+                }
             }
             return $output;
         }
     }
+
+
     
     /**
      * Renders the frontpage layout.

@@ -63,11 +63,6 @@ switch ($action) {
             $tpl->assign('category', $_REQUEST['category']);
         }
 
-        $lm  = new LayoutManager(
-            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
-        );
-        $layout = $lm->render();
-
         $cm      = new ContentManager();
         $rating  = new Rating();
         $comment = new Comment();
@@ -79,8 +74,8 @@ switch ($action) {
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        // Populaze 
-        foreach ($contentElementsInFrontpage as $content){
+        // Populate more data for each content 
+        foreach ($contentElementsInFrontpage as &$content){
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->publisher      = $aut->get_user_name($content->fk_publisher);
             $content->last_editor    = $aut->get_user_name($content->fk_user_last_editor);
@@ -88,48 +83,56 @@ switch ($action) {
             $content->comments       = $comment->count_public_comments($content->id);
         }
 
+        $lm  = new LayoutManager(
+            SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
+        );
+        $layout = $lm->render(array(
+            'contents' => $contentElementsInFrontpage
+        ));
+
         $contentsExcludedForProposed = array();
         foreach($contentElementsInFrontpage as &$content) {
             $contentsExcludedForProposed[] = $content->id;
         }
 
-        if(count($contentsExcludedForProposed) >0) {
+        // Fetch suggested Articles for homepage
+        $suggestedArticles = $cm->getSuggestedContentsForHomePage();
+        $tpl->assign('suggestedArticles', $suggestedArticles);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if(count($contentsExcludedForProposed) > 0) {
             $opinionsExcluded = implode(', ', $contentsExcludedForProposed);
             $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
-        } else {
-            $sqlExcludedOpinions = ' AND 1 = 1';
         }
-
         $opinions = $cm->find(
             'Opinion',
             'contents.available = 1 ' . $sqlExcludedOpinions,
             ' ORDER BY created DESC LIMIT 0,16'
         );
-
-        $rating = new Rating();
-        foreach($opinions as $opinion) {
+        foreach($opinions as &$opinion) {
             $opinion->comments = $comment->count_public_comments($opinion->id);
             $opinion->author   = new Author($opinion->fk_author);
             $opinion->ratings  = $rating->get_value($opinion->id);
         }
 
-        if (count($contentsExcludedForProposed) >0) {
+        // Computing and fetching widgets
+        $sqlExcludedWidgets = '';
+        if (count($contentsExcludedForProposed) > 0) {
             $widgets_excluded = implode(', ', $contentsExcludedForProposed);
-            $sql_excluded_widgets = ' AND `pk_widget` NOT IN ('.$widgets_excluded.')';
-        } else {
-            $sql_excluded_widgets  = ' AND 1 = 1';
+            $sqlExcludedWidgets = ' AND `pk_widget` NOT IN ('.$widgets_excluded.')';
         }
-
         $widgets = $cm->find(
             'Widget',
-            'fk_content_type=12 AND `available`=1 ' . $sql_excluded_widgets,
+            'fk_content_type=12 AND `available`=1 ' . $sqlExcludedWidgets,
             'ORDER BY created DESC '
         );
 
         $tpl->assign(array(
-            'widgets'            =>  $widgets,
+            'widgets'            => $widgets,
             'opinions'           => $opinions,
             'category'           => $category,
+            'category_id'        => $categoryID,
             'frontpage_articles' => $contentElementsInFrontpage,
             'layout'             => $layout,
         ));
@@ -137,6 +140,80 @@ switch ($action) {
         $_SESSION['_from'] = $category;
 
         $tpl->display('frontpagemanager/list.tpl');
+
+    break;
+
+    case 'save_positions':
+
+        if(!Acl::check('ARTICLE_FRONTPAGE')) { Acl::deny(); }
+
+        // Setup view
+        $tpl = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        
+        // Get the form-encoded places from request
+        if (isset($_POST['contents_positions'])) {
+            $contentsPositions = $_POST['contents_positions'];
+        } else {
+            $contentsPositions = null;
+        }
+        $categoryID = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT);
+        $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && isset($categoryID);
+
+
+        $savedProperly = false;
+        if ($validReceivedData) {
+            
+            $contents = array();
+            // Iterate over each element and populate its element to save.
+            foreach ($contentsPositions as $params) {
+
+                if (
+                    !isset($categoryID) || !isset($params['placeholder']) 
+                    || !isset($params['position']) || !isset($params['content_type'])
+                    || strpos('placeholder', $params['placeholder'])
+                ) {
+                    continue;
+                }
+                $contents[] = array(
+                    'id' => $params['id'],
+                    'category' => $categoryID,
+                    'placeholder' => $params['placeholder'],
+                    'position' => $params['position'],
+                    'content_type' => $params['content_type'],
+                );
+                
+            }
+
+            // Save contents
+            $savedProperly = ContentManager::saveContentPositionsForHomePage($categoryID, $contents);
+
+        }
+
+        if ($categoryID == 0){ $section = 'home'; }
+
+        $tpl->delete($section . '|RSS');
+        $tpl->delete($section . '|0');
+
+        /* Notice log of this action */
+        $logger = Application::getLogger();
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            .' action Frontpage save positions at '.$section.' Ids '.json_encode($contentsPositions)
+        );
+
+        // If this request is Ajax return properly formated result.
+        if ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+            if ($savedProperly) {
+                echo _("Content positions saved properly");
+            } else {
+                header('HTTP/1.1 500 Internal Server Error');
+                if ($validReceivedData == false) {
+                    echo _("Unable to save content positions: Data sent from the client were not valid.");
+                } else {
+                    echo _("Unable to save content positions: Unknow reason");
+                }
+            }
+        }
 
     break;
 

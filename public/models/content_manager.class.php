@@ -140,9 +140,8 @@ class ContentManager
                 $content = new $rs->fields['content_type']($rs->fields['pk_fk_content']);
                 // add all the additional properties related with positions and params
 
-                $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
                 $content->load(array(
-                    $placeholder => $rs->fields['placeholder'],
+                    'placeholder' => $rs->fields['placeholder'],
                     'position'    => $rs->fields['position'],
                     'params'      => unserialize($rs->fields['params']),
                 ));
@@ -172,15 +171,14 @@ class ContentManager
         $GLOBALS['application']->conn->StartTrans();
 
         // Clean all the contents for this category after insert the new ones
-        if(!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
+        if (!ContentManager::clearContentPositionsForHomePageOfCategory($categoryID)) {
             return false;
         }
 
         if (count($elements) > 0) {
 
             // Foreach element setup the sql values statement part
-            foreach($elements as $element) {
-
+            foreach ($elements as $element) {
                 $positions[] = array(
                                         $element['id'],
                                         $categoryID,
@@ -201,9 +199,7 @@ class ContentManager
 
             // Handling if there were some errors into the execution
             if(!$rs) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+                Application::logDatabaseError();
                 return false;
             } else {
                 return true;
@@ -234,9 +230,7 @@ class ContentManager
 
         // return the value and log if there were errors
         if(!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            Application::logDatabaseError();
             return false;
         } else {
             return true;
@@ -679,10 +673,7 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
+            Application::logDatabaseError();
             return false;
         } else {
             while (!$rs->EOF) {
@@ -1887,10 +1878,8 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;
+            Application::logDatabaseError();
+            return false;
         }
 
         return $rs->fields['pk_content_category'];
@@ -1904,10 +1893,8 @@ class ContentManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return;
+            Application::logDatabaseError();
+            return false;
         }
 
         $category_name=$this->get_title($rs);

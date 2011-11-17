@@ -12,9 +12,19 @@
 
 {/block}
 
+{block name="js-library"}
+    {script_tag language="javascript" src="/jquery/jquery.min.js"}
+    {script_tag language="javascript" src="/jquery/jquery-ui.js"}
+{/block}
+
 {block name="header-js"}
     {block name="js-library"}{/block}
-    {script_tag src="/frontpagemanager.js"}
+    {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
+    <script type="text/javascript" charset="utf-8" defer>
+    jQuery(document).ready(function () {
+       jQuery('#frontpagemanager').frontpageManager(); 
+    });
+    </script>
 
     <script type="text/javascript">
 
@@ -27,18 +37,13 @@
 
         // Check when some element is dragged to show the warnings-validation hit
         // remembering to save positions
-        // $('warnings-validation').update('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
+        // 
 
         // Add the tabs for content-providers
 
 
     // ]]>
     </script>
-{/block}
-
-{block name="js-library"}
-    {script_tag language="javascript" src="/jquery/jquery.min.js"}
-    {script_tag language="javascript" src="/jquery/jquery-ui.js"}
 {/block}
 
 {block name="content"}
@@ -116,7 +121,7 @@
             {t}Frontpage articles{/t} <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" >
         </div><!-- / -->
 
-        <div id="frontpagemanager" class="span-24 clearfix last">
+        <div id="frontpagemanager" class="span-24 clearfix last" data-category="{$category_id}">
             {$layout}
         </div><!-- /frontpagemanager -->
 
@@ -125,7 +130,7 @@
                 {if $category neq 'home'}
                 <li><a href="#other-articles">{t}Other articles in this category{/t}</a></li>
                 {else}
-                <li><a href="#suggested-elements">{t}Suggested articles{/t}</a></li>
+                <li><a href="#suggested_articles_homepage">{t}Suggested articles{/t}</a></li>
                 {/if}
                 <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
                 <li><a href="#available-opinions">{t}Opinions{/t}</a></li>
@@ -133,20 +138,20 @@
 
             {if $category neq 'home'}
             <div id="other-articles">
-                {include file="frontpage/blocks/others_articles_in_category.tpl"}
+                {include file="frontpagemanager/content-providers/others_articles_in_category.tpl"}
             </div>
             {else}
-            <div id="suggested-elements">
-                {include file="frontpage/blocks/articles_suggested.tpl"}
+            <div id="suggested_articles_homepage">
+                {include file="frontpagemanager/content-providers/articles_suggested.tpl"}
             </div>
             {/if}
 
             <div id="available-widgets">
-                {include file="frontpage/blocks/widgets_available.tpl"}
+                {include file="frontpagemanager/content-providers/widgets_available.tpl"}
             </div>
 
             <div id="available-opinions">
-                {include file="frontpage/blocks/opinions_available.tpl"}
+                {include file="frontpagemanager/content-providers/opinions_available.tpl"}
             </div>
         </div><!-- /content-provider -->
     </div>
