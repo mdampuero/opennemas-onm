@@ -361,7 +361,7 @@ if($('starttime')) {
 				</td>
 				<td style="padding:4px;" valign="top" >				
 					<input 	type="text" id="slug" name="slug" title="{t}slug{/t}" size="90"
-							class="required" style="width:98%" maxlength="256" tabindex="5"
+							style="width:98%" maxlength="256" tabindex="5"
 							{if is_object($article)}
 								value="{$article->slug|clearslash|escape:"html"}"
 							{else}
