@@ -1,12 +1,7 @@
 {extends file="base/base.tpl"}
 
 {block name="footer-js" append}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}prototype-date-extensions.js"></script>
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}scriptaculous/scriptaculous.js?load=effects,dragdrop"></script>
-
-{* Ajax button to change availability *}
-<script type="text/javascript" language="javascript" src="{$params.JS_DIR}switcher_flag.js"></script>
+{script_tag language="javascript" src="/switcher_flag.js"}
 <script type="text/javascript" language="javascript">
 /* <![CDATA[ */
 
@@ -30,12 +25,16 @@ function enviar(frm, trg, acc, id) {
     frm.submit();
 }
 
-function confirmar() {
-    if (confirm('¿Está seguro de querer eliminar este elemento?')) {
-        window.location = this.href;
+function confirmarDelete(action) {
+    var confirm1 = confirm('¿Está seguro de eliminar esta instancia completa?');
+    if (confirm1) {
+        var confirm2 = confirm('¡Se perderá toda la información almacenada así como toda la base de datos!');
+        if (confirm2) {
+            window.location = action.href;
+        }
     }
 }
-// ]]>
+    // ]]>
 </script>
 
 {/block}
@@ -110,7 +109,7 @@ function confirmar() {
                     {$instance->totals[2]}
                 </td>
                  <td>
-                    {$instance->configs['site_created']|default:$smarty.now|date_format:"%d-%m-%Y"}
+                    {$instance->configs['site_created']}
                 </td>
                 <td class="center">
                     {if $instance->activated == 1}
@@ -131,7 +130,7 @@ function confirmar() {
                         </li>
 
                         <li>
-                            <a href="instances.php?action=delete&id={$instance->id}" onclick="confirmar()" title="{t}Delete{/t}">
+                            <a href="instances.php?action=delete&id={$instance->id}" onclick="confirmarDelete(this);return false;" title="{t}Delete{/t}">
                             <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                         </li>
                     </ul>

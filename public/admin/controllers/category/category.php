@@ -123,7 +123,8 @@ if( isset($_REQUEST['action']) ) {
             }
 
             $category = new ContentCategory();
-            if($category->update( $_REQUEST )) {
+            //var_dump($_POST);die();
+            if($category->update( $_POST )) {
                 $ccm->reloadCategories();
             }
 
@@ -153,6 +154,10 @@ if( isset($_REQUEST['action']) ) {
             }
             
             if($category->create( $_POST )) {
+                $user = new User();
+                $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
+                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                
                 $ccm->reloadCategories();
             }
   
@@ -166,8 +171,12 @@ if( isset($_REQUEST['action']) ) {
             Acl::checkOrForward('CATEGORY_DELETE');
 
             $category = new ContentCategory();
-             
+            
             if($category->delete( $_POST['id'] )) {
+                $user = new User();
+                $user->delCategoryToUser($_SESSION['userid'],$_POST['id']);
+                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+                
                 $ccm->reloadCategories();
                 $msg = _("Categoy deleted successfully");
             }else{

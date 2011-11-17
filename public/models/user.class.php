@@ -217,6 +217,49 @@ class User
 
         return false;
     }
+    
+    public function addCategoryToUser ($idUser, $idCategory) {
+        
+        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        
+        $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
+                VALUES (?,?)";
+        
+        $values = array($idUser, $idCategory);
+        
+        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return false;
+        }
+
+        $newUserCategories = self::readAccessCategories($idUser);
+
+        return true;
+        
+    }
+    
+    public function delCategoryToUser ($idUser, $idCategory) {
+        
+        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        
+        $sql = 'DELETE FROM users_content_categories WHERE pk_fk_content_category='.intval($idCategory);
+        
+        if($GLOBALS['application']->conn->Execute($sql) === false) {
+            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+
+            return false;
+        }
+
+        $newUserCategories = self::readAccessCategories($idUser);
+
+        return true;
+        
+    }
 
     private function readAccessCategories($id=null)
     {
@@ -252,8 +295,8 @@ class User
   
         return $contentCategories;
     }
-
-
+    
+    
     private function deleteAccessCategoriesDB()
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user='.intval($this->id);

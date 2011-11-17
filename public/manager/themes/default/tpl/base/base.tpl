@@ -91,6 +91,7 @@
         {script_tag language="javascript" src="/prototype.js"}
         {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
         {script_tag language="javascript" src="/scriptaculous/effects.js"}
+        {script_tag language="javascript" src="/scriptaculous/dragdrop.js"}
     {/block}
 
     {block name="header-js"}
@@ -108,8 +109,29 @@
         {script_tag language="javascript" src="/lightwindow.js" defer="defer"}
         {script_tag language="javascript" src="/modalbox.js" defer="defer"}
         {* FIXME: corregir para que pille bien el path *}
+        <script type="text/javascript">
+        try {
+                // Activar la validación
+                new Validation('formulario', { immediate : true });
+                Validation.addAllThese([
+                        ['validate-password',
+                                '{t}Your password must have between 8 and 16 characters.{/t}', {
+                                minLength : 8,
+                                maxLength : 16
+                        }]
+                ]);
+
+                // Para activar los separadores/tabs
+                $fabtabs = new Fabtabs('tabs');
+        } catch(e) {
+                // Escondemos los errores
+                //console.log( e );
+        }
+        </script>   
      {/block}
 
+     {block name="footer-js"}
+     {/block}
 
 </body>
 </html>

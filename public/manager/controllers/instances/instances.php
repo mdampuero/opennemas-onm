@@ -87,12 +87,14 @@ switch($action) {
             $internal = explode(".", filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING) );
             $internalName = $internal[0];
         }
+        //Force internal_name lowercase
+        $internalName = strtolower($internalName);
         
         //If is creating a new instance, get DB params on the fly
-        $action_name = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
+        $actionName = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
         $internalNameShort = substr($internalName, 0, 10);
         $settings = "";
-        if($action_name == "edit") {
+        if($actionName == "edit") {
             $settings = $_POST['settings'];
         } else {
             $password = String_Utils::generatePassword(16);
@@ -103,7 +105,7 @@ switch($action) {
                 'BD_HOST' => "localhost",
                 'BD_USER' => "onm".$internalNameShort.'usr',
                 'BD_PASS' => $password,
-                'BD_DATABASE' => "onm-".$internalName,
+                'BD_DATABASE' => "onm-".$internalNameShort,
             );
         }
         
@@ -118,7 +120,9 @@ switch($action) {
             'internal_name' => $internalName,
             'domains' => filter_input(INPUT_POST, 'domains' , FILTER_SANITIZE_STRING),
             'activated' => filter_input(INPUT_POST, 'activated' , FILTER_SANITIZE_NUMBER_INT),
-            'settings' => $settings,     
+            'settings' => $settings,
+            'site_created' => filter_input(INPUT_POST, 'site_created' , FILTER_SANITIZE_STRING, 
+                                        array('options' => array('default' => date("d-m-Y - H:m"))))
         );
         
         //Also get timezone if comes from openhost form
@@ -152,6 +156,8 @@ switch($action) {
             
             //Delete the 'activated_modules' apc_cache for this instance
             s::invalidate('activated_modules', $data['internal_name']);
+            //Delete the 'site_name' apc_cache for this instance
+            s::invalidate('site_name', $data['internal_name']);
             
             //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
             $GLOBALS['application']->conn = $im->getConnection( $settings );
@@ -168,11 +174,7 @@ switch($action) {
             }
         } else {
             $errors = $im->create($data);
-            $site_created = filter_input(INPUT_POST, 'site_created' , FILTER_DEFAULT);
-            
-            if (empty($site_created)){
-                $_POST['created'] = time();
-            }
+
             if (is_array($errors) && count($errors) > 0) {
                 m::add($errors);
                 Application::forward('?action=new');

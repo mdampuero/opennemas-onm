@@ -56,7 +56,7 @@ table.adminform {
 {/block}
 
 {block name="footer-js"}
-    
+   
 {/block}
 
 {block name="content" append}
@@ -157,7 +157,7 @@ table.adminform {
                             <label for="site_title">{t}Created:{/t}</label>
                         </th>
                         <td>
-                            <input type="text" id="site_created" name="site_created" value="{$configs['site_created']|default:$smarty.now|date_format:"%d-%m-%Y"}">
+                            <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%d-%m-%Y - %H:%M"}{/if}">
                         </td>
                         <td>
 
@@ -181,10 +181,10 @@ table.adminform {
                             <label for="contact">{t}User password:{/t}</label>
                         </th>
                         <td>
-                            <input type="password" id="password" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
+                            <input type="password" id="password" class="{if $smarty.request.action eq "new"}required validate-password{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
                         </td>
                         <td>
-
+                            <span class="default-value">{t}(The password must have between 8 and 16 characters){/t}</span>
                         </td>
                     </tr>
 
