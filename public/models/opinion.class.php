@@ -443,4 +443,48 @@ class Opinion extends Content
 
         return $contents;
     }
+
+    /**
+    * Get all latest Opinions from an author given his id
+    *
+    * @return mixed, all latest opinions sorted by creation time
+    */
+    static public function getLatestOpinionsForAuthor($authorID, $params = array())
+    {
+
+        $contents = array();
+
+        // Setting up default parameters
+        $default_params = array(
+            'limit' => 6,
+        );
+        $options = array_merge($default_params, $params);
+        $sqlLimit = " LIMIT {$options['limit']}";
+
+
+        if (!isset($authorID)) {
+            return;
+        }
+
+        $cm = new ContentManager();
+        $ccm = ContentCategoryManager::get_instance();
+
+        // Getting All latest opinions
+        $contents = $cm->find('Opinion', 'contents.available=1 AND opinions.fk_author = '.$authorID,
+                    'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit);
+
+        $author = new Author($authorID);    
+            
+        // For each opinion get its author and photo
+        foreach ($contents as $content) {
+            $content->author = $author;
+            $content->author->photo = $content->author->get_photo($content->fk_author_img);
+            if (isset($content->author->photo->path_img)){
+                $content->photo = $content->author->photo->path_img;
+            }
+            $content->name = $content->author->name;
+        }
+
+        return $contents;
+    }
 }

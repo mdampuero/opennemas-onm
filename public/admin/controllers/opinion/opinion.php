@@ -99,7 +99,7 @@ if (!isset($action)) {
                 }
             } else {
                 list($opinions, $pager)= $cm->find_pages('Opinion', 'in_home=1 and available=1 and type_opinion=0',
-                                         'ORDER BY created DESC ', $_REQUEST['page'], 16);
+                                         'ORDER BY created DESC ', $page, 16);
                 $tpl->assign('paginacion', $pager->links);
 
                 $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
