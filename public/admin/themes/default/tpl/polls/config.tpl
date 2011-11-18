@@ -70,7 +70,20 @@
                                 <input type="text" class="required" id="name" name="poll_settings[heightPoll]" value="{$configs['poll_settings']['heightPoll']|default:"500"}" />
                             </div>
                             <br />
-                           
+                            <hr>
+                              <div>
+                                <label for="poll[total_widget]">{t}Total in widget home:{/t}</label>
+                                <input type="text" class="required" name="poll_settings[total_widget]" value="{$configs['poll_settings']['total_widget']|default:"2"}" />
+                            </div>
+                              <div>
+                                <label for="poll[widthWidget]">{t}Charts width in widget home:{/t}</label>
+                                <input type="text" class="required" id="name" name="poll_settings[widthWidget]" value="{$configs['poll_settings']['widthWidget']|default:"240"}" />
+                            </div>
+                            <br />
+                            <div>
+                                <label for="poll[heightWidget]">{t}Charts height in widget home:{/t}</label>
+                                <input type="text" class="required" id="name" name="poll_settings[heightWidget]" value="{$configs['poll_settings']['heightWidget']|default:"240"}" />
+                            </div>
                         </div>
                     </td>
                     <td> <br/>
@@ -92,6 +105,6 @@
         </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />
-   </form>
-</div>
+    </div>
+</form>
 {/block}

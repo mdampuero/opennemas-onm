@@ -84,10 +84,10 @@
 								<div class="title"><h4>{t}Definition values{/t}</h4></div>
                                 <div class="content">
                                     <ul>
-                                        <li>{t} Use  total in widget album for define how many videos can see in widgets in newspaper frontpage{/t}</li>                                       
-                                        <li>{t} Cover width in widget album  define image width for crop the cover used in widgets{/t}</li>
-                                        <li>{t} Cover height in widget album  define image height for crop the cover used in widgets{/t}</li>
-                                         <li>{t}Used to define the frontpage albums, the time range of the latest albums are the most viewed{/t}</li>
+                                        <li>{t}Use  total in widget album for define how many videos can see in widgets in newspaper frontpage{/t}</li>                                       
+                                        <li>{t}Cover width in widget album  define image width for crop the cover used in widgets{/t}</li>
+                                        <li>{t}Cover height in widget album  define image height for crop the cover used in widgets{/t}</li>
+                                        <li>{t}Used to define the frontpage albums, the time range of the latest albums are the most viewed{/t}</li>
                                     </ul>
                                 </div>
                         </div>
@@ -100,6 +100,7 @@
         </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />
-   </form>
-</div>
+    </div>
+</form>
+
 {/block}

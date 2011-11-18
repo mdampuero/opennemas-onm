@@ -35,8 +35,8 @@ if(empty($category)) {
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
-if(empty($category) && !empty($categoryData) )
-    $category = $categoryData[0]->pk_content_category;
+
+if(empty($category)) {$category ='favorite';}
 
 $tpl->assign('category', $category);
 $tpl->assign('subcat', $subcat);
@@ -55,16 +55,56 @@ switch ($action) {
     case 'list':  //Buscar publicidad entre los content
 
         $cm = new ContentManager();
-        // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-        list($polls, $pager) = $cm->find_pages('Poll', 'fk_content_type=11 ', 'ORDER BY  created DESC ',$page,10, $category);
-
-        foreach ($polls as $poll) {
-            $poll->category_name = $poll->loadCategoryName($poll->pk_content);
+         
+       
+        if(empty($numItems)) {$numItems=16;}
+        $configurations = s::get('poll_settings');
+        $numFavorites = $configurations['total_widget'];
+         
+        if (empty($page)) {
+            $limit = "LIMIT ".(ITEMS_PAGE+1);
+        } else {
+            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.$numItems;
         }
+        
+        if ($category == 'favorite') { //Widget video
+            $polls = $cm->find_all('Poll', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
+            
+            if (count($polls) != $numFavorites ) {
+                m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
+            }
+            
+            if(!empty($polls)){
+                foreach ($polls as &$poll) {
+                    $poll->category_name = $ccm->get_name($poll->category);
+                    $poll->category_title = $ccm->get_title($poll->category_name);
+                }
+            }
 
-        /* Ponemos en la plantilla la referencia al objeto pager */
-        $tpl->assign( array('paginacion' => $pager,
-                            'polls'=> $polls)
+        } elseif ($category == 'all') {
+            $polls = $cm->find_all('Poll', 'available =1', 'ORDER BY created DESC '. $limit);
+            
+            if(!empty($polls)){
+                foreach ($polls as &$poll) {
+                    $poll->category_name = $ccm->get_name($poll->category);
+                    $poll->category_title = $ccm->get_title($poll->category_name);
+                }
+            }
+        } else {
+            // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
+            $polls = $cm->find_by_category('Poll', 'fk_content_type=11 ', 'ORDER BY  created DESC '.$limit);
+        }
+        
+        $params = array(
+            'page'=>$page, 'items'=>ITEMS_PAGE,
+            'total' => count($polls),
+            'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category,
+        );
+
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
+        $tpl->assign( array(
+            'paginacion' => $pagination,
+            'polls'=> $polls)
         );
 
         $tpl->display('polls/list.tpl');
