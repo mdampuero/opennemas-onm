@@ -1,18 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="author" content="OpenHost,SL" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta name="author" content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <link rel="shorcut icon" href="{$params.IMAGE_DIR}/favicon.png" />
 
     {block name="meta"}
-        <title>{setting name=site_name} - OpenNeMaS - Admin section</title>
+        <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
     {/block}
 
     {block name="header-css"}     
+        {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
@@ -190,7 +197,8 @@
     {/if}
  </script>
 	{block name="footer-js"}
-    {script_tag src="/footer-functions.js" language="javascript"}
+        {script_tag src="/modernizr/modernizr-2.0.6.min.js" language="javascript"}
+        {script_tag src="/footer-functions.js" language="javascript"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">
@@ -219,6 +227,11 @@
                  </script>
 		{/if}
 	{/block}
+
+<!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+    <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
+<![endif]-->
 
 </body>
 </html>

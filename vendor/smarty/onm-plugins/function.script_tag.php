@@ -44,11 +44,17 @@ function smarty_function_script_tag($params, &$smarty) {
     } else {
         $type = "type=\"text/javascript\"";
     }
+
+    //Comprobar si tiene type definido
+    if (isset($params['escape'])) {
+        $escape = true;
+    }
     
     
     unset($params['external']);
     unset($params['src']);
     unset($params['type']);
+    unset($params['escape']);
     $properties = '';
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
@@ -63,6 +69,10 @@ function smarty_function_script_tag($params, &$smarty) {
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
     
     $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties}></script>";
+
+    if ($escape) {
+        $output = str_replace('</script>', '<\/script>', $output);
+    }
     
     return $output;
 }

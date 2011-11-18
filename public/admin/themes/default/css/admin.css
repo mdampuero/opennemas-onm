@@ -687,6 +687,139 @@ div.utilities-conf input[type="text"]{
     display:inline !important;
 }
 
+table.aa{
+	background:#eFeFeF !important;
+	border:1px solid #ccc;
+}
+table.aa tr {
+	border:none  !important;
+	background:none  !important;
+	height:19px !important;
+
+}
+table.aa tr td {
+	border:none !important;
+	background:none !important;
+	font-variant:small-caps;
+	color:Gray;
+	font-weight:bold;
+	text-transform:uppercase;
+	text-align:center;
+}
+
+/* -------------------------------------------------------------
+  Top Bar admin definitions
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#topbar-admin{
+	background: #464646;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: visible;
+	z-index:99;
+	max-height:38px;
+
+	background: #222;
+    background-color: #222222;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+    background-image: -moz-linear-gradient(#333333, #222222);
+    background-image: -ms-linear-gradient(#333333, #222222);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
+    background-image: -webkit-linear-gradient(#333333, #222222);
+    background-image: -o-linear-gradient(#333333, #222222);
+    background-image: linear-gradient(#333333, #222222);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+	#topbar-admin div.info-left {
+		position:absolute;
+		top:0px;
+		right:10px;
+		height:100%
+	}
+
+	#topbar-admin a, #topbar-admin{
+		color:#ddd;
+	}
+	#topbar-admin #logoonm {
+		display:block;
+		width:160px;
+	}
+		#topbar-admin #logoonm a{
+			color: White;
+			font-family:Georgia;
+		}
+		#topbar-admin #logoonm div{
+			display:block;
+			float:left;
+		}
+		#topbar-admin #logoonm img{
+			margin:5px;
+			vertical-align:middle
+		}
+		#topbar-admin #logoonm div.site-name{
+			padding-top:10px;
+		}
+        
+#topbar-admin .avatar {
+    border:1px solid #DDDDDD;
+    padding:1px;
+    width:14px;
+    margin-bottom:-1px;
+    margin-right:2px;
+}
+
+#cuadromenu, #submenus{
+	background-color:#464646 !important;
+	color:#ddd;
+}
+
+#name-box, #session-actions, #session-actions a, #name-box a{
+	color:#ccc;
+}
+
+#name-box a{
+	text-decoration:underline;
+}
+
+#topbar-admin.manager {
+    background: #049CDB !important;
+    background-color: #049CDB !important;
+    background-repeat: repeat-x !important;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#049CDB), to(#0064CD)) !important;
+    background-image: -moz-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -ms-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049CDB), color-stop(100%, #0064CD)) !important;
+    background-image: -webkit-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: -o-linear-gradient(#049CDB, #0064CD) !important;
+    background-image: linear-gradient(#049CDB, #0064CD) !important;
+}
+#topbar-admin.manager a {
+	color:White;
+}
+
+#topbar-admin form.pull-right {
+    float: right;
+}
+
+#topbar-admin input{background-color:#444;background-color:rgba(255, 255, 255, 0.3);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:normal;font-weight:13px;line-height:1;padding:4px 9px;color:#ffffff;color:rgba(255, 255, 255, 0.75);border:1px solid #111;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-webkit-transition:none;-moz-transition:none;-ms-transition:none;-o-transition:none;transition:none;}.topbar input:-moz-placeholder{color:#e6e6e6;}
+#topbar-admin input::-webkit-input-placeholder{color:#e6e6e6;}
+#topbar-admin input:hover{background-color:#bfbfbf;background-color:rgba(255, 255, 255, 0.5);color:#ffffff;}
+#topbar-admin input:focus,.topbar input.focused{outline:0;background-color:#ffffff;color:#404040;text-shadow:0 1px 0 #ffffff;border: 1px solid #111111;padding:4px 9px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);}
+
+
+#topbar-admin, #topbar-admin .fill {
+    background-color: #222222;
+    background-image: -moz-linear-gradient(center top , #333333, #222222);
+    background-repeat: repeat-x;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+}
+
 /* -------------------------------------------------------------
   Content from modalbox.css
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1052,6 +1185,8 @@ ul#menu ul {
 	padding: 0;
 	display: none;
 	position: absolute;
+	top: 36px;
+	left: 0px;
 	background-color: #333;
 	border-radius: 0 0 5px 5px;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
@@ -1076,6 +1211,130 @@ ul#menu li:hover li a:hover{ background-color: rgba(255, 255, 255, 0.1); }
 ul#menu ul ul { display: none; position: absolute; top: 0; left: 99%;  border-radius: 0 5px 5px 0;}
 ul#menu li > ul li:last-child a { padding-bottom:8px; }
 ul#menu li > ul li:first-child a { padding-top:8px; }
+=======
+ul#menu > li ul {
+	border-radius: 0 5px 5px 0;
+}
+
+ul#menu ul:after /*From IE 7 lack of compliance*/{
+  clear: both;
+  display: block;
+  content: ".";
+  height: 0;
+  visibility: hidden;
+}
+
+ul#menu ul li {
+  float: left; /*For IE 7 lack of compliance*/
+  display: block !important;
+  display: inline; /*For IE*/
+}
+
+ul#menu > li > a {
+    border-radius:5px 5px 0 0;
+	padding: 12px 15px;
+}
+	ul#menu > li:hover > a {
+	    background:#333333;
+		text-decoration: none;
+		background-color: rgba(255, 255, 255, 0.1);
+		color: #FFFFFF;
+		-webkit-transition:background 0.07s linear;
+		-moz-transition:background 0.07s linear;
+		-o-transition:background 0.07s linear;
+		transition:background 0.07s linear;
+	}
+/* Root Menu */
+ul#menu a {
+	padding: 4px 10px 4px;
+	float: none !important; /*For Opera*/
+	float: left; /*For IE*/
+	display: block;
+	color: #CCCCCC;
+	text-decoration: none;
+	text-decoration: none;
+	height: auto !important;
+	height: 1%; /*For IE*/
+}
+ul#menu.manager a { color:White !important; }
+
+ul#menu li ul li {
+	clear: both;
+    display: block;
+    float: none;
+    font-size: 12px;
+}
+ul#menu ul > li > a {
+	min-width: 180px;
+	width:180px;
+	display:block;
+
+}
+
+/* Root Menu Hover Persistence */
+ul#menu a:hover,
+ul#menu li:hover a,
+ul#menu li.iehover a {
+	color: White;
+}
+
+/* 2nd Menu */
+ul#menu li:hover li a,
+ul#menu li.iehover li a {
+  float: none;
+  border:none;
+}
+
+/* 2nd Menu Hover Persistence */
+ul#menu li:hover li a:hover,
+ul#menu li:hover li:hover a,
+ul#menu li.iehover li a:hover,
+ul#menu li.iehover li.iehover a {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 3rd Menu */
+ul#menu li:hover li:hover li a,
+ul#menu li.iehover li.iehover li a {
+  	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 3rd Menu Hover Persistence */
+
+ul#menu li:hover li:hover li a:hover,
+ul#menu li:hover li:hover li:hover a,
+ul#menu li.iehover li.iehover li a:hover,
+ul#menu li.iehover li.iehover li.iehover a {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+ul#menu ul ul,
+ul#menu ul ul ul {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 210px;
+}
+
+/* Do Not Move - Must Come Before display:block for Gecko */
+ul#menu li:hover ul ul,
+ul#menu li:hover ul ul ul,
+ul#menu li.iehover ul ul,
+ul#menu li.iehover ul ul ul {
+	display: none;
+}
+
+ul#menu li:hover ul,
+ul#menu ul li:hover ul,
+ul#menu ul ul li:hover ul,
+ul#menu li.iehover ul,
+ul#menu ul li.iehover ul,
+ul#menu ul ul li.iehover ul {
+  display: block;
+}
+ul#menu .selected{
+	color: #003300;
+}
 
 
 ul#menu.manager a { color:White !important; }
