@@ -29,7 +29,15 @@
     <script type="text/javascript">
 
         jQuery(document).ready(function() {
-           $( "#content-provider").tabs(); 
+            $( "#content-provider").tabs({
+                ajaxOptions: {
+                    error: function( xhr, status, index, anchor ) {
+                        $( anchor.hash ).html(
+                            "<div>Couldn't load this tab. We'll try to fix this as soon as possible. " +
+                            "If this wouldn't be a demo.</div>" );
+                    }
+                }
+            }); 
         });
 
 
@@ -104,7 +112,7 @@
     </div><!-- /top-action-bar -->
 
 
-    <div class="wrapper-content clearfix">
+    <div class="wrapper-content">
 
         <ul id="categories" class="pills">
             {acl hasCategoryAccess=0}
@@ -117,42 +125,36 @@
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
 
-        <div>
-            {t}Frontpage articles{/t} <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src={$params.IMAGE_DIR}leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" >
-        </div><!-- / -->
-
-        <div id="frontpagemanager" class="span-24 clearfix last" data-category="{$category_id}">
+        <div id="frontpagemanager" data-category="{$category_id}">
             {$layout}
         </div><!-- /frontpagemanager -->
 
-        <div id="content-provider" class="span-24 last clearfix">
+        <div id="content-provider" class="clearfix">
             <ul>
+                <li>
+                    <a href="#empty">{t}Out of frontpage{/t}</a>
+                </li>
                 {if $category neq 'home'}
-                <li><a href="#other-articles">{t}Other articles in this category{/t}</a></li>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
+                </li>
                 {else}
-                <li><a href="#suggested_articles_homepage">{t}Suggested articles{/t}</a></li>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-articles-content-provider">{t}Suggested articles{/t}</a>
+                </li>
                 {/if}
-                <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
-                <li><a href="#available-opinions">{t}Opinions{/t}</a></li>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/widgets.php?action=suggested-articles-content-provider">{t}Widgets{/t}</a>
+                </li>
+                <li>
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/opinions.php?action=suggested-articles-content-provider">{t}Opinions{/t}</a>
+                </li>
             </ul>
 
-            {if $category neq 'home'}
-            <div id="other-articles">
-                {include file="frontpagemanager/content-providers/others_articles_in_category.tpl"}
-            </div>
-            {else}
-            <div id="suggested_articles_homepage">
-                {include file="frontpagemanager/content-providers/articles_suggested.tpl"}
-            </div>
-            {/if}
+            <div id="empty">
+                {t}Drop blocks here to get them out of frontpage{/t}
+            </div><!-- /empty -->
 
-            <div id="available-widgets">
-                {include file="frontpagemanager/content-providers/widgets_available.tpl"}
-            </div>
-
-            <div id="available-opinions">
-                {include file="frontpagemanager/content-providers/opinions_available.tpl"}
-            </div>
         </div><!-- /content-provider -->
     </div>
         

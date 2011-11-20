@@ -59,7 +59,7 @@
 jQuery(document).ready(function(){
             
     // Make content providers sortable and allow to D&D over the placeholders
-    jQuery('div.content-provider-block').sortable({
+    jQuery('div#content-provider .ui-tabs-panel').sortable({
         connectWith: "div.placeholder div.content",
         placeholder: 'placeholder-element',
         update: function(event,ui) {
@@ -70,7 +70,7 @@ jQuery(document).ready(function(){
     
     // Make content providers sortable and allow to D&D over placeholders and content provider
     jQuery('div.placeholder div.content').sortable({
-        connectWith: "div.content-provider-block, div.placeholder div.content",
+        connectWith: "div#content-provider .ui-tabs-panel, div.placeholder div.content",
         placeholder: 'placeholder-element',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');

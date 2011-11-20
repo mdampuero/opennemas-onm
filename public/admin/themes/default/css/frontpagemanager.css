@@ -51,7 +51,7 @@
 }
 
 #frontpagemanager .placeholder div.content > div,
-div.content-provider-block > div{
+div#content-provider .ui-tabs-panel > div{
     margin:5px;
     border:1px solid #aaa;
     padding:5px;
@@ -60,7 +60,7 @@ div.content-provider-block > div{
 }
 
 #frontpagemanager .placeholder div.content > div,
-div.content-provider-block > div {
+div#content-provider .ui-tabs-panel > div {
     cursor:pointer;
 }
 
@@ -75,16 +75,22 @@ div.content-provider-block > div {
 }
 
 #content-provider {
+    padding-top:5px;
+    border-top:5px solid #ccc;
+    background:White !important;
     position:fixed;
-    bottom:0;
+    top:0;
     z-index: 9999;
 }
 .ui-tabs .ui-tabs-panel {
     padding:0 !important; 
 }
 
+div#content-provider .ui-tabs-panel {
+    height:150px;
+}
+
 div.content-provider-block {
-    max-height:150px;
     overflow-y: scroll;
     overflow-x:hidden;
 }
