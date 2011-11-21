@@ -1688,10 +1688,19 @@ div.action-bar .right{
 			border:5px solid transparent;
 			z-index:20;
 		}
+        #media-browser .image-preview{
+            width:144px;
+            height:95px;
+            border:1px solid #bfbfbf;
+        }
+         #media-browser .image-preview:hover{           
+            border:1px solid transparent;
+        }
+        
 			#media-browser .photo-image img {
-				width:140px;
-				height:80px;
-				border:1px solid #bfbfbf;
+				max-width:140px;
+				max-height:80px;
+				/*border:1px solid #bfbfbf; */
 				padding:2px;
 			}
 			#media-browser .photo-image img.flash-flag {

@@ -46,7 +46,7 @@
                 </div>
                 
                 
-                <input type="checkbox"  id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo[n]->id}" />
+                <input type="checkbox"  id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo[n]->id}" class ="minput" />
 
             </div>
             

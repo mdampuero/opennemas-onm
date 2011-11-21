@@ -228,11 +228,12 @@ class Photo extends Content
                             $photo->myiptc = $myiptc;
 
                             if (empty($photo->description)) {
-                                if (!empty($myiptc['Headline'])) {
+                            /*    if (!empty($myiptc['Headline'])) {
                                     $photo->description= $myiptc['Headline'];
                                 } else {
                                     $photo->description= $myiptc['Caption'];
-                                }
+                                }*/
+                                 $photo->description= $myiptc['Caption'];
                             }
 
                             if (empty($photo->metadata)) {

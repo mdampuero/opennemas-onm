@@ -1864,6 +1864,7 @@ INSERT INTO `users` (`pk_user`, `online`, `login`, `password`, `sessionexpire`, 
 (3, 0, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David', 'Martinez', 'Carballo', ' ', ' ', 1, 4),
 (5, 0, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco ', 'DiÃ©guez', 'Souto', ' ', ' ', 1, 4),
 (4, 0, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre', 'Rico', '', '', '', 1, 4),
+(7, 0, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra', 'Pereira', '', '', '', 1, 4),
 (132, 0, 'admin', '75bba3adeaec86b143375d90a6d61bfd', 45, 'admin@opennemas.com', 'administrator', 'administrator', NULL, NULL, NULL, 1, 5);
 
 -- --------------------------------------------------------
