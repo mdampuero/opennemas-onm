@@ -15,12 +15,22 @@ $ccm = new ContentCategoryManager();
 // This page has category name opinion, always. Don't use redirection
 $category_name = $_GET['category_name'] = 'opinion';
 
+/**
+ * Getting request params
+ **/
+$dirtyID = filter_var($_GET['pk_content'], FILTER_SANITIZE_STRING);
+if(empty($dirtyID)) {
+    $dirtyID = filter_input(INPUT_POST,'pk_content',FILTER_SANITIZE_STRING);
+}
+
+$opinionID = Content::resolveID($dirtyID);
+ 
 // Category manager to retrieve category of article
 $ccm = ContentCategoryManager::get_instance();
 $tpl->assign('ccm', $ccm);
 $tpl->assign('section', 'opinion');
 
-$opinion = new Opinion( $_REQUEST['pk_content'] );
+$opinion = new Opinion( $opinionID );
 $tpl->assign('opinion', $opinion);
 
 $aut = new Author($opinion->fk_author);

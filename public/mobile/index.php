@@ -41,7 +41,7 @@ $routes = array(
 
     /* Opinion */
     array(
-        'regexp'  => '%^opinions/.*?(?P<pk_content>[0-9]+)\.html$%',
+        'regexp'  => '%^opinion/.*?(?P<pk_content>[0-9]+)\.html$%',
         'handler' => 'MobileRouter::opinion',
     ),
 
