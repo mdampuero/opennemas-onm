@@ -463,12 +463,22 @@ class Application
     public function mobileRouter($autoRedirect=true)
     {
         $isMobileDevice = false;
-
-        $browser = @get_browser(null); //isBanned
+        $showDesktop = filter_input(INPUT_GET,'show_desktop',FILTER_DEFAULT);
+        if ($showDesktop) {
+            $autoRedirect = false;
+            $_COOKIE['confirm_mobile'] = 1;
+        }
         
+        // Browscap library
+        require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
+ 
+        // Creates a new Browscap object (loads or creates the cache)
+        $bc = new Browscap( APPLICATION_PATH .DS.'vendor'.DS.'cache');
+        $browser = $bc->getBrowser(); //isBanned
+
         if (
-            !empty($browser->ismobiledevice)
-            && ($browser->ismobiledevice == 1)
+            !empty($browser->isMobileDevice)
+            && ($browser->isMobileDevice == true)
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
             if ($autoRedirect) {
