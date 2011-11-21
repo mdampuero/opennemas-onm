@@ -105,5 +105,5 @@ $router = new URLDispatcher( $routes );
 $router->run();
 
 
- header('Location: /');
+ //header('Location: /');
 //exit(0);
