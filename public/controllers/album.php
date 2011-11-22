@@ -82,17 +82,24 @@ if (!is_null($action) ) {
                 $albumSettings = s::get('album_settings');
                 $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
                 $days = isset( $albumSettings['time_last'])?$albumSettings['time_last']:4;
+                $order = isset( $albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
+               
 
                 if ( isset($category) && !empty($category) ) {
                     $albums = $cm->find_by_category('Album',
                                         $category, 'fk_content_type=7 AND available=1',
                                         'ORDER BY  created DESC LIMIT 2');
                 } else {
-                    $albums = $cm->find('Album',
+                    if($order == 'favorite') {
+                        $albums = $cm->find('Album',
+                                        'fk_content_type=7 AND available=1 ',
+                                        ' ORDER BY favorite DESC,  created DESC LIMIT '.$total);
+                    }else {
+                        $albums = $cm->find('Album',
                                         'fk_content_type=7 AND available=1 AND '.
                                         'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                                         ' ORDER BY views DESC,  created DESC LIMIT '.$total);
-
+                    }
                 }
               
 				$tpl->assign('albums', $albums);

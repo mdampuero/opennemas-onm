@@ -129,7 +129,7 @@
             <table style="width:95%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
                 <tr>
                     <td>
-                        <h2>{t}Image for frontpage:{/t}</h2>
+                        <h2>{t}Images for album:{/t}</h2>
                     </td>
                     <td  align='center'>
                             <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
@@ -161,7 +161,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <label for="title">{t}Footer image:{/t}</label>
+                        <label for="title">{t}Footer text for image:{/t}</label>
                         <input type="text" id="img_footer" name="img_footer" title="Imagen" value="" size="50" />
                     </td>
                 </tr>

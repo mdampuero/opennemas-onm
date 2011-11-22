@@ -1688,12 +1688,13 @@ div.action-bar .right{
 			border:5px solid transparent;
 			z-index:20;
 		}
-        #media-browser .image-preview{
+        #media-browser .image-preview {
             width:144px;
             height:95px;
             border:1px solid #bfbfbf;
+            text-align: center;
         }
-         #media-browser .image-preview:hover{           
+         #media-browser .image-preview:hover {           
             border:1px solid transparent;
         }
         

@@ -31,10 +31,10 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('album');
 
-$category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
+$category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
 
 if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
+    $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING);
 }
 
 $ccm = ContentCategoryManager::get_instance();
@@ -71,10 +71,8 @@ switch($action) {
         }
 
         $cm = new ContentManager();
-
-        $rawCategory = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
-        $tpl->assign('raw_category', $rawCategory);
-        if ($rawCategory == 'favorite') {
+ 
+        if ($category == 'favorite') {
             $albums = $cm->find_all('Album', 'favorite =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
@@ -87,7 +85,7 @@ switch($action) {
                 }
             }
 
-        } elseif ($rawCategory === 'all') {
+        } elseif ($category === 'all') {
             $albums = $cm->find_all('Album', 'available =1', 'ORDER BY  created DESC '.$limit);
             if(!empty($albums)) {
                 foreach ($albums as &$album) {
