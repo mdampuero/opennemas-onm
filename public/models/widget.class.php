@@ -213,6 +213,32 @@ class Widget extends Content
         }
         return true;
     }
+    
+    public static function getAllInteligentWidgets()
+    {
+        $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $allWidgets = array();
+        
+        if(is_dir($path)){
+            $objects = scandir($path);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
+                        $objectWords = explode('_', substr($object, 7, -10));
+                        $name = '';
+                        foreach ($objectWords as $word) {
+                            $name .= ucfirst($word);
+                        }
+                        
+                        $allWidgets[] .=  $name;
+                    }
+                }
+            }
+        }
+        return $allWidgets;
+    }
+    
+    
     /**
      * Delete
      *

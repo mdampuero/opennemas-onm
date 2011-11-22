@@ -6,6 +6,24 @@
 submitForm = function() {
     document.getElementById('formulario').submit();
 };
+        
+toogleTiny = function(value) {
+    if(value == 'html') {
+        $('toggle-btn').show();
+        $('widget_textarea').show();
+        $('select-widget').hide();
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    } else if (value == 'intelligentwidget') {
+        $('toggle-btn').hide();
+        $('widget_textarea').hide();
+        $('select-widget').show();
+    } else {
+        $('toggle-btn').hide();
+        $('widget_textarea').show();
+        $('select-widget').hide();
+        OpenNeMas.tinyMceFunctions.destroy( 'widget_content' );
+    }
+}
 </script>
 {/block}
 
@@ -65,11 +83,12 @@ submitForm = function() {
                 <label for="renderlet">{t}Widget type{/t}:</label>
             </td>
             <td>
-                <select name="renderlet" id="renderlet">
+                <select name="renderlet" id="renderlet" onChange="toogleTiny(this.value);">
+                    <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
                     <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
                     <option value="php" {if isset($widget) && $widget->renderlet == 'php'}selected="selected"{/if}>{t}PHP{/t}</option>
                     <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
-                    <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
+                    
                 </select>
             </td>
         </tr>
@@ -94,13 +113,23 @@ submitForm = function() {
         <tr class="widget-content">
             <td valign="top" align="right" style="padding:4px;">
                 <label>{t}Content{/t}:</label>
-                {if isset($widget) && $widget->renderlet == 'html'}
-                <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('widget_content');return false;" href="#">
-                    <img border="0" alt="" src="http://www.retrincos.info/admin/themes/default/images//users_edit.png"></a>
-                {/if}
+                <div id="toggle-btn" style="float:right;{if isset($widget) && $widget->renderlet == 'html'}display:inline{else}display:none{/if}">
+                    <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('widget_content');return false;" href="#">
+                        <img border="0" alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
+                </div>
             </td>
             <td>
-                <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
+                <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:none{else}display:inline{/if}">
+                    <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
+                </div>
+                
+                <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:inline{else}display:none{/if}">
+                    <select name="all-widgets" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
+                        {foreach from=$all_widgets item=w}
+                        <option value="{$w}" {if isset($widget) && $widget->content == $w}selected="selected"{/if}>{$w}</option>
+                        {/foreach}
+                    </select>
+                </div>
                 <br/><br/>
             </td>
         </tr>
@@ -116,11 +145,10 @@ submitForm = function() {
 </form>
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript" language="javascript">
+    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+    OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
 {if isset($widget) && $widget->renderlet == 'html'}
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-        OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 {/if}
 </script>
 {/block}

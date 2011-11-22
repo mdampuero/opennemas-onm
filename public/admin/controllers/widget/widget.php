@@ -27,6 +27,8 @@ switch($action) {
         if(isset($_REQUEST['category'])) {
             $_SESSION['categoria'] = $_REQUEST['category'];
         }
+        $allInteligentWidgets = Widget::getAllInteligentWidgets();
+        $tpl->assign('all_widgets', $allInteligentWidgets);
         $tpl->assign('id', $id);
         $tpl->assign('widget', $widget);
         $tpl->display('widget/edit.tpl');
@@ -34,6 +36,8 @@ switch($action) {
     } // Executa tamén new
 
     case 'new': {
+        $allInteligentWidgets = Widget::getAllInteligentWidgets();
+        $tpl->assign('all_widgets', $allInteligentWidgets);
         $tpl->display('widget/edit.tpl');
         break;
     }
