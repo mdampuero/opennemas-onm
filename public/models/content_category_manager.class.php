@@ -88,7 +88,7 @@ class ContentCategoryManager {
      * @return array Array with Content_category objects
     */
     function populate_categories() {
-        $sql = 'SELECT * FROM content_categories';
+        $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {

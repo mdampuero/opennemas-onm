@@ -79,6 +79,7 @@ if( isset($_REQUEST['action']) ) {
                    $categories[] = $cate;
                }
             }
+            $tpl->assign('configurations',s::get('section_settings'));
             $tpl->assign('allcategorys', $categories);
 
             $tpl->display('category/form.tpl');
