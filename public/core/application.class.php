@@ -473,7 +473,7 @@ class Application
         require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
  
         // Creates a new Browscap object (loads or creates the cache)
-        $bc = new Browscap( APPLICATION_PATH .DS.'vendor'.DS.'cache');
+        $bc = new Browscap( APPLICATION_PATH .DS.'tmp'.DS.'cache');
         $browser = $bc->getBrowser(); //isBanned
 
         if (
