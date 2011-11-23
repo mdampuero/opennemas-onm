@@ -195,7 +195,10 @@ Deny from all
 
     RewriteRule ^boletin.html$ newsletter/
 
-    ErrorDocument 404 /controllers/404.html
+    ErrorDocument 400 /controllers/error.php?errordoc=400
+    ErrorDocument 403 /controllers/error.php?errordoc=403
+    ErrorDocument 404 /controllers/error.php?errordoc=404
+    ErrorDocument 500 /controllers/error.php?errordoc=500 
 </IfModule>
 
 <IfModule mod_mime.c>
