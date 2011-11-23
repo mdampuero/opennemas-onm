@@ -38,7 +38,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 }else{
     if(preg_match('@rss@',$_REQUEST['action'])) {
         $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
-        $subcategory_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
+        $subcategory_name = ((isset($_REQUEST['subcategory_name']) ? $_REQUEST['subcategory_name'] : ''));
     } else {
         if(!empty($articleID)){
             $article = new Article($articleID);
@@ -379,14 +379,14 @@ if(isset($_REQUEST['action']) ) {
 
                     // If frontpage contains a SUBCATEGORY the SQL request will be diferent
 
-                    if (isset($subcategory_name)) { $category_name = $subcategory_name; }
+                    if (isset($subcategory_name) && !empty ($subcategory_name)) { $category_name = $subcategory_name; }
 
                     $articles_home = $cm->find_by_category_name('Article',
                                                                 $category_name,
                                                                 'contents.content_status=1 AND contents.frontpage=1 AND '
                                                                 .'contents.available=1 AND contents.fk_content_type=1',
                                                                 'ORDER BY created DESC LIMIT 0,50');
-
+                                                        
                     foreach ($articles_home as $i => $article) {
                         if (isset($article->img1) && $article->img1 != 0) {
                             $photos[$article->id] = new Photo($article->img1);
@@ -401,7 +401,7 @@ if(isset($_REQUEST['action']) ) {
                 // Filter by scheduled {{{
                 $articles_home = $cm->getInTime($articles_home);
                 // }}}
-
+                
                 $tpl->assign('title_rss', strtoupper($title_rss));
                 $tpl->assign('rss', $articles_home);
 
