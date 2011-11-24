@@ -124,7 +124,7 @@ toogleTiny = function(value) {
                 </div>
                 
                 <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:inline{else}display:none{/if}">
-                    <select name="all-widgets" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
+                    <select name="content" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
                         {foreach from=$all_widgets item=w}
                         <option value="{$w}" {if isset($widget) && $widget->content == $w}selected="selected"{/if}>{$w}</option>
                         {/foreach}
