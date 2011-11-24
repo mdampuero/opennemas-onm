@@ -12,6 +12,15 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
         <ul class="old-button">
+                
+            {acl isAllowed="ARTICLE_CREATE"}
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
+                    <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New article{/t}
+                </a>
+            </li>
+            {/acl}
+            <li class="separator"></li>
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
@@ -59,6 +68,7 @@
                      <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                  </a>
             </li>
+          
         </ul>
     </div>
 </div>

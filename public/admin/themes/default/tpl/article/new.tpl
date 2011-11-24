@@ -65,10 +65,11 @@ if($('starttime')) {
 			<li>
 				<a href="#edicion-extra">{t}Article parameters{/t}</a>
 			</li>
-<!--            <li>
-				<a href="#avanced-custom">{t}Article customize{/t}</a>
-			</li>-->
-      
+             {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+             <li>
+				<a id="avanced-custom-button" href="#avanced-custom">{t}Article customize{/t}</a>
+			</li> 
+             {/is_module_activated}
 			{if isset($article) && is_object($article) && !$article->isClone()}
 			<li>
 				<a href="#comments">{t}Comments{/t}</a>
@@ -199,6 +200,7 @@ if($('starttime')) {
 									$('title_int').value = $F('title');
 									get_tags($('title_int').value);
 								}
+
 							});
 							/* ]]> */
 							</script>
@@ -326,6 +328,8 @@ if($('starttime')) {
 								/>
 						</td>
 					</tr>
+
+					
 					<tr>
 						<td valign="top" style="padding:4px;">
 							<label for="starttime">{t}Publication start date:{/t}</label>
@@ -353,116 +357,14 @@ if($('starttime')) {
 					</tr>
 
 				</tbody>
-			</table>
-		</div>
-{*
-        <div class="panel" id="avanced-custom" style="width:98%">
-			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="600">
-			<tbody>
-            <tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="agency">{t}Agency bulletin{/t}</label>
-                </td>
-				<td style="padding:4px;" >
-					<input 	type="text" id="agencyWeb" name="params['agencyWeb']" title="{t}Agency{/t}"
-							 style="width:98%" tabindex="5"
-							{if is_object($article)}
-								value="{$article->params['agencyWeb']|clearslash|escape:"html"}"
-							{else}
-								value="{setting name=site_agency}"
-							{/if}
-						/>
-				</td>
-			</tr>
-            <tr><td colspan="2"> <hr/> </td></tr>
-            <tr><td colspan="2"> <h2> {t}Customize for home{/t} </h2> </td></tr>
-             <tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="agency">{t}Home Title{/t}</label>
-                </td>
-				<td style="padding:4px;" >
-					<input 	type="text" id="titleHome" name="params['titleHome']" title="{t}Title for Home{/t}"
-							style="width:98%" tabindex="5"
-							{if is_object($article)}
-								value="{$article->params['titleHome']|clearslash|escape:"html"}"
-							{else}
-								value=""
-							{/if}
-						/>
-				</td>
-            </tr>
-            <tr>
-				<td style="padding:4px;" valign="top" >
-                    <label>{t}Size for title{/t}</label>
-                </td>
-				<td style="padding:4px;" >
-                        <select name="title_size" id="title_size" class="required" >
-                            <option value="22" {if $article->title_size eq "22"} selected{/if}>22px</option>
-                            <option value="24" {if $article->title_size eq "24"} selected{/if}>24px</option>
-                            <option value="26" {if $article->title_size eq "26" || !$article->title_size} selected{/if}>26px</option>
-                            <option value="28" {if $article->title_size eq "28"} selected{/if}>28px</option>
-                            <option value="30" {if $article->title_size eq "30"} selected{/if}>30px</option>
-                            <option value="32" {if $article->title_size eq "32"} selected{/if}>32px</option>
-                            <option value="34" {if $article->title_size eq "34"} selected{/if}>34px</option>
-                            <option value="36" {if $article->title_size eq "36"} selected{/if}>36px</option>
-                            <option value="38" {if $article->title_size eq "38"} selected{/if}>38px</option>
-                            <option value="40" {if $article->title_size eq "40"} selected{/if}>40px</option>
-                            <option value="42" {if $article->title_size eq "42"} selected{/if}>42px</option>
-                        </select>
-                </td>
-			</tr>
-            <tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="agency">{t}Home Subtitle{/t}</label>
-                </td>
-				<td style="padding:4px;" >
-					<input 	type="text" id="titleHome" name="params['subtitleHome']" title="{t}Title for Home{/t}"
-							 style="width:98%" tabindex="5"
-							{if is_object($article)}
-								value="{$article->params['subtitleHome']|clearslash|escape:"html"}"
-							{else}
-								value=""
-							{/if}
-						/>
-				</td>
-			</tr>
-			 
-			<tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="description">{t}Home summary{/t}</label>
-				</td>
-				<td style="padding:4px;" >
-					<textarea name="sumary_home" id="sumary_home"
-						title="Resumen noticia para home" style="width:100%; height:8em;" tabindex="-1">{$article->params['summary_home']|clearslash}</textarea>
-				</td>
-			</tr>
-             <tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="description">{t}Image position{/t}</label>
-				</td>
-				<td style="padding:4px;" >
 
-                <select name="img_pos" id="img_pos" class="required">
-                    <option value="left" {if $article->img_pos eq "left" || !$article->img_pos} selected{/if}>Izquierda</option>
-                    <option value="right" {if $article->img_pos eq "right"} selected{/if}>Derecha</option>
-                    <option value="none" {if $article->img_pos eq "none"} selected{/if}>Justificada(300px)</option>
-                </select>
-                </td>
-            </tr>
-             <tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="description">{t}Image for home{/t}</label>
-				</td>
-				<td style="padding:4px;" >
-                    {include file="article/partials/_load_image.tpl"}
-                </td>
-            </tr>
-          
-            
-			</tbody>
 			</table>
 		</div>
-*}
+ 
+        <div class="panel" id="avanced-custom" style="width:98%">
+			{include file ="article/partials/_article_avanced_customize.tpl"}
+		</div>
+ 
     
 		{if $smarty.request.action eq 'read'}
 		<div class="panel" id="comments" style="width:98%">
@@ -499,11 +401,11 @@ if($('starttime')) {
  
 		{/if}
 
-
-		<div class="panel" id="contenidos-relacionados" style="width:98%">
-			{include file="article/partials/_related.tpl"}
-		</div>
-
+        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+            <div class="panel" id="contenidos-relacionados" style="width:98%">
+                {include file="article/partials/_related.tpl"}
+            </div>
+        {/is_module_activated}
 		{if isset($article) && is_object($article)}
 		<div class="panel" id="elementos-relacionados" style="width:98%">
 			<br />
@@ -521,6 +423,13 @@ if($('starttime')) {
 										{$content_types.$ct}
 									</td>
 									<td width="120"> {$losrel[n]->category_name|clearslash} </td>
+                                    <td width='120'> 
+                                        <select>
+                                            <option>{t}Gallery{/t} (album)</option>
+                                             <option>{t}Link{/t} (todos)</option>
+                                             <option>{t}Incrustado{/t} (video album, image)</option>
+                                        </select>
+                                    </td>
 									<td width="120">
 										<a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
 											<img src="{$params.IMAGE_DIR}btn_no.png" border="0" /> </a>
@@ -542,13 +451,18 @@ if($('starttime')) {
 						<table  width='99%'>
 							<tr>
 								<td>{$intrel[n]->title|clearslash|escape:'html'}  </td>
-								<td width='120'> {* if $intrel[n]->content_type eq 1}Noticia{elseif  $intrel[n]->content_type eq 7} Galeria
-									{elseif  $intrel[n]->content_type eq 9} Video {elseif  $intrel[n]->content_type eq 4} Opinion
-									{elseif $intrel[n]->content_type eq 3} Fichero {/if *}
+								<td width='120'> 
 									{assign var="ct" value=$intrel[n]->content_type}
 									{$content_types.$ct}
 								</td>
 								<td width='120'> {$intrel[n]->category_name|clearslash} </td>
+                                <td width='120'> 
+                                    <select>
+                                        <option>{t}Gallery{/t} (album)</option>
+                                         <option>{t}Link{/t} (todos)</option>
+                                         <option>{t}Incrustado{/t} (video album, image)</option>
+                                    </select>
+                                </td>
 								<td width='120'>
 									<a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
 										<img src="{$params.IMAGE_DIR}btn_no.png" border="0" /> </a>

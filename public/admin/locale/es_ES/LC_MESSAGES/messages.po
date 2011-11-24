@@ -7036,3 +7036,30 @@ msgstr "Gestor de caché"
 
 #~ msgid "recomended"
 #~ msgstr "recomendado"
+
+
+# Added
+
+msgid "Show in frontpage"
+msgstr "Ver en portada"
+
+msgid "Show in inner article"
+msgstr "Ver en articulo interior"
+
+msgid  "Agency in Bulletin"
+msgstr "Firma para Boletín"
+
+msgid  "Frontpage section"
+msgstr "Portada de Sección"
+
+msgid  "Size for title"
+msgstr "Tamaño del Título"
+
+msgid  "Image position in frontpage"
+msgstr "Posición de la imagen en portada"
+
+msgid  ""
+msgstr ""
+
+msgid  ""
+msgstr ""

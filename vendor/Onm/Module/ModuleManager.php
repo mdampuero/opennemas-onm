@@ -119,7 +119,8 @@ class ModuleManager {
                 'LOG_SQL',
                 'BOOK_MANAGER',
                 'SPECIAL_MANAGER',
-                'SCHEDULE_MANAGER'
+                'SCHEDULE_MANAGER',
+                'AVANCED_ARTICLE_MANAGER'
 
             );
         }
