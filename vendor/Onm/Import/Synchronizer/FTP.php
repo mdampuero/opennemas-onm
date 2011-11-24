@@ -24,60 +24,71 @@ class FTP {
      *
      * @throws Exception, if something went wrong while connecting to FTP server
      */
-	public function __construct($params = null)
-	{
+    public function __construct($params = null)
+    {
+        $this->params = $params;
 
-		$this->ftpConnection = @ftp_connect($params['server']);
-		// test if the connection was successful
-		if (!$this->ftpConnection) {
-			throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
-		}
+        $this->ftpConnection = @ftp_connect($params['server']);
+        // test if the connection was successful
+        if (!$this->ftpConnection) {
+            throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
+        }
 
-		// if there is a ftp login configuration use it
-		if (isset($params['user'])) {
+        // if there is a ftp login configuration use it
+        if (isset($params['user'])) {
 
-			$loginResult = ftp_login($this->ftpConnection,
-									 $params['user'],
-									 $params['password']);
+            $loginResult = ftp_login($this->ftpConnection,
+                                     $params['user'],
+                                     $params['password']);
 
-			if (!$loginResult) {
-				throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
-			}
-			return $this;
-		}
+            if (!$loginResult) {
+                throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
+            }
+            return $this;
+        }
 
-	}
+    }
 
     /**
-	 * Downloads files from an FTP to a $cacheDir.
-	 *
-	 * @param string $cacheDir Path to the directory where save files to.
-	 *
-	 * @return array counts of deleted and downloaded files
-	 *
-	 * @throws <b>Exception</b> $cacheDir not writable.
-	 */
+     * Downloads files from an FTP to a $cacheDir.
+     *
+     * @param string $cacheDir Path to the directory where save files to.
+     *
+     * @return array counts of deleted and downloaded files
+     *
+     * @throws <b>Exception</b> $cacheDir not writable.
+     */
     public function downloadFilesToCacheDir($cacheDir, $excludedFiles = array())
     {
 
         $files = ftp_nlist($this->ftpConnection, ftp_pwd($this->ftpConnection));
+
         self::cleanWeirdFiles($cacheDir);
-		$deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
+        $deletedFiles = self::cleanFiles($cacheDir,$files, $excludedFiles);
 
         $downloadedFiles = 0;
 
         if (is_writable($cacheDir)) {
             $elements = array();
             if (count($files) > 0) {
-				foreach($files as $file) {
-					$elements []= $file;
-					$localFilePath = $cacheDir.DIRECTORY_SEPARATOR.basename($file);
-					if (!file_exists($localFilePath)){
-						ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.basename($file), $file, FTP_BINARY);
-						$downloadedFiles++;
-					}
-				}
-			}
+                foreach($files as $file) {
+
+                    
+                    if (!isset($this->params['allowed_file_extesions_pattern']) 
+                        || !preg_match('@'.$this->params['allowed_file_extesions_pattern'].'@', $file)
+                    ) {
+                        continue;
+                    } else {
+                        $elements []= $file;
+                        $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file));
+                        if (!file_exists($localFilePath)){
+                            ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file)), $file, FTP_BINARY);
+                            $downloadedFiles++;
+                        }
+                    }
+                    
+                }
+            }
         } else {
             throw new Exception(sprintf(_('Directory %s is not writable.'),$cacheDir));
         }
@@ -89,35 +100,35 @@ class FTP {
 
     }
 
-	/**
-	 * Remove empty or invalid files from $cacheDir.
-	 *
-	 * @param string $cacheDir The directory where remove files from.
-	 *
-	 * @return array list of deleted files
-	 */
-	public function cleanWeirdFiles($cacheDir)
-	{
-		$fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+    /**
+     * Remove empty or invalid files from $cacheDir.
+     *
+     * @param string $cacheDir The directory where remove files from.
+     *
+     * @return array list of deleted files
+     */
+    public function cleanWeirdFiles($cacheDir)
+    {
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
 
-		$fileListingCleaned = array();
+        $fileListingCleaned = array();
 
         foreach($fileListing as $file) {
-			if (filesize($file) < 2) {
-				unlink($file);
-	            $fileListingCleaned []= basename($file);
-			}
+            if (filesize($file) < 2) {
+                unlink($file);
+                $fileListingCleaned []= basename($file);
+            }
         }
 
-		return	$fileListingCleaned;
-	}
+        return  $fileListingCleaned;
+    }
 
     /**
      * Clean downloaded files in cacheDir that are not present in server
      *
-     * @param string 	$cacheDir 		the directory where remove files
-     * @param string 	$serverFiles 	the list of files present in server
-     * @param string 	$localFiles 	the list of local files
+     * @param string    $cacheDir       the directory where remove files
+     * @param string    $serverFiles    the list of files present in server
+     * @param string    $localFiles     the list of local files
      *
      * @return boolean, true if all went well
     */
@@ -130,7 +141,7 @@ class FTP {
 
             $serverFileList = array();
             foreach ($serverFiles as $key) {
-                $serverFileList []= basename($key);
+                $serverFileList []= strtolower(basename($key));
             }
 
             foreach ($localFileList as $file) {

@@ -269,6 +269,9 @@ class Europapress implements \Onm\Import\Importer
         $elementsCount = 0;
         foreach ($files as $file) {
 
+            if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
+                continue;
+            }
             try {
                 $element = new \Onm\Import\DataSource\Europapress($this->syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {

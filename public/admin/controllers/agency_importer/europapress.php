@@ -35,7 +35,7 @@ Acl::checkOrForward('IMPORT_EPRESS');
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
 
 // Initialize request parameters
-$page   = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
+$page   = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 1)) );
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
@@ -130,10 +130,14 @@ switch($action) {
         $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
 
         $find_params = array(
-            'category' => filter_input ( INPUT_GET, 'filter_category' , FILTER_SANITIZE_STRING,
-                                        array('options' => array('default' => '*')) ),
-            'title' => filter_input ( INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
-                                     array('options' => array('default' => '*')) ),
+            'category' => filter_input(
+                INPUT_GET, 'filter_category' , FILTER_SANITIZE_STRING,
+                array('options' => array('default' => '*'))
+            ),
+            'title' => filter_input(
+                INPUT_GET, 'filter_title', FILTER_SANITIZE_STRING,
+                array('options' => array('default' => '*'))
+            ),
         );
 
 
@@ -251,9 +255,7 @@ switch($action) {
                 'server'    => $serverAuth['server'],
                 'user'      => $serverAuth['username'],
                 'password'  => $serverAuth['password'],
-                'allowed_file_extesions' => array(
-                    'xml', 'XML',
-                )
+                'allowed_file_extesions_pattern' => '.*\.xml$',
             );
 
             $epSynchronizer = \Onm\Import\Europapress::getInstance();
