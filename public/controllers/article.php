@@ -40,10 +40,12 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
         $category_name = ((isset($_REQUEST['category_name']) ? $_REQUEST['category_name'] : ''));
         $subcategory_name = ((isset($_REQUEST['subcategory_name']) ? $_REQUEST['subcategory_name'] : ''));
     } else {
-        if(!empty($articleID)){
+        if(!empty($articleID) ){
             $article = new Article($articleID);
 
-             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri) {
+             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri 
+                     && !preg_match('@print@',$_REQUEST['action'])
+                     && !preg_match('@send@',$_REQUEST['action'])) {
                  Application::forward301('/'.$article->uri);
              }
             $article->category_name = $article->loadCategoryName($articleID);
@@ -108,7 +110,7 @@ if(isset($_REQUEST['action']) ) {
                 $print_url .= $subcategory_name . '/';
             }
 
-            $print_url .= $article->pk_content . '.html';
+            $print_url .= $dirtyID . '.html';
             $tpl->assign('print_url', $print_url);
             $tpl->assign('sendform_url', '/controllers/article.php?action=sendform&article_id=' . $_GET['article_id'] . '&category_name=' .
                                         $category_name . '&subcategory_name=' . $subcategory_name);
@@ -516,7 +518,7 @@ if(isset($_REQUEST['action']) ) {
                 $print_url .= $subcategory_name . '/';
             }
 
-            $print_url .= $article->pk_content . '.html';
+            $print_url .= $dirtyID . '.html';
             $tpl->assign('print_url', $print_url);
 
             $cat = $ccm->getByName($section);
@@ -544,6 +546,7 @@ if(isset($_REQUEST['action']) ) {
             //Ya se iniciliza en la linea 50
              //$article = new Article($_REQUEST['article_id']);
             $tpl->assign('article', $article);
+            $tpl->assign('article_id', $dirtyID);
 
             $tpl->assign('token', $token);
             $tpl->assign('category_name', $category_name);
