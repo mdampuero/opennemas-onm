@@ -36,28 +36,21 @@ switch($action) {
 
         $configurationsKeys = array(
                                     'site_title', 'site_description','site_keywords','site_agency',
-                                    'time_zone','site_language','mail_server',
-                                    'mail_username','mail_password','google_maps_api_key',
+                                    'time_zone','site_language','site_footer',
+                                    'recaptcha', 'google_maps_api_key',
                                     'google_custom_search_api_key','facebook',
-                                    'google_analytics','piwik',
-                                    'recaptcha',
-                                    'items_per_page',
-                                    'refresh_interval',
-                                    'advertisements_enabled',
-                                    'log_enabled', 'log_db_enabled', 'log_level',
-                                    'activated_modules'
+                                    'google_analytics','piwik',                                    
+                                    'items_per_page','refresh_interval' 
                                     );
 
         $configurations = s::get($configurationsKeys);
 
         $tpl->assign(
-                     array(
-                            'available_modules' => ModuleManager::getAvailableModules(),
+                     array(                            
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
                             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
-                            'logLevels' => array('normal' => _('Normal'), 'verbose' => _('Verbose'), 'all' => _('All (Paranoic mode)') ),
-                        )
+                         )
                     );
 
         $tpl->display('system_settings/system_settings.tpl');
@@ -67,11 +60,7 @@ switch($action) {
 
         unset($_POST['action']);
         unset($_POST['submit']);
-
-        $_POST['advertisements_enabled'] = array_key_exists('advertisements_enabled',$_POST);
-        $_POST['log_enabled'] = array_key_exists('log_enabled',$_POST);
-        $_POST['log_db_enabled'] = array_key_exists('log_db_enabled',$_POST);
-
+ 
 
         foreach ($_POST as $key => $value ) {
             s::set($key, $value);

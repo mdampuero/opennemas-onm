@@ -72,13 +72,10 @@ textarea{
 
         <ul id="tabs">
             <li><a href="#general">{t}General{/t}</a></li>
-            <li><a href="#mail">{t}Mail{/t}</a></li>
-            <li><a href="#log">{t}Log{/t}</a></li>
+            <li><a href="#misc">{t} Opennemas Settings{/t}</a</li>
             <li><a href="#external">{t}External Services{/t}</a></li>
-            <li><a href="#misc">{t}Miscelanous{/t}</a</li>
-            {acl isAllowed="ONLY_MASTERS"}
-                <li><a href="#modules">{t}Modules{/t}</a></li>
-            {/acl}
+            
+          
         </ul>
 
         <div id="general" class="panel">
@@ -128,6 +125,40 @@ textarea{
 
                         </td>
                     </tr>
+                     <tr valign="top">
+                        <th scope="row">
+                            <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
+                        </th>
+                        <td>
+                            <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+       
+        <div id="misc" class="panel">
+           <table>
+                <tbody>
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
+                        </th>
+                        <td>
+                            <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
+                            <span class="default-value"></span>
+                        </td>
+                        <td valign="top">
+                            <div class="help-block margin-left-1">
+                                <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
+                                <div class="content"> {t}Default: 900 secs{/t} </div>
+                            </div>
+                        </td>
+                    </tr>
                     <tr valign="top">
                         <th scope="row">
                             <label for="site_title">{t}Time Zone:{/t}</label>
@@ -150,101 +181,28 @@ textarea{
 
                         </td>
                     </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="items_per_page">{t}Items per page:{/t}</label>
+                        </th>
+                        <td>
+                            <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
+                        </td>
+                        <td valign="top">     
+                            <div class="help-block margin-left-1">
+                                <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
+                                <div class="content">{t}Default: 20 elements{/t}</div>
+                            </div>
+                        
+
+                        </td>
+                    </tr>
+                    
                 </tbody>
             </table>
         </div>
-        <div id="mail" class="panel">
-           <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="mail_server">{t}Mail server{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="mail_server" name="mail_server" value="{$configs['mail_server']|default:""}">
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="mail_username">{t}Username{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="mail_username" name="mail_username" value="{$configs['mail_username']|default:""}">
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="mail_password">{t}Password{/t}</label>
-                        </th>
-                        <td>
-                            <input type="password" id="mail_password" name="mail_password" value="{$configs['mail_password']|default:""}">
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div id="log" class="panel">
-            <fieldset>
-                <legend>{t}System log{/t}</legend>
-                <table>
-                    <tbody>
-                        <tr valign="top">
-                            <th scope="row">
-                                <label for="log_enabled">{t}Enable Log:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
-                                <span class="default-value">{t}Default: true{/t}</span>
-                            </td>
-                        <td>
-
-                        </td>
-                        </tr>
-                        <tr valign="top">
-                            <th scope="row">
-                                <label for="site_title">{t}Log level:{/t}</label>
-                            </th>
-                            <td>
-                                {html_options name=log_level options=$logLevels selected=$configs['log_level']}
-                                <span class="default-value">{t}Default: true{/t}</span>
-                            </td>
-                        <td>
-
-                        </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-            <fieldset>
-                <legend>{t}Database log{/t}</legend>
-                <table>
-                    <tbody>
-                        <tr valign="top">
-                            <th scope="row">
-                                <label for="log_db_enabled">{t}Enable Log:{/t}</label>
-                            </th>
-                            <td>
-                                <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
-                                <span class="default-value">{t}Default: false{/t}</span>
-                            </td>
-                        <td>
-
-                        </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
+ 
 
         <div id="external" class="panel">
             <fieldset>
@@ -404,72 +362,6 @@ textarea{
 
             </fieldset>
         </div>
-
-        <div id="misc" class="panel">
-           <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="advertisements_enabled">{t}Enable advertisements:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="checkbox" id="advertisements_enabled" name="advertisements_enabled" {if ($configs['advertisements_enabled'])}checked{/if} />
-                            <span class="default-value">{t}Default: true{/t}</span>
-                        </td>
-                        <td valign="top">
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="items_per_page">{t}Items per page:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                            <span class="default-value">{t}Default: 20 elements{/t}</span>
-                        </td>
-                        <td valign="top">
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                            <span class="default-value">{t}Default: 900 secs{/t}</span>
-                        </td>
-                        <td valign="top">
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        {acl isAllowed="ONLY_MASTERS"}
-        <div id="modules" class="panel">
-           <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="mail_server">{t}Activated modules{/t}</label>
-                        </th>
-                        <td>
-                            {html_checkboxes name='activated_modules' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
-                        </td>
-                        <td>
-                            <div class="help-block warning margin-left-1">
-                                <div class="title"><h4>{t}Dragons Ahead!{/t}</h4></div>
-                                <div class="content">{t escape=off}This section is experimental and could not work as espected{/t}</div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        {/acl}
 
 
         <div class="action-bar clearfix">
