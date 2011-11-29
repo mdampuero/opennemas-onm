@@ -1,0 +1,21 @@
+[original-database]
+type=mysql
+host=localhost
+user=root
+password=1234
+database=idealgallego_joomla
+
+[target-database]
+type=mysql
+host=localhost
+user=root
+password=1234
+database=idealgallego
+
+[categories]
+108=108 ; A corunha
+107=107 ; Area Metropolitana
+109=109 ; Deportes
+125=125 ; Más - Editorial
+159=159 ; 
+452=452 ; 
