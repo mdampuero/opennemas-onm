@@ -245,7 +245,8 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
                 && file_exists($this->path_upload. $photo->path_file . $photo->name)){
                 $extension = $photo->type_img;
                 if(preg_match('/^(jpeg|jpg|gif|png)$/i', $extension)) {
-                    if(is_readable($this->path_upload . $photo->path_file . $photo->name)){
+                    if(is_readable($this->path_upload . $photo->path_file . $photo->name) && ($this->size>0)){
+                       
                         $thumb = new Imagick($this->path_upload . $photo->path_file . $photo->name);
 
                         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);

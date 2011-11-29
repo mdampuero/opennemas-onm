@@ -102,11 +102,11 @@
                                     <select id='pk_father' name='pk_father'>
                                         <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
                                         {section loop=$menues name=m}
-                                            <option value="{$menues[m]->pk_menu}" name="{$menues[m]->name|default:""}"
-                                                {if isset($menu) && $menu->pk_father eq  $menues[m]->pk_menu} selected {/if}>
-                                                    {$menues[m]->name}
+                                             {assign var=items value=$menues[m]->items}
+                                            <option value="{$items[0]->pk_item}" name="{$items[0]->title} in {$menues[m]->name|default:""}" style="font-weight:bold;" >
+                                                   Menu {$menues[m]->name}  </b>
                                             </option>
-                                            {assign var=items value=$menues[m]->items}
+                                           
                                             {if isset($items) && !empty($items)}
                                                 {section name=su loop=$items}
                                                     <option value="{$items[su]->pk_item}" name="{$items[su]->name|default:""}"
@@ -282,9 +282,10 @@
             <a title="Close" onclick="hideDiv();" class="close-reveal-modal">&#215;</a></div>
         </div>
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" size="100" name="items" id="items" value="" />
-        <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
-        <input type="hidden" id="forDelete" name="forDelete" value="" />
+        
+        <input type="text" name="id" id="id" value="{$menu->pk_menu|default:""}" />
+        <input type="text" size="100" name="items" id="items" value="" />        
+        <input type="text" id="forDelete" name="forDelete" value="" />
     </div><!--fin wrapper-content-->
 
 </form>

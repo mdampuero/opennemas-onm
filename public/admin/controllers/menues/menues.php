@@ -46,19 +46,27 @@ switch($action) {
             }
         }
 
-
+        $withoutFather = array();
         foreach($subMenues as $submenu){
-            //TODO: mejorar, buscamos su menu padre ya que solo sabemos el item
-              foreach($list as $menu) {
-                    foreach($menu->items as $item){
-                        if($item->pk_item == $submenu->pk_father) {
-                            $subList[$item->pk_menu][] = $submenu;
-                        }
+            //TODO: mejorar, buscamos su menu padre para pintarlo ya que solo sabemos el item
+            $without = true;
+            foreach($list as $menu) {
+                foreach($menu->items as $item){
+                    if($item->pk_item == $submenu->pk_father) {
+                        $subList[$item->pk_menu][] = $submenu;
+                        $without = false;
+                    }                        
                 }
+               
+            }
+            if(($submenu->pk_father !=0) && $without) {
+                $withoutFather[] = $submenu;
             }
         }
 
-        $tpl->assign( array('menues'=>$list, 'subMenues'=>$subList) );
+        $tpl->assign( array('menues'=>$list, 
+            'subMenues'=>$subList, 
+            'withoutFather'=>$withoutFather) );
 
 
         $tpl->display('menues/list.tpl');
@@ -184,13 +192,15 @@ switch($action) {
 
     case 'update':
 
+         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        
          Acl::checkOrForward('MENU_UPDATE');
 
          $_POST['params'] = serialize(array('description'=>$_POST['description']));
          //TODO:get site_name;
          $_POST['site'] = SITE;
 
-         $mn = new Menu();
+         $mn = new Menu($id);
          $menu = $mn->update($_POST);
 
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');

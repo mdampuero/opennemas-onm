@@ -51,11 +51,11 @@ class Menu
         //!(empty($data['name']))? '': $data['name'];
 
         $sql = "INSERT INTO menues ".
-               " (`name`, `params`, `site`, `pk_father`) " .
-               " VALUES (?,?,?,?)";
+               " (`name`, `params`, `site`, `pk_father`, `type`) " .
+               " VALUES (?,?,?,?,?)";
 
         $values = array(
-            $data["name"],$data["params"], $data["site"],$data['pk_father']
+            $data["name"],$data["params"], $data["site"],$data['pk_father'], 'user'
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -103,7 +103,7 @@ class Menu
 
     public function update($data)
     {
-       
+      
         $sql = "UPDATE menues"
                 ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=? "
                 ." WHERE pk_menu= ?" ;
@@ -122,11 +122,13 @@ class Menu
         $config = array('pk_father'=> $data['pk_father']);
        
         if(!empty($data['forDelete'])){
-            $forDelete = explode(',', $data['forDelete']);
+            $forDelete = explode(', ', $data['forDelete']);
+           
             array_shift($forDelete); //first is empty FIXME
 
             MenuItems::deleteItems($forDelete);
         }
+       
         MenuItems::setMenu($data['id'], $data['items'], $config);
     
         return true;

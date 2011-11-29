@@ -304,16 +304,19 @@ class MenuItems {
     }
 
     static public function deleteItems($items) {
+      
+        $sql= "DELETE FROM menu_items WHERE pk_item = ?";
+        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+        foreach($items as $item) { 
+            $resp = $GLOBALS['application']->conn->Execute($stmt, array($item) );
+         
+            if ( $resp === false) {
+                $error_msg = $GLOBALS['application']->conn->ErrorMsg();
+                $GLOBALS['application']->logger->debug('Error: '.$error_msg);
+                $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
 
-        $stmt = $GLOBALS['application']->conn->Prepare('DELETE FROM menu_items WHERE pk_item = ?');
-  
-        if ($GLOBALS['application']->conn->Execute($stmt, $items) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+            }
         }
-
 
         return true;
 
