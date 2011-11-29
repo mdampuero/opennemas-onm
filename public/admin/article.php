@@ -7,6 +7,8 @@ require_once('./session_bootstrap.php');
 require_once('articles_events.php');
 
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+use Onm\Settings as s,
+    Onm\Message as m;
 
 //require_once(SITE_LIBS_PATH.'Pager/Pager.php');
 require_once('controllers/utils_content.php');
@@ -55,7 +57,7 @@ if (isset($_REQUEST['action']) ) {
     switch ($_REQUEST['action']) {
 
         case 'list':
-
+          
             // Check if the user can edit frontpages
             if(!Acl::check('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
@@ -228,15 +230,14 @@ if (isset($_REQUEST['action']) ) {
 
         case 'list_pendientes':
 
-            if( !Privileges_check::CheckPrivileges('ARTICLE_PENDINGS')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_PENDINGS');
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
             if ($_REQUEST['category'] != 'todos') {
-                if( !Privileges_check::CheckAccessCategories($_REQUEST['category'])) {
-                    Privileges_check::AccessCategoryDeniedAction();
-                }
+                 if(!Acl::_C( $_REQUEST['category'])){                    
+                      m::add(_("you don't have enought privileges to see this category.") );
+                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');                 
+                 }
             } elseif (!Acl::_C($categoryID)) {
                 $categoryID = $_SESSION['accesscategories'][0];
                 $section = $ccm->get_name($categoryID);
@@ -261,7 +262,7 @@ if (isset($_REQUEST['action']) ) {
             if ($_REQUEST['category'] == 'todos') {
                 $articles = $cm->find('Article', 'fk_content_type=1 AND available=0', 'ORDER BY position ASC, created DESC ');
                 $tpl->assign('articles', $articles);
-                if(Acl::check('OPINION_ADMIN ')){
+                if(Acl::check('OPINION_ADMIN')){
                     $opinions = $cm->find('Opinion', 'fk_content_type=4 AND available=0 ',
                                             'ORDER BY created DESC, type_opinion DESC, title ASC');
                     $tpl->assign('opinions', $opinions);
@@ -323,15 +324,15 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'list_agency': 
-            if( !Privileges_check::CheckPrivileges('ARTICLE_PENDINGS')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_PENDINGS');
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
             if ($_REQUEST['category'] != 'todos') {
-                if( !Privileges_check::CheckAccessCategories($_REQUEST['category'])) {
-                    Privileges_check::AccessCategoryDeniedAction();
-                }
+                 if(!Acl::_C( $_REQUEST['category'])) {
+                      m::add(_("you don't have enought privileges to see this category.") );
+                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+                 }
+                
             }
             $tpl->assign('titulo_barra', 'Gesti&oacute;n de Agencias');
 
@@ -541,6 +542,8 @@ if (isset($_REQUEST['action']) ) {
 
         case 'create':
 
+            Acl::checkOrForward('ARTICLE_CREATE');
+            
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
             if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
             if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
@@ -548,10 +551,7 @@ if (isset($_REQUEST['action']) ) {
 
             $article = new Article();
             $_POST['fk_publisher']=$_SESSION['userid'];
-             if( !Privileges_check::CheckPrivileges('ARTICLE_CREATE', $_SESSION['privileges']) &&
-                ($articleCheck->fk_user_last_editor)!=$_SESSION['userid']) {
-                Privileges_check::AccessDeniedAction();
-            }
+             
             if($article->create( $_POST )) {
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
@@ -580,6 +580,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'update':
 
+           Acl::checkOrForward('ARTICLE_UPDATE'); 
            if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
@@ -593,16 +594,18 @@ if (isset($_REQUEST['action']) ) {
 
             $articleCheck = new Article();
             $articleCheck->read($_REQUEST['id']);
-            if( !Privileges_check::CheckPrivileges('ARTICLE_UPDATE', $_SESSION['privileges']) &&
-                ($articleCheck->fk_user_last_editor)!=$_SESSION['userid']) {
-                Privileges_check::AccessDeniedAction();
+             
+            if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+                m::add(_("You can't modify this content because you don't have enought privileges.") );
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
+                
+            } else {
+                $article = new Article();
+                $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
+
+                $article->update( $_REQUEST );
             }
-
-            $article = new Article();
-            $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
-
-            $article->update( $_REQUEST );
-
+            
             if( $_SESSION['desde']=='search_advanced'){
                 if(isset($_GET['stringSearch'])){
                  Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
@@ -611,6 +614,7 @@ if (isset($_REQUEST['action']) ) {
                     $_SESSION['_from']='home';
                 }
             }
+            
             if($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
             }elseif ($_SESSION['desde'] == 'europa_press_import') {
@@ -630,7 +634,7 @@ if (isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
         break;
 
-        case 'validate': {
+        case 'validate': 
 
             if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
@@ -643,6 +647,7 @@ if (isset($_REQUEST['action']) ) {
             $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
 
             if(!$_POST["id"]) {
+                Acl::checkOrForward('ARTICLE_CREATE');
                 $_POST['fk_publisher'] = $_SESSION['userid'];
 
                 //Estamos creando un nuevo artículo
@@ -650,72 +655,90 @@ if (isset($_REQUEST['action']) ) {
                     $tpl->assign('errors', $article->errors);
                 }
             } else {
-                $article->update( $_POST );
+                Acl::checkOrForward('ARTICLE_UPDATE');
+                $articleCheck = new Article();
+                $articleCheck->read($_REQUEST['id']);
+                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+                    m::add(_("You can't modify this content because you don't have enought privileges.") );
+                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
+
+                } else {
+                    $article->update( $_POST );
+                }
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=read&category=' . $_SESSION['_from'] .
                                  '&id=' . $article->id);
 
-        } break;
+         break;
 
         case 'preview':
 
-            $article = new Article();
+            
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
+            $article = new Article();
             if(!$_POST["id"] || empty($_POST["id"])) {
-                if( !Privileges_check::CheckPrivileges('ARTICLE_CREATE',$_SESSION['privileges'])) {
-                    Privileges_check::AccessDeniedAction();
-                }
-                $_POST['fk_publisher']=$_SESSION['userid'];
+                Acl::checkOrForward('ARTICLE_UPDATE');
+                $_POST['fk_publisher'] = $_SESSION['userid'];
                 //Estamos creando un nuevo artículo
+             
                 if(!$article->create( $_POST ))
                       $tpl->assign('errors', $article->errors);
             } else {
                 //Estamos atualizando un artículo
-                if( !Privileges_check::CheckPrivileges('ARTICLE_UPDATE',$_SESSION['privileges']) &&
-                     ($articleCheck->fk_user_last_editor)!=$_SESSION['userid']) {
-                    Privileges_check::AccessDeniedAction();
+                 Acl::checkOrForward('ARTICLE_UPDATE');
+                 $articleCheck = new Article();
+                 $articleCheck->read($_REQUEST['id']);
+              
+                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+                    m::add(_("You can't modify this content because you don't have enought privileges.") );
+                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
+
+                } else {
+                    $article->update( $_REQUEST );
                 }
-                $article->update( $_REQUEST );
             }
             Application::ajax_out($article->id);
         break;
 
         case 'delete':
+                Acl::checkOrForward('ARTICLE_DELETE');
                 $articleCheck = new Article();
                 $articleCheck->read($_REQUEST['id']);
 
-                if( !Privileges_check::CheckPrivileges('ARTICLE_DELETE',$_SESSION['privileges']) &&
-                    ($articleCheck->fk_user_last_editor)!=$_SESSION['userid']) {
-                    Privileges_check::AccessDeniedAction();
-                }
+                if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
+                    m::add(_("You can't modify this content because you don't have enought privileges.") );
+                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
 
-                $article = new Article($_REQUEST['id']);
-                $rel= new Related_content();
-                $relationes=array();
+                } else {
 
-                $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
-                $msg ='';
-                if(!empty($relationes)){
-                     $msg = "El articulo \"".$article->title."\", está relacionado con los siguientes contenidos:  \n";
-                     $cm= new ContentManager();
-                     $relat = $cm->getContents($relationes);
-                     foreach($relat as $contents) {
-                           $msg.=" - ".strtoupper($contents->content_type)." - ".$contents->category_name." ".$contents->title. "\n";
-                     }
-                     $msg.="\n \n ¡Ojo! Si lo borra, se eliminar&aacute;n las relaciones con los articulos \n";
-                     $msg.=" ¿Desea eliminarlo igualmente?";
-                   /*  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-                     $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                   */
-                }else{
-                   $msg.="¿Está seguro que desea eliminar \"".$article->title."\"?";
-                 /*   $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-                    $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-                  */
+                    $article = new Article($_REQUEST['id']);
+                    $rel= new Related_content();
+                    $relationes=array();
+
+                    $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
+                    $msg ='';
+                    if(!empty($relationes)){
+                         $msg = "El articulo \"".$article->title."\", está relacionado con los siguientes contenidos:  \n";
+                         $cm= new ContentManager();
+                         $relat = $cm->getContents($relationes);
+                         foreach($relat as $contents) {
+                               $msg.=" - ".strtoupper($contents->content_type)." - ".$contents->category_name." ".$contents->title. "\n";
+                         }
+                         $msg.="\n \n ¡Ojo! Si lo borra, se eliminar&aacute;n las relaciones con los articulos \n";
+                         $msg.=" ¿Desea eliminarlo igualmente?";
+                       /*  $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
+                         $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
+                       */
+                    }else{
+                       $msg.="¿Está seguro que desea eliminar \"".$article->title."\"?";
+                     /*   $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
+                        $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
+                      */
+                    }
+                    echo $msg;
+                    exit(0);
                 }
-                echo $msg;
-                exit(0);
         break;
 
         case 'delete_comment': {
@@ -734,6 +757,7 @@ if (isset($_REQUEST['action']) ) {
         } break;
 
         case 'yesdel':
+            Acl::checkOrForward('ARTICLE_DELETE');
             if($_REQUEST['id']){
                 $article = new Article($_REQUEST['id']);
 
@@ -753,9 +777,8 @@ if (isset($_REQUEST['action']) ) {
 
         case 'change_status':
 
-            if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_ARCHIVE');
+            
             $article = new Article($_REQUEST['id']);
 
             // FIXME: evitar otros valores erróneos
@@ -791,9 +814,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'm_restore':
 
-            if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_ARCHIVE');
 
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
@@ -829,9 +850,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'frontpage_status':
-            if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_FRONTPAGE');
 
             $article = new Article($_REQUEST['id']);
             // FIXME: evitar otros valores erróneos
@@ -846,9 +865,8 @@ if (isset($_REQUEST['action']) ) {
 
 
         case 'available_status':
-            if( !Privileges_check::CheckPrivileges('ARTICLE_AVAILABLE')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_AVAILABLE');
+            
             $article = new Article($_REQUEST['id']);
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -858,9 +876,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'inhome_status':
-            if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_HOME');
             $article = new Article($_REQUEST['id']);
 
             // FIXME: evitar otros valores erróneos
@@ -874,9 +890,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'set_position':
-            if( !Privileges_check::CheckPrivileges('NOT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            Acl::checkOrForward('ARTICLE_FRONTPAGE');
             $article = new Article($_REQUEST['id']);
             $article->set_position($_REQUEST['posicion'],$_SESSION['userid']);
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_GET['category'].'&page='.$_REQUEST['page']);
@@ -884,6 +898,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'mstatus':
             //Enviar a la hemeroteca.
+            Acl::checkOrForward('ARTICLE_ARCHIVE');
             if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                 $fields = $_REQUEST['selected_fld'];
                 if(is_array($fields)) {
@@ -918,6 +933,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'mfrontpage':
+            Acl::checkOrForward('ARTICLE_FRONTPAGE');
             $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
             //Usa id para pasar el estatus
 
@@ -957,6 +973,7 @@ if (isset($_REQUEST['action']) ) {
          break;
 
          case 'mavailable':
+             Acl::checkOrForward('ARTICLE_AVAILABLE');
              if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
                  $fields = $_REQUEST['selected_fld'];
 
@@ -1073,7 +1090,7 @@ if (isset($_REQUEST['action']) ) {
             break;
 
         case 'm_inhome_status':
-
+            Acl::checkOrForward('ARTICLE_HOME');
             $fields = $_REQUEST['selected_fld'];
             if(is_array($fields)) {
                 $status = $_REQUEST['id'];
@@ -1122,7 +1139,7 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'mdelete':
-
+            Acl::checkOrForward('ARTICLE_DELETE');
             if($_REQUEST['id']==6){ //Eliminar todos
                 $cm = new ContentManager();
                 if($_SESSION['_from']=='todos' || $_SESSION['_from']=='opinion'){

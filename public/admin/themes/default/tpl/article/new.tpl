@@ -54,6 +54,9 @@ if($('starttime')) {
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 	{include file="article/partials/_menu.tpl"}
 	<div class="wrapper-content">
+          
+        {render_messages}
+          
 		{if is_object($article) && $article->isClone()}
 		<div class="notice">
 			{assign var="original" value=$article->getOriginal()}

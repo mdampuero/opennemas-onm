@@ -1124,11 +1124,7 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (8, 2, 'Sociedad', 'sociedad', 'category', 3, 0),
 (9, 2, 'EconomÃ­a', 'economia', 'category', 4, 0),
 (10, 2, 'Deportes', 'deportes', 'category', 5, 0),
-(11, 2, 'PolÃ­tica', 'politica', 'category', 1, 0),
-(12, 2, 'Cultura', 'cultura', 'category', 2, 0),
-(13, 2, 'Sociedad', 'sociedad', 'category', 3, 0),
-(14, 2, 'EconomÃ­a', 'economia', 'category', 4, 0),
-(15, 2, 'Deportes', 'deportes', 'category', 5, 0),
+
 (19, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),
 (21, 1, 'Portada', 'home', 'internal', 1, 0),
 (23, 4, 'Sociedad', 'sociedad', 'category', 2, 0),

@@ -65,7 +65,7 @@
 
 
 <div class="wrapper-content">
-
+  {render_messages}
     <ul class="pills">
         {acl hasCategoryAccess=0}
         <li>
