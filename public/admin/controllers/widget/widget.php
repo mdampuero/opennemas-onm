@@ -115,6 +115,34 @@ switch($action) {
         break;
     }
 
+    case 'content-provider':
+
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        if ($category == 'home') { $category = 0; }
+                
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if(count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_widget` NOT IN ('.$contentsExcluded.')';
+        }
+        $widgets = $cm->find(
+            'Widget',
+            'contents.available = 1 ' . $sqlExcludedOpinions,
+            ' ORDER BY created DESC LIMIT 0,16'
+        );
+
+        $tpl->assign(array(
+            'widgets' => $widgets, 
+        ));
+
+        $tpl->display('widget/content-provider.tpl');
+
+        break;
+
     case 'list':
     default: {
         //$widgets = $cm->find_by_category('Widget', 3, 'fk_content_type=12 ', 'ORDER BY created DESC');

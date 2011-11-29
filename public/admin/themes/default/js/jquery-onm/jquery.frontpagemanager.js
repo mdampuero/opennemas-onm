@@ -1,3 +1,4 @@
+
 // jQuery FrontpageManager plugin
 // A plugin for jQuery for managing ONM LayoutManager 
 // version 1.0, May 07th, 2011
@@ -59,7 +60,7 @@
 jQuery(document).ready(function(){
             
     // Make content providers sortable and allow to D&D over the placeholders
-    jQuery('div#content-provider .ui-tabs-panel').sortable({
+    jQuery('div#content-provider .ui-tabs-panel > div').sortable({
         connectWith: "div.placeholder div.content",
         placeholder: 'placeholder-element',
         update: function(event,ui) {
@@ -70,7 +71,7 @@ jQuery(document).ready(function(){
     
     // Make content providers sortable and allow to D&D over placeholders and content provider
     jQuery('div.placeholder div.content').sortable({
-        connectWith: "div#content-provider .ui-tabs-panel, div.placeholder div.content",
+        connectWith: "div#content-provider .ui-tabs-panel > div, div.placeholder div.content",
         placeholder: 'placeholder-element',
         update: function(event,ui) {
             jQuery('#warnings-validation').html('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
@@ -85,6 +86,11 @@ jQuery(document).ready(function(){
            'checked', 
            !checkbox.is(':checked')
        ); 
+    });
+
+    jQuery('#content-provider #toggler').click(function(event) {
+        $(this).toggleClass('toggled');
+        jQuery('.content-provider-block-wrapper').toggle();
     });
     
     

@@ -130,30 +130,35 @@
         </div><!-- /frontpagemanager -->
 
         <div id="content-provider" class="clearfix">
-            <ul>
-                <li>
-                    <a href="#empty">{t}Out of frontpage{/t}</a>
-                </li>
-                {if $category neq 'home'}
-                <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
-                </li>
-                {else}
-                <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-articles-content-provider">{t}Suggested articles{/t}</a>
-                </li>
-                {/if}
-                <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/widgets.php?action=suggested-articles-content-provider">{t}Widgets{/t}</a>
-                </li>
-                <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/opinions.php?action=suggested-articles-content-provider">{t}Opinions{/t}</a>
-                </li>
-            </ul>
+            <div id="toggler">
+                Toggle content provider
+            </div><!-- /toggler -->
+            <div class="content-provider-block-wrapper wrapper-content">
+                <ul>
+                    <li>
+                        <a href="#empty">{t}Out of frontpage{/t}</a>
+                    </li>
+                    {if $category neq 'home'}
+                    <li>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
+                    </li>
+                    {else}
+                    <li>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-content-provider&category={$category}">{t}Suggested articles{/t}</a>
+                    </li>
+                    {/if}
+                    <li>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&category={$category}">{t}Widgets{/t}</a>
+                    </li>
+                    <li>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&category={$category}">{t}Opinions{/t}</a>
+                    </li>
+                </ul>
 
-            <div id="empty">
-                {t}Drop blocks here to get them out of frontpage{/t}
-            </div><!-- /empty -->
+                <div id="empty">
+                    {t}Drop blocks here to get them out of frontpage{/t}
+                </div><!-- /empty -->
+            </div>
 
         </div><!-- /content-provider -->
     </div>

@@ -756,8 +756,40 @@ switch($action) {
 
     break;
 
+    case 'content-provider':
+
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            if ($category == 'home') { $category = 0; }
+                    
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if(count($contentElementsInFrontpage) > 0) {
+                $opinionsExcluded = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
+            }
+            $opinions = $cm->find(
+                'Opinion',
+                'contents.available = 1 ' . $sqlExcludedOpinions,
+                ' ORDER BY created DESC LIMIT 0,16'
+            );
+
+            $tpl->assign(array(
+                'opinions' => $opinions, 
+            ));
+
+            $tpl->display('opinion/content-provider.tpl');
+
+            break;
+
+        default:
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
+        break;
+    }
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&page=' . $page);
     break;
 }
-

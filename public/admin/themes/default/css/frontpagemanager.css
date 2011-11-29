@@ -51,7 +51,7 @@
 }
 
 #frontpagemanager .placeholder div.content > div,
-div#content-provider .ui-tabs-panel > div{
+div#content-provider .ui-tabs-panel .content-provider-block  > div{
     margin:5px;
     border:1px solid #aaa;
     padding:5px;
@@ -60,12 +60,12 @@ div#content-provider .ui-tabs-panel > div{
 }
 
 #frontpagemanager .placeholder div.content > div,
-div#content-provider .ui-tabs-panel > div {
+div#content-provider .ui-tabs-panel .content-provider-block > div {
     cursor:pointer;
 }
 
 #frontpagemanager .placeholder-element {
-    min-height:20px;
+    min-height:17px;
     margin:5px;
     border:1px dashed #aaa !important;
     padding:5px;
@@ -79,8 +79,12 @@ div#content-provider .ui-tabs-panel > div {
     border-top:5px solid #ccc;
     background:White !important;
     position:fixed;
-    top:0;
+    bottom:0;
+    right:0;
     z-index: 9999;
+    width:100%;
+    padding-top:5px;
+    /*background:url(../image/frontpagemanager/)*/
 }
 .ui-tabs .ui-tabs-panel {
     padding:0 !important; 
@@ -93,6 +97,7 @@ div#content-provider .ui-tabs-panel {
 div.content-provider-block {
     overflow-y: scroll;
     overflow-x:hidden;
+    height: 100%;
 }
 
 .delete-button {
@@ -148,6 +153,22 @@ dic#content-provider .ui-tabs {
     padding:0 !important;
 }
 
+div#content-provider #toggler {
+    position:absolute;
+    top:0;
+    right:0;
+    padding:5px !important;
+    cursor: pointer;
+    -moz-border-radius:0 0  6px 6px !important;
+    -webkit-border-radius:0 0 6px 6px !important;
+}
+
+div#content-provider #toggler.toggled {
+    top:-24px;
+    -moz-border-radius:6px 6px 0 0  !important;
+    -webkit-border-radius:6px 6px 0 0 !important;
+}
+
 div#content-provider input[type="checkbox"],
 div#content-provider ul.action-buttons {
     display:none;
@@ -183,7 +204,7 @@ div.content div.description span.type {
 #frontpagemanager div.content-provider-element {
     position:relative;
 }
-div.content-provider-element:hover .selectButton {
+#frontpagemanager div.content-provider-element:hover .selectButton {
     background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
     background-position: 0 -294px;
     background-repeat: no-repeat;
@@ -199,6 +220,9 @@ div.content-provider-element .selectButton:hover {
     background-image: url("https://s-static.ak.facebook.com/rsrc.php/v1/yQ/r/-DtXTPJXrav.png");
     background-position: -21px -294px !important;
     background-repeat: no-repeat;
+}
+.ui-sortable-helper {
+    z-index: 99999;
 }
 .ui-sortable-helper .selectButton,
 .ui-sortable-helper ul.action-buttons {
@@ -224,13 +248,16 @@ div#content-provider span.type {
 #content-provider {
     border:0 none;
     padding:0;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+    z-index: 100;
 }
 #content-provider .ui-tabs {
     border:0 none !important;
     padding:0;
 }
 #content-provider .ui-tabs-selected,
-#content-provider .ui-state-active {
+#content-provider .ui-state-active,
+div#content-provider #toggler:hover {
     background: White !important;
     color:Black !important;
     border-bottom: 1px solid White;
@@ -238,16 +265,20 @@ div#content-provider span.type {
     margin-bottom: -2px;
 }
 
-#content-provider .ui-tabs-nav a{
+#content-provider .ui-tabs-nav a,
+div#content-provider #toggler{
     font-weight:normal;
     font-size:11px;
 }
 
 #content-provider .ui-tabs-selected a,
-#content-provider .ui-state-active a {
+#content-provider .ui-state-active a,
+div#content-provider #toggler {
     color:Black;
+    outline:none !important;
 }
-#content-provider .ui-tabs-nav li {
+#content-provider .ui-tabs-nav li,
+div#content-provider #toggler {
     float: left;
     padding: 0px 8px;
     margin-left: 0px;
@@ -261,7 +292,8 @@ div#content-provider span.type {
     background: -webkit-gradient(linear, left top, left bottom, from(#eAeAeA), to(#D2D2D2)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #eAeAeA,  #D2D2D2); /* for firefox 3.6+ */
 }
-#content-provider .ui-tabs-nav li a {
+#content-provider .ui-tabs-nav li a,
+div#content-provider #toggler {
     color:Black;
     text-shadow:0 1px 0 #FFFFFF;
     text-decoration:none !important;
