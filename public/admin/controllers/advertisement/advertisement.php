@@ -225,18 +225,18 @@ if( isset($_REQUEST['action']) ) {
         break;
 
         case 'validate':
-            if(!Privileges_check::CheckPrivileges('ADVERTISEMENT_ADMIN')) {
-                Privileges_check::AccessDeniedAction();
-            }
+            
 
             $advertisement = null;
             if(empty($_POST["id"])) {
+                 Acl::checkOrForward('ADVERTISEMENT_CREATE');
                 $advertisement = new Advertisement();
                 $_POST['publisher'] = $_SESSION['userid'];
                 if(!$advertisement->create( $_POST )) {
                     $tpl->assign('errors', $advertisement->errors);
                 }
             } else {
+                 Acl::checkOrForward('ADVERTISEMENT_UPDATE');
                 $advertisement = new Advertisement($_POST["id"]);
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
                 $advertisement->update( $_REQUEST );

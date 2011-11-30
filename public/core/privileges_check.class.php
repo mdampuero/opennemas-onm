@@ -118,28 +118,10 @@ class Privileges_check
      **/
     private static function SessionExpireTimeAction()
     {
-        Application::forwardTargetParent("/admin/login.php");
+        Application::forward("/admin/login.php");
     }
 
-    /**
-     * Redirects the user to the accessdenied controller.
-     *
-     **/
-    public static function AccessDeniedAction()
-    {
-        Application::forward(
-            '/admin/controllers/accessdenied/accessdenied.php'
-            .'?action=list_pendientes&category='.$_REQUEST['category']
-        );
-    }
-
-    public static function AccessCategoryDeniedAction()
-    {
-        Application::forward(
-            '/admin/controllers/accessdenied/accesscategorydenied.php'
-        );
-    }
-
+     
     public static function LoadSessionExpireTime()
     {
         if (isset($_SESSION)

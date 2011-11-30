@@ -15,15 +15,11 @@ require_once('../album/albums_events.php');
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', 'Portadas del periódico');
 
-if( !Privileges_check::CheckPrivileges('MUL_ADMIN')) {
-    Privileges_check::AccessDeniedAction();
-}
+ Acl::checkOrForward('KIOSKO_ADMIN');
 
 if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) { $_REQUEST['page'] = 1;}
 $ccm = new ContentCategoryManager();
-if (!isset($_REQUEST['category'])) {
-    $_REQUEST['category'] = $ccm->get_id('kiosko-xornal');
-}
+
 
 $tpl->assign('category', $_REQUEST['category']);
 

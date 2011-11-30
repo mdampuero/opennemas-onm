@@ -71,7 +71,7 @@
 		<ul>
 		    {if {count_pending_comments} gt 0}
 		    <li class="menu">
-                <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&category=todos"
+                <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
                     title="{t}There are new comments to moderate{/t}">
                     <img src="{$params.IMAGE_DIR}/messaging_system/messages_red.png" alt="" />
                     {count_pending_comments}
@@ -99,7 +99,9 @@
                 </a>
 			<ul>
 			    <li>
-				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
+				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}
+                <a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&amp;id=%1">Settings</a>
+                {/t}
 			    </li>
 			    <li class="divider"></li>
 			    <li>
