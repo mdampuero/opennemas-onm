@@ -28,7 +28,10 @@ class FTP {
     {
         $this->params = $params;
 
-        $this->ftpConnection = @ftp_connect($params['server']);
+        $this->serverUrl = parse_url($params['server']);
+        
+
+        $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
         // test if the connection was successful
         if (!$this->ftpConnection) {
             throw new \Exception(sprintf(_('Can\'t connect to server %s. Contact with your administrator for support.'), $params['server']));
@@ -40,10 +43,21 @@ class FTP {
             $loginResult = ftp_login($this->ftpConnection,
                                      $params['user'],
                                      $params['password']);
+            
 
             if (!$loginResult) {
                 throw new \Exception(sprintf(_('Can\'t login into server '), $params['server']));
             }
+
+            if (isset($this->serverUrl['path'])) {
+                if (!@ftp_chdir($this->ftpConnection, $this->serverUrl['path'])) {
+                    throw new \Exception(sprintf(
+                        _("Directory '%s' doesn't exists or you don't have enought permissions to acces it"),
+                        $this->serverUrl['path']
+                    ));
+                }
+            }
+
             return $this;
         }
 
