@@ -103,11 +103,11 @@ class InstanceManager
             if (empty($instance->settings['MEDIA_URL']))
             {
                 $instance->settings['MEDIA_URL'] = implode(
-                    '/',
+                    '',
                     array(
                         'http://',
                         $_SERVER['HTTP_HOST'],
-                        'media'.
+                        '/media'.
                         '/'
                     )
                 );
@@ -434,7 +434,7 @@ class InstanceManager
         // Check if the instance already exists
         $sql = "SELECT count(*) as instance_exists FROM instances WHERE `internal_name` = ?";
         $rs = $this->_connection->Execute($sql, array($data['internal_name']));
-        
+   
         // Check if the email already exists
         $sql2 = "SELECT count(*) as email_exists FROM instances WHERE `contact_mail` = ?";
         $rs2 = $this->_connection->Execute($sql2, array($data['user_mail']));
@@ -746,8 +746,8 @@ class InstanceManager
         
         return $templates;
     }
-
-
+    
+   
 }
 
 /**
