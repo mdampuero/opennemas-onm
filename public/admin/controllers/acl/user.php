@@ -32,7 +32,9 @@ if (!isset($action)) {
 
 switch($_REQUEST['action']) {
     case 'list': 
-        Acl::checkOrForward('USER_ADMIN');
+        if(!Acl::check('USER_ADMIN')) {
+            Application::forward('/admin/');
+        }
 
         $cm = new ContentManager();
         $user = new User();
@@ -101,7 +103,7 @@ switch($_REQUEST['action']) {
             Acl::checkOrForward('USER_UPDATE');
         }             
         // TODO: validar datos
-        $user = new User();
+        $user = new User($_REQUEST['id']);
         $user->update( $_REQUEST );
 
         if ( ($_REQUEST['id'] == $_SESSION['userid']) && !Acl::check('USER_UPDATE') ) {  
@@ -139,7 +141,7 @@ switch($_REQUEST['action']) {
                 Acl::checkOrForward('USER_UPDATE');
             }
 
-            $user = new User();
+            $user = new User($_POST['id']);
             $user->update( $_REQUEST );
              
         }

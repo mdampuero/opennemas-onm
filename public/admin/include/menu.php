@@ -230,7 +230,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="BACKEND_ADMIN" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#" privilege="SETTINGS_MANAGER,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
+    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#" privilege="ONM_SETTINGS,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
         <node
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"

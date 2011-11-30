@@ -128,6 +128,12 @@ class User
 
     public function update($data)
     {
+        
+       
+        if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
+            $data['id_user_group'] =$this->id_user_group;
+        }
+        
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
