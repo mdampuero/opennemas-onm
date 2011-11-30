@@ -17,6 +17,7 @@ define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECT
 define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
 define('SITE_MODELS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
 define('APC_PREFIX', 'joomla-importer');
+error_reporting(E_ALL ^ E_NOTICE);
 
 
 // Ensure library/ is on include_path
@@ -40,7 +41,8 @@ $config = array(
     'help|h'        => 'Show help',
     'verbose|v'     => 'Verbose mode',
     'action|a=s'    => 'Action to perform ['. implode(', ', $availableActions).' ]',
-    'categories|m=s'    => 'Module (string)',
+    'categories|c=s'    => 'Module (string)',
+    'max|m=i'       => 'Maximum files',
 );
 
 try {
@@ -56,12 +58,8 @@ try {
             }
 
             JoomlaImporter::executeAction(
-                $options->action, 
-                array(
-                    'module'    => $options->module,
-                    'verbose'   => $options->verbose,
-                    'section'   => $options->section,
-                )
+                $options->action,
+                $options
             );
 
         } else {
@@ -75,9 +73,9 @@ try {
 }
 
 /**
- * Handles all the review operations
+ * Handles all the importation operations
  *
- * @package GNOME
+ * @package Onm
  * @author 
  **/
 class JoomlaImporter
@@ -113,6 +111,7 @@ class JoomlaImporter
      **/
     public static function loadConfiguration()
     {
+        echo "Loading script configuration...".PHP_EOL;
         $configurationFile = realpath(__DIR__.'/'.self::CONF_FILE);
         if (!is_file($configurationFile)) {
             echo "Configuration file 'configuration.ini' doesn't exists".PHP_EOL;
@@ -139,9 +138,18 @@ class JoomlaImporter
         return array_values(self::$configuration['categories']);
     }
 
+
+    public function matchCategory($category)
+    {
+        
+        return self::$configuration['categories'][$category];
+
+    }
+
     public function initOriginalDatabaseConnection($config = array())
     {
 
+        echo "Initialicing source database connection...".PHP_EOL;
         if (isset($config['host'])
             && isset($config['database'])
             && isset($config['user'])
@@ -165,14 +173,16 @@ class JoomlaImporter
 
     public function initTargetDatabaseConnection($config)
     {
+        echo "Initialicing target database connection...".PHP_EOL;
         define('BD_HOST', $config['host']);
         define('BD_USER', $config['user']);
         define('BD_PASS', $config['password']);
         define('BD_TYPE', $config['type']);
         define('BD_DATABASE', $config['database']);
         
-        $app = new Application();
+        $GLOBALS['application'] = new Application();
         Application::initDatabase();
+        Application::initLogger();
     }
 
     /**
@@ -246,47 +256,91 @@ class JoomlaImporter
     {
 
         require 'Console/ProgressBar.php';
-        die();
+        require 'ImportHelper.php';
 
-        $errors = array();
-        $errorPath = WORKING_DIR.'/'.self::ERROR_FOLDER.'/'.$args['section'].'/';
+        echo PHP_EOL.'Importing articles from joomla'.PHP_EOL;
 
-        if (!is_dir($errorPath)) { mkdir($errorPath, 0777, true); }
-
-        $modules = glob(
-            WORKING_DIR.'/'.$args['section'].'/*/po/'.self::$languageCode.'.po'
+        // Retrieve original articles
+        echo "\tGetting original articles...".PHP_EOL;
+        $categories = self::getOriginalCategories();
+        
+        $originalContents = self::$originalDatabaseConn->Execute(
+            "SELECT * FROM jos_content WHERE catid IN (".implode(",", $categories).")"
         );
-        $countModules = count($modules);
-        echo 'Generating error files for '.count($modules).' modules.'.PHP_EOL;
+        if (!$originalContents) {
+            echo self::$originalDatabaseConn->ErrorMsg();
+        }
 
-        $format = '[%bar%] %percent% (%current%/%max%) ';
+        echo "\tStarting to import articles".PHP_EOL;
+
+        $format = "\t[%bar%] %percent% (%current%/%max%) ";
         $filler = '=>';
         $empty  = ' ';
         $width  = 70;
-        $size   = $countModules;
+        $size   = $originalContents->_numOfRows;
         $bar = new Console_ProgressBar($format, $filler, $empty, $width, $size);
 
-        for ($i = 0; $i < $countModules; $i++) {
-            $baseName = strtr($modules[$i], array(
-                WORKING_DIR.'/'.$args['section'].'/' => '',
-                DIRECTORY_SEPARATOR                  => '-',
-            ));
+        $maxElement = ((int)$args->max);
 
-            // Excute the posieve with this file
-            $command = self::$pologyPath.' -b --msgfmt-check --no-skip check-rules -slang:'
-                .self::$languageCode.
-                ' -saccel:_ -snorulerx:\'(noPT-2010_hide|noPT-2011_widget|noPT-2011_environment|kde_frame|kde_enabledisable|clGL-all_colar|kde_about2|mine_about|mine_about2|mine_enabledisable|dual)\' '
-                .$modules[$i].' > '.$errorPath.$baseName.'.errors 2>&1'.PHP_EOL;
-            if ($args['verbose'] == 1) {
-                echo $command;
+        $current = $imported = 0;
+
+
+        while (!$originalContents->EOF) {
+
+            if (isset($args->max) && $imported >= $args->max) {
+                $bar->update($size);
+                echo PHP_EOL."Max of elements imported reached".PHP_EOL;
+                break;
             }
-            shell_exec($command);
-            
-            // Update the progress bar
-            $bar->update($i);
+                if (ImportHelper::elementIsImported($originalContents->fields['id'], 'article') ) {
+                    ImportHelper::log('Original content with id '.$originalContents->fields['id'].' already imported.');
+                } else {
+                    
+                    $originalArticleID = $originalContents->fields['id'];
+                
+                    $values = array(
+                        'title' => $originalContents->fields['title'],
+                        'category' => self::matchCategory($originalContents->fields['catid']),
+                        'with_comment' => 1,
+                        'content_status' => 1,
+                        'frontpage' => 0,
+                        'in_home' => 0,
+                        'title_int' => $originalContents->fields['title'],
+                        'metadata' => String_Utils::get_tags($originalContents->fields['title']),
+                        'subtitle' => '',
+                        'agency' => 'idealgallego.com',
+                        'summary' => $originalContents->fields['introtext'],
+                        'body' => $originalContents->fields['fulltext'],
+                        'posic' => 0,
+                        'id' => 0,
+                        'fk_user' => 125,
+                        'fk_publisher' => 125
+                    );
+                                                    
+                            
+                    $article = new Article();
+                    $newArticleID = $article->create($values);
+                    if(is_string($newArticleID)) {
+                        
+                        ImportHelper::logElementInsert($originalArticleID, $newArticleID, 'article');
+                        ImportHelper::updateCreateDate($newArticleID, $originalContents->fields['created']);
+                        ImportHelper::log('Content with ID '.$originalContents->fields['id']." imported.\n");
+                        $imported++;
+                        
+                    }
+                        
+                }
+                $bar->update($current);
+                $current++;
+
+                $originalContents->MoveNext();
         }
-        echo PHP_EOL.'Finished of error files generation.'.PHP_EOL;
+
+        $originalContents->Close(); # optional           
+
     }
+
+
 
     
 
