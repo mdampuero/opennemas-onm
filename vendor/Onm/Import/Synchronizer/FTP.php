@@ -96,7 +96,7 @@ class FTP {
                         $elements []= $file;
                         $localFilePath = $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file));
                         if (!file_exists($localFilePath)){
-                            ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file)), $file, FTP_BINARY);
+                            @ftp_get($this->ftpConnection,  $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file)), $file, FTP_BINARY);
                             $downloadedFiles++;
                         }
                     }
