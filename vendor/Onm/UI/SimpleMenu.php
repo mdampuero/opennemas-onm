@@ -53,6 +53,8 @@ class SimpleMenu {
 
     }
 
+
+
     /**
      * Returns the HTML for a given XML menu file
      *
@@ -160,6 +162,106 @@ class SimpleMenu {
         }
 
         return true;
+    }
+
+    /*
+     * Renders wrapper
+     * 
+     * @param $element
+     */
+    private function _renderElement($element, $value, $last)
+    {
+        $output =  array();
+        // var_dump($value);die();
+        switch ($element) {
+            case 'submenu':
+                $output []= $this->_renderSubMenu($element, $value, $last);
+                break;
+            
+            case 'node':
+                $output []= $this->_renderNode($element, $value, $last);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+        return implode("\n", $output);
+    }
+
+    /**
+     * Recursive function to render a SubMenu and its contents
+     *
+     * @return void
+     * @author 
+     **/
+    private function _renderSubMenu($element, $value, $last)
+    {
+        foreach ($value as $element => $submenuContent ) {
+            $element = $this->_renderElement($element, $submenuContent, false);
+            if (!empty($element)) {
+                $output []= $element;
+            }
+        }
+        if (count($output) > 0) {
+            $class = $this->getclass($menu['class']);
+            $html .= "<li {$class}>";
+            $html .= $this->getHref($value['title'], 'menu_'.$value['id'], $value['link']);
+            $html .= "<ul>".implode("\n", $output)."</ul>";
+            $html .="</li>";
+        }
+        return $html;        
+    }
+
+    /**
+     * Function for rendering one menu node
+     *
+     * @return void
+     * @author 
+     **/
+    private function _renderNode($element, $value, $last)
+    {
+        $html = null;
+        if (
+            (!isset($value['privilege']) || $this->checkAcl($value['privilege']))
+            && (\Onm\Module\ModuleManager::isActivated((string)$value['module_name']))
+            )
+        {
+            if (($value['privilege']!='ONLY_MASTERS') || ($value['privilege']=='ONLY_MASTERS') && \Acl::isMaster() ) {
+                $external = isset($value['target']);
+                $class = $this->getclass($value['class']);
+                $html.= "<li {$class}>";
+                    $html .= $this->getHref($value['title'], 'submenu_'.$value['id'], $value['link'], $external);
+                $html.= "</li>";
+            }
+        }
+
+        return $html;
+
+    }
+
+        
+    /**
+     * Renders the menu
+     *
+     * @package    Onm
+     * @subpackage Common
+     * @author     me
+     **/
+    public function render($params = array())
+    {
+
+        if (isset($params['contents'])) {
+            $this->contents = $params['contents'];
+        }
+        
+        $output = '';
+        foreach ($this->menu as $element => $value ) {
+            $output []= $this->_renderElement($element, $value, false);
+        }
+
+        return "<ul id='menu' class='clearfix'>".implode("\n", $output)."</ul>";
     }
 
 }

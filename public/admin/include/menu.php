@@ -130,31 +130,6 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 
-
-    <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#" privilege="USER_ADMIN">
-        <node
-            module_name="USER_MANAGER"
-            privilege="USER_ADMIN"
-            title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
-            id="user_manager"
-            link="controllers/acl/user.php"
-        />
-        <node
-            module_name="USER_GROUP_MANAGER"
-            privilege="USER_ADMIN"
-            title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
-            id="user_group_manager"
-            link="controllers/acl/user_groups.php"
-        />
-        <node
-            module_name="PRIVILEGE_MANAGER"
-            privilege="ONLY_MASTERS"
-            title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
-            id="privilege_manager"    
-            link="controllers/acl/privileges.php"
-        />
-    </submenu>
-
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
@@ -195,11 +170,18 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/agency_importer/europapress.php"
             privilege="IMPORT_EPRESS" />
         <node
-            module_name="PAPER_IMPORT"
-            privilege="IMPORT_EFE"
+            module_name="EFE_IMPORTER"
+            privilege="IMPORT_EFE_FILE"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
             id="efe_importer"    
-            link="controllers/agency_importer/EFE.php"
+            link="controllers/agency_importer/efe/efe.php"
+        />
+        <node
+            module_name="PAPER_IMPORT"
+            privilege="IMPORT_EFE_FILE"
+            title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
+            id="efe_importer"    
+            link="controllers/agency_importer/efe-file/efe.php"
         />
         <node
             module_name="PAPER_IMPORT"
@@ -237,6 +219,29 @@ $menuXml = '<?xml version="1.0"?>
             id="settings_manager"
             link="controllers/system_settings/system_settings.php"
             privilege="ONM_SETTINGS" />
+        <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#" privilege="USER_ADMIN">
+            <node
+                module_name="USER_MANAGER"
+                privilege="USER_ADMIN"
+                title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
+                id="user_manager"
+                link="controllers/acl/user.php"
+            />
+            <node
+                module_name="USER_GROUP_MANAGER"
+                privilege="USER_ADMIN"
+                title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
+                id="user_group_manager"
+                link="controllers/acl/user_groups.php"
+            />
+            <node
+                module_name="PRIVILEGE_MANAGER"
+                privilege="ONLY_MASTERS"
+                title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
+                id="privilege_manager"    
+                link="controllers/acl/privileges.php"
+            />
+        </submenu>
         <node class="divider" />
         <node
             module_name="CACHE_MANAGER"

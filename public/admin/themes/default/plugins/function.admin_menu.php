@@ -5,7 +5,8 @@ function smarty_function_admin_menu($params, &$smarty) {
     require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
     $menu = new \Onm\UI\SimpleMenu($menuXml);
-    $htmlOutput = $menu->getHTML();
+    // $htmlOutput = $menu->getHTML();
+    $htmlOutput = $menu->render();
 
     return($htmlOutput);
 
