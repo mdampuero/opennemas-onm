@@ -516,6 +516,6 @@ if(isset($_REQUEST['action']) ) {
 }
 
 $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
-$tpl->display('agency_importer/efe/EFE.tpl');
+$tpl->display('agency_importer/efe-file/index.tpl');
 
  

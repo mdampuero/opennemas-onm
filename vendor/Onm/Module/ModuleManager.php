@@ -90,6 +90,7 @@ class ModuleManager {
                 'CACHE_MANAGER',
                 'CATEGORY_MANAGER',
                 'COMMENT_MANAGER',
+                'EFE_IMPORTER',
                 'EUROPAPRESS_IMPORTER',
                 'FILE_MANAGER',
                 'FRONTPAGE_MANAGER',
