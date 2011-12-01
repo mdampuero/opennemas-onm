@@ -67,7 +67,7 @@ textarea{
 
     {render_messages}
 
-    <form action="{$smarty.server.SCRIPT_NAME}" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="{$smarty.server.SCRIPT_NAME}" enctype="multipart/form-data" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 
         <ul id="tabs">
@@ -125,6 +125,27 @@ textarea{
 
                         </td>
                     </tr>
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="site_title">{t}Site logo:{/t}</label>
+                        </th>
+                        <td>
+                            <input type="file" size="43" id="site_logo" name="site_logo">
+                        </td>
+                        <td>
+ 
+                        </td>
+                    </tr>
+                    {if isset($configs['site_logo'])}
+                    <tr valign="top">
+                        <th scope="row">
+                            <label for="site_title">{t}Logo image:{/t}</label>
+                        </th>
+                        <td>
+                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}">
+                        </td>
+                    </tr>
+                    {/if}
                      <tr valign="top">
                         <th scope="row">
                             <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
@@ -133,7 +154,7 @@ textarea{
                             <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
                         </td>
                         <td>
-
+                            
                         </td>
                     </tr>
         

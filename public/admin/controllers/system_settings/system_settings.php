@@ -35,7 +35,7 @@ switch($action) {
     case 'list':
 
         $configurationsKeys = array(
-                                    'site_title', 'site_description','site_keywords','site_agency',
+                                    'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
                                     'time_zone','site_language','site_footer',
                                     'recaptcha', 'google_maps_api_key',
                                     'google_custom_search_api_key','facebook',
@@ -60,7 +60,15 @@ switch($action) {
 
         unset($_POST['action']);
         unset($_POST['submit']);
- 
+        
+        if(!empty($_FILES) && isset($_FILES['site_logo'])) {
+            $nameFile = $_FILES['site_logo']['name'];
+            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+
+            if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
+               $_POST['site_logo'] = $nameFile;
+            }
+        }
 
         foreach ($_POST as $key => $value ) {
             s::set($key, $value);
