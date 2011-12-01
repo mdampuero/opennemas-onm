@@ -293,7 +293,7 @@ class JoomlaImporter
                 break;
             }
                 if (ImportHelper::elementIsImported($originalContents->fields['id'], 'article') ) {
-                    ImportHelper::log('Original content with id '.$originalContents->fields['id'].' already imported.');
+                    ImportHelper::log('Original content with id '.$originalContents->fields['id']." already imported.\n");
                 } else {
                     
                     $originalArticleID = $originalContents->fields['id'];
@@ -310,7 +310,7 @@ class JoomlaImporter
                         'subtitle' => '',
                         'agency' => 'idealgallego.com',
                         'summary' => $originalContents->fields['introtext'],
-                        'body' => $originalContents->fields['fulltext'],
+                        'body' => $originalContents->fields['introtext']. ' '.$originalContents->fields['fulltext'],
                         'posic' => 0,
                         'id' => 0,
                         'fk_user' => 125,
