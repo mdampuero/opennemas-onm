@@ -48,7 +48,7 @@ if (
     is_null(s::get('efe_server_auth'))
     && $action != 'config'
 ) {
-    m::add(_('Please provide your Europapress auth credentials to start to use your Europapress Importer module'));
+    m::add(_('Please provide your EFE auth credentials to start to use your EFE Importer module'));
     $httpParams [] = array(
                         'action'=>'config',
                     );
@@ -106,9 +106,9 @@ switch($action) {
             if (s::set('efe_server_auth', $serverAuth)
                 && s::set('efe_sync_from_limit', $syncFrom))
             {
-                m::add(_('Europapress configuration saved successfully'), m::SUCCESS);
+                m::add(_('EFE configuration saved successfully'), m::SUCCESS);
             } else {
-                m::add(_('There was an error while saving Europapress configuration'), m::ERROR);
+                m::add(_('There was an error while saving EFE configuration'), m::ERROR);
             }
 
             Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/efe.php' . '?action=list');
@@ -122,12 +122,12 @@ switch($action) {
             Acl::deny();
         }
 
-        $efe = \Onm\Import\Europapress::getInstance();
+        $efe = \Onm\Import\Efe::getInstance();
 
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
 
-        $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
+        $categories = \Onm\Import\DataSource\Efe::getOriginalCategories();
 
         $find_params = array(
             'category' => filter_input(
@@ -177,17 +177,16 @@ switch($action) {
 
         try {
 
-            $ep = new \Onm\Import\Europapress();
+            $ep = new \Onm\Import\Efe();
             //$element = $ep->findByID($id);
 
             $element = $ep->findByFileName($id);
 
         } catch (Exception $e) {
 
-
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['PHP_self'] . '?'.String_Utils::toHttpParams($httpParams));
 
         }
 
@@ -199,7 +198,7 @@ switch($action) {
 
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
 
-        $ep = new Onm\Import\Europapress();
+        $ep = new Onm\Import\Efe();
         $element = $ep->findByFileName($id);
 
 
@@ -253,12 +252,12 @@ switch($action) {
                 'server'    => $serverAuth['server'],
                 'user'      => $serverAuth['username'],
                 'password'  => $serverAuth['password'],
-                'allowed_file_extesions_pattern' => '.*\.xml$',
+                'allowed_file_extesions_pattern' => '.*',
             );
 
-            $epSynchronizer = \Onm\Import\Europapress::getInstance();
-            $message = $epSynchronizer->sync($ftpConfig);
-            $epSynchronizer->updateSyncFile();
+            $efeSynchronizer = \Onm\Import\Efe::getInstance();
+            $message = $efeSynchronizer->sync($ftpConfig);
+            $efeSynchronizer->updateSyncFile();
 
             m::add(
                 sprintf( _('Downloaded %d new articles and deleted %d old ones.'),
@@ -274,7 +273,7 @@ switch($action) {
             m::add( $errorMessage, m::ERROR );
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Europapress();
+            $e = new \Onm\Import\Efe();
             $e->unlockSync();
         }
 
@@ -289,7 +288,7 @@ switch($action) {
 
     case 'unlock': {
 
-        $e = new \Onm\Import\Europapress();
+        $e = new \Onm\Import\Efe();
         $e->unlockSync();
         unset($_SESSION['error']);
         $httpParams = array(
