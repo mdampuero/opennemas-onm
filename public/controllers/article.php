@@ -273,6 +273,19 @@ if(isset($_REQUEST['action']) ) {
 
             /******************************  CATEGORIES & SUBCATEGORIES  ******/
             require_once ("index_sections.php");
+            /**
+             * Fetch information for Advertisements
+            */
+            require_once("index_advertisement.php");
+            /************* COLUMN-LAST *******************************/
+            $other_news =
+                $cm->find(  'Article',
+                            'contents.in_home=1 AND contents.frontpage=1 AND '
+                            .'contents.fk_content_type=1 AND contents.content_status=1 '
+                            .'AND  contents.available=1',
+                            'ORDER BY created DESC LIMIT 1,3');
+            
+            $tpl->assign('other_news', $other_news);
 
             $cacheID = $tpl->generateCacheId('Index', '', "RSS");
 
