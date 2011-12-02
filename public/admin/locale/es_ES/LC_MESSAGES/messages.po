@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-02 13:15+0100\n"
-"PO-Revision-Date: 2011-12-02 13:12+0100\n"
+"PO-Revision-Date: 2011-12-02 15:34+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -2789,7 +2789,7 @@ msgstr "Tamaño de imagen:"
 
 #: public/admin/locale/extracted_strings.c:1565
 msgid "No available images to list here"
-msgstr "No hay ningunha imagen disponible para mostrar aquí."
+msgstr "No hay ninguna imagen disponible para mostrar aquí."
 
 #: public/admin/locale/extracted_strings.c:1568
 msgid "No available graphics to list here"
