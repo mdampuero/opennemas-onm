@@ -1085,13 +1085,13 @@ CREATE TABLE IF NOT EXISTS `menues` (
 --
 
 INSERT INTO `menues` (`pk_menu`, `name`, `type`, `site`, `params`, `pk_father`) VALUES
-(1, 'frontpage', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(2, 'opinion', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
+(1, 'frontpage', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(2, 'opinion', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (3, 'mobile', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
-(4, 'album', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(5, 'video', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(7, 'encuesta', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(8, 'subHome', '', 'onoso.opennemas.com', 'a:1:{s:11:"description";s:0:"";}', 21);
+(4, 'album', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(5, 'video', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(7, 'encuesta', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(8, 'subHome', '', '', 'a:1:{s:11:"description";s:0:"";}', 21);
 
 -- --------------------------------------------------------
 
@@ -1126,7 +1126,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (8, 2, 'Sociedad', 'sociedad', 'category', 3, 0),
 (9, 2, 'EconomÃ­a', 'economia', 'category', 4, 0),
 (10, 2, 'Deportes', 'deportes', 'category', 5, 0),
-
 (19, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),
 (21, 1, 'Portada', 'home', 'internal', 1, 0),
 (23, 4, 'Sociedad', 'sociedad', 'category', 2, 0),
