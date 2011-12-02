@@ -74,7 +74,7 @@ $contentType = Content::getIDContentType('advertisement');
 // Sometimes category is array. When create & update advertisement
 $category = filter_input(INPUT_GET,'category');
 if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category');//,FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
 }
 if(is_array($category)){
     $category = array_shift($category);
@@ -116,7 +116,7 @@ switch($action) {
         $filter_options['available'] = array('-1' => _("-- All --"), '0' => _("No published"), '1' => _("Published"));
         $filter_options['type']      = array('-1' => _("-- All --"), '0' => _("Multimedia"), '1' => _("Javascript"));
         $tpl->assign('filter_options', $filter_options);
-
+        
         $cm = new ContentManager();
         // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
         list($advertisements, $pager)= $cm->find_pages('Advertisement',
