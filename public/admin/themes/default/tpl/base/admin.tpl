@@ -9,7 +9,7 @@
     <link rel="shorcut icon" href="{$params.IMAGE_DIR}/favicon.png" />
 
     {block name="meta"}
-        <title>OpenNeMaS - Admin section</title>
+        <title>{setting name=site_name} - OpenNeMaS - Admin section</title>
     {/block}
 
     {block name="header-css"}     

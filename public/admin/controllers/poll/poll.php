@@ -71,7 +71,7 @@ switch ($action) {
             $polls = $cm->find_all('Poll', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
             
             if (count($polls) != $numFavorites ) {
-                m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
+                m::add( sprintf(_("You must put %d polls in the HOME widget"), $numFavorites));
             }
             
             if(!empty($polls)){

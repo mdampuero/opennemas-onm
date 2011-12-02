@@ -1,9 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Files manager :: General statistics{/t}</h2></div>
+        <div class="title"><h2>{t}Files manager :: {/t}{if $category eq 0}{t}General statistics{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
         {if $category!=0}
         <ul class="old-button">
             <li>
@@ -18,14 +19,13 @@
 </div>
 <div class="wrapper-content">
 
-	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""} >
-
 		<ul class="pills">
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=list&category=0" id="link_global"  {if $category==0}class="active"{/if}>{t}GLOBAL{/t}</a>
 			</li>
 			{include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=list"}
 		</ul>
+        {render_messages}
 	<div id="{$category}">
 		{if $category eq 0}
 			<table class="listing-table">
@@ -148,7 +148,7 @@
 					{sectionelse}
 					<tr>
 						<td class="empty" colspan="5">
-							{t}There is not files available here.{/t}>
+							{t}There is not files available here.{/t}
 						</td>
 					</tr>
 					{/section}
@@ -170,6 +170,7 @@
 
 		<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-	</form>
+	
 </div><!--fin wrapper-content-->
+</form>
 {/block}

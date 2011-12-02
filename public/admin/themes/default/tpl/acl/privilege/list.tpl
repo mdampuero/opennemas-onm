@@ -16,9 +16,18 @@
     <div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Privileges manager{/t}</h2></div>
+            <ul class="old-button">				 
+				<li>
+					<a href="{$smarty.server.PHP_SELF}?action=new&id=0" accesskey="N" tabindex="1">
+						<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New Privilege{/t}
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
+    
     {render_messages}
+    
     <div class="wrapper-content">
         <table class="adminheading">
             <tr>

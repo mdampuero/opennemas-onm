@@ -27,7 +27,7 @@
                     </a>
                 </li>
                 {/acl}
-                {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
+                {acl isAllowed="ADVERTISEMENT_AVAILA"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
                         <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
@@ -159,7 +159,7 @@
                         <td style="text-align:center;" class="center">
                             <ul class="action-buttons">
                           
-                                {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
+                                {acl isAllowed="ADVERTISEMENT_AVAILA"}
                                 <li>
                                     {if $advertisements[c]->available == 1}
                                         <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"

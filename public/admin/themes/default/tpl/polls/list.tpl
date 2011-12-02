@@ -138,11 +138,7 @@
                    <td class="center">
                         <ul class="action-buttons">
                             {acl isAllowed="POLL_UPDATE"}
-                            <li>
-                               <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Archivar a Hemeroteca">
-                                    <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="Archivar a Hemeroteca" />
-                               </a>
-                            </li>
+                           
                             <li>
                                 <a href="{$smarty.server.PHP_SELF}?action=read&id={$polls[c]->id}" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />
