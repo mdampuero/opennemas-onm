@@ -29,9 +29,6 @@ gettext("No");
 gettext("Yes");
 
 /* public/admin/themes/default/tpl//category/config.tpl */
-gettext("Name header images directory:");
-
-/* public/admin/themes/default/tpl//category/config.tpl */
 gettext("Save");
 
 /* public/admin/themes/default/tpl//category/list.tpl */
@@ -303,6 +300,9 @@ gettext("If this option is activated this category will be showed in menu");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Frontpage logo:");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Image logo:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Color:");
@@ -659,7 +659,10 @@ gettext("File:");
 gettext("Upload");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
-gettext("Files manager :: General statistics");
+gettext("Files manager :: ");
+
+/* public/admin/themes/default/tpl//files/list.tpl */
+gettext("General statistics");
 
 /* public/admin/themes/default/tpl//files/list.tpl */
 gettext("Upload file");
@@ -919,53 +922,218 @@ gettext("There is no elements to import");
 /* public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("Try syncing from server by click over the \"Sync with server\" button above.");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Go back");
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("EFE importer");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Check");
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Module configuration");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Sync list  with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Auth credentials");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Server:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Username:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Password:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Sync elements newer than:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/config.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("EFE importer");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Article information");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Import");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Remove File");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Import");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Add File");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Import");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Checking XML files");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Import");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Impoting XML files");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Import");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("To categories");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Go back to list");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Agency:");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Go back to list");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Sync list  with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Priority:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Date:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Title:");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Pretitle:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Summary:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Body:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Date:");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Photos:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Category:");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("People:");
 
-/* public/admin/themes/default/tpl//agency_importer/efe/EFE.tpl */
-gettext("Select a XML or a zip of XML Files to import");
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Place:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Associated Docs:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Categories:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Level:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Level:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Redactors:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("EFE importer");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Available articles");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync list  with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Reload list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Sync list  with server");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Reload list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Reload list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Config Europapress module");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Reload list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Config Europapress module");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Config Europapress module");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Config");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("A long time ago from synchronization.");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Last sync was %1 minutes ago.");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Try syncing the news list from server by clicking in \"Sync with server\" button above");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Filter by title");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("and category:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("All");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Search");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Priority");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Date");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Section");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Priority %1");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Priority %1");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("There is no elements to import");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Try syncing from server by click over the \"Sync with server\" button above.");
 
 /* public/admin/themes/default/tpl//agency_importer/ideal/importXML.tpl */
 gettext("Go back");
@@ -981,6 +1149,54 @@ gettext("Remove File");
 
 /* public/admin/themes/default/tpl//agency_importer/ideal/importXML.tpl */
 gettext("Add File");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Check");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Import");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Remove File");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Add File");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Checking XML files");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Impoting XML files");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("To categories");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Agency:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Date:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Title:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Summary:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Body:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Date:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Category:");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Select a XML or a zip of XML Files to import");
 
 /* public/admin/themes/default/tpl//mediamanager/results.tpl */
 gettext("Media manager");
@@ -2186,19 +2402,10 @@ gettext("System Wide Settings");
 gettext("General");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Mail");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Log");
+gettext(" Opennemas Settings");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("External Services");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Miscelanous");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Modules");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Site title:");
@@ -2213,43 +2420,37 @@ gettext("Site keywords:");
 gettext("Site agency:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site logo:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Logo image:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Text in footer frontpages:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Refresh page every (secs):");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Seconds for refresh pages");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Default: 900 secs");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Time Zone:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Language");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Mail server");
+gettext("Items per page:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Username");
+gettext("Number items in admin lists");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Password");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("System log");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Enable Log:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: true");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Log level:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: true");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Database log");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Enable Log:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: false");
+gettext("Default: 20 elements");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Google Services");
@@ -2325,33 +2526,6 @@ gettext("You can get your recaptcha API Keys from <a href=\"https://www.google.c
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Private key:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Enable advertisements:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: true");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Items per page:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: 20 elements");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Refresh page every (secs):");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Default: 900 secs");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Activated modules");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Dragons Ahead!");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("This section is experimental and could not work as espected");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Save");
@@ -2736,6 +2910,9 @@ gettext("Description");
 
 /* public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Privileges manager");
+
+/* public/admin/themes/default/tpl//acl/privilege/list.tpl */
+gettext("New Privilege");
 
 /* public/admin/themes/default/tpl//acl/privilege/list.tpl */
 gettext("Filter by module:");
@@ -3533,7 +3710,22 @@ gettext("New menu");
 gettext("Title");
 
 /* public/admin/themes/default/tpl//menues/list.tpl */
-gettext("Edit");
+gettext("Actions");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Edit\"");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Edit\"");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("'Do you want delete this menu?'");
 
 /* public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Edit page '%1'");
@@ -3554,10 +3746,37 @@ gettext("Edit page '%1'");
 gettext("\"Edit\"");
 
 /* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("'Do you want delete this menu?'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Delete page '%1'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Delete\"");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext(" Have a problem with next submenues. Parent menu was deleted ");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
 gettext("Edit page '%1'");
 
 /* public/admin/themes/default/tpl//menues/list.tpl */
 gettext("\"Edit\"");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Edit page '%1'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Edit\"");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("'Do you want delete this menu?'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("Delete page '%1'");
+
+/* public/admin/themes/default/tpl//menues/list.tpl */
+gettext("\"Delete\"");
 
 /* public/admin/themes/default/tpl//menues/read.tpl */
 gettext("Menu manager");
@@ -3728,7 +3947,7 @@ gettext("There are new comments to moderate");
 gettext("Active users in backend");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
-gettext("<a id=\"settings\" title=\"See my user preferences\" href=\"%3/controllers/acl/user.php?action=read&id=%1\">Settings</a>");
+gettext("\n                <a id=\"settings\" title=\"See my user preferences\" href=\"%3/controllers/acl/user.php?action=read&amp;id=%1\">Settings</a>\n                ");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Do you really want to exit from backend?");
@@ -3831,9 +4050,6 @@ gettext("Go back");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Go back");
-
-/* public/admin/themes/default/tpl//acessdenied/accessdenied.tpl */
-gettext("Access to section denied.");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Cache Manager");
@@ -5306,6 +5522,9 @@ gettext("No");
 gettext("Widget type");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
+gettext("Intelligent Widget");
+
+/* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("HTML");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
@@ -5313,9 +5532,6 @@ gettext("PHP");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Smarty");
-
-/* public/admin/themes/default/tpl//widget/edit.tpl */
-gettext("Intelligent Widget");
 
 /* public/admin/themes/default/tpl//widget/edit.tpl */
 gettext("Keywords");
