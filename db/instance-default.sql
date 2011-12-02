@@ -1549,6 +1549,11 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 
 
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'ALBUM'),
+(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'ALBUM'),
+(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'ALBUM'),
+(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'ALBUM'),
+(159, 'ALBUM_SETTINGS', 'Configurar módulo de álbumes', 'ALBUM'),
 (158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
 (157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
 (156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
