@@ -141,14 +141,21 @@ textarea{
                         <th scope="row">
                             <label for="site_title">{t}Logo image:{/t}</label>
                         </th>
-                        <td>
+                        <td style="height:100px;">
                             <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}">
+                        </td>
+                        <td>
+                            
                         </td>
                     </tr>
                     {/if}
-                     <tr valign="top">
+                    <tr valign="top">
                         <th scope="row">
                             <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
+                            <div id="toggle-btn" style="float:right;">
+                                <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('site_footer');return false;" href="#">
+                                    <img border="0" alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
+                            </div>
                         </th>
                         <td>
                             <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
@@ -395,5 +402,10 @@ textarea{
 
     </form>
 </div>
-
+{script_tag src="/tiny_mce/opennemas-config.js"}
+<script type="text/javascript" language="javascript">
+    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+    OpenNeMas.tinyMceConfig.advanced.elements = "site_footer";
+    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+</script>
 {/block}
