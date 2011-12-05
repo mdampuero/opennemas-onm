@@ -1798,7 +1798,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'), 
 ('twitter_page', 's:28:"http://twitter.com/opennemas";'),
 ('facebook_id', 's:12:"282535299100";'),
-('site_footer', 's:149:"&copy; <strong>Diario Retrincos Times</strong><br /> Progreso, 64 4A<br /> 32003, Ourense (Spain)<br /> +34 655172329<br /> OpenHost Media Press S.L.";'),
+('site_footer', 's:189:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br /> Calle Noriega Varela 16 BAJO<br /> 32004, Ourense (Spain)<br /> +34 655172329<br /> OpenHost Media Press S.L.</p>";'),
 ('site_title', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
 ('site_description', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),
