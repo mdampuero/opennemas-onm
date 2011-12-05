@@ -78,38 +78,47 @@
                 </a>
 		    </li>
 		    {/if}
+            <li>
+            {gmail_mailbox}
+            </li>
 
-		    {if Acl::check('BACKEND_ADMIN') eq true}
-            <li class="menu" title="{t}Active users in backend{/t}">
-                <a href="#" id="user_activity">
-                    {count_sessions}
-                    <img src="{$params.IMAGE_DIR}/users_activity.png" alt="" />
-                </a>
-		    </li>
-		    {/if}
-		    <li>
-			{gmail_mailbox}
-		    </li>
+            <li>
+                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="hidden" name="article" value="on" />
+                    <input type="hidden" name="id" value="0" />
+                    <input type="hidden" name="opinion" value="on" />
+                    <input type="search" name="stringSearch" placeholder="{t}Search...{/t}">
+                </form>
+            </li>
 
 		    <li class="menu">
                 <a href="#" id="menu" class="menu">
-                    
                     {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true}
                     <strong>{$smarty.session.username|ucfirst}</strong>
                 </a>
-			<ul>
-			    <li>
-				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}
-                <a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&amp;id=%1">Settings</a>
-                {/t}
-			    </li>
-			    <li class="divider"></li>
-			    <li>
-				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" id="logout" class="logout" title="{t}Logout from control panel{/t}">
-				    {t}Log out{/t}
-				</a>
-			    </li>
-			</ul>
+    			<ul>
+    			    <li>
+    				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}
+                    <a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&amp;id=%1">Settings</a>
+                    {/t}
+    			    </li>
+
+                    {if Acl::check('BACKEND_ADMIN') eq true}
+                    <li title="{t}Active users in backend{/t}">
+                        <a href="#" id="user_activity">
+                            {t}Connected users{/t} ({count_sessions})
+                        </a>
+                    </li>
+                    {/if}
+
+    			    <li class="divider"></li>
+    			    <li>
+    				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" id="logout" class="logout" title="{t}Logout from control panel{/t}">
+    				    {t}Log out{/t}
+    				</a>
+    			    </li>
+    			</ul>
 		    </li>
 		</ul>
 
