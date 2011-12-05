@@ -937,7 +937,9 @@ INSERT INTO `content_categories` (`pk_content_category`, `title`, `name`, `inmen
 (28, 'Cine', 'cine', 1, 10, 1, 25, '', ''),
 (29, 'TelevisiÃ³n', 'television', 1, 10, 1, 25, '', ''),
 (30, 'Curiosidades', 'curiosidades', 1, 10, 9, 0, '', ''),
-(31, 'Fotos de Hoy', 'fotos-de-hoy', 1, 10, 7, 0, '', '');
+(31, 'Fotos de Hoy', 'fotos-de-hoy', 1, 10, 7, 0, '', ''),
+(32, 'Portadas', 'portadas', '1', '10', '14', '0', '' , '');
+
 
 -- --------------------------------------------------------
 
@@ -1083,13 +1085,13 @@ CREATE TABLE IF NOT EXISTS `menues` (
 --
 
 INSERT INTO `menues` (`pk_menu`, `name`, `type`, `site`, `params`, `pk_father`) VALUES
-(1, 'frontpage', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(2, 'opinion', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
+(1, 'frontpage', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(2, 'opinion', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (3, 'mobile', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
-(4, 'album', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(5, 'video', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(7, 'encuesta', '', 'idealgallego.local', 'a:1:{s:11:"description";s:0:"";}', 0),
-(8, 'subHome', '', 'onoso.opennemas.com', 'a:1:{s:11:"description";s:0:"";}', 21);
+(4, 'album', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(5, 'video', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(7, 'encuesta', '', '', 'a:1:{s:11:"description";s:0:"";}', 0),
+(8, 'subHome', '', '', 'a:1:{s:11:"description";s:0:"";}', 21);
 
 -- --------------------------------------------------------
 
@@ -1124,7 +1126,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (8, 2, 'Sociedad', 'sociedad', 'category', 3, 0),
 (9, 2, 'EconomÃ­a', 'economia', 'category', 4, 0),
 (10, 2, 'Deportes', 'deportes', 'category', 5, 0),
-
 (19, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),
 (21, 1, 'Portada', 'home', 'internal', 1, 0),
 (23, 4, 'Sociedad', 'sociedad', 'category', 2, 0),
@@ -1545,6 +1546,37 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM'),
 (135, 'GROUP_CHANGE', ' Cambiar de grupo al usuario ', 'GROUP');
 
+
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'ALBUM'),
+(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'ALBUM'),
+(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'ALBUM'),
+(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'ALBUM'),
+(159, 'ALBUM_SETTINGS', 'Configurar módulo de álbumes', 'ALBUM'),
+(158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
+(157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
+(156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
+(155, 'VIDEO_HOME', 'Publicar video en home', 'VIDEO'),
+(154, 'SCHEDULE_ADMIN', 'Gestionar la agenda ', 'SCHEDULE'),
+(153, 'SCHEDULE_SETTINGS', 'Gestionar la agenda ', 'SCHEDULE'),
+(152, 'SPECIAL_TRASH', 'Gestionar papelera especiales', 'SPECIAL'),
+(151, 'SPECIAL_DELETE', 'Eliminar especiales', 'SPECIAL'),
+(150, 'SPECIAL_UPDATE', 'Modificar especiales', 'SPECIAL'),
+(149, 'SPECIAL_SETTINGS', 'Configurar modulo de especiales', 'SPECIAL'),
+(148, 'SPECIAL_AVAILABLE', 'Aprobar especiales', 'SPECIAL'),
+(147, 'SPECIAL_FAVORITE', 'Gestionar widget especiales', 'SPECIAL'),
+(146, 'SPECIAL_CREATE', 'Crear especiales', 'SPECIAL'),
+(145, 'SPECIAL_ADMIN', 'Administrar modulo de especiales ', 'SPECIAL'),
+(144, 'BOOK_TRASH', 'Vaciar papelera de libros', 'BOOK'),
+(143, 'BOOK_DELETE', 'Eliminar libros', 'BOOK'),
+(142, 'BOOK_UPDATE', 'Modificar libros', 'BOOK'),
+(141, 'BOOK_SETTINGS', 'Configurar modulo de libros', 'BOOK'),
+(140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
+(139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
+(138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
+(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK');
+
 -- --------------------------------------------------------
 
 --
@@ -1763,6 +1795,10 @@ CREATE TABLE IF NOT EXISTS `settings` (
 --
 
 INSERT INTO `settings` (`name`, `value`) VALUES
+('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'), 
+('twitter_page', 's:28:"http://twitter.com/opennemas";'),
+('facebook_id', 's:12:"282535299100";'),
+('site_footer', 's:189:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br /> Calle Noriega Varela 16 BAJO<br /> 32004, Ourense (Spain)<br /> +34 655172329<br /> OpenHost Media Press S.L.</p>";'),
 ('site_title', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
 ('site_description', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),
@@ -1860,6 +1896,7 @@ INSERT INTO `users` (`pk_user`, `online`, `login`, `password`, `sessionexpire`, 
 (3, 0, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David', 'Martinez', 'Carballo', ' ', ' ', 1, 4),
 (5, 0, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco ', 'DiÃ©guez', 'Souto', ' ', ' ', 1, 4),
 (4, 0, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre', 'Rico', '', '', '', 1, 4),
+(7, 0, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra', 'Pereira', '', '', '', 1, 4),
 (132, 0, 'admin', '75bba3adeaec86b143375d90a6d61bfd', 45, 'admin@opennemas.com', 'administrator', 'administrator', NULL, NULL, NULL, 1, 5);
 
 -- --------------------------------------------------------
@@ -1987,7 +2024,10 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 (6, 118),
 (6, 122),
 (6, 123),
-(6, 124);
+(6, 124),
+(6, 132),
+(6, 133),
+(6, 134);
 
 -- --------------------------------------------------------
 
@@ -2095,31 +2135,7 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (207, 'TodayNews', 'intelligentwidget');
 
 -- New modules books & specials
-
--- phpMyAdmin SQL Dump
--- version 3.3.7deb5build0.10.10.1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Oct 24, 2011 at 12:49 PM
--- Server version: 5.1.49
--- PHP Version: 5.3.3-1ubuntu9.5
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `onm-cronicas`
---
-
--- --------------------------------------------------------
-
---
+ 
 -- Table structure for table `books`
 --
 
@@ -2171,25 +2187,4 @@ CREATE TABLE IF NOT EXISTS `special_contents` (
 --
 -- Dumping data for table `special_contents`
 --
-
-
-INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
-(154, 'SCHEDULE_ADMIN', 'Gestionar la agenda ', 'SCHEDULE'),
-(153, 'SCHEDULE_SETTINGS', 'Gestionar la agenda ', 'SCHEDULE'),
-(152, 'SPECIAL_TRASH', 'Gestionar papelera especiales', 'SPECIAL'),
-(151, 'SPECIAL_DELETE', 'Eliminar especiales', 'SPECIAL'),
-(150, 'SPECIAL_UPDATE', 'Modificar especiales', 'SPECIAL'),
-(149, 'SPECIAL_SETTINGS', 'Configurar modulo de especiales', 'SPECIAL'),
-(148, 'SPECIAL_AVAILABLE', 'Aprobar especiales', 'SPECIAL'),
-(147, 'SPECIAL_FAVORITE', 'Gestionar widget especiales', 'SPECIAL'),
-(146, 'SPECIAL_CREATE', 'Crear especiales', 'SPECIAL'),
-(145, 'SPECIAL_ADMIN', 'Administrar modulo de especiales ', 'SPECIAL'),
-(144, 'BOOK_TRASH', 'Vaciar papelera de libros', 'BOOK'),
-(143, 'BOOK_DELETE', 'Eliminar libros', 'BOOK'),
-(142, 'BOOK_UPDATE', 'Modificar libros', 'BOOK'),
-(141, 'BOOK_SETTINGS', 'Configurar modulo de libros', 'BOOK'),
-(140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
-(139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
-(138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK');
 

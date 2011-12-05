@@ -178,7 +178,7 @@ class Privilege
         if(is_null($filter)) {
             $sql = 'SELECT * FROM privileges ORDER BY module';
         } else {
-            $sql = 'SELECT * FROM privileges WHERE '.$filter.' ORDER BY module';
+            $sql = 'SELECT * FROM privileges WHERE '.$filter.' ORDER BY module, pk_privilege';
         }
 
         // Set fetch method to ADODB_FETCH_ASSOC

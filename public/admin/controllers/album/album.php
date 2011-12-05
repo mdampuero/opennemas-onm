@@ -188,7 +188,7 @@ switch($action) {
 
         if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
             m::add(_("You can't modify this content because you don't have enought privileges.") );
-             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
         } else {
             $album->update( $_POST );
         }
@@ -239,7 +239,7 @@ switch($action) {
             $cm= new ContentManager();
             $relat = $cm->getContents($relations);
             foreach($relat as $contents) {
-               $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title.'\n';
+               $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
             }
             $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all its relations?");
         } else {
@@ -285,6 +285,8 @@ switch($action) {
     break;
 
     case 'change_favorite':
+        
+        Acl::checkOrForward('ALBUM_FAVORITE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
@@ -386,4 +388,3 @@ switch($action) {
 
     break;
 }
-

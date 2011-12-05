@@ -1,3 +1,31 @@
+--2-Dic- 2011
+ 
+-- Default category for epaper
+INSERT INTO `content_categories` (
+`pk_content_category` ,
+`title` ,
+`name` ,
+`inmenu` ,
+`posmenu` ,
+`internal_category` ,
+`fk_content_category` ,
+`params` ,
+`logo_path` ,
+`color`
+)
+VALUES (
+NULL , 'Portadas', 'portadas', '1', '10', '14', '0', NULL , NULL , '#638F38'
+);
+ 
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES 
+(158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
+(157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
+(156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
+(155, 'VIDEO_HOME', 'Publicar video en home', 'VIDEO');
+  
+
+
 -- 15-Nov-2011
 -- Params for categories
 ALTER TABLE `content_categories` ADD `params` LONGTEXT NULL ;

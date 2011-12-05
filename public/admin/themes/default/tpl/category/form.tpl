@@ -67,12 +67,12 @@
                     <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
                         <label for="title">{t}Title{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap"  colspan="2">
+                    <td style="padding:4px;width:100px;">
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
-                            class="required" size="70" />
+                            class="required" size="50" />
                     </td>
                     <td rowspan="4">
-                    <div class="help-block margin-left-1">
+                    <div class="help-block margin-left-1" style="width:90%">
                         <div class="title"><h4>Categorias</h4></div>
                         <div class="content"> Title for short title name <br />
                         Internal name for calculate slugs and uri <br />
@@ -86,9 +86,9 @@
                     <td valign="middle"  style="padding:4px;text-align:right; width:100px;">
                             <label for="title">{t}Internal name:{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap"   colspan="2">
+                    <td style="padding:4px;width:100px;" nowrap="nowrap">
                         <input type="text" id="name" name="name" title="carpeta categoria" readonly
-                              value="{$category->name|clearslash|default:""}" class="required" size="70" />
+                              value="{$category->name|clearslash|default:""}" class="required" size="50" />
                     </td>
                 </tr>
                 {/if}
@@ -96,9 +96,8 @@
                     <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
                         <label for="title">{t}Page Title{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap"  colspan="2">
-                        <input type="text" id="params[title]" name="params['title']" title="Título" value="{$category->params['title']|clearslash|default:""}"
-                            class="required" size="70" />
+                    <td style="padding:4px;width:100px;" nowrap="nowrap" >
+                        <input type="text" id="params[title]" name="params['title']" title="Título" value="{$category->params['title']|clearslash|default:""}" size="50" />
                     </td>
                 </tr>
                 <tr>
@@ -155,7 +154,7 @@
                     <td align="right" valign="middle" style="width:100px;text-align:right">
                         <label for="inmenu">{t}Show in menu:{/t}</label>
                     </td>
-                    <td style="padding:4px;" colspan="2" >
+                    <td style="padding:4px;">
                         <input type="checkbox" id="inmenu" name="inmenu"
                                value="{if empty($category->fk_content_category) || $category->inmenu eq 1}1{else}0{/if}"
                             {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>
@@ -164,31 +163,35 @@
                 </tr>
 
                 {if isset($configurations) && !empty($configurations['allowLogo'])}
-                     <tr>
-                        <td valign="middle" style="padding:4px;text-align:right; width:100px;">
-                            <label for="inmenu">{t}Frontpage logo:{/t}</label>
-                        </td>
-                        <td style="padding:4px;" nowrap="nowrap" >
-                            <input type="file" id="logo_path" name="logo_path"  />
-                        </td>
-                         <td style="padding:4px;" nowrap="nowrap" rowspan="2" >
-                             {if !empty($category->logo_path)}
-                                 <img src="{$smarty.const.MEDIA_URL}/sections/{$category->logo_path}" >
-                             {/if}
-                         </td>
-                    </tr>
-                    <tr>
-                        <td valign="middle" style="padding:4px;text-align:right; width:100px;">
-                            <label for="inmenu">{t}Color:{/t}</label>
-                        </td>
-                        <td style="padding:4px;" colspan="2" >
-                            <script type="application/x-javascript">
-                                initPicker('color','{$category->color}', 24);
-                            </script>
-                        </td>
-                    </tr>
-                {/if}
-
+                 <tr>
+                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="inmenu">{t}Frontpage logo:{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap" >
+                        <input type="file" id="logo_path" name="logo_path"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="inmenu">{t}Image logo:{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap" >
+                        {if !empty($category->logo_path)}
+                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" >
+                        {/if}
+                    </td>
+                </tr>
+                {/if}    
+                <tr>
+                    <td valign="middle" style="padding:4px;text-align:right; width:100px;">
+                        <label for="inmenu">{t}Color:{/t}</label>
+                    </td>
+                    <td style="padding:4px;" colspan="2" >
+                        <script type="application/x-javascript">
+                            initPicker('color','{$category->color}', 24);
+                        </script>
+                    </td>
+                </tr>
                 {if !empty($subcategorys)}
                     <tr>
                         <td valign="top" style="text-align:right; ">

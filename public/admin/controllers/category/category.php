@@ -90,6 +90,7 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
             $category = new ContentCategory( $_REQUEST['id'] );
+            $category->params = unserialize($category->params);
             $tpl->assign('category', $category);
             $subcategorys = $ccm->getSubcategories( $_REQUEST['id'] );
             $tpl->assign('subcategorys', $subcategorys);
@@ -118,12 +119,11 @@ if( isset($_REQUEST['action']) ) {
                 $uploaddir = MEDIA_PATH.'/sections/'.$nameFile;
 
                 if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
-                  $_REQUEST['logo_path'] = $nameFile;
+                  $_POST['logo_path'] = $nameFile;
                 }
             }
 
             $category = new ContentCategory();
-            //var_dump($_POST);die();
             if($category->update( $_POST )) {
                 $ccm->reloadCategories();
             }
@@ -212,15 +212,14 @@ if( isset($_REQUEST['action']) ) {
 		break;
 
 		case 'validate':
-
+            
             $configurations = s::get('section_settings');
 
             if($configurations['allowLogo'] == 1 ) {
-                $sectionDir = !empty($configurations['logoDir'])?($configurations['logoDir']):'';
 
                 if(!empty($_FILES) && isset($_FILES['logo_path'])) {
                     $nameFile = $_FILES['logo_path']['name'];
-                    $uploaddir = MEDIA_PATH.'/'.$sectionDir.'/'.$nameFile;
+                    $uploaddir = MEDIA_PATH.'/sections/'.$nameFile;
 
                     if (move_uploaded_file($_FILES["logo_path"]["tmp_name"], $uploaddir)) {
                       $_POST['logo_path'] = $nameFile;
@@ -275,8 +274,8 @@ if( isset($_REQUEST['action']) ) {
             unset($_POST['action']);
             unset($_POST['submit']);
 
-            if($_POST['section_settings']['allowLogo'] == 1 && !empty($_POST['section_settings']['logoDir'])){
-                $path = MEDIA_PATH.'/'.$_POST['section_settings']['logoDir'];
+            if($_POST['section_settings']['allowLogo'] == 1){
+                $path = MEDIA_PATH.'/sections';
                 FilesManager::createDirectory($path);
             }
 

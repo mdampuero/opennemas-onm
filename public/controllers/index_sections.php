@@ -92,8 +92,23 @@ if(empty($category_name)) {
 }
 
 $actual_category = $category_name;
+$allcategorys = $ccm->categories;
 
-$tpl->assign(array( 'category_name'=>$category_name ,
+$category_data = array();
+if (!empty($allcategorys)) {
+    foreach ($allcategorys as $prima) {
+        $subcat = $ccm->get_all_subcategories($prima->pk_content_category);
+        $categories[$prima->posmenu] = array('id' => $prima->pk_content_category, 'name' => $prima->name, 'title' => $prima->title, 'internal_category' => $prima->internal_category, 'subcategories' => $subcat, 'posmenu' => $prima->posmenu, 'color' => $prima->color, 'logo' => $prima->logo_path);
+        if (($category == $prima->pk_content_category) || ($subcategory == $prima->pk_content_category)) {
+            $category_data = array('id' => $prima->pk_content_category, 'name' => $prima->name, 'title' => $prima->title, 'internal_category' => $prima->internal_category, 'subcategories' => $subcat, 'posmenu' => $prima->posmenu, 'color' => $prima->color, 'logo' => $prima->logo_path);
+        }
+    }
+}
+
+$tpl->assign(array( 
+    'category_data'=> $category_data,
+    'allcategorys'=> $allcategorys,
+    'category_name'=>$category_name ,
     'category'=>$category ,
     'actual_category'=>$actual_category ,
     'category_real_name', $ccm->get_title($category_name)

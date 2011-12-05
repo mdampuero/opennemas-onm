@@ -56,11 +56,6 @@
                                 </select>
                             </div>
                             <br />
-                       {*     <div>
-                                <label for="section_settings[logoDir]">{t}Name header images directory:{/t}</label>
-                                <input type="text" class="required" name="section_settings[logoDir]" value="{$configs['section_settings']['logoDir']|default:""}" />
-                            </div> *}
-                            <br />
                               
                         </div>
                     </td>

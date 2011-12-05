@@ -85,7 +85,7 @@
                                     </td>
                                     <td>
                                         <select name="available" id="available"
-                                            {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"} disabled="disabled" {/acl} >
+                                            {acl isNotAllowed="ADVERTISEMENT_AVAILA"} disabled="disabled" {/acl} >
                                             <option value="1" {if isset($advertisement->available) &&  $advertisement->available == 1}selected="selected"{/if}>Si</option>
                                             <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
                                         </select>

@@ -114,6 +114,7 @@ switch($action) {
     break;
 
     case 'read':
+        Acl::checkOrForward('SPECIAL_UPDATE');
         $cm = new ContentManager();
         $special = new Special($_REQUEST['id']);
         $nots=$special->get_contents($_REQUEST['id']);
@@ -141,6 +142,7 @@ switch($action) {
 	
     break;
     case 'new':
+        Acl::checkOrForward('SPECIAL_CREATE');
         $cm = new ContentManager();
         $articles= $cm->find_by_category('Article', $category, '1=1 ', 'ORDER BY created DESC LIMIT 0,1000');
         $params = $category;
@@ -163,6 +165,7 @@ switch($action) {
     break;
 
     case 'update':
+        Acl::checkOrForward('SPECIAL_UPDATE');
         $special = new Special($_REQUEST['id']);
         $special->update($_POST);
         if(isset($_GET['desde']) && $_GET['desde']=='hemeroteca'){
@@ -171,18 +174,12 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-    case 'duplicate':
-        // Crear un nuevo special  a partir de uno existente
-        $special = new Special( $_POST['id'] );
-        if($special->duplicate( $_POST )) {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_POST['category']);
-        } else {
-            $tpl->assign('errors', $article->errors);
-
-        }
-    break;
+     
 
     case 'delete':
+        
+        Acl::checkOrForward('SPECIAL_DELETE');
+        
         $special = new Special($_REQUEST['id']);
         $special->delete($_REQUEST['id']);
 
@@ -190,6 +187,9 @@ switch($action) {
     break;
 
     case 'change_favorite':
+        
+        Acl::checkOrForward('SPECIAL_FAVORITE');
+        
         $special = new Special($_REQUEST['id']);
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
         $special->set_favorite($_REQUEST['id'],$status,$category);
@@ -199,6 +199,8 @@ switch($action) {
 
     case 'inhome_status':
 
+        Acl::checkOrForward('SPECIAL_HOME');
+        
         $special = new Special($_REQUEST['id']);
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
         $special->set_inhome($status,$_SESSION['userid']);
@@ -207,6 +209,9 @@ switch($action) {
     break;
 
     case 'available_status':
+        
+        Acl::checkOrForward('SPECIAL_AVAILABLE');
+        
         $special = new Special($_REQUEST['id']);
 
         // FIXME: evitar otros valores erróneos
@@ -217,6 +222,9 @@ switch($action) {
     break;
 
     case 'change_status':
+        
+        Acl::checkOrForward('SPECIAL_AVAILABLE');
+        
         $special = new Special($_REQUEST['id']);
 
         //Publicar o no, comprobar num clic

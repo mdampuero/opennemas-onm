@@ -136,6 +136,66 @@ OpenNeMas.tinyMceConfig = {
         }
     },
 
+    'footer': {
+        mode : "exact",
+        theme : "advanced",
+        language: "es",
+        plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe,gtranslator",
+        skin : "o2k7",
+        skin_variant : "silver",
+        /* css */
+        content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
+
+        theme_advanced_buttons1 : "bold,italic,underline,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,outdent,indent,|,copy,pastetext",
+        theme_advanced_buttons2 : "|,undo,redo,|,removeformat,cleanup,code,|,link,unlink,|,image,media,iframe,spellchecker,gtranslator,xornalautolink",
+        theme_advanced_buttons3 : "",
+
+        /* Force don't use <p> element for new line */
+        force_br_newlines : true,
+        forced_root_block : '',
+        force_p_newlines : false,
+
+        /* Use absolute URIs */
+        relative_urls: false,
+        document_base_url: '/',
+        /* external_image_list_url : "/admin/external_images.js",
+        media_external_list_url : "/admin/external_media.js", */
+
+        /* Tabfocus plugin */
+        tabfocus_elements : ":prev,:next",
+        tab_focus: ":prev,:next",
+
+        /* Iframe */
+        extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
+
+
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+
+        flash_wmode : "transparent",
+        flash_quality : "high",
+        flash_menu : "false",
+
+        theme_advanced_resize_horizontal : false,
+        theme_advanced_resizing : true,
+
+        spellchecker_languages : "+Castellano=es,Galego=gl,English=en",
+
+        setup : function(ed) {
+            ed.onKeyUp.add(function(ed, e) {
+                if(counttiny) {
+                    counttiny(document.getElementById('counter_summary'), ed);
+                }
+            });
+
+            ed.onChange.add(function(ed, e) {
+                if(counttiny) {
+                    counttiny(document.getElementById('counter_summary'), ed);
+                }
+            });
+        }
+    },
+
     'widget': {
         mode : "exact",
         theme : "advanced",
