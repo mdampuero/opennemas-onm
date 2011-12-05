@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
+{css_tag href="/../js/jquery_colorpicker/css/colorpicker.css"}
 <style type="text/css">
 table th, table label {
     color: #888;
@@ -79,160 +80,332 @@ textarea{
         </ul>
 
         <div id="general" class="panel">
-            <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Site title:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="site_title" name="site_title" value="{$configs['site_title']|default:""}">
-                        </td>
-                        <td>
+            <fieldset>
+                <legend>{t}Site options{/t}</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_name">{t}Site name:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit Site name{/t}</h4></div>
+                                    <div class="content">{t}You can change the name of your site here. This will be displayed as your site name{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_agency">{t}Site agency:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit Site agency{/t}</h4></div>
+                                    <div class="content">{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_color">{t}Site color:{/t}</label>
+                            </th>
+                            <td>
+                                <input readonly="readonly" type="text" id="site_color" name="site_color" value="{$configs['site_color']|default:"0000ff"}">
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit Site color{/t}</h4></div>
+                                    <div class="content">{t}You can edit the site color here.
+                                                        This will change the color of the menu bars. 
+                                                        If you wanna change the categorys color, 
+                                                        go to the Category Manager and edit a category.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_logo">{t}Site logo:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="file" size="33" id="site_logo" name="site_logo">
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Add a Logo for the site{/t}</h4></div>
+                                    <div class="content">{t}You can add an image for your site logo here.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        {if isset($configs['site_logo'])}
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Logo image:{/t}</label>
+                            </th>
+                            <td style="height:100px;">
+                                <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}">
+                            </td>
+                            <td colspan=2 valign="top">
 
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Site description:{/t}</label>
-                        </th>
-                        <td>
-                            <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Site keywords:{/t}</label>
-                        </th>
-                        <td>
-                            <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Site agency:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Site logo:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="file" size="43" id="site_logo" name="site_logo">
-                        </td>
-                        <td>
- 
-                        </td>
-                    </tr>
-                    {if isset($configs['site_logo'])}
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Logo image:{/t}</label>
-                        </th>
-                        <td style="height:100px;">
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}">
-                        </td>
-                        <td>
-                            
-                        </td>
-                    </tr>
-                    {/if}
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
-                            <div id="toggle-btn" style="float:right;">
-                                <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('site_footer');return false;" href="#">
-                                    <img border="0" alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
-                            </div>
-                        </th>
-                        <td>
-                            <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
-                        </td>
-                        <td>
-                            
-                        </td>
-                    </tr>
-        
-                </tbody>
-            </table>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        {/if}
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
+                                <div id="toggle-btn" style="float:right;">
+                                    <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('site_footer');return false;" href="#">
+                                        <img border="0" alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
+                                </div>
+                            </th>
+                            <td>
+                                <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
+                                    <div class="content">{t}You can edit here the footer of the site.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>{t}SEO options{/t}</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Site title:{/t}</label>
+                            </th>
+                            <td>
+                                <textarea id="site_title" name="site_title"cols="50" rows="7">{$configs['site_title']|default:""}</textarea>
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit your Site title{/t}</h4></div>
+                                    <div class="content">{t}You can edit here the site title. This one will be displayed on the browsers <title> tag.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_description">{t}Site description:{/t}</label>
+                            </th>
+                            <td>
+                                <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit your Site description{/t}</h4></div>
+                                    <div class="content">{t}You can edit here the site description. This will be used on <meta> tag description.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_keywords">{t}Site keywords:{/t}</label>
+                            </th>
+                            <td>
+                                <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
+                            </td>
+                            <td colspan="2" valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
+                                    <div class="content">{t}You can edit here the site keywords. This will be used on <meta> tag keywords.{/t}</div>
+                                </div>
+                            </td>
+                            <tr valign="top">
+                                <th scope="row">
+                                    
+                                </th>
+                                <td>
+                                    
+                                </td>
+                            </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
         </div>
        
         <div id="misc" class="panel">
-           <table>
-                <tbody>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                            <span class="default-value"></span>
-                        </td>
-                        <td valign="top">
-                            <div class="help-block margin-left-1">
-                                <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
-                                <div class="content"> {t}Default: 900 secs{/t} </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Time Zone:{/t}</label>
-                        </th>
-                        <td>
-                            {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
-                        </td>
-                        <td>
+            <fieldset>
+                <legend>{t}Opennemas settings{/t}</legend>
+               <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
+                                <span class="default-value"></span>
+                            </td>
+                            <td valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
+                                    <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t} </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Time Zone:{/t}</label>
+                            </th>
+                            <td>
+                                {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
+                            </td>
+                            <td>
 
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="site_title">{t}Language{/t}</label>
-                        </th>
-                        <td>
-                            {html_options name=site_language options=$languages selected=$configs['site_language']}
-                        </td>
-                        <td>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="site_title">{t}Language{/t}</label>
+                            </th>
+                            <td>
+                                {html_options name=site_language options=$languages selected=$configs['site_language']}
+                            </td>
+                            <td>
 
-                        </td>
-                    </tr>
-                    
-                    <tr valign="top">
-                        <th scope="row">
-                            <label for="items_per_page">{t}Items per page:{/t}</label>
-                        </th>
-                        <td>
-                            <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                        </td>
-                        <td valign="top">     
-                            <div class="help-block margin-left-1">
-                                <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
-                                <div class="content">{t}Default: 20 elements{/t}</div>
-                            </div>
-                        
+                            </td>
+                        </tr>
 
-                        </td>
-                    </tr>
-                    
-                </tbody>
-            </table>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="items_per_page">{t}Items per page:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
+                            </td>
+                            <td valign="top">     
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
+                                    <div class="content">{t}Default: 20 elements{/t}</div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </fieldset>
         </div>
  
 
         <div id="external" class="panel">
+            <fieldset>
+                <legend>{t}Social networks{/t}</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="facebook_page">{t}Facebook Page Url:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="facebook_page" name="facebook_page" value="{$configs['facebook_page']|default:""}">
+                            </td>
+                            <td rowspan=2>
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Customize Social Networks{/t}</h4></div>
+                                    <div class="content">{t escape=off}If you have a <b>facebook page</b>, please complete the form with your facebook page url and Id.<br/>
+                                                            If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="facebook_id">{t}Facebook Id:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="facebook_id" name="facebook_id" value="{$configs['facebook_id']|default:""}">
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="twitter_page">{t}Twitter Page:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}">
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </fieldset>
+            
             <fieldset>
                 <legend>{t}Google Services{/t}</legend>
                 <table>
@@ -402,10 +575,26 @@ textarea{
 
     </form>
 </div>
+{script_tag language="javascript" src="/jquery/jquery.min.js"}
+{script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript" language="javascript">
     tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.advanced.elements = "site_footer";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
+    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
+   
+    $.noConflict();
+    jQuery('#site_color').ColorPicker({
+        onSubmit: function(hsb, hex, rgb, el) {
+            jQuery(el).val(hex);
+            jQuery(el).ColorPickerHide();
+        },
+        onBeforeShow: function () {
+            jQuery(this).ColorPickerSetColor(this.value);
+        }
+    })
+    .bind('keyup', function(){
+        jQuery(this).ColorPickerSetColor(this.value);
+    });
 </script>
 {/block}

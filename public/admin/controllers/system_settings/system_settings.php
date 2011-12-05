@@ -36,9 +36,9 @@ switch($action) {
 
         $configurationsKeys = array(
                                     'site_title', 'site_logo', 'site_description','site_keywords','site_agency', 'site_footer',
-                                    'time_zone','site_language','site_footer',
-                                    'recaptcha', 'google_maps_api_key',
-                                    'google_custom_search_api_key','facebook',
+                                    'site_color', 'site_name', 'time_zone','site_language','site_footer',
+                                    'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
+                                    'facebook','facebook_page','facebook_id','twitter_page',
                                     'google_analytics','piwik',                                    
                                     'items_per_page','refresh_interval' 
                                     );
