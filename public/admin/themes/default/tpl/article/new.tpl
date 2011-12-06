@@ -56,14 +56,6 @@ if($('starttime')) {
 	<div class="wrapper-content">
           
         {render_messages}
-          
-		{if is_object($article) && $article->isClone()}
-		<div class="notice">
-			{assign var="original" value=$article->getOriginal()}
-            This article was <strong>cloned</strong>. <br> For editing the content you must go to
-            <a href="article.php?action=read&id={$original->id}">the original article</a>.
-		</div>
-		{/if}
 
 		{* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
 		<ul id="tabs">
@@ -97,315 +89,265 @@ if($('starttime')) {
 
 		{* Pestaña de edición ******************************************************** *}
 		<div class="panel" id="edicion-contenido" style="background:#fff;">
-			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
-			<tbody>
-			<tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="title">{t}Frontpage title:{/t}</label>
-					<input type="text" id="title" name="title" title="Título de la noticia en portada"
-						value="{$article->title|clearslash|escape:"html"|default:""}" class="required" style="width:98%" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
-						onkeyup="countWords(this,document.getElementById('counter_title'))"
-						{if is_object($article)}
-						onChange="search_related('{$article->pk_article}',$('metadata').value);"
-						{/if}
-						tabindex="1"/>
-				</td>
-				<td valign="top" align="right" style="padding:4px; width:30%" rowspan="6">
-					<div class="utilities-conf">
-						<table style="width:99%;">
-							<tr>
-								<td align="right">
-								<label for="category">{t}Section:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top">
-									<select name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="8">
-										<option value="20" {if !isset($category)}selected{/if} name="{t}Unknown{/t}" >{t}Unknown{/t}</option>
-										{section name=as loop=$allcategorys}
-										{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-										<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-										{section name=su loop=$subcat[as]}
-											{if $subcat[as][su]->internal_category eq 1}
-												<option value="{$subcat[as][su]->pk_content_category}"
-												{if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-											{/if}
-										{/section}
-										{/acl}
-										{/section}
-									</select>
-								</td>
-							</tr>
-							{if $smarty.session.desde != 'list_hemeroteca'}
-							 <tr>
-								<td align="right">
-									<label for="with_comment">{t}Allow coments{/t}</label>
-								</td>
-								<td  style="text-align:left;vertical-align:top">
-									<input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1 tabindex="9"/>
-								</td>
-							</tr>
-							 <tr>
-								<td align="right">
-									<label for="available">{t}Available:{/t}</label>
-								</td>
+			<table style="margin-bottom:0; width:97%;">
+				<tbody>
+					<tr>
+						<td style="width:75%; vertical-align:top; padding:4px 0;" valign="top" >
+							<label for="title">{t}Frontpage title:{/t}</label>
+							<input type="text" id="title" name="title" title="{t}Title for this new in frontpage{/t}" style="width:100%"
+								value="{$article->title|clearslash|escape:"html"|default:""}" class="required" maxlength="256" onChange="countWords(this,document.getElementById('counter_title'));"
+								onkeyup="countWords(this,document.getElementById('counter_title'))"
+								{if is_object($article)}
+								onChange="search_related('{$article->pk_article}',$('metadata').value);"
+								{/if}
+								tabindex="1"/>
+						</td>
+						<td valign="top" style="width:20%; text-align:right;"  rowspan="5">
+							<div class="utilities-conf" style="width:99%;">
 
-								<td  style="text-align:left;vertical-align:top">
-									<input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1 tabindex="10"/>
-								</td>
-							</tr>
-							<tr>
-								<td align="right">
-									<label for="frontpage">{t}Put in section frontpage:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top">
-									<input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1 tabindex="11"/>
-								</td>
-							</tr>
-							{if ($article->in_home neq 1)}
-							<tr>
-								<td valign="top"  align="right">
-									<label for="in_home">{t}Suggest for frontpage:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top">
-															<input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2 tabindex="7"/>
-								</td>
-							</tr>
-							{/if}
-							{else} {* else if not list_hemeroteca *}
-							<tr>
-								<td valign="top"  align="right">
-															<label for="content_status">{t}Archived:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top">
-									<input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
-									<input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
-									<input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
-									<input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
-									<input type="hidden" id="available" name="available"  value="{$article->available}" />
-									<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
-								</td>
-							</tr>
-							{/if}
-                            <tr>
-                                <td colspan="2">
-                                    <h3>Statistics</h3>
-                                </td>
-                            </tr>
-							<tr>
-								<td align="right">
-									<label for="counter_title">{t}Frontpage title:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
-										value="0" onkeyup="countWords(document.getElementById('title'),this)" tabindex="-1"/> {t}words{/t}
-								</td>
-							</tr>
-							<tr>
-								<td align="right">
-									<label for="counter_title">{t}Inner title{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
-										value="0" onkeyup="countWords(document.getElementById('title_int'),this)" tabindex="-1"/> {t}words{/t}
-								</td>
-							</tr>
-							<tr>
-								<td align="right">
-									<label for="counter_subtitle">{t}Pretitle:{/t}</label>
-								</td>
-								<td style="text-align:left;vertical-align:top;" >
-									<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
-										value="0" onkeyup="countWords(document.getElementById('subtitle'),this)" tabindex="-1"/> {t}words{/t}
-								</td>
-							</tr>
-							<tr colspan=2>
-								<td align="right">
-									<label for="counter_summary">{t}Summary:{/t}</label>
-								</td>
-								<td  style="text-align:left;vertical-align:top">
-									<input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
-										value="0"
-										   onChange="countWords(document.getElementById('summary'),this)"
-										   onkeyup="countWords(document.getElementById('summary'),this)" tabindex="-1"/> {t}words{/t}
-								</td>
-							</tr>
-							<tr>
-								<td align="right">
-									<label for="counter_body">{t}Body:{/t}</label>
-								</td>
-								<td  style="text-align:left;vertical-align:top" >
-									<input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
-										value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));" tabindex="-1"/>
-								</td>
-							</tr>
-						</table>
-						<script type="text/javascript">
-							document.observe("dom:loaded", function() {
-								countWords(document.getElementById('title'), document.getElementById('counter_title'));
-								countWords(document.getElementById('subtitle'), document.getElementById('counter_subtitle'));
-								countWords(document.getElementById('summary'), document.getElementById('counter_summary'));
-								countWords(document.getElementById('body'), document.getElementById('counter_body'));
+								<div style="text-align:right">
+									<h3>{t}Options{/t}</h3>
+									{if $smarty.session.desde != 'list_hemeroteca'}
+										{t}Allow coments{/t}
+										<input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
+										<br/>
+										{t}Available:{/t}
+										<input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1/>
+										<br/>
+
+										{t}Put in section frontpage:{/t}
+										<input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1/>
+										<br/>
+									{if ($article->in_home neq 1)}
+										{t}Suggest for frontpage:{/t}
+										<input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2/>
+										<br/>
+									{/if}
+									{else} {* else if not list_hemeroteca *}
+										{t}Archived:{/t}
+										<input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
+										<br/>
+										<input type="hidden" id="columns" name="columns"  value="{$article->columns}" />
+										<input type="hidden" id="home_columns" name="home_columns"  value="{$article->home_columns}" />
+										<input type="hidden" id="with_comment" name="with_comment"  value="{$article->with_comment}" />
+										<input type="hidden" id="available" name="available"  value="{$article->available}" />
+										<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
+									{/if}
+								</div><!-- / -->
+		                            
+								<div style="text-align:right">
+									<h3>{t}Statistics{/t}</h3>
+									<div>
+										{t}Frontpage title:{/t}
+										<input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
+											value="0" onkeyup="countWords(document.getElementById('title'),this)"/> {t}words{/t}
+									</div><!-- / -->
+									<div>
+										{t}Inner title{/t}
+										<input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
+											value="0" onkeyup="countWords(document.getElementById('title_int'),this)"/> {t}words{/t}
+									</div><!-- / -->
+									<div>
+										{t}Pretitle:{/t}
+										<input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
+											value="0" onkeyup="countWords(document.getElementById('subtitle'),this)"/> {t}words{/t}
+									</div><!-- / -->
+									<div>
+										{t}Summary:{/t}
+										<input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
+											value="0"
+										   	onChange="countWords(document.getElementById('summary'),this)"
+										   	onkeyup="countWords(document.getElementById('summary'),this)"/> {t}words{/t}
+									</div><!-- / -->
+									<div>
+										{t}Body:{/t}
+										<input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
+											value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));"/> {t}words{/t}
+									</div><!-- / -->
+								</div><!-- / -->
+								<script type="text/javascript">
+									document.observe("dom:loaded", function() {
+										countWords(document.getElementById('title'), document.getElementById('counter_title'));
+										countWords(document.getElementById('subtitle'), document.getElementById('counter_subtitle'));
+										countWords(document.getElementById('summary'), document.getElementById('counter_summary'));
+										countWords(document.getElementById('body'), document.getElementById('counter_body'));
+									});
+								</script>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="vertical-align:top; padding:4px 0;">
+							<label for="title">{t}Inner title:{/t}</label>
+							<input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
+									value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:100%"
+									maxlength="256"
+									onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
+									onkeyup="countWords(this,document.getElementById('counter_title_int'))"
+									tabindex="2"/>
+
+							<script type="text/javascript">
+							/* <![CDATA[ */
+							$('title').observe('blur', function(evt) {
+								var tituloInt = $('title_int').value.strip();
+								if( tituloInt.length == 0 ) {
+									$('title_int').value = $F('title');
+									get_tags($('title_int').value);
+								}
 							});
-						</script>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="title">{t}Inner title:{/t}</label>
-					<input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
-							value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:98%"
-							maxlength="256"
-							onChange="countWords(this,document.getElementById('counter_title_int'));get_tags(this.value);"
-							onkeyup="countWords(this,document.getElementById('counter_title_int'))"
-							tabindex="2"/>
+							/* ]]> */
+							</script>
 
-					<script type="text/javascript">
-					/* <![CDATA[ */
-					$('title').observe('blur', function(evt) {
-						var tituloInt = $('title_int').value.strip();
-						if( tituloInt.length == 0 ) {
-							$('title_int').value = $F('title');
-							get_tags($('title_int').value);
-						}
-					});
-					/* ]]> */
-					</script>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align:top; padding:4px 0;" valign="top" >
+							<div style="display:inline-block; width:30%; vertical-align:top;" valign="top">
+								<label for="category">{t}Section:{/t}</label>
+								<select style="width:100%" name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="3">
+									<option value="20" {if !isset($category)}selected{/if} name="{t}Unknown{/t}" >{t}Unknown{/t}</option>
+									{section name=as loop=$allcategorys}
+									{acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+									<option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+									{section name=su loop=$subcat[as]}
+										{if $subcat[as][su]->internal_category eq 1}
+											<option value="{$subcat[as][su]->pk_content_category}"
+											{if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+										{/if}
+									{/section}
+									{/acl}
+									{/section}
+								</select>
+							</div><!-- / -->
+							<div style="display:inline-block; width:69%; vertical-align:top;" valign="top">
+							<label for="agency">{t}Agency{/t}</label>
+								<input 	type="text" id="agency" name="agency" title="{t}Agency{/t}"
+										class="required" style="width:100%" tabindex="4"
+										{if is_object($article)}
+											value="{$article->agency|clearslash|escape:"html"}"
+											onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
+										{else}
+											value="{setting name=site_agency}"
+										{/if}
+									/>
+							</div><!-- / -->
 
-				</td>
-			</tr>
-			<tr>
-				<td style="padding:4px;" >
-					<label for="metadata">{t}Keywords{/t} <small>{t}(Separated by commas){/t}</small></label>
-					<input type="text" id="metadata" name="metadata"
-						   {if isset($article) && is_object($article)}
-						   value="{$article->metadata}"
-						   onChange="search_related('{$article->pk_article|default:""}',$('metadata').value);"
-						   {/if}
-						   style="width:98%" title="Metadatos" tabindex="3"/>
+						</td>
+					</tr>
 
-				</td>
-			</tr>
+					<tr>
+						<td valign="top" >
+							<label for="subtitle">{t}Pretitle{/t}</label>
+							<input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:100%"
+								value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="5"/>
+						</td>
+					</tr>
 
-			<tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="subtitle">{t}Pretitle{/t}</label>
-					<input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:98%"
-						value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="4"/>
-				</td>
-			</tr>
-
-			<tr>
-				<td style="padding:4px;" valign="top" >
-					<label for="agency">{t}Agency{/t}</label>
-					<input 	type="text" id="agency" name="agency" title="{t}Agency{/t}"
-							class="required" style="width:98%" tabindex="5"
+					<tr>
+						<td valign="top" style="vertical-align:top; padding:4px 0;" >
+							<label for="metadata">{t}Keywords{/t} <small>{t}(Separated by commas){/t}</small></label>
+								<input type="text" id="metadata" name="metadata"
+								   {if isset($article) && is_object($article)}
+								   value="{$article->metadata}"
+								   onChange="search_related('{$article->pk_article|default:""}',$('metadata').value);"
+								   {/if} title="Metadatos" tabindex="6" style="width:100%"/>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table style="width:100%;">
+				<tbody>
+					<tr>
+						<td>
+							<label for="summary">
+								{t}Summary{/t}
+								{if is_object($article)}
+									<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
+										<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+									</a>
+								{/if}
+							</label>
+							<textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:98%; min-height:70px;"
+								  onChange="countWords(this,document.getElementById('counter_summary'))"
+								  onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td style="padding:0 4px;">
+							<label for="body">{t}Body{/t}
 							{if is_object($article)}
-								value="{$article->agency|clearslash|escape:"html"}"
-								onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
-							{else}
-								value="{setting name=site_agency}"
+								<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="Habilitar/Deshabilitar editor">
+									<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+								</a>
 							{/if}
-						/>
-				</td>
-			</tr>
-
-			<tr>
-				<td style="padding:4px;">
-					<label for="summary">
-						{t}Summary{/t}
-						{if is_object($article) && !$article->isClone()}
-							<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-								<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
-							</a>
-						{/if}
-					</label>
-					<textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:98%; min-height:70px;"
-						  onChange="countWords(this,document.getElementById('counter_summary'))"
-						  onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}</textarea>
-				</td>
-			</tr>
-			<tr style="padding:4px;">
-				<td style="padding-bottom: 5px; padding-top: 10px;" valign="top" colspan="2">
-					<label for="body">{t}Body{/t}
-					{if is_object($article) && !$article->isClone()}
-						<a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="Habilitar/Deshabilitar editor">
-							<img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
-						</a>
-					{/if}
-					</label>
-					<textarea tabindex="7"name="body" id="body" title="Cuerpo de la noticia"
-							  style="width:100%; height:20em;"
-							  onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
-				</td>
-			</tr>
-			<tr style="padding:4px;">
-				<td valign="top" align="left" colspan="2" >
-					<div id="article_images">
-						{include  file="article/partials/_images.tpl"}
-					</div>
-				</td>
-			</tr>
-			</tbody>
-			<tfoot>
-				<tr class="pagination">
-					<td></td>
-				</tr>
-			</tfoot>
+							</label>
+							<textarea tabindex="7" name="body" id="body" title="Cuerpo de la noticia"
+								style="width:100%;  height:20em;"
+								onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table>
+				<tbody>
+					<tr style="padding:4px;">
+						<td valign="top" align="left" colspan="2" >
+							<div id="article_images">
+								{include  file="article/partials/_images.tpl"}
+							</div>
+						</td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 
 		{* Pestaña de parámetros de noticia ****************************************** *}
-		<div class="panel" id="edicion-extra" style="width:98%">
-			<table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo">
-			<tbody>
-             <tr>
-                <td valign="top" align="right" style="padding:4px;" >
-						<label for="slug">{t}Slug{/t}</label>
-				</td>
-				<td style="padding:4px;" valign="top" >				
-					<input 	type="text" id="slug" name="slug" title="{t}slug{/t}" size="90"
-							style="width:98%" maxlength="256" tabindex="5"
-							{if is_object($article)}
-								value="{$article->slug|clearslash|escape:"html"}"
-							{else}
-								value=""
-							{/if}
-						/>
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="starttime">{t}Publication start date:{/t}</label>
-				</td>
-				<td style="padding:4px;" >
-					<div style="width:170px;">
-						<input type="text" id="starttime" name="starttime" size="18"
-							title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" /></div>
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="endtime">{t}Publication end date:{/t}</label>
-				</td>
-				<td style="padding:4px;" >
-					<div style="width:170px;">
-						<input type="text" id="endtime" name="endtime" size="18"
-							title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" /></div>
+		<div class="panel" id="edicion-extra">
+			<table style="width:98%">
+				<tbody>
+	             	<tr>
+		                <td valign="top" style="padding:4px;">
+							<label for="slug">{t}Slug{/t}</label>
+							<input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
+									style="width:98%" maxlength="256" tabindex="5"
+									{if is_object($article)}
+										value="{$article->slug|clearslash|escape:"html"}"
+									{else}
+										value=""
+									{/if}
+								/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding:4px;">
+							<label for="starttime">{t}Publication start date:{/t}</label>
+							<div style="width:170px;">
+								<input type="text" id="starttime" name="starttime" size="18"
+									title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" /></div>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding:4px;">
+							<label for="endtime">{t}Publication end date:{/t}</label>
+							<div style="width:170px;">
+								<input type="text" id="endtime" name="endtime" size="18"
+									title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" /></div>
 
-					<sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
-				</td>
-			</tr>
-			<tr>
-				<td valign="top" align="right" style="padding:4px;" >
-					<label for="description">{t}Description{/t}</label>
-				</td>
-				<td style="padding:4px;" >
-					<textarea name="description" id="description"
-						title="Descripción interna de la noticia" style="width:100%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
-				</td>
-			</tr>
+							<sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top" style="padding:4px;">
+							<label for="description">{t}Description{/t}</label>
+							<textarea name="description" id="description"
+								title="Descripción interna de la noticia" style="width:98%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
+						</td>
+					</tr>
 
-			</tbody>
+				</tbody>
 			</table>
 		</div>
 {*
