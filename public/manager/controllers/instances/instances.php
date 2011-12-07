@@ -92,7 +92,7 @@ switch($action) {
         
         //If is creating a new instance, get DB params on the fly
         $actionName = filter_input(INPUT_POST, 'action_name' , FILTER_SANITIZE_STRING);
-        $internalNameShort = substr($internalName, 0, 10);
+        $internalNameShort = trim(substr($internalName, 0, 10));
         $settings = "";
         if($actionName == "edit") {
             $settings = $_POST['settings'];
