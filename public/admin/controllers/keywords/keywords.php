@@ -1,37 +1,31 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup app
 */
-require_once('../../../bootstrap.php');
-require_once('../../session_bootstrap.php');
+require_once(dirname(__FILE__).'/../../../bootstrap.php');
+require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
+//Check if module is activated in this onm instance
+\Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
+
+ // Check if the user can admin album
+Acl::checkOrForward('PCLAVE_ADMIN');
+ 
 /**
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-// Check ACL
-if(!Acl::check('PCLAVE_ADMIN')) { Acl::deny(); }
+ 
 
 // Build redirect with filter params
 $_redirect = '';
@@ -44,7 +38,7 @@ $pclave = new PClave();
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 switch($action) {
 
-    case 'list': {
+    case 'list': 
 
         $filter = null;
         if(isset($_REQUEST['filter']) && !empty($_REQUEST['filter']['pclave'])) {
@@ -53,7 +47,7 @@ switch($action) {
 
         $terms = $pclave->getList($filter);
 
-        $items_page = 25;
+        $items_page = ITEMS_PAGE;
         $page = (!isset($_REQUEST['page']))? 1: intval($_REQUEST['page']);
 
         // Pager
@@ -72,9 +66,9 @@ switch($action) {
         $tpl->assign('pclaves', $terms);
         $tpl->assign('pager', $pager);
         $tpl->display('keywords/list.tpl');
-    } break;
+    break;
 
-    case 'search': {
+    case 'search': 
         $id    = intval($_REQUEST['id']);
         $terms = $pclave->getList();
 
@@ -90,9 +84,11 @@ switch($action) {
 
         $tpl->assign('terms', $matches);
         $tpl->display('keywords/search.tpl');
-    } break;
+    break;
 
-    case 'read': {
+    case 'read': 
+        Acl::checkOrForward('PCLAVE_UPDATE');
+        
         $id = $_REQUEST['id'];
         $pclave->read($id);
 
@@ -101,28 +97,32 @@ switch($action) {
         $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
         $tpl->display('keywords/new.tpl');
 
-    } break;
+    break;
 
-    case 'new': {
+    case 'new': 
+        Acl::checkOrForward('PCLAVE_CREATE');
         // Show form
         $tpl->assign('tipos', array('url' => _('URL'), 'intsearch' => _('Internal search'), 'email' => _('Email')));
         $tpl->display('keywords/new.tpl');
-    } break;
+    break;
 
-    case 'delete': {
+    case 'delete': 
+        Acl::checkOrForward('PCLAVE_DELETE');
         $id = intval($_REQUEST['id']);
         $pclave->delete($id);
 
         Application::forward('?action=list' . $_redirect);
-    } break;
+    break;
 
-    case 'save': {
+    case 'save': 
+        Acl::checkOrForward('PCLAVE_CREATE');
+       
         $pclave->save($_POST);
 
         Application::forward('?action=list' . $_redirect);
-    } break;
+    break;
 
-    case 'autolink': {
+    case 'autolink': 
         $content = json_decode($HTTP_RAW_POST_DATA)->content;
         if(!empty($content)) {
             // Terms was cached, no problem
@@ -131,9 +131,9 @@ switch($action) {
             // Return to editor
             echo $pclave->replaceTerms($content, $terms);
         }
-    } break;
+    break;
 
-    default: {
+    default: 
         Application::forward($_SERVER['PHP_SELF'] . '?action=list');
-    } break;
+    break;
 }

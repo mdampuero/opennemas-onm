@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" id="action" name="action" value="save" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 
