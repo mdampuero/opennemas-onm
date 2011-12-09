@@ -17,7 +17,7 @@
 
 <div class="wrapper-content">
 
-<form id="formulario" name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
+<form id="formulario" enctype="multipart/form-data"  name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
 
     <div id="content-wrapper">
 
@@ -40,7 +40,7 @@
                         <td valign="top" align="right" style="padding:4px;">
                             <label for="metadata">Palabras clave: </label>
                         </td>
-                        <td style="padding:4px;" nowrap="nowrap"">
+                        <td style="padding:4px;" nowrap="nowrap">
                             <input type="text" id="metadata" name="metadata" size="80" title="Metadatos" value="{$kiosko->metadata|clearslash|default:""}" /><br>
                             <label align='right'><sub>Separadas por comas</sub></label><br>
                         </td>
@@ -51,9 +51,16 @@
                                         <label for="title">Portada de:</label>
                                     </td>
                                     <td nowrap="nowrap">
-                                        <select name="category" id="category" class="required">
+                                        <select name="category" id="category" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                             {section name=as loop=$allcategorys}
-                                                <option value="{$allcategorys[as]->pk_content_category}" {if isset($kiosko) && $kiosko->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                                                {/acl}
+                                                {section name=su loop=$subcat[as]}
+                                                    {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                                                    <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                                                    {/acl}
+                                                {/section}
                                             {/section}
                                         </select>
                                     </td>
@@ -62,36 +69,22 @@
                                     <td valign="top"  align="right" nowrap="nowrap">
                                         <label for="title"> Disponible:</label>
                                     </td>
-                                    <td valign="top" nowrap="nowrap">
-                                        {if !isset($kiosko)}
-                                            <select name="available" id="available" class="required">
-                                                <option value="0">No</option>
-                                                <option value="1" selected>Si</option>
-                                            </select>
-                                        {else}
-                                            <select name="available" id="available" class="required">
+                                    <td valign="top" nowrap="nowrap">                                       
+                                            <select name="available" id="available" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                                 <option value="0" {if $kiosko->available==0}selected{/if}>No</option>
                                                 <option value="1" {if $kiosko->available==1}selected{/if}>Si</option>
-                                            </select>
-                                        {/if}
+                                            </select>                                        
                                     </td>
                                 </tr>
                                 <tr>
                                     <td valign="top"  align="right" nowrap="nowrap">
                                         <label for="title"> Favorito:</label>
                                     </td>
-                                    <td valign="top" nowrap="nowrap">
-                                        {if !isset($kiosko)}
-                                            <select name="favorite" id="favorite" class="required">
+                                    <td valign="top" nowrap="nowrap">                                      
+                                            <select name="favorite" id="favorite" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                                 <option value="0">No</option>
                                                 <option value="1" selected>Si</option>
-                                            </select>
-                                        {else}
-                                            <select name="favorite" id="favorite" class="required">
-                                                <option value="0" {if $kiosko->favorite==0}selected{/if}>No</option>
-                                                <option value="1" {if $kiosko->favorite==1}selected{/if}>Si</option>
-                                            </select>
-                                        {/if}
+                                   
                                         <img class="favorite" src="{$params.IMAGE_DIR}selected.png" border="0" alt="En home" align="top" />
                                     </td>
                                 </tr>
@@ -103,7 +96,7 @@
                             <label for="title">Fecha:</label>
                         </td>
                         <td style="padding:4px;" nowrap="nowrap">
-                             <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" /></div>
+                             <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" />
                         </td>
                     </tr>
                     <tr>
@@ -124,7 +117,7 @@
 
         {* Replaced by the Control.DatePicker prototype widget *}
         {dhtml_calendar inputField="date" button="date" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
-    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" id="action" name="action" value="create" />
     </div><!--fin content-wrapper-->
 
 </form>

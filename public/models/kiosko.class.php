@@ -1,4 +1,5 @@
 <?php
+ 
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -7,23 +8,24 @@
  * file that was distributed with this source code.
  */
 /**
- * Handles all the CRUD actions over kisko elements.
+ * Handles all the CRUD actions over kioko.
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
+
 class Kiosko extends Content {
-    var $pk_kiosko  = NULL;
-    var $name  = NULL;
-    var $path  = NULL;
-    var $date  = NULL;
-    var $favorite  = 0;
+    public $pk_kiosko  = NULL;
+    public $name  = NULL;
+    public $path  = NULL;
+    public $date  = NULL;
+    public $favorite  = 0;
+    public $kiosko_path =NULL;
 
     /**
       * Constructor PHP5
     */
-    function __construct($id=null) {
+    public function __construct($id=null) {
         parent::__construct($id);
 
         // Si existe idcontenido, entonces cargamos los datos correspondientes
@@ -31,56 +33,45 @@ class Kiosko extends Content {
             $this->read($id);
         }
 
+        $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
         $this->content_type = 'Kiosko';
     }
 
-    function initialize($data) {
+    public function initialize($data) {
         $this->title=$data['name'];
         $this->name=$data['name'];
         $this->path=$data['path'];
         $this->date=$data['date'];
-        $this->favorite=$data['favorite'];
+       
         $this->category=$data['category'];
         $this->available=$data['available'];
         $this->metadata=$data['metadata'];
     }
 
-    function create($data) {
+    public function create($data) {
 
-        if( $this->exists($data['name'], $data['category']) ) {
-            $msg = new Message('Una portada ya ha sido subida en la fecha y categoria seleccionadas.<br />' .
+       if( $this->exists($data['name'], $data['category']) ) {
+           m::add('Una portada ya ha sido subida en la fecha y categoria seleccionadas.<br />' .
                                'Para subir una portada en esa fecha debe eliminar primero la portada existente, ' .
                                'teniendo en cuenta que también se debe eliminar de la papelera.', 'error');
-            $msg->push();
+           
 
             $this->initialize($data);
 
             return false;
-        }
+        } 
 
         parent::create($data);
+        
+        $sql = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date` ) " .
+                        " VALUES (?,?,?,?)";
 
-        if ($data['favorite']==1) {
-            $sql = 'UPDATE kioskos SET `favorite`=0 where
-                    `kioskos`.`pk_kiosko` IN (SELECT `contents_categories`.`pk_fk_content` FROM `contents_categories`
-                                              WHERE `contents_categories`.`pk_fk_content_category`='.$data['category'].')';
-            $rs = $GLOBALS['application']->conn->Execute( $sql );
-        }
-
-        $sql = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`,
-                               `date`, `favorite`) " .
-                        "VALUES (?,?,?,?,?)";
-
-        $path = $data['path'];
-
-        $paper_pdf_path = MEDIA_DIR.'/files/kiosko'.$path;
-        $paper_image_path = MEDIA_DIR.'/images/kiosko'.$path;
-
+         
         $this->createThumb($data['name'], $data['path']);
 
         $values = array($this->id, $data['name'], $data['path'],
-                        $data['date'], $data['favorite']);
-
+                        $data['date'] );
+ 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
 
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -89,15 +80,16 @@ class Kiosko extends Content {
 
             return(false);
         }
-
-	return(true);
+        
+     
+        return(true);
     }
 
 
-    function read($id) {
-	parent::read($id);
+    public function read($id) {
+        parent::read($id);
 
-        $sql = 'SELECT * FROM kioskos WHERE pk_kiosko = '.($id);
+        $sql = 'SELECT pk_kiosko, name, path, date FROM kioskos WHERE pk_kiosko = '.($id);
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
         if (!$rs) {
@@ -111,26 +103,21 @@ class Kiosko extends Content {
         $this->load( $rs->fields );
     }
 
-    function update($data) {
+    public function update($data) {
+        
         if(isset($data['available']) and !isset($data['content_status'])){
                     $data['content_status'] = $data['available'];
         }
-
+ 
     	$GLOBALS['application']->dispatch('onBeforeUpdate', $this);
+        
         parent::update($data);
 
-        if ($data['favorite']==1) {
-            $sql = 'UPDATE kioskos SET `favorite`=0 where
-                    `kioskos`.`pk_kiosko` IN (SELECT `contents_categories`.`pk_fk_content` FROM `contents_categories`
-                                              WHERE `contents_categories`.`pk_fk_content_category`='.$data['category'].')';
-            $rs = $GLOBALS['application']->conn->Execute( $sql );
-        }
+        $sql = "UPDATE kioskos SET `date`=?  " .
+            " WHERE pk_kiosko=?";
 
-        $sql = "UPDATE kioskos SET `favorite`=? " .
-            "WHERE pk_kiosko=".($data['id']);
-
-        $values = array($data['favorite']);
-
+        $values = array($data['date'],  $data['id']);
+ 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -138,22 +125,25 @@ class Kiosko extends Content {
             return;
         }
 
-        $this->category_name=$this->loadCategoryName($this->id);
+      
+        $this->category_name = $this->loadCategoryName($this->id);
         $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
         return(true);
     }
 
-    function remove($id) {
+    public function remove($id) {
 
         parent::remove($this->id);
+        
         $sql = 'DELETE FROM kioskos WHERE pk_kiosko='.($this->id);
 
-        $paper_pdf = MEDIA_DIR.'/files/kiosko'.$this->path.$this->name;
-        $paper_image = MEDIA_DIR.'/images/kiosko'.$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
+        $paper_pdf = $this->kiosko_path.$this->path.$this->name;
+        $paper_image = $this->kiosko_path.$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
+        
         unlink($paper_pdf);
         unlink($paper_image);
-
+var_dump($error_msg);
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -169,8 +159,7 @@ class Kiosko extends Content {
      * @param string $category
      * @return boolean
     */
-    public function exists($name_pdf, $category)
-    {
+    public function exists($name_pdf, $category) {
         $sql = 'SELECT count(`kioskos`.`pk_kiosko`) AS total FROM kioskos,contents_categories
                 WHERE `contents_categories`.`pk_fk_content`=`kioskos`.`pk_kiosko`
                 AND `kioskos`.`name`=? AND `contents_categories`.`pk_fk_content_category`=?';
@@ -179,80 +168,55 @@ class Kiosko extends Content {
         return intval($rs) > 0;
     }
 
-    function set_favorite($status,$last_editor,$category) {
-        $GLOBALS['application']->dispatch('onBeforeSetFavorite', $this);
-        if($this->id == NULL) {
-            return(false);
-        }
+     
+    public function set_favorite($status)
+    {
+     
+        if ($this->id == null) return false;
 
-        $sql = 'UPDATE kioskos SET `favorite`=0 where
-                `kioskos`.`pk_kiosko` IN (SELECT `contents_categories`.`pk_fk_content` FROM `contents_categories`
-                                          WHERE `contents_categories`.`pk_fk_content_category`='.$category.')';
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
-
+        parent::set_favorite($status);
+        
         $sql = "UPDATE kioskos SET `favorite`=? WHERE pk_kiosko=".$this->id;
         $values = array($status);
-
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+ 
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
             return;
         }
-
-  	$changed = date("Y-m-d H:i:s");
-        $sql = 'UPDATE contents SET `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $values = array($last_editor,$changed,$this->id);
-
-        if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
-            return;
-        }
-
-        $GLOBALS['application']->dispatch('onAfterSetFavorite', $this);
-        return(true);
+        return true;
     }
-
-    function createThumb($file_pdf,$path) {
+    
+    public function createThumb($file_pdf, $path) {
         $img_name   = basename($file_pdf, ".pdf") . '.jpg';
         $tmp_name   = '/tmp/' . basename($file_pdf, ".pdf") . '.png';
+    
+        // Thumbnail first page (see [0])
+        if ( file_exists($this->kiosko_path.$path. $file_pdf)) {
+            try {
+              
+                $imagick = new Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
+                $imagick->thumbnailImage(280, 0);
 
-        $pdf_path = MEDIA_DIR.'/files/kiosko'.$path;
-        $image_path = MEDIA_DIR.'/images/kiosko'.$path;
+                // First, save to PNG (*.pdf => /tmp/xxx.png)
+                $imagick->writeImage($tmp_name);
+                
+                // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
+                $imagick = new Imagick($tmp_name);
+                $imagick->writeImage($this->kiosko_path.$path.$img_name);
 
-        if(!file_exists($image_path.'/'.$img_name)) {
-            // Check if exists media_path
-            if(!file_exists($image_path)) {
-                mkdir($image_path, 0775);
+                //remove temp image
+                unlink($tmp_name);
+            } catch(Exception $e) {
+                // Nothing
             }
-
-            // Thumbnail first page (see [0])
-            if ( file_exists($pdf_path.'/'.$file_pdf)) {
-                try {
-                    $imagick = new Imagick($pdf_path.'/'.$file_pdf.'[0]');
-                    $imagick->thumbnailImage(180, 0);
-
-                    // First, save to PNG (*.pdf => /tmp/xxx.png)
-                    $imagick->writeImage($tmp_name);
-
-                    // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
-                    $imagick = new Imagick($tmp_name);
-                    $imagick->writeImage($image_path.'/'.$img_name);
-
-                    //remove temp image
-                    unlink($tmp_name);
-                } catch(Exception $e) {
-                    // Nothing
-                }
-            }
+           
         }
+         
     }
 
-    function get_months_by_years(){
+    function get_months_by_years() {
         $sql = "SELECT DISTINCT MONTH(date) as month, YEAR(date) as year FROM `kioskos` ORDER BY year, month DESC";
         $rs = $GLOBALS['application']->conn->Execute( $sql );
 
