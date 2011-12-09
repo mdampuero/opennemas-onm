@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-06 02:44+0100\n"
-"PO-Revision-Date: 2011-12-06 02:47+0100\n"
+"PO-Revision-Date: 2011-12-09 15:54+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -3369,7 +3369,7 @@ msgstr "Poner en portada"
 
 #: public/admin/locale/extracted_strings.c:2282
 msgid "Delete from home"
-msgstr "Eliminar de portada"
+msgstr "Quitar de portada"
 
 #: public/admin/locale/extracted_strings.c:2285
 #: public/admin/locale/extracted_strings.c:3530

@@ -67,7 +67,7 @@ switch($action) {
         if (empty($page)) {
             $limit= "LIMIT ".(ITEMS_PAGE+1);
         } else {
-            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.$numItems;
+            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
         }
 
         $cm = new ContentManager();
