@@ -121,7 +121,7 @@ function changeList(author)
 
 function changepageList(author,page)
 {
-	new Ajax.Updater('list_opinion', "controllers/opinion/opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
+	new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
 }
 
 

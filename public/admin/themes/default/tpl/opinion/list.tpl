@@ -25,15 +25,7 @@
                     <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                 </a>
             </li>
-            {/acl}
-            {acl isAllowed="OPINION_AVAILABLE"}
-            <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
-                </a>
-            </li>
-            {/acl}
-
+            {/acl}            
             {acl isAllowed="OPINION_DELETE"}
              {if $type_opinion neq '-1'}
             <li>
@@ -48,13 +40,7 @@
                 </a>
             </li>
             {/acl}
-            {acl isAllowed="OPINION_CREATE"}
-            <li>
-                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
-                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
-                </a>
-            </li>
-            {/acl}
+            
             
             {acl isAllowed="OPINION_FRONTPAGE"}
              {if $type_opinion eq '-1'}
@@ -65,7 +51,13 @@
                 </li>
             {/if}
             {/acl}
-
+            {acl isAllowed="OPINION_CREATE"}
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
+                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
+                </a>
+            </li>
+            {/acl}
             {acl isAllowed="OPINION_SETTINGS"}
                 <li class="separator"></li>
                     <li>
