@@ -40,5 +40,3 @@ foreach($opinions as $opinion) {
 
 $tpl->assign('opiniones', $opiniones);
  
-$opinionVicenteMartin = $cm->find('Opinion', '`opinions`.`fk_author` = 56 AND `type_opinion` = 0 AND `available` = 1', 'ORDER BY created DESC LIMIT 0,1');
-$tpl->assign('opinionVicenteMartin', $opinionVicenteMartin[0]);

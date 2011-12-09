@@ -93,7 +93,7 @@
                             <tr>
                                 <th><label for="description">{t}Description{/t}</label></th>
                                 <td>
-                                    <textarea name="description" id="description" cols="60">{$menuParams['description']|clearslash|default:""}</textarea>
+                                    <textarea style="width:95%;" name="description" id="description"  rows="5">{$menuParams['description']|clearslash|default:""}</textarea>
                                 </td>
                             </tr>
                             <tr>
