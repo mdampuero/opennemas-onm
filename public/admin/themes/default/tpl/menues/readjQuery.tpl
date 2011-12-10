@@ -21,7 +21,28 @@
 {/block}
 
 {block name="header-css" append}
-    {css_tag href="/managerMenu.css" media="screen,projection"}
+{css_tag href="/managerMenu.css" media="screen,projection"}
+<style type="text/css">
+label {
+    display:block;
+    color:#666;
+    text-transform:uppercase;
+}
+.utilities-conf label {
+    text-transform:none;
+}
+    
+fieldset {
+    border:none;
+    border-top:1px solid #ccc;
+}
+legend {
+    color:#666;
+    text-transform:uppercase;
+    font-size:13px;
+    padding:0 10px;
+}
+</style>
 {/block}
 
 {block name="content"}
@@ -69,60 +90,58 @@
                     <td>
                         <table  style="margin:10px ">
                             <tr>
-                                <th>
+                                <td style="width:70%; padding:4px 0;">
                                     <label for="name">{t}Name{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" name="name" id="name" value="{$menu->name|default:""}" />
+                                    <input type="text" name="name" id="name" value="{$menu->name|default:""}"  style="width:97%"/>
                                 </td>
-                                <td rowspan="3" valign="top">
+                                <td rowspan="3" valign="top" style="padding:10px">
                                     <div class="help-block">
-                                            <div class="title"><h4>{t}Help{/t}</h4></div>
-                                            <div class="content">
-                                                <ul>
-                                                    <li>{t} Sort items from bottom lists into menu element list.  {/t}</li>
-                                                    <li>{t} Drag menu items to order the menu.  {/t}</li>
-                                                    <li>{t} Use add button for create a new link in the menu{/t}</li>
-                                                    <li>{t} Use dobleClick if you want delete or edit one element{/t}</li>
-                                                </ul>
-                                            </div>
+                                        <div class="title"><h4>{t}Help{/t}</h4></div>
+                                        <div class="content">
+                                            <ul>
+                                                <li>{t} Sort items from bottom lists into menu element list.  {/t}</li>
+                                                <li>{t} Drag menu items to order the menu.  {/t}</li>
+                                                <li>{t} Use add button for create a new link in the menu{/t}</li>
+                                                <li>{t} Use dobleClick if you want delete or edit one element{/t}</li>
+                                            </ul>
+                                        </div>
                                     </div>
 
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="description">{t}Description{/t}</label></th>
-                                <td>
-                                    <textarea style="width:95%;" name="description" id="description"  rows="5">{$menuParams['description']|clearslash|default:""}</textarea>
+                                <td style="padding:4px 0;">
+                                    <label for="description">{t}Description{/t}</label>
+                                    <textarea name="description" id="description"   style="width:97%">{$menuParams['description']|clearslash|default:""}</textarea>
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="description">{t}Father menu{/t}</label></th>
-                                <td colspan="2">
+                                <td valign="top" style="padding:4px 0;">
+                                    <label for="description">{t}Father menu{/t}</label>
                                     <select id='pk_father' name='pk_father'>
                                         <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
                                         {section loop=$menues name=m}
-                                             {assign var=items value=$menues[m]->items}
+                                            {assign var=items value=$menues[m]->items}
                                             <option value="{$items[0]->pk_item}" name="{$items[0]->title} in {$menues[m]->name|default:""}" style="font-weight:bold;" >
-                                                   Menu {$menues[m]->name}  </b>
+                                                   Menu {$menues[m]->name}
                                             </option>
-                                           
                                             {if isset($items) && !empty($items)}
-                                                {section name=su loop=$items}
-                                                    <option value="{$items[su]->pk_item}" name="{$items[su]->name|default:""}"
-                                                    {if isset($menu) && $menu->pk_father eq $items[su]->pk_item} selected {/if}>
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;{$items[su]->title}
-                                                    </option>
-                                                {/section}
+                                            {section name=su loop=$items}
+                                            <option value="{$items[su]->pk_item}" name="{$items[su]->name|default:""}"
+                                                {if isset($menu) && $menu->pk_father eq $items[su]->pk_item} selected {/if}>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;{$items[su]->title}
+                                            </option>
+                                            {/section}
                                             {/if}
                                         {/section}
                                     </select>
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="description">{t}Elements{/t}</label></th>
-                                <td  colspan="2">
-                                    <div class="left">
+                                <td colspan=3>
+                                    <fieldset>
+                                        <legend>{t}Menu components{/t}</legend>
+                                        <div class="left">
                                         <h3>{t}Menu elements{/t}</h3>
                                         <ul id="menuelements" class="menuelements">
                                         {if isset($menu) && !empty($menu->items)}
@@ -256,22 +275,14 @@
                                         </div>
 
                                     </div>
+                                    </fieldset>
+                                    
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                 <tr>
-                     <td style="vertical-align:top;">
-
-                     </td>
-                 </tr>
             </tbody>
-            <tfooter>
-                <tr>
-                    <td colspan=2>&nbsp;</td>
-                </tr>
-            </tfooter>
         </table>
         <div id="linkInsertions" class="reveal-modal" style="display:none;">
             <label>{t}Title:{/t}</label> <input type="text" name="itemTitle" value="" id="itemTitle" size="60">

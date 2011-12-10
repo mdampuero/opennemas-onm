@@ -56,7 +56,7 @@ OpenNeMas.tinyMceConfig = {
         /*extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],object[data|type|classid|codebase|width|height|align],param[name|value],embed[quality|type|pluginspage|width|height|src|align],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name|obj|param|embed]",*/
         extended_valid_elements: "iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth],blockquote[class=style1]",
                 
-        theme_advanced_resize_horizontal : true,
+        theme_advanced_resize_horizontal : false,
         theme_advanced_resizing : true,
 
         spellchecker_languages : "+Castellano=es,Galego=gl,English=en",

@@ -3,6 +3,19 @@
     {script_tag src="/utilspoll.js" language="javascript"}
 {/block}
 
+{block name="header-css" append}
+    <style type="text/css">
+    label {
+        display:block;
+        color:#666;
+        text-transform:uppercase;
+    }
+    .utilities-conf label {
+        text-transform:none;
+    }
+    </style>
+{/block}
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
@@ -15,12 +28,12 @@
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />Guardar
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
                 <li>
                     <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$poll->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />Guardar y continuar
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
@@ -33,12 +46,7 @@
         </div>
     </div>
     <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
-        <table class="adminform">
+        <table class="adminform" style="padding:10px;">
              <tbody>
                  <tr>
                      <td> </td><td > </td>
@@ -46,37 +54,28 @@
                          <div align='center'>
                              <table style='background-color:#F5F5F5; padding:18px; width:69%;' cellpadding="8">
                                  <tr>
-                                     <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                         <label for="title"> Disponible: </label>
-                                     </td>
-                                     <td valign="top" style="padding:4px;" nowrap="nowrap">
+                                    <td style="padding:4px;" nowrap="nowrap">
+                                         <label for="title">{t}Available{/t}</label>
+                                    </td>
+                                    <td>
                                          <select name="available" id="available" class="required">
-                                            <option value="0" {if $poll->available eq 0} selected {/if}>No</option>
-                                            <option value="1" {if $poll->available eq 1} selected {/if}>Si</option>
+                                            <option value="0" {if $poll->available eq 0} selected {/if}>{t}No{/t}</option>
+                                            <option value="1" {if $poll->available eq 1} selected {/if}>{t}Yes{/t}</option>
                                          </select>
                                      </td>
                                  </tr>
                                  <tr>
-                                     <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                       <label for="title"> Favorito: </label>
+                                     <td style="padding:4px;" nowrap="nowrap">
+                                       <label for="title">{t}Favorite{/t}</label>
                                      </td>
                                      <td valign="top" style="padding:4px;" nowrap="nowrap">
                                          <select name="favorite" id="favorite" class="required">
-                                            <option value="0" {if $poll->favorite eq 0} selected {/if}>No</option>
-                                            <option value="1" {if $poll->favorite eq 1} selected {/if}>Si</option>
+                                            <option value="0" {if $poll->favorite eq 0} selected {/if}>{t}No{/t}</option>
+                                            <option value="1" {if $poll->favorite eq 1} selected {/if}>{t}Yes{/t}</option>
                                          </select>
                                      </td>
                                  </tr>
                                  <tr>
-                                     <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                         <label for="title"> Visualización: </label>
-                                     </td>
-                                     <td valign="top" style="padding:4px;" nowrap="nowrap">
-                                          <select name="visualization" id="visualization" class="required">
-                                              <option value="0" {if $poll->visualization eq 0} selected {/if}>Circular</option>
-                                              <option value="1" {if $poll->visualization eq 1} selected {/if}>Barras</option>
-                                          </select>
-                                     </td>
                                  </tr>
                                  <tr>
                                     <td valign="top"  align="right" style="padding:4px;" >
@@ -89,57 +88,57 @@
                                         </select>
                                     </td>
                                 </tr>
-                                 <tr>
-                                     <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                         <label for="title"> Sección: </label>
-                                     </td>
-                                     <td valign="top" style="padding:4px;" nowrap="nowrap">
-                                         <select name="category" id="category"  >
-                                            {section name=as loop=$allcategorys}
-                                                <option value="{$allcategorys[as]->pk_content_category}" {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                                                {section name=su loop=$subcat[as]}
-                                                    <option value="{$subcat[as][su]->pk_content_category}" {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                                {/section}
-                                            {/section}
-                                         </select>
-                                     </td>
-                                 </tr>
                              </table>
                          </div>
                      </td>
                  </tr>
                  <tr>
-                     <td valign="top" align="right" style="padding:4px;" width="30%">
-                         <label for="title">T&iacute;tulo:</label>
-                     </td>
-                     <td style="padding:4px;" nowrap="nowrap" width="70%">
+                     <td style="padding:4px;">
+                         <label for="title">{t}Title{/t}</label>
                          <input 	type="text" id="title" name="title" title="Titulo de la noticia"
                                  value="{$poll->title|clearslash|escape:"html"}" class="required" size="80" onChange="javascript:get_metadata(this.value);"  />
                      </td>
                  </tr>
                  <tr>
-                     <td valign="top" align="right" style="padding:4px;" width="30%">
-                         <label for="title">Subtitulo:</label>
-                     </td>
-                     <td style="padding:4px;" nowrap="nowrap" width="70%">
+                     <td style="padding:4px;">
+                         <label for="title">{t}Subtitle{/t}</label>
                          <input 	type="text" id="subtitle" name="subtitle" title="subTitulo de la noticia"
                                  value="{$poll->subtitle|clearslash}" class="required" size="80" />
                      </td>
                  </tr>
+                <tr>
+                    <td>
+                        <div style="display:inline-block; vertical-align:top;" valign="top">
+                            <label for="title">{t}Section{/t}</label>
+                            <select name="category" id="category"  >
+                                {section name=as loop=$allcategorys}
+                                    <option value="{$allcategorys[as]->pk_content_category}" {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                    {section name=su loop=$subcat[as]}
+                                        <option value="{$subcat[as][su]->pk_content_category}" {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                    {/section}
+                                {/section}
+                            </select>
+                        </div><!-- / -->
+
+                        <div style="display:inline-block;vertical-align:top;" valign="top">
+                            <label for="title">{t}Visualization{/t}</label>
+                            <select name="visualization" id="visualization" class="required">
+                              <option value="0" {if $poll->visualization eq 0} selected {/if}>Circular</option>
+                              <option value="1" {if $poll->visualization eq 1} selected {/if}>Barras</option>
+                            </select>
+                        </div><!-- / -->
+                    </td>
+                </tr>
                  <tr>
-                     <td valign="top" align="right" style="padding:4px;" width="30%">
-                         <label for="title">Palabras Clave:</label>
-                     </td>
-                     <td style="padding:4px;" nowrap="nowrap" width="70%">
+                     <td style="padding:4px;">
+                         <label for="title">{t}Keywords{/t}</label>
                          <input 	type="text" id="metadata" name="metadata" title="Titulo de la noticia"
                                  value="{$poll->metadata|clearslash}" class="required" size="80" />
                      </td>
                 </tr>
                 <tr>
-                     <td valign="top"  align="right" style="padding:4px;" nowrap="nowrap">
-                             <label for="title"> Respuestas: </label>
-                     </td>
                      <td valign="top" style="padding:4px;" nowrap="nowrap">
+                             <label for="title">{t}Allowed answers{/t}</label>
 
                          {assign var='num' value='0'}
                          {section name=i loop=$items}
@@ -155,11 +154,9 @@
                      </td>
                  </tr>
                  <tr>
-                     <td valign="top"  align="right" style="padding:4px;" nowrap="nowrap">
-                     </td>
                      <td valign="top" style="padding:4px;" nowrap="nowrap">
-                         <a onClick="add_item_poll({$num})" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}add.png" border="0" /> Añadir </a> &nbsp;
-                         <a onclick="del_item_poll()" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" border="0"   /> Eliminar</a>
+                         <a onClick="add_item_poll({$num})" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}add.png" border="0" />{t}Add new answer{/t} </a> &nbsp;
+                         <a onclick="del_item_poll()" style="cursor:pointer;"><img src="{$params.IMAGE_DIR}del.png" border="0"   /> {t}Delete last answer{/t}</a>
                          <div id="items" name="items">
                          </div>
                      </td>

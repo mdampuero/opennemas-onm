@@ -9,7 +9,8 @@ makeSortable = function(){
     lists.push(jQuery('.menuelements') );
 
     jQuery( lists ).sortable({
-        connectWith: ".menuelements"
+        connectWith: ".menuelements",
+        placeholder: 'placeholder-element'
     }).disableSelection();
  
 }

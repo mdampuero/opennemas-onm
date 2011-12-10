@@ -181,7 +181,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMPORT_EFE_FILE"
             title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
             id="efe_importer"    
-            link="controllers/agency_importer/efe-file/efe.php"
+            link="controllers/agency_importer/efe-file.php"
         />
         <node
             module_name="PAPER_IMPORT"

@@ -1,207 +1,170 @@
 {extends file="base/admin.tpl"}
 
+
+{block name="header-css" append}
+<style type="text/css">
+label {
+    display:block;
+    color:#666;
+    text-transform:uppercase;
+}
+.utilities-conf label {
+    text-transform:none;
+}
+
+fieldset {
+    border:none;
+    border-top:1px solid #ccc;
+}
+legend {
+    color:#666;
+    text-transform:uppercase;
+    font-size:13px;
+    padding:0 10px;
+}
+</style>
+{/block}
+
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar clearfix">
-            <div class="wrapper-content">
-                <div class="title"><h2>{t}Comment Manager{/t} :: {t}Editing comment{/t}</h2></div>
-                <ul class="old-button">
-                    <li>
-                        <a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
-                            <img border="0" src="{$params.IMAGE_DIR}save.png" ="Guardar y salir" alt="Guardar y salir" ><br />Guardar y salir
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Comment Manager{/t} :: {t}Editing comment{/t}</h2></div>
+            <ul class="old-button">
+                <li>
+                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'update', '{$comment->id}');">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" ="Guardar y salir" alt="Guardar y salir" ><br />{t}Save and exit{/t}
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
+                    </a>
+                </li>
+                <li>
+                    {if $comment->content_status == 1}
+                        <a href="?id={$comment->id}&amp;action=change_status&amp;status=0&amp;category={$comment->category}" title="Publicar">
+                            <img src="{$params.IMAGE_DIR}publish_no.gif" border="0" alt="Publicado" /><br />{t}Unpublish{/t}
                         </a>
-                    </li>
-                    <li>
-                        <a href="#" class="admin_add" onClick="confirmar(this, '{$comment->id}');">
-                            <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    {else}
+                        <a href="?id={$comment->id}&amp;action=change_status&amp;status=1&amp;category={$comment->category}" title="Despublicar">
+                            <img src="{$params.IMAGE_DIR}publish.gif" border="0" alt="Pendiente" /><br />{t}Publish{/t}
                         </a>
-                    </li>
-                    <li>
-                        {if $comment->content_status == 1}
-                            <a href="?id={$comment->id}&amp;action=change_status&amp;status=0&amp;category={$comment->category}" title="Publicar">
-                                <img src="{$params.IMAGE_DIR}publish_no.gif" border="0" alt="Publicado" /><br />Despublicar
-                            </a>
-                        {else}
-                            <a href="?id={$comment->id}&amp;action=change_status&amp;status=1&amp;category={$comment->category}" title="Despublicar">
-                                <img src="{$params.IMAGE_DIR}publish.gif" border="0" alt="Pendiente" /><br />Publicar
-                            </a>
-                        {/if}
-                    </li>
-                    <li>
-                        <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
-                            <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />Ver noticia
-                        </a>
-                    </li>
-                    <li class="separator"></li>
-                    <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                    {/if}
+                </li>
+                <li>
+                    <a href="#" class="admin_add" rel="iframe" onmouseover="return escape('<u>V</u>er Noticia');" onclick="preview(this, '{$article->category}','{$article->subcategory}','{$article->id}');">
+                        <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Ver Noticia" alt="Ver Noticia" ><br />
+                        {t}See article{/t}
+                    </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action=list" value="{t}Go back{/t}" title="{t}Go back{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" >
+                        <br />
+                        {t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
         </div>
+    </div>
+
+
+
+    
 
 
     <div class="wrapper-content">
-        <table class="adminheading">
-            <th>
-                <td></td>
-            </th>
-        </table>
-        <table class="adminform">
-         <tbody>
-         <tr>
-             <td valign="top" align="right" style="padding:4px;" width="30%">
-                 <label for="title">T&iacute;tulo:</label>
-             </td>
-             <td style="padding:4px;" nowrap="nowrap" width="70%">
-                 <input type="text" id="title" name="title" title="Título de la noticia" onkeyup="countWords(this,document.getElementById('counter_title'))"
-                     value="{$comment->title|clearslash|escape:"html"}" class="required" size="100" />
-                 <input type="hidden" id="fk_content" name="fk_content" title="pk_article"
-                     value="{$comment->fk_content}" />
-             </td>
+        <ul id="tabs">
+            <li>
+                <a href="#edicion-contenido">{t}Comment content{/t}</a>
+            </li>
+        </ul>
 
-             <td rowspan="5" valign="top">
-                     <table style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
-                      <tr>
-                             <td valign="top" align="right" style="padding:4px;">
-                                 <label for="title">Fecha:</label>
-                             </td>
-                             <td style="padding:4px;" nowrap="nowrap" >
-                                 <input type="text" id="date" name="date" title="author"
-                                 value="{$comment->created}" class="required" size="20" readonly /></td>
-                         </tr>
-                          {acl isAllowed="COMMENT_AVAILABLE"}
-                         <tr>
-                             <td valign="top" align="right" style="padding:4px;" nowrap="nowrap">
-                                 <label for="title"> Publicado: </label>
-                             </td>
-                                 <td valign="top" style="padding:4px;" nowrap="nowrap">
-                                     <select name="content_status" id="content_status" class="required">
-                                         <option value="1" {if $comment->content_status eq 1} selected {/if}>Si</option>
-                                         <option value="0" {if $comment->content_status eq 0} selected {/if}>No</option>
-                                    </select>
-                         </td>
-                         </tr>
-                          {/acl}
-                         <tr>
-                             <td valign="top" align="right" style="padding:4px;" nowrap>
-                                 <label for="title">IP:</label>
-                             </td>
-                             <td style="padding:4px;" nowrap="nowrap" >
-                                 <input type="text" id="ip" name="ip" title="author"
-                                 value="{$comment->ip}" class="required" size="20" readonly /></td>
-                         </tr>
-                         <tr>
-                             <td valign="top" align="right" style="padding:4px;" nowrap>
-                                 <label for="title">Nº Palabras t&iacute;tulo:</label>
-                             </td>
-                             <td style="padding:4px;" nowrap="nowrap" >
-                                 <input type="text" id="counter_title" name="counter_title" title="counter_title"
-                                     value="0" class="required" size="5" onkeyup="countWords(document.getElementById('title'),this)"/>
-                             </td>
-                         </tr>
+        <div class="panel" id="edicion-contenido">
+            <fieldset>
+                <legend>Basic information</legend>
+                <div style="display:inline-block; width:80%">
+                    <label for="title">{t}Title{/t}</label>
+                    <input type="text" id="title" name="title" title="Título de la noticia" onkeyup="countWords(this,document.getElementById('counter_title'))" value="{$comment->title|clearslash|escape:"html"}" class="required" style="width:97%" />
+                    <input type="hidden" id="fk_content" name="fk_content" title="pk_article" value="{$comment->fk_content}" />
+                </div><!-- / -->
+                {acl isAllowed="COMMENT_AVAILABLE"}
+                <div style="display:inline-block">
+                    <label for="content_status">{t}Published{/t}</label>
+                    <select name="content_status" id="content_status" class="required">
+                        <option value="1" {if $comment->content_status eq 1} selected {/if}>Si</option>
+                        <option value="0" {if $comment->content_status eq 0} selected {/if}>No</option>
+                    </select>
+                </div><!-- / -->
+                {/acl}
+                
+            </fieldset>
+                
 
-                         <tr>
-                             <td valign="top" align="right" style="padding:4px;" nowrap>
-                                 <label for="title">Nº Palabras cuerpo:</label>
-                             </td>
-                             <td style="padding:4px;" nowrap="nowrap" >
-                                 <input type="text" id="counter_body" name="counter_body" title="counter_body"
-                                     value="0" class="required" size="5"  onkeyup="counttiny(document.getElementById('counter_body'));"/>
-                             </td>
-                         </tr>
-                         </table>
-             </td>
-         </tr>
+            <fieldset>
+                <legend>Author information</legend>
+                <div style="display:inline-block;">
+                    <label for="title">{t} Author nickname{/t}</label>
+                    <input type="text" id="author" name="author" title="author" value="{$comment->author|clearslash}" class="required" />
+                </div><!-- / -->
+                <div style="display:inline-block">
+                    <label for="title">{t}Email address{/t}</label><input type="text" id="email" name="email" title="email"
+                value="{$comment->email|clearslash}" class="required" />
+                </div><!-- / -->
 
-         <tr>
-             <td valign="top" align="right" style="padding:4px;" width="30%">
-                 <label for="title">Autor:</label>
-             </td>
-             <td style="padding:4px;" nowrap="nowrap" width="70%">
-                 <input type="text" id="author" name="author" title="author"
-                     value="{$comment->author|clearslash}" class="required" size="40" />
-                     <label for="title"> Email:</label><input type="text" id="email" name="email" title="email"
-                     value="{$comment->email|clearslash}" class="required" size="40" />
-             </td>
-         </tr>
+                <div style="display:inline-block">
+                    <label for="date">{t}Written on{/t}</label>
+                    <input type="text" id="date" name="date" title="author"
+                        value="{$comment->created}" class="required" size="20" readonly />
+                </div>
+                <div style="display:inline-block">
+                    <label for="title">{t}Sent from IP address{/t}</label>
+                    <input type="text" id="ip" name="ip" title="author"
+                    value="{$comment->ip}" class="required" size="20" readonly /></td>
+                </div>
+            </fieldset>
 
-         <tr>
-             <td valign="top" align="right" style="padding:4px;" width="30%">
-                 <label for="body">Cuerpo:</label>
-             </td>
-             <td style="padding:4px;" nowrap="nowrap" width="70%">
-                 <textarea name="body" id="body"
-                     title="comment" style="width:96%; height:20em;">{$comment->body|clearslash}</textarea>
-             </td>
-         </tr>
-         </tbody>
-         </table>
+            <fieldset>
+                <legend>{t}Statistics{/t}</legend>
+                <div style="display:inline-block">
+                    <label for="counter_title">{t}Title{/t}</label>
+                    <input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
+                        value="0" onkeyup="countWords(document.getElementById('title'),this)"/> 
+                </div>
+                <div style="display:inline-block">
+                    <label for="counter_body">{t}Inner title{/t} ({t}words{/t})</label>
+                    <input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
+                        value="0" onkeyup="countWords(document.getElementById('title_int'),this)"/>
+                </div>
+            </fieldset>
 
-         </div>
+            <fieldset>
+                <legend>{t}Body{/t}</legend>
+                <textarea name="body" id="body"
+                    title="comment" style="width:100%; height:20em;">{$comment->body|clearslash}</textarea>
+            </fieldset>
+        </div>
+    </div>
 
-             <div id="article-info" style="display:none;">
-              <table border="0" cellpadding="3" cellspacing="0">
-                     <tbody>
-                     <tr><td><label for="title">Comentario: </label></td>
-                     <td>
-                         <h2> <a style="cursor:pointer;"  onClick="new Effect.BlindDown('edicion-contenido'); new Effect.BlindUp('article-info'); return false;">
-                         {$comment->title|clearslash}</a></h2>
-                     </td></tr>
-                     <tr><td></td>
-                       <td>
-                          <table border="0" width="60%" style='background-color:#F5F5F5; padding:8px;' cellpadding="8">
-                         <tbody>
-                         <tr><td>
-                             <h3>{$article->subtitle|clearslash}</h3>
-                              <h3 > {$article->agency|clearslash} - {$article->created|date_format:"%d/%m/%y "}</h3>
+        <script>
+        countWords(document.getElementById('title'), document.getElementById('counter_title'));
+        countWords(document.getElementById('body'), document.getElementById('counter_body'));
+        </script>
 
-                             <h2>{$article->title|clearslash}</h2>
-                              <p>  <span style="float:left;"><img src="{$photo1->path_file}/{$photo1->name}" id="change1" name="{$article->img1}" border="0" width="180px" /></span>
-                              {$article->summary|clearslash}
-                                 </p>
+        {script_tag src="/tiny_mce/opennemas-config.js"}
+        <script type="text/javascript" language="javascript">
+        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+        </script>
 
-                          </td></tr>
-                          <tr><td>
-                                 <p>
-                                      <span style="float:right;">
-                                       <img src="{$photo2->path_file}/{$photo2->name}" id="change1" name="{$article->img2}" border="0" width="300px" /></span>
-                                     {$article->body|clearslash}
-                                 </p>
-
-
-                             </td>
-                         </tr>
-                         </tbody>
-                         </table>
-                     </td>
-                 </tr>
-                 </tbody>
-                 </table>
-             </div>
-
-             <script>
-                 countWords(document.getElementById('title'), document.getElementById('counter_title'));
-                 countWords(document.getElementById('body'), document.getElementById('counter_body'));
-             </script>
-
-         {script_tag src="/tiny_mce/opennemas-config.js"}
-         <script type="text/javascript" language="javascript">
-             tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-         </script>
-
-         <script type="text/javascript" language="javascript">
-             OpenNeMas.tinyMceConfig.advanced.elements = "body";
-             tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-         </script>
-
-
-        {dialogo script="print"}
+        <script type="text/javascript" language="javascript">
+        OpenNeMas.tinyMceConfig.advanced.elements = "body";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+        </script>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </div>
 </form>
 {/block}

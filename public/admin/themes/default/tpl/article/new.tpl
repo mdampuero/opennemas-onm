@@ -285,7 +285,7 @@ if($('starttime')) {
 							{/if}
 							</label>
 							<textarea tabindex="7" name="body" id="body" title="Cuerpo de la noticia"
-								style="width:100%;  height:20em;"
+								style="width:98%;  height:20em;"
 								onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
 						</td>
 					</tr>

@@ -165,7 +165,7 @@ switch($action) {
         if(!is_null($comment->pk_comment)) {
             $comment->update( $_REQUEST );
             if($_REQUEST['content_status'] == 1) {
-                $article=new Article($comment->fk_content);
+                $article = new Article($comment->fk_content);
                 //Para que cambie la fecha changed.
                 $article->set_status($article->content_status, $article->fk_user_last_editor);
             }
@@ -196,7 +196,7 @@ switch($action) {
         $comment->delete($_POST['id'], $_SESSION['userid']);
                
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $category . '&page=' . $page .'&comment_status='.$_GET['comment_status']);
+                             $category . '&page=' . $page /*.'&comment_status='.$_GET['comment_status']*/);
     break;
 
     case 'change_status': 
