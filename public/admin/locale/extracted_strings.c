@@ -206,7 +206,19 @@ gettext("Comment Manager");
 gettext("Editing comment");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
-gettext("Go back");
+gettext("Save and exit");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("See article");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Go back");
@@ -219,6 +231,45 @@ gettext("Go back");
 
 /* public/admin/themes/default/tpl//comment/read.tpl */
 gettext("Go back");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Comment content");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Published");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext(" Author nickname");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Email address");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Written on");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Sent from IP address");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Statistics");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Inner title");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("words");
+
+/* public/admin/themes/default/tpl//comment/read.tpl */
+gettext("Body");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
 gettext("ALL");
@@ -515,28 +566,31 @@ gettext("New ePaper");
 gettext("Cancel");
 
 /* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("%1");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
+gettext("%1");
+
+/* public/admin/themes/default/tpl//newsstand/new.tpl */
 gettext("Save");
 
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("ePaper Manager");
 
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
-gettext("Editing ePaper");
+gettext("New ePaper");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("Cancel");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("%1");
+
+/* public/admin/themes/default/tpl//newsstand/read.tpl */
+gettext("%1");
 
 /* public/admin/themes/default/tpl//newsstand/read.tpl */
 gettext("Save");
-
-/* public/admin/themes/default/tpl//newsstand/read.tpl */
-gettext("Save");
-
-/* public/admin/themes/default/tpl//newsstand/read.tpl */
-gettext("Save");
-
-/* public/admin/themes/default/tpl//newsstand/read.tpl */
-gettext("Go back");
-
-/* public/admin/themes/default/tpl//newsstand/list.tpl */
-gettext("ePaper Manager");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("New cover");
@@ -1031,7 +1085,7 @@ gettext("Father menu");
 gettext("- Root menu -");
 
 /* public/admin/themes/default/tpl//menues/readjQuery.tpl */
-gettext("Elements");
+gettext("Menu components");
 
 /* public/admin/themes/default/tpl//menues/readjQuery.tpl */
 gettext("Menu elements");
@@ -1907,37 +1961,28 @@ gettext("Go back to list");
 gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Information about poll module settings");
-
-/* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Type values:");
+gettext("Values type");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
 gettext("Percents");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Votes");
+gettext("Vote count");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Charts width:");
+gettext("Charts height");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Charts height:");
+gettext("Charts width");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Total in widget home:");
+gettext("Elements in frontpage widget");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Charts width in widget home:");
+gettext("Chart width");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Charts height in widget home:");
-
-/* public/admin/themes/default/tpl//polls/config.tpl */
-gettext("Definition values");
-
-/* public/admin/themes/default/tpl//polls/config.tpl */
-gettext(" Use type results if you want that results is showed percents or integer values");
+gettext("Chart height");
 
 /* public/admin/themes/default/tpl//polls/config.tpl */
 gettext("Save");
@@ -1946,7 +1991,31 @@ gettext("Save");
 gettext("Creating a poll");
 
 /* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Save");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Go back");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Available");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Yes");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Favorite");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("No");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Yes");
 
 /* public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Allow comments:");
@@ -1956,6 +2025,30 @@ gettext("No");
 
 /* public/admin/themes/default/tpl//polls/new.tpl */
 gettext("Yes");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Subtitle");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Section");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Visualization");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Keywords");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Allowed answers");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Add new answer");
+
+/* public/admin/themes/default/tpl//polls/new.tpl */
+gettext("Delete last answer");
 
 /* public/admin/themes/default/tpl//polls/list.tpl */
 gettext("Delete");
@@ -2183,7 +2276,16 @@ gettext("Go back");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Article parameters");
+gettext("Opinion content");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Opinion parameters");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Title");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Opinion parameters");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
 gettext("Available:");
@@ -2219,22 +2321,7 @@ gettext("Title words-count:");
 gettext("Body words-count:");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Image selection");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Inner opinion photo:");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Widget photo:");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Choose one available photo for the widget:");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Title:");
-
-/* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Type:");
+gettext("Type");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
 gettext("-- Pick an author --");
@@ -2249,16 +2336,31 @@ gettext("Opinion from editorial");
 gettext("Director's letter");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Author:");
+gettext("Author");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
 gettext(" - Select one author - ");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Keywords:");
+gettext("Keywords");
 
 /* public/admin/themes/default/tpl//opinion/new.tpl */
-gettext("Body:");
+gettext("Metadata");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Body");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Image selection");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Inner opinion photo:");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Widget photo:");
+
+/* public/admin/themes/default/tpl//opinion/new.tpl */
+gettext("Choose one available photo for the widget:");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Opinion Manager");
@@ -2273,19 +2375,16 @@ gettext("Delete");
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Publish");
-
-/* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Put in home");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Delete from home");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("New opinion");
+gettext("Save positions");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
-gettext("Save positions");
+gettext("New opinion");
 
 /* public/admin/themes/default/tpl//opinion/list.tpl */
 gettext("Config album module");
@@ -2885,6 +2984,12 @@ gettext("Category manager");
 gettext("Editing category");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Save and exit");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Go Back");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
@@ -2906,13 +3011,10 @@ gettext("Title");
 gettext("Internal name:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Page Title");
-
-/* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Category available for:");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
-gettext("Global");
+gettext("All contents");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Albums");
@@ -2934,6 +3036,9 @@ gettext("Book");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Subsection of:");
+
+/* public/admin/themes/default/tpl//category/form.tpl */
+gettext("Page Title");
 
 /* public/admin/themes/default/tpl//category/form.tpl */
 gettext("Show in menu:");
@@ -3605,40 +3710,10 @@ gettext("Go back");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Please, fill the form with the ad description and push <strong>Save and Exit </strong> when you've finished.");
+gettext("Basic information");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Name");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Published:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Hide Flash events:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Periodicity:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Undefined");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Publication start time:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Publication end time:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("# of clicks:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Visualization count:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Time scheduling:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("seconds. <sub>( -1 no desaparece )</sub>");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Keywords:");
@@ -3647,10 +3722,7 @@ gettext("Keywords:");
 gettext("Separated by commas");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("URL:");
-
-/* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Section");
+gettext("Sections");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Frontpage");
@@ -3663,15 +3735,57 @@ gettext("Frontpage");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Opinion");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("View restrictions:");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Without limits");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Click count");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Views count");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Date range");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("# of clicks:");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Max views");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Date range");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Published:");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Hide Flash events:");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Display during<br/><small>( -1 allways visible)</small>");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Content");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Ad with JavaScript:");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("Ad url:");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
+gettext("GeoIP JS snippets");
+
+/* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Test Javascript code");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
-gettext("Ad position:");
+gettext("Position");
 
 /* public/admin/themes/default/tpl//advertisement/new.tpl */
 gettext("Frontpage");
@@ -5246,7 +5360,10 @@ gettext("System Wide Settings");
 gettext("General");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext(" Opennemas Settings");
+gettext("SEO");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Opennemas Settings");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("External Services");
@@ -5258,31 +5375,22 @@ gettext("Site options");
 gettext("Site name:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site agency");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("You can edit the site agency for the articles here. This will be displayed as your article agency");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Edit Site name");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can change the name of your site here. This will be displayed as your site name");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Site agency:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Edit Site agency");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("You can edit the site agency for the articles here. This will be displayed as your article agency");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Site color:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Edit Site color");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("You can edit the site color here.\n                                                        This will change the color of the menu bars. \n                                                        If you wanna change the categorys color, \n                                                        go to the Category Manager and edit a category.");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Site logo:");
+gettext("You can edit the site color here.\n                                                This will change the color of the menu bars. \n                                                If you wanna change the categorys color, \n                                                go to the Category Manager and edit a category.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Add a Logo for the site");
@@ -5291,16 +5399,25 @@ gettext("Add a Logo for the site");
 gettext("You can add an image for your site logo here.");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Logo image:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Text in footer frontpages:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Edit your Site footer");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("You can edit here the footer of the site.");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site agency:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site color:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Site logo:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Logo image:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Text in footer frontpages:");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("SEO options");
@@ -5336,6 +5453,12 @@ gettext("You can edit here the site keywords. This will be used on <meta> tag ke
 gettext("Opennemas settings");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Language");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
+gettext("Time Zone:");
+
+/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Refresh page every (secs):");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
@@ -5343,12 +5466,6 @@ gettext("Seconds for refresh pages");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Default is set to 900 seconds for refreshing pages in opennemas configuration..");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Time Zone:");
-
-/* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
-gettext("Language");
 
 /* public/admin/themes/default/tpl//system_settings/system_settings.tpl */
 gettext("Items per page:");
@@ -5573,16 +5690,13 @@ gettext("Cancel");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Insert the static page information");
-
-/* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Title:");
+gettext("Title");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("Page title");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Published:");
+gettext("Published");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("Yes");
@@ -5591,19 +5705,22 @@ gettext("Yes");
 gettext("No");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Description:");
+gettext("Direction:");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Keywords:");
+gettext("Keywords");
+
+/* public/admin/themes/default/tpl//static_pages/read.tpl */
+gettext("Keywords");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("(separated with comas)");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Direction:");
+gettext("Description:");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
-gettext("Keywords");
+gettext("Body");
 
 /* public/admin/themes/default/tpl//static_pages/read.tpl */
 gettext("Page content");
