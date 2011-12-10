@@ -73,7 +73,8 @@ textarea{
 
         <ul id="tabs">
             <li><a href="#general">{t}General{/t}</a></li>
-            <li><a href="#misc">{t} Opennemas Settings{/t}</a</li>
+            <li><a href="#seo">{t}SEO{/t}</a</li>
+            <li><a href="#misc">{t}Opennemas Settings{/t}</a</li>
             <li><a href="#external">{t}External Services{/t}</a></li>
             
           
@@ -91,20 +92,30 @@ textarea{
                             <td>
                                 <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
                             </td>
-                            <td colspan="2" valign="top">
+                            <td rowspan=5>
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Edit Site name{/t}</h4></div>
-                                    <div class="content">{t}You can change the name of your site here. This will be displayed as your site name{/t}</div>
+                                    <div class="title"><h4>Basic parameters</h4></div>
+                                    <div class="content">
+                                        <dl>
+                                            <dt><strong>{t}Site agency{/t}</strong></dt>
+                                            <dd>{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</dd>
+                                            <dt><strong>{t}Edit Site name{/t}</strong></dt>
+                                            <dd>{t}You can change the name of your site here. This will be displayed as your site name{/t}</dd>
+                                            <dt><strong>{t}Edit Site color{/t}</strong></dt>
+                                            <dd>
+                                                {t}You can edit the site color here.
+                                                This will change the color of the menu bars. 
+                                                If you wanna change the categorys color, 
+                                                go to the Category Manager and edit a category.{/t}
+                                            </dd>
+                                            <dt><strong>{t}Add a Logo for the site{/t}</strong></dt>
+                                            <dd>{t}You can add an image for your site logo here.{/t}</dd>
+                                            <dt><strong>{t}Edit your Site footer{/t}</strong></dt>
+                                            <dd>{t}You can edit here the footer of the site.{/t}</dd>
+                                        </dl>
+                                         </div>
                                 </div>
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -113,20 +124,6 @@ textarea{
                             <td>
                                 <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
                             </td>
-                            <td colspan="2" valign="top">
-                                <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Edit Site agency{/t}</h4></div>
-                                    <div class="content">{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</div>
-                                </div>
-                            </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -137,21 +134,9 @@ textarea{
                             </td>
                             <td colspan="2" valign="top">
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Edit Site color{/t}</h4></div>
-                                    <div class="content">{t}You can edit the site color here.
-                                                        This will change the color of the menu bars. 
-                                                        If you wanna change the categorys color, 
-                                                        go to the Category Manager and edit a category.{/t}</div>
+                                    
                                 </div>
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -160,20 +145,6 @@ textarea{
                             <td>
                                 <input type="file" size="33" id="site_logo" name="site_logo">
                             </td>
-                            <td colspan="2" valign="top">
-                                <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Add a Logo for the site{/t}</h4></div>
-                                    <div class="content">{t}You can add an image for your site logo here.{/t}</div>
-                                </div>
-                            </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         {if isset($configs['site_logo'])}
                         <tr valign="top">
@@ -186,14 +157,6 @@ textarea{
                             <td colspan=2 valign="top">
 
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         {/if}
                         <tr valign="top">
@@ -207,24 +170,13 @@ textarea{
                             <td>
                                 <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
                             </td>
-                            <td colspan="2" valign="top">
-                                <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
-                                    <div class="content">{t}You can edit here the footer of the site.{/t}</div>
-                                </div>
-                            </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                     </tbody>
                 </table>
             </fieldset>
+        </div>
+
+        <div id="seo" class="panel">
             <fieldset>
                 <legend>{t}SEO options{/t}</legend>
                 <table>
@@ -242,14 +194,6 @@ textarea{
                                     <div class="content">{t}You can edit here the site title. This one will be displayed on the browsers <title> tag.{/t}</div>
                                 </div>
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -264,14 +208,6 @@ textarea{
                                     <div class="content">{t}You can edit here the site description. This will be used on <meta> tag description.{/t}</div>
                                 </div>
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                         <tr valign="top">
                             <th scope="row">
@@ -286,19 +222,11 @@ textarea{
                                     <div class="content">{t}You can edit here the site keywords. This will be used on <meta> tag keywords.{/t}</div>
                                 </div>
                             </td>
-                            <tr valign="top">
-                                <th scope="row">
-                                    
-                                </th>
-                                <td>
-                                    
-                                </td>
-                            </tr>
                         </tr>
                     </tbody>
                 </table>
             </fieldset>
-        </div>
+        </div><!-- /seo -->
        
         <div id="misc" class="panel">
             <fieldset>
@@ -307,17 +235,13 @@ textarea{
                     <tbody>
                         <tr valign="top">
                             <th scope="row">
-                                <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
+                                <label for="site_title">{t}Language{/t}</label>
                             </th>
                             <td>
-                                <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                                <span class="default-value"></span>
+                                {html_options name=site_language options=$languages selected=$configs['site_language']}
                             </td>
-                            <td valign="top">
-                                <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
-                                    <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t} </div>
-                                </div>
+                            <td>
+
                             </td>
                         </tr>
                         <tr valign="top">
@@ -333,13 +257,17 @@ textarea{
                         </tr>
                         <tr valign="top">
                             <th scope="row">
-                                <label for="site_title">{t}Language{/t}</label>
+                                <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
                             </th>
                             <td>
-                                {html_options name=site_language options=$languages selected=$configs['site_language']}
+                                <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
+                                <span class="default-value"></span>
                             </td>
-                            <td>
-
+                            <td valign="top">
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Seconds for refresh pages{/t}</h4></div>
+                                    <div class="content"> {t}Default is set to 900 seconds for refreshing pages in opennemas configuration..{/t} </div>
+                                </div>
                             </td>
                         </tr>
 
