@@ -1,4 +1,4 @@
-<table class="adminlist">
+<table id="ädvertisement-images">
 	<tr>
 		<td valign="top">
 			<div id="div_img_publi"  style="{if isset($advertisement) && $advertisement->with_script == 1} display:none;{else}display:block;{/if}">

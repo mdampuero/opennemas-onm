@@ -3,48 +3,39 @@
 /////// Advertisement
 
 
-function permanencia(my) { 
-   if(my.id=='clic'){		
+function permanencia(my) {
+	console.log(my.options[my.selectedIndex].value);
+	var selectedOption = my.options[my.selectedIndex].value;
+	if (selectedOption=='CLIC') {		
 		$('porclic').show();
 		$('porview').hide();
 		$('porfecha').hide();
-	}else{
-	  if(my.id=='view'){		
-				$('porview').show();
-				$('porclic').hide();
-				$('porfecha').hide();
-			}else{
-				  if(my.id=='fecha'){		
-					$('porclic').hide();
-					$('porview').hide();
-					$('porfecha').show();
-				  }else{
-				   if(my.id=='non'){		
-					$('porclic').hide();
-					$('porview').hide();
-					$('porfecha').hide();
-					}
-				  }
-			}
+	} else if (selectedOption=='VIEW') {		
+		$('porview').show();
+		$('porclic').hide();
+		$('porfecha').hide();
+	} else if (selectedOption=='DATE') {		
+		$('porclic').hide();
+		$('porview').hide();
+		$('porfecha').show();
+	} else {		
+		$('porclic').hide();
+		$('porview').hide();
+		$('porfecha').hide();
 	}
 }
 
 
-function with_without_script(my) { 
-   if(my.checked==true){		
-		Effect.BlindDown($('div_script'));
-		Effect.BlindUp($('div_img_publi'));		
-		Effect.BlindUp($('div_url1'));		
-		Effect.BlindUp($('div_url2'));		
-		Effect.BlindUp($('photos'));	
-		Effect.BlindUp($('div_permanencia'));
-	}else{	 	
-		Effect.BlindDown($('div_img_publi'));
-		Effect.BlindDown($('photos'));
-		Effect.BlindDown($('div_url1'));
-		Effect.BlindDown($('div_url2'));		
-		Effect.BlindDown($('div_permanencia'));
-		Effect.BlindUp($('div_script'));
+function with_without_script(my) {
+
+   if (my.checked === true){
+		$('div_script').setStyle({ display: 'block'});
+		$('div_url1').setStyle({ display: 'none'});
+		$('ädvertisement-images').setStyle({ display: 'none'});
+	} else {
+		$('ädvertisement-images').setStyle({ display: 'block'});
+		$('div_url1').setStyle({ display: 'block'});
+		$('div_script').setStyle({ display: 'none'});
 	}
 }
 
@@ -59,7 +50,7 @@ function isflash(name) {
 	   return false;	
 }
 function noticiasshow(my) {
-  if( $(my.id).checked==true){
+  if( $(my.id).checked===true){
 	$('noticias-relacionadas').show();
   }else{	
 	$('noticias-relacionadas').hide();

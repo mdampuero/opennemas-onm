@@ -39,7 +39,7 @@
                             <input type="checkbox" id="toggleallcheckbox" value="" />
                         </th>
 						<th >{t}Cache group{/t}</th>
-						<th class="right">{t}Expire time{/t}</th>
+						<th class="right">{t}Expire time{/t}  <small>({t}seconds{/t})</small></th>
 					</tr>
                 </thead>
                 <tbody>
@@ -55,7 +55,7 @@
                         </td>
 
                         <td class="right">
-                            <input type="text" size="7" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" /> {t}seconds{/t}
+                            <input type="text" size="7" name="cache_lifetime[{$k}]" value="{$v.cache_lifetime|default:300}" style="text-align: right;" />
                         </td>
                     </tr>
                     {foreachelse}
