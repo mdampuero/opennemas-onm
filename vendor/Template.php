@@ -45,7 +45,7 @@ class Template extends Smarty
                 CACHE_PATH.DS.'smarty'.DS.'config'
             );
         }
-        $this->config_dir       = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
+        $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
             
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value ) {
@@ -206,7 +206,7 @@ class TemplateAdmin extends Template {
         $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
         
         foreach (array('cache', 'compile') as $key => $value ) {
-            $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
+            $directory = CACHE_PATH.DS.'smarty'.DS.'admin-'.$value;
             if (!file_exists($directory)) {
                 mkdir($directory);
             }
@@ -272,7 +272,8 @@ class TemplateManager extends Template {
         $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
         
         foreach (array('cache', 'compile') as $key => $value ) {
-            $directory = CACHE_PATH.DS.'smarty'.DS.$value.'-admin';
+            $directory = CACHE_PATH.DS.'smarty'.DS.'manager-'.$value;
+
             if (!file_exists($directory)) {
                 mkdir($directory);
             }
@@ -281,9 +282,9 @@ class TemplateManager extends Template {
         
         $this->template_dir	= $this->templateBaseDir.'tpl/';
         
-        $this->config_dir	= $this->templateBaseDir.'config/';
-        $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
-        $this->caching	= false;
+        $this->config_dir	 = $this->templateBaseDir.'config/';
+        $this->plugins_dir   []= $this->templateBaseDir.'plugins/';
+        $this->caching	     = false;
         $this->allow_php_tag = true;
 
 

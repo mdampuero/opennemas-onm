@@ -179,7 +179,7 @@ input, select, textarea {
                         </div>
 
 
-                        <div id="porfecha" style="{if isset($advertisement) && $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
+                        <div id="porfecha" style="{if  $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                             <label for="title">{t}Date range{/t}</label>
                             {t}From:{/t} <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
                                 value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />

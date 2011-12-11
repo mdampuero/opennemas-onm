@@ -21,16 +21,6 @@ label{
 .panel {
     background:White;
 }
-fieldset {
-    border:none;
-    border-top:1px solid #ccc;
-}
-legend {
-    color:#666;
-    text-transform:uppercase;
-    font-size:13px;
-    padding:0 10px;
-}
 
 .awesome {
     border:0;

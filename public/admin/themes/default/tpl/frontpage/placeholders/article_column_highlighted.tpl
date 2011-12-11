@@ -16,7 +16,7 @@
    </tr>-->
    <tr width="100%" >
        <td>
-            <table width="100%" height="30" class="aa" style="background-color:#E4DDC9;text-align:center;padding:0px;padding-bottom:1px;">
+            <table width="100%" height="30" class="aa" style="background-color:#ccc;text-align:center;padding:0px;padding-bottom:1px;">
                 <tr><td>{t}Highlighted article (Pay attention on images bigger than 391px){/t}</td></tr>
             </table>
             <div id="{$place}_0" class="seccion" style=min-height:40px;width:100%;background-color:#FFF;text-align:center;padding:0px;">

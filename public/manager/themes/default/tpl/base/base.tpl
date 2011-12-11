@@ -28,19 +28,21 @@
 <body>
 
     <div id="topbar-admin" class="manager">
-        <div id="logoonm">
-	    <a  href="{$smarty.const.SITE_URL}manager/index.php" id="logo-onm" title="{t}Go to admin main page{/t}">
-	       <div><img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas"/></div>
-	    </a>
-        </div>
+        <div class="logo-and-menu">
+            <div id="logoonm">
+                <a  href="{$smarty.const.SITE_URL}manager/index.php" id="logo-onm" title="{t}Go to admin main page{/t}">
+                   <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132px" height="27px"/>
+                </a>
+            </div>
 
-        {admin_menu}
+            {admin_menu}
+        </div><!-- / -->
 
         <div class="info-left">
             <div id="user_box">
 		<ul>
 		    <li class="menu">
-			<a href="#" id="menu" class="menu"><strong>{$smarty.session.username|ucfirst}</strong></a>
+			<a href="#" id="menu" class="menu">{$smarty.session.username|ucfirst}</a>
 			<ul>
 			    <li>
 				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
