@@ -1,7 +1,7 @@
-<table id="ädvertisement-images">
+<table id="ädvertisement-images" style="{if isset($advertisement) && $advertisement->with_script == 1} display:none;{else}display:block;{/if}">
 	<tr>
 		<td valign="top">
-			<div id="div_img_publi"  style="{if isset($advertisement) && $advertisement->with_script == 1} display:none;{else}display:block;{/if}">
+			<div id="div_img_publi">
 				{if isset($photo1) && $photo1->name}
 					<table border="0">
 						<tr>

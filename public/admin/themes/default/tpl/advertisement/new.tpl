@@ -181,9 +181,9 @@ input, select, textarea {
 
                         <div id="porfecha" style="{if isset($advertisement) && $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                             <label for="title">{t}Date range{/t}</label>
-                            From: <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
+                            {t}From:{/t} <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
                                 value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
-                            To: <input type="text" id="endtime" name="endtime" title="Fecha fin publicacion"
+                            {t}To:{/t} <input type="text" id="endtime" name="endtime" title="Fecha fin publicacion"
                                 value="{if isset($advertisement) && $advertisement->endtime != '0000-00-00 00:00:00'}{$advertisement->endtime}{/if}" />
                         </div>
 
@@ -221,7 +221,7 @@ input, select, textarea {
                     {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if} onClick="with_without_script(this);" />
 
 
-                <div id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==1}block{else}none{/if};">
+                <div id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
                     <label for="title" style="display:inline-block;">{t}Ad url:{/t}</label>
                     <input type="text" id="url" name="url" class="validate-url" title="Direccion web Publicidad"
                         style="width:90%" value="{$advertisement->url|default:"http://"}" tabindex=3 />
@@ -229,7 +229,7 @@ input, select, textarea {
 
                 {include file="advertisement/partials/advertisement_images.tpl"}
 
-                <div id="div_script" style="display:{if isset($advertisement) && $advertisement->with_script!=1}none{else}block{/if};">
+                <div id="div_script" style="display:{if isset($advertisement) && $advertisement->with_script ==1}block{else}none{/if};">
                     <textarea name="script" id="script" class="validate-script" title="script de publicidad" style="width:99%; height:8em;">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* Código javascript */&lt;/script&gt;'}</textarea>
 
                     <div style="width:40%; float:left; ">
