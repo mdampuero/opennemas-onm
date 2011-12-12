@@ -354,10 +354,17 @@ class Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-
-            return;
+    
         }
 
+        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.($id);
+ 
+        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            
+        }
         /* Notice log of this action */
         $logger = Application::getLogger();
         $logger->notice('User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed action Remove  at '.$this->content_type.' Id '.$this->id);
