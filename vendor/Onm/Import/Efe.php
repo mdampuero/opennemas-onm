@@ -302,6 +302,7 @@ class Efe implements \Onm\Import\Importer
 
         }
 
+        
         // var_dump($elements[0]->texts);die();
         // var_dump($elements[0]->photos);
         // var_dump($elements[0]->videos);
