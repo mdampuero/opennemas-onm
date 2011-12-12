@@ -128,6 +128,11 @@ class NewsMLG1 {
                 return;
                 break;
 
+            case 'agency_name':
+                $rawAgencyName = $this->getData()->NewsEnvelope->SentFrom->Party->xpath("//Property[@FormalName=\"Organization\"]");
+                return (string)$rawAgencyName[0]->attributes()->Value;
+                break;
+
             case 'texts':
             case 'photos':
             case 'videos':

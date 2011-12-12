@@ -203,18 +203,18 @@ switch($action) {
 
 
         $values = array(
-                        'title' => $element->title,
+                        'title' => $element->texts[0]->title,
                         'category' => 20,
                         'with_comment' => 1,
                         'content_status' => 0,
                         'frontpage' => 0,
                         'in_home' => 0,
-                        'title_int' => $element->title,
-                        'metadata' => String_Utils::get_tags($element->title),
-                        'subtitle' => $element->pretitle,
-                        'agency' => $element->agencyName,
-                        'summary' => $element->summary,
-                        'body' => $element->body,
+                        'title_int' => $element->texts[0]->title,
+                        'metadata' => String_Utils::get_tags($element->texts[0]->title),
+                        'subtitle' => $element->texts[0]->pretitle,
+                        'agency' => $element->agency_name,
+                        'summary' => $element->texts[0]->summary,
+                        'body' => $element->texts[0]->body,
                         'posic' => 0,
                         'id' => 0,
                         'fk_publisher' => $_SESSION['userid'],
@@ -228,6 +228,7 @@ switch($action) {
                         'ordenArti' => '',
                         'ordenArtiInt' => '',
                         );
+        
 
         $article = new Article();
         $newArticleID = $article->create($values);

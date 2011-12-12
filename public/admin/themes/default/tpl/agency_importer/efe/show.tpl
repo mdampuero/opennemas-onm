@@ -43,23 +43,23 @@
                             <p>
                                 <strong>{t}Date:{/t}</strong> {$element->created_time}{*->format("H:i:s d-m-Y")*}
                             </p>
-                            {if $element->pretitle}
+                            {if $element->texts[0]->pretitle}
                             <p>
                                 <strong>{t}Pretitle:{/t}</strong> <br/>
-                                {$element->pretitle}
+                                {$element->texts[0]->pretitle}
                             </p>
                             {/if}
-                            {if $element->summary}
+                            {if $element->texts[0]->summary}
                             <p>
                                 <strong>{t}Summary:{/t}</strong> <br/>
-                                {$element->summary}
+                                {$element->texts[0]->summary}
                             </p>
                             {/if}
                         </div>
                         <div style="border:1px solid #ccc; padding:15px; margin-top:10px;">
                             <p>
                                 <strong>{t}Body:{/t}</strong>
-                                {$element->body}
+                                {$element->texts[0]->body}
                             </p>
                         </div>
                         <div style="border:1px solid #ccc; padding:15px; margin-top:10px;">

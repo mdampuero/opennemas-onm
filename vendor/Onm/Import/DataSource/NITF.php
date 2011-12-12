@@ -38,8 +38,6 @@
         switch ($propertyName) {
 
             case 'id':
-                // TODO: this is not working as I can get the Euid property
-                // return 'id';
                 $attributes = $this->getData()->attributes();
                 return (string)$attributes->Euid;
                 break;
