@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
+    {css_tag href="/../js/jquery_colorpicker/css/colorpicker.css"}
     <style type="text/css">
     label {
         display:block;
@@ -12,7 +13,10 @@
     }
     </style>
 {/block}
+
 {block name="header-js" append}
+    {script_tag language="javascript" src="/jquery/jquery.min.js"}
+    {script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/utilscategory.js" language="javascript"}
     {script_tag src="/MiniColorPicker.js"}
     <script type="text/javascript">
@@ -177,9 +181,10 @@
                 <tr>
                     <td valign="middle" style="padding:4px;">
                         <label for="inmenu">{t}Color:{/t}</label>
-                        <script type="application/x-javascript">
+<!--                        <script type="application/x-javascript">
                             initPicker('color','{$category->color}', 24);
-                        </script>
+                        </script>-->
+                        <input readonly="readonly" size="6" max-lenght="6" type="text" id="site_color" name="site_color" value="{$category->color|default:"0000ff"}">
                     </td>
                 </tr>
                 {if !empty($subcategorys)}
@@ -256,5 +261,19 @@
                 // Escondemos los errores
                 //console.log( e );
         }
+        //Color Picker jQuery
+        $.noConflict();
+        jQuery('#site_color').ColorPicker({
+            onSubmit: function(hsb, hex, rgb, el) {
+                jQuery(el).val(hex);
+                jQuery(el).ColorPickerHide();
+            },
+            onBeforeShow: function () {
+                jQuery(this).ColorPickerSetColor(this.value);
+            }
+        })
+        .bind('keyup', function(){
+            jQuery(this).ColorPickerSetColor(this.value);
+        });
     </script>
 {/block}

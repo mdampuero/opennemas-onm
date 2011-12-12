@@ -39,6 +39,12 @@ textarea{
     width:400px;
     max-height:80%
 }
+.colorpicker input[type="text"] {
+    width: 28px;
+}
+.colorpicker_hex input[type="text"] {
+    width: 50px;
+}
 </style>
 {/block}
 
