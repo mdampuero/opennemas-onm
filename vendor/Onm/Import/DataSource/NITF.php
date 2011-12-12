@@ -38,9 +38,10 @@
         switch ($propertyName) {
 
             case 'id':
-                var_dump($this->getData());die();
-                
-                return (string)$this->getData()->NewsComponent[Euid];
+                // TODO: this is not working as I can get the Euid property
+                // return 'id';
+                $attributes = $this->getData()->attributes();
+                return (string)$attributes->Euid;
                 break;
 
             case 'title':

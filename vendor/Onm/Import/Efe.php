@@ -186,9 +186,9 @@ class Efe implements \Onm\Import\Importer
             return unserialize(file_get_contents($this->syncFilePath));
         } else {
             return array(
-                        'lastimport' => '',
-                        'imported_elements' => array(),
-                        );
+                'lastimport' => '',
+                'imported_elements' => array(),
+            );
         }
     }
 
@@ -299,7 +299,7 @@ class Efe implements \Onm\Import\Importer
 
             $elements []= $element;
             $elementsCount++;
-            
+
         }
         
         // usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));

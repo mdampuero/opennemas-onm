@@ -75,7 +75,6 @@ class NewsMLG1 {
         } else {
             throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
         }
-        
 
         return $this;
 
@@ -103,7 +102,9 @@ class NewsMLG1 {
                 break;
 
             case 'priority':
-                return 1;
+                $rawUrgency = $this->getData()->xpath("//NewsItem/NewsManagement/Urgency");
+                
+                return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
             case 'category':

@@ -25,7 +25,7 @@
 
         <table class="adminheading">
 	    <tr>
-                <th align="left">&nbsp;</th>
+            <th align="left">&nbsp;</th>
 	    </tr>
 	</table>
 
@@ -41,7 +41,7 @@
                             </p>
 
                             <p>
-                                <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
+                                <strong>{t}Date:{/t}</strong> {$element->created_time}{*->format("H:i:s d-m-Y")*}
                             </p>
                             {if $element->pretitle}
                             <p>

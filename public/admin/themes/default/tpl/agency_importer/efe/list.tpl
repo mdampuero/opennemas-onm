@@ -41,6 +41,8 @@
         <ul>
             <li>  Configuration of module (server and auth)</li>
             <li>  Synchronization with server to local temporary folder.</li>
+            <li>List all the available news, and see its contents.</li>
+            <li>Search news by its title</li>
         </ul><!-- / -->
         </p>
     </div><!-- / -->
@@ -99,7 +101,7 @@
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th align="center">{t}Date{/t}</th>
-                    <th>{t}Section{/t}</th>
+                    <th>{t}Category{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {else}
