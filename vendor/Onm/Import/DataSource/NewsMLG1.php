@@ -108,7 +108,7 @@ class NewsMLG1 {
                 break;
 
             case 'category':
-                return 'unknown';
+                return _('Unknown');
                 break;
             
             case 'created_time':

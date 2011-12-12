@@ -34,35 +34,43 @@
 	    <tr>
                 <td>
                     <div id="{$element->id}" style="width:70%; margin:0 auto; margin-top:5px; font-size:13px;">
-                        <div style=" border:1px solid #ccc; padding:15px;">
-                            <h2 style="margin:0;">{$element->title}</h2>
+                        <fieldset>
+                            <legend>{t}Basic information{/t}</legend>
+                            {if $element->texts[0]->pretitle}
                             <p>
-                                <strong>{t}Priority:{/t}</strong> {$element->priority}
+                                <label>{t}Pretitle:{/t}</label>
+                                {$element->texts[0]->pretitle}
+                            </p>
+                            {/if}
+                            <p>
+                                <label>{t}Title:{/t}</label>
+                                {$element->title}
+                            </p>
+                            
+                            <p>
+                                <label>{t}Priority:{/t}</label>
+                                {$element->priority}
                             </p>
 
                             <p>
                                 <strong>{t}Date:{/t}</strong> {$element->created_time}{*->format("H:i:s d-m-Y")*}
                             </p>
-                            {if $element->texts[0]->pretitle}
-                            <p>
-                                <strong>{t}Pretitle:{/t}</strong> <br/>
-                                {$element->texts[0]->pretitle}
-                            </p>
-                            {/if}
                             {if $element->texts[0]->summary}
                             <p>
                                 <strong>{t}Summary:{/t}</strong> <br/>
                                 {$element->texts[0]->summary}
                             </p>
                             {/if}
-                        </div>
-                        <div style="border:1px solid #ccc; padding:15px; margin-top:10px;">
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>{t}Main information{/t}</legend>
                             <p>
-                                <strong>{t}Body:{/t}</strong>
+                                <label></label>
                                 {$element->texts[0]->body}
                             </p>
-                        </div>
-                        <div style="border:1px solid #ccc; padding:15px; margin-top:10px;">
+                        </fieldset>
+                        <div style="border:1px solid #ccc; padding:15px; margin:10px auto;">
                             {if count($element->photos) > 0}
                             <p>
                                 <strong>{t}Photos:{/t}</strong> <br/>
@@ -83,19 +91,11 @@
                                 </ul>
                             </p>
                             {/if}
+                            {if count($element->moddocs) > 0}
                             <p>
-                                <strong>{t}Place:{/t}</strong> <br/>
-                                <ul id="id">
-                                    {foreach from=$element->place item=value key=key}
-                                        <li>{$key} -{$value}</li>
-                                    {/foreach}
-                                </ul>
-                            </p>
-                            {if count($element->associatedDocs) > 0}
-                            <p>
-                                <strong>{t}Associated Docs:{/t}</strong> <br/>
+                                <strong>{t}Documentary modules:{/t}</strong> <br/>
                                 <ul>
-                                {foreach from=$element->associatedDocs item=doc}
+                                {foreach from=$element->moddocs item=doc}
                                     <li>{$doc}</li>
                                 {/foreach}
                                 </ul>
