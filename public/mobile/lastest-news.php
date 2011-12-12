@@ -35,7 +35,11 @@ $photos = array();
                            'ORDER BY placeholder ASC, home_pos ASC, created DESC');*/
 $articles_home = $cm->find('Article', 'available=1 AND content_status=1 AND fk_content_type=1',
                            'ORDER BY created DESC, changed DESC LIMIT 0, 20');
+if(empty($articles_home)) {
+    $articles_home = $cm->find('Opinion', 'available=1 and type_opinion=0',
+                                      'ORDER BY created DESC, position ASC LIMIT 0, 20');
 
+}
 // Filter by scheduled {{{
 $articles_home = $cm->getInTime($articles_home);
 // }}}

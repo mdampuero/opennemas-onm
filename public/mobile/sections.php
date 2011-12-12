@@ -74,3 +74,10 @@ $numCategoriesOnMobile = 2;
 $mobileCategories = array_slice($allcategorys,0,$numCategoriesOnMobile);
 
 $tpl->assign('mobileCategories',$mobileCategories);
+
+if (!isset($menuMobile) || empty($menuMobile->items)) {
+    $menuMobile= Menu::renderMenu('mobile');
+}
+if (!empty($menuMobile->items)) {
+    $tpl->assign('menuMobile',$menuMobile->items);
+}

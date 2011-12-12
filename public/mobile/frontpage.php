@@ -68,13 +68,32 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
 
         $destaca = array();
         foreach($articles_home as $i => $article) {
-        $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
-        $article->category_name = $articles_home[$i]->category_name;
+            $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
+            $article->category_name = $articles_home[$i]->category_name;
 
-        if($article->home_placeholder == 'placeholder_0_0') {
-            $destaca[] = $article;
+            if($article->home_placeholder == 'placeholder_0_0') {
+                $destaca[] = $article;
+            }
         }
+        
+        $actual_category = 'home';
+        $actual_category_id = 0;
+
+        /// Adding Widgets {{{
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actual_category_id);
+
+        foreach($contentsInHomepage as $content) {
+            if(isset($content->home_placeholder)
+               && !empty($content->home_placeholder)
+               && ($content->home_placeholder != '')
+               )
+            {
+                $articles_home[] = $content;
+
+            }
         }
+
+        $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');
 
     } else {
         $tpl->assign('section', $category_name);
