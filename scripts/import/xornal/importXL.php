@@ -53,11 +53,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
     $app = \Application::load();
 
-
  
-$oldId ='58'; //author opinion id
-$topic = '%_os_%Luis%G_mez%'; //Sql patern Xosé Luis Gómez
-
 if(!defined(INSTANCE_MEDIA) )
     define('INSTANCE_MEDIA', SITE_PATH.'media/images');
 
@@ -70,11 +66,17 @@ require 'string_utils.class.php';
 
 
 
-print_r(" You will import opinions {$topic} \n");
+print_r(" \n You will import opinions {$topic} \n");
 
 $refactor = new importContents($config_newDB, $config_oldDB);
-$refactor->importOpinions($oldId);
-//$refactor->importArticles($topic);
+ $refactor->importOpinions($oldId);
+
+/* print_r(" \n  You will import articles by id {$oldId} \n");
+$refactor->importArticles($oldId, true);
+
+print_r(" \n You will import articles by topic {$topic} \n");
+//$refactor->importArticles($t/opic);
+*/
 
 
 

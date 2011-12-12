@@ -304,6 +304,13 @@ class importContents {
              foreach ($opinions as $data) {
  
                 $data['fk_author'] = $newAuthorId;
+                $data['fk_user'] = $newAuthorId;
+                $data['fk_publisher'] = $newAuthorId;
+                $data['fk_user_last_editor '] = $newAuthorId;
+                $data['category_name'] = 'opinion';
+                $data['category'] = 4; 
+                $data['type_opinion'] = 0;  //force author opinion
+                
             
                 $id = $opinion->create($data);
 
@@ -324,12 +331,45 @@ class importContents {
          return false;
     }
 
+    public function getArticlesbyAuthor($topic)
+    {
+
+        $_where = " (fk_author = '".$topic.
+                                            "' OR fk_publisher = '".$topic.
+                                            "' OR fk_user_last_editor = '".$topic."' ) ";
+         
+
+        $sql = " SELECT * FROM articles, contents, contents_categories ".
+                " WHERE fk_content_type=1  AND in_litter=0  ".
+                " AND pk_content = pk_article AND ".
+                " pk_content = pk_fk_content AND ".  $_where ;
+
+         
+                
+        echo "\n". $sql. "\n";
+        
+        $rss = $this->old->conn->Execute($sql);
+
+        if (!$rss) {
+            printf( 'getArticlesData function: '. $this->old->conn->ErrorMsg() );
+            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg() );
+            
+            
+        } else {
+ 
+              $articles = $this->load($rs->fields);
+
+            return $articles;
+       }
+
+    }
+    
     public function getArticlesData($topic)
     {
 
-       // $_where = " WHERE fk_content_type=1  AND (fk_author = 58 OR  fk_publisher = 58 OR fk_user_last_editor = 58 ) ";
+      
         $_where = " WHERE fk_content_type=1  AND in_litter=0 AND (".
-                  " title OR '".$topic."' OR metadata LIKE '".$topic."' ".
+                  " title LIKE '".$topic."' OR metadata LIKE '".$topic."' ".
                   " OR description LIKE '".$topic."' OR summary LIKE '".$topic."' ".
                   " OR body LIKE '".$topic."' OR subtitle LIKE '".$topic."' ".
                   " OR agency LIKE '".$topic."' ) ";
@@ -337,9 +377,9 @@ class importContents {
 
         $sql = " SELECT * FROM articles, contents, contents_categories ".
                 $_where. " AND pk_article = pk_content AND ".
-                " pk_fk_content = pk_fk_content_category " ;
+                " pk_content = pk_fk_content  " ;
 
-        echo $sql;
+        echo $sql. "\n";
         $rss = $this->old->conn->Execute($sql);
 
         if (!$rss) {
@@ -477,23 +517,31 @@ class importContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function importArticles($topic) {
+    public function importArticles($topic, $byAuthor=false) {
 
-         $articles = $this->getArticlesData($topic);
-         var_dump($articles);
+        if(!empty($byAuthor) && ($byAuthor==true) ) {
+           $articles =  $this->getArticlesbyAuthor($topic);
+        } else {
+            
+          $articles = $this->getArticlesData($topic);
+         
+       
+        }
          $categories = array();
 
          if(!empty($articles)) {
+             
              $article = new Article();
              foreach ($articles as $data) {
                 $data->img1 = $this->insertImage($data->img1);
                 $data->img2 = $this->insertImage($data->img2);
                 $id = $article->create($data);
+                var_dump($article);
 
                 if(!empty($id) ) {
                     $this->insertRefactorID($data->pk_article, $id, 'article');
                      var_dump('Inserting '.$data->pk_content, $id, 'article');
-                }else{
+                } else {
                     $errorMsg = 'Problem '.$data->pk_article.' - '.$data->title;
                     $this->log('insert article : '.$errorMsg);
                     printf('insert article : '.$errorMsg);

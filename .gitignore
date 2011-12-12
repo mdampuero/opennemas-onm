@@ -23,3 +23,5 @@ tmp/instances/*/sessions/backend/*
 tmp/instances/*/sessions/frontend/*
 tmp/instances/*/smarty/cache*
 /public/admin/themes/default/js/jquery/jquery.json-2.2.min.js
+/public/admin/locale/es_ES/LC_MESSAGES/messages.po~
+/public/admin/locale/gl_ES/LC_MESSAGES/messages.po~
