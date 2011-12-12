@@ -90,15 +90,15 @@ class NewsMLG1 {
         switch ($propertyName) {
 
             case 'id':
-                
+                return (string)$this->getData()->NewsItem->Identification->NewsIdentifier->NewsItemId;
                 break;
 
             case 'urn':
-                
+                return (string)$this->getData()->NewsItem->Identification->NewsIdentifier->PublicIdentifier;
                 break;
 
             case 'title':
-                return 'Example title';
+                return (string)$this->getData()->NewsItem->NewsComponent->NewsLines->HeadLine;
                 break;
 
             case 'priority':
@@ -109,28 +109,41 @@ class NewsMLG1 {
                 return 'unknown';
                 break;
             
-            case 'create_date':
+            case 'created_time':
+                $originalDate = (string)$this->getData()->NewsItem->NewsManagement->ThisRevisionCreated;
+                // TODO: ISO 8601 doesn't match this date 20111211T103900+0000
                 return time();
+                return \DateTime::createFromFormat(
+                    \DateTime::ISO8601,
+                    $originalDate
+                );
                 break;
 
             case 'body':
-                
+                if (count($this->texts) > 0) {
+                    return $this->texts[0];
+                }
+                return;
                 break;
 
             case 'texts':
-                return 'Example body';
+                $texts = array('texto 1');
+                return $texts;
                 break;
             
             case 'images':
-                
+                $images = array('texto 1');
+                return $images;
                 break;
             
             case 'videos':
-                
+                $videos = array('texto 1');
+                return $videos;
                 break;
 
             case 'moddocs':
-                
+                $moddocs = array('texto 1');
+                return $moddocs;
                 break;
 
             case 'audios':
