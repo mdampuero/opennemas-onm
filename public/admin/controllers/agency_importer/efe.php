@@ -127,7 +127,7 @@ switch($action) {
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
 
-        $categories = \Onm\Import\DataSource\Efe::getOriginalCategories();
+        $categories = \Onm\Import\DataSource\NewsMLG1::getOriginalCategories();
 
         $find_params = array(
             'category' => filter_input(

@@ -273,7 +273,7 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
             try {
-                $element = new \Onm\Import\DataSource\Efe($this->syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {
                 continue;
             }
@@ -302,7 +302,14 @@ class Efe implements \Onm\Import\Importer
 
         }
 
-        usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
+        // var_dump($elements[0]->texts);die();
+        // var_dump($elements[0]->photos);
+        // var_dump($elements[0]->videos);
+        // var_dump($elements[0]->audios);
+
+        
+
+        // usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
         return $elements;
 
@@ -310,7 +317,7 @@ class Efe implements \Onm\Import\Importer
 
 
     /*
-     * Fetches a DataSource\NewsML object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $id
      *
@@ -319,22 +326,22 @@ class Efe implements \Onm\Import\Importer
     public function findByID($id)
     {
 
-        $element = new \Onm\Import\DataSource\NewsML($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
+        $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml');
         return  $element;
 
     }
 
     /*
-     * Fetches a DataSource\NewsML object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $fileName
      *
-     * @return  DataSource\NewsML  the article object
+     * @return  DataSource\NewsMLG1  the article object
      */
     public function findByFileName($id)
     {
 
-        $element = new \Onm\Import\DataSource\NewsML($this->syncPath.DIRECTORY_SEPARATOR.$id);
+        $element = new \Onm\Import\DataSource\NewsMLG1($this->syncPath.DIRECTORY_SEPARATOR.$id);
         return  $element;
 
     }

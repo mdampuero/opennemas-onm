@@ -29,7 +29,7 @@
 namespace Onm\Import\DataSource;
 use Onm\Settings as s;
 
-class NewsML {
+class NewsMLG1 {
 
 
     private $data = null;

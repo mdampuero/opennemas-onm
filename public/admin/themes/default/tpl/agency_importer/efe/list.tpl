@@ -35,6 +35,16 @@
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
+    <div class="error">
+        <p>
+        {t}This module is still in development so keep tuned until finished. For now only works the next:{/t}
+        <ul>
+            <li>  Configuration of module (server and auth)</li>
+            <li>  Synchronization with server to local temporary folder.</li>
+        </ul><!-- / -->
+        </p>
+    </div><!-- / -->
+
 	{render_messages}
 
 	{if ($message || ($minutes > 10))}
@@ -105,7 +115,7 @@
                 <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 
                     <td style="text-align:center;">
-                       <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priorityNumber}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
+                       <img src="{$params.IMAGE_DIR}notifications/level-{$elements[c]->priority}.png" alt="{t 1=$elements[c]->priorityNumber}Priority %1{/t}" title="{t 1=$elements[c]->priorityNumber}Priority %1{/t}">
                     </td>
                     <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
                         <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
@@ -113,7 +123,7 @@
                         </a>
                     </td>
                     <td align="center">
-                            {$elements[c]->created_time->getTimestamp()|relative_date}
+                            {$elements[c]->created_time|relative_date}
                     </td>
 
                     <td align="center">
