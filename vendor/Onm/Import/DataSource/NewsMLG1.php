@@ -75,6 +75,7 @@ class NewsMLG1 {
         } else {
             throw new \Exception(sprintf(_("File '%d' doesn't exists."), $xmlFile));
         }
+        
 
         return $this;
 
@@ -121,38 +122,102 @@ class NewsMLG1 {
 
             case 'body':
                 if (count($this->texts) > 0) {
-                    return $this->texts[0];
+                    return $this->texts[0]->body;
                 }
                 return;
                 break;
 
             case 'texts':
-                $texts = array('texto 1');
-                return $texts;
-                break;
-            
-            case 'images':
-                $images = array('texto 1');
-                return $images;
-                break;
-            
+            case 'photos':
             case 'videos':
-                $videos = array('texto 1');
-                return $videos;
-                break;
-
-            case 'moddocs':
-                $moddocs = array('texto 1');
-                return $moddocs;
-                break;
-
             case 'audios':
-                
+            case 'moddocs':
+            case 'files':
+                return $this->{'get'.ucfirst($propertyName)}();
                 break;
-            
-
 
         }
+    }
+
+    /**
+     * Returns the available text in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getTexts()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]");
+
+        $texts = null;
+        if ($contents[0]->NewsComponent) {
+            foreach ($contents[0]->NewsComponent as $component) {
+                $nitf = new \Onm\Import\DataSource\NITF($component);
+                $texts []= $nitf;
+            }
+        }
+
+        return $texts;
+    }
+
+    /**
+     * Returns the available photos in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getPhotos()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
+        return $contents;
+    }
+
+    /**
+     * Returns the available images in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getVideos()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.videos\"]");
+        return $contents;
+    }
+
+    /**
+     * Returns the available audios in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getAudios()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.audios\"]");
+        return $contents;
+    }
+
+    /**
+     * Returns the available Documentary modules in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getModdocs()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.moddocs\"]");
+        return $contents;
+    }
+
+    /**
+     * Returns the available files in this multimedia package
+     *
+     * @return void
+     * @author 
+     **/
+    public function getFiles()
+    {
+        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.files\"]");
+        return $contents;
     }
 
     /**

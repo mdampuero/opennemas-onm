@@ -267,6 +267,7 @@ class Efe implements \Onm\Import\Importer
 
         $elements = array();
         $elementsCount = 0;
+
         foreach ($files as $file) {
 
             if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
@@ -298,18 +299,9 @@ class Efe implements \Onm\Import\Importer
 
             $elements []= $element;
             $elementsCount++;
-
-
+            
         }
-
         
-        // var_dump($elements[0]->texts);die();
-        // var_dump($elements[0]->photos);
-        // var_dump($elements[0]->videos);
-        // var_dump($elements[0]->audios);
-
-        
-
         // usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
         return $elements;
