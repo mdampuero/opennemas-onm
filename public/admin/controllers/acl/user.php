@@ -30,7 +30,7 @@ if (!isset($action)) {
 }
 
 
-switch($_REQUEST['action']) {
+switch($action) {
     case 'list': 
         if(!Acl::check('USER_ADMIN')) {
             Application::forward('/admin/');

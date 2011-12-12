@@ -65,7 +65,7 @@ if (!isset($action)) {
   
 $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
   
-switch($_REQUEST['action']) {
+switch($action) {
     case 'list':  //Buscar publicidad entre los content
         $cm = new ContentManager();
         // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
