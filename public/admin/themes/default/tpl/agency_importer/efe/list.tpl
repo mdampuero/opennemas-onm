@@ -101,7 +101,7 @@
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th align="center">{t}Date{/t}</th>
-                    <th>{t}Category{/t}</th>
+                    <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {else}
@@ -125,11 +125,17 @@
                         </a>
                     </td>
                     <td align="center">
-                            {$elements[c]->created_time|relative_date}
+                            {$elements[c]->created_time->getTimestamp()|relative_date}
                     </td>
 
                     <td align="center">
-                        {$elements[c]->category|default:""}
+                        <div style="max-width:80px; overflow:hidden;">
+                            
+                        {foreach from=$elements[c]->tags item=group name=loop1}
+                            {$group|implode:", "}
+                        {/foreach}
+                        </div><!-- / -->
+                        
                     </td>
 
                     <td class="right">

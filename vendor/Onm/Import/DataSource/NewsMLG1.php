@@ -107,16 +107,29 @@ class NewsMLG1 {
                 return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
-            case 'category':
-                return _('Unknown');
+            case 'tags':
+                $rawCategory = $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
+                $rawTags = (string)$rawCategory[0]->attributes()->Value;
+                $tagGroups = explode(";", $rawTags);
+                $tags = array();
+                foreach ($tagGroups as $group) {
+                    $tags []= explode(",", $group);
+                }
+                
+                return $tags;
+                
+                return $tags;
                 break;
             
             case 'created_time':
                 $originalDate = (string)$this->getData()->NewsItem->NewsManagement->ThisRevisionCreated;
-                // TODO: ISO 8601 doesn't match this date 20111211T103900+0000
-                return time();
+
+                // ISO 8601 doesn't match this date 20111211T103900+0000
+                $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                
+                
                 return \DateTime::createFromFormat(
-                    \DateTime::ISO8601,
+                    'Ymd\THis',
                     $originalDate
                 );
                 break;

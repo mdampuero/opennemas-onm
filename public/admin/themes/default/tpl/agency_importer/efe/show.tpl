@@ -30,8 +30,8 @@
 	</table>
 
 	<table class="adminform" border=0>
-
-	    <tr>
+        <tbody>
+    	    <tr>
                 <td>
                     <div id="{$element->id}" style="width:70%; margin:0 auto; margin-top:5px; font-size:13px;">
                         <fieldset>
@@ -53,7 +53,7 @@
                             </p>
 
                             <p>
-                                <strong>{t}Date:{/t}</strong> {$element->created_time}{*->format("H:i:s d-m-Y")*}
+                                <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
                             </p>
                             {if $element->texts[0]->summary}
                             <p>
@@ -117,14 +117,15 @@
                     </div>
                 </td>
             </tr>
+            </tbody>
 
             <tfoot>
-                 <tr class="pagination" >
-                     <td colspan="13" align="center">&nbsp;</td>
-                 </tr>
+             <tr class="pagination" >
+                 <td colspan="13" align="center">&nbsp;</td>
+             </tr>
             </tfoot>
 
-	</table>
+	   </table>
    </div>
 
    <input type="hidden" id="action" name="action" value="list" />

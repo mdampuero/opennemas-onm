@@ -302,7 +302,7 @@ class Efe implements \Onm\Import\Importer
 
         }
         
-        // usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
+        usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
         return $elements;
 
