@@ -46,6 +46,9 @@ if(!empty($category_name)) {
                 ) );
 }
 
+// Setting up static-pages on video
+require_once("widget_static_pages.php");
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
 /**
@@ -162,7 +165,21 @@ switch ($action) {
          */
         if (is_null($videoID)) { Application::forward301('/video/'); }
 
+        //Get other_videos for widget video most
+        $days = isset( $videosSettings['time_last'])?:124;
+        $others_videos = $cm->find_all('Video',
+            ' available=1 AND pk_content <> '.$videoID,
+            ' ORDER BY created DESC LIMIT 4'
+        );
 
+        if (count($others_videos) > 0) {
+            foreach ($others_videos as &$video) {
+                $video->category_name = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
+            }
+        }
+        
+        $tpl->assign( 'others_videos', $others_videos );
         # If is not cached process this action
         $cacheID = $tpl->generateCacheId('video-inner', $category_name, $videoID);
 
@@ -210,9 +227,10 @@ switch ($action) {
 
         $video = NULL;
 
-        $items_page = 6;
+        $items_page = 3;
 
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
+        $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
 
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
        
@@ -233,7 +251,7 @@ switch ($action) {
         }
         $tpl->assign('videos', $videos);
         $tpl->assign('page', $page);
-        $tpl->assign('category', $category);
+        $tpl->assign('actual_category_id', $category);
         $tpl->assign('total_incategory', '9');
         $html = $tpl->fetch('video/partials/_widget_video_incategory.tpl');
         echo $html;
@@ -246,6 +264,7 @@ switch ($action) {
         $video = NULL;
         
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
+        $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
 
         $items_page = 3;
 
@@ -264,10 +283,11 @@ switch ($action) {
             }
         } else {
             $page = 1;
+            Application::forward('/controllers/videos.php?action=videos_more&category=' . $category . '&page=1');
         }
         $tpl->assign('others_videos', $others_videos);
         $tpl->assign('page', $page);
-        $tpl->assign('category', $category);
+        $tpl->assign('actual_category_id', $category);
         $tpl->assign('total_more', '4');
         $html = $tpl->fetch('video/partials/_widget_video_more_interesting.tpl');
         echo $html;
