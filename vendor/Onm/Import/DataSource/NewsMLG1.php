@@ -48,6 +48,7 @@ class NewsMLG1 {
         {
             self::$instance = new self($config);
         }
+  
         return self::$instance;
 
     }
@@ -188,7 +189,25 @@ class NewsMLG1 {
     public function getPhotos()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
-        return $contents;
+        $photos = array();
+        foreach ($contents[0] as $componentName => $component) {
+            if ($componentName == 'NewsComponent') {
+                $photoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Photo($component);
+                $photos [$photoComponent->id]= $photoComponent;
+            }
+        }
+        
+        return $photos;
+    }
+
+    /**
+     * Checks if this news component has photos
+     *
+     * @return boolean
+     **/
+    public function hasPhotos()
+    {
+        return count($this->getPhotos()) > 0;
     }
 
     /**

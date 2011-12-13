@@ -194,6 +194,11 @@ switch($action) {
         $tpl->display('agency_importer/efe/show.tpl');
         break;
 
+    case 'show_attachment':
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
+        $id = filter_input ( INPUT_GET, 'attachment_id' , FILTER_SANITIZE_STRING);
+        break;
+
     case 'import':
 
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
