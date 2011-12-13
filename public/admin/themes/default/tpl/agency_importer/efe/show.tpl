@@ -30,8 +30,8 @@
 	</table>
 
 	<table class="adminform" border=0>
-
-	    <tr>
+        <tbody>
+    	    <tr>
                 <td>
                     <div id="{$element->id}" style="width:70%; margin:0 auto; margin-top:5px; font-size:13px;">
                         <fieldset>
@@ -53,7 +53,7 @@
                             </p>
 
                             <p>
-                                <strong>{t}Date:{/t}</strong> {$element->created_time}{*->format("H:i:s d-m-Y")*}
+                                <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
                             </p>
                             {if $element->texts[0]->summary}
                             <p>
@@ -66,27 +66,39 @@
                         <fieldset>
                             <legend>{t}Main information{/t}</legend>
                             <p>
-                                <label></label>
                                 {$element->texts[0]->body}
                             </p>
                         </fieldset>
-                        <div style="border:1px solid #ccc; padding:15px; margin:10px auto;">
+
+                        <fieldset>
+                            <legend>{t}Attached contents{/t}</legend>
+
                             {if count($element->photos) > 0}
                             <p>
                                 <strong>{t}Photos:{/t}</strong> <br/>
                                 <ul>
                                 {foreach from=$element->photos item=photo}
-                                    <li>{$photo}</li>
+                                    <li>{$photo->title}</li>
                                 {/foreach}
                                 </ul>
                             </p>
                             {/if}
-                            {if count($element->people) > 0}
+                            {if count($element->videos) > 0}
                             <p>
-                                <strong>{t}People:{/t}</strong> <br/>
+                                <strong>{t}Videos:{/t}</strong> <br/>
                                 <ul>
-                                {foreach from=$element->people item=person}
-                                    <li>{$person}</li>
+                                {foreach from=$element->Videos item=video}
+                                    <li>{$video}</li>
+                                {/foreach}
+                                </ul>
+                            </p>
+                            {/if}
+                            {if count($element->files) > 0}
+                            <p>
+                                <strong>{t}Files:{/t}</strong> <br/>
+                                <ul>
+                                {foreach from=$element->files item=doc}
+                                    <li>{$file}</li>
                                 {/foreach}
                                 </ul>
                             </p>
@@ -101,53 +113,19 @@
                                 </ul>
                             </p>
                             {/if}
-                            {if count($element->categories) > 0}
-                            <p>
-                                <strong>{t}Categories:{/t}</strong> <br/>
-                                <ul>
-                                {foreach from=$element->categories item=cat}
-                                    <li>{$cat}</li>
-                                {/foreach}
-                                </ul>
-                            </p>
-                            {/if}
-                            {if count($element->dataCastID) > 0}
-                            <p>
-                                <strong>{t}Level:{/t}</strong> <br/>
-                                <ul>
-                                {foreach from=$element->dataCastID item=dataCastID}
-                                    <li>{$dataCastID}</li>
-                                {/foreach}
-                                </ul>
-                            </p>
-                            {/if}
-                            {if count($element->level) > 0}
-                            <p>
-                                <strong>{t}Level:{/t}</strong> <br/>
-                                <ul>
-                                {foreach from=$element->level item=level}
-                                    <li>{$level}</li>
-                                {/foreach}
-                                </ul>
-                            </p>
-                            {/if}
-                            {if count($element->redactor) > 0}
-                            <p>
-                                <strong>{t}Redactors:{/t}</strong> {$element->redactor|implode:", "}
-                            </p>
-                            {/if}
-                        </div>
+                        </fieldset>
                     </div>
                 </td>
             </tr>
+            </tbody>
 
             <tfoot>
-                 <tr class="pagination" >
-                     <td colspan="13" align="center">&nbsp;</td>
-                 </tr>
+             <tr class="pagination" >
+                 <td colspan="13" align="center">&nbsp;</td>
+             </tr>
             </tfoot>
 
-	</table>
+	   </table>
    </div>
 
    <input type="hidden" id="action" name="action" value="list" />

@@ -25,7 +25,7 @@ use Onm\Settings as s;
 require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
-Acl::checkOrForward('IMPORT_EFE');
+Acl::checkOrForward('EFE_FILE_IMPORTER');
 
 /**
  * Setup view

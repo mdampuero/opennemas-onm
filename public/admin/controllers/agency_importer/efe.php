@@ -27,7 +27,7 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 // Check ACL
-Acl::checkOrForward('IMPORT_EFE');
+Acl::checkOrForward('EFE_IMPORTER');
 
 /**
  * Setup view
@@ -192,6 +192,11 @@ switch($action) {
 
         $tpl->assign('element', $element);
         $tpl->display('agency_importer/efe/show.tpl');
+        break;
+
+    case 'show_attachment':
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
+        $id = filter_input ( INPUT_GET, 'attachment_id' , FILTER_SANITIZE_STRING);
         break;
 
     case 'import':

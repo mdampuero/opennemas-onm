@@ -171,14 +171,14 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMPORT_EPRESS" />
         <node
             module_name="EFE_IMPORTER"
-            privilege="IMPORT_EFE_FILE"
+            privilege="EFE_IMPORTER"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
             id="efe_importer"    
-            link="controllers/agency_importer/efe/efe.php"
+            link="controllers/agency_importer/efe.php"
         />
         <node
             module_name="PAPER_IMPORT"
-            privilege="IMPORT_EFE_FILE"
+            privilege="EFE_FILE_IMPORTER"
             title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
             id="efe_importer"    
             link="controllers/agency_importer/efe-file.php"

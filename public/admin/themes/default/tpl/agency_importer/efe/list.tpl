@@ -39,10 +39,11 @@
         <p>
         {t}This module is still in development so keep tuned until finished. For now only works the next:{/t}
         <ul>
-            <li>  Configuration of module (server and auth)</li>
-            <li>  Synchronization with server to local temporary folder.</li>
+            <li>Configuration of module (server and auth)</li>
+            <li>Synchronization with server to local temporary folder.</li>
             <li>List all the available news, and see its contents.</li>
             <li>Search news by its title</li>
+            <li>News import but attachments</li>
         </ul><!-- / -->
         </p>
     </div><!-- / -->
@@ -101,7 +102,7 @@
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th align="center">{t}Date{/t}</th>
-                    <th>{t}Category{/t}</th>
+                    <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {else}
@@ -120,16 +121,25 @@
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
                     </td>
                     <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-                        <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="Importar">
+                        <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
                             {$elements[c]->title}
+                            {if $elements[c]->hasPhotos()}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
+                            {/if}
                         </a>
                     </td>
                     <td align="center">
-                            {$elements[c]->created_time|relative_date}
+                            {$elements[c]->created_time->getTimestamp()|relative_date}
                     </td>
 
                     <td align="center">
-                        {$elements[c]->category|default:""}
+                        <div style="max-width:80px; overflow:hidden;">
+                            
+                        {foreach from=$elements[c]->tags item=group name=loop1}
+                            {$group|implode:", "}
+                        {/foreach}
+                        </div><!-- / -->
+                        
                     </td>
 
                     <td class="right">

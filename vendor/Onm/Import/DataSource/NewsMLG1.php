@@ -48,6 +48,7 @@ class NewsMLG1 {
         {
             self::$instance = new self($config);
         }
+  
         return self::$instance;
 
     }
@@ -107,16 +108,29 @@ class NewsMLG1 {
                 return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
-            case 'category':
-                return _('Unknown');
+            case 'tags':
+                $rawCategory = $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
+                $rawTags = (string)$rawCategory[0]->attributes()->Value;
+                $tagGroups = explode(";", $rawTags);
+                $tags = array();
+                foreach ($tagGroups as $group) {
+                    $tags []= explode(",", $group);
+                }
+                
+                return $tags;
+                
+                return $tags;
                 break;
             
             case 'created_time':
                 $originalDate = (string)$this->getData()->NewsItem->NewsManagement->ThisRevisionCreated;
-                // TODO: ISO 8601 doesn't match this date 20111211T103900+0000
-                return time();
+
+                // ISO 8601 doesn't match this date 20111211T103900+0000
+                $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                
+                
                 return \DateTime::createFromFormat(
-                    \DateTime::ISO8601,
+                    'Ymd\THis',
                     $originalDate
                 );
                 break;
@@ -175,7 +189,25 @@ class NewsMLG1 {
     public function getPhotos()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
-        return $contents;
+        $photos = array();
+        foreach ($contents[0] as $componentName => $component) {
+            if ($componentName == 'NewsComponent') {
+                $photoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Photo($component);
+                $photos [$photoComponent->id]= $photoComponent;
+            }
+        }
+        
+        return $photos;
+    }
+
+    /**
+     * Checks if this news component has photos
+     *
+     * @return boolean
+     **/
+    public function hasPhotos()
+    {
+        return count($this->getPhotos()) > 0;
     }
 
     /**
