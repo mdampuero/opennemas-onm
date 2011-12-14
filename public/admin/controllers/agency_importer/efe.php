@@ -186,7 +186,7 @@ switch($action) {
 
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
-            Application::forward($_SERVER['PHP_self'] . '?'.String_Utils::toHttpParams($httpParams));
+            Application::forward($_SERVER['PHP_SELF'] . '?'.String_Utils::toHttpParams($httpParams));
 
         }
 
@@ -196,43 +196,117 @@ switch($action) {
 
     case 'show_attachment':
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
-        $id = filter_input ( INPUT_GET, 'attachment_id' , FILTER_SANITIZE_STRING);
+        $attachment_id = filter_input ( INPUT_GET, 'attachment_id' , FILTER_SANITIZE_STRING);
+
+    
+        $ep = new Onm\Import\Efe();
+        $element = $ep->findById($id);
+
+        if ($element->hasPhotos()) {
+            $photos = $element->getPhotos();
+            
+            $photo = $photos[$attachment_id];
+            header("Content-type: ".$photo->file_type);
+            echo file_get_contents(realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
+            die();
+        }
+
+        break;
+
+    case 'import_select_category':
+        $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
+        $category = filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING);
+
+
+        if (empty($id)) {
+            m::add(_('Please specify the article to import.'), m::ERROR);
+            Application::forward($_SERVER['PHP_SELF']."?action=list");
+        }
+
+
+        $ccm = ContentCategoryManager::get_instance();
+        list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu();
+
+
+        $categories = array();
+        foreach ($parentCategories as $category) {
+            $categories [$category->pk_content_category]= $category->title;
+        }
+
+        $ep = new Onm\Import\Efe();
+        $element = $ep->findByFileName($id);
+
+        $tpl->assign(array(
+            'id' => $id,
+            'article' => $element,
+            'categories' => $categories,
+        ))  ;
+        
+        $tpl->display('agency_importer/efe/import_select_category.tpl');
+
+        
         break;
 
     case 'import':
 
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
+        $category = (int)filter_input ( INPUT_GET, 'category' , FILTER_SANITIZE_STRING);
+
+
+        if (empty($id)) {
+            m::add(_('Please specify the article to import.'), m::ERROR);
+            Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php");
+        }
+
+        if (empty($category)) {
+            m::add(_('Please assign the category where import this article'), m::ERROR);
+            Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php?action=import_select_category&id={$id}&category={$category}");
+        }
 
         $ep = new Onm\Import\Efe();
         $element = $ep->findByFileName($id);
 
+        if ($element->hasPhotos()) {
+            $photos = $element->getPhotos();
+            foreach($photos as $photo) {
+                // $photo = new Photo(datos);
+                // $photo->create();
+                // realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path)  
+                $imgInt = new stdClass();
+                $imgInt->id = ''; // 375
+                $imgInt->title = ''; // $photo->title;
+
+            }
+        }
+
+// var_dump($imgInt);die();
 
         $values = array(
-                        'title' => $element->texts[0]->title,
-                        'category' => 20,
-                        'with_comment' => 1,
-                        'content_status' => 0,
-                        'frontpage' => 0,
-                        'in_home' => 0,
-                        'title_int' => $element->texts[0]->title,
-                        'metadata' => String_Utils::get_tags($element->texts[0]->title),
-                        'subtitle' => $element->texts[0]->pretitle,
-                        'agency' => $element->agency_name,
-                        'summary' => $element->texts[0]->summary,
-                        'body' => $element->texts[0]->body,
-                        'posic' => 0,
-                        'id' => 0,
-                        'fk_publisher' => $_SESSION['userid'],
-                        'img1' => '',
-                        'img1_footer' => '',
-                        'img2' => '',
-                        'img2_footer' => '',
-                        'fk_video' => '',
-                        'fk_video2' => '',
-                        'footer_video2' => '',
-                        'ordenArti' => '',
-                        'ordenArtiInt' => '',
-                        );
+            'title' => $element->texts[0]->title,
+            'category' => $category,
+            'with_comment' => 1,
+            'content_status' => 0,
+            'frontpage' => 0,
+            'in_home' => 0,
+            'title_int' => $element->texts[0]->title,
+            'metadata' => String_Utils::get_tags($element->texts[0]->title),
+            'subtitle' => $element->texts[0]->pretitle,
+            'agency' => $element->agency_name,
+            'summary' => $element->texts[0]->summary,
+            'body' => $element->texts[0]->body,
+            'posic' => 0,
+            'id' => 0,
+            'fk_publisher' => $_SESSION['userid'],
+            'img1' => '',
+            'img1_footer' => '',
+            'img2' => $imgInt->id,
+            'img2_footer' => $imgInt->title,
+            'fk_video' => '',
+            'fk_video2' => '',
+            'footer_video2' => '',
+            'ordenArti' => '',
+            'ordenArtiInt' => '',
+        );
         
 
         $article = new Article();

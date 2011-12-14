@@ -91,25 +91,30 @@ class NewsMLG1 {
         switch ($propertyName) {
 
             case 'id':
-                return (string)$this->getData()->NewsItem->Identification->NewsIdentifier->NewsItemId;
+                return (string)$this->getData()->NewsItem->Identification
+                                    ->NewsIdentifier->NewsItemId;
                 break;
 
             case 'urn':
-                return (string)$this->getData()->NewsItem->Identification->NewsIdentifier->PublicIdentifier;
+                return (string)$this->getData()->NewsItem->Identification
+                                    ->NewsIdentifier->PublicIdentifier;
                 break;
 
             case 'title':
-                return (string)$this->getData()->NewsItem->NewsComponent->NewsLines->HeadLine;
+                return (string)$this->getData()->NewsItem->NewsComponent
+                                    ->NewsLines->HeadLine;
                 break;
 
             case 'priority':
-                $rawUrgency = $this->getData()->xpath("//NewsItem/NewsManagement/Urgency");
+                $rawUrgency =  $this->getData()
+                                    ->xpath("//NewsItem/NewsManagement/Urgency");
                 
                 return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
             case 'tags':
-                $rawCategory = $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
+                $rawCategory = $this->getData()->NewsItem->NewsComponent
+                                    ->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
                 $rawTags = (string)$rawCategory[0]->attributes()->Value;
                 $tagGroups = explode(";", $rawTags);
                 $tags = array();
@@ -123,7 +128,8 @@ class NewsMLG1 {
                 break;
             
             case 'created_time':
-                $originalDate = (string)$this->getData()->NewsItem->NewsManagement->ThisRevisionCreated;
+                $originalDate = (string)$this->getData()->NewsItem->NewsManagement
+                                                        ->ThisRevisionCreated;
 
                 // ISO 8601 doesn't match this date 20111211T103900+0000
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
@@ -143,7 +149,8 @@ class NewsMLG1 {
                 break;
 
             case 'agency_name':
-                $rawAgencyName = $this->getData()->NewsEnvelope->SentFrom->Party->xpath("//Property[@FormalName=\"Organization\"]");
+                $rawAgencyName = $this->getData()->NewsEnvelope
+                                      ->SentFrom->Party->xpath("//Property[@FormalName=\"Organization\"]");
                 return (string)$rawAgencyName[0]->attributes()->Value;
                 break;
 
@@ -189,6 +196,7 @@ class NewsMLG1 {
     public function getPhotos()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
+        
         $photos = array();
         foreach ($contents[0] as $componentName => $component) {
             if ($componentName == 'NewsComponent') {

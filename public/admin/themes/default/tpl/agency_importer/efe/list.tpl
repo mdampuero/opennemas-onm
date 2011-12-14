@@ -145,7 +145,7 @@
                     <td class="right">
                         <ul class="action-buttons">
                             <li>
-                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import&id={$elements[c]->xmlFile}" title="Importar">
+                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import_select_category&id={$elements[c]->xmlFile}" title="Importar">
                                <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
                                 </a>
                             </li>

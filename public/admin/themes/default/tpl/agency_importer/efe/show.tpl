@@ -78,7 +78,10 @@
                                 <strong>{t}Photos:{/t}</strong> <br/>
                                 <ul>
                                 {foreach from=$element->photos item=photo}
-                                    <li>{$photo->title}</li>
+                                    <li style="vertical-align: top">
+                                        <img width="120" src="{$smarty.server.PHP_SELF}?action=show_attachment&id={$element->id}&attachment_id={$photo->id}" alt="{$photo->title}">
+                                        {$photo->title}
+                                    </li>
                                 {/foreach}
                                 </ul>
                             </p>
