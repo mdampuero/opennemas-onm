@@ -1,11 +1,13 @@
 <?php
 /*
- * This file is part of the onm package.
- * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ * This file is part of the Onm package.
+ *
+ * (c)  Fran Dieguez <fran@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+ use Onm\Message as m;
 /**
  * Photo
  *
@@ -66,6 +68,115 @@ class Photo extends Content
         }
 
         return $this->id;
+    }
+
+    /**
+     * Creates one photo register in the database from data and local file
+     * TODO: this function must content the photo file path
+     *
+     * @params array $data the data for the photo, must content the photo file path
+     **/
+    public function createFromLocalFile($dataSource)
+    {
+
+        $filePath = $dataSource["local_file"];
+
+        if(!empty($filePath)) {
+             // Check upload directory
+            $dateForDirectory = date("/Y/m/d/");
+            $uploadDir = realpath(MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory).DIRECTORY_SEPARATOR ;
+
+            if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+
+            $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
+
+            // Getting information for creating
+            $t = gettimeofday();
+            $micro = intval(substr($t['usec'], 0, 5));
+            $finalPhotoFileName = date("YmdHis") . $micro . "." . strtolower($filePathInfo['extension']);
+            $fileInformation  = new MediaItem($filePath);
+
+            // Building information for the photo image
+            $data = array( 
+                'title'         => $dataSource["title"],
+                'name'          => $finalPhotoFileName,
+                'path_file'     => $dateForDirectory,
+                'fk_category'   => $dataSource["fk_category"],
+                'category'      => $dataSource["fk_category"],
+                'nameCat'       => $dataSource["category_name"],
+
+                'created' => $fileInformation->atime,
+                'changed' => $fileInformation->mtime,
+                'date' => $fileInformation->mtime,
+                'size' => round($fileInformation->size/1024, 2),
+                'width' => $fileInformation->width,
+                'height' => $fileInformation->height,
+                'type_img' => strtolower($filePathInfo['extension']),
+                'media_type' => 'image',
+
+                'author_name'  => '',
+                'pk_author'    => $_SESSION['userid'],
+                'fk_publisher' => $_SESSION['userid'],
+                'description'  => $dataSource['description'],
+                'metadata'     => $dataSource["metadata"],
+            );
+
+
+            if (is_dir($uploadDir) && is_writable($uploadDir)) {
+                m::add(
+                    sprintf(
+                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there', 
+                        $uploadDir.$finalPhotoFileName
+                    ),
+                    m::ERROR
+                );
+                $importedID = null;
+            }
+
+            if (copy($dataSource['local_file'], $uploadDir.$finalPhotoFileName)) {
+
+                $photo = new Photo();
+                $photoID = $photo->create($data);
+
+                // if($contentCreatedID) {
+                //     if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
+                //         // miniatura
+                //         $thumb = new Imagick($uploaddir.$name);
+
+                //         //ARTICLE INNER
+                //         $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
+                //         //Write the new image to a file
+                //         $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
+
+                //         //FRONTPAGE
+                //         $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
+                //         //Write the new image to a file
+                //         $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
+
+                //         //THUMBNAIL
+                //         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
+                //         //Write the new image to a file
+                //         $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
+                //     }
+                // }
+
+                $importedID = $photoID;
+
+            } else {
+
+                $importedID = null;
+
+                m::add(
+                    sprintf(
+                        'Unable to register the new Photo as "%s" file couldn\'t exists.', 
+                        $uploadDir.$finalPhotoFileName
+                    ),
+                    m::ERROR
+                );
+            }
+        }
+
+        return $importedID;
     }
 
     public function read($id)

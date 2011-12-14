@@ -262,6 +262,14 @@ switch($action) {
             m::add(_('Please assign the category where import this article'), m::ERROR);
             Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php?action=import_select_category&id={$id}&category={$category}");
         }
+        $categoryInstance = new ContentCategory($category);
+        if (!is_object($categoryInstance)) {
+            m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
+            Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php?action=import_select_category&id={$id}&category={$category}");
+        }
+
+        
+        
 
         $ep = new Onm\Import\Efe();
         $element = $ep->findByFileName($id);
@@ -269,17 +277,24 @@ switch($action) {
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
             foreach($photos as $photo) {
-                // $photo = new Photo(datos);
-                // $photo->create();
-                // realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path)  
-                $imgInt = new stdClass();
-                $imgInt->id = ''; // 375
-                $imgInt->title = ''; // $photo->title;
+
+                $data = array(
+                    'title' => $photo->title,
+                    'description' => $photo->title,
+                    'local_file' => realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                    'fk_category' => $category,
+                    'category_name' => $categoryInstance->name,
+                    'metadata' => String_Utils::get_tags($photo->title),
+                );
+                $photo = new Photo();
+                $photoID = $photo->createFromLocalFile($data); 
+
+                if (!isset($innerPhoto)) {
+                    $innerPhoto = new Photo($photoID);;
+                }
 
             }
         }
-
-// var_dump($imgInt);die();
 
         $values = array(
             'title' => $element->texts[0]->title,
@@ -299,14 +314,15 @@ switch($action) {
             'fk_publisher' => $_SESSION['userid'],
             'img1' => '',
             'img1_footer' => '',
-            'img2' => $imgInt->id,
-            'img2_footer' => $imgInt->title,
+            'img2' => $innerPhoto->id,
+            'img2_footer' => $innerPhoto->title,
             'fk_video' => '',
             'fk_video2' => '',
             'footer_video2' => '',
             'ordenArti' => '',
             'ordenArtiInt' => '',
         );
+        
         
 
         $article = new Article();

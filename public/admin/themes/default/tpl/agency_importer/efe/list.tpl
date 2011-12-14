@@ -6,6 +6,26 @@
 	padding-top:4px;
 	padding-bottom:4px;
     }
+    .tags-hidden {
+        position:absolute;
+        width:30px; 
+        height: 15px;
+        margin:0;
+        padding:0;
+        margin-top:-10px;
+        overflow:hidden;
+    }
+    .tags-hidden:hover {
+        margin-top:-15px;
+        margin-left:-5px;
+        width:auto;
+        height:auto;
+        overflow:show;
+        background:White;
+        z-index:999;
+        padding:5px;
+        box-shadow:0 0 3px rgba(0,0,0,0.2)
+    }
     </style>
 {/block}
 {block name="content"}
@@ -43,8 +63,9 @@
             <li>Synchronization with server to local temporary folder.</li>
             <li>List all the available news, and see its contents.</li>
             <li>Search news by its title</li>
-            <li>News import but attachments</li>
-        </ul><!-- / -->
+            <li>Import articles but attachments</li>
+            <li>See attached photos</li>
+        </ul>
         </p>
     </div><!-- / -->
 
@@ -101,6 +122,7 @@
                 {if count($elements) >0}
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
+                    <th align="center">{t}Attachments{/t}</th>
                     <th align="center">{t}Date{/t}</th>
                     <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
@@ -123,23 +145,37 @@
                     <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
                         <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
                             {$elements[c]->title}
-                            {if $elements[c]->hasPhotos()}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
-                            {/if}
                         </a>
-                    </td>
-                    <td align="center">
-                            {$elements[c]->created_time->getTimestamp()|relative_date}
                     </td>
 
                     <td align="center">
-                        <div style="max-width:80px; overflow:hidden;">
-                            
-                        {foreach from=$elements[c]->tags item=group name=loop1}
-                            {$group|implode:", "}
-                        {/foreach}
+                        {if $elements[c]->hasPhotos()}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
+                        {/if}
+                        {if $elements[c]->hasPhotos() && false}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
+                        {/if}
+
+                        {if $elements[c]->hasPhotos() && false}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/polls.png" alt="[{t}With files{/t}] " title="{t}This new has attached videos{/t}">
+                        {/if}
+
+                        {if $elements[c]->hasPhotos() && false}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
+                        {/if}
+                    </td>
+                    <td align="center">
+                        {$elements[c]->created_time->getTimestamp()|relative_date}
+                    </td>
+
+                    <td align="center">
+                        <div style="position:relative">
+                            <div class="tags-hidden" >
+                                {foreach from=$elements[c]->tags item=group name=loop1}
+                                    {$group|implode:", "}
+                                {/foreach}
+                            </div><!-- / -->
                         </div><!-- / -->
-                        
                     </td>
 
                     <td class="right">
