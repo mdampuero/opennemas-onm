@@ -138,7 +138,7 @@ class Photo extends Content
                 $photo = new Photo();
                 $photoID = $photo->create($data);
 
-                // if($contentCreatedID) {
+                // if($photoID) {
                 //     if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
                 //         // miniatura
                 //         $thumb = new Imagick($uploaddir.$name);

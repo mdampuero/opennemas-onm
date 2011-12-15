@@ -820,7 +820,7 @@ legend {
 .notice a {color:#514721;}
 .success a {color:#264409;}
 .error a, .notice a, .success a { text-decoration:underline !important; }
-.error li, .notice li, .success li { list-style:none;}
+.error li, .notice li, .success li { margin-left:20px;}
 
 
 /* -------------------------------------------------------------

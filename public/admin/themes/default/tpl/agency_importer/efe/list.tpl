@@ -57,14 +57,9 @@
 
     <div class="error">
         <p>
-        {t}This module is still in development so keep tuned until finished. For now only works the next:{/t}
+        {t}This module is still in development so keep tuned until finished. There are some issues that needs to be solved:{/t}
         <ul>
-            <li>Configuration of module (server and auth)</li>
-            <li>Synchronization with server to local temporary folder.</li>
-            <li>List all the available news, and see its contents.</li>
-            <li>Search news by its title</li>
-            <li>Import articles but attachments</li>
-            <li>See attached photos</li>
+            <li>Generate thumbnails for the attached photos</li>
         </ul>
         </p>
     </div><!-- / -->
