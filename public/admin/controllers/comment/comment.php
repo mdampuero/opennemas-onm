@@ -93,7 +93,7 @@ switch($action) {
 
         $tpl->assign('comment_status', $commentStatus);
         $filter = "content_status = ".$commentStatus;
-
+        $items_page = s::get('items_per_page') ?: 20;
      
         if($category == 'home') {
             $comment = new Comment();
@@ -101,31 +101,43 @@ switch($action) {
             //Comentarios de las noticias in_home
             $comments = $comment->get_home_comments($filter);
             if($comments) {
-                $comments = $cm->paginate_num($comments,ITEMS_PAGE);
+                $comments = $cm->paginate_num($comments,$items_page);
                 $tpl->assign('paginacion', $cm->pager);
                 $tpl->assign('comments', $comments);
             }
 
         } elseif($category == 'todos') {
             $comment = new Comment();
-            // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-            list($allComments, $pager)= $cm->find_pages('Comment', $filter.' ',
-                                                     'ORDER BY  created DESC ',
-                                                     $page, ITEMS_PAGE);
+
             $comments = array();
             if ($module != 0) {
+                
+                $allComments = $cm->find_all('Comment', $filter , ' ORDER BY  created DESC ');
+                
                 foreach ($allComments as $comm) {
                     $comm->content_type = ContentType::getContentTypeByContentId($comm->fk_content);
 
                     if ($comm->content_type == $module) {
                         $comments[] = $comm;
                     }                
-                } 
+                }
+                
+                $pager_options = array(
+                    'mode'        => 'Sliding',
+                    'perPage'     => $items_page,
+                    'delta'       => 4,
+                    'clearIfVoid' => true,
+                    'urlVar'      => 'page',
+                    'totalItems'  => count($comments),
+                );
+                $pager = Pager::factory($pager_options);
+
+                $comments = array_slice($comments, ($page-1)*$items_page, $items_page);
             } else {
-                $comments = $allComments;
+                // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
+                list($comments, $pager)= $cm->find_pages('Comment', $filter.' ',
+                                                     'ORDER BY  created DESC ', $page, $items_page);
             }
-            
-            
 
             $tpl->assign('paginacion', $pager);
             $tpl->assign('comments', $comments);
@@ -135,7 +147,7 @@ switch($action) {
             // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
             list($allComments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
                                                       'ORDER BY content_status, created DESC ',
-                                                      $page, ITEMS_PAGE, $category);
+                                                      $page, $items_page, $category);
             $comments = array();
             if ($module != 0) {
                 foreach ($allComments as $comm) {
