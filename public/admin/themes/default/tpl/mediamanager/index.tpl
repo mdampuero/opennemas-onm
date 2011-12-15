@@ -28,13 +28,22 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+    <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
                     <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
+            {acl isAllowed="IMAGE_SETTINGS"}
+            <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config video module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        {t}Settings{/t}
+                    </a>
+                </li>
+            {/acl}
         </ul>
     </div>
 </div>

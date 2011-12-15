@@ -1,24 +1,14 @@
 <?php
-/* -*- Mode: PHP; tab-width: 4 -*- */
-/**
- * OpenNeMas project
+/*
+ * This file is part of the Onm package.
  *
- * LICENSE
+ * (c)  Fran Dieguez <fran@openhost.es>
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   OpenNeMas
- * @package    OpenNeMas
- * @copyright  Copyright (c) 2009 Openhost S.L. (http://openhost.es)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-
+use Onm\Settings as s,
+    Onm\Message as m;
 
 /**
  * Setup app
@@ -31,6 +21,7 @@ require_once(SITE_CORE_PATH.'privileges_check.class.php');
 
 require(dirname(__FILE__).'/mediamanagerController.php');
 
+$tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 //????? Parche pq no pasa el action, lo borra en algun sitio
 if (!empty($_REQUEST['acti']) && $_REQUEST['acti']=='searchResult'){ 
@@ -262,6 +253,39 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$photo->category.'&alert='.$alert.'&msg='.$msg.'&page='.$_REQUEST['page']);
 
     } break;
+
+    case 'config':
+
+        $configurationsKeys = array(
+            'image_thumb_size',
+            'image_inner_thumb_size',
+            'image_front_thumb_size',
+        );
+
+        $configurations = s::get($configurationsKeys);
+
+        $tpl->assign(array(
+            'configs'   => $configurations,
+        ));
+
+        $tpl->display('mediamanager/config.tpl');
+
+        break;
+
+    case 'save_config':
+
+        unset($_POST['action']);
+        unset($_POST['submit']);
+        
+
+        foreach ($_POST as $key => $value ) {
+            s::set($key, $value);
+        }
+
+        m::add(_('Settings saved.'), m::SUCCESS);
+
+        Application::forward($_SERVER['SCRIPT_NAME']);
+        break;
 
     default: {
 

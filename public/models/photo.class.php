@@ -7,7 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- use Onm\Message as m;
+ use Onm\Message as m,
+     Onm\Settings as s;
 /**
  * Photo
  *
@@ -138,27 +139,63 @@ class Photo extends Content
                 $photo = new Photo();
                 $photoID = $photo->create($data);
 
-                // if($photoID) {
-                //     if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
-                //         // miniatura
-                //         $thumb = new Imagick($uploaddir.$name);
+                if ($photoID) {
 
-                //         //ARTICLE INNER
-                //         $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
-                //         //Write the new image to a file
-                //         $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
+                    if(preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
 
-                //         //FRONTPAGE
-                //         $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
-                //         //Write the new image to a file
-                //         $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
+                        $imageThumbSize = s::get(array(
+                            'image_thumb_size',
+                            'image_inner_thumb_size',
+                            'image_front_thumb_size',
+                        ));
 
-                //         //THUMBNAIL
-                //         $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
-                //         //Write the new image to a file
-                //         $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
-                //     }
-                // }
+                        // Thumbnail handler
+                        $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
+
+                        // Article inner thumbnail
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480, 
+                            $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
+                            true
+                        );
+                        $thumb->writeImage(
+                            $uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName
+                        );
+
+                        // Generate frontpage thumbnails
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350, 
+                            $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
+                            true
+                        );
+                        $thumb->writeImage(
+                            $uploadDir . $imageThumbSize['image_front_thumb_size']['width'] . '-' . $imageThumbSize['image_front_thumb_size']['height'] . '-' . $finalPhotoFileName
+                        );
+
+                        // Main thumbnail
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_thumb_size']['width'] ?: 140, 
+                            $imageThumbSize['image_thumb_size']['height'] ?: 100, 
+                            true
+                        );
+                        //Write the new image to a file
+                        $thumb->writeImage($uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName);
+
+                    }
+
+                } else {
+                    Application::getLogger()->notice(sprintf(
+                        'EFE Importer: Unable to register the photo object %s (destination: %s).', 
+                        $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                    ));
+                    m::add(
+                        sprintf(
+                            'Unable to register the photo object into OpenNemas.', 
+                            $uploadDir.$finalPhotoFileName
+                        ),
+                        m::ERROR
+                    );
+                }
 
                 $importedID = $photoID;
 
@@ -167,12 +204,12 @@ class Photo extends Content
                 $importedID = null;
 
                 Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to register the photo %s (destination: %s).', 
+                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).', 
                     $dataSource['local_file'], $uploadDir.$finalPhotoFileName
                 ));
                 m::add(
                     sprintf(
-                        'Unable to attach the photo related in EFE importer.', 
+                        'Unable to copy the file of the photo related in EFE importer to the article.', 
                         $uploadDir.$finalPhotoFileName
                     ),
                     m::ERROR
