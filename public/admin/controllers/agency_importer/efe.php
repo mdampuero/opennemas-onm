@@ -279,7 +279,7 @@ switch($action) {
             foreach($photos as $photo) {
 
                 $data = array(
-                    'title' => $photo->title,
+                    'title' => $photo->file_path,
                     'description' => $photo->title,
                     'local_file' => realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                     'fk_category' => $category,

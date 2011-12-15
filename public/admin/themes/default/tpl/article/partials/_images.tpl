@@ -75,7 +75,7 @@
                     <tr>
                         <td align='center'>
                             <div id="droppable_div2">
-                                {if isset($photo1) && $photo2->name}
+                                {if isset($photo2) && $photo2->name}
                                     {if strtolower($photo2->type_img)=='swf'}
                                         <object id="change2"  name="{$article->img1}" >
                                             <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo2->path_file}{$photo2->name}"></param>
