@@ -135,7 +135,7 @@
 
             <tbody>
                 {section name=c loop=$elements}
-                <tr class="{if in_array($elements[c]->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
+                <tr class="{if is_array($already_imported) &&  in_array($elements[c]->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
 
                     <td style="text-align:center;">
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
