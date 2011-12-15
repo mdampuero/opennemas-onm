@@ -147,13 +147,15 @@ switch($action) {
  
         $kiosko = new Kiosko();
  
-        if ($uploadStatus !== false && $kiosko->create( $_POST )) {           
-             m::add(_('create ok') );
+        if ($uploadStatus !== false) { 
+            if( !$kiosko->create( $_POST )) {                                          
+                m::add(_('There was a problem with kiosko data. Try again') );
+            }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
-       
         } else {
             if ($uploadStatus==false) {
-                m::add(_('There was an error while uploading the file. <br />Please, contact your system administration') );
+                
+                m::add(_('There was an error while uploading the file. <br />Please, check file size or contact your system administration') );
             
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }

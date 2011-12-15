@@ -18,7 +18,7 @@
 <div class="wrapper-content">
 
 <form id="formulario" enctype="multipart/form-data"  name="formulario" action="{$smarty.server.SCRIPT_NAME}" method="POST">
-
+    	<input type="hidden" name="MAX_FILE_SIZE" value="5000000" />
     <div id="content-wrapper">
 
         <table class="adminheading">

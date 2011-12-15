@@ -13,6 +13,7 @@
  * @package    Onm
  * @subpackage Model
  **/
+use Onm\Message as m;
 
 class Kiosko extends Content {
     public $pk_kiosko  = NULL;
@@ -50,7 +51,7 @@ class Kiosko extends Content {
 
     public function create($data) {
 
-       if( $this->exists($data['name'], $data['category']) ) {
+     /*  if( $this->exists($data['name'], $data['category']) ) {
            m::add('Una portada ya ha sido subida en la fecha y categoria seleccionadas.<br />' .
                                'Para subir una portada en esa fecha debe eliminar primero la portada existente, ' .
                                'teniendo en cuenta que también se debe eliminar de la papelera.', 'error');
@@ -60,7 +61,7 @@ class Kiosko extends Content {
 
             return false;
         } 
-
+*/
         parent::create($data);
         
         $sql = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date` ) " .
