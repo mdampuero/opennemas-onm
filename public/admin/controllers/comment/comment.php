@@ -49,7 +49,29 @@ if(empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT, array('options' => array('default' => 'todos' )));
 }
 
+$module = filter_input(INPUT_GET,'module',FILTER_VALIDATE_INT, array('options' => array('default' => 0 )));
+
 $tpl->assign('category', $category);
+
+function buildFilter($filter) {
+    $filters = array();
+    $url = array();
+
+    $filters[] = $filter;
+
+    if(isset($category)) {
+        $url[] = 'category=' . $category;
+    }
+
+    if(isset($module)
+       && ($module > 0)) {
+        $url[] = 'module=' . $module;
+        //$filters[] = '`fk_content_type`=' . $module;
+    }
+
+    return array( implode(' AND ',$filters), implode('&amp;', $url) );
+}
+
 
 switch($action) {
 
@@ -57,7 +79,7 @@ switch($action) {
 
         // Get all categories for the menu
         $ccm = ContentCategoryManager::get_instance();
-        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category);
+        list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category,$module);
         $tpl->assign('subcat', $subcat);
         $tpl->assign('allcategorys', $parentCategories);
         $tpl->assign('datos_cat', $datos_cat);
@@ -87,18 +109,46 @@ switch($action) {
         } elseif($category == 'todos') {
             $comment = new Comment();
             // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-            list($comments, $pager)= $cm->find_pages('Comment', 'content_status = 0',
+            list($allComments, $pager)= $cm->find_pages('Comment', $filter.' ',
                                                      'ORDER BY  created DESC ',
                                                      $page, ITEMS_PAGE);
+            $comments = array();
+            if ($module != 0) {
+                foreach ($allComments as $comm) {
+                    $comm->content_type = ContentType::getContentTypeByContentId($comm->fk_content);
+
+                    if ($comm->content_type == $module) {
+                        $comments[] = $comm;
+                    }                
+                } 
+            } else {
+                $comments = $allComments;
+            }
+            
+            
+
             $tpl->assign('paginacion', $pager);
             $tpl->assign('comments', $comments);
 
 
         } else {
             // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
-            list($comments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
+            list($allComments, $pager) = $cm->find_pages('Comment', ' fk_content_type=6  and '.$filter.' ',
                                                       'ORDER BY content_status, created DESC ',
                                                       $page, ITEMS_PAGE, $category);
+            $comments = array();
+            if ($module != 0) {
+                foreach ($allComments as $comm) {
+                    $comm->content_type = ContentType::getContentTypeByContentId($comm->fk_content);
+
+                    if ($comm->content_type == $module) {
+                        $comments[] = $comm;
+                    }                
+                } 
+            } else {
+                $comments = $allComments;
+            }
+            
             $tpl->assign('paginacion', $pager);
             $tpl->assign('comments', $comments);
 

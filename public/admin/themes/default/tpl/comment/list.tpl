@@ -1,7 +1,18 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+    <script type="text/javascript">
+        function submitFilters(frm) {
+            $('action').value='list';
+            $('page').value = 1;
+
+            frm.submit();
+        }
+    </script>
+{/block}
+
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -35,7 +46,7 @@
     </div>
     <div class="wrapper-content">
 
-
+{*
         <ul class="pills clearfix">
 			<li>
 				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>{t}ALL{/t}</a>
@@ -60,24 +71,53 @@
             </script>
 			{include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
 		</ul>
-
+*}
 
 		<div class="clearfix">
-        {if $category neq "todos"}
+        
             <ul id="tabs">
                 <li>
-					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=0">{t}Pending{/t}</a>
+					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=0">{t}Pending{/t}</a>
                 </li>
                 <li>
-					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=1">{t}Published{/t}</a>
+					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=1">{t}Published{/t}</a>
                 </li>
                 <li>
-					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&comment_status=2">{t}Rejected{/t}</a>
+					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=2">{t}Rejected{/t}</a>
                 </li>
             </ul>
-        {/if}
+        
         </div>
-
+        
+            <table class="adminheading">
+                <tr>
+                    <th nowrap="nowrap" align="right">
+                        <label for="category">{t}Category name:{/t}</label>
+                        <select name="category" onchange="submitFilters(this.form);">
+                            <option value="todos" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                            {section name=as loop=$allcategorys}
+                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
+                                 {section name=su loop=$subcat[as]}
+										{if $subcat[as][su]->internal_category eq 1}
+											<option value="{$subcat[as][su]->pk_content_category}"
+											{if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+										{/if}
+									{/section}
+                            {/section}
+                        </select>
+                        &nbsp;&nbsp;&nbsp;
+                        <label>{t}Module:{/t}</label>
+                        <select name="module" onchange="submitFilters(this.form);">
+                            <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
+                            {foreach from=$content_types key=i item=type}
+                                 <option value="{$i}" {if $smarty.get.module eq $i}selected{/if}>{$type}</option>
+                            {/foreach}
+                        </select>
+                        <input type="hidden" id="page" name="page" value="{$smarty.request.page|default:"1"}" />
+                    </th>
+                </tr>
+            </table>
+                    
         <script type="text/javascript">
             document.observe('dom:loaded', function() {
                 {if $comment_status==0}
