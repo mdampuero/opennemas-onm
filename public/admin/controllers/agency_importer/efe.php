@@ -158,9 +158,16 @@ switch($action) {
 
         $elements = array_slice($elements, ($page-1)*$items_page, $items_page);
 
+        $urns = array();
+        foreach ($elements as $element) {
+            $urns []= $element->urn;
+        }
+        $alreadyImported = Content::findByUrn($urns);
+
         $tpl->assign(
             array(
                 'elements'      =>  $elements,
+                'already_imported' => $alreadyImported,
                 'categories'    =>  $categories,
                 'minutes'       =>  $minutesFromLastSync,
                 'pagination'    =>  $pager,
@@ -181,6 +188,8 @@ switch($action) {
             //$element = $ep->findByID($id);
 
             $element = $ep->findByFileName($id);
+            
+            $alreadyImported = Content::findByUrn($element->urn);
 
         } catch (Exception $e) {
 
@@ -190,7 +199,10 @@ switch($action) {
 
         }
 
-        $tpl->assign('element', $element);
+        $tpl->assign(array(
+            'element'   => $element,
+            'imported'       => count($alreadyImported) > 0,
+        ));
         $tpl->display('agency_importer/efe/show.tpl');
         break;
 
@@ -321,6 +333,7 @@ switch($action) {
             'footer_video2' => '',
             'ordenArti' => '',
             'ordenArtiInt' => '',
+            'urn_source' => $element->urn,
         );
         
         

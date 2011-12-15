@@ -1,4 +1,14 @@
 {extends file="base/admin.tpl"}
+{block name="header-css" append}
+<style type="text/css" media="screen">
+    .already-imported {
+        background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
+        padding:10px;
+        border:1px solid #ccc;
+        margin-bottom:10px;
+    }
+</style>
+{/block}
 
 {block name="content"}
 <div class="top-action-bar clearfix">
@@ -19,22 +29,19 @@
     </div>
 </div>
 <div class="wrapper-content">
-   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-   <div id="{$category|default:""}">
-
-        <table class="adminheading">
-	    <tr>
-            <th align="left">&nbsp;</th>
-	    </tr>
-	</table>
-
-	<table class="adminform" border=0>
+    {render_messages}
+    {if $imported}
+    <div class="already-imported">
+        {t}This article was imported before. Take care of it.{/t}
+    </div><!-- / -->
+    {/if}
+	<table class="adminform">
         <tbody>
     	    <tr>
                 <td>
                     <div id="{$element->id}" style="width:70%; margin:0 auto; margin-top:5px; font-size:13px;">
-                        <fieldset>
+                    <fieldset>
                             <legend>{t}Basic information{/t}</legend>
                             {if $element->texts[0]->pretitle}
                             <p>
@@ -121,17 +128,7 @@
                 </td>
             </tr>
             </tbody>
-
-            <tfoot>
-             <tr class="pagination" >
-                 <td colspan="13" align="center">&nbsp;</td>
-             </tr>
-            </tfoot>
-
 	   </table>
-   </div>
 
-   <input type="hidden" id="action" name="action" value="list" />
-   </form>
 </div>
 {/block}

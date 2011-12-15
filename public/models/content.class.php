@@ -131,8 +131,9 @@ class Content
                                       `created`, `changed`, `content_status`,
                                       `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,
                                       `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-                                      `in_home`, `home_pos`,`available`,`slug`, `category_name`)".
-                   " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?)";
+                                      `in_home`, `home_pos`,`available`,`slug`, `category_name`, `urn_source`)".
+                   " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?,?)";
+
 
         $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
         $data['endtime']   = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
@@ -144,6 +145,8 @@ class Content
         $data['position']  = (empty($data['position']))? '2': $data['position'];
         $data['in_home']   = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos'] = 100;
+        $data['urn_source'] = (empty($data['urn_source']))? null: $data['urn_source'];
+
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
             $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
@@ -179,7 +182,7 @@ class Content
                         $data['views'], $data['position'],$data['frontpage'],
                         $data['placeholder'],$data['home_placeholder'], 
                         $data['fk_user'], $data['fk_publisher'], $data['fk_user_last_editor'],
-                        $data['in_home'], $data['home_pos'],$data['available'], $data['slug'], $catName);
+                        $data['in_home'], $data['home_pos'],$data['available'], $data['slug'], $catName, $data['urn_source']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
@@ -1509,5 +1512,47 @@ class Content
             //Can't do because sometimes id is empty, example rss in article.php
         }
  
+    }
+
+
+    /**
+     * Search contents by its urn
+     *
+     * @param array/string $urns one urn string or one array of urn strings
+     * @return array the array of contents
+     **/
+    static public function findByUrn($urns)
+    {
+        if (is_array($urns)) {
+            $sqlUrns = '';
+            foreach ($urns as &$urn) {
+                $urn ="'".$urn."'";
+            }
+            $sqlUrns = implode(', ', $urns);
+        } elseif (is_string($urns)) {
+            $sqlUrns = "'".$urns."'";
+        } else {
+            throw new \InvalidArgumentException(sprintf('The param urn is not valid "%s".',$urns));
+        }   
+        
+
+        $sql = "SELECT urn_source FROM `contents` WHERE urn_source IN (".$sqlUrns.")";
+        
+        $contents = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$contents) {
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            return;
+        }
+
+        $contentsUrns = array();
+        while (!$contents->EOF) {
+            $contentsUrns [] = $contents->fields['urn_source'];
+            $contents->MoveNext();
+        }
+        
+        return $contentsUrns;
     }
 }

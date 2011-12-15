@@ -26,6 +26,19 @@
         padding:5px;
         box-shadow:0 0 3px rgba(0,0,0,0.2)
     }
+    .tags-hidden ul { margin:0; padding:0; display:none; }
+    .tags-hidden:hover ul { display:block; }
+    .tags-hidden ul li { list-style:none }
+
+    .tags-hidden:hover .list-tags {
+        display:none;
+    }
+
+    .already-imported, 
+    .already-imported:hover{
+        background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
+        background-color:none;
+    }
     </style>
 {/block}
 {block name="content"}
@@ -120,10 +133,9 @@
                 {/if}
             </thead>
 
-
             <tbody>
                 {section name=c loop=$elements}
-                <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
+                <tr class="{if in_array($elements[c]->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
 
                     <td style="text-align:center;">
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
@@ -157,9 +169,17 @@
                     <td align="center">
                         <div style="position:relative">
                             <div class="tags-hidden" >
-                                {foreach from=$elements[c]->tags item=group name=loop1}
-                                    {$group|implode:", "}
+                                <span class="list-tags">
+                                {foreach from=$elements[c]->tags  key=key item=value name=loop1}
+                                    {$key} 
                                 {/foreach}
+                                </span>
+                                <ul>
+                                {foreach from=$elements[c]->tags item=tag name=loop1}
+                                    <li>{$tag}</li>
+                                {/foreach}    
+                                </ul><!-- / -->
+                                
                             </div><!-- / -->
                         </div><!-- / -->
                     </td>

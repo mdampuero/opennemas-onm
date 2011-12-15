@@ -119,10 +119,9 @@ class NewsMLG1 {
                 $tagGroups = explode(";", $rawTags);
                 $tags = array();
                 foreach ($tagGroups as $group) {
-                    $tags []= explode(",", $group);
+                    preg_match('@(.*):(.*)@', $group, $matches);
+                    $tags [$matches[1]]= $matches[2];
                 }
-                
-                return $tags;
                 
                 return $tags;
                 break;
