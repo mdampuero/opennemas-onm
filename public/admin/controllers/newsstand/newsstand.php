@@ -156,7 +156,8 @@ switch($action) {
         } else {
             if ($uploadStatus==false) {
                 
-                m::add(_('There was an error while uploading the file. <br />Please, check file size or contact your system administration') );
+                m::add(_('There was an error while uploading the file. <br />Try to upload files smaller than that size or contact with your administrator'),
+                (int)(ini_get('upload_max_filesize').' ') );
             
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }

@@ -264,7 +264,7 @@ switch ($action) {
             && !Acl::check('CONTENT_OTHER_UPDATE')
             && $video->pk_user != $_SESSION['userid'])
         {
-            m::add(_("You can't modify this article because you don't have enought privileges.") );
+            m::add(_("You can't modify this video because you don't have enought privileges.") );
         } else {
             $video->update( $_POST );
         }
