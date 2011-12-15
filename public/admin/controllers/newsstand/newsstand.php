@@ -133,13 +133,14 @@ switch($action) {
 
         //Se crea el nombre del PDF
         $date = new DateTime($_POST['date']);
-        $_POST['name'] = $date->format('dmy').'.pdf';
+        $_POST['name'] = $date->format('dmyhis').'.pdf';
         $_POST['path'] = $date->format('Ymd').'/';
         $ruta = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $_POST['path'];
         
         // Create folder if it doesn't exist
         if( !file_exists($ruta) ) {
-            FilesManager::createDirectory($ruta);            
+            FilesManager::createDirectory($ruta);          
+             m::add(_('There was a problem when create dir. Contact your system administration') );
         }
         
         // Move uploaded file

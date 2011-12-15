@@ -144,7 +144,7 @@ class Kiosko extends Content {
         
         unlink($paper_pdf);
         unlink($paper_image);
-var_dump($error_msg);
+ 
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
