@@ -55,15 +55,6 @@
 <div class="wrapper-content">
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-    <div class="error">
-        <p>
-        {t}This module is still in development so keep tuned until finished. There are some issues that needs to be solved:{/t}
-        <ul>
-            <li>Generate thumbnails for the attached photos</li>
-        </ul>
-        </p>
-    </div><!-- / -->
-
 	{render_messages}
 
 	{if ($message || ($minutes > 10))}
