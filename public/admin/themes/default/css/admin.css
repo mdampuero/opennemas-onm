@@ -3,7 +3,8 @@
 
 html {
 	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
-	min-height:100%
+	min-height:100%;
+	overflow-y: scroll;
 }
 body {
 	background:none;
@@ -1665,7 +1666,7 @@ div.action-bar .right{
 .listing-table tr:hover { background:#F1F1F1; }
 .listing-table th td { text-align:center; }
 .listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
-.listing-table td a { color:#0069D6; font-weight: bold; text-decoration:none; }
+.listing-table td a { color:#0069D6; font-weight: bold; text-decoration:none; text-shadow: 0px 0 5px white;}
 .listing-table tfoot td { text-align:center; border: 0 none; min-height:33px;}
 .listing-table tbody .family_type { background:#F5F5F5; font-weight: bold; padding: 8px; }
 
