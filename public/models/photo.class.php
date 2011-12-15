@@ -84,7 +84,7 @@ class Photo extends Content
         if(!empty($filePath)) {
              // Check upload directory
             $dateForDirectory = date("/Y/m/d/");
-            $uploadDir = realpath(MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory).DIRECTORY_SEPARATOR ;
+            $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
 
             if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
 
@@ -122,7 +122,7 @@ class Photo extends Content
             );
 
 
-            if (is_dir($uploadDir) && is_writable($uploadDir)) {
+            if (is_dir($uploadDir) && !is_writable($uploadDir)) {
                 m::add(
                     sprintf(
                         'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there', 
@@ -133,7 +133,7 @@ class Photo extends Content
                 $importedID = null;
             }
 
-            if (copy($dataSource['local_file'], $uploadDir.$finalPhotoFileName)) {
+            if (copy($dataSource['local_file'], realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName)) {
 
                 $photo = new Photo();
                 $photoID = $photo->create($data);
@@ -166,9 +166,13 @@ class Photo extends Content
 
                 $importedID = null;
 
+                Application::getLogger()->notice(sprintf(
+                    'EFE Importer: Unable to register the photo %s (destination: %s).', 
+                    $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                ));
                 m::add(
                     sprintf(
-                        'Unable to register the new Photo as "%s" file couldn\'t exists.', 
+                        'Unable to attach the photo related in EFE importer.', 
                         $uploadDir.$finalPhotoFileName
                     ),
                     m::ERROR

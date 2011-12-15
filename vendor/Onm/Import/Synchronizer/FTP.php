@@ -84,7 +84,7 @@ class FTP {
 
         if (is_writable($cacheDir)) {
             $elements = array();
-            if (count($files) > 0) {
+            if (is_array($files) && count($files) > 0) {
                 foreach($files as $file) {
 
                     
