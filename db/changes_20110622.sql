@@ -1,3 +1,6 @@
+-- 15-Dic-2011
+ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL 
+
 --2-Dic- 2011
  
 -- Default category for epaper
