@@ -290,6 +290,18 @@ gettext("Published");
 gettext("Rejected");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Category name:");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("All");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("Module:");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
+gettext("All");
+
+/* public/admin/themes/default/tpl//comment/list.tpl */
 gettext("Title");
 
 /* public/admin/themes/default/tpl//comment/list.tpl */
@@ -4039,6 +4051,60 @@ gettext("Save changes");
 /* public/admin/themes/default/tpl//botonera_up.tpl */
 gettext("New section");
 
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Image manager :: Configuration");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Sync list  with server");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Information about video module settings");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Main image thumbnails");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Width:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Height:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Inner article image thumbnails");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Width:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Height:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Inner article image thumbnails");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Width:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Height:");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Settings");
+
+/* public/admin/themes/default/tpl//mediamanager/config.tpl */
+gettext("Save");
+
 /* public/admin/themes/default/tpl//mediamanager/list_today.tpl */
 gettext("Image manager");
 
@@ -4281,6 +4347,12 @@ gettext("Images manager :: General statistics");
 
 /* public/admin/themes/default/tpl//mediamanager/index.tpl */
 gettext("Search");
+
+/* public/admin/themes/default/tpl//mediamanager/index.tpl */
+gettext("Config video module");
+
+/* public/admin/themes/default/tpl//mediamanager/index.tpl */
+gettext("Settings");
 
 /* public/admin/themes/default/tpl//mediamanager/index.tpl */
 gettext("Global statistics");
@@ -4910,6 +4982,9 @@ gettext("Sync elements newer than:");
 gettext("Save");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
+gettext("Downloading articles from EFE, please wait...");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
 gettext("EFE importer");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
@@ -4959,9 +5034,6 @@ gettext("Config Europapress module");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
 gettext("Config");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
-gettext("This module is still in development so keep tuned until finished. There are some issues that needs to be solved:");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
 gettext("A long time ago from synchronization.");
@@ -5076,6 +5148,9 @@ gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Go back to list");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("This article was imported before. Take care of it.");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Basic information");
@@ -5217,6 +5292,9 @@ gettext("Sync elements newer than:");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/config.tpl */
 gettext("Save");
+
+/* public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
+gettext("Downloading articles from EuropaPress, please wait...");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("EuropaPress importer");
