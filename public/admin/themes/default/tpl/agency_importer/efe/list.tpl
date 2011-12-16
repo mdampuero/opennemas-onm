@@ -41,13 +41,26 @@
     }
     </style>
 {/block}
+
+{block name="header-js" prepend}
+    {script_tag language="javascript" src="/jquery/jquery.min.js"}
+    <script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function (){
+        
+        jQuery('.sync_with_server').click(function() {
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EFE, please wait...{/t}</div>'); 
+        });
+    });
+    </script>
+{/block}
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Available articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=sync" class="admin_add" value="{t}Sync with server{/t}" title="{t}Sync with server{/t}">
+				<a href="{$smarty.server.PHP_SELF}?action=sync" class="sync_with_server" value="{t}Sync with server{/t}" title="{t}Sync with server{/t}">
 				<img border="0" src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
 				</a>
 			</li>
@@ -66,6 +79,7 @@
     </div>
 </div>
 <div class="wrapper-content">
+    <div class="warnings-validation"></div><!-- / -->
    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
 	{render_messages}
@@ -83,14 +97,13 @@
 			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
 		</p>
 		{/if}
-		{render_messages}
 	    </ul>
 	</div>
 	{/if}
 
 	{if (!empty($error))}
 	<div class="error">
-		 {render_error}
+		{render_error}
 	</div>
 	{/if}
 
