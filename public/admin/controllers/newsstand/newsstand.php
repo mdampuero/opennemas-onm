@@ -139,8 +139,7 @@ switch($action) {
         
         // Create folder if it doesn't exist
         if( !file_exists($ruta) ) {
-            FilesManager::createDirectory($ruta);          
-             m::add(_('There was a problem when create dir. Contact your system administration') );
+            FilesManager::createDirectory($ruta);                      
         }
         
         // Move uploaded file

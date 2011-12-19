@@ -192,21 +192,26 @@ class Kiosko extends Content {
     public function createThumb($file_pdf, $path) {
         $img_name   = basename($file_pdf, ".pdf") . '.jpg';
         $tmp_name   = '/tmp/' . basename($file_pdf, ".pdf") . '.png';
+      
     
         // Thumbnail first page (see [0])
         if ( file_exists($this->kiosko_path.$path. $file_pdf)) {
             try {
               
                 $imagick = new Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
-                $imagick->thumbnailImage(280, 0);
-
-                // First, save to PNG (*.pdf => /tmp/xxx.png)
+                $imagick->thumbnailImage(650, 0);
+                    // First, save to PNG (*.pdf => /tmp/xxx.png)
                 $imagick->writeImage($tmp_name);
-                
-                // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
+                  // finally, save to jpg (/tmp/xxx.png => *.jpg) to avoid problems with the image
                 $imagick = new Imagick($tmp_name);
+                                
+                $imagick->writeImage($this->kiosko_path.$path.'650-'.$img_name);
+
+                $imagick->thumbnailImage(180, 0);
+                //         //Write the new image to a file
                 $imagick->writeImage($this->kiosko_path.$path.$img_name);
 
+                  
                 //remove temp image
                 unlink($tmp_name);
             } catch(Exception $e) {

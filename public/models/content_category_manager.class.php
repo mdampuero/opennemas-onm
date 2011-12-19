@@ -480,6 +480,32 @@ class ContentCategoryManager {
 
         return( $categories );
     }
+    
+    function group_by_type($categories) {
+        $categories = array_values($categories);
+
+        // FIXME: create a lambda function once we upgrade to new version 5.3 of PHP
+        if(!function_exists('__group_by_type')) {
+            // Ordenar
+            function __group_by_type($a, $b) {
+                //Las que no están en el menú colocarlas al final
+                if($b->internal_category == 0) {
+                     return 0;
+                }
+                if($a->internal_category == 0) {
+                     return +1;
+                }
+                if  ($a->internal_category == $b->internal_category) {
+
+                }
+                return ($a->internal_category < $b->internal_category) ? +1 : -1;
+
+            }
+        }
+        usort($categories, '__group_by_type');
+
+        return( $categories );
+    }
 
     /**
      * Get a tree with categories and subcategories
@@ -825,7 +851,8 @@ class ContentCategoryManager {
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-        $fullcat = $this->order_by_posmenu($this->categories);
+    //    $fullcat = $this->order_by_posmenu($this->categories);
+        $fullcat = $this->group_by_type($this->categories);
         $parentCategories = array();
         $categoryData = array();
         foreach( $fullcat as $prima) {

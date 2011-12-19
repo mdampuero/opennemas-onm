@@ -45,23 +45,26 @@ switch($action) {
                     echo ($resp);
                     break;
                 }
-                // Your code here to handle a successful verification
+                
+                // Form data
+                $formulario= "Nombre y Apellidos: ". $_POST['name']." \r\n".
+                    "Email: ".$_POST['email']." \r\n";
+                if (!empty($_POST['entity']) ) {$formulario.= "Entidad ".$_POST['entity']." \n"; }
+                if (!empty($_POST['country']) ) {$formulario.= "País ".$_POST['country']." \n"; }
+                if (!empty($_POST['community']) ) {$formulario.= "Provincia de Origen ".$_POST['community']." \n"; }
+                
                 // Checking the type of action to do (alta/baja)                
                 if($_REQUEST['boletin']=='alta'){
                     $subject  = utf8_decode("Solicitud de ALTA - Boletín ".SITE_FULLNAME);
 
-                    $body=  "Solicitud de Alta en el boletin de: \r\n".
-                        "Nombre y Apellidos: ". $_REQUEST['name']." \r\n".
-                        "Email: ".$_REQUEST['email']." \r\n";
+                    $body=  "Solicitud de Alta en el boletín de: \r\n". $formulario;
 
                     $resp='<script language="JavaScript">(!alert("Se ha subscrito correctamente al boletín."))</script>
                             <script language="javascript">location.href="/home"</script>';
                 }else{
                     $subject  = utf8_decode("Solicitud de BAJA - Boletín ".SITE_FULLNAME);
 
-                    $body=  "Solicitud de Baja en el boletin de: \r\n".
-                        "Nombre y Apellidos: ". $_REQUEST['name']." \r\n".
-                        "Email: ".$_REQUEST['email']." \r\n";
+                    $body=  "Solicitud de Baja en el boletín de: \r\n". $formulario;
 
                     $resp='<script language="JavaScript">(!alert("Se ha dado de baja del boletín correctamente."))</script>
                             <script language="javascript">location.href="/home"</script>';

@@ -45,6 +45,7 @@ class Uri
        'static_page'=> array( 'estaticas/_SLUG_.html'),
        'ad'        =>  array( 'publicidad/_ID_.html'),
        'articleNewsletter' => array( 'seccion/_CATEGORY_/#_ID_'),
+       'kiosko'        =>  array( 'portadas-papel/_CATEGORY_/_DATE__ID_.html'),
     );
 
     /**
