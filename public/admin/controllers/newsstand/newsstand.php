@@ -133,7 +133,7 @@ switch($action) {
 
         //Se crea el nombre del PDF
         $date = new DateTime($_POST['date']);
-        $_POST['name'] = $date->format('dmyhis').'.pdf';
+        $_POST['name'] = $date->format('dmy').'-'.$_POST['category'].'pdf';
         $_POST['path'] = $date->format('Ymd').'/';
         $ruta = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $_POST['path'];
         
