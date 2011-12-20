@@ -71,7 +71,7 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="ARTICLE_MANAGER"
-            privilege="ARCHIVE_ADMIN"
+            privilege="ARTICLE_ARCHIVE"
             title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
             id="library_manager"
             link="article.php?action=list_hemeroteca"
