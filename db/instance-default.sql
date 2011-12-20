@@ -457,6 +457,7 @@ CREATE TABLE IF NOT EXISTS `contents` (
   `params` longtext,
   `category_name` varchar(255) NOT NULL COMMENT 'name category',
   `favorite` tinyint(1) DEFAULT NULL,
+  `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL,
   PRIMARY KEY (`pk_content`),
   KEY `fk_content_type` (`fk_content_type`),
   KEY `in_litter` (`in_litter`),
