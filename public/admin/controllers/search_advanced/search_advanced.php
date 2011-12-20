@@ -5,7 +5,7 @@
 */
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
-
+use \Onm\Module\ModuleManager as mod;
 /**
  * Setup view
 */
@@ -192,24 +192,34 @@ function checkTypes(& $htmlCheck)
     $szTypes =  '';
     foreach($arrayTypes as $aType)
     {
-
-         if ($aType['pk_content_type'] != 5 && // No eventos
-                 $aType['pk_content_type'] != 10 && // No interviú
-                 $aType['pk_content_type'] != 11 && // No encuestas
-                 $aType['pk_content_type'] != 14 && // No kiosko
-                 $aType['pk_content_type'] != 9 && // No video
-                 $aType['pk_content_type'] != 7){  // No albums
-            if(isset($_REQUEST[$aType['name']]))
-            {
-                $szTypes .= $aType['name'] . ", ";
-                $htmlCheck .= '<input id="'.$aType['name'] .'" name="' . $aType['name'] .'"  type="checkbox" valign="center" checked="true"/>'.$aType['title'];
+        if($aType['name']== 'advertisement') {
+            $aType['name']= 'ads';
+        }
+        if($aType['name']== 'attachment'){
+            $aType['name']= 'file';
+        }
+        if($aType['name']== 'photo'){
+            $aType['name']= 'image';
+        }
+        if($aType['name']== 'static_page'){
+            $aType['name']= 'static_pages';
+        }
+        
+        if (mod::moduleExists(strtoupper($aType['name']).'_MANAGER')) {
+            if (mod::isActivated(strtoupper($aType['name']).'_MANAGER')) {
+                if(isset($_REQUEST[$aType[1]]))
+                {
+                    $szTypes .= $aType[1] . ", ";
+                    $htmlCheck .= '<input id="'.$aType[1] .'" name="' . $aType[1] .'"  type="checkbox" valign="center" checked="true"/>'.$aType['title'];
+                }
+                else
+                {
+                    $htmlCheck .= '<input id="'. $aType[1].'" name="'.$aType[1].'"  type="checkbox" valign="center"/>'.$aType['title'];
+                }
             }
-            else
-            {
-                $htmlCheck .= '<input id="'. $aType['name'].'" name="'.$aType['name'].'"  type="checkbox" valign="center"/>'.$aType['title'];
-            }
-         }
+        }
     }
+    
     try
     {
         $szTypes = trim($szTypes);

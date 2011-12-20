@@ -26,13 +26,10 @@
             <tr>
                 <td style="padding:20px; padding-top:0; vertical-align:middle; text-align:center" nowrap="nowrap">
                     {foreach name=contentTypes item=type from=$arrayTypes}
-                    {*NO interviu(10), NO albums(7), NO video(9), NO encuesta(11), NO kiosko(14), NO eventos(5)*}
-                        {if $type[0] != 5 && $type[0] != 10 && $type[0] != 11 && $type[0] != 14 && $type[0] != 7 && $type[0] != 9}
-                            {if $type[0] == 1 || $type[0] == 4}
-                                <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center" checked="true"/>{$type[2]|mb_capitalize}
-                            {else}
-                                <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center"/>{$type[2]|mb_capitalize}
-                            {/if}
+                        {if $type[0] == 1 || $type[0] == 4}
+                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center" checked="true"/>{$type[2]|mb_capitalize}
+                        {else}
+                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" valign="center"/>{$type[2]|mb_capitalize}
                         {/if}
                     {/foreach}
                 </td>
