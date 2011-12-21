@@ -202,7 +202,7 @@ switch($action) {
     case 'read': 
 
         Acl::checkOrForward('COMMENT_UPDATE');
-        $contentID = filter_input ( INPUT_POST, 'id' , FILTER_SANITIZE_NUMBER_INT);
+        $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
 
         // habrá que tener en cuenta el tipo
         $comment = new Comment( $contentID );
