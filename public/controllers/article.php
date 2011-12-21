@@ -4,7 +4,7 @@
  * Start up and setup the app
 */
 require_once('../bootstrap.php');
-
+use Onm\Settings as s;
 /**
  * Redirect Mobile browsers to mobile site unless a cookie exists.
 */
@@ -53,7 +53,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
             $subcategory_name = null;
         }
     }
-
+    
     // Normalizar os nomes
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
     $_GET['category_name'] = $category_name;
@@ -277,6 +277,11 @@ if(isset($_REQUEST['action']) ) {
              * Fetch information for Advertisements
             */
             require_once("index_advertisement.php");
+            /**
+             * Fetch information for Static Pages
+             */
+             //TODO: Move to a widget. Used in all templates
+            require_once("widget_static_pages.php");
             /************* COLUMN-LAST *******************************/
             $other_news =
                 $cm->find(  'Article',
@@ -600,7 +605,7 @@ if(isset($_REQUEST['action']) ) {
 
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
-            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
+            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.s::get('site_name');  //substr(strip_tags($_REQUEST['body']), 0, 100);
 
             $tplMail->assign('destination', 'amig@,');
 
