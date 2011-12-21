@@ -4,7 +4,7 @@
  * Start up and setup the app
 */
 require_once('../bootstrap.php');
-
+use Onm\Settings as s;
 /**
  * Redirect Mobile browsers to mobile site unless a cookie exists.
 */
@@ -56,6 +56,7 @@ if(isset($_REQUEST['action']) ) {
 
             $ccm = ContentCategoryManager::get_instance();
             require_once ("index_sections.php");
+            require_once("widget_static_pages.php");
 
             /**
              * Fetch comments for this opinion
@@ -75,7 +76,7 @@ if(isset($_REQUEST['action']) ) {
                     $title = $str->get_title($opinion->title);
                     $print_url = '/imprimir/' . $title. '/'. $opinion->pk_content . '.html';
                     $tpl->assign('print_url', $print_url);
-                    $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $opinionID );
+                    $tpl->assign('sendform_url', '/controllers/opinion_inner.php?action=sendform&opinion_id=' . $dirtyID );
                     // } Sacar broza
 
 
@@ -147,14 +148,11 @@ if(isset($_REQUEST['action']) ) {
         case 'print': {
 
             // Article
-            $opinion = new Opinion($opinionID);
+            $opinion = new Opinion($dirtyID);
             $opinion->category_name = 'opinion';
             $opinion->author_name_slug = String_Utils::get_title($opinion->name);
 
             $author = new Author($opinion->fk_author);
-
-
-
 
             $tpl->assign('author', $author->name);
 
@@ -214,13 +212,22 @@ if(isset($_REQUEST['action']) ) {
 
             $mail->From     = $_REQUEST['sender'];
             $mail->FromName = $_REQUEST['name_sender'];
-            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.SITE_FULLNAME;  //substr(strip_tags($_REQUEST['body']), 0, 100);
+            $mail->Subject  = $_REQUEST['name_sender'].' ha compartido contigo un contenido de '.s::get('site_name');  //substr(strip_tags($_REQUEST['body']), 0, 100);
 
             $tplMail->assign('destination', 'amig@,');
 
             // Load permalink to embed into content
-            $opinion = new Opinion($opinionID);
-
+            $opinion = new Opinion($dirtyID);
+            $opinion->author_name_slug = String_Utils::get_title($opinion->name);
+            $opinionType = '';
+            if ($opinion->type_opinion == 1) {
+                $opinionType = 'editorial';
+            } elseif ($opinion->type_opinion == 2) {
+                $opinionType = 'director';
+            } else {
+                $opinionType = $opinion->author_name_slug;
+            }
+            $tplMail->assign('opinionType', $opinionType);            
             $tplMail->assign('mail', $mail);
             $tplMail->assign('opinion', $opinion);
 

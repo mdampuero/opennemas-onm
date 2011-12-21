@@ -40,31 +40,31 @@ function changePhotos(fk_author)
 function show_authors(type_opinion)
 {
 	if(type_opinion==0){
-                $('div_author1').setStyle({display:'inline'});
+        $('div_author1').setStyle({display:'inline'});
 		$('div_author2').setStyle({display:'inline'});
 	}else{
 		$('div_author1').setStyle({display:'none'});
 		$('div_author2').setStyle({display:'none'});
 	}
-        if(type_opinion==1){
-           $('widget').src='';
-           $('fk_author_img_widget').value='';
-           $('fk_author_img').value='';
+        
+    if(type_opinion==1){
+       $('widget').src='';
+       $('fk_author_img_widget').value='';
+       $('fk_author_img').value='';
+       fk_author=1; //Editorial
+       $('fk_author').value='1';
 	   $('seleccionada').src='';
-           $('thelist').childElements().each(function(item){
-                item.parentNode.removeChild(item);
-            });
-
-        }else{
-            if(type_opinion==2){
-              //TODO: get id director not manually
-                  fk_author=58; //Director
-                $('fk_author').value=58;
-            }else{
-                    fk_author=$('fk_author').options[$('fk_author').selectedIndex].value;
-            }
-            changePhotos(fk_author);
-        }
+       $('thelist').childElements().each(function(item){
+            item.parentNode.removeChild(item);
+        });
+    }else{
+        if(type_opinion==2){
+            //TODO: get id director not manually
+            fk_author=2; //Director
+            $('fk_author').value=2;
+        }        
+        changePhotos(fk_author);
+    }
 }
 
 function change_algoritm(algoritm)

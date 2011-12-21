@@ -143,20 +143,20 @@ class Opinion extends Content
             return;
         }
 
-
-        if ($this->fk_author == 0) {
-            if ((int)$this->type_opinion == 1) {
-                $this->author = 'Editorial';
-            } elseif ((int)$this->type_opinion == 2) {
-                $this->author = 'Director';
+        
+        if ((int)$rs->fields['fk_author'] == 0) {
+            if ((int)$rs->fields['type_opinion'] == 1) {
+                $rs->fields['author'] = 'Editorial';
+            } elseif ((int)$rs->fields['type_opinion'] == 2) {
+                $rs->fields['author'] = 'Director';
             }
         } else {
-             $this->author =  $rs->fields['name'] ; //Used front opinion.
+             $rs->fields['author'] =  $rs->fields['name'] ; //Used front opinion.
         }
 
       $this->load( $rs->fields );
 
-    }
+  }
 
 /* Mejoras sql -- lee los datos del autor y la imagen todo en la misma consulta
     function read($id) {
