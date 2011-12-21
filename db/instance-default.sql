@@ -348,7 +348,7 @@ CREATE TABLE IF NOT EXISTS `authors` (
 INSERT INTO `authors` (`pk_author`, `name`, `politics`, `date_nac`, `fk_user`, `condition`, `blog`) VALUES
 (3, 'Convallis vitae', '', '0000-00-00 00:00:00', 0, '', ''),
 (2, 'Director', NULL, NULL, 0, NULL, NULL),
-(1, 'Feugiat nec', '', NULL, 0, '', '');
+(1, 'Editorial', '', NULL, 0, '', '');
 
 -- --------------------------------------------------------
 
