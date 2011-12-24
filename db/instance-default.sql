@@ -1810,7 +1810,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('mail_username', 's:9:"webmaster";'),
 ('mail_password', 's:0:"";'),
 ('google_maps_api_key', 's:86:"ABQIAAAA_RE85FLaf_hXdhkxaS463hQC49KlvU2s_1jV47V5-i8q6UJ2IBQiAxw97Jt7tEWzuIY513Qutp-Cqg";'),
-('google_custom_search_api_key', 's:33:"001675133575090086387:p82kkkctkiu";'),
+('google_custom_search_api_key', 's:0:"";'),
 ('facebook', 'a:2:{s:7:"api_key";s:1:" ";s:10:"secret_key";s:1:" ";}'),
 ('google_analytics', 'a:2:{s:7:"api_key";s:1:" ";s:11:"base_domain";s:1:" ";}'),
 ('piwik', 'a:2:{s:7:"page_id";s:0:"";s:10:"server_url";s:0:"";}'),
