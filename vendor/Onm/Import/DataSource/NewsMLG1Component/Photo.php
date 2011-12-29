@@ -12,7 +12,6 @@
   * Wrapper for Photo component inside NewsMLG1
   *
   * @package default
-  * @author 
   **/
  class Photo
  {
@@ -21,12 +20,11 @@
      * Instantiates the Photo DOM data from an SimpleXML object
      *
      * @return void
-     * @author 
      **/
     public function __construct($data)
     {
         $this->data = $data;
-        
+
     }
 
     /*
@@ -44,8 +42,8 @@
                 break;
 
             case 'title':
-                $titles = $this->getData()->xpath("//NewsLines/HeadLine");
-                return (string)$titles[0];
+                $content = $this->getData()->NewsComponent->ContentItem->DataContent->xpath('//body.content');
+                return (string)$content[1]->p;
                 break;
 
             case 'file_type':
@@ -57,7 +55,7 @@
                 $fileType = $this->getData()->NewsComponent->ContentItem->attributes()->Href;
                 return (string)$fileType;
                 break;
-            
+
             case 'created_time':
                 $originalDate = (string)$this->getData()->DescriptiveMetadata->DateLineDate;
                 // ISO 8601 doesn't match this date 20111211T103900+0000
@@ -68,7 +66,6 @@
                     $originalDate
                 );
                 break;
-
         }
     }
 

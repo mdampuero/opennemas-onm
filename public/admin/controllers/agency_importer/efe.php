@@ -185,10 +185,9 @@ switch($action) {
         try {
 
             $ep = new \Onm\Import\Efe();
-            //$element = $ep->findByID($id);
 
             $element = $ep->findByFileName($id);
-            
+
             $alreadyImported = Content::findByUrn($element->urn);
 
         } catch (Exception $e) {
@@ -210,13 +209,13 @@ switch($action) {
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_STRING);
         $attachment_id = filter_input ( INPUT_GET, 'attachment_id' , FILTER_SANITIZE_STRING);
 
-    
+
         $ep = new Onm\Import\Efe();
         $element = $ep->findById($id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
-            
+
             $photo = $photos[$attachment_id];
             header("Content-type: ".$photo->file_type);
             echo file_get_contents(realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
@@ -253,10 +252,10 @@ switch($action) {
             'article' => $element,
             'categories' => $categories,
         ))  ;
-        
+
         $tpl->display('agency_importer/efe/import_select_category.tpl');
 
-        
+
         break;
 
     case 'import':
@@ -280,8 +279,8 @@ switch($action) {
             Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php?action=import_select_category&id={$id}&category={$category}");
         }
 
-        
-        
+
+
 
         $ep = new Onm\Import\Efe();
         $element = $ep->findByFileName($id);
@@ -299,7 +298,7 @@ switch($action) {
                     'metadata' => String_Utils::get_tags($photo->title),
                 );
                 $photo = new Photo();
-                $photoID = $photo->createFromLocalFile($data); 
+                $photoID = $photo->createFromLocalFile($data);
 
                 if (!isset($innerPhoto)) {
                     $innerPhoto = new Photo($photoID);;
@@ -335,8 +334,8 @@ switch($action) {
             'ordenArtiInt' => '',
             'urn_source' => $element->urn,
         );
-        
-        
+
+
 
         $article = new Article();
         $newArticleID = $article->create($values);

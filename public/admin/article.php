@@ -57,7 +57,7 @@ if (isset($_REQUEST['action']) ) {
     switch ($_REQUEST['action']) {
 
         case 'list':
-          
+
             // Check if the user can edit frontpages
             if(!Acl::check('ARTICLE_FRONTPAGE')) {
                 Acl::deny();
@@ -114,7 +114,7 @@ if (isset($_REQUEST['action']) ) {
                     $suggestedArticles[$key]->catName = $ccm->get_title($value->catName);
                     $suggestedArticles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
                     $suggestedArticles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
-                    
+
                 }
                 $tpl->assign('suggestedArticles', $suggestedArticles);
 
@@ -179,7 +179,7 @@ if (isset($_REQUEST['action']) ) {
             foreach ($articles as $key => $value) {
                 $articles[$key]->catName = $ccm->get_title($value->catName);
                 $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
-                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
             }
             $tpl->assign('destacado', $destacado);
             $tpl->assign('articles', $articles);
@@ -234,9 +234,9 @@ if (isset($_REQUEST['action']) ) {
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
             if ($_REQUEST['category'] != 'todos') {
-                 if(!Acl::_C( $_REQUEST['category'])){                    
+                 if(!Acl::_C( $_REQUEST['category'])){
                       m::add(_("you don't have enought privileges to see this category.") );
-                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');                 
+                      Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
                  }
             } elseif (!Acl::_C($categoryID)) {
                 $categoryID = $_SESSION['accesscategories'][0];
@@ -323,7 +323,7 @@ if (isset($_REQUEST['action']) ) {
 
         break;
 
-        case 'list_agency': 
+        case 'list_agency':
             Acl::checkOrForward('ARTICLE_PENDINGS');
 
             //Comprobación si el usuario tiene acceso a esta categoria/seccion.
@@ -332,7 +332,7 @@ if (isset($_REQUEST['action']) ) {
                       m::add(_("you don't have enought privileges to see this category.") );
                       Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
                  }
-                
+
             }
             $tpl->assign('titulo_barra', 'Gesti&oacute;n de Agencias');
 
@@ -543,7 +543,7 @@ if (isset($_REQUEST['action']) ) {
         case 'create':
 
             Acl::checkOrForward('ARTICLE_CREATE');
-            
+
             if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
             if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
             if (isset($_POST['in_home'])) {$_POST['in_home'] = 2;} else {$_POST['in_home'] = 0;}
@@ -551,7 +551,7 @@ if (isset($_REQUEST['action']) ) {
 
             $article = new Article();
             $_POST['fk_publisher']=$_SESSION['userid'];
-             
+
             if($article->create( $_POST )) {
                 if($_SESSION['desde'] == 'index_portada') {
                     Application::forward('index.php');
@@ -580,7 +580,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'update':
 
-           Acl::checkOrForward('ARTICLE_UPDATE'); 
+           Acl::checkOrForward('ARTICLE_UPDATE');
            if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
                 if (isset($_POST['frontpage'])) {$_POST['frontpage'] = 1;} else {$_POST['frontpage'] = 0;}
@@ -594,18 +594,18 @@ if (isset($_REQUEST['action']) ) {
 
             $articleCheck = new Article();
             $articleCheck->read($_REQUEST['id']);
-             
+
             if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
                 m::add(_("You can't modify this content because you don't have enought privileges.") );
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
-                
+
             } else {
                 $article = new Article();
                 $_REQUEST['fk_user_last_editor'] = $_SESSION['userid'];
 
                 $article->update( $_REQUEST );
             }
-            
+
             if( $_SESSION['desde']=='search_advanced'){
                 if(isset($_GET['stringSearch'])){
                  Application::forward('controllers/search_advanced/search_advanced.php?action=search&stringSearch='.$_GET['stringSearch'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
@@ -614,7 +614,7 @@ if (isset($_REQUEST['action']) ) {
                     $_SESSION['_from']='home';
                 }
             }
-            
+
             if($_SESSION['desde']=='index_portada') {
                 Application::forward('index.php');
             }elseif ($_SESSION['desde'] == 'europa_press_import') {
@@ -634,7 +634,7 @@ if (isset($_REQUEST['action']) ) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action='.$_SESSION['desde'].'&category='.$_SESSION['_from'].'&page='.$_REQUEST['page']);
         break;
 
-        case 'validate': 
+        case 'validate':
 
             if ($_SESSION['desde'] != 'list_hemeroteca') {
                 if (isset($_POST['with_comment'])) {$_POST['with_comment'] = 1;} else {$_POST['with_comment'] = 0;}
@@ -674,14 +674,14 @@ if (isset($_REQUEST['action']) ) {
 
         case 'preview':
 
-            
+
             $_REQUEST['fk_user_last_editor']=$_SESSION['userid'];
             $article = new Article();
             if(!$_POST["id"] || empty($_POST["id"])) {
                 Acl::checkOrForward('ARTICLE_UPDATE');
                 $_POST['fk_publisher'] = $_SESSION['userid'];
                 //Estamos creando un nuevo artículo
-             
+
                 if(!$article->create( $_POST ))
                       $tpl->assign('errors', $article->errors);
             } else {
@@ -689,7 +689,7 @@ if (isset($_REQUEST['action']) ) {
                  Acl::checkOrForward('ARTICLE_UPDATE');
                  $articleCheck = new Article();
                  $articleCheck->read($_REQUEST['id']);
-              
+
                 if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $articleCheck->fk_user != $_SESSION['userid']) {
                     m::add(_("You can't modify this content because you don't have enought privileges.") );
                     Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$_REQUEST['id']);
@@ -778,7 +778,7 @@ if (isset($_REQUEST['action']) ) {
         case 'change_status':
 
             Acl::checkOrForward('ARTICLE_ARCHIVE');
-            
+
             $article = new Article($_REQUEST['id']);
 
             // FIXME: evitar otros valores erróneos
@@ -866,7 +866,7 @@ if (isset($_REQUEST['action']) ) {
 
         case 'available_status':
             Acl::checkOrForward('ARTICLE_AVAILABLE');
-            
+
             $article = new Article($_REQUEST['id']);
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -1249,7 +1249,7 @@ if (isset($_REQUEST['action']) ) {
             foreach ($articles as $key => $value) {
                 $articles[$key]->catName = $ccm->get_title($value->catName);
                 $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
-                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
             }
             $tpl->assign('articles', $articles);
 
@@ -1274,7 +1274,7 @@ if (isset($_REQUEST['action']) ) {
             foreach ($articles as $key => $value) {
                 $articles[$key]->catName = $ccm->get_title($value->catName);
                 $articles[$key]->authorName = $aut->get_user_name($value->fk_publisher);
-                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);        
+                $articles[$key]->lastEditorName = $aut->get_user_name($value->fk_user_last_editor);
             }
 
             $tpl->assign('articles', $articles);
