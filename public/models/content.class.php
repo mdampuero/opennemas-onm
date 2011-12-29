@@ -16,36 +16,36 @@
 class Content
 {
 
-    public $id = null;
-    public $content_type = null;
-    public $title = null;
-    public $description = null;
-    public $metadata = null;
-    public $starttime = null;
-    public $endtime = null;
-    public $created = null;
-    public $changed = null;
-    public $fk_user = null;
-    public $fk_publisher = null;
+    public $id                  = null;
+    public $content_type        = null;
+    public $title               = null;
+    public $description         = null;
+    public $metadata            = null;
+    public $starttime           = null;
+    public $endtime             = null;
+    public $created             = null;
+    public $changed             = null;
+    public $fk_user             = null;
+    public $fk_publisher        = null;
     public $fk_user_last_editor = null;
-    public $category = null;
-    public $category_name = null;
-    public $views = null;
-    public $archive = null;
-    public $permalink= null;
-    public $position = null;
-    public $in_home= null;
-    public $home_pos= null;
-    public $available= null;
-    public $frontpage= null;
-    public $in_litter= null;
-    public $content_status = null;
-    public $placeholder = null;
-    public $home_placeholder = null;
-    public $params = null;
-    public $slug = null;
-    public $favorite = null;
-    public $cache = null;
+    public $category            = null;
+    public $category_name       = null;
+    public $views               = null;
+    public $archive             = null;
+    public $permalink           = null;
+    public $position            = null;
+    public $in_home             = null;
+    public $home_pos            = null;
+    public $available           = null;
+    public $frontpage           = null;
+    public $in_litter           = null;
+    public $content_status      = null;
+    public $placeholder         = null;
+    public $home_placeholder    = null;
+    public $params              = null;
+    public $slug                = null;
+    public $favorite            = null;
+    public $cache               = null;
 
     /**
      * Initializes the content for a given id.
@@ -79,10 +79,10 @@ class Content
                 $uri =  Uri::generate(
                     strtolower($this->content_type_name),
                     array(
-                        'id' => sprintf('%06d',$this->id),
-                        'date' => date('YmdHis', strtotime($this->created)),
+                        'id'       => sprintf('%06d',$this->id),
+                        'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug' => $this->slug2,
+                        'slug'     => $this->slug2,
                     )
                 );
 
@@ -114,7 +114,7 @@ class Content
 
     /**
      * Creates one content given an array of data
-     * 
+     *
      * @param array $data array with data for create the article
      *
      * @return void
@@ -135,38 +135,34 @@ class Content
                    " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?,?)";
 
 
-        $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
-        $data['endtime']   = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
-        $data['content_status'] = (empty($data['content_status']))? 0: intval($data['content_status']);
-        $data['available'] = (empty($data['available']))? 0: intval($data['available']);
-        $data['frontpage'] = (!isset($data['frontpage']) || empty($data['frontpage']))? 0: intval($data['frontpage']);
-        $data['placeholder'] = (!isset($data['placeholder']) || empty($data['placeholder']))? 'placeholder_0_1': $data['placeholder'];
+        $data['starttime']        = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
+        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
+        $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
+        $data['available']        = (empty($data['available']))? 0: intval($data['available']);
+        $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))? 0: intval($data['frontpage']);
+        $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))? 'placeholder_0_1': $data['placeholder'];
         $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))? 'placeholder_0_1': $data['home_placeholder'];
-        $data['position']  = (empty($data['position']))? '2': $data['position'];
-        $data['in_home']   = (empty($data['in_home']))? 0: $data['in_home'];
-        $data['home_pos'] = 100;
-        $data['urn_source'] = (empty($data['urn_source']))? null: $data['urn_source'];
+        $data['position']         = (empty($data['position']))? '2': $data['position'];
+        $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
+        $data['home_pos']         = 100;
+        $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
 
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
             $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
 
-        $data['views'] = 1;
+        $data['views']   = 1;
         $data['created'] = (empty($data['created']))? date("Y-m-d H:i:s") : $data['created'];
         $data['changed'] = date("Y-m-d H:i:s");
 
-        if (empty($data['description'])
-            && !isset ($data['description'])
-        ) {
-            $data['description']='';
+        if (empty($data['description']) && !isset ($data['description'])) {
+            $data['description']     = '';
         }
         if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
 
-        $data['fk_user'] =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
-
+        $data['fk_user']             =(empty($data['fk_user']) && !isset ($data['fk_user'])) ?$_SESSION['userid'] :$data['fk_user'] ;
         $data['fk_user_last_editor'] =  $data['fk_user'];
-
-        $data['fk_publisher'] = (empty($data['available']))? '': $data['fk_user'];
+        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
 
         $fk_content_type = $GLOBALS['application']->conn->
             GetOne('SELECT * FROM `content_types` WHERE name = "'. $this->content_type.'"');
@@ -180,7 +176,7 @@ class Content
                         $data['metadata'], $data['starttime'], $data['endtime'],
                         $data['created'], $data['changed'], $data['content_status'],
                         $data['views'], $data['position'],$data['frontpage'],
-                        $data['placeholder'],$data['home_placeholder'], 
+                        $data['placeholder'],$data['home_placeholder'],
                         $data['fk_user'], $data['fk_publisher'], $data['fk_user_last_editor'],
                         $data['in_home'], $data['home_pos'],$data['available'], $data['slug'], $catName, $data['urn_source']);
 
@@ -193,7 +189,7 @@ class Content
         }
 
         $this->id = $GLOBALS['application']->conn->Insert_ID();
-      
+
         $sql = "INSERT INTO contents_categories (`pk_fk_content` ,`pk_fk_content_category`, `catName`) VALUES (?,?,?)";
         $values = array($this->id, $data['category'],$catName);
 
@@ -261,14 +257,14 @@ class Content
 
         $this->read( $data['id']); //????
 
-        $data['changed'] = date("Y-m-d H:i:s");
-        $data['starttime'] = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
-        $data['endtime'] = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
-        $data['content_status'] = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
-        $data['available'] = (!isset($data['available']))? $this->available: $data['available'];
-        $data['frontpage'] = (!isset($data['frontpage']))? $this->frontpage: $data['frontpage'];
-        $data['in_home']   = (!isset($data['in_home']))? $this->in_home: $data['in_home'];
-        $data['placeholder'] = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
+        $data['changed']          = date("Y-m-d H:i:s");
+        $data['starttime']        = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
+        $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
+        $data['content_status']   = (!isset($data['content_status']))? $this->content_status: $data['content_status'];
+        $data['available']        = (!isset($data['available']))? $this->available: $data['available'];
+        $data['frontpage']        = (!isset($data['frontpage']))? $this->frontpage: $data['frontpage'];
+        $data['in_home']          = (!isset($data['in_home']))? $this->in_home: $data['in_home'];
+        $data['placeholder']      = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
         $data['home_placeholder'] = (empty($this->home_placeholder))? 'placeholder_0_1': $this->home_placeholder;
 
         if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
@@ -277,7 +273,7 @@ class Content
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])&& !isset ($data['fk_user_last_editor'])) $data['fk_user_last_editor']= $_SESSION['userid'];
-    
+
         if(empty($data['slug'] ) || !isset($data['slug']) )
             $data['slug'] = mb_strtolower(String_Utils::get_title($data['title']));
 
@@ -285,14 +281,14 @@ class Content
         if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
         if (empty($data['metadata'])&& !isset ($data['metadata'])) $data['metadata']='';
         if (empty($data['pk_author'])&& !isset ($data['pk_author'])) $data['pk_author']='';
-     
+
         if ($data['category'] != $this->category) {
-            
-            $ccm = ContentCategoryManager::get_instance();
+
+            $ccm     = ContentCategoryManager::get_instance();
             $catName = $ccm->get_name($data['category']);
-     
-            $sql2 = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
-                   "WHERE pk_fk_content= ?";
+
+            $sql2   = "UPDATE contents_categories SET `pk_fk_content_category`=?, `catName`=? " .
+                      "WHERE pk_fk_content= ?";
             $values = array($data['category'], $catName, $data['id']);
 
 
@@ -321,7 +317,7 @@ class Content
             return;
         }
 
-     
+
 
         /* Notice log of this action */
         $logger = Application::getLogger();
@@ -357,16 +353,16 @@ class Content
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-    
+
         }
 
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.($id);
- 
+
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
             $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            
+
         }
         /* Notice log of this action */
         $logger = Application::getLogger();
@@ -454,7 +450,7 @@ class Content
                 $sql = 'SELECT pk_fk_content_category FROM `contents_categories` WHERE pk_fk_content =?';
                 $rs = $GLOBALS['application']->conn->GetOne($sql, $pk_content);
                 $this->category = $rs;
-            } 
+            }
         }
         return $ccm->get_name($this->category);
 
@@ -1124,29 +1120,29 @@ class Content
     static public function setNumViews($id=null)
     {
         $botStrings = array(
-                            "google",
-                            "bot",
-                            "msnbot",
-                            "facebookexternal",
-                            "yahoo",
-                            "spider",
-                            "archiver",
-                            "curl",
-                            "python",
-                            "nambu",
-                            "twitt",
-                            "perl",
-                            "sphere",
-                            "PEAR",
-                            "java",
-                            "wordpress",
-                            "radian",
-                            "crawl",
-                            "yandex",
-                            "eventbox",
-                            "monitor",
-                            "mechanize",
-                          );
+            "google",
+            "bot",
+            "msnbot",
+            "facebookexternal",
+            "yahoo",
+            "spider",
+            "archiver",
+            "curl",
+            "python",
+            "nambu",
+            "twitt",
+            "perl",
+            "sphere",
+            "PEAR",
+            "java",
+            "wordpress",
+            "radian",
+            "crawl",
+            "yandex",
+            "eventbox",
+            "monitor",
+            "mechanize",
+        );
 
         foreach ($botStrings as $bot) {
             $httpUserAgent = preg_quote($_SERVER['HTTP_USER_AGENT']);
@@ -1451,7 +1447,7 @@ class Content
         $sql="SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
         $value= array($oldID);
         $contentID = $GLOBALS['application']->conn->GetOne($sql,$value);
- 
+
         return $contentID;
     }
 
@@ -1474,24 +1470,24 @@ class Content
             $content = new Content($refactorID);
             Application::forward301('/'.$content->uri);
         }
-        
+
         return $oldID;
     }
 
     /**
-     * Clean id and search if exist in content table. 
-     * If not found search in refactor_id table. (used for translate old format ids 
+     * Clean id and search if exist in content table.
+     * If not found search in refactor_id table. (used for translate old format ids
      *
      * @param string $dirtyID. Vble with date in first 14 digits
      *
      * @return int id in table content or forward to 404
-     *  
+     *
      */
 
     public static function resolveID($dirtyID) {
 
         if (!empty($dirtyID)){
-          
+
             if (INSTANCE_UNIQUE_NAME == 'nuevatribuna') {
                 $contentID = self::searchInRefactorID($dirtyID);
             }
@@ -1500,7 +1496,7 @@ class Content
             $contentID = (int)$matches["digit"];
 
             $contentID = self::searchContentID($contentID);
- 
+
             if (empty($contentID)) {
                // header("HTTP/1.0 404 Not Found");
 
@@ -1511,7 +1507,7 @@ class Content
           // header("HTTP/1.0 404 Not Found");
             //Can't do because sometimes id is empty, example rss in article.php
         }
- 
+
     }
 
 
@@ -1533,11 +1529,11 @@ class Content
             $sqlUrns = "'".$urns."'";
         } else {
             throw new \InvalidArgumentException(sprintf('The param urn is not valid "%s".',$urns));
-        }   
-        
+        }
+
 
         $sql = "SELECT urn_source FROM `contents` WHERE urn_source IN (".$sqlUrns.")";
-        
+
         $contents = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$contents) {
@@ -1552,7 +1548,7 @@ class Content
             $contentsUrns [] = $contents->fields['urn_source'];
             $contents->MoveNext();
         }
-        
+
         return $contentsUrns;
     }
 }

@@ -3,8 +3,9 @@ use FilesManager as fm;
 /**
  * Template class
  *
- * @author Tomás Vilariño <vifito@openhost.es>
- */
+ * @package Onm
+ * @author  Fran Dieguez <fran@openhost.es>
+ **/
 class Template extends Smarty
 {
     // Private properties
@@ -27,7 +28,7 @@ class Template extends Smarty
     {
         // Call the parent constructor
         parent::__construct();
-        
+
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
@@ -35,7 +36,7 @@ class Template extends Smarty
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->template_dir     = realpath($this->templateBaseDir.'tpl/').'/';
-        
+
         // If config dir exists copy it to cache directory to make instance aware.
         if (!file_exists(CACHE_PATH.DS.'smarty'.DS.'config')
             && file_exists($this->templateBaseDir.'config')
@@ -46,7 +47,7 @@ class Template extends Smarty
             );
         }
         $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
-            
+
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.$value;
@@ -55,7 +56,7 @@ class Template extends Smarty
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
-        
+
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         // Add global plugins path
@@ -101,7 +102,7 @@ class Template extends Smarty
         $this->autoload_filters = $filters;
     }
 
-    
+
     public function generateCacheId($seccion, $subseccion=null, $resource=null)
     {
         $cacheId = '';
@@ -204,7 +205,7 @@ class TemplateAdmin extends Template {
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.ADMIN_DIR.DS.'themes'.DS.$theme.DS;
-        
+
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.'admin-'.$value;
             if (!file_exists($directory)) {
@@ -212,7 +213,7 @@ class TemplateAdmin extends Template {
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
-        
+
         $this->template_dir	= $this->templateBaseDir.'tpl/';
         $this->config_dir	= $this->templateBaseDir.'config/';
         $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
@@ -223,7 +224,7 @@ class TemplateAdmin extends Template {
 
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
-        
+
         $this->locale_dir	= $baseUrl.'locale/';
         $this->css_dir	        = $baseUrl.'css/';
         $this->image_dir	= $baseUrl.'images/';
@@ -270,7 +271,7 @@ class TemplateManager extends Template {
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'manager'.DS.'themes'.DS.'default'.DS;
-        
+
         foreach (array('cache', 'compile') as $key => $value ) {
             $directory = CACHE_PATH.DS.'smarty'.DS.'manager-'.$value;
 
@@ -279,9 +280,9 @@ class TemplateManager extends Template {
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
-        
+
         $this->template_dir	= $this->templateBaseDir.'tpl/';
-        
+
         $this->config_dir	 = $this->templateBaseDir.'config/';
         $this->plugins_dir   []= $this->templateBaseDir.'plugins/';
         $this->caching	     = false;
@@ -291,7 +292,7 @@ class TemplateManager extends Template {
 
         // Template variables
         $baseUrl = SITE_URL.SS.'admin'.SS.'themes'.SS.$theme.SS;
-        
+
         $this->locale_dir	= $baseUrl.'locale/';
         $this->css_dir	        = $baseUrl.'css/';
         $this->image_dir	= $baseUrl.'images/';
