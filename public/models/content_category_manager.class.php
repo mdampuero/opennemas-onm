@@ -587,7 +587,7 @@ class ContentCategoryManager {
 
         // First loop categories
         foreach($categories as $category) {
-            if(($category->fk_content_category == 0) && ($category->internal_category != 0) /*&& ($category->inmenu == 1)*/) {
+            if(($category->fk_content_category == 0) && ($category->internal_category == 1) && ($category->inmenu == 1)) {
             //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) {
                 $tree[$category->pk_content_category] = $category;
                 $tree[$category->pk_content_category]->childNodes = array();

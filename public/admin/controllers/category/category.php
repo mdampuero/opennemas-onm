@@ -201,12 +201,14 @@ if( isset($_REQUEST['action']) ) {
 		case 'set_inmenu':
 
 		    $category = new ContentCategory($_REQUEST['id']);
+            
             // FIXME: evitar otros valores erróneos
             $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
             $category->set_inmenu($status);
             /* Limpiar la cache de portada de todas las categorias */
          //   $refresh = Content::refreshFrontpageForAllCategories();
-
+            $ccm->reloadCategories();
+            
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
 		break;

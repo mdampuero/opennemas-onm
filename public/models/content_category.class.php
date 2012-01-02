@@ -286,8 +286,8 @@ class ContentCategory {
         if ($this->pk_content_category == NULL)  return false;
         if ($status == 0)   $this->posmenu = 30;
 
-        $sql = "UPDATE content_categories"
-                ."SET `inmenu`=?, `posmenu`=?"
+        $sql = "UPDATE content_categories "
+                ." SET `inmenu`=?, `posmenu`=?"
                 . " WHERE pk_content_category=?";
         $values = array($status, $this->posmenu, $this->pk_content_category);
 
