@@ -393,7 +393,11 @@ if(isset($_REQUEST['action']) ) {
                             $title_rss = 'Este autor no tiene opiniones todavía.';
                         }
                     }
-
+                    //Generate author-name-slug for generate_uri
+                    foreach ($articles_home as &$art) {
+                        $art['author_name_slug'] = String_Utils::get_title($art['name']);
+                    }
+                    
                 // Get the RSS for the rest of categories
                 } else {
 
@@ -411,7 +415,7 @@ if(isset($_REQUEST['action']) ) {
                         if (isset($article->img1) && $article->img1 != 0) {
                             $photos[$article->id] = new Photo($article->img1);
                         }
-
+                        
                         $article->category_name = $article->loadCategoryName($article->id);
                     }
 
