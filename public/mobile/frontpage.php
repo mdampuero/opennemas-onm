@@ -59,19 +59,24 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
         $articles_home = $cm->find_all('Article',
                             'contents.in_home=1 AND contents.frontpage=1 '
                             .'AND contents.available=1 AND contents.content_status=1 '
-                            .'AND contents.fk_content_type=1 ',
+                            .'AND contents.fk_content_type=1 '
+                            .' AND contents.home_placeholder != \'\'',
                             'ORDER BY home_pos ASC, created DESC');
 
         // Filter by scheduled {{{
         $articles_home = $cm->getInTime($articles_home);
         // }}}
 
+        foreach ($articles_home as $article) {
+            $article->position = $article->home_pos;
+        }
+        
         $destaca = array();
         foreach($articles_home as $i => $article) {
             $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
             $article->category_name = $articles_home[$i]->category_name;
 
-            if($article->home_placeholder == 'placeholder_0_0') {
+            if(preg_match('@highlighted@', $article->home_placeholder)) {
                 $destaca[] = $article;
             }
         }
@@ -86,6 +91,7 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
             if(isset($content->home_placeholder)
                && !empty($content->home_placeholder)
                && ($content->home_placeholder != '')
+               && ($content->content_type == 4)
                )
             {
                 $articles_home[] = $content;
@@ -110,12 +116,12 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
         $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
         $article->category_name = $articles_home[$i]->category_name;
 
-            if($article->placeholder == 'placeholder_0_0') {
+            if(preg_match('@highlighted@', $article->home_placeholder)) {
                 $destaca[] = $article;
             }
         }
     }
-
+    
     $tpl->assign('destaca', $destaca);
     $tpl->assign('articles_home', $articles_home);
 

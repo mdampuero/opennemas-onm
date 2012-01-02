@@ -38,6 +38,7 @@ $opinions = $cm->find_listAuthors('available=1 AND type_opinion=0 AND content_st
 //Comprobación de index undefined php5.3
 $tpl->assign('editorial', $editorial);
 if(isset ($director[0])){
+    $director[0]->name = 'Director';
     $tpl->assign('director', $director[0]);
 }
 
