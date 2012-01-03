@@ -113,7 +113,7 @@
 		<tr>
 		    <th align="left">Total: {$pagination->_totalItems} articles.</th>
 		    <th nowrap="nowrap" align="right">
-			<label for="username">{t}Filter by title{/t}</label>
+			<label for="username">{t}Filter by title or content{/t}</label>
 			<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
 
 			<label for="usergroup">{t}and category:{/t}</label>

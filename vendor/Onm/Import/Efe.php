@@ -280,7 +280,10 @@ class Efe implements \Onm\Import\Importer
             }
 
             if ((($params['title'] != '*'))
-                && !(preg_match('@'.strtolower($params['title']).'@', strtolower($element->title)) > 0))
+                && !(
+                    preg_match('@'.strtolower($params['title']).'@', strtolower($element->title)) > 0
+                    || (is_array($element->getTexts()) && preg_match('@'.strtolower($params['title']).'@', strtolower($element->texts[0]->body)) > 0)
+                    ))
             {
                 continue;
             }
@@ -301,7 +304,7 @@ class Efe implements \Onm\Import\Importer
             $elementsCount++;
 
         }
-        
+
         usort($elements, create_function('$a,$b', 'return  $b->created_time->getTimestamp() - $a->created_time->getTimestamp();'));
 
         return $elements;

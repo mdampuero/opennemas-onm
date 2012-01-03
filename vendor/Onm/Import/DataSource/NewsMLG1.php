@@ -176,7 +176,7 @@ class NewsMLG1 {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.texts\"]");
 
         $texts = null;
-        if ($contents[0]->NewsComponent) {
+        if (isset($contents[0]) && $contents[0]->NewsComponent) {
             foreach ($contents[0]->NewsComponent as $component) {
                 $nitf = new \Onm\Import\DataSource\NITF($component);
                 $texts []= $nitf;
