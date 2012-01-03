@@ -1550,10 +1550,10 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 
 
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
-(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'ALBUM'),
-(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'ALBUM'),
-(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'ALBUM'),
-(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'ALBUM'),
+(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'VIDEO'),
+(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'CATEGORY'),
+(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'OPINION'),
+(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'POLL'),
 (159, 'ALBUM_SETTINGS', 'Configurar módulo de álbumes', 'ALBUM'),
 (158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
 (157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
@@ -2028,7 +2028,9 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 (6, 124),
 (6, 132),
 (6, 133),
-(6, 134);
+(6, 134),
+(6, 161),
+(6, 162);
 
 -- --------------------------------------------------------
 
