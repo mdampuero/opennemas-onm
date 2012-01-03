@@ -72,7 +72,7 @@ class NewsMLG1 {
         $this->xmlFile = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
-        $this->agencyName = $baseAgency.' | Europapress';
+        $this->agencyName = $baseAgency.' | EFE';
 
         if(file_exists($xmlFile)) {
             if (filesize($xmlFile) < 2) {
