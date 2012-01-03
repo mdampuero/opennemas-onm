@@ -118,10 +118,6 @@ switch($action) {
 
     case 'list':
 
-        if(!Acl::check('COMMENT_ADMIN', 'EDIT')) {
-            Acl::deny();
-        }
-
         $europapress = \Onm\Import\Europapress::getInstance();
 
         // Get the amount of minutes from last sync
