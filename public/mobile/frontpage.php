@@ -71,16 +71,6 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
             $article->position = $article->home_pos;
         }
         
-        $destaca = array();
-        foreach($articles_home as $i => $article) {
-            $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
-            $article->category_name = $articles_home[$i]->category_name;
-
-            if(preg_match('@highlighted@', $article->home_placeholder)) {
-                $destaca[] = $article;
-            }
-        }
-        
         $actual_category = 'home';
         $actual_category_id = 0;
 
@@ -96,6 +86,16 @@ if(($tpl->caching == 0) || !$tpl->isCached('mobile/frontpage-mobile.tpl', $cache
             {
                 $articles_home[] = $content;
 
+            }
+        }
+        
+        $destaca = array();
+        foreach($articles_home as $i => $article) {
+            $articles_home[$i]->category_name = $articles_home[$i]->loadCategoryName($articles_home[$i]->id);
+            $article->category_name = $articles_home[$i]->category_name;
+
+            if(preg_match('@highlighted@', $article->home_placeholder)) {
+                $destaca[] = $article;
             }
         }
 
