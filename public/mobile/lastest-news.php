@@ -36,9 +36,20 @@ $photos = array();
 $articles_home = $cm->find('Article', 'available=1 AND content_status=1 AND fk_content_type=1',
                            'ORDER BY created DESC, changed DESC LIMIT 0, 20');
 if(empty($articles_home)) {
-    $articles_home = $cm->find('Opinion', 'available=1 and type_opinion=0',
-                                      'ORDER BY created DESC, position ASC LIMIT 0, 20');
+        /// Adding Widgets {{{
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory(0);
 
+        foreach($contentsInHomepage as $content) {
+            if(isset($content->home_placeholder)
+               && !empty($content->home_placeholder)
+               && ($content->home_placeholder != '')
+               && ($content->content_type == 4)
+               )
+            {
+                $articles_home[] = $content;
+
+            }
+        }
 }
 // Filter by scheduled {{{
 $articles_home = $cm->getInTime($articles_home);
