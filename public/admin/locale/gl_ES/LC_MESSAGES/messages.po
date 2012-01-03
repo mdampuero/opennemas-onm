@@ -2,14 +2,14 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Fran Diéguez <frandieguez@gnome.org>, 2011.
-# Fran Dieguez <frandieguez@gnome.org>, 2011.
+# Fran Dieguez <frandieguez@gnome.org>, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-16 14:50+0100\n"
-"PO-Revision-Date: 2011-12-16 16:17+0100\n"
+"POT-Creation-Date: 2012-01-03 13:32+0100\n"
+"PO-Revision-Date: 2012-01-03 13:33+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl_ES\n"
@@ -139,32 +139,32 @@ msgstr "Configuración de EFE gardada correctamente"
 msgid "There was an error while saving EFE configuration"
 msgstr "Produciuse un erro ao gardar a configuración de EFE"
 
-#: public/admin/controllers/agency_importer/efe.php:197
+#: public/admin/controllers/agency_importer/efe.php:196
 #: public/admin/controllers/agency_importer/europapress.php:189
 #, php-format
 msgid "ID \"%d\" doesn't exist"
 msgstr "O ID «%d» non existe"
 
-#: public/admin/controllers/agency_importer/efe.php:234
-#: public/admin/controllers/agency_importer/efe.php:269
+#: public/admin/controllers/agency_importer/efe.php:233
+#: public/admin/controllers/agency_importer/efe.php:268
 msgid "Please specify the article to import."
 msgstr "Especifique o artigo a importar."
 
-#: public/admin/controllers/agency_importer/efe.php:274
+#: public/admin/controllers/agency_importer/efe.php:273
 msgid "Please assign the category where import this article"
 msgstr "Asigne a categoría onde quere importar este artigo"
 
-#: public/admin/controllers/agency_importer/efe.php:279
+#: public/admin/controllers/agency_importer/efe.php:278
 msgid "The category you have chosen doesn't exists."
 msgstr "A categoría que seleccionou non existe."
 
-#: public/admin/controllers/agency_importer/efe.php:372
+#: public/admin/controllers/agency_importer/efe.php:371
 #: public/admin/controllers/agency_importer/europapress.php:266
 #, php-format
 msgid "Downloaded %d new articles and deleted %d old ones."
 msgstr "Descargáronse %d novos artigos e elimináronse %d antigos."
 
-#: public/admin/controllers/agency_importer/efe.php:381
+#: public/admin/controllers/agency_importer/efe.php:380
 #: public/admin/controllers/agency_importer/europapress.php:275
 #, php-format
 msgid "If you are sure <a href=\"%s?action=unlock\">try to unlock it</a>"
@@ -317,7 +317,7 @@ msgstr "A categoría foi baleirada correctamente"
 #: public/admin/controllers/mediamanager/mediamanager.php:285
 #: public/admin/controllers/newsletter/newsletter.php:333
 #: public/admin/controllers/system_settings/system_settings.php:77
-#: public/admin/controllers/video/video.php:449
+#: public/admin/controllers/video/video.php:447
 msgid "Settings saved."
 msgstr "Opciones gardadas."
 
@@ -408,18 +408,11 @@ msgstr ""
 msgid "Kiosko Management"
 msgstr "Xestor de kiosko"
 
-#: public/admin/controllers/newsstand/newsstand.php:143
-#, fuzzy
-msgid "There was a problem when create dir. Contact your system administration"
-msgstr ""
-"Produciuse un erro ao subir o ficheiro.<br/>Por favor, contacte co "
-"administrador do sistema."
-
-#: public/admin/controllers/newsstand/newsstand.php:153
+#: public/admin/controllers/newsstand/newsstand.php:152
 msgid "There was a problem with kiosko data. Try again"
 msgstr ""
 
-#: public/admin/controllers/newsstand/newsstand.php:159
+#: public/admin/controllers/newsstand/newsstand.php:158
 #, fuzzy
 msgid ""
 "There was an error while uploading the file. <br />Try to upload files "
@@ -429,7 +422,7 @@ msgstr ""
 "Tente subir ficheiros máis pequenos que dito tamaño ou contacte co seu "
 "administrador."
 
-#: public/admin/controllers/newsstand/newsstand.php:205
+#: public/admin/controllers/newsstand/newsstand.php:204
 msgid "Can't be favorite. It's umpublished"
 msgstr ""
 "Non é posíbel marcar o elemento como favorito, xa que non está publicado"
@@ -569,49 +562,49 @@ msgstr "Enquérito:interior"
 msgid "Sitemap"
 msgstr "Mapa do sitio"
 
-#: public/admin/controllers/video/video.php:87
+#: public/admin/controllers/video/video.php:85
 #, php-format
 msgid "You must put %d videos in the HOME widget"
 msgstr "Debe ter %d vídeos para o widget de portada"
 
-#: public/admin/controllers/video/video.php:172
+#: public/admin/controllers/video/video.php:170
 msgid "Can't get video information. Check url"
 msgstr "Non foi posíbel obter a información do vídeo. Comprobe o url"
 
-#: public/admin/controllers/video/video.php:182
+#: public/admin/controllers/video/video.php:180
 msgid "Please check the video url, seems to be incorrect"
 msgstr "Comprobe o url do vídeo, parece ser incorrecto"
 
-#: public/admin/controllers/video/video.php:267
+#: public/admin/controllers/video/video.php:265
 msgid "You can't modify this video because you don't have enought privileges."
 msgstr "Non pode modificar este vídeo porque non ten permisos dabondo."
 
-#: public/admin/controllers/video/video.php:289
+#: public/admin/controllers/video/video.php:287
 #, php-format
 msgid "The video %s has some relations:"
 msgstr "O vídeo %s ten relaciones:"
 
-#: public/admin/controllers/video/video.php:295
+#: public/admin/controllers/video/video.php:293
 msgid ""
 "Caution! Are you sure that you want to delete this video and its relations?"
 msgstr ""
 "Atención! Ten certeza que quere eliminar este vídeo e tódalas súas relacións?"
 
-#: public/admin/controllers/video/video.php:298
+#: public/admin/controllers/video/video.php:296
 #, php-format
 msgid "Do you want delete %s ?"
 msgstr "Desexa eliminar «%s»?"
 
-#: public/admin/controllers/video/video.php:360
+#: public/admin/controllers/video/video.php:358
 msgid "This video is not published so you can't define it as favorite."
 msgstr ""
 "Este vídeo no está publicado por lo que no puede definirlo como favorito."
 
-#: public/admin/controllers/video/video.php:398
+#: public/admin/controllers/video/video.php:396
 msgid "Next albums have relations. Delete one by one"
 msgstr "Os seguintes álbums teñen relacións. Elimíneas unha a unha."
 
-#: public/admin/controllers/video/video.php:412
+#: public/admin/controllers/video/video.php:410
 msgid "You can delete one by one!"
 msgstr "Debe eliminalos un a un!"
 
@@ -873,7 +866,7 @@ msgstr "Sentímolo, vostede non ten permisos dabondo"
 msgid "URL not valid"
 msgstr "URL non válido"
 
-#: public/core/uri.class.php:82 public/core/uri.class.php:86
+#: public/core/uri.class.php:83 public/core/uri.class.php:87
 msgid "Error: Uri::generate should get $contentType and parameters"
 msgstr "Erro: Uri::generate debe obter $contentType e os seus parámetros"
 
@@ -1065,7 +1058,7 @@ msgstr ""
 msgid "Directory %s is not writable."
 msgstr "Non é posíbel escribir no cartafol «%s»."
 
-#: public/models/content.class.php:1305
+#: public/models/content.class.php:1301
 #, php-format
 msgid "Homepage for category %s cleaned sucessfully.\n"
 msgstr "A portadilla para a categoría «%s» foi limpada correctamente.\n"
@@ -5191,8 +5184,8 @@ msgstr ""
 
 #: public/admin/locale/extracted_strings.c:5048
 #: public/admin/locale/extracted_strings.c:5360
-msgid "Filter by title"
-msgstr "Filtrar por título"
+msgid "Filter by title or content"
+msgstr "Filtrar por título ou contido"
 
 #: public/admin/locale/extracted_strings.c:5051
 #: public/admin/locale/extracted_strings.c:5363
@@ -6322,6 +6315,13 @@ msgstr "Benvido ao xestor de instancias de OpenNeMas"
 #: public/admin/locale/extracted_strings.c:6623
 msgid "Cache manager"
 msgstr "Xestor de caché"
+
+#, fuzzy
+#~ msgid ""
+#~ "There was a problem when create dir. Contact your system administration"
+#~ msgstr ""
+#~ "Produciuse un erro ao subir o ficheiro.<br/>Por favor, contacte co "
+#~ "administrador do sistema."
 
 #, fuzzy
 #~ msgid "create ok"

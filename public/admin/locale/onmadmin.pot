@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-16 16:17+0100\n"
+"POT-Creation-Date: 2012-01-03 13:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,32 +136,32 @@ msgstr ""
 msgid "There was an error while saving EFE configuration"
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:197
+#: public/admin/controllers/agency_importer/efe.php:196
 #: public/admin/controllers/agency_importer/europapress.php:189
 #, php-format
 msgid "ID \"%d\" doesn't exist"
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:234
-#: public/admin/controllers/agency_importer/efe.php:269
+#: public/admin/controllers/agency_importer/efe.php:233
+#: public/admin/controllers/agency_importer/efe.php:268
 msgid "Please specify the article to import."
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:274
+#: public/admin/controllers/agency_importer/efe.php:273
 msgid "Please assign the category where import this article"
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:279
+#: public/admin/controllers/agency_importer/efe.php:278
 msgid "The category you have chosen doesn't exists."
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:372
+#: public/admin/controllers/agency_importer/efe.php:371
 #: public/admin/controllers/agency_importer/europapress.php:266
 #, php-format
 msgid "Downloaded %d new articles and deleted %d old ones."
 msgstr ""
 
-#: public/admin/controllers/agency_importer/efe.php:381
+#: public/admin/controllers/agency_importer/efe.php:380
 #: public/admin/controllers/agency_importer/europapress.php:275
 #, php-format
 msgid "If you are sure <a href=\"%s?action=unlock\">try to unlock it</a>"
@@ -303,7 +303,7 @@ msgstr ""
 #: public/admin/controllers/mediamanager/mediamanager.php:285
 #: public/admin/controllers/newsletter/newsletter.php:333
 #: public/admin/controllers/system_settings/system_settings.php:77
-#: public/admin/controllers/video/video.php:449
+#: public/admin/controllers/video/video.php:447
 msgid "Settings saved."
 msgstr ""
 
@@ -388,21 +388,17 @@ msgstr ""
 msgid "Kiosko Management"
 msgstr ""
 
-#: public/admin/controllers/newsstand/newsstand.php:143
-msgid "There was a problem when create dir. Contact your system administration"
-msgstr ""
-
-#: public/admin/controllers/newsstand/newsstand.php:153
+#: public/admin/controllers/newsstand/newsstand.php:152
 msgid "There was a problem with kiosko data. Try again"
 msgstr ""
 
-#: public/admin/controllers/newsstand/newsstand.php:159
+#: public/admin/controllers/newsstand/newsstand.php:158
 msgid ""
 "There was an error while uploading the file. <br />Try to upload files "
 "smaller than that size or contact with your administrator"
 msgstr ""
 
-#: public/admin/controllers/newsstand/newsstand.php:205
+#: public/admin/controllers/newsstand/newsstand.php:204
 msgid "Can't be favorite. It's umpublished"
 msgstr ""
 
@@ -541,47 +537,47 @@ msgstr ""
 msgid "Sitemap"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:87
+#: public/admin/controllers/video/video.php:85
 #, php-format
 msgid "You must put %d videos in the HOME widget"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:172
+#: public/admin/controllers/video/video.php:170
 msgid "Can't get video information. Check url"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:182
+#: public/admin/controllers/video/video.php:180
 msgid "Please check the video url, seems to be incorrect"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:267
+#: public/admin/controllers/video/video.php:265
 msgid "You can't modify this video because you don't have enought privileges."
 msgstr ""
 
-#: public/admin/controllers/video/video.php:289
+#: public/admin/controllers/video/video.php:287
 #, php-format
 msgid "The video %s has some relations:"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:295
+#: public/admin/controllers/video/video.php:293
 msgid ""
 "Caution! Are you sure that you want to delete this video and its relations?"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:298
+#: public/admin/controllers/video/video.php:296
 #, php-format
 msgid "Do you want delete %s ?"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:360
+#: public/admin/controllers/video/video.php:358
 msgid "This video is not published so you can't define it as favorite."
 msgstr ""
 
-#: public/admin/controllers/video/video.php:398
+#: public/admin/controllers/video/video.php:396
 msgid "Next albums have relations. Delete one by one"
 msgstr ""
 
-#: public/admin/controllers/video/video.php:412
+#: public/admin/controllers/video/video.php:410
 msgid "You can delete one by one!"
 msgstr ""
 
@@ -843,7 +839,7 @@ msgstr ""
 msgid "URL not valid"
 msgstr ""
 
-#: public/core/uri.class.php:82 public/core/uri.class.php:86
+#: public/core/uri.class.php:83 public/core/uri.class.php:87
 msgid "Error: Uri::generate should get $contentType and parameters"
 msgstr ""
 
@@ -1032,7 +1028,7 @@ msgstr ""
 msgid "Directory %s is not writable."
 msgstr ""
 
-#: public/models/content.class.php:1305
+#: public/models/content.class.php:1301
 #, php-format
 msgid "Homepage for category %s cleaned sucessfully.\n"
 msgstr ""
@@ -5106,7 +5102,7 @@ msgstr ""
 
 #: public/admin/locale/extracted_strings.c:5048
 #: public/admin/locale/extracted_strings.c:5360
-msgid "Filter by title"
+msgid "Filter by title or content"
 msgstr ""
 
 #: public/admin/locale/extracted_strings.c:5051

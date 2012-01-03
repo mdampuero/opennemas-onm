@@ -5045,7 +5045,7 @@ gettext("Last sync was %1 minutes ago.");
 gettext("Try syncing the news list from server by clicking in \"Sync with server\" button above");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
-gettext("Filter by title");
+gettext("Filter by title or content");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/list.tpl */
 gettext("and category:");
@@ -5357,7 +5357,7 @@ gettext("Last sync was %1 minutes ago.");
 gettext("Try syncing the news list from server by clicking in \"Sync with server\" button above");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
-gettext("Filter by title");
+gettext("Filter by title or content");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/list.tpl */
 gettext("and category:");
