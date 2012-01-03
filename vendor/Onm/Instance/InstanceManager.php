@@ -169,7 +169,7 @@ class InstanceManager
         
         $instances = array();
         
-        $sql = "SELECT * FROM instances ORDER BY id";
+        $sql = "SELECT * FROM instances ORDER BY id DESC";
         $rs = $this->_connection->Execute($sql);
         
         if (!$rs) {
