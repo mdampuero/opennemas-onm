@@ -237,7 +237,7 @@ class User
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-
+            
             return false;
         }
 
@@ -247,7 +247,7 @@ class User
         
     }
     
-    public function delCategoryToUser ($idUser, $idCategory) {
+    public function delCategoryToUser($idUser, $idCategory) {
         
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
         
@@ -261,7 +261,8 @@ class User
             return false;
         }
 
-        $newUserCategories = self::readAccessCategories($idUser);
+        $this->accesscategories = self::readAccessCategories($idUser);
+        
 
         return true;
         
@@ -276,9 +277,9 @@ class User
         }
          // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
-
-            $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = ?';
-            $rs = $GLOBALS['application']->conn->Execute( $sql, $id );
+ 
+            $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = '.intval($id);
+            $rs = $GLOBALS['application']->conn->Execute( $sql );
 
             if (!$rs) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();

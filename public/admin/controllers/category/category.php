@@ -235,6 +235,10 @@ if( isset($_REQUEST['action']) ) {
             if(empty($_POST['id'])) {
                $category = new ContentCategory();
                if($category->create( $_POST )) {
+                $user = new User();
+                $user->addCategoryToUser($_SESSION['userid'],$category->pk_content_category);
+                $_SESSION['accesscategories'] = $user->get_access_categories_id($_SESSION['userid']);
+               
                    $ccm->reloadCategories();
                }
             } else {
