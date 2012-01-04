@@ -17,6 +17,8 @@ $im = im::getInstance();
 
 session_start();
 
+// Initialize request parameters
+$page   = filter_input( INPUT_GET, 'page' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => '1')) );
 // Widget instance
 $action = (isset($_REQUEST['action']))? $_REQUEST['action']: null;
 
@@ -212,7 +214,18 @@ switch($action) {
         // available messages
         // session_start();
         
-        $instances = $im->findAll();
+        $find_params = array(
+            'name' => filter_input(
+                INPUT_GET, 'filter_name', FILTER_SANITIZE_STRING,
+                array('options' => array('default' => '*'))
+            ),
+            'per_page' => filter_input(
+                INPUT_GET, 'filter_per_page', FILTER_SANITIZE_STRING,
+                array('options' => array('default' => '20'))
+            ),
+        );
+        
+        $instances = $im->findAll($find_params);
         
         foreach($instances as &$instance) {
              list($instance->totals, $instance->configs) =
@@ -221,10 +234,31 @@ switch($action) {
             $instance->domains = preg_split("@, @", $instance->domains);
 
         }
+        
+        $items_page =  $find_params['per_page'];
+        
+        // Pager
+        $pager_options = array(
+            'mode'        => 'Sliding',
+            'perPage'     => $items_page,
+            'delta'       => 4,
+            'clearIfVoid' => true,
+            'urlVar'      => 'page',
+            'totalItems'  => count($instances),
+        );
+        $pager = Pager::factory($pager_options);
+
+        $instances = array_slice($instances, ($page-1)*$items_page, $items_page);
+
+        $tpl->assign(
+            array(
+                'instances'      => $instances,
+                'per_page'      => $items_page,
+                'pagination'    =>  $pager,
+            )
+        );
 
         $_SESSION['desde'] = 'instances';
-
-        $tpl->assign('instances', $instances);
         $tpl->display('instances/list.tpl');
         break;
 }

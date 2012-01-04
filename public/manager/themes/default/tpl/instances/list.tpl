@@ -60,6 +60,28 @@ function confirmarDelete(action) {
     {render_messages}
 </div>
 <div class="wrapper-content">
+<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>  
+    <table class="adminheading">
+        <tr>
+            <th align="left">Total: {$pagination->_totalItems} instances.</th>
+            <th nowrap="nowrap" align="right">
+                <label for="username">{t}Filter by name{/t}</label>
+                <input id="username" name="filter_name" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
+
+                <label for="usergroup">{t}Per page{/t}</label>
+                <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
+                     <option value="10" {if $per_page eq 10}selected{/if}>10</option>
+                     <option value="20" {if $per_page eq 20}selected{/if}>20</option>
+                     <option value="50" {if $per_page eq 50}selected{/if}>50</option>
+                     <option value="100" {if $per_page eq 100}selected{/if}>100</option>              
+                </select>
+                
+                <input type="hidden" name="page" value="1" />
+                <input type="submit" value="{t}Search{/t}">
+            </th>
+        </tr>
+    </table>
+    
     <table class="listing-table" >
 
         <thead>
@@ -146,10 +168,12 @@ function confirmarDelete(action) {
         <tfoot>
             <tr class="pagination">
                 <td colspan="11">
-                    {$pager->links}&nbsp;
+                    {$pagination->links}&nbsp;
                 </td>
             </tr>
         </tfoot>
     </table>
+    <input type="hidden" id="action" name="action" value="list" />
+</form>
 </div>
 {/block}

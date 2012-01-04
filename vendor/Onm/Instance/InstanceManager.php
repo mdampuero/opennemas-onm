@@ -164,12 +164,16 @@ class InstanceManager
      * Gets a list of instances
      * 
      */
-    public function findAll()
+    public function findAll($params = array())
     {
         
         $instances = array();
         
-        $sql = "SELECT * FROM instances ORDER BY id DESC";
+        if ($params['name'] != '*') {
+            $sql = "SELECT * FROM instances WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
+        } else {
+            $sql = "SELECT * FROM instances ORDER BY id DESC";
+        }
         $rs = $this->_connection->Execute($sql);
         
         if (!$rs) {
