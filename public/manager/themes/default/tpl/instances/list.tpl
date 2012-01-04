@@ -93,7 +93,7 @@ function confirmarDelete(action) {
             <th>{t}Articles{/t}</th>
             <th>{t}Images{/t}</th>
             <th>{t}Ads{/t}</th>
-             <th>{t}Created{/t}</th>
+            <th width="100px">{t}Created{/t}</th>
             <th class="center" width="50px">{t}Activated{/t}</th>
             <th class="center" width="50px">{t}Actions{/t}</th>
             {else}
