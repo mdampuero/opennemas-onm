@@ -21,6 +21,11 @@
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
         {css_tag href="/messageboard.css" media="screen"}
+        <style>
+            div.wrapper-content {
+                max-width: 1024px;
+            }
+        </style>
 
 	{/block}
 
