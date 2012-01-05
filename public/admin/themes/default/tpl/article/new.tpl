@@ -111,18 +111,23 @@ if($('starttime')) {
 										{t}Allow coments{/t}
 										<input type="checkbox" {if (isset($article) && $article->with_comment eq 1)}checked{/if} name="with_comment" id="with_comment" value=1/>
 										<br/>
+                                        {acl isAllowed="ARTICLE_AVAILABLE"}
 										{t}Available:{/t}
 										<input type="checkbox" {if (isset($article) && $article->content_status eq 1)}checked{/if}  name="content_status" id="content_status" value=1/>
 										<br/>
-
+                                        {/acl}
+                                        {acl isAllowed="ARTICLE_FRONTPAGE"}
 										{t}Put in section frontpage:{/t}
 										<input type="checkbox"  name="frontpage" {if (isset($article) && $article->frontpage eq 1)}checked{/if} id="frontpage" value=1/>
 										<br/>
-									{if ($article->in_home neq 1)}
-										{t}Suggest for frontpage:{/t}
-										<input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2/>
-										<br/>
-									{/if}
+                                        {/acl}
+                                        {acl isAllowed="ARTICLE_HOME"}
+                                        {if ($article->in_home neq 1)}
+                                            {t}Suggest for frontpage:{/t}
+                                            <input type="checkbox"  name="in_home" {if (isset($article) && $article->in_home eq 2)}checked{/if} id="in_home" value=2/>
+                                            <br/>
+                                        {/if}
+                                       {/acl}
 									{else} {* else if not list_hemeroteca *}
 										{t}Archived:{/t}
 										<input type="checkbox" name="content_status" {if (isset($article) && $article->content_status == 0)}checked{/if} value="0" id="content_status"/>
