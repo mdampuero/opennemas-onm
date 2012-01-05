@@ -91,8 +91,10 @@ legend {
                         <table  style="margin:10px ">
                             <tr>
                                 <td style="width:70%; padding:4px 0;">
-                                    <label for="name">{t}Name{/t}</label>
-                                    <input type="text" name="name" id="name" value="{$menu->name|default:""}"  style="width:97%"/>
+                                    <label for="name">{t}Name{/t}</label>  
+                                    <input type="text" name="name" class="required" 
+                                           id="name" value="{$menu->name|default:""}"  style="width:97%" 
+                                           {if $menu->type neq 'user'} readonly="readonly" {/if}/>
                                 </td>
                                 <td rowspan="3" valign="top" style="padding:10px">
                                     <div class="help-block">
