@@ -188,7 +188,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMPORT_XML"
             title="'.htmlspecialchars(_("XML Importer"), ENT_QUOTES).'"
             id="xml_importer"
-            link="controllers/agency_importer/importXML.php?action=info"
+            link="controllers/agency_importer/importXMLFiles.php"
         />
         <node class="divider" />
         <node
