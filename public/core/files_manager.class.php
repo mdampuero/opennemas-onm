@@ -139,5 +139,41 @@ class FilesManager {
         }
 
     }
+    
+    /**
+     * Uncompress Zip archives
+     *
+     * @param string $file name
+     *  
+     */
+    static public function decompressZIP($file) {
+       
+        $zip = new ZipArchive;
+
+        // open archive
+        if ($zip->open($file) !== TRUE) {
+            die ("Could not open archive");
+        }
+
+        $dataZIP = array();
+
+        // get number of files in archive
+        $numFiles = $zip->numFiles;
+
+        // iterate over file list
+        // print details of each file
+        // DEL REVËS   for ($x=$numFiles; $x>0; $x--) {
+        for ($x=0; $x<$numFiles; $x++) {
+            
+            $file = $zip->statIndex($x);
+            $dataZIP[$x] = $file['name'];
+        }
+
+        $zip->extractTo(SITE_TMP_PATH.DS);
+        
+        $zip->close();
+        
+        return $dataZIP;
+    }
 
 }
