@@ -676,12 +676,12 @@ class ContentCategoryManager {
 
     //Returns false if the category does not exist
     function exists($category_name) {
-        if( is_null($this->categories) ) {
+   //     if( is_null($this->categories) ) {
             $sql = 'SELECT count(*) AS total FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->GetOne( $sql, $category_name );
-
+  
             return( $rs || $rs > 0 );
-        }
+      //  }
 
         // Singleton version
         // search into categories internal array ($this->categories)

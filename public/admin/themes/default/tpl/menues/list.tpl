@@ -66,7 +66,7 @@
                                      <li>
                                          {if $menues[m]->type eq 'user'}
                                         {acl isAllowed="MENU_ADMIN"}                           
-                                            <a onclick="confirm({t}'Do you want delete this menu?'{/t});return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                            <a onclick="if(!confirm({t}'Do you want delete this menu?'{/t}))return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&id={$menues[m]->pk_menu}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                             </a>
                                         {/acl}
@@ -103,7 +103,7 @@
                                         <li>
                                              {if $subMenu[s]->type eq 'user'}
                                             {acl isAllowed="MENU_ADMIN"}                           
-                                                <a onclick="confirm({t}'Do you want delete this menu?'{/t});return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&name={$subMenu[s]->name}" title="{t 1=$subMenu[s]->name}Delete page '%1'{/t}" title={t}"Delete"{/t}>
+                                                <a onclick="if(!confirm({t}'Do you want delete this menu?'{/t}))return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&id={$subMenu[s]->pk_menu}" title="{t 1=$subMenu[s]->name}Delete page '%1'{/t}" title={t}"Delete"{/t}>
                                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                                 </a>
                                             {/acl}

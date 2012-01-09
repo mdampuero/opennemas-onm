@@ -207,6 +207,21 @@ switch($action) {
 
     break;
 
+    case 'delete':
+
+         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        
+         Acl::checkOrForward('MENU_DELETE');
+ 
+         
+         $mn = new Menu($id);
+         $menu = $mn->delete($id);
+         MenuItems::emptyMenu($id);
+
+         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+    break;
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;

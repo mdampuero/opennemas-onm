@@ -94,7 +94,7 @@ legend {
                                     <label for="name">{t}Name{/t}</label>  
                                     <input type="text" name="name" class="required" 
                                            id="name" value="{$menu->name|default:""}"  style="width:97%" 
-                                           {if $menu->type neq 'user'} readonly="readonly" {/if}/>
+                                           {if !empty($menu->type) && $menu->type neq 'user'} readonly="readonly" {/if}/>
                                 </td>
                                 <td rowspan="3" valign="top" style="padding:10px">
                                     <div class="help-block">
