@@ -42,7 +42,7 @@
 
     <div class="wrapper-content">
 
-        {*render_messages*}
+        {render_messages}
 
         <ul id="tabs">
             <li>

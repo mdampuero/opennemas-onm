@@ -96,13 +96,13 @@ if( isset($_REQUEST['action']) ) {
             $tpl->assign('subcategorys', $subcategorys);
             $categories = array();
             foreach($allcategorys as $cate) {
-               if($cate->internal_category != 0 && $cate->fk_content_category == 0) {
+               if($cate->pk_content_category != $_REQUEST['id']  && 
+                   ($cate->internal_category != 0 && $cate->fk_content_category == 0)) {
                    $categories[] = $cate;
                }
             }
             $tpl->assign('allcategorys', $categories);
             $tpl->assign('configurations',s::get('section_settings'));
-
 
             $tpl->display('category/form.tpl');
 
