@@ -114,17 +114,16 @@ class ContentCategory {
     public function update($data)
     {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
-
-        $data['name'] = String_Utils::normalize_name($data['title']);
-
+        
+        
         if (empty($data['logo_path'])) {
             $data['logo_path'] = $this->logo_path;
         }
         $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
-        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?,`logo_path`=?,`color`=?
+        $sql = "UPDATE content_categories SET  `title`=?, `inmenu`=?, `fk_content_category`=?, `internal_category`=?,`logo_path`=?,`color`=?
                     WHERE pk_content_category=" . ($data['id']);
-        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'], $data['internal_category'], $data['logo_path'], $data['color']);
-
+        $values = array($data['title'], $data['inmenu'], $data['subcategory'], $data['internal_category'], $data['logo_path'], $data['color']);
+ 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);

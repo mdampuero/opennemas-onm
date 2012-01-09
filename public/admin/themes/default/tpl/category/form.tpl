@@ -103,30 +103,30 @@
                             <label for="internal_category">{t}Category available for:{/t}</label>
                             <select name="internal_category" id="internal_category" >
                                 <option value="1"
-                                    {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>{t}All contents{/t}</option>
+                                    {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
                                 {is_module_activated name="ALBUM_MANAGER"}
                                     <option value="7"
-                                        {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 7)} selected="selected"{/if}>{t}Albums{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="VIDEO_MANAGER"}
                                     <option value="9"
-                                        {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
+                                        {if !isset($category) && ($category->internal_category eq 9)} selected="selected"{/if}>{t}Video{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="POLL_MANAGER"}
                                     <option value="11"
-                                        {if isset($category) && ($category->internal_category eq 11)} checked="checked"{/if}>{t}Poll{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 11)} selected="selected"{/if}>{t}Poll{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="KIOSKO_MANAGER"}
                                     <option value="14"
-                                        {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 14)} selected="selected"{/if}>{t}ePaper{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="SPECIAL_MANAGER"}
                                     <option value="10"
-                                        {if isset($category) && ($category->internal_category eq 10)} checked="checked"{/if}>{t}Special{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 10)} selected="selected"{/if}>{t}Special{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="BOOK_MANAGER"}
                                     <option value="15"
-                                        {if isset($category) && ($category->internal_category eq 15)} checked="checked"{/if}>{t}Book{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
                                 {/is_module_activated}
                             </select>
 

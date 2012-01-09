@@ -1550,6 +1550,7 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 
 
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(164, 'MENU_DELETE', 'Eliminar menu', 'MENU'),
 (163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'VIDEO'),
 (162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'CATEGORY'),
 (161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'OPINION'),
@@ -2031,7 +2032,8 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 (6, 133),
 (6, 134),
 (6, 161),
-(6, 162);
+(6, 162),
+(6, 164);
 
 -- --------------------------------------------------------
 
