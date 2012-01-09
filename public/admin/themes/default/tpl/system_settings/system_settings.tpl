@@ -222,6 +222,30 @@ textarea{
                     </tbody>
                 </table>
             </fieldset>
+
+             <fieldset>
+                <legend>{t}Web Master Tools{/t}</legend>
+                <table>
+                    <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="webmastertools_google">{t}Google Web Master Tools:{/t}</label>
+                            </th>
+                            <td colspan=2>
+                                <input id="webmastertools_google" name="webmastertools_google" value="{$configs['webmastertools_google']|default:""}" />
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="webmastertools_bing">{t}Bing Web Master Tools:{/t}</label>
+                            </th>
+                            <td colspan=2>
+                                <input id="webmastertools_bing" name="webmastertools_bing" value="{$configs['webmastertools_bing']|default:""}" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
         </div><!-- /seo -->
        
         <div id="misc" class="panel">

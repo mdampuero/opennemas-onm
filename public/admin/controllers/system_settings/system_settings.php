@@ -39,14 +39,15 @@ switch($action) {
                                     'site_color', 'site_name', 'time_zone','site_language','site_footer',
                                     'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
                                     'facebook','facebook_page','facebook_id','twitter_page',
-                                    'google_analytics','piwik',                                    
-                                    'items_per_page','refresh_interval' 
+                                    'google_analytics','piwik',
+                                    'items_per_page','refresh_interval',
+                                    'webmastertools_google', 'webmastertools_bing'
                                     );
 
         $configurations = s::get($configurationsKeys);
 
         $tpl->assign(
-                     array(                            
+                     array(
                             'configs'   => $configurations,
                             'timezones' => \DateTimeZone::listIdentifiers(),
                             'languages' => array('en_US' => _("English"), 'es_ES' => _("Spanish"), 'gl_ES' => _("Galician")),
@@ -60,7 +61,7 @@ switch($action) {
 
         unset($_POST['action']);
         unset($_POST['submit']);
-        
+
         if(!empty($_FILES) && isset($_FILES['site_logo'])) {
             $nameFile = $_FILES['site_logo']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
