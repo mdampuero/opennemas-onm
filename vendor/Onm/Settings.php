@@ -59,14 +59,14 @@ class Settings {
                 $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
                 $rs = $GLOBALS['application']->conn->GetOne( $sql );
 
-                    
+
                 if (!$rs) {
                     $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
                     if (!empty($errorMsg)) {
                         $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
                         $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
                     }
-                    
+
                     return false;
                 }
 
@@ -174,7 +174,7 @@ class Settings {
 
         return true;
     }
-    
+
     /**
      * Invalidates the apc_cache for a setting from its name.
      *
@@ -203,6 +203,6 @@ class Settings {
         return true;
     }
 
-    
+
 
 }

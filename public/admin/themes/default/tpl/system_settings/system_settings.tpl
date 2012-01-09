@@ -468,7 +468,7 @@ textarea{
                         </tr>
                         <tr valign="top">
                             <th scope="row">
-                                <label for="piwik_server_url">{t}Private key:{/t}</label>
+                                <label for="piwik_server_url">{t}Server URL:{/t}</label>
                             </th>
                             <td>
                                 <input type="text" id="piwik_server_url" name="piwik[server_url]" value="{$configs['piwik']['server_url']|default:""}">
