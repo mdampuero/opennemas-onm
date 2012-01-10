@@ -360,11 +360,11 @@ if($('starttime')) {
 
 			</table>
 		</div>
- 
-        <div class="panel" id="avanced-custom" style="width:98%">
-			{include file ="article/partials/_article_avanced_customize.tpl"}
-		</div>
- 
+        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}                 
+            <div class="panel" id="avanced-custom" style="width:98%">
+                {include file ="article/partials/_article_avanced_customize.tpl"}
+            </div>
+        {/is_module_activated}
     
 		{if $smarty.request.action eq 'read'}
 		<div class="panel" id="comments" style="width:98%">
@@ -401,13 +401,13 @@ if($('starttime')) {
  
 		{/if}
 
-        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-            <div class="panel" id="contenidos-relacionados" style="width:98%">
-                {include file="article/partials/_related.tpl"}
-            </div>
-        {/is_module_activated}
+         
+    <div class="panel" id="contenidos-relacionados" style="width:98%">
+        {include file="article/partials/_related.tpl"}
+    </div>
+        
 		{if isset($article) && is_object($article)}
-		<div class="panel" id="elementos-relacionados" style="width:98%">
+	<div class="panel" id="elementos-relacionados" style="width:98%">
 			<br />
 			Listado contenidos relacionados en Portada:  <br />
 			<div style="position:relative;" id="scroll-container2">

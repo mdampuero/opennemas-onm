@@ -67,86 +67,81 @@
         <table class="adminform" style='padding:10px;' >
             <tbody>
                 <tr>
-                    <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
-                        <label for="title">{t}Title{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td style="padding:4px;" nowrap="nowrap" colspan="2">
+                        <label for="title">{t}Name{/t}</label>
                         <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}"
-                            class="required" size="66" />
+                            class="required" size="80" />
                     </td>
-                    <td rowspan="4">
+                    <td rowspan="5" style="vertical-align:top;">
                         <div class="help-block margin-left-1" style="width:90%">
                             <div class="title"><h4>Sections</h4></div>
-                            <div class="content"> 
+                            <div class="content">
                                 <div class="content">
                                 {t} Title for short title name {/t}<br />
                                 {t}Internal name for calculate slugs and uri {/t}<br />
-                                {t}Title page for the long title used for seo & in widgets, menues...{/t}
+                                {t}Title page for the long title used for seo & in title bar, widgets, menues...{/t}
                                 {t}If title page empty Opennemas get short title{/t}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <label for="title">{t}Title{/t}</label>
-                        <input type="text" id="title" name="title" title="Título" value="{$category->title|clearslash|default:""}" class="required" style="width:97%"/>
-                    </td>
-                </tr>
+
                 {if isset($category) && !empty($category->name)}
                 <tr>
-                    <td style="padding:4px;" nowrap="nowrap"   colspan="2">
+                    <td style="padding:4px;" nowrap="nowrap" colspan="2" >
+                         <label for="title">{t}Slug{/t}</label>
                         <input type="text" id="name" name="name" title="slug categoria" readonly
                               value="{$category->name|clearslash|default:""}" class="required" size="66" />
                     </td>
                 </tr>
                 {/if}
                 <tr>
-                    <td align="right" valign="middle" style="padding:4px;text-align:right; width:100px;">
-                        <label for="title">{t}Page Title{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap"  colspan="2"> 
+                    <td style="padding:4px;" nowrap="nowrap" colspan="2">
+                        <label for="title">{t}Page Title {/t}</label>
+
                         <input type="text" id="params[title]" name="params[title]" title="Título" value="{$category->params['title']}"
-                             size="66" />
+                             size="80" />
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding:4px; vertical-align:top;" valign=top>
-                        
+                    <td style="padding:4px;" nowrap="nowrap" valign="top">
+
                         <div style="display:inline-block;  width:40%; height:100px; vertical-align:top;">
                             <label for="internal_category">{t}Category available for:{/t}</label>
+                            <br>
                             <select name="internal_category" id="internal_category" >
                                 <option value="1"
-                                    {if  (empty($category->internal_category) || $category->internal_category eq 1)} selected="selected"{/if}>{t}All contents{/t}</option>
+                                    {if  (empty($category->internal_category) || $category->internal_category eq 1)} checked="checked"{/if}>{t}All contents{/t}</option>
                                 {is_module_activated name="ALBUM_MANAGER"}
                                     <option value="7"
-                                        {if isset($category) && ($category->internal_category eq 7)} selected="selected"{/if}>{t}Albums{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="VIDEO_MANAGER"}
                                     <option value="9"
-                                        {if !isset($category) && ($category->internal_category eq 9)} selected="selected"{/if}>{t}Video{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="POLL_MANAGER"}
                                     <option value="11"
-                                        {if isset($category) && ($category->internal_category eq 11)} selected="selected"{/if}>{t}Poll{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 11)} checked="checked"{/if}>{t}Poll{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="KIOSKO_MANAGER"}
                                     <option value="14"
-                                        {if isset($category) && ($category->internal_category eq 14)} selected="selected"{/if}>{t}ePaper{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="SPECIAL_MANAGER"}
                                     <option value="10"
-                                        {if isset($category) && ($category->internal_category eq 10)} selected="selected"{/if}>{t}Special{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 10)} checked="checked"{/if}>{t}Special{/t}</option>
                                 {/is_module_activated}
                                 {is_module_activated name="BOOK_MANAGER"}
                                     <option value="15"
-                                        {if isset($category) && ($category->internal_category eq 15)} selected="selected"{/if}>{t}Book{/t}</option>
+                                        {if isset($category) && ($category->internal_category eq 15)} checked="checked"{/if}>{t}Book{/t}</option>
                                 {/is_module_activated}
                             </select>
 
-<<<<<<< HEAD
                         </div>
+                     </td>
 
+                    <td style="padding:4px; vertical-align:top;" valign="top">
                         <div style="display:inline-block; width:50%;">
                             <label for="title">{t}Subsection of:{/t}</label>
                             <select name="subcategory" class="required" size="12" style="height:100px;">
@@ -156,64 +151,11 @@
                                 {/section}
                             </select>
                         </div>
-=======
                     </td>
-                    <td  colspan="2">
-                        <select name="internal_category" id="internal_category" >
-                            <option value="1"
-                                {if  (empty($category->fk_content_category) || $category->internal_category eq 1)} checked="checked"{/if}>{t}Global{/t}</option>
-                            {is_module_activated name="ALBUM_MANAGER"}
-                                <option value="7"
-                                    {if isset($category) && ($category->internal_category eq 7)} checked="checked"{/if}>{t}Albums{/t}</option>
-                            {/is_module_activated}
-                            {is_module_activated name="VIDEO_MANAGER"}
-                                <option value="9"
-                                    {if isset($category) && ($category->internal_category eq 9)} checked="checked"{/if}>{t}Video{/t}</option>
-                            {/is_module_activated}
-                            {is_module_activated name="POLL_MANAGER"}
-                                <option value="11"
-                                    {if isset($category) && ($category->internal_category eq 11)} checked="checked"{/if}>{t}Poll{/t}</option>
-                            {/is_module_activated}
-                            {is_module_activated name="KIOSKO_MANAGER"}
-                                <option value="14"
-                                    {if isset($category) && ($category->internal_category eq 14)} checked="checked"{/if}>{t}ePaper{/t}</option>
-                            {/is_module_activated}
-                            {is_module_activated name="SPECIAL_MANAGER"}
-                                <option value="10"
-                                    {if isset($category) && ($category->internal_category eq 10)} checked="checked"{/if}>{t}Special{/t}</option>
-                            {/is_module_activated}
-                            {is_module_activated name="BOOK_MANAGER"}
-                                <option value="15"
-                                    {if isset($category) && ($category->internal_category eq 15)} checked="checked"{/if}>{t}Book{/t}</option>
-                            {/is_module_activated}
-                        </select>
->>>>>>> [Feature41]- BACKEND: Categories manager: large title, logo and color
+                </tr>
 
-                    </td>
-                </tr>
-                {*
                 <tr>
-<<<<<<< HEAD
-                    <td>
-                        <label for="title">{t}Page Title{/t}</label>
-                        <input type="text" id="params[title]" name="params['title']" title="Título" value="{$category->params['title']|clearslash|default:""}" style="width:97%" />
-=======
-                    <td align="right" valign="top" style="padding:4px;text-align:right; width:100px;">
-                        <label for="title">{t}Subsection of:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap"  colspan="2">
-                        <select name="subcategory" class="required" size="12">
-                            <option value="0" {if !isset($category) || (!empty($category->fk_content_category) || $category->fk_content_category eq '0')}selected{/if}> -- </option>
-                            {section name=as loop=$allcategorys}
-                                 <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category->fk_content_category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                            {/section}
-                        </select>
->>>>>>> [Feature41]- BACKEND: Categories manager: large title, logo and color
-                    </td>
-                </tr>
-                *}
-                <tr>
-                    <td style="padding:4px;">
+                    <td style="padding:4px;" colspan="2">
                         <label for="inmenu">{t}Show in menu:{/t}</label>
                         <input type="checkbox" id="inmenu" name="inmenu"
                                value="{if empty($category->fk_content_category) || $category->inmenu eq 1}1{else}0{/if}"
@@ -225,33 +167,33 @@
                 {if isset($configurations) && !empty($configurations['allowLogo'])}
 
                  <tr>
-                    <td valign="middle" style="padding:4px;">
+                    <td valign="middle" style="padding:4px;" colspan="3">
                         <label for="inmenu">{t}Frontpage logo:{/t}</label>
                         <input type="file" id="logo_path" name="logo_path"  />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="middle" style="padding:4px;" colspan=2>
+                    <td valign="middle" style="padding:4px;" colspan="3">
                         <label for="inmenu">{t}Image logo:{/t}</label>
                         {if !empty($category->logo_path)}
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" >
+                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$category->logo_path}" style="max-width:200px;" >
                         {/if}
                     </td>
                 </tr>
-                {/if}    
+                {/if}
                 <tr>
-                    <td valign="middle" style="padding:4px;">
+                    <td valign="middle" style="padding:4px;" colspan="3">
                         <label for="inmenu">{t}Color:{/t}</label>
                         <script type="application/x-javascript">
                             initPicker('color','{$category->color}', 24);
-                        </script>-->
+                        </script>
                         <input readonly="readonly" size="6" max-lenght="6" type="text" id="site_color" name="site_color" value="{$category->color|default:"0000ff"}">
                     </td>
                 </tr>
 
                 {if !empty($subcategorys)}
                 <tr>
-                    <td valign="top">
+                    <td valign="top" colspan="3">
                         <label>{t}Subsections:{/t}</label>
                         <table class="adminlist" id="cates" style="width:90%;margin:10px; ">
                             <thead>
@@ -306,6 +248,7 @@
                 </tr>
                 {/if}
             </tbody>
+
         </table>
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />

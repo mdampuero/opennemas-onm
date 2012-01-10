@@ -91,7 +91,7 @@ if( isset($_REQUEST['action']) ) {
 
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
             $category = new ContentCategory( $_REQUEST['id'] );
-            $category->params = unserialize($category->params);
+            $category->params = is_string($category->params) ? unserialize($category->params) : array();
             $tpl->assign('category', $category);
             $subcategorys = $ccm->getSubcategories( $_REQUEST['id'] );
             $tpl->assign('subcategorys', $subcategorys);

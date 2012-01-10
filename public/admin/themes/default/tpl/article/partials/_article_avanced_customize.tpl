@@ -123,12 +123,12 @@
                                 {*AJAX imageGallery *}
                             </div>                
                             <script type="text/javascript" language="javascript">
-                                $('avanced-custom-button').observe('click', function() {
+                              /*  $('avanced-custom-button').observe('click', function() {
 
                                     loadGalleryImages('listByCategory','{$category}','','1', 'photos-home');
                                     makeDroppable();
 
-                                });
+                                });*/
                             </script>
 
                         </td>
