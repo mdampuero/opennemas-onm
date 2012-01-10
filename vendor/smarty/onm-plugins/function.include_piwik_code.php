@@ -23,7 +23,7 @@ function smarty_function_include_piwik_code($params, &$smarty) {
 
         $output = '<!-- Piwik -->
 <script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "'.$httpsHost.'" : "'. $httpsHost .'");
+var pkBaseURL = (("https:" == document.location.protocol) ? "'.$httpsHost.'" : "'.  $piwikConfig['server_url'] .'");
 document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
 </script><script type="text/javascript">
 try {
@@ -31,7 +31,7 @@ var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '. $piwikConfig['pa
 piwikTracker.trackPageView();
 piwikTracker.enableLinkTracking();
 } catch( err ) {}
-</script><noscript><p><img src="'. $httpsHost .'?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
+</script><noscript><p><img src="'. $piwikConfig['server_url'] .'?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
 <!-- End Piwik Tracking Code -->';
 
     }
