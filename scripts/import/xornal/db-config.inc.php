@@ -1,8 +1,10 @@
 <?php
 
  
-$oldId ='58'; //author opinion id
-$topic = '%_os_%_uis%_mez%'; //Sql patern Xosé Luis Gómez
+//$oldId ='58'; //author opinion id
+//$topic = '%_os_%_uis%_mez%'; //Sql patern Xosé Luis Gómez
+$oldId ='37'; //author opinion id
+ $topic = '%_os_%_exuto%'; //Sql patern 
 
 
 /**
@@ -12,7 +14,8 @@ define('BD_TYPE', "mysqli");
 define('BD_HOST' , "localhost");
 define('BD_USER' , "root");
 define('BD_PASS' , "root");
-define('BD_DATABASE' , "onm-joseluisgo");
+//define('BD_DATABASE' , "onm-joseluisgo");
+define('BD_DATABASE' , "onm-xosemexuto");
 
 $config_oldDB = array(
                           'bd_host' => 'localhost',

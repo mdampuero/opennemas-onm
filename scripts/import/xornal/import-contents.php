@@ -318,7 +318,7 @@ class importContents {
                     $this->insertRefactorID($data['pk_content'], $id, 'opinion');
                     printf("\n Inserting: ".$data['pk_content'].", ".$id.", opinion");
                 }else{
-                    $errorMsg = 'Problem '.$data['pk_content'].' - '.$data['title'];
+                    $errorMsg = 'Problem '.$data['pk_content'].' - '.$data['title']. " /n";
                     $this->log('insert opinion : '.$errorMsg);
                     printf('insert opinion : '.$errorMsg);
                 }

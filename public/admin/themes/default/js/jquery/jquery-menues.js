@@ -23,11 +23,11 @@ makeSortable = function(){
 saveMenu = function() {
     var items = new Array();
 
-    jQuery('ul.menuelements li').each( function(i,item) {
+    jQuery('ul.menuelements li').each( function() {
  
           if( item.id ) {
  
-              items[i] =  { "id": item.id,
+              items[i] =  { "id": $(this).id,
                            "title": item.title,
                            "type": item.type,
                            "link": item.link,
