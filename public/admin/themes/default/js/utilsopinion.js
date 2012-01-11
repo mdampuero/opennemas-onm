@@ -46,7 +46,7 @@ function show_authors(type_opinion)
 		$('div_author1').setStyle({display:'none'});
 		$('div_author2').setStyle({display:'none'});
 	}
-        
+
     if(type_opinion==1){
        $('widget').src='';
        $('fk_author_img_widget').value='';
@@ -62,7 +62,7 @@ function show_authors(type_opinion)
             //TODO: get id director not manually
             fk_author=2; //Director
             $('fk_author').value=2;
-        }        
+        }
         changePhotos(fk_author);
     }
 }
@@ -79,67 +79,65 @@ function change_algoritm(algoritm)
 }
 
 function savePositionsOpinion() {
-	var orden=null;
-	if($('cates')){
-		var items = $('cates').select(".sortable");
-		for (i = 0; i < items.length; i++) {
-			if(orden){
-				orden =orden + "," +items[i].id;
-			}else{
-				orden =items[i].id;
-			}
-		}
-		//	alert('orden'+orden);
-	}
-	//Editorial
-	if ($('editoriales')) {
-		items = $('editoriales').select(".edits_sort");
-		for (i = 0; i < items.length; i++) {
-		    orden =orden + "," +items[i].id;
-		}
-	}
-	console.log(orden);
+    var orden=null;
+
+    //Editorial
+    if ($('editoriales')) {
+        items = $('editoriales').select(".edits_sort");
+        for (i = 0; i < items.length; i++) {
+            orden =orden + "," +items[i].id;
+        }
+    }
+    //Other Opinion
+    if($('cates')){
+        var items = $('cates').select(".sortable");
+        for (i = 0; i < items.length; i++) {
+            if(orden){
+                    orden =orden + "," +items[i].id;
+            }else{
+                    orden =items[i].id;
+            }
+        }
+    }
+
     if (orden) {
-		new Ajax.Request(
-			"/admin/controllers/opinion/opinion.php?action=save_positions",
-			{
-				method: 'post',
-				postBody: 'orden='+orden,
-				onLoaded : $('msg').update('<div class="notice">Guardando posiciones...</div>'),
-				onSuccess: function(transport) {
-					$('msg').update('<div class="success">Posiciones guardadas correctamente</div>');
-				}
-			}
+        new Ajax.Request(
+            "/admin/controllers/opinion/opinion.php?action=save_positions",
+            {
+                method: 'post',
+                postBody: 'orden='+orden,
+                onLoaded : $('msg').update('<div class="notice">Guardando posiciones...</div>'),
+                onSuccess: function(transport) {
+                           $('msg').update('<div class="success">Posiciones guardadas correctamente</div>');
+                }
+            }
         );
     }
 }
 
 function changeList(author)
 {
-	new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author );
+    new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author );
 }
 
 function changepageList(author,page)
 {
-	new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
+    new Ajax.Updater('list_opinion', "opinion.php?action=change_list_byauthor&author="+author+"&page="+page );
 }
 
 
 function delete_opinion(id,page){
 
-      new Ajax.Request( 'opinion.php?action=delete&id='+id+'&page='+page,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
+  new Ajax.Request( 'opinion.php?action=delete&id='+id+'&page='+page,
+    {
+        onSuccess: function(transport) {
+             var msg = transport.responseText;
 
-                   if(confirm(msg)) {
-                      var ruta='opinion.php?action=yesdel&id='+id+'&page='+page;
-                      location.href= ruta;
-                   }
-                   return false;
-                 //showMsg({'warn':[msg ]},'growl');
-            }
-        });
-
-
+               if(confirm(msg)) {
+                  var ruta='opinion.php?action=yesdel&id='+id+'&page='+page;
+                  location.href= ruta;
+               }
+               return false;
+        }
+    });
  }

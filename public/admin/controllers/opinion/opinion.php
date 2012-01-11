@@ -38,7 +38,7 @@ require_once('./opinion_events.php');
 if (!isset($_SESSION['desde'])) {
     $_SESSION['desde'] = 'opinion';
 }
- 
+
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
 
 if (!isset($_SESSION['type'])) {
@@ -47,7 +47,7 @@ if (!isset($_SESSION['type'])) {
 $type_opinion = filter_input(INPUT_GET,'type_opinion',FILTER_VALIDATE_INT );
 
 if (!isset($type_opinion)) {
-    $type_opinion = filter_input(INPUT_POST,'type_opinion',FILTER_VALIDATE_INT, array('options' => array('default' => '-1')) );     
+    $type_opinion = filter_input(INPUT_POST,'type_opinion',FILTER_VALIDATE_INT, array('options' => array('default' => '-1')) );
 }
 
 $c = new Content();
@@ -79,7 +79,7 @@ switch($action) {
             list($opinions, $pager)= $cm->find_pages('Opinion', "type_opinion='".$type_opinion."'",
                                                          'ORDER BY created DESC ', $page, ITEMS_PAGE);
 
-            
+
             $tpl->assign('paginacion', $pager->links);
 
             $number = 2;
@@ -107,7 +107,7 @@ switch($action) {
                                   'ORDER BY type_opinion DESC, position ASC, created DESC');
 
             $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
-                                   'ORDER BY created DESC LIMIT 0,'.$numEditorial);
+                                   'ORDER BY position ASC, created DESC LIMIT 0,'.$numEditorial);
 
 
             $director = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=2',
@@ -226,9 +226,9 @@ switch($action) {
             $tpl->display('opinion/partials/_opinion_list.tpl');
             exit(0);
         }
-             
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&type_opinion=0&page='.$page);
-        
+
 
     break;
 
@@ -574,7 +574,7 @@ switch($action) {
                         $opinion->set_status($status, $_SESSION['userid']);
                         $opinion->set_available($status, $_SESSION['userid']);
                 } else {
-                    $opinion->set_inhome($status, $_SESSION['userid']);                        
+                    $opinion->set_inhome($status, $_SESSION['userid']);
                 }
             }
             $total = $opinion->count_inhome_type(1);
@@ -594,8 +594,8 @@ switch($action) {
     break;
 
     case 'save_positions':
-        if (isset($_REQUEST['orden'])){
-            $tok = strtok($_REQUEST['orden'], ",");
+        if (isset($_POST['orden'])){
+            $tok = strtok($_POST['orden'], ",");
             $_positions = array();
             $pos = 1;
 

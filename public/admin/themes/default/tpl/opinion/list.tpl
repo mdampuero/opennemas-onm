@@ -25,7 +25,7 @@
                     <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                 </a>
             </li>
-            {/acl}            
+            {/acl}
             {acl isAllowed="OPINION_DELETE"}
              {if $type_opinion neq '-1'}
             <li>
@@ -33,19 +33,19 @@
                     <img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />{t}Put in home{/t}
                 </a>
             </li>
-            {/if}            
+            {/if}
             <li>
                 <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
                     <img border="0" src="{$params.IMAGE_DIR}home_no50.png"  title="Frontpage" alt="Frontpage" ><br />{t escape="off"}Delete from home{/t}
                 </a>
             </li>
             {/acl}
-            
-            
+
+
             {acl isAllowed="OPINION_FRONTPAGE"}
              {if $type_opinion eq '-1'}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:savePositionsOpinion();" title="Guardar Positions" alt="Guardar Posiciones">
+                    <a href="#" class="admin_add" onClick="savePositionsOpinion();" title="Guardar Positions" alt="Guardar Posiciones">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
                     </a>
                 </li>
@@ -82,11 +82,12 @@
     <div class="wrapper-content">
 
         {render_messages}
-     
+        <div id="msg"></div>
+
         <div>
             <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Widgets home{/t}</a>
                 </li>
                 <li>
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>
@@ -98,7 +99,7 @@
                     <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" id="director" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</a>
                 </li>
             </ul>
- 
+
             <div id="list_opinion">
                  {if $type_opinion=='-1'}
                      {include file="opinion/partials/_opinion_list_home.tpl"}
