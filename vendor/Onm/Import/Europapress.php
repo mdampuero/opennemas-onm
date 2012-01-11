@@ -278,11 +278,8 @@ class Europapress implements \Onm\Import\Importer
                 continue;
             }
 
-            if ((($params['title'] != '*'))
-                && !(
-                    preg_match('@'.strtolower($params['title']).'@', strtolower($element->title)) > 0
-                    || preg_match('@'.strtolower($params['title']).'@', strtolower($element->body)) > 0
-                    ))
+            if (($params['title'] != '*') 
+                && !($element->hasContent($params['title'])))
             {
                 continue;
             }

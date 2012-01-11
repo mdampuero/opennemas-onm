@@ -48,7 +48,7 @@ class NewsMLG1 {
         {
             self::$instance = new self($config);
         }
-  
+
         return self::$instance;
 
     }
@@ -108,7 +108,6 @@ class NewsMLG1 {
             case 'priority':
                 $rawUrgency =  $this->getData()
                                     ->xpath("//NewsItem/NewsManagement/Urgency");
-                
                 return (int)$rawUrgency[0]->attributes()->FormalName;
                 break;
 
@@ -117,23 +116,24 @@ class NewsMLG1 {
                                     ->DescriptiveMetadata->xpath("//Property[@FormalName=\"Tesauro\"]");
                 $rawTags = (string)$rawCategory[0]->attributes()->Value;
                 $tagGroups = explode(";", $rawTags);
+
                 $tags = array();
                 foreach ($tagGroups as $group) {
                     preg_match('@(.*):(.*)@', $group, $matches);
                     $tags [$matches[1]]= $matches[2];
                 }
-                
+
                 return $tags;
                 break;
-            
+
             case 'created_time':
                 $originalDate = (string)$this->getData()->NewsItem->NewsManagement
                                                         ->ThisRevisionCreated;
 
                 // ISO 8601 doesn't match this date 20111211T103900+0000
                 $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
-                
-                
+
+
                 return \DateTime::createFromFormat(
                     'Ymd\THis',
                     $originalDate
@@ -169,7 +169,7 @@ class NewsMLG1 {
      * Returns the available text in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getTexts()
     {
@@ -190,12 +190,12 @@ class NewsMLG1 {
      * Returns the available photos in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getPhotos()
     {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
-        
+
         $photos = array();
         foreach ($contents[0] as $componentName => $component) {
             if ($componentName == 'NewsComponent') {
@@ -203,7 +203,7 @@ class NewsMLG1 {
                 $photos [$photoComponent->id]= $photoComponent;
             }
         }
-        
+
         return $photos;
     }
 
@@ -221,7 +221,7 @@ class NewsMLG1 {
      * Returns the available images in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getVideos()
     {
@@ -233,7 +233,7 @@ class NewsMLG1 {
      * Returns the available audios in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getAudios()
     {
@@ -245,7 +245,7 @@ class NewsMLG1 {
      * Returns the available Documentary modules in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getModdocs()
     {
@@ -257,7 +257,7 @@ class NewsMLG1 {
      * Returns the available files in this multimedia package
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function getFiles()
     {
@@ -281,6 +281,26 @@ class NewsMLG1 {
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Finds a regexp inside the title and content
+     *
+     * @return boolean
+     **/
+    public function hasContent($needle)
+    {
+        $needle = strtolower(\Onm\StringUtils::normalize($needle));
+        $title = strtolower(\Onm\StringUtils::normalize($this->title));
+
+        if (preg_match("@".$needle."@", $title)) {
+            return true;
+        }
+        $body = strtolower(\Onm\StringUtils::normalize($this->body));
+        if (preg_match("@".$needle."@", $body)) {
+            return true;
+        }
+        return false;
     }
 
 
