@@ -235,7 +235,7 @@ class Content
         // Load object properties
         $this->load( $rs->fields );
         $this->fk_user = $this->fk_author;
-        
+
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
 
@@ -911,7 +911,7 @@ class Content
                 $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
                 $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
-                return;
+                return false;
             }
 
         }
