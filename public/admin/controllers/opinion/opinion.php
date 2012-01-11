@@ -146,7 +146,7 @@ switch($action) {
 
         $tpl->assign('type_opinion', $type_opinion);
 
-        $op_comment = $names = array();
+        $op_comment = $names = $op_ratings = array();
 
         if (!empty($opinions)) {
             foreach ( $opinions as $opin) {
@@ -154,15 +154,13 @@ switch($action) {
                 $aut = new Author($opin->fk_author);
                 $names[] = $aut->name;
                 $op_comment[] = count($todos);
-                $ratings[] = $rating->get_value($opin->id);
+                $op_ratings[] = $rating->get_value($opin->id);
             }
         }
 
         $tpl->assign('op_comment', $op_comment);
         $tpl->assign('names', $names);
-        if(isset($op_rating)){
-            $tpl->assign('ratings', $op_rating);
-        }
+        $tpl->assign('op_rating', $op_ratings);
 
         $aut = new Author();
         $autores = $aut->all_authors(NULL,'ORDER BY name');
