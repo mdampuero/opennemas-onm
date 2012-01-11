@@ -1540,16 +1540,17 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (122, 'MENU_ADMIN', 'Listado de menus', 'MENU'),
 (123, 'MENU_AVAILABLE', 'Leer menu', 'MENU'),
 (124, 'MENU_UPDATE', 'Modificar menu', 'MENU'),
-(125, 'IMPORT_ADMIN', 'Listado de menus', 'IMPORT'),
-(126, 'IMPORT_EPRESS', 'Leer Widget', 'IMPORT'),
-(127, 'IMPORT_XML', 'Modificar Widget', 'IMPORT'),
-(128, 'IMPORT_EFE', 'Eliminar Widget', 'IMPORT'),
+(125, 'IMPORT_ADMIN', 'Importar', 'IMPORT'),
+(126, 'IMPORT_EPRESS', 'Importar EuropaPress', 'IMPORT'),
+(127, 'IMPORT_XML', 'Importar XML', 'IMPORT'),
+(128, 'IMPORT_EFE', 'Importar EFE', 'IMPORT'),
 (134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM'),
 (135, 'GROUP_CHANGE', ' Cambiar de grupo al usuario ', 'GROUP');
 
 
 
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(165, 'IMPORT_EFE_FILE', 'Importar ficheros EFE', 'IMPORT'),
 (164, 'MENU_DELETE', 'Eliminar menu', 'MENU'),
 (163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'VIDEO'),
 (162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'CATEGORY'),
@@ -1797,7 +1798,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 --
 
 INSERT INTO `settings` (`name`, `value`) VALUES
-('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'), 
+('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'),
 ('twitter_page', 's:28:"http://twitter.com/opennemas";'),
 ('facebook_id', 's:12:"282535299100";'),
 ('site_footer', 's:189:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br /> Calle Noriega Varela 16 BAJO<br /> 32004, Ourense (Spain)<br /> +34 655172329<br /> OpenHost Media Press S.L.</p>";'),
@@ -2141,7 +2142,7 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (207, 'TodayNews', 'intelligentwidget');
 
 -- New modules books & specials
- 
+
 -- Table structure for table `books`
 --
 
