@@ -33,7 +33,7 @@ class Europapress {
 
 
     private $data = null;
-    
+
     static private $priorityMap = array(
         '10'  => 4,
         '20' => 3,
@@ -111,7 +111,7 @@ class Europapress {
             case 'priority':
                 return self::matchPriority((string) $this->data->PRIORIDAD);
                 break;
-            
+
             case 'priorityNumber':
                 return self::$priorityMap[(string) $this->data->PRIORIDAD];
                 break;
@@ -123,7 +123,7 @@ class Europapress {
             case 'category':
                 return self::matchCategoryName((string) $this->data->SECCION);
                 break;
-            
+
             case 'originalCategory':
                 return (string) $this->data->SECCION;
                 break;
@@ -306,6 +306,26 @@ class Europapress {
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Finds a regexp inside the title and content
+     *
+     * @return boolean
+     **/
+    public function hasContent($needle)
+    {
+        $needle = strtolower(\Onm\StringUtils::normalize($needle));
+        $title = strtolower(\Onm\StringUtils::normalize($this->title));
+
+        if (preg_match("@".$needle."@", $title)) {
+            return true;
+        }
+        $body = strtolower(\Onm\StringUtils::normalize($this->body));
+        if (preg_match("@".$needle."@", $body)) {
+            return true;
+        }
+        return false;
     }
 
 

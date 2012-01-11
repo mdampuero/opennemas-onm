@@ -279,11 +279,8 @@ class Efe implements \Onm\Import\Importer
                 continue;
             }
 
-            if ((($params['title'] != '*'))
-                && !(
-                    preg_match('@'.strtolower($params['title']).'@', strtolower($element->title)) > 0
-                    || (is_array($element->getTexts()) && preg_match('@'.strtolower($params['title']).'@', strtolower($element->texts[0]->body)) > 0)
-                    ))
+            if (($params['title'] != '*') 
+                && !($element->hasContent($params['title'])))
             {
                 continue;
             }
