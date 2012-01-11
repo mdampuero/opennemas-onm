@@ -226,13 +226,13 @@
                             <td class="center" style="width:90px;">
                                     {$op_rating[c]|default:""}
                              </td>
-                            <td style="width:70px;" class="center">
+                            <td class="center" style="width:40px;">
                                     {$op_comment[c]}
                             </td>
-                            <td class="center" style="width:100px;">
+                            <td class="center" style="width:130px;">
                                     {$opinions[c]->created}
                             </td>
-                            <td class="center" style="width:40px;">
+                            <td class="center" style="width:30px;">
                                 {acl isAllowed="OPINION__FRONTPAGE"}
                                     {if $opinions[c]->in_home == 1}
                                         <a href="?id={$opinions[c]->id}&amp;action=inhome_status&amp;status=0&amp;category={$category|default:""}" class="no_home" title="Sacar de portada" >
@@ -245,7 +245,7 @@
                                     {/if}
                                 {/acl}
                             </td>
-                            <td class="center" style="width:70px;">
+                            <td class="center" style="width:72px;">
                                 <ul class="action-buttons">
                                 {acl isAllowed="OPINION_UPDATE"}
                                 <li>
