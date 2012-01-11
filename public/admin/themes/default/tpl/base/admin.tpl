@@ -28,7 +28,6 @@
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
         {css_tag href="/messageboard.css" media="screen"}
-
 	{/block}
 
     {block name="js-library"}
@@ -54,7 +53,7 @@
         {* FIXME: corregir para que pille bien el path *}
         {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
             lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
-            {script_tag language="javascript" src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag language="javascript" src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
@@ -74,7 +73,6 @@
 
             {admin_menu}
         </div><!-- / -->
-
 
         <div class="info-left">
             <div id="user_box">
@@ -137,17 +135,11 @@
     </div>
 
     <div id="content">
-
-    {block name="content"}
-
-    {/block}
-
+    {block name="content"}{/block}
     </div>
 
-
-
     {block name="copyright"}
-	<div id="copyright" class="wrapper-content clearfix">
+	<div id="copyright" class="wrapper-content">
 
         <div class="company left">
             <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
@@ -164,8 +156,6 @@
 
 
 <script type="text/javascript">
-    /* <![CDATA[ */
-    //new YpSlideOutMenuHelper();
 
     {if Acl::check('USER_ADMIN') eq true}
     var users_online = [];
@@ -195,13 +185,13 @@
         }
     });
     {/if}
- </script>
+    </script>
 	{block name="footer-js"}
         {script_tag src="/modernizr/modernizr-2.0.6.min.js" language="javascript"}
         {script_tag src="/onm/footer-functions.js" language="javascript"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
-            <script type="text/javascript">
+        <script type="text/javascript">
         	try {
 			// Activar la validación
 			new Validation('formulario', { immediate : true });
@@ -224,7 +214,7 @@
 			// Escondemos los errores
 			//console.log( e );
 		}
-                 </script>
+        </script>
 		{/if}
 	{/block}
 
