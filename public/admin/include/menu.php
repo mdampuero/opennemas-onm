@@ -59,9 +59,10 @@ $menuXml = '<?xml version="1.0"?>
             module_name="STATIC_PAGES_MANAGER"
             privilege="STATIC_ADMIN"
             title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            id="static_pages_manager"    
+            id="static_pages_manager"
             link="controllers/static_pages/static_pages.php"
         />
+
          <node
             module_name="SPECIAL_MANAGER"
             privilege="SPECIAL_ADMIN"
@@ -122,6 +123,12 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/album/album.php"
         />
         <node
+            module_name="KIOSKO_MANAGER"
+            title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
+            id="kiosko_manager"
+            link="controllers/newsstand/newsstand.php"
+            privilege="KIOSKO_ADMIN" />
+        <node
             module_name="BOOK_MANAGER"
             privilege="BOOK_ADMIN"
             title="'.htmlspecialchars(_("Books"), ENT_QUOTES).'"
@@ -135,15 +142,17 @@ $menuXml = '<?xml version="1.0"?>
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
             title="'.htmlspecialchars(_("Advanced Search"), ENT_QUOTES).'"
-            id="advanced_search"    
+            id="advanced_search"
             link="controllers/search_advanced/search_advanced.php"
         />
+         <node class="divider" />
         <node
-            module_name="KIOSKO_MANAGER"
-            title="'.htmlspecialchars(_("News Stand"), ENT_QUOTES).'"
-            id="kiosko_manager"    
-            link="controllers/newsstand/newsstand.php"
-            privilege="KIOSKO_ADMIN" />
+            module_name="TRASH_MANAGER"
+            title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
+            id="trash_manager"
+            link="controllers/trash.php"
+            privilege="TRASH_ADMIN" />
+        <node class="divider" />
         <node
             module_name="NEWSLETTER_MANAGER"
             title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'"
@@ -173,14 +182,14 @@ $menuXml = '<?xml version="1.0"?>
             module_name="EFE_IMPORTER"
             privilege="EFE_IMPORTER"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
-            id="efe_importer"    
+            id="efe_importer"
             link="controllers/agency_importer/efe.php"
         />
         <node
             module_name="PAPER_IMPORT"
-            privilege="EFE_FILE_IMPORTER"
+            privilege="IMPORT_EFE_FILE"
             title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
-            id="efe_importer"    
+            id="efe_importer"
             link="controllers/agency_importer/efe-file.php"
         />
         <node
@@ -190,19 +199,7 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="controllers/agency_importer/importXMLFiles.php"
         />
-        <node class="divider" />
-        <node
-            module_name="TRASH_MANAGER"
-            title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
-            id="trash_manager"
-            link="controllers/trash.php"
-            privilege="TRASH_ADMIN" />
-        <node
-            module_name="LINK_CONTROL_MANAGER"
-            title="'.htmlspecialchars(_("Link control"), ENT_QUOTES).'"
-            id="link_control_manager"
-            link="controllers/link_control/link_control.php"
-            privilege="ONLY_MASTERS" />
+
         <node class="divider" />
         <node
             module_name="ONM_STATISTICS"
@@ -238,7 +235,7 @@ $menuXml = '<?xml version="1.0"?>
                 module_name="PRIVILEGE_MANAGER"
                 privilege="ONLY_MASTERS"
                 title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
-                id="privilege_manager"    
+                id="privilege_manager"
                 link="controllers/acl/privileges.php"
             />
         </submenu>

@@ -1,5 +1,9 @@
 {extends file="base/admin.tpl"}
-
+{block name="header-js" append}
+    {script_tag src="/jquery/jquery.min.js"}
+       {script_tag src="/jquery/jquery-ui.js"}
+    {script_tag src="/onm/jquery.newsstand.js" language="javascript"}
+{/block}
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -12,6 +16,15 @@
                 </a>
             </li>
             {/acl}
+            {acl isAllowed="KIOSKO_WIDGET"}
+             {if $category eq 'favorite'}
+                <li>
+                    <a href="#" class="admin_add" onClick="javascript:saveSortPositions();" title="Guardar Positions" alt="Guardar Posiciones">
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                    </a>
+                </li>
+            {/if}
+            {/acl}
         </ul>
     </div>
 </div>
@@ -20,25 +33,22 @@
 <div class="wrapper-content">
 
 {render_messages}
-     
- 
+
+
 <form action="#" method="post" name="formulario" id="formulario">
 
-        {* ZONA MENU CATEGORIAS ******* *}
-   {* <ul id="tabs" style="margin-left:10px;">
-        {section name=as loop=$allcategorys}
-        <li>
-            {assign var=ca value=$allcategorys[as]->pk_content_category}
-            <a href="{$smarty.server.PHP_SELF}?action=list&category={$ca}#" {if $category==$ca} style="color:#000000; font-weight:bold; background-color:#BFD9BF" {else}{if $ca eq $category}style="color:#000000; font-weight:bold; background-color:#BFD9BF" {/if}{/if} >{$allcategorys[as]->title}</a>
-        </li>
-        {/section}
+    {* ZONA MENU CATEGORIAS ******* *}
+
+    <ul class="pills clearfix">
+         <li>
+            <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{/if}>{t}WIDGET{/t}</a>
+         </li>
+         {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
     </ul>
- *}
-        <ul class="pills clearfix">
-             {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
-        </ul>
 
     <br />
+    {* MENSAJES DE AVISO GUARDAR POS******* *}
+    <div id="warnings-validation"></div>
 
     <table class="listing-table">
 
@@ -58,22 +68,22 @@
         {else}
         <thead>
             <tr>
-                <th colspan=9>
+                <th colspan="9">
                     &nbsp;
                 </th>
 
             </tr>
         </thead>
         {/if}
-
+        <tbody class="sortable">
         {section name=as loop=$portadas}
-        <tr>
-            <td > 
-                <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}" 
-                     title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" height="80" 
-                     onmouseover="Tip('<img src={$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, true, WIDTH, 280)" onmouseout="UnTip()" />
+        <tr data-id="{$portadas[as]->pk_kiosko}">
+            <td >
+                <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
+                     title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" height="80"
+                     onmouseover="Tip('<img src={$KIOSKO_IMG_URL}{$portadas[as]->path}650-{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"} >', SHADOW, true, ABOVE, true, WIDTH, 640)" onmouseout="UnTip()" />
             </td>
-            <td >                              
+            <td >
                 {$portadas[as]->title|clearslash}
             </td>
             <td align="center">
@@ -131,11 +141,10 @@
         </tr>
         {sectionelse}
         <tr>
-            <td class="empty" colspan=9>{t}There is no stands{/t}</td>
+            <td class="empty" colspan="9">{t}There is no stands{/t}</td>
         </tr>
         {/section}
-
-
+        </tbody>
         <tfoot>
             <tr>
                 <td colspan="9" style="padding:10px;font-size: 12px;" align="center">
@@ -147,6 +156,21 @@
             </tr>
         </tfoot>
     </table>
+
+
+
+    {if $category eq 'favorite'}
+        <script type="text/javascript">
+
+            // <![CDATA[
+
+                $.noConflict();
+                jQuery(document).ready(function() {
+                    makeSortable();
+                });
+            // ]]>
+        </script>
+    {/if}
     <input type="hidden" id="action" name="action" value="" />
      <input type="hidden" id="id" name="id" value="" />
 </form>

@@ -20,13 +20,13 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  // Check if the user can admin kiosko
 Acl::checkOrForward('KIOSKO_ADMIN');
 
-  
+
 /**
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $tpl->assign('titulo_barra', _('Kiosko Management'));
-  
+
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 if (!isset($page)) {
     $page = filter_input( INPUT_POST, 'action' , FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
@@ -37,16 +37,18 @@ $contentType = Content::getIDContentType('kiosko');
 
 if(!defined('KIOSKO_DIR'))
     define('KIOSKO_DIR', "kiosko".SS);
- 
 
-$category = filter_input(INPUT_GET,'category',FILTER_VALIDATE_INT);
+
+
+$category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
 
 if(empty($category)) {
-    $category = filter_input(INPUT_POST,'category',FILTER_VALIDATE_INT);
+    $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING, array('options' => array('default' => 'favorite')));
 }
 
-$ccm = ContentCategoryManager::get_instance();
-list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
+
+    $ccm = ContentCategoryManager::get_instance();
+    list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
 
 $tpl->assign('category', $category);
@@ -62,21 +64,29 @@ $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
-  
-$tpl->assign('formAttrs', 'enctype="multipart/form-data"');
-  
-switch($action) {
-    case 'list':  //Buscar publicidad entre los content
-        $cm = new ContentManager();
-        // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-        list($portadas, $pager)= $cm->find_pages('Kiosko', 'fk_content_type=14 ', 
-                                        'ORDER BY  date DESC ',$page, ITEMS_PAGE, 
-                                        $category);
 
-        $aut=new User(); 
+$tpl->assign('formAttrs', 'enctype="multipart/form-data"');
+
+switch($action) {
+    case 'list':
+        $cm = new ContentManager();
+        if ($category == 'favorite') {
+            list($portadas, $pager)= $cm->find_pages('Kiosko',
+                                        'fk_content_type=14 ',
+                                            'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
+
+
+        } else {
+
+            // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
+            list($portadas, $pager)= $cm->find_pages('Kiosko', 'fk_content_type=14 ',
+                                            'ORDER BY  date DESC ',$page, ITEMS_PAGE,
+                                            $category);
+        }
+        $aut=new User();
         foreach ($portadas as $portada) {
-            
-            
+
+
             $portada->publisher=$aut->get_user_name($portada->fk_publisher);
             $portada->editor=$aut->get_user_name($portada->fk_user_last_editor);
         }
@@ -100,7 +110,7 @@ switch($action) {
         Acl::checkOrForward('KIOSKO_UPDATE');
         $cm = new ContentManager();
         $kiosko = new Kiosko( $_REQUEST['id'] );
-        
+
         $tpl->assign('kiosko', $kiosko);
         $tpl->assign('KIOSKO_IMG_URL', INSTANCE_MEDIA.KIOSKO_DIR);
         $tpl->display('newsstand/read.tpl');
@@ -108,12 +118,12 @@ switch($action) {
     break;
 
     case 'update':
- 
+
         Acl::checkOrForward('KIOSKO_UPDATE');
-        
+
         $_POST['fk_user_last_editor']=$_SESSION['userid'];
         $portada = new Kiosko($_POST['id']);
-        
+
         $_POST['description'] = '';
         if (!Acl::isAdmin()
             && !Acl::check('CONTENT_OTHER_UPDATE')
@@ -136,65 +146,65 @@ switch($action) {
         $_POST['name'] = $date->format('dmy').'-'.$_POST['category'].'.pdf';
         $_POST['path'] = $date->format('Ymd').'/';
         $ruta = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $_POST['path'];
-        
+
         // Create folder if it doesn't exist
         if( !file_exists($ruta) ) {
-            FilesManager::createDirectory($ruta);                      
+            FilesManager::createDirectory($ruta);
         }
-        
+
         // Move uploaded file
         $uploadStatus = @move_uploaded_file($_FILES['file']['tmp_name'], $ruta. $_POST['name']);
- 
+
         $kiosko = new Kiosko();
- 
-        if ($uploadStatus !== false) { 
-            if( !$kiosko->create( $_POST )) {                                          
+
+        if ($uploadStatus !== false) {
+            if( !$kiosko->create( $_POST )) {
                 m::add(_('There was a problem with kiosko data. Try again') );
             }
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } else {
             if ($uploadStatus==false) {
-                
+
                 m::add(_('There was an error while uploading the file. <br />Try to upload files smaller than that size or contact with your administrator'),
                 (int)(ini_get('upload_max_filesize').' ') );
-            
+
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
             }
             //Error debido a portada ya subida enla fecha indicada
             $_REQUEST['action'] = 'new';
-            
+
             $tpl->assign('kiosko', $kiosko);
         }
 
     break;
 
     case 'delete':
-     
+
         Acl::checkOrForward('KIOSKO_DELETE');
         $portada = new Kiosko($_REQUEST['id']);
-        
+
         $portada->remove();
- 
+
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
     break;
 
     case 'change_status':
         Acl::checkOrForward('KIOSKO_AVAILABLE');
-        
+
         $portada = new Kiosko($_REQUEST['id']);
 
         //Publicar o no, comprobar num clic
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-         
+
         $portada->set_available($status, $_SESSION['userid']);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
     break;
 
     case 'change_favorite':
-        
+
         Acl::checkOrForward('KIOSKO_HOME');
-        
+
         $portada = new Kiosko($_REQUEST['id']);
 
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -206,8 +216,38 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
     break;
 
+    case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+
+            }
+
+            $opinion = new Opinion();
+            $msg = $opinion->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Have a problem, positions can't be saved.");
+         }
+        exit(0);
+    break;
+
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
     break;
 }
- 
