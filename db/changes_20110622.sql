@@ -1,8 +1,13 @@
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+(165, 'IMPORT_EFE_FILE', 'Importar ficheros EFE', 'IMPORT');
+
+
+
 -- 15-Dic-2011
-ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL 
+ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL
 
 --2-Dic- 2011
- 
+
 -- Default category for epaper
 INSERT INTO `content_categories` (
 `pk_content_category` ,
@@ -19,14 +24,14 @@ INSERT INTO `content_categories` (
 VALUES (
 NULL , 'Portadas', 'portadas', '1', '10', '14', '0', NULL , NULL , '#638F38'
 );
- 
 
-INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES 
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
 (157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
 (156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
 (155, 'VIDEO_HOME', 'Publicar video en home', 'VIDEO');
-  
+
 
 
 -- 15-Nov-2011
@@ -175,7 +180,7 @@ ALTER TABLE `votes` CHANGE `pk_vote` `pk_vote` BIGINT( 20 ) UNSIGNED NOT NULL AU
 ALTER TABLE `widgets` CHANGE `pk_widget` `pk_widget` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ;
 
 ALTER TABLE `albums` DROP `favorite` ;
- 
+
 
 ----------------------------------------------------------------------------------
 ALTER TABLE `contents` ADD `favorite` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `in_home`;
