@@ -29,17 +29,17 @@ $configFile = implode(DIRECTORY_SEPARATOR, array(
 ));
 
 if (file_exists($configFile)) {
-    
+
     require($configFile);
     require_once(SITE_CORE_PATH.'application.class.php');
     \Application::initAutoloader('*');
-    
+
     // Loads one ONM instance from database
     $im = \Onm\Instance\InstanceManager::getInstance();
     try {
-        
+
         $instance = $im->load($_SERVER['SERVER_NAME']);
-        
+
     } catch (\Onm\Instance\NotActivatedException $e) {
         echo 'Instance not activated';
         die();
@@ -47,9 +47,9 @@ if (file_exists($configFile)) {
         echo 'Instance not found';
         die();
     }
-    
+
     $app = \Application::load();
-    
+
 } else {
     $errorPage =  file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'500.html');
     echo $errorPage;

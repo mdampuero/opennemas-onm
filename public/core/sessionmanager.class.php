@@ -67,7 +67,7 @@ class SessionManager implements ArrayAccess
     {
         // Save the actual lifetime for this session in the session manager
         $this->lifetime = $lifetime;
-        
+
         if (is_null($lifetime)
             && !isset($_COOKIE['default_expire'])
         ) {

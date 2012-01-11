@@ -51,22 +51,27 @@ if( isset($_REQUEST['action'])){
                  * Check if user account is activated
                  */
                 if($user->authorize == 1){
+
+                    // Increase security by regenerating the id
+                    session_regenerate_id();
+
                     // Load session
                     require_once('session_bootstrap.php');
-                    
+
                     //Delete the cache that handles the number of active sessions
                     apc_delete(APC_PREFIX ."_"."num_sessions");
 
                     $_SESSION = array(
-                        'userid' 			 => $user->id,
-                        'username' 		 => $user->login,
-                        'email' 			 => $user->email,
-                        'isAdmin' 		 =>  ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
-                        'isMaster' 		 =>  ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
-                        'privileges' 		 => Privilege::get_privileges_by_user($user->id),
-                        'accesscategories' => $user->get_access_categories_id(),
-                        'authMethod' 		 => $user->authMethod,
+                        'userid'            => $user->id,
+                        'username'          => $user->login,
+                        'email'             => $user->email,
+                        'isAdmin'           => ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
+                        'isMaster'          => ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
+                        'privileges'        => Privilege::get_privileges_by_user($user->id),
+                        'accesscategories'  => $user->get_access_categories_id(),
+                        'authMethod'        => $user->authMethod,
                         'default_expire'    => $user->sessionexpire,
+                        'csrf'              => md5(uniqid(mt_rand(), true))
                     );
 
                     /**
@@ -77,15 +82,18 @@ if( isset($_REQUEST['action'])){
                             $_SESSION['authGmail']  = base64_encode($login.':'.$password);
                     }
 
-                     /**
-                     * Store default expire time
-                     */
+                    // Store default expire time
                     $app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
 
                     Privileges_check::loadSessionExpireTime();
 
                     //initHandleErrorPrivileges();
-                    Application::forward(SITE_URL_ADMIN.SS.'index.php');
+                    $forwardTo = filter_input(INPUT_POST, 'forward_to');
+                    if (!is_null($forwardTo)) {
+                        Application::forward(SITE_URL.SS.$forwardTo);
+                    } else {
+                        Application::forward(SITE_URL_ADMIN.SS.'index.php');
+                    }
                 } else{
                     $tpl->assign('message', _('This user was deactivated. Please ask your administrator.'));
                 }

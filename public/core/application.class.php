@@ -59,34 +59,34 @@ class Application
     static public function load()
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==NULL) {
-            
-            
+
+
             // Setting up static Constants
             self::initInternalConstants();
 
             $GLOBALS['application'] = new Application();
-            
+
             if (INSTANCE_UNIQUE_NAME != 'onm_manager') {
                 // Setting up DataBase connection
                 self::initDatabase();
-            
+
                 // Setting up Logger
                 self::initLogger();
-    
+
                 // Setting up Gettext
                 self::initL10nSystem();
 
                 self::initTimeZone();
             }
-            
+
         }
 
         return( $GLOBALS['application'] );
     }
-    
+
     /*
      * Initializes the Request object and register it inside Application object
-     * 
+     *
      * @param $
      */
     static public function getRequest()
@@ -131,7 +131,7 @@ class Application
         if (s::get('log_db_enabled') == 1) {
             self::$conn->LogSQL();
         }
-     * 
+     *
      */
         // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
@@ -209,7 +209,7 @@ class Application
      * Sets the timezone for this app from the instance settings
      *
      * @return void
-     * @author 
+     * @author
      **/
     static public function initTimeZone()
     {
@@ -326,11 +326,11 @@ class Application
         }
 
     }
-    
-    
+
+
     /*
      * Initializes all the internal application constans
-     * 
+     *
      */
     static public function initInternalConstants()
     {
@@ -344,18 +344,18 @@ class Application
         if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
             $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
         }
-        
+
         define('SS', "/");
-        
+
         define('APC_PREFIX', INSTANCE_UNIQUE_NAME);
 
         define('SITE', $_SERVER['SERVER_NAME']);
-        
+
         define('BASE_URL', '/');
         define('ADMIN_DIR', "admin");
         define('SITE_URL', $protocol.SITE.BASE_URL);
         define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
-        
+
         define('SITE_ADMIN_DIR', "admin");
         define('SITE_ADMIN_TMP_DIR', "tmp");
         define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
@@ -363,7 +363,7 @@ class Application
         $cachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) { mkdir($cachepath, 0755, true); }
         define('CACHE_PATH', realpath($cachepath));
-        
+
         /**
          * Logging settings
          **/
@@ -380,12 +380,12 @@ class Application
         /**
          * Media paths and urls configurations
          **/
-        
+
         //TODO: All the MEDIA_* should be ported to use this constant
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
         define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
-        
-        
+
+
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
 
@@ -397,22 +397,22 @@ class Application
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
-        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application        
+        define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR); // TODO: delete from application
         define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR); // TODO: delete from application
-        
+
         /**
         * Template settings
         **/
         define('TEMPLATE_USER_PATH',     SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', SITE_URL."themes".SS.TEMPLATE_USER.SS);
-        
+
         define('TEMPLATE_ADMIN', "default");
         define('TEMPLATE_ADMIN_PATH',SITE_PATH.DS.ADMIN_DIR.DS."themes".DS.TEMPLATE_ADMIN);
         define('TEMPLATE_ADMIN_PATH_WEB',SS.ADMIN_DIR.SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('TEMPLATE_ADMIN_URL', SITE_URL_ADMIN.SS."themes".SS.TEMPLATE_ADMIN.SS);
-        
-        
-        
+
+
+
         /**
          * Mail settings
          **/
@@ -421,14 +421,14 @@ class Application
         define('MAIL_USER', "");
         define('MAIL_PASS', "");
         define('MAIL_FROM', 'noreply@opennemas.com');
-        
+
         /**
         * Session de usuario
         **/
         $GLOBALS['USER_ID'] = NULL;
         $GLOBALS['conn'] = NULL;
-        
-        define('ITEMS_PAGE', "20"); // TODO: delete from application    
+
+        define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
 
     /**
@@ -468,10 +468,10 @@ class Application
             $autoRedirect = false;
             $_COOKIE['confirm_mobile'] = 1;
         }
-        
+
         // Browscap library
         require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
- 
+
         // Creates a new Browscap object (loads or creates the cache)
         $bc = new Browscap( APPLICATION_PATH .DS.'tmp'.DS.'cache');
         $browser = $bc->getBrowser(); //isBanned
@@ -487,7 +487,7 @@ class Application
                 $isMobileDevice = true;
             }
         }
-        
+
         return $isMobileDevice;
     }
 
@@ -678,7 +678,7 @@ HTMLCODE;
      * Register in the log one event in the content
      *
      * @return void
-     * @author 
+     * @author
      **/
     static public function logContentEvent($action, $content)
     {
@@ -692,7 +692,7 @@ HTMLCODE;
      * Register in the Database error handler one error message
      *
      * @return boolean true if all was sucessfully performed
-     * @author 
+     * @author
      **/
     static public function logDatabaseError()
     {
