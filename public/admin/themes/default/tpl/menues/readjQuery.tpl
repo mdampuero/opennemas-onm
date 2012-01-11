@@ -5,17 +5,17 @@
     {script_tag src="/jquery/jquery.min.js"}
     {script_tag src="/jquery/jquery-ui.js"}
     {*{script_tag src="/jquery/jquery.json-2.2.min.js"}*}
-    {script_tag src="/jquery/jquery-menues.js"}
+    {script_tag src="/onm/jquery.menues.js"}
     <script type="text/javascript">
         $.noConflict();
         jQuery(document).ready(function() {
             jQuery( "#tabs-div" ).tabs();
             makeSortable();
-          
+
          });
 
 
-         
+
     </script>
 
 {/block}
@@ -31,7 +31,7 @@ label {
 .utilities-conf label {
     text-transform:none;
 }
-    
+
 fieldset {
     border:none;
     border-top:1px solid #ccc;
@@ -78,7 +78,7 @@ legend {
                 </li>
             </ul>
         </div>
-        
+
     </div>
     <div class="wrapper-content">
         <table class="adminform">
@@ -91,9 +91,9 @@ legend {
                         <table  style="margin:10px ">
                             <tr>
                                 <td style="width:70%; padding:4px 0;">
-                                    <label for="name">{t}Name{/t}</label>  
-                                    <input type="text" name="name" class="required" 
-                                           id="name" value="{$menu->name|default:""}"  style="width:97%" 
+                                    <label for="name">{t}Name{/t}</label>
+                                    <input type="text" name="name" class="required"
+                                           id="name" value="{$menu->name|default:""}"  style="width:97%"
                                            {if !empty($menu->type) && $menu->type neq 'user'} readonly="readonly" {/if}/>
                                 </td>
                                 <td rowspan="3" valign="top" style="padding:10px">
@@ -278,7 +278,7 @@ legend {
 
                                     </div>
                                     </fieldset>
-                                    
+
                                 </td>
                             </tr>
                         </table>
@@ -295,9 +295,9 @@ legend {
             <a title="Close" onclick="hideDiv();" class="close-reveal-modal">&#215;</a></div>
         </div>
         <input type="hidden" id="action" name="action" value="" />
-        
+
         <input type="hidden" name="id" id="id" value="{$menu->pk_menu|default:""}" />
-        <input type="hidden" size="100" name="items" id="items" value="" />        
+        <input type="hidden" size="100" name="items" id="items" value="" />
         <input type="hidden" id="forDelete" name="forDelete" value="" />
     </div><!--fin wrapper-content-->
 

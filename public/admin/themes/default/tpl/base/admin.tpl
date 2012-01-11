@@ -18,7 +18,7 @@
         <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
     {/block}
 
-    {block name="header-css"}     
+    {block name="header-css"}
         {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
@@ -74,7 +74,7 @@
 
             {admin_menu}
         </div><!-- / -->
-        
+
 
         <div class="info-left">
             <div id="user_box">
@@ -144,7 +144,7 @@
 
     </div>
 
-    
+
 
     {block name="copyright"}
 	<div id="copyright" class="wrapper-content clearfix">
@@ -198,7 +198,7 @@
  </script>
 	{block name="footer-js"}
         {script_tag src="/modernizr/modernizr-2.0.6.min.js" language="javascript"}
-        {script_tag src="/footer-functions.js" language="javascript"}
+        {script_tag src="/onm/footer-functions.js" language="javascript"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
             <script type="text/javascript">
