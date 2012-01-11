@@ -678,7 +678,7 @@ HTMLCODE;
      * Register in the log one event in the content
      *
      * @return void
-     * @author 
+     * @author
      **/
     static public function logContentEvent($action, $content)
     {
@@ -692,7 +692,7 @@ HTMLCODE;
      * Register in the Database error handler one error message
      *
      * @return boolean true if all was sucessfully performed
-     * @author 
+     * @author
      **/
     static public function logDatabaseError()
     {
