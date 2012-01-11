@@ -3,7 +3,6 @@
 
 {block name="header-js" append}
     {script_tag src="/utilscategory.js" language="javascript"}
-    {script_tag src="/MiniColorPicker.js"}
 {/block}
 {block name="header-css" append}
     <style type="text/css">
@@ -27,15 +26,15 @@
                     </a>
                 </li>
                 {/acl}
-                {acl isAllowed="CATEGORY_SETTINGS"}
-                    <li class="separator"></li>
-                        <li>
-                            <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
-                                <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                                {t}Configurations{/t}
-                            </a>
-                        </li>
-                    {/acl}
+                {*acl isAllowed="CATEGORY_SETTINGS"}
+                <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        {t}Configurations{/t}
+                    </a>
+                </li>
+                {/acl*}
             </ul>
         </div>
     </div>
@@ -70,12 +69,12 @@
             {/is_module_activated}
             {is_module_activated name="SPECIAL_MANAGER"}
             <li>
-                <a href="#epapel" id="epapel-tab">{t}Special categories{/t}</a>
+                <a href="#special" id="special-tab">{t}Special categories{/t}</a>
             </li>
             {/is_module_activated}
             {is_module_activated name="BOOK_MANAGER"}
             <li>
-                <a href="#poll" id="poll-tab">{t}Book categories{/t}</a>
+                <a href="#book" id="book-tab">{t}Book categories{/t}</a>
             </li>
             {/is_module_activated}
         </ul>
@@ -180,7 +179,7 @@
                         </td>
                     </tr>
                     {/section}
-                     
+
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
@@ -218,7 +217,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="8">                            
+                        <td colspan="8">
                         </td>
                     </tr>
                 </tfoot>
@@ -253,7 +252,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="pagination">
-                        <td colspan="8">                     
+                        <td colspan="8">
                         </td>
                     </tr>
                 </tfoot>
