@@ -72,7 +72,7 @@ switch($action) {
         $cm = new ContentManager();
         if ($category == 'favorite') {
             list($portadas, $pager)= $cm->find_pages('Kiosko',
-                                        'fk_content_type=14 ',
+                                        'fk_content_type=14 AND kioskos.favorite=1 ',
                                             'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
 
 
