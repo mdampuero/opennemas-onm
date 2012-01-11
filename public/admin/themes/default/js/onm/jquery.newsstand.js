@@ -12,7 +12,7 @@ saveSortPositions = function() {
     jQuery( "tbody.sortable tr" ).each(function(){
         items_id.push(jQuery(this).data("id"));
     })
-  console.log( items_id);
+
     jQuery.ajax({
        type: "GET",
        url: "newsstand.php?action=save_positions&",
@@ -28,16 +28,4 @@ saveSortPositions = function() {
 
 
 }
-
-/*
-*
-
-    jQuery.ajax({
-       type: "GET",
-       url: "newsstand.php?action=save_positions",
-       data: {positions : items_id}
-    }).done(function( msg ) {
-       $('#warnings-validation').html(msg);
-    });
-
-* */
+ 
