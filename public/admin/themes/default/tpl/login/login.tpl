@@ -72,6 +72,7 @@
 			</div>
 			<input type="hidden" id="action" name="action" value="login" />
             <input type="hidden" name="testcookie" value="1" />
+            <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
 
             {if isset($token)}
                 {* Google token to identify captcha challenge *}
