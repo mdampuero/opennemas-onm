@@ -39,12 +39,6 @@ textarea{
     width:400px;
     max-height:80%
 }
-.colorpicker input[type="text"] {
-    width: 28px;
-}
-.colorpicker_hex input[type="text"] {
-    width: 50px;
-}
 </style>
 {/block}
 
@@ -72,8 +66,8 @@ textarea{
             <li><a href="#seo">{t}SEO{/t}</a</li>
             <li><a href="#misc">{t}Opennemas Settings{/t}</a</li>
             <li><a href="#external">{t}External Services{/t}</a></li>
-            
-          
+
+
         </ul>
 
         <div id="general" class="panel">
@@ -97,11 +91,13 @@ textarea{
                                             <dd>{t}You can edit the site agency for the articles here. This will be displayed as your article agency{/t}</dd>
                                             <dt><strong>{t}Edit Site name{/t}</strong></dt>
                                             <dd>{t}You can change the name of your site here. This will be displayed as your site name{/t}</dd>
+                                            <dt><strong>{t}Show logo and color in frontpages{/t}</strong></dt>
+                                            <dd>{t}You can enable Logos and category colors for your site here.{/t}</dd>
                                             <dt><strong>{t}Edit Site color{/t}</strong></dt>
                                             <dd>
                                                 {t}You can edit the site color here.
-                                                This will change the color of the menu bars. 
-                                                If you wanna change the categorys color, 
+                                                This will change the color of the menu bars.
+                                                If you wanna change the categorys color,
                                                 go to the Category Manager and edit a category.{/t}
                                             </dd>
                                             <dt><strong>{t}Add a Logo for the site{/t}</strong></dt>
@@ -126,15 +122,28 @@ textarea{
                                 <label for="site_color">{t}Site color:{/t}</label>
                             </th>
                             <td>
-                                <input readonly="readonly" type="text" id="site_color" name="site_color" value="{$configs['site_color']|default:"0000ff"}">
+                                <input readonly="readonly" type="text" class="colorpicker_input" id="site_color" name="site_color" value="{$configs['site_color']}">
+                                <div class="colopicker_viewer" style="background-color:#{$configs['site_color']}"></div>
                             </td>
                             <td colspan="2" valign="top">
-                                <div class="help-block margin-left-1">
-                                    
-                                </div>
+
                             </td>
                         </tr>
                         <tr valign="top">
+                            <th scope="row">
+                                <label for="section_settings[allowLogo]">{t}Show logo and color in frontpages:{/t}</label>
+                            </th>
+                            <td>
+                                <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" onChange="toogleSiteLogo(this.value);">
+                                    <option value="0">{t}No{/t}</option>
+                                    <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
+                                </select>
+                            </td>
+                            <td colspan="2" valign="top">
+
+                            </td>
+                        </tr>
+                        <tr valign="top" id="site_logo" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
                             <th scope="row">
                                 <label for="site_logo">{t}Site logo:{/t}</label>
                             </th>
@@ -247,7 +256,7 @@ textarea{
                 </table>
             </fieldset>
         </div><!-- /seo -->
-       
+
         <div id="misc" class="panel">
             <fieldset>
                 <legend>{t}Opennemas settings{/t}</legend>
@@ -298,7 +307,7 @@ textarea{
                             <td>
                                 <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                             </td>
-                            <td valign="top">     
+                            <td valign="top">
                                 <div class="help-block margin-left-1">
                                     <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
                                     <div class="content">{t}Default: 20 elements{/t}</div>
@@ -310,7 +319,7 @@ textarea{
                 </table>
             </fieldset>
         </div>
- 
+
 
         <div id="external" class="panel">
             <fieldset>
@@ -353,7 +362,7 @@ textarea{
                 </table>
 
             </fieldset>
-            
+
             <fieldset>
                 <legend>{t}Google Services{/t}</legend>
                 <table>
@@ -530,12 +539,16 @@ textarea{
     tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
     OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
     tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
-   
+
+    //Color Picker jQuery
     $.noConflict();
     jQuery('#site_color').ColorPicker({
         onSubmit: function(hsb, hex, rgb, el) {
             jQuery(el).val(hex);
             jQuery(el).ColorPickerHide();
+        },
+        onChange: function (hsb, hex, rgb) {
+            jQuery('.colopicker_viewer').css('background-color', '#' + hex);
         },
         onBeforeShow: function () {
             jQuery(this).ColorPickerSetColor(this.value);
@@ -544,5 +557,13 @@ textarea{
     .bind('keyup', function(){
         jQuery(this).ColorPickerSetColor(this.value);
     });
+
+    toogleSiteLogo = function(value) {
+    if(value == 0) {
+        $('site_logo').hide();
+    } else {
+        $('site_logo').show();
+    }
+}
 </script>
 {/block}

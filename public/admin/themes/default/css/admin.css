@@ -765,7 +765,7 @@ table.aa tr td {
 		#topbar-admin #logoonm div.site-name{
 			padding-top:10px;
 		}
-        
+
 #topbar-admin .avatar {
     border:1px solid #DDDDDD;
     padding:1px;
@@ -1007,7 +1007,7 @@ legend {
 			padding:5px;
 			vertical-align:middle
 		}
-        
+
 #topbar-admin .avatar {
     border:1px solid #DDDDDD;
     padding:1px;
@@ -1666,10 +1666,10 @@ div.action-bar .right{
             border:1px solid #bfbfbf;
             text-align: center;
         }
-         #media-browser .image-preview:hover {           
+         #media-browser .image-preview:hover {
             border:1px solid transparent;
         }
-        
+
 			#media-browser .photo-image img {
 				max-width:140px;
 				max-height:80px;
@@ -2072,4 +2072,36 @@ div.action-bar .right{
 .pills > li.with-subcategories > a:hover:after {
     border-top: 4px solid White;
     color:White;
+}
+
+/* -------------------------------------------------------------
+  ColorPicker
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.colorpicker input[type="text"] {
+    width: 28px;
+}
+.colorpicker_hex input[type="text"] {
+    width: 50px;
+}
+.colopicker_viewer {
+    height:28px;
+    border: 1px solid #B5B8C8;
+    border-right:0 !important;
+    width:30px !important;
+    display:inline-block;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    float: left;
+    margin-left:-2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+.colorpicker_input {
+    width:50px !important;
+    display:inline-block;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left:0 !important;
+}
+.colorpicker {
+    z-index:9999;
 }

@@ -39,7 +39,7 @@ switch($action) {
                                     'site_color', 'site_name', 'time_zone','site_language','site_footer',
                                     'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
                                     'facebook','facebook_page','facebook_id','twitter_page',
-                                    'google_analytics','piwik',
+                                    'google_analytics','piwik', 'section_settings',
                                     'items_per_page','refresh_interval',
                                     'webmastertools_google', 'webmastertools_bing'
                                     );
@@ -69,6 +69,10 @@ switch($action) {
             if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
                $_POST['site_logo'] = $nameFile;
             }
+        }
+        if($_POST['section_settings']['allowLogo'] == 1){
+            $path = MEDIA_PATH.'/sections';
+            FilesManager::createDirectory($path);
         }
 
         foreach ($_POST as $key => $value ) {
