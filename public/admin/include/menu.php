@@ -180,7 +180,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMPORT_EPRESS" />
         <node
             module_name="EFE_IMPORTER"
-            privilege="EFE_IMPORTER"
+            privilege="IMPORT_EFE"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
             id="efe_importer"
             link="controllers/agency_importer/efe.php"
