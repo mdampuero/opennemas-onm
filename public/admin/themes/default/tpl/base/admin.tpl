@@ -7,9 +7,9 @@
 
     <meta charset="utf-8">
 
-    <meta name="author" content="OpenHost,SL">
+    <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport"  content="width=device-width,initial-scale=1">
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
 
@@ -26,7 +26,6 @@
         {css_tag href="/lightview.css"}
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
-        {css_tag href="/messageboard.css" media="screen"}
 	{/block}
 
     {block name="js-library"}
@@ -62,22 +61,17 @@
 
 </head>
 <body>
-	{* scriptsection name="body" *}
     {script_tag src="/wz_tooltip.js"}
-	{* /scriptsection *}
 
     <header id="topbar-admin" class="clearfix">
-
         <div class="logo-and-menu">
             <div id="logoonm">
                 <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
                    <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
                 </a>
             </div>
-
             {admin_menu}
         </div><!-- / -->
-
         <div class="info-left">
             <div id="user_box">
         		<ul>
@@ -131,30 +125,24 @@
             			</ul>
         		    </li>
         		</ul>
-
             </div>
-
         </div>
-
     </header>
 
-    <div id="content">
+    <div id="content" role="main">
     {block name="content"}{/block}
     </div>
 
     {block name="copyright"}
 	<footer id="copyright" class="wrapper-content">
-
         <div class="company left">
             <img src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
 			{t} made by OpenHost S.L.{/t}<br/>
             {t 1=strftime("%Y")}All rights reserved ® 2008 - %1{/t}
         </div>
-
         <ul class="support">
             <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
         </ul>
-
     </footer>
 	{/block}
 
@@ -191,6 +179,7 @@
     {/if}
     </script>
 	{block name="footer-js"}
+        {browser_update}
         {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
         {script_tag src="/onm/footer-functions.js"}
 
