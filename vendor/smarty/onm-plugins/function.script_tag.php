@@ -8,20 +8,20 @@
 function smarty_function_script_tag($params, &$smarty) {
 
     $output = "";
-    
+
     if (empty($params['src'])) {
         trigger_error("[plugin] script_tag parameter 'src' cannot be empty",E_USER_NOTICE);
         return;
     }
-    
+
     $src = $params['src'];
-   
+
     //Comprobar si es un link externo
     if (array_key_exists('external', $params)) {
         $server = '';
     } else {
         //Si no es externno, calculamos el mtime del fichero
-        $mtime = '?';        
+        $mtime = '?';
         $server = '';
         if ($smarty->theme == 'default') {
             $file = TEMPLATE_ADMIN_PATH.'/js'.$src;
@@ -37,7 +37,7 @@ function smarty_function_script_tag($params, &$smarty) {
             }
         }
     }
-    
+
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
@@ -49,8 +49,8 @@ function smarty_function_script_tag($params, &$smarty) {
     if (isset($params['escape'])) {
         $escape = true;
     }
-    
-    
+
+
     unset($params['external']);
     unset($params['src']);
     unset($params['type']);
@@ -65,14 +65,14 @@ function smarty_function_script_tag($params, &$smarty) {
     } else {
         $resource = $server.DS.$src;
     }
-    
+
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
-    
-    $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties}></script>";
+
+    $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties} ></script>";
 
     if ($escape) {
-        $output = str_replace('</script>', '<\/script>', $output);
+        $output = str_replace('/>', '\/>', $output);
     }
-    
+
     return $output;
 }

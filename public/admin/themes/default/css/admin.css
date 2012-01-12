@@ -24,13 +24,15 @@ html[xmlns] .clearfix{display: block;}
 * html .clearfix{height: 1%;}
 
 img { border: 0 none; }
-a { color:#333333; outline:none; }
+a { color:#333333; }
 a:hover { color:#000000; }
-a, img { padding: 0; margin: 0; }
+a, img { padding: 0; margin: 0; outline:none; }
 a:link    { color: #0B55C4; text-decoration: none; }
 a:visited { color: #0B55C4; text-decoration: none; }
 a:hover   { text-decoration: underline; }
 
+::-moz-selection { background: #357AE8; color: #fff; text-shadow: none; }
+::selection { background: #357AE8; color: #fff; text-shadow: none; }
 
 form { margin: 0; padding: 0; }
 
@@ -114,7 +116,7 @@ textarea:focus,select:fofus {
 
 label {padding: 1px 3px 1px 0px;}
 
-div.wrapper-content {
+.wrapper-content {
     margin: 0 auto;
     max-width: 960px;
     position: relative;

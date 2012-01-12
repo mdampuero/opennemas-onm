@@ -6,13 +6,12 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <meta name="author" content="OpenHost,SL">
-    <meta name="generator" content="OpenNemas - News Management System" />
+    <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <link rel="shorcut icon" href="{$params.IMAGE_DIR}/favicon.png" />
+    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
 
     {block name="meta"}
         <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
@@ -31,29 +30,26 @@
 	{/block}
 
     {block name="js-library"}
-        {script_tag language="javascript" src="/prototype.js"}
-        {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
-        {script_tag language="javascript" src="/scriptaculous/effects.js"}
+        {script_tag src="/prototype.js"}
+        {script_tag src="/scriptaculous/scriptaculous.js"}
+        {script_tag src="/scriptaculous/effects.js"}
     {/block}
 
     {block name="header-js"}
         {block name="js-library"}{/block}
-        {script_tag language="javascript" src="/lightview.js"}
-        {script_tag language="javascript" src="/prototype-date-extensions.js"}
-        {script_tag language="javascript" src="/fabtabulous.js"}
-        {script_tag language="javascript" src="/control.maxlength.js"}
-        {script_tag language="javascript" src="/datepicker.js"}
-        {script_tag language="javascript" src="/MessageBoard.js"}
-        {script_tag language="javascript" src="/utils.js"}
-        {script_tag language="javascript" src="/utils_header.js"}
-        {script_tag language="javascript" src="/utilsopinion.js"}
-        {script_tag language="javascript" src="/validation.js"}
-        {script_tag language="javascript" src="/lightwindow.js" defer="defer"}
-        {script_tag language="javascript" src="/modalbox.js" defer="defer"}
-        {* FIXME: corregir para que pille bien el path *}
-        {dhtml_calendar_init src=$params.JS_DIR|cat:'jscalendar/calendar.js' setup_src=$params.JS_DIR|cat:'/jscalendar/calendar-setup.js'
-            lang=$params.JS_DIR|cat:'jscalendar/lang/calendar-es.js' css=$params.JS_DIR|cat:'/jscalendar/calendar-win2k-cold-2.css'}
-        {script_tag language="javascript" src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag src="/onm/scripts.js"}
+        {script_tag src="/lightview.js"}
+        {script_tag src="/prototype-date-extensions.js"}
+        {script_tag src="/fabtabulous.js"}
+        {script_tag src="/control.maxlength.js"}
+        {script_tag src="/datepicker.js"}
+        {script_tag src="/utils.js"}
+        {script_tag src="/utils_header.js"}
+        {script_tag src="/utilsopinion.js"}
+        {script_tag src="/validation.js"}
+        {script_tag src="/lightwindow.js" defer="defer"}
+        {script_tag src="/modalbox.js" defer="defer"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
@@ -62,12 +58,12 @@
     {script_tag src="/wz_tooltip.js"}
 	{* /scriptsection *}
 
-    <div id="topbar-admin" class="clearfix">
+    <header id="topbar-admin" class="clearfix">
 
         <div class="logo-and-menu">
             <div id="logoonm">
                 <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
-                   <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132px" height="27px"/>
+                   <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
                 </a>
             </div>
 
@@ -99,15 +95,15 @@
                     </li>
 
         		    <li class="menu">
-                        <a href="#" id="menu" class="menu">
+                        <a href="#" class="menu">
                             {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true}
                             {$smarty.session.username|ucfirst}
                         </a>
             			<ul>
             			    <li>
-            				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}
-                            <a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&amp;id=%1">Settings</a>
-                            {/t}
+                				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}
+                                <a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&amp;id=%1">Settings</a>
+                                {/t}
             			    </li>
 
                             {if Acl::check('BACKEND_ADMIN') eq true}
@@ -132,17 +128,17 @@
 
         </div>
 
-    </div>
+    </header>
 
     <div id="content">
     {block name="content"}{/block}
     </div>
 
     {block name="copyright"}
-	<div id="copyright" class="wrapper-content">
+	<footer id="copyright" class="wrapper-content">
 
         <div class="company left">
-            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
+            <img src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
 			{t} made by OpenHost S.L.{/t}<br/>
             {t 1=strftime("%Y")}All rights reserved ® 2008 - %1{/t}
         </div>
@@ -151,7 +147,7 @@
             <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
         </ul>
 
-    </div>
+    </footer>
 	{/block}
 
 
@@ -187,8 +183,8 @@
     {/if}
     </script>
 	{block name="footer-js"}
-        {script_tag src="/modernizr/modernizr-2.0.6.min.js" language="javascript"}
-        {script_tag src="/onm/footer-functions.js" language="javascript"}
+        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
+        {script_tag src="/onm/footer-functions.js"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

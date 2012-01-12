@@ -8,16 +8,16 @@
 function smarty_function_css_tag($params, &$smarty) {
 
     $output = "";
-    
+
     if (empty($params['href'])) {
         trigger_error("[plugin] css_tag parameter 'href' cannot be empty",E_USER_NOTICE);
         return;
     }
-    
-    $href = $params['href'];
-   
 
-    $mtime = '?';        
+    $href = $params['href'];
+
+
+    $mtime = '?';
     $server = '';
     if ($smarty->theme == 'default') {
         $file = TEMPLATE_ADMIN_PATH.'/css'.$href;
@@ -32,23 +32,23 @@ function smarty_function_css_tag($params, &$smarty) {
             $server = TEMPLATE_USER_URL.'css';
         }
     }
-    
+
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
     } else {
         $type = "type=\"text/css\"";
     }
-    
+
     //Comprobar si tiene rel definido
     if (isset($params['rel'])) {
         $rel = "rel=\"{$params['rel']}\"";
     } else {
         $rel = "rel=\"stylesheet\"";
     }
-    
-    
-    
+
+
+
     unset($params['rel']);
     unset($params['href']);
     unset($params['type']);
@@ -56,11 +56,11 @@ function smarty_function_css_tag($params, &$smarty) {
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
-    
+
     $resource = $server.DS.$href;
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
-    
-    $output = "<link {$rel} {$type} href=\"{$resource}{$mtime}\" {$properties}></link>";
-    
+
+    $output = "<link {$rel} {$type} href=\"{$resource}{$mtime}\" {$properties}>";
+
     return $output;
 }

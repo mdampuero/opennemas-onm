@@ -2,17 +2,16 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="author" content="OpenHost,SL" />
-    <meta name="generator" content="OpenNemas - News Management System" />
-    <link rel="shorcut icon" href="{$params.IMAGE_DIR}/favicon.png" />
-
     {block name="meta"}
         <title>OpenNeMaS - Manager section</title>
     {/block}
+    <meta http-equiv="pragma" content="no-cache" >
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+    <meta name="author" content="OpenHost,SL" >
+    <meta name="generator" content="OpenNemas - News Management System" >
+    <link rel="shorcut icon" href="{$params.IMAGE_DIR}favicon.png" >
 
-    {block name="header-css"}     
+    {block name="header-css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
@@ -21,12 +20,6 @@
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
         {css_tag href="/messageboard.css" media="screen"}
-        <style>
-            div.wrapper-content {
-                max-width: 1024px;
-            }
-        </style>
-
 	{/block}
 
 </head>

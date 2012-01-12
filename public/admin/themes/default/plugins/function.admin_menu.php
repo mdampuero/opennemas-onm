@@ -6,7 +6,7 @@ function smarty_function_admin_menu($params, &$smarty) {
 
     $menu = new \Onm\UI\SimpleMenu($menuXml);
     // $htmlOutput = $menu->getHTML();
-    $htmlOutput = $menu->render();
+    $htmlOutput = $menu->render(array('doctype' => 'html5'));
 
     return($htmlOutput);
 

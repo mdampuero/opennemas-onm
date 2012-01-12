@@ -169,7 +169,7 @@ $menuXml = '<?xml version="1.0"?>
          <node
             module_name="SCHEDULE_MANAGER"
             title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
-            id="newsletter_manager"
+            id="cronicas_schedule_manager"
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
@@ -189,7 +189,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="PAPER_IMPORT"
             privilege="IMPORT_EFE_FILE"
             title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
-            id="efe_importer"
+            id="import_efe_file"
             link="controllers/agency_importer/efe-file.php"
         />
         <node
