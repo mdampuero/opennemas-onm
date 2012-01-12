@@ -2,7 +2,14 @@
    Author: OpenHost S.L.
    ========================================================================== */
 
+html {
+	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
+	min-height:100%;
+	overflow-y: scroll;
+}
+
 body {
+	font-family:Arial,"Helvetica Neue",Helvetica,Arial,sans-serif;
 	background:none;
 	width:100%;
 	margin:0;
@@ -11,17 +18,6 @@ body {
 	font-size: 12px !important;
 	margin-top: 24px;
 }
-body, td, th { font-family: Arial, Helvetica, sans-serif; }
-
-html {
-	background: url('../images/general/admin_background.jpg.png') bottom right no-repeat;
-	min-height:100%;
-	overflow-y: scroll;
-}
-.clearfix:after{content: ".";display: block;clear: both;visibility: hidden;line-height: 0;height: 0;}
-.clearfix{display: inline-block;}
-html[xmlns] .clearfix{display: block;}
-* html .clearfix{height: 1%;}
 
 img { border: 0 none; }
 a { color:#333333; }
@@ -145,6 +141,11 @@ table.aa {
 	background: #EFEFEF !important;
 	border: 1px solid #CCC;
 }
+
+.clearfix:after{content: ".";display: block;clear: both;visibility: hidden;line-height: 0;height: 0;}
+.clearfix{display: inline-block;}
+html[xmlns] .clearfix{display: block;}
+* html .clearfix{height: 1%;}
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -417,14 +418,11 @@ a.unpublishing:hover {
 
 
 #warnings-validation {
-	/*text-transform:capitalize;*/
-	/*font-size: 12px;*/
 	margin:5px 0;
 }
 
 #warnings-validation a {
 	font-weight: bold;
-	font-size: 16px;
 	color: #024678;
 	text-decoration: underline;
 }
@@ -709,118 +707,6 @@ table.aa tr td {
 	text-align:center;
 }
 
-/* -------------------------------------------------------------
-  Top Bar admin definitions
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-#topbar-admin{
-	background: #464646;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    overflow: visible;
-	z-index:99;
-	max-height:38px;
-
-	background: #222;
-    background-color: #222222;
-    background-repeat: repeat-x;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
-    background-image: -moz-linear-gradient(#333333, #222222);
-    background-image: -ms-linear-gradient(#333333, #222222);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
-    background-image: -webkit-linear-gradient(#333333, #222222);
-    background-image: -o-linear-gradient(#333333, #222222);
-    background-image: linear-gradient(#333333, #222222);
-    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-}
-
-	#topbar-admin div.info-left {
-		position:absolute;
-		top:0px;
-		right:10px;
-		height:100%
-	}
-
-	#topbar-admin a, #topbar-admin{
-		color:#ddd;
-	}
-	#topbar-admin #logoonm {
-		display:block;
-		width:160px;
-	}
-		#topbar-admin #logoonm a{
-			color: White;
-			font-family:Georgia;
-		}
-		#topbar-admin #logoonm div{
-			display:block;
-			float:left;
-		}
-		#topbar-admin #logoonm img{
-			margin:5px;
-			vertical-align:middle
-		}
-		#topbar-admin #logoonm div.site-name{
-			padding-top:10px;
-		}
-
-#topbar-admin .avatar {
-    border:1px solid #DDDDDD;
-    padding:1px;
-    width:14px;
-    margin-bottom:-1px;
-    margin-right:2px;
-}
-
-#cuadromenu, #submenus{
-	background-color:#464646 !important;
-	color:#ddd;
-}
-
-#name-box, #session-actions, #session-actions a, #name-box a{
-	color:#ccc;
-}
-
-#name-box a{
-	text-decoration:underline;
-}
-
-#topbar-admin.manager {
-    background: #049CDB !important;
-    background-color: #049CDB !important;
-    background-repeat: repeat-x !important;
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#049CDB), to(#0064CD)) !important;
-    background-image: -moz-linear-gradient(#049CDB, #0064CD) !important;
-    background-image: -ms-linear-gradient(#049CDB, #0064CD) !important;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049CDB), color-stop(100%, #0064CD)) !important;
-    background-image: -webkit-linear-gradient(#049CDB, #0064CD) !important;
-    background-image: -o-linear-gradient(#049CDB, #0064CD) !important;
-    background-image: linear-gradient(#049CDB, #0064CD) !important;
-}
-#topbar-admin.manager a {
-	color:White;
-}
-
-#topbar-admin form.pull-right {
-    float: right;
-}
-
-#topbar-admin input{background-color:#444;background-color:rgba(255, 255, 255, 0.3);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:normal;font-weight:13px;line-height:1;padding:4px 9px;color:#ffffff;color:rgba(255, 255, 255, 0.75);border:1px solid #111;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-webkit-transition:none;-moz-transition:none;-ms-transition:none;-o-transition:none;transition:none;}.topbar input:-moz-placeholder{color:#e6e6e6;}
-#topbar-admin input::-webkit-input-placeholder{color:#e6e6e6;}
-#topbar-admin input:hover{background-color:#bfbfbf;background-color:rgba(255, 255, 255, 0.5);color:#ffffff;}
-#topbar-admin input:focus,.topbar input.focused{outline:0;background-color:#ffffff;color:#404040;text-shadow:0 1px 0 #ffffff;border: 1px solid #111111;padding:4px 9px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);}
-
-
-#topbar-admin, #topbar-admin .fill {
-    background-color: #222222;
-    background-image: -moz-linear-gradient(center top , #333333, #222222);
-    background-repeat: repeat-x;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-}
 
 /* -------------------------------------------------------------
   Content from modalbox.css
@@ -959,7 +845,6 @@ legend {
 .error a, .notice a, .success a { text-decoration:underline !important; }
 .error li, .notice li, .success li { margin-left:20px;}
 
-
 /* -------------------------------------------------------------
   Top Bar admin definitions
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -972,7 +857,8 @@ legend {
     right: 0;
     overflow: visible;
 	z-index:99;
-	font-size: 12px;
+	max-height:38px;
+
 	background: #222;
     background-color: #222222;
     background-repeat: repeat-x;
@@ -995,19 +881,27 @@ legend {
 		height:100%
 	}
 
-	#topbar-admin, #topbar-admin a {
+	#topbar-admin a, #topbar-admin{
 		color:#ddd;
 	}
 	#topbar-admin #logoonm {
+		display:block;
 		width:140px;
 		float:left;
 	}
 		#topbar-admin #logoonm a{
 			color: White;
 		}
+		#topbar-admin #logoonm div{
+			display:block;
+			float:left;
+		}
 		#topbar-admin #logoonm img{
-			/*padding:5px;*/
+			margin:5px;
 			vertical-align:middle
+		}
+		#topbar-admin #logoonm div.site-name{
+			padding-top:10px;
 		}
 
 #topbar-admin .avatar {
@@ -1016,6 +910,11 @@ legend {
     width:14px;
     margin-bottom:-1px;
     margin-right:2px;
+}
+
+#cuadromenu, #submenus{
+	background-color:#464646 !important;
+	color:#ddd;
 }
 
 #name-box, #session-actions, #session-actions a, #name-box a{
@@ -1046,7 +945,7 @@ legend {
     float: right;
 }
 
-#topbar-admin input{background-color:#444;background-color:rgba(255, 255, 255, 0.3);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:normal;font-weight:13px;line-height:1;padding:4px 9px;color:#ffffff;color:rgba(255, 255, 255, 0.75);border:1px solid #111;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-webkit-transition:none;-moz-transition:none;-ms-transition:none;-o-transition:none;transition:none;}.topbar input:-moz-placeholder{color:#e6e6e6;}
+#topbar-admin input{background-color:#444;background-color:rgba(255, 255, 255, 0.3);font-weight:13px;line-height:1;padding:4px 9px;color:#ffffff;color:rgba(255, 255, 255, 0.75);border:1px solid #111;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-webkit-transition:none;-moz-transition:none;-ms-transition:none;-o-transition:none;transition:none;}.topbar input:-moz-placeholder{color:#e6e6e6;}
 #topbar-admin input::-webkit-input-placeholder{color:#e6e6e6;}
 #topbar-admin input:hover{background-color:#bfbfbf;background-color:rgba(255, 255, 255, 0.5);color:#ffffff;}
 #topbar-admin input:focus,.topbar input.focused{outline:0;background-color:#ffffff;color:#404040;text-shadow:0 1px 0 #ffffff;border: 1px solid #111111;padding:4px 9px;-webkit-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);-moz-box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.1),0 1px 0px rgba(255, 255, 255, 0.25);}
