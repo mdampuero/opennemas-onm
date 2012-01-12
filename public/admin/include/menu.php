@@ -2,7 +2,7 @@
 
 $menuXml = '<?xml version="1.0"?>
 <menu>
-    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" id="frontpage" link="#">
+    <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
         <node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
@@ -11,11 +11,19 @@ $menuXml = '<?xml version="1.0"?>
             link="article.php"
         />
         <node
-            module_name="WIDGET_MANAGER"
-            privilege="WIDGET_ADMIN"
-            title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'"
-            id="widget_manager"
-            link="controllers/widget/widget.php"
+            module_name="STATIC_PAGES_MANAGER"
+            privilege="STATIC_ADMIN"
+            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
+            id="static_pages_manager"
+            link="controllers/static_pages/static_pages.php"
+        />
+        <node class="divider" />
+        <node
+            module_name="MENU_MANAGER"
+            privilege="MENU_ADMIN"
+            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
+            id="menu_manager"
+            link="controllers/menues/menues.php"
         />
     </submenu>
 
@@ -55,13 +63,6 @@ $menuXml = '<?xml version="1.0"?>
             id="ads_manager"
             link="controllers/advertisement/advertisement.php"
         />
-        <node
-            module_name="STATIC_PAGES_MANAGER"
-            privilege="STATIC_ADMIN"
-            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            id="static_pages_manager"
-            link="controllers/static_pages/static_pages.php"
-        />
 
          <node
             module_name="SPECIAL_MANAGER"
@@ -78,18 +79,19 @@ $menuXml = '<?xml version="1.0"?>
             link="article.php?action=list_hemeroteca"
         />
         <node
+            module_name="WIDGET_MANAGER"
+            privilege="WIDGET_ADMIN"
+            title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
+            id="widget_manager"
+            link="controllers/widget/widget.php"
+        />
+        <node class="divider" />
+        <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
             title="'.htmlspecialchars(_("Category Manager"), ENT_QUOTES).'"
             id="category_manager"
             link="controllers/category/category.php"
-        />
-        <node
-            module_name="MENU_MANAGER"
-            privilege="MENU_ADMIN"
-            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
-            id="menu_manager"
-            link="controllers/menues/menues.php"
         />
      </submenu>
 
