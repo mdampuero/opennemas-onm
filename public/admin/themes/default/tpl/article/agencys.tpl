@@ -205,9 +205,5 @@
             <td colspan="9"></td>
         </tfoot>
         </table>
-
-             <br />
-            {include file="botonera_up.tpl"}
-
     </div>
 {/if}

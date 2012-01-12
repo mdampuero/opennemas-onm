@@ -162,7 +162,6 @@
         {/if}
    {else}
 
-        {* BOTONERA: incluir en botonera_up.tpl*}
          {if $smarty.server.PHP_SELF eq '/admin/mediamanager.php'}
             {if $action=='list_today'}
                 {assign var=accion value='Fotos de Hoy'}

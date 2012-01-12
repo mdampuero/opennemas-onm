@@ -10,7 +10,7 @@
 <form action="#" method="post" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Specials manager{/t}::&nbsp; {if $category eq 0}Widget Home{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="SPECIAL_DELETE"}
                 <li>

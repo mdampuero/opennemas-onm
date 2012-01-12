@@ -7,7 +7,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}</h2></div>
+            <div class="title"><h2>{t}Polls manager{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="POLL_DELETE"}
                 <li>
