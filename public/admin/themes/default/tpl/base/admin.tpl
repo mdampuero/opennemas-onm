@@ -57,6 +57,7 @@
         {script_tag src="/lightwindow.js" defer="defer"}
         {script_tag src="/modalbox.js" defer="defer"}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
      {/block}
 
 </head>
@@ -180,7 +181,6 @@
     </script>
 	{block name="footer-js"}
         {browser_update}
-        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
         {script_tag src="/onm/footer-functions.js"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
