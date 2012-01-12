@@ -21,8 +21,7 @@
 
 		<form method="post" action="login.php" id="loginform" name="loginform">
 			<div class="span-16">
-
-				<div id="logo">
+                <div id="logo">
 					<h1>OpenNeMaS</h1>
 					<div>{t}The journalism CMS{/t}</div>
 				</div>
@@ -54,11 +53,7 @@
 				</div>
 
 				<div class="span-16 last clearfix submit-remember-block">
-					<div class="span-8">
-						<input type="checkbox" tabindex="3" value="forever" id="rememberme" name="rememberme"
-							{if isset($smarty.cookies.login_username)}checked="checked" {/if}/>{t}Remember me{/t}</label>
-					</div>
-					<div class="span-8 last right">
+					<div class="span-16 last right">
 						<button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
 					</div>
 				</div>
@@ -71,13 +66,8 @@
 				{/if}
 			</div>
 			<input type="hidden" id="action" name="action" value="login" />
-            <input type="hidden" name="testcookie" value="1" />
+            <input type="hidden" name="token" value="{$smarty.session.csrf}" />
             <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
-
-            {if isset($token)}
-                {* Google token to identify captcha challenge *}
-                <input type="hidden" name="token" value="{$token}" />
-            {/if}
 		</form>
 
 		</div>

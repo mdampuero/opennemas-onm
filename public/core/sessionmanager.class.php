@@ -21,7 +21,7 @@ class SessionManager implements ArrayAccess
      * @var sessionDirectory
      **/
     protected $sessionDirectory = SYS_SESSION_PATH;
-    
+
     /**
      * The singleton instance for this object.
      *
@@ -185,7 +185,7 @@ class SessionManager implements ArrayAccess
                                 );
                             }
                         } else {
-                            @unlink($sessionDirectory.'/'.$file); 
+                            @unlink($sessionDirectory.'/'.$file);
                         }
                     }
                 }
@@ -216,7 +216,7 @@ class SessionManager implements ArrayAccess
                             if (isset($session['userid'])
                                 && ($session['userid']==$userid)
                             ) {
-                                @unlink($sessionDirectory.'/'.$file);  
+                                @unlink($sessionDirectory.'/'.$file);
                                 apc_delete(APC_PREFIX ."_"."num_sessions");
                             }
                         }

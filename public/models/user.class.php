@@ -89,7 +89,7 @@ class User
             return(false);
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
- 
+
         //Insertar las categorias de acceso.
         if(isset($data['ids_category'])) {
             $this->createAccessCategoriesDB($data['ids_category']);
@@ -128,12 +128,12 @@ class User
 
     public function update($data)
     {
-        
-       
+
+
         if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
             $data['id_user_group'] =$this->id_user_group;
         }
-        
+
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
@@ -215,44 +215,44 @@ class User
 
                 return false;
             }
-            
+
             $this->readAccessCategories($this->id);
-            
+
             return true;
         }
 
         return false;
     }
-    
+
     public function addCategoryToUser ($idUser, $idCategory) {
-        
+
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
-        
+
         $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
                 VALUES (?,?)";
-        
+
         $values = array($idUser, $idCategory);
-        
+
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            
+
             return false;
         }
 
         $newUserCategories = self::readAccessCategories($idUser);
 
         return true;
-        
+
     }
-    
+
     public function delCategoryToUser($idUser, $idCategory) {
-        
+
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
-        
+
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_content_category='.intval($idCategory);
-        
+
         if($GLOBALS['application']->conn->Execute($sql) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
@@ -262,10 +262,10 @@ class User
         }
 
         $this->accesscategories = self::readAccessCategories($idUser);
-        
+
 
         return true;
-        
+
     }
 
     private function readAccessCategories($id=null)
@@ -277,7 +277,7 @@ class User
         }
          // If was not fetched from APC now is turn of DB
         if (!$fetchedFromAPC) {
- 
+
             $sql = 'SELECT pk_fk_content_category FROM users_content_categories WHERE pk_fk_user = '.intval($id);
             $rs = $GLOBALS['application']->conn->Execute( $sql );
 
@@ -299,11 +299,11 @@ class User
                 apc_store(APC_PREFIX . "_readAccessCategories".$id, $contentCategories);
             }
         }
-  
+
         return $contentCategories;
     }
-    
-    
+
+
     private function deleteAccessCategoriesDB()
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user='.intval($this->id);
