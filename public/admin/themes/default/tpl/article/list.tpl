@@ -12,7 +12,7 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
         <ul class="old-button">
-                
+
             {acl isAllowed="ARTICLE_CREATE"}
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
@@ -68,7 +68,7 @@
                      <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                  </a>
             </li>
-          
+
         </ul>
     </div>
 </div>
@@ -218,38 +218,7 @@
 
         // ]]>
         </script>
-    </div> {* div id=$category *}
-    <td valign="top" align="right" style="padding:4px;" width="30%">
-
-            <script type="text/javascript" language="javascript">
-            document.observe('dom:loaded', function() {
-                if($('title')){
-                    new OpenNeMas.Maxlength($('title'), {});
-                    $('title').focus(); // Set focus first element
-                }
-                getGalleryImages('listByCategory','{$category}','','1');
-                getGalleryVideos('listByCategory','{$category}','','1');
-            });
-
-            if($('starttime')) {
-                new Control.DatePicker($('starttime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-
-                new Control.DatePicker($('endtime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-            }
-            </script>
-
+    </div>
 
             <input type="hidden" id="action" name="action" value="" />
             <input type="hidden" name="id" id="id" value="{$id|default}" />

@@ -22,7 +22,7 @@
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
-        {css_tag href="/datepicker.css"}
+        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
         {css_tag href="/lightview.css"}
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
@@ -30,9 +30,18 @@
 	{/block}
 
     {block name="js-library"}
-        {script_tag src="/prototype.js"}
-        {script_tag src="/scriptaculous/scriptaculous.js"}
-        {script_tag src="/scriptaculous/effects.js"}
+        {script_tag language="javascript" src="/jquery/jquery.min.js"}
+        {script_tag language="javascript" src="/jquery/jquery-ui.js"}
+        {script_tag language="javascript" src="/jquery/jquery.ui.datepicker.js"}
+        {script_tag language="javascript" src="/jquery/jquery-ui-timepicker-addon.js"}
+        {script_tag language="javascript" src="/jquery/jquery-ui-sliderAccess.js"}
+        <script type="text/javascript">
+            $.noConflict();
+            // Code that uses other library's $ can follow here.
+        </script>
+        {script_tag language="javascript" src="/prototype.js"}
+        {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
+        {script_tag language="javascript" src="/scriptaculous/effects.js"}
     {/block}
 
     {block name="header-js"}
@@ -42,7 +51,6 @@
         {script_tag src="/prototype-date-extensions.js"}
         {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
-        {script_tag src="/datepicker.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
         {script_tag src="/utilsopinion.js"}

@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag language="javascript" src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsarticle.js" language="javascript"}
     {script_tag src="/editables.js" language="javascript"}
     {script_tag src="/utilsGallery.js" language="javascript"}
@@ -29,24 +30,6 @@ document.observe('dom:loaded', function() {
 	getGalleryImages('listByCategory','{$category}','','1');
 	getGalleryVideos('listByCategory','{$category}','','1');
 });
-
-if($('starttime')) {
-	new Control.DatePicker($('starttime'), {
-		icon: './themes/default/images/template_manager/update16x16.png',
-		locale: 'es_ES',
-		timePicker: true,
-		timePickerAdjacent: true,
-		dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-	});
-
-	new Control.DatePicker($('endtime'), {
-		icon: './themes/default/images/template_manager/update16x16.png',
-		locale: 'es_ES',
-		timePicker: true,
-		timePickerAdjacent: true,
-		dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-	});
-}
 </script>
 {/block}
 
@@ -54,7 +37,7 @@ if($('starttime')) {
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 	{include file="article/partials/_menu.tpl"}
 	<div class="wrapper-content">
-          
+
         {render_messages}
 
 		{* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
@@ -68,7 +51,7 @@ if($('starttime')) {
              {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
              <li>
 				<a id="avanced-custom-button" href="#avanced-custom">{t}Article customize{/t}</a>
-			</li> 
+			</li>
              {/is_module_activated}
 			{if isset($article) && is_object($article) && !$article->isClone()}
 			<li>
@@ -140,7 +123,7 @@ if($('starttime')) {
 										<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
 									{/if}
 								</div><!-- / -->
-		                            
+
 								<div style="text-align:right">
 									<h3>{t}Statistics{/t}</h3>
 									<div>
@@ -312,60 +295,63 @@ if($('starttime')) {
 		</div>
 
 		{* Pestaña de parámetros de noticia ****************************************** *}
-		<div class="panel" id="edicion-extra">
-			<table style="width:98%">
-				<tbody>
+<div class="panel" id="edicion-extra">
+        <table style="width:98%">
+                <tbody>
 	             	<tr>
-		                <td valign="top" style="padding:4px;">
-							<label for="slug">{t}Slug{/t}</label>
-							<input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
+                            <td valign="top" style="padding:4px;">
+                                <label for="slug">{t}Slug{/t}</label>
+                                <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
 									style="width:98%" maxlength="256" tabindex="5"
-									{if is_object($article)}
-										value="{$article->slug|clearslash|escape:"html"}"
-									{else}
-										value=""
-									{/if}
-								/>
-						</td>
-					</tr>
+                                        {if is_object($article)}
+                                                value="{$article->slug|clearslash|escape:"html"}"
+                                        {else}
+                                                value=""
+                                        {/if}/>
+                            </td>
+                        </tr>
 
-					
-					<tr>
-						<td valign="top" style="padding:4px;">
-							<label for="starttime">{t}Publication start date:{/t}</label>
-							<div style="width:170px;">
-								<input type="text" id="starttime" name="starttime" size="18"
-									title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" /></div>
-						</td>
-					</tr>
-					<tr>
-						<td valign="top" style="padding:4px;">
-							<label for="endtime">{t}Publication end date:{/t}</label>
-							<div style="width:170px;">
-								<input type="text" id="endtime" name="endtime" size="18"
-									title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" /></div>
+                        <tr>
+                            <td valign="top" style="padding:4px;">
+                                    <div style="width:170px;">
+                                        <label for="starttime">{t}Publication start date:{/t}</label>
 
-							<sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
-						</td>
-					</tr>
-					<tr>
-						<td valign="top" style="padding:4px;">
-							<label for="description">{t}Description{/t}</label>
-							<textarea name="description" id="description"
-								title="Descripción interna de la noticia" style="width:98%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
-						</td>
-					</tr>
+                                            <input type="text" id="starttime" name="starttime" size="18"
+                                                            title="Fecha inicio publicaci&oacute;n" value="{$article->starttime}" tabindex="-1" />
+                                    </div>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <label for="starttime" >{t}till{/t}</label>
+                            </td>
+                            <td valign="top" style="padding:4px;">
+                                    <div style="width:170px;">
+                                        <label for="endtime">{t}Publication end date:{/t}</label>
 
-				</tbody>
+                                            <input type="text" id="endtime" name="endtime" size="18"
+                                                            title="Fecha fin publicaci&oacute;n" value="{$article->endtime}" tabindex="-1" />
+                                    </div>
 
-			</table>
-		</div>
-        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}                 
+                                    <sub>{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</sub>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="padding:4px;">
+                                <label for="description">{t}Description{/t}</label>
+                                <textarea name="description" id="description"
+                                        title="Descripción interna de la noticia" style="width:98%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
+                            </td>
+                        </tr>
+
+                </tbody>
+
+        </table>
+</div>
+        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
             <div class="panel" id="avanced-custom" style="width:98%">
                 {include file ="article/partials/_article_avanced_customize.tpl"}
             </div>
         {/is_module_activated}
-    
+
 		{if $smarty.request.action eq 'read'}
 		<div class="panel" id="comments" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
@@ -393,19 +379,19 @@ if($('starttime')) {
 				  </div>
 				 </td></tr>
 			{/section}
-			
+
 			</tbody>
 			</table>
 		</div>
 
- 
+
 		{/if}
 
-         
+
     <div class="panel" id="contenidos-relacionados" style="width:98%">
         {include file="article/partials/_related.tpl"}
     </div>
-        
+
 		{if isset($article) && is_object($article)}
 	<div class="panel" id="elementos-relacionados" style="width:98%">
 			<br />
@@ -423,7 +409,7 @@ if($('starttime')) {
 										{$content_types.$ct}
 									</td>
 									<td width="120"> {$losrel[n]->category_name|clearslash} </td>
-                                    <td width='120'> 
+                                    <td width='120'>
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
                                              <option>{t}Link{/t} (todos)</option>
@@ -451,12 +437,12 @@ if($('starttime')) {
 						<table  width='99%'>
 							<tr>
 								<td>{$intrel[n]->title|clearslash|escape:'html'}  </td>
-								<td width='120'> 
+								<td width='120'>
 									{assign var="ct" value=$intrel[n]->content_type}
 									{$content_types.$ct}
 								</td>
 								<td width='120'> {$intrel[n]->category_name|clearslash} </td>
-                                <td width='120'> 
+                                <td width='120'>
                                     <select>
                                         <option>{t}Gallery{/t} (album)</option>
                                          <option>{t}Link{/t} (todos)</option>

@@ -10,21 +10,6 @@
                     this.up(2).select('input[type=checkbox]')[0].
                         setAttribute('checked', 'checked');
                 });
-
-                new Control.DatePicker(item,{
-                    icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    onSelect: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    },
-                    onHover: function(fecha, instance) {
-                        instance.element.up(2).select('input[type=checkbox]')[0].
-                            setAttribute('checked', 'checked');
-                    }
-                });
             });
         }
     });
@@ -35,15 +20,6 @@
         $('formulario').submit();
     }
 
-    if($('expires[]')) {
-	new Control.DatePicker($('starttime'), {
-		icon: './themes/default/images/template_manager/update16x16.png',
-		locale: 'es_ES',
-		timePicker: true,
-		timePickerAdjacent: true,
-		dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-	});
-}
     </script>
 {/block}
 {block name="header-css" append}

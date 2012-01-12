@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/../js/jquery_colorpicker/css/colorpicker.css"}
+{css_tag href="/../js/jquery/jquery_colorpicker/css/colorpicker.css"}
 <style type="text/css">
 table th, table label {
     color: #888;
@@ -533,7 +533,7 @@ textarea{
     </form>
 </div>
 {script_tag language="javascript" src="/jquery/jquery.min.js"}
-{script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
+{script_tag language="javascript" src="/jquery/jquery_colorpicker/js/colorpicker.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript" language="javascript">
     tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );

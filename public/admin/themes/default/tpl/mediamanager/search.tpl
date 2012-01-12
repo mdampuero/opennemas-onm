@@ -1,14 +1,38 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+{/block}
+
 {block name="footer-js" append}
-<script type="text/javascript">
-function toggleAdvanced() {
-    var results = $$('tr.advanced');
-    results.each(function(elem){
-        elem.toggleClassName('nodisplay');
-    });
-}
-</script>
+    {script_tag src="/photos.js" defer="defer" language="javascript"}
+    {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
+        <div class="message" id="console-info">{$smarty.request.message}</div>
+        <script defer="defer" type="text/javascript">
+            new Effect.Highlight('console-info', {ldelim}startcolor:'#ff99ff', endcolor:'#999999'{rdelim})
+        </script>
+    {/if}
+    <script type="text/javascript">
+        function toggleAdvanced() {
+            var results = $$('tr.advanced');
+            results.each(function(elem){
+                elem.toggleClassName('nodisplay');
+            });
+        }
+    </script>
+    <script defer="defer" type="text/javascript">
+    function confirmar(url) {
+        if(confirm('¿Está seguro de querer eliminar este fichero?')) {
+            location.href = url;
+        }
+    }
+    </script>
+
+    {if !empty($smarty.request.alerta)}
+    <script type="text/javascript">
+        alert("NO SE PUEDE ELIMINAR {$smarty.request.name} .\n Esta imagen está siendo utilizada en: {$smarty.request.alerta}.");
+    </script>
+    {/if}
 {/block}
 
 {block name="header-css" append}
@@ -63,59 +87,6 @@ textarea{
     max-height:80%
 }
 </style>
-{/block}
-
-
-{block name="footer-js" append}
-    {script_tag src="/photos.js" defer="defer" language="javascript"}
-    {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
-        <div class="message" id="console-info">{$smarty.request.message}</div>
-        <script defer="defer" type="text/javascript">
-            new Effect.Highlight('console-info', {ldelim}startcolor:'#ff99ff', endcolor:'#999999'{rdelim})
-        </script>
-    {/if}
-
-    <script defer="defer" type="text/javascript">
-    function confirmar(url) {
-        if(confirm('¿Está seguro de querer eliminar este fichero?')) {
-            location.href = url;
-        }
-    }
-    </script>
-
-    {if !empty($smarty.request.alerta)}
-    <script type="text/javascript">
-        alert("NO SE PUEDE ELIMINAR {$smarty.request.name} .\n Esta imagen está siendo utilizada en: {$smarty.request.alerta}.");
-    </script>
-    {/if}
-
-    <script type="text/javascript" language="javascript">
-        if($('starttime')) {
-            new Control.DatePicker($('starttime'), {
-                icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
-                locale: 'es_ES',
-                timePicker: true,
-                timePickerAdjacent: true,
-                dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-            });
-
-        }
-        else {
-            alert('Not existent');
-        }
-
-        if($('endtime')) {
-            new Control.DatePicker($('endtime'), {
-                icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
-                locale: 'es_ES',
-                timePicker: true,
-                timePickerAdjacent: true,
-                dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-            });
-
-        }
-    </script>
-
 {/block}
 
 {block name="content"}

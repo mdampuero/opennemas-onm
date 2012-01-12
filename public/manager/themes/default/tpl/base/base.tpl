@@ -15,7 +15,6 @@
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
-        {css_tag href="/datepicker.css"}
         {css_tag href="/lightview.css"}
         {css_tag href="/lightwindow.css" media="screen"}
         {css_tag href="/mediamanager.css"}
@@ -69,7 +68,7 @@
 
     </div>
 
-    
+
 
     {block name="copyright"}
 	<div id="copyright" class="wrapper-content clearfix">
@@ -100,7 +99,6 @@
         {script_tag language="javascript" src="/prototype-date-extensions.js"}
         {script_tag language="javascript" src="/fabtabulous.js"}
         {script_tag language="javascript" src="/control.maxlength.js"}
-        {script_tag language="javascript" src="/datepicker.js"}
         {script_tag language="javascript" src="/MessageBoard.js"}
         {script_tag language="javascript" src="/utils.js"}
         {script_tag language="javascript" src="/utils_header.js"}
@@ -127,7 +125,7 @@
                 // Escondemos los errores
                 //console.log( e );
         }
-        </script>   
+        </script>
      {/block}
 
      {block name="footer-js"}

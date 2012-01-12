@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="/../js/jquery_colorpicker/css/colorpicker.css"}
+    {css_tag href="/../css/jquery/jquery_colorpicker/css/colorpicker.css"}
     <style type="text/css">
     label {
         display:block;
@@ -16,7 +16,7 @@
 
 {block name="header-js" append}
     {script_tag language="javascript" src="/jquery/jquery.min.js"}
-    {script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag language="javascript" src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/utilscategory.js" language="javascript"}
     <script type="text/javascript">
     // <![CDATA[

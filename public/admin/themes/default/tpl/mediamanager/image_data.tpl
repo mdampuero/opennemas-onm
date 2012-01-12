@@ -1,5 +1,8 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+{/block}
 
 {block name="footer-js" append}
     {script_tag src="/photos.js" language="javascript"}
@@ -46,7 +49,7 @@
                 // Escondemos los errores
                 //console.log( e );
                     }
-    </script>    
+    </script>
 {/block}
 
 {block name="content"}
@@ -74,7 +77,7 @@
                     {if !isset($smarty.request.stringSearch)}
                         <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.request.category}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                     {else}
-                        <a href="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php?stringSearch={$smarty.get.stringSearch}&photo=on&action=search&id=0" 
+                        <a href="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php?stringSearch={$smarty.get.stringSearch}&photo=on&action=search&id=0"
                            class="admin_add" value="Cancelar" title="Cancelar">
                     {/if}
                          <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}

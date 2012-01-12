@@ -26,7 +26,7 @@
                         {/if}
                     </td>
                     <td style="padding:20px 5px; width:380px;">
-                        <div class="photo-static-info"> 
+                        <div class="photo-static-info">
                             <p><label>{t}Name:{/t}</label> {$photo1->title}</p>
                             <p><label>{t}File:{/t}</label> {$photo1->name}</p>
                             <p><label>{t}Resolution:{/t}</label> {$photo1->width} x {$photo1->height} (px)</p>
@@ -43,7 +43,7 @@
                             <div style="display:inline-block">
                                 <label for="fecha[{$photo1->id}]">{t}Date:{/t}</label><br>
 
-                                <input type="text" size="22" id="fecha[{$photo1->id}]" name="fecha[{$photo1->id}]"
+                                <input type="text" size="22" id="fecha-{$photo1->id}" name="fecha-{$photo1->id}"
                                     value="{$photo1->date|date_format:"%Y-%m-%d %H:%M:%S"}"  title="{t}Date:{/t}" />
                             </div>
                         </p>
@@ -197,15 +197,15 @@
     </tfoot>
 </table>
 
-
-<script defer="defer" type="text/javascript" language="javascript">
-    if($('fecha[{$photo1->id}]')) {
-        new Control.DatePicker($('fecha[{$photo1->id}]'), {
-            icon: './../../themes/default/images/template_manager/update16x16.png',
-            locale: 'es_ES',
-            timePicker: true,
-            timePickerAdjacent: true,
-            dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-        });
-    }
+<script type="text/javascript" language="javascript">
+jQuery(function() {
+    jQuery('#fecha-{$photo1->id}').datetimepicker({
+        hourGrid: 4,
+        showAnim: "fadeIn",
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'hh:mm:ss',
+	minuteGrid: 10
+    });
+    jQuery('#ui-datepicker-div').css('clip', 'auto');
+});
 </script>

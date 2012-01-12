@@ -1,5 +1,9 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+{/block}
+
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -15,7 +19,7 @@
 </div>
 
 
-{render_messages}                
+{render_messages}
 
 <div class="wrapper-content">
 
@@ -28,7 +32,7 @@
                 <td></td>
             </th>
         </table>
-        <table class="adminform">       
+        <table class="adminform">
         <tbody>
             <tr>
                 <td valign="top" align="right" style="padding:4px;">
@@ -44,7 +48,7 @@
                                 <label for="title">Portada de:</label>
                             </td>
                             <td nowrap="nowrap">
-                                <select name="category" id="category" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>                                    
+                                <select name="category" id="category" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                      {section name=as loop=$allcategorys}
                                             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $kiosko->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
@@ -98,7 +102,7 @@
                     <label for="title">Fecha:</label>
                 </td>
                 <td style="padding:4px;" nowrap="nowrap">
-                    <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" /> 
+                    <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" />
                 </td>
             </tr>
             <tr>
@@ -116,8 +120,6 @@
             </div>
         </div>
 
-        {* Replaced by the Control.DatePicker prototype widget *}
-        {dhtml_calendar inputField="date" button="date" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
     <input type="hidden" id="action" name="action" value="update" />
     <input type="hidden" id="id" name="id" value="{$kiosko->id}" />
     </div><!--fin content-wrapper-->

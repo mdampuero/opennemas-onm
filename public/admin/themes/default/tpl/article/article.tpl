@@ -21,41 +21,6 @@
         {if isset($smarty.request.action) && $smarty.request.action eq "only_read"}
             {include  file="article/only_read.tpl"}
         {/if}
-
-        <td valign="top" align="right" style="padding:4px;" width="30%">
-
-            <script type="text/javascript" language="javascript">
-            document.observe('dom:loaded', function() {
-                if($('title')){
-                    new OpenNeMas.Maxlength($('title'), {});
-                    $('title').focus(); // Set focus first element
-                }
-                getGalleryImages('listByCategory','{$category}','','1');
-                getGalleryVideos('listByCategory','{$category}','','1');
-            });
-
-            if($('starttime')) {
-                new Control.DatePicker($('starttime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-
-                new Control.DatePicker($('endtime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-            }
-            </script>
-
-
-<!--            <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id|default:""}" />-->
         </div>
     </form>
 </div>
