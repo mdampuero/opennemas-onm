@@ -514,43 +514,6 @@ a.unpublishing:hover {
     margin-bottom: -1px;
 }
 
-/* BEGIN: .tabs added by vifito ******************** */
-.tabs {
-	list-style: none;
-	margin-left: 0;
-	padding-left: 0;
-	border: 0 solid #fff;
-}
-
-.tabs li {
-	float: left;
-
-	margin-left: 0;
-	padding-left: 0;
-}
-
-.tabs a {
-	float: left;
-	padding: 5px 8px;
-	margin-left: 0px;
-	margin-right: 6px;
-	background-color: #F2F2F2;
-	text-decoration: none;
-	color: #999999;
-	border:1px solid #F2F2F2;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	text-shadow: white 0px 0px 3px;
-}
-
-.tabs a.active-tab {
-	/*background-color: #CCC;
-	border-top: 2px solid #999;
-	padding-top: 3px;
-	color: #000;*/
-}
-/* END: .tabs added by vifito ********************** */
-
 #tabs2 {
 	list-style: none;
 	margin-left: 0;
@@ -586,51 +549,6 @@ a.unpublishing:hover {
 	padding-top: 3px;
 	color: #000;
 }
-
-
-
-/* BEGIN: .tabs2 added by vifito ********************** */
-.tabs2 {
-	list-style: none;
-	margin-left: 0;
-	padding-left: 0;
-	border: 0 solid #ccc;
-}
-
-.tabs2 a:hover{
-	background:#ccc !important;
-	color:Black !important;
-}
-
-.tabs2 li {
-	float: left;
-
-	margin-left: 0;
-	padding-left: 0;
-}
-
-.tabs2 a {
-	float: left;
-	padding: 5px 8px;
-	margin-left: 0px;
-	margin-right: 6px;
-	background-color: #e1e1e1;
-	text-decoration: none;
-	color: #666 !important;
-	border:1px solid #e1e1e1;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-
-.tabs2 a.active-tab {
-        color:#000000;
-        font-weight:bold;
-        background-color:#BFD9BF;
-/*	background-color: #CCC;
-	padding-top: 3px;
-	color: #000;*/
-}
-/* END: .tabs2 added by vifito ********************** */
 
 input.disabled {
 	border: 1px solid #F2F2F2;
@@ -1342,6 +1260,7 @@ ul#menu.manager a { color:White !important; }
 	border:1px solid #bfbfbf;
 	position:relative;
 	width:100%;
+	width:90%
 }
 	.help-block.warning { border-color: #FBC2C4; }
 	.help-block .title {
@@ -2014,3 +1933,77 @@ div.action-bar .right{
 .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+
+.tabs > ul { margin: 0; padding: 0; }
+.tabs > ul li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.tabs > ul li a { float: left; padding: .5em 1em; text-decoration: none; }
+.tabs > ul li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs-panel, .tabs > div { display: block; padding: 0 !important; background: none; border:1px solid #ccc;}
+
+.tabs > ul li a {
+	outline:none;
+	padding: 5px 8px !important;
+	margin-left: 0px !important;
+	margin-right: 6px !important;
+	border: 1px solid #ccc !important;
+	border-bottom:none !important;
+	color:Black;
+	-moz-border-radius: 6px 6px 0 0 !important;
+	-webkit-border-radius: 6px 6px 0 0 !important;
+	background: #eAeAeA; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eAeAeA', endColorstr='#D2D2D2'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#eAeAeA), to(#D2D2D2)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #eAeAeA,  #D2D2D2); /* for firefox 3.6+ */
+	text-shadow:0 1px 0 #FFFFFF !important;
+	text-decoration:none !important;
+	font-size:12px !important;
+	color:Black !important;
+}
+
+.tabs {
+	border-radius:0 !important;
+	padding:0 !important;
+	margin:0 !important;
+	border:0 none;
+	margin-top:2px;
+}
+.tabs > ul:after{content: ".";display: block;clear: both;visibility: hidden;line-height: 0;height: 0;}
+
+.ui-tabs-panel,
+.tabs > div {
+	padding:0.6em 0 !important;
+	border:1px solid #ccc !important;
+	border-radius:0 !important;
+}
+.tabs, .ui-tabs {
+	border:0 none !important;
+}
+
+.tabs > ul li.ui-state-active a {
+	background:White;
+}
+
+.ui-tabs-nav li {
+	background:none !important;
+	padding:0 !important;
+	margin:0 !important;
+	border:0 none !important;
+	background:none !important;
+}
+
+.ui-tabs-nav {
+	background:none !important;
+	padding:0 !important;
+	margin:0 !important;
+	border:0 none !important;
+	background:none !important;
+}
+
+.tabs a.active-tab {
+	/*background-color: #CCC;
+	border-top: 2px solid #999;
+	padding-top: 3px;
+	color: #000;*/
+}
+.tabs > div fieldset { width:99%; }

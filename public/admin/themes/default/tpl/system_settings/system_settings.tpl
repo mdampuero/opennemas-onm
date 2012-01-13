@@ -18,15 +18,9 @@ th {
 label{
     font-weight:normal;
 }
-.panel {
-    background:White;
-}
 
 .awesome {
     border:0;
-}
-.panel {
-    margin:0;
 }
 .default-value {
     display:inline;
@@ -49,13 +43,12 @@ tr {
 {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery("#tabs").tabs();
-    });
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
+tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
+tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
 
+jQuery(document).ready(function() {
+    jQuery("#system-settings-tabbed").tabs();
     //Color Picker jQuery
     jQuery('#site_color').ColorPicker({
         onSubmit: function(hsb, hex, rgb, el) {
@@ -79,6 +72,7 @@ tr {
             jQuery('#site_logo_block').show();
         }
     }
+});
 </script>
 {/block}
 
@@ -99,7 +93,7 @@ tr {
     {render_messages}
 
     <form action="{$smarty.server.SCRIPT_NAME}" enctype="multipart/form-data" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
-        <div id="tabs">
+        <div id="system-settings-tabbed" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a></li>
                 <li><a href="#seo">{t}SEO{/t}</a></li>
@@ -107,7 +101,7 @@ tr {
                 <li><a href="#external">{t}External Services{/t}</a></li>
             </ul>
 
-            <div id="general" class="panel">
+            <div id="general">
                 <fieldset>
                     <legend>{t}Site options{/t}</legend>
                     <table>
@@ -287,7 +281,7 @@ tr {
                 </fieldset>
             </div><!-- /seo -->
 
-            <div id="misc" class="panel">
+            <div id="misc">
                 <fieldset>
                     <legend>{t}Opennemas settings{/t}</legend>
                    <table>
@@ -345,7 +339,7 @@ tr {
             </div>
 
 
-            <div id="external" class="panel">
+            <div id="external">
                 <fieldset>
                     <legend>{t}Social networks{/t}</legend>
                     <table>
