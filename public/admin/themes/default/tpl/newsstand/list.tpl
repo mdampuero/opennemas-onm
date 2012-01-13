@@ -7,9 +7,31 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{$titulo_barra}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{/if}</h2></div>
+        <div class="title"><h2>{t}Newsstand Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget{/t}{/if}</h2></div>
         <ul class="old-button">
+            {acl isAllowed="KIOSKO_DELETE"}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+                    <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                </a>
+            </li>
+            {/acl}
+            {acl isAllowed="KIOSKO_AVAILABLE"}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+                </a>
+            </li>
+            {/acl}
+            {acl isAllowed="KIOSKO_AVAILABLE"}
+            <li>
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+                </a>
+            </li>
+            {/acl}
             {acl isAllowed="KIOSKO_CREATE"}
+            <li class="separator"></li>
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New cover{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}article_add.png" title="Nueva" alt="Nueva"><br />{t}New ePaper{/t}
@@ -55,6 +77,7 @@
         {if count($portadas) > 0}
         <thead>
             <tr>
+                <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th align="center" style="width:100px;">{t}Cover{/t}</th>
                 <th align="center">{t}Title{/t}</th>
                 <th align="center" style="width:90px;">{t}Date{/t}</th>
@@ -78,6 +101,9 @@
         <tbody class="sortable">
         {section name=as loop=$portadas}
         <tr data-id="{$portadas[as]->pk_kiosko}">
+            <td class="center">
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+            </td>
             <td >
                 <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
                      title="{$portadas[as]->title|clearslash}" alt="{$portadas[as]->title|clearslash}" height="80"
