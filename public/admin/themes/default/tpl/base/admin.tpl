@@ -46,7 +46,7 @@
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/lightview.js"}
         {script_tag src="/prototype-date-extensions.js"}
-        {script_tag src="/fabtabulous.js"}
+        {*script_tag src="/fabtabulous.js"*}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
@@ -198,9 +198,6 @@
 					equalToField : 'password'
 				}]
 			]);
-
-			// Para activar los separadores/tabs
-			$fabtabs = new Fabtabs('tabs');
 		} catch(e) {
 			// Escondemos los errores
 			//console.log( e );

@@ -749,7 +749,7 @@ legend {
     color:#666;
     text-transform:uppercase;
     font-size:13px;
-    padding:0 10px;
+    padding:0 10px 0 0;
 }
 
  /* -------------------------------------------------------------
@@ -1977,10 +1977,11 @@ div.action-bar .right{
 .tabs > ul:after{content: ".";display: block;clear: both;visibility: hidden;line-height: 0;height: 0;}
 
 .ui-tabs-panel,
-.tabs > div {
-	padding:0.6em 0 !important;
-	border:1px solid #ccc !important;
-	border-radius:0 !important;
+.tabs > div,
+.tabs > table{
+    padding:10px !important;
+    border:1px solid #ccc !important;
+    border-radius:0 !important;
 }
 .tabs, .ui-tabs {
 	border:0 none !important;
@@ -1991,25 +1992,24 @@ div.action-bar .right{
 }
 
 .ui-tabs-nav li {
-	background:none !important;
-	padding:0 !important;
-	margin:0 !important;
-	border:0 none !important;
-	background:none !important;
+    background:none !important;
+    padding:0 !important;
+    margin:0 !important;
+    border:0 none !important;
+    background:none !important;
 }
 
 .ui-tabs-nav {
-	background:none !important;
-	padding:0 !important;
-	margin:0 !important;
-	border:0 none !important;
-	background:none !important;
+    background:none !important;
+    padding:0 !important;
+    margin:0 !important;
+    border:0 none !important;
+    background:none !important;
 }
 
 .tabs a.active-tab {
-	/*background-color: #CCC;
-	border-top: 2px solid #999;
-	padding-top: 3px;
-	color: #000;*/
+    /*background-color: #CCC;
+    border-top: 2px solid #999;
+    padding-top: 3px;
+    color: #000;*/
 }
-.tabs > div fieldset { width:99%; }

@@ -232,56 +232,60 @@ if(isset($_REQUEST['action']) ) {
 	}
 
 //Print menu categorias contenidos relacionadas para ajax
-	function print_menu($allcategorys,$subcat,$datos_cat,$tipo){
-			$category= $datos_cat->pk_content_category;
-			$html_out = '<br />';
-			$html_out .=' <ul class="tabs">';
-			$i=0;
-			foreach($allcategorys as $cat) {
-				$html_out .= ' <li> <a href="#"  onClick="get_div_contents(0,\''.$tipo.'\','.$cat->pk_content_category.',1);" ';
-				 if ($category==$cat->pk_content_category) {
-				 	$html_out .= ' style="color:#000000; font-weight:bold; background-color:#BFD9BF" ';
-				 }
-				 $html_out .= '>'.$cat->title .'</a> ';
-				 $html_out .='	</li>';
-				$i++;
-			}
-			$html_out .= '</ul> <br />';
+function print_menu($allcategorys,$subcat,$datos_cat,$tipo){
+    if (is_object($datos_cat)) {
+        $category = $datos_cat->pk_content_category;
+    } else {
+        $category = null;
+    }
 
-			$html_out .='<div style="clear:left;"> ';
-			$i=0;
-			foreach($allcategorys as $cat) {
-			    $html_out .= '<div id="'.$cat->name.'" style="display:inline ">
-			      <ul class="tabs"> ';
-			    foreach($subcat[$i] as $sub){
-				      if ($cat->pk_content_category == $category){
+    $html_out .=' <ul class="tabs">';
+    $i=0;
+    foreach($allcategorys as $cat) {
+            $html_out .= ' <li> <a href="#"  onClick="get_div_contents(0,\''.$tipo.'\','.$cat->pk_content_category.',1);" ';
+             if ($category==$cat->pk_content_category) {
+                    $html_out .= ' style="color:#000000; font-weight:bold; background-color:#BFD9BF" ';
+             }
+             $html_out .= '>'.$cat->title .'</a> ';
+             $html_out .='	</li>';
+            $i++;
+    }
+    $html_out .= '</ul> <br />';
 
-							  	$html_out .= '<li> <a href="#" onClick="get_div_contents(0,\''.$tipo.'\','.$sub->pk_content_category.',1);"  >';
-							    $html_out .= '<span style="color:#222 ;margin-left: 12px;margin-right: 12px;">'.$sub->title.'</span></a>
-							    </li>';
-				      }else{ //Es una subcategoria
-				      		  $father= $datos_cat->fk_content_category;
-							  if ($sub->fk_content_category==$father){
-							      $html_out .= '<li> <a href="#"  onClick="get_div_contents(0,\''.$tipo.'\','.$sub->pk_content_category.',1);" ';
-							      if ($category==$sub->pk_content_category){
-							      	$html_out .= ' style="color:#000000; font-weight:bold; background-color:#BFD9BF" ';
-							      }
-						      	  $html_out .= ' > ';
-							      $html_out .= '<span style="color:#222 ;margin-left: 12px;margin-right: 12px;">'.$sub->title.'</span></a>
-							     	 </li>';
-							  }
-					}
+    $html_out .='<div style="clear:left;"> ';
+    $i=0;
+    foreach($allcategorys as $cat) {
+        $html_out .= '<div id="'.$cat->name.'" style="display:inline ">
+          <ul class="tabs"> ';
+        foreach($subcat[$i] as $sub){
+                  if ($cat->pk_content_category == $category){
 
-				}
-				$i++;
-				$html_out .='      </ul>
-					    </div> ';
-			}
-			$html_out .= '		</div>
-			<br class="clear"/><br class="clear"/>';
+                                            $html_out .= '<li> <a href="#" onClick="get_div_contents(0,\''.$tipo.'\','.$sub->pk_content_category.',1);"  >';
+                                        $html_out .= '<span style="color:#222 ;margin-left: 12px;margin-right: 12px;">'.$sub->title.'</span></a>
+                                        </li>';
+                  }else{ //Es una subcategoria
+                              $father= $datos_cat->fk_content_category;
+                                      if ($sub->fk_content_category==$father){
+                                          $html_out .= '<li> <a href="#"  onClick="get_div_contents(0,\''.$tipo.'\','.$sub->pk_content_category.',1);" ';
+                                          if ($category==$sub->pk_content_category){
+                                            $html_out .= ' style="color:#000000; font-weight:bold; background-color:#BFD9BF" ';
+                                          }
+                                      $html_out .= ' > ';
+                                          $html_out .= '<span style="color:#222 ;margin-left: 12px;margin-right: 12px;">'.$sub->title.'</span></a>
+                                             </li>';
+                                      }
+                    }
 
-			return $html_out;
-	}
+            }
+            $i++;
+            $html_out .='      </ul>
+                        </div> ';
+    }
+    $html_out .= '		</div>
+    <br class="clear"/><br class="clear"/>';
+
+    return $html_out;
+}
 	function print_menu_opinion($type_opinion){
 
 		$html_out ='<ul class="tabs">
