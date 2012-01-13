@@ -27,7 +27,7 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 // Check ACL
-Acl::checkOrForward('EFE_IMPORTER');
+Acl::checkOrForward('IMPORT_EFE');
 
 /**
  * Setup view
@@ -118,7 +118,7 @@ switch($action) {
 
     case 'list':
 
-        if(!Acl::check('COMMENT_ADMIN', 'EDIT')) {
+        if(!Acl::check('IMPORT_EFE', 'EDIT')) {
             Acl::deny();
         }
 
