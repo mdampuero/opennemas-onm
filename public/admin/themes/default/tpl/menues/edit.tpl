@@ -5,7 +5,7 @@
     {script_tag src="/onm/jquery.menues.js"}
     <script type="text/javascript">
     jQuery(document).ready(function() {
-        jQuery( "#tabs-div" ).tabs();
+        jQuery( "#menu-form" ).tabs();
         makeSortable();
     });
     </script>
@@ -150,8 +150,8 @@ legend {
                                         </ul>
                                     </div>
                                     <br/>
-                                    <div class="left" id="tabs-div">
-                                          <ul id="tabs">
+                                    <div id="menu-form" class="left tabs">
+                                        <ul>
                                             <li>
                                                 <a href="#listado">{t}Global Categories{/t}</a>
                                             </li>
@@ -181,7 +181,7 @@ legend {
                                             </li>
                                         </ul>
 
-                                        <div class="panel" id="listado">
+                                        <div id="listado">
                                             <ul id='availableCategories' class="elementsContainer">
                                                 {section name=as loop=$categories}
                                                     <li id="cat_{$categories[as]->pk_content_category}" title="{$categories[as]->title}"
@@ -193,19 +193,19 @@ legend {
                                                 {/section}
                                             </ul>
                                          </div>
-                                        <div class="panel" id="listadoAlbum">
+                                        <div id="listadoAlbum">
                                             <ul id='albumCategories' class="elementsContainer">
                                                 {section name=as loop=$albumCategories}
-                                                        <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
-                                                            type="albumCategory" link="{$albumCategories[as]->name}"
-                                                            pk_item="{$albumCategories[as]->pk_content_category}"
-                                                            class="drag-category" pk_menu="">
-                                                            {$albumCategories[as]->title}
-                                                        </li>
+                                                <li id="album_{$albumCategories[as]->pk_content_category}" title="{$albumCategories[as]->title}"
+                                                    type="albumCategory" link="{$albumCategories[as]->name}"
+                                                    pk_item="{$albumCategories[as]->pk_content_category}"
+                                                    class="drag-category" pk_menu="">
+                                                    {$albumCategories[as]->title}
+                                                </li>
                                                 {/section}
                                             </ul>
                                          </div>
-                                        <div class="panel" id="listadoVideo">
+                                        <div id="listadoVideo">
                                             <ul id='videoCategories' class="elementsContainer">
                                                 {section name=as loop=$videoCategories}
                                                         <li id="video_{$videoCategories[as]->pk_content_category}" title="{$videoCategories[as]->title}"
@@ -217,7 +217,7 @@ legend {
                                                 {/section}
                                             </ul>
                                          </div>
-                                         <div class="panel" id="listadoPoll">
+                                         <div id="listadoPoll">
                                             <ul id='pollCategories' class="elementsContainer">
                                                 {section name=as loop=$pollCategories}
                                                         <li id="video_{$pollCategories[as]->pk_content_category}" title="{$pollCategories[as]->title}"
@@ -229,7 +229,7 @@ legend {
                                                 {/section}
                                             </ul>
                                          </div>
-                                         <div class="panel" id="frontpages">
+                                         <div id="frontpages">
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
                                                     <li id="page_{$page}"   pk_item="{$value}"
@@ -241,7 +241,7 @@ legend {
                                                 {/foreach}
                                             </ul>
                                         </div>
-                                         <div class="panel" id="staticPages">
+                                         <div id="staticPages">
                                               <ul id='availableStatics' class="elementsContainer">
                                                  {section name=k loop=$staticPages}
                                                      <li id="static_{$staticPages[k]->id}" title="{$staticPages[k]->title}" pk_menu=""
@@ -253,7 +253,7 @@ legend {
                                                  {/section}
                                              </ul>
                                          </div>
-                                        <div class="panel" id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
+                                        <div id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
                                             {section name=as loop=$categories}
                                                 {if !empty($subcat[as])}
                                                     <b>{$categories[as]->title}</b>

@@ -3,17 +3,25 @@
 * Management menu: drag-drop items, delete item, add item.
 */
 
-makeSortable = function(){
- 
-    var lists = jQuery('ul.elementsContainer');
-    lists.push(jQuery('.menuelements') );
+jQuery(document).ready(function(){
 
-    jQuery( lists ).sortable({
-        connectWith: ".menuelements",
-        placeholder: 'placeholder-element'
-    }).disableSelection();
- 
-}
+    makeSortable = function(){
+
+
+        jQuery( 'ul.elementsContainer' ).sortable({
+            connectWith: ".menuelements",
+            placeholder: 'placeholder-element'
+        }).disableSelection();
+
+        jQuery( '.menuelements' ).sortable({
+            connectWith: 'ul.elementsContainer',
+            placeholder: 'placeholder-element'
+        }).disableSelection();
+
+    }();
+
+});
+
 
 
  /*
@@ -24,9 +32,9 @@ saveMenu = function() {
     var items = new Array();
 
     jQuery('ul.menuelements li').each( function() {
- 
+
           if( item.id ) {
- 
+
               items[i] =  { "id": $(this).id,
                            "title": item.title,
                            "type": item.type,
@@ -37,7 +45,7 @@ saveMenu = function() {
          }
 
     });
- 
+
       var val = jQuery.toJSON(items);
 
    jQuery('input#items').attr('value', items );
@@ -58,11 +66,11 @@ addLink = function() {
 
     return false;
 }
- 
+
 hideDiv = function() {
     jQuery('#linkInsertions').hide();
 }
- 
+
 clear = function() {
    jQuery('#itemTitle').attr('value','');
    jQuery('#link').attr('value','');
@@ -72,22 +80,22 @@ saveLink = function() {
 
     var name = jQuery('#itemTitle').attr('value');
     var link = jQuery('#link').attr('value');
- 
+
     if(name && link) {
         ul = jQuery('#menuelements');
 
         var li = document.createElement('li');
-       
+
         ul.append( '<li title="'+ name +'" link="'+ link +
                     '" class="menuItem" name="'+ name +'" id ="'+ name +
                     '" pk_item="" type="external">'+name+'</li>' );
 
-         
+
         clear();
         jQuery('#linkInsertions').hide();
     }
 }
- 
+
 editLink = function(id) {
 
         jQuery('#linkInsertions').show(('blind'));
@@ -100,7 +108,7 @@ editLink = function(id) {
         if( jQuery('#'+id).attr('type') != 'external') {
              jQuery('#link').attr('disabled','true');
         }
- 
+
 }
 
 
@@ -108,7 +116,7 @@ deleteLink = function(id) {
 
         var deletes = jQuery('#forDelete').attr('value') + ", "+ jQuery('#'+id).attr('pk_item');
         jQuery('#forDelete').attr('value', deletes);
-       
+
         jQuery('#'+id).remove();
 }
 
@@ -116,24 +124,24 @@ updateLink = function() {
     var id = jQuery('#IdItem').attr('value');
     var name= jQuery('#itemTitle').attr('value');
     var link= jQuery('#link').attr('value');
- 
+
     if(name) {
         jQuery('#'+id).attr('title', name);
     }
     if(link) {
        jQuery('#'+id).attr('link', link);
     }
-  
+
     jQuery('#'+id).text(name);
 
     jQuery('#linkInsertions').hide();
- 
+
 }
- 
+
 hideActions = function() {
    jQuery('.menuItem').attr( 'style','background:white');
    jQuery('div.div-actions').remove();
-   
+
 }
 createActions = function(id) {
     jQuery('#'+id).append('<div class="div-actions" style="margin-top:10px; width: 60px;">'+
@@ -142,13 +150,13 @@ createActions = function(id) {
 }
 
 showActions = function(id) {
- 
+
     jQuery('#'+id).attr( 'style','background:#eee');
 
    hideActions();
-  
+
    createActions(id);
-  
+
 }
 
 
@@ -190,5 +198,5 @@ jQuery('.menuelements').bind( "sortreceive", function(event, ui) {
 
        jQuery(ui.item).attr('ondblclick', ' showActions( "'+ id +'" )' );
 
-   
+
 });
