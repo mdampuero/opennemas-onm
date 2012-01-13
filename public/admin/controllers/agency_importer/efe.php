@@ -117,11 +117,7 @@ switch($action) {
         break;
 
     case 'list':
-
-        if(!Acl::check('IMPORT_EFE', 'EDIT')) {
-            Acl::deny();
-        }
-
+ 
         $efe = \Onm\Import\Efe::getInstance();
 
         // Get the amount of minutes from last sync
