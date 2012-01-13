@@ -1,7 +1,8 @@
 /*
 * jquery Datepicker call
 */
-jQuery(function() {
+// TODO: create a plugin for starttime and endtime related inputs
+jQuery(document).ready(function() {
     jQuery('#starttime').datetimepicker({
         hourGrid: 4,
         showAnim: "fadeIn",

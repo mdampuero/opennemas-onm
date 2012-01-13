@@ -196,7 +196,7 @@ tr {
                                 <th scope="row">
                                     <label for="site_footer">{t}Text in footer frontpages:{/t}</label>
                                     <div id="toggle-btn" style="float:right;">
-                                        <a title="Habilitar/Deshabilitar editor" onclick="OpenNeMas.tinyMceFunctions.toggle('site_footer');return false;" href="#">
+                                        <a title="Habilitar/Deshabilitar editor" data-selector-to-hide="site_footer" class="toggle-tinymce" href="#">
                                             <img alt="" src="{$params.IMAGE_DIR}users_edit.png"></a>
                                     </div>
                                 </th>
