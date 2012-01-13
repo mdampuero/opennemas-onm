@@ -137,7 +137,8 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
+        privilege="BACKEND_ADMIN,NEWSLETTER_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,IMPORT_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -180,7 +181,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMPORT_EPRESS" />
         <node
             module_name="EFE_IMPORTER"
-            privilege="EFE_IMPORTER"
+            privilege="IMPORT_EFE"
             title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
             id="efe_importer"
             link="controllers/agency_importer/efe.php"
