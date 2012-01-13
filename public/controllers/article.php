@@ -27,7 +27,7 @@ if(empty($dirtyID)) {
 }
 
 $articleID = Content::resolveID($dirtyID);
- 
+
 
 $tpl->assign('contentId', $articleID); // Used on module_comments.tpl
 
@@ -43,7 +43,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
         if(!empty($articleID) ){
             $article = new Article($articleID);
 
-             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri 
+             if ($_SERVER['REQUEST_URI'] != '/'.$article->uri
                      && !preg_match('@print@',$_REQUEST['action'])
                      && !preg_match('@send@',$_REQUEST['action'])) {
                  Application::forward301('/'.$article->uri);
@@ -53,7 +53,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
             $subcategory_name = null;
         }
     }
-    
+
     // Normalizar os nomes
     list($category_name, $subcategory_name) = $ccm->normalize($category_name, $subcategory_name);
     $_GET['category_name'] = $category_name;
@@ -64,7 +64,7 @@ if($_REQUEST['action']=='vote' ||  $_REQUEST['action']=='rating' ) {
 
 
     if (isset($category_name) && !empty($category_name)) {
-        
+
         if (!$ccm->exists($category_name)) {
             Application::forward301('/');
         } else {
@@ -168,7 +168,7 @@ if(isset($_REQUEST['action']) ) {
                     || !$tpl->isCached('article/article.tpl', $cache_id) )
                 {
 
-                    
+
 
                     if (isset($article->img2)
                        && ($article->img2 != 0))
@@ -289,7 +289,7 @@ if(isset($_REQUEST['action']) ) {
                             .'contents.fk_content_type=1 AND contents.content_status=1 '
                             .'AND  contents.available=1',
                             'ORDER BY created DESC LIMIT 1,3');
-            
+
             $tpl->assign('other_news', $other_news);
 
             $cacheID = $tpl->generateCacheId('Index', '', "RSS");
@@ -397,7 +397,7 @@ if(isset($_REQUEST['action']) ) {
                     foreach ($articles_home as &$art) {
                         $art['author_name_slug'] = String_Utils::get_title($art['name']);
                     }
-                    
+
                 // Get the RSS for the rest of categories
                 } else {
 
@@ -410,12 +410,12 @@ if(isset($_REQUEST['action']) ) {
                                                                 'contents.content_status=1 AND contents.frontpage=1 AND '
                                                                 .'contents.available=1 AND contents.fk_content_type=1',
                                                                 'ORDER BY created DESC LIMIT 0,50');
-                                                        
+
                     foreach ($articles_home as $i => $article) {
                         if (isset($article->img1) && $article->img1 != 0) {
                             $photos[$article->id] = new Photo($article->img1);
                         }
-                        
+
                         $article->category_name = $article->loadCategoryName($article->id);
                     }
 
@@ -425,7 +425,7 @@ if(isset($_REQUEST['action']) ) {
                 // Filter by scheduled {{{
                 $articles_home = $cm->getInTime($articles_home);
                 // }}}
-                
+
                 $tpl->assign('title_rss', strtoupper($title_rss));
                 $tpl->assign('rss', $articles_home);
 
