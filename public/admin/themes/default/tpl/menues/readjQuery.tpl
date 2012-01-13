@@ -2,23 +2,16 @@
 
 {block name="footer-js" append}
     {script_tag src="/utilsMenues.js" language="javascript"}
-    {script_tag src="/jquery/jquery.min.js"}
-    {script_tag src="/jquery/jquery-ui.js"}
-    {*{script_tag src="/jquery/jquery.json-2.2.min.js"}*}
     {script_tag src="/onm/jquery.menues.js"}
     <script type="text/javascript">
-        $.noConflict();
-        jQuery(document).ready(function() {
-            jQuery( "#tabs-div" ).tabs();
-            makeSortable();
-
-         });
-
-
-
+    jQuery(document).ready(function() {
+        jQuery( "#tabs-div" ).tabs();
+        makeSortable();
+    });
     </script>
-
 {/block}
+
+{block name="header-js" append}{/block}
 
 {block name="header-css" append}
 {css_tag href="/managerMenu.css" media="screen,projection"}
