@@ -19,17 +19,18 @@ function smarty_function_css_tag($params, &$smarty) {
 
     $mtime = '?';
     $server = '';
+    $basepath = $params["basepath"] ?: "/css";
     if ($smarty->theme == 'default') {
-        $file = TEMPLATE_ADMIN_PATH.'/css'.$href;
+        $file = TEMPLATE_ADMIN_PATH.$basepath.$href;
         if (file_exists($file)) {
             $mtime .= filemtime($file);
-            $server = TEMPLATE_ADMIN_URL.'css';
+            $server = TEMPLATE_ADMIN_URL.$basepath;
         }
     } else {
-        $file = TEMPLATE_USER_PATH.'/css'.$href;
+        $file = TEMPLATE_USER_PATH.$basepath.$href;
         if (file_exists($file)) {
             $mtime .= filemtime($file);
-            $server = TEMPLATE_USER_URL.'css';
+            $server = TEMPLATE_USER_URL.$basepath;
         }
     }
 
@@ -52,6 +53,7 @@ function smarty_function_css_tag($params, &$smarty) {
     unset($params['rel']);
     unset($params['href']);
     unset($params['type']);
+    unset($params['basepath']);
     $properties = '';
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";

@@ -23,20 +23,22 @@ function smarty_function_script_tag($params, &$smarty) {
         //Si no es externno, calculamos el mtime del fichero
         $mtime = '?';
         $server = '';
+        $basepath = $params["basepath"] ?: "/js";
         if ($smarty->theme == 'default') {
-            $file = TEMPLATE_ADMIN_PATH.'/js'.$src;
+            $file = TEMPLATE_ADMIN_PATH.$basepath.$href;
             if (file_exists($file)) {
                 $mtime .= filemtime($file);
-                $server = TEMPLATE_ADMIN_URL.'js';
+                $server = TEMPLATE_ADMIN_URL.$basepath;
             }
         } else {
-            $file = TEMPLATE_USER_PATH.'/js'.$src;
+            $file = TEMPLATE_USER_PATH.$basepath.$href;
             if (file_exists($file)) {
                 $mtime .= filemtime($file);
-                $server = TEMPLATE_USER_URL.'js';
+                $server = TEMPLATE_USER_URL.$basepath;
             }
         }
     }
+
 
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
@@ -55,6 +57,7 @@ function smarty_function_script_tag($params, &$smarty) {
     unset($params['src']);
     unset($params['type']);
     unset($params['escape']);
+    unset($params['basepath']);
     $properties = '';
     foreach($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
