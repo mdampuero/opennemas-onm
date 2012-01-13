@@ -29,18 +29,16 @@
 	{/block}
 
     {block name="js-library"}
-        {script_tag language="javascript" src="/jquery/jquery.min.js"}
-        {script_tag language="javascript" src="/jquery/jquery-ui.js"}
-        {script_tag language="javascript" src="/jquery/jquery.ui.datepicker.js"}
-        {script_tag language="javascript" src="/jquery/jquery-ui-timepicker-addon.js"}
-        {script_tag language="javascript" src="/jquery/jquery-ui-sliderAccess.js"}
+        {script_tag src="/jquery/jquery.min.js"}
+        {script_tag src="/jquery/jquery-ui.min.js"}
         <script type="text/javascript">
-            $.noConflict();
-            // Code that uses other library's $ can follow here.
+            jQuery(document).ready(function (){
+                jQuery.noConflict();
+            });
         </script>
-        {script_tag language="javascript" src="/prototype.js"}
-        {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
-        {script_tag language="javascript" src="/scriptaculous/effects.js"}
+        {script_tag src="/prototype.js"}
+        {script_tag src="/scriptaculous/scriptaculous.js"}
+        {script_tag src="/scriptaculous/effects.js"}
     {/block}
 
     {block name="header-js"}

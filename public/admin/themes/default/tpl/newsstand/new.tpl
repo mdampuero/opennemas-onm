@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
     {script_tag language="javascript" src="/onm/jquery.datepicker.js"}
 {/block}
 

@@ -1,11 +1,13 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js"}
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/photos.js" language="javascript"}
+    {script_tag src="/photos.js"}
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
         <div class="message" id="console-info">{$smarty.request.message}</div>
         <script defer="defer" type="text/javascript">

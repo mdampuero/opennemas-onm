@@ -1,10 +1,12 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag language="javascript" src="/onm/jquery.datepicker.js"}
-    {script_tag src="/utilsarticle.js" language="javascript"}
-    {script_tag src="/editables.js" language="javascript"}
-    {script_tag src="/utilsGallery.js" language="javascript"}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js"}
+    {script_tag src="/utilsarticle.js"}
+    {script_tag src="/editables.js"}
+    {script_tag src="/utilsGallery.js"}
 {/block}
 
 {block name="header-css" append}
@@ -21,7 +23,7 @@
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 document.observe('dom:loaded', function() {
 	if($('title')){
 		new OpenNeMas.Maxlength($('title'), {});
