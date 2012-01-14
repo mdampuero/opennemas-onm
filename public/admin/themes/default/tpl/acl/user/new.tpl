@@ -193,10 +193,8 @@ function showGroupUsers(elto) {
                                     <label for="sessionexpire">{t}Session expire time:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" id="sessionexpire" name="sessionexpire" title="Expiraci&oacute;n de Sessi&oacute;n"
+                                    <input type="number" id="sessionexpire" name="sessionexpire" title="Expiraci&oacute;n de Sessi&oacute;n"
                                         value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" size="4" />
-                                    <input id="up" class="spinner_button" type="button" value="+" />
-                                    <input id="dn" class="spinner_button" type="button" value="-" />
                                     <apan>{t}minutes{/t}</span>
                             </tr>
 
@@ -205,7 +203,7 @@ function showGroupUsers(elto) {
                                     <label for="email">{t}Email adress:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" id="email" name="email" title="{t}Email adress:{/t}"
+                                    <input type="email" id="email" name="email" title="{t}Email adress:{/t}"
                                         value="{$user->email}" class="required validate-email"  size="50"/>
                                 </td>
                             </tr>
@@ -307,7 +305,7 @@ function showGroupUsers(elto) {
                                                     {/foreach}
                                                 {/if}
                                             {/foreach}
- 
+
                                         </select>
 
                                         <!--<select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">

@@ -323,18 +323,9 @@ input, select, textarea {
         </div><!-- / -->
 
         <style type="text/css">
-            #tabs a {
-                background-color: #F5F5F5;
-            }
-
-            #tabs a.active-tab {
-                background-color: #EEE;
-                font-weight: bold;
-            }
-            table.adminlist img {
-                height:auto !important;
-            }
-
+        table.adminlist img {
+            height:auto !important;
+        }
         </style>
 
         <script language="javascript" type="text/javascript">

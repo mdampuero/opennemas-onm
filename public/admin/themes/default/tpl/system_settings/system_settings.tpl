@@ -307,7 +307,7 @@ jQuery(document).ready(function() {
                                     <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
+                                    <input type="number" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
                                     <span class="default-value"></span>
                                 </td>
                                 <td>
@@ -323,7 +323,7 @@ jQuery(document).ready(function() {
                                     <label for="items_per_page">{t}Items per page:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
+                                    <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                                 </td>
                                 <td>
                                     <div class="help-block margin-left-1">
