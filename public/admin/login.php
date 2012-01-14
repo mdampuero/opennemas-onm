@@ -60,6 +60,7 @@ switch ($action) {
                     // Store default expire time
                     $app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
                     Privileges_check::loadSessionExpireTime();
+                    $GLOBALS['Session']->cleanExpiredSessionFiles();
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {

@@ -15,6 +15,14 @@
  **/
 class SessionManager implements ArrayAccess
 {
+
+    /**
+     * Defines the max age of a session in seconds. Used for expire sessions.
+     *
+     * @var string
+     **/
+    const MAX_SESSION_LIFETIME = 259200;
+
     /**
      * The directory where sessions are saved.
      *
@@ -205,7 +213,7 @@ class SessionManager implements ArrayAccess
     {
         $sessionDirectory = $this->sessionDirectory;
 
-        if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
+        if (is_dir($sessionDirectory)) {
             if ($dh = opendir($sessionDirectory)) {
                 while (($file = readdir($dh)) !== false) {
                     if (preg_match('/^sess_/', $file)) {
@@ -230,7 +238,6 @@ class SessionManager implements ArrayAccess
     /**
      * Unserializes the session information.
      * http://es2.php.net/manual/en/function.session-decode.php#79244
-
      * @param string $data the serialized data for the session.
      **/
     public function unserializeSession($data)
@@ -250,6 +257,28 @@ class SessionManager implements ArrayAccess
             $i++;
         }
         return $result;
+    }
+
+    /**
+     * Deletes all expired session files from instance tmp folder
+     *
+     * This function deletes all the expired session files from the instance tmp
+     * folder. A session file is marked as expired if it has a modification time 
+     * greater than 72 hours.
+     * @return void
+     **/
+    public function cleanExpiredSessionFiles()
+    {
+        $sessionDir = $this->sessionDirectory;  // your sessions directory
+        $compareTime = time() - self::MAX_SESSION_LIFETIME;  // Expire 72 hours
+        $count = 0;
+
+        foreach (glob($sessionDir."/*") as $file) {
+            if ($compareTime >= filemtime($file)) {
+                if (unlink($file)) $count++; 
+            }
+        }
+        $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");
     }
 
 }
