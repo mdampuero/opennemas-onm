@@ -60,7 +60,7 @@
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Go to cache settings{/t}">
 					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
 					{t}Settings{/t}
 				</a>
@@ -166,7 +166,7 @@
 						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
 						{* RSS *}
 						{elseif $resource eq "RSS"}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
+						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}RSS cache{/t}" />
 						{* Frontpage mobile *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
 						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />

@@ -137,7 +137,7 @@
         <div class="company left">
             <img src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
 			{t} made by OpenHost S.L.{/t}<br/>
-            {t 1=strftime("%Y")}All rights reserved ® 2008 - %1{/t}
+            {t 1=strftime("%Y") escape=off}All rights reserved &copy; 2008 - %1{/t}
         </div>
         <ul class="support">
             <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>

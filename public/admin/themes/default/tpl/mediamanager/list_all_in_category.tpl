@@ -34,9 +34,9 @@
             {if $datos_cat[0]}
                 {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}
             {elseif $category eq "2"}
-                    {t}Image manager:: Images for category «publicidad»{/t}
+                    {t}Image manager:: Images for category "Advertisement"{/t}
             {else}
-                {t}Image manager:: Images for category «GLOBAL»{/t}
+                {t}Image manager:: Images for category "GLOBAL"{/t}
             {/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="IMAGE_DELETE"}
