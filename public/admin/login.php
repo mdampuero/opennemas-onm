@@ -62,7 +62,7 @@ switch ($action) {
                     Privileges_check::loadSessionExpireTime();
 
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
-                    if (!is_null($forwardTo)) {
+                    if (!is_null($forwardTo) && !empty($forwardTo)) {
                         Application::forward(SITE_URL.SS.$forwardTo);
                     } else {
                         Application::forward(SITE_URL_ADMIN);
