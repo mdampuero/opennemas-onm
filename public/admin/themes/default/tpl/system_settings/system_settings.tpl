@@ -1,79 +1,80 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-{css_tag href="/css/colorpicker.css" basepath="/js/jquery/jquery_colorpicker/"}
-<style type="text/css">
-table th, table label {
-    color: #888;
-    text-shadow: white 0 1px 0;
-    font-size: 13px;
-}
-th {
-    vertical-align: top;
-    text-align: left;
-    padding: 10px;
-    width: 200px;
-    font-size: 13px;
-}
-label{
-    font-weight:normal;
-}
+    {css_tag href="/css/colorpicker.css" basepath="/js/jquery/jquery_colorpicker/"}
+    <style type="text/css">
+    table th, table label {
+        color: #888;
+        text-shadow: white 0 1px 0;
+        font-size: 13px;
+    }
+    th {
+        vertical-align: top;
+        text-align: left;
+        padding: 10px;
+        width: 200px;
+        font-size: 13px;
+    }
+    label{
+        font-weight:normal;
+    }
 
-.awesome {
-    border:0;
-}
-.default-value {
-    display:inline;
-    color:#666;
-    margin-left:10px;
-    vertical-align:middle
-}
-input[type="text"],
-textarea{
-    width:400px;
-    max-height:80%
-}
-tr {
-    vertical-align:top;
-}
-</style>
+    .awesome {
+        border:0;
+    }
+    .default-value {
+        display:inline;
+        color:#666;
+        margin-left:10px;
+        vertical-align:middle
+    }
+    input[type="text"],
+    textarea{
+        width:400px;
+        max-height:80%
+    }
+    tr {
+        vertical-align:top;
+    }
+    </style>
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
-<script type="text/javascript">
-tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
-tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
+    {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag src="/tiny_mce/opennemas-config.js"}
 
-jQuery(document).ready(function() {
-    jQuery("#system-settings-tabbed").tabs();
-    //Color Picker jQuery
-    jQuery('#site_color').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-            jQuery(el).val(hex);
-            jQuery(el).ColorPickerHide();
-        },
-        onChange: function (hsb, hex, rgb) {
-            jQuery('.colopicker_viewer').css('background-color', '#' + hex);
-        },
-        onBeforeShow: function () {
+    <script type="text/javascript">
+    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
+    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
+
+    jQuery(document).ready(function() {
+        jQuery("#system-settings-tabbed").tabs();
+        //Color Picker jQuery
+        jQuery('#site_color').ColorPicker({
+            onSubmit: function(hsb, hex, rgb, el) {
+                jQuery(el).val(hex);
+                jQuery(el).ColorPickerHide();
+            },
+            onChange: function (hsb, hex, rgb) {
+                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+            },
+            onBeforeShow: function () {
+                jQuery(this).ColorPickerSetColor(this.value);
+            }
+        }).bind('keyup', function(){
             jQuery(this).ColorPickerSetColor(this.value);
-        }
-    }).bind('keyup', function(){
-        jQuery(this).ColorPickerSetColor(this.value);
-    });
+        });
 
-    toogleSiteLogo = function(value) {
-        if(value == 0) {
-            jQuery('#site_logo_block').hide();
-        } else {
-            jQuery('#site_logo_block').show();
+        toogleSiteLogo = function(value) {
+            if(value == 0) {
+                jQuery('#site_logo_block').hide();
+            } else {
+                jQuery('#site_logo_block').show();
+            }
         }
-    }
-});
-</script>
+    });
+    </script>
 {/block}
 
 {block name="content"}
@@ -218,7 +219,7 @@ jQuery(document).ready(function() {
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site title{/t}</h4></div>
-                                        <div class="content">{t escape="off"}You can edit here the site title. This one will be displayed on the browsers &lt;title> tag.{/t}</div>
+                                        <div class="content">{t escape="off"}You can edit here the site title. This one will be displayed on the browsers &lt;title&gt; tag.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -232,7 +233,7 @@ jQuery(document).ready(function() {
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site description{/t}</h4></div>
-                                        <div class="content">{t escape=off}You can edit here the site description. This will be used on &lt;meta> tag description.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site description. This will be used on &lt;meta&gt; tag description.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -254,7 +255,7 @@ jQuery(document).ready(function() {
                     </table>
                 </fieldset>
 
-                 <fieldset>
+                <fieldset>
                     <legend>{t}Web Master Tools{/t}</legend>
                     <table>
                         <tbody>

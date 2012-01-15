@@ -6,7 +6,6 @@
     <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery( "#menu-form" ).tabs();
-        makeSortable();
     });
     </script>
 {/block}
