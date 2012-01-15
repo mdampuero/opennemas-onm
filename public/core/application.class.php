@@ -340,10 +340,7 @@ class Application
         define('STATUS', "1");
         define('CHARSET', "text/html; charset=UTF-8");
 
-        $protocol = 'http://';
-        if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
-            $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
-        }
+        $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
 
         define('SS', "/");
 
