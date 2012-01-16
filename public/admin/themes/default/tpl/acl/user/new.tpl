@@ -146,8 +146,73 @@ function showGroupUsers(elto) {
         <table class="adminform"  width="100%">
             <tr>
                 <td valign="top">
+                <fieldset>
+                    <legend>{t}Name{/t}</legend>
+                    <table>
+                        <tbody>
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="name">{t}Name:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="name" name="name" title="{t}Name:{/t}"
+                                    value="{$user->name}" class="required"  size="50"/>
+                            </td>
+                            <td rowspan=5>
+                                <div class="help-block margin-left-1">
+                                    <div class="title"><h4>{t}Complete user information{/t}</h4></div>
+                                    <div class="content">
+                                        {t escape=off}Please complete the user information by filling the aside form.{/t}
+                                        {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <table style="margin:1em;">
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="firstname">{t}Surname:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="firstname" name="firstname" title="{t}Surname:{/t}"
+                                    value="{$user->firstname}" class="required"  size="50"/>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="lasname">{t}Maiden surname:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="lastname" name="lastname" title="{t}Maiden surname:{/t}"
+                                    value="{$user->lastname}"  size="50"/>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="address">{t}Address:{/t}</label>
+                            </th>
+                            <td>
+                                <textarea type="text" id="address" name="address" title="{t}Address:{/t}" cols=60>{$user->address}</textarea>
+                            </td>
+                        </tr>
+
+                        <tr valign="top">
+                            <th scope="row">
+                                <label for="phone">{t}Telephone:{/t}</label>
+                            </th>
+                            <td>
+                                <input type="text" id="phone" name="phone" title="{t}Telephone:{/t}" class="validate-digits"
+                                    value="{$user->phone}"  size="15"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>{t}OpenNemas user information{/t}</legend>
+                    <table>
                         <tbody>
                             <tr valign="top">
                                 <th scope="row">
@@ -156,17 +221,6 @@ function showGroupUsers(elto) {
                                 <td>
                                     <input type="text" id="login" name="login" title="Login del usuario"
                                         value="{$user->login}" class="required"  size="14" maxlength="20" />
-                                </td>
-                                <td rowspan="12">
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Complete user information{/t}</h4></div>
-                                        <div class="content">{t escape=off}Please complete the user information by filling the aside form.{/t}</div>
-                                    </div>
-                                    <br>
-                                    <div class="help-block margin-left-1">
-                                        <div class="title"><h4>{t}Do you want a custom avatar?{/t}</h4></div>
-                                        <div class="content">{t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}</div>
-                                    </div>
                                 </td>
                             </tr>
                             <tr valign="top">
@@ -207,56 +261,13 @@ function showGroupUsers(elto) {
                                         value="{$user->email}" class="required validate-email"  size="50"/>
                                 </td>
                             </tr>
-
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="name">{t}Name:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="name" name="name" title="{t}Name:{/t}"
-                                        value="{$user->name}" class="required"  size="50"/>
-                                </td>
-                            </tr>
-
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="firstname">{t}Surname:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="firstname" name="firstname" title="{t}Surname:{/t}"
-                                        value="{$user->firstname}" class="required"  size="50"/>
-                                </td>
-                            </tr>
-
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="lasname">{t}Maiden surname:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="lastname" name="lastname" title="{t}Maiden surname:{/t}"
-                                        value="{$user->lastname}"  size="50"/>
-                                </td>
-                            </tr>
-
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="address">{t}Address:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="address" name="address" title="{t}Address:{/t}"
-                                        value="{$user->address}"  size="50"/>
-                                </td>
-                            </tr>
-
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="phone">{t}Telephone:{/t}</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="phone" name="phone" title="{t}Telephone:{/t}" class="validate-digits"
-                                        value="{$user->phone}"  size="15"/>
-                                </td>
-                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>{t}User group and category access{/t}</legend>
+                    <table style="margin:1em;">
+                        <tbody>
                            {acl isAllowed="GROUP_CHANGE"}
                             <tr valign="top">
                                 <th scope="row">
@@ -320,6 +331,8 @@ function showGroupUsers(elto) {
                         </tbody>
 
                     </table>
+                </fieldset>
+                    
                 </td>
             </tr>
             <tfoot>

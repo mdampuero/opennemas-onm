@@ -44,8 +44,10 @@ switch ($action) {
                     //Delete the cache that handles the number of active sessions
                     apc_delete(APC_PREFIX ."_"."num_sessions");
 
+
                     $_SESSION = array(
                         'userid'           => $user->id,
+                        'realname'         => $user->firstname . " " . $user->lastname,
                         'username'         => $user->login,
                         'email'            => $user->email,
                         'isAdmin'          => ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),

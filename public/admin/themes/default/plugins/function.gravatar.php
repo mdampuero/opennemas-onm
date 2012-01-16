@@ -4,7 +4,7 @@ function smarty_function_gravatar($params, &$smarty) {
     $url = '';
     if (array_key_exists('email', $params)) {
 
-        $size = '16';
+        $size = (isset($params['size'])) ? $params['size'] : '16';
         $d = 'mm'; // mm, identicon, 404, monsterid, wavatar
         $r = 'g';
         $img = false;

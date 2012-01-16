@@ -826,13 +826,6 @@ legend {
 			padding-top:10px;
 		}
 
-#topbar-admin .avatar {
-    border:1px solid #DDDDDD;
-    padding:1px;
-    width:14px;
-    margin-bottom:-1px;
-    margin-right:2px;
-}
 
 #cuadromenu, #submenus{
 	background-color:#464646 !important;
@@ -1581,34 +1574,22 @@ div.action-bar .right{
 	padding:0;
 	margin:0;
 }
+#user_box *{
+	vertical-align:middle;
+}
 #user_box a {
 	text-decoration:none
 }
 #user_box > ul > li > a {
 	display:block;
-	padding: 12px 3px;
+	padding: 12px 10px;
+}
+#user_box > ul > li:hover > a {
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
-#user_box > ul > li > a:hover {
-	-webkit-transition:background 0.07s linear;
-	-moz-transition:background 0.07s linear;
-	-o-transition:background 0.07s linear;
-	transition:background 0.07s linear;
-}
-#user_box *{
-	vertical-align:middle;
-}
-#user_box ul > li {
-	display:inline-block;
-}
-#user_box ul li a.menu {
-	padding: 10px 10px;
-	margin:0;
-}
-#user_box ul li.menu {
-  position: relative;
-}
-#user_box ul li.menu a.menu:after {
+
+#user_box > ul > li a.menu:after {
   width: 0px;
   height: 0px;
   display: inline-block;
@@ -1625,92 +1606,68 @@ div.action-bar .right{
   -moz-opacity: 0.5;
   opacity: 0.5;
 }
-#user_box ul li.menu:hover a.menu, #user_box ul li.menu:hover a:hover {
-  background-color: #444;
-  background-color: rgba(255, 255, 255, 0.1);
-  *background-color: #444;
-  /* IE6-7 */
 
-  color: #fff;
+#user_box ul > li {
+	display:inline-block;
 }
-#user_box ul li.menu:hover ul {
-  display: block;
-  position:absolute;
+.usermenu > ul {
+	width:250px !important;
+	margin: 0;
+	padding:0;
+	display: none;
+	position: absolute;
+	top: 99%;
+	right: 0px;
+	background-color: #333;
+	border-radius: 0 0 5px 5px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
-#user_box ul li.menu:hover ul li a {
-  background-color: transparent;
-  font-weight: normal;
-}
-#user_box ul li.menu:hover ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  *background-color: #444;
-  /* IE6-7 */
+.usermenu:hover > ul {
+	display:block !important;
+	margin:0;
 
-  color: #fff;
 }
-#user_box ul li.menu:hover ul li.active a {
-  background-color: rgba(255, 255, 255, 0.1);
-  font-weight: bold;
+.usermenu > ul > li {
+	width:100%;
 }
-#user_box ul li ul {
-  background-color: #333;
-  float: left;
-  display: none;
-  position: absolute;
-  min-width: 160px;
-  max-width: 220px;
-  _width: 160px;
-  margin:0;
-  padding: 0;
-  text-align: left;
-  border: 0;
-  zoom: 1;
-  -webkit-border-radius: 0 0 5px 5px;
-  -moz-border-radius: 0 0 5px 5px;
-  border-radius: 0 0 5px 5px;
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-  right:0;
+.usermenu li a:hover {
+	text-decoration:underline !important;
 }
-#user_box ul li ul li {
-  float: none;
-  clear: both;
-  display: block;
-  background: none;
-  font-size: 12px;
+.usermenu .avatar {
+	float:left;
+	box-shadow: 0 0px 3px rgba(0, 0, 0, 0.6);
+	padding:1px;
+	margin:10px;
+	width:50px;
+	height:50px
 }
-#user_box ul li ul li a {
-  display: block;
-  padding: 6px 15px;
-  clear: both;
-  font-weight: normal;
-  line-height: 19px;
-  color: #bbb;
+.usermenu .user-info {
+	float:right;
+	width:160px;
+ 	margin:10px;
+ 	margin-left:0;
 }
-#user_box ul li ul li a:hover {
-  background-color: #333;
-  background-color: rgba(255, 255, 255, 0.25);
-  color: #fff;
-}
-#menu li.divider,
-#user_box ul li ul li.divider {
-	height:1px;
-	overflow: hidden;
-	background: #222;
-	background: rgba(0, 0, 0, 0.2);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-	margin: 5px 0;
-}
-#user_box ul li ul li span {
-  clear: both;
-  display: block;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 6px 15px;
-  cursor: default;
-  color: #808080;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-}
+	.usermenu .complete-name {
+		color: White;
+		font-size:1.2em;
+		font-weight:bold;
+	}
+	.usermenu .login-name {
+		font-size:.95em;
+		color:#999;
+		margin-bottom:10px;
+	}
+	.usermenu .user-info li {
+		display:block;
+		clear:both;
+		width:100%;
+	}
+
+	.usermenu .user-info ul {
+		width:100%;
+		margin:0;
+		padding:0;
+	}
 
 /* -------------------------------------------------------------
   New layout for listing tables.
