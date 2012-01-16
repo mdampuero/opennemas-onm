@@ -71,7 +71,7 @@ switch($action) {
         }
 
         $cm = new ContentManager();
- 
+
         if ($category == 'favorite') {
             $albums = $cm->find_all('Album', 'favorite =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
@@ -235,15 +235,15 @@ switch($action) {
         $msg ='';
         $relations = Related_content::get_content_relations( $id );
         if (!empty($relations)) {
-            $msg = sprintf(_(" The album %s have some relations")."\n", $album->title);
+            $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
             $cm= new ContentManager();
             $relat = $cm->getContents($relations);
             foreach($relat as $contents) {
                $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all its relations?");
+            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");
         } else {
-            $msg = sprintf(_("Do you want delete %s?"), $album->title);
+            $msg = sprintf(_('Do you want to delete "%s"?'), $album->title);
         }
         echo $msg;
         exit(0);
@@ -255,7 +255,7 @@ switch($action) {
         Acl::checkOrForward('ALBUM_DELETE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if($id){
+        if ($id){
             $album = new Album($id);
             //Delete relations
             $rel= new Related_content();
@@ -285,7 +285,7 @@ switch($action) {
     break;
 
     case 'change_favorite':
-        
+
         Acl::checkOrForward('ALBUM_FAVORITE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);

@@ -26,7 +26,7 @@
     </tr>
      <tr>
         <td>
-            <label for="title">Descripción:</label>
+            <label for="title">{t}Description{/t}</label>
         </td>
         <td>
             <textarea name="description" id="description" class="required" style="width:70%"

@@ -114,7 +114,7 @@
                                 <td>
                                     <input type="text" id="site_name" name="site_name" value="{$configs['site_name']|default:""}">
                                 </td>
-                                <td rowspan=5>
+                                <td rowspan=4>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>Basic parameters</h4></div>
                                         <div class="content">
@@ -219,7 +219,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site title{/t}</h4></div>
-                                        <div class="content">{t escape="off"}You can edit here the site title. This one will be displayed on the browsers &lt;title&gt; tag.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site title. This one will be displayed on the browsers &lt;title&gt; tag.{/t}</div>
                                     </div>
                                 </td>
                             </tr>

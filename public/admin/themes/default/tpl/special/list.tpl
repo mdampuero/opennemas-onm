@@ -106,10 +106,10 @@
                 <td class="center">
                     {acl isAllowed="SPECIAL_AVAILABLE"}
                         {if $specials[as]->available == 1}
-                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
+                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
+                                <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
                         {/if}
                     {/acl}
@@ -118,9 +118,9 @@
                 <td class="center">
                     {acl isAllowed="SPECIAL_FAVORITE"}
                         {if $specials[as]->favorite == 1}
-                           <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
+                           <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
+                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}'></a>
                         {/if}
                     {/acl}
                 </td>

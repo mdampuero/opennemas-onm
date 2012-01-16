@@ -114,7 +114,7 @@
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:90%; height:10em;">{t 1=$special->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$special->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 

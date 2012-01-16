@@ -160,7 +160,7 @@
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:90%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 
@@ -170,7 +170,7 @@
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="metadata" name="metadata" size="60"
-                           class="required" title={t}"Metadata"{/t} value="{$book->metadata}" />
+                           class="required" title="Metadata" value="{$book->metadata}" />
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
                     </td>
                 </tr>

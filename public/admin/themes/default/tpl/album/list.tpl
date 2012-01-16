@@ -19,21 +19,21 @@
                 {acl isAllowed="ALBUM_DELETE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Eliminar{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />{t}Publish{/t}
                     </a>
                 </li>
                 {/acl}
@@ -41,7 +41,7 @@
                 <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Album');" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />Nuevo Album
+                        <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />{t}New album{/t}
                     </a>
                 </li>
                 {/acl}
@@ -112,11 +112,11 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $albums[as]->available == 1}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
+                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
+                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
                 </td>
@@ -124,27 +124,28 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
                         {if $albums[as]->favorite == 1}
-                           <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
+                           <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
+                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
                 <td class="center">
                     <ul class="action-buttons">
-                       {acl isAllowed="ALBUM_UPDATE"}
+                        {acl isAllowed="ALBUM_UPDATE"}
                         <li>
                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
                                    <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                       </li>
-                       {/acl}
+                        </li>
+                        {/acl}
 
-                       {acl isAllowed="ALBUM_DELETE"}
-                       <li>
-                           <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
-                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                       </li>
-                       {/acl}
+                        {acl isAllowed="ALBUM_DELETE"}
+                        <li>
+                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
+                               <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                            </a>
+                        </li>
+                        {/acl}
                     </ul>
                 </td>
 

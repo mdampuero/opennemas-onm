@@ -1413,7 +1413,7 @@ class Content
         foreach ($availableCategories as $category) {
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $output .= sprintf(_("Homepage for category %s cleaned sucessfully.\n"), $category->name);
+            $output .= sprintf(_("Homepage for category %s cleaned sucessfully."), $category->name);
         }
         return $output;
 
