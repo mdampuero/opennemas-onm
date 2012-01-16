@@ -72,7 +72,7 @@ if (!is_null($action) ) {
 			 **/
 			$tpl->setConfig('gallery-frontpage');
 
-			$cacheID = $tpl->generateCacheId('gallery-frontpage',$category_name, $page);
+			$cacheID = $tpl->generateCacheId('gallery-frontpage'.$category_name, '', $page);
 
 			/**
 			 * Don't execute action logic if was cached before

@@ -138,12 +138,11 @@ switch($action) {
                 // Increment numviews if it's accesible
                 $poll->setNumViews($pollId);
 
-                $cacheID = $tpl->generateCacheId($category_name, $pollId );
+                $cacheID = $tpl->generateCacheId($category_name,'', $pollId );
 
-                if( 1 || ($tpl->caching == 0) || !$tpl->is_cached('poll/poll.tpl', $cacheID) ) {
+                if( ($tpl->caching == 0) || !$tpl->isCached('poll/poll.tpl', $cacheID) ) {
 
                     $items = $poll->get_items($pollId);
-
 
                     $comment = new Comment();
                     $comments = $comment->get_public_comments($pollId);
