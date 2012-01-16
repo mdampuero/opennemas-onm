@@ -1148,6 +1148,15 @@ ul#menu .selected{
 	color: #003300;
 }
 
+#menu li.divider {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 1px;
+    margin: 5px 0;
+    overflow: hidden;
+    height: 1px;
+    padding: 0;
+}
 
 ul#menu.manager a { color:White !important; }
 /* -------------------------------------------------------------

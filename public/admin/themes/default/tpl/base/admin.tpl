@@ -141,7 +141,7 @@
 	{/block}
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     {if Acl::check('USER_ADMIN') eq true}
     var users_online = [];
@@ -178,7 +178,7 @@
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">
-        	try {
+    	try {
 			// Activar la validación
 			new Validation('formulario', { immediate : true });
 			Validation.addAllThese([
