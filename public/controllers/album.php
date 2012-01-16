@@ -41,8 +41,9 @@ if(!empty($category_name)) {
                         'category_real_name' => $category_real_name ,
                 ) );
 } else {
+     //$category_name = 'Portada';
      $category_real_name = 'Portada';
-     $tpl->assign(array( 
+     $tpl->assign(array(
                         'category_real_name' => $category_real_name ,
                 ) );
 }
@@ -77,13 +78,13 @@ if (!is_null($action) ) {
 			 * Don't execute action logic if was cached before
 			 */
             if ( ($tpl->caching == 0)
-			   && (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
-                
+			   || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
+
                 $albumSettings = s::get('album_settings');
                 $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
                 $days = isset( $albumSettings['time_last'])?$albumSettings['time_last']:4;
                 $order = isset( $albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
-               
+
 
                 if ( isset($category) && !empty($category) ) {
                     $albums = $cm->find_by_category('Album',
@@ -101,7 +102,7 @@ if (!is_null($action) ) {
                                         ' ORDER BY views DESC,  created DESC LIMIT '.$total);
                     }
                 }
-              
+
 				$tpl->assign('albums', $albums);
 
 			}
@@ -142,7 +143,7 @@ if (!is_null($action) ) {
 			require_once("album_inner_ads.php");
 
 			if (($tpl->caching == 0)
-				&& (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
+				|| (!$tpl->isCached('gallery/gallery.tpl', $cacheID))){
 
 				/**
 				 * Get the album from the id and increment the numviews for it
@@ -156,7 +157,7 @@ if (!is_null($action) ) {
                 $configurations = s::get('album_settings');
                 $total = isset($configurations['total_front'])?($configurations['total_front']):2;
                 $days = isset( $configurations['time_last'])?($configurations['time_last']):4;
-                
+
 				$otherAlbums = $cm->find('Album',
 												$category,
 												'available=1 and pk_content !='.$albumID.
