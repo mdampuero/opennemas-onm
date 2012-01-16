@@ -1027,7 +1027,6 @@ ul#menu li:hover li a:hover{ background-color: rgba(255, 255, 255, 0.1); }
 ul#menu ul ul { display: none; position: absolute; top: 0; left: 99%;  border-radius: 0 5px 5px 0;}
 ul#menu li > ul li:last-child a { padding-bottom:8px; }
 ul#menu li > ul li:first-child a { padding-top:8px; }
-=======
 ul#menu > li ul {
 	border-radius: 0 5px 5px 0;
 }
@@ -1607,6 +1606,14 @@ div.action-bar .right{
   opacity: 0.5;
 }
 
+#user_box .string-search {
+	-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;
+	width:150px;
+	border-radius:13px;
+}
+#user_box .string-search:focus {
+	width:200px;
+}
 #user_box ul > li {
 	display:inline-block;
 }
