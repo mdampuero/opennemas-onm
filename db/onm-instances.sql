@@ -55,6 +55,8 @@ CREATE TABLE `instances` (
   `name` varchar(255) NOT NULL,
   `domains` text NOT NULL,
   `settings` text,
+  `activated` TINYINT( 1 ) NOT NULL,
+  `contact_mail` VARCHAR( 255 ) NOT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
