@@ -42,7 +42,7 @@ legend {
 
         {render_messages}
 
-        
+
         <div class"panel" style="border:1px solid #ccc; padding:10px;">
             <fieldset>
                 <legend>Poll section preferences</legend>
@@ -52,7 +52,7 @@ legend {
                     <option value="vote" {if $configs['poll_settings']['typeValue'] eq 'vote'} selected {/if}>{t}Vote count{/t}</option>
                 </select>
                 <br/><br/>
-                
+
                 <div style="display:inline-block">
                     <label for="poll[heightPoll]">{t}Charts height{/t}</label>
                     <input type="text" class="required" id="name" name="poll_settings[heightPoll]" value="{$configs['poll_settings']['heightPoll']|default:"500"}" />
@@ -61,14 +61,14 @@ legend {
                     <label for="poll[widthPoll]">{t}Charts width{/t}</label>
                 <input type="text" class="required" id="name" name="poll_settings[widthPoll]" value="{$configs['poll_settings']['widthPoll']|default:"600"}" />
                 </div><!-- / -->
-                
+
 
             </fieldset>
 
             <fieldset>
                 <legend>Poll home widget preferences</legend>
                 <label for="poll[total_widget]">{t}Elements in frontpage widget{/t}</label>
-                <input type="text" class="required" name="poll_settings[total_widget]" value="{$configs['poll_settings']['total_widget']|default:"2"}" />
+                <input type="text" class="required" name="poll_settings[total_widget]" value="{$configs['poll_settings']['total_widget']|default:"1"}" />
                 <br/><br/>
 
                 <div style="display:inline-block">
@@ -80,10 +80,10 @@ legend {
                     <input type="text" class="required" id="name" name="poll_settings[heightWidget]" value="{$configs['poll_settings']['heightWidget']|default:"240"}" />
                 </div><!-- / -->
 
-                
+
             </fieldset>
         </div><!-- / -->
-                        
+
         <div class="action-bar clearfix">
             <div class="right">
                 <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">

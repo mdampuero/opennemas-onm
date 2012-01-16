@@ -55,25 +55,25 @@ switch ($action) {
     case 'list':  //Buscar publicidad entre los content
 
         $cm = new ContentManager();
-         
-       
+
+
         if(empty($numItems)) {$numItems=16;}
         $configurations = s::get('poll_settings');
         $numFavorites = $configurations['total_widget'];
-         
+
         if (empty($page)) {
             $limit = "LIMIT ".(ITEMS_PAGE+1);
         } else {
             $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.$numItems;
         }
-        
+
         if ($category == 'favorite') { //Widget video
             $polls = $cm->find_all('Poll', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
-            
+
             if (count($polls) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d polls in the HOME widget"), $numFavorites));
             }
-            
+
             if(!empty($polls)){
                 foreach ($polls as &$poll) {
                     $poll->category_name = $ccm->get_name($poll->category);
@@ -83,7 +83,7 @@ switch ($action) {
 
         } elseif ($category == 'all') {
             $polls = $cm->find_all('Poll', 'available =1', 'ORDER BY created DESC '. $limit);
-            
+
             if(!empty($polls)){
                 foreach ($polls as &$poll) {
                     $poll->category_name = $ccm->get_name($poll->category);
@@ -92,9 +92,9 @@ switch ($action) {
             }
         } else {
             // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
-            $polls = $cm->find_by_category('Poll', 'fk_content_type=11 ', 'ORDER BY  created DESC '.$limit);
+            $polls = $cm->find_by_category('Poll', $category, ' 1=1', 'ORDER BY  created DESC '.$limit);
         }
-        
+
         $params = array(
             'page'=>$page, 'items'=>ITEMS_PAGE,
             'total' => count($polls),
@@ -112,7 +112,7 @@ switch ($action) {
     break;
 
     case 'new':
-        
+
         Acl::checkOrForward('POLL_CREATE');
 
         $tpl->display('polls/new.tpl');
@@ -178,7 +178,7 @@ switch ($action) {
         $poll = new Poll();
         $poll->delete( $_POST['id'] );
 
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
 
     case 'change_status':
@@ -188,11 +188,8 @@ switch ($action) {
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
         $poll->set_available($status, $_SESSION['userid']);
 
-        if ($_GET['from']=='index') {
-            Application::forward('index.php?action=list');
-        } else {
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
-        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+
     break;
 
     case 'change_favorite':
@@ -204,7 +201,7 @@ switch ($action) {
         if (isset($_GET['from']) && $_GET['from'] =='index') {
             Application::forward('index.php?action=list&msg='.$msg);
         }else{
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         }
     break;
 
