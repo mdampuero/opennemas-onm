@@ -28,17 +28,7 @@ a:hover   { text-decoration: underline; }
 
 
 h1 { margin: 0; padding-bottom: 8px; color: #0B55C4; font-size: 20px; font-weight: bold; }
-h2 {
-	color:#464646;
-	font-size:1.5em;
-	vertical-align:bottom;
-	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-	font-style:italic;
-	font-weight:normal;
-	margin:0;
-	padding:14px 15px 3px 0;
-	text-shadow:0 1px 0 #FFFFFF;
-}
+h2 { }
 h3 { font-size: 13px; }
 
 legend {
@@ -790,12 +780,16 @@ legend {
 			display:inline-block;
 			padding:10px 0;
 		}
-		.top-action-bar .title img {
-			margin-left:10px;
-		}
+		.top-action-bar .title img { margin-left:10px; }
 		.top-action-bar .title h2 {
+			color:#464646;
+			font-size:1.5em;
+			vertical-align:bottom;
+			font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+			font-style:italic;
+			font-weight:normal;
+			text-shadow:0 1px 0 #FFFFFF;
 			margin:0;
-			padding:0;
 			padding:22px 0;
 			font-size:1.6em;
 		}
@@ -883,7 +877,7 @@ ul#menu { margin: 0; padding: 0; list-style: none; display:inline-block; }
 ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
 	ul#menu li:hover > a, ul#menu a:hover { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
-ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #333; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #222; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
 	ul#menu li { display: block; position:relative; list-style: none; margin: 0; padding: 0; border: 0 none;}
 		ul#menu a:hover { color: White; }
 	ul#menu > li ul { border-radius: 0 0 5px 5px ; }
@@ -891,6 +885,7 @@ ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; back
 /* Root menu */
 ul#menu > li {  display: inline-block;  position: relative; }
 	ul#menu > li > a { padding: 12px 15px; }
+	ul#menu > li:hover > a { background-color: #111; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
 
 /* 2nd Menu */
 ul#menu > li > ul { top: 99%; left: 0px; display:none;}
@@ -1478,7 +1473,6 @@ div.action-bar .right{
 	border:1px solid #111111;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
     color: #BBBBBB;
-    font-size: 12px;
     padding: 5px 7px !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
     margin:4px 12px 5px 12px;
