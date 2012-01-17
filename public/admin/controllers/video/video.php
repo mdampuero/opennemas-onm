@@ -69,8 +69,8 @@ switch ($action) {
 
         $configurations = s::get('video_settings');
         $numFavorites = $configurations['total_widget'];
-        
-        
+
+
 
         if (empty($page)) {
             $limit = "LIMIT ".(ITEMS_PAGE+1);
@@ -80,11 +80,11 @@ switch ($action) {
 
         if ($category == 'favorite') { //Widget video
             $videos = $cm->find_all('Video', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
-            
+
             if (count($videos) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
             }
-            
+
             if(!empty($videos)){
                 foreach ($videos as &$video) {
                     $video->category_name = $ccm->get_name($video->category);
@@ -94,7 +94,7 @@ switch ($action) {
 
         } elseif ($category == 'all') {
             $videos = $cm->find_all('Video', 'available =1', 'ORDER BY created DESC '. $limit);
-            
+
             if(!empty($videos)){
                 foreach ($videos as &$video) {
                     $video->category_name = $ccm->get_name($video->category);
@@ -125,9 +125,9 @@ switch ($action) {
         break;
 
     case 'selecttype':
-        
+
         $tpl->display('video/selecttype.tpl');
-        
+
         break;
 
     case 'new':
@@ -187,9 +187,9 @@ switch ($action) {
     case 'create':
 
         Acl::checkOrForward('VIDEO_CREATE');
-        
+
         $pathUpload = MEDIA_PATH.DS;
-        
+
         if (
             isset($_FILES)
             && count($_FILES) >0
@@ -197,28 +197,39 @@ switch ($action) {
             && !empty($_FILES["video_file"]["name"])
         ) {
             $video = new Video();
-            
-            //Mirar el tema de mensajes en los fallos que deberia devolver.
-            $filePath = Video::uploadFLV($_FILES["video_file"], $pathUpload);
-            
-            // IF not file provided try to redirect user.
-            // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-            $_POST["video_url"] = $filePath['flvFile'];
-            $_POST["information"] = array('thumbnails' => $filePath['thumbnails']);
-            $_POST["author_name"] = 'internal';
-            if($video->create( $_POST )) {
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-            } else {
-                $tpl->assign('errors', $video->errors);
+
+            try {
+                //Mirar el tema de mensajes en los fallos que deberia devolver.
+            $processedFile = $video->upload($_FILES["video_file"], $pathUpload);
+            } catch (\Exception $e) {
+                m::add($e->getMessage());
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=create');
             }
-            $tpl->display('video/new.tpl');
+
+            if (!empty($processedFile)) {
+                // IF not file provided try to redirect user.
+                // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+                $_POST["video_url"] = $processedFile['flvFile'];
+                $_POST["information"] = array('thumbnails' => $processedFile['thumbnails']);
+                $_POST["author_name"] = 'internal';
+
+                if($video->create( $_POST )) {
+                    m::add(_('Video uploaded'));
+                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+                } else {
+                    $tpl->assign('errors', $video->errors);
+                }
+                $tpl->display('video/new.tpl');
+            } else {
+                m::add(_('There was an erro while processing your video file'), m::ERROR);
+            }
             die();
-            
+
         } elseif (!empty($_POST['information'])) {
-            
+
             $video = new Video();
             $_POST['information'] = json_decode($_POST['information'], true);
-            
+
             if($video->create( $_POST )) {
                 Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
             } else {
@@ -226,25 +237,25 @@ switch ($action) {
             }
             $tpl->display('video/new.tpl');
             die();
-            
+
         } else {
             //m::add('Form not uploaded properly');
             //$type = \Onm\Request::getInstance()->getParam('type', 'file');
             //
             //Application::forward(
             //    $_SERVER['SCRIPT_NAME'] ."?action=create&type={$type}"
-            //);  
+            //);
         }
 
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
         Application::forward(
             $_SERVER['SCRIPT_NAME']
             . '?action=list_today&category='.$category
-            . '&page=' . $page . '&mensaje=' . 'mensagepordefinir'
+            . '&page=' . $page
         );
 
         break;
-    
+
     case 'validate':
 
         $continue = true;

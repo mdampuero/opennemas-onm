@@ -85,7 +85,9 @@
     </div>
 
         <div class="wrapper-content">
+
             {render_messages}
+
 			<table class="adminheading">
 				<tr>
 					<td>{t}Enter video information{/t}</td>

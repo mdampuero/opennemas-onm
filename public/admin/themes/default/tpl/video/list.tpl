@@ -52,22 +52,22 @@
 
     <div class="wrapper-content">
         {render_messages}
-    </div><!-- / -->        
-        
+    </div><!-- / -->
+
     <div class="wrapper-content">
 
         <ul class="pills clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category==='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
             </li>
-            
+
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if} >{t}All categories{/t}</a>
             </li>
 
             {include file="menu_categories.tpl" home="video.php?action=list"}
         </ul>
-        
+
         {render_messages}
 
         <table class="listing-table">
