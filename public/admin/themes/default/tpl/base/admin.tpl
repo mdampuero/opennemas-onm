@@ -50,7 +50,10 @@
         {script_tag src="/lightview.js"}
         {script_tag src="/lightwindow.js" defer="defer"}
         {script_tag src="/modalbox.js" defer="defer"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js" defer="defer"}
+     {/block}
+
+     {block name="footer-js"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>

@@ -247,7 +247,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
-                                        <div class="content">{t}You can edit here the site keywords. This will be used on <meta> tag keywords.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site keywords. This will be used on &lt;meta&gt; tag keywords.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
