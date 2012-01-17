@@ -1,12 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="js-library" append}
-
-    {script_tag src="/jquery/jquery.min.js"}
-    {script_tag src="/jquery/jquery-ui.js"}
-    <script>jQuery.noConflict();</script>
-{/block}
-
 {block name="header-js" append}
     <style type="text/css">
         .panel{ border:0 !important; }

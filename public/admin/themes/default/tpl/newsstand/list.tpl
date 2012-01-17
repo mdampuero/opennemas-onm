@@ -1,7 +1,5 @@
 {extends file="base/admin.tpl"}
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery.min.js"}
-       {script_tag src="/jquery/jquery-ui.js"}
     {script_tag src="/onm/jquery.newsstand.js" language="javascript"}
 {/block}
 {block name="content"}
