@@ -72,8 +72,8 @@ if (!is_null($action) ) {
 			 **/
 			$tpl->setConfig('gallery-frontpage');
 
-			$cacheID = $tpl->generateCacheId('gallery-frontpage'.$category_name, '', $page);
-
+			$cacheID = $tpl->generateCacheId($category_name, '', $page);
+ 
 			/**
 			 * Don't execute action logic if was cached before
 			 */
@@ -112,7 +112,7 @@ if (!is_null($action) ) {
 			/**
 			 * Send the response to the user
 			 */
-            $tpl->display('album/album_frontpage.tpl');
+            $tpl->display('album/album_frontpage.tpl',$cacheID);
 
         break;
 

@@ -84,7 +84,7 @@ switch($action) {
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
 								 array('options'=> array('default' => 0)));
 
-        $cacheID = $tpl->generateCacheId('poll-frontpage',$category_name, $page);
+        $cacheID = $tpl->generateCacheId($category_name, '', $page);
 
         /**
          * Don't execute action logic if was cached before
@@ -251,7 +251,7 @@ switch($action) {
 
             $poll->setNumViews($pollId);
 
-            $cacheID= $tpl->generateCacheId($category_name, $pollId );
+            $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
 
             require_once('poll_inner_advertisement.php');
 
