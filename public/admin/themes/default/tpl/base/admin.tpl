@@ -11,12 +11,11 @@
     <meta name="generator" content="OpenNemas - News Management System">
     <meta name="viewport"  content="width=device-width,initial-scale=1">
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
-
     {block name="meta"}
         <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
     {/block}
 
+    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
         {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
@@ -25,16 +24,12 @@
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
         {css_tag href="/lightview.css"}
         {css_tag href="/lightwindow.css" media="screen"}
-        {css_tag href="/mediamanager.css"}
 	{/block}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/jquery/jquery-ui.min.js"}
         <script type="text/javascript">
-            jQuery(document).ready(function (){
-                jQuery.noConflict();
-            });
+        jQuery.noConflict();
         </script>
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
@@ -44,7 +39,7 @@
     {block name="header-js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/lightview.js"}
+        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
         {script_tag src="/prototype-date-extensions.js"}
         {*script_tag src="/fabtabulous.js"*}
         {script_tag src="/control.maxlength.js"}
@@ -52,10 +47,10 @@
         {script_tag src="/utils_header.js"}
         {script_tag src="/utilsopinion.js"}
         {script_tag src="/validation.js"}
+        {script_tag src="/lightview.js"}
         {script_tag src="/lightwindow.js" defer="defer"}
         {script_tag src="/modalbox.js" defer="defer"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
-        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js" defer="defer"}
      {/block}
 
 </head>
@@ -74,18 +69,7 @@
         <div class="info-left">
             <div id="user_box">
         		<ul>
-        		    {if {count_pending_comments} gt 0}
-        		    <li class="menu">
-                        <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
-                            title="{t}There are new comments to moderate{/t}">
-                            <img src="{$params.IMAGE_DIR}/messaging_system/messages_red.png" alt="" />
-                            {count_pending_comments}
-                        </a>
-        		    </li>
-        		    {/if}
-                    {gmail_mailbox prepend_html="<li>" append_html="</li>"}
-
-                    <li>
+                    <li class="nofillonhover">
                         <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
                             <input type="hidden" name="action" value="search" />
                             <input type="hidden" name="article" value="on" />
@@ -95,10 +79,17 @@
                         </form>
                     </li>
 
-        		    <li class="usermenu">
-                        <a href="#" class="menu">
-                            {$smarty.session.username|ucfirst}
+                    {if {count_pending_comments} gt 0}
+                    <li class="menu">
+                        <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
+                            title="{t}There are new comments to moderate{/t}">
+                            <span class="icon">{count_pending_comments}</span>
                         </a>
+                    </li>
+                    {/if}
+
+        		    <li class="usermenu">
+                        <a href="#" class="menu">&nbsp;</a>
             			<ul>
             			    <li>
                                 <div class="avatar">
@@ -107,7 +98,7 @@
                 				<div class="user-info">
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
                                     <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links clearfix">
+                                    <ul class="links">
                                         <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
                                         {if Acl::check('BACKEND_ADMIN') eq true}
                                         <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
