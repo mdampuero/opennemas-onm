@@ -65,6 +65,11 @@
                                   <option name="newsletter_maillist[link]" value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
                                 </select>
                             </div>
+                            <br />    
+                            <div>
+                                <label for="newsletter_maillist[subscription]">{t}Mail address in form subscription{/t}</label>
+                                <input type="text" class="required" id="name" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" />
+                            </div>
                         </div>
                     </td>
                 </tr>
