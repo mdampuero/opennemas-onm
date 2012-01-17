@@ -15,75 +15,7 @@
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
-        {css_tag href="/lightview.css"}
-        {css_tag href="/lightwindow.css" media="screen"}
-        {css_tag href="/mediamanager.css"}
         {css_tag href="/messageboard.css" media="screen"}
-	{/block}
-
-</head>
-<body>
-
-    <div id="topbar-admin" class="manager">
-        <div class="logo-and-menu">
-            <div id="logoonm">
-                <a  href="{$smarty.const.SITE_URL}manager/index.php" id="logo-onm" title="{t}Go to admin main page{/t}">
-                   <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132px" height="27px"/>
-                </a>
-            </div>
-
-            {admin_menu}
-        </div><!-- / -->
-
-        <div class="info-left">
-            <div id="user_box">
-		<ul>
-		    <li class="menu">
-			<a href="#" id="menu" class="menu">{$smarty.session.username|ucfirst}</a>
-			<ul>
-			    <li>
-				{t escape="off" 1=$smarty.session.userid 2=$smarty.session.username 3=$smarty.const.SITE_URL_ADMIN}<a id="settings" title="See my user preferences" href="%3/controllers/acl/user.php?action=read&id=%1">Settings</a>{/t}
-			    </li>
-			    <li class="divider"></li>
-			    <li>
-				<a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php');" id="logout" class="logout" title="{t}Logout from control panel{/t}">
-				    {t}Log out{/t}
-				</a>
-			    </li>
-			</ul>
-		    </li>
-		</ul>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div id="content">
-
-    {block name="content"}
-
-    {/block}
-
-    </div>
-
-
-
-    {block name="copyright"}
-	<div id="copyright" class="wrapper-content clearfix">
-
-        <div class="company left">
-            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
-			{t} made by OpenHost S.L.{/t}<br/>
-            {t 1=strftime("%Y") escape=off}All rights reserved &copy; 2008 - %1{/t}
-        </div>
-
-        <ul class="support">
-            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a> </li>
-        </ul>
-
-    </div>
 	{/block}
 
     {block name="js-library"}
@@ -128,8 +60,47 @@
         </script>
      {/block}
 
-     {block name="footer-js"}
-     {/block}
+</head>
+<body>
+
+    <header class="global-nav manager clearfix">
+        <div class="logoonm pull-right">
+            <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
+               <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
+            </a>
+        </div>
+        <div class="global-menu pull-left">
+            {admin_menu}
+        </div>
+    </header>
+
+    <div id="content">
+
+    {block name="content"}
+
+    {/block}
+
+    </div>
+
+
+
+    {block name="copyright"}
+	<div id="copyright" class="wrapper-content clearfix">
+
+        <div class="company left">
+            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
+			{t} made by OpenHost S.L.{/t}<br/>
+            {t 1=strftime("%Y") escape=off}All rights reserved &copy; 2008 - %1{/t}
+        </div>
+
+        <ul class="support">
+            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a> </li>
+        </ul>
+
+    </div>
+	{/block}
+
+    {block name="footer-js"}{/block}
 
 </body>
 </html>

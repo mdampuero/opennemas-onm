@@ -60,60 +60,56 @@
 <body>
     {script_tag src="/wz_tooltip.js"}
 
-    <header id="topbar-admin" class="clearfix">
-        <div class="logo-and-menu">
-            <div id="logoonm">
-                <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
-                   <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
+    <header class="global-nav clearfix">
+        <div class="logoonm pull-right">
+            <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
+               <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
+            </a>
+        </div>
+        <div class="global-menu pull-left">
+            {admin_menu}
+        </div>
+        <div class="global-user-tools pull-right">
+
+            <div class="global-search nofillonhover">
+                <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="hidden" name="article" value="on" />
+                    <input type="hidden" name="id" value="0" />
+                    <input type="hidden" name="opinion" value="on" />
+                    <input type="search" name="stringSearch" placeholder="{t}Search...{/t}" class="string-search">
+                </form>
+            </div>
+
+            {if {count_pending_comments} gt 0}
+            <div class="notification-messages">
+                <a  class="comments-available" 
+                    href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
+                    title="{t}There are new comments to moderate{/t}">
+                    <span class="icon">{count_pending_comments}</span>
                 </a>
             </div>
-            {admin_menu}
-        </div><!-- / -->
-        <div class="info-left">
-            <div id="user_box">
-        		<ul>
-                    <li class="nofillonhover">
-                        <form action="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php" method="post">
-                            <input type="hidden" name="action" value="search" />
-                            <input type="hidden" name="article" value="on" />
-                            <input type="hidden" name="id" value="0" />
-                            <input type="hidden" name="opinion" value="on" />
-                            <input type="search" name="stringSearch" placeholder="{t}Search...{/t}" class="string-search">
-                        </form>
-                    </li>
+            {/if}
 
-                    {if {count_pending_comments} gt 0}
-                    <li class="menu">
-                        <a class="comments-available" href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
-                            title="{t}There are new comments to moderate{/t}">
-                            <span class="icon">{count_pending_comments}</span>
-                        </a>
-                    </li>
-                    {/if}
-
-        		    <li class="usermenu">
-                        <a href="#" class="menu">&nbsp;</a>
-            			<ul>
-            			    <li>
-                                <div class="avatar">
-                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
-                                </div><!-- / -->
-                				<div class="user-info">
-                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                                    <div class="login-name">{$smarty.session.username}</div>
-                                    <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
-                                        {if Acl::check('BACKEND_ADMIN') eq true}
-                                        <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
-                                        {/if}
-                                        <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                                    </ul><!-- / -->
-                                </div><!-- / -->
-            			    </li>
-            			</ul>
-        		    </li>
-        		</ul>
-            </div>
+            <div class="usermenu">
+                <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
+    			<div>
+                        <div class="avatar">
+                            {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
+                        </div><!-- / -->
+        				<div class="user-info">
+                            <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                            <div class="login-name">{$smarty.session.username}</div>
+                            <ul class="links">
+                                <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
+                                {if Acl::check('BACKEND_ADMIN') eq true}
+                                <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
+                                {/if}
+                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
+                            </ul><!-- / -->
+                        </div><!-- / -->
+			    </div>
+    		</div>
         </div>
     </header>
 
