@@ -219,7 +219,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site title{/t}</h4></div>
-                                        <div class="content">{t escape=off}You can edit here the site title. This one will be displayed on the browsers &lt;title&gt; tag.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site title. This one will be displayed on the browsers title bar.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -233,7 +233,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site description{/t}</h4></div>
-                                        <div class="content">{t escape=off}You can edit here the site description. This will be used on &lt;meta&gt; tag description.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site description. This will be used on meta tag description.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -247,7 +247,7 @@
                                 <td>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Edit your Site footer{/t}</h4></div>
-                                        <div class="content">{t escape=off}You can edit here the site keywords. This will be used on &lt;meta&gt; tag keywords.{/t}</div>
+                                        <div class="content">{t escape=off}You can edit here the site keywords. This will be used on meta tag keywords.{/t}</div>
                                     </div>
                                 </td>
                             </tr>
