@@ -20,6 +20,7 @@ class Template extends Smarty
     public $filters        = array( 'pre'    => array(),
                           'post'   => array(),
                           'output' => array(), );
+    public $templateBaseDir;
 
     public $relative_path = null;
     static public $registry = array();
@@ -32,6 +33,8 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
+
+        self::$_CHARSET = 'UTF-8';
 
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
@@ -60,10 +63,9 @@ class Template extends Smarty
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         // Add global plugins path
-        $this->plugins_dir[]    = realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/');
-        $this->plugins_dir[]    = realpath($this->templateBaseDir.'plugins/').'/';
+        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
+        $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/').'/');
         $this->caching          = false;
-        $this->allow_php_tag    = true;
 
 
         // Template variables
@@ -216,9 +218,8 @@ class TemplateAdmin extends Template {
 
         $this->template_dir	= $this->templateBaseDir.'tpl/';
         $this->config_dir	= $this->templateBaseDir.'config/';
-        $this->plugins_dir[]= $this->templateBaseDir.'plugins/';
+        $this->addPluginsDir($this->templateBaseDir.'plugins/');
         $this->caching	= false;
-        $this->allow_php_tag = true;
 
 
 
@@ -284,7 +285,7 @@ class TemplateManager extends Template {
         $this->template_dir	= $this->templateBaseDir.'tpl/';
 
         $this->config_dir	 = $this->templateBaseDir.'config/';
-        $this->plugins_dir   []= $this->templateBaseDir.'plugins/';
+        $this->addPluginsDir($this->templateBaseDir.'plugins/');
         $this->caching	     = false;
         $this->allow_php_tag = true;
 
