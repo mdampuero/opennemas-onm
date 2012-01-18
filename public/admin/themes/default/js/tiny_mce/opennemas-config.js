@@ -29,7 +29,7 @@ OpenNeMas.tinyMceConfig = {
         theme_advanced_toolbar_align : "left",
         theme_advanced_statusbar_location : "bottom",
         skin : "cirkuit",
-        skin_variant : "silver",
+        //skin_variant : "silver",
 
         /* theme_advanced_styles : "Título 1=header1;Título 2=header2;Título 3=header3;",*/
         theme_advanced_disable : "help",
@@ -82,7 +82,7 @@ OpenNeMas.tinyMceConfig = {
         language: "es",
         plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe,gtranslator",
         skin : "cirkuit",
-        skin_variant : "silver",
+        //skin_variant : "silver",
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
@@ -142,7 +142,7 @@ OpenNeMas.tinyMceConfig = {
         language: "es",
         plugins : "safari,style,advlink,noneditable,inlinepopups,paste,media,noneditable,xornal,searchreplace,spellchecker,tabfocus,iframe,gtranslator",
         skin : "cirkuit",
-        skin_variant : "silver",
+        //skin_variant : "silver",
         /* css */
         content_css: '/admin/themes/default/js/tiny_mce/opennemas-config.css?' + new Date().getTime(),
 
