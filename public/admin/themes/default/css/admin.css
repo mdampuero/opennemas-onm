@@ -10,7 +10,7 @@ body {
 	margin:0;
 	min-height:100%;
 	background: #fff;
-	font-size: 12px !important;
+	font-size: 12.1px !important;
 	margin-top: 24px;
 }
 
@@ -737,7 +737,7 @@ legend {
 .global-user-tools .global-search .string-search {
 	background:url(../images/global-search-box.png) 5px 3px no-repeat; padding-left:25px; width:110px; border-radius:13px; line-height:1.25em;
 	-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;
-	display:block; margin-top:5px;
+	display:block; margin-top:5px; background-color:#444;
 }
 .global-user-tools .global-search .string-search:focus { background:url(../images/global-search-box-blur.png) 5px 3px no-repeat; padding-left:25px; width:250px; background-color:#ffffff; }
 .global-user-tools .global-search form { height:100%; }
@@ -906,7 +906,7 @@ legend {
 		}
 
 		.buttons .button span.icon.home {
-			background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
+			/*background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;*/
 		}
 
 /* -------------------------------------------------------------
@@ -921,7 +921,7 @@ legend {
   Main admin menu   //// Root = Horizontal, Secondary = Vertical
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Global menu properties*/
-ul#menu { margin: 0; padding: 0; list-style: none; display:inline-block; }
+ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100% }
 ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
 	ul#menu li:hover > a, ul#menu a:hover { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
@@ -931,8 +931,8 @@ ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; back
 	ul#menu > li ul { border-radius: 0 0 5px 5px ; }
 
 /* Root menu */
-ul#menu > li {  display: inline-block;  position: relative; }
-	ul#menu > li > a { padding: 12px 15px; }
+ul#menu > li {  display: inline-block;  position: relative; height:100% }
+	ul#menu > li > a { margin: 0; padding: 11px 10px !important; }
 	ul#menu > li:hover > a { background-color: #111; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
 
 /* 2nd Menu */
@@ -945,8 +945,8 @@ ul#menu ul:after { clear: both; display: block; content: "."; height: 0; visibil
 ul#menu li:hover > ul { display: block; }
 	ul#menu ul li a { padding: 5px 35px 5px 15px ; }
 ul#menu ul li { clear: both; display: block; float: none; }
-ul#menu ul li:last-child  a { padding-bottom:8px; }
-ul#menu ul li:first-child a { padding-top:8px; }
+ul#menu ul li:last-child  a { padding-bottom:6px; }
+ul#menu ul li:first-child a { padding-top:6px; }
 		ul#menu ul ul { border-radius: 0  5px 5px 0; display: none; position: absolute; top: 0; left: 99%; }
 	ul#menu ul li.divider { padding:0; height:1px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 1px; margin: 5px 0; overflow: hidden; height: 1px; padding: 0; }
 
