@@ -221,7 +221,7 @@ switch ($action) {
                 }
                 $tpl->display('video/new.tpl');
             } else {
-                m::add(_('There was an erro while processing your video file'), m::ERROR);
+                m::add(_('There was an error while processing your video file'), m::ERROR);
             }
             die();
 

@@ -201,16 +201,18 @@ class Video extends Content
 
             $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
-            $videoInformation['flvFile'] = $convertedVideo['relative_path'];
+            if (array_key_exists('relative_path', $convertedVideo)) {
+                $videoInformation['flvFile'] = $convertedVideo['relative_path'];
 
-            $videoAbsolutePath = $convertedVideo['absolute_path'];
+                $videoAbsolutePath = $convertedVideo['absolute_path'];
 
-            $thumbnails = self::createThumbnailsfromFLV($videoAbsolutePath);
+                $thumbnails = self::createThumbnailsfromFLV($videoAbsolutePath);
 
-            // We need to add relative path for every thumbnail
-            $relativeUploadDir = $convertedVideo['relative_dir'];
-            foreach ($thumbnails as $name => $value ) {
-                $videoInformation['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
+                // We need to add relative path for every thumbnail
+                $relativeUploadDir = $convertedVideo['relative_dir'];
+                foreach ($thumbnails as $name => $value ) {
+                    $videoInformation['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
+                }
             }
 
         } //if empty
@@ -247,26 +249,21 @@ class Video extends Content
         // Compose absolute path to the new video file
         $videoSavePath = realpath($absoluteUploadpath).DS.$fileName;
 
-        $return['relative_dir'] = $relativeUploadDir;
-        $return['relative_path'] = $relativeUploadDir.DS.$fileName;
-        $return['absolute_path'] = $videoSavePath;
-
         switch ($fileType) {
             case 'video/x-ms-wmv':
-
-                $output = exec(
-                    $ffmpgePath." -i ".$temporaryVideoPath." -f flv -s 320x240 ".$videoSavePath
-                );
+            case 'video/avi':
+            case 'video/msvideo':
+            case 'video/x-msvideo':
+                // Dropped option -s 320x240
+                $shellCommand = escapeshellcmd($ffmpgePath." -i ".$temporaryVideoPath." -f flv  ".$videoSavePath). " 2>&1";
+                exec($shellCommand, $outputExec, $returnExec);
+                if ($returnExec !== 0) {
+                    throw new \Exception(
+                        _('There was a problem while converting your video. Please contact with your adminstrator.')
+                    );
+                };
                 break;
 
-            case 'avi':
-            case 'mpg':
-            case 'mpeg':
-            case 'mov':
-                exec(
-                    $ffmpgePath." -i ".$temporaryVideoPath." -f flv -s 320x240 ".$videoSavePath
-                );
-                break;
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
                 break;
@@ -274,6 +271,10 @@ class Video extends Content
                 throw new \Exception(sprintf(_('Video format "%s" not supported'), $fileType));
                 break;
         }
+
+        $return['relative_dir'] = $relativeUploadDir;
+        $return['relative_path'] = $relativeUploadDir.DS.$fileName;
+        $return['absolute_path'] = $videoSavePath;
 
         return $return;
     }
