@@ -69,6 +69,7 @@ switch($action) {
                     'username' => $serverAuth['username'],
                     'password' => $serverAuth['password'],
                     'message' => $message,
+                    'agency_string' => s::get('efe_agency_string'),
                     'sync_from' => array(
                         'no_limits' => _('No limit'),
                         '86400' => _('1 day'),
@@ -92,6 +93,7 @@ switch($action) {
             $username   = filter_input( INPUT_POST, 'username' , FILTER_SANITIZE_STRING );
             $password   = filter_input( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
             $syncFrom   = filter_input( INPUT_POST, 'sync_from' , FILTER_SANITIZE_STRING );
+            $agencyString   = filter_input( INPUT_POST, 'agency_string' , FILTER_SANITIZE_STRING );
 
             if (!isset($server) || !isset($username) || !isset($password)) {
                 Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/efe.php' . '?action=config');
@@ -104,7 +106,8 @@ switch($action) {
             );
 
             if (s::set('efe_server_auth', $serverAuth)
-                && s::set('efe_sync_from_limit', $syncFrom))
+                && s::set('efe_sync_from_limit', $syncFrom)
+                && s::set('efe_agency_string', $agencyString))
             {
                 m::add(_('EFE configuration saved successfully'), m::SUCCESS);
             } else {
@@ -313,7 +316,7 @@ switch($action) {
             'title_int' => $element->texts[0]->title,
             'metadata' => String_Utils::get_tags($element->texts[0]->title),
             'subtitle' => $element->texts[0]->pretitle,
-            'agency' => $element->agency_name,
+            'agency' => s::get('efe_agency_string') ?: $element->agency_name,
             'summary' => $element->texts[0]->summary,
             'body' => $element->texts[0]->body,
             'posic' => 0,

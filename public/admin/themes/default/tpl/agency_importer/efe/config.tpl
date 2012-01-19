@@ -77,8 +77,11 @@
                                 <input type="password" class="required" id="password" name="password" value="{$password|default:""}" />
                             </div>
                             <div>
+                                <label for="password">{t}Agency:{/t}</label>
+                                <input type="text" class="required" id="agency_string" name="agency_string" value="{$agency_string|default:""}" />
+                            </div>
+                            <div>
                                 <label for="sync_from">{t}Sync elements newer than:{/t}</label>
-                                
                                 <select name="sync_from">
                                     {html_options options=$sync_from selected=$sync_from_setting|default:""}
                                 </select>

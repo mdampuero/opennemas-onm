@@ -69,6 +69,7 @@ switch($action) {
                     'username' => $serverAuth['username'],
                     'password' => $serverAuth['password'],
                     'message' => $message,
+                    'agency_string' => s::get('europapress_agency_string'),
                     'sync_from' => array(
                         'no_limits' => _('No limit'),
                         '86400' => _('1 day'),
@@ -92,6 +93,7 @@ switch($action) {
             $username   = filter_input( INPUT_POST, 'username' , FILTER_SANITIZE_STRING );
             $password   = filter_input( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
             $syncFrom   = filter_input( INPUT_POST, 'sync_from' , FILTER_SANITIZE_STRING );
+            $agencyString   = filter_input( INPUT_POST, 'agency_string' , FILTER_SANITIZE_STRING );
 
             if (!isset($server) || !isset($username) || !isset($password)) {
                 Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/europapress.php' . '?action=config');
@@ -104,7 +106,8 @@ switch($action) {
             );
 
             if (s::set('europapress_server_auth', $serverAuth)
-                && s::set('europapress_sync_from_limit', $syncFrom))
+                && s::set('europapress_sync_from_limit', $syncFrom)
+                && s::set('europapress_agency_string', $agencyString))
             {
                 m::add(_('Europapress configuration saved successfully'), m::SUCCESS);
             } else {
@@ -180,7 +183,6 @@ switch($action) {
 
         } catch (Exception $e) {
 
-
             // Redirect the user to the list of articles and show him/her an error message
             $httpParams []= array( 'error' => sprintf(_('ID "%d" doesn\'t exist'),$id));
             Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
@@ -209,7 +211,7 @@ switch($action) {
                         'title_int' => $element->title,
                         'metadata' => String_Utils::get_tags($element->title),
                         'subtitle' => $element->pretitle,
-                        'agency' => $element->agencyName,
+                        'agency' => s::get('europapress_agency_string') ?: $element->agencyName,
                         'summary' => $element->summary,
                         'body' => $element->body,
                         'posic' => 0,
