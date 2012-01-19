@@ -296,7 +296,7 @@
                                  target="_blank">
                                {if $caches[c].category neq 'home'}{t 1=$caches[c].category}Poll %1{/t} {else} {t}Poll Frontpage{/t} {/if}
                             </a>
-                            <input type="text" name="uris[]" value="encuesta/{$caches[c].category}" />
+                            <input type="hidden" name="uris[]" value="encuesta/{$caches[c].category}" />
 						{elseif isset($titles.$resource) && (($caches[c].template == 'poll') || ($caches[c].template == 'graphic_poll'))}
                             <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}"
                                  target="_blank">

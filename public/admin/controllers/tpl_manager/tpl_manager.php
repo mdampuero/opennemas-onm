@@ -407,7 +407,7 @@ switch($action) {
     } break;
 
     case 'deleteAll':
-         $smarty->clearAllCache();
+         $tpl->clearAllCache();
          Application::forward($_SERVER['PHP_SELF'] . '?action=list');
     break;
 }
