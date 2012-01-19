@@ -279,19 +279,17 @@ switch($action) {
         }
 
 
-
-
-        $ep = new Onm\Import\Efe();
-        $element = $ep->findByFileName($id);
+        $efe = new Onm\Import\Efe();
+        $element = $efe->findByFileName($id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
             foreach($photos as $photo) {
 
                 $data = array(
-                    'title' => $photo->file_path,
-                    'description' => $photo->title,
-                    'local_file' => realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                    'title' => $photo->title,
+                    'description' => '',
+                    'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                     'fk_category' => $category,
                     'category_name' => $categoryInstance->name,
                     'metadata' => String_Utils::get_tags($photo->title),
@@ -301,6 +299,41 @@ switch($action) {
 
                 if (!isset($innerPhoto)) {
                     $innerPhoto = new Photo($photoID);;
+                }
+
+            }
+        }
+
+        if ($element->hasVideos()) {
+            $videos = $element->getVideos();
+            foreach($videos as $video) {
+
+                $data = array(
+                    'title' => $video->file_path,
+                    'description' => $video->title,
+                    'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
+                    'fk_category' => $category,
+                    'category_name' => $categoryInstance->name,
+                    'metadata' => String_Utils::get_tags($video->title),
+                );
+
+                $videoFileData = array(
+                    'file_type' => $video->file_type,
+                    'file_path' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
+                    'category' => $category,
+                    'available' => 1,
+                    'content_status' => 0,
+                    'title' => $video->title,
+                    'metadata' => String_Utils::get_tags($video->title),
+                    'description' => '',
+                    'author_name' => 'internal',
+                );
+
+                $video = new Video();
+                $videoID = $video->createFromLocalFile($videoFileData);
+
+                if (!isset($innerVideo)) {
+                    $innerVideo = new video($videoID);;
                 }
 
             }
@@ -324,11 +357,11 @@ switch($action) {
             'fk_publisher' => $_SESSION['userid'],
             'img1' => '',
             'img1_footer' => '',
-            'img2' => $innerPhoto->id,
-            'img2_footer' => $innerPhoto->title,
+            'img2' => (isset($innerVideo) ? $innerVideo->id : ''),
+            'img2_footer' => (isset($innerPhoto) ? $innerPhoto->title : ''),
             'fk_video' => '',
-            'fk_video2' => '',
-            'footer_video2' => '',
+            'fk_video2' => (isset($innerVideo) ? $innerVideo->id : ''),
+            'footer_video2' => (isset($innerVideo) ? $innerVideo->title : ''),
             'ordenArti' => '',
             'ordenArtiInt' => '',
             'urn_source' => $element->urn,

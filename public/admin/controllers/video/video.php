@@ -188,69 +188,67 @@ switch ($action) {
 
         Acl::checkOrForward('VIDEO_CREATE');
 
-        $pathUpload = MEDIA_PATH.DS;
+        $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 
-        if (
-            isset($_FILES)
-            && count($_FILES) >0
-            && count($_FILES["video_file"]) >= 1
-            && !empty($_FILES["video_file"]["name"])
-        ) {
-            $video = new Video();
+        if ($type === 'file') {
 
-            try {
-                //Mirar el tema de mensajes en los fallos que deberia devolver.
-            $processedFile = $video->upload($_FILES["video_file"], $pathUpload);
-            } catch (\Exception $e) {
-                m::add($e->getMessage());
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=create');
-            }
+            // Check if the video file entry was completed
+            if (isset($_FILES)
+                && array_key_exists('video_file', $_FILES)
+                && array_key_exists('name', $_FILES["video_file"])
+            ) {
 
-            if (!empty($processedFile)) {
-                // IF not file provided try to redirect user.
-                // Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
-                $_POST["video_url"] = $processedFile['flvFile'];
-                $_POST["information"] = array('thumbnails' => $processedFile['thumbnails']);
-                $_POST["author_name"] = 'internal';
+                $videoFileData = array(
+                    'file_type' =>$_FILES["video_file"]["type"],
+                    'file_path' =>$_FILES["video_file"]["tmp_name"],
+                    'category' => filter_input(INPUT_POST, 'category'),
+                    'available' => filter_input(INPUT_POST, 'available'),
+                    'content_status' => filter_input(INPUT_POST, 'content_status'),
+                    'title' => filter_input(INPUT_POST, 'title'),
+                    'metadata' => filter_input(INPUT_POST, 'metadata'),
+                    'description' => filter_input(INPUT_POST, 'description'),
+                    'author_name' => filter_input(INPUT_POST, 'author_name'),
+                );
 
-                if($video->create( $_POST )) {
-                    m::add(_('Video uploaded'));
-                    Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
-                } else {
-                    $tpl->assign('errors', $video->errors);
+                $video = new Video();
+                try {
+                    $video->createFromLocalFile($videoFileData);
+                } catch (\Exception $e) {
+                    m::add($e->getMessage());
+                    Application::forward($_SERVER['SCRIPT_NAME']. '?action=new&type='.$type);
                 }
-                $tpl->display('video/new.tpl');
+
             } else {
-                m::add(_('There was an error while processing your video file'), m::ERROR);
+                m::add(_('There was a problem while uploading the file. Please check if you have completed all the form fields.'));
+                Application::forward($_SERVER['SCRIPT_NAME']. '?action=new&type='.$type);
             }
-            die();
 
-        } elseif (!empty($_POST['information'])) {
+        } elseif ($type == 'web-source') {
 
-            $video = new Video();
-            $_POST['information'] = json_decode($_POST['information'], true);
+            if (!empty($_POST['information'])) {
 
-            if($video->create( $_POST )) {
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+                $video = new Video();
+                $_POST['information'] = json_decode($_POST['information'], true);
+                try {
+                    $video->create($_POST);
+                } catch (\Exception $e) {
+                    m::add($e->getMessage());
+                    Application::forward($_SERVER['SCRIPT_NAME']. '?action=new&type='.$type);
+                }
+
             } else {
-                $tpl->assign('errors', $video->errors);
+                m::add('There was an error while uploading the form, not all the required data was sent.');
+                Application::forward($_SERVER['SCRIPT_NAME']. '?action=new&type='.$type);
             }
-            $tpl->display('video/new.tpl');
-            die();
-
         } else {
-            //m::add('Form not uploaded properly');
-            //$type = \Onm\Request::getInstance()->getParam('type', 'file');
-            //
-            //Application::forward(
-            //    $_SERVER['SCRIPT_NAME'] ."?action=create&type={$type}"
-            //);
+            m::add('There was an error while uploading the form, the video type is not specified.');
+            Application::forward($_SERVER['SCRIPT_NAME']. '?action=new&type='.$type);
         }
 
         $page = (isset($_REQUEST['page']))? $_REQUEST['page']: 0;
         Application::forward(
             $_SERVER['SCRIPT_NAME']
-            . '?action=list_today&category='.$category
+            . '?action=list_today&category='.filter_input(INPUT_POST, 'category')
             . '&page=' . $page
         );
 
@@ -304,7 +302,7 @@ switch ($action) {
             $msg.="\n \n "._("Caution! Are you sure that you want to delete this video and its relations?");
 
         } else {
-            $msg = sprintf(_("Do you want delete %s ?"),$video->title);
+            $msg = sprintf(_("Do you want to delete the video '%s' ?"),$video->title);
         }
 
         echo $msg;
@@ -323,6 +321,8 @@ switch ($action) {
             $rel= new Related_content();
             $rel->delete_all($id);
             $video->delete( $id ,$_SESSION['userid'] );
+        } else {
+            m::add(_('You must give an id for delete the video.'), m::ERROR);
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 

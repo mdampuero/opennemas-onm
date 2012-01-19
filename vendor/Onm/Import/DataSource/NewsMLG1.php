@@ -194,17 +194,23 @@ class NewsMLG1 {
      **/
     public function getPhotos()
     {
-        $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
+        if (!isset($this->photos)) {
+            $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.photos\"]");
 
-        $photos = array();
-        foreach ($contents[0] as $componentName => $component) {
-            if ($componentName == 'NewsComponent') {
-                $photoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Photo($component);
-                $photos [$photoComponent->id]= $photoComponent;
+            if (count($contents) > 0) {
+                $this->photos = array();
+                foreach ($contents[0] as $componentName => $component) {
+                    if ($componentName == 'NewsComponent') {
+                        $photoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Photo($component);
+                        $this->photos[$photoComponent->id] = $photoComponent;
+                    }
+                }
+            } else {
+                $this->photos = array();
             }
         }
 
-        return $photos;
+        return $this->photos;
     }
 
     /**
@@ -225,8 +231,32 @@ class NewsMLG1 {
      **/
     public function getVideos()
     {
+    if (!isset($this->videos)) {
         $contents = $this->getData()->xpath("//NewsItem/NewsComponent/NewsComponent[@Duid=\"multimedia_".$this->id.".multimedia.videos\"]");
-        return $contents;
+
+        if (count($contents) > 0) {
+            $this->videos = array();
+            foreach ($contents[0] as $componentName => $component) {
+                if ($componentName == 'NewsComponent') {
+                    $videoComponent = new \Onm\Import\DataSource\NewsMLG1Component\Video($component);
+                    $this->videos[$videoComponent->id] = $videoComponent;
+                }
+            }
+        } else {
+            $this->videos = array();
+        }
+    }
+        return $this->videos;
+    }
+
+    /**
+     * Checks if this news component has photos
+     *
+     * @return boolean
+     **/
+    public function hasVideos()
+    {
+        return count($this->getVideos()) > 0;
     }
 
     /**

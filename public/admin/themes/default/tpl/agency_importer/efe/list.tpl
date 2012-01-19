@@ -163,7 +163,7 @@
                         {if $elements[c]->hasPhotos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
                         {/if}
-                        {if $elements[c]->hasPhotos() && false}
+                        {if $elements[c]->hasVideos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
 

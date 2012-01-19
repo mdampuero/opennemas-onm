@@ -53,7 +53,7 @@
                                 <label>{t}Title:{/t}</label>
                                 {$element->title}
                             </p>
-                            
+
                             <p>
                                 <label>{t}Priority:{/t}</label>
                                 {$element->priority}
@@ -85,8 +85,8 @@
                                 <strong>{t}Photos:{/t}</strong> <br/>
                                 <ul>
                                 {foreach from=$element->photos item=photo}
-                                    <li style="vertical-align: top">
-                                        <img width="120" src="{$smarty.server.PHP_SELF}?action=show_attachment&id={$element->id}&attachment_id={$photo->id}" alt="{$photo->title}">
+                                    <li style="vertical-align: top" class="clearfix">
+                                        <img style="float:left;" width="120" src="{$smarty.server.PHP_SELF}?action=show_attachment&id={$element->id}&attachment_id={$photo->id}" alt="{$photo->title}">
                                         {$photo->title}
                                     </li>
                                 {/foreach}
@@ -97,8 +97,8 @@
                             <p>
                                 <strong>{t}Videos:{/t}</strong> <br/>
                                 <ul>
-                                {foreach from=$element->Videos item=video}
-                                    <li>{$video}</li>
+                                {foreach from=$element->videos item=video}
+                                    <li>{$video->title} ({$video->file_type})</li>
                                 {/foreach}
                                 </ul>
                             </p>
