@@ -1927,14 +1927,14 @@ class ContentManager
     {
         $contents = array();
         if( is_array($pk_contents) && count($pk_contents) > 0 ) {
-            $sql  = 'SELECT * FROM `contents` WHERE pk_content IN ('.implode(',', $pk_contents).')';
+            $sql  = 'SELECT * FROM `contents` WHERE fk_content_type != 8 AND pk_content IN ('.implode(',', $pk_contents).')';
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             if($rs !== false) {
                 while(!$rs->EOF) {
                     $obj = new Content();
                     $obj->load($rs->fields);
-                    $obj->content_type = $GLOBALS['application']->conn->GetOne('SELECT title FROM `content_types` WHERE pk_content_type = "' .
+                    $obj->content_type = $GLOBALS['application']->conn->GetOne('SELECT name FROM `content_types` WHERE pk_content_type = "' .
                                                                                     $obj->fk_content_type . '"');
                     $obj->category_name = $obj->loadCategoryName($obj->id);
 

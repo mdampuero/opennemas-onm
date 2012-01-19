@@ -137,12 +137,14 @@ switch($action) {
             if (($poll->available==1) && ($poll->in_litter==0)) {
                 // Increment numviews if it's accesible
                 $poll->setNumViews($pollId);
+                $items = $poll->get_items($pollId);
 
                 $cacheID = $tpl->generateCacheId($category_name,'', $pollId );
 
                 if( ($tpl->caching == 0) || !$tpl->isCached('poll/poll.tpl', $cacheID) ) {
 
-                    $items = $poll->get_items($pollId);
+
+                    var_dump($items);
 
                     $comment = new Comment();
                     $comments = $comment->get_public_comments($pollId);
@@ -163,7 +165,7 @@ switch($action) {
                          $tpl->assign('type_poll','bars');
                     }
 
-                    $xml = $tpl->fetch('poll/graphic_poll.tpl');
+                    $xml = $tpl->fetch('poll/graphic_poll.tpl', $cacheID);
 
                     $file =  $poll_path. $pollId.'.xml';
                     FilesManager::mkFile($file);
@@ -173,7 +175,7 @@ switch($action) {
 
                 } // end if $tpl->is_cached
 
-                  require_once('poll_inner_advertisement.php');
+                require_once('poll_inner_advertisement.php');
 
                 $tpl->assign('contentId', $pollId); // Used on module_comments.tpl
 
@@ -205,7 +207,7 @@ switch($action) {
 
         $poll = new Poll($pollId);
 
-        if(!empty($poll->id)){
+        if(!empty($poll->id)) {
 
             $cookie="polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
@@ -251,9 +253,12 @@ switch($action) {
 
             $poll->setNumViews($pollId);
 
-            $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
-
             require_once('poll_inner_advertisement.php');
+
+            $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete($cacheID, 'poll.tpl');
+            $tplManager->delete($cacheID, 'graphic_poll.tpl');
 
             $tpl->display('poll/poll.tpl', $cacheID);
         }
