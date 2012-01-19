@@ -305,7 +305,7 @@ switch($action) {
 
                     // If this article has more than one photo take the first one
                     if (!isset($innerPhoto)) {
-                        $innerPhoto = new Photo($photoID);;
+                        $innerPhoto = new Photo($photoID);
                     }
                 }
 
@@ -338,8 +338,9 @@ switch($action) {
 
                     // If this article has more than one video take the first one
                     if (!isset($innerVideo)) {
-                        $innerVideo = new Video($videoID);;
+                        $innerVideo = new Video($videoID);
                     }
+                }
             }
         }
 
