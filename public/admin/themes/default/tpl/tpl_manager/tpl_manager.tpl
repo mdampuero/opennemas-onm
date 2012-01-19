@@ -66,7 +66,7 @@
 					{t}Delete{/t}
 				</a>
 			</li>
-
+{*
             <li>
 				<a href="#refresh" rel="refresh" onclick="if (confirm('{t}Are you sure to delete all?{/t}')) { sendForm('deleteAll'); } return false;"
 				  title="{t}Delete all caches. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
@@ -74,7 +74,7 @@
 					{t}Delete All{/t}
 				</a>
 			</li>
-
+*}
 			<li>
 				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
 				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
