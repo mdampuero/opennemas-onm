@@ -87,6 +87,11 @@
                             <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                         </a>
                     {else}
+                        {if $smarty.session.desde eq 'efe_press_import'}
+                            <a href="/admin/controllers/agency_importer/efe.php" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                            </a>
+                        {/if}
                         <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&category={$smarty.request.category|default:""}&page={$smarty.get.page|default:""}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                         </a>
