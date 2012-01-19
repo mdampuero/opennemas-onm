@@ -59,8 +59,8 @@ class Photo extends Content
                         $data['height'], $data['nameCat'], $data['type_img'],
                         $data['author_name'], $data['media_type']);
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
+        $execution = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($execution === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
@@ -73,9 +73,9 @@ class Photo extends Content
 
     /**
      * Creates one photo register in the database from data and local file
-     * TODO: this function must content the photo file path
+     * TODO: this function must content the photo local_file
      *
-     * @params array $data the data for the photo, must content the photo file path
+     * @params array $data the data for the photo, must content the photo local_file
      **/
     public function createFromLocalFile($dataSource)
     {
@@ -98,22 +98,22 @@ class Photo extends Content
             $fileInformation  = new MediaItem($filePath);
 
             // Building information for the photo image
-            $data = array( 
-                'title'         => $dataSource["title"],
-                'name'          => $finalPhotoFileName,
-                'path_file'     => $dateForDirectory,
-                'fk_category'   => $dataSource["fk_category"],
-                'category'      => $dataSource["fk_category"],
-                'nameCat'       => $dataSource["category_name"],
+            $data = array(
+                'title'        => $dataSource["title"],
+                'name'         => $finalPhotoFileName,
+                'path_file'    => $dateForDirectory,
+                'fk_category'  => $dataSource["fk_category"],
+                'category'     => $dataSource["fk_category"],
+                'nameCat'      => $dataSource["category_name"],
 
-                'created' => $fileInformation->atime,
-                'changed' => $fileInformation->mtime,
-                'date' => $fileInformation->mtime,
-                'size' => round($fileInformation->size/1024, 2),
-                'width' => $fileInformation->width,
-                'height' => $fileInformation->height,
-                'type_img' => strtolower($filePathInfo['extension']),
-                'media_type' => 'image',
+                'created'      => $fileInformation->atime,
+                'changed'      => $fileInformation->mtime,
+                'date'         => $fileInformation->mtime,
+                'size'         => round($fileInformation->size/1024, 2),
+                'width'        => $fileInformation->width,
+                'height'       => $fileInformation->height,
+                'type_img'     => strtolower($filePathInfo['extension']),
+                'media_type'   => 'image',
 
                 'author_name'  => '',
                 'pk_author'    => $_SESSION['userid'],
@@ -122,11 +122,10 @@ class Photo extends Content
                 'metadata'     => $dataSource["metadata"],
             );
 
-
             if (is_dir($uploadDir) && !is_writable($uploadDir)) {
                 m::add(
                     sprintf(
-                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there', 
+                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there',
                         $uploadDir.$finalPhotoFileName
                     ),
                     m::ERROR
@@ -154,7 +153,7 @@ class Photo extends Content
 
                         // Article inner thumbnail
                         $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480, 
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
                             $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
                             true
                         );
@@ -164,7 +163,7 @@ class Photo extends Content
 
                         // Generate frontpage thumbnails
                         $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350, 
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
                             $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
                             true
                         );
@@ -174,8 +173,8 @@ class Photo extends Content
 
                         // Main thumbnail
                         $thumb->thumbnailImage(
-                            $imageThumbSize['image_thumb_size']['width'] ?: 140, 
-                            $imageThumbSize['image_thumb_size']['height'] ?: 100, 
+                            $imageThumbSize['image_thumb_size']['width'] ?: 140,
+                            $imageThumbSize['image_thumb_size']['height'] ?: 100,
                             true
                         );
                         //Write the new image to a file
@@ -185,12 +184,12 @@ class Photo extends Content
 
                 } else {
                     Application::getLogger()->notice(sprintf(
-                        'EFE Importer: Unable to register the photo object %s (destination: %s).', 
+                        'EFE Importer: Unable to register the photo object %s (destination: %s).',
                         $dataSource['local_file'], $uploadDir.$finalPhotoFileName
                     ));
                     m::add(
                         sprintf(
-                            'Unable to register the photo object into OpenNemas.', 
+                            'Unable to register the photo object into OpenNemas.',
                             $uploadDir.$finalPhotoFileName
                         ),
                         m::ERROR
@@ -204,12 +203,12 @@ class Photo extends Content
                 $importedID = null;
 
                 Application::getLogger()->notice(sprintf(
-                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).', 
+                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                     $dataSource['local_file'], $uploadDir.$finalPhotoFileName
                 ));
                 m::add(
                     sprintf(
-                        'Unable to copy the file of the photo related in EFE importer to the article.', 
+                        'Unable to copy the file of the photo related in EFE importer to the article.',
                         $uploadDir.$finalPhotoFileName
                     ),
                     m::ERROR
@@ -236,23 +235,24 @@ class Photo extends Content
 
         }
 
+
         //$this->load( $rs->fields );
-        $this->pk_photo = $rs->fields['pk_photo'];
-        $this->name = $rs->fields['name'];
-        $this->path_file = $rs->fields['path_file'];
-        $this->size = $rs->fields['size'];
-        $this->resolution = $rs->fields['resolution'];
-        $this->width = $rs->fields['width'];
-        $this->height = $rs->fields['height'];
-        $this->nameCat = $rs->fields['nameCat'];
-        $this->type_img = $rs->fields['type_img'];
+        $this->pk_photo    = $rs->fields['pk_photo'];
+        $this->name        = $rs->fields['name'];
+        $this->path_file   = $rs->fields['path_file'];
+        $this->size        = $rs->fields['size'];
+        $this->resolution  = $rs->fields['resolution'];
+        $this->width       = $rs->fields['width'];
+        $this->height      = $rs->fields['height'];
+        $this->nameCat     = $rs->fields['nameCat'];
+        $this->type_img    = $rs->fields['type_img'];
         $this->author_name = $rs->fields['author_name'];
-        $this->media_type = $rs->fields['media_type'];
+        $this->media_type  = $rs->fields['media_type'];
         $this->description = ($this->description);
-        $this->metadata = ($this->metadata);
-        $this->date =  $rs->fields['date'];
-        $this->color =  $rs->fields['color'];
-        $this->address =  $rs->fields['address'];
+        $this->metadata    = ($this->metadata);
+        $this->date        =  $rs->fields['date'];
+        $this->color       =  $rs->fields['color'];
+        $this->address     =  $rs->fields['address'];
     }
 
     public function read_alldata($id)

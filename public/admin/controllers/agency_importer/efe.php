@@ -303,6 +303,7 @@ switch($action) {
                     $photo = new Photo();
                     $photoID = $photo->createFromLocalFile($data);
 
+                    // If this article has more than one photo take the first one
                     if (!isset($innerPhoto)) {
                         $innerPhoto = new Photo($photoID);;
                     }
@@ -335,10 +336,10 @@ switch($action) {
                     $video = new Video();
                     $videoID = $video->createFromLocalFile($videoFileData);
 
+                    // If this article has more than one video take the first one
                     if (!isset($innerVideo)) {
-                        $innerVideo = new video($videoID);;
+                        $innerVideo = new Video($videoID);;
                     }
-                }
             }
         }
 
@@ -360,7 +361,7 @@ switch($action) {
             'fk_publisher' => $_SESSION['userid'],
             'img1' => '',
             'img1_footer' => '',
-            'img2' => (isset($innerVideo) ? $innerVideo->id : ''),
+            'img2' => (isset($innerPhoto) ? $innerPhoto->id : ''),
             'img2_footer' => (isset($innerPhoto) ? $innerPhoto->title : ''),
             'fk_video' => '',
             'fk_video2' => (isset($innerVideo) ? $innerVideo->id : ''),
@@ -369,8 +370,6 @@ switch($action) {
             'ordenArtiInt' => '',
             'urn_source' => $element->urn,
         );
-
-
 
         $article = new Article();
         $newArticleID = $article->create($values);
