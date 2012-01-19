@@ -54,7 +54,7 @@ if($('starttime')) {
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 	{include file="article/partials/_menu.tpl"}
 	<div class="wrapper-content">
-          
+
         {render_messages}
 
 		{* FORMULARIO PARA ENGADIR UN CONTENIDO ************************************** *}
@@ -68,7 +68,7 @@ if($('starttime')) {
              {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
              <li>
 				<a id="avanced-custom-button" href="#avanced-custom">{t}Article customize{/t}</a>
-			</li> 
+			</li>
              {/is_module_activated}
 			{if isset($article) && is_object($article) && !$article->isClone()}
 			<li>
@@ -140,7 +140,7 @@ if($('starttime')) {
 										<input type="hidden" id="in_home" name="in_home"  value="{$article->in_home}" />
 									{/if}
 								</div><!-- / -->
-		                            
+
 								<div style="text-align:right">
 									<h3>{t}Statistics{/t}</h3>
 									<div>
@@ -329,7 +329,7 @@ if($('starttime')) {
 						</td>
 					</tr>
 
-					
+
 					<tr>
 						<td valign="top" style="padding:4px;">
 							<label for="starttime">{t}Publication start date:{/t}</label>
@@ -360,12 +360,12 @@ if($('starttime')) {
 
 			</table>
 		</div>
-        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}                 
+        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
             <div class="panel" id="avanced-custom" style="width:98%">
                 {include file ="article/partials/_article_avanced_customize.tpl"}
             </div>
         {/is_module_activated}
-    
+
 		{if $smarty.request.action eq 'read'}
 		<div class="panel" id="comments" style="width:98%">
 			<table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
@@ -393,20 +393,19 @@ if($('starttime')) {
 				  </div>
 				 </td></tr>
 			{/section}
-			
+
 			</tbody>
 			</table>
 		</div>
 
- 
+
 		{/if}
 
-         
     <div class="panel" id="contenidos-relacionados" style="width:98%">
         {include file="article/partials/_related.tpl"}
     </div>
-        
-		{if isset($article) && is_object($article)}
+
+	{if isset($article) && is_object($article)}
 	<div class="panel" id="elementos-relacionados" style="width:98%">
 			<br />
 			Listado contenidos relacionados en Portada:  <br />
@@ -423,7 +422,7 @@ if($('starttime')) {
 										{$content_types.$ct}
 									</td>
 									<td width="120"> {$losrel[n]->category_name|clearslash} </td>
-                                    <td width='120'> 
+                                    <td width='120'>
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
                                              <option>{t}Link{/t} (todos)</option>
@@ -447,16 +446,16 @@ if($('starttime')) {
 				<ul id="thelist2int" style="padding: 4px; background: #EEEEEE">
 					{assign var=cont value=1}
 					{section name=n loop=$intrel}
-					<li id="{$intrel[n]->id|clearslash}"">
+					<li id="{$intrel[n]->id|clearslash}">
 						<table  width='99%'>
 							<tr>
 								<td>{$intrel[n]->title|clearslash|escape:'html'}  </td>
-								<td width='120'> 
+								<td width='120'>
 									{assign var="ct" value=$intrel[n]->content_type}
 									{$content_types.$ct}
 								</td>
 								<td width='120'> {$intrel[n]->category_name|clearslash} </td>
-                                <td width='120'> 
+                                <td width='120'>
                                     <select>
                                         <option>{t}Gallery{/t} (album)</option>
                                          <option>{t}Link{/t} (todos)</option>
@@ -502,12 +501,6 @@ if($('starttime')) {
 			</div>
 		{/if}
 
-		{if isset($clones)}
-		<div class="panel" id="clones" style="width:98%">
-			{include file="article/partials/_clones.tpl"}
-		</div>
-		{/if}
-
 		{if isset($article) && is_object($article) && $article->isClone()}
 		{* Disable fields via javascript if $article->isClone() *}
 		<script type="text/javascript">
@@ -524,11 +517,6 @@ if($('starttime')) {
         {script_tag src="/tiny_mce/opennemas-config.js"}
 		<script type="text/javascript" language="javascript">
 			tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-			{if isset($article) && $article->isClone()}
-				OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-				OpenNeMas.tinyMceConfig.advanced.readonly = 1;
-			{/if}
 
 			OpenNeMas.tinyMceConfig.simple.elements = "summary";
 			tinyMCE.init( OpenNeMas.tinyMceConfig.simple );

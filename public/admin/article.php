@@ -441,8 +441,8 @@ if (isset($_REQUEST['action']) ) {
             $cm = new ContentManager();
             //FIXME: cambiar por la llamada a vars php en smarty
             $tpl->assign('MEDIA_IMG_PATH_WEB', MEDIA_IMG_PATH_WEB);
-            
-            
+
+
             $tpl->assign(array( 'availableSizes'=>array(20,22,24,26,28,30,32,34)
                         ) );
 
@@ -460,14 +460,14 @@ if (isset($_REQUEST['action']) ) {
             }
             $article = new Article( $_REQUEST['id'] );
             $article->params = unserialize($article->params);
-            
+
             $tpl->assign('article', $article);
 
             //Para usar el id de articulo al borrar un comentario
             $_SESSION['olderId']=$_REQUEST['id'];
             $cm = new ContentManager();
 
-           
+
             //Photos de noticia
             $img1=$article->img1;
             if(!empty($img1)){
@@ -480,14 +480,14 @@ if (isset($_REQUEST['action']) ) {
                 $photo2 = new Photo($img2);
                 $tpl->assign('photo2', $photo2);
             }
-            
+
+
             $imgHome = $article->params['imgHome'];
             if(!empty($imgHome)){
                 $photoHome= new Photo($imgHome);
                 $tpl->assign('photoHome', $photoHome);
             }
-            
-           
+
             $video = $article->fk_video;
             if(!empty($video)) {
                 $video1 = new Video($video);
@@ -506,14 +506,14 @@ if (isset($_REQUEST['action']) ) {
             $relationes = $rel->get_relations( $_REQUEST['id'] );//de portada
             $losrel = array();
             foreach($relationes as $aret) {
-                 $resul = new Content($aret);
-                 $losrel[] = $resul;
+                $resul = new Content($aret);
+                $losrel[] = $resul;
             }
             $tpl->assign('losrel', $losrel);
 
-            //Relacionados de interior
+            // Relacionados de interior
             $intrelationes = array();
-            $intrelationes = $rel->get_relations_int( $_REQUEST['id'] );//de interor
+            $intrelationes = $rel->get_relations_int($_REQUEST['id']);//de interor
             $intrel = array();
             foreach($intrelationes as $aret) {
                 $resul = new Content($aret);
@@ -534,11 +534,10 @@ if (isset($_REQUEST['action']) ) {
                 $_SESSION['_from'] ='search_advanced';
             }
 
-           
-            $tpl->assign(array( 'availableSizes'=>array(20,22,24,26,28,30,32,34)
-                        ) );
+            $tpl->assign(
+                array('availableSizes'=>array(20,22,24,26,28,30,32,34))
+            );
 
-             
             $tpl->display('article/new.tpl');
             // }}}
         } break;
