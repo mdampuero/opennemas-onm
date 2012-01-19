@@ -30,7 +30,7 @@
         <td  style="width:80px; text-align:right; padding-right:10px;">
             <ul class="action-buttons">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?id={$item->id}&action=read" title="Editar">
+                    <a href="{$smarty.server.PHP_SELF}?id={$item->id}&action=read&category={$smarty.get.category|default:""}" title="Editar">
                         <img src="{$params.IMAGE_DIR}edit.png" border="0" alt="Editar" />
                     </a>
                 </li>
