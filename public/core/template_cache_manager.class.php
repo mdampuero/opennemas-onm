@@ -30,7 +30,7 @@ class TemplateCacheManager
 
         $this->_smarty = (!is_null($smarty)) ? $smarty : new Template($themeDir);
         $this->_cacheDir = $this->_smarty->cache_dir;
-        
+
     }
 
     /**
@@ -317,7 +317,7 @@ class TemplateCacheManager
         $pk_contents = array();
         $pk_authors = array();
         foreach ($items as $item) {
-            if (preg_match('/[0-9]{14,19}/', $item['resource'])) {
+            if (preg_match('/[0-9]{1,9}/', $item['resource'])) {
                 $pk_contents[] = $item['resource'];
             } elseif (preg_match('/RSS([0-9]+)/', $item['resource'], $matches)) {
                 $pk_authors[] = $matches[1];

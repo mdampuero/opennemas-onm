@@ -67,6 +67,14 @@
 				</a>
 			</li>
 
+            <li>
+				<a href="#refresh" rel="refresh" onclick="if (confirm('{t}Are you sure to delete all?{/t}')) { sendForm('deleteAll'); } return false;"
+				  title="{t}Delete all caches. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
+					{t}Delete All{/t}
+				</a>
+			</li>
+
 			<li>
 				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
 				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
@@ -116,8 +124,11 @@
                         <option value="opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Inner opinion{/t}</option>
                         <option value="video-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video frontpage{/t}</option>
                         <option value="video-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video inner{/t}</option>
-                        <option value="gallery-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Album frontpage{/t}</option>
-                        <option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Album inner{/t}</option>
+                        <option value="gallery-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'gallery-frontpage'}selected="selected"{/if}>{t}Album frontpage{/t}</option>
+                        <option value="gallery-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'gallery-inner'}selected="selected"{/if}>{t}Album inner{/t}</option>
+                        <option value="poll-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'poll-frontpage'}selected="selected"{/if}>{t}Poll frontpage{/t}</option>
+                        <option value="poll-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'poll-inner'}selected="selected"{/if}>{t}Poll inner{/t}</option>
+
                     </select>
 
                     {t}and from{/t}
@@ -153,6 +164,9 @@
 			</thead>
 			<tbody>
                 {section name="c" loop=$caches}
+                    {* dont show frontpage parts*}
+                    {if $caches[c].resource neq 0 && $caches[c].template eq 'frontpage'}
+                     {else}
 				<tr>
                     <td>
 						<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
@@ -161,132 +175,173 @@
                     </td>
                     <td class="center">
 					{assign var="resource" value=$caches[c].resource}
+
 						{* Inner Article *}
                         {if isset($titles.$resource) && ($caches[c].template == 'article')}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" border="0" title="{t}Inner article cache file{/t}" />
-						{* Frontpage mobile *}
-						{elseif ($caches[c].template == 'mobile-article-inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
-						{* Video inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Inner video cache file{/t}" />
-						{* Video frontpage *}
-						{elseif ($caches[c].template == 'video_frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Video inner cache file{/t}" />
-						{* Opinion inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
-						{* Gallery frontpage *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Frontpage article cache file{/t}" />
-						{* Gallery inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'album')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Inner gallery cache file{/t}" />
-						{* RSS opinion *}
-						{elseif isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}RSS Opinion author cache file {/t}" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" border="0" title="{t}Article cache file{/t}" />
+
+                        {* Video *}
+						{elseif ($caches[c].template == 'video_inner') ||
+                             ($caches[c].template == 'video_frontpage') ||
+                             ($caches[c].template == 'video_main_frontpage')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Video cache file{/t}" />
+
+                        {* Gallery frontpage *}
+						{elseif ($caches[c].template == 'album_frontpage') ||
+						    ($caches[c].template == 'album')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Gallery cache file{/t}" />
+
 						{* Opinion author index*}
-						{elseif ($caches[c].template == 'opinion_author_index')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}RSS frontpage author of opinion{/t}" />
-						{* RSS *}
-						{elseif $resource eq "RSS"}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
-						{* Frontpage mobile *}
-						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
-						{* Frontpages *}
+						{elseif ($caches[c].template == 'opinion_author_index') ||
+                            ($caches[c].template == 'opinion_frontpage') ||
+                            (isset($titles.$resource) && ($caches[c].template == 'opinion'))}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
+
+                        {* Frontpage mobile *}
+						{elseif ($caches[c].template == 'mobile-article-inner')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile cache file{/t}" />
+                        {* Frontpage mobile *}
+						{elseif not isset($titles.$resource) && not isset($authors.$resource)
+                            && ($caches[c].template == 'frontpage-mobile')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
+
+                        {* Frontpages *}
 						{elseif ($caches[c].template == 'frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
-                        {elseif ($caches[c].template == 'album')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+
+                        {* Polls *}
+                        {elseif ($caches[c].template == 'poll') ||
+                             ($caches[c].template == 'graphic_poll') ||
+						     ($caches[c].template == 'poll_frontpage')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/polls.png" border="0" title="{t}Poll cache file{/t}" />
+
+                        {* RSS *}
+						{elseif $resource eq "RSS"}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}Caché RSS{/t}" />
 						{* Other kind of resources *}
+                        {elseif isset($authors.$resource)}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" border="0" title="{t}RSS Opinion author cache file {/t}" />
+
 						{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
-					{/if}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
+                        {/if}
                     </td>
-
-
-
-				   <td>
+                    <td>
 						{assign var="resource" value=$caches[c].resource}
 						{* Inner Article *}
                         {if isset($titles.$resource) && ($caches[c].template == 'article')}
-						<a href="{$smarty.const.SITE_URL}controllers/article.php?article_id={$caches[c].resource}&action=read&category_name={$caches[c].category}" target="_blank">
-							{$titles.$resource|clearslash}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}"  target="_blank">
+                                {$titles.$resource|clearslash}
+                            </a>
+                            <input type="hidden" name="uris[]" value="{$contentUris.$resource}" />
 						{* Frontpage mobile *}
 						{elseif ($caches[c].template == 'mobile-article-inner')}
-						<a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
-							{$titles.$resource}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
+                                {$titles.$resource}
+                            </a>
+                            <input type="hidden" name="uris[]" value="mobile/seccion/{$caches[c].category}/" />
 						{* Video inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-						<a href="{$smarty.const.SITE_URL}controllers/videos.php?id={$caches[c].resource}&action=inner" target="_blank">
-							{$titles.$resource|clearslash}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}" target="_blank">
+                                {$titles.$resource|clearslash}
+                            </a>
+                            <input type="hidden" name="uris[]" value="{$contentUris.$resource}" />
 						{* Video frontpage *}
 						{elseif ($caches[c].template == 'video_frontpage')}
-						<a href="{$smarty.const.SITE_URL}controllers/videos.php?category_name={$caches[c].category}&action=list" target="_blank">
-							{t 1=$caches[c].category}Frontpage %1{/t}
-                        </a>
+                            <a href="{$smarty.const.SITE_URL}video/{$caches[c].category}/" target="_blank">
+                                {t 1=$caches[c].category}Video %1{/t}
+                            </a>
+                            <input type="hidden" name="uris[]" value="video/{$caches[c].category}/" />
+                        {elseif ($caches[c].template == 'video_main_frontpage')}
+                            <a href="{$smarty.const.SITE_URL}video/" target="_blank">
+                                {t}Video Frontpage{/t}
+                            </a>
+                            <input type="hidden" name="uris[]" value="video/" />
 						{* Opinion inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
-							{$titles.$resource|clearslash}
-						</a>
+                            {assign var="resName" value='RSS'|cat:$resource}
+                            <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}"  target="_blank">
+                                {$titles.$resource|clearslash}
+                            </a>
+                             <input type="hidden" name="uris[]" value="{$contentUris.$resource}" />
+                        {elseif ($caches[c].template == 'opinion_frontpage')}
+                            <a href="{$smarty.const.SITE_URL}opinion/" target="_blank">
+                                {t 1=$caches[c].category}Frontpage %1{/t}
+                            </a>
+                            <input type="hidden" name="uris[]" value="opinion/" />
+                        {* Opinion author index*}
+						{elseif ($caches[c].template == 'opinion_author_index')}
+                            {capture "uriAuthor"}{generate_uri content_type="opinion_author_frontpage"
+                                        title=$allAuthors.$resource
+                                        id=$caches[c].resource}{/capture}
+                            <a href="{$smarty.const.SITE_URL}/{$smarty.capture.uriAuthor|trim}" target="_blank">
+                                {t}Opinion Author{/t} {$allAuthors.$resource}
+                            </a>
+                            <input type="hidden" name="uris[]" value="{$smarty.capture.uriAuthor|trim}" />
 						{* Gallery frontpage *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
-							{$titles.$resource|clearslash}
-						</a>
+						{elseif ($caches[c].template == 'album_frontpage')}
+                            <a href="{$smarty.const.SITE_URL}album/{$caches[c].category}/" target="_blank">
+                                {if $caches[c].category neq 'home'}{t 1=$caches[c].category}Album %1{/t} {else} {t}Album Frontpage{/t} {/if}
+                            </a>
+                            <input type="hidden"  name="uris[]" value="album/{$caches[c].category}/" />
 						{* Gallery inner *}
 						{elseif isset($titles.$resource) && ($caches[c].template == 'album')}
-						<a href="{$smarty.const.SITE_URL}controllers/opinion.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read"
-							 target="_blank">
-                            {$titles.$resource|clearslash}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}" target="_blank">
+                                {$titles.$resource|clearslash}
+                            </a>
+                            <input type="hidden" name="uris[]" value="{$contentUris.$resource}" />
+                        {* Polls *}
+                        {elseif ($caches[c].template == 'poll_frontpage')}
+                            <a href="{$smarty.const.SITE_URL}encuesta/{$caches[c].category}"
+                                 target="_blank">
+                               {if $caches[c].category neq 'home'}{t 1=$caches[c].category}Poll %1{/t} {else} {t}Poll Frontpage{/t} {/if}
+                            </a>
+                            <input type="text" name="uris[]" value="encuesta/{$caches[c].category}" />
+						{elseif isset($titles.$resource) && (($caches[c].template == 'poll') || ($caches[c].template == 'graphic_poll'))}
+                            <a href="{$smarty.const.SITE_URL}{$contentUris.$resource}"
+                                 target="_blank">
+                                {$titles.$resource|clearslash}
+                            </a>
+                            <input type="hidden" name="uris[]" value="{$contentUris.$resource}" />
 						{* RSS opinion *}
 						{elseif isset($authors.$resource)}
-						<a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"  target="_blank">
-							{$authors.$resource|clearslash}
-						</a>
-						{* Opinion author index*}
-						{elseif ($caches[c].template == 'opinion_author_index')}
-						<a href="{$smarty.const.SITE_URL}controllers/opinion_index.php?category_name=opinion&opinion_id={$caches[c].resource}&action=read" target="_blank">
-							{t 1=$caches[c].resource}Author ID %1{/t}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}rss/opinion/{$resource|replace:"RSS":""}/"  target="_blank">
+                                {$authors.$resource|clearslash}
+                            </a>
+                            <input type="hidden" name="uris[]" value="rss/opinion/{$resource|replace:"RSS":""}/" />
 						{* RSS *}
 						{elseif $resource eq "RSS"}
-						<a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/"{/if}" target="_blank">
-							<strong>{t}RSS:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
-						</a>
+                            <a href="{if $caches[c].category != 'home'}{$smarty.const.SITE_URL}rss/{$caches[c].category}/{else}{$smarty.const.SITE_URL}rss/{/if}" target="_blank">
+                                <strong>{t}RSS:{/t}</strong> {$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
+                            </a>
+                             <input type="hidden" name="uris[]" value="rss/{$caches[c].category}/" />
 						{* Frontpage mobile *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-						<a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
-							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}
-						</a>
+                            <a href="{$smarty.const.SITE_URL}mobile/seccion/{$caches[c].category}/"  target="_blank">
+                                {$ccm->get_title($caches[c].category)|clearslash|default:"Portada"}
+                            </a>
+                            <input type="hidden" name="uris[]" value="mobile/seccion/{$caches[c].category}/" />
 						{* Frontpages *}
 						{elseif ($caches[c].template == 'frontpage')}
-						<a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
-                            {if $caches[c].resource gt 0}
-							{$ccm->get_title($caches[c].category)|clearslash|default:"HOME"} (Pág. {$caches[c].resource})</a>
-						{else}
-							{$ccm->get_title($caches[c].category)|clearslash|default:"HOME"}</a>
-						{/if}
+                            {if $caches[c].resource eq 0}
+                                <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/"  target="_blank">
+                                {$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category}</a>
+                            {/if}
+                            <input type="hidden" name="uris[]" value="seccion/{$caches[c].category}/" />
 						{* Other kind of resources *}
 						{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-						<a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
-						{if $caches[c].resource gt 0}
-							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"} {t 1=$caches[c].resource}(Page %1){/t}</a>
-						{else}
-							{$ccm->get_title($caches[c].category)|clearslash|default:"PORTADA"}</a>
-						{/if}
-
+                            <a href="{$smarty.const.SITE_URL}seccion/{$caches[c].category}/{$caches[c].resource}"  target="_blank">
+                            {if $caches[c].resource gt 0}
+                                {$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category} {t 1=$caches[c].resource}(Page %1){/t}</a>
+                            {else}
+                                {$ccm->get_title($caches[c].category)|clearslash|default:$caches[c].category}</a>
+                            {/if}
+                             <input type="hidden" name="uris[]" value="seccion/{$caches[c].category}/{$caches[c].resource}" />
 					{/if}
-				</td>
+                    </td>
 
                     <td class="center">
-                        {$ccm->get_title($caches[c].category)|clearslash|default:"Unknown"}
+                        {$ccm->get_title($caches[c].category)|clearslash|capitalize|default:$caches[c].category|capitalize}
                     </td>
 
                     <td class="center">
@@ -308,7 +363,7 @@
                         {$caches[c].size} KB
                     </td>
                     <td class="center">
-                       <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
+                       <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}&uris={$contentUris.$resource|urlencode}"
                            title="{t}Regenerate cache file{/t}">
                             <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" />
                        </a>&nbsp;
@@ -318,6 +373,7 @@
                        </a>
                     </td>
                 </tr>
+                {/if}
                 {/section}
 			</tbody>
 

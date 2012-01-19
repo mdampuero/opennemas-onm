@@ -20,7 +20,7 @@ $tpl->setConfig('video');
 */
 $cm = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
-
+$page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING, array('options' => array('default' => '0')));
 $category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
 if(empty($category_name)) {
     $category_name = filter_input(INPUT_POST,'category_name',FILTER_SANITIZE_STRING);
@@ -64,19 +64,19 @@ switch ($action) {
     case 'list':
 
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId('video-frontpage', $category_name, '');
-        
+        $cacheID = $tpl->generateCacheId( $category_name, '', $page);
+
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
 
             $videosSettings = s::get('video_settings');
-            
+
             $totalVideosFrontpage = isset($videosSettings['total_front'])?:2;
             $days = isset( $videosSettings['time_last'])?:124;
 
             if (isset($category_name) && !empty($category_name) ) {
-              
+
                 $front_videos = $cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
@@ -94,7 +94,7 @@ switch ($action) {
                     'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
                     'ORDER BY views DESC LIMIT 3'
                 );
-                
+
                 if (count($front_videos) > 0) {
                     foreach ($front_videos as &$video) {
                         $video->category_name = $video->loadCategoryName($video->id);
@@ -102,7 +102,7 @@ switch ($action) {
                     }
                 }
                 $tpl->assign( 'front_videos', $front_videos);
-               
+
             } else {
                 $videos = $cm->find_all( 'Video',
                     ' available=1 ',
@@ -123,7 +123,7 @@ switch ($action) {
             } else {
                    // Application::forward301('/video/');
             }
-            
+
             if (count($others_videos) > 0) {
                 foreach ($others_videos as &$video) {
                     $video->category_name = $video->loadCategoryName($video->id);
@@ -178,10 +178,10 @@ switch ($action) {
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
         }
-        
+
         $tpl->assign( 'others_videos', $others_videos );
         # If is not cached process this action
-        $cacheID = $tpl->generateCacheId('video-inner', $category_name, $videoID);
+        $cacheID = $tpl->generateCacheId( $category_name, '', $videoID);
 
         if (($tpl->caching == 0)
             || !$tpl->isCached('video/video_inner.tpl', $videoID)
@@ -233,7 +233,7 @@ switch ($action) {
         $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
 
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
-       
+
         $videos = $cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $category . '',
@@ -262,7 +262,7 @@ switch ($action) {
     case 'videos_more':
 
         $video = NULL;
-        
+
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
         $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
 

@@ -73,7 +73,7 @@ if (!is_null($action) ) {
 			$tpl->setConfig('gallery-frontpage');
 
 			$cacheID = $tpl->generateCacheId($category_name, '', $page);
- 
+
 			/**
 			 * Don't execute action logic if was cached before
 			 */
@@ -131,7 +131,7 @@ if (!is_null($action) ) {
 			if (is_null($albumID)) { Application::forward301('/albumes/'); }
 
 			$tpl->setConfig('gallery-inner');
-			$cacheID = $tpl->generateCacheId('gallery-inner', null, $albumID);
+			$cacheID = $tpl->generateCacheId($category_name, null, $albumID);
 
 			/**
 			 * Increment views for this content

@@ -47,13 +47,32 @@ $tpl->assign('titulo_barra', 'Cache manager');
  * @param $cacheid, the id for the cache
  * @param $tpl, the tpl from the cache was generated from
 */
-function refreshAction(&$tplManager, $cacheid, $tpl)
+function refreshAction(&$tplManager, $cacheid, $tpl,$uri = NULL)
 {
     $tplManager->delete($cacheid, $tpl);
-
+/*
+    $url = Uri::generate('opinion_author_frontpage',
+							  array(
+									'slug' => $opinions[0]['author_name_slug'],
+									'id' => $opinions[0]['pk_author']
+									));
+    $url .=  Uri::generate( 'article',
+                                array(
+                                    'id' => $article->id,
+                                    'date' => date('Y-m-d', strtotime($article->created)),
+                                    'category' => $article->category_name,
+                                    'slug' => $article->slug,
+                                )
+                            );
+*/
     $matches = array();
+
     preg_match('/(?P<category>[^\|]+)\|(?P<resource>[0-9]+)$/', $cacheid, $matches);
-    if(($tpl == 'opinion.tpl') && isset($matches['resource'])) { // opinion of author
+
+    if(!empty($uri)) {
+        $url = SITE_URL .$uri;
+        //TODO: review if next options are unused
+    }elseif(($tpl == 'opinion.tpl') && isset($matches['resource'])) { // opinion of author
         $url = SITE_URL . '/controllers/opinion.php?category_name=opinion&opinion_id=' . $matches['resource'] . '&action=read';
     } elseif(($tpl == 'mobile.index.tpl') && isset($matches['resource'])) { // mobile frontpage
         if($matches['category']!='home') {
@@ -63,21 +82,24 @@ function refreshAction(&$tplManager, $cacheid, $tpl)
         }
     } elseif(($tpl == 'video_frontpage.tpl')) { // video frontpage
 
-        $url = SITE_URL . 'controllers/videos.php?category_name='.$cacheid.'&action=list';
+        $url = SITE_URL . 'video/'.$cacheid.'/';
 
-    } elseif(($tpl == 'video_inner.tpl') && isset($matches['resource'])) { // video inner
-        $url = SITE_URL . 'controllers/videos.php?id='.$matches['resource'].'&action=inner';
+    } elseif(($tpl == 'album_frontpage.tpl')) { // video frontpage
+
+        $url = SITE_URL . 'video/'.$cacheid.'/';
+
+    } elseif(($tpl == 'poll_frontpage.tpl')) { // video frontpage
+
+        $url = SITE_URL . 'encuesta/'.$cacheid.'/';
 
     } elseif(($tpl == 'opinion_index.tpl')) { // opinion frontpage
-        $url = SITE_URL . 'controllers/videos.php?category_name='.$cacheid.'&action=list';
-
-    } elseif(($tpl == 'opinion_inner.tpl') && isset($matches['resource'])) { // opinion inner
-        $url = SITE_URL . 'controllers/opinion.php?category_name=opinion&opinion_id='.$matches['resource'].'&action=read';
+        $url = SITE_URL . 'opinion/';
 
     }elseif(isset($matches['resource'])) {
 
-        if(preg_match('/[0-9]{14,19}/', $matches['resource'])) { // 19 digits then it's a pk_content
+        if(preg_match('/[0-9]+/', $matches['resource'])) { // 19 digits then it's a pk_content
             $url = SITE_URL . 'controllers/article.php?article_id='.$matches['resource'].'&action=read&category_name='.$matches['category'];
+
         } else {
 
             if($matches['category']!='home') {
@@ -118,6 +140,8 @@ function buildFilter()
                         'video-inner' => 'video_inner\.tpl\.php$',
                         'gallery-frontpage' => 'album_frontpage\.tpl\.php$',
                         'gallery-inner' => 'album\.tpl\.php$',
+                        'poll-frontpage' => 'poll_frontpage\.tpl\.php$',
+                        'poll-inner' => 'poll.tpl\.php$',
                     );
         $filter  .= $regexp[ $_REQUEST['type'] ];
         $params[] = 'type='.$_REQUEST['type'];
@@ -186,6 +210,7 @@ switch($action) {
         $selectedElements = (isset($_REQUEST['selected']) ? $_REQUEST['selected'] : null );
         $cacheElements = $_REQUEST['cacheid'];
         $tplElements = $_REQUEST['tpl'];
+        $tplUris = $_REQUEST['uris'];
 
         /**
          * If the user selected elements to refresh try to process the action
@@ -198,7 +223,7 @@ switch($action) {
                 */
                 foreach($selectedElements as $idx) {
                     if(isset($cacheElements[$idx])) {
-                        refreshAction($tplManager, $cacheElements[$idx],  $tplElements[$idx]);
+                        refreshAction($tplManager, $cacheElements[$idx],  $tplElements[$idx], $tplUris[$idx]);
                     }
                 }
             } else {
@@ -206,12 +231,12 @@ switch($action) {
                  * If just one element was selected try to refresh it individualy
                 */
                 if(is_string($cacheElements)){
-                    refreshAction($tplManager, $cacheElements,  $tplElements);
+                    refreshAction($tplManager, $cacheElements,  $tplElements, $tplUris);
                 }
             }
         } else {
             if(isset($_REQUEST['cacheid']) && is_string($_REQUEST['cacheid'])){
-                refreshAction($tplManager, $_REQUEST['cacheid'], $_REQUEST['tpl']);
+                refreshAction($tplManager, $_REQUEST['cacheid'], $_REQUEST['tpl'], $_REQUEST['uris']);
             }
         }
 
@@ -239,6 +264,8 @@ switch($action) {
         } else {
             $config = $tplManager->dumpConfig();
             $tpl->assign('config', $config);
+
+
             $tpl->assign('groupName', array(
                 'frontpages'        => _('Frontpage'),
                 'frontpage-mobile'  => _('Frontpage mobile version'),
@@ -271,6 +298,8 @@ switch($action) {
                 'sitemap'           => 'sitemap.png',
 
             ));
+
+            $tpl->assign('modules', $modules);
 
             $tpl->display('tpl_manager/config.tpl');
             exit(0);
@@ -306,17 +335,50 @@ switch($action) {
 
         list($pk_contents, $pk_authors) = $tplManager->getResources($caches);
 
+        $allAuthors = array();
+        $author = new Author();
+        $all_authors = $author->cache->all_authors(NULL,'ORDER BY name');
+        foreach($all_authors as $a) {
+                $allAuthors[ $a->pk_author ] = $a->name;
+        }
+
         $cm = new ContentManager();
         $articles = $cm->getContents( $pk_contents );
         $articleTitles = array();
+        $articleUris = array();
+
+
         if (count($articles)>0) {
             foreach($articles as $a) {
+
                 $articleTitles[$a->pk_content] = $a->title;
+
+
+                if($a->fk_content_type == '4'){
+                    $authorName= !empty($allAuthors[$a->fk_author])?$allAuthors[$a->fk_author]:'opinion';
+                    $articleUris[$a->pk_content] = Uri::generate( 'opinion',
+                                array(
+                                    'id' => sprintf('%06d',$a->id),
+                                    'date' => date('YmdHis', strtotime($a->created)),
+                                    'category' => $authorName,
+                                    'slug' => $a->slug,
+                                )
+                            );
+                } else {
+                    $articleUris[$a->pk_content] = Uri::generate( $a->content_type,
+                                array(
+                                    'id' => sprintf('%06d',$a->id),
+                                    'date' => date('YmdHis', strtotime($a->created)),
+                                    'category' => $a->category_name,
+                                    'slug' => $a->slug,
+                                )
+                            );
+                }
             }
         }
 
+
         $authors = array();
-        $author = new Author();
         if(count($pk_authors)>0) {
             $it = $author->find('pk_author IN ('.implode(',', $pk_authors).')');
             foreach($it as $a) {
@@ -337,10 +399,17 @@ switch($action) {
             'sections' => $sections,
             'ccm' => $ccm,
             'titles' => $articleTitles,
+            'contentUris' => $articleUris,
             'caches' => $caches,
+            'allAuthors' => $allAuthors,
         ));
 
     } break;
+
+    case 'deleteAll':
+         $smarty->clearAllCache();
+         Application::forward($_SERVER['PHP_SELF'] . '?action=list');
+    break;
 }
 
 $tpl->display('tpl_manager/tpl_manager.tpl');
