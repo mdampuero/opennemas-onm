@@ -291,7 +291,11 @@
                         <td align='center'>
                             <div id="droppable_div3">
                                 {if isset($video2) && $video2->pk_video}
+                                    {if $video2->author_name == 'internal'}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}"  id="change3" name="{$article->fk_video2}" border="0" width="120px" />
+                                    {else}
                                     <img src="{$video2->information['thumbnail']}"  id="change3" name="{$article->fk_video2}" border="0" width="120px" />
+                                    {/if}
                                 {else}
                                     <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change3" name="default_img" border="0" width="300px" />
                                 {/if}

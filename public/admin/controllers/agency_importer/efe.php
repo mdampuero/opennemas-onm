@@ -278,64 +278,67 @@ switch($action) {
             Application::forward(SITE_URL_ADMIN."/controllers/agency_importer/efe.php?action=import_select_category&id={$id}&category={$category}");
         }
 
-
+        // Get EFE new from a filename
         $efe = new Onm\Import\Efe();
         $element = $efe->findByFileName($id);
 
+        // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
             foreach($photos as $photo) {
 
-                $data = array(
-                    'title' => $photo->title,
-                    'description' => '',
-                    'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
-                    'fk_category' => $category,
-                    'category_name' => $categoryInstance->name,
-                    'metadata' => String_Utils::get_tags($photo->title),
-                );
-                $photo = new Photo();
-                $photoID = $photo->createFromLocalFile($data);
+                $filePath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
 
-                if (!isset($innerPhoto)) {
-                    $innerPhoto = new Photo($photoID);;
+                // Check if the file exists
+                if ($filePath) {
+                    $data = array(
+                        'title' => $photo->title,
+                        'description' => '',
+                        'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                        'fk_category' => $category,
+                        'category_name' => $categoryInstance->name,
+                        'metadata' => String_Utils::get_tags($photo->title),
+                    );
+
+                    $photo = new Photo();
+                    $photoID = $photo->createFromLocalFile($data);
+
+                    if (!isset($innerPhoto)) {
+                        $innerPhoto = new Photo($photoID);;
+                    }
                 }
 
             }
         }
 
+        // If the new has videos import them
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
             foreach($videos as $video) {
 
-                $data = array(
-                    'title' => $video->file_path,
-                    'description' => $video->title,
-                    'local_file' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
-                    'fk_category' => $category,
-                    'category_name' => $categoryInstance->name,
-                    'metadata' => String_Utils::get_tags($video->title),
-                );
+                $filepath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path);
 
-                $videoFileData = array(
-                    'file_type' => $video->file_type,
-                    'file_path' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
-                    'category' => $category,
-                    'available' => 1,
-                    'content_status' => 0,
-                    'title' => $video->title,
-                    'metadata' => String_Utils::get_tags($video->title),
-                    'description' => '',
-                    'author_name' => 'internal',
-                );
+                // Check if the file exists
+                if ($filePath) {
+                    $videoFileData = array(
+                        'file_type' => $video->file_type,
+                        'file_path' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
+                        'category' => $category,
+                        'available' => 1,
+                        'content_status' => 0,
+                        'title' => $video->title,
+                        'metadata' => String_Utils::get_tags($video->title),
+                        'description' => '',
+                        'author_name' => 'internal',
+                    );
 
-                $video = new Video();
-                $videoID = $video->createFromLocalFile($videoFileData);
+                    $video = new Video();
+                    $videoID = $video->createFromLocalFile($videoFileData);
 
-                if (!isset($innerVideo)) {
-                    $innerVideo = new video($videoID);;
+                    if (!isset($innerVideo)) {
+                        $innerVideo = new video($videoID);;
+                    }
                 }
-
             }
         }
 

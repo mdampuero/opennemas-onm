@@ -1,4 +1,3 @@
-
 <ul id='thelist'  class="gallery_list clearfix" style="width:100%; margin:0; padding:0">
    {assign var=num value='1'}
    {section name=n loop=$videos}
@@ -7,17 +6,18 @@
        <li style="display:inline-block;">
            <div>
                <a>
-
-                   {assign var='information' value=$videos[n]->information|unserialize}
-
                     <img class="video"  width="67" id="draggable_video{$num}"
-                         src="{$information['thumbnail']}"
-                         name="{$videos[n]->pk_video}" alt="{$videos[n]->title}"
-                         qlicon="{$videos[n]->videoid}"
-                         de:created="{$videos[n]->created}"
-                         de:description="{$videos[n]->description|clearslash|escape:'html'}"
-                         de:tags="{$videos[n]->metadata}"
-                         title="{$videos[n]->title}" />
+                        {if $videos[n]->author_name == "internal"}
+                            src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$videos[n]->information['thumbnails']['normal']}"
+                        {else}
+                            src="{$videos[n]->information['thumbnail']}"
+                        {/if}
+                        name="{$videos[n]->pk_video}" alt="{$videos[n]->title}"
+                        qlicon="{$videos[n]->videoid}"
+                        de:created="{$videos[n]->created}"
+                        de:description="{$videos[n]->description|clearslash|escape:'html'}"
+                        de:tags="{$videos[n]->metadata}"
+                        title="{$videos[n]->title}" />
 
                 </a>
            </div>
