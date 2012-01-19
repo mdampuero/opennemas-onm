@@ -118,7 +118,7 @@ class Video extends Content
             return false;
         }
 
-        return true;
+        return $this->id;
     }
 
     public function read($id)
@@ -182,40 +182,67 @@ class Video extends Content
         }
     }
 
+    /**
+     * Creates a video from a local file
+     *
+     * @return true
+     * @throws Exception, if something goes wrong
+     **/
+    public function createFromLocalFile($videoFileData = array())
+    {
+        $pathUpload = MEDIA_PATH.DS;
+        $processedFile = $this->upload($videoFileData, $pathUpload);
+
+
+        // If video file was converted/copied successfully insert the video into database
+        if (!empty($processedFile)) {
+
+            $videoInformation = array_merge(
+                $videoFileData,
+                array(
+                    "video_url" => $processedFile['flvFile'],
+                    "information" => array('thumbnails' => $processedFile['thumbnails']),
+                    "author_name" => 'internal',
+                )
+            );
+            $videoId = $this->create($videoInformation);
+            if (!$videoId) {
+                throw new \Exception($this->errors);
+            }
+
+        } else {
+            throw new \Exception(_('There was an error while processing your video file'));
+        }
+        return $videoId;
+    }
+
     public function upload($file, $baseUploadpath)
     {
-
         $videoInformation = array();
 
-        if (empty($file["tmp_name"])) {
-            m::add(sprintf(
+        if (empty($file["file_path"])) {
+            throw new Exception(sprintf(
                 _('Seems that the server limits file uploads up to %s Mb. '
                   .'Try to upload files smaller than that size or contact with your administrator'),
                 (int)(ini_get('upload_max_filesize'))
             ));
-            return $videoInformation;
         }
         $uploads = array();
+        $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
 
-        if(!empty($file["name"])) {
+        if (array_key_exists('relative_path', $convertedVideo)) {
+            $videoInformation['flvFile'] = $convertedVideo['relative_path'];
 
-            $convertedVideo = $this->convertVideotoFLV($file, $baseUploadpath);
+            $videoAbsolutePath = $convertedVideo['absolute_path'];
 
-            if (array_key_exists('relative_path', $convertedVideo)) {
-                $videoInformation['flvFile'] = $convertedVideo['relative_path'];
+            $thumbnails = self::createThumbnailsfromFLV($videoAbsolutePath);
 
-                $videoAbsolutePath = $convertedVideo['absolute_path'];
-
-                $thumbnails = self::createThumbnailsfromFLV($videoAbsolutePath);
-
-                // We need to add relative path for every thumbnail
-                $relativeUploadDir = $convertedVideo['relative_dir'];
-                foreach ($thumbnails as $name => $value ) {
-                    $videoInformation['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
-                }
+            // We need to add relative path for every thumbnail
+            $relativeUploadDir = $convertedVideo['relative_dir'];
+            foreach ($thumbnails as $name => $value ) {
+                $videoInformation['thumbnails'][$name] = $relativeUploadDir.DIRECTORY_SEPARATOR.$value;
             }
-
-        } //if empty
+        }
 
         return $videoInformation;
     }
@@ -231,9 +258,9 @@ class Video extends Content
 
         $ffmpgePath = exec("which ffmpeg");
 
-        $originalVideoPath = $originalVideo['tmp_name'];
-        $fileType = $originalVideo['type'];
-        $temporaryVideoPath = $originalVideo['tmp_name'];
+        $originalVideoPath = $originalVideo['file_path'];
+        $fileType = $originalVideo['file_type'];
+        $temporaryVideoPath = $originalVideo['file_path'];
 
         // Calculate upload directory and create it if not exists
         $relativeUploadDir = 'video'.DS.date("Y/m/d");

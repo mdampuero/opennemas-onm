@@ -144,13 +144,9 @@
 						</td>
 					</tr>
                     {if $smarty.get.type == "file" || (isset($video) && $video->author_name == 'internal')}
-                    
                         {include file="video/partials/_form_video_internal.tpl"}
-
                     {else}
-                        
                         {include file="video/partials/_form_video_panorama.tpl"}
-
                     {/if}
 
 				</tbody>
@@ -161,6 +157,7 @@
 				</tfooter>
 			</table>
 
+        <input type="hidden" name="type" value="{$smarty.get.type}">
 		<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
 	</div>
