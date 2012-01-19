@@ -72,9 +72,7 @@ function refreshAction(&$tplManager, $cacheid, $tpl,$uri = NULL)
     if(!empty($uri)) {
         $url = SITE_URL .$uri;
         //TODO: review if next options are unused
-    }elseif(($tpl == 'opinion.tpl') && isset($matches['resource'])) { // opinion of author
-        $url = SITE_URL . '/controllers/opinion.php?category_name=opinion&opinion_id=' . $matches['resource'] . '&action=read';
-    } elseif(($tpl == 'mobile.index.tpl') && isset($matches['resource'])) { // mobile frontpage
+    } elseif(($tpl == 'frontpage-mobile.tpl') && isset($matches['resource'])) { // mobile frontpage
         if($matches['category']!='home') {
             $url = SITE_URL . 'mobile/seccion/'.$matches['category'].'/'.$matches['resource'];
         } else {
@@ -86,7 +84,7 @@ function refreshAction(&$tplManager, $cacheid, $tpl,$uri = NULL)
 
     } elseif(($tpl == 'album_frontpage.tpl')) { // video frontpage
 
-        $url = SITE_URL . 'video/'.$cacheid.'/';
+        $url = SITE_URL . 'album/'.$cacheid.'/';
 
     } elseif(($tpl == 'poll_frontpage.tpl')) { // video frontpage
 
@@ -96,18 +94,12 @@ function refreshAction(&$tplManager, $cacheid, $tpl,$uri = NULL)
         $url = SITE_URL . 'opinion/';
 
     }elseif(isset($matches['resource'])) {
-
-        if(preg_match('/[0-9]+/', $matches['resource'])) { // 19 digits then it's a pk_content
-            $url = SITE_URL . 'controllers/article.php?article_id='.$matches['resource'].'&action=read&category_name='.$matches['category'];
-
+        if($matches['category']!='home') {
+            $url = SITE_URL . 'seccion/'.$matches['category'].'/'.$matches['resource'];
         } else {
-
-            if($matches['category']!='home') {
-                $url = SITE_URL . 'seccion/'.$matches['category'].'/'.$matches['resource'];
-            } else {
-                $url = SITE_URL;
-            }
+            $url = SITE_URL;
         }
+
     }  else {
         preg_match('/(?P<category>[^\|]+)\|RSS(?P<resource>[0-9]*)$/', $cacheid, $matches);
         $url = SITE_URL.'rss/'.$matches['category'].'/'.$matches['resource'];
