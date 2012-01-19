@@ -323,7 +323,7 @@ switch($action) {
                 if ($filePath) {
                     $videoFileData = array(
                         'file_type' => $video->file_type,
-                        'file_path' => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path),
+                        'file_path' => $filepath,
                         'category' => $category,
                         'available' => 1,
                         'content_status' => 0,
