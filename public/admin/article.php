@@ -481,7 +481,6 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('photo2', $photo2);
             }
 
-
             $imgHome = $article->params['imgHome'];
             if(!empty($imgHome)){
                 $photoHome= new Photo($imgHome);
