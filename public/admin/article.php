@@ -447,7 +447,7 @@ if (isset($_REQUEST['action']) ) {
                         ) );
 
             //TODO: AJAX
-            require_once('controllers/video/videoGallery.php');
+            // require_once('controllers/video/videoGallery.php');
             $tpl->display('article/new.tpl');
 
         break;
