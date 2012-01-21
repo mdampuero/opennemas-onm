@@ -1,68 +1,64 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
+
+    <meta charset="utf-8">
+
+    <meta name="author"    content="OpenHost,SL">
+    <meta name="generator" content="OpenNemas - News Management System">
+    <meta name="viewport"  content="width=device-width,initial-scale=1">
+
     {block name="meta"}
         <title>OpenNeMaS - Manager section</title>
     {/block}
-    <meta http-equiv="pragma" content="no-cache" >
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
-    <meta name="author" content="OpenHost,SL" >
-    <meta name="generator" content="OpenNemas - News Management System" >
-    <link rel="shorcut icon" href="{$params.IMAGE_DIR}favicon.png" >
 
+    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
+    {css_tag href="/bootstrap/bootstrap.css"}
+        {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/buttons.css"}
-        {css_tag href="/messageboard.css" media="screen"}
-	{/block}
+        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
+        {css_tag href="/lightview.css"}
+        {css_tag href="/lightwindow.css" media="screen"}
+    {/block}
 
     {block name="js-library"}
-        {script_tag language="javascript" src="/prototype.js"}
-        {script_tag language="javascript" src="/scriptaculous/scriptaculous.js"}
-        {script_tag language="javascript" src="/scriptaculous/effects.js"}
-        {script_tag language="javascript" src="/scriptaculous/dragdrop.js"}
+        {script_tag src="/jquery/jquery.min.js"}
+        <script type="text/javascript">
+        jQuery.noConflict();
+        </script>
+        {script_tag src="/jquery/bootstrap-modal.js" language="javascript"}
+        {script_tag src="/prototype.js"}
+        {script_tag src="/scriptaculous/scriptaculous.js"}
+        {script_tag src="/scriptaculous/effects.js"}
     {/block}
 
     {block name="header-js"}
         {block name="js-library"}{/block}
-        {script_tag language="javascript" src="/lightview.js"}
-        {script_tag language="javascript" src="/prototype-date-extensions.js"}
-        {script_tag language="javascript" src="/fabtabulous.js"}
-        {script_tag language="javascript" src="/control.maxlength.js"}
-        {script_tag language="javascript" src="/MessageBoard.js"}
-        {script_tag language="javascript" src="/utils.js"}
-        {script_tag language="javascript" src="/utils_header.js"}
-        {script_tag language="javascript" src="/utilsopinion.js"}
-        {script_tag language="javascript" src="/validation.js"}
-        {script_tag language="javascript" src="/lightwindow.js" defer="defer"}
-        {script_tag language="javascript" src="/modalbox.js" defer="defer"}
-        {* FIXME: corregir para que pille bien el path *}
-        <script type="text/javascript">
-        try {
-                // Activar la validación
-                new Validation('formulario', { immediate : true });
-                Validation.addAllThese([
-                        ['validate-password',
-                                '{t}Your password must have between 8 and 16 characters.{/t}', {
-                                minLength : 8,
-                                maxLength : 16
-                        }]
-                ]);
+        {script_tag src="/onm/scripts.js"}
+        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
+        {script_tag src="/prototype-date-extensions.js"}
+        {*script_tag src="/fabtabulous.js"*}
+        {script_tag src="/control.maxlength.js"}
+        {script_tag src="/utils.js"}
+        {script_tag src="/utils_header.js"}
+        {script_tag src="/utilsopinion.js"}
+        {script_tag src="/validation.js"}
+        {script_tag src="/lightview.js"}
+        {script_tag src="/lightwindow.js" defer="defer"}
+     {/block}
 
-                // Para activar los separadores/tabs
-                $fabtabs = new Fabtabs('tabs');
-        } catch(e) {
-                // Escondemos los errores
-                //console.log( e );
-        }
-        </script>
+     {block name="footer-js"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
 <body>
-
     <header class="global-nav manager clearfix">
         <div class="logoonm pull-right">
             <a  href="{$smarty.const.SITE_URL}admin/" id="logo-onm" title="{t}Go to admin main page{/t}">
@@ -74,33 +70,51 @@
         </div>
     </header>
 
-    <div id="content">
-
-    {block name="content"}
-
-    {/block}
-
+    <div id="content" role="main">
+    {block name="content"}{/block}
     </div>
-
 
 
     {block name="copyright"}
-	<div id="copyright" class="wrapper-content clearfix">
-
+    <footer id="copyright" class="wrapper-content">
         <div class="company left">
-            <img align="left" src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
-			{t} made by OpenHost S.L.{/t}<br/>
+            <img src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
+            {t} made by OpenHost S.L.{/t}<br/>
             {t 1=strftime("%Y") escape=off}All rights reserved &copy; 2008 - %1{/t}
         </div>
-
         <ul class="support">
-            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a> </li>
+            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
         </ul>
+    </footer>
+    {/block}
 
-    </div>
-	{/block}
+    {block name="footer-js"}
+        {browser_update}
 
-    {block name="footer-js"}{/block}
+        {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
+        <script type="text/javascript">
+        try {
+            // Activar la validación
+            new Validation('formulario', { immediate : true });
+            Validation.addAllThese([
+                ['validate-password',
+                    '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}', {
+                    minLength : 6,
+                    notOneOf : ['password','PASSWORD','Password'],
+                    notEqualToField : 'login'
+                }],
+                ['validate-password-confirm',
+                    '{t}Please check your first password and check again.{/t}', {
+                    equalToField : 'password'
+                }]
+            ]);
+        } catch(e) {
+            // Escondemos los errores
+            //console.log( e );
+        }
+        </script>
+        {/if}
+    {/block}
 
 </body>
 </html>
