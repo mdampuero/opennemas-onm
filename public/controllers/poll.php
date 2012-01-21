@@ -141,10 +141,7 @@ switch($action) {
 
                 $cacheID = $tpl->generateCacheId($category_name,'', $pollId );
 
-                if( ($tpl->caching == 0) || !$tpl->isCached('poll/poll.tpl', $cacheID) ) {
-
-
-                    var_dump($items);
+                if ( ($tpl->caching == 0) || !$tpl->isCached('poll/poll.tpl', $cacheID) ) {
 
                     $comment = new Comment();
                     $comments = $comment->get_public_comments($pollId);
