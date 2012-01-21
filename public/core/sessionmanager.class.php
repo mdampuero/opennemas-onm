@@ -175,29 +175,27 @@ class SessionManager implements ArrayAccess
         $sessions = array();
 
         if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
-            if ($dh = opendir($sessionDirectory)) {
-                while (($file = readdir($dh)) !== false) {
-                    if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.'/'.$file);
-                        if (!empty($contents)) {
-                            $session =
-                                SessionManager::unserializeSession($contents);
 
-                            if (isset($session['userid']) && !$session['isMaster'] ) {
-                                $sessions[] = array(
-                                    'userid'     => $session['userid'],
-                                    'username'   => $session['username'],
-                                    'isAdmin'    => $session['isAdmin'],
-                                    'expire'     => $session['expire'],
-                                    'authMethod' => $session['authMethod'],
-                                );
-                            }
-                        } else {
-                            @unlink($sessionDirectory.'/'.$file);
-                        }
-                    }
+            $sessionFiles = glob($sessionDirectory.DS."sess*");
+            foreach ($sessionFiles as $session) {
+                $contents = file_get_contents($session);
+                if (!empty($contents)) {
+                    $session =
+                        SessionManager::unserializeSession($contents);
+
+                    if (isset($session['userid'])) {
+                        $sessions[] = array(
+                            'userid'     => $session['userid'],
+                            'username'   => $session['username'],
+                            'isAdmin'    => $session['isAdmin'],
+                            'expire'     => $session['expire'],
+                            'authMethod' => $session['authMethod'],
+                        );
+                   }
+
+                } else {
+                    @unlink($sessionDirectory.'/'.$file);
                 }
-                closedir($dh);
             }
         }
 
