@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+    {include file="acl/user/modal/_modal_edit_user_group.tpl"}
+    {script_tag src="/SpinnerControl.js"}
     <script type="text/javascript">
         document.observe('dom:loaded', function(){
             onChangeGroup( document.formulario.id_user_group, new Array('comboAccessCategory','labelAccessCategory') );
@@ -92,23 +94,6 @@ input[type="password"]{
 </style>
 {/block}
 
-{block name="footer-js" append}
-{script_tag src="/SpinnerControl.js" language="javascript"}
-{script_tag src="/modalbox.js" language="javascript"}
-
-{* FIXME: separar todo a un fichero js que tenga las funcionalidades de los usuarios *}
-<script type="text/javascript">
-function showGroupUsers(elto) {
-    /* Modalbox.show('user_groups.php?action=read&id=' + $('id_user_group').value, {
-        title: elto.title, width: 800, height: 640}); */
-    /*if( confirm('¿Está seguro de querer salir de la edición del usuario?') ) {
-        window.open('user_groups.php?action=read&id=' + $('id_user_group').value, 'centro');
-    }*/
-    Modalbox.show('<iframe width="100%" height="450" src="user_groups.php?action=read&id=' + $('id_user_group').value+'"  frameborder="0" marginheight="0" marginwidth="0"></iframe>', { title: '{t}User group manager{/t}', width: 760 });
-}
-</script>
-{/block}
-
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
@@ -160,7 +145,7 @@ function showGroupUsers(elto) {
                             </td>
                             <td rowspan=5>
                                 <div class="help-block margin-left-1">
-                                    <div class="title"><h4>{t}Complete user information{/t}</h4></div>
+                                    <div class="title"><h4>{t}User information{/t}</h4></div>
                                     <div class="content">
                                         {t escape=off}Please complete the user information by filling the aside form.{/t}
                                         {t escape=off}Sign up in <a href="http://www.gravatar.com">gravatar.com</a> and ensure that you use the same email as you have here in OpenNemas{/t}
@@ -285,7 +270,7 @@ function showGroupUsers(elto) {
                                         {/section}
                                     </select>
 
-                                    <a href="javascript:void(0);" title="{t}Edit groups and privileges{/t}" onclick="showGroupUsers(this);return false;">
+                                    <a href="javascript:void(0);" title="{t}Edit groups and privileges{/t}" id="show-user-group-modal">
                                         <img src="{$params.IMAGE_DIR}users_edit.png" border="0" style="vertical-align: middle;" /></a>
                                 </td>
                             </tr>
@@ -332,7 +317,6 @@ function showGroupUsers(elto) {
 
                     </table>
                 </fieldset>
-                    
                 </td>
             </tr>
             <tfoot>

@@ -51,7 +51,6 @@
         {script_tag src="/validation.js"}
         {script_tag src="/lightview.js"}
         {script_tag src="/lightwindow.js" defer="defer"}
-        {script_tag src="/modalbox.js" defer="defer"}
      {/block}
 
      {block name="footer-js"}

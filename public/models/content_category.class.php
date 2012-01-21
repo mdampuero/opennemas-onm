@@ -26,6 +26,7 @@ class ContentCategory {
 
     var $posmenu = NULL;
     var $internal_category = NULL; // flag asignar a un tipo de contenido.
+    var $params = null;
 
     /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
 
