@@ -12,8 +12,6 @@
             width:200px;
         }
     </style>
-    {css_tag href="/bootstrap/bootstrap.css"}
-    {script_tag src="/jquery/bootstrap-modal.js" language="javascript"}
     {script_tag src="/utilsMenues.js" language="javascript"}
 {/block}
 

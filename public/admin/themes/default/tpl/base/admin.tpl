@@ -17,6 +17,7 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
+    {css_tag href="/bootstrap/bootstrap.css"}
         {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
@@ -31,6 +32,7 @@
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
+        {script_tag src="/jquery/bootstrap-modal.js" language="javascript"}
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
         {script_tag src="/scriptaculous/effects.js"}
@@ -130,41 +132,15 @@
     </footer>
 	{/block}
 
-
-    <script type="text/javascript">
-
-    {if Acl::check('USER_ADMIN') eq true}
-    var users_online = [];
-    function linkToMB() {
-        $('MB_content').select('td a.modal').each(function(item) {
-            item.observe('click', function(event) {
-                Event.stop(event);
-
-                Modalbox.show(this.href, {
-                    title: '{t}Active users{/t}',
-                    afterLoad: linkToMB,
-                    width: 300
-                });
-            });
-        });
-    }
-
-    document.observe('dom:loaded', function() {
-        if( $('user_activity') ) {
-            $('user_activity').observe('click', function() {
-                Modalbox.show('{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/index.php?action=show_panel', {
-                    title: '{t}Active users{/t}',
-                    afterLoad: linkToMB,
-                    width: 300
-                });
-            });
-        }
-    });
-    {/if}
-    </script>
-	{block name="footer-js"}
+    {block name="footer-js"}
         {browser_update}
         {script_tag src="/onm/footer-functions.js"}
+
+        {if Acl::check('USER_ADMIN') eq true}
+        {include file="welcome/modals/_modal_users.tpl"}
+        {script_tag src="/onm/footer-functions-admin.js"}
+        {/if}
+
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">
@@ -191,10 +167,10 @@
 		{/if}
 	{/block}
 
-<!--[if lt IE 7 ]>
-    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-    <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
-<![endif]-->
+    <!--[if lt IE 7 ]>
+        <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+        <script>window.attachEvent("onload",function(){ CFInstall.check({ mode:"overlay" }) })</script>
+    <![endif]-->
 
 </body>
 </html>
