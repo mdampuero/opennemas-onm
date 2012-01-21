@@ -1433,9 +1433,9 @@ div.action-bar .right{
 .pills > li.with-subcategories:hover > a, .pills a:hover { background: none repeat scroll 0% 0% #0050A3; color: #FFFFFF; text-decoration: none; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); }
 .pills  a.active { background: none repeat scroll 0% 0% #0069D6; color: #FFFFFF; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); }
 .pills > li.active:hover > a, .pills > li.with-subcategories:hover > a{ border-radius:10px 10px 0 0; }
-.pills ul { margin:0; padding:0; position:absolute; top:35px; left:0; display:none; }
+.pills ul { margin:0; padding:0; position:absolute; top:35px; left:0; display:none; z-index: 9999;}
 .pills ul li { list-style:none; margin:0; }
-.pills ul li a { border:1px solid transparent; display:block; border-radius:0; margin:0; background: none repeat scroll 0% 0% #0069D6; color: #FFFFFF; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); color: #FFFFFF; padding:0px 25px; }
+.pills ul li a { white-space:nowrap; border:1px solid transparent; display:block; border-radius:0; margin:0; background: none repeat scroll 0% 0% #0069D6; color: #FFFFFF; text-shadow: 0pt 1px 1px rgba(0, 0, 0, 0.25); color: #FFFFFF; padding:0px 25px; }
 .pills ul li:first-child a { border-top-right-radius: 5px; }
 .pills ul li:last-child a { border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; }
 .pills li:hover ul { display:block; }
