@@ -102,8 +102,8 @@ input[type="password"]{
 			<div class="title"><h2>{$titulo_barra} :: {t}Editing user information{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user->id}', 'formulario');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    <a href="#" class="admin_add" onClick="sendFormValidate(this, '_self', 'validate', '{$user->id}', 'formulario');" title="Validar">
+                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </a>
                 </li>
 
@@ -113,13 +113,13 @@ input[type="password"]{
                 {else}
                    <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', 0, 'formulario');">
                 {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save and exit{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" value="{t}Cancel{/t}" title="Cancelar">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                    <a href="#" class="admin_add" onClick="enviar(this, '_self', 'list', 0);" onmouseover="return escape('<u>C</u>ancelar');" title="Cancelar">
+                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
 			</ul>
@@ -128,14 +128,14 @@ input[type="password"]{
 
 
     <div class="wrapper-content">
-        <table class="adminform"  width="100%">
+        <table class="adminform">
             <tr>
-                <td valign="top">
+                <td>
                 <fieldset>
                     <legend>{t}Name{/t}</legend>
                     <table>
                         <tbody>
-                        <tr valign="top">
+                        <tr>
                             <th scope="row">
                                 <label for="name">{t}Name:{/t}</label>
                             </th>
@@ -154,42 +154,39 @@ input[type="password"]{
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr>
                             <th scope="row">
                                 <label for="firstname">{t}Surname:{/t}</label>
                             </th>
                             <td>
-                                <input type="text" id="firstname" name="firstname" title="{t}Surname:{/t}"
-                                    value="{$user->firstname}" class="required"  size="50"/>
+                                <input type="text" id="firstname" name="firstname" value="{$user->firstname}" class="required"  size="50"/>
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr>
                             <th scope="row">
-                                <label for="lasname">{t}Maiden surname:{/t}</label>
+                                <label for="lastname">{t}Maiden surname:{/t}</label>
                             </th>
                             <td>
-                                <input type="text" id="lastname" name="lastname" title="{t}Maiden surname:{/t}"
-                                    value="{$user->lastname}"  size="50"/>
+                                <input type="text" id="lastname" name="lastname" value="{$user->lastname}"  size="50"/>
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr>
                             <th scope="row">
                                 <label for="address">{t}Address:{/t}</label>
                             </th>
                             <td>
-                                <textarea type="text" id="address" name="address" title="{t}Address:{/t}" cols=60>{$user->address}</textarea>
+                                <textarea id="address" name="address" cols=60>{$user->address}</textarea>
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr>
                             <th scope="row">
                                 <label for="phone">{t}Telephone:{/t}</label>
                             </th>
                             <td>
-                                <input type="text" id="phone" name="phone" title="{t}Telephone:{/t}" class="validate-digits"
-                                    value="{$user->phone}"  size="15"/>
+                                <input type="text" id="phone" name="phone" class="validate-digits" value="{$user->phone}"  size="15"/>
                             </td>
                         </tr>
                         </tbody>
@@ -199,50 +196,50 @@ input[type="password"]{
                     <legend>{t}OpenNemas user information{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="login">{t}Login:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="text" id="login" name="login" title="Login del usuario"
+                                    <input type="text" id="login" name="login"
                                         value="{$user->login}" class="required"  size="14" maxlength="20" />
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="password">{t}Password:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="password" id="password" name="password" title="Password"  size="20" autocomplete="off"
+                                    <input type="password" id="password" name="password" size="20" autocomplete="off"
                                         value="" class="{if $smarty.request.action eq "new"}required validate-password{/if}" />
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="passwordconfirm">{t}Re-enter password:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="password" id="passwordconfirm" name="passwordconfirm" title="Confirm Password"  size="20"
+                                    <input type="password" id="passwordconfirm" name="passwordconfirm" size="20"
                                             value="" autocomplete="off" class="{if $smarty.request.action eq "new"}required{/if} validate-password-confirm" />
                                 </td>
                             </tr>
 
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="sessionexpire">{t}Session expire time:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="number" id="sessionexpire" name="sessionexpire" title="Expiraci&oacute;n de Sessi&oacute;n"
-                                        value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" size="4" />
-                                    <apan>{t}minutes{/t}</span>
+                                    <input type="number" id="sessionexpire" name="sessionexpire"
+                                        value="{$user->sessionexpire|default:"15"}" class="required validate-digits" style="text-align:right" />
+                                    <span>{t}minutes{/t}</span>
                             </tr>
 
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="email">{t}Email adress:{/t}</label>
                                 </th>
                                 <td>
-                                    <input type="email" id="email" name="email" title="{t}Email adress:{/t}"
+                                    <input type="email" id="email" name="email"
                                         value="{$user->email}" class="required validate-email"  size="50"/>
                                 </td>
                             </tr>
@@ -254,7 +251,7 @@ input[type="password"]{
                     <table style="margin:1em;">
                         <tbody>
                            {acl isAllowed="GROUP_CHANGE"}
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="id_user_group">{t}User group:{/t}</label>
                                 </th>
@@ -271,17 +268,17 @@ input[type="password"]{
                                     </select>
 
                                     <a href="javascript:void(0);" title="{t}Edit groups and privileges{/t}" id="show-user-group-modal">
-                                        <img src="{$params.IMAGE_DIR}users_edit.png" border="0" style="vertical-align: middle;" /></a>
+                                        <img src="{$params.IMAGE_DIR}users_edit.png" style="vertical-align: middle;" /></a>
                                 </td>
                             </tr>
                             {/acl}
                             {acl isAllowed="USER_CATEGORY"}
-                            <tr valign="top">
+                            <tr>
                                 <th scope="row">
                                     <label for="id_user_group">{t}Sections:{/t}</label>
                                 </th>
                                 <td>
-                                    <div  id="comboAccessCategory" name="comboAccessCategory">
+                                    <div id="comboAccessCategory">
                                         <select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
                                             {if isset($content_categories_select) && count($content_categories_select)<=0}
                                                 <option value ="" selected="selected"></option>
@@ -321,12 +318,12 @@ input[type="password"]{
             </tr>
             <tfoot>
                 <tr>
-                    <td colspan=2></td>
+                    <td></td>
                 </tr>
             </tfoot>
         </table>
 		<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-	</form>
-</div>
+    </div>
+</form>
 {/block}

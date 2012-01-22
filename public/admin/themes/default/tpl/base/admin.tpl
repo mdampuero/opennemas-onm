@@ -132,12 +132,6 @@
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
         {script_tag src="/onm/footer-functions.js"}
 
-        {if Acl::check('USER_ADMIN') eq true}
-        {include file="welcome/modals/_modal_users.tpl"}
-        {script_tag src="/onm/footer-functions-admin.js"}
-        {/if}
-
-
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">
     	try {
@@ -160,6 +154,12 @@
         </script>
 		{/if}
 	{/block}
+
+
+    {if Acl::check('USER_ADMIN') eq true}
+    {include file="welcome/modals/_modal_users.tpl"}
+    {script_tag src="/onm/footer-functions-admin.js"}
+    {/if}
 
     <!--[if lt IE 7 ]>
         <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>

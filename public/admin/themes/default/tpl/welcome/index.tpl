@@ -34,8 +34,8 @@
 {block name="footer-js" append}
     {script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1}
     {script_tag src="/feed/feed.js"}
-    <script defer="defer">
     {if $feeds neq null}
+    <script>
     {section name="feed" loop=$feeds}
         jQuery(document).ready(function() {
             jQuery("#feed-{$smarty.section.feed.index}").gFeed ({
@@ -44,9 +44,8 @@
             });
         });
     {/section}
-
-    {/if}
     </script>
+    {/if}
 {/block}
 
 {block name="content"}
