@@ -6,7 +6,7 @@
     <div class="modal-body"></div>
 </div>
 
-<script>
+<script defer="defer">
 jQuery(document).ready(function($) {
     jQuery("#modal-logged-users").modal({
         backdrop: 'static', //Show a grey back drop

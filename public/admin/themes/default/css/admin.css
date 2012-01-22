@@ -629,6 +629,7 @@ table.aa tr td {
 fieldset {
     border:none;
     border-top:1px solid #ccc;
+	padding: 20px 0;
 }
 legend {
     color:#666;

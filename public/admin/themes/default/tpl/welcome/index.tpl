@@ -33,11 +33,8 @@
 
 {block name="footer-js" append}
     {script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1}
-    {script_tag src="/jquery/jquery.min.js"}
     {script_tag src="/feed/feed.js"}
-
-    <script type="text/javascript">
-    $.noConflict();
+    <script defer="defer">
     {if $feeds neq null}
     {section name="feed" loop=$feeds}
         jQuery(document).ready(function() {
@@ -82,13 +79,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-    {if isset($smarty.session.messages)
-        && !empty($smarty.session.messages)}
-        {messageboard type="inline"}
-    {else}
-        {messageboard type="growl"}
-    {/if}
-    <br/>
+    {render_messages}
     <table class="adminheading">
         <tbody>
             <tr>

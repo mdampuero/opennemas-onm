@@ -250,75 +250,78 @@ input, select, textarea {
             <fieldset>
                 <legend>{t}Position{/t}</legend>
 
-                <ul id="tabs">
-                    <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
-                    <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
-                    <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
-                    {/is_module_activated}
+                <div id="position-adv" class="tabs">
+                    <ul id="tabs">
+                        <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
+                        <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
+                        {is_module_activated name="VIDEO_MANAGER"}
+                        <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
+                        <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="OPINION_MANAGER"}
+                        <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
+                        <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="ALBUM_MANAGER"}
+                        <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
+                        <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="POLL_MANAGER"}
+                        <li><a href="#publi-poll">{t}Poll{/t}</a></li>
+                        <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="NEWSLETTER_MANAGER"}
+                        <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
+                        {/is_module_activated}
+                    </ul>
+
+                    <div id="publi-portada" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions.tpl"}
+                    </div>
+
+                    <div id="publi-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_interior.tpl"}
+                    </div>
                     {is_module_activated name="OPINION_MANAGER"}
-                    <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
-                    <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+                    <div id="publi-opinion" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
+                    </div>
+                    <div id="publi-opinion-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
+                    </div>
+                    {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <div id="publi-video" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                    </div>
+                    <div id="publi-video-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
-                    <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
-                    <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
+                    <div id="publi-gallery" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
+                    </div>
+                    <div id="publi-gallery-inner" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                    <li><a href="#publi-poll">{t}Poll{/t}</a></li>
-                    <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
+                    <div id="publi-poll" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_poll.tpl"}
+                    </div>
+                    <div id="publi-poll-inner" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
+                    <div id="publi-newsletter" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                    </div>
+
                     {/is_module_activated}
-                </ul>
-
-                <div id="publi-portada" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions.tpl"}
-                </div>
-
-                <div id="publi-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_interior.tpl"}
-                </div>
-                {is_module_activated name="OPINION_MANAGER"}
-                <div id="publi-opinion" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                </div>
-                <div id="publi-opinion-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="VIDEO_MANAGER"}
-                <div id="publi-video" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                </div>
-                <div id="publi-video-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="ALBUM_MANAGER"}
-                <div id="publi-gallery" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                </div>
-                <div id="publi-gallery-inner" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="POLL_MANAGER"}
-                <div id="publi-poll" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_poll.tpl"}
-                </div>
-                <div id="publi-poll-inner" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="NEWSLETTER_MANAGER"}
-                <div id="publi-newsletter" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
-                </div>
-
-                {/is_module_activated}
+                    
+                </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->
 

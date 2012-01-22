@@ -32,7 +32,7 @@
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
-        {script_tag src="/jquery/bootstrap-modal.js" language="javascript"}
+        {script_tag src="/jquery/bootstrap-modal.js"}
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
         {script_tag src="/scriptaculous/effects.js"}
@@ -43,7 +43,7 @@
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
         {script_tag src="/prototype-date-extensions.js"}
-        {*script_tag src="/fabtabulous.js"*}
+        {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}
@@ -51,10 +51,6 @@
         {script_tag src="/validation.js"}
         {script_tag src="/lightview.js"}
         {script_tag src="/lightwindow.js" defer="defer"}
-     {/block}
-
-     {block name="footer-js"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
@@ -133,6 +129,7 @@
 
     {block name="footer-js"}
         {browser_update}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
         {script_tag src="/onm/footer-functions.js"}
 
         {if Acl::check('USER_ADMIN') eq true}
@@ -159,8 +156,6 @@
 				}]
 			]);
 		} catch(e) {
-			// Escondemos los errores
-			//console.log( e );
 		}
         </script>
 		{/if}
