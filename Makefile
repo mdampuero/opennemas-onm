@@ -89,6 +89,10 @@ cleanlogs:
 	@echo "Cleaning logs..."
 	rm tmp/logs/*.log -f
 
+cleansmarty:
+	@echo "Cleaning smarty remporary files..."
+	rm tmp/instances/*/smarty/ -r
+
 cleandocs:
 	@echo "Cleaning generated documentations..."
 	rm doc/doxygen doc/phpdoc doc/apigen doc/docblox -r
