@@ -6,13 +6,13 @@
             <ul class="old-button">
                 <li>
                     <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=purge">
-                        <img border="0" alt="" src="{$params.IMAGE_DIR}/editclear.png"><br>
+                        <img alt="{t}Clean{/t}" src="{$params.IMAGE_DIR}/editclear.png"><br>
                         {t}Clean{/t}
                     </a>
                 </li>
                 <li>
                     <a title="{t}Refresh the list for getting newest error list{/t}" href="{$smarty.server.PHP_SELF}">
-                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
+                        <img alt="{t}Refresh list{/t}" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png"><br>
                         {t}Refresh list{/t}
                     </a>
                 </li>
@@ -22,82 +22,75 @@
 
     <div class="wrapper-content">
 
-
         {render_messages}
 
-         <div id="{$category}">
-            <div class="table-info clearfix">
-                <div>
-                    <div class="left">
-                        {$total_errors} registered SQL errors
-                    </div>
-                    <div class="right">
-                        <form method="GET" action="{$smarty.server.PHP_SELF}">
-                            <input type="text" name="search" value="{$search}">
-                            <button type="submit">{t}Search{/t}</button>
-                        </form>
-                    </div>
+        <div class="table-info clearfix">
+            <div>
+                <div class="left">
+                    {$total_errors} registered SQL errors
+                </div>
+                <div class="right">
+                    <form method="GET" action="{$smarty.server.PHP_SELF}">
+                        <input type="text" name="search" value="{$search}">
+                        <button type="submit">{t}Search{/t}</button>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <table class="listing-table">
+        <table class="listing-table">
 
-                <thead>
-                   <tr>
-                        <th scope="col" style="width:5px;">#</th>
-                        <th class="center" style="width:120px; text-align:center;">{t}Creation date{/t}</th>
-                        <th >{t}Error explanation{/t}</th>
-                        <th class="center" style="width:80px; text-align:center;">{t}Execution time{/t}</th>
-                   </tr>
-                </thead>
-                <tbody>
-                    {foreach from=$errors item=error name=errors}
+            <thead>
+               <tr>
+                    <th scope="col" style="width:5px;">#</th>
+                    <th class="center" style="width:120px; text-align:center;">{t}Creation date{/t}</th>
+                    <th >{t}Error explanation{/t}</th>
+                    <th class="center" style="width:80px; text-align:center;">{t}Execution time{/t}</th>
+               </tr>
+            </thead>
+            <tbody>
+                {foreach from=$errors item=error name=errors}
+                <tr>
+                    <td class="center">
+                        {$smarty.foreach.errors.iteration+$elements_page}
+                    </td>
+                    <td class="center">
+                        {$error['created']}
+                    </td>
+                    <td>
+                        <strong>{$error['tracer']}</strong>
+                        <br>
+                        <strong>SQL:</strong> {$error['sql1']}
+                        <br>
+                        <strong>Params:</strong> {$error['params']}
+                        <br>
+                        <strong>Other info:</strong> {$error['sql0']}
+                    </td>
+                    <td class="center">
+                        {$error['timer']}
+                    </td>
+                </tr>
+                {foreachelse}
                     <tr>
-                        <td class="center">
-                            {$smarty.foreach.errors.iteration+$elements_page}
-                        </td>
-                        <td class="center">
-                            {$error['created']}
-                        </td>
-                        <td>
-                            <strong>{$error['tracer']}</strong>
-                            <br>
-                            <strong>SQL:</strong> {$error['sql1']}
-                            <br>
-                            <strong>Params:</strong> {$error['params']}
-                            <br>
-                            <strong>Other info:</strong> {$error['sql0']}
-                        </td>
-                        <td class="center">
-                            {$error['timer']}
+                        <td colspan=4 class="empty">
+                            {t}There is no SQL errors registered in database.{/t}
                         </td>
                     </tr>
-                    {foreachelse}
-                        <tr>
-                            <td colspan=4 class="empty">
-                                {t}There is no SQL errors registered in database.{/t}
-                            </td>
-                        </tr>
-                    {/foreach}
-                </tbody>
+                {/foreach}
+            </tbody>
 
-                {if $pagination->_totalItems > 0}
-                <tfoot>
-                    <tr class="pagination">
-                        <td colspan="4">{$pagination->links}</td>
-                    </tr>
-                </tfoot>
-                {/if}
+            {if $pagination->_totalItems > 0}
+            <tfoot>
+                <tr class="pagination">
+                    <td colspan="4">{$pagination->links}</td>
+                </tr>
+            </tfoot>
+            {/if}
 
-             </table>
-
-         </div>
-
+         </table>
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
     </div>
-{dialogo script="print"}
-
 {/block}
