@@ -14,57 +14,49 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsopinion.js" language="javascript"}
-    {script_tag src="/photos.js" language="javascript"}
-    <script type="text/javascript">
+{script_tag src="/utilsopinion.js" language="javascript"}
+{script_tag src="/photos.js" language="javascript"}
+<script>
+    countWords(
+               document.getElementById('title'),
+               document.getElementById('counter_title')
+               );
 
-        countWords(
-                   document.getElementById('title'),
-                   document.getElementById('counter_title')
-                   );
+    countWords(
+               document.getElementById('body'),
+               document.getElementById('counter_body')
+               );
 
-        countWords(
-                   document.getElementById('body'),
-                   document.getElementById('counter_body')
-                   );
+    Droppables.add('div_widget', {
+        onDrop: function(element) {
+                $('widget').src=element.src;
+                $('fk_author_img_widget').value=element.id;
+        }
+    });
+    Droppables.add('sel', {
+        onDrop: function(element) {
+           $('fk_author_img').value=element.id;
+           $('seleccionada').src=element.src;
+        }
+    });
+</script>
 
-        Droppables.add('div_widget', {
-            onDrop: function(element) {
-                    $('widget').src=element.src;
-                    $('fk_author_img_widget').value=element.id;
-            }
-        });
-        Droppables.add('sel', {
-            onDrop: function(element) {
-               $('fk_author_img').value=element.id;
-               $('seleccionada').src=element.src;
-            }
-        });
+{script_tag src="/tiny_mce/opennemas-config.js"}
+<script type="text/javascript" language="javascript">
+    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+</script>
 
-        </script>
+<script type="text/javascript" language="javascript">
+    OpenNeMas.tinyMceConfig.advanced.elements = "body";
+    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+</script>
 
-        {script_tag src="/tiny_mce/opennemas-config.js"}
-        <script type="text/javascript" language="javascript">
-            tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-        </script>
-
-        <script type="text/javascript" language="javascript">
-            OpenNeMas.tinyMceConfig.advanced.elements = "body";
-            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-        </script>
-
-
-    {dialogo script="print"}
-    {* FORMULARIO PARA ENGADIR ************************************** *}
-
-    <script type="text/javascript" language="javascript">
-
-        document.observe('dom:loaded', function() {
-            if($('title')){
-                new OpenNeMas.Maxlength($('title'), { });
-            }
-        });
-
+<script>
+    document.observe('dom:loaded', function() {
+        if($('title')){
+            new OpenNeMas.Maxlength($('title'), { });
+        }
+    });
     jQuery(document).ready(function ($){
         $('#opinion-form').tabs();
     });

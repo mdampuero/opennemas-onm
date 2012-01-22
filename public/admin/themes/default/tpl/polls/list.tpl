@@ -180,6 +180,4 @@
 
     </div>
 </form>
-{dialogo script="print"}
-
 {/block}

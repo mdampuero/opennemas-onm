@@ -109,8 +109,6 @@
             </div>
          </div>
 
-        {dialogo script="print"}
-
         <script type="text/javascript" language="javascript">
         document.observe('dom:loaded', function() {
             if($('title')){
