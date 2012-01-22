@@ -8,7 +8,7 @@
     }
     .tags-hidden {
         position:absolute;
-        width:30px; 
+        width:30px;
         height: 15px;
         margin:0;
         padding:0;
@@ -34,7 +34,7 @@
         display:none;
     }
 
-    .already-imported, 
+    .already-imported,
     .already-imported:hover{
         background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
         background-color:none;
@@ -43,16 +43,13 @@
 {/block}
 
 {block name="header-js" prepend}
-    {script_tag language="javascript" src="/jquery/jquery.min.js"}
-    <script type="text/javascript">
-    jQuery.noConflict();
+<script type="text/javascript">
     jQuery(document).ready(function (){
-        
         jQuery('.sync_with_server').click(function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EFE, please wait...{/t}</div>'); 
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><img src="/admin/themes/default/images/ajax-loader.gif" /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
         });
     });
-    </script>
+</script>
 {/block}
 {block name="content"}
 <div class="top-action-bar clearfix">
@@ -60,88 +57,89 @@
         <div class="title"><h2>{t}EFE importer{/t} :: {t}Available articles{/t}</h2></div>
         <ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=sync" class="sync_with_server" value="{t}Sync with server{/t}" title="{t}Sync with server{/t}">
-				<img border="0" src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
+				<a href="{$smarty.server.PHP_SELF}?action=sync" class="sync_with_server" title="{t}Sync with server{/t}">
+				<img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
 				</a>
 			</li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Sync with server{/t}" title="{t}Reload list{/t}">
-				<img border="0" src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
+				<a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Reload list{/t}">
+				<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
 
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" value="{t}Config Europapress module{/t}" title="{t}Reload list{/t}">
-				<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Reload list{/t}">
+				<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
 				</a>
 			</li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
+
     <div class="warnings-validation"></div><!-- / -->
-   <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-	{render_messages}
+    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
-	{if ($message || ($minutes > 10))}
-	<div class="notice">
-	    <ul>
-		{if $minutes > 10}
-		<p>
-			{if $minutes > 100}
-			<span class="red">{t}A long time ago from synchronization.{/t}</span>
-			{else}
-			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
-			{/if}
-			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
-		</p>
-		{/if}
-	    </ul>
-	</div>
-	{/if}
+    	{render_messages}
 
-	{if (!empty($error))}
-	<div class="error">
-		{render_error}
-	</div>
-	{/if}
+    	{if ($message || ($minutes > 10))}
+    	<div class="notice">
+    	    <ul>
+        		{if $minutes > 10}
+        		<li>
+        			{if $minutes > 100}
+        			<span class="red">{t}A long time ago from synchronization.{/t}</span>
+        			{else}
+        			<span class="red">{t 1=$minutes}Last sync was %1 minutes ago.{/t}</span>
+        			{/if}
+        			{t}Try syncing the news list from server by clicking in "Sync with server" button above{/t}
+        		</li>
+    		    {/if}
+    	    </ul>
+    	</div>
+    	{/if}
 
-	<div id="{$category|default:""}">
+    	{if (!empty($error))}
+    	<div class="error">
+    		{render_error}
+    	</div>
+    	{/if}
 
-	    <table class="adminheading">
-		<tr>
-		    <th align="left">Total: {$pagination->_totalItems} articles.</th>
-		    <th nowrap="nowrap" align="right">
-			<label for="username">{t}Filter by title or content{/t}</label>
-			<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
 
-			<label for="usergroup">{t}and category:{/t}</label>
-			<select id="usergroup" name="filter_category" onchange="this.form.submit();">
-			     <option value="*">{t}All{/t}</option>
-			     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
-			</select>
+        <table class="adminheading">
+    	<tr>
+    	    <th>Total: {$pagination->_totalItems} articles.</th>
+    	    <th >
+    		<label for="username">{t}Filter by title or content{/t}</label>
+    		<input id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" />
 
-			<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
-			<input type="submit" value="{t}Search{/t}">
-		    </th>
-		</tr>
-	    </table>
+    		<label for="usergroup">{t}and category:{/t}</label>
+    		<select id="usergroup" name="filter_category" onchange="this.form.submit();">
+    		     <option value="*">{t}All{/t}</option>
+    		     {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+    		</select>
 
-	    <table class="listing-table">
+    		<input type="hidden" name="page" value="{$smarty.request.page|default:""}" />
+    		<input type="submit" value="{t}Search{/t}">
+    	    </th>
+    	</tr>
+        </table>
+
+        <table class="listing-table">
             <thead>
                 <tr>
                 {if count($elements) >0}
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
-                    <th align="center">{t}Attachments{/t}</th>
-                    <th align="center">{t}Date{/t}</th>
+                    <th>{t}Attachments{/t}</th>
+                    <th>{t}Date{/t}</th>
                     <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {else}
                 <tr>
-                    <th coslpan=5>&nbsp;</th>
+                    <th coslpan=6>&nbsp;</th>
                 </tr>
                 {/if}
             </thead>
@@ -154,12 +152,12 @@
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $elements[c]->priority > 4}4{else}{$elements[c]->priority}{/if}.png" alt="{t 1=$elements[c]->priority}Priority %1{/t}" title="{t 1=$elements[c]->priority}Priority %1{/t}">
                     </td>
                     <td onmouseout="UnTip()" onmouseover="Tip('{$elements[c]->body|regex_replace:"/[\r\t\n]/":" "|clearslash|regex_replace:"/'/":"\'"|escape:'html'}', SHADOW, false, ABOVE, false, WIDTH, 800)">
-                        <a href="{$smarty.server.PHP_SELF}?action=show&id={$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
+                        <a href="{$smarty.server.PHP_SELF}?action=show&amp;id={$elements[c]->xmlFile|urlencode}" title="{t}Import{/t}">
                             {$elements[c]->title}
                         </a>
                     </td>
 
-                    <td align="center">
+                    <td>
                         {if $elements[c]->hasPhotos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
                         {/if}
@@ -175,24 +173,23 @@
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
-                    <td align="center">
+                    <td>
                         {$elements[c]->created_time->getTimestamp()|relative_date}
                     </td>
 
-                    <td align="center">
+                    <td>
                         <div style="position:relative">
                             <div class="tags-hidden" >
                                 <span class="list-tags">
                                 {foreach from=$elements[c]->tags  key=key item=value name=loop1}
-                                    {$key} 
+                                    {$key}
                                 {/foreach}
                                 </span>
                                 <ul>
                                 {foreach from=$elements[c]->tags item=tag name=loop1}
                                     <li>{$tag}</li>
-                                {/foreach}    
+                                {/foreach}
                                 </ul><!-- / -->
-                                
                             </div><!-- / -->
                         </div><!-- / -->
                     </td>
@@ -200,18 +197,18 @@
                     <td class="right">
                         <ul class="action-buttons">
                             <li>
-                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import_select_category&id={$elements[c]->xmlFile}" title="Importar">
-                               <img border="0" alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
+                                <a class="publishing" href="{$smarty.server.PHP_SELF}?action=import_select_category&amp;id={$elements[c]->xmlFile}" title="Importar">
+                               <img alt="Publicar" src="{$params.IMAGE_DIR}archive_no2.png">
                                 </a>
                             </li>
                         </ul>
                     </td>
 
-                   </tr>
+                </tr>
 
                 {sectionelse}
                 <tr>
-                    <td colspan=5 class="empty">
+                    <td colspan=6 class="empty">
                         <h2>
                             <b>{t}There is no elements to import{/t}</b>
                         </h2>
@@ -221,15 +218,14 @@
                 {/section}
             </tbody>
             <tfoot>
-                 <tr class="pagination" >
-                     <td colspan="13" align="center">{$pagination->links|default:""}&nbsp;</td>
+                 <tr class="pagination">
+                     <td colspan="6">{$pagination->links|default:""}&nbsp;</td>
                  </tr>
             </tfoot>
 
-	   </table>
-	</div>
+        </table>
 
-	<input type="hidden" id="action" name="action" value="list" />
+    	<input type="hidden" id="action" name="action" value="list" />
 	</form>
 </div>
 {/block}
