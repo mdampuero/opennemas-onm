@@ -2,7 +2,7 @@
 /*
  * This file is part of the Onm package.
  *
- * (c) 
+ * (c)
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -211,7 +211,7 @@ class Content
 
     /**
      * Loads the data for an content given its id
-     * 
+     *
      * @param array $data array with data for create the article
      *
      * @return void
@@ -223,9 +223,9 @@ class Content
         if (empty($id)) {
             return false;
         }
-        $sql = 'SELECT * FROM contents, contents_categories 
+        $sql = 'SELECT * FROM contents, contents_categories
                 WHERE pk_content = '.($id).' AND pk_content = pk_fk_content';
-        
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if (!$rs) {
             $errorMsg = Application::logDatabaseError();
@@ -248,7 +248,7 @@ class Content
 
         $name_type = $this->content_type;
 
-        $sql = "UPDATE contents 
+        $sql = "UPDATE contents
                 SET `title`=?, `description`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
                     `changed`=?, `in_home`=?, `frontpage`=?,
@@ -483,8 +483,8 @@ class Content
 
     /**
      * Sets the pending status for this content.
-     * 
-     * This content has to be 
+     *
+     * This content has to be
      *
      * @return boolean true if all went well
      **/
@@ -501,7 +501,7 @@ class Content
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $stmt = $GLOBALS['application']->conn->Prepare(
-            'UPDATE contents 
+            'UPDATE contents
              SET `available`=0, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?'
         );
@@ -529,7 +529,7 @@ class Content
      * undocumented function
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function setTrashed()
     {
@@ -541,7 +541,7 @@ class Content
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $stmt = $GLOBALS['application']->conn->Prepare(
-            'UPDATE contents 
+            'UPDATE contents
              SET `in_litter`=1, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?'
         );
@@ -598,7 +598,7 @@ class Content
         $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
         $stmt = $GLOBALS['application']->conn->Prepare(
-            'UPDATE contents 
+            'UPDATE contents
              SET `content_status`=0, `available`= 1, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?'
         );
@@ -634,7 +634,7 @@ class Content
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $stmt = $GLOBALS['application']->conn->Prepare(
-            'UPDATE contents 
+            'UPDATE contents
              SET `in_home`=2, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?'
         );
@@ -895,7 +895,7 @@ class Content
 
         /* Notice log of this action */
         $logger = Application::logContentEvent(__METHOD__, $this);
-    
+
     }
 
     //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
@@ -1016,7 +1016,7 @@ class Content
         }
 
         /* Notice log of this action */
-        $logger = Application::logContentEvent();
+        $logger = Application::logContentEvent('setFrontpage');
 
         //$GLOBALS['application']->dispatch('onAfterSetFrontpage', $this);
     }
