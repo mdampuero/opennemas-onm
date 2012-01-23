@@ -51,6 +51,7 @@
         {script_tag src="/validation.js"}
         {script_tag src="/lightview.js"}
         {script_tag src="/lightwindow.js" defer="defer"}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
@@ -80,9 +81,8 @@
 
             {if {count_pending_comments} gt 0}
             <div class="notification-messages">
-                <a  class="comments-available" 
-                    href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos"
-                    title="{t}There are new comments to moderate{/t}">
+                <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
+                    href="{$smarty.const.SITE_URL_ADMIN}/controllers/comment/comment.php?action=list&amp;category=todos">
                     <span class="icon">{count_pending_comments}</span>
                 </a>
             </div>
@@ -91,20 +91,20 @@
             <div class="usermenu">
                 <a href="#" class="menu"><span class="icon">&nbsp;</span></a>
     			<div>
-                        <div class="avatar">
-                            {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
-                        </div><!-- / -->
-        				<div class="user-info">
-                            <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
-                            <div class="login-name">{$smarty.session.username}</div>
-                            <ul class="links">
-                                <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
-                                {if Acl::check('BACKEND_ADMIN') eq true}
-                                <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
-                                {/if}
-                                <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                            </ul><!-- / -->
-                        </div><!-- / -->
+                    <div class="avatar">
+                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
+                    </div><!-- / -->
+    				<div class="user-info">
+                        <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                        <div class="login-name">{$smarty.session.username}</div>
+                        <ul class="links">
+                            <li><a id="settings" title="{t}Edit my profile{/t}" href="{$smarty.const.SITE_URL_ADMIN}/controllers/acl/user.php?action=read&amp;id={$smarty.session.userid}">{t}Edit my profile{/t}</a></li>
+                            {if Acl::check('BACKEND_ADMIN') eq true}
+                            <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
+                            {/if}
+                            <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
+                        </ul><!-- / -->
+                    </div><!-- / -->
 			    </div>
     		</div>
         </div>
@@ -129,7 +129,6 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
         {script_tag src="/onm/footer-functions.js"}
 
 		{if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
