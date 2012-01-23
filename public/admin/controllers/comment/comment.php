@@ -255,7 +255,7 @@ switch($action) {
 
         Acl::checkOrForward('COMMENT_DELETE');
         $comment = new Comment();
-        $comment->delete($_POST['id'], $_SESSION['userid']);
+        $comment->delete($_GET['id'], $_SESSION['userid']);
                
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                              $category . '&page=' . $page /*.'&comment_status='.$_GET['comment_status']*/);
