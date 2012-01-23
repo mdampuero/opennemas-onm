@@ -246,14 +246,22 @@
                             <td valign="top" style="min-height:80px; padding:8px;   background-color:#eee">
                                 <div id="sel" style="width:100%;">
                                     <b>{t}Inner opinion photo:{/t}</b> <br />
-                                    <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img|default:""}" id="seleccionada" name="seleccionada"  border="1" align="top" />
+                                    {if !empty($foto->path_img)}
+                                        <img src="{$MEDIA_IMG_PATH_URL}{$foto->path_img|default:""}" id="seleccionada" name="seleccionada"  border="1" align="top" />
+                                    {else}
+                                        <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_author.png" id="seleccionada" name="seleccionada"  border="1" align="top" />
+                                    {/if}
                                     <input type="hidden" id="fk_author_img" name="fk_author_img" value="{$opinion->fk_author_img|default:""}" />
                                 </div>
                             </td>
                             <td valign="top" style="min-height:80px; padding:8px; background-color:#bbb">
                                 <div id="div_widget" style="width:100%;">
                                     <b>{t}Widget photo:{/t}</b><br />
-                                    <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img|default:""}" id="widget" name="widget"  border="1" align="top" />
+                                    {if !empty($fotowidget->path_img)}
+                                        <img src="{$MEDIA_IMG_PATH_URL}{$fotowidget->path_img|default:""}" id="widget" name="widget"  border="1" align="top" />
+                                    {else}
+                                        <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_author.png" id="widget" name="widget"  border="1" align="top" />
+                                    {/if}
                                     <input type="hidden" id="fk_author_img_widget" name="fk_author_img_widget" value="{$opinion->fk_author_img_widget|default:""}" />
                                 </div>
                             </td>

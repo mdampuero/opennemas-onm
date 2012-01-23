@@ -88,10 +88,10 @@ switch($action) {
             $total = $opinion->count_inhome_type($type_opinion);
             $alert="";
 
-            if (($type_opinion == 1) && ($total != $numEditorial)) {
+            if (($numEditorial>0) && ($type_opinion == 1) && ($total != $numEditorial)) {
                 $type = 'editorial';
                 $number = $numEditorial;
-            } elseif (($type_opinion == 2) && ($total != $numDirector)) {
+            } elseif (($numDirector>0) && ($type_opinion == 2) && ($total != $numDirector)) {
                  $type = 'opinion del director';
                  $number = $numDirector;
             }
@@ -105,14 +105,14 @@ switch($action) {
 
             $opinions = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=0',
                                   'ORDER BY type_opinion DESC, position ASC, created DESC');
-
-            $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
+            if($numEditorial > 0) {
+                $editorial = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=1',
                                    'ORDER BY position ASC, created DESC LIMIT 0,'.$numEditorial);
-
-
-            $director = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=2',
+            }
+            if($numDirector >0) {
+                $director = $cm->find('Opinion', 'in_home=1 and available=1 and type_opinion=2',
                                   'ORDER BY created DESC LIMIT 0,'.$numDirector);
-
+            }
             if (($numEditorial>0) && (count($editorial) != $numEditorial)) {
                 $type = 'editorial';
                 m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
@@ -128,6 +128,7 @@ switch($action) {
                     $opin->comments = count($todos);
                     $opin->ratings = $rating->get_value($opin->id);
                 }
+                $tpl->assign('editorial', $editorial);
             }
 
             if (!empty($director)) {
@@ -136,12 +137,8 @@ switch($action) {
                     $opin->comments = count($todos);
                     $opin->ratings = $rating->get_value($opin->id);
                 }
+                $tpl->assign('director', $director);
             }
-
-            $tpl->assign('editorial', $editorial);
-            $tpl->assign('director', $director);
-
-
         }
 
         $tpl->assign('type_opinion', $type_opinion);
@@ -293,11 +290,15 @@ switch($action) {
             $numDirector = $configurations['total_director'];
 
             if (($opinion->type_opinion == 1) && ($total != $numEditorial)) {
-                $type = 'editorial';
-                m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                if($numEditorial > 0) {
+                    $type = 'editorial';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                }
             } elseif (($opinion->type_opinion == 2) && ($total != $numDirector)) {
-                 $type = 'opinion del director';
-                 m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+                if($numDirector > 0) {
+                    $type = 'opinion del director';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+                }
             }
 
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
@@ -543,11 +544,15 @@ switch($action) {
         $numDirector = $configurations['total_director'];
 
         if (($opinion->type_opinion == 1) && ($total != $numEditorial)) {
-            $type = 'editorial';
-            m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+            if($numEditorial > 0) {
+                $type = 'editorial';
+                m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+            }
         } elseif (($opinion->type_opinion == 2) && ($total != $numDirector)) {
-             $type = 'opinion del director';
-             m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+            if($numDirector > 0) {
+                $type = 'opinion del director';
+                m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+            }
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
@@ -575,15 +580,22 @@ switch($action) {
                     $opinion->set_inhome($status, $_SESSION['userid']);
                 }
             }
-            $total = $opinion->count_inhome_type(1);
-            if ($total != $numEditorial) {
-                $type = 'editorial';
-                m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+            $configurations = s::get('opinion_settings');
+            $numEditorial = $configurations['total_editorial'];
+            $numDirector = $configurations['total_director'];
+            if($numEditorial > 0) {
+                $total = $opinion->count_inhome_type(1);
+                if ($total != $numEditorial) {
+                    $type = 'editorial';
+                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                }
             }
-            $total = $opinion->count_inhome_type(2);
-            if ($total != $numDirector) {
-                 $type = 'opinion del director';
-                 m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+            if($numDirector > 0) {
+                $total = $opinion->count_inhome_type(2);
+                if ($total != $numDirector) {
+                     $type = 'opinion del director';
+                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+                }
             }
         }
 
