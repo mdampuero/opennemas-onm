@@ -72,8 +72,8 @@ textarea{
             <li><a href="#seo">{t}SEO{/t}</a</li>
             <li><a href="#misc">{t}Opennemas Settings{/t}</a</li>
             <li><a href="#external">{t}External Services{/t}</a></li>
-            
-          
+
+
         </ul>
 
         <div id="general" class="panel">
@@ -100,8 +100,8 @@ textarea{
                                             <dt><strong>{t}Edit Site color{/t}</strong></dt>
                                             <dd>
                                                 {t}You can edit the site color here.
-                                                This will change the color of the menu bars. 
-                                                If you wanna change the categorys color, 
+                                                This will change the color of the menu bars.
+                                                If you wanna change the categorys color,
                                                 go to the Category Manager and edit a category.{/t}
                                             </dd>
                                             <dt><strong>{t}Add a Logo for the site{/t}</strong></dt>
@@ -130,7 +130,7 @@ textarea{
                             </td>
                             <td colspan="2" valign="top">
                                 <div class="help-block margin-left-1">
-                                    
+
                                 </div>
                             </td>
                         </tr>
@@ -147,8 +147,8 @@ textarea{
                             <th scope="row">
                                 <label for="site_title">{t}Logo image:{/t}</label>
                             </th>
-                            <td style="height:100px;">
-                                <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}">
+                            <td>
+                                <img width="50%" src="{$smarty.const.INSTANCE_MEDIA}sections/{$configs['site_logo']}">
                             </td>
                             <td colspan=2 valign="top">
 
@@ -247,7 +247,7 @@ textarea{
                 </table>
             </fieldset>
         </div><!-- /seo -->
-       
+
         <div id="misc" class="panel">
             <fieldset>
                 <legend>{t}Opennemas settings{/t}</legend>
@@ -298,7 +298,7 @@ textarea{
                             <td>
                                 <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                             </td>
-                            <td valign="top">     
+                            <td valign="top">
                                 <div class="help-block margin-left-1">
                                     <div class="title"><h4>{t}Number items in admin lists{/t}</h4></div>
                                     <div class="content">{t}Default: 20 elements{/t}</div>
@@ -310,7 +310,7 @@ textarea{
                 </table>
             </fieldset>
         </div>
- 
+
 
         <div id="external" class="panel">
             <fieldset>
@@ -353,7 +353,7 @@ textarea{
                 </table>
 
             </fieldset>
-            
+
             <fieldset>
                 <legend>{t}Google Services{/t}</legend>
                 <table>
@@ -530,7 +530,7 @@ textarea{
     tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
     OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
     tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
-   
+
     $.noConflict();
     jQuery('#site_color').ColorPicker({
         onSubmit: function(hsb, hex, rgb, el) {
