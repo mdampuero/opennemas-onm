@@ -27,7 +27,8 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#">
+    <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#"
+             privilege="ARTICLE_PENDINGS,OPINION_ADMIN,COMMENT_ADMIN,POLL_ADMIN,ADVERTISEMENT_ADMIN,STATIC_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,CATEGORY_ADMIN,MENU_ADMIN">
         <node
             module_name="ARTICLE_MANAGER"
             privilege="ARTICLE_PENDINGS"
@@ -95,7 +96,8 @@ $menuXml = '<?xml version="1.0"?>
         />
      </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#" privilege="IMAGE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,FILE_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
+            privilege="IMAGE_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
             privilege="IMAGE_ADMIN"
@@ -139,7 +141,8 @@ $menuXml = '<?xml version="1.0"?>
         />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#" privilege="BACKEND_ADMIN,CACHE_ADMIN,SEARCH_ADMIN,TRASH_ADMIN,PCLAVE_ADMIN,EP_IMPORTER_ADMIN">
+    <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
+        privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -211,36 +214,39 @@ $menuXml = '<?xml version="1.0"?>
             privilege="BACKEND_ADMIN" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#" privilege="ONM_SETTINGS,CACHE_ADMIN,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
+    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#"
+             privilege="ONM_SETTINGS,CACHE_ADMIN,USER_ADMIN,ONLY_MASTERS,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
         <node
             module_name="SETTINGS_MANAGER"
             title="'.htmlspecialchars(_("System settings"), ENT_QUOTES).'"
             id="settings_manager"
             link="controllers/system_settings/system_settings.php"
             privilege="ONM_SETTINGS" />
-        <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#" privilege="USER_ADMIN">
-            <node
-                module_name="USER_MANAGER"
-                privilege="USER_ADMIN"
-                title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
-                id="user_manager"
-                link="controllers/acl/user.php"
-            />
-            <node
-                module_name="USER_GROUP_MANAGER"
-                privilege="USER_ADMIN"
-                title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
-                id="user_group_manager"
-                link="controllers/acl/user_groups.php"
-            />
-            <node
-                module_name="PRIVILEGE_MANAGER"
-                privilege="ONLY_MASTERS"
-                title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
-                id="privilege_manager"
-                link="controllers/acl/privileges.php"
-            />
-        </submenu>
+
+            <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#"
+                     privilege="USER_ADMIN">
+                <node
+                    module_name="USER_MANAGER"
+                    privilege="USER_ADMIN"
+                    title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
+                    id="user_manager"
+                    link="controllers/acl/user.php"
+                />
+                <node
+                    module_name="USER_GROUP_MANAGER"
+                    privilege="USER_ADMIN"
+                    title="'.htmlspecialchars(_("User Groups"), ENT_QUOTES).'"
+                    id="user_group_manager"
+                    link="controllers/acl/user_groups.php"
+                />
+                <node
+                    module_name="PRIVILEGE_MANAGER"
+                    privilege="ONLY_MASTERS"
+                    title="'.htmlspecialchars(_("Privileges"), ENT_QUOTES).'"
+                    id="privilege_manager"
+                    link="controllers/acl/privileges.php"
+                />
+            </submenu>
         <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
@@ -277,7 +283,6 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
             id="support_help"
             link="http://www.openhost.es/"
-            privilege="BACKEND_ADMIN"
             target="external"/>
     </submenu>
 </menu>';
