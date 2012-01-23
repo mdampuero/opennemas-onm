@@ -69,22 +69,22 @@
                                     <td valign="top"  align="right" nowrap="nowrap">
                                         <label for="title"> Disponible:</label>
                                     </td>
-                                    <td valign="top" nowrap="nowrap">                                       
+                                    <td valign="top" nowrap="nowrap">
                                             <select name="available" id="available" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                                <option value="0" {if $kiosko->available==0}selected{/if}>No</option>
-                                                <option value="1" {if $kiosko->available==1}selected{/if}>Si</option>
-                                            </select>                                        
+                                                <option value="0">No</option>
+                                                <option value="1" selected>Si</option>
+                                            </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td valign="top"  align="right" nowrap="nowrap">
                                         <label for="title"> Favorito:</label>
                                     </td>
-                                    <td valign="top" nowrap="nowrap">                                      
+                                    <td valign="top" nowrap="nowrap">
                                             <select name="favorite" id="favorite" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                                 <option value="0">No</option>
                                                 <option value="1" selected>Si</option>
-                                   
+
                                         <img class="favorite" src="{$params.IMAGE_DIR}selected.png" border="0" alt="En home" align="top" />
                                     </td>
                                 </tr>

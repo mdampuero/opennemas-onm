@@ -15,7 +15,7 @@
 </div>
 
 
-{render_messages}                
+{render_messages}
 
 <div class="wrapper-content">
 
@@ -28,7 +28,7 @@
                 <td></td>
             </th>
         </table>
-        <table class="adminform">       
+        <table class="adminform">
         <tbody>
             <tr>
                 <td valign="top" align="right" style="padding:4px;">
@@ -44,7 +44,7 @@
                                 <label for="title">Portada de:</label>
                             </td>
                             <td nowrap="nowrap">
-                                <select name="category" id="category" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>                                    
+                                <select name="category" id="category" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                      {section name=as loop=$allcategorys}
                                             {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $kiosko->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
@@ -65,7 +65,7 @@
                             <td valign="top" nowrap="nowrap">
                                 <select name="available" id="available" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                     <option value="0" {if $kiosko->available==0}selected{/if}>No</option>
-                                    <option value="1" {if $kiosko->available==1}selected{/if}>Si</option>
+                                    <option value="1" {if empty($kiosko) || $kiosko->available==1}selected{/if}>Si</option>
                                 </select>
                             </td>
                         </tr>
@@ -76,7 +76,7 @@
                             <td valign="top" nowrap="nowrap">
                                 <select name="favorite" id="favorite" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                     <option value="0" {if $kiosko->favorite==0}selected{/if}>No</option>
-                                    <option value="1" {if $kiosko->favorite==1}selected{/if}>Si</option>
+                                    <option value="1" {if empty($kiosko) || $kiosko->favorite==1}selected{/if}>Si</option>
                                 </select>
                                 <img class="favorite" src="{$params.IMAGE_DIR}selected.png" border="0" alt="En home" align="top" />
                             </td>
@@ -98,7 +98,7 @@
                     <label for="title">Fecha:</label>
                 </td>
                 <td style="padding:4px;" nowrap="nowrap">
-                    <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" /> 
+                    <input type="text" id="date" name="date" size="18" title="Fecha de portada" value="{$kiosko->date|default:""}" tabindex="-1" class="required" />
                 </td>
             </tr>
             <tr>
