@@ -291,8 +291,6 @@ switch($action) {
 
             ));
 
-            $tpl->assign('modules', $modules);
-
             $tpl->display('tpl_manager/config.tpl');
             exit(0);
         }
