@@ -2,18 +2,16 @@
 /**
  * Smarty plugin
  * Check if this block is allow display your content
- * 
+ *
  * {acl isAllowed="PRIVILEGE" hasCategoryAccess="10"}
  *    {* If $_SESSION['userid'] has access then show this content *}
  *    ...smarty content...
  * {/acl}
  *
 */
- 
-function smarty_block_acl($params, $content, &$smarty, $open) {
-    if( $open ) {
-        // NADA
-    } else {
+function smarty_block_acl($params, $text, Smarty_Internal_Template $template, &$repeat)
+{
+    if(!$repeat) {
        // require_once(SITE_PATH . '/core/privileges_check.class.php');
         $check = true;
 
