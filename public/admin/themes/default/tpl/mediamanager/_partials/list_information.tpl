@@ -15,7 +15,7 @@
     <tbody>
         {section name=c loop=$categorys}
         <tr>
-            <td><a href="{$smarty.server.PHP_SELF}?category={$categorys[c]->id}">{$categorys[c]->title|clearslash|escape:"html"}</a></td>
+            <td><a href="{$smarty.server.PHP_SELF}?category={$categorys[c]->pk_content_category}">{$categorys[c]->title|clearslash|escape:"html"}</a></td>
             <td class="center">{$num_photos[c]->jpg|default:0}</td>
             <td class="center">{$num_photos[c]->gif|default:0}</td>
             <td class="center">{$num_photos[c]->png|default:0}</td>
@@ -27,7 +27,7 @@
         </tr>
         {section name=su loop=$subcategorys[c]}
         <tr>
-            <td style="padding-left:25px;">&rArr; <a href="{$smarty.server.PHP_SELF}?category={$subcategorys[c][su]->id}">{$subcategorys[c][su]->title}</a></td>
+            <td style="padding-left:25px;">&rArr; <a href="{$smarty.server.PHP_SELF}?category={$subcategorys[c][su]->pk_content_category}">{$subcategorys[c][su]->title}</a></td>
             <td class="center">{$num_sub_photos[c][su]->jpg|default:0}</td>
             <td class="center">{$num_sub_photos[c][su]->gif|default:0}</td>
             <td class="center">{$num_sub_photos[c][su]->png|default:0}</td>

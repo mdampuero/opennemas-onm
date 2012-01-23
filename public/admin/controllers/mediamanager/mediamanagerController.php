@@ -169,6 +169,7 @@ class mediamanagerController { // FIXME: nome das clases a primeira en maiuscula
         $num_especials_totalSIZE=0;
         foreach($especials as $key=>$cat) {
             $num_especials[$j] =  new stdClass;
+            $num_especials[$j]->id = $key;
             $num_especials[$j]->title = $cat;
             $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
             $num_especials[$j]->size = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
