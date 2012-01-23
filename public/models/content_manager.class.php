@@ -1455,7 +1455,7 @@ class ContentManager
         }
 
         $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.slug, opinions.type_opinion,
-                      opinions.body,contents.created
+                      opinions.body,contents.created,contents.changed
                FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
                WHERE `contents`.`fk_content_type`=4 and opinions.type_opinion=1 AND contents.pk_content=opinions.pk_opinion
