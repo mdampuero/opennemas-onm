@@ -38,13 +38,13 @@
     });
     make_sortable_divs_portadas('{$category}');
 
-    $('tabs').observe('click', makealldivssortable);
+  /*  $('tabs').observe('click', makealldivssortable);
 
     function makealldivssortable(event) {
         setTimeout('make_sortable_divs_portadas(\'{$category}\');', 800);
     }
 
-
+*/
     Draggables.observers.each(function(item){
         item.onEnd= avisoGuardarPosiciones;
     });
