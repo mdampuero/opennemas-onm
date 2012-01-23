@@ -456,11 +456,13 @@ if($('starttime')) {
 								</td>
 								<td width='120'> {$intrel[n]->category_name|clearslash} </td>
                                 <td width='120'>
+                                    {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
                                     <select>
                                         <option>{t}Gallery{/t} (album)</option>
                                          <option>{t}Link{/t} (todos)</option>
                                          <option>{t}Incrustado{/t} (video album, image)</option>
                                     </select>
+                                    {/is_module_activated}
                                 </td>
 								<td width='120'>
 									<a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
