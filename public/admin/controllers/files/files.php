@@ -96,8 +96,8 @@ switch($action) {
                 if (!empty($contenido)) {
                     foreach ($contenido as $value) {
                         if ($categories == $value->category) {
-                            if (file_exists(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path)) {
-                                $size[$i] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);
+                            if (file_exists(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path)) {
+                                $size[$i] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
 
                             }
                         }
@@ -112,7 +112,7 @@ switch($action) {
                             foreach ($sub_files[$ind][0] as $value) {                                
                                 if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
                                     if ($ccm->get_id($ccm->get_father($value->catName)) ) {
-                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$value->path);     
+                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);     
 
                                     }
                                 }
@@ -147,7 +147,7 @@ switch($action) {
             if($attaches) {
                 foreach($attaches as $archivo) {
                       $dir_date =preg_replace("/\-/", '/', substr($archivo->created, 0, ITEMS_PAGE));
-                      $ruta = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.'/'.$archivo->path ;
+                      $ruta = MEDIA_PATH.'/'.FILE_DIR.'/'.$archivo->path ;
 
                     if (is_file($ruta)) {
                         $status[$i]='1'; //Si existe
@@ -250,8 +250,8 @@ switch($action) {
 
             $dateStamp = date('Ymd');
             $directoryDate =date("/Y/m/d/");
-            $basePath = MEDIA_PATH.'/'.MEDIA_DIR.'/'.FILE_DIR.$directoryDate ;
-
+            $basePath = MEDIA_PATH.'/'.FILE_DIR.$directoryDate ;
+            
             $fileName = $_FILES['path']['name'];
             $fileType   = $_FILES['path']['type'];
             $fileSize = $_FILES['path']['size'];
@@ -270,7 +270,7 @@ switch($action) {
             if( !file_exists($basePath) ) {
                 mkdir($basePath, 0777, true);
             }
-
+            
             // Move uploaded file
             $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
 
@@ -280,6 +280,8 @@ switch($action) {
                 if ($attachment->create($data)) {
                     $msg = _("File created successfuly.");
                     Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$category.'&page='.$page);
+                } else {
+                    $tpl->assign('message', _('A file with the same name already exists.') );
                 }
 
             } else {

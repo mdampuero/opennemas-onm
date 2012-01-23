@@ -15,11 +15,15 @@
     </div>
 </div>
 <div class="wrapper-content">
-        <table class="adminheading">
-            <tr>
-                <th>&nbsp;</th>
-            </tr>
-        </table>
+    
+    {render_messages}
+
+    <table class="adminheading">
+        <tr>
+            <th>&nbsp;</th>
+        </tr>
+    </table>
+    
 	<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 		<table border="0" cellpadding="0" cellspacing="0" class="adminform" width="700">

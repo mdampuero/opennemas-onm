@@ -386,7 +386,7 @@ class Application
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
 
-        define('MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
+        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
         define('ADS_DIR', "advertisements");
