@@ -239,7 +239,8 @@ function print_menu($allcategorys,$subcat,$datos_cat,$tipo){
         $category = null;
     }
 
-    $html_out .=' <ul class="tabs">';
+    $html_out ='';
+    $html_out .=' <ul class="pills">';
     $i=0;
     foreach($allcategorys as $cat) {
             $html_out .= ' <li> <a href="#"  onClick="get_div_contents(0,\''.$tipo.'\','.$cat->pk_content_category.',1);" ';
@@ -256,7 +257,7 @@ function print_menu($allcategorys,$subcat,$datos_cat,$tipo){
     $i=0;
     foreach($allcategorys as $cat) {
         $html_out .= '<div id="'.$cat->name.'" style="display:inline ">
-          <ul class="tabs"> ';
+          <ul class="pills"> ';
         foreach($subcat[$i] as $sub){
                   if ($cat->pk_content_category == $category){
 
@@ -288,7 +289,7 @@ function print_menu($allcategorys,$subcat,$datos_cat,$tipo){
 }
 	function print_menu_opinion($type_opinion){
 
-		$html_out ='<ul class="tabs">
+		$html_out ='<ul class="pills">
 			<li><a onclick="get_div_contents(0,\'opinions\',0,1);"  ';
 			 if ($type_opinion==0){ $html_out .='style="color:#000000; font-weight:bold; cursor:pointer; background-color:#BFD9BF"';}else{$html_out .='style="cursor:pointer;" '; }
 			 $html_out .='><b>Opinion Autor</b></a></li>

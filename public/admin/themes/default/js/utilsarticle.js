@@ -606,35 +606,35 @@ function search_related(id, metadata,page) {
            onComplete: function() {
                  //Posibilidad de marcar los que estan recien añadidos
                     var Nodes = $('thelist2').select('li');
-                      for (var i=0;i < Nodes.length;i++) {
-                              var id=Nodes[i].getAttribute('id');
-                              if(id!=$$('#'+id)){
-                                      //var el =$$('#'+id+' input[class="portada"]');
-                                      var el =$$('#'+id);
-                                     el.each(function(item, index){
-                                             if(item.getAttribute('class')=='portada'){
-                                                    item.checked=true;
-                                             }
-                                     });
+                    for (var i=0;i < Nodes.length;i++) {
+                          var id=Nodes[i].getAttribute('id');
+                          if(id!=$$('#'+id)){
+                                  //var el =$$('#'+id+' input[class="portada"]');
+                                  var el =$$('#'+id);
+                                 el.each(function(item, index){
+                                         if(item.getAttribute('class')=='portada'){
+                                                item.checked=true;
+                                         }
+                                 });
 
-                              }
+                          }
 
-                      }
-                      var Nodes = $('thelist2int').select('li');
-                      for (var i=0;i < Nodes.length;i++) {
-                              var id=Nodes[i].getAttribute('id');
-                              if(id!=$$('.interior#'+id)){
-                                      var el =$$('.interior#'+id);
-                                      el.each(function(item, index){
-                                                     if(item.getAttribute('class')=='interior'){
-                                                    item.checked=true;
-                                             }
-                                     });
+                    }
+                    var Nodes = $('thelist2int').select('li');
+                    for (var i=0;i < Nodes.length;i++) {
+                          var id=Nodes[i].getAttribute('id');
+                          if(id!=$$('.interior#'+id)){
+                                  var el =$$('.interior#'+id);
+                                  el.each(function(item, index){
+                                                 if(item.getAttribute('class')=='interior'){
+                                                item.checked=true;
+                                         }
+                                 });
 
-                              }
+                          }
 
-                      }
-            }
+                    }
+                        }
         });
     }
 }
@@ -704,31 +704,39 @@ function  get_div_contents(id,content,category,page)
         onComplete: function() {
             //Posibilidad de marcar los que estan recien añadidos
             var Nodes = $('thelist2').select('li');
-              for (var i=0;i < Nodes.length;i++) {
-                      var id=Nodes[i].getAttribute('id');
-                      if(id){
-                              //var el =$$('#'+id+' input[class="portada"]');
-                              var el =$$('#'+id);
-                             el.each(function(item, index){
-                                     if(item.getAttribute('class')=='portada'){
-                                            item.checked=true;
-                                     }
-                             });
-                      }
-              }
-              var Nodes = $('thelist2int').select('li');
-              for (var i=0;i < Nodes.length;i++) {
-                      var id=Nodes[i].getAttribute('id');
-                      if(id){
-                              var el =$$('.interior#'+id);
-                              el.each(function(item, index){
-                                             if(item.getAttribute('class')=='interior'){
-                                            item.checked=true;
-                                     }
-                             });
-                      }
-              }
-        }
+            for (var i=0;i < Nodes.length;i++) {
+                  var id=Nodes[i].getAttribute('id');
+                  if(id){
+                          //var el =$$('#'+id+' input[class="portada"]');
+                          var el =$$('#'+id);
+                         el.each(function(item, index){
+                                 if(item.getAttribute('class')=='portada'){
+                                        item.checked=true;
+                                 }
+                         });
+                  }
+            }
+            var Nodes = $('thelist2int').select('li');
+            for (var i=0;i < Nodes.length;i++) {
+                  var id=Nodes[i].getAttribute('id');
+                  if(id){
+                          var el =$$('.interior#'+id);
+                          el.each(function(item, index){
+                                         if(item.getAttribute('class')=='interior'){
+                                        item.checked=true;
+                                 }
+                         });
+                  }
+            }
+            //Shows the selected dive and hide others.
+	var divs=$$('div.div_lists');
+	for (var i=0;i < divs.length;i++) {
+                if(divs[i].id!=div){
+			Effect.DropOut(divs[i], { duration: 0.2 });
+		}
+	 }
+            Effect.Appear(div,  { duration: 0.1 });
+}
     });
 }
 
