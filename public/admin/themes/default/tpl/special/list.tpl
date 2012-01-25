@@ -1,10 +1,10 @@
 {extends file="base/admin.tpl"}
-
 {block name="header-js" append}
-    {script_tag src="/utilsSpecial.js" language="javascript"}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+ 
 
 {/block}
- 
+
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario">
@@ -34,12 +34,21 @@
                 </li>
                 {/acl}
                 {acl isAllowed="SPECIAL_CREATE"}
-                <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Special');" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}special.png" title="Nuevo Special" alt="Nuevo Special"><br />Nuevo Special
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="ALBUM_WIDGET"}
+                    <li class="separator"></li>
+                     {if $category eq 'widget'}
+                        <li>
+                            <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
+                                <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                            </a>
+                        </li>
+                    {/if}
                 {/acl}
                 {acl isAllowed="SPECIAL_SETTINGS"}
                 <li class="separator"></li>
@@ -55,6 +64,8 @@
     </div>
     <div class="wrapper-content">
 
+        {render_messages}
+
         <ul class="pills clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>{t}WIDGET HOME{/t}</a>
@@ -63,8 +74,8 @@
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
-        {render_messages}
-
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
         <table class="listing-table">
             <thead>
                 <tr>
@@ -74,16 +85,17 @@
                     </th>
                     <th class="title">{t}Title{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                     {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-
+             <tbody class="sortable">
             {section name=as loop=$specials}
-            <tr {cycle values="class=row0,class=row1"}>
+            <tr data-id="{$specials[as]->pk_special}">
                 <td class="center">
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$specials[as]->id}"  style="cursor:pointer;" >
                 </td>
@@ -95,7 +107,7 @@
                  <td class="center">
                     {$specials[as]->views}
                 </td>
-                {if $category=='favorite'}
+                {if $category=='widget' || $category=='all'}
                     <td class="center">
                          {$specials[as]->category_title}
                     </td>
@@ -110,17 +122,27 @@
                                         <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
                         {else}
                                 <a href="?id={$specials[as]->pk_special}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
                 </td>
-
+                {if $category!='widget' && $category!='all'}
                 <td class="center">
                     {acl isAllowed="SPECIAL_FAVORITE"}
                         {if $specials[as]->favorite == 1}
                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}'></a>
+                            <a href="?id={$specials[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                        {/if}
+                    {/acl}
+                </td>
+                {/if}
+                <td class="center">
+                    {acl isAllowed="SPECIAL_HOME"}
+                        {if $specials[as]->in_home == 1}
+                           <a href="?id={$specials[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {else}
+                            <a href="?id={$specials[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -148,6 +170,7 @@
                 <td class="empty" colspan=9>{t}There is no specials yet{/t}</td>
             </tr>
         {/section}
+            </tbody>
             <tfoot>
               <td colspan="9">
                 {$paginacion->links|default:""}&nbsp;
@@ -159,4 +182,14 @@
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
+
+{if $category eq 'widget'}
+    <script type="text/javascript">
+        // <![CDATA[
+            jQuery(document).ready(function() {
+                makeSortable();
+            });
+        // ]]>
+    </script>
+{/if}
 {/block}
