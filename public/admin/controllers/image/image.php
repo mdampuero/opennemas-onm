@@ -497,7 +497,7 @@ switch($action) {
         if (empty($category) || !array_key_exists($category, $ccm->categories)) {
             m::add(_('Please provide a valid category for upload images.'));
             Application::forward(
-                $_SERVER['SCRIPT_NAME'] . '?action=list_today'
+                $_SERVER['SCRIPT_NAME'] . '?action=today_catalog'
                 .'&category=' . $category
             );
         }
