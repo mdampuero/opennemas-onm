@@ -310,8 +310,8 @@ jQuery(document).ready(function ($){
                         <tr>
                             <td valign="top" style="padding:4px;">
                                 <label for="slug">{t}Slug{/t}</label>
-                                <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
-                                                                        style="width:98%" maxlength="256" tabindex="5"
+                                <input type="text" id="slug" name="slug" title="{t}slug{/t}"
+                                        style="width:98%" maxlength="256" tabindex="5"
                                     {if is_object($article)}
                                             value="{$article->slug|clearslash|escape:"html"}"
                                     {else}
@@ -321,18 +321,15 @@ jQuery(document).ready(function ($){
                         </tr>
                         <tr>
                             <td valign="top" style="padding:4px;">
-                                <div style="width:170px;">
+                                <div style="width:370px;">
                                     <label for="starttime">{t}Publication start date:{/t}</label>
                                     <input type="text" id="starttime" name="starttime" size="18"
                                            title="Fecha inicio publicaci&oacute;n"
                                            value="{$article->starttime}" tabindex="-1" />
                                 </div>
                             </td>
-                            <td style="vertical-align: middle;">
-                                <label for="starttime" >{t}till{/t}</label>
-                            </td>
                             <td valign="top" style="padding:4px;">
-                                <div style="width:170px;">
+                                <div style="width:370px;">
                                     <label for="endtime">{t}Publication end date:{/t}</label>
                                     <input type="text" id="endtime" name="endtime" size="18"
                                            title="Fecha fin publicaci&oacute;n"

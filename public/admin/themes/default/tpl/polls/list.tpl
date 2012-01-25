@@ -60,7 +60,7 @@
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if} >{t}All categories{/t}</a>
             </li>
-        
+
             {include file="menu_categories.tpl" home="poll.php?action=list"}
         </ul>
 
@@ -92,9 +92,9 @@
                         <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$polls[c]->id}"  style="cursor:pointer;" >
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();" >
-                    
+
                             {$polls[c]->title|clearslash}
-                    
+
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();"  >
                         {$polls[c]->subtitle|clearslash}
@@ -110,20 +110,6 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="POLL_AVAILABLE"}
-                        {if $polls[c]->favorite == 1}
-                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado">
-                            &nbsp;
-                        </a>
-                        {else}
-                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente">
-                            &nbsp;
-                        </a>
-                        {/if}
-                        {/acl}
-                    </td>
-
-                    <td class="center">
-                        {acl isAllowed="POLL_AVAILABLE"}
                         {if $polls[c]->available == 1}
                         <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
@@ -135,10 +121,34 @@
                         {/if}
                         {/acl}
                    </td>
-                   <td class="center">
+                    <td class="center">
+                        {acl isAllowed="POLL_FAVORITE"}
+                        {if $polls[c]->favorite == 1}
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado">
+                            &nbsp;
+                        </a>
+                        {else}
+                        <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=1&amp;page={$paginacion->_currentPage}" class="favourite_off" title="Pendiente">
+                            &nbsp;
+                        </a>
+                        {/if}
+                        {/acl}
+                    </td>
+                    <td class="center">
+
+                    <td class="center">
+                    {acl isAllowed="POLL_HOME"}
+                        {if $polls[c]->in_home == 1}
+                           <a href="?id={$polls[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {else}
+                            <a href="?id={$polls[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                        {/if}
+                    {/acl}
+                    </td>
+                    <td class="center">
                         <ul class="action-buttons">
                             {acl isAllowed="POLL_UPDATE"}
-                           
+
                             <li>
                                 <a href="{$smarty.server.PHP_SELF}?action=read&id={$polls[c]->id}" title="Modificar">
                                     <img src="{$params.IMAGE_DIR}edit.png" border="0" />

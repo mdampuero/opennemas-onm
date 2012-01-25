@@ -5,7 +5,7 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Newsstand Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget{/t}{/if}</h2></div>
+        <div class="title"><h2>{t}Newsstand Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget Home{/t}{/if}</h2></div>
         <ul class="old-button">
             {acl isAllowed="KIOSKO_DELETE"}
             <li>
@@ -39,7 +39,7 @@
             {acl isAllowed="KIOSKO_WIDGET"}
              {if $category eq 'favorite'}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:saveSortPositions();" title="Guardar Positions" alt="Guardar Posiciones">
+                    <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
                     </a>
                 </li>
@@ -180,23 +180,18 @@
             </tr>
         </tfoot>
     </table>
-
-
-
-    {if $category eq 'favorite'}
-        <script type="text/javascript">
-
-            // <![CDATA[
-
-                $.noConflict();
-                jQuery(document).ready(function() {
-                    makeSortable();
-                });
-            // ]]>
-        </script>
-    {/if}
     <input type="hidden" id="action" name="action" value="" />
-     <input type="hidden" id="id" name="id" value="" />
+    <input type="hidden" id="id" name="id" value="" />
 </form>
 </div>
+{if $category eq 'favorite'}
+    <script type="text/javascript">
+
+        // <![CDATA[
+            jQuery(document).ready(function() {
+                makeSortable();
+            });
+        // ]]>
+    </script>
+{/if}
 {/block}

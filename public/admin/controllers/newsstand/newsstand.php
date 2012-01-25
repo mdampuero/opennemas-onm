@@ -230,8 +230,8 @@ switch($action) {
 
             }
 
-            $opinion = new Opinion();
-            $msg = $opinion->set_position($_positions, $_SESSION['userid']);
+            $portada = new Kiosko();
+            $msg = $portada->set_position($_positions, $_SESSION['userid']);
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
