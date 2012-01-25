@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+
     {script_tag src="/utilsalbum.js" language="javascript"}
 
 {/block}
@@ -38,12 +40,21 @@
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_CREATE"}
-                <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Album');" accesskey="N" tabindex="1">
                         <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />{t}New album{/t}
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="ALBUM_WIDGET"}
+                     {if $category eq 'widget'}
+                        <li class="separator"></li>
+                        <li>
+                            <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
+                                <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                            </a>
+                        </li>
+                    {/if}
                 {/acl}
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
@@ -59,9 +70,11 @@
     </div>
     <div class="wrapper-content">
 
+        {render_messages}
+
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
             </li>
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
@@ -69,27 +82,28 @@
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
-        {render_messages}
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
                 <tr>
-
                     <th style="width:15px;">
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                    {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-
+             <tbody class="sortable">
             {section name=as loop=$albums}
-            <tr {cycle values="class=row0,class=row1"}>
+            <tr data-id="{$albums[as]->pk_album}">
                 <td class="center">
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
                 </td>
@@ -101,7 +115,7 @@
                  <td class="center">
                     {$albums[as]->views}
                 </td>
-                {if $category=='favorite'}
+                {if $category=='widget' || $category=='all'}
                     <td class="center">
                          {$albums[as]->category_title}
                     </td>
@@ -120,13 +134,23 @@
                         {/if}
                     {/acl}
                 </td>
-
+                 {if $category!='widget' && $category!='all'}
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
                         {if $albums[as]->favorite == 1}
                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
                             <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                        {/if}
+                    {/acl}
+                </td>
+                {/if}
+                <td class="center">
+                    {acl isAllowed="ALBUM_HOME"}
+                        {if $albums[as]->in_home == 1}
+                           <a href="?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {else}
+                            <a href="?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -155,6 +179,7 @@
                 <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
             </tr>
         {/section}
+          </tbody>
             <tfoot>
               <td colspan="9">
                 {$paginacion->links|default:""}&nbsp;
@@ -166,4 +191,15 @@
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
+{if $category eq 'widget'}
+        <script type="text/javascript">
+
+        // <![CDATA[
+
+            jQuery(document).ready(function() {
+                makeSortable();
+            });
+        // ]]>
+    </script>
+{/if}
 {/block}
