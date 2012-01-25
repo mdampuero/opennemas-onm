@@ -457,7 +457,6 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('_from', $_SESSION['_from']);
             }
             $article = new Article( $_REQUEST['id'] );
-            $article->params = unserialize($article->params);
 
             $tpl->assign('article', $article);
 

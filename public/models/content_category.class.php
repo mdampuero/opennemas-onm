@@ -75,7 +75,7 @@ class ContentCategory {
                     (`name`, `title`,`inmenu`,`fk_content_category`,
                     `internal_category`, `logo_path`,`color`, `params`)
                 VALUES (?,?,?,?,?,?,?,?)";
-        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'], 
+        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'],
             $data['internal_category'], $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -106,8 +106,9 @@ class ContentCategory {
             return;
         }
         $this->load($rs->fields);
-        $this->params = unserialize($this->params);
-       
+        if(!empty($this->params) && is_string($this->params))
+            $this->params = unserialize($this->params);
+
     }
 
     /**
@@ -120,7 +121,7 @@ class ContentCategory {
     public function update($data)
     {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
- 
+
         $data['name'] = String_Utils::normalize_name($data['title']);
         $data['params'] = serialize($data['params']);
         if (empty($data['logo_path'])) {
@@ -131,14 +132,14 @@ class ContentCategory {
                        " `fk_content_category`=?, `internal_category`=?, ".
                        " `logo_path`=?,`color`=?, `params`=? ".
                    " WHERE pk_content_category=" . ($data['id']);
-        
-        $values = array($data['name'], $data['title'], $data['inmenu'], 
-                    $data['subcategory'], $data['internal_category'], 
+
+        $values = array($data['name'], $data['title'], $data['inmenu'],
+                    $data['subcategory'], $data['internal_category'],
                     $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-           
+
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;

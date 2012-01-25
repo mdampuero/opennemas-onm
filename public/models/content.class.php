@@ -133,8 +133,9 @@ class Content
                                       `created`, `changed`, `content_status`,
                                       `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,
                                       `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-                                      `in_home`, `home_pos`,`available`,`slug`, `category_name`, `urn_source`)".
-                   " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?,?,?,?)";
+                                      `in_home`, `home_pos`,`available`,
+                                      `slug`, `category_name`, `urn_source`, `params`)".
+                   " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
 
         $data['starttime']        = (empty($data['starttime']))? '0000-00-00 00:00:00': $data['starttime'];
@@ -148,6 +149,7 @@ class Content
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos']         = 100;
         $data['urn_source']       = (empty($data['urn_source']))? null: $data['urn_source'];
+        $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
 
 
         if(empty($data['slug'] ) || !isset($data['slug']) )
@@ -180,7 +182,8 @@ class Content
                         $data['views'], $data['position'],$data['frontpage'],
                         $data['placeholder'],$data['home_placeholder'],
                         $data['fk_user'], $data['fk_publisher'], $data['fk_user_last_editor'],
-                        $data['in_home'], $data['home_pos'],$data['available'], $data['slug'], $catName, $data['urn_source']);
+                        $data['in_home'], $data['home_pos'],$data['available'],
+                        $data['slug'], $catName, $data['urn_source'], $data['params']);
 
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -235,6 +238,8 @@ class Content
         // Load object properties
         $this->load( $rs->fields );
         $this->fk_user = $this->fk_author;
+        if(!empty($this->params) && is_string($this->params))
+            $this->params = unserialize($this->params);
 
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
@@ -254,7 +259,7 @@ class Content
                     `changed`=?, `in_home`=?, `frontpage`=?,
                     `available`=?, `content_status`=?,
                     `placeholder`=?, `home_placeholder`=?,
-                    `fk_user_last_editor`=?, `slug`=?, `category_name`=?
+                    `fk_user_last_editor`=?, `slug`=?, `category_name`=?, `params`=?
                 WHERE pk_content= ?";
 
         $this->read( $data['id']); //????
@@ -268,6 +273,8 @@ class Content
         $data['in_home']          = (!isset($data['in_home']))? $this->in_home: $data['in_home'];
         $data['placeholder']      = (empty($this->placeholder))? 'placeholder_0_1': $this->placeholder;
         $data['home_placeholder'] = (empty($this->home_placeholder))? 'placeholder_0_1': $this->home_placeholder;
+        $data['params'] = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+
 
         if (empty($data['description'])&& !isset ($data['description'])) $data['description']='';
 
@@ -307,7 +314,7 @@ class Content
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'], $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user_last_editor'], $data['slug'],$this->category_name, $data['id'] );
+            $data['fk_user_last_editor'], $data['slug'],$this->category_name, $data['params'], $data['id'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = Application::logDatabaseError();
@@ -1192,6 +1199,7 @@ class Content
         $changed = date("Y-m-d H:i:s");
 
         if (is_array($position)) {
+            $stmt = $GLOBALS['application']->conn->
                 Prepare('UPDATE contents SET `in_home`=1, `home_pos`=?, `home_placeholder`=? WHERE `pk_content`=?');
 
             if (!is_array($position)) {
