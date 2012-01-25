@@ -456,6 +456,7 @@ class Photo extends Content
             return;
 
         }
+        return true;
     }
 
     public function remove($id)
@@ -539,6 +540,8 @@ class Photo extends Content
 
         return $result;
     }
+
+
 } //end class
 
 function map_entities($str)

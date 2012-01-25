@@ -31,7 +31,7 @@
     <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?category={$category}&amp;action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
                     <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
@@ -51,21 +51,21 @@
 
     <ul class="pills">
         <li>
-            <a href="mediamanager.php?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}class="active"{/if}>
+            <a href="{$smarty.server.PHP_SELF}?listmode={$listmode|default:""}&category=GLOBAL" {if $category==0}class="active"{/if}>
                 {t}Global statistics{/t}
             </a>
         </li>
-        {if $smarty.server.PHP_SELF eq '/admin/controllers/mediamanager/mediamanager.php'}
+        {if $smarty.server.PHP_SELF eq '/admin/controllers/image/{$smarty.server.PHP_SELF}'}
         {acl isAllowed="ADVERTISEMENT_ADMIN"}
             <li>
-                <a href="mediamanager.php?listmode={$listmode|default:""}&category=2" {if $category==2}class="active"{/if}>
+                <a href="{$smarty.server.PHP_SELF}?listmode={$listmode|default:""}&category=2" {if $category==2}class="active"{/if}>
                     {t}Advertisement{/t}
                 </a>
             </li>
         {/acl}
         {/if}
-        {include file="menu_categories.tpl" home="mediamanager.php?listmode="}
+        {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?listmode="}
     </ul>
-    {include file="mediamanager/_partials/list_information.tpl"}
+    {include file="image/_partials/list_information.tpl"}
 </div>
 {/block}

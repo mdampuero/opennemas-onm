@@ -58,10 +58,10 @@ $.noConflict();
         <div class="title"><h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="controllers/mediamanager/mediamanager.php" class="admin_add"
+                <a href="controllers/image/image.php" class="admin_add"
                    title="{t}Media manager{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
-                    <br />{t}Media manager{/t}
+                    <br />{t}Image manager{/t}
                 </a>
             </li>
             <li>
@@ -82,12 +82,7 @@ $.noConflict();
     </div>
 </div>
 <div class="wrapper-content">
-    {if isset($smarty.session.messages)
-        && !empty($smarty.session.messages)}
-        {messageboard type="inline"}
-    {else}
-        {messageboard type="growl"}
-    {/if}
+    {render_messages}
     <br/>
     <table class="adminheading">
         <tbody>

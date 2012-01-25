@@ -1112,7 +1112,8 @@ ul#menu.manager a { color:White !important; }
 		}
 
 			#menu-acciones-admin ul li a,
-			.old-button li a{
+			.old-button li a ,
+			.old-button li button {
 				display: block;
 				padding-top: 2px;
 				padding-bottom: 2px;
@@ -1125,25 +1126,22 @@ ul#menu.manager a { color:White !important; }
 				width: auto;
 				border:1px solid transparent;
 				padding:5px;
-
+				font-family:Arial;
+				font-size:11px;
 			}
 				#menu-acciones-admin ul li a img {
 					height:40px !important;
 				}
 
 
-				#menu-acciones-admin ul li button img,
-				.old-button li button img{
-					height:50px !important;
-
-				}
-
-				.old-button li a img {
+				.old-button li a img,
+				.old-button li a button {
 					height:35px !important;
 				}
 
 				#menu-acciones-admin ul li a:hover,
-				.old-button li a:hover{
+				.old-button li a:hover,
+				.old-button button:hover {
                     color:Black;
                     background:#e4e4e4;
                     border: 1px solid #D9D9D9;
@@ -1406,6 +1404,7 @@ div.action-bar .right{
             height:95px;
             border:1px solid #bfbfbf;
             text-align: center;
+            vertical-align:top;
         }
          #media-browser .image-preview:hover {           
             border:1px solid transparent;
@@ -1485,6 +1484,9 @@ div.action-bar .right{
 			}
 		#media-browser .photo-hovered {
 			z-index:999;
+		}
+		#exif table td {
+			padding:0;
 		}
 
 
@@ -1664,7 +1666,9 @@ div.action-bar .right{
     padding: 9px;
     text-align: left;
 }
+.listing-table.withborder tbody { border:1px solid #ccc; }
 .listing-table tr:hover { background:#F1F1F1; }
+.listing-table.nofill tr:hover { background:none !important;}
 .listing-table th td { text-align:center; }
 .listing-table td.empty{ text-align:center; font-size:13px; padding:30px; }
 .listing-table td a { color:#0069D6; font-weight: bold; text-decoration:none; text-shadow: 0px 0 5px white;}

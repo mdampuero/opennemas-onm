@@ -294,6 +294,7 @@ class Video extends Content
             case 'video/x-flv':
                 copy($temporaryVideoPath, $videoSavePath);
                 break;
+
             default:
                 throw new \Exception(sprintf(_('Video format "%s" not supported'), $fileType));
                 break;

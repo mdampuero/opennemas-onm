@@ -101,7 +101,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="IMAGE_ADMIN"
             title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
             id="image_manager"
-            link="controllers/mediamanager/mediamanager.php"
+            link="controllers/image/image.php"
         />
         <node
             module_name="FILE_MANAGER"

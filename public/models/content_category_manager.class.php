@@ -785,7 +785,7 @@ class ContentCategoryManager {
         return $groups;
     }
 
-     function count_media_by_type_group($filter=NULL) {
+     function countMediaByTypeGroup($filter=NULL) {
          $_where = '1=1';
         if( !is_null($filter) ) {
             $_where = $filter;

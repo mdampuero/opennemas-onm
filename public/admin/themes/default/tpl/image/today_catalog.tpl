@@ -45,31 +45,31 @@
             </li>
             {/acl}
             <li>
-                <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
+                <button type="button" style="cursor:pointer;width: 95px;" onmouseover="return escape('<u>S</u>eleccionar todo');" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                     <img id="select_button" class="icon" src="{$params.IMAGE_DIR}select_button.png" alt="Seleccionar Todo"  status="0">
                 </button>
             </li>
             {/if}
 
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=search"name="submit_mult" value="Buscar Imágenes">
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?ction=search&amp;acategory={$category}"name="submit_mult" value="Buscar Imágenes">
                     <img border="0"  src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
             {acl isAllowed="IMAGE_CREATE"}
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=upload#upload-photos" name="submit_mult" value="Subir Fotos">
-                    <img border="0"  src="{$params.IMAGE_DIR}images_add.png" alt="Subir Fotos"><br />{t}Upload{/t}
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=create&amp;category={$category}" name="submit_mult" value="Subir Fotos">
+                    <img border="0"  src="{$params.IMAGE_DIR}upload.png" alt="Subir Fotos"><br />{t}New image{/t}
                 </a>
             </li>
             {/acl}
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_all" name="submit_mult" value="Catálogo de Fotos">
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$category}" name="submit_mult" value="Catálogo de Fotos">
                     <img border="0"  src="{$params.IMAGE_DIR}folder_image.png" alt="Catálogo de Fotos"><br />{t}Photo catalog{/t}
                 </a>
             </li>
             <li>
-                <a class="admin_add" href="mediamanager.php?category={$category}&amp;action=list_today"  name="submit_mult" value="Fotos de Hoy">
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=today_catalog&amp;category={$category}"  name="submit_mult" value="Fotos de Hoy">
                     <img border="0"  src="{$params.IMAGE_DIR}image_today.png" alt="Fotos de Hoy"><br />{t}Today photos{/t}
                 </a>
             </li>
@@ -78,17 +78,12 @@
 </div>
 
 <div class="wrapper-content">
-    {include file="mediamanager/_partials/categories.tpl"}
 
-    <div id="{$category}" class="categ" style="padding: 6px 2px;">
-        {if !empty($smarty.request.mensaje)}
-            <script type="text/javascript">
-                showMsgContainer({ 'warn':['Ocurrió algún error al subir: <br /> {$smarty.request.mensaje}. <br /> Compruebe su tamaño (MAX 300 MB). <br /> '] },'inline','media_msg');
-            </script>
-        {/if}
+    {render_messages}
 
-        {include file="mediamanager/_partials/media-browser.tpl"}
-    </div>
+    {include file="image/_partials/categories.tpl" home="{$smarty.server.PHP_SELF}?action=today_catalog"}
+
+    {include file="image/_partials/media-browser.tpl"}
 
 
 </div><!--fin wrapper-content-->
