@@ -600,7 +600,7 @@ switch($action) {
         }
 
         Application::forward(
-            $_SERVER['SCRIPT_NAME'] . '?action=list_today'
+            $_SERVER['SCRIPT_NAME'] . '?action=today_catalog'
             .'&category=' . $category
             .'&page=' . $page
         );
