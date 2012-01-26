@@ -156,25 +156,16 @@ switch ($action) {
         $url = filter_input(INPUT_GET,'url',FILTER_DEFAULT);
         $url = rawurldecode($url);
         if ($url) {
-            $fetchedFromAPC = false;
-            if (extension_loaded('apc')) {
-                $information = apc_fetch(APC_PREFIX ."video_".$url, $fetchedFromAPC);
-            }
-            if (!$fetchedFromAPC) {
-                try {
+            try {
 
-                    $videoP = new \Panorama\Video($url);
-                    $information = $videoP->getVideoDetails();
+                $videoP = new \Panorama\Video($url);
+                $information = $videoP->getVideoDetails();
 
-                } catch (Exception $e) {
-                    $html_out = _( "Can't get video information. Check url");
-                }
-            }
+                $tpl->assign('information', $information);
+                $html_out = $tpl->fetch('video/partials/_video_information.tpl');
 
-            $tpl->assign('information', $information);
-            $html_out = $tpl->fetch('video/partials/_video_information.tpl');
-            if (extension_loaded('apc')) {
-               @apc_store(APC_PREFIX ."video_".$url, $information);
+            } catch (Exception $e) {
+                $html_out = _( "Can't get video information. Check the url");
             }
         }  else {
             $html_out = _("Please check the video url, seems to be incorrect");
