@@ -235,7 +235,7 @@ if(isset($_REQUEST['action']) ) {
             // Filter tags before send
             $message = $_REQUEST['body'];
             $tplMail->assign('body', $message);
-            $agency = SITE_FULLNAME;
+            $agency = s::get('site_name');
             $tplMail->assign('agency',$agency);
             $summary = substr(strip_tags(stripslashes($opinion->body)), 0, 300)."...";
             $tplMail->assign('summary', $summary);

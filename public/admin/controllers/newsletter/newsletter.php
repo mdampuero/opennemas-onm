@@ -232,7 +232,7 @@ switch($action) {
             'mail_user' => MAIL_USER,
             'mail_pass' => MAIL_PASS,
             'mail_from' => MAIL_FROM,
-            'mail_from_name' => SITE_FULLNAME,
+            'mail_from_name' => s::get('site_name'),
         );
 
         $data = json_decode($postmaster);

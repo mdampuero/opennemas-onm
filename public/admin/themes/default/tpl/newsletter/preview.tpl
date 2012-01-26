@@ -85,7 +85,7 @@ document.observe('dom:loaded', function() {
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" size="80"
-								   value="[{$smarty.const.SITE_FULLNAME}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+								   value="[{setting name="site_name"}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
 						</p>
 
 						{* Valores asistente *}

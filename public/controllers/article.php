@@ -627,7 +627,7 @@ if(isset($_REQUEST['action']) ) {
             if (!empty($article->agency)) {
                 $agency = $article->agency;
             } else {
-                $agency = SITE_FULLNAME;
+                $agency = s::get('site_name');
             }
             $tplMail->assign('agency',$agency);
 
