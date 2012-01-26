@@ -57,6 +57,7 @@
             {/if}
 
         </table>
+        <input type="hidden" value="{$video->video_url}" name="video_url" />
         <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
         <input type="hidden" name="author_name" value="internal"/>
     </td>
