@@ -252,22 +252,27 @@ switch($action) {
             }
         }
         
-        foreach($data->lists as $email) {
-            $mailbox = new stdClass();
-            $name = preg_split('/@/',$email);
-            $mailbox->name = $name[0];
-            $mailbox->email =trim($email);
- 
-            // Replace name destination
-            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+        if (isset($data->lists)) {
+            foreach($data->lists as $email) {
+                if (trim($email) != ""){
+                    $mailbox = new stdClass();
+                    $name = preg_split('/@/',$email);
+                    $mailbox->name = $name[0];
+                    $mailbox->email =trim($email);
 
-            if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-            } else {
-                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+                    // Replace name destination
+                    $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+                    if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
+                        $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
+                    } else {
+                        $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+                    }
+                }
+                
             }
         }
-
+        
         $tpl->assign(array(
             'html_final' => $htmlFinal,
             'postmaster' => $postmaster,
