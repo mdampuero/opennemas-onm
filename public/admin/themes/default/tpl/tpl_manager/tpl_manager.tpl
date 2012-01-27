@@ -10,6 +10,21 @@
                     this.up(2).select('input[type=checkbox]')[0].
                         setAttribute('checked', 'checked');
                 });
+
+                new Control.DatePicker(item,{
+                    icon: '{$params.IMAGE_DIR}/template_manager/update16x16.png',
+                    locale: 'es_ES',
+                    timePicker: true,
+                    timePickerAdjacent: true,
+                    onSelect: function(fecha, instance) {
+                        instance.element.up(2).select('input[type=checkbox]')[0].
+                            setAttribute('checked', 'checked');
+                    },
+                    onHover: function(fecha, instance) {
+                        instance.element.up(2).select('input[type=checkbox]')[0].
+                            setAttribute('checked', 'checked');
+                    }
+                });
             });
         }
     });
@@ -20,6 +35,15 @@
         $('formulario').submit();
     }
 
+    if($('expires[]')) {
+	new Control.DatePicker($('starttime'), {
+		icon: './themes/default/images/template_manager/update16x16.png',
+		locale: 'es_ES',
+		timePicker: true,
+		timePickerAdjacent: true,
+		dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
+	});
+}
     </script>
 {/block}
 {block name="header-css" append}
@@ -38,15 +62,23 @@
 		<ul class="old-button">
 			<li>
 				<a href="#delete" onclick="if(confirm('{t}Are you sure that you want to delete this selected cache files?{/t}')){ sendForm('delete'); }return false;" title="{t}Delete cache{/t}">
-					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
 					{t}Delete{/t}
 				</a>
 			</li>
-
+{*
+            <li>
+				<a href="#refresh" rel="refresh" onclick="if (confirm('{t}Are you sure to delete all?{/t}')) { sendForm('deleteAll'); } return false;"
+				  title="{t}Delete all caches. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/delete48x48.png" border="0" /><br />
+					{t}Delete All{/t}
+				</a>
+			</li>
+*}
 			<li>
-				<a href="#refresh" onclick="sendForm('refresh');return false;"
+				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
 				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
-					<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" border="0" /><br />
 					{t}Regenerate{/t}
 				</a>
 			</li>
@@ -54,14 +86,14 @@
 			<li>
 				<a href="#update" onclick="sendForm('update');return false;"
 				  title="{t}This changes the expire date but maintains the cache file contents{/t}">
-					<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/update48x48.png" border="0" /><br />
 					{t}Change expiration{/t}
 				</a>
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Go to cache settings{/t}">
-					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" /><br />
+				<a href="{$smarty.server.SCRIPT_NAME}?action=config" title="{t}Configurar cachés{/t}">
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" border="0" /><br />
 					{t}Settings{/t}
 				</a>
 			</li>
@@ -107,7 +139,7 @@
                     </select>
 
                     <button onclick="javascript:paginate(1);return false;">
-                        <img src="{$params.IMAGE_DIR}template_manager/reload16x16.png" width="10" />
+                        <img src="{$params.IMAGE_DIR}template_manager/reload16x16.png" border="0" align="absmiddle" width="10" />
                         {t}Update list{/t}
                     </button>
                 </div>
@@ -117,7 +149,7 @@
 		{if count($caches)>0}
 		<table class="listing-table">
 			<thead>
-				<tr>
+				<tr align="left">
 					<th  style="width:10px;">
                         <input type="checkbox" id="toggleallcheckbox" value="" />
                     </th>
@@ -132,6 +164,9 @@
 			</thead>
 			<tbody>
                 {section name="c" loop=$caches}
+                    {* dont show frontpage parts*}
+                    {if $caches[c].resource neq 0 && $caches[c].template eq 'frontpage'}
+                     {else}
 				<tr>
                     <td>
 						<input type="checkbox" name="selected[]" value="{$smarty.section.c.index}" />
@@ -143,47 +178,36 @@
 
 						{* Inner Article *}
                         {if isset($titles.$resource) && ($caches[c].template == 'article')}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" title="{t}Inner article cache file{/t}" />
-						{* Frontpage mobile *}
-						{elseif ($caches[c].template == 'mobile-article-inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" title="{t}Mobile frontpage cache file{/t}" />
-						{* Video inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'video_inner')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" title="{t}Inner video cache file{/t}" />
-						{* Video frontpage *}
-						{elseif ($caches[c].template == 'video_frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" title="{t}Video inner cache file{/t}" />
-						{* Opinion inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'opinion')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" title="{t}Opinion inner article file{/t}" />
-						{* Gallery frontpage *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'gallery-frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" title="{t}Frontpage article cache file{/t}" />
-						{* Gallery inner *}
-						{elseif isset($titles.$resource) && ($caches[c].template == 'album')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" title="{t}Inner gallery cache file{/t}" />
-						{* RSS opinion *}
-						{elseif isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" title="{t}RSS Opinion author cache file {/t}" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" border="0" title="{t}Article cache file{/t}" />
+
+                        {* Video *}
+						{elseif ($caches[c].template == 'video_inner') ||
+                             ($caches[c].template == 'video_frontpage') ||
+                             ($caches[c].template == 'video_main_frontpage')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" border="0" title="{t}Video cache file{/t}" />
+
+                        {* Gallery frontpage *}
+						{elseif ($caches[c].template == 'album_frontpage') ||
+						    ($caches[c].template == 'album')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" border="0" title="{t}Gallery cache file{/t}" />
+
 						{* Opinion author index*}
-						{elseif ($caches[c].template == 'opinion_author_index')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" title="{t}RSS frontpage author of opinion{/t}" />
-						{* RSS *}
-						{elseif $resource eq "RSS"}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/rss16x16.png" title="{t}RSS cache{/t}" />
-						{* Frontpage mobile *}
-						{elseif not isset($titles.$resource) && not isset($authors.$resource) && ($caches[c].template == 'frontpage-mobile')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" title="{t}Mobile frontpage cache file{/t}" />
-						{* Frontpages *}
+						{elseif ($caches[c].template == 'opinion_author_index') ||
+                            ($caches[c].template == 'opinion_frontpage') ||
+                            (isset($titles.$resource) && ($caches[c].template == 'opinion'))}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/opinion16x16.png" border="0" title="{t}Opinion inner article file{/t}" />
+
+                        {* Frontpage mobile *}
+						{elseif ($caches[c].template == 'mobile-article-inner')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile cache file{/t}" />
+                        {* Frontpage mobile *}
+						{elseif not isset($titles.$resource) && not isset($authors.$resource)
+                            && ($caches[c].template == 'frontpage-mobile')}
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/phone16x16.png" border="0" title="{t}Mobile frontpage cache file{/t}" />
+
+                        {* Frontpages *}
 						{elseif ($caches[c].template == 'frontpage')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" title="{t}Section Frontpage cache file{/t}" />
-                        {elseif ($caches[c].template == 'album')}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/gallery.png" title="{t}Section Frontpage cache file{/t}" />
-						{* Other kind of resources *}
-						{elseif not isset($titles.$resource) && not isset($authors.$resource)}
-						<img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" title="{t}Section Frontpage cache file{/t}" />
-					{/if}
-                    </td>
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/home16x16.png" border="0" title="{t}Section Frontpage cache file{/t}" />
 
                         {* Polls *}
                         {elseif ($caches[c].template == 'poll') ||
@@ -327,9 +351,9 @@
                     <td class="center">
                         <div>
                             {if $caches[c].expires < $smarty.now}
-                                <img src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" alt="X" title="{t}Cache file expired{/t}" style="float: right; margin: 4px;" />
+                                <img src="{$params.IMAGE_DIR}template_manager/outtime16x16.png" border="0" alt="X" title="{t}Cache file expired{/t}" style="float: right; margin: 4px;" />
                             {else}
-                                <img  src="{$params.IMAGE_DIR}template_manager/ok16x16.png" alt="V" title="{t}Cache file valid{/t}"  style="float: right; margin: 4px;" />
+                                <img  src="{$params.IMAGE_DIR}template_manager/ok16x16.png" border="0" alt="V" title="{t}Cache file valid{/t}"  style="float: right; margin: 4px;" />
                             {/if}
                             <input type="text" name="expires[]" value="{$caches[c].expires|date_format:"%H:%M %d/%m/%Y"}"
                                 maxlength="20" style="width: 130px; display:inline"/>
@@ -341,11 +365,11 @@
                     <td class="center">
                        <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}&uris={$contentUris.$resource|urlencode}"
                            title="{t}Regenerate cache file{/t}">
-                            <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" alt="" />
+                            <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" border="0" alt="" />
                        </a>&nbsp;
                        <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
                             title="{t}Delete cache file{/t}">
-                            <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" alt="" />
+                            <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" border="0" alt="" />
                        </a>
                     </td>
                 </tr>
@@ -376,8 +400,9 @@
 		 </div>
 		{/if}
 
+	</div>
+
 		<input type="hidden" id="page"   name="page"   value="{$smarty.request.page|default:'1'}" />
 		<input type="hidden" id="action" name="action" value="" />
 	</form>
-</div>
 {/block}
