@@ -29,7 +29,7 @@
     <div id="importer-element-info"  class="tabs">
         <ul>
             <li><a href="#basic" title="{t}Basic information{/t}">{t}Basic information{/t}</a></li>
-            <li><a href="#more" title="{t}More infomation{/t}">{t}More information{/t}</a></li>
+            <li><a href="#more" title="{t}More information{/t}">{t}More information{/t}</a></li>
         </ul><!-- -->
         <div id="basic">
             <h2 style="margin:0;">{$element->title}</h2>

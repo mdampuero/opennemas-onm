@@ -644,6 +644,9 @@ gettext("Cover");
 gettext("Title");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Section");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Date");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
@@ -653,13 +656,22 @@ gettext("Publisher");
 gettext("Last editor");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
-gettext("Favorite");
-
-/* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Published");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Favorite");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Home");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("Actions");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Take out from home");
+
+/* public/admin/themes/default/tpl//newsstand/list.tpl */
+gettext("Put in home");
 
 /* public/admin/themes/default/tpl//newsstand/list.tpl */
 gettext("There is no stands");
@@ -1346,7 +1358,7 @@ gettext("Gallery");
 gettext("Link");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Incrustado");
+gettext("Embebed");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Gallery");
@@ -1979,7 +1991,7 @@ gettext("There are new comments to moderate");
 gettext("Edit my profile");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
-gettext("Edit my profile");
+gettext("Edit my user profile");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Active users in backend");
@@ -2667,18 +2679,6 @@ gettext("Restore from library");
 
 /* public/admin/themes/default/tpl//search_advanced/partials/_list.tpl */
 gettext("There isn't any existent elements that matches your search criteria");
-
-/* public/admin/themes/default/tpl//search_advanced/search.tpl */
-gettext("Advanced search");
-
-/* public/admin/themes/default/tpl//search_advanced/search.tpl */
-gettext("Advanced Search");
-
-/* public/admin/themes/default/tpl//search_advanced/search.tpl */
-gettext("Search");
-
-/* public/admin/themes/default/tpl//search_advanced/search.tpl */
-gettext("Content types:");
 
 /* public/admin/themes/default/tpl//files/new.tpl */
 gettext("Files manager :: General statistics");
@@ -3455,6 +3455,12 @@ gettext("Editing Album");
 gettext("Save and continue");
 
 /* public/admin/themes/default/tpl//book/new.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//book/new.tpl */
+gettext("Save and continue");
+
+/* public/admin/themes/default/tpl//book/new.tpl */
 gettext("Save");
 
 /* public/admin/themes/default/tpl//book/new.tpl */
@@ -3512,13 +3518,31 @@ gettext("Keywords:");
 gettext("Separated by coma");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Book manager");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Unpublish");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Publish");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("New book");
+
+/* public/admin/themes/default/tpl//book/list.tpl */
+gettext("New book");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("New book");
@@ -3572,7 +3596,7 @@ gettext("Take out from frontpage");
 gettext("Put in frontpage");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
-gettext("Edit");
+gettext("Edit book");
 
 /* public/admin/themes/default/tpl//book/list.tpl */
 gettext("Delete");
@@ -3980,9 +4004,6 @@ gettext("Delete");
 gettext("Delete");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
-gettext("Delete");
-
-/* public/admin/themes/default/tpl//advertisement/list.tpl */
 gettext("Unpublish");
 
 /* public/admin/themes/default/tpl//advertisement/list.tpl */
@@ -4278,6 +4299,9 @@ gettext("User group:");
 
 /* public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("User group:");
+
+/* public/admin/themes/default/tpl//acl/user/new.tpl */
+gettext("--Select one--");
 
 /* public/admin/themes/default/tpl//acl/user/new.tpl */
 gettext("Edit groups and privileges");
@@ -4754,19 +4778,7 @@ gettext("Import");
 gettext("Import");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Import");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Import");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Go back to list");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Go back to list");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Sync list  with server");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Go back to list");
@@ -4776,6 +4788,18 @@ gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("This article was imported before. Take care of it.");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Basic information");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Photos");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Videos");
+
+/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
+gettext("Other attachments");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Basic information");
@@ -4797,15 +4821,6 @@ gettext("Summary:");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Main information");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Attached contents");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Photos:");
-
-/* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
-gettext("Videos:");
 
 /* public/admin/themes/default/tpl//agency_importer/efe/show.tpl */
 gettext("Files:");
@@ -5018,13 +5033,28 @@ gettext("Redactors:");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Check");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
 gettext("Check");
 
 /* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
 gettext("Import");
 
 /* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Import");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
 gettext("Remove File");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Remove File");
+
+/* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
+gettext("Add File");
 
 /* public/admin/themes/default/tpl//agency_importer/efe-file/index.tpl */
 gettext("Add File");
@@ -5213,25 +5243,25 @@ gettext("Import");
 gettext("Import");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
-gettext("Import");
-
-/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
-gettext("Import");
-
-/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
-gettext("Sync list  with server");
-
-/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Go back to list");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
-gettext("Go back to list");
+gettext("Basic information");
+
+/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("Basic information");
+
+/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("More information");
+
+/* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
+gettext("More information");
 
 /* public/admin/themes/default/tpl//agency_importer/europapress/show.tpl */
 gettext("Priority:");
@@ -6293,7 +6323,13 @@ gettext("Global statistics");
 gettext("Advertisement");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
-gettext("Photo information \"%1\"");
+gettext("Basic information");
+
+/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
+gettext("Geolocation");
+
+/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
+gettext("EXIF &amp; IPTC");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("Name:");
@@ -6332,9 +6368,6 @@ gettext("B/W");
 gettext("B/W");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
-gettext("We can't geolocalize that direction");
-
-/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("Geolocalization");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
@@ -6344,13 +6377,7 @@ gettext("Help OpenNeMas to get all the photos geolocalized. In the future you wi
 gettext("Set your Google maps key");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
-gettext("Help OpenNeMas to get all the photos geolocalized. For this you have to configure your Google Maps API key from\n                        the <a href=\"/admin/controllers/system_settings/system_settings.php?action=list#external\" title=\"Go to the system settings dialog\">system settings dialog</a>");
-
-/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
-gettext("Help");
-
-/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
-gettext("Complete all the photo information for helping OpenNeMas to make better search results");
+gettext("Help OpenNeMas to get all the photos geolocalized. For this you have to configure your Google Maps API key from\n                the <a href=\"/admin/controllers/system_settings/system_settings.php?action=list#external\" title=\"Go to the system settings dialog\">system settings dialog</a>");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("EXIF Data:");
@@ -6363,6 +6390,9 @@ gettext("IPTC Data:");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("No available IPTC data.");
+
+/* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
+gettext("We can't geolocalize that direction");
 
 /* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
 gettext("List of images");

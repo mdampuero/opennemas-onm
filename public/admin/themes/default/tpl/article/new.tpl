@@ -427,7 +427,7 @@ jQuery(document).ready(function ($){
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
                                             <option>{t}Link{/t} (todos)</option>
-                                            <option>{t}Incrustado{/t} (video album, image)</option>
+                                            <option>{t}Embebed{/t} (video album, image)</option>
                                         </select>
                                     </td>
                                     <td width="120">
