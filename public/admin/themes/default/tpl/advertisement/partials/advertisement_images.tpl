@@ -1,21 +1,21 @@
 <table id="ädvertisement-images" style="{if isset($advertisement) && $advertisement->with_script == 1} display:none;{else}display:block;{/if}">
 	<tr>
-		<td valign="top">
+		<td>
 			<div id="div_img_publi">
 				{if isset($photo1) && $photo1->name}
-					<table border="0">
+					<table>
 						<tr>
 							<td>
 								<h2>{t}Multimedia for this ad:{/t}</h2>
 							</td>
 							<td style="text-align:right;">
 								<a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img');">
-									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" border="0" align="absmiddle" /> </a>
-								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img|default:""}" size="70" />
+									<img style="cursor:pointer;" src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img" alt="Eliminar" title="{t}Delete{/t}" align="absmiddle" /> </a>
+								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img|default:""}"/>
 							</td>
 						</tr>
 						<tr>
-							<td align='left'>
+							<td>
 								<div id="droppable_div1">
 									{if strtolower($photo1->type_img)=='swf'}
 									<object id="change1"  name="{$advertisement->img|default:""}" >
@@ -23,11 +23,11 @@
 										<embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name|default:""}" width="300" ></embed>
 									</object>
 									{else}
-									<img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img|default:""}" id="change1" border="0" width="300px" />
+									<img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" name="{$advertisement->img|default:""}" id="change1" width="300" />
 									{/if}
 								</div>
 							</td>
-							<td nowrap="nowrap" colspan="2">
+							<td>
 								<div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
 									</div>
 									<div id="noimag2" style="display: inline; width:380px; height:30px;">	</div>
@@ -47,22 +47,22 @@
 						</tr>
 					</table>
 				{else}
-					<table border="0">
+					<table>
 						<tr>
 							<td>
 								<h2>{t}Advertisement:{/t}</h2>
 							</td>
 							<td>
-								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}" size="70"/>
+								<input type="hidden" id="input_img" name="img" title="{t}Image{/t}" value="{$advertisement->img}"/>
 							</td>
 						</tr>
 						<tr>
-							<td align="left">
+							<td>
 								<div id="droppable_div1">
-									<img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change1" border="0" width="300px" />
+									<img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change1" width="300" />
 								</div>
 							</td>
-							<td nowrap="nowrap" colspan="2">
+							<td>
 								<div id="informa" style="display: inline; width:380px; height:30px;">
 										<p><strong>{t}File:{/t}</strong> {t}default_img.jpg{/t}</p>
 										<p><strong>{t}Size:{/t}</strong> {t}XX x XX px{/t}</p>
@@ -79,25 +79,24 @@
 				{/if}
 			</div>
 		</td>
-
 		<td style="max-width:400px; text-align: center;">
-
-			<div id="id" style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
+			<div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
 					<strong>{t}Available multimedia for ads{/t}</strong>
 			</div>
-
 			<div id="photos" class="photos clearfix"
-                 style="border:1px solid #ccc; {if isset($advertisement) && $advertisement->with_script == 1}display:none;
-                                                {else} display:block; {/if}" >
-
+                 style="border:1px solid #ccc;  
+                 {if isset($advertisement) && $advertisement->with_script == 1}
+                     display:none;
+                 {else} 
+                     display:block; 
+                 {/if}" >
 			</div>
-
 		</td>
 	</tr>
 </table>
 
 
-<script defer="defer" type="text/javascript">
+<script type="text/javascript">
  document.observe('dom:loaded', function() {
      getGalleryImages('listByCategory','2','','1');
     });
@@ -127,7 +126,7 @@
                         if(element.getAttribute('de:ancho')>300) { ancho=300; }
                         $('change1').setAttribute('width',ancho);
                     } else {
-                        $('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" style="max-width:300px;" width="'+ancho+'" >';
+                        $('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" style="max-width:300px;" width="'+ancho+'" >';
                     }
 			   		$('informa').innerHTML=' ';
                     $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong> " + element.getAttribute('de:mas') + "</p>"+
@@ -143,7 +142,7 @@
 
 
 </script>
-<style type="text/css">
+<!--<style type="text/css">
 	#div_img_publi table,
 	#div_img_publi tr,
 	#div_img_publi td {
@@ -159,4 +158,4 @@
 		min-height:250px;
 	}
 
-</style>
+</style>-->

@@ -1,29 +1,6 @@
-
-<style>
-#advertisement-mosaic-video {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 240px;
-    height: 400px;
-}
-
-#advertisement-mosaic-frame-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0px;
-    height: 0px;
-    z-index: 100;
-    border: 1px dashed #F00;
-    background-color: #996633;
-}
-</style>
-
-
 <div id="advertisement-mosaic-video" style="">
     <div id="advertisement-mosaic-frame-video"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/videoAds.png" width="240" height="401" border="0" usemap="#mapVideo" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/videoAds.png" width="240" height="401" usemap="#mapVideo" />
 </div>
 
 <map name="mapVideo">

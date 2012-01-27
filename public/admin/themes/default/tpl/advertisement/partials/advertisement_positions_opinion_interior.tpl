@@ -1,39 +1,38 @@
-
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_interior_opinion">
+<table id="ads_type_interior_opinion">
 <tbody>
     <tr>
-        <td align="right" colspan="2">
+        <td colspan="2">
             <label>
                 Banner Intersticial - Opinion Inner (800X600)
                 <input type="radio" name="type_advertisement" value="750" {if isset($advertisement) && $advertisement->type_advertisement == 750}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right" width="340" rowspan="8">
+        <td rowspan="8">
             {include file="advertisement/partials/advertisement_map_positions_opinion_interior.tpl"}
         </td>
     </tr>
-     <tr>
+    <tr>
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
-        <td align="right">
+        <td>
             <label>
                 Big Banner Top (728X90)
                 <input type="radio" name="type_advertisement" value="701" {if isset($advertisement) && $advertisement->type_advertisement == 701}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">
+        <td>
             <label>
                 Banner Top Right (234X90)
                 <input type="radio" name="type_advertisement" value="702" {if isset($advertisement) && $advertisement->type_advertisement == 702}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-     <tr>
+    <tr>
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
-        <td align="right"  colspan="2">
+        <td colspan="2">
             <label>
                Banner1 Column Right (300X*)
                 <input type="radio" name="type_advertisement" value="703" {if isset($advertisement) && $advertisement->type_advertisement == 703}checked="checked" {/if}/>
@@ -42,7 +41,7 @@
     </tr>
 
     <tr>
-        <td height="50" align="right" colspan="2">
+        <td colspan="2">
             <label>
                 Robapágina (650X*)
                 <input type="radio" name="type_advertisement" value="704" {if isset($advertisement) && $advertisement->type_advertisement == 704}checked="checked" {/if}/>
@@ -51,35 +50,35 @@
     </tr>
 
     <tr>
-        <td height="50" align="right"  colspan="2">
+        <td colspan="2">
             <label>
                Banner2 Column Right (300X*)
                 <input type="radio" name="type_advertisement" value="705" {if isset($advertisement) && $advertisement->type_advertisement == 705}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
-     <tr>
+    <tr>
         <td colspan="2"><hr /></td>
     </tr>
       <tr>
-        <td align="right">
+        <td>
             <label>
                 Big Banner Bottom (728X90)
                 <input type="radio" name="type_advertisement" value="709" {if isset($advertisement) && $advertisement->type_advertisement == 709}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">
+        <td>
             <label>
                 Banner Bottom Right (234X90)
                 <input type="radio" name="type_advertisement" value="710" {if isset($advertisement) && $advertisement->type_advertisement == 710}checked="checked" {/if}/>
             </label>
         </td>
+        <td>&nbsp;</td>
     </tr>
-
 </tbody>
 </table>
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 /* <![CDATA[ */
 var adPositionOpinionInterior = null;
 

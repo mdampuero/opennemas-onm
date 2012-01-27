@@ -1,8 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/utilsadvertisement.js" language="javascript"}
-    {script_tag src="/AdPosition.js" language="javascript"}
+    {script_tag src="/utilsadvertisement.js"}
+    {script_tag src="/AdPosition.js"}
     <script type="text/javascript">
         function submitFilters(frm) {
             $('action').value='list';
@@ -22,29 +22,29 @@
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ADVERTISEMENT_AVAILA"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" title="noFrontpage">
+                        <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
+                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" title="Frontpage">
+                        <img src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ADVERTISEMENT_CREATE"}
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&category={$smarty.request.category}&page={$smarty.get.page|default:0}"
+                    <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/advertisement/advertisement.php?action=new&amp;category={$smarty.request.category}&amp;page={$smarty.get.page|default:0}"
                        class="admin_add" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
+                        <img src="{$params.IMAGE_DIR}list-add.png" title="{t}New{/t}" alt="{t}New{/t}"><br />{t}New{/t}
                     </a>
                 </li>
                 {/acl}
@@ -55,7 +55,7 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
             </li>
             {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
@@ -64,9 +64,9 @@
 
             <table class="adminheading">
                 <tr>
-                    <th nowrap="nowrap" align="right">
+                    <th>
                         <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
-                        <select name="filter[type_advertisement]" onchange="submitFilters(this.form);">
+                        <select name="filter[type_advertisement]" id="filter[type_advertisement]" onchange="submitFilters(this.form);">
                             {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
                                 {assign var=filterType value=""}
                             {else}
@@ -122,15 +122,15 @@
                                 value="{$advertisements[c]->pk_advertisement}" />
                         </td>
                         <td style="">
-                            <label for="title">
+                            <label>
                                 {if $advertisements[c]->with_script == 1}
-                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" border="0"
+                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" 
                                          alt="Javascript" title="Javascript" />
                                 {elseif $advertisements[c]->is_flash == 1}
-                                    <img src="{$params.IMAGE_DIR}flash.gif" border="0" alt="{t}Media flash{/t}"
+                                    <img src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}"
                                          title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
                                 {else}
-                                    <img src="{$params.IMAGE_DIR}iconos/picture.png" border="0" alt="{t}Media{/t}"
+                                    <img src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}"
                                          title="{t}Media element (jpg, image, gif){/t}" />
                                 {/if}
                                 {assign var="type_advertisement" value=$advertisements[c]->type_advertisement}
@@ -150,10 +150,10 @@
                             {/if}
                         </td>
 
-                        <td style="text-align:center;" align="right">
+                        <td style="text-align:center;">
                             {$advertisements[c]->num_clic_count|number_format:0:',':'.'}
                         </td>
-                        <td style="text-align:center;" align="right">
+                        <td style="text-align:center;">
                              {$advertisements[c]->views|number_format:0:',':'.'}
                         </td>
                         <td style="text-align:center;" class="center">
@@ -164,25 +164,25 @@
                                     {if $advertisements[c]->available == 1}
                                         <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;category={$category}&amp;status=0&amp;&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
                                             title={t}"Published"{/t}>
-                                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                                            <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                                     {else}
                                         <a href="?id={$advertisements[c]->id}&amp;action=available_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}&amp;{$query_string}"
-                                            title={t}"Unresolved"{/t}>
-                                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}" /></a>
+                                            title={t escape=off}"Unresolved"{/t}>
+                                            <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}" /></a>
                                     {/if}
                                 </li>
                                 {/acl}
                                 {acl isAllowed="ADVERTISEMENT_UPDATE"}
                                 <li>
-                                    <a href="{$smarty.server.PHP_SELF}?action=read&id={$advertisements[c]->id}" title="{t}Edit{/t}">
-                                        <img src="{$params.IMAGE_DIR}edit.png" border="0" />
+                                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$advertisements[c]->id}" title="{t}Edit{/t}">
+                                        <img src="{$params.IMAGE_DIR}edit.png" />
                                     </a>
                                 </li>
                                 {/acl}
                                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                                 <li>
                                     <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
-                                        <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                        <img src="{$params.IMAGE_DIR}trash.png" />
                                     </a>
                                 </li>
                                 {/acl}
@@ -201,7 +201,7 @@
 
                 <tfoot >
                     <tr class="pagination">
-                        <td colspan="10">
+                        <td colspan="7">
                             {$paginacion->links}&nbsp;
                         </td>
                     </tr>
@@ -209,11 +209,11 @@
 
             </table>
 
-        </div><!--fin content-wrapper-->
+        </div><!--fin id="$category"-->
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-
-    </form>
-</div>
+        <input type="hidden" name="id" value="{$id|default:""}" />
+        
+    </div><!--fin content-wrapper-->
+</form>
 {/block}

@@ -1,51 +1,41 @@
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_portada">
+<table id="ads_type_portada">
 <tbody>
     <tr>
-        <td align="center" colspan="2">
-            <table width=100%>
-                <tr>
-                    <td align="center">
-                        <label>
-                            Frontpage Intersticial (800X600)
-                            <input type="radio" name="type_advertisement" value="50" {if isset($advertisement) && $advertisement->type_advertisement == 50}checked="checked" {/if}/>
-                        </label>
-                    </td>
-                </tr>
-            </table>
+        <td colspan="2">
+            <label>
+                Frontpage Intersticial (800X600)
+                <input type="radio" name="type_advertisement" value="50" {if isset($advertisement) && $advertisement->type_advertisement == 50}checked="checked" {/if}/>
+            </label>
         </td>
-        <td rowspan="11" align="right" width="340">
+        <td rowspan="11">
             {include file="advertisement/partials/advertisement_map_positions.tpl"}
-        </td>
-    </tr>
-    <tr>
-        <td align="center" colspan="2">
-            <table width=100%>
-                <tr>
-                    <td align="left">
-                        <label>
-                            Top Left LeaderBoard (728X90)
-                            <input type="radio" name="type_advertisement" value="1" {if isset($advertisement) && $advertisement->type_advertisement == 1}checked="checked" {/if}/>
-                        </label>
-                    </td>
-                    <td align="right">
-                        <label>
-                            Top Right LeaderBoard  (234X90)
-                            <input type="radio" name="type_advertisement" value="2" {if isset($advertisement) && $advertisement->type_advertisement == 2}checked="checked" {/if}/>
-                        </label>
-                    </td>
-                </tr>
-            </table>
         </td>
     </tr>
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-
     <tr>
-        <td colspan="2" align="right">
-            <table width=100%>
+        <td>
+            <label>
+                Top Left LeaderBoard (728X90)
+                <input type="radio" name="type_advertisement" value="1" {if isset($advertisement) && $advertisement->type_advertisement == 1}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td>
+            <label>
+                Top Right LeaderBoard  (234X90)
+                <input type="radio" name="type_advertisement" value="2" {if isset($advertisement) && $advertisement->type_advertisement == 2}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table>
                 <tr>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 1 position 1 (300X*)
                             <input type="radio" name="type_advertisement" value="11" {if isset($advertisement) && $advertisement->type_advertisement == 11}checked="checked" {/if}/>
@@ -56,7 +46,7 @@
                             <input type="radio" name="type_advertisement" value="12" {if isset($advertisement) && $advertisement->type_advertisement == 12}checked="checked" {/if}/>
                         </label>
                     </td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 2 position 1 (300X*)
                             <input type="radio" name="type_advertisement" value="21" {if isset($advertisement) && $advertisement->type_advertisement == 21}checked="checked" {/if}/>
@@ -67,7 +57,7 @@
                             <input type="radio" name="type_advertisement" value="22" {if isset($advertisement) && $advertisement->type_advertisement == 22}checked="checked" {/if}/>
                         </label>
                     </td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 3 position 1 (300X*)
                             <input type="radio" name="type_advertisement" value="31" {if isset($advertisement) && $advertisement->type_advertisement == 31}checked="checked" {/if}/>
@@ -82,23 +72,21 @@
             </table>
         </td>
     </tr>
-
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-
     <tr>
-        <td colspan=2 align=right>
-            <table width=100%>
+        <td colspan=2>
+            <table>
                 <tr>
-                    <td align="left">
+                    <td>
                         <label>
                             Button Column 1 position 3  (200x200)
                             <input type="radio" name="type_advertisement" value="13" {if isset($advertisement) && $advertisement->type_advertisement == 13}checked="checked" {/if}/>
                         </label>
                     </td>
                     <td>&nbsp;</td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 3 position 3 (200x200)
                             <input type="radio" name="type_advertisement" value="33" {if isset($advertisement) && $advertisement->type_advertisement == 33}checked="checked" {/if}/>
@@ -106,14 +94,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="left">
+                    <td>
                         <label>
                             Center Left LeaderBoard (728X90)
                             <input type="radio" name="type_advertisement" value="3" {if isset($advertisement) && $advertisement->type_advertisement == 3}checked="checked" {/if}/>
                         </label>
                     </td>
                     <td>&nbsp;</td>
-                    <td align="right">
+                    <td>
                         <label>
                             Center Right LeaderBoard (234x90)
                             <input type="radio" name="type_advertisement" value="4" {if $advertisement->type_advertisement == 4}checked="checked" {/if}/>
@@ -123,16 +111,14 @@
             </table>
         </td>
     </tr>
-
     <tr>
         <td colspan="2"><hr /></td>
     </tr>
-
     <tr>
         <td colspan="2">
-            <table width=100%>
+            <table>
                 <tr>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 1 position 4 (300X*)
                             <input type="radio" name="type_advertisement" value="14" {if isset($advertisement) && $advertisement->type_advertisement == 14}checked="checked" {/if}/>
@@ -143,7 +129,7 @@
                             <input type="radio" name="type_advertisement" value="15" {if isset($advertisement) && $advertisement->type_advertisement == 15}checked="checked" {/if}/>
                         </label>
                     </td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 2 position 4 (300X*)
                             <input type="radio" name="type_advertisement" value="24" {if isset($advertisement) && $advertisement->type_advertisement == 24}checked="checked" {/if}/>
@@ -154,7 +140,7 @@
                             <input type="radio" name="type_advertisement" value="25" {if isset($advertisement) && $advertisement->type_advertisement == 25}checked="checked" {/if}/>
                         </label>
                     </td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 3 position 4 (300X*)
                             <input type="radio" name="type_advertisement" value="34" {if isset($advertisement) && $advertisement->type_advertisement == 34}checked="checked" {/if}/>
@@ -174,16 +160,16 @@
     </tr>
     <tr>
         <td colspan="2">
-            <table width=100%>
+            <table>
                 <tr>
-                    <td align="left">
+                    <td>
                         <label>
                             Button Column 1 position 6  (200x200)
                             <input type="radio" name="type_advertisement" value="16" {if isset($advertisement) && $advertisement->type_advertisement == 16}checked="checked" {/if}/>
                         </label>
                     </td>
                     <td>&nbsp;</td>
-                    <td align="right">
+                    <td>
                         <label>
                             Button Column 3 position 6 (200x200)
                             <input type="radio" name="type_advertisement" value="36" {if isset($advertisement) && $advertisement->type_advertisement == 36}checked="checked" {/if}/>
@@ -191,14 +177,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="left">
+                    <td>
                         <label>
                             Bottom Left LeaderBoard (728X90)
                             <input type="radio" name="type_advertisement" value="5" {if isset($advertisement) && $advertisement->type_advertisement == 5}checked="checked" {/if}/>
                         </label>
                     </td>
                     <td>&nbsp;</td>
-                    <td align="right">
+                    <td>
                         <label>
                             Bottom Right LeaderBoard (234X90)
                             <input type="radio" name="type_advertisement" value="6" {if isset($advertisement) && $advertisement->type_advertisement == 6}checked="checked" {/if}/>
@@ -208,11 +194,10 @@
             </table>
         </td>
     </tr>
-
 </tbody>
 </table>
 
-<script defer="defer" type="text/javascript" language="javascript">
+<script type="text/javascript">
 /* <![CDATA[ */
 var adPositionPortada = null;
 

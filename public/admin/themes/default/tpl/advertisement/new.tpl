@@ -3,12 +3,27 @@
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
-    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
-    {script_tag src="/utilsadvertisement.js" language="javascript"}
-    {script_tag src="/AdPosition.js" language="javascript"}
+    {script_tag src="/onm/jquery.datepicker.js"}
+    {script_tag src="/utilsadvertisement.js"}
+    {script_tag src="/AdPosition.js"}
 {/block}
 {block name="footer-js" append}
-    {script_tag src="/utilsGallery.js" language="javascript"}
+    {script_tag src="/utilsGallery.js"}
+    <script type="text/javascript">
+    
+        jQuery(document).ready(function ($){
+            $('#position-adv').tabs();
+        });
+
+        function testScript(frm)  {
+            frm.action.value = 'test_script';
+            frm.target = 'test_script'; // abrir noutra ventá
+            frm.submit();
+
+            frm.target = ''; // cambiar o target para que siga facendo peticións na mesma ventá
+            frm.action.value = '';
+        }
+    </script>
 {/block}
 {block name="header-css" append}
 <style type="text/css">
@@ -53,26 +68,28 @@ input, select, textarea {
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
 
 <div class="top-action-bar clearfix">
-	<div class="wrapper-content">
-		<div class="title"><h2>{t}Ad manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2></div>
-		<ul class="old-button">
-			<li>
-			{if isset($advertisement->id)}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
-			{else}
-			   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
-			{/if}
-				<img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
-				</a>
-			</li>
-			<li class="separator"></li>
-			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={$smarty.request.desde|default:""}&category={$_REQUEST['category']|default:0}&page={$_GET['page']|default:0}" value="Cancelar" title="Cancelar">
-					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
-				</a>
-			</li>
-		</ul>
-	</div>
+    <div class="wrapper-content">
+            <div class="title">
+                <h2>{t}Ad manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
+            </div>
+            <ul class="old-button">
+                <li>
+                {if isset($advertisement->id)}
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'update', '{$advertisement->id}', 'formulario');">
+                {else}
+                   <a href="#" onClick="javascript:sendFormValidate(this, '_self', 'create', '0', 'formulario');">
+                {/if}
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="Guardar y salir"><br />{t}Save and exit{/t}
+                        </a>
+                </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action={$smarty.request.desde|default:""}&amp;category={$_REQUEST['category']|default:0}&amp;page={$_GET['page']|default:0}" title="Cancelar">
+                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                    </a>
+                </li>
+            </ul>
+    </div>
 </div>
 
 <div class="wrapper-content">
@@ -251,7 +268,7 @@ input, select, textarea {
                 <legend>{t}Position{/t}</legend>
 
                 <div id="position-adv" class="tabs">
-                    <ul id="tabs">
+                    <ul>
                         <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
                         <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
                         {is_module_activated name="VIDEO_MANAGER"}
@@ -274,163 +291,52 @@ input, select, textarea {
                         <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
                         {/is_module_activated}
                     </ul>
-
-                    <div id="publi-portada" class="panel-ads">
+                    
+                    <div id="publi-portada">
                         {include file="advertisement/partials/advertisement_positions.tpl"}
                     </div>
 
-                    <div id="publi-interior" class="panel-ads">
+                    <div id="publi-interior">
                         {include file="advertisement/partials/advertisement_positions_interior.tpl"}
                     </div>
-                    {is_module_activated name="OPINION_MANAGER"}
-                    <div id="publi-opinion" class="panel-ads">
-                        {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                    </div>
-                    <div id="publi-opinion-interior" class="panel-ads">
-                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
-                    </div>
-                    {/is_module_activated}
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <div id="publi-video" class="panel-ads">
+                    
+                    <div id="publi-video">
                         {include file="advertisement/partials/advertisement_positions_video.tpl"}
                     </div>
-                    <div id="publi-video-interior" class="panel-ads">
+                    <div id="publi-video-interior">
                         {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="ALBUM_MANAGER"}
-                    <div id="publi-gallery" class="panel-ads">
+                    <div id="publi-opinion">
+                        {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
+                    </div>
+                    <div id="publi-opinion-interior">
+                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
+                    </div>
+                    <div id="publi-gallery">
                         {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
                     </div>
-                    <div id="publi-gallery-inner" class="panel-ads">
+                    <div id="publi-gallery-inner">
                         {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="POLL_MANAGER"}
-                    <div id="publi-poll" class="panel-ads">
+                    <div id="publi-poll">
                         {include file="advertisement/partials/advertisement_positions_poll.tpl"}
                     </div>
-                    <div id="publi-poll-inner" class="panel-ads">
+                    <div id="publi-poll-inner">
                         {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
                     </div>
-                    {/is_module_activated}
-                    {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <div id="publi-newsletter" class="panel-ads">
+                    <div id="publi-newsletter">
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
-
-                    {/is_module_activated}
-                    
                 </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->
-
-        <style type="text/css">
-        table.adminlist img {
-            height:auto !important;
-        }
-        </style>
-
-        <script language="javascript" type="text/javascript">
-            function testScript(frm)  {
-                frm.action.value = 'test_script';
-                frm.target = 'test_script'; // abrir noutra ventá
-                frm.submit();
-
-                frm.target = ''; // cambiar o target para que siga facendo peticións na mesma ventá
-                frm.action.value = '';
-            }
-        </script>
-
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            // Add exhibit method to Fabtabs to can select a tab by id
-            Fabtabs.addMethods( {
-                exhibit: function(id) {
-                    elm = this.element.select("a[href$="+id+"]")[0];
-                    this.show( elm );
-                    this.menu.without(elm).each(this.hide.bind(this));
-
-                    if(['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1) {
-                        this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: ''});
-                        this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: 'none'});
-                        this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: 'none'});
-                        this.changePropertyTabs('a[href$=publi-gallery], a[href$=publi-gallery-inner]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-poll],a[href$=publi-gallery-poll]', { display: 'none' });
-
-                     } else {
-                        this.changePropertyTabs('a[href$=publi-portada],a[href$=publi-interior]', { display: '' });
-                        this.changePropertyTabs('a[href$=publi-video],a[href$=publi-video-interior]', { display: '' });
-                        this.changePropertyTabs('a[href$=publi-opinion],a[href$=publi-opinion-interior]', { display: 'none' });
-                        this.changePropertyTabs('a[href$=publi-gallery],a[href$=publi-gallery-inner]', { display: '' });
-                        this.changePropertyTabs('a[href$=publi-poll],a[href$=publi-gallery-poll]', { display: '' });
-                    }
-
-
-                },
-
-                changePropertyTabs: function(tabSelector, style) {
-                    this.element.select(tabSelector).each(function(item) {
-                        item.setStyle(style);
-                    });
-                },
-
-                activate :  function(ev) {
-                    var elm = Event.findElement(ev, "a");
-                    var id = elm.getAttribute('href').gsub(/#(.*?)$/, '#{1}');
-
-                    Event.stop(ev);
-
-                    this.show(elm);
-                    this.menu.without(elm).each(this.hide.bind(this));
-
-                    if( $F('category') == '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)!=-1)) {
-                        this.show(elm);
-                        this.menu.without(elm).each(this.hide.bind(this));
-                    }
-
-                    if( $F('category') != '4' && (['publi-opinion', 'publi-opinion-interior'].indexOf(id)==-1)) {
-                        this.show(elm);
-                        this.menu.without(elm).each(this.hide.bind(this));
-                    }
-                }
-            });
-
-            $('category').observe('change', function() {
-                if(this.value == '4') {
-                    $fabtabs.exhibit('publi-opinion');
-                } else if(this.value == '3') {
-                    $fabtabs.exhibit('publi-gallery');
-                } else {
-                    $fabtabs.exhibit('publi-portada');
-                }
-            });
-
-            document.observe('dom:loaded', function() {
-                {if $category ne '4'}
-                    {if $advertisement->type_advertisement lt 100}
-                        $fabtabs.exhibit('publi-portada');
-                    {else}
-                        $fabtabs.exhibit('publi-interior');
-                    {/if}
-                {else}
-                    {if $advertisement->type_advertisement ne 101 && $advertisement->type_advertisement ne 5}
-                        $fabtabs.exhibit('publi-opinion');
-                    {else}
-                        $fabtabs.exhibit('publi-opinion-interior');
-                    {/if}
-                {/if}
-            });
-
-        </script>
-
+        
         <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
         <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
         <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
     {/if}
-
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </form>
-</div>
+        <input type="hidden" name="id" value="{$id|default:""}" />
+    </div>
+</form>
 {/block}
