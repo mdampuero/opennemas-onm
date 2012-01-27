@@ -31,7 +31,7 @@ if (!isset($action)) {
 
 switch($action) {
     case 'list':
-        Acl::checkOrForward('USER_ADMIN'));
+        Acl::checkOrForward('USER_ADMIN');
 
         $cm = new ContentManager();
         $user = new User();

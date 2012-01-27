@@ -68,7 +68,7 @@
 			</li>
 
 			<li>
-				<a href="#refresh" rel="refresh" onclick="sendForm('refresh');return false;"
+				<a href="#refresh" onclick="sendForm('refresh');return false;"
 				  title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
 					<img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" /><br />
 					{t}Regenerate{/t}
@@ -355,11 +355,11 @@
                         {$caches[c].size} KB
                     </td>
                     <td class="center">
-                       <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}&uris={$contentUris.$resource|urlencode}"
+                       <a href="?action=refresh&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}&amp;uris={$contentUris.$resource|urlencode}"
                            title="{t}Regenerate cache file{/t}">
                             <img src="{$params.IMAGE_DIR}template_manager/refresh16x16.png" alt="" />
                        </a>&nbsp;
-                       <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&{$paramsUri}"
+                       <a href="?action=delete&amp;cacheid={$caches[c].category}|{$caches[c].resource}&amp;tpl={$caches[c].template}.tpl&amp;{$paramsUri}"
                             title="{t}Delete cache file{/t}">
                             <img src="{$params.IMAGE_DIR}template_manager/delete16x16.png" alt="" />
                        </a>

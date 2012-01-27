@@ -24,7 +24,7 @@ label {
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+    <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 
         <table class="adminheading">
             <tr>
@@ -35,7 +35,7 @@ label {
 
             <tr>
                 <td style="padding:20px; text-align:center">
-                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch"
+                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
                             class="required" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;
                     <button type="submit" class="onm-button green" onclick="return enviar(this, '_self', 'search', 0);">{t}Search{/t}</button>
                 </td>
@@ -56,8 +56,15 @@ label {
                 </td>
             </tr>
         </table>
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        {if isset($search_string)}
+        <div class="resultsSearch" id="resultsSearch" name="resultsSearch">
+            {if !isset($arrayResults) || empty($arrayResults)}
+                {include file="search_advanced/partials/_no_results.tpl"}
+            {else}
+                {include file="search_advanced/partials/_list.tpl"}
+            {/if}
+        </div>
+        {/if}
     </form>
 </div>
 {/block}

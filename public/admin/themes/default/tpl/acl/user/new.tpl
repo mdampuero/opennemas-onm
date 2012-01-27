@@ -259,7 +259,7 @@ input[type="password"]{
                             </th>
                             <td>
                                 <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
-                                    <option  value ="" selected="selected"> </option>
+                                    <option  value ="">{t}--Select one--{/t}</option>
                                     {section name=user_group loop=$user_groups}
                                         {if $user_groups[user_group]->id == $user->id_user_group}
                                             <option  value = "{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
