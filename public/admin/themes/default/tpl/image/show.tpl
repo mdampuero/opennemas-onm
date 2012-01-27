@@ -1,34 +1,33 @@
 {extends file="base/admin.tpl"}
 
-
-{block name="footer-js" append}
-    {script_tag src="/photos.js" language="javascript"}
-    <script type="text/javascript">
-        try {
-                // Activar la validación
-                new Validation('form_upload', { immediate : true });
-                Validation.addAllThese([
-                        ['validate-password',
-                                '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}', {
-                                minLength : 6,
-                                notOneOf : ['password','PASSWORD','Password'],
-                                notEqualToField : 'login'
-                        }],
-                        ['validate-password-confirm',
-                                '{t}Please check your first password and check again.{/t}', {
-                                equalToField : 'password'
-                        }]
-                ]);
-
-                // Para activar los separadores/tabs
-                $fabtabs = new Fabtabs('tabs');
-        } catch(e) {
-                // Escondemos los errores
-                //console.log( e );
-                    }
+{block name="header-js" append}
+    {script_tag src="/photos.js"}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js"}
+    <script>
+    try {
+        new Validation('form_upload', { immediate : true });
+        Validation.addAllThese([
+            [
+                'validate-password',
+                '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}',
+                {
+                    minLength : 6,
+                    notOneOf : ['password','PASSWORD','Password'],
+                    notEqualToField : 'login'
+                }
+            ],
+            [
+                'validate-password-confirm',
+                '{t}Please check your first password and check again.{/t}',
+                { equalToField : 'password' }
+            ]
+        ]);
+    } catch(e) { }
     </script>
+    <script src="http://maps.google.com/maps?file=api&amp;sensor=true&amp;key={setting name=google_maps_api_key}"></script>
 {/block}
-
 {block name="content"}
 <form id="form_upload" name="form_upload" action="{$smarty.server.SCRIPT_NAME}" method="POST">
     <div class="top-action-bar">

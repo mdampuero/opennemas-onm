@@ -273,7 +273,7 @@ class SessionManager implements ArrayAccess
 
         foreach (glob($sessionDir."/*") as $file) {
             if ($compareTime >= filemtime($file)) {
-                if (unlink($file)) $count++; 
+                if (unlink($file)) $count++;
             }
         }
         $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");

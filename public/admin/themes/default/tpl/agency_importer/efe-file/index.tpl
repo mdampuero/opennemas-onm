@@ -10,28 +10,28 @@
         <div class="title"><h2>{t}{$titulo_barra}{/t}</h2></div>
         <ul class="old-button">
             <li>
-				<a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" value="Cancelar" title="Cancelar">
+				<a href="#" class="admin_add" onClick="cancel('list_agency', 'todos', '');" title="{t}Go back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
 				</a>
 			</li>
             <li>
-                <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');" name="check" value="check">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Check{/t}
+                <a href="#" class="admin_add"  onclick="enviar(this, '_self', 'check', 0);" onmouseover="return escape('<u>C</u>heck');">
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="{t}Check{/t}"><br />{t}Check{/t}
                 </a>
             </li>
             <li>
-                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');" name="import" value="import">
-                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="Importar"><br />{t}Import{/t}
+                <a href="#" class="admin_add" onclick="enviar(this, '_self', 'import', 0);" onmouseover="return escape('<u>I</u>mportar XML');">
+                    <img border="0" src="{$params.IMAGE_DIR}checkout.png" alt="{t}Import{/t}"><br />{t}Import{/t}
                 </a>
             </li>
             <li>
-                <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');" name="remove" value="remove">
-                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="Remove"><br />{t}Remove File{/t}
+                <a href="#" class="admin_add" onclick="delFile()" onmouseover="return escape('<u>R</u>emove File');">
+                    <img border="0" src="{$params.IMAGE_DIR}list-remove.png" alt="{t}Remove File{/t}"><br />{t}Remove File{/t}
                 </a>
             </li>
             <li>
-                <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');" name="add" value="add">
-                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="Add"><br />{t}Add File{/t}
+                <a href="#" class="admin_add" onclick="addFile();" onmouseover="return escape('<u>A</u>dd File');">
+                    <img border="0" src="{$params.IMAGE_DIR}list-add.png" alt="{t}Add File{/t}"><br />{t}Add File{/t}
                 </a>
             </li>
         </ul>
@@ -47,7 +47,8 @@
 			</tr>
 		</table>
 		<table class="adminlist">
-			<tr><td colspan="2"><br />
+			<tr>
+                <td colspan="2"><br />
 					  <div id="FileContainer">
 							<div class="marcoFoto" id="File0">
 								<p style="font-weight: bold;">File #0:
@@ -57,11 +58,16 @@
 							</div>
 					  </div>
 				  <p>&nbsp;</p>
-			</td></tr>
-		</table><br />
-	{if isset($dataXML) && !empty($dataXML)}
-		{if isset($action) && $action eq 'check'}<h2>{t}Checking XML files{/t}</h2>
-		{else}<h2>{t}Impoting XML files{/t}</h2>
+			    </td>
+            </tr>
+		</table>
+        <br />
+    	{if isset($dataXML) && !empty($dataXML)}
+        
+		{if isset($action) && $action eq 'check'}
+        <h2>{t}Checking XML files{/t}</h2>
+		{else}
+        <h2>{t}Impoting XML files{/t}</h2>
 		{/if}
 		<br />
         <div style="background:#F7F7F7 none repeat scroll 0 0;border:1px solid #D7D7D7;padding:0;margin:0.5em 1em;overflow:auto;">

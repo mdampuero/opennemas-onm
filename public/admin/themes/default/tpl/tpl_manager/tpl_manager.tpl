@@ -47,11 +47,9 @@
     </script>
 {/block}
 {block name="header-css" append}
-	<style type="text/css">
-	img.inputExtension {
-		top:9px !important;
-	}
-	</style>
+<style type="text/css">
+img.inputExtension { top:9px !important; }
+</style>
 {/block}
 
 

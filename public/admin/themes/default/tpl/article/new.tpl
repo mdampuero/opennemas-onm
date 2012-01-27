@@ -75,7 +75,7 @@ jQuery(document).ready(function ($){
                 {/if}
             </ul>
 
-    {* Pestaña de edición-contenido*}
+            {* Pestaña de edición-contenido*}
             <div id="edicion-contenido">
                 <table style="margin-bottom:0; width:100%;">
                     <tbody>
@@ -225,10 +225,10 @@ jQuery(document).ready(function ($){
                                     <input  type="text" id="agency" name="agency" title="{t}Agency{/t}"
                                             class="required" style="width:100%" tabindex="4"
                                             {if is_object($article)}
-                                                    value="{$article->agency|clearslash|escape:"html"}"
-                                                    onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
+                                                value="{$article->agency|clearslash|escape:"html"}"
+                                                onblur="setTimeout(function(){ tinyMCE.get('summary').focus(); }, 200);"
                                             {else}
-                                                    value="{setting name=site_agency}"
+                                                value="{setting name=site_agency}"
                                             {/if}
                                     />
                                 </div><!-- / -->
@@ -303,7 +303,7 @@ jQuery(document).ready(function ($){
                 </table>
             </div>
 
-    {* Pestaña de parámetros de noticia *}
+            {* Pestaña de parámetros de noticia *}
             <div id="edicion-extra">
                 <table style="width:98%">
                     <tbody>

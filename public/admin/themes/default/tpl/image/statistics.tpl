@@ -2,7 +2,7 @@
 
 
 {block name="footer-js" append}
-    {script_tag src="/photos.js" language="javascript" defer="defer"}
+    {script_tag src="/photos.js" defer="defer"}
 {/block}
 
 {block name="content"}
@@ -11,15 +11,15 @@
     <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=search" onmouseover="return escape('<u>B</u>uscar Imagenes');" name="submit_mult" value="Buscar Imágenes">
-                    <img border="0" src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=search">
+                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
                 </a>
             </li>
             {acl isAllowed="IMAGE_SETTINGS"}
             <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config video module{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config video module{/t}">
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                         {t}Settings{/t}
                     </a>
                 </li>
@@ -30,7 +30,6 @@
 <div class="wrapper-content">
 
     {render_messages}
-
 
     <ul class="pills">
         <li>
@@ -89,7 +88,7 @@
             {/section}
             {/section}
             <tr>
-                <td class="family_type" scope="col" colspan="9">{t}Specials{/t}</td>
+                <td class="family_type" colspan="9">{t}Specials{/t}</td>
             </tr>
 
             {section name=c loop=$num_especials}

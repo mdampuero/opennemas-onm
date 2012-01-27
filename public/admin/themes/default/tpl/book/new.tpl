@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/utilsBook.js" language="javascript"}
+    {script_tag src="/utilsBook.js"}
 
 {/block}
 
@@ -13,13 +13,13 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Book manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Book{/t}{else}{t}Editing Album{/t}{/if}</h2></div>
             <ul class="old-button">
+                {acl isAllowed="BOOK_CREATE"}
                 <li>
-                    {acl isAllowed="BOOK_CREATE"}
-                    <a class="admin_add" onClick="enviar(this, '_self', 'validate', '{$book->id}');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
+                    <a class="admin_add" onClick="enviar(this, '_self', 'validate', '{$book->id}');" title="{t}Save and continue{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </a>
-                    {/acl}
                 </li>
+                {/acl}
                 <li>
                     {if isset($book->id)}
                         {acl isAllowed="BOOK_UPDATE"}
@@ -30,13 +30,13 @@
                             <a onClick="javascript:enviar(this, '_self', 'create', '0');">
                         {/acl}
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=list&amp;category={$smarty.request.category}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
+                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>
@@ -55,10 +55,10 @@
         <table class="adminform" >
             <tbody>
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;">
+                    <td>
                         <label for="title">{t}Title:{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <input type="text" id="title" name="title" title={t}"Album"{/t}
                             size="60" value="{$book->title|clearslash|escape:"html"}"
                             class="required" onBlur="javascript:get_metadata(this.value);" />
@@ -66,10 +66,10 @@
                     <td rowspan="4">
                         <table style='background-color:#F5F5F5; padding:18px;'>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                <label for="title">Secci&oacute;n:</label>
+                                <td>
+                                    <label for="title">Secci&oacute;n:</label>
                                 </td>
-                                <td nowrap="nowrap">
+                                <td>
                                     <select name="category" id="category"  >
                                         {section name=as loop=$allcategorys}
                                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
@@ -81,10 +81,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
+                                <td valign="top"  align="right">
                                     <label for="title"> {t}Available:{/t} </label>
                                 </td>
-                                <td valign="top" nowrap="nowrap">
+                                <td valign="top">
                                         <select name="available" id="available"
                                             class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
                                             <option value="0" {if $book->available eq 0} selected {/if}>{t}No{/t}</option>
@@ -98,10 +98,10 @@
                 </tr>
 
             <tr>
-                <td valign="top" align="right" style="padding:4px;">
+                <td style="padding:4px;">
                     <label for="title">Archivo:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td width="70%">
                     {if (!isset($book->file_name) || empty($book->file_name) )}
                         <input name="file" type="file"/>
                     {else}
@@ -111,10 +111,10 @@
                 </td>
             </tr>
             <tr>
-                <td valign="top" align="right" style="padding:4px;">
+                <td style="padding:4px;">
                     <label for="title">Tapa libro:</label>
                 </td>
-                <td style="padding:4px;" nowrap="nowrap" width="70%">
+                <td width="70%">
                     {if (!isset($book->file_name) || empty($book->file_name) )}
                          <input name="file_img" type="file"/>
                          <div id="informa" style="display: none; width:100%; height:40px;">*Imagen</div>
@@ -129,46 +129,46 @@
             </tr>
 
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;" >
+                    <td>
                         <label for="title">{t}Author{/t}:</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <input type="text" id="author" name="author" title="{t}author{/t}"
                             size="60" value="{$book->author|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                  <tr>
-                    <td valign="top" align="right" style="padding:4px;" >
+                    <td>
                         <label for="title">{t}Date{/t}:</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <input type="text" id="startime" name="startime" title="{t}Date{/t}"
                             size="60" value="{$book->startime|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                  <tr>
-                    <td valign="top" align="right" style="padding:4px;" >
+                    <td>
                         <label for="title">{t}Editorial{/t}:</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <input type="text" id="editorial" name="editorial" title="{t}editorial{/t}"
                             size="60" value="{$book->editorial|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;">
+                    <td style="padding:4px;">
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 
                 <tr>
-                    <td valign="top" align="right" style="padding:4px;">
+                    <td style="padding:4px;">
                         <label for="metadata">{t}Keywords:{/t}</label>
                     </td>
-                    <td style="padding:4px;" nowrap="nowrap">
+                    <td>
                         <input type="text" id="metadata" name="metadata" size="60"
                            class="required" title="Metadata" value="{$book->metadata}" />
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>

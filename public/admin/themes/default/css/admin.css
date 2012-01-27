@@ -1359,6 +1359,25 @@ div.action-bar .right{
 		}
 
 /* -------------------------------------------------------------
+  Image edit form.
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.photo-edit { margin-top:40px !important; display:block; }
+.photo-edit div { vertical-align:top; }
+.photo-edit .image-preview, .photo-edit .photo-basic-information { display:inline-block; }
+.photo-edit .photo-static-info {
+	border:1px solid #ddd;
+	border-radius:5px;
+	padding:10px;
+	margin-bottom:5px;
+}
+.photo-edit .image-preview { width:300px; padding:10px; background:#ddd; border-radius:5px; }
+.photo-edit .image-preview img { width:100%; }
+
+.photo-edit .photo-basic-information {
+	width:580px;
+	margin-left:10px;
+}
+/* -------------------------------------------------------------
   New layout for listing tables.
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .listing-table {
