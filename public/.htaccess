@@ -412,7 +412,6 @@ Options -Indexes
 # OpenNeMas Apache rules
 # ----------------------------------------------------------------------
 
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
