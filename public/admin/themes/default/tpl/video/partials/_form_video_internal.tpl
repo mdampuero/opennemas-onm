@@ -19,7 +19,7 @@
             </tr>
              <tr>
                 <td valign="top">
-                    <label for="title">Descripción:</label>
+                    <label for="title">{t}Description{/t}</label>
                 </td>
                 <td valign="top">
                     <textarea name="description" id="description" class="required"
@@ -29,7 +29,6 @@
 
             </tr>
             {if isset($video)}
-
             <tr>
                 <td>
                     <label>
@@ -44,7 +43,6 @@
 
                 </td>
             </tr>
-
             {else}
             <tr>
                 <td>

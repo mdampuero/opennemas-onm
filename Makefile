@@ -83,7 +83,7 @@ cleancache:
 
 cleaninstancefiles:
 	@echo "Cleaning temporal instance files..."
-	rm tmp/instances/* -f
+	rm tmp/instances/* -rf
 
 cleanlogs:
 	@echo "Cleaning logs..."

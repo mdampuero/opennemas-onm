@@ -14,128 +14,20 @@
     }
 </style>
 
-
-
+<table style="width:100%" border="1" >
 <tr>
-    <td colspan="3" >
-        <p>
-            <label>{t}Album images (Double click to select and cut images){/t}</label>
-        </p>
-	    <div id="scroll-album">
-		    <ul class="gallery_list" id="album_list">
-                {if !empty($photoData)}
-                     {assign var=indi value='1'}          
-                     {section name=n loop=$photoData}
-                         <li value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
-                             de:pk_photo="{$photoData[n]->pk_photo}"  id="f{$indi}-{$photoData[n]->pk_photo}">
-                             {if strtolower($photoData[n]->type_img)=='swf'}
-                                 <a class="album" title="{t}Show image{/t}"
-                                    onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
-                                     <object id="change2" >
-                                        <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"></param>
-                                        <embed src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}" width="68" height="50" ></embed>
-                                    </object>
-                                     <span  style="float:right; clear:none;">
-                                        <img id="img{$photoData[n]->pk_photo}" class="draggable2" style="width:16px;height:16px;"
-                                         src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" ondblclick="return false;"
-                                         style="{cssimagescale resolution=67 photo=$photoData[n]}"
-                                         class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
-                                         de:pk_photo="{$photoData[n]->pk_photo}"
-                                         value="f{$indi}-{$photoData[n]->pk_photo}"
-                                         name="{$photoData[n]->name}"
-                                         de:mas="{$photoData[n]->name}"
-                                         de:type_img="{$photoData[n]->type_img}"
-                                         de:url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}"
-                                         de:path="{$photoData[n]->path_file}"
-                                         de:dimensions="{$photoData[n]->width} x {$photoData[n]->height} (px)"
-                                         de:peso="{$photoData[n]->size}"
-                                         de:created="{$photoData[n]->created}"
-                                         de:description="{$photoData[n]->description|escape:"html"}"
-                                         de:tags="{$photoData[n]->metadata}"
-                                         de:footer="{$otherPhotos[n][2]|escape:"html"}" />
-                                     </span>
-                                 </a>
-                             {else}
-                                 <a class="album" title="{t}Show image{/t}"
-                                    onClick="show_image('img{$photoData[n]->pk_photo}', 'f{$indi}-{$photoData[n]->pk_photo}')">
-                                     <img ondblclick="define_crop(this);"
-                                         style="{cssimagescale resolution=67 photo=$photoData[n]}"
-                                         src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photoData[n]->path_file}{$photoData[n]->name}"
-                                         class="draggable2" id="img{$photoData[n]->pk_photo}"  border="0"
-                                         de:pk_photo="{$photoData[n]->pk_photo}"
-                                         value="f{$indi}-{$photoData[n]->pk_photo}"
-                                         name="{$photoData[n]->name}"
-                                         de:mas="{$photoData[n]->name}"
-                                         de:path="{$photoData[n]->path_file}"
-                                         de:dimensions="{$photoData[n]->width} x {$photoData[n]->height} (px)"
-                                         de:peso="{$photoData[n]->size}"
-                                         de:created="{$photoData[n]->created}"
-                                         de:description="{$photoData[n]->description|escape:"html"}"
-                                         de:tags="{$photoData[n]->metadata}"
-                                         de:footer="{$otherPhotos[n][2]|escape:"html"}" />
-                                 </a>
-                             {/if}
-                         </li>
-                     {assign var=indi value=$indi+1}
-                     {/section}
-                {/if}
-            </ul>
-        </div>
-    </td>
-</tr>
-
-<tr>
-    <td style="height:60px;" colspan="3">
-        <div id="album_msg" style="display:none;"></div>
-    </td>
-</tr>
-
-<tr>
-    <td></td><td></td>
-    <td  align="right" rowspan="2">
-        <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
-                <strong>{t}Available images{/t}</strong>
-        </div>
-        <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
-            <table>
-                <tr>
-                    <td align="left">
-                        <div class="cajaBusqueda">
-                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                               onclick="this.select();" value="{t}Search images by title...{/t}"/>
-                        </div>
-                    </td>
-                    <td align="right">
-                        <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);">
-                            <option value="0">GLOBAL</option>
-                                {section name=as loop=$allcategorys}
-                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                    {section name=su loop=$subcat[as]}
-                                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/section}
-                                {/section}
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <div id="photos" class="photos" style="height:440px; border:0px double #333333; margin:5px; overflow:auto;"></div>
-        </div>
-    </td>
-</tr>
-<tr>
-    <td colspan="2"  style="vertical-align:top;" >
+    <td style="vertical-align:top;" >
         <div id="portada" style="display:block;">
-            <table style="width:95%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px;">
+            <table style="width:100%; display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px 0;">
                 <tr>
                     <td>
-                        <h2>{t}Image for frontpage:{/t}</h2>
+                        <h2>{t}Image for Special:{/t}</h2>
                     </td>
                     <td  align='center'>
                         <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img');">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png"
                                  id="remove_img" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
-                        </a>                        
+                        </a>
                     </td>
                 </tr>
                 <input type="hidden" id="img_des" value="" size="60">
@@ -165,8 +57,39 @@
                         <input type="text" id="img_footer" name="img_footer" title="Imagen" value="" size="50" />
                     </td>
                 </tr>
-            </table>   
+            </table>
         </div>
-
     </td>
+     <td  align="right"  >
+        <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
+                <strong>{t}Available images{/t}</strong>
+        </div>
+        <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
+            <table>
+                <tr>
+                    <td align="left">
+                        <div class="cajaBusqueda">
+                            <input id="stringImageSearch" name="stringImageSearch" type="text"
+                               onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
+                               onclick="this.select();" value="{t}Search images by title...{/t}"/>
+                        </div>
+                    </td>
+                    <td align="right">
+                        <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);">
+                            <option value="0">GLOBAL</option>
+                                {section name=as loop=$allcategorys}
+                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
+                                    {section name=su loop=$subcat[as]}
+                                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                    {/section}
+                                {/section}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <div id="photos" class="photos" style="height:440px; border:0px double #333333; margin:5px; overflow:auto;"></div>
+            </div>
+    </td>
+
 </tr>
+</table>

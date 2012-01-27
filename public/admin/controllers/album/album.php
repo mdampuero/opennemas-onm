@@ -40,7 +40,7 @@ if(empty($category)) {
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
-if(empty($category)) {$category ='favorite';}
+if(empty($category)) {$category ='widget';}
 
 $tpl->assign('category', $category);
 
@@ -71,9 +71,9 @@ switch($action) {
         }
 
         $cm = new ContentManager();
- 
-        if ($category == 'favorite') {
-            $albums = $cm->find_all('Album', 'favorite =1 AND available =1',
+
+        if ($category == 'widget') {
+            $albums = $cm->find_all('Album', 'in_home =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
@@ -235,15 +235,15 @@ switch($action) {
         $msg ='';
         $relations = Related_content::get_content_relations( $id );
         if (!empty($relations)) {
-            $msg = sprintf(_(" The album %s have some relations")."\n", $album->title);
+            $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
             $cm= new ContentManager();
             $relat = $cm->getContents($relations);
             foreach($relat as $contents) {
                $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all its relations?");
+            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");
         } else {
-            $msg = sprintf(_("Do you want delete %s?"), $album->title);
+            $msg = sprintf(_('Do you want to delete "%s"?'), $album->title);
         }
         echo $msg;
         exit(0);
@@ -255,7 +255,7 @@ switch($action) {
         Acl::checkOrForward('ALBUM_DELETE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if($id){
+        if ($id){
             $album = new Album($id);
             //Delete relations
             $rel= new Related_content();
@@ -285,7 +285,7 @@ switch($action) {
     break;
 
     case 'change_favorite':
-        
+
         Acl::checkOrForward('ALBUM_FAVORITE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
@@ -300,6 +300,24 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 
         break;
+
+      case 'change_inHome':
+
+        Acl::checkOrForward('ALBUM_HOME');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $album = new Album($id);
+        if ($album->available == 1) {
+            $album->set_inhome($status,$_SESSION['userid']);
+        } else {
+            m::add(_("This album is not published so you can't define it as widget home content.") );
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
+        break;
+
 
     case 'mfrontpage':
 
@@ -352,6 +370,35 @@ switch($action) {
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.' &page='.$page);
 
+    break;
+
+    case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $album = new Album();
+            $msg = $album->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Have a problem, positions can't be saved.");
+         }
+        exit(0);
     break;
 
     case 'config':

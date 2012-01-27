@@ -340,7 +340,10 @@ class Application
         define('STATUS', "1");
         define('CHARSET', "text/html; charset=UTF-8");
 
-        $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        $protocol = 'http://';
+        if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
+            $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        }
 
         define('SS', "/");
 
@@ -678,12 +681,15 @@ HTMLCODE;
      * @return void
      * @author
      **/
-    static public function logContentEvent($action, $content)
+    static public function logContentEvent($action=NULL, $content=NULL)
     {
         $logger = Application::getLogger();
-        $logger->notice(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-            .'the action '.$action.' at '.get_class($content).' (ID:'.$content->id.')' );
+
+            $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
+            .'the action '.$action;
+            if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+
+            $logger->notice( $msg );
     }
 
     /**

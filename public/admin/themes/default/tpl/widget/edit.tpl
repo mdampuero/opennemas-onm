@@ -6,7 +6,7 @@
 submitForm = function() {
     document.getElementById('formulario').submit();
 };
-        
+
 toogleTiny = function(value) {
     if(value == 'html') {
         $('toggle-btn').show();
@@ -31,7 +31,7 @@ toogleTiny = function(value) {
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{if $smarty.request.action eq "new"}{t}Creating new widget{/t}{else}{t 1=$widget->title}Editing widget «%1»{/t}{/if}</h2>
+            <h2>{if $smarty.request.action eq "new"}{t}Creating new widget{/t}{else}{t 1=$widget->title}Editing widget "%1"{/t}{/if}</h2>
         </div>
         <ul class="old-button">
             <li>
@@ -88,7 +88,7 @@ toogleTiny = function(value) {
                     <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
                     <option value="php" {if isset($widget) && $widget->renderlet == 'php'}selected="selected"{/if}>{t}PHP{/t}</option>
                     <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
-                    
+
                 </select>
             </td>
         </tr>
@@ -122,7 +122,7 @@ toogleTiny = function(value) {
                 <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:none{else}display:inline{/if}">
                     <textarea cols="80" id="widget_content" rows="20" name="content">{$widget->content|default:""}</textarea>
                 </div>
-                
+
                 <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $smarty.get.action eq 'new'}display:inline{else}display:none{/if}">
                     <select name="content" id="all-widgets" {if isset($widget)}disabled="disabled"{/if}>
                         {foreach from=$all_widgets item=w}

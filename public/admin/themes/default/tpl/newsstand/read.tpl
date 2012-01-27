@@ -1,5 +1,11 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
+{/block}
+
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -116,8 +122,6 @@
             </div>
         </div>
 
-        {* Replaced by the Control.DatePicker prototype widget *}
-        {dhtml_calendar inputField="date" button="date" singleClick=true ifFormat="%Y-%m-%d" firstDay=1 align="CR"}
     <input type="hidden" id="action" name="action" value="update" />
     <input type="hidden" id="id" name="id" value="{$kiosko->id}" />
     </div><!--fin content-wrapper-->

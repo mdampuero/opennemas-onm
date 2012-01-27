@@ -1,8 +1,18 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+    {css_tag href="/mediamanager.css"}
+{/block}
+
+
+{block name="header-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js"}
+{/block}
 
 {block name="footer-js" append}
-    {script_tag src="/photos.js" language="javascript"}
+    {script_tag src="/photos.js"}
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
         <div class="message" id="console-info">{$smarty.request.message}</div>
         <script defer="defer" type="text/javascript">
@@ -46,7 +56,7 @@
                 // Escondemos los errores
                 //console.log( e );
                     }
-    </script>    
+    </script>
 {/block}
 
 {block name="content"}
@@ -74,7 +84,7 @@
                     {if !isset($smarty.request.stringSearch)}
                         <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.request.category}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                     {else}
-                        <a href="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php?stringSearch={$smarty.get.stringSearch}&photo=on&action=search&id=0" 
+                        <a href="{$smarty.const.SITE_URL_ADMIN}/controllers/search_advanced/search_advanced.php?stringSearch={$smarty.get.stringSearch}&photo=on&action=search&id=0"
                            class="admin_add" value="Cancelar" title="Cancelar">
                     {/if}
                          <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}

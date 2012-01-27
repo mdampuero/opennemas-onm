@@ -248,7 +248,6 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('datos_cat', $datos_cat);
                 $tpl->assign('category', $_REQUEST['category']);
             }
-            $tpl->assign('titulo_barra', 'Gesti&oacute;n de Pendientes');
 
             $cm = new ContentManager();
             if (!isset($_REQUEST['category']) || $_REQUEST['category']=='home' || $_REQUEST['category']=='0' ) {
@@ -404,7 +403,6 @@ if (isset($_REQUEST['action']) ) {
 
 
         case 'list_hemeroteca':
-            $tpl->assign('titulo_barra', 'Hemeroteca');
 
             if (!isset($_REQUEST['category']) || $_REQUEST['category'] =='home') {
                 $_REQUEST['category'] = 'todos';
@@ -1374,23 +1372,21 @@ if (isset($_REQUEST['action']) ) {
                 || empty($_GET['category'])
                 || ($_GET['category'] == 'home')
                 || ($_GET['category'] == 'todos')
-                || ($_GET['category'] == '')){
-                    $category= 11;
-                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
-            }else{ $category=$_GET['category']; }
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'noticias');
-            /* $articles = $cm->find_by_category('Article', $category, 'content_status=1 AND available=1  AND fk_content_type=1', 'ORDER BY created DESC  LIMIT 0,100');
 
-            $params=$_REQUEST['id'].", 'noticias',".$category;
-            $articles = $cm->paginate_num_js($articles,20, 3, "get_div_contents", $params);
-            $pages=$cm->pager;
-            $paginacionV='<p align="center">'.$pages->links.'</p>'	;
-            */
-                 list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=1 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
+            list($articles, $pages)= $cm->find_pages('Article', 'fk_content_type=1 and content_status=1 AND available=1 ', 'ORDER BY  created DESC,  contents.title ASC ',$_REQUEST['page'],20,$category);
 
-               $params=$_REQUEST['id'].", 'noticias',$category";
-               $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
-               $paginacionV='<p align="center">'.$paginacion .'</p>'	;
+            $params=$_REQUEST['id'].", 'noticias',$category";
+            $paginacion=$cm->makePagesLinkjs($pages, ' get_div_contents', $params);
+            $paginacionV='<p align="center">'.$paginacion .'</p>'	;
 
             $html_out = print_lists_related($_REQUEST['id'], $articles, 'noticias_div');
             Application::ajax_out("<h2>Publicadas</h2>".$categorys.$html_out.$paginacionV);
@@ -1399,10 +1395,18 @@ if (isset($_REQUEST['action']) ) {
 
           case 'get_hemeroteca':
             $cm = new ContentManager();
-            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 11;
-                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
-            }else{ $category=$_GET['category']; }
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'hemeroteca');
 
@@ -1414,14 +1418,22 @@ if (isset($_REQUEST['action']) ) {
             $html_out = print_lists_related($_REQUEST['id'], $articles, 'hemeroteca_div');
             Application::ajax_out("<h2>Hemeroteca</h2>".$categorys.$html_out.$paginacionV);
 
-        break;
+            break;
 
          case 'get_pendientes':
             $cm = new ContentManager();
-            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-            $category= 11;
-            $datos_cat = $ccm->find('pk_content_category=11', NULL);
-            }else{ $category=$_GET['category']; }
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'pendientes');
 
@@ -1438,9 +1450,18 @@ if (isset($_REQUEST['action']) ) {
 
         case 'reload_menu':
             $cm = new ContentManager();
-            if (($_GET['category']) ||($_GET['category'] != 'home') || ($_GET['category'] != 'todos')){
-                    $category= $_GET['category'];
-            }else{ $category=11; }
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
             $tpl->assign('category', $_GET['category']);
             $tpl->assign('home', '');
             $html_out=$tpl->fetch('menu_categorys.tpl');
@@ -1450,10 +1471,18 @@ if (isset($_REQUEST['action']) ) {
 
         case 'get_videos':
             $cm = new ContentManager();
-            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-            $category= 11;
-            $datos_cat = $ccm->find('pk_content_category=11', NULL);
-            }else{ $category=$_GET['category']; }
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'videos');
 
@@ -1469,11 +1498,19 @@ if (isset($_REQUEST['action']) ) {
         break;
 
         case 'get_albums':
-           $cm = new ContentManager();
-           if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                $category= 11;
-                $datos_cat = $ccm->find('pk_content_category=11', NULL);
-           }else{ $category=$_GET['category']; }
+            $cm = new ContentManager();
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 3;//Album
+                $datos_cat = $ccm->find('pk_content_category=3', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
 
            $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'albums');
 
@@ -1503,10 +1540,19 @@ if (isset($_REQUEST['action']) ) {
         case 'get_adjuntos':
             $cm = new ContentManager();
 
-            if (!isset($_GET['category'])|| empty($_GET['category']) ||($_GET['category'] == 'home') || ($_GET['category'] == 'todos')||($_GET['category'] == ' ')){
-                    $category= 11;
-                    $datos_cat = $ccm->find('pk_content_category=11', NULL);
-            }else{ $category=$_GET['category']; }
+            $cm = new ContentManager();
+            if (!isset($_GET['category'])
+                || empty($_GET['category'])
+                || ($_GET['category'] == 'home')
+                || ($_GET['category'] == 'todos')
+                || ($_GET['category'] == ' ')
+            ) {
+                $category = 36;//Galicia
+                $datos_cat = $ccm->find('pk_content_category=36', NULL);
+            } else {
+                $category = $_GET['category'];
+                $datos_cat = $ccm->find('pk_content_category='.$category, NULL);
+            }
 
             $categorys=print_menu($allcategorys,$subcat,$datos_cat[0],'adjuntos');
 

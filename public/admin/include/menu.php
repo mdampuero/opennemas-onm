@@ -2,7 +2,7 @@
 
 $menuXml = '<?xml version="1.0"?>
 <menu>
-    <submenu title="'.htmlspecialchars(_("Frontpage"), ENT_QUOTES).'" id="frontpage" link="#">
+    <submenu title="'.htmlspecialchars(_("Web site"), ENT_QUOTES).'" id="frontpage" link="#">
         <node
             module_name="FRONTPAGE_MANAGER"
             privilege="ARTICLE_FRONTPAGE"
@@ -11,11 +11,19 @@ $menuXml = '<?xml version="1.0"?>
             link="article.php"
         />
         <node
-            module_name="WIDGET_MANAGER"
-            privilege="WIDGET_ADMIN"
-            title="'.htmlspecialchars(_("Widget Manager"), ENT_QUOTES).'"
-            id="widget_manager"
-            link="controllers/widget/widget.php"
+            module_name="STATIC_PAGES_MANAGER"
+            privilege="STATIC_ADMIN"
+            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
+            id="static_pages_manager"
+            link="controllers/static_pages/static_pages.php"
+        />
+        <node class="divider" />
+        <node
+            module_name="MENU_MANAGER"
+            privilege="MENU_ADMIN"
+            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
+            id="menu_manager"
+            link="controllers/menues/menues.php"
         />
     </submenu>
 
@@ -56,13 +64,6 @@ $menuXml = '<?xml version="1.0"?>
             id="ads_manager"
             link="controllers/advertisement/advertisement.php"
         />
-        <node
-            module_name="STATIC_PAGES_MANAGER"
-            privilege="STATIC_ADMIN"
-            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            id="static_pages_manager"
-            link="controllers/static_pages/static_pages.php"
-        />
 
          <node
             module_name="SPECIAL_MANAGER"
@@ -79,22 +80,23 @@ $menuXml = '<?xml version="1.0"?>
             link="article.php?action=list_hemeroteca"
         />
         <node
+            module_name="WIDGET_MANAGER"
+            privilege="WIDGET_ADMIN"
+            title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
+            id="widget_manager"
+            link="controllers/widget/widget.php"
+        />
+        <node class="divider" />
+        <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
             title="'.htmlspecialchars(_("Category Manager"), ENT_QUOTES).'"
             id="category_manager"
             link="controllers/category/category.php"
         />
-        <node
-            module_name="MENU_MANAGER"
-            privilege="MENU_ADMIN"
-            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
-            id="menu_manager"
-            link="controllers/menues/menues.php"
-        />
      </submenu>
 
-    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#" 
+    <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
             privilege="IMAGE_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
@@ -172,7 +174,7 @@ $menuXml = '<?xml version="1.0"?>
          <node
             module_name="SCHEDULE_MANAGER"
             title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
-            id="newsletter_manager"
+            id="cronicas_schedule_manager"
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
@@ -192,7 +194,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="PAPER_IMPORT"
             privilege="IMPORT_EFE_FILE"
             title="'.htmlspecialchars(_("EFE file Importer"), ENT_QUOTES).'"
-            id="efe_importer"
+            id="import_efe_file"
             link="controllers/agency_importer/efe-file.php"
         />
         <node
@@ -212,7 +214,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="BACKEND_ADMIN" />
     </submenu>
 
-    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#" 
+    <submenu title="'.htmlspecialchars(_("System"), ENT_QUOTES).'" id="system" link="#"
              privilege="ONM_SETTINGS,CACHE_ADMIN,USER_ADMIN,ONLY_MASTERS,SYSTEM_UPDATE_MANAGER,BACKEND_ADMIN">
         <node
             module_name="SETTINGS_MANAGER"
@@ -221,7 +223,7 @@ $menuXml = '<?xml version="1.0"?>
             link="controllers/system_settings/system_settings.php"
             privilege="ONM_SETTINGS" />
 
-            <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#" 
+            <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#"
                      privilege="USER_ADMIN">
                 <node
                     module_name="USER_MANAGER"

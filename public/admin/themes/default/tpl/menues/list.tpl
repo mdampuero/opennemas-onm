@@ -22,6 +22,15 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}Menu manager{/t} :: {t}Listing menues{/t}</h2></div>
           <ul class="old-button">
+              {acl isAllowed="MENU_DELETE"}
+            <li>
+                 <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    </a>
+            </li>
+            {/acl}
+
+            <li class="separator"></li>
             <li>
                 {acl isAllowed="MENU_CREATE"}
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
@@ -32,32 +41,42 @@
         </ul>
     </div>
 </div>
+
+<div class="wrapper-content">
+    {render_messages}
+</div><!-- / -->
+
 <div class="wrapper-content">
     <form action="#" method="post" name="formulario" id="formulario">
         <div>
             <table class="listing-table">
                 <thead>
                     <tr>
+                        <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                         <th>{t}Title{/t}</th>
                         <th align="center" style="width:30px;">{t}Actions{/t}</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
                     {section loop=$menues name=m}
                         <tr>
+                             <td class="center">
+                                <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}"
+                                       name="selected_fld[]" value="{$menues[m]->pk_menu}" style="cursor:pointer;" >
+                            </td>
                             <td>
                             {acl isAllowed="MENU_UPDATE"}
                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}"
                              {/acl}
-                                    title="{t 1=$menues[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                    title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                      {$menues[m]->name|capitalize}
                                  </a>
                             </td>
                              <td class="center">
                                  <ul class="action-buttons clearfix">
                                     <li>
-                                        {acl isAllowed="MENU_UPDATE"}                           
+                                        {acl isAllowed="MENU_UPDATE"}
                                             <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$menues[m]->name}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                                 <img src="{$params.IMAGE_DIR}edit.png" border="0" />
                                             </a>
@@ -65,8 +84,9 @@
                                     </li>
                                      <li>
                                          {if $menues[m]->type eq 'user'}
-                                        {acl isAllowed="MENU_ADMIN"}                           
-                                            <a onclick="if(!confirm({t}'Do you want delete this menu?'{/t}))return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&id={$menues[m]->pk_menu}" title="{t 1=$menues[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                        {acl isAllowed="MENU_ADMIN"}
+                                            <a class="del" data-controls-modal="modal-from-dom"
+                                               data-id="{$menues[m]->pk_menu}" data-title="{$menues[m]->name|capitalize}"  href="#" >
                                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                             </a>
                                         {/acl}
@@ -80,6 +100,11 @@
                             {if $k eq $menues[m]->pk_menu}
                                 {section loop=$subMenu name=s}
                                 <tr>
+                                     <td class="center">
+                                         <input type="checkbox" class="minput"
+                                                id="selected_{$smarty.section.as.iteration}"
+                                                name="selected_fld[]" value="{$subMenu[s]->pk_menu}"  style="cursor:pointer;" >
+                                    </td>
                                     <td style="padding-left:20px">
                                         <strong>&rArr; </strong>
                                         {acl isAllowed="MENU_UPDATE"}
@@ -102,8 +127,10 @@
                                         </li>
                                         <li>
                                              {if $subMenu[s]->type eq 'user'}
-                                            {acl isAllowed="MENU_ADMIN"}                           
-                                                <a onclick="if(!confirm({t}'Do you want delete this menu?'{/t}))return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&id={$subMenu[s]->pk_menu}" title="{t 1=$subMenu[s]->name}Delete page '%1'{/t}" title={t}"Delete"{/t}>
+                                            {acl isAllowed="MENU_ADMIN"}
+                                                   <a class="del" data-controls-modal="modal-from-dom"
+                                                       data-id="{$subMenu[s]->pk_menu}"
+                                                       data-title="{$subMenu[s]->name|capitalize}"  href="#" >
                                                     <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                                 </a>
                                             {/acl}
@@ -124,15 +151,19 @@
                         </tr>
                       {section loop=$withoutFather name=m}
                         <tr>
+                             <td class="center">
+                                 <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}"
+                                        name="selected_fld[]" value="{$withoutFather[m]->id}"  style="cursor:pointer;" >
+                            </td>
                             <td>
-                            {acl isAllowed="MENU_UPDATE"}
-                                <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}"
-                             {/acl}
-                                    title="{t 1=$withoutFather[s]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
+                                {acl isAllowed="MENU_UPDATE"}
+                                 <a href="{$smarty.server.SCRIPT_NAME}?action=read&name={$withoutFather[m]->name}"
+                                {/acl}
+                                    title="{t 1=$withoutFather[m]->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                                      {$withoutFather[m]->name|capitalize}
                                  </a>
                             </td>
-                            
+
                             <td class="center">
                                  <ul class="action-buttons clearfix">
                                     <li>
@@ -144,8 +175,10 @@
                                     </li>
                                     <li>
                                          {if $withoutFather[m]->type eq 'user'}
-                                        {acl isAllowed="MENU_ADMIN"}                           
-                                            <a onclick="confirm({t}'Do you want delete this menu?'{/t});return false;" href="{$smarty.server.SCRIPT_NAME}?action=delete&name={$withoutFather[m]->name}" title="{t 1=$withoutFather[m]->name}Delete page '%1'{/t}" title={t}"Delete"{/t}>
+                                        {acl isAllowed="MENU_ADMIN"}
+                                           <a class="del" data-controls-modal="modal-from-dom"
+                                               data-id="{$withoutFather[m]->pk_menu}"
+                                               href="#" >
                                                 <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                                             </a>
                                         {/acl}
@@ -159,12 +192,15 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan=2>&nbsp;</td>
+                        <td colspan="3">&nbsp;</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-
+        <input type="hidden" id="action" name="action" value="" />
      </form>
 </div><!--fin wrapper-content-->
+{include file="menues/modals/_modalDelete.tpl"}
+{include file="menues/modals/_modalBatchDelete.tpl"}
+{include file="menues/modals/_modalAccept.tpl"}
 {/block}

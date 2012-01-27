@@ -26,14 +26,14 @@
 			<div class="title"><h2>{t}User Manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-						<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="Eliminar">
+						<img src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
 					</a>
 				</li>
 				<li class="separator"></li>
 				<li>
-					<a href="{$smarty.server.PHP_SELF}?action=new&id=0" accesskey="N" tabindex="1">
-						<img border="0" src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New user{/t}
+					<a href="{$smarty.server.PHP_SELF}?action=new&amp;id=0" accesskey="N" tabindex="1">
+						<img src="{$params.IMAGE_DIR}user_add.png" title="Nuevo" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
 			</ul>
@@ -44,8 +44,7 @@
 		{* Filters: filter[name], filter[login], filter[group]  *}
 		<table class="adminheading">
 			<tr>
-				<th align="right">
-
+				<th>
 					<label for="username">{t}Filter by name{/t}
 						<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name|default:""}" />
 					</label>
@@ -83,13 +82,13 @@
 			</thead>
 			{/if}
 			<tbody>
-			{foreach from=$users item=user name=user_listing}
+				{foreach from=$users item=user name=user_listing}
 				<tr>
 					<td>
-						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$user->id}"  style="cursor:pointer;" ">
+						<input type="checkbox" class="minput"  id="selected_{$user->id}" name="selected_fld[]" value="{$user->id}"  style="cursor:pointer;">
 					</td>
 					<td class="left">
-						<a href="?action=read&id={$user->id}" title="{t}Edit user{/t}">
+						<a href="?action=read&amp;id={$user->id}" title="{t}Edit user{/t}">
 							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
 					</td>
 					<td class="center">
@@ -105,13 +104,13 @@
 					<td class="right">
 						<ul class="action-buttons">
 							<li>
-								<a href="{$smarty.server.PHP_SELF}?action=read&id={$user->id}&page={$page|default:0}" title="{t}Edit user{/t}">
-									<img src="{$params.IMAGE_DIR}edit.png" border="0" alt="{t}Edit user{/t}"/>
+								<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$user->id}&amp;page={$page|default:0}" title="{t}Edit user{/t}">
+									<img src="{$params.IMAGE_DIR}edit.png" alt="{t}Edit user{/t}"/>
 								</a>
 							</li>
 							<li>
 								<a href="#" onClick="javascript:confirmar(this, {$user->id});" title="{t}Delete user{/t}">
-									<img src="{$params.IMAGE_DIR}trash.png" border="0" alt="{t}Delete user{/t}"/>
+									<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete user{/t}"/>
 								</a>
 							</li>
 						</ul>
@@ -125,14 +124,14 @@
 					</td>
 				</tr>
 				{/foreach}
-				<tfoot>
-					<tr>
-						<td colspan="5">
-							&nbsp;
-						</td>
-					</tr>
-				</tfoot>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="5">
+						&nbsp;
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 
 		<input type="hidden" id="action" name="action" value="" />

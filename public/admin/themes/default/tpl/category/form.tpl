@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
-    {css_tag href="/../js/jquery_colorpicker/css/colorpicker.css"}
+    {css_tag href="/../css/jquery/jquery_colorpicker/css/colorpicker.css"}
     <style type="text/css">
     label {
         display:block;
@@ -16,9 +16,8 @@
 
 {block name="header-js" append}
     {script_tag language="javascript" src="/jquery/jquery.min.js"}
-    {script_tag language="javascript" src="/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag language="javascript" src="/jquery/jquery_colorpicker/js/colorpicker.js"}
     {script_tag src="/utilscategory.js" language="javascript"}
-    {script_tag src="/MiniColorPicker.js"}
     <script type="text/javascript">
     // <![CDATA[
         Sortable.create('subcates',{
@@ -184,10 +183,8 @@
                 <tr>
                     <td valign="middle" style="padding:4px;" colspan="3">
                         <label for="inmenu">{t}Color:{/t}</label>
-                        <script type="application/x-javascript">
-                            initPicker('color','{$category->color}', 24);
-                        </script>
                         <input readonly="readonly" size="6" max-lenght="6" type="text" id="site_color" name="site_color" value="{$category->color|default:"0000ff"}">
+                        <div class="colopicker_viewer" style="background-color:#{$category->color|default:"0000ff"}"></div>
                     </td>
                 </tr>
 
@@ -272,6 +269,9 @@
             onSubmit: function(hsb, hex, rgb, el) {
                 jQuery(el).val(hex);
                 jQuery(el).ColorPickerHide();
+            },
+            onChange: function (hsb, hex, rgb) {
+                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
             },
             onBeforeShow: function () {
                 jQuery(this).ColorPickerSetColor(this.value);

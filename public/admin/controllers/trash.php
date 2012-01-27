@@ -13,7 +13,6 @@ require_once('../../bootstrap.php');
 require_once('../session_bootstrap.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Trash'));
 
 if (!isset($_REQUEST['page']) || empty($_REQUEST['page'])) {$_REQUEST['page'] = 1;}
 if (!isset($_REQUEST['category'])) {$_REQUEST['category'] = 1;}

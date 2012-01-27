@@ -74,8 +74,8 @@
 *}
 
 		<div class="clearfix">
-        
-            <ul id="tabs">
+
+            <ul class="pills">
                 <li>
 					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=0">{t}Pending{/t}</a>
                 </li>
@@ -86,9 +86,9 @@
 					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=2">{t}Rejected{/t}</a>
                 </li>
             </ul>
-        
+
         </div>
-        
+
             <table class="adminheading">
                 <tr>
                     <th nowrap="nowrap" align="right">
@@ -117,7 +117,7 @@
                     </th>
                 </tr>
             </table>
-                    
+
         <script type="text/javascript">
             document.observe('dom:loaded', function() {
                 {if $comment_status==0}

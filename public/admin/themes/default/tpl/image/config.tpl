@@ -1,6 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-css" append}
+    {css_tag href="/mediamanager.css"}
+{/block}
+
+{block name="header-css" append}
     <style type="text/css">
     label {
         width:150px;

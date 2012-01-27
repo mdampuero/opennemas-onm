@@ -29,7 +29,7 @@ $tpl->assign('titulo_barra', _('Kiosko Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 if (!isset($page)) {
-    $page = filter_input( INPUT_POST, 'action' , FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
+    $page = filter_input( INPUT_POST, 'page' , FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
 }
 
 /******************* GESTION CATEGORIAS  *****************************/
@@ -73,7 +73,8 @@ switch($action) {
         if ($category == 'favorite') {
             list($portadas, $pager)= $cm->find_pages('Kiosko',
                                         'fk_content_type=14 AND kioskos.favorite=1 ',
-                                            'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
+                                        'fk_content_type=14 ',
+                                        'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
 
 
         } else {
@@ -161,14 +162,14 @@ switch($action) {
             if( !$kiosko->create( $_POST )) {
                 m::add(_('There was a problem with kiosko data. Try again') );
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         } else {
             if ($uploadStatus==false) {
 
                 m::add(_('There was an error while uploading the file. <br />Try to upload files smaller than that size or contact with your administrator'),
                 (int)(ini_get('upload_max_filesize').' ') );
 
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
             }
             //Error debido a portada ya subida enla fecha indicada
             $_REQUEST['action'] = 'new';

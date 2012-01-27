@@ -6,13 +6,63 @@
     {script_tag src="/utilsGallery.js" language="javascript"}
 {/block}
 
+{block name="footer-js" append}
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        $('#contents-provider').tabs();
+    });
+
+    // <![CDATA[
+    make_sortable_divs_portadas('{$category}');
+    // Controlar o cambio de posicións para amosar un aviso
+    var posicionesIniciales = null;
+    var posicionesInicialesWarning = false; // Mellorar o rendemento
+    avisoGuardarPosiciones = function() {
+        //Provisional repite innecesariamente.
+        {if $category eq 'home'}
+        changedTables({$category});
+        {/if}
+        if(!posicionesInicialesWarning) {
+            $$('input[type=checkbox]').each( function(item, idx) {
+                if(item.value != posicionesIniciales[idx].value) {
+                    $('warnings-validation').update('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
+                    posicionesInicialesWarning = true;
+                    $break;
+                }
+            });
+        }
+    };
+
+    document.observe('dom:loaded', function() {
+        posicionesIniciales = $$('input[type=checkbox]');
+    });
+    make_sortable_divs_portadas('{$category}');
+
+  /*  $('tabs').observe('click', makealldivssortable);
+
+    function makealldivssortable(event) {
+        setTimeout('make_sortable_divs_portadas(\'{$category}\');', 800);
+    }
+
+*/
+    Draggables.observers.each(function(item){
+        item.onEnd= avisoGuardarPosiciones;
+    });
+
+    // Activate tabs in contents provider
+    $fabtabs = new Fabtabs('tabs');
+
+// ]]>
+</script>
+{/block}
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
         <ul class="old-button">
-                
+
             {acl isAllowed="ARTICLE_CREATE"}
             <li>
                 <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add">
@@ -68,14 +118,16 @@
                      <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                  </a>
             </li>
-          
+
         </ul>
     </div>
 </div>
 
 
 <div class="wrapper-content">
-  {render_messages}
+
+    {render_messages}
+
     <ul class="pills">
         {acl hasCategoryAccess=0}
         <li>
@@ -103,7 +155,7 @@
         </table>
         <div id="pagina">
 
-            <table id="columns" class="adminform">
+            <table id="columns" class="adminform clearfix">
                 <tr  valign="top">
                    <td colspan=3>
                         {include  file="frontpage/placeholders/article_column_highlighted.tpl" place='placeholder_highlighted'}
@@ -111,19 +163,19 @@
                 </tr>
                 <tr valign="top" width="100%">
                     <td >
-                          {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_0'}
+                        {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_0'}
                     </td>
-                     <td >
-                          {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_1'}
+                    <td >
+                        {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_1'}
                     </td>
                     <td>
-                          {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_2'}
+                        {include  file="frontpage/placeholders/article_column.tpl" place='placeholder_2'}
                     </td>
                 </tr>
             </table>
 
-            <div id="contents-provider">
-                <ul id="tabs">
+            <div id="contents-provider" class="tabs" style="margin-top:20px;">
+                <ul>
                     {if $category neq 'home'}
                     <li><a href="#other-articles">{t}Other articles in this category{/t}</a></li>
                     {else}
@@ -131,129 +183,36 @@
                     {/if}
                     <li><a href="#available-widgets">{t}Widgets{/t}</a></li>
                     <li><a href="#available-opinions">{t}Opinions{/t}</a></li>
+                    <li><a href="#drop">{t}Stage{/t}</a></li>
                 </ul>
 
                 {if $category neq 'home'}
-                <div id="other-articles" class="panel no-border tabs-panel" style="width:100%">
+                <div id="other-articles">
                     {include file="frontpage/blocks/others_articles_in_category.tpl"}
                 </div>
                 {else}
-                <div id="suggested-elements" class="panel no-border tabs-panel" style="width:100%">
+                <div id="suggested-elements">
                     {include file="frontpage/blocks/articles_suggested.tpl"}
                 </div>
                 {/if}
 
-                <div id="available-widgets" class="panel no-border tabs-panel" style="width:100%">
+                <div id="available-widgets">
                     {include file="frontpage/blocks/widgets_available.tpl"}
                 </div>
 
-                <div id="available-opinions" class="panel no-border tabs-panel" style="width:100%">
+                <div id="available-opinions">
                     {include file="frontpage/blocks/opinions_available.tpl"}
+                </div>
+
+                <div id="drop">
+                    {t}Drop an element here to get it out of this frontpage{/t}
                 </div>
             </div>
 
-            <div id="no_en_home" style="margin:10px 0">
-                <table class="adminheading">
-                    <tr>
-                        <th align="center">{t}Homepage articles{/t} <img  border="0" style="margin-left:10px; cursor:pointer;" src="{$params.IMAGE_DIR}iconos/info.png" onmouseover="Tip('<img src=http://demo.opennemasweb.es/admin/themes/default/images/leyenda_programadas.png >', SHADOW, true, ABOVE, true, WIDTH, 300)" onmouseout="UnTip()" ></th>
-                    </tr>
-                </table>
-                <table class="adminlist" border=0 style="border:1px solid #ccc !important;">
-                    <tr>
-                        <td width="100%">
-                            <div id="div_no_home" style="width:100%;min-height:80px;padding:5px;overflow:auto;">
-                              {if $category eq 'home'} {t}NOT IN HOME{/t} {else} {t 1=$datos_cat[0]->title}NOT IN FRONTPAGE OF %1{/t} {/if}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-
-
-
-        </div> {* div id=pagina *}
-        <script type="text/javascript">
-
-
-            // <![CDATA[
-            make_sortable_divs_portadas('{$category}');
-            // Controlar o cambio de posicións para amosar un aviso
-            var posicionesIniciales = null;
-            var posicionesInicialesWarning = false; // Mellorar o rendemento
-            avisoGuardarPosiciones = function() {
-                //Provisional repite innecesariamente.
-                {if $category eq 'home'}
-                changedTables({$category});
-                {/if}
-                if(!posicionesInicialesWarning) {
-                    $$('input[type=checkbox]').each( function(item, idx) {
-                        if(item.value != posicionesIniciales[idx].value) {
-                            $('warnings-validation').update('<div class="notice">{t}Please, remember save positions after finish.{/t}</div>');
-                            posicionesInicialesWarning = true;
-                            $break;
-                        }
-                    });
-                }
-            };
-
-            document.observe('dom:loaded', function() {
-                posicionesIniciales = $$('input[type=checkbox]');
-            });
-            make_sortable_divs_portadas('{$category}');
-
-            $('tabs').observe('click', makealldivssortable);
-
-            function makealldivssortable(event) {
-                setTimeout('make_sortable_divs_portadas(\'{$category}\');', 800);
-            }
-
-
-            Draggables.observers.each(function(item){
-                item.onEnd= avisoGuardarPosiciones;
-            });
-
-            // Activate tabs in contents provider
-            $fabtabs = new Fabtabs('tabs');
-
-        // ]]>
-        </script>
-    </div> {* div id=$category *}
-    <td valign="top" align="right" style="padding:4px;" width="30%">
-
-            <script type="text/javascript" language="javascript">
-            document.observe('dom:loaded', function() {
-                if($('title')){
-                    new OpenNeMas.Maxlength($('title'), {});
-                    $('title').focus(); // Set focus first element
-                }
-                getGalleryImages('listByCategory','{$category}','','1');
-                getGalleryVideos('listByCategory','{$category}','','1');
-            });
-
-            if($('starttime')) {
-                new Control.DatePicker($('starttime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-
-                new Control.DatePicker($('endtime'), {
-                    icon: './themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-            }
-            </script>
-
-
-            <input type="hidden" id="action" name="action" value="" />
-            <input type="hidden" name="id" id="id" value="{$id|default}" />
         </div>
-    </form>
-</div>
+
+        <input type="hidden" id="action" name="action" value="" />
+        <input type="hidden" name="id" id="id" value="{$id|default}" />
+    </div>
+</form>
 {/block}

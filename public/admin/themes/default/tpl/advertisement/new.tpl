@@ -1,6 +1,9 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+    {script_tag src="/jquery/jquery-ui-sliderAccess.js"}
+    {script_tag src="/onm/jquery.datepicker.js" language="javascript"}
     {script_tag src="/utilsadvertisement.js" language="javascript"}
     {script_tag src="/AdPosition.js" language="javascript"}
 {/block}
@@ -11,9 +14,6 @@
 <style type="text/css">
 object {
     z-index:0;
-}
-.datepickerControl {
-    z-index:99;
 }
 table.adminlist img {
     height:auto !important;
@@ -79,7 +79,7 @@ input, select, textarea {
 
     {if isset($smarty.request.action) && ($smarty.request.action eq "new" || $smarty.request.action eq "read")}
 
-        
+
         <div class="panel clearfix" style="display:block">
             <fieldset style="vertical-align:top">
                 <legend>{t}Basic information{/t}</legend>
@@ -95,7 +95,7 @@ input, select, textarea {
                             onBlur="javascript:get_metadata(this.value);"/>
 
                     <label for="metadata">{t}Keywords:{/t} <small>{t}Separated by commas{/t}</small></label>
-                    
+
                     <input type="text" id="metadata" name="metadata" style="width:90%" tabindex=2
                        title="Metadatos" value="{$advertisement->metadata|strip|default:""}">
 
@@ -105,7 +105,7 @@ input, select, textarea {
                         {if $smarty.request.action eq "read"}
                             <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                             <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
-                            
+
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
                                     {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
@@ -123,7 +123,7 @@ input, select, textarea {
                             {is_module_activated name="OPINION_MANAGER"}
                             <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                             {/is_module_activated}
-                            
+
 
                             {section name=as loop=$allcategorys}
                                 <option value="{$allcategorys[as]->pk_content_category}"
@@ -141,7 +141,7 @@ input, select, textarea {
                         </select>
 
                     </div><!-- / -->
-                    
+
                     <div style="display:inline-block; width:30%; vertical-align:top">
                         <label>{t}View restrictions:{/t}</label>
                         <select name="type_medida" onChange="permanencia(this);">
@@ -153,7 +153,7 @@ input, select, textarea {
                     </div>
 
                     <div style="display:{if $advertisement->with_script==1}none{else}inline-block{/if}; width:30%; vertical-align:top">
-                        
+
                         <div id="porclic" style="display:{if $advertisement->type_medida!='CLIC'}none{/if};">
                             <label for="title">{t}# of clicks:{/t}</label>
                             <input type="text" id="num_clic" name="num_clic" title="Numero de clic"
@@ -179,7 +179,7 @@ input, select, textarea {
                         </div>
 
 
-                        <div id="porfecha" style="{if  $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
+                        <div id="porfecha" style="width:190px;{if  $advertisement->type_medida neq 'DATE'} display:none{else}display:block{/if};">
                             <label for="title">{t}Date range{/t}</label>
                             {t}From:{/t} <input type="text" id="starttime"  name="starttime" title="Fecha inicio publicacion"
                                 value="{if isset($advertisement) && $advertisement->starttime != '0000-00-00 00:00:00'}{$advertisement->starttime}{/if}" />
@@ -191,7 +191,7 @@ input, select, textarea {
                 </div><!-- / -->
 
                 <div style="display:inline-block; width:20%">
-                    
+
                     <label for="available">{t}Published:{/t}</label>
                     <select name="available" id="available"
                         {acl isNotAllowed="ADVERTISEMENT_AVAILA"} disabled="disabled" {/acl} >
@@ -199,10 +199,10 @@ input, select, textarea {
                         <option value="0" {if isset($advertisement->available) &&  $advertisement->available == 0}selected="selected"{/if}>No</option>
                     </select>
                     <br/>
-                    
+
                     <label for="overlap" style="display:inline-block;">{t}Hide Flash events:{/t}</label>
                     <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
-                        
+
                     <div id="timeout_container" style="display:{if !isset($advertisement) || $advertisement->type_advertisement!=50}none{/if};">
                         <label for="timeout">{t escape="off"}Display during<br/><small>( -1 allways visible)</small>{/t}:</label>
                         <input type="text" id="timeout" name="timeout" size="2" title="Segundos antes de desaparecer"
@@ -244,97 +244,91 @@ input, select, textarea {
                         <button class="onm-button blue" onclick="testScript(this.form);return false;">{t}Test Javascript code{/t}</button>
                     </div>
                 </div>
-                
+
             </fieldset>
 
             <fieldset>
                 <legend>{t}Position{/t}</legend>
 
-                <ul id="tabs">
-                    <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
-                    <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
-                    {is_module_activated name="VIDEO_MANAGER"}
-                    <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
-                    <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
-                    {/is_module_activated}
+                <div id="position-adv" class="tabs">
+                    <ul id="tabs">
+                        <li><a href="#publi-portada">{t}Frontpage{/t}</a></li>
+                        <li><a href="#publi-interior">{t}Inner article{/t}</a></li>
+                        {is_module_activated name="VIDEO_MANAGER"}
+                        <li><a href="#publi-video">{t}Video frontpage{/t}</a></li>
+                        <li><a href="#publi-video-interior">{t}Inner video{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="OPINION_MANAGER"}
+                        <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
+                        <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="ALBUM_MANAGER"}
+                        <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
+                        <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="POLL_MANAGER"}
+                        <li><a href="#publi-poll">{t}Poll{/t}</a></li>
+                        <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
+                        {/is_module_activated}
+                        {is_module_activated name="NEWSLETTER_MANAGER"}
+                        <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
+                        {/is_module_activated}
+                    </ul>
+
+                    <div id="publi-portada" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions.tpl"}
+                    </div>
+
+                    <div id="publi-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_interior.tpl"}
+                    </div>
                     {is_module_activated name="OPINION_MANAGER"}
-                    <li><a href="#publi-opinion">{t}Opinion frontpage{/t}</a></li>
-                    <li><a href="#publi-opinion-interior">{t}Inner opinion{/t}</a></li>
+                    <div id="publi-opinion" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
+                    </div>
+                    <div id="publi-opinion-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
+                    </div>
+                    {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <div id="publi-video" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_video.tpl"}
+                    </div>
+                    <div id="publi-video-interior" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="ALBUM_MANAGER"}
-                    <li><a href="#publi-gallery">{t}Galleries{/t}</a></li>
-                    <li><a href="#publi-gallery-inner">{t}Gallery Inner{/t}</a></li>
+                    <div id="publi-gallery" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
+                    </div>
+                    <div id="publi-gallery-inner" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}
-                    <li><a href="#publi-poll">{t}Poll{/t}</a></li>
-                    <li><a href="#publi-poll-inner">{t}Poll Inner{/t}</a></li>
+                    <div id="publi-poll" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_poll.tpl"}
+                    </div>
+                    <div id="publi-poll-inner" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
+                    </div>
                     {/is_module_activated}
                     {is_module_activated name="NEWSLETTER_MANAGER"}
-                    <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
+                    <div id="publi-newsletter" class="panel-ads">
+                        {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
+                    </div>
+
                     {/is_module_activated}
-                </ul>
-
-                <div id="publi-portada" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions.tpl"}
-                </div>
-
-                <div id="publi-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_interior.tpl"}
-                </div>
-                {is_module_activated name="OPINION_MANAGER"}
-                <div id="publi-opinion" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_opinion.tpl"}
-                </div>
-                <div id="publi-opinion-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_opinion_interior.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="VIDEO_MANAGER"}
-                <div id="publi-video" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_video.tpl"}
-                </div>
-                <div id="publi-video-interior" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_video_interior.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="ALBUM_MANAGER"}
-                <div id="publi-gallery" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_gallery.tpl"}
-                </div>
-                <div id="publi-gallery-inner" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_gallery_inner.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="POLL_MANAGER"}
-                <div id="publi-poll" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_poll.tpl"}
-                </div>
-                <div id="publi-poll-inner" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_poll_inner.tpl"}
-                </div>
-                {/is_module_activated}
-                {is_module_activated name="NEWSLETTER_MANAGER"}
-                <div id="publi-newsletter" class="panel-ads">
-                    {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
-                </div>
-
-                {/is_module_activated}
+                    
+                </div><!-- /position-adv -->
             </fieldset>
         </div><!-- / -->
 
         <style type="text/css">
-            #tabs a {
-                background-color: #F5F5F5;
-            }
-
-            #tabs a.active-tab {
-                background-color: #EEE;
-                font-weight: bold;
-            }
-            table.adminlist img {
-                height:auto !important;
-            }
-
+        table.adminlist img {
+            height:auto !important;
+        }
         </style>
 
         <script language="javascript" type="text/javascript">
@@ -428,26 +422,6 @@ input, select, textarea {
                 {/if}
             });
 
-        </script>
-
-        <script type="text/javascript" language="javascript">
-            if($('starttime')) {
-                new Control.DatePicker($('starttime'), {
-                    icon: '{$smarty.const.SITE_URL_ADMIN}/themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-
-                new Control.DatePicker($('endtime'), {
-                    icon: '{$smarty.const.SITE_URL_ADMIN}/themes/default/images/template_manager/update16x16.png',
-                    locale: 'es_ES',
-                    timePicker: true,
-                    timePickerAdjacent: true,
-                    dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-                });
-            }
         </script>
 
         <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />

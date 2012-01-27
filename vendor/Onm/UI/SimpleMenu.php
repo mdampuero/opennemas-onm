@@ -31,7 +31,7 @@ class SimpleMenu {
     public function __construct($menuXMLFile, $baseUrl = null) {
 
         $menu = simplexml_load_string($menuXMLFile);
-        
+
         if (!isset($baseUrl)) {
             $baseUrl = SITE_URL_ADMIN;
         }
@@ -116,13 +116,13 @@ class SimpleMenu {
         }
 
     }
-    
+
     private function getClass($class)
     {
         if (isset($class) && !empty($class)) {
             return "class=\"{$class}\"";
         }
-        
+
     }
 
     private function getHref($title, $id, $url, $external = false) {
@@ -166,7 +166,7 @@ class SimpleMenu {
 
     /*
      * Renders wrapper
-     * 
+     *
      * @param $element
      */
     private function _renderElement($element, $value, $last)
@@ -177,16 +177,16 @@ class SimpleMenu {
             case 'submenu':
                 $output []= $this->_renderSubMenu($element, $value, $last);
                 break;
-            
+
             case 'node':
                 $output []= $this->_renderNode($element, $value, $last);
                 break;
-            
+
             default:
                 # code...
                 break;
         }
-        
+
         return implode("\n", $output);
     }
 
@@ -194,7 +194,7 @@ class SimpleMenu {
      * Recursive function to render a SubMenu and its contents
      *
      * @return void
-     * @author 
+     * @author
      **/
     private function _renderSubMenu($element, $value, $last)
     {
@@ -211,14 +211,14 @@ class SimpleMenu {
             $html .= "<ul>".implode("\n", $output)."</ul>";
             $html .="</li>";
         }
-        return $html;        
+        return $html;
     }
 
     /**
      * Function for rendering one menu node
      *
      * @return void
-     * @author 
+     * @author
      **/
     private function _renderNode($element, $value, $last)
     {
@@ -241,7 +241,7 @@ class SimpleMenu {
 
     }
 
-        
+
     /**
      * Renders the menu
      *
@@ -255,13 +255,18 @@ class SimpleMenu {
         if (isset($params['contents'])) {
             $this->contents = $params['contents'];
         }
-        
+
         $output = '';
         foreach ($this->menu as $element => $value ) {
             $output []= $this->_renderElement($element, $value, false);
         }
 
-        return "<ul id='menu' class='clearfix'>".implode("\n", $output)."</ul>";
+        $menu = "<ul id='menu' class='clearfix'>".implode("\n", $output)."</ul>";
+        if ($params['doctype']) {
+            $menu = "<nav>".$menu."</nav>";
+        }
+
+        return $menu;
     }
 
 }
