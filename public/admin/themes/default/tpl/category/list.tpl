@@ -127,7 +127,7 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+             {is_module_activated name="ALBUM_MANAGER"}
             <div id="album">
                 <table class="listing-table">
                     <thead>
@@ -161,7 +161,8 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+            {/is_module_activated}
+            {is_module_activated name="VIDEO_MANAGER"}
             <div id="video">
                 <table class="listing-table">
                     <thead>
@@ -196,7 +197,8 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+            {/is_module_activated}
+            {is_module_activated name="KIOSKO_MANAGER"}
             <div id="epapel">
                 <table class="listing-table">
                     <thead>
@@ -231,7 +233,8 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+             {/is_module_activated}
+             {is_module_activated name="POLL_MANAGER"}
             <div id="poll">
                 <table class="listing-table">
                     <thead>
@@ -266,7 +269,8 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+            {/is_module_activated}
+            {is_module_activated name="SPECIAL_MANAGER"}
             <div id="special">
                 <table class="listing-table">
                     <thead>
@@ -301,7 +305,8 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+            {/is_module_activated}
+            {is_module_activated name="BOOK_MANAGER"}
             <div id="book">
                 <table class="listing-table">
                     <thead>
@@ -336,7 +341,7 @@ jQuery(document).ready(function ($){
                     </tfoot>
                 </table>
             </div>
-
+            {/is_module_activated}
         </div><!-- categories-tabs -->
 
     </div>

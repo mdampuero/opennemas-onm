@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="header-js" append}
-    {script_tag src="/onm/jquery.newsstand.js" language="javascript"}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
 {/block}
 {block name="content"}
 <div class="top-action-bar clearfix">
@@ -78,11 +78,13 @@
                 <th style="width:15px;"><input type="checkbox" id="toggleallcheckbox"></th>
                 <th align="center" style="width:100px;">{t}Cover{/t}</th>
                 <th align="center">{t}Title{/t}</th>
+                {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                 <th align="center" style="width:90px;">{t}Date{/t}</th>
                 <th align="center" style="width:10px;">{t}Publisher{/t}</th>
                 <th align="center" style="width:90px;">{t}Last editor{/t}</th>
-                <th align="center" style="width:10px;">{t}Favorite{/t}</th>
                 <th align="center" style="width:10px;">{t}Published{/t}</th>
+                {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                <th align="center" style="width:10px;">{t}Home{/t}</th>
                 <th align="center" style="width:50px;">{t}Actions{/t}</th>
             </tr>
         </thead>
@@ -110,6 +112,11 @@
             <td >
                 {$portadas[as]->title|clearslash}
             </td>
+            {if $category=='widget' || $category=='all'}
+                <td class="center">
+                     {$albums[as]->category_title}
+                </td>
+            {/if}
             <td align="center">
                 {$portadas[as]->date}
             </td>
@@ -119,6 +126,20 @@
             <td  align="center">
                 {$portadas[as]->editor}
             </td>
+             <td align="center">
+                {acl isAllowed="KIOSKO_AVAILABLE"}
+                    {if $portadas[as]->available == 1}
+                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
+                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                        </a>
+                    {else}
+                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Pendiente">
+                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                        </a>
+                    {/if}
+                {/acl}
+            </td>
+            {if $category!='widget' && $category!='all'}
             <td align="center">
             {acl isAllowed="KIOSKO_FAVORITE"}
                 {if $portadas[as]->favorite == 1}
@@ -128,16 +149,13 @@
                 {/if}
             {/acl}
             </td>
-            <td align="center">
+            {/if}
+            <td class="center">
                 {acl isAllowed="KIOSKO_HOME"}
-                    {if $portadas[as]->available == 1}
-                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Publicado">
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                        </a>
+                    {if $portadas[as]->in_home == 1}
+                       <a href="?id={$portadas[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
                     {else}
-                        <a href="?id={$portadas[as]->pk_kiosko}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}&amp;category={$category}" title="Pendiente">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                        </a>
+                        <a href="?id={$portadas[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                     {/if}
                 {/acl}
             </td>
@@ -158,20 +176,18 @@
                         {/acl}
                     </li>
                 </ul>
-
-
             </td>
 
         </tr>
         {sectionelse}
         <tr>
-            <td class="empty" colspan="9">{t}There is no stands{/t}</td>
+            <td class="empty" colspan="10">{t}There is no stands{/t}</td>
         </tr>
         {/section}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="9" style="padding:10px;font-size: 12px;" align="center">
+                <td colspan="10" style="padding:10px;font-size: 12px;" align="center">
                     {if count($portadas) gt 0}
                         {$paginacion->links}
                     {/if}
