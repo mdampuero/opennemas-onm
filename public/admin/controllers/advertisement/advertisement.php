@@ -111,7 +111,7 @@ switch($action) {
         $tpl->assign('map', $map);
 
         // Filters
-        $map = array('-1' => _("--All--")) + $map;
+        $map = array('-1' => _("-- All --")) + $map;
         $filter_options['type_advertisement'] = $map;
         $filter_options['available'] = array('-1' => _("-- All --"), '0' => _("No published"), '1' => _("Published"));
         $filter_options['type']      = array('-1' => _("-- All --"), '0' => _("Multimedia"), '1' => _("Javascript"));

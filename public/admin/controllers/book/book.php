@@ -23,7 +23,6 @@ Acl::checkOrForward('BOOK_ADMIN');
 
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Book Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
@@ -65,9 +64,9 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('BOOK_ADMIN');
-        
+
         $cm = new ContentManager();
-    
+
         if (empty($page)) {
             $limit= "LIMIT ".(ITEMS_PAGE+1);
         } else {
@@ -86,15 +85,11 @@ switch($action) {
             if (count($books) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
             }
-        
-        } else {
 
+        } else {
             $books = $cm->find_by_category('Book', $category, '1=1',
                            'ORDER BY created DESC '.$limit);
-          
         }
-        
-
 
         $params = array(
             'page'=>$page, 'items'=>ITEMS_PAGE,
@@ -186,7 +181,7 @@ switch($action) {
     case 'validate':
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        
+
         if(empty($id)) {
 
             Acl::checkOrForward('BOOK_CREATE');
@@ -241,7 +236,7 @@ switch($action) {
     break;
 
     case 'delete':
-        Acl::checkOrForward('BOOK_DELETE');  
+        Acl::checkOrForward('BOOK_DELETE');
         $book = new Book();
         $book->delete( $_POST['id'] );
 
@@ -250,8 +245,8 @@ switch($action) {
 
     case 'change_status':
 
-        Acl::checkOrForward('BOOK_AVAILABLE'); 
-        
+        Acl::checkOrForward('BOOK_AVAILABLE');
+
         $book = new Book($_REQUEST['id']);
         //Publicar o no, comprobar num clic
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -261,7 +256,7 @@ switch($action) {
     break;
 
     case 'frontpage_status': //Publicar/Despublicar
-        Acl::checkOrForward('BOOK_AVAILABLE'); 
+        Acl::checkOrForward('BOOK_AVAILABLE');
         $book = new Book($_REQUEST['id']);
 
         $status = ($_REQUEST['status']==1)? 1: 0;
@@ -272,7 +267,7 @@ switch($action) {
 
     case 'mstatus':
 
-        Acl::checkOrForward('BOOK_AVAILABLE'); 
+        Acl::checkOrForward('BOOK_AVAILABLE');
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
             $fields = $_REQUEST['selected_fld'];
             if(is_array($fields)) {
@@ -287,7 +282,7 @@ switch($action) {
 
     case 'mdelete':
 
-        Acl::checkOrForward('BOOK_DELETE'); 
+        Acl::checkOrForward('BOOK_DELETE');
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
             $fields = $_REQUEST['selected_fld'];
             if(is_array($fields)) {
@@ -303,7 +298,7 @@ switch($action) {
 
     case 'change_favorite':
 
-        Acl::checkOrForward('BOOK_FAVORITE'); 
+        Acl::checkOrForward('BOOK_FAVORITE');
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
                                 array('options' => array('default'=> 0)));

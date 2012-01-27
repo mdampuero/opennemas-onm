@@ -30,12 +30,12 @@
                             <a onClick="javascript:enviar(this, '_self', 'create', '0');">
                         {/acl}
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
                     </a>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list&category={$smarty.request.category}">
+                    <a href="{$smarty.server.PHP_SELF}?action=list&amp;category={$smarty.request.category}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -174,7 +174,6 @@
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
                     </td>
                 </tr>
-               
             </tbody>
         </table>
 
@@ -182,7 +181,4 @@
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
-
 {/block}
-
- 

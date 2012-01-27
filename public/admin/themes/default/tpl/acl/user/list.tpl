@@ -20,10 +20,10 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}User Manager{/t}</h2></div>
+			<div class="title"><h2>{t}User manager{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="Eliminar">
@@ -41,20 +41,19 @@
 	</div>
 	<div class="wrapper-content">
 
-		{* Filters: filter[name], filter[login], filter[group]  *}
 		<table class="adminheading">
 			<tr>
 				<th>
 					<label for="username">{t}Filter by name{/t}
-						<input id="username" name="filter[name]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.name|default:""}" />
+						<input id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" />
 					</label>
 
 					<label for="userlogin">{t}or username:{/t}
-						<input id="userlogin" name="filter[login]" onchange="$('action').value='list';this.form.submit();" value="{$smarty.request.filter.login|default:""}" />
+						<input id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" />
 					</label>
 
 					<label for="usergroup">{t}and group:{/t}
-						<select id="usergroup" name="filter[group]" onchange="$('action').value='list';this.form.submit();">
+						<select id="usergroup" name="filter[group]">
 							{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
 								{assign var=filter_selected value=$smarty.request.filter.group}
 							{/if}
@@ -134,7 +133,7 @@
 			</tfoot>
 		</table>
 
-		<input type="hidden" id="action" name="action" value="" />
+		<input type="hidden" id="action" name="action" value="list" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
 	</div>

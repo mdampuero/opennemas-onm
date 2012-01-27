@@ -79,7 +79,7 @@
                                  </tr>
                                  <tr>
                                     <td valign="top"  align="right" style="padding:4px;" >
-                                        <label for="title">{t}Allow comments:{/t}</label>
+                                        <label for="title">{t}Allow comments{/t}</label>
                                     </td>
                                     <td valign="top" style="padding:4px;" >
                                         <select name="with_comment" id="with_comment" class="required">

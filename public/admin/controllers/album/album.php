@@ -396,7 +396,7 @@ switch($action) {
          if(!empty($msg) && $msg == true) {
              echo _("Positions saved successfully.");
          } else{
-             echo _("Have a problem, positions can't be saved.");
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
          }
         exit(0);
     break;

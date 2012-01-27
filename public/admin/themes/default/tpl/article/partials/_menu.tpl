@@ -2,7 +2,7 @@
 {if preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "new")}
 <div class="top-action-bar">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Article manager :: Creating new article{/t}</h2></div>
+		<div class="title"><h2>{t}Article manager{/t} :: {t}Creating new article{/t}</h2></div>
 		<ul class="old-button">
             {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
@@ -37,7 +37,7 @@
 {elseif preg_match('/article\.php/',$smarty.server.SCRIPT_NAME) && ($smarty.request.action eq "read")}
 <div class="top-action-bar">
 	<div class="wrapper-content">
-		<div class="title"><h2>{t}Article manager :: Editing article{/t}</h2></div>
+		<div class="title"><h2>{t}Article manager{/t} :: {t}Editing article{/t}</h2></div>
 		<ul class="old-button">
 			{if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
@@ -60,15 +60,7 @@
                     <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
-             {/acl}
-            
-            {*if !$article->isClone()}
-            <li>
-                <a href="#" onclick="recolectar(); sendFormValidate(this, '_blank', 'clone', '{$article->id}', 'formulario');" id="button_clone">
-                    <img border="0" src="{$params.IMAGE_DIR}clone.png" title="{t}Clone{/t}" /><br />{t}Clone{/t}
-                </a>
-            </li>
-            {/if*}
+            {/acl}
 
             <li>
                 <a href="#" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
@@ -92,7 +84,7 @@
                                 <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                             </a>
                         {else}
-                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&category={$smarty.request.category|default:""}&page={$smarty.get.page|default:""}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
+                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&page={$smarty.get.page|default:""}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
                             <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                         </a>
                         {/if}
@@ -108,7 +100,7 @@
 		<div class="title"><h2>{t}Library{/t} :: {t}Seeing article{/t}</h2></div>
 		<ul class="old-button">
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&category={$smarty.get.category}&page={$_GET['page']}" title="{t}Go back{/t}">
+				<a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&amp;category={$smarty.get.category}&amp;page={$_GET['page']}" title="{t}Go back{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>

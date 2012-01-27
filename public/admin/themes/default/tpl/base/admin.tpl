@@ -93,7 +93,7 @@
     			<div>
                     <div class="avatar">
                         {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="50"}
-                    </div><!-- / -->
+                    </div><!-- /.avatar -->
     				<div class="user-info">
                         <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
                         <div class="login-name">{$smarty.session.username}</div>
@@ -103,8 +103,8 @@
                             <li><a href="#" id="user_activity" title="{t}Active users in backend{/t}">{t}Connected users{/t} ({count_sessions})</a></li>
                             {/if}
                             <li><a href="javascript:salir('{t}Do you really want to exit from backend?{/t}','{$smarty.const.SITE_URL_ADMIN}/logout.php?csrf={$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from control panel{/t}">{t}Log out{/t}</a></li>
-                        </ul><!-- / -->
-                    </div><!-- / -->
+                        </ul><!-- /.links -->
+                    </div><!-- /.user-info -->
 			    </div>
     		</div>
         </div>

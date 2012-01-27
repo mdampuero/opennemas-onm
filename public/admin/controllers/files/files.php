@@ -285,7 +285,7 @@ switch($action) {
                 }
 
             } else {
-                $tpl->assign('message', _('There was an error while uploading the file. <br />Please, contact your system administration'));
+                $tpl->assign('message', _('There was an error while uploading the file. <br />Please, contact your system administrator.'));
             }
 
         } elseif (!isset($_GET['op'])) {

@@ -21,7 +21,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="MENU_MANAGER"
             privilege="MENU_ADMIN"
-            title="'.htmlspecialchars(_("Menu Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Menu manager"), ENT_QUOTES).'"
             id="menu_manager"
             link="controllers/menues/menues.php"
         />
@@ -90,7 +90,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
-            title="'.htmlspecialchars(_("Category Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Category manager"), ENT_QUOTES).'"
             id="category_manager"
             link="controllers/category/category.php"
         />
@@ -250,13 +250,13 @@ $menuXml = '<?xml version="1.0"?>
         <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
-            title="'.htmlspecialchars(_("Cache Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
             id="cache_manager"
             link="controllers/tpl_manager/tpl_manager.php"
             privilege="CACHE_ADMIN" />
         <node
             module_name="PHP_CACHE_MANAGER"
-            title="'.htmlspecialchars(_("PHP Cache Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("PHP Cache manager"), ENT_QUOTES).'"
             id="php_cache__manager"
             link="controllers/system_information/system_information.php?action=apc_iframe"
             privilege="ONLY_MASTERS" />
@@ -275,7 +275,7 @@ $menuXml = '<?xml version="1.0"?>
             privilege="ONLY_MASTERS" />
         <node
             module_name="MYSQL_MANAGER"
-            title="'.htmlspecialchars(_("Database Manager"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Database manager"), ENT_QUOTES).'"
             id="mysql_manager"
             link="controllers/system_information/system_information.php?action=mysql_check"
             privilege="ONLY_MASTERS" />

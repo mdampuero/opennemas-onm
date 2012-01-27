@@ -10,7 +10,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Pending manager{/t}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
+        <div class="title"><h2>{t}Pending articles{/t} :: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
         <ul class="old-button">
             {acl isAllowed="ARTICLE_DELETE"}
              <li>

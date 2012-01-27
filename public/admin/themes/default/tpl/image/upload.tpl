@@ -33,7 +33,7 @@
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t 1=$datos_cat[0]->title}Image manager :: Upload image to "%1"{/t}</h2></div>
+			<div class="title"><h2>{t}Image manager{/t} :: {t 1=$datos_cat[0]->title}Upload image to "%1"{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<a href="{$smarty.server.PHP_SELF}?category={$category}&amp;action=list_today"  name="submit_mult" value="{t}Go Back{/t}">

@@ -75,7 +75,7 @@ textarea{
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Image Manager{/t}:: {if $action eq 'search'} {t}Search{/t} {elseif $action eq 'searchResult'} {t}Search result{/t} {else} {t}Information{/t} {/if} </h2></div>
+            <div class="title"><h2>{t}Image manager{/t}:: {if $action eq 'search'} {t}Search{/t} {elseif $action eq 'searchResult'} {t}Search result{/t} {else} {t}Information{/t} {/if} </h2></div>
             <ul class="old-button">
                 <li>
                     <a class="admin_add" href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}" onmouseover="return escape('Listado de Categorias');" name="submit_mult" value="Listado de Categorias">
@@ -100,8 +100,8 @@ textarea{
                 {if !empty($search_criteria['minWidth'])}{t 1=$search_criteria['minWidth']}, min width of %1 px{/t}{/if}
                 {if !empty($search_criteria['maxHeight'])}{t 1=$search_criteria['maxHeight']}, max height of %1 px{/t}{/if}
                 {if !empty($search_criteria['minHeight'])}{t 1=$search_criteria['minHeight']}, min height of %1 px{/t}{/if}
-                {if !empty($search_criteria['maxWeight'])}{t 1=$search_criteria['maxWeight']}, max weight of %1 px{/t}{/if}
-                {if !empty($search_criteria['minWeight'])}{t 1=$search_criteria['minWeight']}, min weight of %1 px{/t}{/if}
+                {if !empty($search_criteria['maxWeight'])}{t 1=$search_criteria['maxWeight']}, max weight of %1 bytes{/t}{/if}
+                {if !empty($search_criteria['minWeight'])}{t 1=$search_criteria['minWeight']}, min weight of %1 bytes{/t}{/if}
                 {if !empty($search_criteria['type'])}{t 1=$search_criteria['type']}, type of "%1"{/t}{/if}
                 {if !empty($search_criteria['color'])}{t 1=$search_criteria['color']}, color "%1"{/t}{/if}
                 {if !empty($search_criteria['author'])}{t 1=$search_criteria['author']}, created by "%1"{/t}{/if}
@@ -202,7 +202,7 @@ textarea{
                     </th>
                     <td>
                         <select name="type" id="type" />
-                            <option value="" selected >{t} - All types - {/t}</option>
+                            <option value="" selected >{t}-- All --{/t}</option>
                             <option value="jpg" >jpg</option>
                             <option value="gif" >gif</option>
                             <option value="png" >png</option>

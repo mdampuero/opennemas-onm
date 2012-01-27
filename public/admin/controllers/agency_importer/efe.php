@@ -109,9 +109,9 @@ switch($action) {
                 && s::set('efe_sync_from_limit', $syncFrom)
                 && s::set('efe_agency_string', $agencyString))
             {
-                m::add(_('EFE configuration saved successfully'), m::SUCCESS);
+                m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
             } else {
-                m::add(_('There was an error while saving EFE configuration'), m::ERROR);
+                m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
             }
 
             Application::forward(SITE_URL_ADMIN.'/controllers/agency_importer/efe.php' . '?action=list');
