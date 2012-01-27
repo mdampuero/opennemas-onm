@@ -31,7 +31,6 @@ if(!Acl::check('BACKEND_ADMIN')) {
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Cache manager');
 
 /**
  * Utility functions
@@ -155,7 +154,7 @@ function buildFilter()
     }
 
     // return $filter and URI $params
-    return array( $filter, implode('&', $params), $page, $items_page);
+    return array($filter, implode('&', $params), $page, $items_page);
 }
 
 $template = new Template(TEMPLATE_USER);
