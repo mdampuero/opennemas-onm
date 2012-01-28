@@ -854,7 +854,13 @@ gettext("\"Metadata\"");
 gettext("Separated by coma");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
-gettext("Eliminar");
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Delete");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Unpublish");
@@ -863,7 +869,25 @@ gettext("Unpublish");
 gettext("Publish");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Publish");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
 gettext("New album");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("New album");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("New album");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Save positions");
+
+/* public/admin/themes/default/tpl//album/list.tpl */
+gettext("Save positions");
 
 /* public/admin/themes/default/tpl//album/list.tpl */
 gettext("Save positions");
@@ -1367,7 +1391,7 @@ gettext("Gallery");
 gettext("Link");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Incrustado");
+gettext("Embebed");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Related contents in frontpage");
@@ -1625,40 +1649,52 @@ gettext("Multimedia associated to this article:");
 gettext("Image or video for frontpage:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File name:");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File size:");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Footer text for frontpage image:");
+gettext("Image for frontpage");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Image for inner article page:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File name:");
+gettext("Image for inner article page");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Size:");
+gettext("File name");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File size:");
+gettext("Image size");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
+gettext("File size");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
+gettext("Creation date");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Description");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Tags");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Footer text for frontpage image:");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("File name");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Image size");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("File size");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Creation date");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Description");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Tags");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Footer text for inner image:");
@@ -1670,61 +1706,52 @@ gettext("Available images");
 gettext("Search images by title...");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File name:");
+gettext("Image or video for frontpage:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Size:");
+gettext("Video for frontpage");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File size:");
+gettext("Image for inner article page:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
+gettext("Video for inner article page");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
+gettext("File name");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File name:");
+gettext("Creation date");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Size:");
+gettext("Description");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File size:");
+gettext("Tags");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
+gettext("Footer text for frontpage image:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
+gettext("File name");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Video for inner article page:");
+gettext("Creation date");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Code:");
+gettext("Description");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
+gettext("Tags");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Footer text for inner video:");
 
 /* public/admin/themes/default/tpl//article/partials/_images.tpl */
+gettext("Available videos");
+
+/* public/admin/themes/default/tpl//article/partials/_images.tpl */
 gettext("Search videos by title...");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Code:");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//article/partials/_images.tpl */
-gettext("Description:");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Article manager");
@@ -2834,37 +2861,37 @@ gettext("All types");
 gettext("Frontpages");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Inner notice");
+gettext("Article: inner");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Mobile frontpages");
+gettext("Mobile: frontpages");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("RSS pages");
+gettext("RSS");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Frontpage opinion");
+gettext("Opinion: frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Inner opinion");
+gettext("Opinion: inner");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video frontpage");
+gettext("Video: frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video inner");
+gettext("Video: inner");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Album frontpage");
+gettext("Album: frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Album inner");
+gettext("Album: inner");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Poll frontpage");
+gettext("Poll: frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Poll inner");
+gettext("Poll: inner");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("and from");
@@ -2897,31 +2924,31 @@ gettext("Size");
 gettext("Actions");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Article cache file");
+gettext("Article inner cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video cache file");
+gettext("Video inner cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Gallery cache file");
+gettext("Album cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion inner article file");
+gettext("Opinion author index cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Mobile cache file");
+gettext("Mobile article inner cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Mobile frontpage cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Section Frontpage cache file");
+gettext("Category frontpage cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Poll cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Caché RSS");
+gettext("RSS cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("RSS Opinion author cache file ");
@@ -2930,16 +2957,16 @@ gettext("RSS Opinion author cache file ");
 gettext("Section Frontpage cache file");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video %1");
+gettext("Video: frontpage %1");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Video Frontpage");
+gettext("Video: main frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Frontpage %1");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion Author");
+gettext("Opinion of Author \"%1\"");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Album %1");
@@ -2951,10 +2978,16 @@ gettext("Album Frontpage");
 gettext("Poll %1");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Poll Frontpage");
+gettext("Poll: frontpage");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("RSS:");
+
+/* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Mobile frontpage: ");
+
+/* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
+gettext("Frontpage: ");
 
 /* public/admin/themes/default/tpl//tpl_manager/tpl_manager.tpl */
 gettext("(Page %1)");
@@ -3782,19 +3815,19 @@ gettext("There is no elements in the trash");
 gettext("Welcome to %1");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
-gettext("Media manager");
+gettext("Go to multimedia manager");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("Media manager");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
-gettext("New opinion");
+gettext("Create new opinion");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("New opinion");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
-gettext("New article");
+gettext("Create new article");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("New article");
