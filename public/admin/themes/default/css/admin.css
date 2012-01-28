@@ -1451,7 +1451,7 @@ div.action-bar .right{
 /* -------------------------------------------------------------
   Article edit form: image assignment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#article-form .thumbnail{
+.droppable-position .thumbnail{
 	border: 1px solid #DDDDDD;
 	border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -1459,36 +1459,36 @@ div.action-bar .right{
 	line-height: 1;
 	padding: 4px;
 }
-#article-form .thumbnail:hover {
+.droppable-position .thumbnail:hover {
   border-color: #0088CC;
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
 
-#article-form .article-resource-image, #article-form .article-resource-image-info {
+.article-resource-image, .article-resource-image-info {
     width: 270px;
     float:left;
     display:inline-block;
 }
-#article-form .article-resource-image img {
+.resource-container .article-resource-image img {
     width:100%;
     background:#ccc;
 }
-#article-form .article-resource-image-info {
+.resource-container .article-resource-image-info {
     width: 260px;
     margin-left:10px;
 }
-#article-form .article-resource-image-info label { display:inline;}
-#article-form .article-resource-image-info label { text-transform:none; }
-#article-form .article-resource-image-info { margin-top:10px; }
-#article-form .article-resource-image-info div { margin-bottom:3px; }
-#article-form .article-resource-footer { width:100%; display:block; }
-#article-form .delete-button { position:absolute; top:0px; right:0px; cursor:pointer;  }
-#article-form .delete-button img { width:20px; }
+.resource-container .article-resource-image-info label { display:inline;}
+.resource-container .article-resource-image-info label { text-transform:none; }
+.resource-container .article-resource-image-info { margin-top:10px; }
+.resource-container .article-resource-image-info div { margin-bottom:3px; }
+.resource-container .article-resource-footer { width:100%; display:block; }
+.resource-container .delete-button { position:absolute; top:0px; right:0px; cursor:pointer;  }
+.resource-container .delete-button img { width:20px; }
 
-#article-form .resource-container > div > div { position:relative; }
+.resource-container > div > div { position:relative; }
 
-#article-form .resource-container { width:590px;}
-#article-form .marker {
+.resource-container { width:590px;}
+.resource-container .marker {
 	color: Red;
 	display: inline-block;
 	font-weight: bolder;

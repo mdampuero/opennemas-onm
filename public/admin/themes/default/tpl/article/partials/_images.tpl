@@ -9,7 +9,7 @@
                     <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;{/if}</span></a></li>
                     <li><a href="#inner-image" title="{t}Image for inner article page:{/t}">{t}Image for inner article page{/t}{if isset($photo2) && $photo2->name}<span class="marker">&#164;{/if}</a></li>
                 </ul><!-- / -->
-                <div id="frontpage-image" class="droppable-image-position">
+                <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button" onclick="javascript:recuperar_eliminar('img1');">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
@@ -38,7 +38,7 @@
                         </div>
                     </div><!-- / -->
                 </div><!-- /frontpage-image -->
-                <div id="inner-image" class="droppable-image-position">
+                <div id="inner-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button" onclick="javascript:recuperar_eliminar('img2');">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" />
@@ -120,7 +120,7 @@
                     <li><a href="#inner-video" title="{t}Image for inner article page:{/t}">{t}Video for inner article page{/t}{if isset($video2) && $video2->pk_video}<span class="marker">&#164;{/if}</a></li>
                 </ul><!-- / -->
 
-                <div id="frontpage-video" class="droppable-video-position">
+                <div id="frontpage-video" class="droppable-video-position droppable-position">
                     <div>
                         <a class="delete-button" onclick="javascript:recuperar_eliminar('video1');">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
@@ -159,7 +159,7 @@
                     </div><!-- / -->
                 </div><!-- /frontpage-video -->
 
-                <div id="inner-video" class="droppable-video-position">
+                <div id="inner-video" class="droppable-video-position droppable-position">
                     <div>
                         <a class="delete-button" onclick="javascript:recuperar_eliminar('video2');">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
