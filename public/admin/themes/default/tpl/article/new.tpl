@@ -23,27 +23,41 @@
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript">
-document.observe('dom:loaded', function() {
-    if($('title')){
+    <script type="text/javascript">
+    document.observe('dom:loaded', function() {
+        if($('title')){
             new OpenNeMas.Maxlength($('title'), {});
             $('title').focus(); // Set focus first element
-    }
-    getGalleryImages('listByCategory','{$category}','','1');
-    getGalleryVideos('listByCategory','{$category}','','1');
-});
-jQuery(document).ready(function ($){
-    $('#article-form').tabs();
-});
-</script>
+        }
+    });
+    jQuery(document).ready(function ($){
+        $('#article-form').tabs();
+    });
+    </script>
+
+    {script_tag src="/tiny_mce/opennemas-config.js"}
+    <script defer="defer">
+        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
+
+        {if isset($article) && $article->isClone()}
+                OpenNeMas.tinyMceConfig.simple.readonly   = 1;
+                OpenNeMas.tinyMceConfig.advanced.readonly = 1;
+        {/if}
+
+        OpenNeMas.tinyMceConfig.simple.elements = "summary";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+
+        OpenNeMas.tinyMceConfig.advanced.elements = "body";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+    </script>
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="POST" name="formulario" id="formulario">
     {include file="article/partials/_menu.tpl"}
     <div class="wrapper-content">
+        {render_messages}
         <div id="article-form" class="tabs">
-            {render_messages}
 
             <ul>
                 <li>
@@ -140,33 +154,33 @@ jQuery(document).ready(function ($){
                                         <h3>{t}Statistics{/t}</h3>
                                         <div>
                                             {t}Frontpage title:{/t}
-                                            <input type="text" id="counter_title" name="counter_title" title="counter_title" disabled=disabled
+                                            <input type="text" id="counter_title" name="counter_title" disabled=disabled
                                                    value="0" onkeyup="countWords(document.getElementById('title'),this)"/> {t}words{/t}
                                         </div><!-- / -->
                                         <div>
                                             {t}Inner title{/t}
-                                            <input type="text" id="counter_title_int" name="counter_title_int" title="counter_title_int" disabled=disabled
+                                            <input type="text" id="counter_title_int" name="counter_title_int" disabled=disabled
                                                     value="0" onkeyup="countWords(document.getElementById('title_int'),this)"/> {t}words{/t}
                                         </div><!-- / -->
                                         <div>
                                             {t}Pretitle:{/t}
-                                            <input type="text" id="counter_subtitle" name="counter_subtitle" title="counter_subtitle" disabled=disabled
+                                            <input type="text" id="counter_subtitle" name="counter_subtitle" disabled=disabled
                                                     value="0" onkeyup="countWords(document.getElementById('subtitle'),this)"/> {t}words{/t}
                                         </div><!-- / -->
                                         <div>
                                             {t}Summary:{/t}
-                                            <input type="text" id="counter_summary" name="counter_summary" title="counter_summary" disabled=disabled
+                                            <input type="text" id="counter_summary" name="counter_summary" disabled=disabled
                                                     value="0"
                                                     onChange="countWords(document.getElementById('summary'),this)"
                                                     onkeyup="countWords(document.getElementById('summary'),this)"/> {t}words{/t}
                                         </div><!-- / -->
                                         <div>
                                             {t}Body:{/t}
-                                            <input type="text" id="counter_body" name="counter_body" title="counter_body" disabled=disabled
+                                            <input type="text" id="counter_body" name="counter_body" disabled=disabled
                                                     value="0" size="3" onChange="counttiny(document.getElementById('counter_body'));" onkeyup="counttiny(document.getElementById('counter_body'));"/> {t}words{/t}
                                         </div><!-- / -->
                                     </div><!-- / -->
-                                    <script type="text/javascript">
+                                    <script>
                                     document.observe("dom:loaded", function() {
                                         countWords(document.getElementById('title'), document.getElementById('counter_title'));
                                         countWords(document.getElementById('subtitle'), document.getElementById('counter_subtitle'));
@@ -189,12 +203,11 @@ jQuery(document).ready(function ($){
 
                                 <script type="text/javascript">
                                 $('title').observe('blur', function(evt) {
-                                        var tituloInt = $('title_int').value.strip();
-                                        if( tituloInt.length == 0 ) {
-                                                $('title_int').value = $F('title');
-                                                get_tags($('title_int').value);
-                                        }
-
+                                    var tituloInt = $('title_int').value.strip();
+                                    if( tituloInt.length == 0 ) {
+                                            $('title_int').value = $F('title');
+                                            get_tags($('title_int').value);
+                                    }
                                 });
                                 </script>
                             </td>
@@ -465,7 +478,7 @@ jQuery(document).ready(function ($){
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
                                             <option>{t}Link{/t} (todos)</option>
-                                            <option>{t}Incrustado{/t} (video album, image)</option>
+                                            <option>{t}Embebed{/t} (video album, image)</option>
                                         </select>
                                         {/is_module_activated}
                                     </td>
@@ -508,40 +521,6 @@ jQuery(document).ready(function ($){
         </div>
         {/if}
 
-        {if isset($clones)}
-        <div id="clones" style="width:98%">
-            {include file="article/partials/_clones.tpl"}
-        </div>
-        {/if}
-
-        {if isset($article) && is_object($article) && $article->isClone()}
-        {* Disable fields via javascript if $article->isClone() *}
-        <script type="text/javascript">
-        (function() {
-                var elements = ['title', 'description', 'subtitle', 'metadata', 'agency'];
-                elements.each(function(item){
-                        $(item).disabled = true;
-                        $(item).setAttribute('disabled', 'disabled');
-                });
-        }());
-        </script>
-        {/if}
-
-        {script_tag src="/tiny_mce/opennemas-config.js"}
-        <script type="text/javascript" language="javascript">
-            tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-            {if isset($article) && $article->isClone()}
-                    OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-                    OpenNeMas.tinyMceConfig.advanced.readonly = 1;
-            {/if}
-
-            OpenNeMas.tinyMceConfig.simple.elements = "summary";
-            tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-
-            OpenNeMas.tinyMceConfig.advanced.elements = "body";
-            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-        </script>
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
             <img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />

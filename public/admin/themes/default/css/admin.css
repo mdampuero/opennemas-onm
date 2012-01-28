@@ -688,10 +688,10 @@ legend {
 	.global-nav .logoonm, .global-nav > nav { float:left; display:inline-block; }
 
 	.global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
-	.global-nav .logoonm { width:140px; }
-		.global-nav .logoonm a{ color: White; }
-		.global-nav .logoonm div{ display:block; float:left; }
-		.global-nav .logoonm img{ margin:5px; vertical-align:middle; outline:none; }
+	.global-nav .logoonm { width:140px; margin:0; padding:0; height:35px;}
+		.global-nav .logoonm a{ color: White; height:35px; vertical-align:center;}
+		.global-nav .logoonm div { display:block; float:left; }
+		.global-nav .logoonm img{ vertical-align:middle; outline:none; padding-top:5px }
 		.global-nav .logoonm div.site-name{ padding-top:10px; }
 
 .global-nav.manager {
@@ -741,8 +741,6 @@ legend {
 	display:block; margin-top:5px; background-color:#444;
 }
 .global-user-tools .global-search .string-search:focus { background:url(../images/global-search-box-blur.png) 5px 3px no-repeat; padding-left:25px; width:250px; background-color:#ffffff; }
-.global-user-tools .global-search form { height:100%; }
-
 
 .global-user-tools .usermenu { position:relative; }
 .global-user-tools .usermenu:hover > div { display:block !important; margin:0; }
@@ -890,12 +888,13 @@ legend {
 			text-align: center;
 			vertical-align: middle;
 			width: 50px;
-			color: #3366CC;
+			color: #ccc !important;
 			outline: medium none;
 			text-decoration: none;
 			display: inline-block;
 			position: relative;
 			cursor: pointer;
+			text-indent:-9999px;
 		}
 
 		.buttons .button span.icon {
@@ -907,7 +906,11 @@ legend {
 		}
 
 		.buttons .button span.icon.home {
-			/*background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;*/
+			background: url("https://ssl.gstatic.com/s2/oz/images/sprites/common-full-2fd6df831c52ccf15a88279322948103.png") no-repeat scroll 0 -137px transparent;
+		}
+
+		.buttons .button span.icon img {
+			height:100%
 		}
 
 /* -------------------------------------------------------------
@@ -933,7 +936,7 @@ ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; back
 
 /* Root menu */
 ul#menu > li {  display: inline-block;  position: relative; height:100% }
-	ul#menu > li > a { margin: 0; padding: 11px 10px !important; }
+	ul#menu > li > a { margin: 0; padding: 10px 10px !important; line-height: 18px;}
 	ul#menu > li:hover > a { background-color: #111; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; }
 
 /* 2nd Menu */
@@ -1445,6 +1448,53 @@ div.action-bar .right{
 .table-info .left { float:left; text-align:left; }
 .table-info .center { text-align:center }
 
+/* -------------------------------------------------------------
+  Article edit form: image assignment
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#article-form .thumbnail{
+	border: 1px solid #DDDDDD;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	display: block;
+	line-height: 1;
+	padding: 4px;
+}
+#article-form .thumbnail:hover {
+  border-color: #0088CC;
+  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+}
+
+#article-form .article-resource-image, #article-form .article-resource-image-info {
+    width: 270px;
+    float:left;
+    display:inline-block;
+}
+#article-form .article-resource-image img {
+    width:100%;
+    background:#ccc;
+}
+#article-form .article-resource-image-info {
+    width: 260px;
+    margin-left:10px;
+}
+#article-form .article-resource-image-info label { display:inline;}
+#article-form .article-resource-image-info label { text-transform:none; }
+#article-form .article-resource-image-info { margin-top:10px; }
+#article-form .article-resource-image-info div { margin-bottom:3px; }
+#article-form .article-resource-footer { width:100%; display:block; }
+#article-form .delete-button { position:absolute; top:0px; right:0px; cursor:pointer;  }
+#article-form .delete-button img { width:20px; }
+
+#article-form .resource-container > div > div { position:relative; }
+
+#article-form .resource-container { width:590px;}
+#article-form .marker {
+	color: Red;
+	display: inline-block;
+	font-weight: bolder;
+	margin-left: 5px;
+	vertical-align: text-top;
+}
 /* -------------------------------------------------------------
   pills experiment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

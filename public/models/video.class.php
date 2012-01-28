@@ -85,7 +85,7 @@ class Video extends Content
                     $information = $this->information;
                 }
                 if ($this->author_name == 'internal') {
-                    $thumbnail = $information['thumbnails']['small'];
+                    $thumbnail = MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
                 } else {
                     $thumbnail = $information['thumbnail'];
                 }

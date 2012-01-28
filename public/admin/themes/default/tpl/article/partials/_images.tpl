@@ -4,139 +4,77 @@
     {is_module_activated name="IMAGE_MANAGER"}
     <tr>
         <td valign="top">
-            <div id="img_portada" style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
-                <table style="width:100%;">
-                    <tr>
-                        <td>
-                            <label>{t}Image or video for frontpage:{/t}</label>
-                        </td>
-                        <td  align='right'>
-                            <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('img1');">
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
-                            </a>
-                        </td>
-                    </tr>
-                    <input type="hidden" id="input_img1" name="img1" title="Imagen" value="{$article->img1|default:""}" size="70"/>
-                    <tr>
-                        <td align='center'>
-                            <div id="droppable_div1">
-                                {if $video1->pk_video}
-
-                                    <input type="hidden" id="input_video" name="fk_video" value="{$video1->pk_video}" size="70">
-
-									<img src="{$video1->information['thumbnail']}" id="change1"
-                                         name="{$video1->pk_video}" border="0" width="120px" />
-
+            <div id="related-images" class="resource-container tabs">
+                <ul>
+                    <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;{/if}</span></a></li>
+                    <li><a href="#inner-image" title="{t}Image for inner article page:{/t}">{t}Image for inner article page{/t}{if isset($photo2) && $photo2->name}<span class="marker">&#164;{/if}</a></li>
+                </ul><!-- / -->
+                <div id="frontpage-image" class="droppable-image-position">
+                    <div>
+                        <a class="delete-button" onclick="javascript:recuperar_eliminar('img1');">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
+                        </a>
+                        <div class="clearfix">
+                            <div class="thumbnail article-resource-image">
+                                {if isset($photo1) && $photo1->name}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
                                 {else}
-                                    <input type="hidden" id="input_video" name="fk_video" value="" size="70">
-                                    {if isset($photo1) && $photo1->name}
-                                        {if strtolower($photo1->type_img)=='swf'}
-                                            <object id="change1"  name="{$article->img1}" >
-                                                <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}"></param>
-                                                <embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}" width="300" ></embed>
-                                            </object>
-                                        {else}
-                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="change1" name="{$article->img1}" border="0" width="300px" />
-                                        {/if}
-                                    {else}
-                                        <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change1" name="default_img" border="0" width="300px" />
-                                    {/if}
+                                    <img src="http://placehold.it/290x226" id="frontpage_image" />
                                 {/if}
                             </div>
-                        </td>
-                        <td colspan="1" style="text-align:left;white-space:normal;">
-                            <div id="informa" style="text-align:left; width:260px;overflow:auto;">
-                          {if $video1->pk_video}
-
-										<b>Archivo: {$video2->title|truncate:"60"|default:""}</b> <br><b>Fecha de creaci&oacute;n:</b> {$video1->created}<br>
-										<b>Descripcion: </b>{$video1->description|clearslash|escape:'html'} <br><b>Tags:</b> {$video1->metadata}<br>
-
-                          {else}
-                                <p><strong>{t}File name:{/t}</strong><br/> {$photo1->name|default:'default_img.jpg'}</p>
-                                <p><strong>{t}Size:{/t}</strong><br/> {$photo1->width|default:0} x {$photo1->height|default:0} (px)</p>
-                                <p><strong>{t}File size:{/t}</strong><br/> {$photo1->size|default:0} Kb</p>
-                                <p><strong>{t}File creation date{/t}:</strong><br/> {$photo1->created|default:""}</p>
-                                <p><strong>{t}Description:{/t}</strong><br/> {$photo1->description|default:""|clearslash|escape:'html'}</p>
-                                <p><strong>Tags:</strong><br/> {$photo1->metadata|default:""}</p>
-
-                         {/if}
-                         </div>
-                            <div id="noimag" style="display: inline; width:100%; height:30px;"></div>
-                            <div id="noinfor" style="display: none; width:100%;  height:30px;"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan=2>
-                            <div id="footer_img_portada">
-                                <label for="title">{t}Footer text for frontpage image:{/t}</label>
-                                <textarea id="img1_footer" name="img1_footer" title="Imagen" style="width:90%">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                            <div id="image-information" class="article-resource-image-info">
+                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo1->name|default:'default_img.jpg'}</span></div>
+                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span> (px)</div>
+                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo1->size|default:0}</span> Kb</div>
+                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo1->created|default:""}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo1->description|escape:'html'}</span></div>
+                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo1->metadata|default:""}</span></div>
                             </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <br/>
-            <input type="hidden" id="posic" name="posic" value="0" />
-            <div id="img_interior"  style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
-                <table style="width:100%;">
-                    <tr>
-                        <td>
-                            <label>{t}Image for inner article page:{/t}</label>
-                        </td>
-                        <td  align='right'>
-                            <a style="cursor:pointer;" onclick="javascript:recuperar_eliminar('img2');">
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
-                            </a>
-                        </td>
-                    </tr>
-                    <input type="hidden" id="input_img2" name="img2" title="Imagen" value="{$article->img2|default:""}" size="70"/>
-                    <tr>
-                        <td align='center'>
-                            <div id="droppable_div2">
+                        </div><!-- / -->
+                        <div id="footer_img_portada" class="article-resource-footer">
+                            <label for="title">{t}Footer text for frontpage image:{/t}</label>
+                            <textarea name="img1_footer" style="width:95%">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="img1" value="{$article->img1|default:""}" />
+                        </div>
+                    </div><!-- / -->
+                </div><!-- /frontpage-image -->
+                <div id="inner-image" class="droppable-image-position">
+                    <div>
+                        <a class="delete-button" onclick="javascript:recuperar_eliminar('img2');">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" />
+                        </a>
+                        <div class="clearfix">
+                            <div id="droppable_div2" class="thumbnail article-resource-image">
                                 {if isset($photo2) && $photo2->name}
-                                    {if strtolower($photo2->type_img)=='swf'}
-                                        <object id="change2"  name="{$article->img1}" >
-                                            <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo2->path_file}{$photo2->name}"></param>
-                                            <embed src="{$smarty.const.MEDIA_IMG_PATH_URL}{$photo2->path_file}{$photo2->name}" width="300" ></embed>
-                                        </object>
-                                    {else}
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="change2" name="{$article->img2}" border="0" width="300px" />
-                                    {/if}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="inner_image" name="{$article->img2}" />
                                 {else}
-                                    <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change2" name="default_img" border="0" width="300px" />
+                                    <img src="http://placehold.it/290x226" id="inner_image" />
                                 {/if}
                             </div>
-                        </td>
-                        <td colspan="1" style="text-align:left;white-space:normal;">
-                            <div id="informa2" style="text-align:left;overflow:auto;width:260px; ">
-                                <p><strong>{t}File name:{/t}</strong><br/> {$photo2->name|default:'default_img.jpg'}</p>
-                                <p><strong>{t}Size:{/t}:</strong><br/> {$photo2->width|default:0} x {$photo2->height|default:0} (px)</p>
-                                <p><strong>{t}File size:{/t}</strong><br/> {$photo2->size|default:0} Kb</p>
-                                <p><strong>{t}File creation date{/t}:</strong><br/> {$photo2->created|default:""}</p>
-                                <p><strong>{t}Description:{/t}</strong><br/> {$photo2->description|default:""|clearslash|escape:'html'}</p>
-                                <p><strong>Tags:</strong><br/> {$photo2->metadata|default:""}</p>
+                            <div id="image-information" class="article-resource-image-info">
+                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
+                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
+                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
+                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo2->created|default:""}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo2->description|escape:'html'}</span></div>
+                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo2->metadata|default:""}</span></div>
                             </div>
-                            <div id="noimag2" style="display: inline; width:100%; height:30px;">	</div>
-                            <div id="noinfor2" style="display: none; width:100%; height:30px;"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan=2>
-                            <div id="footer_img_interior">
-                                <label for="title">{t}Footer text for inner image:{/t}</label>
-                                <textarea id="img2_footer" name="img2_footer" title="Imagen" style="width:90%">{$article->img2_footer|clearslash|escape:'html'}</textarea>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                        </div>
+                        <div id="footer_img_interior" class="article-resource-footer">
+                            <label for="title">{t}Footer text for inner image:{/t}</label>
+                            <textarea name="img2_footer" title="Imagen" style="width:95%">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="img2" value="{$article->img2|default:""}" />
+                        </div>
+                    </div>
+                </div><!-- /frontpage-image -->
+            </div><!-- /related-images -->
+
         </td>
         <td valign="top" style="width:430px">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
                 <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
             </div>
-            <div id="photos_container" class="photos"
-                 style="border:1px solid #ccc;  padding:7px;">
+            <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
                 <table>
                     <tr>
                         <td align="left">
@@ -157,178 +95,106 @@
                         </td>
                     </tr>
                 </table>
-                <div id="photos" class="photos">
+                <div id="photos">
                     {*AJAX imageGallery *}
                 </div>
            </div>
         </td>
     </tr>
-    <script type="text/javascript">
-        Droppables.add('droppable_div1', {
-            accept: ['draggable', 'video'],
-            onDrop: function(element) {
-
-    				if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
-    					var ancho=element.getAttribute('de:ancho');
-    					if(element.getAttribute('de:ancho')>300) { ancho=300; }
-    					$('droppable_div1').innerHTML='<object id="change1"><param name="movie" value="'+
-    												   element.getAttribute('de:url') +'/'+ element.getAttribute('de:mas')
-    												   + '"><embed src="'+ element.getAttribute('de:url')
-    												   +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
-    					$('informa').innerHTML=' es un Flash';
-    					$('informa').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
-    					$('input_img1').value=element.name;
-
-    			   } else {
-    				   var source=element.src;
-    				   if($('change1').src){
-    					   recuperarOpacity('img1');
-
-    					   if(element.getAttribute('class')=='draggable'){
-    						   $('change1').src = source.replace( '140-100-','');
-    					   }else{
-    						   $('change1').src = source;
-    					   }
-
-    					   $('change1').name=element.name;
-    					   var ancho=element.getAttribute('de:ancho');
-    					   if(element.getAttribute('de:ancho')>300) { ancho=300; }
-    					   $('change1').setAttribute('width','300');
-    				   }else{
-    						var ancho=element.getAttribute('de:ancho');
-    						$('droppable_div1').innerHTML= '<img src="'+ source.replace( '140-100-','') + '"  id="change1" border="0" style="max-width: 300px;" width="'+ancho+'" >';
-    				   }
-    				   $('informa').innerHTML=' ';
-    				   if(element.getAttribute('class')=='draggable'){
-    					   $('input_img1').value=element.name;
-    					   $('informa').innerHTML= " <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
-    						   "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
-    						   "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
-    						   "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
-    						   "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
-    						   "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
-    					   $('img1_footer').value= element.getAttribute('de:description');
-    					   $('input_video').value='';
-    				   }else{
-    					  $('input_video').value=element.name;
-    					  $('informa').innerHTML="<strong>Codigo: </strong><br/>"+element.getAttribute('title')  + "<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created') + "<br><strong>Descripcion: </strong><br/>" + element.getAttribute('de:description') +"<br><strong>Tags: </strong><br/>" + element.getAttribute('de:tags');
-    					  $('img1_footer').value= element.getAttribute('de:description');
-    					  $('input_img1').value='';
-    				   }
-    				   // En firefox 2, precísase reescalar o div co alto da imaxe
-    				   if( /Firefox\/2/.test(navigator.userAgent) ) {
-    					   $('droppable_div1').style.height = $('change1').height + 'px';
-    				   }
-    			   }
-
-                }
-          });
-          Droppables.add('droppable_div2', {
-            accept: 'draggable',
-            onDrop: function(element) {
-                     if((element.getAttribute('de:type_img')=='swf') || (element.getAttribute('de:type_img')=='SWF')){
-                         var ancho=element.getAttribute('de:ancho');
-                         if(element.getAttribute('de:ancho')>300) { ancho=300; }
-                         $('droppable_div2').innerHTML='<object id="change2"><param name="movie" value="'+
-                                                        element.getAttribute('de:url') +'/'+ element.getAttribute('de:mas')
-                                                        + '"><embed src="'+ element.getAttribute('de:url')
-                                                        +'/'+element.getAttribute('de:mas')+ '" width="'+ancho+'" ></embed></object>';
-                         $('informa2').innerHTML=' es un Flash';
-                         $('informa2').innerHTML="<strong>Archivo: </strong><br/>"+element.getAttribute('de:mas') + "<br><strong>Dimensiones: </strong><br/>"+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + " (px)<br><strong>Peso: </strong><br/>" + element.getAttribute('de:peso') + "Kb<br><strong>Fecha Creaci&oacute;n: </strong><br/>" + element.getAttribute('de:created');
-                         $('input_img2').value=element.name;
-
-                    } else {
-                        var source2=element.src;
-                        if($('change2').src){
-                                recuperarOpacity('img2');
-                                $('change2').src = source2.replace( '140-100-','');
-                                $('change2').name=element.name;
-                                var ancho = element.getAttribute('de:ancho');
-                                if(element.getAttribute('de:ancho')>300) { ancho=300; }
-                                $('change2').setAttribute('width',ancho);
-                         } else{
-                             var ancho = element.getAttribute('de:ancho');
-                             $('droppable_div2').innerHTML= '<img src="'+ source2.replace( '140-100-','') + '"  id="change2" border="0" style="max-width: 300px;" width="'+ancho+'" >';
-                        }
-                        $('input_img2').value=element.name;
-                        $('informa2').innerHTML=' ';
-                        $('informa2').innerHTML=" <p><strong>{t}File name:{/t}</strong><br/> " + element.getAttribute('de:mas') + "</p>"+
-                            "<p><strong>{t}Size:{/t}:</strong><br/> "+element.getAttribute('de:ancho') + " x " +element.getAttribute('de:alto') + "(px)</p>"+
-                            "<p><strong>{t}File size:{/t}</strong><br/> " + element.getAttribute('de:peso') + " Kb</p>"+
-                            "<p><strong>{t}File creation date{/t}:</strong><br/> " + element.getAttribute('de:created') + "</p>"+
-                            "<p><strong>{t}Description:{/t}</strong><br/> " + element.getAttribute('de:description') +"</p>"+
-                            "<p><strong>Tags:</strong><br/> "+ element.getAttribute('de:tags')+"</p> ";
-                         $('img2_footer').value= element.getAttribute('de:description');
-
-                        // En firefox 2, precísase reescalar o div co alto da imaxe
-                        if( /Firefox\/2/.test(navigator.userAgent) ) {
-                            $('droppable_div2').style.height = $('change2').height + 'px';
-                        }
-                   }
-             }
-          });
+    <script>
+        jQuery(document).ready(function($){
+            $('#related-images').tabs();
+        });
+        getGalleryImages('listByCategory','{$category}','','1');
     </script>
     {/is_module_activated}
-
     {is_module_activated name="VIDEO_MANAGER"}
-    <br/>
+    <tr>
+        <td colspan=2><hr></td>
+    </tr>
     <tr>
         <td valign="top">
-            <div id="video_interior" style=" display:block; border-bottom:1px solid #ccc; background:#eee; padding:10px">
-                <table style="width:100%;">
-                    <tr>
-                        <td>
-                                <h2>{t}Video for inner article page:{/t}</h2>
-                        </td>
-                        <td  align='right'>
-                            <a style="cursor:pointer;"  onclick="javascript:recuperar_eliminar('video2');">
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" border="0" align="absmiddle" />
-                            </a>
-                        </td>
-                    </tr>
-                    <input type="hidden" id="input_video2" name="fk_video2" value="{$video2->pk_video}" size="70">
-                    <tr>
-                        <td align='center'>
-                            <div id="droppable_div3">
-                                {if isset($video2) && $video2->pk_video}
-                                    {if $video2->author_name == 'internal'}
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}"  id="change3" name="{$article->fk_video2}" border="0" width="120px" />
-                                    {else}
-                                    <img src="{$video2->information['thumbnail']}"  id="change3" name="{$article->fk_video2}" border="0" width="120px" />
-                                    {/if}
+            <div id="related-videos" class="resource-container tabs">
+                <ul>
+                    <li><a href="#frontpage-video" title="{t}Image or video for frontpage:{/t}">{t}Video for frontpage{/t}{if isset($video1) && $video1->pk_video}<span class="marker">&#164;{/if}</a></li>
+                    <li><a href="#inner-video" title="{t}Image for inner article page:{/t}">{t}Video for inner article page{/t}{if isset($video2) && $video2->pk_video}<span class="marker">&#164;{/if}</a></li>
+                </ul><!-- / -->
+
+                <div id="frontpage-video" class="droppable-video-position">
+                    <div>
+                        <a class="delete-button" onclick="javascript:recuperar_eliminar('video1');">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video1" alt="Eliminar" title="Eliminar" />
+                        </a>
+                        <div class="clearfix">
+                            <div class="thumbnail article-resource-image">
+                                {if $video1->pk_video}
+                                    <input type="hidden" id="input_video" name="fk_video" value="{$video1->pk_video}" size="70">
+                                    <img src="{$video1->information['thumbnail']}" id="change1"
+                                         name="{$video1->pk_video}" border="0" width="120px" />
                                 {else}
-                                    <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" id="change3" name="default_img" border="0" width="300px" />
+                                    <input type="hidden" id="input_video" name="fk_video" value="" size="70">
+                                    {if isset($video1) && $video1->pk_video}
+                                        {if $video1->author_name == 'internal'}
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
+                                        {else}
+                                        <img src="{$video1->information['thumbnail']}" />
+                                        {/if}
+                                    {else}
+                                        <img src="http://placehold.it/290x226" id="change1" />
+                                    {/if}
                                 {/if}
                             </div>
-                        </td>
-                        <td colspan="1" style="text-align:left;white-space:normal;">
-                            <div id="informa3" style="text-align:left;width:260px; overflow:auto;">
-                                <p><strong>{t}Code:{/t}</strong><br/>{$video2->title|truncate:"60"|default:""}</p>
-                                <p><strong>{t}File creation date{/t}:</strong><br/> {$video2->created|default:""}</p>
-                                <p><strong>{t}Description:{/t}</strong><br/> {$video2->description|default:""|clearslash|escape:'html'}</p>
-                                <p><strong>Tags:</strong><br/> {$video2->metadata|default:""}</p>
+                            <div class="article-resource-image-info">
+                                <div><label>{t}File name{/t}</label>     <span class="filename">{$video1->name|default:'default_img.jpg'}</span></div>
+                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video1->created|default:""}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$video1->description|escape:'html'}</span></div>
+                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$video1->metadata|default:""}</span></div>
+                            </div>
+                        </div><!-- / -->
+                        <div class="article-resource-footer">
+                            <label for="title">{t}Footer text for frontpage image:{/t}</label>
+                            <!-- <textarea name="img1_footer" style="width:95%">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
+                            <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" />
+                        </div>
+                    </div><!-- / -->
+                </div><!-- /frontpage-video -->
 
+                <div id="inner-video" class="droppable-video-position">
+                    <div>
+                        <a class="delete-button" onclick="javascript:recuperar_eliminar('video2');">
+                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
+                        </a>
+                        <div class="clearfix">
+                            <div class="thumbnail article-resource-image">
+                                {if isset($video2) && $video2->pk_video}
+                                    {if $video2->author_name == 'internal'}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
+                                    {else}
+                                    <img src="{$video2->information['thumbnail']}"/>
+                                    {/if}
+                                {else}
+                                    <img src="http://placehold.it/290x226" id="change1" />
+                                {/if}
                             </div>
-                            <div id="noimag3" style="display: inline; width:380px; height:30px;"></div>
-                            <div id="noinfor3" style="display: none; width:100%;  height:30px;"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan=2>
-                            <div id="video2_footer">
-                                <label for="title">{t}Footer text for inner video:{/t}</label><br/>
-                                <textarea id="footer_video2" name="footer_video2" style="width:90%">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                            <div id="image-information" class="article-resource-image-info">
+                                <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
+                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
+                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
                             </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                        </div>
+                        <div class="article-resource-footer">
+                            <label for="title">{t}Footer text for inner video:{/t}</label>
+                            <textarea name="footer_video2" style="width:95%">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="fk_video2" value="{$video2->pk_video}" />
+                        </div>
+                    </div>
+                </div><!-- /inner-video -->
+            </div><!-- /related-videos -->
         </td>
         <td valign="top">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
-                <a style="cursor:pointer;" onclick="new Effect.toggle($('videos-container'),'blind')">
-                    <strong>Videos</strong>
-                </a>
+                <strong>{t}Available videos{/t}</strong>
             </div>
             <div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
                 <table>
@@ -342,7 +208,7 @@
                             </div>
                         </td>
                         <td align="right">
-                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listbyCategory',this.options[this.selectedIndex].value,'', 1);">
+                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listbyCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
                                 <option value="0">GLOBAL</option>
                                 {section name=as loop=$allcategorys}
                                     <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -355,32 +221,17 @@
                     </tr>
                 </table>
                 <br>
-                <div id="videos" class="photos">
+                <div id="videos">
                     {*AJAX videoGallery *}
                </div>
             </div>
         </td>
-    </tr>
-    <script type="text/javascript">
-    Droppables.add('droppable_div3', {
-        accept: 'video',
-        onDrop: function(element) {
-            recuperarOpacity('video2');
-            var source3=element.src;
-            if($('change3')){
-                $('change3').src = source3;
-                $('change3').name=element.name;
-                $('change3').setAttribute('width',300);
-            }
-            $('input_video2').value=element.name;
-            $('informa3').innerHTML=' ';
-            $('informa3').innerHTML = "<p><strong>{t}Code:{/t}</strong><br/>" + element.getAttribute('title')  + "</p>"+
-                                "<p><strong>{t}File creation date{/t}:</strong><br/>" + element.getAttribute('de:created') + "</p>"+
-                                "<p><strong>{t}Description:{/t}</strong><br/>" + element.getAttribute('de:description') +"</p>"+
-                                "<p><strong>Tags:</strong><br/>" + element.getAttribute('de:tags')+"</p>";
-            $('footer_video2').value= element.getAttribute('de:description');
-        }
+    </tr>   
+    <script>
+    jQuery(document).ready(function($){
+        $('#related-videos').tabs();
     });
+    getGalleryVideos('listByCategory','{$category}','','1', 'videos');
     </script>
     {/is_module_activated}
 </table>

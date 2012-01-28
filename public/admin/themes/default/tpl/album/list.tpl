@@ -20,29 +20,29 @@
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Eliminar{/t}
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" value="noFrontpage" title="noFrontpage">
+                        <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />{t}Publish{/t}
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" title="{t}Publish{/t}">
+                        <img src="{$params.IMAGE_DIR}publish.gif" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_CREATE"}
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Album');" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />{t}New album{/t}
+                    <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New album{/t}" >
+                        <img src="{$params.IMAGE_DIR}/album.png" alt="{t}New album{/t}"><br />{t}New album{/t}
                     </a>
                 </li>
                 {/acl}
@@ -50,8 +50,8 @@
                      {if $category eq 'widget'}
                         <li class="separator"></li>
                         <li>
-                            <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="Guardar Positions" alt="Guardar Posiciones">
-                                <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                            <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                             </a>
                         </li>
                     {/if}
@@ -59,8 +59,8 @@
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
                     <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config album module{/t}">
+                            <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                             {t}Configurations{/t}
                         </a>
                     </li>
@@ -74,10 +74,10 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=widget" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
             </li>
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
             </li>
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
@@ -127,10 +127,10 @@
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $albums[as]->available == 1}
                                 <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
                                 <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}Pending{/t}"/></a>
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
                 </td>
@@ -159,14 +159,14 @@
                         {acl isAllowed="ALBUM_UPDATE"}
                         <li>
                            <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
-                                   <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
+                                   <img src="{$params.IMAGE_DIR}edit.png" /></a>
                         </li>
                         {/acl}
 
                         {acl isAllowed="ALBUM_DELETE"}
                         <li>
                             <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
-                               <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                               <img src="{$params.IMAGE_DIR}trash.png" />
                             </a>
                         </li>
                         {/acl}

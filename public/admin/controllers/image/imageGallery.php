@@ -1,6 +1,7 @@
 <?php
 /*
  * This file is part of the onm package.
+ *
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -24,13 +25,12 @@ $cm = new ContentManager();
  **/
 if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
 
-    if( !defined('ITEMS_GALLERY') ){
-        define('ITEMS_GALLERY', 20);
-    }
+    if (!defined('ITEMS_GALLERY') ){ define('ITEMS_GALLERY', 20); }
+
+    $htmlOut ='';
 
     $action   = filter_input(INPUT_GET,'action',FILTER_SANITIZE_STRING, array('options' => array('default'=> 'listByMetadatas')));
     $page     = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT,  array('options' => array('default'=> 1)));
-    $html_out ='';
 
     $category = filter_input( INPUT_GET, 'category', FILTER_VALIDATE_INT, array('options' => array('default'=> 0)));
 
@@ -59,7 +59,7 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
                 $szWhere .= ')';
             } else {
                 $szWhere = "TRUE";
-                $html_out .= _(
+                $htmlOut .= _(
                     "<div>"
                     ."<p>Unable to find any content matching your search criterira.</p>" 
                     ."<p>Your search string <strong>" . $metadatas . "</strong> doesn't have any matched content.</p>"
@@ -129,7 +129,7 @@ if (\Onm\Module\ModuleManager::isActivated('IMAGE_MANAGER')) {
     }
 
     // AJAX REQUEST
-    $html_out .= $tpl->fetch('image/image_gallery.ajax.tpl');
-    Application::ajax_out($html_out);
+    $htmlOut .= $tpl->fetch('image/image_gallery.ajax.tpl');
+    Application::ajax_out($htmlOut);
 }
 
