@@ -77,7 +77,7 @@
 {/if}
 <script>
 jQuery(document).ready(function($){
-    $( "#photos_container #photos .draggable-handler" ).draggable({ opacity: 0.5});
+    $( "#photos_container #photos .draggable-handler" ).draggable({ opacity: 0.5, helper: "clone"});
     $( ".droppable-image-position" ).droppable({
         accept: "#photos_container #photos img",
         drop: function( event, ui ) {
