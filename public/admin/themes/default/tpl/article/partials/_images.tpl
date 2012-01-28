@@ -3,11 +3,11 @@
 <table style="width:100%">
     {is_module_activated name="IMAGE_MANAGER"}
     <tr>
-        <td valign="top">
+        <td>
             <div id="related-images" class="resource-container tabs">
                 <ul>
-                    <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;{/if}</span></a></li>
-                    <li><a href="#inner-image" title="{t}Image for inner article page:{/t}">{t}Image for inner article page{/t}{if isset($photo2) && $photo2->name}<span class="marker">&#164;{/if}</a></li>
+                    <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;</span>{/if}</a></li>
+                    <li><a href="#inner-image" title="{t}Image for inner article page:{/t}">{t}Image for inner article page{/t}{if isset($photo2) && $photo2->name}<span class="marker">&#164;</span>{/if}</a></li>
                 </ul><!-- / -->
                 <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>
@@ -22,7 +22,7 @@
                                     <img src="http://placehold.it/290x226" id="frontpage_image" />
                                 {/if}
                             </div>
-                            <div id="image-information" class="article-resource-image-info">
+                            <div class="article-resource-image-info">
                                 <div><label>{t}File name{/t}</label>     <span class="filename">{$photo1->name|default:'default_img.jpg'}</span></div>
                                 <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span> (px)</div>
                                 <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo1->size|default:0}</span> Kb</div>
@@ -51,7 +51,7 @@
                                     <img src="http://placehold.it/290x226" id="inner_image" />
                                 {/if}
                             </div>
-                            <div id="image-information" class="article-resource-image-info">
+                            <div class="article-resource-image-info">
                                 <div><label>{t}File name{/t}</label>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
                                 <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
                                 <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
@@ -70,14 +70,14 @@
             </div><!-- /related-images -->
 
         </td>
-        <td valign="top" style="width:430px">
+        <td style="width:430px">
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
                 <a onclick="new Effect.toggle($('photos_container'),'blind')" ><strong>{t}Available images{/t}</strong></a>
             </div>
             <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
                 <table>
                     <tr>
-                        <td align="left">
+                        <td >
                             <input id="stringImageSearch" name="stringImageSearch" type="text"
                                onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
                                onclick="this.select();" placeholder="{t}Search images by title...{/t}" />
@@ -101,23 +101,18 @@
            </div>
         </td>
     </tr>
-    <script>
-        jQuery(document).ready(function($){
-            $('#related-images').tabs();
-        });
-        getGalleryImages('listByCategory','{$category}','','1');
-    </script>
     {/is_module_activated}
+
     {is_module_activated name="VIDEO_MANAGER"}
     <tr>
         <td colspan=2><hr></td>
     </tr>
     <tr>
-        <td valign="top">
+        <td>
             <div id="related-videos" class="resource-container tabs">
                 <ul>
-                    <li><a href="#frontpage-video" title="{t}Image or video for frontpage:{/t}">{t}Video for frontpage{/t}{if isset($video1) && $video1->pk_video}<span class="marker">&#164;{/if}</a></li>
-                    <li><a href="#inner-video" title="{t}Image for inner article page:{/t}">{t}Video for inner article page{/t}{if isset($video2) && $video2->pk_video}<span class="marker">&#164;{/if}</a></li>
+                    <li><a href="#frontpage-video" title="{t}Image or video for frontpage:{/t}">{t}Video for frontpage{/t}{if isset($video1) && $video1->pk_video}<span class="marker">&#164;</span>{/if}</a></li>
+                    <li><a href="#inner-video" title="{t}Image for inner article page:{/t}">{t}Video for inner article page{/t}{if isset($video2) && $video2->pk_video}<span class="marker">&#164;</span>{/if}</a></li>
                 </ul><!-- / -->
 
                 <div id="frontpage-video" class="droppable-video-position droppable-position">
@@ -128,11 +123,11 @@
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
                                 {if $video1->pk_video}
-                                    <input type="hidden" id="input_video" name="fk_video" value="{$video1->pk_video}" size="70">
-                                    <img src="{$video1->information['thumbnail']}" id="change1"
-                                         name="{$video1->pk_video}" border="0" width="120px" />
+                                    <input type="hidden" id="input_video" name="fk_video" value="{$video1->pk_video}">
+                                    <img src="{$video1->information['thumbnail']}"
+                                         name="{$video1->pk_video}" style="width:120px" />
                                 {else}
-                                    <input type="hidden" id="input_video" name="fk_video" value="" size="70">
+                                    <input type="hidden" id="input_video" name="fk_video" value="">
                                     {if isset($video1) && $video1->pk_video}
                                         {if $video1->author_name == 'internal'}
                                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />
@@ -140,7 +135,7 @@
                                         <img src="{$video1->information['thumbnail']}" />
                                         {/if}
                                     {else}
-                                        <img src="http://placehold.it/290x226" id="change1" />
+                                        <img src="http://placehold.it/290x226" />
                                     {/if}
                                 {/if}
                             </div>
@@ -173,10 +168,10 @@
                                     <img src="{$video2->information['thumbnail']}"/>
                                     {/if}
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="change1" />
+                                    <img src="http://placehold.it/290x226" />
                                 {/if}
                             </div>
-                            <div id="image-information" class="article-resource-image-info">
+                            <div class="article-resource-image-info">
                                 <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
                                 <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
                                 <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
@@ -192,7 +187,7 @@
                 </div><!-- /inner-video -->
             </div><!-- /related-videos -->
         </td>
-        <td valign="top">
+        <td>
             <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
                 <strong>{t}Available videos{/t}</strong>
             </div>
@@ -200,14 +195,14 @@
                 <table>
                     <tr>
                         <td>
-                            <div class="cajaBusqueda" style="width:100%;" align="left">
+                            <div class="cajaBusqueda" style="width:100%;" >
                                 <input class="textoABuscar" id="stringVideoSearch" name="stringVideoSearch" type="text"
                                        onkeypress="onVideoKeyEnter(event, $('category_imag').options[$('category_video').selectedIndex].value, $('stringVideoSearch').value,1);"
                                        onclick="this.select();" placeholder="{t}Search videos by title...{/t}"
-                                       align="left"/>
+                                       />
                             </div>
                         </td>
-                        <td align="right">
+                        <td>
                             <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listbyCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
                                 <option value="0">GLOBAL</option>
                                 {section name=as loop=$allcategorys}
@@ -227,28 +222,26 @@
             </div>
         </td>
     </tr>   
-    <script>
-    jQuery(document).ready(function($){
-        $('#related-videos').tabs();
-    });
-    getGalleryVideos('listByCategory','{$category}','','1', 'videos');
-    </script>
+    
     {/is_module_activated}
 </table>
 
-<style type="text/css">
-	div.pagination {
-		margin-top:10px;
-		display:block;
-	}
-	.pagination a {
-		border:1px solid #ccc;
-		padding:5px;
-		background:#fff;
-	}
-	.pagination a:hover {
-		background:#dfdfdf;
+{is_module_activated name="IMAGE_MANAGER"}
+<script>
+jQuery(document).ready(function($){
+    $('#related-images').tabs();
+});
+getGalleryImages('listByCategory','{$category}','','1');
+</script>
+{/is_module_activated}
 
-	}
-</style>
+{is_module_activated name="VIDEO_MANAGER"}
+<script>
+jQuery(document).ready(function($){
+    $('#related-videos').tabs();
+});
+getGalleryVideos('listByCategory','{$category}','','1', 'videos');
+</script>
+{/is_module_activated}
+
 {/is_module_activated}

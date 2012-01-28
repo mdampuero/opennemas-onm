@@ -6,27 +6,27 @@
 		<ul class="old-button">
             {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
-				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
-				<img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+				<img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
 				</a>
 			</li>
             {/acl}
             {acl isAllowed="ARTICLE_CREATE"}
 			<li>
 				<a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'create', 0, 'formulario');" id="button_save">
-				<img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
+				<img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
 				</a>
 			</li>
              {/acl}
             {acl isAllowed="ARTICLE_UPDATE"}
 			<li>
 				<a href="#"  accesskey="P" onclick="recolectar(); previewArticle('','formulario','create'); return false;" id="button_preview">
-				<img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
+				<img src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" /><br />{t}Preview{/t}</a>
 			</li>
 			<li class="separator"></li>
 			<li>
-				<a href="{$smarty.server.PHP_SELF}?action={if isset($smarty.session.desde)}{$smarty.session.desde|default:""}{else}list_pendientes{/if}&category={$smarty.request.category|default:"todas"}&page={$smarty.get.page|default:0}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+				<a href="{$smarty.server.PHP_SELF}?action={if isset($smarty.session.desde)}{$smarty.session.desde|default:""}{else}list_pendientes{/if}&amp;category={$smarty.request.category|default:"todas"}&amp;page={$smarty.get.page|default:0}" title="{t}Cancel{/t}">
+					<img src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
             {/acl}
@@ -42,50 +42,50 @@
 			{if ($article->content_status eq 0) && ($article->available eq 1)}
             <li>
                 <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'restore', '{$article->id|default:""}', 'formulario');" onmouseover="return escape('Recuperar');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
+                    <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Restore{/t}"><br />{t}Restore{/t}
                 </a>
             </li>
             {/if}
 
             {acl isAllowed="ARTICLE_UPDATE"}
 		    <li>
-                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" value="{t}Save and continue{/t}" title="{t}Save and continue{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                <a href="#" class="admin_add" onClick="recolectar();sendFormValidate(this, '_self', 'validate', '{$article->id|default:""}', 'formulario');" title="{t}Save and continue{/t}">
+                    <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                 </a>
 		    </li>
              {/acl}
             {acl isAllowed="ARTICLE_UPDATE"}
             <li>
                 <a href="#" class="admin_add" onClick="recolectar(); sendFormValidate(this, '_self', 'update', '{$article->id|default:""}', 'formulario');" id="button_save">
-                    <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
+                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
                 </a>
             </li>
             {/acl}
 
             <li>
                 <a href="#" accesskey="P" onmouseover="return escape('<u>P</u>revisualizar');" onclick="recolectar(); previewArticle('{$article->id}','formulario','update'); return false;" id="button_preview">
-                    <img border="0" src="{$params.IMAGE_DIR}preview.png" title="Previsualizar" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
+                    <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
                 </a>
             </li>
 			<li class="separator"></li>
 			<li>
                 {if $smarty.session.desde eq 'search_advanced'  && isset($smarty.get.stringSearch)}
-                     <a href="#" class="admin_add"  onClick="window.location='controllers/search_advanced/search_advanced.php?action=search&stringSearch={$smarty.get.stringSearch}';">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                     <a href="#" class="admin_add"  onClick="window.location='controllers/search_advanced/search_advanced.php?action=search&amp;stringSearch={$smarty.get.stringSearch}';">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
 					</a>
                 {else}
                     {if $smarty.session.desde eq 'europa_press_import'}
-                        <a href="/admin/controllers/agency_importer/europapress.php" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                        <a href="/admin/controllers/agency_importer/europapress.php" title="{t}Cancel{/t}">
+                            <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                         </a>
                     {else}
                         {if $smarty.session.desde eq 'efe_press_import'}
-                            <a href="/admin/controllers/agency_importer/efe.php" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                            <a href="/admin/controllers/agency_importer/efe.php" title="{t}Cancel{/t}">
+                                <img src="{$params.IMAGE_DIR}previous.png"  alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                             </a>
                         {else}
-                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&page={$smarty.get.page|default:""}" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Preview{/t}" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
+                        <a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde|default:"list_pendientes"}&amp;category={$smarty.request.category|default:""}&amp;page={$smarty.get.page|default:""}" title="{t}Cancel{/t}">
+                            <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Cancel{/t}" ><br />{t}Go back{/t}
                         </a>
                         {/if}
                     {/if}
@@ -101,7 +101,7 @@
 		<ul class="old-button">
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action={$smarty.session.desde}&amp;category={$smarty.get.category}&amp;page={$_GET['page']}" title="{t}Go back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}cancel.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+					<img src="{$params.IMAGE_DIR}cancel.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
 				</a>
 			</li>
 
@@ -116,21 +116,21 @@
 
             {acl isAllowed="ARTICLE_DELETE"}
 			 <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');" name="submit_mult" value="Eliminar todos">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />Eliminar todos
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 6);"  onmouseover="return escape('<u>E</u>liminar todos');">
+                    <img src="{$params.IMAGE_DIR}trash.png" alt="Eliminar todos"><br />Eliminar todos
                 </a>
             </li>
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');" name="submit_mult" value="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />Eliminar
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);"  onmouseover="return escape('<u>E</u>liminar');">
+                    <img src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />Eliminar
                 </a>
             </li>
              {/acl}
             {acl isAllowed="ARTICLE_AVAILABLE"}
             {if $category!=20}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');" name="submit_mult" value="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />Publicar
+                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mavailable', 1);" onmouseover="return escape('<u>P</u>ublicar');">
+                    <img src="{$params.IMAGE_DIR}publish.gif" alt="noFrontpage"><br />Publicar
                 </a>
             </li>
             {/if}
@@ -143,7 +143,7 @@
             {acl isAllowed="IMPORT_ADMIN"}
             <li>
                 <a href="importAgencyXML.php" class="admin_add"  onmouseover="return escape('<u>I</u>mportar XML');" name="submit_mult" value="Importar">
-                    <img border="0" src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />Importar Agencia XML
+                    <img src="{$params.IMAGE_DIR}xml.png" alt="Importar"><br />Importar Agencia XML
                 </a>
             </li>
             {/acl}

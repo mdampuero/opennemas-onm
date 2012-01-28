@@ -62,18 +62,18 @@
                 <h2>{t}Articles by section{/t}</h2>
         </div>
         <div id="hemeroteca_div" class='div_lists' style="display:none">
-                {include file="menu_categorys.tpl" home=""}
+                {include file="menu_categorys.tpl" home="" base='library_'}
                 <h2>{t}Articles in library{/t}</h2>
         </div>
         <div id="pendientes_div" class='div_lists' style="display:none">
-                {include file="menu_categorys.tpl" home=""}
+                {include file="menu_categorys.tpl" home="" base='pending_'}
                 <h2>{t}Pending articles{/t}</h2>
         </div>
         <div id="opinions_div" class='div_lists' style="display:none">
-            <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+            <table style="width:100%">
                 <tbody>
                     <tr>
-                        <td colspan="2">
+                        <td>
                             <h2>{t}Opinions{/t}</h2>
                         </td>
                     </tr>
@@ -81,11 +81,11 @@
             </table>
         </div>
         <div  id="albums_div"  class='div_lists' style="display:none">
-            <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+            <table style="width:100%">
                 <tbody>
                     <tr>
-                        <td colspan="2">
-                            {include file="menu_categorys.tpl" home=""}
+                        <td>
+                            {include file="menu_categorys.tpl" home="" base='albums_'}
                             <h2>{t}Albums{/t}</h2>
                         </td>
                     </tr>
@@ -93,11 +93,11 @@
             </table>
         </div>
         <div id='videos_div'  class='div_lists' style="display:none"><br/>
-            <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+            <table style="width:100%">
                 <tbody>
                     <tr>
-                        <td colspan="2">
-                            {include file="menu_categorys.tpl" home=""}
+                        <td>
+                            {include file="menu_categorys.tpl" home=""  base='videos_'}
                             <h2>{t}Videos{/t}</h2>
                         </td>
                     </tr>
@@ -105,11 +105,11 @@
             </table>
         </div>
         <div id="adjuntos_div"  class='div_lists' style="display:none">
-            <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+            <table style="width:100%">
                 <tbody>
                     <tr>
                         <td>
-                            {include file="menu_categorys.tpl" home=""}
+                            {include file="menu_categorys.tpl" home="" base='attachments_'}
                             <h2>{t}Files{/t}</h2>
                         </td>
                     </tr>
@@ -132,7 +132,7 @@
             </div>
         </div>
         <div id="search-div2"  class='div_lists' style="display:none">
-            <table border="0" cellpadding="0" cellspacing="0" class="fuente_cuerpo" width="100%">
+            <table style="width:100%">
                 <tbody>
                     <tr>
                         <td>

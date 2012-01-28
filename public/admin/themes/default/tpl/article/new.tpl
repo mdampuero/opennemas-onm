@@ -23,7 +23,7 @@
 {/block}
 
 {block name="footer-js" append}
-    <script type="text/javascript">
+    <script>
     document.observe('dom:loaded', function() {
         if($('title')){
             new OpenNeMas.Maxlength($('title'), {});
@@ -36,12 +36,12 @@
     </script>
 
     {script_tag src="/tiny_mce/opennemas-config.js"}
-    <script defer="defer">
+    <script>
         tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
 
         {if isset($article) && $article->isClone()}
-                OpenNeMas.tinyMceConfig.simple.readonly   = 1;
-                OpenNeMas.tinyMceConfig.advanced.readonly = 1;
+            OpenNeMas.tinyMceConfig.simple.readonly   = 1;
+            OpenNeMas.tinyMceConfig.advanced.readonly = 1;
         {/if}
 
         OpenNeMas.tinyMceConfig.simple.elements = "summary";
@@ -94,7 +94,7 @@
                 <table style="margin-bottom:0; width:100%;">
                     <tbody>
                         <tr>
-                            <td style="width:75%; vertical-align:top; padding:4px 0;" valign="top" >
+                            <td style="width:75%; vertical-align:top; padding:4px 0;" >
                                 <label for="title">{t}Frontpage title:{/t}</label>
                                 <input type="text" id="title" name="title"
                                        title="{t}Title for this new in frontpage{/t}" style="width:100%"
@@ -107,7 +107,7 @@
                                        {/if}
                                        tabindex="1"/>
                             </td>
-                            <td valign="top" style="width:20%; text-align:right;"  rowspan="5">
+                            <td style="width:20%; text-align:right;"  rowspan="5">
                                 <div class="utilities-conf" style="width:99%;">
                                     <div style="text-align:right">
                                         <h3>{t}Options{/t}</h3>
@@ -192,7 +192,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td valign="top" style="vertical-align:top; padding:4px 0;">
+                            <td style="vertical-align:top; padding:4px 0;">
                                 <label for="title">{t}Inner title:{/t}</label>
                                 <input 	type="text" id="title_int" name="title_int" title="{t}Inner title:{/t}"
                                         value="{$article->title_int|clearslash|escape:"html"}" class="required" style="width:100%"
@@ -201,7 +201,7 @@
                                         onkeyup="countWords(this,document.getElementById('counter_title_int'))"
                                         tabindex="2"/>
 
-                                <script type="text/javascript">
+                                <script>
                                 $('title').observe('blur', function(evt) {
                                     var tituloInt = $('title_int').value.strip();
                                     if( tituloInt.length == 0 ) {
@@ -213,27 +213,27 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="vertical-align:top; padding:4px 0;" valign="top" >
-                                <div style="display:inline-block; width:30%; vertical-align:top;" valign="top">
+                            <td style="vertical-align:top; padding:4px 0;" >
+                                <div style="display:inline-block; width:30%; vertical-align:top;">
                                     <label for="category">{t}Section:{/t}</label>
                                     <select style="width:100%" name="category" id="category" class="validate-section" onChange="get_tags($('title').value);"  tabindex="3">
-                                        <option value="20" {if !isset($category)}selected{/if} name="{t}Unknown{/t}" >
+                                        <option value="20" {if !isset($category)}selected{/if}>
                                             {t}Unknown{/t}
                                         </option>
                                         {section name=as loop=$allcategorys}
                                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
                                         {section name=su loop=$subcat[as]}
                                             {if $subcat[as][su]->internal_category eq 1}
                                                 <option value="{$subcat[as][su]->pk_content_category}"
-                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                                             {/if}
                                         {/section}
                                         {/acl}
                                         {/section}
                                     </select>
                                 </div><!-- / -->
-                                <div style="display:inline-block; width:69%; vertical-align:top;" valign="top">
+                                <div style="display:inline-block; width:69%; vertical-align:top;">
                                 <label for="agency">{t}Agency{/t}</label>
                                     <input  type="text" id="agency" name="agency" title="{t}Agency{/t}"
                                             class="required" style="width:100%" tabindex="4"
@@ -248,14 +248,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td valign="top" >
+                            <td >
                                 <label for="subtitle">{t}Pretitle{/t}</label>
                                 <input type="text" id="subtitle" name="subtitle" title="antetítulo" style="width:100%"
                                         value="{$article->subtitle|upper|clearslash|escape:"html"}" onChange="countWords(this,document.getElementById('counter_subtitle'))" onkeyup="countWords(this,document.getElementById('counter_subtitle'))" tabindex="5"/>
                             </td>
                         </tr>
                         <tr>
-                            <td valign="top" style="vertical-align:top; padding:4px 0;" >
+                            <td style="vertical-align:top; padding:4px 0;" >
                                 <label for="metadata">{t}Keywords{/t} <small>{t}(Separated by commas){/t}</small></label>
                                 <input type="text" id="metadata" name="metadata"
                                    {if isset($article) && is_object($article)}
@@ -274,11 +274,11 @@
                                     {t}Summary{/t}
                                     {if is_object($article)}
                                         <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-                                            <img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+                                            <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
                                         </a>
                                     {/if}
                                 </label>
-                                <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:98%; min-height:70px;"
+                                <textarea tabindex="6" name="summary" id="summary" title="Resumen de la noticia" style="width:100%; min-height:70px;"
                                           onChange="countWords(this,document.getElementById('counter_summary'))"
                                           onkeyup="countWords(this,document.getElementById('counter_summary'))">{$article->summary|clearslash|escape:"html"}
                                 </textarea>
@@ -291,13 +291,13 @@
                             <td style="padding:0 4px;">
                                 <label for="body">{t}Body{/t}
                                 {if is_object($article)}
-                                    <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="Habilitar/Deshabilitar editor">
-                                        <img src="{$params.IMAGE_DIR}/users_edit.png" alt="" border="0" />
+                                    <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="{t}Enable/disable enhanced editor{/t}">
+                                        <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
                                     </a>
                                 {/if}
                                 </label>
                                 <textarea tabindex="7" name="body" id="body" title="Cuerpo de la noticia"
-                                        style="width:98%;  height:20em;"
+                                        style="width:100%;  height:20em;"
                                         onChange="counttiny(document.getElementById('counter_body'));" >{$article->body|clearslash}</textarea>
                             </td>
                         </tr>
@@ -306,7 +306,7 @@
                 <table>
                     <tbody>
                         <tr style="padding:4px;">
-                            <td valign="top" align="left" colspan="2" >
+                            <td colspan="2" >
                                 <div id="article_images">
                                     {include  file="article/partials/_images.tpl"}
                                 </div>
@@ -321,7 +321,7 @@
                 <table style="width:98%">
                     <tbody>
                         <tr>
-                            <td valign="top" style="padding:4px;">
+                            <td style="padding:4px;">
                                 <label for="slug">{t}Slug{/t}</label>
                                 <input type="text" id="slug" name="slug" title="{t}slug{/t}"
                                         style="width:98%" maxlength="256" tabindex="5"
@@ -333,7 +333,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td valign="top" style="padding:4px;">
+                            <td style="padding:4px;">
                                 <div style="width:370px;">
                                     <label for="starttime">{t}Publication start date:{/t}</label>
                                     <input type="text" id="starttime" name="starttime" size="18"
@@ -341,7 +341,7 @@
                                            value="{$article->starttime}" tabindex="-1" />
                                 </div>
                             </td>
-                            <td valign="top" style="padding:4px;">
+                            <td style="padding:4px;">
                                 <div style="width:370px;">
                                     <label for="endtime">{t}Publication end date:{/t}</label>
                                     <input type="text" id="endtime" name="endtime" size="18"
@@ -352,7 +352,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td valign="top" style="padding:4px;">
+                            <td style="padding:4px;">
                                 <label for="description">{t}Description{/t}</label>
                                 <textarea name="description" id="description"
                                         title="Descripción interna de la noticia" style="width:98%; height:8em;" tabindex="-1">{$article->description|clearslash}</textarea>
@@ -369,13 +369,13 @@
 
         {if $smarty.request.action eq 'read'}
         <div id="comments" style="width:98%">
-            <table border="0" cellpadding="0" cellspacing="4" class="fuente_cuerpo" width="99%">
+            <table>
                 <tbody>
                     <tr>
-                        <th class="title" width='50%'>Comentario</th>
-                        <th class="title"  width='20%'>Autor</th>
-                        <th align="right">Publicar</th>
-                        <th align="right">Eliminar</th>
+                        <th class="title" style='width:50%'>Comentario</th>
+                        <th class="title"  style='width:20%'>Autor</th>
+                        <th class="right">Publicar</th>
+                        <th class="right">Eliminar</th>
                     </tr>
                     {section name=c loop=$comments}
                     <tr>
@@ -390,11 +390,11 @@
                             <br />
                             {$comments[c]->email}
                         </td>
-                        <td align="right">
+                        <td class="right">
                         </td>
-                        <td align="right">
+                        <td class="right">
                             <a href="#" onClick="javascript:confirmarDelComment(this, '{$comments[c]->pk_comment}');" title="Eliminar">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                                <img src="{$params.IMAGE_DIR}trash.png"  />
                             </a>
                         </td>
                     </tr>
@@ -429,14 +429,14 @@
                                     <td>
                                         {$losrel[n]->title|clearslash|escape:'html'}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         {assign var="ct" value=$losrel[n]->content_type}
                                         {$content_types.$ct}
                                     </td>
                                     <td width="120">
                                         {$losrel[n]->category_name|clearslash}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
                                             <option>{t}Link{/t} (todos)</option>
@@ -445,7 +445,7 @@
                                     </td>
                                     <td width="120">
                                         <a  href="#" onClick="javascript:del_relation('{$losrel[n]->id|clearslash}','thelist2');" title="Quitar relacion">
-                                            <img src="{$params.IMAGE_DIR}btn_no.png" border="0" />
+                                            <img src="{$params.IMAGE_DIR}btn_no.png"  />
                                         </a>
                                     </td>
                                 </tr>
@@ -461,19 +461,19 @@
                         {assign var=cont value=1}
                         {section name=n loop=$intrel}
                         <li id="{$intrel[n]->id|clearslash}">
-                            <table  width='99%'>
+                            <table  style='width:99%'>
                                 <tr>
                                     <td>
                                         {$intrel[n]->title|clearslash|escape:'html'}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         {assign var="ct" value=$intrel[n]->content_type}
                                         {$content_types.$ct}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         {$intrel[n]->category_name|clearslash}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
                                         <select>
                                             <option>{t}Gallery{/t} (album)</option>
@@ -482,9 +482,9 @@
                                         </select>
                                         {/is_module_activated}
                                     </td>
-                                    <td width='120'>
+                                    <td style='width:120'>
                                         <a  href="#" onClick="javascript:del_relation('{$intrel[n]->id|clearslash}','thelist2int');" title="Quitar relacion">
-                                                <img src="{$params.IMAGE_DIR}btn_no.png" border="0" />
+                                                <img src="{$params.IMAGE_DIR}btn_no.png"  />
                                         </a>
                                     </td>
                                 </tr>
@@ -497,8 +497,8 @@
             <br/><br/>
 
             <div class="p">
-                <input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
-                <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+                <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
+                <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
             </div>
         </div>
         {else}
@@ -514,8 +514,8 @@
                     <ul id="thelist2int" style="padding: 4px; background: #EEEEEE"></ul>
                 </div>
                 <div class="p">
-                    <input type="hidden" id="ordenPortada" name="ordenArti" value="" size="140"></input>
-                    <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" size="140"></input>
+                    <input type="hidden" id="ordenPortada" name="ordenArti" value="" />
+                    <input type="hidden" id="ordenInterior" name="ordenArtiInt" value="" />
                 </div>
             </div>
         </div>
@@ -523,11 +523,11 @@
 
 
         <div id="reloadPreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}loading.gif" border="0" align="absmiddle" />
+            <img src="{$params.IMAGE_DIR}loading.gif"  />
             <span id="reloadPreviewText"></span>
         </div>
         <div id="savePreview" style="display: none; background-color: #FFE9AF; color: #666; border: 1px solid #996699; padding: 10px; font-size: 1.1em; font-weight: bold; width: 550px; position: absolute; right: 0; top: 0;">
-            <img src="{$params.IMAGE_DIR}btn_filesave.png" border="0" align="absmiddle" />
+            <img src="{$params.IMAGE_DIR}btn_filesave.png"  />
             <span id="savePreviewText"></span>
         </div>
             <input type="hidden" id="action" name="action" value="" />
