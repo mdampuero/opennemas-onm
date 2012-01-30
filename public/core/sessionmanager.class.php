@@ -212,25 +212,22 @@ class SessionManager implements ArrayAccess
         $sessionDirectory = $this->sessionDirectory;
 
         if (is_dir($sessionDirectory)) {
-            if ($dh = opendir($sessionDirectory)) {
-                while (($file = readdir($dh)) !== false) {
-                    if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.'/'.$file);
-                        if (!empty($contents)) {
-                            $session =
-                                SessionManager::unserializeSession($contents);
-                            if (isset($session['userid'])
-                                && ($session['userid']==$userid)
-                            ) {
-                                @unlink($sessionDirectory.'/'.$file);
-                                apc_delete(APC_PREFIX ."_"."num_sessions");
-                            }
-                        }
+            $sessionFiles = glob($sessionDirectory.DS."sess*");
+            foreach ($sessionFiles as $session) {
+                $contents = file_get_contents($session);
+                if (!empty($contents)) {
+                    $sessionContents = SessionManager::unserializeSession($contents);
+                    if (isset($sessionContents['userid'])
+                        && ($sessionContents['userid'] == $userid)
+                    ) {
+                        @unlink($session);
                     }
+                } else {
+                    @unlink($session);
                 }
-                closedir($dh);
             }
         }
+        apc_delete(APC_PREFIX ."_"."num_sessions");
     }
 
     /**
@@ -261,7 +258,7 @@ class SessionManager implements ArrayAccess
      * Deletes all expired session files from instance tmp folder
      *
      * This function deletes all the expired session files from the instance tmp
-     * folder. A session file is marked as expired if it has a modification time 
+     * folder. A session file is marked as expired if it has a modification time
      * greater than 72 hours.
      * @return void
      **/
@@ -272,7 +269,17 @@ class SessionManager implements ArrayAccess
         $count = 0;
 
         foreach (glob($sessionDir."/*") as $file) {
-            if ($compareTime >= filemtime($file)) {
+            $contents = file_get_contents($file);
+            $sessionContents = SessionManager::unserializeSession($contents);
+            $time = time();
+            if (
+                $compareTime >= filemtime($file)
+                || (
+                        is_array($sessionContents)
+                        && array_key_exists('expire', $sessionContents)
+                        && ($sessionContents['expire'] > $time)
+                    )
+            ) {
                 if (unlink($file)) $count++;
             }
         }

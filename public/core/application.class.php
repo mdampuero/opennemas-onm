@@ -185,7 +185,14 @@ class Application
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-        $locale = s::get('site_language'). ".UTF-8";
+        $availableLanguages = self::getAvailableLanguages();
+        $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
+
+        if ($forceLanguage !== null && in_array($forceLanguage, array_keys($availableLanguages))) {
+            $locale = $forceLanguage.".UTF-8";
+        } else {
+            $locale = s::get('site_language'). ".UTF-8";
+        }
         $domain = 'messages';
 
         if (self::isBackend()) {
@@ -430,6 +437,16 @@ class Application
         $GLOBALS['conn'] = NULL;
 
         define('ITEMS_PAGE', "20"); // TODO: delete from application
+    }
+
+    /**
+     * Returns the available languages
+     *
+     * @return array the list of languages
+     **/
+    static public function getAvailableLanguages()
+    {
+        return array('en_US' => "English", 'es_ES' => "Español", 'gl_ES' => "Galego");
     }
 
     /**

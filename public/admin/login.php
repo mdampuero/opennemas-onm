@@ -83,6 +83,8 @@ switch ($action) {
 
     default:
         $_SESSION['csrf'] = md5(uniqid(mt_rand(), true));
+        $languages = Application::getAvailableLanguages();
+        $tpl->assign('languages', $languages);
         $tpl->display('login/login.tpl');
         break;
 }

@@ -33,7 +33,7 @@
         {script_tag src="/jquery/jquery.min.js"}
         {script_tag src="/jquery/jquery-ui.min.js"}
         <script type="text/javascript">
-            jQuery(document).ready(function (){
+            jQuery(document).ready(function ($){
                 jQuery.noConflict();
             });
         </script>
@@ -97,7 +97,22 @@
 	</div>
 
     <footer>
-      	<div class="copyright">{t escape=off}Powered by <a href="http://www.openhost.es/opennemas">OpenNeMaS</a> v{$version}{/t}</div>
+        <nav class="left">
+            <ul>
+                <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
+                {foreach from=$languages key=key item=language}
+                    <li><a href="?language={$key}" title="{$language}">{$language}</a></li>
+                {/foreach}
+            </ul><!-- / -->
+        </nav>
+        <nav class="right">
+            <ul>
+                <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">About</a></li>
+                <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+            </ul>
+        </nav>
     </footer>
 </body>
 </html>

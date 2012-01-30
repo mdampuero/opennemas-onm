@@ -27,15 +27,19 @@
         {css_tag href="/lightwindow.css" media="screen"}
 	{/block}
 
+    {block name="prototype"}
+        {script_tag src="/prototype.js"}
+        {script_tag src="/scriptaculous/scriptaculous.js"}
+        {script_tag src="/scriptaculous/effects.js"}
+    {/block}
+
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js"}
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
         {script_tag src="/jquery/bootstrap-modal.js"}
-        {script_tag src="/prototype.js"}
-        {script_tag src="/scriptaculous/scriptaculous.js"}
-        {script_tag src="/scriptaculous/effects.js"}
+        {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
