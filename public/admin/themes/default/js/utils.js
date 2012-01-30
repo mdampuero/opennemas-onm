@@ -185,7 +185,7 @@ function onChangeGroup(evaluateControl, ids)
 
 function paginate_search(action,page,stringSearch,categories)
 {
-    new Ajax.Updater('resultsSearch', "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
+    new Ajax.Updater('search-results', "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
         {
             evalScripts: true
         } );

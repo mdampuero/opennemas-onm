@@ -1,22 +1,22 @@
 <table class="listing-table">
     <thead>
-        <th class="title" style="width:50%;">{t}Title{/t}</th>
         <th class="center" style="width:30px;">{t}Type{/t}</th>
+        <th class="title" style="width:40%;">{t}Title{/t}</th>
         <th class="center" style="width:50px;">{t}Category{/t}</th>
-        <th class="center" style="width:50px;">{t}Creation date{/t}</th>
-        <th class="center" style="width:20px;">{t}Status{/t}</th>
-        <th class="center" style="width:50px;">{t}Actions{/t}</th>
+        <th class="center" style="width:80px;">{t}Creation date{/t}</th>
+        <th class="center" style="width:10px;"></th>
+        <th class="center" style="width:30px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
         {section name=c loop=$arrayResults}
         <tr>
+            <td  class="center">
+                {$arrayResults[c].type}
+            </td>
             <td style="padding:10px;"><font size="2">{$arrayResults[c].titule|clearslash}</font><br>
                 {if $arrayResults[c].content_type neq 'comment'}
                     <font size="1"><b>{t}Metatags:{/t}</b>  {$arrayResults[c].metadata|clearslash}</font>
                 {/if}
-            </td>
-            <td  class="center">
-                {$arrayResults[c].type}
             </td>
             <td class="center">
                 {$arrayResults[c].catName}

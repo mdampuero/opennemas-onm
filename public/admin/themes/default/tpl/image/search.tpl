@@ -99,7 +99,7 @@ textarea{
                         {t escape="off"}Please fill the form of<br> the side to search images{/t}
                     </div><!-- / -->
                 {/if}
-            </div>
+            </div><!-- /search -->
             <div class="search-form">
                 <div>
                     <label for="string_search">{t}Image name{/t}</label>
@@ -155,9 +155,9 @@ textarea{
                     <p>
                         <button type="submit" class="onm-button red submit">{t}Search{/t}</button>
                     </p>
-                </div><!-- / -->
-
-            </div><!-- / -->
+                </div><!-- /search-form -->
+            </div>
+        </div><!-- /search -->
     </div>
 </form>
 

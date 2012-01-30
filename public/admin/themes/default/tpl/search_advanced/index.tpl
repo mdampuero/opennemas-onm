@@ -24,47 +24,54 @@ label {
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-
-        <table class="adminheading">
-            <tr>
-                <th>{t}Advanced Search{/t}</th>
-            </tr>
-        </table>
-        <table class="adminform">
-
-            <tr>
-                <td style="padding:20px; text-align:center">
-                    <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
-                            class="required" onkeypress="return onSearchKeyEnter(event, this, '_self', 'search', 0);"/> &nbsp;
-                    <button type="submit" class="onm-button green" onclick="return enviar(this, '_self', 'search', 0);">{t}Search{/t}</button>
-                </td>
-            </tr>
-            <tr>
-                <td style="padding:20px; padding-top:0; vertical-align:middle; text-align:left">
-                {foreach name=contentTypes item=type from=$arrayTypes}
-                    <div class="content-type-picker">
-                        {if $type[0] == 1 || $type[0] == 4}
-                        <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" checked="checked"/>
-                        <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+    <form action="{$smarty.server.PHP_SELF}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+        <div class="wrapper-content">
+            <div class="search clearfix">
+                <div class="search-results">
+                    <div id="search-results">
+                        
+                        {if !is_null($smarty.get.stringSearch)}
+                            {include file="search_advanced/partials/_list.tpl"}
                         {else}
-                        <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" />
-                        <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+
+                            <div class="empty">
+                                <p>
+                                    <img src="{$params.IMAGE_DIR}/search/search-images.png">
+                                </p>
+                                {t escape="off"}Please fill the form of<br> the side to search contents{/t}
+                            </div><!-- / -->
                         {/if}
-                    </div>
-                {/foreach}
-                </td>
-            </tr>
-        </table>
-        {if isset($search_string)}
-        <div class="resultsSearch" id="resultsSearch" name="resultsSearch">
-            {if !isset($arrayResults) || empty($arrayResults)}
-                {include file="search_advanced/partials/_no_results.tpl"}
-            {else}
-                {include file="search_advanced/partials/_list.tpl"}
-            {/if}
+                    </div><!-- /search-results -->
+                </div><!-- /search -->
+                <div class="search-form">
+                    <div>
+                        <label for="string_search">
+                            {t}Content name{/t}
+                            <input type="text" id="stringSearch" name="stringSearch" title="stringSearch" value="{$search_string}"
+                                class="required" /> &nbsp;
+
+                        </label>
+
+                        <div class="search-bar-title">{t}Content type{/t}</div>
+
+                        {foreach name=contentTypes item=type from=$arrayTypes}
+                        <div class="content-type-picker type-picker">
+                            {if $type[0] == 1 || $type[0] == 4}
+                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" checked="checked"/>
+                            <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+                            {else}
+                            <input class="{$type[0]}" name="{$type[1]}" id="{$type[1]}" type="checkbox" />
+                            <label for="{$type[1]}">{$type[2]|mb_capitalize}</label>
+                            {/if}
+                        </div>
+
+                        {/foreach}
+                        <br>
+                        <button type="submit" class="onm-button red">{t}Search{/t}</button>
+                    </div><!-- /search-form -->
+                </div>
+            </div><!-- /search -->
         </div>
-        {/if}
     </form>
 </div>
 {/block}

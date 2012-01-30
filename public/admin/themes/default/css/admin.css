@@ -1697,6 +1697,15 @@ html.draganddrop #dropzone {
 			display:inline-block;
 			margin-right:4px;
 		}
+		.search .search-form .type-picker {
+			width:100%;
+			display:block;
+			padding-left:10px;
+			padding-top:10px;
+		}
+		.search .search-form .type-picker label {display:inline; margin:0; font-weight:normal;}
+		.search .search-form .type-picker input {display:inline-block; clear:right; margin:0;}
+
 /* -------------------------------------------------------------
   pills experiment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
