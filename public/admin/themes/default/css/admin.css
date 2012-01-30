@@ -1268,7 +1268,7 @@ div.action-bar .right{
 		box-shadow:none;
 	}
 
-	#media-browser .photo .image {
+	#media-browser .photo .image-preview {
 		min-height:80px;
 	}
 
@@ -1314,6 +1314,7 @@ div.action-bar .right{
 		#media-browser .photo:hover .data .title {
 			font-weight:bold;
 			font-size:13px;
+			line-height:15px;
 			margin-bottom:7px;
 		}
 		#media-browser .photo:hover .data .description,
@@ -1520,7 +1521,6 @@ div.action-bar .right{
 	border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 	display: block;
-	line-height: 1;
 	padding: 4px;
 }
 .thumbnail:hover {
@@ -1649,6 +1649,54 @@ html.draganddrop #dropzone {
     transition: all 0.3s ease-out;
     opacity: 1;
 }
+
+/* -------------------------------------------------------------
+  Search listings
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.search {
+	border:1px solid #ddd;
+	width:100%;
+}
+	.search .search-results{
+		float:left;
+		width:74%;
+		display:inline-block;
+		vertical-align:top;
+	}
+		.search .search-results .empty {
+			padding-top:2em;
+			font-size:1.7em;
+			color:#777;
+			font-weight:bold;
+			text-align:center;
+		}
+		.search #media-browser {
+			border:0 none;
+		}
+	.search .search-form {
+		float:right;
+		display:inline-block;
+		width:25%;
+		background:#eee;
+		border-left:1px solid #ddd;
+	}
+		.search .search-form > div {
+			margin:10px;
+			position:relative;
+		}
+		.search .search-form .search-bar-title,
+		.search .search-form label {
+			display:block;
+			clear:both;
+			width:90%;
+			margin-top:10px;
+			font-weight:bold;
+		}
+		.search .search-form input.inline {
+			width:40%;
+			display:inline-block;
+			margin-right:4px;
+		}
 /* -------------------------------------------------------------
   pills experiment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

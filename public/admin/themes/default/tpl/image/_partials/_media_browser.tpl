@@ -1,7 +1,6 @@
-{if !empty($search)}
-    <div style='float:left;margin-left:10px;margin-top:10px;'><h4> {$search}</h4></div>
-{/if}
-
+{if !(is_null($hideheaders)) && !($hideheaders)}
+<div  id="media-browser">
+{else}
 <table class="listing-table nofill border" id="media-browser">
     <thead>
         <tr>
@@ -11,6 +10,7 @@
     <tbody>
         <tr>
             <td>
+{/if}
                 {section name=n loop=$photos}
                 <div class="photo thumbnail" >
 
@@ -83,10 +83,19 @@
                 </div>
 
             {sectionelse}
-                <div style="margin:20 auto; display:block; padding:10px; text-align:center;">
-                    {t}No available images to list here{/t}
+                <div class="empty">
+                    <p>
+                        <img src="{$params.IMAGE_DIR}/search/search-images.png">
+                    </p>
+                    {t escape=off}No available images<br> for this search{/t}
                 </div>
             {/section}
+{if !(is_null($hideheaders)) && !($hideheaders)}
+    <div>
+        {$pages->links}
+    </div><!-- / -->
+</div>
+{else}
             </td>
         </tr>
     </tbody>
@@ -98,3 +107,5 @@
         </tr>
     </tfoot>
 </table>
+
+{/if}

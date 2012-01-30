@@ -2000,13 +2000,25 @@ gettext("Logout from control panel");
 gettext("Log out");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
-gettext(" made by OpenHost S.L.");
+gettext("About");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
-gettext("All rights reserved &copy; 2008 - %1");
+gettext("Help");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
-gettext("Support & Help");
+gettext("Help");
+
+/* public/admin/themes/default/tpl//base/admin.tpl */
+gettext("Privacy Policy");
+
+/* public/admin/themes/default/tpl//base/admin.tpl */
+gettext("Privacy Policy");
+
+/* public/admin/themes/default/tpl//base/admin.tpl */
+gettext("Legal");
+
+/* public/admin/themes/default/tpl//base/admin.tpl */
+gettext("Legal");
 
 /* public/admin/themes/default/tpl//base/admin.tpl */
 gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
@@ -2211,6 +2223,9 @@ gettext("Password:");
 
 /* public/admin/themes/default/tpl//login/login.tpl */
 gettext("Enter");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("About");
 
 /* public/admin/themes/default/tpl//login/login.tpl */
 gettext("Help");
@@ -3795,6 +3810,24 @@ gettext("There is no elements in the trash");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("Welcome to %1");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("Media manager");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("Media manager");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("New opinion");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("New opinion");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("New article");
+
+/* public/admin/themes/default/tpl//welcome/index.tpl */
+gettext("New article");
 
 /* public/admin/themes/default/tpl//welcome/index.tpl */
 gettext("Go to multimedia manager");
@@ -6095,13 +6128,13 @@ gettext("You <strong>ONLY</strong> can upload <strong>10</strong> images at the 
 gettext("Upload files");
 
 /* public/admin/themes/default/tpl//image/category_catalog.tpl */
-gettext("Image manager:: Images for category \"%1\"");
+gettext("Images in category \"%1\"");
 
 /* public/admin/themes/default/tpl//image/category_catalog.tpl */
-gettext("Image manager:: Images for category \"Advertisement\"");
+gettext("Images of \"Advertisement\"");
 
 /* public/admin/themes/default/tpl//image/category_catalog.tpl */
-gettext("Image manager:: Images for category \"GLOBAL\"");
+gettext("Images in category \"GLOBAL\"");
 
 /* public/admin/themes/default/tpl//image/category_catalog.tpl */
 gettext("Delete all");
@@ -6349,6 +6382,42 @@ gettext("Global statistics");
 /* public/admin/themes/default/tpl//image/_partials/categories.tpl */
 gettext("Advertisement");
 
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("List of images");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("No available title");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("No available description");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("No tags");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Author:");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Type:");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Created:");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Image size:");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("File size:");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Edit");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//image/_partials/_media_browser.tpl */
+gettext("No available images to list here");
+
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("Basic information");
 
@@ -6420,39 +6489,6 @@ gettext("No available IPTC data.");
 
 /* public/admin/themes/default/tpl//image/_partials/photo_data.tpl */
 gettext("We can't geolocalize that direction");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("List of images");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("No available title");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("No available description");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Author:");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Type:");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Created:");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Image size:");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("File size:");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Edit");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("Delete");
-
-/* public/admin/themes/default/tpl//image/_partials/media-browser.tpl */
-gettext("No available images to list here");
 
 /* public/admin/themes/default/tpl//image/index.tpl */
 gettext("Images manager :: General statistics");
@@ -6563,10 +6599,7 @@ gettext("You <strong>ONLY</strong> can upload <strong>10</strong> images at the 
 gettext("Upload files");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Image manager");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Search");
+gettext("Search images");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Search result");
@@ -6578,49 +6611,7 @@ gettext("Information");
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Statistics");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Searching images with the next criteria: ");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", in category \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", max width of %1 px");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", min width of %1 px");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", max height of %1 px");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", min height of %1 px");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", max weight of %1 bytes");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", min weight of %1 bytes");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", type of \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", color \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", created by \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", created after \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext(", created before \"%1\"");
-
-/* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Fill the form for searching an image");
+gettext("Please fill the form of<br> the side to search images");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Image name");
@@ -6635,25 +6626,31 @@ gettext("All");
 gettext("Advertisement");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Show advanced search &darr;");
+gettext("Width (px.)");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Max width:");
+gettext("Min");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Min width:");
+gettext("Max");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Max height:");
+gettext("Height (px.)");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Min height:");
+gettext("Min");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Max weight:");
+gettext("Max");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("Min weight:");
+gettext("Weight (kB)");
+
+/* public/admin/themes/default/tpl//image/search.tpl */
+gettext("Min");
+
+/* public/admin/themes/default/tpl//image/search.tpl */
+gettext("Max");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Type:");
@@ -6683,16 +6680,13 @@ gettext("Author:");
 gettext("Date period:");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("From:");
+gettext("From");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
-gettext("To:");
+gettext("To");
 
 /* public/admin/themes/default/tpl//image/search.tpl */
 gettext("Search");
-
-/* public/admin/themes/default/tpl//image/today_catalog.tpl */
-gettext("Image manager");
 
 /* public/admin/themes/default/tpl//image/today_catalog.tpl */
 gettext("Today images in \"%1\"");
