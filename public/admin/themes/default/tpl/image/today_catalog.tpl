@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {css_tag href="/mediamanager.css"}
-{/block}
-
 {block name="footer-js" append}
     {script_tag src="/photos.js" defer="defer" language="javascript"}
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}
@@ -32,7 +28,7 @@
 <form action="{$smarty.server.SCRIPT_NAME}" style="margin:0 auto !important;">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Image manager{/t} :: {t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2></div>
+        <div class="title"><h2>{t 1=$datos_cat[0]->title}Today images in "%1"{/t}</h2></div>
         <ul class="old-button">
             {if $action neq 'upload'}
             {acl isAllowed="IMAGE_DELETE"}
@@ -86,7 +82,7 @@
 
     {include file="image/_partials/categories.tpl" home="{$smarty.server.PHP_SELF}?action=today_catalog"}
 
-    {include file="image/_partials/media-browser.tpl"}
+    {include file="image/_partials/_media_browser.tpl"}
 
 
 </div><!--fin wrapper-content-->

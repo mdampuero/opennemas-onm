@@ -1089,54 +1089,13 @@ ul#menu.manager a { color:White !important; }
 /* -------------------------------------------------------------
   Footer
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#copyright {
-	vertical-align:top;
-	margin-top:10px;
-	margin-bottom:50px;
-}
-	#copyright .company {
-		color:#888;
-		float:left;
-		width:40%
-	}
-		#copyright .company img {
-			margin-right:1em;
-			margin-top:5px;
-		}
-
-	#copyright .support {
-		float:right;
-		width:40%;
-		text-align:right;
-		margin-top:0px;
-	}
-
-		#copyright .support li {
-			list-style:none !important;
-			display:inline-block;
-			margin:0 10px;
-		}
-		#copyright .support li:last-child {
-			margin-right:0px;
-		}
-			#copyright .support li a {
-				padding:5px 10px;
-				background:White;
-			}
-
-			#copyright .support li a:hover {
-				background:#efefef;
-			}
-
-
-/* -------------------------------------------------------------
-  Footer
- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 footer {
 	display:block;
-	padding-top:10px;
 	text-align:left;
 	font-size:11px;
+	vertical-align:top;
+	padding-top:5px;
+	padding-bottom:50px;
 }
 footer > div {
 	width:100%;
@@ -1159,7 +1118,7 @@ footer nav ul li {
 	padding:0px 6px;
 }
 footer nav a, footer nav a:active {
-	color: #666 !important;
+	color: #888 !important;
 	text-decoration:none;
 	outline:none;
 	-moz-transition: color 0.3s ease 0s;
@@ -1287,44 +1246,107 @@ div.action-bar .right{
 /* -------------------------------------------------------------
   media-browser
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#media-browser {
-	border:1px solid #bfbfbf;
-	background:White;
-}
+ #media-browser {
+ 	border:1px solid #bfbfbf;
+ 	background:White;
+ }
+
 	#media-browser .photo {
 		position:relative;
-		float:left;
+		min-width:140px;
+		text-align:center;
+		display:inline-block;
+		vertical-align:top;
+		margin-bottom:5px;
+		margin-right:5px;
 	}
 	#media-browser .photo:hover {
+		background: #005991;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED');
+		background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED));
+		background: -moz-linear-gradient(top,  #005991,  #4787ED);
+		box-shadow:none;
+	}
+
+	#media-browser .photo .image {
+		min-height:80px;
+	}
+
+		#media-browser .image input[type="checkbox"] {
+			position:absolute;
+			top:5px;
+			left:5px;
+		}
+
+		#media-browser .photo .data {
+			padding:10px;
+			color:White;
+			position:absolute;
+			top:0;
+			left:99%;
+			display:none;
+			text-align:left;
+			z-index:20;
+			white-space:nowrap;
+		}
+		#media-browser .photo:hover .data {
+			display:block;
+			background: #005991;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED');
+			background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED));
+			background: -moz-linear-gradient(top,  #005991,  #4787ED);
+			border-radius:0 5px 5px 5px;
+		}
+
+		#media-browser .photo:hover .data ul {
+			padding:0;
+			margin:0;
+		}
+		#media-browser .photo:hover .data ul li {
+			list-style:none;
+			margin-bottom:4px;
+			display:block;
+		}
+		#media-browser .photo:hover .data a {
+			color:White;
+			text-shadow:none;
+		}
+		#media-browser .photo:hover .data .title {
+			font-weight:bold;
+			font-size:13px;
+			margin-bottom:7px;
+		}
+		#media-browser .photo:hover .data .description,
+		#media-browser .photo:hover .data .tags {
+			white-space:normal;
+			margin-bottom:3px;
+		}
+
+/*
+	#media-browser .photo:hover {
 		z-index:999;
-	}
-	#media-browser .photo:hover .photo-image {
-		border:5px solid transparent;
-	}
-	#media-browser .photo:hover .photo-data {
-		display:block
+		background:#4787ED;
+		background: #005991;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED');
+		background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED));
+		background: -moz-linear-gradient(top,  #005991,  #4787ED);
 	}
 		#media-browser .photo-image {
 			width:140px;
 			position:relative;
-			border:5px solid transparent;
-			z-index:20;
 		}
-        #media-browser .image-preview {
-            width:144px;
-            height:95px;
-            border:1px solid #bfbfbf;
-            text-align: center;
-            vertical-align:top;
-        }
-         #media-browser .image-preview:hover {
-            border:1px solid transparent;
-        }
+			#media-browser .photo:hover .photo-image {
+				border:1px solid transparent;
+				box-shadow:none;
+			}
+			#media-browser .photo:hover .photo-data {
+				display:block;
+				text-align:left;
+			}
 
 			#media-browser .photo-image img {
 				max-width:140px;
 				max-height:80px;
-				/*border:1px solid #bfbfbf; */
 				padding:2px;
 			}
 			#media-browser .photo-image img.flash-flag {
@@ -1335,18 +1357,10 @@ div.action-bar .right{
 				#media-browser .photo:hover .photo-image img {
 					border:1px solid White;
 				}
-			#media-browser .photo-image input[type="checkbox"] {
-				position:absolute;
-				top:5px;
-				left:5px;
-			}
+			
 
 		#media-browser .photo-data {
-			background:#4787ED;
-			background: #005991; /* for non-css3 browsers */
-			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#005991', endColorstr='#4787ED'); /* for IE */
-			background: -webkit-gradient(linear, left top, left bottom, from(#005991), to(#4787ED)); /* for webkit browsers */
-			background: -moz-linear-gradient(top,  #005991,  #4787ED); /* for firefox 3.6+ */
+			
 			padding-left:160px;
 			position:absolute;
 			top:0;
@@ -1395,10 +1409,21 @@ div.action-bar .right{
 			}
 		#media-browser .photo-hovered {
 			z-index:999;
-		}
+		}*/
 		#exif table td {
 			padding:0;
 		}
+		.photo-geolocation {
+			border:1px solid #bfbfbf;
+			padding:10px;
+			border-radius:5px;
+		}
+		.photo-geolocation .photo-geolocation-canvas{
+			border:1px solid #bfbfbf;
+			margin:5px;
+			box-shadow:0 0 3px 3px rgba(0,0,0, 0.1);
+		}
+
 
 /* -------------------------------------------------------------
   Image edit form.
@@ -1490,7 +1515,7 @@ div.action-bar .right{
 /* -------------------------------------------------------------
   Article edit form: image assignment
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.droppable-position .thumbnail{
+.thumbnail{
 	border: 1px solid #DDDDDD;
 	border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -1498,7 +1523,7 @@ div.action-bar .right{
 	line-height: 1;
 	padding: 4px;
 }
-.droppable-position .thumbnail:hover {
+.thumbnail:hover {
   border-color: #0088CC;
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
@@ -1533,6 +1558,96 @@ div.action-bar .right{
 	font-weight: bolder;
 	margin-left: 5px;
 	vertical-align: text-top;
+}
+
+/* -------------------------------------------------------------
+  Ajax file upload
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+ .fileupload-buttonbar {
+    width:100%;
+    margin-bottom:5px;
+ }
+.fileupload-buttonbar .right {
+   float:right;
+   margin-left:4px;
+}
+.fileupload-buttonbar .left {
+   float:left;
+   margin-right:4px;
+}
+
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    border: 0 none;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    /*-moz-transform: translate(-300px, 0) scale(4);*/
+    height:95%;
+    width:95%;
+    cursor:pointer !important;
+}
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display:inline-block;
+    padding:6px 10px;
+}
+.progressbar,
+.progressbar div {
+    width: 200px;
+    height: 20px;
+    -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+            border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+
+.progressbar div {
+    width: auto;
+    background: url(../../images/progressbar.gif);
+}
+
+.fileupload-progressbar {
+    width: 350px;
+}
+.template-upload td:last-child,
+.template-download td:last-child {
+    text-align:right;
+    white-space: nowrap;
+}
+
+html.draganddrop #dropzone {
+    display:block;
+}
+#dropzone {
+    display:none;
+    background: #eee;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+#dropzone.in {
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+#dropzone.hover {
+    background: White;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
 }
 /* -------------------------------------------------------------
   pills experiment

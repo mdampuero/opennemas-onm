@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {css_tag href="/mediamanager.css"}
-{/block}
-
 {block name="footer-js" append}
     {script_tag src="/photos.js" defer="defer" language="javascript"}
     {if isset($smarty.request.message) && strlen($smarty.request.message) > 0}

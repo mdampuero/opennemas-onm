@@ -1,9 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    {css_tag href="/mediamanager.css"}
-{/block}
-
 {block name="footer-js" append}
     {script_tag src="/photos.js" defer="defer" language="javascript"}
 
@@ -29,11 +25,11 @@
         <div class="wrapper-content">
             <div class="title"><h2>
             {if $datos_cat[0]}
-                {t 1=$datos_cat[0]->title}Image manager:: Images for category "%1"{/t}
+                {t 1=$datos_cat[0]->title}Images in category "%1"{/t}
             {elseif $category eq "2"}
-                    {t}Image manager:: Images for category "Advertisement"{/t}
+                    {t}Images of "Advertisement"{/t}
             {else}
-                {t}Image manager:: Images for category "GLOBAL"{/t}
+                {t}Images in category "GLOBAL"{/t}
             {/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="IMAGE_DELETE"}
@@ -87,8 +83,7 @@
 
         {include file="image/_partials/categories.tpl" home="{$smarty.server.PHP_SELF}?action=category_catalog"}
 
-        {include file="image/_partials/media-browser.tpl"}
-
+        {include file="image/_partials/_media_browser.tpl"}
 
     </div>
 

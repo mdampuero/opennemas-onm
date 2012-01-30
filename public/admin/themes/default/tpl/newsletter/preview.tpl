@@ -2,7 +2,6 @@
 
 {block name="header-css" append}
 {css_tag href="/admin.css"}
-{css_tag href="/calendar_date_select.css"}
 {css_tag href="/newsletter.css" media="screen"}
 {/block}
 
