@@ -277,7 +277,7 @@ class SessionManager implements ArrayAccess
                 || (
                         is_array($sessionContents)
                         && array_key_exists('expire', $sessionContents)
-                        && ($sessionContents['expire'] > $time)
+                        && ($sessionContents['expire'] < $time)
                     )
             ) {
                 if (unlink($file)) $count++;
