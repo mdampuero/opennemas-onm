@@ -11,63 +11,32 @@ function toggleAdvanced() {
 </script>
 {/block}
 
-{block name="header-css" append}
-<style type="text/css">
-.nodisplay {
-    display:none;
-}
-
-table th, table label {
-    color: #888;
-    text-shadow: white 0 1px 0;
-    font-size: 13px;
-}
-th {
-    vertical-align: top;
-    text-align: left;
-    padding: 10px;
-    width: 200px;
-    font-size: 13px;
-}
-label{
-    font-weight:normal;
-}
-.panel {
-    background:White;
-}
-fieldset {
-    border:none;
-    border-top:1px solid #ccc;
-}
-legend {
-    color:#666;
-    text-transform:uppercase;
-    font-size:13px;
-    padding:0 10px;
-}
-
-.awesome {
-    border:0;
-}
-.panel {
-    margin:0;
-}
-.default-value {
-    display:inline;
-    color:#666;
-    margin-left:10px;
-    vertical-align:middle
-}
-input[type="text"],
-textarea{
-    max-height:80%
-}
-</style>
-{/block}
 
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/photos.js" defer="defer" language="javascript"}
+    <script>
+    jQuery(document).ready(function() {
+        jQuery('#starttime').datetimepicker({
+            hourGrid: 4,
+            showAnim: "fadeIn",
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'hh:mm:ss',
+            minuteGrid: 10
+        });
+        jQuery('#endtime').datetimepicker({
+            hourGrid: 4,
+            showAnim: "fadeIn",
+            dateFormat: 'yy-mm-dd',
+            timeFormat: 'hh:mm:ss',
+            minuteGrid: 10
+        });
+
+        jQuery('#ui-datepicker-div').css('clip', 'auto');
+
+    });
+</script>
 {/block}
 
 {block name="content"}
