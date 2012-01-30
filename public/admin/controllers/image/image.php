@@ -666,25 +666,52 @@ switch($action) {
                 $photo = new Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
                     foreach ($upload['tmp_name'] as $index => $value) {
-                        $info[] = array(
-                            'name'          => $upload['tmp_name'][$index],
-                            'url'           => isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
-                            'thumbnail_url' => 'http://idealgallego.local//admin/themes/default/images/previous.png',
-                            'size'          => isset($_SERVER['HTTP_X_FILE_SIZE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
+                        $data = array(
+                            'local_file'        => $upload['tmp_name'][$index],
+                            'original_filename' => $upload['name'][$index],
+                            'title'             => '',
+                            'fk_category'       => $category,
+                            'category'          => $category,
+                            'category_name'     => $category_name,
+                            'description'       => '',
+                            'metadata'          => '',
+                        );
+                        $photo = new Photo();
+                        $photo = $photo->createFromLocalFileAjax($data);
+
+                        $info [] = array(
+                            'name'          => $photo->name,
+                            'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                            'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                            'size'          => $photo->size,
                             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
-                            'error'         => $upload['error'][$index],
+                            'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",
                         );
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
-                    $info[] = array(
-                        'name'          => isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
-                        'url'           => isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
-                        'thumbnail_url' => 'http://idealgallego.local//admin/themes/default/images/previous.png',
-                        'size'          => isset($_SERVER['HTTP_X_FILE_SIZE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : (isset($upload['size']) ? isset($upload['size']) : null),
-                        'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : (isset($upload['type']) ? isset($upload['type']) : null),
-                        'error'         => isset($upload['error']) ? $upload['error'] : null,
+                    $data = array(
+                        'local_file'    => $upload['tmp_name'],
+                        'original_filename' => $upload['name'][$index],
+                        'title'         => '',
+                        'fk_category'   => $category,
+                        'category'      => $category,
+                        'category_name' => $category_name,
+                        'description'   => '',
+                        'metadata'      => '',
+                    );
+
+                    $photo = new Photo();
+                    $photo = $photo->createFromLocalFileAjax($data);
+
+                    $info [] = array(
+                        'name'          => $photo->name,
+                        'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                        'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                        'size'          => $photo->size,
+                        'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                        'error'         => '',
                         'delete_url'    => '',
                         "delete_type"   => "DELETE",
                     );

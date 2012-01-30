@@ -101,13 +101,15 @@
             <ul>
                 <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
                 {foreach from=$languages key=key item=language}
-                    <li><a href="?language={$key}" title="{$language}">{$language}</a></li>
+                    <li>
+                        <a href="?language={$key}" title="{$language}" {if $key == $current_language}class="active"{/if}>{$language}</a>
+                    </li>
                 {/foreach}
             </ul><!-- / -->
         </nav>
         <nav class="right">
             <ul>
-                <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">About</a></li>
+                <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
                 <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
                 <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
                 <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>

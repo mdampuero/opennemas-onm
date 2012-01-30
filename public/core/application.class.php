@@ -31,6 +31,7 @@ class Application
     var $cache          = null;
     var $image          = null;
     var $events         = array();
+    static $language    = '';
     static $request        = null;
 
     /**
@@ -189,10 +190,12 @@ class Application
         $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
 
         if ($forceLanguage !== null && in_array($forceLanguage, array_keys($availableLanguages))) {
-            $locale = $forceLanguage.".UTF-8";
+            self::$language = $forceLanguage;
         } else {
-            $locale = s::get('site_language'). ".UTF-8";
+            self::$language = s::get('site_language');
         }
+
+        $locale = self::$language.".UTF-8";
         $domain = 'messages';
 
         if (self::isBackend()) {

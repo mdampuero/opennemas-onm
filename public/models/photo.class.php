@@ -92,10 +92,10 @@ class Photo extends Content
             $filePathInfo = pathinfo($filePath);     //sacamos infor del archivo
 
             // Getting information for creating
-            $t = gettimeofday();
-            $micro = intval(substr($t['usec'], 0, 5));
+            $t                  = gettimeofday();
+            $micro              = intval(substr($t['usec'], 0, 5));
             $finalPhotoFileName = date("YmdHis") . $micro . "." . strtolower($filePathInfo['extension']);
-            $fileInformation  = new MediaItem($filePath);
+            $fileInformation    = new MediaItem($filePath);
 
             // Building information for the photo image
             $data = array(
@@ -217,6 +217,152 @@ class Photo extends Content
         }
 
         return $importedID;
+    }
+
+
+    /**
+     * Creates one photo register in the database from data and local file
+     * TODO: this function must content the photo local_file
+     *
+     * @params array $data the data for the photo, must content the photo local_file
+     **/
+    public function createFromLocalFileAjax($dataSource)
+    {
+
+        $filePath = $dataSource["local_file"];
+        $originalFileName = $dataSource['original_filename'];
+
+        if(!empty($filePath)) {
+             // Check upload directory
+            $dateForDirectory = date("/Y/m/d/");
+            $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR ;
+
+            if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+
+            $filePathInfo = pathinfo($originalFileName);     //sacamos infor del archivo
+
+            // Getting information for creating
+            $t                  = gettimeofday();
+            $micro              = intval(substr($t['usec'], 0, 5));
+            $finalPhotoFileName = date("YmdHis") . $micro . "." . strtolower($filePathInfo['extension']);
+            $fileInformation    = new MediaItem($filePath);
+
+            // Building information for the photo image
+            $data = array(
+                'title'        => $originalFileName,
+                'name'         => $finalPhotoFileName,
+                'path_file'    => $dateForDirectory,
+                'fk_category'  => $dataSource["fk_category"],
+                'category'     => $dataSource["fk_category"],
+                'nameCat'      => $dataSource["category_name"],
+
+                'created'      => $fileInformation->atime,
+                'changed'      => $fileInformation->mtime,
+                'date'         => $fileInformation->mtime,
+                'size'         => round($fileInformation->size/1024, 2),
+                'width'        => $fileInformation->width,
+                'height'       => $fileInformation->height,
+                'type_img'     => strtolower($filePathInfo['extension']),
+                'media_type'   => 'image',
+
+                'author_name'  => '',
+                'pk_author'    => $_SESSION['userid'],
+                'fk_publisher' => $_SESSION['userid'],
+                'description'  => $dataSource['description'],
+                'metadata'     => $dataSource["metadata"],
+            );
+
+            if (is_dir($uploadDir) && !is_writable($uploadDir)) {
+                throw new Exception(
+                    sprintf(
+                        'Upload directory doesn\'t exists or you don\'t have enought privileges to write files there',
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
+            }
+
+            if (copy($dataSource['local_file'], realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName)) {
+
+                $photo = new Photo();
+                $photoID = $photo->create($data);
+
+                if ($photoID) {
+
+                    if(preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
+
+                        $imageThumbSize = s::get(array(
+                            'image_thumb_size',
+                            'image_inner_thumb_size',
+                            'image_front_thumb_size',
+                        ));
+
+                        // Thumbnail handler
+                        $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
+
+                        // Article inner thumbnail
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
+                            $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
+                            true
+                        );
+                        $thumb->writeImage(
+                            $uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName
+                        );
+
+                        // Generate frontpage thumbnails
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
+                            $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
+                            true
+                        );
+                        $thumb->writeImage(
+                            $uploadDir . $imageThumbSize['image_front_thumb_size']['width'] . '-' . $imageThumbSize['image_front_thumb_size']['height'] . '-' . $finalPhotoFileName
+                        );
+
+                        // Main thumbnail
+                        $thumb->thumbnailImage(
+                            $imageThumbSize['image_thumb_size']['width'] ?: 140,
+                            $imageThumbSize['image_thumb_size']['height'] ?: 100,
+                            true
+                        );
+                        //Write the new image to a file
+                        $thumb->writeImage($uploadDir . $imageThumbSize['image_thumb_size']['width'] . '-' . $imageThumbSize['image_thumb_size']['height'] . '-' . $finalPhotoFileName);
+
+                    }
+
+                } else {
+                    Application::getLogger()->notice(sprintf(
+                        'EFE Importer: Unable to register the photo object %s (destination: %s).',
+                        $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                    ));
+                   throw new Exception(
+                        sprintf(
+                            'Unable to register the photo object into OpenNemas.',
+                            $uploadDir.$finalPhotoFileName
+                        )
+                    );
+                }
+
+                $photo = new Photo($photoID);
+
+            } else {
+
+                $importedID = null;
+
+                Application::getLogger()->notice(sprintf(
+                    'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
+                    $dataSource['local_file'], $uploadDir.$finalPhotoFileName
+                ));
+                throw new Exception(
+                    sprintf(
+                        'Unable to copy the file of the photo related in EFE importer to the article.',
+                        $uploadDir.$finalPhotoFileName
+                    )
+                );
+            }
+        }
+
+        return $photo;
     }
 
     public function read($id)
