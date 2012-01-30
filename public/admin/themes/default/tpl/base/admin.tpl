@@ -119,15 +119,22 @@
     </div>
 
     {block name="copyright"}
-	<footer id="copyright" class="wrapper-content">
-        <div class="company left">
-            <img src="{$params.IMAGE_DIR}logos/logo-opennemas-small-blue.png" alt="OpenNeMaS"/>
-			{t} made by OpenHost S.L.{/t}<br/>
-            {t 1=strftime("%Y") escape=off}All rights reserved &copy; 2008 - %1{/t}
-        </div>
-        <ul class="support">
-            <li><a href="http://www.openhost.es/">{t}Support & Help{/t}</a>
-        </ul>
+    <footer class="wrapper-content">
+        <div class="clearfix">
+            <nav class="left">
+                <ul>
+                    <li>&copy; {strftime("%Y")} OpenHost S.L.</li>
+                </ul><!-- / -->
+            </nav>
+            <nav class="right">
+                <ul>
+                    <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
+                    <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                    <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                </ul>
+            </nav>
+        </div><!-- / -->
     </footer>
 	{/block}
 

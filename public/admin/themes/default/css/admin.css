@@ -109,6 +109,8 @@ table.aa {
 .clearfix{display: inline-block;}
 html[xmlns] .clearfix{display: block;}
 * html .clearfix{height: 1%;}
+
+
 /* -------------------------------------------------------------
   LISTINGS
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1125,6 +1127,43 @@ ul#menu.manager a { color:White !important; }
 			#copyright .support li a:hover {
 				background:#efefef;
 			}
+
+
+/* -------------------------------------------------------------
+  Footer
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+footer {
+	display:block;
+	padding-top:10px;
+	text-align:left;
+	font-size:11px;
+}
+footer > div {
+	width:100%;
+}
+footer nav {
+	width:45%;
+}
+footer nav.right {
+	float:right;
+	text-align:right;
+}
+footer nav.left {
+	float:left;
+	text-align:left;
+}
+footer nav ul { margin:0; padding:0; display:inline-block; }
+footer nav ul li {
+	display:inline-block;
+	color: #555;
+	padding:0px 6px;
+}
+footer nav a, footer nav a:active {
+	color: #666 !important;
+	text-decoration:none;
+	outline:none;
+	-moz-transition: color 0.3s ease 0s;
+}
 
 /* -------------------------------------------------------------
   Simple pager
