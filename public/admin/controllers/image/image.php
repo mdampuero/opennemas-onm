@@ -676,19 +676,24 @@ switch($action) {
                             'description'       => '',
                             'metadata'          => '',
                         );
-                        $photo = new Photo();
-                        $photo = $photo->createFromLocalFileAjax($data);
-
-                        $info [] = array(
-                            'name'          => $photo->name,
-                            'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
-                            'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
-                            'size'          => $photo->size,
-                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
-                            'error'         => '',
-                            'delete_url'    => '',
-                            "delete_type"   => "DELETE",
-                        );
+                        try {
+                            $photo = new Photo();
+                            $photo = $photo->createFromLocalFileAjax($data);
+                            $info [] = array(
+                                'name'          => $photo->name,
+                                'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                                'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                                'size'          => $photo->size,
+                                'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                                'error'         => '',
+                                'delete_url'    => '',
+                                "delete_type"   => "DELETE",
+                            );
+                        } catch (Exception $e) {
+                            $info [] = array(
+                                'error'         => $e->getMessage(),
+                            );
+                        }
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
                     $data = array(
@@ -702,19 +707,26 @@ switch($action) {
                         'metadata'      => '',
                     );
 
+                    try {
+
                     $photo = new Photo();
                     $photo = $photo->createFromLocalFileAjax($data);
 
-                    $info [] = array(
-                        'name'          => $photo->name,
-                        'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
-                        'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
-                        'size'          => $photo->size,
-                        'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
-                        'error'         => '',
-                        'delete_url'    => '',
-                        "delete_type"   => "DELETE",
-                    );
+                        $info [] = array(
+                            'name'          => $photo->name,
+                            'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                            'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
+                            'size'          => $photo->size,
+                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                            'error'         => '',
+                            'delete_url'    => '',
+                            "delete_type"   => "DELETE",
+                        );
+                    } catch (Exception $e) {
+                        $info [] = array(
+                            'error'         => $e->getMessage(),
+                        );
+                    }
                 }
 
                 header('Vary: Accept');
