@@ -75,7 +75,22 @@
                 </a>
             </li>
         </ul>
+        <div class="buttons" style="display:none">
+            <a href="controllers/image/image.php" class="button" title="{t}Go to multimedia manager{/t}">
+                <!-- <span class="icon"><img src="{$params.IMAGE_DIR}/icons.png" title="" alt="" /></span> -->
+                {t}Media manager{/t}
+            </a>
+            <a href="controllers/opinion/opinion.php?action=new" class="button" title="{t}Create new opinion{/t}">
+                <!-- <img src="{$params.IMAGE_DIR}opinion.png" title="" alt="" /> -->
+                {t}New opinion{/t}
+            </a>
+            <a href="article.php?action=new" class="button" title="{t}Create new article{/t}">
+                <!-- <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" /> -->
+                <span class="icon home">{t}New article{/t}</span>
+            </a>
+        </div>
     </div>
+    <!-- <link rel="stylesheet" href="http://markdotto.com/bs2/docs/assets/css/bootstrap.css"> -->
 </div>
 <div class="wrapper-content">
     {render_messages}

@@ -415,6 +415,28 @@ switch($action) {
         $tpl->display('image/create.tpl');
         break;
 
+    case 'create_improved':
+
+        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
+        if (empty($category) || !array_key_exists($category, $ccm->categories)) {
+            m::add(_('Please provide a valid category for upload images.'));
+            Application::forward(
+                $_SERVER['SCRIPT_NAME'] . '?action=today_catalog'
+                .'&category=' . $category
+            );
+        }
+
+        $maxUpload = (int)(ini_get('upload_max_filesize'));
+        $maxPost = (int)(ini_get('post_max_size'));
+        $memoryLimit = (int)(ini_get('memory_limit'));
+        $maxAllowedSize = min($maxUpload, $maxPost, $memoryLimit);
+
+        $tpl->assign('action', $action);
+        $tpl->assign('category', $category);
+        $tpl->assign('max_allowed_size', $maxAllowedSize);
+        $tpl->display('image/create_improved.tpl');
+        break;
+
     case 'show':
 
         $photos = array();
@@ -604,6 +626,175 @@ switch($action) {
             .'&category=' . $category
             .'&page=' . $page
         );
+        break;
+
+    case 'upload_photos_improved':
+
+
+        header('Pragma: no-cache');
+        header('Cache-Control: private, no-cache');
+        header('Content-Disposition: inline; filename="files.json"');
+        header('X-Content-Type-Options: nosniff');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: OPTIONS, HEAD, GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Headers: X-File-Name, X-File-Type, X-File-Size');
+
+        switch ($_SERVER['REQUEST_METHOD']) {
+            case 'HEAD':
+            case 'GET':
+                $array = array();
+                echo json_encode($array);
+                break;
+            case 'POST':
+
+                // check if category, and filesizes are properly setted and category_name is valid
+                $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
+                if (empty($category) || !array_key_exists($category, $ccm->categories)) {
+                    // Raise an error with json
+                }
+                $category_name = $ccm->categories[$category]->name;
+
+                $fileSizesSettings = s::get(array(
+                    'image_thumb_size',
+                    'image_inner_thumb_size',
+                    'image_front_thumb_size',
+                ));
+
+                $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
+                $info = array();
+
+                $photo = new Photo();
+                if ($upload && is_array($upload['tmp_name'])) {
+                    foreach ($upload['tmp_name'] as $index => $value) {
+                        $info[] = array(
+                            'name'          => $upload['tmp_name'][$index],
+                            'url'           => isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : $upload['name'][$index],
+                            'thumbnail_url' => 'http://idealgallego.local//admin/themes/default/images/previous.png',
+                            'size'          => isset($_SERVER['HTTP_X_FILE_SIZE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : $upload['size'][$index],
+                            'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
+                            'error'         => $upload['error'][$index],
+                            'delete_url'    => '',
+                            "delete_type"   => "DELETE",
+                        );
+                    }
+                } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
+                    $info[] = array(
+                        'name'          => isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
+                        'url'           => isset($upload['tmp_name']) ? $upload['tmp_name'] : null,
+                        'thumbnail_url' => 'http://idealgallego.local//admin/themes/default/images/previous.png',
+                        'size'          => isset($_SERVER['HTTP_X_FILE_SIZE']) ? $_SERVER['HTTP_X_FILE_SIZE'] : (isset($upload['size']) ? isset($upload['size']) : null),
+                        'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : (isset($upload['type']) ? isset($upload['type']) : null),
+                        'error'         => isset($upload['error']) ? $upload['error'] : null,
+                        'delete_url'    => '',
+                        "delete_type"   => "DELETE",
+                    );
+                }
+
+                header('Vary: Accept');
+                $json = json_encode($info);
+                $redirect = isset($_REQUEST['redirect']) ?
+                    stripslashes($_REQUEST['redirect']) : null;
+                if ($redirect) {
+                    header('Location: '.sprintf($redirect, rawurlencode($json)));
+                    return;
+                }
+                if (isset($_SERVER['HTTP_ACCEPT']) &&
+                    (strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false)) {
+                    header('Content-type: application/json');
+                } else {
+                    header('Content-type: text/plain');
+                }
+                echo $json;
+                break;
+
+            case 'DELETE':
+                break;
+            default:
+                header('HTTP/1.1 405 Method Not Allowed');
+        }
+        die();
+
+        if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
+
+            $fallos = "";
+            $uploads = array();
+            for ($i=0; $i < count($_FILES["file"]["name"]); $i++) {
+
+                $originalfileName = $_FILES["file"]["name"][$i];
+
+                if (!empty($originalfileName)) {
+                     // Check upload directory
+                    $dirDate = date("/Y/m/d/");
+                    $uploadDir = $path_upload.$dirDate ;
+
+                    if(!is_dir($uploadDir)) { FilesManager::createDirectory($uploadDir); }
+
+                    // Generation of the new name (format YYYYMMDDHHMMSSmmmmmm)
+                    $datos = pathinfo($originalfileName);
+                    $extension = strtolower($datos['extension']);
+                    $t = gettimeofday(); //Sacamos los microsegundos
+                    $micro = intval(substr($t['usec'], 0, 5)); //Le damos formato de 5digitos a los microsegundos
+                    $targetFileName = date("YmdHis") . $micro . "." . $extension;
+
+                    if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $uploadDir.$targetFileName)) {
+
+                        // Getting information from photo file
+                        $imageInformation  = new MediaItem( $uploadDir.$targetFileName );
+
+                        $data = array(
+                            'title'        => $originalfileName,
+                            'name'         => $targetFileName,
+                            'path_file'    => $dirDate,
+                            'fk_category'  => $category,
+                            'category'     => $category,
+                            'nameCat'      => $category_name,
+                            'created'      => $imageInformation->atime,
+                            'changed'      => $imageInformation->mtime,
+                            'date'         => $imageInformation->mtime,
+                            'size'         => round($imageInformation->size/1024, 2),
+                            'width'        => $imageInformation->width,
+                            'height'       => $imageInformation->height,
+                            'type_img'     => $extension,
+                            'media_type'   => 'image',
+                            'author_name'  => '',
+                            'pk_author'    => $_SESSION['userid'],
+                            'fk_publisher' => $_SESSION['userid'],
+                            'description'  => '',
+                            'metadata'     => '',
+                        );
+
+                        $photo = new Photo();
+                        $photoID = $photo->create($data);
+
+                        if ($photoID) {
+                            if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
+                                // miniatura
+                                $thumb = new Imagick($uploadDir.$targetFileName);
+
+                                //ARTICLE INNER
+                                $thumb->thumbnailImage($fileSizesSettings['image_inner_thumb_size']['width'], $fileSizesSettings['image_inner_thumb_size']['height'], true);
+                                $thumb->writeImage($uploadDir . $fileSizesSettings['image_inner_thumb_size']['width'] . '-' . $fileSizesSettings['image_inner_thumb_size']['height'] . '-' . $targetFileName);
+
+                                //FRONTPAGE
+                                $thumb->thumbnailImage($fileSizesSettings['image_front_thumb_size']['width'], $fileSizesSettings['image_front_thumb_size']['height'], true);
+                                $thumb->writeImage($uploadDir . $fileSizesSettings['image_front_thumb_size']['width'] . '-' . $fileSizesSettings['image_front_thumb_size']['height'] . '-' . $targetFileName);
+
+                                //THUMBNAIL
+                                $thumb->thumbnailImage($fileSizesSettings['image_thumb_size']['width'], $fileSizesSettings['image_thumb_size']['height'], true);
+                                $thumb->writeImage($uploadDir . $fileSizesSettings['image_thumb_size']['width'] . '-' . $fileSizesSettings['image_thumb_size']['height'] . '-' . $targetFileName);
+                            }
+                        }
+
+                        $uploads[] = $photoID;
+
+                    } else {
+
+                        $fallos .= " '" . $nameFile . "' ";
+                    }
+                } //if empty
+            } //for
+
+        }
         break;
 
     // Must be rewritten with jQuery Modal boxes as current js is a mess

@@ -71,7 +71,7 @@
 
             {acl isAllowed="AUTHOR_ADMIN"}
             <li >
-                <a href="author.php?action=list&desde=opinion" class="admin_add" name="submit_mult" value="Listado Autores" title="Listado Autores">
+                <a href="author.php?action=list&amp;desde=opinion" class="admin_add" name="submit_mult" value="Listado Autores" title="Listado Autores">
                     <img border="0" src="{$params.IMAGE_DIR}authors.png" title="Listado Autores" alt="Listado Autores"><br />Ver Autores
                 </a>
             </li>
@@ -87,16 +87,16 @@
         <div>
             <ul class="pills clearfix">
                 <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Widgets home{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=-1" id="home" {if $type_opinion==-1}class="active"{/if}>{t}Widgets home{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=0" id="author" {if $type_opinion=='0'}class="active"{/if}>{t}Author Opinions{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=1" id="editorial" {if $type_opinion=='1'}class="active"{/if}>{t}Editorial{/t}</a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=1" id="editorial" {if $type_opinion=='1'}class="active"{/if}>{t}Editorial{/t}</a>
                 </li>
                 <li>
-                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&type_opinion=2" id="director" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</a>
+                    <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;type_opinion=2" id="director" {if $type_opinion=='2'}class="active"{/if}>{t}Director opinion{/t}</a>
                 </li>
             </ul>
 

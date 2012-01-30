@@ -1334,9 +1334,6 @@ gettext("Section:");
 gettext("Unknown");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
-gettext("Unknown");
-
-/* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Agency");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
@@ -1356,6 +1353,9 @@ gettext("Summary");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Body");
+
+/* public/admin/themes/default/tpl//article/new.tpl */
+gettext("Enable/disable enhanced editor");
 
 /* public/admin/themes/default/tpl//article/new.tpl */
 gettext("Slug");
@@ -1772,9 +1772,6 @@ gettext("Save and continue");
 gettext("Save and continue");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Save and exit");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
@@ -1791,9 +1788,6 @@ gettext("Preview");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Preview");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Cancel");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Cancel");
@@ -1829,22 +1823,10 @@ gettext("Save and continue");
 gettext("Save and continue");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and continue");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Save and exit");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Save and exit");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Save and exit");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Preview");
@@ -1865,12 +1847,6 @@ gettext("Cancel");
 gettext("Cancel");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Cancel");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
@@ -1880,22 +1856,10 @@ gettext("Cancel");
 gettext("Cancel");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Cancel");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Go back");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Cancel");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Cancel");
-
-/* public/admin/themes/default/tpl//article/partials/_menu.tpl */
-gettext("Preview");
 
 /* public/admin/themes/default/tpl//article/partials/_menu.tpl */
 gettext("Cancel");
@@ -2247,6 +2211,24 @@ gettext("Password:");
 
 /* public/admin/themes/default/tpl//login/login.tpl */
 gettext("Enter");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Help");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Help");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Privacy Policy");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Privacy Policy");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Legal");
+
+/* public/admin/themes/default/tpl//login/login.tpl */
+gettext("Legal");
 
 /* public/admin/themes/default/tpl//opinion/authors/new.tpl */
 gettext("Opinion Manager :: New author");
@@ -4145,88 +4127,25 @@ gettext("Close");
 gettext("Multimedia for this ad:");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Delete");
+gettext("File name");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Image");
+gettext("Image size");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Weight:");
+gettext("File size");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Creation date");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Description:");
+gettext("Description");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Tags:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Advertisement:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Image");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("default_img.jpg");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("XX x XX px");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Weight:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("XX Kb");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Creation date");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("11/06/2008");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Description:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Example image");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Tags:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("some, words, separated, by, commas");
+gettext("Tags");
 
 /* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("Available multimedia for ads");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File name:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Size:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File size:");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File creation date");
-
-/* public/admin/themes/default/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Description:");
 
 /* public/admin/themes/default/tpl//acl/user/modal/_modal_edit_user_group.tpl */
 gettext("Editing user group");
@@ -6327,6 +6246,81 @@ gettext("Specials");
 
 /* public/admin/themes/default/tpl//image/statistics.tpl */
 gettext("TOTAL");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Uploading images to \"%1\"");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Go back");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Cancel upload");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Start upload");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Add files...");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Delete selected");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Drop files here");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("User notes");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Include files to upload by:");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("You can <strong>drag &amp; drop</strong> files from your desktop on this webpage with Google Chrome, Mozilla Firefox and Apple Safari.");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("If you are using Internet Explorer click in \"Add Files...\" buton and select the files you want to upload.");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("The maximum file size for uploads is <strong>%1 MB</strong>.");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Iniciar");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Cancel");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Cancel");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Error");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Delete");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("File is too big");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("File is too small");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Filetype not allowed");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Max number of files exceeded");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Uploaded bytes exceed file size");
+
+/* public/admin/themes/default/tpl//image/create_improved.tpl */
+gettext("Empty file upload result");
 
 /* public/admin/themes/default/tpl//image/delete_relations.tpl */
 gettext("Media manager");
