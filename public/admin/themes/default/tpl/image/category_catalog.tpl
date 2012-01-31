@@ -58,7 +58,7 @@
                 </li>
                 {acl isAllowed="IMAGE_CREATE"}
                 <li>
-                    <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=create&amp;category={$category}" name="submit_mult" value="Subir Fotos">
+                    <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=create_improved&amp;category={$category}" name="submit_mult" value="Subir Fotos">
                         <img border="0" src="{$params.IMAGE_DIR}upload.png" alt="{t}Upload{/t}"><br />{t}New image{/t}
                     </a>
                 </li>
