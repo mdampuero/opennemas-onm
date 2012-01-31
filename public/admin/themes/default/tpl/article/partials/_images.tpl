@@ -123,11 +123,9 @@
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
                                 {if $video1->pk_video}
-                                    <input type="hidden" id="input_video" name="fk_video" value="{$video1->pk_video}">
                                     <img src="{$video1->information['thumbnail']}"
                                          name="{$video1->pk_video}" style="width:120px" />
                                 {else}
-                                    <input type="hidden" id="input_video" name="fk_video" value="">
                                     {if isset($video1) && $video1->pk_video}
                                         {if $video1->author_name == 'internal'}
                                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video1->information['thumbnails']['normal']}" />

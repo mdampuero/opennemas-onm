@@ -7,6 +7,7 @@
     {script_tag src="/utilsarticle.js"}
     {script_tag src="/editables.js"}
     {script_tag src="/utilsGallery.js"}
+    {script_tag src="/swfobject.js"}
 {/block}
 
 {block name="header-css" append}

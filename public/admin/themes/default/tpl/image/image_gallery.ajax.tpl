@@ -5,33 +5,22 @@
             <div style="float: left;">
                 <a>
                     {if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
-                        <object style="z-index:-3; cursor:default;"  title="Desc: {$photos[n]->description} Tags: {$photos[n]->metadata} ">
+                        <object style="z-index:-3; cursor:default;">
                             <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}">
                             <param name="autoplay" value="false">
                             <param name="autoStart" value="0">
-                            <embed  width="68" height="40" style="cursor:default;"
+                            <embed  width="68" height="40"
                                     src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}"
-                                    name="{$photos[n]->pk_photo}"
-                                    data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}"
-                                    data-filename="{$photos[n]->name}"
-                                    data-filepath="{$photos[n]->path_file}"
-                                    data-width="{$photos[n]->width}"
-                                    data-height="{$photos[n]->height}"
-                                    data-weight="{$photos[n]->size}"
-                                    data-created="{$photos[n]->created}"
-                                    data-type-img="{$photos[n]->type_img}"
-                                    data-description="{$photos[n]->description}"
-                                    data-tags="{$photos[n]->metadata}"
-                                    onmouseout="UnTip()"
-                                    onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)">
+                                    name="{$photos[n]->pk_photo}">
                             </embed>
                         </object>
-                        <span  style="float:right; clear:none;">
+                        <span  style="float:right; clear:none; width:100%; height:100%; z-index:1;">
                             <img id="draggable_img{$num}"
                                  class="draggable-handler"
                                  style="width:16px;height:16px;"
                                  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif"
                                  name="{$photos[n]->pk_photo}"
+                                 data-id="{$photos[n]->pk_photo}"
                                  data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}"
                                  data-filename="{$photos[n]->name}"
                                  data-filepath="{$photos[n]->path_file}"
@@ -42,8 +31,6 @@
                                  data-type-img="{$photos[n]->type_img}"
                                  data-description="{$photos[n]->description}"
                                  data-tags="{$photos[n]->metadata}"
-                                 onmouseout="UnTip()"
-                                 onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)"
                                  />
                         </span>
                     {else}
@@ -63,8 +50,6 @@
                             data-type-img="{$photos[n]->type_img}"
                             data-description="{$photos[n]->description|clearslash|escape:'html'}"
                             data-tags="{$photos[n]->metadata}"
-                            onmouseout="UnTip()"
-                            onmouseover="Tip('<b>Nombre foto:</b>{$photos[n]->title|clearslash|escape:'html'}<br /><b>Tags:</b>{$photos[n]->metadata|clearslash|escape:'html'}<br /><b>Descripción:</b>{$photos[n]->description|clearslash|escape:'html'}', SHADOW, true, ABOVE, true, WIDTH, 300)"
                     {/if}
                 </a>
             </div>
@@ -84,8 +69,15 @@ jQuery(document).ready(function($){
             var image = ui.draggable;
             var parent = $(this);
 
-            // Change the image thumbnail to the new one
-            parent.find('.thumbnail img').attr("src", image.data("url"));
+            if (image.data('type-img') != 'swf') {
+                // Change the image thumbnail to the new one
+                parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
+            } else {
+                parent.find('.article-resource-image').html( "<div id=\"flash-container-replace\"><\/div><script> var flashvars = {}; var params = {}; var attributes = {};" +
+                    "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
+                );
+            };
+
             // Change the image information to the new one
             var article_info = parent.find(".article-resource-image-info");
             article_info.find(".filename").html(image.data("filename"));
@@ -94,6 +86,7 @@ jQuery(document).ready(function($){
             article_info.find(".created_time").html(image.data("created"));
             article_info.find(".description").html(image.data("description"));
             article_info.find(".tags").html(image.data("tags"));
+
             // Change the form values
             var article_inputs = parent.find(".article-resource-footer");
             article_inputs.find("input[type='hidden']").attr('value', image.data("id"));

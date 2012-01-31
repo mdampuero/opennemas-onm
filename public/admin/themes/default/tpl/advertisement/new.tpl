@@ -6,11 +6,11 @@
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/utilsadvertisement.js"}
     {script_tag src="/AdPosition.js"}
+    {script_tag src="/swfobject.js"}
 {/block}
 {block name="footer-js" append}
     {script_tag src="/utilsGallery.js"}
     <script type="text/javascript">
-    
         jQuery(document).ready(function ($){
             $('#position-adv').tabs();
         });

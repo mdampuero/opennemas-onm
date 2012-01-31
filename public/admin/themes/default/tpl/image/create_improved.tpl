@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
     <link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.css">
     <!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-ie6.min.css"><![endif]-->
-    <link rel="stylesheet" href="{$params.CSS_DIR}/jquery.fileupload-ui.css">
 {/block}
 
 {block name="content"}
