@@ -681,7 +681,7 @@ switch($action) {
                             $photo = $photo->createFromLocalFileAjax($data);
                             $info [] = array(
                                 'name'          => $photo->name,
-                                'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                                'url'           => $_SERVER['PHP_SELF']."?action=show&id[]=".$photo->id,
                                 'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
                                 'size'          => $photo->size,
                                 'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
@@ -714,7 +714,7 @@ switch($action) {
 
                         $info [] = array(
                             'name'          => $photo->name,
-                            'url'           => $_SERVER['PHP_SELF']."&action=show&id[]=".$photo->id,
+                            'url'           => $_SERVER['PHP_SELF']."?action=show&id[]=".$photo->id,
                             'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
                             'size'          => $photo->size,
                             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE']) ? $_SERVER['HTTP_X_FILE_TYPE'] : $upload['type'][$index],
