@@ -72,9 +72,13 @@ class Subscriptor
     public function create($data) {
     
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
- 
+        
         // WARNING!!! By default, subscription=1  
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
+        
+        // By default first and last name are ""
+        $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
+        $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
         
         $sql = 'INSERT INTO ' . $this->_tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
@@ -146,14 +150,14 @@ class Subscriptor
             $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`=?, `status`=?,'.
                     ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
-            $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`= ?,';
+            $sql = 'UPDATE ' . $this->_tableName . ' SET `subscription`= ?, `status`=?';
         }
 
         $sql .= ' WHERE pk_pc_user=' . intval($data['id']);
 
         $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
         if(!$isBackend) {
-            $values = array($data['subscription']);
+            $values = array($data['subscription'],$data['status']);
         } else {
 
             $values =   array( $data['subscription'], $data['status'],$data['email'],
@@ -273,7 +277,7 @@ class Subscriptor
     */
     public function mUpdateProperty($id, $property, $value=null)
     {
-        $sql = 'UPDATE ' . $this->_tableName . ' SET `' . $property . '`=? WHERE pk_user=?';
+        $sql = 'UPDATE ' . $this->_tableName . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
         if(!is_array($id)) {
             $rs = $GLOBALS['application']->conn->Execute($sql, array($value, $id));
         } else {

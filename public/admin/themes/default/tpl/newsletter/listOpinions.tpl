@@ -6,7 +6,7 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag language="javascript" src="/newsletter.js"}
+{script_tag src="/newsletter.js"}
 <script type="text/javascript">
 var manager = null;
 var searchEngine = null;
@@ -16,64 +16,61 @@ var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
 
 document.observe('dom:loaded', function() {
-    try {
-        var itemsSelected = new Array();
-        if(postData!=null && postData.opinions) {
-            itemsSelected = postData.opinions;
-        }
 
-        manager = new Newsletter.Manager('items-selected', { items: itemsSelected });
-
-        searchEngine = new Newsletter.SearchEngine('items-list', {
-            'items': itemsList,
-            'manager': manager,
-            'form': 'searchForm'
-        });
-
-        $('postmaster').value = Object.toJSON(postData); // Binding post-data
-
-        var botonera = $$('div#buttons ul li a');
-        botonera[0].observe('click', function() {
-            manager.serialize('opinions');
-
-            $('searchForm').action.value = 'listAccounts';
-            $('searchForm').submit();
-        });
-
-        botonera[1].observe('click', function() {
-            manager.serialize('opinions');
-
-            $('searchForm').action.value = 'listArticles';
-            $('searchForm').submit();
-        });
-
-        botonera[2].observe('click', function() {
-            manager.clearList();
-        });
-
-        botonera[3].observe('click', function() {
-            searchEngine.selectAll();
-        });
-
-        new Newsletter.UISplitPane('container', 'container1', 'container2', 'separator');
-
-        // Wizard icons step
-        $('map').select('area').each(function(tagArea) {
-            tagArea.observe('click', function(evt) {
-                Event.stop(evt);
-
-                var attr = this.getAttribute('action');
-
-                var form = $('searchForm');
-                manager.serialize('opinions'); // global object
-
-                form.action.value = attr;
-                form.submit();
-            });
-        });
-    } catch(e) {
-        console.log(e);
+    var itemsSelected = new Array();
+    if(postData!=null && postData.opinions) {
+        itemsSelected = postData.opinions;
     }
+
+    manager = new Newsletter.Manager('items-selected', { items: itemsSelected });
+
+    searchEngine = new Newsletter.SearchEngine('items-list', {
+        'items': itemsList,
+        'manager': manager,
+        'form': 'searchForm'
+    });
+
+    $('postmaster').value = Object.toJSON(postData); // Binding post-data
+
+    var botonera = $$('div#buttons ul li a');
+    botonera[0].observe('click', function() {
+        manager.serialize('opinions');
+
+        $('searchForm').action.value = 'listAccounts';
+        $('searchForm').submit();
+    });
+
+    botonera[1].observe('click', function() {
+        manager.serialize('opinions');
+
+        $('searchForm').action.value = 'listArticles';
+        $('searchForm').submit();
+    });
+
+    botonera[2].observe('click', function() {
+        manager.clearList();
+    });
+
+    botonera[3].observe('click', function() {
+        searchEngine.selectAll();
+    });
+
+    new Newsletter.UISplitPane('container', 'container1', 'container2', 'separator');
+
+    // Wizard icons step
+    $('map').select('area').each(function(tagArea) {
+        tagArea.observe('click', function(evt) {
+            Event.stop(evt);
+
+            var attr = this.getAttribute('action');
+
+            var form = $('searchForm');
+            manager.serialize('opinions'); // global object
+
+            form.action.value = attr;
+            form.submit();
+        });
+    });
 });
 
 </script>
@@ -85,40 +82,40 @@ document.observe('dom:loaded', function() {
 	<div class="wrapper-content">
 		<div class="title">
 			<h2>{t}Newsletter management{/t}</h2>
-			<img src="{$params.IMAGE_DIR}newsletter/2.gif" width="300" height="40" border="0" usemap="#map" />
+			<img src="{$params.IMAGE_DIR}newsletter/2.gif" width="300" height="40" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
 					{t}Previous step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}editclear.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}editclear.png" alt="{t}Clean container of selected opinions{/t}" /><br />
 					{t}Clean{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" title="{t}Select all the opinions available{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="{t}Select all the opinions available{/t}" /><br />
 					{t}Select all{/t}
 				</a>
 			</li>
             <li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config newsletter module{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config newsletter module{/t}" /><br />
 					{t}Configurations{/t}
 				</a>
 			</li>
@@ -163,25 +160,25 @@ document.observe('dom:loaded', function() {
 	</table>
 	<table class="adminlist" >
 		<thead style="text-align:center;">
-			<th nowrap>Listado de Opiniones (pulse dos veces para incluir un elemento)</th>
-			<th nowrap>Opiniones seleccionadas (pulse dos veces para eliminar un elemento)</th>
+            <tr>
+                <th>Listado de Opiniones (pulse dos veces para incluir un elemento)</th>
+                <th>Opiniones seleccionadas (pulse dos veces para eliminar un elemento)</th>
+            </tr>
 		</thead>
 		<tr>
-			<td width="50%">
+			<td style="width:50%">
 				<div id="container1">
 					<ul id="items-list" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
-			<td width="50%">
+			<td style="width:50%">
 				<div id="container2">
 					{* Items selected *}
 					<ul id="items-selected" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
 		</tr>
-        <div id="separator"></div>
 	</table>
-
-
+    <div id="separator"></div>
 </div>
 {/block}

@@ -6,7 +6,7 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/newsletter.js" language="javascript"}
+{script_tag src="/newsletter.js"}
 <script type="text/javascript">
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
@@ -49,20 +49,20 @@ document.observe('dom:loaded', function() {
 	<div class="wrapper-content">
 		<div class="title">
 			<h2>{t}Newsletter management{/t}</h2>
-			<img src="{$params.IMAGE_DIR}newsletter/4.gif" width="300" height="40" border="0" usemap="#map" />
+			<img src="{$params.IMAGE_DIR}newsletter/4.gif" width="300" height="40" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Previous{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Previous{/t}" /><br />
 					{t}Previous step{/t}
 				</a>
 			</li>
@@ -72,9 +72,11 @@ document.observe('dom:loaded', function() {
 </div>
 <div class="wrapper-content">
 	<table class="adminheading">
-		<th>
-			<td></td>
-		</th>
+        <tr>
+            <th>
+                {t}Newsletter preview{/t}
+            </th>
+        </tr>
 	</table>
 	<table class="adminlist">
 		<tr>
@@ -110,13 +112,5 @@ document.observe('dom:loaded', function() {
 			</tr>
 		</tfoot>
 	</table>
-
-
-
-
-</div>
-	</div>
-
-
 </div>
 {/block}

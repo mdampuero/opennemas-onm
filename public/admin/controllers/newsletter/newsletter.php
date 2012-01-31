@@ -97,7 +97,7 @@ switch($action) {
     /**
      * Check if module is configured, if not redirect to configuration form
     */
-    if (is_null(s::get('newsletter_maillist'))) {
+    if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))) {
         m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
         $httpParams [] = array(
                             'action'=>'config',
@@ -312,6 +312,7 @@ switch($action) {
 
         $configurationsKeys = array(
                                     'newsletter_maillist',
+                                    'newsletter_subscriptionType',
                                     );
 
         $configurations = s::get($configurationsKeys);
