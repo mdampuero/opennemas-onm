@@ -252,6 +252,19 @@ getGalleryImages('listByCategory','{$category}','','1');
 <script>
 jQuery(document).ready(function($){
     $('#related-videos').tabs();
+    jQuery('#related-videos .delete-button').on('click', function () {
+        var parent = jQuery(this).parent();
+        var elementID = parent.find('.related-element-id');
+
+        if (elementID.val() > 0) {
+            elementID.data('id', elementID.val());
+            elementID.val(null);
+            parent.fadeTo('slow', 0.5);
+        } else {
+            elementID.val(elementID.data('id'));
+            parent.fadeTo('slow', 1);
+        };
+    });
 });
 getGalleryVideos('listByCategory','{$category}','','1', 'videos');
 </script>
