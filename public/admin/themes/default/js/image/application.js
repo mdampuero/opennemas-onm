@@ -17,31 +17,23 @@ jQuery(function ($) {
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload();
+    $('#fileupload').fileupload('option', {
+        maxFileSize: 5000000,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+    });
 
-    if (window.location.hostname === 'blueimp.github.com') {
-        // Demo settings:
-        $('#fileupload').prop(
-            'action',
-            '//jquery-file-upload.appspot.com'
-        );
-        $('#fileupload').fileupload('option', {
-            maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-        });
-    } else {
-        // Load existing files:
-        $.getJSON($('#fileupload').prop('action'), function (files) {
-            var fu = $('#fileupload').data('fileupload'),
-                template;
-            fu._adjustMaxNumberOfFiles(-files.length);
-            template = fu._renderDownload(files)
-                .appendTo($('#fileupload .files'));
-            // Force reflow:
-            fu._reflow = fu._transition && template.length &&
-                template[0].offsetWidth;
-            template.addClass('in');
-        });
-    }
+    // // Load existing files:
+    // $.getJSON($('#fileupload').prop('action'), function (files) {
+    //     var fu = $('#fileupload').data('fileupload'),
+    //         template;
+    //     fu._adjustMaxNumberOfFiles(-files.length);
+    //     template = fu._renderDownload(files)
+    //         .appendTo($('#fileupload .files'));
+    //     // Force reflow:
+    //     fu._reflow = fu._transition && template.length &&
+    //         template[0].offsetWidth;
+    //     template.addClass('in');
+    // });
 
     // Enable iframe cross-domain access via redirect page:
     var redirectPage = window.location.href.replace(
@@ -76,6 +68,8 @@ jQuery(function ($) {
     // Initialize the Bootstrap Image Gallery plugin:
     $('#fileupload .files').imagegallery();
 
+
+    // Initialize the Drag zone handler
     $('#fileupload').fileupload({
         dropZone: $('#dropzone')
     });
@@ -96,6 +90,10 @@ jQuery(function ($) {
             window.dropZoneTimeout = null;
             dropZone.removeClass('in hover');
         }, 200);
+    });
+
+    $('#fileupload').bind('fileuploaddone', function (e, data){
+        log('upload finished');
     });
 
 });
