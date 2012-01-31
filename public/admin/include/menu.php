@@ -17,6 +17,13 @@ $menuXml = '<?xml version="1.0"?>
             id="static_pages_manager"
             link="controllers/static_pages/static_pages.php"
         />
+        <node
+            module_name="WIDGET_MANAGER"
+            privilege="WIDGET_ADMIN"
+            title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
+            id="widget_manager"
+            link="controllers/widget/widget.php"
+        />
         <node class="divider" />
         <node
             module_name="MENU_MANAGER"
@@ -78,13 +85,6 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Library"), ENT_QUOTES).'"
             id="library_manager"
             link="article.php?action=list_hemeroteca"
-        />
-        <node
-            module_name="WIDGET_MANAGER"
-            privilege="WIDGET_ADMIN"
-            title="'.htmlspecialchars(_("Widgets"), ENT_QUOTES).'"
-            id="widget_manager"
-            link="controllers/widget/widget.php"
         />
         <node class="divider" />
         <node
