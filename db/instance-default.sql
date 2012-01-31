@@ -1832,6 +1832,10 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('poll_settings', 'a:3:{s:9:"typeValue";s:7:"percent";s:9:"widthPoll";s:3:"600";s:10:"heightPoll";s:3:"500";}'),
 ('opinion_settings', 'a:2:{s:14:"total_director";s:1:"2";s:15:"total_editorial";s:1:"3";}');
 
+INSERT INTO `settings` (`name`, `value`) VALUES
+('image_front_thumb_size', 'a:2:{s:5:"width";s:3:"350";s:6:"height";s:3:"250";}'),
+('image_inner_thumb_size', 'a:2:{s:5:"width";s:3:"480";s:6:"height";s:3:"250";}'),
+('image_thumb_size', 'a:2:{s:5:"width";s:3:"140";s:6:"height";s:3:"100";}');
 -- --------------------------------------------------------
 
 --
