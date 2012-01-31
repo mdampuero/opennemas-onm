@@ -47,24 +47,25 @@
             <table class="adminform" border="0">
                 <tr>
                     <td>
-                        <div class="form-wrapper">                           
+                        <div class="form-wrapper">
                              <div>
-                                <label for="opinion_settings[total_director]">{t}Total Director Opinion in widget:{/t}</label>
+                                <label for="opinion_settings[total_director]">{t}Number of director articles in the widget:{/t}</label>
                                 <input type="text" class="required" name="opinion_settings[total_director]" value="{$configs['opinion_settings']['total_director']|default:"1"}" />
                             </div>
                             <br />
                             <div>
-                                <label for="opinion_settings[total_editorial]">{t}Total Editorials in widget:{/t}</label>
+                                <label for="opinion_settings[total_editorial]">{t}Number of editorial articles in the widget:{/t}</label>
                                 <input type="text" class="required" name="opinion_settings[total_editorial]" value="{$configs['opinion_settings']['total_editorial']|default:"2"}" />
                             </div>
                             <br />
-                              
                         </div>
                     </td>
                 </tr>
             </table>
-            <div class="action-bar">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="action-bar clearfix">
+                <div class="right">
+                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+                </div><!-- / -->
             </div>
         </div>
     </div>
