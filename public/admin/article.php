@@ -481,10 +481,12 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('photo2', $photo2);
             }
 
-            $imgHome = $article->params['imgHome'];
-            if(!empty($imgHome)){
-                $photoHome= new Photo($imgHome);
-                $tpl->assign('photoHome', $photoHome);
+            if (array_key_exists('imgHome', $article->params)) {
+                $imgHome = $article->params['imgHome'];
+                if(!empty($imgHome)){
+                    $photoHome= new Photo($imgHome);
+                    $tpl->assign('photoHome', $photoHome);
+                }
             }
 
             $video = $article->fk_video;

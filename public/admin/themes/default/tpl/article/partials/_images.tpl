@@ -11,7 +11,7 @@
                 </ul><!-- / -->
                 <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>
-                        <a class="delete-button" onclick="javascript:recuperar_eliminar('img1');">
+                        <a class="delete-button">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
@@ -33,14 +33,14 @@
                         </div><!-- / -->
                         <div id="footer_img_portada" class="article-resource-footer">
                             <label for="title">{t}Footer text for frontpage image:{/t}</label>
-                            <textarea name="img1_footer" style="width:95%">{$article->img1_footer|clearslash|escape:'html'}</textarea>
-                            <input type="hidden" name="img1" value="{$article->img1|default:""}" />
+                            <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id" />
                         </div>
                     </div><!-- / -->
                 </div><!-- /frontpage-image -->
                 <div id="inner-image" class="droppable-image-position droppable-position">
                     <div>
-                        <a class="delete-button" onclick="javascript:recuperar_eliminar('img2');">
+                        <a class="delete-button">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img2" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
@@ -62,8 +62,8 @@
                         </div>
                         <div id="footer_img_interior" class="article-resource-footer">
                             <label for="title">{t}Footer text for inner image:{/t}</label>
-                            <textarea name="img2_footer" title="Imagen" style="width:95%">{$article->img2_footer|clearslash|escape:'html'}</textarea>
-                            <input type="hidden" name="img2" value="{$article->img2|default:""}" />
+                            <textarea name="img2_footer" title="Imagen" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
                         </div>
                     </div>
                 </div><!-- /frontpage-image -->
@@ -148,15 +148,15 @@
                         </div><!-- / -->
                         <div class="article-resource-footer">
                             <label for="title">{t}Footer text for frontpage image:{/t}</label>
-                            <!-- <textarea name="img1_footer" style="width:95%">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
-                            <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" />
+                            <!-- <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea> -->
+                            <input type="hidden" name="fk_video" value="{$article->fk_video|default:""}" class="related-element-id" />
                         </div>
                     </div><!-- / -->
                 </div><!-- /frontpage-video -->
 
                 <div id="inner-video" class="droppable-video-position droppable-position">
                     <div>
-                        <a class="delete-button" onclick="javascript:recuperar_eliminar('video2');">
+                        <a class="delete-button">
                             <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
@@ -180,8 +180,8 @@
                         </div>
                         <div class="article-resource-footer">
                             <label for="title">{t}Footer text for inner video:{/t}</label>
-                            <textarea name="footer_video2" style="width:95%">{$article->footer_video2|clearslash|escape:'html'}</textarea>
-                            <input type="hidden" name="fk_video2" value="{$video2->pk_video}" />
+                            <textarea name="footer_video2" style="width:95%" class="related-element-footer">{$article->footer_video2|clearslash|escape:'html'}</textarea>
+                            <input type="hidden" name="fk_video2" value="{$video2->pk_video}" class="related-element-id"/>
                         </div>
                     </div>
                 </div><!-- /inner-video -->
@@ -230,6 +230,19 @@
 <script>
 jQuery(document).ready(function($){
     $('#related-images').tabs();
+    jQuery('#related-images .delete-button').on('click', function () {
+        var parent = jQuery(this).parent();
+        var elementID = parent.find('.related-element-id');
+
+        if (elementID.val() > 0) {
+            elementID.data('id', elementID.val());
+            elementID.val(null);
+            parent.fadeTo('slow', 0.5);
+        } else {
+            elementID.val(elementID.data('id'));
+            parent.fadeTo('slow', 1);
+        };
+    });
 });
 getGalleryImages('listByCategory','{$category}','','1');
 </script>
