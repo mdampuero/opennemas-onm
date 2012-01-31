@@ -1317,9 +1317,12 @@ div.action-bar .right{
 			line-height:15px;
 			margin-bottom:7px;
 		}
-		#media-browser .photo:hover .data .description,
-		#media-browser .photo:hover .data .tags {
-			white-space:normal;
+
+		#media-browser .photo .data .title,
+		#media-browser .photo .data .description,
+		#media-browser .photo .data .tags {
+			white-space:normal !important;
+			width:250px;
 			margin-bottom:3px;
 		}
 
