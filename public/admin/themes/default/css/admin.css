@@ -1581,11 +1581,8 @@ div.action-bar .right{
 #album-images .list-of-images .image-moving {
 	width:80px;
 	height:80px;
-	display:inline-block;
-	margin: 0 10px 10px 0;
-	overflow:hidden;
 	cursor:pointer;
-	position:relative;
+	position:relative;	
 }
 #album-images .list-of-images .image > img {
 	width:100%;
@@ -1607,8 +1604,7 @@ div.action-bar .right{
 	clear:both
 }
 .list-of-images ul {
-	margin:0;
-	padding:0;
+	list-style-type: none; margin: 0; padding: 0;
 }
 .list-of-images .image textarea
 {
@@ -1618,19 +1614,19 @@ div.action-bar .right{
 {
 	display:block;
 }
-.list-of-images .image {
+.list-of-images .image,
+.list-of-images .image-moving {
+	margin: 3px 3px 3px 0; float: left; width: 100px; height: 90px; font-size: 4em; text-align: center;
 	background:White;
 }
 .list-of-images .image .overlay-image {
 	vertical-align:bottom;
 	text-align:right;
+	width:100%;
 }
 .list-of-images .image .overlay-image .image-buttons {
 	background: rgba(255,255,255,0.8);
 	display:none;
-}
-.list-of-images .image .overlay-image .image-buttons li {
-	display:inline-block;
 }
 .list-of-images .image .overlay-image:hover .image-buttons {
 	display:block;
@@ -1647,7 +1643,12 @@ div.action-bar .right{
 	left:0;
 }
 .list-of-images .image-moving {
-
+	float:left;
+	border: 1px solid #DDD;
+	border-radius: 4px 4px 4px 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	display: block;
+	padding: 4px;
 }
 /* -------------------------------------------------------------
   Ajax file upload

@@ -100,7 +100,8 @@ document.observe('dom:loaded', function() {
 });
 jQuery(document).ready(function($){
     $( ".list-of-images ul" ).sortable({
-        placeholder: "image-moving"
+        placeholder: "image-moving",
+        contaiment:  "parent"
     }).disableSelection();
 
     $( ".list-of-images ul" ).droppable({

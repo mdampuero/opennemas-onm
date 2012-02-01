@@ -107,7 +107,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label for="metadata">{t}Keywords:{/t}<sub>{t}Separated by coma{/t}</sub></label>
+                            <label for="metadata">{t}Keywords:{/t}<small> ({t}Separated by coma{/t})</small></label>
                             <input type="text" id="metadata" name="metadata" style="width:98%"
                                    class="required" title={t}"Metadata"{/t} value="{$album->metadata}" />
                         </td>
