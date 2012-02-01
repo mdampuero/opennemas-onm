@@ -2,7 +2,7 @@
 
 
 {block name="header-js" append}
-    {script_tag src="/utilscategory.js" language="javascript"}
+    {script_tag src="/utilscategory.js"}
 {/block}
 {block name="header-css" append}
     <style type="text/css">
@@ -31,7 +31,7 @@ jQuery(document).ready(function ($){
                  {acl isAllowed="CATEGORY_CREATE"}
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" class="admin_add" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
+                        <img src="{$params.IMAGE_DIR}list-add.png" title="Nueva" alt="Nueva"><br />{t}New section{/t}
                     </a>
                 </li>
                 {/acl}
@@ -39,7 +39,7 @@ jQuery(document).ready(function ($){
                 <li class="separator"></li>
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                         {t}Configurations{/t}
                     </a>
                 </li>
@@ -120,7 +120,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="10">
+                            <td colspan="7">
                                 &nbsp;
                             </td>
                         </tr>
@@ -147,7 +147,7 @@ jQuery(document).ready(function ($){
                                 {include file="category/_partials/print_list_category.tpl" category=$categorys[c] subcategorys=$subcategorys[c] num_contents=$num_contents[c] num_sub_contents=$num_sub_contents[c]}
                             {/if}
                         {sectionelse}
-                                <tr>
+                            <tr>
                                 <td class="empty">
                                     {t}No available categories for listing{/t}
                                 </td>
@@ -156,7 +156,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8" align="center"> </td>
+                            <td colspan="7"> </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -192,7 +192,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8" align="center"> </td>
+                            <td colspan="7" > </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -227,7 +227,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8">
+                            <td colspan="7">
                             </td>
                         </tr>
                     </tfoot>
@@ -263,7 +263,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8">
+                            <td colspan="7">
                             </td>
                         </tr>
                     </tfoot>
@@ -299,7 +299,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8">
+                            <td colspan="7">
                             </td>
                         </tr>
                     </tfoot>
@@ -335,7 +335,7 @@ jQuery(document).ready(function ($){
                     </tbody>
                     <tfoot>
                         <tr class="pagination">
-                            <td colspan="8">
+                            <td colspan="7">
                             </td>
                         </tr>
                     </tfoot>

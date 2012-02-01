@@ -25,8 +25,8 @@
             <div class="title"><h2>{t}Sections :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Go back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
             </ul>
@@ -36,15 +36,15 @@
 
         {render_messages}
 
-        <div id="{$category}">
+        <div id="c-{$category}">
 
             <table class="adminheading">
                  <tr>
-                     <th align="left">{t}Information about sections module settings{/t}</th>
+                     <th>{t}Information about sections module settings{/t}</th>
                  </tr>
             </table>
 
-            <table class="adminform" border="0">
+            <table class="adminform">
                 <tr>
                     <td>
                         <div class="form-wrapper">                           
