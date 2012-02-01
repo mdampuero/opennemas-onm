@@ -410,8 +410,6 @@ a.unpublishing:hover {
   Content from styles.css
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .panel {
-	clear: both;
-	display: none;
 	border: 1px solid #CCC;
 	width: 100%;
 	margin-bottom: 10px;
@@ -1563,6 +1561,94 @@ div.action-bar .right{
 	vertical-align: text-top;
 }
 
+/* -------------------------------------------------------------
+  Ajax file upload
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#album-images > div{
+ 	vertical-align:top;
+
+}
+#album-images .list-of-images {
+	width:99%;
+	border:1px solid #ccc;
+}
+#album-images .list-of-images > ul {
+	margin:10px;
+	min-height:300px;
+	position:relative;
+}
+#album-images .list-of-images .image,
+#album-images .list-of-images .image-moving {
+	width:80px;
+	height:80px;
+	display:inline-block;
+	margin: 0 10px 10px 0;
+	overflow:hidden;
+	cursor:pointer;
+	position:relative;
+}
+#album-images .list-of-images .image > img {
+	width:100%;
+	height:100%;
+}
+#album-edit-form {
+	border:1px solid #ccc;
+}
+
+.album-information {
+	margin:10px;
+	width:100%;
+}
+.album-information td {
+	padding:3px 0;
+}
+#album-edit-form label {
+	display:block;
+	clear:both
+}
+.list-of-images ul {
+	margin:0;
+	padding:0;
+}
+.list-of-images .image textarea
+{
+	display:none;
+}
+.list-of-images .image.editing textarea
+{
+	display:block;
+}
+.list-of-images .image {
+	background:White;
+}
+.list-of-images .image .overlay-image {
+	vertical-align:bottom;
+	text-align:right;
+}
+.list-of-images .image .overlay-image .image-buttons {
+	background: rgba(255,255,255,0.8);
+	display:none;
+}
+.list-of-images .image .overlay-image .image-buttons li {
+	display:inline-block;
+}
+.list-of-images .image .overlay-image:hover .image-buttons {
+	display:block;
+}
+.list-of-images .image .overlay-image:hover .image-buttons img { width:16px; }
+
+.list-of-images .image .overlay-image {
+	background:transparent;
+	display:block;
+	width:100%;
+	height:100%;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.list-of-images .image-moving {
+
+}
 /* -------------------------------------------------------------
   Ajax file upload
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

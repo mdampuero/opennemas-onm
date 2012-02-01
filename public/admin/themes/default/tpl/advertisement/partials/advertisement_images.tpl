@@ -76,5 +76,35 @@
                 parent.fadeTo('slow', 1);
             };
         });
-    })
+        $( ".droppable-image-position" ).droppable({
+            accept: "#photos_container #photos img",
+            drop: function( event, ui ) {
+                var image = ui.draggable;
+                var parent = $(this);
+
+                if (image.data('type-img') != 'swf') {
+                    // Change the image thumbnail to the new one
+                    parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
+                } else {
+                    parent.find('.article-resource-image').html( "<div id=\"flash-container-replace\"><\/div><script> var flashvars = {}; var params = {}; var attributes = {};" +
+                        "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
+                    );
+                };
+
+                // Change the image information to the new one
+                var article_info = parent.find(".article-resource-image-info");
+                article_info.find(".filename").html(image.data("filename"));
+                article_info.find(".image_size").html(image.data("width") + " x "+ image.data("height") + " px");
+                article_info.find(".file_size").html(image.data("weight") + " Kb");
+                article_info.find(".created_time").html(image.data("created"));
+                article_info.find(".description").html(image.data("description"));
+                article_info.find(".tags").html(image.data("tags"));
+
+                // Change the form values
+                var article_inputs = parent.find(".article-resource-footer");
+                article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
+                article_inputs.find("textarea").attr('value', image.data("description"));
+            }
+        });
+    });
 </script>

@@ -1,5 +1,8 @@
 {extends file="base/admin.tpl"}
 
+{block name="prototype"}
+{/block}
+
 {block name="header-css" append}
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
     <link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-image-gallery.min.css">
@@ -160,11 +163,5 @@
     <!--<script id="template-upload" type="text/html" src="{$params.JS_DIR}/image/template_upload.js"></script>-->
     <!--<script id="template-download" type="text/html" src="{$params.JS_DIR}/image/template_download.js"></script>-->
 
-
-    <script>
-    jQuery(document).ready(function($) {
-        
-    });
-    </script>
 {/block}
 

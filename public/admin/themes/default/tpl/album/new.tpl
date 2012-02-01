@@ -1,8 +1,17 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+<style type="text/css" media="screen">
+    label {
+        display:block;
+        color:#666;
+        text-transform:uppercase;
+    }
+</style>
+{/block}
+
 {block name="header-js" append}
     {script_tag src="/utilsalbum.js" language="javascript"}
-
 {/block}
 
 {block name="footer-js" append}
@@ -19,27 +28,29 @@
             <ul class="old-button">
                 <li>
                     {acl isAllowed="ALBUM_CREATE"}
-                    <a class="admin_add" onClick="album_get_order(); if(check_crop()) enviar(this, '_self', 'validate', '{$album->id}');" value="Validar" title="Validar">
-                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
-                    </a>
+                    <button type="submit" name="action" value="validate">
+                        <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                    </button>
                     {/acl}
                 </li>
                 <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                            <a onClick="javascript:album_get_order(); if(check_crop()) enviar(this, '_self', 'update', '{$album->id}');">
+                        <button type="submit" name="action" value="update">
+                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                            <a onClick="javascript: album_get_order(); if(check_crop()) enviar(this, '_self', 'create', '0');">
+                        <button type="submit" name="action" value="create">
+                            <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
+                        </button>
                         {/acl}
                     {/if}
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y salir" alt="Guardar y salir"><br />{t}Save{/t}
-                    </a>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=list&category={$smarty.request.category}">
+                    <a href="{$smarty.server.PHP_SELF}?action=list&amp;category={$smarty.request.category}">
                         <img border="0" src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -47,97 +58,69 @@
         </div>
     </div>
     <div class="wrapper-content">
+        <div class="album-edit-form panel">
+            <table class="album-information">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="title">{t}Title:{/t}</label>
+                            <input type="text" id="title" name="title" title={t}"Album"{/t}
+                                value="{$album->title|clearslash|escape:"html"}"
+                                class="required"
+                                onBlur="javascript:get_metadata(this.value);" 
+                                style="width:98%;" />
+                        </td>
+                        <td rowspan="4" style="width:200px">
+                            <label for="title">{t}Available:{/t}</label>
+                            <input type="checkbox" value="{$album->available}" id="available" name="available">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display:inline-block;width:30%;">
+                                <label for="category">{t}Category{/t}</label>
+                                <select name="category" id="category" style="width:98%">
+                                    {section name=as loop=$allcategorys}
+                                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                    <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
+                                    {/acl}
+                                    {section name=su loop=$subcat[as]}
+                                        {acl hasCategoryAccess=$subcat[as]->pk_content_category}
+                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
+                                        {/acl}
+                                    {/section}
+                                    {/section}
+                                </select>
+                            </div>
+                            <div style="display:inline-block;width:69%;">
+                                <label for="agency">{t}Agency{/t}</label>
+                                <input type="text" id="agency" name="agency" style="width:98%"
+                                    value="{$album->agency|clearslash|escape:"html"}" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="description">{t}Description{/t}</label>
+                            <textarea name="description" id="description" style="width:98%;" >{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="metadata">{t}Keywords:{/t}<sub>{t}Separated by coma{/t}</sub></label>
+                            <input type="text" id="metadata" name="metadata" style="width:98%"
+                                   class="required" title={t}"Metadata"{/t} value="{$album->metadata}" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="album-images">
+                {include file="album/partials/_images.tpl"}
+            </div><!-- /album-images -->
+        </div>
 
-        <table class="adminheading">
-            <tr>
-                <td>
-                    {t}Enter album information{/t}
-                </td>
-            </tr>
-        </table>
-
-        <table class="adminform" >
-            <tbody>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">{t}Title:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="title" name="title" title={t}"Album"{/t}
-                            size="60" value="{$album->title|clearslash|escape:"html"}"
-                            class="required" onBlur="javascript:get_metadata(this.value);" />
-                    </td>
-                    <td rowspan="4">
-                        <table style='background-color:#F5F5F5; padding:18px;'>
-                            <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                <label for="title">Secci&oacute;n:</label>
-                                </td>
-                                <td nowrap="nowrap">
-                                    <select name="category" id="category">
-                                        {section name=as loop=$allcategorys}
-                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                                            {/acl}
-                                            {section name=su loop=$subcat[as]}
-                                                {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                                                {/acl}
-                                            {/section}
-                                        {/section}
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top"  align="right" nowrap="nowrap">
-                                    <label for="title"> {t}Available:{/t} </label>
-                                </td>
-                                <td valign="top" nowrap="nowrap">
-                                        <select name="available" id="available"
-                                            class="required" {acl isNotAllowed="ALBUM_AVAILABLE"} disabled="disabled" {/acl}>
-                                            <option value="0" {if $album->available eq 0} selected {/if}>{t}No{/t}</option>
-                                            <option value="1" {if $album->available eq 1} selected {/if}>{t}Yes{/t}</option>
-
-                                        </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;" >
-                        <label for="title">Agencia:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="agency" name="agency" title={t}"Album"{/t}
-                            size="60" value="{$album->agency|clearslash|escape:"html"}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="title">Descripci&oacute;n:</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:90%; height:10em;">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td valign="top" align="right" style="padding:4px;">
-                        <label for="metadata">{t}Keywords:{/t}</label>
-                    </td>
-                    <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="metadata" name="metadata" size="60"
-                           class="required" title={t}"Metadata"{/t} value="{$album->metadata}" />
-                        <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
-                    </td>
-                </tr>
-                {include file="album/album_images.tpl"}
-            </tbody>
-        </table>
-
-        <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+
     </div>
 </form>
 

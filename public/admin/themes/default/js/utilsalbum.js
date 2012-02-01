@@ -387,17 +387,17 @@ function get_images_album(param,page)
 
 function delete_album(id,page){
 
-      new Ajax.Request( 'album.php?action=delete&id='+id+'&page='+page,
-        {
-            onSuccess: function(transport) {
-                 var msg = transport.responseText;
-                // showMsg({'warn':[msg ]},'growl');
-                 if(confirm(msg)) {
-                      var ruta='album.php?action=yesdel&id='+id+'&page='+page;
-                      location.href= ruta;
-                   }
-            }
-        });
+    new Ajax.Request( 'album.php?action=delete&id='+id+'&page='+page,
+    {
+        onSuccess: function(transport) {
+             var msg = transport.responseText;
+            // showMsg({'warn':[msg ]},'growl');
+             if(confirm(msg)) {
+                  var ruta='album.php?action=yesdel&id='+id+'&page='+page;
+                  location.href= ruta;
+               }
+        }
+    });
 
 
  }

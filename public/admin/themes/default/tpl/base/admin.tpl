@@ -17,7 +17,7 @@
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-    {css_tag href="/bootstrap/bootstrap.css"}
+        {css_tag href="/bootstrap/bootstrap.css"}
         {css_tag href="/style.css"}
         {css_tag href="/admin.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
@@ -31,6 +31,7 @@
         {script_tag src="/prototype.js"}
         {script_tag src="/scriptaculous/scriptaculous.js"}
         {script_tag src="/scriptaculous/effects.js"}
+        {script_tag src="/prototype-date-extensions.js"}
     {/block}
 
     {block name="js-library"}
@@ -46,7 +47,6 @@
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
-        {script_tag src="/prototype-date-extensions.js"}
         {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}

@@ -167,6 +167,7 @@ switch($action) {
     break;
 
     case 'create':
+        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_CREATE');
         $album = new Album();
@@ -180,6 +181,7 @@ switch($action) {
     break;
 
     case 'update':
+        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_UPDATE');
 
@@ -197,6 +199,7 @@ switch($action) {
     break;
 
     case 'validate':
+        var_dump($_POST);die();
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         if(empty($id)) {
@@ -204,7 +207,7 @@ switch($action) {
         Acl::checkOrForward('ALBUM_CREATE');
 
         $album = new Album();
-        if(!$album->create( $_POST ))
+        if (!$album->create( $_POST ))
             m::add(_($album->errors));
         } else {
 

@@ -108,7 +108,7 @@
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
+                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{$albums[as]->title|clearslash}">
                         {$albums[as]->title|clearslash}
                     </a>
                 </td>
@@ -116,9 +116,9 @@
                     {$albums[as]->views}
                 </td>
                 {if $category=='widget' || $category=='all'}
-                    <td class="center">
-                         {$albums[as]->category_title}
-                    </td>
+                <td class="center">
+                     {$albums[as]->category_title}
+                </td>
                 {/if}
                 <td class="center">
                          {$albums[as]->created}
@@ -126,10 +126,10 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $albums[as]->available == 1}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
+                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
@@ -138,9 +138,9 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
                         {if $albums[as]->favorite == 1}
-                           <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -148,9 +148,9 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_HOME"}
                         {if $albums[as]->in_home == 1}
-                           <a href="?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -158,11 +158,11 @@
                     <ul class="action-buttons">
                         {acl isAllowed="ALBUM_UPDATE"}
                         <li>
-                           <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
-                                   <img src="{$params.IMAGE_DIR}edit.png" /></a>
+                           <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{t}Edit{/t}" >
+                                <img src="{$params.IMAGE_DIR}edit.png" />
+                            </a>
                         </li>
                         {/acl}
-
                         {acl isAllowed="ALBUM_DELETE"}
                         <li>
                             <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
