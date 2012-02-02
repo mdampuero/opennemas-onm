@@ -164,13 +164,19 @@
                 <tr>
                     <td colspan="3">
                         <label for="inmenu">{t}Show in menu:{/t}</label>
-                        <input type="checkbox" id="inmenu" name="inmenu"
-                               value="{if empty($category->fk_content_category) || $category->inmenu eq 1}1{else}0{/if}"
-                            {if empty($category->fk_content_category) || $category->inmenu eq 1} checked="checked"{/if}>
+                        <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
                             {t}If this option is activated this category will be showed in menu{/t}
                     </td>
                 </tr>
-
+                <tr>
+                    <td colspan="3">
+                        <label for="params[inrss]">{t}Show in rss:{/t}</label>
+                        <input type="checkbox" id="params[inrss]" name="params[inrss]" value="1"
+                            {if !isset($category->params['inrss']) || $category->params['inrss'] eq 1} checked="checked"{/if}>
+                            {t}If this option is activated this category will be showed in rss{/t}
+                    </td>
+                </tr>
+                
                 {if isset($configurations) && !empty($configurations['allowLogo'])}
 
                  <tr>
@@ -233,7 +239,7 @@
                                 <td>
                                     <ul class="action-buttons">
                                         <li>
-                                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
+                                            <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$subcategorys[s]->pk_content_category}" title="Modificar">
                                                 <img src="{$params.IMAGE_DIR}edit.png" />
                                             </a>
                                         </li>
