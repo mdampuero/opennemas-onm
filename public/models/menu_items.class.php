@@ -121,7 +121,7 @@ class MenuItems {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
             $GLOBALS['application']->logger->debug('Error: '.$error_msg);
             $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
-            return false; 
+            return false;
         }
         return true;
 
@@ -224,23 +224,23 @@ class MenuItems {
                            " VALUES (?,?,?,?,?,?)");
 
             $stmtUpdate = $GLOBALS['application']->conn->Prepare("UPDATE menu_items ".
-                           " SET  `title` =?, `position` =?  ".
+                           " SET  `title` =?, `position` =?, `pk_father`=?  ".
                            " WHERE pk_item = ?" );
 
 
             $menu = MenuItems::getPkItems($id);
-            
+
             $values =array();
             $valuesUpdate =array();
             $i=1;
 
             foreach ($items as $item) {
-          
+
                 //update item if exists in menu
                 $update = 0;
 
                 if (!empty($item->pk_item) && in_array( $item->pk_item, $menu ) ) {
-                    $valuesUpdate[] = array(  $item->title, $i,
+                    $valuesUpdate[] = array(  $item->title, $i, $config['pk_father'],
                          $item->pk_item );
                     $update = 1;
 
@@ -304,12 +304,12 @@ class MenuItems {
     }
 
     static public function deleteItems($items) {
-      
+
         $sql= "DELETE FROM menu_items WHERE pk_item = ?";
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        foreach($items as $item) { 
+        foreach($items as $item) {
             $resp = $GLOBALS['application']->conn->Execute($stmt, array($item) );
-         
+
             if ( $resp === false) {
                 $error_msg = $GLOBALS['application']->conn->ErrorMsg();
                 $GLOBALS['application']->logger->debug('Error: '.$error_msg);
