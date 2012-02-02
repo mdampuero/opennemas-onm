@@ -112,7 +112,7 @@ if( isset($_REQUEST['action']) ) {
             
             Acl::checkOrForward('CATEGORY_UPDATE');
             
-            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+//            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
             $configurations = s::get('section_settings');
@@ -143,7 +143,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'create':
             Acl::checkOrForward('CATEGORY_CREATE');
             
-            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+//            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
             $category = new ContentCategory();
@@ -222,7 +222,7 @@ if( isset($_REQUEST['action']) ) {
 		case 'validate':
             
             $configurations = s::get('section_settings');
-            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+//            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
             if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
             
             if($configurations['allowLogo'] == 1 ) {
