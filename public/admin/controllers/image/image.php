@@ -180,11 +180,6 @@ switch($action) {
     case 'category_catalog':
 
         $cm = new ContentManager();
-        $photos = $cm->find(
-            'Photo',
-            'contents.fk_content_type=8 and photos.media_type="image"',
-            'ORDER BY  created DESC '
-        );
 
         list($photos, $pager) = $cm->find_pages(
             'Photo', 'contents.fk_content_type=8 and photos.media_type="image"',
