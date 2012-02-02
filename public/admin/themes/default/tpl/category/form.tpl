@@ -161,14 +161,13 @@
                         
                     </td>
                 </tr>
-{*                <tr>
+                <tr>
                     <td colspan="3">
-                        <label for="inmenu">{t}Show in menu:{/t}</label>
+                        <label for="inmenu">{t}Available:{/t}</label>
                         <input type="checkbox" id="inmenu" name="inmenu" value="1" {if $category->inmenu eq 1} checked="checked"{/if}>
                             {t}If this option is activated this category will be showed in menu{/t}
                     </td>
                 </tr>
-*}
                 <tr>
                     <td colspan="3">
                         <label for="params[inrss]">{t}Show in rss:{/t}</label>
