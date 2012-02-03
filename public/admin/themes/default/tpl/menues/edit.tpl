@@ -86,7 +86,7 @@ legend {
                                     <label for="name">{t}Name{/t}</label>
                                     <input type="text" name="name" class="required"
                                            id="name" value="{$menu->name|default:""}"  style="width:97%"
-                                           {if !empty($menu->type) && $menu->type neq 'user'} readonly="readonly" {/if}/>
+                                           {if (!empty($menu) && $menu->type neq 'user')} readonly="readonly" {/if}/>
                                 </td>
                                 <td rowspan="3" valign="top" style="padding:10px">
                                     <div class="help-block">
@@ -113,7 +113,7 @@ legend {
                             <tr>
                                 <td valign="top" style="padding:4px 0;">
                                     <label for="description">{t}Father menu{/t}</label>
-                                    <select id='pk_father' name='pk_father'>
+                                    <select id='pk_father' name='pk_father' {if (!empty($menu) && $menu->type neq 'user')} disabled="disabled" {/if}>
                                         <option value="0" title="Ninguno">{t}- Root menu -{/t}</option>
                                         {section loop=$menues name=m}
                                             {assign var=items value=$menues[m]->items}
