@@ -144,7 +144,7 @@ switch($action) {
 
         //Se crea el nombre del PDF
         $date = new DateTime($_POST['date']);
-        $_POST['name'] = $date->format('dmy').'-'.$_POST['category'].'.pdf';
+        $_POST['name'] = $date->format('dmyhis').'-'.$_POST['category'].'.pdf';
         $_POST['path'] = $date->format('Ymd').'/';
         $ruta = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $_POST['path'];
 
@@ -184,7 +184,7 @@ switch($action) {
         Acl::checkOrForward('KIOSKO_DELETE');
         $portada = new Kiosko($_REQUEST['id']);
 
-        $portada->remove();
+        $portada->delete();
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
     break;
@@ -214,7 +214,25 @@ switch($action) {
         } else {
                 m::add(_("Can't be favorite. It's umpublished") );
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('LETTER_DELETE');
+
+        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
+            $fields = $_REQUEST['selected_fld'];
+
+            if(is_array($fields)) {
+                foreach($fields as $i ) {
+                    $portada = new Kiosko($i);
+                    $portada->delete( $i, $_SESSION['userid'] );
+                }
+            }
+        }
+
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
+                    $letterStatus . '&page=' . $page);
     break;
 
     case 'save_positions':
@@ -231,14 +249,8 @@ switch($action) {
 
             }
 
-            $opinion = new Opinion();
-            $msg = $opinion->set_position($_positions, $_SESSION['userid']);
-
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
-            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
+            $portada = new Kiosko();
+            $msg = $portada->set_position($_positions, $_SESSION['userid']);
          }
          if(!empty($msg) && $msg == true) {
              echo _("Positions saved successfully.");
