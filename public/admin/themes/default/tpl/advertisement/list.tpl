@@ -57,6 +57,9 @@
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
             </li>
+            <li>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=4" id="link_home" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
+            </li>
             {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
@@ -124,7 +127,7 @@
                         <td style="">
                             <label>
                                 {if $advertisements[c]->with_script == 1}
-                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png" 
+                                    <img src="{$params.IMAGE_DIR}iconos/script_code_red.png"
                                          alt="Javascript" title="Javascript" />
                                 {elseif $advertisements[c]->is_flash == 1}
                                     <img src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}"
@@ -158,7 +161,7 @@
                         </td>
                         <td style="text-align:center;" class="center">
                             <ul class="action-buttons">
-                          
+
                                 {acl isAllowed="ADVERTISEMENT_AVAILA"}
                                 <li>
                                     {if $advertisements[c]->available == 1}
@@ -213,7 +216,7 @@
 
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" value="{$id|default:""}" />
-        
+
     </div><!--fin content-wrapper-->
 </form>
 {/block}

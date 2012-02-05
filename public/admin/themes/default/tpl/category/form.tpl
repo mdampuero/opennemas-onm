@@ -21,22 +21,46 @@
 {/block}
 
 {block name="header-js" append}
-    {script_tag src="/jquery/jquery.min.js"}
-    {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
-    {script_tag src="/utilscategory.js"}
-    <script type="text/javascript">
-    // <![CDATA[
-        Sortable.create('subcates',{
-            tag:'table',
-            dropOnEmpty: true,
-            containment:["subcates"],
-            constraint:false});
-    // ]]>
-    </script>
+{script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+{script_tag src="/utilscategory.js"}
+<script type="text/javascript">
+// <![CDATA[
+    Sortable.create('subcates',{
+        tag:'table',
+        dropOnEmpty: true,
+        containment:["subcates"],
+        constraint:false});
+// ]]>
+</script>
+{/block}
+
+{block name="footer-js" append}
+<script type="text/javascript">
+    try {
+        new Validation('form_upload', { immediate : true });
+    } catch(e) { }
+
+    jQuery(document).ready(function($) {
+        $('#site_color').ColorPicker({
+            onSubmit: function(hsb, hex, rgb, el) {
+                jQuery(el).val(hex);
+                jQuery(el).ColorPickerHide();
+            },
+            onChange: function (hsb, hex, rgb) {
+                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
+            },
+            onBeforeShow: function () {
+                jQuery(this).ColorPickerSetColor(this.value);
+            }
+        })
+        .bind('keyup', function(){
+            jQuery(this).ColorPickerSetColor(this.value);
+        });
+    });
+</script>
 {/block}
 
 {block name="content"}
-
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 
     <div class="top-action-bar clearfix">
@@ -158,7 +182,7 @@
                         </div>
                     </td>
                     <td>
-                        
+
                     </td>
                 </tr>
                 <tr>
@@ -191,7 +215,7 @@
                 <tr>
                     <td colspan="3">
                         <label for="site_color">{t}Color:{/t}</label>
-                        <input readonly="readonly" size="6" type="text" id="site_color" name="site_color" value="{$category->color|default:"0000ff"}">
+                        <input readonly="readonly" size="6" type="text" id="site_color" name="color" value="{$category->color|default:"0000ff"}">
                         <div class="colopicker_viewer" style="background-color:#{$category->color|default:"0000ff"}"></div>
                     </td>
                 </tr>
@@ -233,7 +257,7 @@
                                 <td>
                                     <ul class="action-buttons">
                                         <li>
-                                            <a href="{$smarty.server.PHP_SELF}?action=read&id={$subcategorys[s]->pk_content_category}" title="Modificar">
+                                            <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$subcategorys[s]->pk_content_category}" title="Modificar">
                                                 <img src="{$params.IMAGE_DIR}edit.png" />
                                             </a>
                                         </li>
@@ -252,39 +276,10 @@
                 {/if}
             </tbody>
         </table>
-            
+
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
     </div><!--fin wrapper-content-->
 </form>
-{/block}
-
-{block name="footer-js" append}
-       <script type="text/javascript">
-        try {
-                // Activar la validación
-                new Validation('form_upload', { immediate : true });
-        } catch(e) {
-                // Escondemos los errores
-                //console.log( e );
-        }
-        //Color Picker jQuery
-        $.noConflict();
-        jQuery('#site_color').ColorPicker({
-            onSubmit: function(hsb, hex, rgb, el) {
-                jQuery(el).val(hex);
-                jQuery(el).ColorPickerHide();
-            },
-            onChange: function (hsb, hex, rgb) {
-                jQuery('.colopicker_viewer').css('background-color', '#' + hex);
-            },
-            onBeforeShow: function () {
-                jQuery(this).ColorPickerSetColor(this.value);
-            }
-        })
-        .bind('keyup', function(){
-            jQuery(this).ColorPickerSetColor(this.value);
-        });
-    </script>
 {/block}
