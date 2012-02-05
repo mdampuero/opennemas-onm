@@ -5,7 +5,7 @@
 {/block}
 
 {block name="header-js" append}
-{script_tag src="/newsletter.js" language="javascript"}
+{script_tag src="/newsletter.js"}
 {/block}
 {block name="footer-js" append}
 <script type="text/javascript">
@@ -28,13 +28,13 @@
 <div class="top-action-bar" id="buttons">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Delivered newsletter report{/t} </h2>
-            <img src="{$params.IMAGE_DIR}newsletter/5.gif" width="300" height="40" border="0" />
+            <img src="{$params.IMAGE_DIR}newsletter/5.gif" width="300" height="40" />
         </div>
 
         <ul class="old-button">
             <li>
                 <a href="#" class="admin_add" title="{t}Back{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
+                    <img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
                     {t}Previous step{/t}
                 </a>
             </li>
@@ -65,7 +65,7 @@
         </tr>
         <tfoot>
             <tr>
-                <td align="right" colspan=2>
+                <td colspan=2>
                     <strong>Envío finalizado.</strong>
                 </td>
             </tr>

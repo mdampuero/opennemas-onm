@@ -587,6 +587,7 @@ class ContentCategoryManager {
 
         // First loop categories
         foreach($categories as $category) {
+            $category->params = unserialize($category->params);
             if(($category->fk_content_category == 0) && ($category->internal_category == 1) && ($category->inmenu == 1)) {
             //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) {
                 $tree[$category->pk_content_category] = $category;
@@ -599,11 +600,11 @@ class ContentCategoryManager {
             //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) {
             if(($category->fk_content_category != 0) && ($category->internal_category != 0) &&
                (isset($tree[$category->fk_content_category])) /* && ($category->inmenu == 1)*/ ) {
-
+                
                 $tree[$category->fk_content_category]->childNodes[$category->pk_content_category] = $category;
             }
         }
-
+        
         return $tree;
     }
 

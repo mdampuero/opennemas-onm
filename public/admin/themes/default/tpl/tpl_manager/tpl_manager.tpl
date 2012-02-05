@@ -35,7 +35,7 @@
         $('formulario').submit();
     }
 
-}
+
     </script>
 {/block}
 {block name="header-css" append}
@@ -59,7 +59,7 @@ img.inputExtension { top:9px !important; }
 			</li>
 
 			<li>
-                <button type="submit" name="action" value="refresh" 
+                <button type="submit" name="action" value="refresh"
                     title="{t}Delete and generates a new cache with updated data. BE AWARE: If you apply this action to multiple files you could slow down the system.{/t}">
                     <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" /><br />
                     {t}Regenerate{/t}
@@ -67,7 +67,7 @@ img.inputExtension { top:9px !important; }
 			</li>
 
 			<li>
-                <button type="submit" name="action" value="update" 
+                <button type="submit" name="action" value="update"
                     title="{t}This changes the expire date but maintains the cache file contents{/t}">
                     <img src="{$params.IMAGE_DIR}template_manager/update48x48.png" /><br />
                     {t}Change expiration{/t}
@@ -380,7 +380,8 @@ img.inputExtension { top:9px !important; }
 		 </div>
 		{/if}
 
-    	<input type="hidden" id="page"   name="page"   value="{$smarty.request.page|default:'1'}" />
+    	<input type="hidden" id="page" name="page" value="{$smarty.request.page|default:'1'}" />
+        <input type="hidden" id="action" name="action" value="" />
 </div>
 </form>
 {/block}

@@ -396,7 +396,10 @@
                                 <td rowspan=2>
                                     <div class="help-block margin-left-1">
                                         <div class="title"><h4>{t}Get API keys{/t}</h4></div>
-                                        <div class="content">{t escape=off}You can get your Google Maps API Key from <a href="http://code.google.com/intl/gl-GL/apis/maps/signup.html">Google maps sign up website</a>.{/t}</div>
+                                        <div class="content">
+                                            {t escape=off}You can get your Google <strong>Maps</strong> API Key from <a href="http://code.google.com/apis/maps/signup.html"  target="_blank">Google maps sign up website</a>.{/t}<br>
+                                            {t escape=off}You can get your Google <strong>Search</strong> API Key from <a href="http://www.google.com/cse/manage/create"  target="_blank">Google Search sign up website</a>.{/t}
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

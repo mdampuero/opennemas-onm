@@ -97,6 +97,7 @@ legend {
                                                 <li>{t} Drag menu items to order the menu.  {/t}</li>
                                                 <li>{t} Use add button for create a new link in the menu{/t}</li>
                                                 <li>{t} Use dobleClick if you want delete or edit one element{/t}</li>
+                                                <li>{t} Only allow two levels in menus{/t}</li>
                                             </ul>
                                         </div>
                                     </div>

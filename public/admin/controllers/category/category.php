@@ -88,10 +88,9 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'read':
             Acl::checkOrForward('CATEGORY_UPDATE');
-
+            
             $tpl->assign('formAttrs', 'enctype="multipart/form-data"');
             $category = new ContentCategory( $_REQUEST['id'] );
-            $category->params = is_string($category->params) ? unserialize($category->params) : array();
             $tpl->assign('category', $category);
             $subcategorys = $ccm->getSubcategories( $_REQUEST['id'] );
             $tpl->assign('subcategorys', $subcategorys);
@@ -112,6 +111,9 @@ if( isset($_REQUEST['action']) ) {
 		case 'update':
             
             Acl::checkOrForward('CATEGORY_UPDATE');
+            
+            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+            if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
             $configurations = s::get('section_settings');
 
@@ -140,6 +142,9 @@ if( isset($_REQUEST['action']) ) {
 
 		case 'create':
             Acl::checkOrForward('CATEGORY_CREATE');
+            
+            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+            if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
 
             $category = new ContentCategory();
 
@@ -217,7 +222,9 @@ if( isset($_REQUEST['action']) ) {
 		case 'validate':
             
             $configurations = s::get('section_settings');
-
+            if (isset($_POST['inmenu'])) {$_POST['inmenu'] = 1;} else {$_POST['inmenu'] = 0;}
+            if (isset($_POST['params']['inrss'])) {$_POST['params']['inrss'] = 1;} else {$_POST['params']['inrss'] = 0;}
+            
             if($configurations['allowLogo'] == 1 ) {
 
                 if(!empty($_FILES) && isset($_FILES['logo_path'])) {
