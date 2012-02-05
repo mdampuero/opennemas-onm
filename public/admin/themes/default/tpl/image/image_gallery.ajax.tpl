@@ -3,7 +3,7 @@
    {section name=n loop=$photos}
         <li>
             <div style="float: left;">
-                <a>
+                <a href="#">
                     {if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
                         <object style="z-index:-3; cursor:default;">
                             <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}">
@@ -19,7 +19,6 @@
                                  class="draggable-handler"
                                  style="width:16px;height:16px;"
                                  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif"
-                                 name="{$photos[n]->pk_photo}"
                                  data-id="{$photos[n]->pk_photo}"
                                  data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}"
                                  data-filename="{$photos[n]->name}"
@@ -31,6 +30,7 @@
                                  data-type-img="{$photos[n]->type_img}"
                                  data-description="{$photos[n]->description}"
                                  data-tags="{$photos[n]->metadata}"
+                                 alt="{$photos[n]->description}"
                                  />
                         </span>
                     {else}
@@ -38,7 +38,6 @@
                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}140-100-{$photos[n]->name}"
                             id="draggable_img{$num}"
                             class="draggable-handler"
-                            name="{$photos[n]->pk_photo}"
                             data-id="{$photos[n]->pk_photo}"
                             data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}"
                             data-filename="{$photos[n]->name}"
@@ -50,6 +49,8 @@
                             data-type-img="{$photos[n]->type_img}"
                             data-description="{$photos[n]->description|clearslash|escape:'html'}"
                             data-tags="{$photos[n]->metadata}"
+                            alt="{$photos[n]->description}"
+                            />
                     {/if}
                 </a>
             </div>

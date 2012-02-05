@@ -22,12 +22,12 @@ class SimplePager {
     public $next = null;
     public $previus = null;
 
-
-
-    public function __construct() {
-
-
-    }
+    /**
+     * Initializes the SimplePager instance
+     *
+     * @return void
+     **/
+    public function __construct() { }
 
     /**
      * Returns the HTML paginate with js action onclick
@@ -38,42 +38,33 @@ class SimplePager {
      *
      * @return string    the HTML for pagination
      */
-    public static function getPager($params = array()) {
+    public static function getPager($params = array())
+    {
 
-        $html = '';
-        $page = $params['page'];
-        $items = $params['items'];
-        $total = $params['total'];
-        $others =$params['others'];
-        $function = $params['function'];
+        $html      = '';
+        $page      = $params['page'];
+        $items     = $params['items'];
+        $total     = $params['total'];
+        $others    = $params['others'];
+        $function  = $params['function'];
 
-        $next       = "<a onClick='".$function."(".$others.",".($page+1).")'  title='Next'>"._("Next »")."</a>";
-        $previous   = "<a onClick='".$function."(".$others.",".($page-1).")' title='Previous'>"._("« Previous")."</a>";
+        $next       = "<a onClick='".$function."(".$others.", ".($page+1).")' title='"._("Get previous page")."'>"._("Next »")."</a>\n";
+        $previous   = "<a onClick='".$function."(".$others."', '".($page-1)."')' title='"._("Get previous page")."'>"._("« Previous")."</a>\n";
 
         if ($page == 1 || empty($page)) {
-            if($total <= $items) {
-                $html ='';
+            if ($total <= $items) {
+                $html = '';
             } else {
-                $html.= "<li>";
-                $html.= $next;
-                $html.= "</li>";
+                $html .= "<li>{$next}</li>\n";
             }
         } elseif ($total <= $items) {
-                     $html.= "<li>";
-                     $html.= $previous;
-                     $html.= "</li>";
+            $html.= "<li>{$previous}</li>\n";
         } else {
-            $html.= "<li>";
-            $html.= $previous;
-            $html.= "</li>";
-            $html.= "<li>";
-            $html.= $next;
-            $html.= "</li>";
+            $html.= "<li>{$previous}</li>\n";
+            $html.= "<li>{$next}</li>\n";
         }
 
-        $output = "<ul id='simplepager' class='clearfix'>".$html."</ul>";
-
-
+        $output = "<ul id='simplepager' class='clearfix'>\n".$html."\n</ul>\n";
 
         return $output;
 
@@ -83,12 +74,13 @@ class SimplePager {
      * Returns the HTML paginate with href params
      *
      * @param array  $params     the params for this function
-     *  url-url to link, 'total' total elements,
-     *  'items' elements for page, and 'page' page number
+     *                           url-url to link, 'total' total elements,
+     *                           'items' elements for page, and 'page' page number
      *
      * @return string the HTML for pagination
      */
-    public static function getPagerUrl($params = array()) {
+    public static function getPagerUrl($params = array())
+    {
 
         $html = '';
         $page = $params['page'];
