@@ -455,11 +455,16 @@ class Photo extends Content
                     $exif = array();
                     if (isset($info)) {
                         foreach($info as $key => $val) {
-                            if ($key != 'APP1') { $data_exif = read_exif_data($image, 0, true); break; }
+                            if ($key != 'APP1') {
+                                $data_exif = read_exif_data($image, 0, true); break;
+                            }
                         }
                     }
-
-                    $photo->exif = $data_exif;
+                    if (!empty($data_exif)) {
+                        $photo->exif = $data_exif;
+                    } else {
+                        $photo->exif = null;
+                    }
 
                     if (empty($exif)) {
                         $photo->infor .= _("No availabel EXIF data</br>");

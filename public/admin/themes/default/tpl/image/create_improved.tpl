@@ -19,12 +19,21 @@
                     <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}"><br />{t}Go back{/t}
                 </a>
             </li>
+            <li class="separator"></li>
+            <li style="display:none" class="edit-uploaded" id="edit-uploaded-button">
+                <a href="#">
+                    <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Edit uploaded{/t}"><br />{t}Edit uploaded{/t}
+                </a>
+            </li>
         </ul>
     </div>
 </div>
 <div class="wrapper-content">
 
     {render_messages}
+    <div class="notice edit-uploaded" style="display:none">
+        {t}Please click in the "Edit uploaded" button from above to edit latest upload photo's data{/t}
+    </div><!-- / -->
 
     <form id="fileupload" action="{$smarty.server.PHP_SELF}?action=upload_photos_improved&amp;category={$category}" method="POST" enctype="multipart/form-data">
 
@@ -72,8 +81,10 @@
             </div>
         </div>
         <input type="hidden" name="category" value="{$category}" />
-
     </form>
+    <div id="upload-helper" data-filecount=0></div>
+
+    </div><!-- /upload-helper -->
 </div>
 {/block}
 
@@ -124,6 +135,7 @@
                 {% } %}</td>
                 <td class="name">
                     <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}">{%=file.name%}</a>
+                    <input type="hidden" name="id[]" value="{%=file.id%}" class="file-id">
                 </td>
                 <td class="size">{%=o.formatFileSize(file.size)%}</td>
                 <td></td>
@@ -146,6 +158,18 @@
         uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
         emptyResult: '{t}Empty file upload result{/t}'
     };
+
+    window.onbeforeunload = function (e) {
+        e = e || window.event;
+
+        var filesforsend = jQuery("#fileupload tr.template-download").length;
+
+        if (filesforsend > 0) {
+            return false;
+        };
+    };
+
+
     </script>
 
     <!-- The Templates and Load Image plugins are included for the FileUpload user interface -->

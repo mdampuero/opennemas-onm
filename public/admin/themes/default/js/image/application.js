@@ -22,19 +22,6 @@ jQuery(function ($) {
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     });
 
-    // // Load existing files:
-    // $.getJSON($('#fileupload').prop('action'), function (files) {
-    //     var fu = $('#fileupload').data('fileupload'),
-    //         template;
-    //     fu._adjustMaxNumberOfFiles(-files.length);
-    //     template = fu._renderDownload(files)
-    //         .appendTo($('#fileupload .files'));
-    //     // Force reflow:
-    //     fu._reflow = fu._transition && template.length &&
-    //         template[0].offsetWidth;
-    //     template.addClass('in');
-    // });
-
     // Enable iframe cross-domain access via redirect page:
     var redirectPage = window.location.href.replace(
         /\/[^\/]*$/,
@@ -70,9 +57,7 @@ jQuery(function ($) {
 
 
     // Initialize the Drag zone handler
-    $('#fileupload').fileupload({
-        dropZone: $('#dropzone')
-    });
+    $('#fileupload').fileupload({ dropZone: $('#dropzone') });
     $(document).bind('dragover', function (e) {
         var dropZone = $('#dropzone'),
             timeout = window.dropZoneTimeout;
@@ -92,8 +77,22 @@ jQuery(function ($) {
         }, 200);
     });
 
+    // When an image was uploaded sucessfully show the edit uploaded button
     $('#fileupload').bind('fileuploaddone', function (e, data){
-        log('upload finished');
+        $('.edit-uploaded').each(function() {
+            $(this).css('display','block');
+        });
+    });
+
+    // When clicking in edit uploaded button redirect to the show form with
+    // the photo uploaded ids
+    $("#edit-uploaded-button").on('click', function(e, ui){
+        var fileIds = '';
+        $('.file-id').each(function(){
+            fileIds += "&id[]="+$(this).val();
+        });
+        window.location = "image.php?action=show"+fileIds;
+        e.preventDefault();
     });
 
 });

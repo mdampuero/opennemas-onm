@@ -15,9 +15,12 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/cropper.js" language="javascript"}
     {script_tag src="/utilsGallery.js" language="javascript"}
     <script>
+    try {
+        new Validation('formulario', { immediate : true });
+    } catch(e) { }
+
     jQuery(document).ready(function($){
         $("#form-validate-button, #form-send-button").on("click", function(event) {
 
@@ -34,7 +37,7 @@
                 return false;
             };
             return true;
-        })
+        });
     });
     </script>
 {/block}

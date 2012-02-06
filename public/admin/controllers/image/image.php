@@ -675,6 +675,7 @@ switch($action) {
                             $photo = new Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
                             $info [] = array(
+                                'id'            => $photo->id,
                                 'name'          => $photo->name,
                                 'url'           => $_SERVER['PHP_SELF']."?action=show&id[]=".$photo->id,
                                 'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
@@ -708,6 +709,7 @@ switch($action) {
                     $photo = $photo->createFromLocalFileAjax($data);
 
                         $info [] = array(
+                            'id'            => $photo->id,
                             'name'          => $photo->name,
                             'url'           => $_SERVER['PHP_SELF']."?action=show&id[]=".$photo->id,
                             'thumbnail_url' => $img_url.$photo->path_file."/".$fileSizesSettings['image_thumb_size']['width']."-".$fileSizesSettings['image_thumb_size']['height']."-".$photo->name,
