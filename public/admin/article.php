@@ -481,7 +481,8 @@ if (isset($_REQUEST['action']) ) {
                 $tpl->assign('photo2', $photo2);
             }
 
-            if (array_key_exists('imgHome', $article->params)) {
+            if(is_array($article->params) &&
+                    (array_key_exists('imgHome', $article->params)) ) {
                 $imgHome = $article->params['imgHome'];
                 if(!empty($imgHome)){
                     $photoHome= new Photo($imgHome);
