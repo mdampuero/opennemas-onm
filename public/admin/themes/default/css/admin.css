@@ -1359,10 +1359,10 @@ div.action-bar .right{
 				#media-browser .photo:hover .photo-image img {
 					border:1px solid White;
 				}
-			
+
 
 		#media-browser .photo-data {
-			
+
 			padding-left:160px;
 			position:absolute;
 			top:0;
@@ -1569,8 +1569,6 @@ div.action-bar .right{
 
 }
 #album-images .list-of-images {
-	width:99%;
-	border:1px solid #ccc;
 }
 #album-images .list-of-images > ul {
 	margin:10px;
@@ -1582,7 +1580,7 @@ div.action-bar .right{
 	width:80px;
 	height:80px;
 	cursor:pointer;
-	position:relative;	
+	position:relative;
 }
 #album-images .list-of-images .image > img {
 	width:100%;
@@ -1616,8 +1614,9 @@ div.action-bar .right{
 }
 .list-of-images .image,
 .list-of-images .image-moving {
-	margin: 3px 3px 3px 0; float: left; width: 100px; height: 90px; font-size: 4em; text-align: center;
+	margin: 3px 3px 3px 0; float: left; width: 100px; height: 90px; text-align: center;
 	background:White;
+	overflow:hidden;
 }
 .list-of-images .image .overlay-image {
 	vertical-align:bottom;
@@ -1631,7 +1630,11 @@ div.action-bar .right{
 .list-of-images .image .overlay-image:hover .image-buttons {
 	display:block;
 }
-.list-of-images .image .overlay-image:hover .image-buttons img { width:16px; }
+.list-of-images .image .image-buttons li {
+	display:inline-block;
+	padding:2px;
+}
+.list-of-images .image .overlay-image .image-buttons img { width:16px; }
 
 .list-of-images .image .overlay-image {
 	background:transparent;

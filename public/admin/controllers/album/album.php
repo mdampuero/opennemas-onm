@@ -188,7 +188,10 @@ switch($action) {
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         $album = new Album($id);
 
-        if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && $album->fk_user != $_SESSION['userid']
+        ) {
             m::add(_("You can't modify this content because you don't have enought privileges.") );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
         } else {
@@ -217,9 +220,9 @@ switch($action) {
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && $album->fk_user != $_SESSION['userid'])
             {
-                 m::add(_("You can't modify this article because you don't have enought privileges.") );
+                m::add(_("You can't modify this article because you don't have enought privileges.") );
             }
-            $album->update( $_POST );
+            $album->update($_POST);
 
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$album->id.'&category='.$category.'&page='.$page);
@@ -241,7 +244,7 @@ switch($action) {
             $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
             $cm= new ContentManager();
             $relat = $cm->getContents($relations);
-            foreach($relat as $contents) {
+            foreach ($relat as $contents) {
                $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
             }
             $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");

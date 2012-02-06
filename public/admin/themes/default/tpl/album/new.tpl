@@ -17,10 +17,30 @@
 {block name="footer-js" append}
     {script_tag src="/cropper.js" language="javascript"}
     {script_tag src="/utilsGallery.js" language="javascript"}
+    <script>
+    jQuery(document).ready(function($){
+        $("#form-validate-button, #form-send-button").on("click", function(event) {
+
+            var frontpage_image =  $(".album-frontpage-image");
+            var album_images =  $("#list-of-images .image");
+            if (frontpage_image.val() == "") {
+                $("#modal-edit-album-errors").modal('show');
+                $("#album-contents").tabs('selected',0);
+                return false;
+            }
+            if (album_images.length < 1) {
+                $("#modal-edit-album-errors").modal('show');
+                $("#album-contents").tabs('selected',1);
+                return false;
+            };
+            return true;
+        })
+    });
+    </script>
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="post" name="formulario" id="album-edit-form" {$formAttrs}>
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -28,7 +48,7 @@
             <ul class="old-button">
                 <li>
                     {acl isAllowed="ALBUM_CREATE"}
-                    <button type="submit" name="action" value="validate">
+                    <button type="submit" name="action" value="validate"  id="form-validate-button">
                         <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                     {/acl}
@@ -36,13 +56,13 @@
                 <li>
                     {if isset($album->id)}
                         {acl isAllowed="ALBUM_UPDATE"}
-                        <button type="submit" name="action" value="update">
+                        <button type="submit" name="action" value="update" id="form-send-button">
                             <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                         {/acl}
                     {else}
                         {acl isAllowed="ALBUM_CREATE"}
-                        <button type="submit" name="action" value="create">
+                        <button type="submit" name="action" value="create" id="form-send-button">
                             <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />{t}Save{/t}
                         </button>
                         {/acl}
@@ -67,7 +87,7 @@
                             <input type="text" id="title" name="title" title={t}"Album"{/t}
                                 value="{$album->title|clearslash|escape:"html"}"
                                 class="required"
-                                onBlur="javascript:get_metadata(this.value);" 
+                                onBlur="javascript:get_metadata(this.value);"
                                 style="width:98%;" />
                         </td>
                         <td rowspan="4" style="width:200px">
@@ -123,5 +143,5 @@
 
     </div>
 </form>
-
+{include file="album/modals/_edit_album_error.tpl"}
 {/block}

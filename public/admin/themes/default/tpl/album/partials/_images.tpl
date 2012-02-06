@@ -1,8 +1,9 @@
-<div style="width:59%;display:inline-block;">
-    <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
-        <strong>{t}Images in this album (drop here images from the side block){/t}</strong>
-    </div>
-    <div class="list-of-images">
+<div id="album-contents" style="width:590px;display:inline-block;" class="tabs resource-container clearfix">
+    <ul>
+        <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
+        <li><a href="#frontpage-image">{t}Frontpage image{/t}</a></li>
+    </ul>
+    <div id="list-of-images" class="list-of-images">
         <ul>
             {if !empty($photoData)}
                 {foreach from=$photoData item=photo key=key name=album_photos}
@@ -37,24 +38,54 @@
             {/if}
         </ul>
     </div><!-- /list-of-images -->
+    <div id="frontpage-image" class="droppable-video-position droppable-position">
+        <div>
+            <a class="delete-button">
+                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_video2" alt="Eliminar" title="Eliminar" />
+            </a>
+            <div class="clearfix">
+                <div class="thumbnail article-resource-image">
+                    {if isset($video2) && $video2->pk_video}
+                        {if $video2->author_name == 'internal'}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
+                        {else}
+                        <img src="{$video2->information['thumbnail']}"/>
+                        {/if}
+                    {else}
+                        <img src="http://placehold.it/290x226" />
+                    {/if}
+                </div>
+                <div class="article-resource-image-info">
+                    <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
+                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
+                    <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
+                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
+                </div>
+            </div>
+            <div class="article-resource-footer">
+                <input type="hidden" name="album_frontpage_image" value="{$video2->pk_video}" class="album-frontpage-image"/>
+            </div>
+        </div>
+    </div><!-- /inner-video -->
 </div>
 
-<div style="width:40%;display:inline-block;">
-    <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:7px;">
+<div style="width:340px;display:inline-block;">
+    <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:6px;">
         <strong>{t}Available images{/t}</strong>
     </div>
-    <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
+    <div id="photos_container" class="photos" style="border:1px solid #ccc; border-top:0 none;  padding:7px;">
+        <form id="image_search">
         <table>
             <tr>
                 <td>
                     <div class="cajaBusqueda">
-                        <input id="stringImageSearch" name="stringImageSearch" type="text" style="width:"
+                        <input id="stringImageSearch" name="stringImageSearch" type="text" style="width:90%"
                            onkeypress="onImageKeyEnter(event, $('category_imag').options[$('category_imag').selectedIndex].value,encodeURIComponent($('stringImageSearch').value),1);"
-                           placeholder="{t}Search images by title...{/t}"/>
+                           placeholder="{t}Search images by title...{/t}" form="image_search"/>
                     </div>
                 </td>
-                <td>
-                    <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);">
+                <td class="right">
+                    <select id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('list_by_category',this.options[this.selectedIndex].value,'',1);"  style="width:90%" form="image_search">
                         <option value="0">GLOBAL</option>
                         {section name=as loop=$allcategorys}
                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -66,32 +97,10 @@
                 </td>
             </tr>
         </table>
+        </form>
         <div id="photos" class="photos"></div>
     </div>
 </div>
-
-
-    <label>{t}Cut the image that is in frontpage view. ({$crop_width}x{$crop_height} px){/t} </label>
-    <img src="{$params.IMAGE_DIR}default_img.jpg" id="testImage"  width="300" />
-
-    <div id="previewArea">
-        {if !empty($album->cover)}
-            <img id="crop_img" src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"
-                 alt={t}"Frontpage image"{/t}  style="maxWidth:600px;maxHeight:400px;" />
-        {/if}
-    </div>
-    <input type="hidden" name="album_highlighted_image[x1]" id="x1" value=""/>
-    <input type="hidden" name="album_highlighted_image[y1]" id="y1" value=""/>
-
-    <input type="hidden" name="album_highlighted_image[width]" id="width" value="" />
-    <input type="hidden" name="album_highlighted_image[height]" id="height" value=""/>
-
-    <input type="hidden" name="album_highlighted_image[media_path]" id="media_path"
-        value="{$smarty.const.MEDIA_IMG_PATH_WEB}"/>
-    <input type="hidden" name="album_highlighted_image[path_img]" id="path_img" value=""/>
-    <input type="hidden" name="album_highlighted_image[name_img]" id="name_img" value=""/>
-</div>
-
 
 {script_tag src="/tiny_mce/opennemas-config.js"}
 <script>
@@ -99,6 +108,8 @@ document.observe('dom:loaded', function() {
     getGalleryImages('listByCategory','{$category}','','1');
 });
 jQuery(document).ready(function($){
+
+    $('#album-contents').tabs();
     $( ".list-of-images ul" ).sortable({
         placeholder: "image-moving",
         contaiment:  "parent"
@@ -137,6 +148,37 @@ jQuery(document).ready(function($){
                     "<input type=\"hidden\" name=\"album_photos_id[]\" value=\"" + image.data("id") + "\">" +
                 "</li>"
             );
+        }
+    });
+
+
+    $("#frontpage-image").droppable({
+        accept: "#photos_container #photos img",
+        drop: function( event, ui ) {
+            var image = ui.draggable;
+            var parent = $(this);
+
+            if (image.data('type-img') != 'swf') {
+                // Change the image thumbnail to the new one
+                parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
+            } else {
+                parent.find('.article-resource-image').html( "<div id=\"flash-container-replace\"><\/div><script> var flashvars = {}; var params = {}; var attributes = {};" +
+                    "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
+                );
+            };
+
+            // Change the image information to the new one
+            var article_info = parent.find(".article-resource-image-info");
+            article_info.find(".filename").html(image.data("filename"));
+            article_info.find(".image_size").html(image.data("width") + " x "+ image.data("height") + " px");
+            article_info.find(".file_size").html(image.data("weight") + " Kb");
+            article_info.find(".created_time").html(image.data("created"));
+            article_info.find(".description").html(image.data("description"));
+            article_info.find(".tags").html(image.data("tags"));
+
+            // Change the form values
+            var article_inputs = parent.find(".article-resource-footer");
+            article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
         }
     });
 });
