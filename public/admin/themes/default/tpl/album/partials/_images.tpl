@@ -1,19 +1,18 @@
 <div id="album-contents" style="width:590px;display:inline-block;" class="tabs resource-container clearfix">
     <ul>
         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
-        <li><a href="#frontpage-image">{t}Frontpage image{/t}</a></li>
+        <li><a href="#frontpage-image">{t}Cover image{/t}</a></li>
     </ul>
     <div id="list-of-images" class="list-of-images">
         <ul>
-            {if !empty($photoData)}
-                {foreach from=$photoData item=photo key=key name=album_photos}
+            {if !empty($photos)}
+                {foreach from=$photos item=photo key=key name=album_photos}
                     <li class="image thumbnail">
                         <div class="overlay-image">
                             <div>
                                 <ul class="image-buttons">
-                                    <li><a href="#" title="{t}Mark as album image{/t}"><img src="{$params.IMAGE_DIR}publish_r.png"></a></li>
-                                    <li><a href="/admin/article.php?action=read&amp;id=41107" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
-                                    <li><a href="#" title="{t}Drop{/t}"><img src="{$params.IMAGE_DIR}trash.png"></a></li>
+                                    <li><a href="#" class="edit-button" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
+                                    <li><a href="#" class="delete-button" title="{t}Drop{/t}"><img src="{$params.IMAGE_DIR}trash.png"></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -125,9 +124,8 @@ jQuery(document).ready(function($){
                 "<li class=\"image thumbnail\">" +
                     "<div class=\"overlay-image\"><div>" +
                         "<ul class=\"image-buttons\">" +
-                            "<li><a href=\"#\" title=\"{t}Mark as album image{/t}\"><img src=\"{$params.IMAGE_DIR}publish_r.png\"></a></li>" +
-                            "<li><a href=\"#\" title=\"{t}Edit{/t}\"><img src=\"{$params.IMAGE_DIR}edit.png\"></a></li>" +
-                            "<li><a href=\"#\" title=\"{t}Drop{/t}\"><img src=\"{$params.IMAGE_DIR}trash.png\"></a></li>" +
+                            "<li><a href=\"#\" class=\"edit-button\" title=\"{t}Edit{/t}\"><img src=\"{$params.IMAGE_DIR}edit.png\"></a></li>" +
+                            "<li><a href=\"#\" class=\"delete-button\" title=\"{t}Drop{/t}\"><img src=\"{$params.IMAGE_DIR}trash.png\"></a></li>" +
                         "</ul>" +
                     "</div></div>" +
                     "<img " +
@@ -148,9 +146,19 @@ jQuery(document).ready(function($){
                     "<input type=\"hidden\" name=\"album_photos_id[]\" value=\"" + image.data("id") + "\">" +
                 "</li>"
             );
+
+            $('.list-of-images .delete-button').on('click', function(event,ui){
+                $(this).parents('.image.thumbnail').remove();
+                event.preventDefault();
+            });
         }
     });
 
+    // Delete buttons for drop an image from the album
+    $('.list-of-images .delete-button').on('click', function(event, ui){
+        $(this).parents('.image.thumbnail').remove();
+        event.preventDefault();
+    });
 
     $("#frontpage-image").droppable({
         accept: "#photos_container #photos img",
@@ -179,7 +187,23 @@ jQuery(document).ready(function($){
             // Change the form values
             var article_inputs = parent.find(".article-resource-footer");
             article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
+
         }
     });
+
+    jQuery('#frontpage-image .delete-button').on('click', function () {
+        var parent = jQuery(this).parent();
+        var elementID = parent.find('.album-frontpage-image');
+
+        if (elementID.val() > 0) {
+            elementID.data('id', elementID.val());
+            elementID.val(null);
+            parent.fadeTo('slow', 0.5);
+        } else {
+            elementID.val(elementID.data('id'));
+            parent.fadeTo('slow', 1);
+        };
+    });
+
 });
 </script>

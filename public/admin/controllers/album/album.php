@@ -134,33 +134,24 @@ switch($action) {
         Acl::checkOrForward('ALBUM_UPDATE');
 
         $configurations = s::get('album_settings');
-        $tpl->assign(array(
-            'crop_width' => $configurations['crop_width'],
-            'crop_height' => $configurations['crop_height']
-        ));
 
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        if (empty($id)) { //because forwards
+        if (empty($id)) {
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         }
 
         $album = new Album( $id);
         $tpl->assign('album', $album);
 
-        $cropExist = file_exists(MEDIA_IMG_PATH_WEB.$album->cover);
-        $tpl->assign('crop_exist', $cropExist);
-
-        $photoData = array();
-        $photos = $album->get_album($id);
-        $tpl->assign('otherPhotos', $photos);
-        if (!empty($photos)) {
-            foreach ($photos as $ph) {
-                $photoData[] = new Photo($ph[0]);
+        $photos = array();
+        $photoIds = $album->get_album($id);
+        if (!empty($photoIds)) {
+            foreach ($photoIds as $ph) {
+                $photos[] = new Photo($photo[0]);
             }
         }
         $tpl->assign( array(
             'category' => $album->category,
-            'photoData' => $photoData,
+            'photos' => $photos,
         ));
         $tpl->display('album/new.tpl');
 
@@ -409,29 +400,28 @@ switch($action) {
 
     case 'config':
 
-        $configurationsKeys = array('album_settings',);
-        $configurations = s::get($configurationsKeys);
-        $tpl->assign(array(
-            'configs'   => $configurations,
-        ));
-
-        $tpl->display('album/config.tpl');
-
-    break;
-
-    case 'save_config':
-
         Acl::checkOrForward('ALBUM_SETTINGS');
 
-        unset($_POST['action']);
-        unset($_POST['submit']);
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $configurationsKeys = array('album_settings',);
+            $configurations = s::get($configurationsKeys);
+            $tpl->assign(array(
+                'configs'   => $configurations,
+            ));
 
-        foreach ($_POST as $key => $value ) { s::set($key, $value); }
+            $tpl->display('album/config.tpl');
+        } else {
 
-        m::add(_('Settings saved successfully.'), m::SUCCESS);
+            unset($_POST['action']);
+            unset($_POST['submit']);
 
-        $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+            m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+            $httpParams = array(array('action'=>'list'),);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        }
 
     break;
 
