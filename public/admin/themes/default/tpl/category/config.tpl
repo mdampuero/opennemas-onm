@@ -45,24 +45,28 @@
             </table>
 
             <table class="adminform">
-                <tr>
-                    <td>
-                        <div class="form-wrapper">                           
-                            <div>
-                                <label for="section_settings[allowLogo]">{t}Show change headers and color in frontpages:{/t}</label>
-                                 <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" class="required">
-                                    <option value="0">{t}No{/t}</option>
-                                    <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
-                                </select>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="form-wrapper">
+                                <div>
+                                    <label for="section_settings[allowLogo]">{t}Show change headers and color in frontpages:{/t}</label>
+                                     <select name="section_settings[allowLogo]" id="section_settings[allowLogo]" class="required">
+                                        <option value="0">{t}No{/t}</option>
+                                        <option value="1" {if $configs['section_settings']['allowLogo'] eq "1"} selected {/if}>{t}Yes{/t}</option>
+                                    </select>
+                                </div>
+                                <br />
+
                             </div>
-                            <br />
-                              
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-            <div class="action-bar">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button green">
+            <div class="action-bar clearfix">
+                <div class="right">
+                    <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
+                </div><!-- / -->
             </div>
         </div>
 

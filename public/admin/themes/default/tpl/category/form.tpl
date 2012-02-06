@@ -35,9 +35,9 @@
 {/block}
 
 {block name="footer-js" append}
-<script type="text/javascript">
+<script>
     try {
-        new Validation('form_upload', { immediate : true });
+        new Validation('formulario', { immediate : true });
     } catch(e) { }
 
     jQuery(document).ready(function($) {
@@ -200,7 +200,7 @@
                             {t}If this option is activated this category will be showed in rss{/t}
                     </td>
                 </tr>
-                
+
                 {if isset($configurations) && !empty($configurations['allowLogo'])}
 
                  <tr>
