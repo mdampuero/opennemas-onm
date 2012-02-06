@@ -90,8 +90,11 @@ if(empty($category_name)) {
     $category_title = $categoryData[0]->title;
 
 }
-
-$actual_category = $category_name;
+if(empty($actual_category)) {
+    $actual_category =
+               (!isset($subcategory_name))? $category_name
+                                                : $subcategory_name;
+}
 $allcategorys = $ccm->categories;
 
 $category_data = array();
@@ -105,7 +108,7 @@ if (!empty($allcategorys)) {
     }
 }
 
-$tpl->assign(array( 
+$tpl->assign(array(
     'category_data'=> $category_data,
     'allcategorys'=> $allcategorys,
     'category_name'=>$category_name ,
