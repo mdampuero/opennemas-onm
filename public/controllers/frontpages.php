@@ -1,0 +1,135 @@
+<?php
+/*
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+use Onm\Settings as s;
+/**
+ * Start up and setup the app
+*/
+require_once('../bootstrap.php');
+
+/**
+ * Fetch HTTP variables
+*/
+
+$category_name = filter_input(INPUT_GET,'category_name',FILTER_SANITIZE_STRING);
+if ( !(isset($category_name) && !empty($category_name)) ) {
+    $category_name = 'home';
+}
+
+$subcategory_name = filter_input(INPUT_GET,'subcategory_name',FILTER_SANITIZE_STRING);
+$cache_page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
+$cache_page = (is_null($cache_page))? 0 : $cache_page;
+
+$date = filter_input(INPUT_GET,'date',FILTER_SANITIZE_STRING);
+
+/**
+ * Setup view
+*/
+$tpl = new Template(TEMPLATE_USER);
+//$tpl->setConfig('newslibrary');
+//$cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
+
+/**
+ * Fetch information for Advertisements
+*/
+require_once("index_advertisement.php");
+
+$ccm = ContentCategoryManager::get_instance();
+$settings = s::get('frontpage_settings');
+
+$menuFrontpage= Menu::renderMenu('frontpage');
+
+if (!empty($menuFrontpage->items)) {
+    $tpl->assign('menuFrontpage',$menuFrontpage->items);
+}
+if (empty($category_name) && !empty($menuFrontpage->items)) {
+    foreach ($menuFrontpage->items as  $item) {
+        if(empty($category_name) && $item->type == 'category') {
+             $category_name = $item->link;
+             $category = $ccm->get_id($category_name);
+        }
+    }
+
+}
+
+
+if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
+{
+
+
+    $fp = new Frontpage();
+
+    /************************ FETCHING NEWS ***********************************/
+   if(isset($settings['viewMethod']) &&
+           $settings['viewMethod'] == 'listFrontpages') {
+
+        if( $fp->getFrontpage($date, $actual_category_id) ) {
+
+            $articles_home = array();
+            if(!empty($fp->contents)){
+                foreach($fp->contents as $element) {
+
+                    $content = new $element['content_type']($element['pk_fk_content']);
+                    // add all the additional properties related with positions and params
+
+                    $placeholder = ($actual_category_id == 0) ? 'home_placeholder': 'placeholder';
+                    $content->load(array(
+                        $placeholder => $element['placeholder'],
+                        'position'   => $element['position'],
+                        'type'       => $element['content_type'],
+                        'params'     => unserialize($element['params']),
+                    ));
+
+                    if(!empty($content->fk_video)) {
+                        $content->video = new Video($content->fk_video);
+
+                    }else {
+                        if(!empty($content->img1)) {
+                            $content->image = new Photo($content->img1);
+                        }
+                    }
+
+                    $articles_home[] = $content;
+
+                }
+            }
+
+        }
+
+        $tpl->assign('articles_home', $articles_home);
+
+        $tpl->display('frontpage/fp_newslibrary.tpl');
+
+    } elseif (isset($settings['viewMethod']) &&
+           $settings['viewMethod'] == 'staticFrontpages') {
+                //cronicas method
+    } else {
+
+        $cm = new ContentManager();
+        $allCategories = $ccm->categories;
+
+        $library = array();
+        $contents= $cm->getContentsForLibrary($date);
+        if(!empty($contents)) {
+            foreach ($contents as $content) {
+               $categoryID = $content->category;
+               $library[$categoryID]->id = $categoryID;
+               $library[$categoryID]->title = $allCategories[$categoryID]->title;
+               $library[$categoryID]->contents[] = $content;
+}
+        }
+
+        $tpl->assign('library',$library);
+
+        $tpl->display('frontpage/fp_list_contents.tpl');
+
+    }
+
+} // $tpl->is_cached
+
+

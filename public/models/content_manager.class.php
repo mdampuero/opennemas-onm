@@ -1998,4 +1998,66 @@ class ContentManager
         }
         return $relatedContent;
     }
+
+
+
+    /**
+    * Fetches all the contents (articles, widgets, etc) for one specific category
+    * with its placeholder and position
+    *
+    * This is used for HomePages, fetches all the contents assigned for it and allows
+    * to render an entire homepage
+    *
+    * @param type $category_id, the id of the category we want to get contents from
+    * @return mixed, array of contents
+    */
+    public function getContentsForLibrary($date)
+    {
+        if(empty($date)) {
+            return false;
+        }
+        // Initialization of variables
+        $contents = array();
+
+        $sql = 'SELECT * FROM contents, contents_categories '
+              .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
+              .'AND DATE(starttime) = "'.$date.'" '
+              .'AND available=1 AND in_litter=0 '
+              .'AND pk_fk_content = pk_content '
+              .'ORDER BY pk_fk_content_category, starttime DESC ';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+
+        if($rs !== false) {
+
+            $contents = array();
+
+            while(!$rs->EOF) {
+
+                if($rs->fields['fk_content_type'] == 1) {
+                    $content = new Article($rs->fields['pk_fk_content']);
+                    if(!empty($content->fk_video)) {
+                        $content->video = new Video($content->fk_video);
+
+                    }else {
+                        if(!empty($content->img1)) {
+                            $content->image = new Photo($content->img1);
+                        }
+                    }
+                }else{
+                    $content = new Content($rs->fields['pk_fk_content']);
+                    $content->content_type = $content->content_type_name;
+                }
+                $contents[] = $content;
+
+                $rs->MoveNext();
+            }
+
+
+            return $contents;
+        }
+        return false;
+    }
 }
+
