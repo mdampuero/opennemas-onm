@@ -9,8 +9,8 @@
         <ul class="old-button">
             {acl isAllowed="KIOSKO_DELETE"}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                    <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                <a class="delChecked" data-controls-modal="modal-kiosko-batchDelete" href="#" title="Eliminar" alt="Eliminar">
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
                 </a>
             </li>
             {/acl}
@@ -170,7 +170,9 @@
                     </li>
                     <li>
                         {acl isAllowed="KIOSKO_DELETE"}
-                        <a href="#" onClick="javascript:confirmar(this, {$portadas[as]->pk_kiosko});" title="Eliminar">
+                        <a class="del" data-controls-modal="modal-from-dom"
+                               data-id="{$portadas[as]->pk_kiosko}"
+                               data-title="{$portadas[as]->title|capitalize}"  href="#" >
                             <img src="{$params.IMAGE_DIR}trash.png" border="0" />
                         </a>
                         {/acl}
