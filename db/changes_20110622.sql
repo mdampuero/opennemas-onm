@@ -1,6 +1,47 @@
+
+--03-02-2012
+UPDATE contents SET starttime = created WHERE starttime = '0000-00-00 00:00:00';
+
+--31-Dic-2012
+INSERT INTO `content_types` ( `pk_content_type`, `name`, `title` ) VALUES
+(17, 'letter', 'Letters to the Editor'), (18, 'frontpage', 'Portada');
+
+INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
+
+(166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
+(167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
+(168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
+(169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
+(170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
+(171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
+(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER');
+
+
+--29-Dic-2012
+CREATE TABLE IF NOT EXISTS `letters` (
+  `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(255)  DEFAULT NULL,
+  `email` varchar(255)  DEFAULT NULL,
+  `body` text ,
+  PRIMARY KEY (`pk_letter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `frontpages` (
+   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
+   `date` int(11) NOT NULL COMMENT 'date as 20110720',
+   `category` int(11) NOT NULL COMMENT 'category',
+   `version` bigint(20) DEFAULT NULL,
+   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
+   `promoted` tinyint(1) DEFAULT NULL,
+   `day_frontpage` tinyint(1) DEFAULT NULL,
+   `params` longtext NOT NULL COMMENT 'serialized params',
+   PRIMARY KEY (`date`,`category`)
+
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
 (165, 'IMPORT_EFE_FILE', 'Importar ficheros EFE', 'IMPORT');
-
 
 
 -- 15-Dic-2011

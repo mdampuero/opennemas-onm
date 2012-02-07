@@ -79,6 +79,13 @@ $menuXml = '<?xml version="1.0"?>
             id="specials_manager"
             link="controllers/specials/special.php"
         />
+         <node
+            module_name="LETTER_MANAGER"
+            privilege="LETTER_ADMIN"
+            title="'.htmlspecialchars(_("Letter to the editor"), ENT_QUOTES).'"
+            id="opinion_manager"
+            link="controllers/letter/letter.php"
+        />
         <node
             module_name="ARTICLE_MANAGER"
             privilege="ARTICLE_ARCHIVE"

@@ -126,7 +126,7 @@ img.inputExtension { top:9px !important; }
                 </div>
             </div>
         </div>
-
+        <div id="caches">
 		{if count($caches)>0}
 		<table class="listing-table">
 			<thead>
@@ -373,13 +373,14 @@ img.inputExtension { top:9px !important; }
 					</td>
 				</tr>
 			</tfoot>
+         </table>
 		{else}
 		 <div style="border:1px solid #ccc; padding:10px; font-size:1.2em; text-align:center">
 			  <p>{t escape="no"}Ohh, there is <strong>no cache file</strong> in the system.{/t}</p>
 			  <p>{t escape="no" 1=$smarty.const.SITE_URL}Visit some pages in <a href="%1" title="Visit your site">your site</a>{/t}</p>
 		 </div>
 		{/if}
-
+        </div>
     	<input type="hidden" id="page" name="page" value="{$smarty.request.page|default:'1'}" />
         <input type="hidden" id="action" name="action" value="" />
 </div>
