@@ -121,19 +121,24 @@ class ContentCategory {
     public function update($data)
     {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
-
-        $data['name'] = String_Utils::normalize_name($data['title']);
+        //No se puede cambiar el nombre de las url's
+      /*  if($data['title'] != $this->title) {
+            $data['name'] = String_Utils::normalize_name($data['title']);
+        } else {
+            $data['name'] =$this->name;
+        }
+     */
         $data['params'] = serialize($data['params']);
         if (empty($data['logo_path'])) {
             $data['logo_path'] = $this->logo_path;
         }
         $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
-        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, ".
+        $sql = "UPDATE content_categories SET  `title`=?, `inmenu`=?, ".
                        " `fk_content_category`=?, `internal_category`=?, ".
                        " `logo_path`=?,`color`=?, `params`=? ".
                    " WHERE pk_content_category=" . ($data['id']);
 
-        $values = array($data['name'], $data['title'], $data['inmenu'],
+        $values = array($data['title'], $data['inmenu'],
                     $data['subcategory'], $data['internal_category'],
                     $data['logo_path'], $data['color'], $data['params']);
 
