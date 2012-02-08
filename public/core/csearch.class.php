@@ -78,12 +78,12 @@ class cSearch
 
             $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
             $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
-            $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags2);//Match con contents.title
+            $szMatch2 = $this->DefineMatchOfSentence2($szSourceTags);//Match con contents.title
         } else {
             $szMatch2 = '1=1';
         }
 
-        $szMatch = $this->DefineMatchOfSentence($szSourceTags); //Match con metadata
+        $szMatch = $this->DefineMatchOfSentence($szSourceTags2); //Match con metadata
         $szSqlSentence = "SELECT pk_content, available, title, metadata, pk_fk_content_category, created, catName, " . (($szMatch)) .'+'.(($szMatch2)) . " AS rel FROM contents, contents_categories";
         $szSqlWhere = " WHERE " . (($szMatch)) .' AND '.(($szMatch2));
         $szSqlWhere .=  " AND ( " . $this->ParserTypes($szContentsTypeTitle) . ") ";
