@@ -781,7 +781,7 @@ class Content
         if (empty($start)) { return ($now < $end); }
 
         // only setted $start
-        if (empty($end)) { return ($now > $start); }
+        if (empty($end) || $end <= 0) { return ($now > $start); }
 
         // $start < $now < $end
         return (($now < $end) && ($now > $start));
