@@ -1,15 +1,16 @@
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-
     <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport"  content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width">
 
     {block name="meta"}
         <title>{setting name=site_name} - OpenNeMaS - Administration section</title>
@@ -46,7 +47,7 @@
     {block name="header-js"}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
-        {script_tag src="/modernizr/modernizr-2.0.6.min.js"}
+        {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
         {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
