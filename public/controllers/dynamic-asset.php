@@ -12,11 +12,13 @@ require_once('../bootstrap.php');
 $file      = filter_input(INPUT_GET, 'file', FILTER_SANITIZE_STRING);
 $transform = filter_input(INPUT_GET, 'transform', FILTER_SANITIZE_STRING);
 
-$filePath = MEDIA_PATH.DIRECTORY_SEPARATOR.$file;
-$image = new \Onm\File\Image\Imagick;
-$image->load($filePath);
-if (!empty($transform)) {
-    $image->transform($transform);
-}
+if (preg_match('@(jpg|jpeg|gif|png)@i',$file)) {
+    $filePath = MEDIA_PATH.DIRECTORY_SEPARATOR.$file;
+    $image = new \Onm\File\Image\Imagick;
+    $image->load($filePath);
+    if (!empty($transform)) {
+        $image->transform($transform);
+    }
 
-$image->output();
+    $image->output();
+}
