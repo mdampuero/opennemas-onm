@@ -4,42 +4,13 @@
     {script_tag src="/utilsarticle.js" language="javascript"}
     {script_tag src="/editables.js" language="javascript"}
     {script_tag src="/utilsGallery.js" language="javascript"}
-    <script type="text/javascript" language="javascript">
-    document.observe('dom:loaded', function() {
-        if($('title')){
-            new OpenNeMas.Maxlength($('title'), {});
-            $('title').focus(); // Set focus first element
-        }
-        getGalleryImages('listByCategory','{$category}','','1');
-        getGalleryVideos('listByCategory','{$category}','','1');
-    });
-
-    if($('starttime')) {
-        new Control.DatePicker($('starttime'), {
-            icon: './themes/default/images/template_manager/update16x16.png',
-            locale: 'es_ES',
-            timePicker: true,
-            timePickerAdjacent: true,
-            dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-        });
-
-        new Control.DatePicker($('endtime'), {
-            icon: './themes/default/images/template_manager/update16x16.png',
-            locale: 'es_ES',
-            timePicker: true,
-            timePickerAdjacent: true,
-            dateTimeFormat: 'yyyy-MM-dd HH:mm:ss'
-        });
-    }
-    </script>
-
 {/block}
 
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
 <div class="top-action-bar">
     <div class="wrapper-content">
-        <div class="title"><h2>{$titulo_barra}:: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
+        <div class="title"><h2>{t}Pending articles{/t} :: {$datos_cat[0]->title}{if empty($datos_cat[0]->title)} {$category|upper} {/if}</h2></div>
         <ul class="old-button">
             {acl isAllowed="ARTICLE_DELETE"}
              <li>
@@ -192,7 +163,7 @@
                               </script>
                         </td>
                         <td  class="center">
-                              
+
                         </td>
                     {/if}
                     <td >

@@ -41,7 +41,7 @@ make_sortable_divs_portadas = function() {
     for(var i=0; i< otherHuecos.length; i++) {
         huecos.push(otherHuecos[i].id);
     }
-	huecos.push($('div_no_home'));
+	//huecos.push($('div_no_home'));
     huecos.push($('art'));
     //console.log(huecos);
 
@@ -61,7 +61,7 @@ savePositions = function(category) {
    // changedTables(category);
     var huecos = getFrontpageHoles();
 
-    huecos.push($('div_no_home'));
+  //  huecos.push($('div_no_home'));
     huecos.push($('art'));
 
     var places = {};
@@ -70,6 +70,7 @@ savePositions = function(category) {
     for (var i=0; i<huecos.length; i++) {
         huecos_id.push(huecos[i].id);
     }
+
 
     huecos.each(function(div_id, i){
         if( $(div_id) ) {
@@ -193,10 +194,10 @@ changedTables = function(category) {
         }
     }
 
-    Nodes=$('div_no_home').select('a.no_home');
+   /* Nodes=$('div_no_home').select('a.no_home');
     for (i = 0; i < Nodes.length; i++) {
             Nodes[i].setAttribute('class',"go_home");
-    }
+    }*/
 }
 
 
@@ -213,7 +214,7 @@ function previewFrontpage(category) {
     // changedTables(category);
     var huecos = getFrontpageHoles();
 
-    huecos.push($('div_no_home'));
+  //  huecos.push($('div_no_home'));
     huecos.push($('art'));
 
 
@@ -317,88 +318,6 @@ function show_iframe(){
 }
 
 //////////////////////////// CUADROS IMAGEN Y VIDEO //////////////////////////////////////////////////////////
-
-//Eliminar y recuperar imagen en articulos.
- function recuperar_eliminar(field){
-	  var nombre='input_'+field;
-	  if (document.getElementById( nombre ).value ==''){
-	  	 recuperarOpacity(field);
-	  }else{
-	  	 vaciarImg(field);
-	  }
- }
-
-//Vaciar foto y meter img_default.
-function vaciarImg(field){
- 		var nombre='remove_'+field;   //Icono papelera-recuperar
-		document.getElementById( nombre ).src='themes/default/images/trash_no.png';
-	    document.getElementById( nombre ).setAttribute('alt','Recuperar');
-	    document.getElementById( nombre ).setAttribute('title','Recuperar');
-
-		if(field=='img1'){
-				document.getElementById( 'input_img1' ).value ='';
-				document.getElementById( 'input_video' ).value ='';
-				document.getElementById('img_portada').setAttribute('style','opacity:0.4;');
-				document.getElementById( nombre ).setAttribute('style','opacity:1;');
-				document.getElementById('informa').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-				document.getElementById('img1_footer').setAttribute('disabled','true');
-		}
-
-		if(field=='img2'){
-				document.getElementById( 'input_img2' ).value ='';
-				document.getElementById('img_interior').setAttribute('style','opacity:0.4;');
-				document.getElementById(nombre).setAttribute('style','opacity:1;');
-				document.getElementById('informa2').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-				document.getElementById('img2_footer').setAttribute('disabled','true');
-		}
-		//Publicidad
-		if(field=='img'){
-			document.getElementById( 'img' ).value ='';
-			document.getElementById('preview_img').setAttribute('style','opacity:0.4;');
-			document.getElementById('informa2').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-			document.getElementById('noinfor2').setAttribute('style','opacity:0.4;');
-		}
-
-		if(field=='video2'){
-			document.getElementById( 'input_video2' ).value ='';
-			document.getElementById('video_interior').setAttribute('style','opacity:0.4;');
-			document.getElementById(nombre).setAttribute('style','opacity:1;');
-			document.getElementById('informa3').setAttribute('style','opacity:0.4;overflow:auto;width:260px;');
-			document.getElementById('video2_footer').setAttribute('style','opacity:0.4;');
-		}
-
-  }
-
- function recuperarOpacity(field){
-	    var nombre='remove_'+field;
-		document.getElementById( nombre ).src='themes/default/images/trash.png';
-	    document.getElementById( nombre ).setAttribute('alt','Eliminar');
-	    document.getElementById( nombre ).setAttribute('title','Eliminar');
-		if(field=='img1'){
-				document.getElementById( 'input_img1' ).value =document.getElementById( 'change1' ).name;
-				document.getElementById( 'input_video' ).value =document.getElementById( 'change1' ).name;
-				document.getElementById('img_portada').setAttribute('style','opacity:1;');
-				document.getElementById('informa').setAttribute('style','opacity:1;overflow:auto;width:260px;');
-				document.getElementById('img1_footer').removeAttribute('disabled');
-	 	}
-
-		if(field=='img2'){
-				document.getElementById( 'input_img2' ).value = document.getElementById( 'change2' ).name;
-				document.getElementById('img_interior').setAttribute('style','opacity:1;');
-				document.getElementById('informa2').setAttribute('style','opacity:1;overflow:auto;width:260px;');
-				document.getElementById('img2_footer').removeAttribute('disabled');
-		}
-
-		if(field=='video2'){
-
-			document.getElementById('video_interior').setAttribute('style','opacity:1;');
-			document.getElementById(nombre).setAttribute('style','opacity:1;');
-			document.getElementById('informa3').setAttribute('style','opacity:1;overflow:auto;width:260px;');
-			document.getElementById('video2_footer').setAttribute('style','opacity:1;');
-			document.getElementById( 'input_video2' ).value =document.getElementById( 'change3' ).name;
-		}
- }
-
 
 //Paginacion otros articulos.
 function  get_suggested_articles(category,page) {
@@ -605,35 +524,35 @@ function search_related(id, metadata,page) {
            onComplete: function() {
                  //Posibilidad de marcar los que estan recien añadidos
                     var Nodes = $('thelist2').select('li');
-                      for (var i=0;i < Nodes.length;i++) {
-                              var id=Nodes[i].getAttribute('id');
-                              if(id!=$$('#'+id)){
-                                      //var el =$$('#'+id+' input[class="portada"]');
-                                      var el =$$('#'+id);
-                                     el.each(function(item, index){
-                                             if(item.getAttribute('class')=='portada'){
-                                                    item.checked=true;
-                                             }
-                                     });
+                    for (var i=0;i < Nodes.length;i++) {
+                          var id=Nodes[i].getAttribute('id');
+                          if(id!=$$('#'+id)){
+                                  //var el =$$('#'+id+' input[class="portada"]');
+                                  var el =$$('#'+id);
+                                 el.each(function(item, index){
+                                         if(item.getAttribute('class')=='portada'){
+                                                item.checked=true;
+                                         }
+                                 });
 
-                              }
+                          }
 
-                      }
-                      var Nodes = $('thelist2int').select('li');
-                      for (var i=0;i < Nodes.length;i++) {
-                              var id=Nodes[i].getAttribute('id');
-                              if(id!=$$('.interior#'+id)){
-                                      var el =$$('.interior#'+id);
-                                      el.each(function(item, index){
-                                                     if(item.getAttribute('class')=='interior'){
-                                                    item.checked=true;
-                                             }
-                                     });
+                    }
+                    var Nodes = $('thelist2int').select('li');
+                    for (var i=0;i < Nodes.length;i++) {
+                          var id=Nodes[i].getAttribute('id');
+                          if(id!=$$('.interior#'+id)){
+                                  var el =$$('.interior#'+id);
+                                  el.each(function(item, index){
+                                                 if(item.getAttribute('class')=='interior'){
+                                                item.checked=true;
+                                         }
+                                 });
 
-                              }
+                          }
 
-                      }
-            }
+                    }
+                        }
         });
     }
 }
@@ -703,31 +622,39 @@ function  get_div_contents(id,content,category,page)
         onComplete: function() {
             //Posibilidad de marcar los que estan recien añadidos
             var Nodes = $('thelist2').select('li');
-              for (var i=0;i < Nodes.length;i++) {
-                      var id=Nodes[i].getAttribute('id');
-                      if(id){
-                              //var el =$$('#'+id+' input[class="portada"]');
-                              var el =$$('#'+id);
-                             el.each(function(item, index){
-                                     if(item.getAttribute('class')=='portada'){
-                                            item.checked=true;
-                                     }
-                             });
-                      }
-              }
-              var Nodes = $('thelist2int').select('li');
-              for (var i=0;i < Nodes.length;i++) {
-                      var id=Nodes[i].getAttribute('id');
-                      if(id){
-                              var el =$$('.interior#'+id);
-                              el.each(function(item, index){
-                                             if(item.getAttribute('class')=='interior'){
-                                            item.checked=true;
-                                     }
-                             });
-                      }
-              }
-        }
+            for (var i=0;i < Nodes.length;i++) {
+                  var id=Nodes[i].getAttribute('id');
+                  if(id){
+                          //var el =$$('#'+id+' input[class="portada"]');
+                          var el =$$('#'+id);
+                         el.each(function(item, index){
+                                 if(item.getAttribute('class')=='portada'){
+                                        item.checked=true;
+                                 }
+                         });
+                  }
+            }
+            var Nodes = $('thelist2int').select('li');
+            for (var i=0;i < Nodes.length;i++) {
+                  var id=Nodes[i].getAttribute('id');
+                  if(id){
+                          var el =$$('.interior#'+id);
+                          el.each(function(item, index){
+                                         if(item.getAttribute('class')=='interior'){
+                                        item.checked=true;
+                                 }
+                         });
+                  }
+            }
+            //Shows the selected dive and hide others.
+	var divs=$$('div.div_lists');
+	for (var i=0;i < divs.length;i++) {
+                if(divs[i].id!=div){
+			Effect.DropOut(divs[i], { duration: 0.2 });
+		}
+	 }
+            Effect.Appear(div,  { duration: 0.1 });
+}
     });
 }
 

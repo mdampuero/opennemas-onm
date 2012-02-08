@@ -32,24 +32,20 @@
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1 }
-{script_tag src="/jquery/jquery.min.js"}
-{script_tag src="/feed/feed.js"}
-
-<script type="text/javascript">
-$.noConflict();
-{if $feeds neq null}
-{section name="feed" loop=$feeds}
-    jQuery(document).ready(function() {
-        jQuery("#feed-{$smarty.section.feed.index}").gFeed ({
-            url: '{$feeds[feed].url}',
-            max: 3
+    {script_tag src="http://www.google.com/jsapi?key=ABQIAAAAm85YhpjwWOAjVRurtFoZeBTmeauUFXdDTHxXlqQ2gYMcEYi9-xS0s4NcIHse4XpBCrOhkmD7LoZW6A" external=1}
+    {script_tag src="/feed/feed.js"}
+    {if $feeds neq null}
+    <script>
+    {section name="feed" loop=$feeds}
+        jQuery(document).ready(function() {
+            jQuery("#feed-{$smarty.section.feed.index}").gFeed ({
+                url: '{$feeds[feed].url}',
+                max: 3
+            });
         });
-    });
-{/section}
-
-{/if}
-</script>
+    {/section}
+    </script>
+    {/if}
 {/block}
 
 {block name="content"}
@@ -58,37 +54,46 @@ $.noConflict();
         <div class="title"><h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="controllers/mediamanager/mediamanager.php" class="admin_add"
+                <a href="controllers/image/image.php" class="admin_add"
                    title="{t}Media manager{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
+                    <img src="{$params.IMAGE_DIR}/icons.png" title="" alt="" />
                     <br />{t}Media manager{/t}
                 </a>
             </li>
             <li>
                 <a href="controllers/opinion/opinion.php?action=new" class="admin_add"
                    title="{t}New opinion{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
+                    <img src="{$params.IMAGE_DIR}opinion.png" title="" alt="" />
                     <br />{t}New opinion{/t}
                 </a>
             </li>
             <li>
                 <a href="article.php?action=new" class="admin_add"
                    title="{t}New article{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
+                        <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" />
                     <br />{t}New article{/t}
                 </a>
             </li>
         </ul>
+        <div class="buttons" style="display:none">
+            <a href="controllers/image/image.php" class="button" title="{t}Go to multimedia manager{/t}">
+                <!-- <span class="icon"><img src="{$params.IMAGE_DIR}/icons.png" title="" alt="" /></span> -->
+                {t}Media manager{/t}
+            </a>
+            <a href="controllers/opinion/opinion.php?action=new" class="button" title="{t}Create new opinion{/t}">
+                <!-- <img src="{$params.IMAGE_DIR}opinion.png" title="" alt="" /> -->
+                {t}New opinion{/t}
+            </a>
+            <a href="article.php?action=new" class="button" title="{t}Create new article{/t}">
+                <!-- <img src="{$params.IMAGE_DIR}/article_add.png" title="" alt="" /> -->
+                <span class="icon home">{t}New article{/t}</span>
+            </a>
+        </div>
     </div>
+    <!-- <link rel="stylesheet" href="http://markdotto.com/bs2/docs/assets/css/bootstrap.css"> -->
 </div>
 <div class="wrapper-content">
-    {if isset($smarty.session.messages)
-        && !empty($smarty.session.messages)}
-        {messageboard type="inline"}
-    {else}
-        {messageboard type="growl"}
-    {/if}
-    <br/>
+    {render_messages}
     <table class="adminheading">
         <tbody>
             <tr>
@@ -97,7 +102,7 @@ $.noConflict();
         </tbody>
     </table>
 
-    <table border="0" cellpadding="4" cellspacing="0" class="adminform" >
+    <table class="adminform" >
 
         <tbody>
         {if $feeds neq null}
@@ -117,7 +122,7 @@ $.noConflict();
 
         <tfoot>
             <tr>
-                <td colspan="5" align="center">
+                <td colspan="{$feeds|count}">
                     &nbsp;
                 </td>
             </tr>

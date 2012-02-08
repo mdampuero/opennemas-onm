@@ -19,17 +19,16 @@
             </tr>
              <tr>
                 <td valign="top">
-                    <label for="title">Descripción:</label>
+                    <label for="title">{t}Description{/t}</label>
                 </td>
                 <td valign="top">
-                    <textarea name="description" id="description" class="required" 
+                    <textarea name="description" id="description" class="required"
                             title="{t}Video description{/t}">{$video->description|clearslash|default:""}</textarea>
                 </td>
             </tr>
-             
+
             </tr>
             {if isset($video)}
-
             <tr>
                 <td>
                     <label>
@@ -41,10 +40,9 @@
                         {script_tag src="/media/common_assets/fplayer/flowplayer-3.2.6.min.js" external=1}
                         {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
                     </div>
-                    
+
                 </td>
             </tr>
-                
             {else}
             <tr>
                 <td>
@@ -55,8 +53,10 @@
                 </td>
             </tr>
             {/if}
-                 
+
         </table>
+        <input type="hidden" value="{$video->video_url}" name="video_url" />
+        <input type="hidden" value="{json_encode($information)|escape:"html"}" name="information" />
         <input type="hidden" name="author_name" value="internal"/>
     </td>
 </tr>

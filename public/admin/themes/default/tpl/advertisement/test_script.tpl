@@ -1,8 +1,8 @@
  {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/utilsadvertisement.js" language="javascript"}
-    {script_tag src="/AdPosition.js" language="javascript"}
+    {script_tag src="/utilsadvertisement.js"}
+    {script_tag src="/AdPosition.js"}
 {/block}
 
 
@@ -22,7 +22,7 @@
             </div>
 
         <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="id" value="{$id|default:""}" />
     </form>
 </div><!--fin content-wrapper-->
 {/block}

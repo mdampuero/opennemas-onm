@@ -283,7 +283,7 @@ class PClave {
         $value = '"' .trim($value) . '"';
         $value = urlencode($value);
 
-        return sprintf($text, $value, 'Buscar m&aacute;s entradas '. SITE_FULLNAME .'en para: ' . htmlentities($origin, ENT_COMPAT, 'UTF-8'), $pclave);
+        return sprintf($text, $value, 'Buscar m&aacute;s entradas '. s::get('site_name') .'en para: ' . htmlentities($origin, ENT_COMPAT, 'UTF-8'), $pclave);
     }
 
     public function cb_url($pclave, $value) {

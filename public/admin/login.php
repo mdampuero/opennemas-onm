@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Setup app
 */
 require_once('../bootstrap.php');
-
+require_once('session_bootstrap.php');
 
 require_once(SITE_CORE_PATH.'privileges_check.class.php');
 require_once(SITE_CORE_PATH.'method_cache_manager.class.php');
@@ -13,102 +12,81 @@ require_once(SITE_CORE_PATH.'method_cache_manager.class.php');
  * Setup view
 */
 $tpl = new TemplateAdmin(TEMPLATE_ADMIN);
+$tpl->assign('version', \Onm\Common\Version::VERSION);
 
-if( isset($_REQUEST['action'])){
-	switch($_REQUEST['action']) {
-        case 'login':
+$action = filter_input ( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
+switch ($action) {
+    case 'login':
 
-            $user = new User();
+		//  Get values from post
+        $login    = filter_input ( INPUT_POST, 'login' , FILTER_SANITIZE_STRING );
+        $password = filter_input ( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
+        $token    = filter_input ( INPUT_POST, 'token' , FILTER_SANITIZE_STRING );
+        $captcha  = '';
 
-			/**
-			 * Get values from post
-			*/
-			$token = filter_input ( INPUT_POST, 'token' , FILTER_SANITIZE_STRING );
-			$captcha = filter_input ( INPUT_POST, 'captcha' , FILTER_SANITIZE_STRING );
-			$login = filter_input ( INPUT_POST, 'login' , FILTER_SANITIZE_STRING );
-			$password = filter_input ( INPUT_POST, 'password' , FILTER_SANITIZE_STRING );
+        $user = new User();
+        // var_dump($_SESSION, $token);
 
-            $result = $user->login($login, $password, $token, $captcha);
+        if ($_SESSION['csrf'] !== $token) {
+            $tpl->assign('message', _('Login token is not valid. Try to autenticate again.'));
+        } else {
+            // Try to autenticate the user
+            if ($user->login($login, $password, $token, $captcha)) {
 
-            if ($result === true) {
-
-				$rememberme = filter_input ( INPUT_POST, 'rememberme' , FILTER_SANITIZE_STRING );
-
-                if( isset($_REQUEST['rememberme']) ) {
-
-                    $app->setcookie_secure("login_username", $login,    time()+60*60*24*30, '/admin/');
-                    $app->setcookie_secure("login_password", $password, time()+60*60*24*30, '/admin/');
-
+                // Check if user account is activated
+                if ($user->authorize != 1) {
+                    $tpl->assign('message', _('This user was deactivated. Please ask your administrator.'));
                 } else {
-                    if (isset($_COOKIE['login_username'])) {
-                        // Caducar a cookie
-                        setcookie("login_username", '', time()-(60*60) );
-                        setcookie("login_password", '', time()-(60*60) );
-                    }
-                }
-
-                /**
-                 * Check if user account is activated
-                 */
-                if($user->authorize == 1){
 
                     // Increase security by regenerating the id
                     session_regenerate_id();
 
-                    // Load session
-                    require_once('session_bootstrap.php');
-
                     //Delete the cache that handles the number of active sessions
                     apc_delete(APC_PREFIX ."_"."num_sessions");
 
-                    $_SESSION = array(
-                        'userid'            => $user->id,
-                        'username'          => $user->login,
-                        'email'             => $user->email,
-                        'isAdmin'           => ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
-                        'isMaster'          => ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
-                        'privileges'        => Privilege::get_privileges_by_user($user->id),
-                        'accesscategories'  => $user->get_access_categories_id(),
-                        'authMethod'        => $user->authMethod,
-                        'default_expire'    => $user->sessionexpire,
-                        'csrf'              => md5(uniqid(mt_rand(), true))
-                    );
 
-                    /**
-                     * Available authentication methods:  database, google_clientlogin
-                     * Check if user auth is google_clientlogin stablish its auth for Gmail
-                     */
-                    if($user->authMethod == 'google_clientlogin') {
-                            $_SESSION['authGmail']  = base64_encode($login.':'.$password);
-                    }
+                    $_SESSION = array(
+                        'userid'           => $user->id,
+                        'realname'         => $user->firstname . " " . $user->lastname,
+                        'username'         => $user->login,
+                        'email'            => $user->email,
+                        'isAdmin'          => ( User_group::getGroupName($user->fk_user_group)=='Administrador' ),
+                        'isMaster'         => ( User_group::getGroupName($user->fk_user_group)=='Masters' ),
+                        'privileges'       => Privilege::get_privileges_by_user($user->id),
+                        'accesscategories' => $user->get_access_categories_id(),
+                        'authMethod'       => $user->authMethod,
+                        'default_expire'   => $user->sessionexpire,
+                        'csrf'             => md5(uniqid(mt_rand(), true))
+                    );
 
                     // Store default expire time
                     $app->setcookie_secure('default_expire', $user->sessionexpire, 0, '/admin/');
-
                     Privileges_check::loadSessionExpireTime();
+                    $GLOBALS['Session']->cleanExpiredSessionFiles();
 
-                    //initHandleErrorPrivileges();
                     $forwardTo = filter_input(INPUT_POST, 'forward_to');
                     if (!is_null($forwardTo) && !empty($forwardTo)) {
-                        Application::forward(SITE_URL.SS.$forwardTo);
+                        Application::forward(SITE_URL.$forwardTo);
                     } else {
-                        Application::forward(SITE_URL_ADMIN.SS.'index.php');
+                        Application::forward(SITE_URL_ADMIN);
                     }
-                } else{
-                    $tpl->assign('message', _('This user was deactivated. Please ask your administrator.'));
                 }
+
             } else {
-
-                // Show google captcha
-                if(isset($result['token'])) {
-                    $tpl->assign('token', $result['token']);
-                    $tpl->assign('captcha', $result['captcha']);
-                }
-
                 $tpl->assign('message', _('Username or password incorrect.'));
             }
+        }
+        $_SESSION['csrf'] = md5(uniqid(mt_rand(), true));
+        $tpl->display('login/login.tpl');
+
+    break;
+
+    default:
+        $_SESSION['csrf'] = md5(uniqid(mt_rand(), true));
+        $languages = Application::getAvailableLanguages();
+        $currentLanguage =Application::$language;
+        $tpl->assign('languages', $languages);
+        $tpl->assign('current_language', $currentLanguage);
+        $tpl->display('login/login.tpl');
         break;
-	}
 }
-$tpl->assign('version', \Onm\Common\Version::VERSION);
-$tpl->display('login/login.tpl');

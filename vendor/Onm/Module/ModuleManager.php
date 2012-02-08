@@ -120,7 +120,9 @@ class ModuleManager {
                 'BOOK_MANAGER',
                 'SPECIAL_MANAGER',
                 'SCHEDULE_MANAGER',
-                'AVANCED_ARTICLE_MANAGER'
+                'AVANCED_ARTICLE_MANAGER',
+                'LIBRARY_MANAGER',
+                'LETTER_MANAGER'
 
             );
         }

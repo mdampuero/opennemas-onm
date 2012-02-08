@@ -2,13 +2,11 @@
 
 {block name="header-css" append}
 {css_tag href="/admin.css"}
-{css_tag href="/calendar_date_select.css"}
-{css_tag href="/mediamanager.css"}
 {css_tag href="/newsletter.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
-{script_tag src="/newsletter.js" language="javascript"}
+{script_tag src="/newsletter.js"}
 <script type="text/javascript">
 var postData = {strip}{$smarty.request.postmaster|default:"null"}{/strip};
 
@@ -51,20 +49,20 @@ document.observe('dom:loaded', function() {
 	<div class="wrapper-content">
 		<div class="title">
 			<h2>{t}Newsletter management{/t}</h2>
-			<img src="{$params.IMAGE_DIR}newsletter/4.gif" width="300" height="40" border="0" usemap="#map" />
+			<img src="{$params.IMAGE_DIR}newsletter/4.gif" width="300" height="40" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Previous{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Previous{/t}" /><br />
 					{t}Previous step{/t}
 				</a>
 			</li>
@@ -74,9 +72,11 @@ document.observe('dom:loaded', function() {
 </div>
 <div class="wrapper-content">
 	<table class="adminheading">
-		<th>
-			<td></td>
-		</th>
+        <tr>
+            <th>
+                {t}Newsletter preview{/t}
+            </th>
+        </tr>
 	</table>
 	<table class="adminlist">
 		<tr>
@@ -86,7 +86,7 @@ document.observe('dom:loaded', function() {
 						<p>
 							<label>{t}Email subject{/t}:</label>
 							<input type="text" name="subject" id="subject" size="80"
-								   value="[{$smarty.const.SITE_FULLNAME}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
+								   value="[{setting name="site_name"}] Boletín de noticias {$smarty.now|date_format:"%d/%m/%Y"}" />
 						</p>
 
 						{* Valores asistente *}
@@ -98,7 +98,7 @@ document.observe('dom:loaded', function() {
 		</tr>
 		<tr>
 			<td>
-				<div style="width:75%; margin:0 auto;">
+				<div style="width:85%; margin:0 auto;">
 					<div style="border:1px solid #ccc; padding:20px;background-color: white;">
 						{$htmlContent}
 					</div>
@@ -112,13 +112,5 @@ document.observe('dom:loaded', function() {
 			</tr>
 		</tfoot>
 	</table>
-
-
-
-
-</div>
-	</div>
-
-
 </div>
 {/block}

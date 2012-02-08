@@ -7,7 +7,7 @@
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
     <div class="top-action-bar">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}</h2></div>
+            <div class="title"><h2>{t}Polls manager{/t}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="POLL_DELETE"}
                 <li>
@@ -112,6 +112,19 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="POLL_AVAILABLE"}
+                        {if $polls[c]->available == 1}
+                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;page={$paginacion->_currentPage}" title="Publicado">
+                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
+                        </a>
+                        {else}
+                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;page={$paginacion->_currentPage}" title="Pendiente">
+                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
+                        </a>
+                        {/if}
+                        {/acl}
+                   </td>
+                    <td class="center">
+                        {acl isAllowed="POLL_FAVORITE"}
                         {if $polls[c]->favorite == 1}
                         <a href="?id={$polls[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" class="favourite_on" title="Publicado">
                             &nbsp;
@@ -125,19 +138,15 @@
                     </td>
 
                     <td class="center">
-                        {acl isAllowed="POLL_AVAILABLE"}
-                        {if $polls[c]->available == 1}
-                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Publicado">
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                        </a>
+                    {acl isAllowed="POLL_HOME"}
+                        {if $polls[c]->in_home == 1}
+                           <a href="?id={$polls[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                        <a href="?id={$polls[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage}" title="Pendiente">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                        </a>
+                            <a href="?id={$polls[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
-                        {/acl}
-                   </td>
-                   <td class="center">
+                    {/acl}
+                    </td>
+                    <td class="center">
                         <ul class="action-buttons">
                             {acl isAllowed="POLL_UPDATE"}
 
@@ -182,6 +191,4 @@
 
     </div>
 </form>
-{dialogo script="print"}
-
 {/block}

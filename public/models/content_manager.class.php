@@ -141,18 +141,12 @@ class ContentManager
                 // add all the additional properties related with positions and params
 
                 $placeholder = ($categoryID == 0) ? 'home_placeholder': 'placeholder';
-                $content->load(
-                                array(
-                                      $placeholder => $rs->fields['placeholder'],
-                                      'position'    => $rs->fields['position'],
-                                      'params'      => json_decode($rs->fields['params']),
-                                      )
-                               );
+                $content->load(array(
+                    $placeholder => $rs->fields['placeholder'],
+                    'position'    => $rs->fields['position'],
+                    'params'      => unserialize($rs->fields['params']),
+                ));
                 $contents[] = $content;
-
-
-
-
                 $rs->MoveNext();
             }
         }
@@ -1455,7 +1449,7 @@ class ContentManager
         }
 
         $sql= 'SELECT authors.name, opinions.pk_opinion as id, contents.title, contents.slug, opinions.type_opinion,
-                      opinions.body,contents.created
+                      opinions.body,contents.created,contents.changed
                FROM contents, opinions
                     LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
                WHERE `contents`.`fk_content_type`=4 and opinions.type_opinion=1 AND contents.pk_content=opinions.pk_opinion
@@ -1484,22 +1478,22 @@ class ContentManager
      */
     public function create_paginate($total_items, $num_pages, $delta, $funcion='null', $params='null')
     {
-        if(!isset($num_pages)) {
+        if (!isset($num_pages)) {
             $num_pages = 5;
         }
 
-        if(!isset($total_items)) {
+        if (!isset($total_items)) {
             $total_items = 40;
         }
 
-        if(!isset($delta)) {
+        if (!isset($delta)) {
             $delta = 2;
         }
 
-        $page='page';
-        $path='';
+        $page = 'page';
+        $path = '';
 
-        if($funcion == 'URL'){
+        if ($funcion == 'URL') {
             $fun="%d/";
             $append=false;
             $path = SITE_URL.$params;
@@ -1957,4 +1951,113 @@ class ContentManager
 
         return $contentsOrdered;
     }
+
+
+    /**
+     * Returns an array of image objects given an array/unique_id  of image
+     *
+     * @return void
+     **/
+    static public function getRelatedImagesForContentsWithIDs($relatedImagesIDs)
+    {
+        // If the given ids is an unique element transform it to an array.
+        if (!is_array($relatedImagesIDs) && !empty($relatedImagesIDs)) {
+            $relatedImagesIDs = array($relatedImagesIDs);
+        }
+
+        // If the related images id array is empty just return an empty array
+        if(!(count($relatedImagesIDs) > 0)) { return array(); }
+
+        // Fetch the images from SQL
+        $relatedImagesSQL = implode(',', $relatedImagesIDs);
+        $cm = new ContentManager();
+        $images = $cm->find('Photo', "pk_content IN ($relatedImagesSQL)");
+
+        return $images;
+    }
+
+    /**
+     * Returns an array of related contents for one content given its id
+     *
+     * @return array list of related content
+     **/
+    public function getRelatedContentFromContentID($contentID)
+    {
+        $rc  = new Related_content();
+        $ccm = new ContentCategoryManager();
+        $relatedContentIDs = $rc->get_relations($contentID);
+        $relatedContent = array();
+        foreach($relatedContentIDs as $contentID) {
+            $content = new Content($contentID);
+            // Filter by scheduled {{{
+            if ($content->isInTime() && $content->available==1 && $content->in_litter==0) {
+                $content->category_name = $ccm->get_name($content->category);
+                $relatedContent[] = $content;
+            }
+            // }}}
+        }
+        return $relatedContent;
+    }
+
+
+
+    /**
+    * Fetches all the contents (articles, widgets, etc) for one specific category
+    * with its placeholder and position
+    *
+    * This is used for HomePages, fetches all the contents assigned for it and allows
+    * to render an entire homepage
+    *
+    * @param type $category_id, the id of the category we want to get contents from
+    * @return mixed, array of contents
+    */
+    public function getContentsForLibrary($date)
+    {
+        if(empty($date)) {
+            return false;
+        }
+        // Initialization of variables
+        $contents = array();
+
+        $sql = 'SELECT * FROM contents, contents_categories '
+              .'WHERE fk_content_type IN (1,3,7,9,10,11,17) '
+              .'AND DATE(starttime) = "'.$date.'" '
+              .'AND available=1 AND in_litter=0 '
+              .'AND pk_fk_content = pk_content '
+              .'ORDER BY pk_fk_content_category, starttime DESC ';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+
+        if($rs !== false) {
+
+            $contents = array();
+
+            while(!$rs->EOF) {
+
+                if($rs->fields['fk_content_type'] == 1) {
+                    $content = new Article($rs->fields['pk_fk_content']);
+                    if(!empty($content->fk_video)) {
+                        $content->video = new Video($content->fk_video);
+
+                    }else {
+                        if(!empty($content->img1)) {
+                            $content->image = new Photo($content->img1);
+                        }
+                    }
+                }else{
+                    $content = new Content($rs->fields['pk_fk_content']);
+                    $content->content_type = $content->content_type_name;
+                }
+                $contents[] = $content;
+
+                $rs->MoveNext();
+            }
+
+
+            return $contents;
+        }
+        return false;
+    }
 }
+

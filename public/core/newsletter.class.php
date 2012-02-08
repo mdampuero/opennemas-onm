@@ -115,6 +115,7 @@ class Newsletter
         
         $configurations = s::get(array(
                                     'newsletter_maillist',
+                                    'newsletter_subscriptionType',
                                     ));
         
         $tpl->assign('conf', $configurations);

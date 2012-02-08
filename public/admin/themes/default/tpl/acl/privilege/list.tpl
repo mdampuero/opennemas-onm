@@ -49,7 +49,7 @@
                 <tr>
                     <th>{t}Privilege name{/t}</th>
                     <th>{t}Description{/t}</th>
-                    <th>{t}Módule{/t}</th>
+                    <th>{t}Module{/t}</th>
                     <th class="center" style="width:30px;">{t}Actions{/t}</th>
                 </tr>
             </thead>

@@ -15,17 +15,12 @@
 		<ul class="old-button">
 			<li>
 				<a href="{$smarty.server.SCRIPT_NAME}" title="{t}Cancel{/t}">
-					<img src="{$params.IMAGE_DIR}previous.png" border="0" /><br />
+					<img src="{$params.IMAGE_DIR}previous.png" /><br />
 					{t}Go back{/t}
 				</a>
 			</li>
-
-			<li>
-
-			</li>
 		</ul>
 	</div>
-
 </div>
 <div class="wrapper-content">
 
@@ -49,7 +44,7 @@
                             <input type="checkbox" name="caching[{$k|default:""}]" value="1" {if $v.caching}checked="checked"{/if}/>
                         </td>
                         <td>
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/{$groupIcon.$k}" border="0" title="Caché de opinión interior" />
+                            <img src="{$params.IMAGE_DIR}template_manager/elements/{$groupIcon.$k}" title="Caché de opinión interior" />
                             {$groupName.$k|default:$k}
                             <input type="hidden" name="group[]" value="{$k|default:""}" />
                         </td>
@@ -67,13 +62,12 @@
 					{/foreach}
 				</tbody>
             </table>
-			<table id="tabla" name="tabla" class="adminlist" >
+                <div class="action-bar clearfix">
+                    <div class="right">
+                        <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
+                    </div>
+                </div><!-- / -->
 		</div>
-		<div class="action-bar clearfix">
-            <div class="right">
-                <input type="submit" name="submit" value="{t}Save{/t}"  class="onm-button red">
-            </div>
-        </div>
 
 		<input type="hidden" id="action" name="action" value="config" />
 	</form>

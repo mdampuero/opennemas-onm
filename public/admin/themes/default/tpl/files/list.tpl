@@ -121,7 +121,7 @@
 							{$attaches[c]->title|clearslash}
 						</td>
 						<td>
-							{$attaches[c]->path}
+							{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches[c]->path}
 						</td>
 						<td class="center">
 							{if $status[c] eq 1}
@@ -170,7 +170,7 @@
 
 		<input type="hidden" id="action" name="action" value="" />
 		<input type="hidden" name="id" id="id" value="{$id|default:""}" />
-	
+
 </div><!--fin wrapper-content-->
 </form>
 {/block}

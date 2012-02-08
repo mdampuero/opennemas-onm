@@ -219,59 +219,7 @@ $tpl->assign('photos', $photos);
  
     /************************************ END COLUMN1 **************************************************/
     
-    /**
-     * Fetching articles home express
-     */
-    $now= date('Y-m-d H:m:s',time());
-
-    $articles_home_express = 
-        $cm->find('Article', 
-                'content_status=1 AND available=1 AND fk_content_type=1 ',
-                'AND (starttime="0000-00-00 00:00:00" ',
-                '   OR (starttime != "0000-00-00 00:00:00" ',
-                '   AND starttime<"'.$now.'")) ',
-                'AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 
-                'ORDER BY created DESC LIMIT 0 , 5 ');
-
-    $tpl->assign('articles_home_express', $articles_home_express);
-
-    /**
-     * Fetching titular gente
-     */
-    $titular_gente = 
-        $cm->find_by_category_name('Article',
-                                'tendencias', 
-                                'content_status=1 AND frontpage=1 ',
-                                'AND available=1 AND fk_content_type=1 ',
-                                'AND  (starttime="0000-00-00 00:00:00" ',
-                                '   OR (starttime != "0000-00-00 00:00:00" ',
-                                '   AND starttime<"'.$now.'")) ',
-                                'AND (endtime="0000-00-00 00:00:00" OR (endtime != "0000-00-00 00:00:00"  AND endtime>"'.$now.'")) ', 
-                                'ORDER BY position ASC LIMIT 0 , 6');
-
-    foreach ($titular_gente as $gente) {
-        $img = new Photo($gente->img2);
-        $gente->path_img = $img->path_file."".$img->name;
-    }
-
-    $tpl->assign('titulares_gente', $titular_gente);
-
-    /**
-     * Fetch information for Albums
-    */
-    $album_photo = array();
-    $lastAlbum = $cm->find('Album', 
-                            ' contents.fk_content_type=7 and contents.available=1 ', 
-                            'ORDER BY favorite DESC, created DESC ',
-                            'LIMIT 0 , 5');
-    $tpl->assign('lastAlbum', $lastAlbum);
-
-
-    /**
-     * Fetch information for Static Pages
-     */
-    require_once ("widget_videos.php");
-
+    
 /********************************* ADVERTISEMENTS  *********************************************/
 require_once ("index_advertisement.php");
 /********************************* ADVERTISEMENTS  *********************************************/

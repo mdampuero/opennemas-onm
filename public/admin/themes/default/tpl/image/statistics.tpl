@@ -1,0 +1,124 @@
+{extends file="base/admin.tpl"}
+
+
+{block name="footer-js" append}
+    {script_tag src="/photos.js" defer="defer"}
+{/block}
+
+{block name="content"}
+<div class="top-action-bar clearfix">
+    <div class="wrapper-content">
+    <div class="title"><h2>{t}Images manager :: General statistics{/t}</h2></div>
+        <ul class="old-button">
+            <li>
+                <a class="admin_add" href="{$smarty.server.PHP_SELF}?action=search">
+                    <img src="{$params.IMAGE_DIR}search.png" alt="Buscar Imágenes"><br />{t}Search{/t}
+                </a>
+            </li>
+            {acl isAllowed="IMAGE_SETTINGS"}
+            <li class="separator"></li>
+                <li>
+                    <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config video module{/t}">
+                        <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        {t}Settings{/t}
+                    </a>
+                </li>
+            {/acl}
+        </ul>
+    </div>
+</div>
+<div class="wrapper-content">
+
+    {render_messages}
+
+    <ul class="pills">
+        <li>
+            <a href="{$smarty.server.PHP_SELF}?action=statistics" {if $category==0}class="active"{/if}>
+                {t}Global statistics{/t}
+            </a>
+        </li>
+        {acl isAllowed="ADVERTISEMENT_ADMIN"}
+            <li>
+                <a href="{$smarty.server.PHP_SELF}?action=today_catalog&amp;category=2" {if $category==2}class="active"{/if}>
+                    {t}Advertisement{/t}
+                </a>
+            </li>
+        {/acl}
+        {include file="menu_categories.tpl" home="{$smarty.server.PHP_SELF}?action=today_catalog"}
+    </ul>
+    <table class="listing-table">
+        <thead>
+            <tr>
+                <th>{t}Title{/t}</th>
+                <th class="center">{t}# photos{/t}</th>
+                <th class="center">{t}Total Size (MB){/t}</th>
+                <th class="center">{t}JPG images{/t}</th>
+                <th class="center">{t}GIF images{/t}</th>
+                <th class="center">{t}PNG images{/t}</th>
+                <th class="center">{t}Other formats{/t}</th>
+                <th class="center">{t}Color images{/t}</th>
+                <th class="center">{t}B/W images{/t}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {section name=c loop=$categorys}
+            <tr>
+                <td><a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$categorys[c]->pk_content_category}">{$categorys[c]->title|clearslash|escape:"html"}</a></td>
+                <td class="center"><strong>{$num_photos[c]->total|default:0}</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{math equation="x / y" x=$num_photos[c]->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center">{$num_photos[c]->jpg|default:0}</td>
+                <td class="center">{$num_photos[c]->gif|default:0}</td>
+                <td class="center">{$num_photos[c]->png|default:0}</td>
+                <td class="center">{$num_photos[c]->other|default:0}</td>
+                <td class="center">{$num_photos[c]->color|default:0}</td>
+                <td class="center">{$num_photos[c]->BN|default:0}</td>
+            </tr>
+            {section name=su loop=$subcategorys[c]}
+            <tr>
+                <td style="padding-left:25px;">&rArr; <a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$subcategorys[c][su]->pk_content_category}">{$subcategorys[c][su]->title}</a></td>
+                <td class="center"><strong>{$num_sub_photos[c][su]->total|default:0}</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{assign value=$num_sub_photos[c][su] var="subcat"}{math equation="x / y" x=$subcat->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center">{$num_sub_photos[c][su]->jpg|default:0}</td>
+                <td class="center">{$num_sub_photos[c][su]->gif|default:0}</td>
+                <td class="center">{$num_sub_photos[c][su]->png|default:0}</td>
+                <td class="center">{$num_sub_photos[c][su]->other|default:0}</td>
+                <td class="center">{$num_sub_photos[c][su]->color|default:0}</td>
+                <td class="center">{$num_sub_photos[c][su]->BN|default:0}</td>
+            </tr>
+            {/section}
+            {/section}
+            <tr>
+                <td class="family_type" colspan="9">{t}Specials{/t}</td>
+            </tr>
+
+            {section name=c loop=$num_especials}
+            <tr>
+                <td><a href="{$smarty.server.PHP_SELF}?action=category_catalog&amp;category={$num_especials[c]->id}">{$num_especials[c]->title|clearslash|escape:"html"}</a></td>
+                <td class="center"><strong>{$num_especials[c]->total|default:0}</strong></td>
+                <td class="center" style="border-right:1px solid #999"><strong>{math equation="x / y" x=$num_especials[c]->size|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center">{$num_especials[c]->jpg|default:0}</td>
+                <td class="center">{$num_especials[c]->gif|default:0}</td>
+                <td class="center">{$num_especials[c]->png|default:0}</td>
+                <td class="center">{$num_especials[c]->other|default:0}</td>
+                <td class="center">{$num_especials[c]->color|default:0}</td>
+                <td class="center">{$num_especials[c]->BN|default:0}</td>
+            </tr>
+            {/section}
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td class="left"><strong>{t}TOTAL{/t}</strong></td>
+                <td class="center"><strong>{$totals['total']|default:0}</strong></td>
+                <td class="center"><strong>{math equation="x / y" x=$totals['size']|default:0 y=1024 format="%.2f"} MB</strong></td>
+                <td class="center">{$totals['jpg']|default:0}</td>
+                <td class="center">{$totals['gif']|default:0}</td>
+                <td class="center">{$totals['png']|default:0}</td>
+                <td class="center">{$totals['other']|default:0}</td>
+                <td class="center">{$totals['color']|default:0}</td>
+                <td class="center">{$totals['bn']|default:0}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{/block}

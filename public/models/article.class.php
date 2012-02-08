@@ -631,10 +631,7 @@ class Article extends Content
                 .'WHERE (`pk_original` = ?) OR (`pk_clone` = ?)';
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+            $errorMsg = Application::logDatabaseError();
 
             return false;
         }

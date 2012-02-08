@@ -24,7 +24,7 @@ $type2res = array(
     'opinion' => 'controllers/opinion/opinion.php',
     'comment' => 'controllers/comment/comment.php',
     'album' => 'controllers/album/album.php',
-    'photo' => 'controllers/mediamanager/mediamanager.php',
+    'photo' => 'controllers/image/image.php',
     'video' => 'controllers/video/video.php',
     'interviu' => 'interviu.php',
     'poll' => 'controllers/poll/poll.php',
@@ -41,30 +41,21 @@ if (is_null($action)) {
 switch ($action) {
 
     case 'index':
-
-        $Types = Content::getContentTypes();
-        $tpl->assign('arrayTypes', $Types);
-        $tpl->display('search_advanced/index.tpl');
-
-    break;
-
     case 'search':
 
-        /**
-         * Get all the available content types
-         */
+        // Get all the available content types
         $contentTypes = Content::getContentTypes();
         $tpl->assign('arrayTypes', $contentTypes);
+        $stringSearch = filter_input(INPUT_GET, 'stringSearch', FILTER_SANITIZE_STRING);
 
         /**
          * if search string is empty skip executing some logic
         */
-        if (isset($_REQUEST['stringSearch']) &&
-            !empty($_REQUEST['stringSearch']))
-        {
+        if (!empty($stringSearch)) {
+
             $htmlChecks=null;
             $szCheckedTypes = checkTypes($htmlChecks);
-            $szTags  = trim($_REQUEST['stringSearch']);
+            $szTags  = trim($stringSearch);
             $objSearch = cSearch::Instance();
             $arrayResults = $objSearch->SearchContentsSelectMerge(
                 "contents.title as titule, contents.metadata, contents.slug,
@@ -79,38 +70,33 @@ switch ($action) {
                 100
             );
 
-            $Pager = null;
+            $Pager        = null;
             $arrayResults = cSearch::Paginate($Pager, $arrayResults, "id", 10);
-            $indice = 0; $ind = 0;
-            $res = array();
-            $szTagsArray = explode(', ', String_Utils::get_tags($szTags));
+            $indice       = 0; $ind = 0;
+            $res          = array();
+            $szTagsArray  = explode(', ', String_Utils::get_tags($szTags));
 
 
             foreach ($arrayResults as $res ) {
-
                 for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                    $arrayResults[$indice]['titule'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                    $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                    $arrayResults[$indice]['titule']   = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                    $arrayResults[$indice]['metadata'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
                 }
-
                 $indice++;
-
             }
 
             $szPagesLink = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
             $tpl->assign(array(
-                'type2res'     => $type2res,
-                'pagination'   => $szPagesLink,
-                'arrayResults' => $arrayResults,
+                'search_string'    => $stringSearch,
+                'type2res'         => $type2res,
+                'pagination'       => $szPagesLink,
+                'arrayResults'     => $arrayResults,
                 'htmlCheckedTypes' => $htmlChecks
             ));
-
         }
 
-
-
-        $tpl->display('search_advanced/search.tpl');
+        $tpl->display('search_advanced/index.tpl');
 
     break;
 
@@ -123,11 +109,11 @@ switch ($action) {
             break;
         }
 
-        $htmlChecks=null;
+        $htmlChecks     =null;
         $szCheckedTypes = checkTypes($htmlChecks);
-        $szTags  = trim($_REQUEST['stringSearch']);
-        $objSearch = cSearch::Instance();
-        $arrayResults = $objSearch->SearchContentsSelectMerge(
+        $szTags         = trim($_REQUEST['stringSearch']);
+        $objSearch      = cSearch::Instance();
+        $arrayResults   = $objSearch->SearchContentsSelectMerge(
             "contents.title as titule, contents.metadata, contents.slug,
             contents.description, contents.created, contents.pk_content as id,
             contents_categories.catName, contents_categories.pk_fk_content_category as category,
@@ -152,8 +138,8 @@ switch ($action) {
 
         foreach ($arrayResults as $res ) {
             for($ind=0; $ind < sizeof($szTagsArray); $ind++){
-                $arrayResults[$indice]['titule']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
-                $arrayResults[$indice]['metadata']= String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
+                $arrayResults[$indice]['titule']   = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['titule']);
+                $arrayResults[$indice]['metadata'] = String_Utils::ext_str_ireplace($szTagsArray[$ind], '<b><span style="color:blue">$1</font></b>', $arrayResults[$indice]['metadata']);
             }
 
             $indice++;
@@ -162,10 +148,10 @@ switch ($action) {
         $htmlPaging = PaginateLink($Pager,$szTags, explode(", ", $szCheckedTypes));
 
         $tpl->assign(array(
-                        'type2res'     => $type2res,
-                        'pagination'   => $htmlPaging,
-                        'arrayResults' => $arrayResults
-                    ));
+            'type2res'     => $type2res,
+            'pagination'   => $htmlPaging,
+            'arrayResults' => $arrayResults
+        ));
 
         $html_out=$tpl->fetch('search_advanced/partials/_list.tpl');
         Application::ajax_out($html_out);

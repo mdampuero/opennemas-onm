@@ -83,11 +83,15 @@ cleancache:
 
 cleaninstancefiles:
 	@echo "Cleaning temporal instance files..."
-	rm tmp/instances/* -f
+	rm tmp/instances/* -rf
 
 cleanlogs:
 	@echo "Cleaning logs..."
 	rm tmp/logs/*.log -f
+
+cleansmarty:
+	@echo "Cleaning smarty remporary files..."
+	rm tmp/instances/*/smarty/ -r
 
 cleandocs:
 	@echo "Cleaning generated documentations..."

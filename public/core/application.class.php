@@ -31,6 +31,7 @@ class Application
     var $cache          = null;
     var $image          = null;
     var $events         = array();
+    static $language    = '';
     static $request        = null;
 
     /**
@@ -185,7 +186,16 @@ class Application
         /* Set internal character encoding to UTF-8 */
         mb_internal_encoding("UTF-8");
 
-        $locale = s::get('site_language'). ".UTF-8";
+        $availableLanguages = self::getAvailableLanguages();
+        $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
+
+        if ($forceLanguage !== null && in_array($forceLanguage, array_keys($availableLanguages))) {
+            self::$language = $forceLanguage;
+        } else {
+            self::$language = s::get('site_language');
+        }
+
+        $locale = self::$language.".UTF-8";
         $domain = 'messages';
 
         if (self::isBackend()) {
@@ -340,7 +350,10 @@ class Application
         define('STATUS', "1");
         define('CHARSET', "text/html; charset=UTF-8");
 
-        $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        $protocol = 'http://';
+        if (preg_match('@^/admin/@', $_SERVER['REQUEST_URI'])) {
+            $protocol = (!empty($_SERVER['HTTPS']))? 'https://': 'http://';
+        }
 
         define('SS', "/");
 
@@ -386,7 +399,7 @@ class Application
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);    // External server or a local dir
         define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS); // Full path to the instance media files
 
-        define('MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
+        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME); // local path to write media (/path/to/media)
         define('IMG_DIR', "images");
         define('FILE_DIR', "files");
         define('ADS_DIR', "advertisements");
@@ -427,6 +440,16 @@ class Application
         $GLOBALS['conn'] = NULL;
 
         define('ITEMS_PAGE', "20"); // TODO: delete from application
+    }
+
+    /**
+     * Returns the available languages
+     *
+     * @return array the list of languages
+     **/
+    static public function getAvailableLanguages()
+    {
+        return array('en_US' => "English", 'es_ES' => "Español", 'gl_ES' => "Galego");
     }
 
     /**
@@ -678,12 +701,15 @@ HTMLCODE;
      * @return void
      * @author
      **/
-    static public function logContentEvent($action, $content)
+    static public function logContentEvent($action=NULL, $content=NULL)
     {
         $logger = Application::getLogger();
-        $logger->notice(
-            'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
-            .'the action '.$action.' at '.get_class($content).' (ID:'.$content->id.')' );
+
+            $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
+            .'the action '.$action;
+            if(!empty($content)){ $msg.=' at '.get_class($content).' (ID:'.$content->id.')';}
+
+            $logger->notice( $msg );
     }
 
     /**

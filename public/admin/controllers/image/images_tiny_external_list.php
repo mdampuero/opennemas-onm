@@ -30,7 +30,6 @@ foreach($photos as $photo)
             . '", "'
             . utf8_encode("$file")
             . '"],';
-        
     }
 }
 

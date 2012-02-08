@@ -9,12 +9,11 @@ use Onm\Settings as s,
 require_once('../../../bootstrap.php');
 require_once('../../session_bootstrap.php');
 
- 
+
 /**
  * Set up view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'User Management');
 
 $ccm = new ContentCategoryManager();
 
@@ -31,15 +30,13 @@ if (!isset($action)) {
 
 
 switch($action) {
-    case 'list': 
-        if(!Acl::check('USER_ADMIN')) {
-            Application::forward('/admin/');
-        }
+    case 'list':
+        Acl::checkOrForward('USER_ADMIN');
 
         $cm = new ContentManager();
         $user = new User();
 
-        $filters = (isset($_REQUEST['filter']))? $_REQUEST['filter']: null;
+        $filters = (isset($_GET['filter']))? $_GET['filter']: null;
         $users = $user->get_users($filters, ' ORDER BY login ');
 
         $users = $cm->paginate_num($users, ITEMS_PAGE);
@@ -48,7 +45,7 @@ switch($action) {
         $group      = $user_group->get_user_groups();
 
         $groupsOptions = array();
-        $groupsOptions[] = _('-- Select a group --');
+        $groupsOptions[] = _('--All--');
         foreach($group as $cat) {
             $groupsOptions[$cat->id] = $cat->name;
         }
@@ -64,13 +61,13 @@ switch($action) {
 
     break;
 
-    case 'new':  
+    case 'new':
         Acl::checkOrForward('USER_CREATE');
-        
+
         $user = new User( $_REQUEST['id'] );
-        $user_group = new User_group();
+        $userGroup = new User_group();
         $tpl->assign('user', $user);
-        $tpl->assign('user_groups', $user_group->get_user_groups());
+        $tpl->assign('user_groups', $userGroup->get_user_groups());
 
         $tree = $ccm->getCategoriesTree();
         $tpl->assign('content_categories', $tree);
@@ -80,7 +77,7 @@ switch($action) {
 
     case 'read': {
         //user can modify his data
-        if ($_REQUEST['id'] != $_SESSION['userid']) {                
+        if ($_REQUEST['id'] != $_SESSION['userid']) {
             Acl::checkOrForward('USER_UPDATE');
         }
         $user = new User( $_REQUEST['id'] );
@@ -97,25 +94,25 @@ switch($action) {
         $tpl->display('acl/user/new.tpl');
     } break;
 
-    case 'update': 
-        
-        if ($_REQUEST['id'] != $_SESSION['userid']) {                
+    case 'update':
+
+        if ($_REQUEST['id'] != $_SESSION['userid']) {
             Acl::checkOrForward('USER_UPDATE');
-        }             
+        }
         // TODO: validar datos
         $user = new User($_REQUEST['id']);
         $user->update( $_REQUEST );
 
-        if ( ($_REQUEST['id'] == $_SESSION['userid']) && !Acl::check('USER_UPDATE') ) {  
+        if ( ($_REQUEST['id'] == $_SESSION['userid']) && !Acl::check('USER_UPDATE') ) {
             Application::forward('/admin/');
         } else {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
         }
     break;
 
-    case 'create': 
+    case 'create':
         Acl::checkOrForward('USER_CREATE');
-        
+
         $user = new User();
         if($user->create( $_POST )) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
@@ -125,32 +122,32 @@ switch($action) {
         $tpl->display('acl/user/new.tpl');
     break;
 
-    case 'validate': 
-         
+    case 'validate':
+
         if(empty($_POST["id"])) {
             Acl::checkOrForward('USER_CREATE');
-            
+
             $user = new User();
             if(!$user->create( $_POST )) {
                 $tpl->assign('errors', $user->errors);
             }
-           
+
         } else {
-            
-            if ($_POST['id'] != $_SESSION['userid']) {                
+
+            if ($_POST['id'] != $_SESSION['userid']) {
                 Acl::checkOrForward('USER_UPDATE');
             }
 
             $user = new User($_POST['id']);
             $user->update( $_REQUEST );
-             
+
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$user->id);
     break;
-    
-    case 'change_authorize': 
-        
+
+    case 'change_authorize':
+
         $user = new User( $_REQUEST['id'] );
         //Autorizar o no , comprobar...
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
@@ -160,11 +157,11 @@ switch($action) {
             $user->authorize_user($user->id);
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
-    break;    
-    
-    case 'delete': 
+    break;
+
+    case 'delete':
         Acl::checkOrForward('USER_DELETE');
-        
+
         $user = new User();
         $user->delete( $_POST['id'] );
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
@@ -172,7 +169,7 @@ switch($action) {
 
     case 'mdelete':
         Acl::checkOrForward('USER_DELETE');
-        
+
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
         {
             $fields = $_REQUEST['selected_fld'];

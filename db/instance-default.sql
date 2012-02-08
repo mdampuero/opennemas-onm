@@ -1039,7 +1039,9 @@ INSERT INTO `content_types` (`pk_content_type`, `name`, `title`, `fk_template_de
 (13, 'static_page', 'Página estática', NULL),
 (14, 'kiosko', 'Kiosko', NULL),
 (15, 'book', 'Libro', NULL),
-(16, 'schedule', 'Agenda',NULL)
+(16, 'schedule', 'Agenda',NULL),
+(17, 'letter', 'Letters to the Editor', NULL),
+(18, 'frontpage', 'Portadas',NULL)
 ;
 
 -- --------------------------------------------------------
@@ -1578,7 +1580,14 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 (140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
 (139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
 (138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK');
+(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK')
+(166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
+(167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
+(168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
+(169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
+(170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
+(171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
+(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER');
 
 -- --------------------------------------------------------
 
@@ -1832,6 +1841,10 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('poll_settings', 'a:3:{s:9:"typeValue";s:7:"percent";s:9:"widthPoll";s:3:"600";s:10:"heightPoll";s:3:"500";}'),
 ('opinion_settings', 'a:2:{s:14:"total_director";s:1:"2";s:15:"total_editorial";s:1:"3";}');
 
+INSERT INTO `settings` (`name`, `value`) VALUES
+('image_front_thumb_size', 'a:2:{s:5:"width";s:3:"350";s:6:"height";s:3:"250";}'),
+('image_inner_thumb_size', 'a:2:{s:5:"width";s:3:"480";s:6:"height";s:3:"250";}'),
+('image_thumb_size', 'a:2:{s:5:"width";s:3:"140";s:6:"height";s:3:"100";}');
 -- --------------------------------------------------------
 
 --
@@ -2172,10 +2185,6 @@ CREATE TABLE IF NOT EXISTS `specials` (
   PRIMARY KEY (`pk_special`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `specials`
---
-
 -- --------------------------------------------------------
 
 --
@@ -2191,7 +2200,36 @@ CREATE TABLE IF NOT EXISTS `special_contents` (
   `type_content` varchar(100) CHARACTER SET utf8 NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `special_contents`
+-- Table structure for table `letters`
 --
 
+CREATE TABLE IF NOT EXISTS `letters` (
+  `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(255)  DEFAULT NULL,
+  `email` varchar(255)  DEFAULT NULL,
+  `body` text ,
+  PRIMARY KEY (`pk_letter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `frontpages`
+--
+
+CREATE TABLE IF NOT EXISTS `frontpages` (
+   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
+   `date` int(11) NOT NULL COMMENT 'date as 20110720',
+   `category` int(11) NOT NULL COMMENT 'category',
+   `version` bigint(20) DEFAULT NULL,
+   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
+   `promoted` tinyint(1) DEFAULT NULL,
+   `day_frontpage` tinyint(1) DEFAULT NULL,
+   `params` longtext NOT NULL COMMENT 'serialized params',
+   PRIMARY KEY (`date`,`category`)
+
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -22,7 +22,7 @@
     </tr>
 </table>
 
-<table class="listing-table">
+<table class="listing-table nofill">
     <tr>
         <td colspan='11'>
             <div id="deldirector" class="seccion">
@@ -107,7 +107,7 @@
         </td>
     </tr>
 </table>
-<table class="listing-table">
+<table class="listing-table nofill">
     <tbody>
         <tr>
             <td colspan='11'>
@@ -193,7 +193,7 @@
         </td>
     </tr>
 </table>
-<table class="listing-table">
+<table class="listing-table nofill">
     <tr>
 	<td colspan='11'>
             <div id="cates" class="seccion">

@@ -26,6 +26,7 @@ class ContentCategory {
 
     var $posmenu = NULL;
     var $internal_category = NULL; // flag asignar a un tipo de contenido.
+    var $params = null;
 
     /* $internal_category = 0 categoria es interna (para usar ventajas funciones class ContentCategory) no se muestra en el menu.
 
@@ -74,7 +75,7 @@ class ContentCategory {
                     (`name`, `title`,`inmenu`,`fk_content_category`,
                     `internal_category`, `logo_path`,`color`, `params`)
                 VALUES (?,?,?,?,?,?,?,?)";
-        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'], 
+        $values = array($data['name'], $data['title'], $data['inmenu'], $data['subcategory'],
             $data['internal_category'], $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -105,8 +106,9 @@ class ContentCategory {
             return;
         }
         $this->load($rs->fields);
-        $this->params = unserialize($this->params);
-       
+        if(!empty($this->params) && is_string($this->params))
+            $this->params = unserialize($this->params);
+
     }
 
     /**
@@ -119,25 +121,30 @@ class ContentCategory {
     public function update($data)
     {
         $this->read($data['id']); //Para comprobar si cambio el nombre carpeta
- 
-        $data['name'] = String_Utils::normalize_name($data['title']);
+        //No se puede cambiar el nombre de las url's
+      /*  if($data['title'] != $this->title) {
+            $data['name'] = String_Utils::normalize_name($data['title']);
+        } else {
+            $data['name'] =$this->name;
+        }
+     */
         $data['params'] = serialize($data['params']);
         if (empty($data['logo_path'])) {
             $data['logo_path'] = $this->logo_path;
         }
         $data['color'] = (isset($data['color'])) ? $data['color'] : $this->color;
-        $sql = "UPDATE content_categories SET `name`=?, `title`=?, `inmenu`=?, ".
+        $sql = "UPDATE content_categories SET  `title`=?, `inmenu`=?, ".
                        " `fk_content_category`=?, `internal_category`=?, ".
                        " `logo_path`=?,`color`=?, `params`=? ".
                    " WHERE pk_content_category=" . ($data['id']);
-        
-        $values = array($data['name'], $data['title'], $data['inmenu'], 
-                    $data['subcategory'], $data['internal_category'], 
+
+        $values = array($data['title'], $data['inmenu'],
+                    $data['subcategory'], $data['internal_category'],
                     $data['logo_path'], $data['color'], $data['params']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-           
+
             $GLOBALS['application']->logger->debug('Error: ' . $errorMsg);
             $GLOBALS['application']->errors[] = 'Error: ' . $errorMsg;
             return;

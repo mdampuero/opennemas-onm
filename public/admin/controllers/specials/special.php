@@ -16,14 +16,13 @@ require_once(dirname(__FILE__).'/../../../bootstrap.php');
 require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
 
 //Check if module is activated in this onm instance
-\Onm\Module\ModuleManager::checkActivatedOrForward('BOOK_MANAGER');
+\Onm\Module\ModuleManager::checkActivatedOrForward('SPECIAL_MANAGER');
 
- // Check if the user can admin books
-Acl::checkOrForward('BOOK_ADMIN');
+ // Check if the user can admin specials
+Acl::checkOrForward('SPECIAL_ADMIN');
 
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Book Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
@@ -40,7 +39,7 @@ $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
 if(empty($category)) {
-    $category ='favorite';
+    $category ='widget';
 }
 
 $tpl->assign('category', $category);
@@ -57,7 +56,7 @@ if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
 
-$configurations = s::get('book_settings');
+$configurations = s::get('special_settings');
 $numFavorites = (isset($configurations['total_widget']) && !empty($configurations['total_widget']))? $configurations['total_widget']: 1;
 $sizeFile = (isset($configurations['size_file']) && !empty($configurations['size_file']))? $configurations['size_file']: 5000000;
 
@@ -74,8 +73,8 @@ switch($action) {
             $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.ITEMS_PAGE;
         }
 
-        if ($category == 'favorite') {
-            $specials = $cm->find_all('Special', 'favorite =1 AND available =1', 'ORDER BY position, created DESC '.$limit);
+        if ($category == 'widget') {
+            $specials = $cm->find_all('Special', 'in_home =1 AND available =1', 'ORDER BY position, created DESC '.$limit);
 
             if(!empty($specials)) {
                 foreach ($specials as &$special) {
@@ -139,7 +138,7 @@ switch($action) {
         $tpl->assign('articles', $articles);
 
         $tpl->display('special/new.tpl');
-	
+
     break;
     case 'new':
         Acl::checkOrForward('SPECIAL_CREATE');
@@ -174,12 +173,12 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-     
+
 
     case 'delete':
-        
+
         Acl::checkOrForward('SPECIAL_DELETE');
-        
+
         $special = new Special($_REQUEST['id']);
         $special->delete($_REQUEST['id']);
 
@@ -187,31 +186,36 @@ switch($action) {
     break;
 
     case 'change_favorite':
-        
+
         Acl::checkOrForward('SPECIAL_FAVORITE');
-        
+
         $special = new Special($_REQUEST['id']);
         $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $special->set_favorite($_REQUEST['id'],$status,$category);
+        $special->set_favorite($status);
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-    case 'inhome_status':
+    case 'change_inHome':
 
         Acl::checkOrForward('SPECIAL_HOME');
-        
-        $special = new Special($_REQUEST['id']);
-        $status = ($_REQUEST['status']==1)? 1: 0; // Evitar otros valores
-        $special->set_inhome($status,$_SESSION['userid']);
-
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $special = new Special($id);
+        if ($special->available == 1) {
+            $special->set_inhome($status,$_SESSION['userid']);
+        } else {
+            m::add(_("This special is not published so you can't define it as widget home content.") );
+        }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
     break;
 
     case 'available_status':
-        
+
         Acl::checkOrForward('SPECIAL_AVAILABLE');
-        
+
         $special = new Special($_REQUEST['id']);
 
         // FIXME: evitar otros valores erróneos
@@ -222,9 +226,9 @@ switch($action) {
     break;
 
     case 'change_status':
-        
+
         Acl::checkOrForward('SPECIAL_AVAILABLE');
-        
+
         $special = new Special($_REQUEST['id']);
 
         //Publicar o no, comprobar num clic
@@ -334,10 +338,65 @@ switch($action) {
           exit(0);
     break;
 
+    case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
 
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $special = new Special();
+            $msg = $special->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Have a problem, positions can't be saved.");
+         }
+        exit(0);
+    break;
+
+    case 'config':
+
+        $configurationsKeys = array('special_settings',);
+        $configurations = s::get($configurationsKeys);
+        $tpl->assign(array(
+            'configs'   => $configurations,
+        ));
+
+        $tpl->display('special/config.tpl');
+
+    break;
+
+    case 'save_config':
+
+        Acl::checkOrForward('SPECIAL_SETTINGS');
+
+        unset($_POST['action']);
+        unset($_POST['submit']);
+
+        foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+        m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+        $httpParams = array(array('action'=>'list'),);
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+
+    break;
 
     default:
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
     break;
-	
+
 }

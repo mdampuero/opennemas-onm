@@ -1,29 +1,6 @@
-
-<style>
-#advertisement-mosaic-opinioninterior {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 240px;
-    height: 400px;
-}
-
-#advertisement-mosaic-opinioninterior-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0px;
-    height: 0px;
-    z-index: 100;
-    border: 1px dashed #F00;
-    background-color: #996633;
-}
-</style>
-
-
 <div id="advertisement-mosaic-opinioninterior" style=" ">
     <div id="advertisement-mosaic-opinioninterior-frame"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240"  border="0" usemap="#mapOpinionInterior" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/ArticleAds.png" width="240"  usemap="#mapOpinionInterior" />
 </div>
 
 <map name="mapOpinionInterior">

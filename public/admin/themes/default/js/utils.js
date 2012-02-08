@@ -151,6 +151,7 @@ function onChangeGroup(evaluateControl, ids)
 {
     if (document.getElementById)
     {
+        var combo = document.getElementById('ids_category');
         //se define la variable "el" igual a nuestro div
         if(evaluateControl.options[evaluateControl.selectedIndex].text.toLowerCase() == "administrador")
         {
@@ -159,7 +160,6 @@ function onChangeGroup(evaluateControl, ids)
                 var hideDiv = document.getElementById(ids[iIndex]);
                 hideDiv.style.display = 'none'; //damos un atributo display:none que oculta el div
             }
-            var combo = document.getElementById('ids_category');
             combo.options[0].selected = false;
             for(iIndex=1; iIndex<combo.options.length;  iIndex++)
                 combo.options[iIndex].selected = true;
@@ -169,11 +169,14 @@ function onChangeGroup(evaluateControl, ids)
             for(iIndex=0; iIndex<ids.length; iIndex++)
             {
                 var showDiv = document.getElementById(ids[iIndex]);
-                showDiv.style.display = 'block'; //damos un atributo display:block que muestra el div
+                if (showDiv) {
+                    showDiv.style.display = 'block'; //damos un atributo display:block que muestra el div
+                }
             }
-            var combo = document.getElementById('ids_category');
-            for(iIndex=0; iIndex<combo.options.length;  iIndex++)
-                combo.options[iIndex].selected = false;
+            if (combo) {
+                for(iIndex=0; iIndex<combo.options.length;  iIndex++)
+                    combo.options[iIndex].selected = false;
+            }
         }
 
     }
@@ -182,7 +185,7 @@ function onChangeGroup(evaluateControl, ids)
 
 function paginate_search(action,page,stringSearch,categories)
 {
-    new Ajax.Updater('resultsSearch', "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
+    new Ajax.Updater('search-results', "search_advanced.php?action="+action+"&page="+page+"&stringSearch="+stringSearch+categories,
         {
             evalScripts: true
         } );

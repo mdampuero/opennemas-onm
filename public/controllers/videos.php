@@ -265,8 +265,12 @@ switch ($action) {
 
         $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,  array('options' => array('default' => '1')));
         $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING,  array('options' => array('default' => '0')));
-
-        $items_page = 3;
+        
+        if ($category == '0') {
+            $items_page = 6;
+        } else {
+            $items_page = 3;
+        }
 
         $_limit = 'LIMIT ' . ($page - 1) * $items_page . ', ' . ($items_page);
 

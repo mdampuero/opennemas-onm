@@ -51,17 +51,11 @@ class Kiosko extends Content {
 
     public function create($data) {
 
-     /*  if( $this->exists($data['name'], $data['category']) ) {
-           m::add('Una portada ya ha sido subida en la fecha y categoria seleccionadas.<br />' .
-                               'Para subir una portada en esa fecha debe eliminar primero la portada existente, ' .
-                               'teniendo en cuenta que también se debe eliminar de la papelera.', 'error');
+       if( $this->exists($data['path'], $data['category']) ) {
+           m::add(_("There's other paper in this date & this category.") );
 
-
-            $this->initialize($data);
-
-            return false;
         }
-*/
+
         parent::create($data);
 
         $sql = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date` ) " .
@@ -141,9 +135,11 @@ class Kiosko extends Content {
 
         $paper_pdf = $this->kiosko_path.$this->path.$this->name;
         $paper_image = $this->kiosko_path.$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
+        $big_paper_image = $this->kiosko_path."650-".$this->path.preg_replace("/.pdf$/",".jpg",$this->name);
 
         unlink($paper_pdf);
         unlink($paper_image);
+        unlink($big_paper_image);
 
         if($GLOBALS['application']->conn->Execute($sql)===false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -160,11 +156,11 @@ class Kiosko extends Content {
      * @param string $category
      * @return boolean
     */
-    public function exists($name_pdf, $category) {
+    public function exists($path_pdf, $category) {
         $sql = 'SELECT count(`kioskos`.`pk_kiosko`) AS total FROM kioskos,contents_categories
                 WHERE `contents_categories`.`pk_fk_content`=`kioskos`.`pk_kiosko`
-                AND `kioskos`.`name`=? AND `contents_categories`.`pk_fk_content_category`=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($name_pdf, $category));
+                AND `kioskos`.`path`=? AND `contents_categories`.`pk_fk_content_category`=?';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array($path_pdf, $category));
 
         return intval($rs) > 0;
     }

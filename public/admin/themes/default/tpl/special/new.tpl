@@ -56,7 +56,7 @@
             </tr>
         </table>
 
-        <table class="adminform" >
+        <table class="adminform">
             <tbody>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;">
@@ -102,11 +102,11 @@
                 </tr>
                 <tr>
                     <td valign="top" align="right" style="padding:4px;" >
-                        <label for="title">Agencia:</label>
+                        <label for="title">Subtitle:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
                         <input type="text" id="agency" name="agency" title={t}"Special"{/t}
-                            size="60" value="{$special->agency|clearslash|escape:"html"}" />
+                            size="60" value="{$special->subtitle|clearslash|escape:"html"}" />
                     </td>
                 </tr>
                 <tr>
@@ -114,7 +114,7 @@
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <textarea name="description" id="description"  title={t}"description"{/t} style="width:90%; height:10em;">{t 1=$special->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$special->description|clearslash|escape:"html"}%1{/t}</textarea>
                     </td>
                 </tr>
 
@@ -128,34 +128,44 @@
                         <br><label align='right'><sub>{t}Separated by coma{/t}</sub></label>
                     </td>
                 </tr>
-                {include file="special/special_image.tpl"}
-
-
-                {include file="special/special_content.tpl"}
-
-
+                <tr>
+                    <td valign="top" align="right" style="padding:4px;">
+                        <label for="slug">{t}Slug{/t}</label>
+                    </td>
+                    <td style="padding:4px;" nowrap="nowrap">
+                        <input 	type="text" id="slug" name="slug" title="{t}slug{/t}"
+                                                        style="width:98%" maxlength="256" tabindex="5"
+                            {if is_object($article)}
+                                    value="{$article->slug|clearslash|escape:"html"}"
+                            {else}
+                                    value=""
+                            {/if}/>
+                     </td>
+                </tr>
+                <tr>
+                    <td valign="top" align="right" colspan="3">
+                        {include file="special/special_image.tpl"}
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" align="right" colspan="3">
+                        {include file="special/special_content.tpl"}
+                    </td>
+                </tr>
+          </tbody>
+        </table>
+    </div>
 <script type="text/javascript" language="javascript">
 tinyMCE.init({
 	mode : "exact",
 	elements : "description"
 });
 </script>
- 
-    <!-- </div> -->
+    <input type="hidden" id="noticias_right" name="noticias_right" value="">
+    <input type="hidden" id="noticias_left" name="noticias_left" value="">
 
-<input type="hidden" id="noticias_right" name="noticias_right" value="">
-
-<input type="hidden" id="noticias_left" name="noticias_left" value=""> 
-
-
-
-
-            </tbody>
-        </table>
-
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-    </div>
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
 
 {/block}

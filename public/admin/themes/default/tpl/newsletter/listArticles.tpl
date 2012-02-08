@@ -2,13 +2,11 @@
 
 {block name="header-css" append}
 {css_tag href="/admin.css"}
-{css_tag href="/calendar_date_select.css"}
-{css_tag href="/mediamanager.css"}
 {css_tag href="/newsletter.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
-{script_tag language="javascript" src="/newsletter.js"}
+{script_tag src="/newsletter.js"}
 <script type="text/javascript">
 	/* <![CDATA[ */
 	var manager = null; // Newsletter.Manager
@@ -67,7 +65,7 @@
 		});
 	});
 	/* ]]> */
-	</script>
+</script>
 {/block}
 
 {block name="content"}
@@ -76,41 +74,41 @@
 	<div class="wrapper-content">
 		<div class="title">
 			<h2>{t}Newsletter management{/t}</h2>
-			<img src="{$params.IMAGE_DIR}newsletter/1.gif" width="300" height="40" border="0" usemap="#map" />
+			<img src="{$params.IMAGE_DIR}newsletter/1.gif" width="300" height="40" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 
 		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}editclear.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}editclear.png" alt="{t}Clean container of selected opinions{/t}" /><br />
 					{t}Clean{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" title="{t}Select all the opinions available{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="{t}Select all the opinions available{/t}" /><br />
 					{t}Select all{/t}
 				</a>
 			</li>
 			<li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config newsletter module{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
 					{t}Configurations{/t}
 				</a>
 			</li>
 
             <li >
-                <a href="subscriptors.php?action=list" class="admin_add" name="submit_mult" value="{t}Subscriptors{/t} title="{t}Subscriptors{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}authors.png" title="{t}Subscriptors{/t}" alt="{t}Subscriptors{/t}"><br />{t}Subscriptors{/t}
+                <a href="subscriptors.php?action=list" class="admin_add" id="submit_mult" title="{t}Subscriptors{/t}">
+                    <img src="{$params.IMAGE_DIR}authors.png" title="{t}Subscriptors{/t}" alt="{t}Subscriptors{/t}"><br />{t}Subscriptors{/t}
                 </a>
             </li>
 		</ul>
@@ -169,25 +167,26 @@
 	</table>
 	<table class="adminlist" >
 		<thead style="text-align:center;">
-			<th nowrap>{t}Available articles (please, double click over one element to send it){/t}</th>
-			<th nowrap>{t}Selected articles (please doucle click over one element to discart it){/t}</th>
+            <tr>
+                <th>{t}Available articles (please, double click over one element to send it){/t}</th>
+                <th>{t}Selected articles (please doucle click over one element to discart it){/t}</th>
+            </tr>
 		</thead>
 		<tr>
-			<td width="50%">
+			<td style="width:50%">
 				<div id="container1">
 					<ul id="items-list" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
 
-			<td width="50%">
+			<td style="width:50%">
 				<div id="container2">
 					{* Items selected *}
 					<ul id="items-selected" style="margin:0; padding:0"></ul>
 				</div>
 			</td>
 		</tr>
-        <div id="separator"></div>
 	</table>
-
+    <div id="separator"></div>
 </div>
 {/block}

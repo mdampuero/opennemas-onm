@@ -84,7 +84,12 @@ class MediaItem
 
         $_d = pathinfo($filename);
 
-        return( strtoupper($_d['extension']) );
+        if (array_key_exists('extension', $_d)) {
+            $extension = $_d['extension'];
+        } else {
+            $extension = '';
+        }
+        return $extension;
     }
 
     public function getHTMLTag()

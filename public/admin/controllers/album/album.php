@@ -40,7 +40,7 @@ if(empty($category)) {
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
-if(empty($category)) {$category ='favorite';}
+if(empty($category)) {$category ='widget';}
 
 $tpl->assign('category', $category);
 
@@ -71,9 +71,9 @@ switch($action) {
         }
 
         $cm = new ContentManager();
- 
-        if ($category == 'favorite') {
-            $albums = $cm->find_all('Album', 'favorite =1 AND available =1',
+
+        if ($category == 'widget') {
+            $albums = $cm->find_all('Album', 'in_home =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
@@ -134,39 +134,31 @@ switch($action) {
         Acl::checkOrForward('ALBUM_UPDATE');
 
         $configurations = s::get('album_settings');
-        $tpl->assign(array(
-            'crop_width' => $configurations['crop_width'],
-            'crop_height' => $configurations['crop_height']
-        ));
 
-        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        if (empty($id)) { //because forwards
+        if (empty($id)) {
             $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
         }
 
         $album = new Album( $id);
         $tpl->assign('album', $album);
 
-        $cropExist = file_exists(MEDIA_IMG_PATH_WEB.$album->cover);
-        $tpl->assign('crop_exist', $cropExist);
-
-        $photoData = array();
-        $photos = $album->get_album($id);
-        $tpl->assign('otherPhotos', $photos);
-        if (!empty($photos)) {
-            foreach ($photos as $ph) {
-                $photoData[] = new Photo($ph[0]);
+        $photos = array();
+        $photoIds = $album->get_album($id);
+        if (!empty($photoIds)) {
+            foreach ($photoIds as $ph) {
+                $photos[] = new Photo($photo[0]);
             }
         }
         $tpl->assign( array(
             'category' => $album->category,
-            'photoData' => $photoData,
+            'photos' => $photos,
         ));
         $tpl->display('album/new.tpl');
 
     break;
 
     case 'create':
+        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_CREATE');
         $album = new Album();
@@ -180,13 +172,17 @@ switch($action) {
     break;
 
     case 'update':
+        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_UPDATE');
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         $album = new Album($id);
 
-        if(!Acl::isAdmin() && !Acl::check('CONTENT_OTHER_UPDATE') && $album->fk_user != $_SESSION['userid']) {
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && $album->fk_user != $_SESSION['userid']
+        ) {
             m::add(_("You can't modify this content because you don't have enought privileges.") );
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$id);
         } else {
@@ -197,6 +193,7 @@ switch($action) {
     break;
 
     case 'validate':
+        var_dump($_POST);die();
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         if(empty($id)) {
@@ -204,7 +201,7 @@ switch($action) {
         Acl::checkOrForward('ALBUM_CREATE');
 
         $album = new Album();
-        if(!$album->create( $_POST ))
+        if (!$album->create( $_POST ))
             m::add(_($album->errors));
         } else {
 
@@ -214,9 +211,9 @@ switch($action) {
                 && !Acl::check('CONTENT_OTHER_UPDATE')
                 && $album->fk_user != $_SESSION['userid'])
             {
-                 m::add(_("You can't modify this article because you don't have enought privileges.") );
+                m::add(_("You can't modify this article because you don't have enought privileges.") );
             }
-            $album->update( $_POST );
+            $album->update($_POST);
 
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=read&id='.$album->id.'&category='.$category.'&page='.$page);
@@ -235,15 +232,15 @@ switch($action) {
         $msg ='';
         $relations = Related_content::get_content_relations( $id );
         if (!empty($relations)) {
-            $msg = sprintf(_(" The album %s have some relations")."\n", $album->title);
+            $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
             $cm= new ContentManager();
             $relat = $cm->getContents($relations);
-            foreach($relat as $contents) {
+            foreach ($relat as $contents) {
                $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all its relations?");
+            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");
         } else {
-            $msg = sprintf(_("Do you want delete %s?"), $album->title);
+            $msg = sprintf(_('Do you want to delete "%s"?'), $album->title);
         }
         echo $msg;
         exit(0);
@@ -255,7 +252,7 @@ switch($action) {
         Acl::checkOrForward('ALBUM_DELETE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if($id){
+        if ($id){
             $album = new Album($id);
             //Delete relations
             $rel= new Related_content();
@@ -285,7 +282,7 @@ switch($action) {
     break;
 
     case 'change_favorite':
-        
+
         Acl::checkOrForward('ALBUM_FAVORITE');
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
@@ -300,6 +297,24 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
 
         break;
+
+      case 'change_inHome':
+
+        Acl::checkOrForward('ALBUM_HOME');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $album = new Album($id);
+        if ($album->available == 1) {
+            $album->set_inhome($status,$_SESSION['userid']);
+        } else {
+            m::add(_("This album is not published so you can't define it as widget home content.") );
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
+        break;
+
 
     case 'mfrontpage':
 
@@ -354,31 +369,59 @@ switch($action) {
 
     break;
 
-    case 'config':
+    case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
 
-        $configurationsKeys = array('album_settings',);
-        $configurations = s::get($configurationsKeys);
-        $tpl->assign(array(
-            'configs'   => $configurations,
-        ));
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
 
-        $tpl->display('album/config.tpl');
+            $album = new Album();
+            $msg = $album->set_position($_positions, $_SESSION['userid']);
 
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
+         }
+        exit(0);
     break;
 
-    case 'save_config':
+    case 'config':
 
         Acl::checkOrForward('ALBUM_SETTINGS');
 
-        unset($_POST['action']);
-        unset($_POST['submit']);
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $configurationsKeys = array('album_settings',);
+            $configurations = s::get($configurationsKeys);
+            $tpl->assign(array(
+                'configs'   => $configurations,
+            ));
 
-        foreach ($_POST as $key => $value ) { s::set($key, $value); }
+            $tpl->display('album/config.tpl');
+        } else {
 
-        m::add(_('Settings saved successfully.'), m::SUCCESS);
+            unset($_POST['action']);
+            unset($_POST['submit']);
 
-        $httpParams = array(array('action'=>'list'),);
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+            foreach ($_POST as $key => $value ) { s::set($key, $value); }
+
+            m::add(_('Settings saved successfully.'), m::SUCCESS);
+
+            $httpParams = array(array('action'=>'list'),);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?'.String_Utils::toHttpParams($httpParams));
+        }
 
     break;
 

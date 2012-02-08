@@ -9,11 +9,12 @@ require_once('../../session_bootstrap.php');
 // Check if the user can frontpage menues admin
 //Acl::checkOrForward('MENUES_ADMIN');
 
+use Onm\Settings as s,
+    Onm\Message as m;
 /**
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Section Manager'));
 
 $ccm = ContentCategoryManager::get_instance();
 
@@ -55,17 +56,17 @@ switch($action) {
                     if($item->pk_item == $submenu->pk_father) {
                         $subList[$item->pk_menu][] = $submenu;
                         $without = false;
-                    }                        
+                    }
                 }
-               
+
             }
             if(($submenu->pk_father !=0) && $without) {
                 $withoutFather[] = $submenu;
             }
         }
 
-        $tpl->assign( array('menues'=>$list, 
-            'subMenues'=>$subList, 
+        $tpl->assign( array('menues'=>$list,
+            'subMenues'=>$subList,
             'withoutFather'=>$withoutFather) );
 
 
@@ -105,7 +106,7 @@ switch($action) {
                             'menues'=> $menues,
                             'pages'=> $pages ));
 
-        $tpl->display('menues/readjQuery.tpl');
+        $tpl->display('menues/edit.tpl');
 
     break;
 
@@ -145,7 +146,7 @@ switch($action) {
 
         $tpl->assign('menu', $menu);
 
-        $tpl->display('menues/readjQuery.tpl');
+        $tpl->display('menues/edit.tpl');
 
     break;
 
@@ -193,7 +194,7 @@ switch($action) {
     case 'update':
 
          $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
-        
+
          Acl::checkOrForward('MENU_UPDATE');
 
          $_POST['params'] = serialize(array('description'=>$_POST['description']));
@@ -209,16 +210,36 @@ switch($action) {
 
     case 'delete':
 
-         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        
+         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+
          Acl::checkOrForward('MENU_DELETE');
- 
-         
+
          $mn = new Menu($id);
          $menu = $mn->delete($id);
          MenuItems::emptyMenu($id);
 
          Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
+
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('MENU_DELETE');
+        if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
+            $fields = $_REQUEST['selected_fld'];
+            if (is_array($fields)) {
+                foreach ($fields as $id ) {
+                    $mn = new Menu($id);
+                    if($mn->type == 'user') {
+                        $mn = $mn->delete($id);
+                        MenuItems::emptyMenu($id);
+                    } else {
+                        m::add( "You can't delete menu %{$mn->name}% " );
+                    }
+               }
+
+            }
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list');
 
     break;
 

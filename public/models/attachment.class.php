@@ -6,6 +6,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+use Onm\Message as m;
+
 /**
  *
  * IMPORTANTE: revisar método Attachment::delete desta clase que sobreescribe o de Content
@@ -85,10 +88,10 @@ class Attachment extends Content  {
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
         if ( $this->exists($data['path'], $data['category']) ) {
-            $msg = new Message('Un fichero con el mismo nombre ya existe.<br />' .
-                               'Para subir un fichero con el mismo nombre elimine el existente.', 'error');
-            $msg->push();
-
+//            $msg = new Message('Un fichero con el mismo nombre ya existe.<br />' .
+//                               'Para subir un fichero con el mismo nombre elimine el existente.', 'error');
+//            $msg->push();
+            
             return false;
         }
 

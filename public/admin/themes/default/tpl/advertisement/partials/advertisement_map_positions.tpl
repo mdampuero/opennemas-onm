@@ -1,30 +1,6 @@
-
-<style>
-#advertisement-mosaic {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 240px;
-    height: 880px;
-}
-
-#advertisement-mosaic-frame {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0px;
-    height: 0px;
-    z-index: 100;
-    border: 1px dashed #F00;
-    background-color: #996633;
-}
-
-</style>
-
-
 <div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" style="width:240px;height:628px;" border="0" usemap="#mapPortada" />
+    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
 </div>
 
 <map name="mapPortada">

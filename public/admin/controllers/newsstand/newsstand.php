@@ -29,7 +29,7 @@ $tpl->assign('titulo_barra', _('Kiosko Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 if (!isset($page)) {
-    $page = filter_input( INPUT_POST, 'action' , FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
+    $page = filter_input( INPUT_POST, 'page' , FILTER_VALIDATE_INT, array('options' => array('default' => '1')) );
 }
 
 /******************* GESTION CATEGORIAS  *****************************/
@@ -73,7 +73,8 @@ switch($action) {
         if ($category == 'favorite') {
             list($portadas, $pager)= $cm->find_pages('Kiosko',
                                         'fk_content_type=14 AND kioskos.favorite=1 ',
-                                            'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
+                                        'fk_content_type=14 ',
+                                        'ORDER BY position ASC, date DESC ',$page, ITEMS_PAGE );
 
 
         } else {
@@ -143,7 +144,7 @@ switch($action) {
 
         //Se crea el nombre del PDF
         $date = new DateTime($_POST['date']);
-        $_POST['name'] = $date->format('dmy').'-'.$_POST['category'].'.pdf';
+        $_POST['name'] = $date->format('dmyhis').'-'.$_POST['category'].'.pdf';
         $_POST['path'] = $date->format('Ymd').'/';
         $ruta = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $_POST['path'];
 
@@ -161,14 +162,14 @@ switch($action) {
             if( !$kiosko->create( $_POST )) {
                 m::add(_('There was a problem with kiosko data. Try again') );
             }
-            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+            Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         } else {
             if ($uploadStatus==false) {
 
                 m::add(_('There was an error while uploading the file. <br />Try to upload files smaller than that size or contact with your administrator'),
                 (int)(ini_get('upload_max_filesize').' ') );
 
-                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+                Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
             }
             //Error debido a portada ya subida enla fecha indicada
             $_REQUEST['action'] = 'new';
@@ -183,7 +184,7 @@ switch($action) {
         Acl::checkOrForward('KIOSKO_DELETE');
         $portada = new Kiosko($_REQUEST['id']);
 
-        $portada->remove();
+        $portada->delete();
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
     break;
@@ -213,7 +214,25 @@ switch($action) {
         } else {
                 m::add(_("Can't be favorite. It's umpublished") );
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&msg='.$msg.'&category='.$_REQUEST['category']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('LETTER_DELETE');
+
+        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
+            $fields = $_REQUEST['selected_fld'];
+
+            if(is_array($fields)) {
+                foreach($fields as $i ) {
+                    $portada = new Kiosko($i);
+                    $portada->delete( $i, $_SESSION['userid'] );
+                }
+            }
+        }
+
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
+                    $letterStatus . '&page=' . $page);
     break;
 
     case 'save_positions':
@@ -230,14 +249,8 @@ switch($action) {
 
             }
 
-            $opinion = new Opinion();
-            $msg = $opinion->set_position($_positions, $_SESSION['userid']);
-
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
-            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
+            $portada = new Kiosko();
+            $msg = $portada->set_position($_positions, $_SESSION['userid']);
          }
          if(!empty($msg) && $msg == true) {
              echo _("Positions saved successfully.");

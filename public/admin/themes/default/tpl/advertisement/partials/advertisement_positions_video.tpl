@@ -1,13 +1,13 @@
-<table border="0" cellpadding="4" cellspacing="6" id="ads_type_video">
+<table id="ads_type_video">
 <tbody>
     <tr>
-        <td align="right" colspan="2">
+        <td colspan="2">
             <label>
                 Banner Intersticial - Video Frontpage (800X600)
                 <input type="radio" name="type_advertisement" value="250" {if isset($advertisement) && $advertisement->type_advertisement == 250}checked="checked" {/if}/>
             </label>
         </td>
-        <td rowspan="7" align="right" width="340">
+        <td rowspan="7">
             {include file="advertisement/partials/advertisement_map_positions_video.tpl"}
         </td>
     </tr>
@@ -15,13 +15,13 @@
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
-        <td align="right">
+        <td>
             <label>
                 Big Banner Top (728X90)
                 <input type="radio" name="type_advertisement" value="201" {if isset($advertisement) && $advertisement->type_advertisement == 201}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">
+        <td>
             <label>
                  Banner Top Right (234X90)
                 <input type="radio" name="type_advertisement" value="202" {if isset($advertisement) && $advertisement->type_advertisement == 202}checked="checked" {/if}/>
@@ -34,7 +34,7 @@
     </tr>
 
     <tr>
-        <td align="right" colspan="2">
+        <td colspan="2">
             <label>
                 Banner1 Column Right (I) (300X*)
                 <input type="radio" name="type_advertisement" value="203" {if isset($advertisement) && $advertisement->type_advertisement == 203}checked="checked" {/if}/>
@@ -49,13 +49,13 @@
 
 
     <tr>
-        <td align="right">
+        <td>
             <label>
                 Big Banner Bottom (728X90)
                 <input type="radio" name="type_advertisement" value="209" {if isset($advertisement) && $advertisement->type_advertisement == 209}checked="checked" {/if}/>
             </label>
         </td>
-        <td align="right">
+        <td>
             <label>
                 Banner Bottom Right (234X90)
                 <input type="radio" name="type_advertisement" value="210" {if isset($advertisement) && $advertisement->type_advertisement == 210}checked="checked" {/if}/>
@@ -65,7 +65,7 @@
 </tbody>
 </table>
 
-<script defer="defer" type="text/javascript" language="javascript">
+<script type="text/javascript">
 /* <![CDATA[ */
 var adPositionVideo = null;
 

@@ -97,7 +97,7 @@ switch($action) {
     /**
      * Check if module is configured, if not redirect to configuration form
     */
-    if (is_null(s::get('newsletter_maillist'))) {
+    if (is_null(s::get('newsletter_maillist')) || !(s::get('newsletter_subscriptionType'))) {
         m::add(_('Please provide your Newsletter configuration to start to use your Newsletter module'));
         $httpParams [] = array(
                             'action'=>'config',
@@ -232,7 +232,7 @@ switch($action) {
             'mail_user' => MAIL_USER,
             'mail_pass' => MAIL_PASS,
             'mail_from' => MAIL_FROM,
-            'mail_from_name' => SITE_FULLNAME,
+            'mail_from_name' => s::get('site_name'),
         );
 
         $data = json_decode($postmaster);
@@ -252,22 +252,27 @@ switch($action) {
             }
         }
         
-        foreach($data->lists as $email) {
-            $mailbox = new stdClass();
-            $name = preg_split('/@/',$email);
-            $mailbox->name = $name[0];
-            $mailbox->email =trim($email);
- 
-            // Replace name destination
-            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+        if (isset($data->lists)) {
+            foreach($data->lists as $email) {
+                if (trim($email) != ""){
+                    $mailbox = new stdClass();
+                    $name = preg_split('/@/',$email);
+                    $mailbox->name = $name[0];
+                    $mailbox->email =trim($email);
 
-            if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
-                $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
-            } else {
-                $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+                    // Replace name destination
+                    $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+
+                    if($newsletter->sendToUser($mailbox, $emailHtmlContent, $params)) {
+                        $htmlFinal .= '<tr><td width=50% align=right><strong class="ok">OK</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email . '&gt;</td></tr>';
+                    } else {
+                        $htmlFinal .= '<tr><td width=50% ><strong class="failed">FAILED</strong>&nbsp;&nbsp;</td><td>'. $mailbox->name . ' &lt;' . $mailbox->email. '&gt;</td></tr>';
+                    }
+                }
+                
             }
         }
-
+        
         $tpl->assign(array(
             'html_final' => $htmlFinal,
             'postmaster' => $postmaster,
@@ -307,6 +312,7 @@ switch($action) {
 
         $configurationsKeys = array(
                                     'newsletter_maillist',
+                                    'newsletter_subscriptionType',
                                     );
 
         $configurations = s::get($configurationsKeys);

@@ -15,13 +15,21 @@
  **/
 class SessionManager implements ArrayAccess
 {
+
+    /**
+     * Defines the max age of a session in seconds. Used for expire sessions.
+     *
+     * @var string
+     **/
+    const MAX_SESSION_LIFETIME = 259200;
+
     /**
      * The directory where sessions are saved.
      *
      * @var sessionDirectory
      **/
     protected $sessionDirectory = SYS_SESSION_PATH;
-    
+
     /**
      * The singleton instance for this object.
      *
@@ -167,29 +175,27 @@ class SessionManager implements ArrayAccess
         $sessions = array();
 
         if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
-            if ($dh = opendir($sessionDirectory)) {
-                while (($file = readdir($dh)) !== false) {
-                    if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.'/'.$file);
-                        if (!empty($contents)) {
-                            $session =
-                                SessionManager::unserializeSession($contents);
 
-                            if (isset($session['userid']) && !$session['isMaster'] ) {
-                                $sessions[] = array(
-                                    'userid'     => $session['userid'],
-                                    'username'   => $session['username'],
-                                    'isAdmin'    => $session['isAdmin'],
-                                    'expire'     => $session['expire'],
-                                    'authMethod' => $session['authMethod'],
-                                );
-                            }
-                        } else {
-                            @unlink($sessionDirectory.'/'.$file); 
-                        }
-                    }
+            $sessionFiles = glob($sessionDirectory.DS."sess*");
+            foreach ($sessionFiles as $session) {
+                $contents = file_get_contents($session);
+                if (!empty($contents)) {
+                    $session =
+                        SessionManager::unserializeSession($contents);
+
+                    if (isset($session['userid'])) {
+                        $sessions[] = array(
+                            'userid'     => $session['userid'],
+                            'username'   => $session['username'],
+                            'isAdmin'    => $session['isAdmin'],
+                            'expire'     => $session['expire'],
+                            'authMethod' => $session['authMethod'],
+                        );
+                   }
+
+                } else {
+                    @unlink($sessionDirectory.'/'.$file);
                 }
-                closedir($dh);
             }
         }
 
@@ -205,32 +211,28 @@ class SessionManager implements ArrayAccess
     {
         $sessionDirectory = $this->sessionDirectory;
 
-        if (file_exists($sessionDirectory) && is_dir($sessionDirectory)) {
-            if ($dh = opendir($sessionDirectory)) {
-                while (($file = readdir($dh)) !== false) {
-                    if (preg_match('/^sess_/', $file)) {
-                        $contents = file_get_contents($sessionDirectory.'/'.$file);
-                        if (!empty($contents)) {
-                            $session =
-                                SessionManager::unserializeSession($contents);
-                            if (isset($session['userid'])
-                                && ($session['userid']==$userid)
-                            ) {
-                                @unlink($sessionDirectory.'/'.$file);  
-                                apc_delete(APC_PREFIX ."_"."num_sessions");
-                            }
-                        }
+        if (is_dir($sessionDirectory)) {
+            $sessionFiles = glob($sessionDirectory.DS."sess*");
+            foreach ($sessionFiles as $session) {
+                $contents = file_get_contents($session);
+                if (!empty($contents)) {
+                    $sessionContents = SessionManager::unserializeSession($contents);
+                    if (isset($sessionContents['userid'])
+                        && ($sessionContents['userid'] == $userid)
+                    ) {
+                        @unlink($session);
                     }
+                } else {
+                    @unlink($session);
                 }
-                closedir($dh);
             }
         }
+        apc_delete(APC_PREFIX ."_"."num_sessions");
     }
 
     /**
      * Unserializes the session information.
      * http://es2.php.net/manual/en/function.session-decode.php#79244
-
      * @param string $data the serialized data for the session.
      **/
     public function unserializeSession($data)
@@ -250,6 +252,38 @@ class SessionManager implements ArrayAccess
             $i++;
         }
         return $result;
+    }
+
+    /**
+     * Deletes all expired session files from instance tmp folder
+     *
+     * This function deletes all the expired session files from the instance tmp
+     * folder. A session file is marked as expired if it has a modification time
+     * greater than 72 hours.
+     * @return void
+     **/
+    public function cleanExpiredSessionFiles()
+    {
+        $sessionDir = $this->sessionDirectory;  // your sessions directory
+        $compareTime = time() - self::MAX_SESSION_LIFETIME;  // Expire 72 hours
+        $count = 0;
+
+        foreach (glob($sessionDir."/*") as $file) {
+            $contents = file_get_contents($file);
+            $sessionContents = SessionManager::unserializeSession($contents);
+            $time = time();
+            if (
+                $compareTime >= filemtime($file)
+                || (
+                        is_array($sessionContents)
+                        && array_key_exists('expire', $sessionContents)
+                        && ($sessionContents['expire'] < $time)
+                    )
+            ) {
+                if (unlink($file)) $count++;
+            }
+        }
+        $GLOBALS['application']->logger->debug("Expired session files deleted. {$count}");
     }
 
 }

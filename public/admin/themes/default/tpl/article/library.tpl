@@ -11,7 +11,7 @@
 	<div class="top-action-bar">
 		<div class="wrapper-content">
 			<div class="title">
-				<h2>{$titulo_barra} :: {if $category eq 'todos'}{$category|upper}{else}{$datos_cat[0]->title} {/if}</h2>
+				<h2>{t}Library{/t} :: {if $category eq 'todos'}{$category|upper}{else}{$datos_cat[0]->title} {/if}</h2>
 			</div>
 			<ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}

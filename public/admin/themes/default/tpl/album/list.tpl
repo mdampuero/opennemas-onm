@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+
     {script_tag src="/utilsalbum.js" language="javascript"}
 
 {/block}
@@ -18,38 +20,47 @@
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" value="noFrontpage" title="noFrontpage">
+                        <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" title="{t}Publish{/t}">
+                        <img src="{$params.IMAGE_DIR}publish.gif" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ALBUM_CREATE"}
-                <li class="separator"></li>
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}?action=new" onmouseover="return escape('<u>N</u>uevo Album');" accesskey="N" tabindex="1">
-                        <img border="0" src="{$params.IMAGE_DIR}/album.png" title="Nuevo Album" alt="Nuevo Album"><br />Nuevo Album
+                    <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New album{/t}" >
+                        <img src="{$params.IMAGE_DIR}/album.png" alt="{t}New album{/t}"><br />{t}New album{/t}
                     </a>
                 </li>
+                {/acl}
+                {acl isAllowed="ALBUM_WIDGET"}
+                     {if $category eq 'widget'}
+                        <li class="separator"></li>
+                        <li>
+                            <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                            </a>
+                        </li>
+                    {/if}
                 {/acl}
                 {acl isAllowed="ALBUM_SETTINGS"}
                 <li class="separator"></li>
                     <li>
-                        <a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config album module{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                        <a href="{$smarty.server.PHP_SELF}?action=config" title="{t}Config album module{/t}">
+                            <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                             {t}Configurations{/t}
                         </a>
                     </li>
@@ -59,52 +70,55 @@
     </div>
     <div class="wrapper-content">
 
+        {render_messages}
+
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category=='favorite'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=widget" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
             </li>
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=all" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
             </li>
            {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
 
-        {render_messages}
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
                 <tr>
-
                     <th style="width:15px;">
                         <input type="checkbox" id="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-                    {if $category=='favorite'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
+                    {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                    {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-
+             <tbody class="sortable">
             {section name=as loop=$albums}
-            <tr {cycle values="class=row0,class=row1"}>
+            <tr data-id="{$albums[as]->pk_album}">
                 <td class="center">
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{$albums[as]->title|clearslash}">
+                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{$albums[as]->title|clearslash}">
                         {$albums[as]->title|clearslash}
                     </a>
                 </td>
                  <td class="center">
                     {$albums[as]->views}
                 </td>
-                {if $category=='favorite'}
-                    <td class="center">
-                         {$albums[as]->category_title}
-                    </td>
+                {if $category=='widget' || $category=='all'}
+                <td class="center">
+                     {$albums[as]->category_title}
+                </td>
                 {/if}
                 <td class="center">
                          {$albums[as]->created}
@@ -112,39 +126,50 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $albums[as]->available == 1}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Published"{/t}>
-                                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt={t}"Published"{/t} /></a>
+                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Published{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title={t}"Pending{/t}>
-                                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt={t}"Pending{/t}/></a>
+                                <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->pk_album}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="{t}Pending{/t}">
+                                        <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}
                 </td>
-
+                 {if $category!='widget' && $category!='all'}
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
                         {if $albums[as]->favorite == 1}
-                           <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title={t}"Take out from frontpage"{/t}></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
                         {else}
-                            <a href="?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title={t}"Put in frontpage"{/t}></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                        {/if}
+                    {/acl}
+                </td>
+                {/if}
+                <td class="center">
+                    {acl isAllowed="ALBUM_HOME"}
+                        {if $albums[as]->in_home == 1}
+                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {else}
+                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
                 <td class="center">
                     <ul class="action-buttons">
-                       {acl isAllowed="ALBUM_UPDATE"}
+                        {acl isAllowed="ALBUM_UPDATE"}
                         <li>
-                           <a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$albums[as]->pk_album}');" title="{t}Edit{/t}" >
-                                   <img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
-                       </li>
-                       {/acl}
-
-                       {acl isAllowed="ALBUM_DELETE"}
-                       <li>
-                           <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title={t}Delete{/t}>
-                                   <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-                       </li>
-                       {/acl}
+                           <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$albums[as]->pk_album}" title="{t}Edit{/t}" >
+                                <img src="{$params.IMAGE_DIR}edit.png" />
+                            </a>
+                        </li>
+                        {/acl}
+                        {acl isAllowed="ALBUM_DELETE"}
+                        <li>
+                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
+                               <img src="{$params.IMAGE_DIR}trash.png" />
+                            </a>
+                        </li>
+                        {/acl}
                     </ul>
                 </td>
 
@@ -154,6 +179,7 @@
                 <td class="empty" colspan=9>{t}There is no albums yet{/t}</td>
             </tr>
         {/section}
+          </tbody>
             <tfoot>
               <td colspan="9">
                 {$paginacion->links|default:""}&nbsp;
@@ -165,4 +191,15 @@
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
+{if $category eq 'widget'}
+        <script type="text/javascript">
+
+        // <![CDATA[
+
+            jQuery(document).ready(function() {
+                makeSortable();
+            });
+        // ]]>
+    </script>
+{/if}
 {/block}

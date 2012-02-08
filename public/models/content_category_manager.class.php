@@ -480,7 +480,7 @@ class ContentCategoryManager {
 
         return( $categories );
     }
-    
+
     function group_by_type($categories) {
         $categories = array_values($categories);
 
@@ -496,9 +496,9 @@ class ContentCategoryManager {
                      return +1;
                 }
                 if  ($a->internal_category == $b->internal_category) {
-
+                    return ($a->posmenu > $b->posmenu) ? +1 : -1;
                 }
-                return ($a->internal_category < $b->internal_category) ? +1 : -1;
+                return ($a->internal_category < $b->internal_category) ? 1 : +1;
 
             }
         }
@@ -587,6 +587,7 @@ class ContentCategoryManager {
 
         // First loop categories
         foreach($categories as $category) {
+            $category->params = unserialize($category->params);
             if(($category->fk_content_category == 0) && ($category->internal_category == 1) && ($category->inmenu == 1)) {
             //if(($category->fk_content_category == 0) && ($category->internal_category == 1)) {
                 $tree[$category->pk_content_category] = $category;
@@ -599,11 +600,11 @@ class ContentCategoryManager {
             //if(($category->fk_content_category != 0) && ($category->internal_category == 1)) {
             if(($category->fk_content_category != 0) && ($category->internal_category != 0) &&
                (isset($tree[$category->fk_content_category])) /* && ($category->inmenu == 1)*/ ) {
-
+                
                 $tree[$category->fk_content_category]->childNodes[$category->pk_content_category] = $category;
             }
         }
-
+        
         return $tree;
     }
 
@@ -679,7 +680,7 @@ class ContentCategoryManager {
    //     if( is_null($this->categories) ) {
             $sql = 'SELECT count(*) AS total FROM content_categories WHERE name = ?';
             $rs  = $GLOBALS['application']->conn->GetOne( $sql, $category_name );
-  
+
             return( $rs || $rs > 0 );
       //  }
 
@@ -785,7 +786,7 @@ class ContentCategoryManager {
         return $groups;
     }
 
-     function count_media_by_type_group($filter=NULL) {
+     function countMediaByTypeGroup($filter=NULL) {
          $_where = '1=1';
         if( !is_null($filter) ) {
             $_where = $filter;
@@ -851,8 +852,10 @@ class ContentCategoryManager {
         //subcat is an array with all subcat form the parentCategories array
         //$categoryData is the info of the category selected
 
-    //    $fullcat = $this->order_by_posmenu($this->categories);
+
+       //$fullcat = $this->order_by_posmenu($this->categories);
         $fullcat = $this->group_by_type($this->categories);
+
         $parentCategories = array();
         $categoryData = array();
         foreach( $fullcat as $prima) {

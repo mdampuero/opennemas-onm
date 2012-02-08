@@ -9,11 +9,11 @@
     }
     input[type="text"],
     input[type="password"] {
-        width:300px;
+        width:400px;
     }
     .form-wrapper {
         margin:10px auto;
-        width:50%;
+        width:70%;
     }
     </style>
 {/block}
@@ -25,8 +25,8 @@
             <div class="title"><h2>{t}Newsletter :: Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                    <a href="{$smarty.server.PHP_SELF}" class="admin_add" title="{t}Go back to list{/t}">
+                    <img src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
                 </li>
             </ul>
@@ -36,39 +36,47 @@
 
         {render_messages}
 
-        <div id="{$category}">
+        <div id="cat-{$category}">
 
             <table class="adminheading">
                  <tr>
-                     <th align="left">{t}Information about newsletter receipt{/t}</th>
+                     <th>{t}Information about newsletter receipt{/t}</th>
                  </tr>
             </table>
 
-            <table class="adminform" border=0>
+            <table class="adminform">
                 <tr>
                     <td>
                         <div class="form-wrapper">
                             <div>
-                                <label for="newsletter_maillist[name]">{t}Maillist name:{/t}</label>
-                                <input type="text" class="required" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
+                                <label>{t}Maillist name:{/t}</label>
+                                <input type="text" class="required" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" />
                             </div>
                             <br />
                              <div>
-                                <label for="newsletter_maillist[email]">{t}Maillist email:{/t}</label>
+                                <label>{t}Maillist email:{/t}</label>
                                 <input type="text" class="required" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" />
                             </div>
                             <br />
                              <div>
-                                <label for="newsletter_maillist[link]">{t}Maillist link:{/t}</label>
+                                <label>{t}Maillist link:{/t}</label>
                                 <select name="newsletter_maillist[link]" id="newsletter_maillist[link]" class="required">
-                                  <option name="newsletter_maillist[link]" value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
-                                  <option name="newsletter_maillist[link]" value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
+                                  <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
+                                  <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
                                 </select>
                             </div>
                             <br />    
                             <div>
-                                <label for="newsletter_maillist[subscription]">{t}Mail address in form subscription{/t}</label>
-                                <input type="text" class="required" id="name" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" />
+                                <label>{t}Newsletter subscription type{/t}</label>
+                                <input type="radio" class="required" name="newsletter_subscriptionType" value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'}checked="checked"{/if} />
+                                {t}Manage newsletter by e-mail{/t}
+                                <input type="radio" class="required" name="newsletter_subscriptionType" value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'}checked="checked"{/if} />
+                                {t}Manage newsletter by subscriptors table{/t}
+                            </div>
+                            <br />   
+                            <div>
+                                <label>{t}Mail address in form subscription{/t}</label>
+                                <input type="text" class="required" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" />
                             </div>
                         </div>
                     </td>
@@ -82,6 +90,6 @@
         </div>
 
         <input type="hidden" id="action" name="action" value="save_config" />
-   </form>
-</div>
+   </div>
+</form>
 {/block}

@@ -38,14 +38,14 @@
 			</td>
 			 {if  $type_opinion eq '0'}
 			<td  onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-                <a href="author.php?action=read&id={$opinions[c]->fk_author}">
+                <a href="author.php?action=read&amp;id={$opinions[c]->fk_author}">
                     {$names[c]}
                 </a>
 
 			</td>
 			{/if}
 			<td style="" onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
-				<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
+				<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="Modificar">
 					{$opinions[c]->title|clearslash}
                 </a>
 			</td>
@@ -86,7 +86,7 @@
 				<ul class="action-buttons">
                     {acl isAllowed="OPINION_UPDATE"}
 					<li>
-						<a href="{$smarty.server.PHP_SELF}?action=read&id={$opinions[c]->id}" title="Modificar">
+						<a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$opinions[c]->id}" title="Modificar">
 							<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 					</li>
                     {/acl}

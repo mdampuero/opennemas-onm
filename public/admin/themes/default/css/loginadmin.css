@@ -72,7 +72,7 @@ input[type="checkbox"] {
 .left { text-align:left; }
 .right { text-align:right; }
 
-#footer {
+footer {
 	width:100%;
 	height:30px;
 	vertical-align:middle;
@@ -82,13 +82,6 @@ input[type="checkbox"] {
 	left:0px;
 }
 
-	#footer .copyright {
-		padding-right:10px !important;
-	}
-	#footer a {
-		color:#eee;
-	}
-
 div.submit-remember-block {
 	padding-top:10px;
 }
@@ -96,3 +89,39 @@ button {
 	border:none;
 	margin-right:20px;
 }
+
+#login-wrapper {
+	margin:0 auto;
+	display:block;
+	float:none !important;
+}
+
+footer {
+	text-align:left;
+	font-size:11px;
+}
+footer nav {
+	position:absolute;
+	width:30%;
+	bottom:15px;
+}
+footer nav.right {
+	right:15px;
+	text-align:right;
+}
+footer nav.left {
+	left:15px;
+}
+footer nav ul { margin:0; padding:0; }
+footer nav ul li {
+	display:inline-block;
+	color: #555;
+}
+footer nav a, footer nav a:active {
+	color: #666;
+	text-decoration:none;
+	outline:none;
+	padding:0px 6px;
+	-moz-transition: color 0.3s ease 0s;
+}
+footer nav a:hover, footer nav a.active { color:White; }

@@ -2,13 +2,11 @@
 
 {block name="header-css" append}
 {css_tag href="/admin.css"}
-{css_tag href="/calendar_date_select.css"}
-{css_tag href="/mediamanager.css"}
 {css_tag href="/newsletter.css" media="screen"}
 {/block}
 
 {block name="footer-js" append}
-{script_tag language="javascript" src="/newsletter.js"}
+{script_tag src="/newsletter.js"}
 <script type="text/javascript">
 var manager = null;
 var itemsList = {json_encode value=$items}; // Elementos para seleccionar
@@ -85,40 +83,40 @@ document.observe('dom:loaded', function() {
 	<div class="wrapper-content">
 		<div class="title">
 			<h2>{t}Newsletter management{/t}</h2>
-			<img src="{$params.IMAGE_DIR}newsletter/3.gif" width="300" height="40" border="0" usemap="#map" />
+			<img src="{$params.IMAGE_DIR}newsletter/3.gif" width="300" height="40" usemap="#map" />
 			{include file="newsletter/_partials/wizard.png.map"}
 		</div>
 		<ul class="old-button">
 			<li>
 				<a href="#" class="admin_add" title="{t}Next{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_next.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
 					{t}Next step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Back{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}arrow_previous.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
 					{t}Previous step{/t}
 				</a>
 			</li>
 
 			<li>
 				<a href="#" class="admin_add" title="{t}Clean container of selected opinions{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}editclear.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}editclear.png" alt="{t}Clean container of selected opinions{/t}" /><br />
 					{t}Clean{/t}
 				</a>
 			</li>
 			<li>
 				<a href="#" class="admin_add" title="{t}Select all the opinions available{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}newsletter/deselect.png" alt="{t}Select all the opinions available{/t}" /><br />
 					{t}Select all{/t}
 				</a>
 			</li>
             <li class="separator"></li>
 			<li>
 				<a href="{$smarty.server.PHP_SELF}?action=config" class="admin_add" title="{t}Config newsletter module{/t}">
-					<img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+					<img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config newsletter module{/t}" /><br />
 					{t}Configurations{/t}
 				</a>
 			</li>
@@ -142,13 +140,13 @@ document.observe('dom:loaded', function() {
 
 	<table class="adminheading">
 		<tr style="text-align:center;font-size: 0.85em;">
-			<th nowrap>{t}Subscriptors available (please double click over a subscritor to add to recipients){/t}</th>
-			<th nowrap>{t}Subscriptors selected (please double click over a subscritor to delete from recipients){/t}</th>
+			<th>{t}Subscriptors available (please double click over a subscritor to add to recipients){/t}</th>
+			<th>{t}Subscriptors selected (please double click over a subscritor to delete from recipients){/t}</th>
 		</tr>
 	</table>
 	<table class="adminlist" style="min-height:500px">
 		<tr>
-			<td width="50%">
+			<td style="width:50%">
                  <div id="container3"  style="min-height:50px;">
                      <label>{t}MailList Account{/t}: </label> <br />
 					<ul id="items-list3" style="margin:0; padding:0px"></ul>
@@ -161,7 +159,7 @@ document.observe('dom:loaded', function() {
                
                
 			</td>
-			<td width="50%">
+			<td style="width:50%">
                 <div id="container4" style="height:120px;">
                     <label>{t}Write others receivers{/t}</label> {t}(Separated by commas or different lines){/t} <br>
                     <textarea id="othersMails" name="othersMails" rows="5" cols="70"></textarea>
@@ -173,9 +171,7 @@ document.observe('dom:loaded', function() {
 				</div>
 			</td>
 		</tr>
-        <div id="separator"></div>
 	</table>
-
-
+    <div id="separator"></div>
 </div>
 {/block}
