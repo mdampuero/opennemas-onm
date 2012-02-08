@@ -27,6 +27,7 @@ $cache_page = (is_null($cache_page))? 0 : $cache_page;
 
 $date = filter_input(INPUT_GET,'date',FILTER_SANITIZE_STRING);
 
+
 /**
  * Setup view
 */
@@ -34,6 +35,7 @@ $tpl = new Template(TEMPLATE_USER);
 //$tpl->setConfig('newslibrary');
 //$cache_id = $tpl->generateCacheId($category_name, $subcategory_name, $date);
 
+$tpl->assign('newslibraryDate',$date);
 /**
  * Fetch information for Advertisements
 */
@@ -57,10 +59,8 @@ if (empty($category_name) && !empty($menuFrontpage->items)) {
 
 }
 
-
 if ( 1==1 || ($tpl->caching == 0)  || !$tpl->isCached('frontpage/newslibrary.tpl', $cache_id) )
 {
-
 
     $fp = new Frontpage();
 
