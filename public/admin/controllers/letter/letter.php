@@ -152,8 +152,8 @@ switch($action) {
         $id = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT );
         $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
         if((!empty($id)) && (!empty($status))) {
-            $letter = new Letter($_REQUEST['id']);
-            $letter->set_status($_REQUEST['status'], $_SESSION['userid']);
+            $letter = new Letter($id);
+            $letter->set_available($status, $_SESSION['userid']);
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letterStatus='
