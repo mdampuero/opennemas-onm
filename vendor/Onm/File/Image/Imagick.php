@@ -13,13 +13,15 @@ namespace Onm\File\Image;
  *
  * @package Onm_File_Image
  **/
-class Imagick implements ImageInterface
+class Imagick extends Common implements ImageInterface
 {
     // The image object to operate into
     protected $image;
 
     /**
      * Initializes the object from a path
+     *
+     * @param string $image the image path
      *
      * @return Onm\File\Imagick object
      **/
@@ -35,7 +37,7 @@ class Imagick implements ImageInterface
     /**
      * Destroys the image object
      *
-     * @return Onm\File\ImageImagick object
+     * @return Onm\File\Imagick object
      **/
     public function unload()
     {
@@ -47,14 +49,15 @@ class Imagick implements ImageInterface
     /**
      * Writes the image in a given path, if not given overwrites the original
      *
-     * @return Onm\File\ImageImagick object
+     * @param string $filePath the path where save the image
+     * @return Onm\File\Imagick object
      **/
-    public function save($filename = '')
+    public function save($filePath = '')
     {
-        if (!$filename) {
+        if (!$filePath) {
             $this->image->writeImage();
         } else {
-            $this->image->writeImage($filename);
+            $this->image->writeImage($filePath);
         }
 
         return $this;
@@ -63,13 +66,13 @@ class Imagick implements ImageInterface
     /**
      * Resizes an image given a width and height
      *
-     * @param $width   the width of the final image
-     * @param $height  the height of the final image
-     * @param $enlarge force the enlarging of the image
+     * @param int     $width   the width of the final image
+     * @param int     $height  the height of the final image
+     * @param boolean $enlarge force the enlarging of the image
      *
      * @return Onm\File\Imagick object
      **/
-    public function resize ($width, $height = 0, $enlarge = false)
+    public function resize($width, $height = 0, $enlarge = false)
     {
         $width = intval($width);
         $height = intval($height);
@@ -90,20 +93,30 @@ class Imagick implements ImageInterface
     }
 
     /**
-     * Crops the image given a width, height
+     * Crops the image given a width, height, position x and y
+     *
+     * @param int $width   the width of the final image
+     * @param int $height  the height of the final image
+     * @param int $x       the position in the x-axis from where cut the image
+     * @param int $y       the position in the y-axis from where cut the image
      *
      * @return Onm\File\Imagick object
      **/
     public function crop($width, $height, $x = 0, $y = 0)
     {
-        $x = $this->position($x, $width, $this->image->getImageWidth());
-        $y = $this->position($y, $height, $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $width, $this->image->getImageWidth());
+        $y = $this->transformPosition($y, $height, $this->image->getImageHeight());
 
         $this->image->cropImage($width, $height, $x, $y);
 
         return $this;
     }
 
+    /**
+     * Inverts the image vertically
+     *
+     * @return Onm\File\Imagick object
+     **/
     public function flip()
     {
         $this->image->flipImage();
@@ -112,7 +125,7 @@ class Imagick implements ImageInterface
     }
 
     /**
-     * Invert an image horizontally
+     * Inverts the image horizontally
      *
      * @return Onm\File\Imagick object
      **/
@@ -124,11 +137,14 @@ class Imagick implements ImageInterface
     }
 
     /**
-     * Crop an resize an image to specific dimmensions
+     * Crop and resize an image to specific dimmensions
+     *
+     * @param int $width   the width of the final image
+     * @param int $height  the height of the final image
      *
      * @return Onm\File\Imagick object
      **/
-    public function zoomCrop($width, $height)
+    public function thumbnail($width, $height)
     {
         $widthResize  = ($width/$this->image->getImageWidth()) * 100;
         $heightResize = ($height/$this->image->getImageHeight()) * 100;
@@ -146,6 +162,9 @@ class Imagick implements ImageInterface
 
     /**
      * Rotates an image
+     *
+     * @param int $degrees     the amount of degrees to rotate the image
+     * @param int $background  the background for fill the empty spaces
      *
      * @return Onm\File\Imagick object
      */
@@ -167,6 +186,10 @@ class Imagick implements ImageInterface
     /**
      * Merge two images in one
      *
+     * @param string        $imagePath  the image path to merge into the actual
+     * @param int/string    $x          the horizontal position where merge the image
+     * @param int/string    $y          the vertical position where merge the image
+     *
      * @return Onm\File\Imagick object
      */
     public function merge($imagePath, $x = 0, $y = 0)
@@ -178,8 +201,8 @@ class Imagick implements ImageInterface
             $objectImage->readImage($imagePath);
         }
 
-        $x = $this->position($x, $objectImage->getImageWidth(), $this->image->getImageWidth());
-        $y = $this->position($y, $objectImage->getImageHeight(), $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $objectImage->getImageWidth(), $this->image->getImageWidth());
+        $y = $this->transformPosition($y, $objectImage->getImageHeight(), $this->image->getImageHeight());
 
         $this->image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
         $this->image->flattenImages();
@@ -189,6 +212,8 @@ class Imagick implements ImageInterface
 
     /**
      * Sets the target format
+     *
+     * @param string  $targetFormat the desired format to convert the image
      *
      * @return Onm\File\Imagick object
      */

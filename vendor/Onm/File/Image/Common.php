@@ -11,16 +11,15 @@ namespace Onm\File\Image;
 /**
  * Handles all the common operations with images
  *
- * @package default
- * @author
+ * @package Onm_File_Image
  **/
 abstract class Common
 {
+
     /**
-     * public function transform ([string $operations])
-     *
-     * Execute a list of operations
-     */
+     * Execute a list of operations in the image object
+     * @param string $operations the string of the operations and params
+     **/
     public function transform($operations = '')
     {
         if (!$operations) {
@@ -44,7 +43,7 @@ abstract class Common
                     $this->$function($params[0]);
                     break;
 
-                case 'zoomCrop':
+                case 'thumbnail':
                 case 'rotate':
                     $this->$function($params[0], $params[1]);
                     break;
@@ -68,8 +67,8 @@ abstract class Common
     /**
      * Split string operations and convert it to array
      *
-     * return array
-     */
+     * return array the formatted operations array
+     **/
     private function getOperations($operations) {
         $return = array();
         $array = explode('|', $operations);
@@ -97,9 +96,10 @@ abstract class Common
      * @param  int/string $position the position in the image
      * @param  int        $size     the size of the image
      * @param  int        $size     the size of the canvas
+     *
      * @return int        the related image position
      */
-    protected function position($position, $size, $canvas)
+    protected function transformPosition($position, $size, $canvas)
     {
         if (is_int($position)) {
             return $position;
