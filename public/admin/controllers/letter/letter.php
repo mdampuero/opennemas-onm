@@ -34,7 +34,7 @@ if( empty($action) ) {
 }
 
 $letterStatus = filter_input( INPUT_GET, 'letterStatus' , FILTER_SANITIZE_STRING );
-if( empty($action) ) {
+if( empty($letterStatus) ) {
     $letterStatus = filter_input ( INPUT_POST, 'letterStatus' , FILTER_SANITIZE_NUMBER_INT,
                                     array('options' => array('default' => 0)) );
 }
