@@ -45,7 +45,7 @@ INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUE
 
 
 -- 15-Dic-2011
-ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL
+ALTER TABLE `contents` ADD `urn_source` VARCHAR( 255 ) NULL DEFAULT NULL;
 
 --2-Dic- 2011
 
