@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  **/
 namespace Onm\File\Image;
+
+
 /**
  * Handles all the operations with Images using the ImageMagick library
  *
@@ -27,7 +29,7 @@ class Imagick extends Common implements ImageInterface
      **/
     public function load($image)
     {
-        $this->image = new Imagick();
+        $this->image = new \Imagick();
 
         $this->image->readImage($image);
 
@@ -222,6 +224,38 @@ class Imagick extends Common implements ImageInterface
         $this->image->setImageFormat($targetFormat);
 
         return $this;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function output($header = true)
+    {
+        //Show header mime-type
+        if ($header) {
+            $format = strtolower($this->image->getImageFormat());
+            $header = '';
+
+            switch ($format) {
+                case 'jpeg':
+                case 'jpg':
+                case 'gif':
+                case 'png':
+                    $header = "image/$format";
+                    break;
+            }
+
+            if ($header) {
+                header('Content-Type: '.$header);
+            }
+        }
+
+        echo $this->image->getImageBlob();
+
+        die();
     }
 
 } // END class ImageMagick

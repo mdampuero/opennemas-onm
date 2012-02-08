@@ -28,7 +28,7 @@ abstract class Common
 
         $arrayOperations = $this->getOperations($operations);
 
-        foreach ($array_operations as $operation) {
+        foreach ($arrayOperations as $operation) {
             $function = $operation['function'];
             $params = $operation['params'];
 
