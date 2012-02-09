@@ -24,7 +24,6 @@ Acl::checkOrForward('ALBUM_ADMIN');
 require_once('./albums_events.php');
 
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Album Management'));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 
@@ -32,8 +31,7 @@ $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
 $contentType = Content::getIDContentType('album');
 
 $category = filter_input(INPUT_GET,'category',FILTER_SANITIZE_STRING);
-
-if(empty($category)) {
+if (empty($category)) {
     $category = filter_input(INPUT_POST,'category',FILTER_SANITIZE_STRING);
 }
 
@@ -60,19 +58,19 @@ switch($action) {
 
     case 'list':
         Acl::checkOrForward('ALBUM_ADMIN');
-
         $configurations = s::get('album_settings');
-        $numFavorites = $configurations['total_widget'];
 
         if (empty($page)) {
-            $limit= "LIMIT ".(ITEMS_PAGE+1);
+            $limit = "LIMIT ".(ITEMS_PAGE+1);
         } else {
-            $limit= "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
+            $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
         }
 
         $cm = new ContentManager();
 
         if ($category == 'widget') {
+
+            $numFavorites = $configurations['total_widget'];
             $albums = $cm->find_all('Album', 'in_home =1 AND available =1',
                                 'ORDER BY position ASC, created DESC '.$limit);
             if (count($albums) != $numFavorites ) {
@@ -86,7 +84,7 @@ switch($action) {
             }
 
         } elseif ($category === 'all') {
-            $albums = $cm->find_all('Album', 'available =1', 'ORDER BY  created DESC '.$limit);
+            $albums = $cm->find_all('Album', 'available=1', 'ORDER BY created DESC '.$limit);
             if(!empty($albums)) {
                 foreach ($albums as &$album) {
                     $album->category_name = $ccm->get_name($album->category);
@@ -94,17 +92,20 @@ switch($action) {
                 }
             }
         } else {
-            $albums = $cm->find_by_category('Album', $category, 'fk_content_type=7',
-                           'ORDER BY created DESC '.$limit);
+            $albums = $cm->find_by_category(
+                'Album',
+                $category,
+                'fk_content_type=7',
+                'ORDER BY created DESC '.$limit
+            );
         }
 
-        $params = array(
-            'page'=>$page, 'items'=>ITEMS_PAGE,
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(array(
+            'page'  => $page,
+            'items' => ITEMS_PAGE,
             'total' => count($albums),
-            'url'=>$_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
-        );
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl($params);
+            'url'   => $_SERVER['SCRIPT_NAME'].'?action=list&category='.$category
+        ));
 
         $tpl->assign(array(
             'pagination' => $pagination,
@@ -119,12 +120,6 @@ switch($action) {
 
         Acl::checkOrForward('ALBUM_CREATE');
 
-        $configurations = s::get('album_settings');
-
-        $tpl->assign( array(
-            'crop_width' => $configurations['crop_width'],
-            'crop_height' => $configurations['crop_height'] ));
-
         $tpl->display('album/new.tpl');
 
     break;
@@ -132,47 +127,40 @@ switch($action) {
     case 'read':
 
         Acl::checkOrForward('ALBUM_UPDATE');
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 
-        $configurations = s::get('album_settings');
-
-        if (empty($id)) {
-            $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        }
-
-        $album = new Album( $id);
-        $tpl->assign('album', $album);
+        $album = new Album($id);
 
         $photos = array();
-        $photoIds = $album->get_album($id);
-        if (!empty($photoIds)) {
-            foreach ($photoIds as $ph) {
-                $photos[] = new Photo($photo[0]);
-            }
+        $photoIds = $album->_getAttachedPhotos($id);
+
+        foreach ((array)$photoIds as $photo) {
+            $photos[] = new Photo($photo[0]);
         }
+
         $tpl->assign( array(
             'category' => $album->category,
             'photos' => $photos,
+            'album' => $album,
         ));
         $tpl->display('album/new.tpl');
 
     break;
 
     case 'create':
-        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_CREATE');
         $album = new Album();
-        if ($album->create( $_POST )) {
+        if ($album->create($_POST)) {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
         }else{
-             m::add(_($album->errors) );
+            m::add(_($album->errors) );
         }
         $tpl->display('album/new.tpl');
 
     break;
 
     case 'update':
-        var_dump($_POST);die();
 
         Acl::checkOrForward('ALBUM_UPDATE');
 
@@ -193,16 +181,16 @@ switch($action) {
     break;
 
     case 'validate':
-        var_dump($_POST);die();
+
+    // var_dump($_POST);die();
 
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         if(empty($id)) {
+            Acl::checkOrForward('ALBUM_CREATE');
 
-        Acl::checkOrForward('ALBUM_CREATE');
-
-        $album = new Album();
-        if (!$album->create( $_POST ))
-            m::add(_($album->errors));
+            $album = new Album;
+            if (!$album->create($_POST))
+                m::add(_($album->errors));
         } else {
 
             Acl::checkOrForward('ALBUM_UPDATE');

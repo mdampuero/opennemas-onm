@@ -318,21 +318,6 @@ FileETag None
 
 
 # ----------------------------------------------------------------------
-# Prevent SSL cert warnings
-# ----------------------------------------------------------------------
-
-# Rewrite secure requests properly to prevent SSL cert warnings, e.g. prevent
-# https://www.example.com when your cert only allows https://secure.example.com
-# Uncomment the following lines to use this feature.
-
-# <IfModule mod_rewrite.c>
-#   RewriteCond %{SERVER_PORT} !^443
-#   RewriteRule ^ https://example-domain-please-change-me.com%{REQUEST_URI} [R=301,L]
-# </IfModule>
-
-
-
-# ----------------------------------------------------------------------
 # Prevent 404 errors for non-existing redirected folders
 # ----------------------------------------------------------------------
 
@@ -340,16 +325,6 @@ FileETag None
 #   e.g. /blog/hello : webmasterworld.com/apache/3808792.htm
 
 Options -MultiViews
-
-
-
-# ----------------------------------------------------------------------
-# Custom 404 page
-# ----------------------------------------------------------------------
-
-# You can add custom pages to handle 500 or 403 pretty easily, if you like.
-ErrorDocument 404 /404.php
-
 
 
 # ----------------------------------------------------------------------

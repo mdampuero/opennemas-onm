@@ -142,7 +142,7 @@
             </div><!-- /album-images -->
         </div>
 
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+        <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
 
     </div>
 </form>

@@ -31,7 +31,7 @@
                              data-footer="{$otherPhotos[n][2]|escape:"html"}"
                              alt="{$photo->name}"/>
                         <textarea name="album_photos_footer[]">{$photo->name}</textarea>
-                        <input type="hidden" name="album_photos_ids[]" value="{$photo->pk_photo}">
+                        <input type="hidden" name="album_photos_id[]" value="{$photo->pk_photo}">
                     </li><!-- /image -->
                 {/foreach}
             {/if}
@@ -44,25 +44,21 @@
             </a>
             <div class="clearfix">
                 <div class="thumbnail article-resource-image">
-                    {if isset($video2) && $video2->pk_video}
-                        {if $video2->author_name == 'internal'}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/../{$video2->information['thumbnails']['normal']}" />
-                        {else}
-                        <img src="{$video2->information['thumbnail']}"/>
-                        {/if}
+                    {if !empty($album->cover_id)}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
                     {else}
                         <img src="http://placehold.it/290x226" />
                     {/if}
                 </div>
                 <div class="article-resource-image-info">
-                    <div><label>{t}File name{/t}</label>     <span class="filename">{$video2->name|default:'default_img.jpg'}</span></div>
-                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$video2->created|default:""}</span></div>
-                    <div><label>{t}Description{/t}</label>   <span class="description">{$video2->description|escape:'html'}</span></div>
-                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$video2->metadata|default:""}</span></div>
+                    <div><label>{t}File name{/t}</label>     <span class="filename">{$album->cover_image->name|default:'default_img.jpg'}</span></div>
+                    <div><label>{t}Creation date{/t}</label> <span class="created_time">{$album->cover_image->created|default:""}</span></div>
+                    <div><label>{t}Description{/t}</label>   <span class="description">{$album->cover_image->description|escape:'html'}</span></div>
+                    <div><label>{t}Tags{/t}</label>          <span class="tags">{$album->cover_image->metadata|default:""}</span></div>
                 </div>
             </div>
             <div class="article-resource-footer">
-                <input type="hidden" name="album_frontpage_image" value="{$video2->pk_video}" class="album-frontpage-image"/>
+                <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
             </div>
         </div>
     </div><!-- /inner-video -->

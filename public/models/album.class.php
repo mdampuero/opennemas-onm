@@ -11,18 +11,31 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Album extends Content
 {
-    public $pk_album = NULL;
-    public $subtitle = NULL;
-    public $agency = NULL;
-    public $fuente = NULL;
-    public $cover = NULL;
-    public $widthCover = 300;
-    public $heightCover = 240;
 
+    /**
+     * the album id
+     */
+    public $pk_album = NULL;
+
+    /**
+     * the subtitle for this album
+     */
+    public $subtitle = NULL;
+
+    /**
+     * the agency which created this album originaly
+     */
+    public $agency = NULL;
+
+    public $fuente = NULL;
+
+    /**
+     * the id of the image that is the cover for this album
+     */
+    public $cover_id = NULL;
 
     /**
      * Initializes the Album class.
@@ -37,10 +50,12 @@ class Album extends Content
             $this->read($id);
         }
         $this->content_type = __CLASS__;
+
+        return $this;
     }
 
     /**
-     * Magic function to get uninitilized object properties.
+     * Magic function for getting uninitilized object properties.
      *
      * @param string $name the name of the property to get.
      *
@@ -101,7 +116,7 @@ class Album extends Content
     }
 
     /**
-     * Creates an album from array and stores it in db
+     * Creates an album from a data array and stores it in db
      *
      * @param array $data the data of the album
      *
@@ -112,13 +127,11 @@ class Album extends Content
 
         parent::create($data);
 
-        $this->cover = $this->cropImageFront($data);
-
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
         $data['fuente'] = (empty($data['fuente']))? '': $data['fuente'];
 
         $sql = "INSERT INTO albums "
-                ." (`pk_album`,`subtitle`, `agency`,`fuente`,`cover`) "
+                ." (`pk_album`,`subtitle`, `agency`,`fuente`,`cover_id`) "
                 ." VALUES (?,?,?,?,?)";
 
         $values = array(
@@ -130,28 +143,14 @@ class Album extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return(false);
+            return Application::logDatabaseError();
         }
 
-        $data['id']=$this->id;
+        $data['id'] = $this->id;
 
-        if (isset($data['ordenAlbum'])) {
-            $tok = strtok($data['ordenAlbum'], "++");
-            $pos=1;
-            $albumPhoto=new Album_photo();
-            while (($tok !== false) AND ($tok !=" ")) {
-                    $infor=explode("::", $tok);
-                    $albumPhoto->create($this->id, $infor[0], $pos, $infor[1]);
+        $this->_saveAttachedPhotos($data);
 
-                    $tok = strtok("++");
-                    $pos++;
-            }
-        }
-
-        return true;
+        return $this;
     }
 
     /**
@@ -161,25 +160,26 @@ class Album extends Content
      **/
     public function read($id)
     {
-
         parent::read($id);
 
-        $sql = 'SELECT * FROM albums WHERE pk_album = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
+        $sql = 'SELECT * FROM albums WHERE pk_album = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, $id);
         if (!$rs) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return;
+            return Application::logDatabaseError();
         }
 
-        $this->pk_album = $rs->fields['pk_album'];
-        $this->subtitle = $rs->fields['subtitle'];
-        $this->agency = $rs->fields['agency'];
-        $this->fuente = $rs->fields['fuente'];
-        $this->cover = $rs->fields['cover'];
+        $this->pk_album    = $rs->fields['pk_album'];
+        $this->subtitle    = $rs->fields['subtitle'];
+        $this->agency      = $rs->fields['agency'];
+        $this->fuente      = $rs->fields['fuente'];
+        $this->cover_id    = $rs->fields['cover_id'];
+        $this->cover_image = new Photo($rs->fields['cover_id']);
+        $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
 
+        // var_dump($rs->fields['cover_id'], $this->cover_image, $this);die();
+
+
+        return $this;
     }
 
     /**
@@ -193,149 +193,70 @@ class Album extends Content
         parent::update($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? 0: $data['subtitle'];
-        $data['fuente'] = (empty($data['fuente']))? 0: $data['fuente'];
+        $data['fuente']   = (empty($data['fuente']))? 0: $data['fuente'];
 
         $sql = "UPDATE albums "
-                ."SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover`=? "
-                ." WHERE pk_album=".($data['id']);
+             . "SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover_id`=? "
+             ." WHERE pk_album=".($data['id']);
 
-        if (!empty($data['name_img'])) {
-            $this->cover =  $this->cropImageFront($data);
-        }
-
-        $values = array(            $data['subtitle'],
+        $values = array(
+            $data['subtitle'],
             $data['agency'],
             $data['fuente'],
-            $this->cover
+            $data['album_frontpage_image'],
         );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return;
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if (!$rs) {
+            return Application::logDatabaseError();
         }
 
-        $album=new Album_photo();
-        $album->delete_album($data['id']);
+        $this->_removeAttachedImages($data['id']);
+        $this->_saveAttachedPhotos($data);
 
-        if (isset($data['ordenAlbum'])) {
-            $tok = strtok($data['ordenAlbum'], "++");
-            $pos=1;
-            while (($tok !== false) AND ($tok !=" ")) {
-                $infor = preg_split("@::@", $tok);
-                $album->create($this->id, $infor[0], $pos, $infor[1]);
-                $tok = strtok("++");
-                $pos++;
-            }
-        }
+        return $this;
     }
 
     /**
-     * Create a cover for frontpage widget
-     *
-     * @param array $data image
-     *
-     * @return bool if cover was create
-     */
-    public function cropImageFront($data)
-    {
-
-        $configurations = \Onm\Settings::get('album_settings');
-        $this->widthCover = $configurations['crop_width'];
-        $this->heightCover = $configurations['crop_height'];
-
-        if ($data['path_img'] && $data['name_img']) {
-
-            $uploaddir = MEDIA_IMG_PATH.$data['path_img'];
-            $image =   $uploaddir.$data['name_img'];
-
-            $picture = new Imagick($image);
-            $width = $picture->getImageWidth();
-            $height = $picture->getImageHeight();
-
-            // Scale original image for crop with visor size
-            if ($height>0 and $width>0) {
-                if ($height>400 OR $width>600) {
-                    if ($width > $height) {
-                        $w = 600;
-                        $h = floor(($height*$w) / $width);
-                        $picture->scaleImage($w, $h, true);
-                    } else {
-                        $h = 400;
-                        $w = floor(($width*$h) / $height);
-                        $picture->scaleImage($w, $h, true);
-                    }
-                    $height = $h;
-                    $width = $w;
-                }
-            }
-
-            $picture->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 1);
-            $picture->cropImage(
-                $data['width'], $data['height'],
-                $data['x1'], $data['y1']
-            );
-            $picture->resizeImage(
-                $this->widthCover, $this->heightCover,
-                Imagick::FILTER_LANCZOS,
-                1
-            );
-
-            $datos = pathinfo($image);     // Fetch file info
-            $extension = strtolower($datos['extension']);
-            $t = gettimeofday();             // Fetch the actual microsecs
-            $micro = intval(substr($t['usec'], 0, 5)); // Get just 5 digits
-            $name = date("YmdHis") . $micro . "." . $extension;
-            $cover = '/'.$this->widthCover."-".$this->heightCover.'-'. $name;
-
-            $path = $uploaddir.$cover;
-            if (!$picture->writeImage($path)) {
-                return false;
-            }
-            chmod($path, 0777);
-
-            return $data['path_img'].$cover;
-        }
-
-    }
-
-
-    /**
-     * Removes an album by a given id.
+     * Removes an album given id.
      *
      * @param string $id the album id
+     *
+     * @return
      **/
     public function remove($id)
     {
 
         parent::remove($id);
 
-        $sql = 'DELETE FROM albums WHERE pk_album='.($id);
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-            return;
+        $sql = 'DELETE FROM albums WHERE pk_album='.$id;
+        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+            return Application::logDatabaseError();
         }
-        $album = new Album_photo();
-        $album->delete_album($id);
+
+        return $this->_removeAttachedImages($id);
     }
 
-    //Lee de la tabla la relacion de galeria y fotos
-    public function get_album($albumID)
+    /**
+     * Returns a multidimensional array with the images related to this album
+     *
+     * @param int $albumId the album id
+     *
+     * @return mixed array of array(pk_photo, position, description)
+     */
+    public function _getAttachedPhotos($albumID)
     {
 
         if ($albumID == NULL) {
-            return(false);
+            return false ;
         }
-        $photosAlbum = array();
 
         $sql = 'SELECT DISTINCT pk_photo, description, position'
-                .' FROM albums_photos '
-               .'WHERE pk_album = ' .($albumID).' ORDER BY position ASC';
+               .' FROM albums_photos '
+               .' WHERE pk_album = ' .$albumID.' ORDER BY position ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
         $i=0;
+        $photosAlbum = array();
         while (!$rs->EOF) {
             $photosAlbum[$i][] = $rs->fields['pk_photo'];
             $photosAlbum[$i][] = $rs->fields['position'];
@@ -344,48 +265,51 @@ class Album extends Content
               $i++;
         }
 
-        return($photosAlbum);
-
+        return $photosAlbum;
     }
 
     /**
-     * Gets the first photo from album.
+     * Saves the photos attached to one album
      *
-     * @param string $albumID the id of the album.
-     *
-     * @return array key-value array with properties of the image
+     * @return void
      **/
-    public function get_firstfoto_album($albumID)
+    public function _saveAttachedPhotos($data)
     {
+        $albumPhoto = new Album_photo;
+        if (isset($data['album_photos_id'])) {
+            foreach ($data['album_photos_id'] as $position => $photoID) {
+                $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
+                $sql = "INSERT INTO albums_photos "
+                     ."(`pk_album`, `pk_photo`, `position`, `description`) "
+                     ." VALUES (?,?,?,?)";
 
-        $photoAlbum = array();
-        $sql = 'SELECT * from albums_photos WHERE pk_album = ' .($albumID).
-               ' ORDER BY position ASC LIMIT 1';
+                $values = array($this->id, $photoID, $position, $photoFooter);
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-        if ($rs->fields) {
-
-            $photoAlbum['pk_photo'] = $rs->fields['pk_photo'];
-            $photoAlbum['description'] = $rs->fields['description'];
-
-            $sql = 'SELECT * FROM photos'
-                    .' WHERE pk_photo = '.($rs->fields['pk_photo']);
-            $queryExec = $GLOBALS['application']->conn->Execute($sql);
-
-            if (!$queryExec) {
-                $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-                $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-                $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
-                return;
+                if ($rs === false) {
+                    return Application::logDatabaseError();
+                }
             }
-
-            $photoAlbum['name'] = $queryExec->fields['name'];
-            $photoAlbum['path_file'] = $queryExec->fields['path_file'];
-
+            return true;
         }
+        return $this;
+    }
 
-        return $photoAlbum;
+    /**
+     * Delete one album by a given id
+     *
+     * @param int $albumID, the foreighn key for the album
+     * @return boolean, true if the album was deleted, false if it wasn't
+     **/
+    public function _removeAttachedImages($albumID)
+    {
+        $sql = 'DELETE FROM albums_photos WHERE pk_album=?';
 
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
+        if (!$rs) {
+            return Application::logDatabaseError();
+        }
+        return $this;
     }
 }

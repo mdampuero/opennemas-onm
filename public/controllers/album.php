@@ -167,7 +167,7 @@ if (!is_null($action) ) {
 
 				$album->category_name = $album->loadCategoryName($album->id);
 				$album->category_title = $album->loadCategoryTitle($album->id);
-				$_albumArray = $album->get_album($album->id);
+				$_albumArray = $album->_getAttachedPhotos($album->id);
 
 				/**
 				 * Get the album photos
