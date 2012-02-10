@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Erro 404 .</title>
+    <meta http-equiv="refresh" CONTENT="0;URL=http://www.elidealgallego.com">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style type="text/css">
             a, a:link {
