@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <img
-                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['image']->path_file}{$photo['image']->name}"
+                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
                              id="img{$photo['photo']->pk_photo}"
                              data-id="{$photo['photo']->pk_photo}"
                              data-title="{$photo['photo']->name}"

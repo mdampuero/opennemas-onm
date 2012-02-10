@@ -147,4 +147,5 @@
     </div>
 </form>
 {include file="album/modals/_edit_album_error.tpl"}
+{include file="album/modals/_edit_album_photo.tpl"}
 {/block}
