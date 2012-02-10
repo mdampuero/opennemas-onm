@@ -41,11 +41,11 @@ if(!empty($category_name)) {
                         'category_real_name' => $category_real_name ,
                 ) );
 } else {
-     //$category_name = 'Portada';
-     $category_real_name = 'Portada';
-     $tpl->assign(array(
-                        'category_real_name' => $category_real_name ,
-                ) );
+    //$category_name = 'Portada';
+    $category_real_name = 'Portada';
+    $tpl->assign(array(
+        'category_real_name' => $category_real_name ,
+    ));
 }
 
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
@@ -64,43 +64,53 @@ if (!is_null($action) ) {
 
         case 'frontpage':
 
-			$page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
-								 array('options'=> array('default' => 0)));
+			$page = filter_input(
+                INPUT_GET,'page',FILTER_SANITIZE_STRING,
+				array('options'=> array('default' => 0))
+            );
 
-			/**
-			 * Setup caching system
-			 **/
+			//Setup caching system
 			$tpl->setConfig('gallery-frontpage');
-
 			$cacheID = $tpl->generateCacheId($category_name, '', $page);
 
 			/**
-			 * Don't execute action logic if was cached before
+			 * Don't execute the action logic if was cached before
 			 */
             if ( ($tpl->caching == 0)
 			   || (!$tpl->isCached('gallery/gallery-frontpage.tpl', $cacheID)) ) {
 
                 $albumSettings = s::get('album_settings');
                 $total = isset($albumSettings['total_front'])?$albumSettings['total_front']:2;
-                $days = isset( $albumSettings['time_last'])?$albumSettings['time_last']:4;
-                $order = isset( $albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
+                $days  = isset($albumSettings['time_last'])?$albumSettings['time_last']:4;
+                $order = isset($albumSettings['orderFrontpage'])?$albumSettings['orderFrontpage']:'views';
 
 
                 if ( isset($category) && !empty($category) ) {
-                    $albums = $cm->find_by_category('Album',
-                                        $category, 'fk_content_type=7 AND available=1',
-                                        'ORDER BY  created DESC LIMIT 2');
+                    $albums = $cm->find_by_category(
+                        'Album',
+                        $category, 'fk_content_type=7 AND available=1',
+                        'ORDER BY  created DESC LIMIT 2'
+                    );
                 } else {
                     if($order == 'favorite') {
-                        $albums = $cm->find('Album',
-                                        'fk_content_type=7 AND available=1 ',
-                                        ' ORDER BY favorite DESC,  created DESC LIMIT '.$total);
+                        $albums = $cm->find(
+                            'Album',
+                            'fk_content_type=7 AND available=1 ',
+                            ' ORDER BY favorite DESC,  created DESC LIMIT '.$total
+                        );
                     }else {
-                        $albums = $cm->find('Album',
-                                        'fk_content_type=7 AND available=1 AND '.
-                                        'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                                        ' ORDER BY views DESC,  created DESC LIMIT '.$total);
+                        $albums = $cm->find(
+                            'Album',
+                            'fk_content_type=7 AND available=1 AND '.
+                            'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                            ' ORDER BY views DESC,  created DESC LIMIT '.$total
+                        );
                     }
+                }
+
+                foreach ($albums as &$album) {
+                    $album->cover_image = new Photo($album->cover_id);
+                    $album->cover       = $album->cover_image->path_file.$album->cover_image->name;
                 }
 
 				$tpl->assign('albums', $albums);
@@ -109,9 +119,7 @@ if (!is_null($action) ) {
 
             require_once ("album_front_ads.php");
 
-			/**
-			 * Send the response to the user
-			 */
+			// Send the response to the user
             $tpl->display('album/album_frontpage.tpl',$cacheID);
 
         break;
