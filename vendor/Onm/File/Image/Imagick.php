@@ -66,6 +66,32 @@ class Imagick extends Common implements ImageInterface
     }
 
     /**
+     * Returns the width of the image
+     *
+     * @return int the width of the image
+     **/
+    public function getWidth()
+    {
+        if (is_object($this->image)) {
+            return (int)$this->image->getImageWidth();
+        }
+        throw new \Exception(_('Please initialize the image before get its width.'));
+    }
+
+    /**
+     * Returns the height of the image
+     *
+     * @return int the height of the image
+     **/
+    public function getHeight()
+    {
+        if (is_object($this->image)) {
+            return (int)$this->image->getImageHeight();
+        }
+        throw new \Exception(_('Please initialize the image before get its height.'));
+    }
+
+    /**
      * Resizes an image given a width and height
      *
      * @param int     $width   the width of the final image
@@ -82,7 +108,7 @@ class Imagick extends Common implements ImageInterface
         // If not forcing the enlarge and the image size is
         // bigger that the required size return the same image
         if (!$enlarge
-            && $this->enlarge($width, $height, $this->image->getImageWidth(), $this->image->getImageHeight()))
+            && $this->enlarge($width, $height, $this->getWidth(), $this->getHeight()))
         {
             return $this;
         }
@@ -106,8 +132,8 @@ class Imagick extends Common implements ImageInterface
      **/
     public function crop($width, $height, $x = 0, $y = 0)
     {
-        $x = $this->transformPosition($x, $width, $this->image->getImageWidth());
-        $y = $this->transformPosition($y, $height, $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $width, $this->getWidth());
+        $y = $this->transformPosition($y, $height, $this->getHeight());
 
         $this->image->cropImage($width, $height, $x, $y);
 
@@ -148,8 +174,8 @@ class Imagick extends Common implements ImageInterface
      **/
     public function thumbnail($width, $height)
     {
-        $widthResize  = ($width/$this->image->getImageWidth()) * 100;
-        $heightResize = ($height/$this->image->getImageHeight()) * 100;
+        $widthResize  = ($width/$this->getWidth()) * 100;
+        $heightResize = ($height/$this->getHeight()) * 100;
 
         if ($widthResize < $heightResize) {
             $this->resize(0, $height);
@@ -203,8 +229,8 @@ class Imagick extends Common implements ImageInterface
             $objectImage->readImage($imagePath);
         }
 
-        $x = $this->transformPosition($x, $objectImage->getImageWidth(), $this->image->getImageWidth());
-        $y = $this->transformPosition($y, $objectImage->getImageHeight(), $this->image->getImageHeight());
+        $x = $this->transformPosition($x, $objectImage->getWidth(), $this->getWidth());
+        $y = $this->transformPosition($y, $objectImage->getHeight(), $this->getHeight());
 
         $this->image->compositeImage($objectImage, $objectImage->getImageCompose(), $x, $y);
         $this->image->flattenImages();
