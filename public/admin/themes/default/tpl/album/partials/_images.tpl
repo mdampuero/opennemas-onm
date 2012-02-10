@@ -201,5 +201,12 @@ jQuery(document).ready(function($){
         };
     });
 
+    jQuery('.edit-button').on('click', function () {
+        var parent = jQuery(this).parent();
+        var elementID = parent.find('.album-frontpage-image');
+
+        jQuery("#modal-edit-album-photo").modal('show');
+    });
+
 });
 </script>

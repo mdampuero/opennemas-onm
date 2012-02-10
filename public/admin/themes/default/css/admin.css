@@ -1625,13 +1625,14 @@ div.action-bar .right{
 }
 .list-of-images .image .overlay-image .image-buttons {
 	background: rgba(255,255,255,0.8);
+	padding:2px;
 	display:none;
 }
 .list-of-images .image .overlay-image:hover .image-buttons {
 	display:block;
 }
 .list-of-images .image .image-buttons li {
-	float:right;
+	width:16px;
 	padding:2px;
 	display:block;
 }

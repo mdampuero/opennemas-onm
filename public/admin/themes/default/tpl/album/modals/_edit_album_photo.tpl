@@ -4,6 +4,7 @@
       <h3>{t}Complete all the required album information before save it{/t}</h3>
     </div>
     <div class="modal-body">
+        <h2>En construcción...</h2>
         <div class="thumbnail article-resource-image">
             <img src="#"/>
         </div>
@@ -21,13 +22,15 @@
 </div>
 
 <script>
-jQuery("#modal-edit-album-photo").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false,
-});
-jQuery('#modal-edit-album-photo a.btn.accept').on('click', function(e){
-    jQuery("#modal-menu-accept").modal('hide');
-    e.preventDefault();
+jQuery(document).ready(function() {
+    jQuery("#modal-edit-album-photo").modal({
+        backdrop: 'static', //Show a grey back drop
+        keyboard: true, //Can close on escape
+        show: false,
+    });
+    jQuery('#modal-edit-album-photo a.btn.accept').on('click', function(e){
+        jQuery("#modal-menu-accept").modal('hide');
+        e.preventDefault();
+    });
 });
 </script>
