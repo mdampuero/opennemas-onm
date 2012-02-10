@@ -98,4 +98,5 @@ if (($tpl->caching == 0)
 
 // Return the output as xml
 header('Content-type: application/xml charset=utf-8');
-echo $tpl->fetch('sitemap/sitemap.tpl', $cacheID);
+$tpl->assign('action', $action);
+$tpl->display('sitemap/sitemap.tpl', $cacheID);
