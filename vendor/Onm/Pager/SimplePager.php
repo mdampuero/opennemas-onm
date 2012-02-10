@@ -48,8 +48,8 @@ class SimplePager {
         $others    = $params['others'];
         $function  = $params['function'];
 
-        $next       = "<a onClick='".$function."(".$others.", ".($page+1).")' title='"._("Get previous page")."'>"._("Next »")."</a>\n";
-        $previous   = "<a onClick='".$function."(".$others."', '".($page-1)."')' title='"._("Get previous page")."'>"._("« Previous")."</a>\n";
+        $next       = "<a onClick='".$function."(".$others.", ".($page+1).")' title='"._("Get next page")."'>"._("Next »")."</a>\n";
+        $previous   = "<a onClick='".$function."(".$others.", ".($page-1).")' title='"._("Get previous page")."'>"._("« Previous")."</a>\n";
 
         if ($page == 1 || empty($page)) {
             if ($total <= $items) {
