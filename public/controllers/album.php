@@ -166,30 +166,20 @@ if (!is_null($action) ) {
                 $total = isset($configurations['total_front'])?($configurations['total_front']):2;
                 $days = isset( $configurations['time_last'])?($configurations['time_last']):4;
 
-				$otherAlbums = $cm->find('Album',
-												$category,
-												'available=1 and pk_content !='.$albumID.
-												' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                                                ' ORDER BY views DESC,  created DESC LIMIT '.$total);
+				$otherAlbums = $cm->find(
+                    'Album',
+					$category,
+					'available=1 and pk_content !='.$albumID.
+					' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    ' ORDER BY views DESC,  created DESC LIMIT '.$total
+                );
 				$tpl->assign('gallerys', $otherAlbums);
 
 				$album->category_name = $album->loadCategoryName($album->id);
 				$album->category_title = $album->loadCategoryTitle($album->id);
 				$_albumArray = $album->_getAttachedPhotos($album->id);
 
-				/**
-				 * Get the album photos
-				 **/
-				$i=0;
-				$albumPhotos = array();
-                if(!empty($_albumArray)) {
-                    foreach($_albumArray as $ph){
-                       $albumPhotos[$i]['photo'] = new Photo($ph[0]);
-                       $albumPhotos[$i]['description']=$ph[2];
-                       $i++;
-                    }
-                }
-				$tpl->assign('album_photos', $albumPhotos);
+				$tpl->assign('album_photos', $_albumArray);
 
 			} // END iscached
 

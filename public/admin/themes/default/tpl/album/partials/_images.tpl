@@ -3,7 +3,7 @@
         <li><a href="#list-of-images">{t}Images in this album{/t}</a></li>
         <li><a href="#frontpage-image">{t}Cover image{/t}</a></li>
     </ul>
-    <div id="list-of-images" class="list-of-images">
+    <div id="list-of-images" class="list-of-images clearfix">
         <ul>
             {if !empty($photos)}
                 {foreach from=$photos item=photo key=key name=album_photos}
@@ -17,21 +17,21 @@
                             </div>
                         </div>
                         <img
-                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo->path_file}{$photo->name}"
-                             id="img{$photo->pk_photo}"
-                             data-id="{$photo->pk_photo}"
-                             data-title="{$photo->name}"
-                             data-description="{$photo->description|escape:"html"}"
-                             data-path="{$photo->path_file}"
-                             data-width="{$photo->width}"
-                             data-height="{$photo->height}"
-                             data-filesize="{$photo->size}"
-                             data-created="{$photo->created}"
-                             data-tags="{$photo->metadata}"
-                             data-footer="{$otherPhotos[n][2]|escape:"html"}"
+                             src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['image']->path_file}{$photo['image']->name}"
+                             id="img{$photo['photo']->pk_photo}"
+                             data-id="{$photo['photo']->pk_photo}"
+                             data-title="{$photo['photo']->name}"
+                             data-description="{$photo['photo']->description|escape:"html"}"
+                             data-path="{$photo['photo']->path_file}"
+                             data-width="{$photo['photo']->width}"
+                             data-height="{$photo['photo']->height}"
+                             data-filesize="{$photo['photo']->size}"
+                             data-created="{$photo['photo']->created}"
+                             data-tags="{$photo['photo']->metadata}"
+                             data-footer="{$photo['description']|escape:"html"}"
                              alt="{$photo->name}"/>
-                        <textarea name="album_photos_footer[]">{$photo->name}</textarea>
-                        <input type="hidden" name="album_photos_id[]" value="{$photo->pk_photo}">
+                        <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
+                        <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
                     </li><!-- /image -->
                 {/foreach}
             {/if}

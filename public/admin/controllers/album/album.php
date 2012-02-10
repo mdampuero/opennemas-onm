@@ -132,11 +132,7 @@ switch($action) {
         $album = new Album($id);
 
         $photos = array();
-        $photoIds = $album->_getAttachedPhotos($id);
-
-        foreach ((array)$photoIds as $photo) {
-            $photos[] = new Photo($photo[0]);
-        }
+        $photos = $album->_getAttachedPhotos($id);
 
         $tpl->assign( array(
             'category' => $album->category,

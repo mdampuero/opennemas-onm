@@ -255,14 +255,16 @@ class Album extends Content
                .' WHERE pk_album = ' .$albumID.' ORDER BY position ASC';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $i=0;
         $photosAlbum = array();
         while (!$rs->EOF) {
-            $photosAlbum[$i][] = $rs->fields['pk_photo'];
-            $photosAlbum[$i][] = $rs->fields['position'];
-            $photosAlbum[$i][] = $rs->fields['description'];
-              $rs->MoveNext();
-              $i++;
+            $photosAlbum []= array(
+                'id'       => $rs->fields['pk_photo'],
+                'position' => $rs->fields['position'],
+                'description' => $rs->fields['description'],
+                'photo'    => new Photo($rs->fields['pk_photo']),
+            );
+
+            $rs->MoveNext();
         }
 
         return $photosAlbum;
