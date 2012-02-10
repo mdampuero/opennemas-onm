@@ -233,10 +233,19 @@ legend {
                                             <ul id='availablePages' class="elementsContainer">
                                                 {foreach from=$pages item=value key=page}
                                                     <li id="page_{$page}"   pk_item="{$value}"
-                                                        title="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
-                                                        link="{if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}"
+                                                        title="{if $page eq 'frontpage'}home
+                                                                {elseif $page eq 'poll'}Encuesta
+                                                                {elseif $page eq 'letter'}Cartas Al Director
+                                                                {else}{$page}{/if}"
+                                                        link="{if $page eq 'frontpage'}home
+                                                                {elseif $page eq 'poll'}encuesta
+                                                                {elseif $page eq 'letter'}cartas-al-director
+                                                                {else}{$page}{/if}"
                                                         type="internal"  class="drag-category" pk_menu="">
-                                                       {if $page eq 'frontpage'}home{elseif $page eq 'poll'}encuesta{else}{$page}{/if}
+                                                       {if $page eq 'frontpage'}home
+                                                            {elseif $page eq 'poll'}encuesta
+                                                            {elseif $page eq 'letter'}Cartas Al Director
+                                                            {else}{$page}{/if}
                                                     </li>
                                                 {/foreach}
                                             </ul>

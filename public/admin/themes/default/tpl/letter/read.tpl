@@ -25,10 +25,38 @@ legend {
 </style>
 {/block}
 
+{block name="header-js" append}
+    {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{/block}
+
 {block name="footer-js" append}
 <script>
 jQuery(document).ready(function($) {
     $('#letter-edit').tabs();
+
+jQuery('#created').datetimepicker({
+        hourGrid: 4,
+        showAnim: "fadeIn",
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'hh:mm:ss',
+        minuteGrid: 10,
+        onClose: function(dateText, inst) {
+            var endDateTextBox = jQuery('#created');
+            if (endDateTextBox.val() != '') {
+                var testStartDate = new Date(dateText);
+                var testEndDate = new Date(endDateTextBox.val());
+                if (testStartDate > testEndDate)
+                    endDateTextBox.val(dateText);
+            }
+            else {
+                endDateTextBox.val(dateText);
+            }
+        },
+        onSelect: function (selectedDateTime){
+            var start = jQuery(this).datetimepicker('getDate');
+            jQuery('#created').datetimepicker('option', 'minDate', new Date(start.getTime()));
+        }
+    });
 });
 </script>
 
@@ -123,7 +151,7 @@ jQuery(document).ready(function($) {
                     <div style="display:inline-block">
                         <label for="title">{t}Sent from IP address{/t}</label>
                         <input type="text" id="params[ip]" name="params[ip]" title="author"
-                        value="{$letter->ip}" class="required" size="20" /></td>
+                        value="{$letter->ip|default:"127.0.0.1"}" size="20" /></td>
                     </div>
                 </fieldset>
 

@@ -19,7 +19,7 @@ $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 $ccm = ContentCategoryManager::get_instance();
 
 //Frontpages ¿? add polls, kiosko, static_pages
-$pages = array('frontpage'=>1, 'opinion'=>4, 'album'=>7, 'video'=>9, 'mobile'=>3, 'poll'=>11);
+$pages = array('frontpage'=>1, 'opinion'=>4, 'album'=>7, 'video'=>9, 'mobile'=>3, 'poll'=>11, 'letter'=>17);
 
 $action = filter_input(INPUT_POST,'action',FILTER_SANITIZE_STRING );
 if (empty($action)) {
