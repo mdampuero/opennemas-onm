@@ -1631,10 +1631,11 @@ div.action-bar .right{
 	display:block;
 }
 .list-of-images .image .image-buttons li {
-	display:inline-block;
+	float:right;
 	padding:2px;
+	display:block;
 }
-.list-of-images .image .overlay-image .image-buttons img { width:16px; }
+.list-of-images .image .overlay-image .image-buttons img { width:16px; display:block }
 
 .list-of-images .image .overlay-image {
 	background:transparent;
@@ -1703,7 +1704,7 @@ div.action-bar .right{
 
 .progressbar div {
     width: auto;
-    background: url(../../images/progressbar.gif);
+    background: url(../images/progressbar.gif);
 }
 
 .fileupload-progressbar {

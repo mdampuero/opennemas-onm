@@ -10,7 +10,7 @@
                     <li class="image thumbnail">
                         <div class="overlay-image">
                             <div>
-                                <ul class="image-buttons">
+                                <ul class="image-buttons clearfix">
                                     <li><a href="#" class="edit-button" title="Editar"><img src="{$params.IMAGE_DIR}edit.png"></a></li>
                                     <li><a href="#" class="delete-button" title="{t}Drop{/t}"><img src="{$params.IMAGE_DIR}trash.png"></a></li>
                                 </ul>
