@@ -80,7 +80,7 @@ if (\Onm\Module\ModuleManager::isActivated('VIDEO_MANAGER')) {
         $videoParams = array(
             'page'=>$page, 'items'=>ITEMS_GALLERY,
             'total' => count($videos), 'function'=>'getGalleryVideos',
-            'others'=>'"listbyCategory", "'.$metadatas.'"' 
+            'others'=>'"listByCategory", "'.$metadatas.'"'
         );
     }
 
