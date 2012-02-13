@@ -17,6 +17,7 @@ require_once('../bootstrap.php');
  */
 $tpl = new Template(TEMPLATE_USER);
 
+
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 $cm  = new ContentManager();
 $ccm = ContentCategoryManager::get_instance();
@@ -154,7 +155,7 @@ switch($action) {
                         'num_comments'=> count($comments),
                         'otherPolls'=>$otherPolls,
                         ) );
-
+/*
                     //TODO save name in db
                     if ($poll->visualization == '0') { // pie
                          $tpl->assign('type_poll','pie');
@@ -168,7 +169,7 @@ switch($action) {
                     FilesManager::mkFile($file);
 
                     FilesManager::writeInFile($file, $xml);
-
+*/
 
                 } // end if $tpl->is_cached
 
