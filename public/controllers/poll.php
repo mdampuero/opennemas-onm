@@ -51,18 +51,6 @@ if(!empty($category_name)) {
 }
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
 
-//TODO: define dir to save xml and charts.swf dir
-//TODO: widget others polls
-define ('POLL_DIR', "polls");
-define ('INTERNAL_DIR', "internal");
-
-$poll_path = MEDIA_PATH .  DIRECTORY_SEPARATOR . POLL_DIR . DIRECTORY_SEPARATOR ;
-
-$tpl->assign(array ('chartPolls'  => MEDIA_DIR_URL.DIRECTORY_SEPARATOR.INTERNAL_DIR ,
-                    'xmlDirPolls' => MEDIA_DIR_URL.DIRECTORY_SEPARATOR.POLL_DIR.SS,
-                    'poll_path'   => $poll_path,
-             ) );
-
 
    $pollSettings = s::get('poll_settings');
 
@@ -76,16 +64,14 @@ $action = filter_input(INPUT_POST,'action', FILTER_SANITIZE_STRING);
 if(empty($action)) {
     $action = filter_input(INPUT_GET,'action', FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
-
+$page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
+								 array('options'=> array('default' => 0)));
 switch($action) {
     case 'frontpage':
 
         $tpl->setConfig('poll-frontpage');
 
-        $page = filter_input(INPUT_GET,'page',FILTER_SANITIZE_STRING,
-								 array('options'=> array('default' => 0)));
-
-        $cacheID = $tpl->generateCacheId($category_name, '', $page);
+        $cacheID = $tpl->generateCacheId('poll'.$category_name, '', $page);
 
         /**
          * Don't execute action logic if was cached before
@@ -103,6 +89,15 @@ switch($action) {
                  $otherPolls = $cm->find('Poll', 'available=1 ',
                                             'ORDER BY created DESC LIMIT 2,7');
             }
+
+            if(!empty($polls)) {
+                foreach($polls as &$poll) {
+                    $poll->items = $poll->get_items($poll->id);
+                    $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d',$poll->id);
+
+                }
+            }
+
             $tpl->assign( array('polls'=> $polls, 'otherPolls'=> $otherPolls ) );
 
         }
@@ -129,8 +124,6 @@ switch($action) {
          */
         if (is_null($pollId)) { Application::forward301('/encuesta/'); }
 
-
-
         $poll = new Poll($pollId);
 
         if (!empty($poll)) {
@@ -139,6 +132,7 @@ switch($action) {
                 // Increment numviews if it's accesible
                 $poll->setNumViews($pollId);
                 $items = $poll->get_items($pollId);
+                $poll->dirtyId = $dirtyID;
 
                 $cacheID = $tpl->generateCacheId($category_name,'', $pollId );
 
@@ -155,21 +149,17 @@ switch($action) {
                         'num_comments'=> count($comments),
                         'otherPolls'=>$otherPolls,
                         ) );
-/*
-                    //TODO save name in db
-                    if ($poll->visualization == '0') { // pie
-                         $tpl->assign('type_poll','pie');
-                    } else {
-                         $tpl->assign('type_poll','bars');
-                    }
-
-                    $xml = $tpl->fetch('poll/graphic_poll.tpl', $cacheID);
-
-                    $file =  $poll_path. $pollId.'.xml';
-                    FilesManager::mkFile($file);
-
-                    FilesManager::writeInFile($file, $xml);
-*/
+                      $cookie="polls".$pollId;
+                      $msg='';
+                      if (isset($_COOKIE[$cookie])) {
+                          if($_COOKIE[$cookie]=='tks') {
+                               $msg = 'Ya ha votado esta encuesta';
+                          } else {
+                               $msg = 'Gracias, por su voto';
+                               $GLOBALS['application']->setcookie_secure($cookie, 'tks');
+                          }
+                        }
+                        $tpl->assign('msg',$msg);
 
                 } // end if $tpl->is_cached
 
@@ -206,59 +196,24 @@ switch($action) {
         $poll = new Poll($pollId);
 
         if(!empty($poll->id)) {
-
             $cookie="polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
-                $tpl->assign('msg','Ya ha votado esta encuesta');
+                 $GLOBALS['application']->setcookie_secure($cookie, 'tks');
             }
             if (isset($_POST['respEncuesta'])
                     && !empty($_POST['respEncuesta'])
                      && !isset($_COOKIE[$cookie]) ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
-               // $poll=new Poll($_REQUEST['id']);
                 $poll->vote($_POST['respEncuesta'],$ip);
-                $tpl->assign('msg','Gracias por su voto ');
             }
-            $items = $poll->get_items($pollId);
-
-
-            $otherPolls = $cm->find('Poll', 'available=1 ',
-                                    'ORDER BY created DESC LIMIT 5');
-
-            $tpl->assign( array( 'poll'=>$poll,
-                'items' => $items,
-                'otherPolls'=>$otherPolls,
-                ) );
-
-            //TODO save name in db
-            if ($poll->visualization == '0') { // pie
-                 $tpl->assign('type_poll','pie');
-            } else {
-                 $tpl->assign('type_poll','bars');
-            }
-
-            $xml = $tpl->fetch('poll/graphic_poll.tpl');
-
-            $file =  $poll_path.$pollId.'.xml';
-            FilesManager::mkFile($file);
-            FilesManager::writeInFile($file, $xml);
-
-            $comment = new Comment();
-            $comments = $comment->get_public_comments($pollId);
-            $tpl->assign('num_comments', count($comments));
-
-            $tpl->assign('contentId', $pollId); // Used on module_comments.tpl
-
-            $poll->setNumViews($pollId);
-
-            require_once('poll_inner_advertisement.php');
 
             $cacheID= $tpl->generateCacheId($category_name, '',$pollId );
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete($cacheID, 'poll.tpl');
-            $tplManager->delete($cacheID, 'graphic_poll.tpl');
+            $cacheID = $tpl->generateCacheId('poll'.$category_name, '', $page);
+            $tplManager->delete($cacheID, 'poll_frontpage.tpl');
 
-            $tpl->display('poll/poll.tpl', $cacheID);
+            Application::forward(SITE_URL.$poll->uri);
         }
 
     break;

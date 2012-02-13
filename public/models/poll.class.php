@@ -234,8 +234,8 @@ class Poll extends Content {
         $votes = $GLOBALS['application']->conn->GetOne('SELECT votes FROM `poll_items` WHERE pk_item = "'. $pk_item.'"');
         $votes++;
         $sql = "UPDATE poll_items SET `votes`=?
-                    WHERE pk_item=".($pk_item);
-        $values = array($votes);
+                    WHERE pk_item=? ";
+        $values = array($votes, $pk_item);
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             $error_msg = $GLOBALS['application']->conn->ErrorMsg();
@@ -245,10 +245,10 @@ class Poll extends Content {
         }
 
         $sql = "UPDATE polls SET `total_votes`=?, `used_ips`=?
-                    WHERE pk_poll=".($this->id);
+                    WHERE pk_poll=?";
 
         //$values = array($this->total_votes, serialize($this->ips_count_rating));
-        $values = array($this->total_votes, serialize($this->used_ips));
+        $values = array($this->total_votes, serialize($this->used_ips), $this->id);
 
 
         if($GLOBALS['application']->conn->Execute($sql, $values) === false) {
