@@ -33,8 +33,7 @@ class APCCache extends AbstractCache
     */
     public function initialize($options = array())
     {
-        if (!function_exists('apc_store') || !ini_get('apc.enabled'))
-        {
+        if (!function_exists('apc_store') || !ini_get('apc.enabled')) {
             throw new \Exception('You must have APC installed and enabled to use APCCache class.');
         }
     }

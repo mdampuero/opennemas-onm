@@ -57,7 +57,16 @@ abstract class Common
                     $this->$function($params[0], $params[1], $params[2], $params[3]);
                     break;
                 default:
-                    throw new \Exception(sprintf(_('No valid operation (%s) for image transform. All operation string is %s'), $function, implode(',', $params)));
+                    throw new \Exception(
+                        sprintf(
+                            _(
+                                'No valid operation (%s) for image transform.'
+                                .' All operation string is %s'
+                            ),
+                            $function,
+                            implode(',', $params)
+                        )
+                    );
             }
         }
 
@@ -82,7 +91,8 @@ abstract class Common
      *
      * return array the formatted operations array
      **/
-    private function getOperations($operations) {
+    private function getOperations($operations)
+    {
         $return = array();
         $listOperations = explode('|', $operations);
 

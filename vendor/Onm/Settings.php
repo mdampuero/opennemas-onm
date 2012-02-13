@@ -23,9 +23,9 @@ namespace Onm;
  * @package    Onm
  * @subpackage Settings
  * @author     Fran Dieguez <fran@openhost.es>
- * @version    Git: $Id: Settings.php Mér Xul 13 01:06:01 2011 frandieguez $
  */
-class Settings {
+class Settings
+{
 
     /**
      * Fetches a setting from its name.
@@ -44,7 +44,9 @@ class Settings {
     static public function get( $settingName )
     {
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        };
 
         if (!is_array($settingName)) {
 
@@ -57,7 +59,7 @@ class Settings {
             // If was not fetched from APC now is turn of DB
             if (!$fetchedFromAPC) {
                 $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
-                $rs = $GLOBALS['application']->conn->GetOne( $sql );
+                $rs = $GLOBALS['application']->conn->GetOne($sql);
 
 
                 if (!$rs) {
@@ -91,8 +93,8 @@ class Settings {
                 $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
 
                 $settingValue = array();
-                foreach ($apcSettingValue as $key => $value ) {
-                    $key = preg_replace("@".APC_PREFIX . "_@","", $key);
+                foreach ($apcSettingValue as $key => $value) {
+                    $key = preg_replace("@".APC_PREFIX . "_@", "", $key);
                     $settingValue[$key] = $value;
                 }
 
@@ -105,13 +107,14 @@ class Settings {
             ) {
 
                 $settingName = implode("', '", $settingName);
-                $sql = ( "SELECT name, value FROM `settings` WHERE name IN ('{$settingName}') ");
-                $rs = $GLOBALS['application']->conn->Execute( $sql );
+                $sql         = "SELECT name, value FROM `settings` "
+                               ."WHERE name IN ('{$settingName}') ";
+                $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
-                    $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-                    $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-                    $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+                    $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+                    $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+                    $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
                     return false;
                 }
@@ -151,7 +154,9 @@ class Settings {
     static public function set($settingName, $settingValue)
     {
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        }
 
         $settingValueSerialized = serialize($settingValue);
 
@@ -159,12 +164,12 @@ class Settings {
                             VALUES ('{$settingName}','{$settingValueSerialized}')
                             ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
 
-        $rs = $GLOBALS['application']->conn->Execute( $sql );
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-            $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-            $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+            $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
+            $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
+            $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
 
             return false;
         }
@@ -192,8 +197,12 @@ class Settings {
         if (is_null($instanceName)) {
             $instanceName = APC_PREFIX;
         }
+
         // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) { return false; };
+        if (!isset($settingName) || empty($settingName)) {
+            return false;
+        }
+
         if (extension_loaded('apc')) {
             apc_delete($instanceName . "_".$settingName);
         } else {

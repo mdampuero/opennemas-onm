@@ -15,6 +15,7 @@ namespace Onm\Module;
  * @author     Fran Dieguez <fran@openhost.es>
  * @version    Git: $Id: ModuleException.php 28842 Xov Xuñ 23 12:49:53 2011 frandieguez $
  */
-class ModuleException extends \Exception{
+class ModuleException extends \Exception
+{
 
 }

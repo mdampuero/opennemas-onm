@@ -20,14 +20,14 @@ class ArrayCache extends AbstractCache
     /**
      * @var array $data
      */
-    private $data = array();
+    private $_data = array();
 
     /**
      * {@inheritdoc}
      */
     public function getIds()
     {
-        return array_keys($this->data);
+        return array_keys($this->_data);
     }
 
     /**
@@ -35,8 +35,8 @@ class ArrayCache extends AbstractCache
      */
     protected function _doFetch($id)
     {
-        if (isset($this->data[$id])) {
-            return $this->data[$id];
+        if (isset($this->_data[$id])) {
+            return $this->_data[$id];
         }
 
         return false;
@@ -47,7 +47,7 @@ class ArrayCache extends AbstractCache
      */
     protected function _doContains($id)
     {
-        return isset($this->data[$id]);
+        return isset($this->_data[$id]);
     }
 
     /**
@@ -55,7 +55,7 @@ class ArrayCache extends AbstractCache
      */
     protected function _doSave($id, $data, $lifeTime = 0)
     {
-        $this->data[$id] = $data;
+        $this->_data[$id] = $data;
 
         return true;
     }
@@ -65,7 +65,7 @@ class ArrayCache extends AbstractCache
      */
     protected function _doDelete($id)
     {
-        unset($this->data[$id]);
+        unset($this->_data[$id]);
 
         return true;
     }

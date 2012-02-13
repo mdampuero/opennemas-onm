@@ -63,7 +63,7 @@ abstract class AbstractCache implements Cache
         $id = $this->_getNamespacedId($id);
 
         if (strpos($id, '*') !== false) {
-            return $this->deleteByRegex('/' . str_replace('*', '.*', $id) . '/');
+            return $this->deleteByRegex('/'.str_replace('*', '.*', $id).'/');
         }
 
         return $this->_doDelete($id);
@@ -182,10 +182,13 @@ abstract class AbstractCache implements Cache
     /**
      * Puts data into the cache.
      *
-     * @param string $id The cache id.
-     * @param string $data The cache entry/data.
-     * @param int $lifeTime The lifetime. If != false, sets a specific lifetime for this cache entry (null => infinite lifeTime).
-     * @return boolean TRUE if the entry was successfully stored in the cache, FALSE otherwise.
+     * @param string $id       The cache id.
+     * @param string $data     The cache entry/data.
+     * @param int    $lifeTime The lifetime. If != false, sets a specific
+     *                         lifetime for this cache entry (null => infinite
+     *                         lifeTime).
+     * @return boolean         TRUE if the entry was successfully stored in the
+     *                         cache, FALSE otherwise.
      */
     abstract protected function _doSave($id, $data, $lifeTime = false);
 
@@ -193,7 +196,8 @@ abstract class AbstractCache implements Cache
      * Deletes a cache entry.
      *
      * @param string $id cache id
-     * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
+     * @return boolean TRUE if the cache entry was successfully deleted,
+     *                 FALSE otherwise.
      */
     abstract protected function _doDelete($id);
 

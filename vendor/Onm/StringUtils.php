@@ -28,7 +28,7 @@ class StringUtils
     public function __construct($string = null)
     {
         //echo $stringTest." si<br>";
-        if(!is_null($string)) {
+        if (!is_null($string)) {
             $this->stringTest = $string;
         } else {
             $this->stringTest = "";
@@ -142,14 +142,14 @@ class StringUtils
         $title = self::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
 
-        if($useStopList) {
+        if ($useStopList) {
             // Remove stop list
             $titule = self::remove_shorts($title);
         }
 
-        if(empty($titule) || $titule ==" "){ //Si se queda vacio, no quitar shorts.
+        if (empty($titule) || $titule == " ") {
             $titule=$title;
-         }
+        }
 
         $titule = self::setSeparator($titule, '-');
         $titule = preg_replace('/[\-]+/', '-', $titule);
@@ -160,16 +160,16 @@ class StringUtils
     /**
      * Prevent duplicate metadata
      *
-     * @access static
      * @param string $metadata
      * @param string $separator By default ','
+     *
      * @return string
      **/
     static public function normalize_metadata($metadata, $separator=',')
     {
         $items = explode(',', $metadata);
 
-        foreach($items as $k => $item) {
+        foreach ($items as $k => $item) {
             $items[$k] = trim($item);
         }
 
@@ -211,11 +211,11 @@ class StringUtils
      **/
     static public function remove_shorts($string)
     {
-        $shorts = file( dirname(__FILE__).'/self_stoplist.txt');
+        $shorts = file(dirname(__FILE__).'/self_stoplist.txt');
 
         $size = count($shorts);
 
-        for($i=0; $i<$size; $i++) {
+        for ($i=0; $i<$size; $i++) {
             $short  = preg_replace('/\n/', '', $shorts[$i]);
             $string = preg_replace('/^'.$short.'[\.\, ]/', ' ', $string);
             $string = preg_replace('/[\.\, ]'.$short.'[\.\, ]/', ' ', $string);
@@ -225,13 +225,13 @@ class StringUtils
         return $string;
     }
 
-    static public function str_stop($string, $max_length=30, $suffix='...')
+    static public function str_stop($string, $maxLength=30, $suffix='...')
     {
-        if (strlen($string) > $max_length) {
-            $string = substr($string, 0, $max_length);
+        if (strlen($string) > $maxLength) {
+            $string = substr($string, 0, $maxLength);
             $pos = strrpos($string, " ");
             if ($pos === false) {
-                return substr($string, 0, $max_length).$suffix;
+                return substr($string, 0, $maxLength).$suffix;
             }
             return substr($string, 0, $pos).$suffix;
         } else {
@@ -242,12 +242,12 @@ class StringUtils
     static public function unhtmlentities($string)
     {
         // replace numeric entities
-        $string = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
-        $string = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
+        $string   = preg_replace('~&#x([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $string);
+        $string   = preg_replace('~&#([0-9]+);~e', 'chr("\\1")', $string);
         // replace literal entities
-        $trans_tbl = get_html_translation_table(HTML_ENTITIES);
-        $trans_tbl = array_flip($trans_tbl);
-        return utf8_encode(strtr($string, $trans_tbl));
+        $transTbl = get_html_translation_table(HTML_ENTITIES);
+        $transTbl = array_flip($transTbl);
+        return utf8_encode(strtr($string, $transTbl));
     }
 
     /**
@@ -257,15 +257,16 @@ class StringUtils
      **/
     static public function disabled_magic_quotes( &$data=NULL )
     {
-        if( get_magic_quotes_gpc() ) {
-            function stripslashes_deep($value) {
+        if (get_magic_quotes_gpc()) {
+            function stripslashes_deep($value)
+            {
                 $value = is_array($value) ?
                             array_map('stripslashes_deep', $value) :
                             stripslashes($value);
                 return $value;
             }
 
-            if( !is_null($data) ) {
+            if (!is_null($data)) {
                 $data = array_map('stripslashes_deep', $data);
             } else {
                 $_POST = array_map('stripslashes_deep', $_POST);
@@ -287,30 +288,30 @@ class StringUtils
      * Gets "n" first words from a given text
      *
      * @param string $text
-     * @param integer $num_words
+     * @param integer $numWords
      * @return string
-     * @example self::get_num_words('hello world', 1)
+     * @example self::get_numWords('hello world', 1)
      **/
-    static public function get_num_words($text,$num_words)
+    static public function get_numWords($text,$numWords)
     {
-        $no_html = strip_tags($text ); //Quita etiquetas html.
-        $description = explode(" ",$no_html,$num_words);
-        $sobra = array_pop($description);
-        $words = implode(" ",$description).'...';
+        $noHtml      = strip_tags($text);
+        $description = explode(" ", $noHtml, $numWords);
+        $sobra       = array_pop($description);
+        $words       = implode(" ", $description).'...';
 
-    	return $words;
+        return $words;
     }
 
     static public function loadBadWords()
     {
         $entries = file(dirname(__FILE__).'/self_badwords.txt');
         $words = array();
-        foreach($entries as $entry) {
-            if(preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
-
-                $words[] = array('weight' => $matches[1],
-                                 'text'   => trim($matches[2])
-                                );
+        foreach ($entries as $entry) {
+            if (preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
+                $words[] = array(
+                    'weight' => $matches[1],
+                    'text'   => trim($matches[2])
+                );
             }
         }
 
@@ -325,8 +326,8 @@ class StringUtils
         $words = self::loadBadWords();
         $text = ' ' . $text . ' ';
 
-        foreach($words as $word) {
-            if($word['weight'] > $weight) {
+        foreach ($words as $word) {
+            if ($word['weight'] > $weight) {
                 $text = preg_replace('/\W' . $word['text'] . '\W/si', $replaceStr, $text);
             }
         }
@@ -346,8 +347,8 @@ class StringUtils
 
         $weight = 0;
 
-        foreach($words as $word) {
-            if(preg_match_all('/' . $word['text'] . '/si', $text, $matches)) {
+        foreach ($words as $word) {
+            if (preg_match_all('/' . $word['text'] . '/si', $text, $matches)) {
                 $weight += ($word['weight'] * count($matches[0]));
             }
         }
@@ -364,7 +365,7 @@ class StringUtils
 
         // The final result
         $result = array();
-        if(is_array($httpParams)) {
+        if (is_array($httpParams)) {
 
             // Iterate over each key-value parameter
             foreach ($httpParams as $param) {
@@ -419,7 +420,7 @@ class StringUtils
         $password = "";
 
         while ($i <= $length-1) {
-            $password .= $chars{mt_rand(0,strlen($chars)-1)};
+            $password .= $chars{mt_rand(0, strlen($chars)-1)};
             $i++;
         }
         return $password;

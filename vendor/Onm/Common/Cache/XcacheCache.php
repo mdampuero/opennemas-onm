@@ -80,7 +80,10 @@ class XcacheCache extends AbstractCache
     protected function _checkAuth()
     {
         if (ini_get('xcache.admin.enable_auth')) {
-            throw new \BadMethodCallException('To use all features of \Onm\Common\Cache\XcacheCache, you must set "xcache.admin.enable_auth" to "Off" in your php.ini.');
+            throw new \BadMethodCallException(
+                'To use all features of \Onm\Common\Cache\XcacheCache, '
+                .'you must set "xcache.admin.enable_auth" to "Off" in your php.ini.'
+            );
         }
     }
 }
