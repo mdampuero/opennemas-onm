@@ -11,6 +11,13 @@ $menuXml = '<?xml version="1.0"?>
             link="article.php"
         />
         <node
+            module_name="FRONTPAGE_MANAGER"
+            privilege="ARTICLE_FRONTPAGE"
+            title="'.htmlspecialchars(_("New Frontpage Manager"), ENT_QUOTES).'"
+            id="frontpage_manager"
+            link="controllers/frontpagemanager/frontpagemanager.php"
+        />
+        <node
             module_name="STATIC_PAGES_MANAGER"
             privilege="STATIC_ADMIN"
             title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
