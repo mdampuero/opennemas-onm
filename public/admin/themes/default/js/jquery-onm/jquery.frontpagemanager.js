@@ -135,7 +135,10 @@ jQuery(document).ready(function($){
         return false;
     });
 
-    $( "#content-provider").dialog({ position: 'bottom', minWidth: 600 });
+    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false });
+    $('#button_addnewcontents').on('click', function() {
+        $( "#content-provider").dialog('open');
+    });
     $( "#content-provider .content-provider-block-wrapper").tabs({
         ajaxOptions: {
             error: function( xhr, status, index, anchor ) {

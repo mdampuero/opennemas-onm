@@ -34,21 +34,7 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
-                <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="{t}Delete{/t}" title="{t}Delete{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="admin_add" onClick="javascript:confirmar_hemeroteca(this,{$category}, 0);" name="submit_mult" value="Archivar" title="Archivar">
-                        <img border="0" src="{$params.IMAGE_DIR}archive.gif" title="{t}Arquive{/t}" alt="{t}Arquive{/t}" ><br />{t}Arquive{/t}
-                    </a>
-                </li>
+
                 {if $category!='home'}
                 <li>
                     <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 2);" name="submit_mult" value="Frontpage" title="Sugerir Home">
@@ -57,8 +43,8 @@
                 </li>
                 {/if}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);" name="submit_mult" value="Frontpage" title="Frontpage">
-                        <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="Frontpage" ><br />{t}No home{/t}
+                    <a title="More actions">
+                        <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="More actions" ><br />{t}More actions{/t}
                     </a>
                 </li>
                 <li>
@@ -79,6 +65,11 @@
                 <li>
                      <a href="#" onclick="clearcache('{$category}'); return false;" id="button_clearcache">
                          <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
+                     </a>
+                </li>
+                <li>
+                     <a href="#" id="button_addnewcontents">
+                         <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}Add contents{/t}" alt="" /><br />{t}Add contents{/t}
                      </a>
                 </li>
             </ul><!-- /old-button -->
