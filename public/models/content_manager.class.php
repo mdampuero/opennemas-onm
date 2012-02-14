@@ -140,12 +140,15 @@ class ContentManager
                 $content = new $rs->fields['content_type']($rs->fields['pk_fk_content']);
                 // add all the additional properties related with positions and params
 
-                $content->load(array(
-                    'placeholder' => $rs->fields['placeholder'],
-                    'position'    => $rs->fields['position'],
-                    'params'      => unserialize($rs->fields['params']),
-                ));
-                $contents[] = $content;
+                if ($content->in_litter == 0) {
+                    $content->load(array(
+                        'placeholder' => $rs->fields['placeholder'],
+                        'position'    => $rs->fields['position'],
+                        'params'      => unserialize($rs->fields['params']),
+                    ));
+                    $contents[] = $content;
+                }
+
                 $rs->MoveNext();
             }
         }
