@@ -1,43 +1,18 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css"}
+{block name="header-css" append}
     {css_tag href="/bp/screen.css"}
     {css_tag href="/bp/print.css" media="print"}
     <!--[if IE]>{css_tag href="/bp/ie.css"}<![endif]-->
-    {css_tag href="/admin.css"}
-    <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-    {css_tag href="/buttons.css"}
     {css_tag href="/frontpagemanager.css"}
-    {css_tag href="/jquery-ui/ui-lightness/jquery-ui-1.8.16.custom.css"}
 
 {/block}
 
-{block name="js-library"}
-    {script_tag language="javascript" src="/jquery/jquery.min.js"}
-    {script_tag language="javascript" src="/jquery/jquery-ui.js"}
-{/block}
-
-{block name="header-js"}
-    {block name="js-library"}{/block}
+{block name="footer-js" append}
     {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
-    <script type="text/javascript" charset="utf-8" defer>
-    jQuery(document).ready(function () {
-       jQuery('#frontpagemanager').frontpageManager(); 
-    });
-    </script>
-
-    <script type="text/javascript">
-
-        jQuery(document).ready(function() {
-            $( "#content-provider").tabs({
-                ajaxOptions: {
-                    error: function( xhr, status, index, anchor ) {
-                        $( anchor.hash ).html(
-                            "<div>Couldn't load this tab. We'll try to fix this as soon as possible. " +
-                            "If this wouldn't be a demo.</div>" );
-                    }
-                }
-            }); 
+    <script defer="defer">
+        jQuery(document).ready(function($) {
+           jQuery('#frontpagemanager').frontpageManager();
         });
 
 
@@ -45,10 +20,9 @@
 
         // Check when some element is dragged to show the warnings-validation hit
         // remembering to save positions
-        // 
+        //
 
         // Add the tabs for content-providers
-
 
     // ]]>
     </script>
@@ -117,7 +91,7 @@
         <ul id="categories" class="pills">
             {acl hasCategoryAccess=0}
             <li>
-                <a href="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list&category=home" id='link_home' {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
+                <a href="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list&amp;category=home" id='link_home' {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
             </li>
             {/acl}
             {include file="menu_categories.tpl" home="/admin/controllers/frontpagemanager/frontpagemanager.php?action=list"}
@@ -125,15 +99,12 @@
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
 
-        <div id="frontpagemanager" data-category="{$category_id}">
+        <div id="frontpagemanager" data-category="{$category_id}" class="clearfix">
             {$layout}
         </div><!-- /frontpagemanager -->
 
-        <div id="content-provider" class="clearfix">
-            <div id="toggler">
-                Toggle content provider
-            </div><!-- /toggler -->
-            <div class="content-provider-block-wrapper wrapper-content">
+        <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
+            <div class="content-provider-block-wrapper wrapper-content clearfix">
                 <ul>
                     <li>
                         <a href="#empty">{t}Out of frontpage{/t}</a>
@@ -162,7 +133,7 @@
 
         </div><!-- /content-provider -->
     </div>
-        
+
     <input type="hidden"  id="category" name="category" value="{$category}">
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id|default}" />
