@@ -46,7 +46,8 @@
     };
 
     $.fn.frontpageManager.defaults = {
-        foo: 'bar'
+        placeholder_element_class: 'placeholder-element',
+
     };
 
     $.fn.frontpageManager.settings = {};

@@ -330,3 +330,7 @@ div#content-provider #toggler{
 .ui-dialog .ui-icon-closethick {
     background:url(../images/tb-close.png) top left no-repeat;
 }
+
+.ui-sortable-helper {
+    z-index:9999 !important;
+}

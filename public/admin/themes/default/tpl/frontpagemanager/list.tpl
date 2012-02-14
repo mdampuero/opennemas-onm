@@ -47,7 +47,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}home_no50.png" title="{t}No home{/t}" alt="More actions" ><br />{t}More actions{/t}
                     </a>
                 </li>
-                <li>
+                <li style="display:none">
                     <button type="button" style="cursor:pointer; background-color: #e1e3e5; border: 0px; width: 95px;" onClick="javascript:checkAll(this.form['selected_fld[]'],'select_button');">
                         <img id="select_button" class="icon" status="0" src="{$params.IMAGE_DIR}select_button.png" title="{t}Select all{/t}" alt="{t}Select all{/t}"  status="0">
                     </button>
@@ -62,7 +62,7 @@
                         <img border="0" src="{$params.IMAGE_DIR}preview.png" title="{t}Preview{/t}" alt="{t}Preview{/t}" ><br />{t}Preview{/t}
                     </a>
                 </li>
-                <li>
+                <li style="display:none">
                      <a href="#" onclick="clearcache('{$category}'); return false;" id="button_clearcache">
                          <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="" /><br />{t}Clean cache{/t}
                      </a>
@@ -97,29 +97,34 @@
         <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
             <div class="content-provider-block-wrapper wrapper-content clearfix">
                 <ul>
-                    <li>
-                        <a href="#empty">{t}Out of frontpage{/t}</a>
-                    </li>
                     {if $category neq 'home'}
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
                     </li>
                     {else}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-content-provider&category={$category}">{t}Suggested articles{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-content-provider&amp;category={$category}">{t}Suggested articles{/t}</a>
                     </li>
                     {/if}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&category={$category}">{t}Widgets{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/widget/widget.php?action=content-provider&amp;category={$category}">{t}Widgets{/t}</a>
                     </li>
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&category={$category}">{t}Opinions{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&amp;category={$category}">{t}Opinions{/t}</a>
+                    </li>
+
+                    <li>
+                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=content-provider&amp;category={$category}">{t}Albums{/t}</a>
+                    </li>
+
+                    <li>
+                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/image/image.php?action=content-provider&amp;category={$category}">{t}Images{/t}</a>
+                    </li>
+
+                    <li>
+                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/image/image.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
                     </li>
                 </ul>
-
-                <div id="empty">
-                    {t}Drop blocks here to get them out of frontpage{/t}
-                </div><!-- /empty -->
             </div>
 
         </div><!-- /content-provider -->
