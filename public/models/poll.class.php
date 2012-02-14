@@ -225,7 +225,7 @@ class Poll extends Content {
     function vote($pk_item,$ip){
         $this->used_ips = $this->add_count($this->used_ips,$ip);
         if (!$this->used_ips){
-                $GLOBALS['application']->setcookie_secure("polls".$this->id, 'true', time()+60*60*24*30);
+                Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
                 return(false);
         }
 
@@ -260,7 +260,7 @@ class Poll extends Content {
         }
 
         //creamos la cookie
-        $GLOBALS['application']->setcookie_secure("polls".$this->id, 'true', time()+60*60*24*30);
+        Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
 
         return(true);
     }

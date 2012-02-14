@@ -156,7 +156,7 @@ switch($action) {
                                $msg = 'Ya ha votado esta encuesta';
                           } else {
                                $msg = 'Gracias, por su voto';
-                               $GLOBALS['application']->setcookie_secure($cookie, 'tks');
+                               Application::setCookieSecure($cookie, 'tks');
                           }
                         }
                         $tpl->assign('msg',$msg);
@@ -198,7 +198,7 @@ switch($action) {
         if(!empty($poll->id)) {
             $cookie="polls".$pollId;
             if (isset($_COOKIE[$cookie])) {
-                 $GLOBALS['application']->setcookie_secure($cookie, 'tks');
+                 Application::setCookieSecure($cookie, 'tks');
             }
             if (isset($_POST['respEncuesta'])
                     && !empty($_POST['respEncuesta'])

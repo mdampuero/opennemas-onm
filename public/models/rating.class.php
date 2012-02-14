@@ -166,7 +166,7 @@ class Rating
         }
 
         //creamos la cookie
-        $GLOBALS['application']->setcookie_secure(
+        Application::setCookieSecure(
             "vote" . $this->pk_rating,
             'true',
             time() + 60 * 60 * 24 * 30

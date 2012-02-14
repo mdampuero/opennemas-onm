@@ -147,7 +147,7 @@ class Vote
         }
 
         //creamos la cookie
-        $GLOBALS['application']->setcookie_secure(
+       Application::setCookieSecure(
             "vote" . $this->pk_vote,
             'true',
             time() + 60 * 60 * 24 * 30
