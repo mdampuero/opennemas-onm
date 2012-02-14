@@ -45,8 +45,10 @@ if(!empty($category_name)) {
                 ) );
 } else {
      $category_real_name = 'Portada';
+     $category_name = 'home';
      $tpl->assign(array(
                         'category_real_name' => $category_real_name ,
+                        'category_name'=>$category_name
                 ) );
 }
 /******************************  CATEGORIES & SUBCATEGORIES  *********************************/
