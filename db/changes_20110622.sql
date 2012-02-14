@@ -1,5 +1,5 @@
 --09-02-2012
-ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL
+ALTER TABLE  `albums` CHANGE  `cover`  `cover_id` BIGINT( 255 ) NULL DEFAULT NULL;
 
 --03-02-2012
 UPDATE contents SET starttime = created WHERE starttime = '0000-00-00 00:00:00';

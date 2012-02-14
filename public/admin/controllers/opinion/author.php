@@ -26,7 +26,7 @@ if( isset($_REQUEST['action']) ) {
 
         case 'list':
 
-            Acl::checkOrForward('USER_ADMIN');
+            Acl::checkOrForward('AUTHOR_ADMIN');
 
 			$author = new Author();
 			$cm = new ContentManager();

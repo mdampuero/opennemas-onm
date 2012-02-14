@@ -83,7 +83,7 @@
                                onclick="this.select();" placeholder="{t}Search images by title...{/t}" />
                         </td>
                         <td>
-                            <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listbyCategory',this.options[this.selectedIndex].value,'', 1);">
+                            <select style="width:140px" id="category_imag" name="category_imag" class="required" onChange="getGalleryImages('listByCategory',this.options[this.selectedIndex].value,'', 1);">
                                 <option value="0">GLOBAL</option>
                                     {section name=as loop=$allcategorys}
                                         <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -201,7 +201,7 @@
                             </div>
                         </td>
                         <td>
-                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listbyCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
+                            <select style="width:140px"  id="category_video" name="category_video" class="required" onChange="getGalleryVideos('listByCategory',this.options[this.selectedIndex].value,'', 1,'videos');">
                                 <option value="0">GLOBAL</option>
                                 {section name=as loop=$allcategorys}
                                     <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
@@ -219,8 +219,8 @@
                </div>
             </div>
         </td>
-    </tr>   
-    
+    </tr>
+
     {/is_module_activated}
 </table>
 
@@ -242,7 +242,7 @@ jQuery(document).ready(function($){
         };
     });
 
-    
+
 });
 getGalleryImages('listByCategory','{$category}','','1');
 </script>

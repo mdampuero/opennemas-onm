@@ -616,7 +616,7 @@ HTMLCODE;
     * Other available tags: @tutorial, @version, @copyright, @deprecated,
     * @example, @ignore, @link, @see, @since
     */
-    public function setcookie_secure($name, $value, $expires=0, $domain='/')
+    static public function setCookieSecure($name, $value, $expires=0, $domain='/')
     {
         setcookie(
             $name, $value, $expires, $domain,
