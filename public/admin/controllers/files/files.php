@@ -46,18 +46,18 @@ list($parentCategories, $subcat, $datos_cat) = $ccm->getArraysMenu($category, $c
 $tpl->assign('subcat', $subcat);
 $tpl->assign('allcategorys', $parentCategories);
 $tpl->assign('datos_cat', $datos_cat);
- 
+
 
 $action = filter_input( INPUT_POST, 'action' , FILTER_SANITIZE_STRING );
 if (!isset($action)) {
     $action = filter_input( INPUT_GET, 'action' , FILTER_SANITIZE_STRING, array('options' => array('default' => 'list')) );
 }
 
- 
+
 switch($action) {
-    case 'list':  
+    case 'list':
         if($category == 0) {
-            $nameCategory = 'GLOBAL';  
+            $nameCategory = 'GLOBAL';
             $cm = new ContentManager();
             $total_num_photos=0;
             $files = array();
@@ -65,7 +65,7 @@ switch($action) {
             $sub_size = array();
             $num_photos = array();
             $fullcat = $ccm->order_by_posmenu($ccm->categories);
-            
+
             foreach($parentCategories as $k => $v) {
                 $num_photos[$k]= $ccm->count_content_by_type($v->pk_content_category, $contentType);
                 $total_num_photos += $num_photos[$k];
@@ -106,13 +106,13 @@ switch($action) {
                 $i++;
             }
             if(!empty($parentCategories) && !empty ($aux_categories)) {
-                foreach($parentCategories as $k => $v) {                                  
+                foreach($parentCategories as $k => $v) {
                     foreach ($aux_categories as $ind) {
                         if (!empty ($sub_files[$ind][0])) {
-                            foreach ($sub_files[$ind][0] as $value) {                                
+                            foreach ($sub_files[$ind][0] as $value) {
                                 if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
                                     if ($ccm->get_id($ccm->get_father($value->catName)) ) {
-                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);     
+                                        $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
 
                                     }
                                 }
@@ -124,7 +124,7 @@ switch($action) {
                     }
                 }
             }
-            
+
             $tpl->assign('total_img', $total_num_photos);
             $tpl->assign('total_size', $total_size);
             $tpl->assign('size', $size);
@@ -136,7 +136,7 @@ switch($action) {
 
         } else {
             $cm = new ContentManager();
-           
+
             list($attaches, $pager)= $cm->find_pages('Attachment', 'fk_content_type=3 ',
                                                      'ORDER BY  created DESC ',$page, ITEMS_PAGE,  $category);
             $tpl->assign('paginacion', $pager);
@@ -151,7 +151,7 @@ switch($action) {
 
                     if (is_file($ruta)) {
                         $status[$i]='1'; //Si existe
-                        $archivo->set_available(1, $_SESSION['userid']);
+                      
                     } else {
                         $status[$i]='0';
                         $archivo->set_available(0, $_SESSION['userid']);
@@ -187,48 +187,113 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
     break;
 
-    case 'delete':
-         Acl::checkOrForward('FILE_DELETE');
-        //Mirar si tiene relacion
-        $att = new Attachment($_REQUEST['id']);
-        $rel= new Related_content();
-        $relationes=array();
-        $relationes = $rel->get_content_relations( $_REQUEST['id'] );//de portada
-        if(!empty($relationes)){
-            $msg = "El fichero  '".$att->title."' , está relacionado con los siguientes articulos:  ";
-            $cm= new ContentManager();
-            $relat = $cm->getContents($relationes);
-            foreach($relat as $contents) {
-                  $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
-            }
-            $msg.="\n \n ¡Ojo! Si borra el fichero se eliminaran las relaciones del fichero con los articulos";
-            $msg.="\n ¿Desea eliminarlo igualmente?";
-        //    $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-        //    $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-            echo $msg;
-            exit(0);
-        }else{
-            $msg="¿Está seguro que desea eliminar '".$att->title."' ?";
-        //   $msg.='<br /><a href="'.$_SERVER['SCRIPT_NAME'].'?action=yesdel&id='.$_REQUEST['id'].'">  <img src="themes/default/images/ok.png" title="SI">  </a> ';
-        //   $msg.='   <a href="#" onClick="hideMsgContainer(\'msgBox\');"> <img src="themes/default/images/no.png" title="NO">  </a></p>';
-           echo $msg;
-           exit(0);
-        }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&message='.$msg.'&page='.$page);
-     break;
+    case 'getRelations':
 
-    case 'yesdel':
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+
+        $relations=array();
+        $msg ='';
+        $relations = Related_content::get_content_relations($id);
+
+        if (!empty($relations)) {
+            $msg = sprintf(_("<br>The album has some relations"));
+            $cm = new ContentManager();
+            $relat = $cm->getContents($relations);
+            foreach($relat as $contents) {
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
+            }
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this file and its relations?");
+
+            echo $msg;
+        }
+
+        exit(0);
+        break;
+
+    case 'delete':
         Acl::checkOrForward('FILE_DELETE');
-        if($_REQUEST['id']){
-            $att = new Attachment($_REQUEST['id']);
+
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if($id){
+            $att = new Attachment($id);
             //Delete relations
             $rel= new Related_content();
-            $rel->delete_all($_REQUEST['id']);
-            $att->delete( $_REQUEST['id'],$_SESSION['userid'] );
+            $rel->delete_all($id);
+            $att->delete( $id ,$_SESSION['userid'] );
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
-     break;
 
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
+
+    break;
+
+    case 'change_status':
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        Acl::checkOrForward('FILE_AVAILABLE');
+        $att = new Attachment($id);
+
+        //Publicar o no,
+        $status = filter_input(INPUT_GET,'status',FILTER_DEFAULT);
+
+        //Se hace en set_available
+        $att->set_available($status, $_SESSION['userid']);
+
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$att->category.'&page='.$page);
+
+    break;
+
+    case 'batchFrontpage':
+
+        Acl::checkOrForward('FILE_AVAILABLE');
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            if (is_array($fields)) {
+                foreach ($fields as $i) {
+                    $att = new Attachment($i);
+                    $att->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $att->set_favorite($status);
+                    }
+                }
+            }
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
+                             $category . '&page=' . $page);
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('FILE_DELETE');
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $msg = 'Las opiniones ';
+
+            if(is_array($fields)) {
+                foreach($fields as $i) {
+                    $opinion = new Opinion($i);
+                    $rel = new Related_content();
+                    $relationes = array();
+                    $relationes = $rel->get_content_relations( $i );//de portada
+
+                    if(!empty($relationes)) {
+                        $alert = 'ok';
+                        $msg .= " \"" . $opinion->title . "\",    \n";
+                    } else {
+                        $opinion->delete($i, $_SESSION['userid'] );
+                    }
+                }
+            }
+        }
+        if(isset($alert) && $alert =='ok') {
+            $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
+            m::add($msg);
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
+                             $_SESSION['type'] .'&page=' . $page);
+    break;
 
     case 'upload':
 
@@ -251,7 +316,7 @@ switch($action) {
             $dateStamp = date('Ymd');
             $directoryDate =date("/Y/m/d/");
             $basePath = MEDIA_PATH.'/'.FILE_DIR.$directoryDate ;
-            
+
             $fileName = $_FILES['path']['name'];
             $fileType   = $_FILES['path']['type'];
             $fileSize = $_FILES['path']['size'];
@@ -270,7 +335,7 @@ switch($action) {
             if( !file_exists($basePath) ) {
                 mkdir($basePath, 0777, true);
             }
-            
+
             // Move uploaded file
             $uploadStatus = move_uploaded_file($_FILES['path']['tmp_name'], $basePath.$fileName);
 
