@@ -22,12 +22,11 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  * Check privileges
 */
 Acl::checkOrForward('OPINION_ADMIN');
-
+ 
 /**
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', _('Opinion Manager'));
 
 // FIXME: usar en template {$smarty.const.MEDIA_IMG_PATH_URL}
 $tpl->assign('MEDIA_IMG_PATH_URL', MEDIA_IMG_PATH_WEB);
@@ -392,10 +391,34 @@ switch($action) {
                              $_SESSION['type'] . '&id=' . $opinion->id);
     break;
 
+    case 'getRelations':
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+
+        $relations=array();
+        $msg ='';
+        $relations = Related_content::get_content_relations($id);
+
+        if (!empty($relations)) {
+            $msg = sprintf(_("<br>The album has some relations"));
+            $cm = new ContentManager();
+            $relat = $cm->getContents($relations);
+            foreach($relat as $contents) {
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
+            }
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this opinion and its relations?");
+
+            echo $msg;
+        }
+
+        exit(0);
+        break;
+
     case 'delete':
         Acl::checkOrForward('OPINION_DELETE');
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         $opinionCheck = new Opinion();
-        $opinionCheck->read($_REQUEST['id']);
+        $opinionCheck->read($id);
 
         if( !Acl::isAdmin() &&
                 !Acl::check('CONTENT_OTHER_UPDATE') &&
@@ -403,52 +426,24 @@ switch($action) {
             m::add(_("You can't delete this opinion because you don't have enought privileges.") );
         }
 
-        $opinion = new Opinion($_REQUEST['id']);
-        $rel = new Related_content();
-        $relationes = array();
-        $relationes = $rel->get_content_relations( $_REQUEST['id'] ); //de portada
-
-        if(!empty($relationes)) {
-            $msg = " La opini&oacute;n  '" . $opinion->title . "' , está relacionada con los siguientes articulos: \n";
-            $cm = new ContentManager();
-            $relat = $cm->getContents($relationes);
-
-            foreach($relat as $contents) {
-                $msg .= " - " . strtoupper($contents->content_type) . " - " . $contents->category_name .
-                        " " . $contents->title . "\n";
-            }
-
-            $msg .= "\n\n¡Ojo! Si la borra, se eliminaran las relaciones de la opinion con los articulos";
-            $msg .= "\n¿Desea eliminarlo igualmente?";
-
-            echo $msg;
-            exit(0);
-        } else {
-            $msg =" ¿Está seguro que desea eliminar '" . $opinion->title . "' ?";
-
-            echo $msg;
-            exit(0);
-        }
-    break;
-
-    case 'yesdel':
-        Acl::checkOrForward('OPINION_DELETE');
-        if($_REQUEST['id']) {
+        if($id) {
             //Delete relations
             $rel= new Related_content();
-            $rel->delete_all($_REQUEST['id']);
+            $rel->delete_all($id);
 
-            $opinion = new Opinion($_REQUEST['id']);
-            $opinion->delete($_REQUEST['id'], $_SESSION['userid']);
+            $opinion = new Opinion($id);
+            $opinion->delete($id, $_SESSION['userid']);
+
             require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
             $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('opinion|1');
         }
+
         if( $_SESSION['desde']=='list_pendientes'){
             Application::forward(SITE_URL_ADMIN.'/article.php?action='.$_SESSION['desde'].'&category='.$_REQUEST['category'].'&page='.$page);
         }else{
-            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $opinion->category . '&page=' . $page);
+            Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
+                             $_SESSION['type'] . '&page=' . $page);
         }
     break;
 
@@ -474,57 +469,7 @@ switch($action) {
         }
     break;
 
-    case 'mfrontpage':
-        Acl::checkOrForward('OPINION_FRONTPAGE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
-            $fields = $_REQUEST['selected_fld'];
-            $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
-            if(is_array($fields)) {
-                foreach($fields as $i) {
-                    $opinion = new Opinion($i);
-                    $opinion->set_available($status, $_SESSION['userid']);
-                    //  $opinion->set_status($_REQUEST['id'],$_SESSION['userid']);
-                    //Se reutiliza el id para pasar el estatus
-                }
-            }
-        }
-
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                             $_SESSION['type'] . '&page=' . $page);
-    break;
-
-    case 'mdelete':
-        Acl::checkOrForward('OPINION_DELETE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
-            $fields = $_REQUEST['selected_fld'];
-
-            $msg = 'Las opiniones ';
-
-            if(is_array($fields)) {
-                foreach($fields as $i) {
-                    $opinion = new Opinion($i);
-                    $rel = new Related_content();
-                    $relationes = array();
-                    $relationes = $rel->get_content_relations( $i );//de portada
-
-                    if(!empty($relationes)) {
-                        $alert = 'ok';
-                        $msg .= " \"" . $opinion->title . "\",    \n";
-                    } else {
-                        $opinion->delete($i, $_SESSION['userid'] );
-                    }
-                }
-            }
-        }
-        if(isset($alert) && $alert =='ok') {
-            $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
-            m::add($msg);
-        }
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
-                             $_SESSION['type'] .'&page=' . $page);
-    break;
-
-    case 'inhome_status':
+     case 'inhome_status':
         Acl::checkOrForward('OPINION_HOME');
         $opinion = new Opinion($_REQUEST['id']);
         $alert='';
@@ -561,47 +506,102 @@ switch($action) {
                              '&page=' . $page);
     break;
 
-    case 'm_inhome_status':
-        Acl::checkOrForward('OPINION_HOME');
-        $fields = $_REQUEST['selected_fld'];
-        $alert = '';
+    case 'batchFrontpage':
 
-        if(is_array($fields)) {
-            $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
+        Acl::checkOrForward('OPINION_AVAILABLE');
 
-            //Usa id para pasar el estatus
-            foreach($fields as $i) {
-                $opinion = new Opinion($i);
-                // FIXME: evitar otros valores erróneos
-                if (($status == 1) && ($opinion->type_opinion != 1)  && ($opinion->type_opinion != 2))  {
-                        $opinion->set_inhome($status, $_SESSION['userid']);
-                        $opinion->set_status($status, $_SESSION['userid']);
-                        $opinion->set_available($status, $_SESSION['userid']);
-                } else {
-                    $opinion->set_inhome($status, $_SESSION['userid']);
-                }
-            }
-            $configurations = s::get('opinion_settings');
-            $numEditorial = $configurations['total_editorial'];
-            $numDirector = $configurations['total_director'];
-            if($numEditorial > 0) {
-                $total = $opinion->count_inhome_type(1);
-                if ($total != $numEditorial) {
-                    $type = 'editorial';
-                    m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
-                }
-            }
-            if($numDirector > 0) {
-                $total = $opinion->count_inhome_type(2);
-                if ($total != $numDirector) {
-                     $type = 'opinion del director';
-                     m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            if (is_array($fields)) {
+                foreach ($fields as $i) {
+                    $opinion = new Opinion($i);
+                    $opinion->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $opinion->set_favorite($status);
+                    }
                 }
             }
         }
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
+                             $_SESSION['type'] . '&page=' . $page);
+    break;
 
+    case 'batchInHome':
+        Acl::checkOrForward('OPINION_HOME');
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            $alert = '';
+
+            if(is_array($fields)) {
+                foreach($fields as $i) {
+                    $opinion = new Opinion($i);
+                    // FIXME: evitar otros valores erróneos
+                    if (($status == 1) && ($opinion->type_opinion != 1)  && ($opinion->type_opinion != 2))  {
+                            $opinion->set_inhome($status, $_SESSION['userid']);
+                            $opinion->set_status($status, $_SESSION['userid']);
+                            $opinion->set_available($status, $_SESSION['userid']);
+                    } else {
+                        $opinion->set_inhome($status, $_SESSION['userid']);
+                    }
+                }
+                $configurations = s::get('opinion_settings');
+                $numEditorial = $configurations['total_editorial'];
+                $numDirector = $configurations['total_director'];
+                if($numEditorial > 0) {
+                    $total = $opinion->count_inhome_type(1);
+                    if ($total != $numEditorial) {
+                        $type = 'editorial';
+                        m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type) );
+                    }
+                }
+                if($numDirector > 0) {
+                    $total = $opinion->count_inhome_type(2);
+                    if ($total != $numDirector) {
+                        $type = 'opinion del director';
+                        m::add( sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type) );
+                    }
+                }
+            }
+        }
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
                              $_SESSION['type'] . '&alert=' . $alert . '&page=' . $page);
+    break;
+
+
+    case 'batchDelete':
+        Acl::checkOrForward('OPINION_DELETE');
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $msg = 'Las opiniones ';
+
+            if(is_array($fields)) {
+                foreach($fields as $i) {
+                    $opinion = new Opinion($i);
+                    $rel = new Related_content();
+                    $relationes = array();
+                    $relationes = $rel->get_content_relations( $i );//de portada
+
+                    if(!empty($relationes)) {
+                        $alert = 'ok';
+                        $msg .= " \"" . $opinion->title . "\",    \n";
+                    } else {
+                        $opinion->delete($i, $_SESSION['userid'] );
+                    }
+                }
+            }
+        }
+        if(isset($alert) && $alert =='ok') {
+            $msg .= " tienen relacionados.  !Elimínelos uno a uno!";
+            m::add($msg);
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&type_opinion=' .
+                             $_SESSION['type'] .'&page=' . $page);
     break;
 
     case 'save_positions':
