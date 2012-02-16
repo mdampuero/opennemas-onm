@@ -53,6 +53,9 @@ $module = filter_input(INPUT_GET,'module',FILTER_VALIDATE_INT, array('options' =
 
 $tpl->assign('category', $category);
 
+$commentStatus = filter_input( INPUT_GET, 'comment_status' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
+$tpl->assign('comment_status', $commentStatus);
+
 function buildFilter($filter) {
     $filters = array();
     $url = array();
@@ -75,7 +78,7 @@ function buildFilter($filter) {
 
 switch($action) {
 
-    case 'list': 
+    case 'list':
 
         // Get all categories for the menu
         $ccm = ContentCategoryManager::get_instance();
@@ -89,12 +92,10 @@ switch($action) {
         $tpl->assign('content_types', $content_types);
 
         $cm = new ContentManager();
-        $commentStatus = filter_input ( INPUT_GET, 'comment_status' , FILTER_SANITIZE_NUMBER_INT, array('options' => array('default' => 0)) );
 
-        $tpl->assign('comment_status', $commentStatus);
         $filter = "content_status = ".$commentStatus;
         $items_page = s::get('items_per_page') ?: 20;
-     
+
         if($category == 'home') {
             $comment = new Comment();
 
@@ -111,17 +112,17 @@ switch($action) {
 
             $comments = array();
             if ($module != 0) {
-                
+
                 $allComments = $cm->find_all('Comment', $filter , ' ORDER BY  created DESC ');
-                
+
                 foreach ($allComments as $comm) {
                     $comm->content_type = ContentType::getContentTypeByContentId($comm->fk_content);
 
                     if ($comm->content_type == $module) {
                         $comments[] = $comm;
-                    }                
+                    }
                 }
-                
+
                 $pager_options = array(
                     'mode'        => 'Sliding',
                     'perPage'     => $items_page,
@@ -155,12 +156,12 @@ switch($action) {
 
                     if ($comm->content_type == $module) {
                         $comments[] = $comm;
-                    }                
-                } 
+                    }
+                }
             } else {
                 $comments = $allComments;
             }
-            
+
             $tpl->assign('paginacion', $pager);
             $tpl->assign('comments', $comments);
 
@@ -191,36 +192,36 @@ switch($action) {
         $tpl->assign('votes', $votes);
         $tpl->display('comment/list.tpl');
 
-         
+
     break;
 
     case 'new': {
         Acl::checkOrForward('COMMENT_CREATE');
-        
+
     } break;
 
-    case 'read': 
+    case 'read':
 
         Acl::checkOrForward('COMMENT_UPDATE');
         $contentID = filter_input ( INPUT_GET, 'id' , FILTER_SANITIZE_NUMBER_INT);
 
         // habrá que tener en cuenta el tipo
         $comment = new Comment( $contentID );
-        if(!is_null($comment->pk_comment)) {           
+        if(!is_null($comment->pk_comment)) {
 
             $tpl->assign('comment', $comment);
 
             $article = new Content( $comment->fk_content );
             $tpl->assign('article', $article);
 
-           
+
         }
         $tpl->display('comment/read.tpl');
 
     break;
 
-    case 'update': 
-        
+    case 'update':
+
         Acl::checkOrForward('COMMENT_UPDATE');
         $comment = new Comment($_REQUEST['id']);
 
@@ -237,31 +238,31 @@ switch($action) {
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $category . '&page=' . $page);
+                             $category . '&comment_status=' . $commentStatus . '&page=' . $page);
     break;
 
-    case 'create': 
+    case 'create':
         Acl::checkOrForward('COMMENT_CREATE');
         $comment = new Comment();
         if($comment->create( $_POST )) {
             Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                                 $category . '&page=' . $page);
+                                 $category . '&comment_status=' . $commentStatus . '&page=' . $page);
         } else {
             $tpl->assign('errors', $comment->errors);
         }
     break;
 
-    case 'delete':  
+    case 'delete':
 
         Acl::checkOrForward('COMMENT_DELETE');
         $comment = new Comment();
         $comment->delete($_GET['id'], $_SESSION['userid']);
-               
+
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                              $category . '&page=' . $page /*.'&comment_status='.$_GET['comment_status']*/);
     break;
 
-    case 'change_status': 
+    case 'change_status':
         Acl::checkOrForward('COMMENT_AVAILABLE');
         if((isset ($_REQUEST['tipo']) && $_REQUEST['tipo'] == 'encuesta') || ($category == 'encuesta')){
             $comment = new PC_Comment($_REQUEST['id']);
@@ -282,54 +283,43 @@ switch($action) {
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $category . '&comment_status=' . $_REQUEST['comment_status'] . '&page=' .
+                             $category . '&comment_status=' . $commentStatus . '&page=' .
                              $page);
     break;
 
-    case 'mfrontpage': 
+    case 'batchFrontpage':
         Acl::checkOrForward('COMMENT_AVAILABLE');
-
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
-            $fields = $_REQUEST['selected_fld'];
-            $status = $_REQUEST['id'];
-
-            if(is_array($fields)) {
-                foreach($fields as $i ) {
-                    $comment = new Comment($i);
-
-                    if(!is_null($comment->pk_comment)) {
-                        // Ya se cambia en el set_available  $comment->set_status($status,$_SESSION['userid']);
-                        //Se reutiliza el id para pasar el estatus
-                        $comment->set_available($status, $_SESSION['userid']);
-                        $article = new Article($comment->fk_content);
-
-                        //Para que cambie la fecha changed.
-                        $article->set_status($article->content_status, $article->fk_user_last_editor);
-                    } else {
-                        $comment = new PC_Comment($i);
-                        $comment->set_status($status, $_SESSION['userid']);
-                    }
-                }
-            }
-        }
-
-        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $category . '&page=' . $page);
-    break;
-
-    case 'mdelete': 
-        Acl::checkOrForward('COMMENT_DELETE');
         
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
-            $fields = $_REQUEST['selected_fld'];
-
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if(is_array($fields)) {
                 foreach($fields as $i ) {
                     $comment = new Comment($i);
+
                     if(!is_null($comment->pk_comment)) {
-                        $comment->delete( $i, $_SESSION['userid'] );
-                    } else {
-                        $comment = new PC_Comment($i);
+                        $comment->set_available($status, $_SESSION['userid']);
+                        //$article = new Article($comment->fk_content);
+                        //Para que cambie la fecha changed.
+                        //$article->set_status($article->content_status, $article->fk_user_last_editor);
+                    }
+                }
+            }
+        }
+
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
+                             $category . '&comment_status=' . $commentStatus . '&page=' . $page);
+    break;
+
+    case 'batchDelete':
+        Acl::checkOrForward('COMMENT_DELETE');
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+             if(is_array($fields)) {
+                foreach($fields as $i ) {
+                    $comment = new Comment($i);
+                    if(!is_null($comment->pk_comment)) {
                         $comment->delete( $i, $_SESSION['userid'] );
                     }
                 }
@@ -337,10 +327,10 @@ switch($action) {
         }
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
-                             $category . '&comment_status=' . $_REQUEST['comment_status'] . '&page=' . $page);
+                             $category . '&comment_status=' . $commentStatus . '&page=' . $page);
     break;
 
-    default: 
+    default:
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&category=' .
                              $category . '&page=' . $page);
     break;
