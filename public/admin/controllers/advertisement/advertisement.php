@@ -25,42 +25,43 @@ require_once('./advertisement_events.php');
  * Setup view
 */
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
-$tpl->assign('titulo_barra', 'Advertisement Management');
- 
+
 function buildFilter($filter) {
     $filters = array();
     $url = array();
 
     $filters[] = $filter;
 
-    if(isset($_REQUEST['filter']['type_advertisement'])
-       && ($_REQUEST['filter']['type_advertisement'] >= 0)) {
-        $filters[] = '`type_advertisement`=' . $_REQUEST['filter']['type_advertisement'];
+    $definedFilters = isset($_GET['filter'])?$_GET['filter']:'';
 
-        $url[] = 'filter[type_advertisement]=' . $_REQUEST['filter']['type_advertisement'];
+    if(isset($definedFilters['type_advertisement'])
+       && ($definedFilters['type_advertisement'] >= 0)) {
+        $filters[] = '`type_advertisement`=' . $definedFilters['type_advertisement'];
+
+        $url[] = 'filter[type_advertisement]=' . $definedFilters['type_advertisement'];
     }
 
-    if(isset($_REQUEST['filter']['available'])
-       && ($_REQUEST['filter']['available'] >= 0)) {
-        if($_REQUEST['filter']['available']==1) {
+    if(isset($definedFilters['available'])
+       && ($definedFilters['available'] >= 0)) {
+        if($definedFilters['available']==1) {
             $filters[] = '`available`=1';
         } else {
             $filters[] = '(`available`<>1 OR `available` IS NULL)';
         }
 
-        $url[] = 'filter[available]=' . $_REQUEST['filter']['available'];
+        $url[] = 'filter[available]=' . $definedFilters['available'];
     }
 
-    if(isset($_REQUEST['filter']['type'])
-       && ($_REQUEST['filter']['type'] >= 0)) {
+    if(isset($definedFilters['type'])
+       && ($definedFilters['type'] >= 0)) {
         // with_script == 1 => is script banner, otherwise is a media banner
-        if($_REQUEST['filter']['type']==1) {
+        if($definedFilters['type']==1) {
             $filters[] = '`with_script`=1';
         } else {
             $filters[] = '(`with_script`<>1 OR `with_script` IS NULL)';
         }
 
-        $url[] = 'filter[type]=' . $_REQUEST['filter']['type'];
+        $url[] = 'filter[type]=' . $definedFilters['type'];
     }
 
     return array( implode(' AND ',$filters), implode('&amp;', $url) );
@@ -78,7 +79,7 @@ if(empty($category)) {
 }
 if(is_array($category)){
     $category = array_shift($category);
-    
+
 }
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
@@ -111,12 +112,13 @@ switch($action) {
         $tpl->assign('map', $map);
 
         // Filters
+        $filter_options = array();
         $map = array('-1' => _("-- All --")) + $map;
         $filter_options['type_advertisement'] = $map;
         $filter_options['available'] = array('-1' => _("-- All --"), '0' => _("No published"), '1' => _("Published"));
         $filter_options['type']      = array('-1' => _("-- All --"), '0' => _("Multimedia"), '1' => _("Javascript"));
         $tpl->assign('filter_options', $filter_options);
-        
+
         $cm = new ContentManager();
         // ContentManager::find_pages(<TIPO_CONTENIDO>, <CLAUSE_WHERE>, <CLAUSE_ORDER>,<PAGE>,<ITEMS_PER_PAGE>,<CATEGORY>);
         list($advertisements, $pager)= $cm->find_pages('Advertisement',
@@ -180,7 +182,7 @@ switch($action) {
         $tpl->assign('advertisement', $advertisement);
 
         $adv = $advertisement->img;
- 
+
         if(isset($adv) && (!empty($adv))) {
             //Buscar foto where pk_foto=img1
             $photo1 = new Photo($adv);
@@ -240,7 +242,6 @@ switch($action) {
 
     case 'validate':
 
-
         $advertisement = null;
         if(empty($_POST["id"])) {
              Acl::checkOrForward('ADVERTISEMENT_CREATE');
@@ -296,16 +297,16 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
     break;
 
-    case 'mfrontpage':
+    case 'batchFrontpage':
         Acl::checkOrForward('ADVERTISEMENT_AVAILA');
 
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
-            $fields = $_REQUEST['selected_fld'];
-
+         if(isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
+            $fields = $_POST['selected_fld'];
+            $status = filter_input ( INPUT_POST, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if(is_array($fields)) {
                 foreach($fields as $i ) {
                     $advertisement = new Advertisement($i);
-                    $advertisement->set_available($_REQUEST['id'],$_SESSION['userid']);   //Se reutiliza el id para pasar el estatus
+                    $advertisement->set_available($status,$_SESSION['userid']);   //Se reutiliza el id para pasar el estatus
                 }
             }
         }
@@ -313,11 +314,11 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page.'&'.$query_string);
     break;
 
-    case 'mdelete':
+    case 'batchDelete':
         Acl::checkOrForward('ADVERTISEMENT_DELETE');
 
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
-            $fields = $_REQUEST['selected_fld'];
+        if(isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
+            $fields = $_POST['selected_fld'];
             if(is_array($fields)) {
                 foreach($fields as $i ) {
                     $advertisement = new Advertisement($i);

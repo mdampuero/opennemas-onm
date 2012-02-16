@@ -15,28 +15,28 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{$titulo_barra}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
+            <div class="title"><h2>{t}Advertisement manager{/t}::&nbsp; {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
+                     <a class="delChecked" data-controls-modal="modal-advertisement-batchDelete" href="#" title="{t}Delete{/t}">
                         <img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
                     </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ADVERTISEMENT_AVAILA"}
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" title="noFrontpage">
+                    <button value="batchFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
                         <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                    </a>
+                    </button>
                 </li>
                 <li>
-                    <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" title="Frontpage">
+                     <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
                         <img src="{$params.IMAGE_DIR}publish.gif" title="Frontpage" alt="Frontpage" ><br />{t}Publish{/t}
-                    </a>
+                    </button>
                 </li>
                 {/acl}
                 {acl isAllowed="ADVERTISEMENT_CREATE"}
@@ -184,7 +184,9 @@
                                 {/acl}
                                 {acl isAllowed="ADVERTISEMENT_DELETE"}
                                 <li>
-                                    <a href="#" onClick="javascript:confirmar(this, '{$advertisements[c]->id}');" title="{t}Delete{/t}">
+                                      <a class="del" data-controls-modal="modal-from-dom"
+                                           data-id="{$advertisements[c]->id}"
+                                           data-title="{$advertisements[c]->title|capitalize}"  href="#" >
                                         <img src="{$params.IMAGE_DIR}trash.png" />
                                     </a>
                                 </li>
@@ -213,10 +215,30 @@
             </table>
 
         </div><!--fin id="$category"-->
+    </div> <!--end wrapper-->
+    <input type="hidden" name="category" id="category" value="{$category}" />
+    <input type="hidden" id="status" name="status" value="" />
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" value="{$id|default:""}" />
-
-    </div><!--fin content-wrapper-->
 </form>
+     <script>
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#formulario').attr('method', "POST");
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#formulario').attr('method', "POST");
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+    </script>
+    {include file="advertisement/modals/_modalDelete.tpl"}
+    {include file="advertisement/modals/_modalBatchDelete.tpl"}
+    {include file="advertisement/modals/_modalAccept.tpl"}
 {/block}
