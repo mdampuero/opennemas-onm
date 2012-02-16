@@ -2,32 +2,33 @@
 
 {block name="header-js" append}
     {script_tag src="/utilsVideo.js" language="javascript"}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario">
+<form action="#" method="get" name="formulario">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Video Manager :: Listing videos{/t} {if $category eq 0}HOME{else}{$datos_cat[0]->title}{/if}</h2></div>
 			<ul class="old-button">
 				{acl isAllowed="VIDEO_DELETE"}
 				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
-						<img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar" ><br />{t}Delete{/t}
-					</a>
+                    <a class="delChecked" data-controls-modal="modal-video-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                    </a>
 				</li>
 				{/acl}
 				{acl isAllowed="VIDEO_AVAILABLE"}
-				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-						<img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-					</a>
-				</li>
-				<li>
-					<a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-						<img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />{t}Publish{/t}
-					</a>
-				</li>
+                <li>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
+               </li>
+               <li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
+               </li>
 				{/acl}
 				{acl isAllowed="VIDEO_CREATE"}
                 <li class="separator"></li>
@@ -37,6 +38,16 @@
 					</a>
 				</li>
 				{/acl}
+                {acl isAllowed="VIDEO_WIDGET"}
+                     {if $category eq 'widget'}
+                        <li class="separator"></li>
+                        <li>
+                            <a href="#" onClick="javascript:saveSortPositions('{$smarty.server.PHP_SELF}');" title="{t}Save positions{/t}">
+                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                            </a>
+                        </li>
+                    {/if}
+                {/acl}
                 {acl isAllowed="VIDEO_SETTINGS"}
                 <li class="separator"></li>
                     <li>
@@ -58,7 +69,7 @@
 
         <ul class="pills clearfix">
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=favorite" {if $category==='favorite'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=widget" {if $category==='widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
             </li>
 
             <li>
@@ -67,8 +78,8 @@
 
             {include file="menu_categories.tpl" home="video.php?action=list"}
         </ul>
-
-        {render_messages}
+        {* MENSAJES DE AVISO GUARDAR POS******* *}
+        <div id="warnings-validation"></div>
 
         <table class="listing-table">
             <thead>
@@ -81,9 +92,10 @@
                     <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center">{t}Service{/t}</th>
                     <th class="center">Created</th>
-                    {if $category=='favorite'}<th class="center">{t}Section{/t}</th>{/if}
+                    {if $category=='widget' || $category=='all'}<th class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                    {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="center" style="width:35px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
@@ -92,11 +104,11 @@
                     {/if}
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="sortable">
                 {section name=c loop=$videos}
-                <tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;">
+                <tr data-id="{$videos[c]->pk_album}" style="cursor:pointer;">
                     <td>
-                        <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
+                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$videos[c]->id}"  style="cursor:pointer;">
                     </td>
                     <td onClick="javascript:document.getElementById('selected_{$smarty.section.c.iteration}').click();">
                         {$videos[c]->title|clearslash}
@@ -111,7 +123,7 @@
                     <td class="center">
                         {$videos[c]->created}
                     </td class="center">
-                    {if $category=='favorite'}
+                    {if $category=='widget' || $category=='all'}
                         <td >
                              {$videos[c]->category_title}
                         </td>
@@ -119,22 +131,33 @@
                     <td class="center">
                         {acl isAllowed="VIDEO_AVAILABLE"}
                             {if $videos[c]->available == 1}
-                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Publicado">
+                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" title="Publicado">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" /></a>
                             {else}
-                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" title="Pendiente">
+                                <a href="?id={$videos[c]->id}&amp;action=change_status&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" title="Pendiente">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" /></a>
                             {/if}
                         {/acl}
                     </td>
+                     {if $category!='widget' && $category!='all'}
                     <td class="center">
                         {acl isAllowed="VIDEO_FAVORITE"}
                                 {if $videos[c]->favorite == 1}
-                                   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_on" title="Quitar de Portada"></a>
+                                   <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="favourite_on" title="Quitar de Portada"></a>
                                 {else}
-                                    <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="favourite_off" title="Meter en Portada"></a>
+                                    <a href="?id={$videos[c]->id}&amp;action=change_favorite&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="favourite_off" title="Meter en Portada"></a>
                                 {/if}
                          {/acl}
+                    </td>
+                    {/if}
+                    <td class="center">
+                    {acl isAllowed="VIDEO_HOME"}
+                        {if $videos[c]->in_home == 1}
+                           <a href="{$smarty.server.PHP_SELF}?id={$videos[c]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {else}
+                            <a href="{$smarty.server.PHP_SELF}?id={$videos[c]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                        {/if}
+                    {/acl}
                     </td>
                     <td style="padding:1px; font-size:11px;" class="center">
                         <ul class="action-buttons">
@@ -147,8 +170,11 @@
 
                             {acl isAllowed="VIDEO_DELETE"}
                             <li>
-                                <a href="#" onClick="javascript:delete_videos('{$videos[c]->id}','{$paginacion->_currentPage|default:""}');" title="Eliminar">
-                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                             <a class="del" data-controls-modal="modal-from-dom"
+                               data-id="{$videos[c]->id}"
+                               data-title="{$videos[c]->title|capitalize}" href="#" >
+                            <img src="{$params.IMAGE_DIR}trash.png" border="0" />
+                            </a>
                             </li>
                             {/acl}
                         </ul>
@@ -172,9 +198,36 @@
         </table>
 
     </div>
-
+    <input type="hidden" name="page" id="page" value="{$page|default:0}" />
+    <input type="hidden" name="category" id="category" value="{$category}" />
+    <input type="hidden" id="status" name="status" value="" />
     <input type="hidden" id="action" name="action" value="" />
     <input type="hidden" name="id" id="id" value="{$id|default:""}" />
 </form>
+     <script>
+        // <![CDATA[
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
 
+        {if $category eq 'widget'}
+            jQuery(document).ready(function() {
+                makeSortable();
+            });
+        // ]]>
+        {/if}
+    </script>
+
+    {include file="video/modals/_modalDelete.tpl"}
+    {include file="video/modals/_modalBatchDelete.tpl"}
+    {include file="video/modals/_modalAccept.tpl"}
 {/block}
