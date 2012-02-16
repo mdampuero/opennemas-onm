@@ -21,20 +21,20 @@
             <ul class="old-button">
                {acl isAllowed="LETTER_DELETE"}
                <li>
-                    <a class="delChecked" data-controls-modal="modal-letter-batchDelete" href="#" title="Eliminar" alt="Eliminar">
-                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                    <a class="delChecked" data-controls-modal="modal-letter-batchDelete" href="#" title="{t}Delete{/t}" alt="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
                </li>
                {/acl}
                {acl isAllowed="LETTER_AVAILABLE"}
                <li>
-                    <a value="batchReject" name="buton-batchReject" id="buton-batchReject" type="submit">
-                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="Rechazar" alt="Rechazar" ><br />Rechazar
+                    <button value="batchReject" name="buton-batchReject" id="buton-batchReject" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Reject{/t}
                    </button>
                </li>
                <li>
                    <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
-                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
                </li>
                {/acl}
@@ -95,7 +95,7 @@
                 	{section name=c loop=$letters|default:array()}
 					<tr {cycle values="class=row0,class=row1"}  style="cursor:pointer;" >
 						<td >
-							<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$letters[c]->id}"  style="cursor:pointer;" >
+							<input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$letters[c]->id}"  style="cursor:pointer;" >
 						</td>
                         <td>{$letters[c]->title}</td>
 						<td>{$letters[c]->author}: {$letters[c]->email}</td>
@@ -117,14 +117,14 @@
 										</a>
 									{else}
 										<a class="publishing" href="?id={$letters[c]->id}&amp;action=change_status&amp;status=2&amp;letterStatus={$letterStatus}&amp;page={$paginacion->_currentPage|default:0}" title="Rechazar">
-											<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+											<img border="0" src="{$params.IMAGE_DIR}publish_r.png">
 										</a>
 									{/if}
 								</li>
                                 {/acl}
                                  {acl isAllowed="LETTER_UPDATE"}
 								<li>
-									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$letters[c]->id}');" title="Modificar">
+									<a {$smarty.server.PHP_SELF}?action=read&id={$letters[c]->id} title="Modificar">
 										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
                                 {/acl}
@@ -183,4 +183,5 @@
 {include file="letter/modals/_modalDelete.tpl"}
 {include file="letter/modals/_modalBatchDelete.tpl"}
 {include file="letter/modals/_modalAccept.tpl"}
+
 {/block}
