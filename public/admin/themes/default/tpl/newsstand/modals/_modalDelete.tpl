@@ -4,7 +4,7 @@
       <h3>{t}Delete kiosko{/t}</h3>
     </div>
     <div class="modal-body">
-        <p>{t}Are you sure that do you want delete "%title%"?{/t}</p>
+        <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
 
     </div>
     <div class="modal-footer">
@@ -16,16 +16,13 @@
 <script>
 jQuery("#modal-kiosko-delete").modal({
     backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
+    keyboard: true //Can close on escape
 });
 
 jQuery('.del').click(function(e) {
-    jQuery('#modal-kiosko-delete .modal-body').html(
-    jQuery('#modal-kiosko-delete .modal-body').html()
-        .replace( /%title%/g, jQuery(this).data('title'))
-    );
+    jQuery('#modal-kiosko-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
-    jQuery("#modal-kiosko-delete ").modal('show');
+    jQuery("#modal-kiosko-delete").modal('show');
     jQuery("body").data("selected-for-del", jQuery(this).data("id"));
     e.preventDefault();
 });
