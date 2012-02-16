@@ -58,7 +58,7 @@
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
             </li>
             <li>
-                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=4" id="link_home" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
+                <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=4" id="link_op" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
             </li>
             {include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
         </ul>
@@ -177,7 +177,7 @@
                                 {/acl}
                                 {acl isAllowed="ADVERTISEMENT_UPDATE"}
                                 <li>
-                                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$advertisements[c]->id}" title="{t}Edit{/t}">
+                                    <a href="{$smarty.server.PHP_SELF}?action=read&amp;id={$advertisements[c]->id}&amp;place={$advertisements[c]->advertisement_placeholder}" title="{t}Edit{/t}">
                                         <img src="{$params.IMAGE_DIR}edit.png" />
                                     </a>
                                 </li>

@@ -136,6 +136,10 @@ switch($action) {
                 $adv->is_flash = 0;
             }
             $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+            
+            //Get the name of the advertisement placeholder
+            $adv_placeholder = $adv->getNameOfAdvertisementPlaceholder($adv->type_advertisement);
+            $adv->advertisement_placeholder = $adv_placeholder;
 
             if(in_array($category, $adv->fk_content_categories)
                or $adv->fk_content_categories == array(0))

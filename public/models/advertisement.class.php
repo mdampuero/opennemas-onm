@@ -504,6 +504,40 @@ class Advertisement extends Content
     }
 
     /**
+     * Function that retrieves the name of the placeholder given the type_advertisemnt
+     * For example type=503  => name=publi-gallery-inner
+     *
+     * @param string $type_advertisement
+     * @return string $name_advertisement
+     **/
+    public function getNameOfAdvertisementPlaceholder($type_advertisement)
+    {
+        if ($type_advertisement > 0 && $type_advertisement < 100) {
+            return 'publi-portada';
+        } elseif ($type_advertisement > 100 && $type_advertisement < 200) {
+            return 'publi-interior';
+        } elseif ($type_advertisement > 200 && $type_advertisement < 300) {
+            return 'publi-video';
+        } elseif ($type_advertisement > 300 && $type_advertisement < 400) {
+            return 'publi-video-interior';
+        } elseif ($type_advertisement > 400 && $type_advertisement < 500) {
+            return 'publi-gallery';
+        } elseif ($type_advertisement > 500 && $type_advertisement < 600) {
+            return 'publi-gallery-inner';
+        } elseif ($type_advertisement > 600 && $type_advertisement < 700) {
+            return 'publi-opinion';
+        } elseif ($type_advertisement > 700 && $type_advertisement < 800) {
+            return 'publi-opinion-interior';
+        } elseif ($type_advertisement > 800 && $type_advertisement < 900) {
+            return 'publi-poll';
+        } elseif ($type_advertisement > 900 && $type_advertisement < 1000) {
+            return 'publi-poll-inner';
+        } elseif ($type_advertisement > 1000 && $type_advertisement < 1100) {
+            return 'publi-newsletter';
+        }
+    }
+
+    /**
      * Increase by one click the number of clicks given an advertisement id
      *
      * @param int $id the id of the advertisement ot increase num_count
@@ -604,7 +638,7 @@ class Advertisement extends Content
 
             // If this banner is not in time don't add it to the final results
            $rsBanner = $cm->getInTime($rsBanner);
-           
+
             // $advertisements is an array of banners, grouped by advertisement type
             $advertisements = array();
             foreach ($rsBanner as $adv) {
