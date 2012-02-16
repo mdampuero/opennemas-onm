@@ -81,8 +81,10 @@
                             {/acl}
                             {acl isAllowed="STATIC_DELETE"}
 							<li>
-								<a href="#" onClick="javascript:confirmar(this, '{$pages[k]->id}');" title="{t}Delete{/t}">
-									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								<a class="del" data-controls-modal="modal-from-dom"
+                                   data-id="{$pages[k]->id}" title="{t}Delete{/t}"
+                                   data-title="{$pages[k]->title|capitalize}" href="#" >
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
                             {/acl}
@@ -115,4 +117,5 @@
         });
     </script>
 </div>
+     {include file="static_pages/modals/_modalDelete.tpl"}
 {/block}

@@ -242,6 +242,7 @@ switch($action) {
     break;
 
     case 'mstatus':
+        Acl::checkOrForward('SPECIAL_AVAILABLE');
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
             $fields = $_REQUEST['selected_fld'];
             if(is_array($fields)) {
@@ -255,6 +256,8 @@ switch($action) {
     break;
 
     case 'mfrontpage':
+        Acl::checkOrForward('SPECIAL_AVAILABLE');
+
         $status = ($_REQUEST['id']==1)? 1: 0; // Evitar otros valores
         if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
         {
@@ -271,18 +274,24 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
     break;
 
-    case 'mdelete':
-          if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0){
-             $fields = $_REQUEST['selected_fld'];
-             if(is_array($fields)) {
-                foreach($fields as $content ) {
-                    $special=new Special($content);
-                    $special->delete($content);
+    case 'batchDelete':
+        Acl::checkOrForward('SPECIAL_DELETE');
+
+        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
+            $fields = $_REQUEST['selected_fld'];
+
+            if(is_array($fields)) {
+                foreach($fields as $i ) {
+                    $special = new Special($i);
+                    $special->delete( $i, $_SESSION['userid'] );
                 }
-             }
-          }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+            }
+        }
+
+        Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
+                    $letterStatus . '&page=' . $page);
     break;
+
 
     case 'm_no_in_special':
 

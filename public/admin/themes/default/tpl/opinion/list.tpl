@@ -7,37 +7,45 @@
 
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario" {$formAttrs}>
+<form action="#" method="get" name="formulario" id="formulario" {$formAttrs}>
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Opinion Manager{/t} :: {t}Listing opinions{/t}</h2></div>
         <ul class="old-button">
             {acl isAllowed="OPINION_DELETE"}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);return false;" name="submit_mult" value="Eliminar" title="Eliminar">
+                 <a class="delChecked" data-controls-modal="modal-opinion-batchDelete" href="#" title="{t}Delete{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
                 </a>
             </li>
             {/acl}
             {acl isAllowed="OPINION_AVAILABLE"}
+            {if $type_opinion eq '-1'}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);return false;" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                </a>
+                <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                </button>
             </li>
+            {else}
+            <li>
+                <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                </button>
+            </li>
+            {/if}
             {/acl}
-            {acl isAllowed="OPINION_DELETE"}
+            {acl isAllowed="OPINION_AVAILABLE"}
              {if $type_opinion neq '-1'}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 1);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />{t}Put in home{/t}
-                </a>
+                <button value="batchInHome" name="buton-batchInHome" id="buton-batchInHome" type="submit">
+                     <img border="0" src="{$params.IMAGE_DIR}gohome50.png"  title="Frontpage" alt="Frontpage" ><br />{t}Put in home{/t}
+                </button>
             </li>
             {/if}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'm_inhome_status', 0);return false;" name="submit_mult" value="Frontpage" title="Frontpage">
+                <button value="batchNoInHome" name="buton-batchNoInHome" id="buton-batchNoInHome" type="submit">
                     <img border="0" src="{$params.IMAGE_DIR}home_no50.png"  title="Frontpage" alt="Frontpage" ><br />{t escape="off"}Delete from home{/t}
-                </a>
+                </button>
             </li>
             {/acl}
 
@@ -117,17 +125,39 @@
         });
         </script>
 
-        <input type="hidden" id="action" name="action" value="" />
-        <input type="hidden" name="id" id="id" value="{$id|default:""}" />
-
-    </div><!--fin wrapper-content-->
+    <input type="hidden" name="category" id="category" value="{$category}" />
+    <input type="hidden" id="status" name="status" value="" />
+    <input type="hidden" id="action" name="action" value="" />
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+    </div>
 </form>
-{/block}
-
-{block name="footer-js" append}
-{if isset($smarty.get.msgdelete) && $smarty.get.msgdelete eq 'ok'}
-    <script type="text/javascript" language="javascript">
-        alert('{$smarty.get.msg}');
+     <script>
+        jQuery('#buton-batchNoInHome').on('click', function(){
+            jQuery('#action').attr('value', "batchInHome");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchInHome').on('click', function(){
+            jQuery('#action').attr('value', "batchInHome");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
     </script>
-{/if}
+    {include file="opinion/modals/_modalDelete.tpl"}
+    {include file="opinion/modals/_modalBatchDelete.tpl"}
+    {include file="opinion/modals/_modalAccept.tpl"}
 {/block}
