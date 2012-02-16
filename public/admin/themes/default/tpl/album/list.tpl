@@ -13,7 +13,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="post" name="formulario" id="formulario">
+<form action="#" method="get" name="formulario" id="formulario">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -22,25 +22,24 @@
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}
                 <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" title="{t}Delete{/t}">
-                        <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                    <a class="delChecked" data-controls-modal="modal-album-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
-                </li>
-                {/acl}
-                {acl isAllowed="ALBUM_AVAILABLE"}
+				</li>
+				{/acl}
+				{acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" value="noFrontpage" title="noFrontpage">
-                        <img src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                    </a>
-                </li>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
+               </li>
+               <li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
+               </li>
                 {/acl}
-                {acl isAllowed="ALBUM_AVAILABLE"}
-                <li>
-                    <a href="#" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" title="{t}Publish{/t}">
-                        <img src="{$params.IMAGE_DIR}publish.gif" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                    </a>
-                </li>
-                {/acl}
+
                 {acl isAllowed="ALBUM_CREATE"}
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new" title="{t}New album{/t}" >
@@ -150,9 +149,9 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_HOME"}
                         {if $albums[as]->in_home == 1}
-                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
+                           <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=0&amp;category={$category}&amp;page={$page|default:0}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$paginacion->_currentPage|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{$smarty.server.PHP_SELF}?id={$albums[as]->id}&amp;action=change_inHome&amp;status=1&amp;category={$category}&amp;page={$page|default:0}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
@@ -167,7 +166,8 @@
                         {/acl}
                         {acl isAllowed="ALBUM_DELETE"}
                         <li>
-                            <a href="#" onClick="javascript:delete_album('{$albums[as]->pk_album}','{$paginacion->_currentPage|default:0}');" title="{t}Delete{/t}">
+                            <a class="del" data-controls-modal="modal-from-dom" data-id="{$albums[as]->id}"
+                               data-title="{$albums[as]->title|capitalize}" href="#" title="{t}Delete{/t}">
                                <img src="{$params.IMAGE_DIR}trash.png" />
                             </a>
                         </li>
@@ -184,24 +184,42 @@
           </tbody>
             <tfoot>
               <td colspan="9">
-                {$paginacion->links|default:""}&nbsp;
+                {$pagination|default:""}&nbsp;
               </td>
             </tfoot>
         </table>
 
+        <input type="hidden" name="page" id="page" value="{$page|default:0}" />
+        <input type="hidden" name="category" id="category" value="{$category}" />
+        <input type="hidden" id="status" name="status" value="" />
         <input type="hidden" id="action" name="action" value="" />
         <input type="hidden" name="id" id="id" value="{$id|default:""}" />
     </div>
 </form>
-{if $category eq 'widget'}
-        <script type="text/javascript">
-
+    <script>
         // <![CDATA[
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
 
+        {if $category eq 'widget'}
             jQuery(document).ready(function() {
                 makeSortable();
             });
         // ]]>
+        {/if}
     </script>
-{/if}
+
+    {include file="album/modals/_modalDelete.tpl"}
+    {include file="album/modals/_modalBatchDelete.tpl"}
+    {include file="album/modals/_modalAccept.tpl"}
 {/block}
