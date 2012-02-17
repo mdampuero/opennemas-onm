@@ -53,6 +53,7 @@
     </div>
     <div class="wrapper-content">
 
+         {render_messages}
         <ul class="pills clearfix">
             <li>
                 <a href="{$smarty.server.SCRIPT_NAME}?action=list&amp;category=0" id="link_home" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
