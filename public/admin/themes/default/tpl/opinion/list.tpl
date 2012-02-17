@@ -135,24 +135,28 @@
         jQuery('#buton-batchNoInHome').on('click', function(){
             jQuery('#action').attr('value', "batchInHome");
             jQuery('#status').attr('value', "0");
+            jQuery('#formulario').attr('method', "POST");
             jQuery('#formulario').submit();
             e.preventDefault();
         });
         jQuery('#buton-batchInHome').on('click', function(){
             jQuery('#action').attr('value', "batchInHome");
             jQuery('#status').attr('value', "1");
+            jQuery('#formulario').attr('method', "POST");
             jQuery('#formulario').submit();
             e.preventDefault();
         });
         jQuery('#buton-batchnoFrontpage').on('click', function(){
             jQuery('#action').attr('value', "batchFrontpage");
             jQuery('#status').attr('value', "0");
+            jQuery('#formulario').attr('method', "POST");
             jQuery('#formulario').submit();
             e.preventDefault();
         });
         jQuery('#buton-batchFrontpage').on('click', function(){
             jQuery('#action').attr('value', "batchFrontpage");
             jQuery('#status').attr('value', "1");
+            jQuery('#formulario').attr('method', "POST");
             jQuery('#formulario').submit();
             e.preventDefault();
         });

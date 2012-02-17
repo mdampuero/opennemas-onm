@@ -37,6 +37,7 @@ jQuery('.delChecked').click(function(e) {
 
 jQuery('#modal-opinion-batchDelete a.btn.yes').on('click', function(){
     jQuery('#action').attr('value', "batchDelete");
+    jQuery('#formulario').attr('method', "POST");
     jQuery('#formulario').submit();
     e.preventDefault();
 });

@@ -22,7 +22,7 @@ require_once(SITE_ADMIN_PATH.'session_bootstrap.php');
  * Check privileges
 */
 Acl::checkOrForward('OPINION_ADMIN');
- 
+
 /**
  * Setup view
 */
@@ -510,10 +510,10 @@ switch($action) {
 
         Acl::checkOrForward('OPINION_AVAILABLE');
 
-        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
-            $fields = $_GET['selected_fld'];
+        if(isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
+            $fields = $_POST['selected_fld'];
 
-            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            $status = filter_input ( INPUT_POST, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if (is_array($fields)) {
                 foreach ($fields as $i) {
                     $opinion = new Opinion($i);
@@ -531,10 +531,10 @@ switch($action) {
     case 'batchInHome':
         Acl::checkOrForward('OPINION_HOME');
 
-        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
-            $fields = $_GET['selected_fld'];
+        if(isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
+            $fields = $_POST['selected_fld'];
 
-            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            $status = filter_input ( INPUT_POST, 'status' , FILTER_SANITIZE_NUMBER_INT );
             $alert = '';
 
             if(is_array($fields)) {
@@ -575,8 +575,8 @@ switch($action) {
 
     case 'batchDelete':
         Acl::checkOrForward('OPINION_DELETE');
-        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
-            $fields = $_GET['selected_fld'];
+        if(isset($_POST['selected_fld']) && count($_POST['selected_fld']) > 0) {
+            $fields = $_POST['selected_fld'];
 
             $msg = 'Las opiniones ';
 
