@@ -24,66 +24,39 @@
             <ul class="old-button">
                 {acl isAllowed="COMMENT_DELETE"}
                <li>
-                   <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mdelete', 0);" name="submit_mult" value="Eliminar" title="Eliminar">
+                   <a class="delChecked" data-controls-modal="modal-comment-batchDelete" href="#" title="{t}Delete{/t}" alt="{t}Delete{/t}">
                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />Eliminar
                    </a>
                </li>
                {/acl}
                {acl isAllowed="COMMENT_AVAILABLE"}
                <li>
-                   <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 2);" name="submit_mult" value="noFrontpage" title="Rechazar">
-                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="Rechazar" alt="Rechazar" ><br />Rechazar
-                   </a>
+                    <button value="batchReject" name="buton-batchReject" id="buton-batchReject" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
                </li>
                <li>
-                   <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Publicar">
-                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-                   </a>
-               </li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
+            </li>
                {/acl}
             </ul>
         </div>
     </div>
     <div class="wrapper-content">
 
-{*
-        <ul class="pills clearfix">
-			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=todos" id="link_todos"  {if $category=='todos'}class="active"{/if}>{t}ALL{/t}</a>
-			</li>
-			<li>
-				<a href="{$smarty.server.SCRIPT_NAME}?action=list&category=home" id="link_home" {if $category=='home'}class="active"{/if}>{t}HOME{/t}</a>
-			</li>
-			<li>
-			   <a href="{$smarty.server.SCRIPT_NAME}?action=list&category=4" id="link_home" {if $category=='4'}class="active"{/if}>{t}OPINION{/t}</a>
-			</li>
-			<script type="text/javascript">
-            //<![CDATA[
-				Event.observe($('link_todos'), 'mouseover', function(event) {
-					$('menu_subcats').setOpacity(0);
-					e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-				});
-				Event.observe($('link_home'), 'mouseover', function(event) {
-					$('menu_subcats').setOpacity(0);
-					e = setTimeout("show_subcat('{$category}','{$home|urlencode}');$('menu_subcats').setOpacity(1);",1000);
-				});
-			//]]>
-            </script>
-			{include file="menu_categories.tpl" home=$smarty.server.SCRIPT_NAME|cat:"?action=list"}
-		</ul>
-*}
-
 		<div class="clearfix">
 
             <ul class="pills">
                 <li>
-					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=0">{t}Pending{/t}</a>
+					<a id="pending-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=0" {if $comment_status==0}class="active"{/if} >{t}Pending{/t}</a>
                 </li>
                 <li>
-					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=1">{t}Published{/t}</a>
+					<a id="published-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=1" {if $comment_status==1}class="active"{/if}>{t}Published{/t}</a>
                 </li>
                 <li>
-					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=2">{t}Rejected{/t}</a>
+					<a id="rejected-tab" href="{$smarty.server.SCRIPT_NAME}?action=list&category={$category}&module={$smarty.get.module}&comment_status=2" {if $comment_status==2}class="active"{/if}>{t}Rejected{/t}</a>
                 </li>
             </ul>
 
@@ -117,20 +90,6 @@
                     </th>
                 </tr>
             </table>
-
-        <script type="text/javascript">
-            document.observe('dom:loaded', function() {
-                {if $comment_status==0}
-                    $('pending-tab').setAttribute('class', 'active-tab');
-                {elseif $comment_status==1}
-                    $('published-tab').setAttribute('class', 'active-tab');
-                    $('pending-tab').setAttribute('class', '');
-                {elseif $comment_status==2}
-                    $('rejected-tab').setAttribute('class', 'active-tab');
-                    $('pending-tab').setAttribute('class', '');
-                {/if}
-            });
-        </script>
 
 		<div id="{$category}">
 
@@ -174,9 +133,7 @@
                                 {else}
                                     &lt;{$comments[c]->email}&gt;
                                 {/if}<br>
-                                {if $title}
-								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:30:"..."}]</strong>
-    							{/if}
+								<strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
                                 {$comments[c]->body|strip_tags|clearslash|truncate:50}
                             </a>
 						</td>
@@ -221,13 +178,15 @@
                                 {/acl}
                                  {acl isAllowed="COMMENT_UPDATE"}
 								<li>
-									<a href="#" onClick="javascript:enviar(this, '_self', 'read', '{$comments[c]->id}');" title="Modificar">
+									<a href="{$smarty.server.PHP_SELF}?action=read&id={$comments[c]->id}" title="Modificar">
 										<img src="{$params.IMAGE_DIR}edit.png" border="0" /></a>
 								</li>
                                 {/acl}
                                 {acl isAllowed="COMMENT_DELETE"}
 								<li>
-									<a href="#" onClick="javascript:confirmar(this, '{$comments[c]->id}');" title="Eliminar">
+									<a class="del" data-controls-modal="modal-from-dom"
+                               data-id="{$comments[c]->id}"
+                               data-title="{$comments[c]->title|capitalize}"  href="#" >
 										<img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
 								</li>
                                 {/acl}
@@ -255,8 +214,28 @@
 		</div>
     </div>
 
+    <input type="hidden" name="comment_status" id="comment_status" value="{$comment_status}" />
+    <input type="hidden" name="category" id="category" value="{$category}" />
+    <input type="hidden" id="status" name="status" value="" />
 	<input type="hidden" id="action" name="action" value="" />
 	<input type="hidden" name="id" id="id" value="{$id|default:""}" />
 
 </form>
+     <script>
+        jQuery('#buton-batchReject').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "2");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+    </script>
+    {include file="comment/modals/_modalDelete.tpl"}
+    {include file="comment/modals/_modalBatchDelete.tpl"}
+    {include file="comment/modals/_modalAccept.tpl"}
 {/block}

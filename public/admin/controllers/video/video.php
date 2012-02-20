@@ -33,7 +33,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 ));
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-
+$tpl->assign('page', $page);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('video');
 
@@ -46,7 +46,7 @@ if(empty($category)) {
 
 $ccm = ContentCategoryManager::get_instance();
 list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu( $category, $contentType);
-if(empty($category)) {$category ='favorite';}
+if(empty($category)) {$category ='widget';}
 $tpl->assign('category', $category);
 
 $tpl->assign('subcat', $subcat);
@@ -78,8 +78,8 @@ switch ($action) {
             $limit = "LIMIT ".($page-1) * ITEMS_PAGE .', '.(ITEMS_PAGE+1);
         }
 
-        if ($category == 'favorite') { //Widget video
-            $videos = $cm->find_all('Video', 'favorite = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
+        if ($category == 'widget') { //Widget video
+            $videos = $cm->find_all('Video', 'in_home = 1 AND available =1', 'ORDER BY  created DESC '. $limit);
 
             if (count($videos) != $numFavorites ) {
                 m::add( sprintf(_("You must put %d videos in the HOME widget"), $numFavorites));
@@ -274,40 +274,37 @@ switch ($action) {
 
         break;
 
-    case 'delete':
-
-        Acl::checkOrForward('VIDEO_DELETE');
+    case 'getRelations':
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+
         $video = new Video($id);
         $relations=array();
         $msg ='';
         $relations = Related_content::get_content_relations($id);
+
         if (!empty($relations)) {
-            $msg = sprintf(_("The video %s has some relations:",$video->title));
+            $msg = sprintf(_("<br>The video has some relations"));
             $cm = new ContentManager();
             $relat = $cm->getContents($relations);
             foreach($relat as $contents) {
-                $msg.="\n - ".strtoupper($contents->category_name).": ".$contents->title;
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this video and its relations?");
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this video and its relations?");
 
-        } else {
-            $msg = sprintf(_("Do you want to delete the video '%s' ?"),$video->title);
+            echo $msg;
         }
 
-        echo $msg;
         exit(0);
-
         break;
 
-    case 'yesdel':
+    case 'delete':
 
         Acl::checkOrForward('VIDEO_DELETE');
 
-        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if ($id) {
-            $video = new Video($_REQUEST['id']);
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if (!empty($id)) {
+            $video = new Video($id);
             //Delete relations
             $rel= new Related_content();
             $rel->delete_all($id);
@@ -315,15 +312,6 @@ switch ($action) {
         } else {
             m::add(_('You must give an id for delete the video.'), m::ERROR);
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
-
-        break;
-
-    case 'set_position':
-
-        $video = new Video($_REQUEST['id']);
-        $video->set_position($_REQUEST['posicion'],$_SESSION['userid']);
-
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$video->category.'&page='.$page);
 
         break;
@@ -363,21 +351,36 @@ switch ($action) {
 
         break;
 
+     case 'change_inHome':
 
-    case 'mfrontpage':
+        Acl::checkOrForward('ALBUM_HOME');
+
+        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
+        $status = filter_input(INPUT_GET,'status',FILTER_VALIDATE_INT,
+                                array('options' => array('default'=> 0)));
+        $album = new Album($id);
+        if ($album->available == 1) {
+            $album->set_inhome($status,$_SESSION['userid']);
+        } else {
+            m::add(_("This album is not published so you can't define it as widget home content.") );
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category);
+
+        break;
+
+    case 'batchFrontpage':
 
         Acl::checkOrForward('VIDEO_AVAILABLE');
-        if (isset($_REQUEST['selected_fld'])
-            && count($_REQUEST['selected_fld'])>0)
-        {
-            $fields = $_REQUEST['selected_fld'];
-            $status = ($_REQUEST['status']==1)? 1: 0;
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if(is_array($fields)) {
                 foreach($fields as $i ) {
                     $video = new Video($i);
                     $video->set_available($status, $_SESSION['userid']);
                     if($status == 0){
-                        $video->set_favorite($status);
+                        $video->set_favorite($status, $_SESSION['userid']);
                     }
                 }
             }
@@ -386,14 +389,13 @@ switch ($action) {
 
         break;
 
-    case 'mdelete':
 
+    case 'batchDelete':
         Acl::checkOrForward('VIDEO_DELETE');
-         $msg='';
-        if (isset($_REQUEST['selected_fld'])
-            && count($_REQUEST['selected_fld'])>0)
-        {
-            $fields = $_REQUEST['selected_fld'];
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
             if (is_array($fields)) {
                 $msg = _("Next albums have relations. Delete one by one");
 
@@ -402,11 +404,10 @@ switch ($action) {
                     $relations=array();
                     $relations = Related_content::get_content_relations( $i );
 
-                    if(!empty($relations)){
-                        $alert =1;
+                    if (!empty($relations)) {
                         $msg .= " \"".$video->title."\", ";
                     } else {
-                       $video->delete( $i,$_SESSION['userid'] );
+                        $video->delete( $i, $_SESSION['userid'] );
                     }
                     if (isset($alert) && !empty($alert)) {
                         $msg.=_("You can delete one by one!");
@@ -419,6 +420,35 @@ switch ($action) {
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
 
         break;
+
+    case 'save_positions':
+        $positions = $_GET['positions'];
+        if (isset($positions)  && is_array($positions)
+                && count($positions) > 0) {
+           $_positions = array();
+           $pos = 1;
+
+           foreach($positions as $id) {
+                    $_positions[] = array($pos, '1', $id);
+                    $pos += 1;
+            }
+
+            $video = new Video();
+            $msg = $video->set_position($_positions, $_SESSION['userid']);
+
+            // FIXME: buscar otra forma de hacerlo
+            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
+            require_once(SITE_CORE_PATH.'template_cache_manager.class.php');
+            $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete('home|0');
+         }
+         if(!empty($msg) && $msg == true) {
+             echo _("Positions saved successfully.");
+         } else{
+             echo _("Unable to save the new positions. Please contact with your system administrator.");
+         }
+        exit(0);
+    break;
 
     case 'config':
 
@@ -498,5 +528,5 @@ switch ($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&page='.$page);
 
-        break;
+       break;
 }

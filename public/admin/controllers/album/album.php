@@ -26,7 +26,7 @@ require_once('./albums_events.php');
 $tpl = new \TemplateAdmin(TEMPLATE_ADMIN);
 
 $page = filter_input(INPUT_GET,'page',FILTER_VALIDATE_INT);
-
+$tpl->assign('page', $page);
 /******************* GESTION CATEGORIAS  *****************************/
 $contentType = Content::getIDContentType('album');
 
@@ -178,13 +178,11 @@ switch($action) {
 
     case 'validate':
 
-    // var_dump($_POST);die();
-
         $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
         if(empty($id)) {
             Acl::checkOrForward('ALBUM_CREATE');
 
-            $album = new Album;
+            $album = new Album();
             if (!$album->create($_POST))
                 m::add(_($album->errors));
         } else {
@@ -204,49 +202,47 @@ switch($action) {
 
     break;
 
-    case 'delete':
-
-        Acl::checkOrForward('ALBUM_DELETE');
+    case 'getRelations':
 
         $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
 
         $album = new Album($id);
-
         $relations=array();
         $msg ='';
-        $relations = Related_content::get_content_relations( $id );
+        $relations = Related_content::get_content_relations($id);
+
         if (!empty($relations)) {
-            $msg = sprintf(_('The album "%s" has related elements')."\n", $album->title);
-            $cm= new ContentManager();
+            $msg = sprintf(_("<br>The album has some relations"));
+            $cm = new ContentManager();
             $relat = $cm->getContents($relations);
-            foreach ($relat as $contents) {
-               $msg.=" - ".strtoupper($contents->category_name).": ".$contents->title." \n";
+            foreach($relat as $contents) {
+                $msg.=" <br>- ".strtoupper($contents->category_name).": ".$contents->title;
             }
-            $msg.="\n \n "._("Caution! Are you sure that you want to delete this album and all related contents?");
-        } else {
-            $msg = sprintf(_('Do you want to delete "%s"?'), $album->title);
+            $msg.="<br> "._("Caution! Are you sure that you want to delete this album and its relations?");
+
+            echo $msg;
         }
-        echo $msg;
+
         exit(0);
+        break;
 
-    break;
-
-    case 'yesdel':
+    case 'delete':
 
         Acl::checkOrForward('ALBUM_DELETE');
 
-        $id = filter_input(INPUT_GET,'id',FILTER_DEFAULT);
-        if ($id){
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if (!empty($id)) {
             $album = new Album($id);
             //Delete relations
             $rel= new Related_content();
             $rel->delete_all($id);
-            $album->delete($id,$_SESSION['userid'] );
+            $album->delete( $id ,$_SESSION['userid'] );
+        } else {
+            m::add(_('You must give an id for delete the album.'), m::ERROR);
         }
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$_REQUEST['page']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$album->category.'&page='.$page);
 
-    break;
-
+        break;
 
     case 'change_status':
 
@@ -300,13 +296,14 @@ switch($action) {
         break;
 
 
-    case 'mfrontpage':
+    case 'batchFrontpage':
 
         Acl::checkOrForward('ALBUM_AVAILABLE');
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0)
-        {
-            $fields = $_REQUEST['selected_fld'];
-            $status = ($_REQUEST['id']==1)? 1: 0; //Se reutiliza el id para pasar el estatus
+
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input ( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
             if (is_array($fields)) {
                 foreach ($fields as $i) {
                     $album = new Album($i);
@@ -321,33 +318,34 @@ switch($action) {
 
     break;
 
-    case 'mdelete':
+    case 'batchDelete':
+        Acl::checkOrForward('ALBUM_DELETE');
 
-        Acl::checkOrForward('ALBUM_TRASH');
-        if (isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld'])>0) {
-        $fields = $_REQUEST['selected_fld'];
-        if (is_array($fields)) {
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
 
-            $msg = _("These albums have relations:");
+            if (is_array($fields)) {
 
-            foreach ($fields as $i ) {
-                $album = new Album($i);
-                $relations=array();
-                $relations = Related_content::get_content_relations( $i );
+                    $msg = _("These albums have relations:");
 
-                if(!empty($relations)){
-                     $alert =1;
-                     $msg .= " \"".$album->title."\", ";
+                    foreach ($fields as $i ) {
+                        $album = new Album($i);
+                        $relations=array();
+                        $relations = Related_content::get_content_relations( $i );
 
-                }else{
-                    $album->delete( $i,$_SESSION['userid'] );
+                        if(!empty($relations)){
+                            $alert =1;
+                            $msg .= " \"".$album->title."\", ";
+
+                        }else{
+                            $album->delete( $i,$_SESSION['userid'] );
+                        }
+                    }
+                    if (isset($alert) && !empty($alert)) {
+                        $msg.=_("You must delete them one by one!");
+                        m::add( $msg );
+                    }
                 }
-            }
-            if (isset($alert) && !empty($alert)) {
-                $msg.=_("You must delete them one by one!");
-                m::add( $msg );
-            }
-        }
         }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.' &page='.$page);
 

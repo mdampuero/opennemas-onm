@@ -46,12 +46,9 @@ switch($action) {
 
         $cm = new ContentManager();
 
-
-
         $filter = "content_status = ".$letterStatus;
         $items_page = s::get('items_per_page') ?: 20;
-
-
+ 
         // ContentManager::find_pages(<TIPO>, <WHERE>, <ORDER>, <PAGE>, <ITEMS_PER_PAGE>, <CATEGORY>);
         list($letters, $pager)= $cm->find_pages('Letter', $filter.' ',
                                                  'ORDER BY  created DESC ', $page, $items_page);
@@ -159,7 +156,6 @@ switch($action) {
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letterStatus='
                 . $letterStatus . '&page=' . $page);
     break;
-
 
     case 'batchFrontpage':
 

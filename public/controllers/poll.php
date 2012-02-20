@@ -86,7 +86,7 @@ switch($action) {
                 $otherPolls = $cm->find('Poll', 'available=1 ',
                                             'ORDER BY created DESC LIMIT 5');
             } else {
-                 $polls = $cm->find('Poll', 'available=1 ',
+                 $polls = $cm->find('Poll', 'available=1 and in_home=1',
                                             'ORDER BY created DESC LIMIT 2');
                  $otherPolls = $cm->find('Poll', 'available=1 ',
                                             'ORDER BY created DESC LIMIT 2,7');

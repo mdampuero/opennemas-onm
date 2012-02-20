@@ -7,6 +7,13 @@
 		<div class="wrapper-content">
             <div class="title"><h2>{t}Opinion Manager :: Author list{/t}</div>
             <ul class="old-button">
+                 {acl isAllowed="AUTHOR_CREATE"}
+                <li>
+                    <a class="delChecked" data-controls-modal="modal-author-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
+                    </a>
+                </li>
+                {/acl}
                 {acl isAllowed="AUTHOR_CREATE"}
                 <li>
                     <a href="{$smarty.server.PHP_SELF}?action=new&page=0" class="admin_add"  accesskey="N" tabindex="1">
@@ -26,7 +33,7 @@
 	</div>
 
     <div class="wrapper-content">
-
+         {render_messages}
         <table class="adminheading">
             <tr align="right">
                 <th>
@@ -43,6 +50,9 @@
         <table class="listing-table">
             <thead>
                 <tr>
+                    <th style="width:15px">
+                        <input type="checkbox" id="toggleallcheckbox" />
+                    </th>
                     <th class="title">{t}Author name{/t}</th>
                     <th class="title">{t}Condition{/t}</th>
                     <th>{t}Blog name{/t}</th>
@@ -53,6 +63,10 @@
             </thead>
             {section name=c loop=$authors}
                 <tr bgcolor="{cycle values="#eeeeee,#ffffff"}">
+                     <td style="text-align:center;">
+                        <input type="checkbox" class="minput" id="selected_{$smarty.section.c.iteration}" name="selected_fld[]"
+                            value="{$authors[c]->pk_author}" />
+                    </td>
                     <td style="padding:5px;">
                         {$authors[c]->name}&nbsp;&nbsp;{*if $authors[c]->fk_user != 0}(usuario){/if*}
                     </td>
@@ -79,8 +93,9 @@
                             {/acl}
                             {acl isAllowed="AUTHOR_DELETE"}
 							<li>
-								<a href="#" onClick="javascript:confirmar(this, {$authors[c]->pk_author});" title="Eliminar">
-									<img src="{$params.IMAGE_DIR}trash.png" border="0" />
+								<a class="del" data-controls-modal="modal-from-dom"
+                                           data-id="{$authors[c]->pk_author}"
+                                           data-title="{$authors[c]->name|capitalize}"  href="#" ><img src="{$params.IMAGE_DIR}trash.png" border="0" />
 								</a>
 							</li>
                             {/acl}
@@ -105,4 +120,7 @@
     <input type="hidden" id="action" name="action" value="">
     <input type="hidden" id="id" name="id" value={$id}>
 </form>
+    {include file="opinion/authors/modals/_modalDelete.tpl"}
+    {include file="opinion/authors/modals/_modalBatchDelete.tpl"}
+    {include file="opinion/authors/modals/_modalAccept.tpl"}
 {/block}

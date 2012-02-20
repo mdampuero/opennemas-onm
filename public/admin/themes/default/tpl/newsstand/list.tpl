@@ -1,31 +1,33 @@
 {extends file="base/admin.tpl"}
+
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
 {/block}
+
 {block name="content"}
+<form action="#" method="get" name="formulario" id="formulario">
+
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}Newsstand Manager{/t}::&nbsp; {if !empty($datos_cat[0])}{$datos_cat[0]->title}{else}{t}Widget Home{/t}{/if}</h2></div>
         <ul class="old-button">
             {acl isAllowed="KIOSKO_DELETE"}
             <li>
-                <a class="delChecked" data-controls-modal="modal-kiosko-batchDelete" href="#" title="Eliminar" alt="Eliminar">
-                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                <a class="delChecked" data-controls-modal="modal-kiosko-batchDelete" href="#" title="{t}Delete{/t}">
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                 </a>
             </li>
             {/acl}
             {acl isAllowed="KIOSKO_AVAILABLE"}
             <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 0);" name="submit_mult" value="noFrontpage" title="noFrontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="noFrontpage" alt="noFrontpage" ><br />Despublicar
-                </a>
-            </li>
-            {/acl}
-            {acl isAllowed="KIOSKO_AVAILABLE"}
-            <li>
-                <a href="#" class="admin_add" onClick="javascript:enviar2(this, '_self', 'mfrontpage', 1);" name="submit_mult" value="Frontpage" title="Frontpage">
-                    <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="Publicar" alt="Publicar" ><br />Publicar
-                </a>
+                    <button value="batchnoFrontpage" name="buton-batchnoFrontpage" id="buton-batchnoFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
+                   </button>
+               </li>
+               <li>
+                   <button value="batchFrontpage" name="buton-batchFrontpage" id="buton-batchFrontpage" type="submit">
+                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
+                   </button>
             </li>
             {/acl}
             {acl isAllowed="KIOSKO_CREATE"}
@@ -53,9 +55,6 @@
 <div class="wrapper-content">
 
 {render_messages}
-
-
-<form action="#" method="post" name="formulario" id="formulario">
 
     {* ZONA MENU CATEGORIAS ******* *}
 
@@ -102,7 +101,7 @@
         {section name=as loop=$portadas}
         <tr data-id="{$portadas[as]->pk_kiosko}">
             <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$albums[as]->id}"  style="cursor:pointer;" >
+                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$portadas[as]->id}"  style="cursor:pointer;" >
             </td>
             <td >
                 <img src="{$KIOSKO_IMG_URL}{$portadas[as]->path}{$portadas[as]->name|regex_replace:"/.pdf$/":".jpg"}"
@@ -198,10 +197,31 @@
             </tr>
         </tfoot>
     </table>
+    <input type="hidden" name="category" id="category" value="{$category}" />
+    <input type="hidden" id="status" name="status" value="" />
     <input type="hidden" id="action" name="action" value="" />
-    <input type="hidden" id="id" name="id" value="" />
-</form>
+    <input type="hidden" name="id" id="id" value="{$id|default:""}" />
+
+     <script>
+        jQuery('#buton-batchnoFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "0");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+        jQuery('#buton-batchFrontpage').on('click', function(){
+            jQuery('#action').attr('value', "batchFrontpage");
+            jQuery('#status').attr('value', "1");
+            jQuery('#formulario').submit();
+            e.preventDefault();
+        });
+    </script>
 </div>
+</form>
+{include file="newsstand/modals/_modalDelete.tpl"}
+{include file="newsstand/modals/_modalBatchDelete.tpl"}
+{include file="newsstand/modals/_modalAccept.tpl"}
+
 {if $category eq 'favorite'}
     <script type="text/javascript">
 

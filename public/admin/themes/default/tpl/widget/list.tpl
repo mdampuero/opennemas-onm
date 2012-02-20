@@ -17,26 +17,6 @@ document.observe('dom:loaded', function() {
 
 </script>
 
-
-<script language="javascript">
-// <![CDATA[
-function enviar(frm, trg, acc, id) {
-    frm.target = trg;
-
-    $('action').value = acc;
-    $('id').value = id;
-
-    frm.submit();
-}
-
-function confirmar() {
-    if (confirm('¿Está seguro de querer eliminar este elemento?')) {
-        window.location = this.href;
-    }
-}
-// ]]>
-</script>
-
 {/block}
 
 {block name="content"}
@@ -77,7 +57,7 @@ function confirmar() {
             <tbody>
                 {section name=wgt loop=$widgets}
                 <tr>
-                    <td>                       
+                    <td>
                         {$widgets[wgt]->title}
                     </td>
 
@@ -98,7 +78,7 @@ function confirmar() {
                     </td>
 
                     <td>
-                        <ul class="action-buttons clearfix">                            
+                        <ul class="action-buttons clearfix">
                             {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
                             {acl isAllowed="WIDGET_UPDATE"}
                             <li>
@@ -108,8 +88,10 @@ function confirmar() {
                             {/acl}
                             {acl isAllowed="WIDGET_DELETE"}
                             <li>
-                                <a href="widget.php?action=delete&id={$widgets[wgt]->pk_widget}" onclick="confirmar()" title="{t}Delete{/t}">
-                                <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
+                                <a class="del" data-controls-modal="modal-from-dom"
+                                   data-id="{$widgets[wgt]->pk_widget}" title="{t}Delete{/t}"
+                                   data-title="{$widgets[wgt]->title|capitalize}" href="#" >
+                                    <img src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
                             </li>
                             {/acl}
                             {else}
@@ -137,4 +119,5 @@ function confirmar() {
 
     </div>
 </div>
+    {include file="widget/modals/_modalDelete.tpl"}
 {/block}

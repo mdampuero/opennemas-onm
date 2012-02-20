@@ -386,11 +386,11 @@ switch($action) {
         $foto = new Photo($id);
         $contents = $foto->is_used($id);
 
-
         if (count($contents) > 0 && ($forceDelete != 'yes')) {
             $cm = new ContentManager();
             $related_contents = $cm->getContents($contents);
             $tpl->assign('related_contents', $related_contents);
+            $tpl->assign('foto', $foto);
             $tpl->assign('id',$id);
             $tpl->assign('form_action', $_SERVER['REQUEST_URI']);
             $tpl->display('image/delete_relations.tpl');
@@ -398,7 +398,7 @@ switch($action) {
             $foto->delete($id, $_SESSION['userid']);
             Application::forward(
                 $_SERVER['SCRIPT_NAME'] . '?action=' . $_SESSION['desde']
-                .'&category=' . $category . '&page=' . $page
+                .'&category=' . $foto->category . '&page=' . $page
             );
         }
         break;

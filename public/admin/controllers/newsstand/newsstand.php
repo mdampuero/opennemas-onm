@@ -181,10 +181,12 @@ switch($action) {
     case 'delete':
 
         Acl::checkOrForward('KIOSKO_DELETE');
-        $portada = new Kiosko($_REQUEST['id']);
+        $id = filter_input(INPUT_POST,'id',FILTER_DEFAULT);
+        if (!empty($id)) {
+            $portada = new Kiosko($id);
 
-        $portada->delete();
-
+            $portada->delete($id);
+        }
         Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
     break;
 
@@ -217,10 +219,10 @@ switch($action) {
     break;
 
     case 'batchDelete':
-        Acl::checkOrForward('LETTER_DELETE');
+        Acl::checkOrForward('KIOSKO_DELETE');
 
-        if(isset($_REQUEST['selected_fld']) && count($_REQUEST['selected_fld']) > 0) {
-            $fields = $_REQUEST['selected_fld'];
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
 
             if(is_array($fields)) {
                 foreach($fields as $i ) {
@@ -232,6 +234,27 @@ switch($action) {
 
         Application::forward($_SERVER['SCRIPT_NAME'] . '?action=list&letter_status=' .
                     $letterStatus . '&page=' . $page);
+    break;
+
+    case 'batchFrontpage':
+
+        Acl::checkOrForward('KIOSKO_AVAILABLE');
+        if(isset($_GET['selected_fld']) && count($_GET['selected_fld']) > 0) {
+            $fields = $_GET['selected_fld'];
+
+            $status = filter_input( INPUT_GET, 'status' , FILTER_SANITIZE_NUMBER_INT );
+            if(is_array($fields)) {
+                foreach($fields as $i ) {
+                    $portada = new Kiosko($i);
+                    $portada->set_available($status, $_SESSION['userid']);
+                    if($status == 0){
+                        $portada->set_favorite($status, $_SESSION['userid']);
+                    }
+                }
+            }
+        }
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$category.'&page='.$page);
+
     break;
 
     case 'save_positions':
@@ -260,6 +283,6 @@ switch($action) {
     break;
 
     default:
-        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
+        Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category']);
     break;
 }
