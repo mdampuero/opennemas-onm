@@ -31,7 +31,7 @@
     <div class="top-action-bar">
         <div class="wrapper-content">
             <div style='float:left;margin-left:10px;margin-top:10px;'><h2></h2></div>
-            <div class="title"><h2> {t}Media manager{/t} :: {t 1=$datos_cat[0]->title}Deleting image '%1'{/t}</h2></div>
+            <div class="title"><h2> {t}Media manager{/t} :: {t 1=$foto->name}Deleting image '%1'{/t}</h2></div>
             <ul class="old-button">
                 <li class="separator"></li>
                 <li>
@@ -75,6 +75,7 @@
         </div>
 
     </div><!--wrapper-content-->
+    <input type="hidden" name="category" value="{$foto->category}" />
     <input type="hidden" name="action" value="delete" />
     <input type="hidden" name="force" value="yes" />
     <input type="hidden" name="id" value="{$id}" />
