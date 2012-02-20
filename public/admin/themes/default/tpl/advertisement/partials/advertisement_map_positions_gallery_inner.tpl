@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-gallery-inner" style="">
     <div id="advertisement-mosaic-frame-gallery-inner"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/right1Ads.png" width="240" usemap="#mapGallery" />
+    <img src="{$params.IMAGE_DIR}/advertisement/right1Ads.png" width="240" usemap="#mapGallery" />
 </div>
 
 <map name="mapGallery">

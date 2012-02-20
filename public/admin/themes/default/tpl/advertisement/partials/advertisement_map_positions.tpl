@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic">
     <div id="advertisement-mosaic-frame"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+    <img src="{$params.IMAGE_DIR}/advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
 </div>
 
 <map name="mapPortada">

@@ -1,6 +1,6 @@
 <div id="advertisement-mosaic-video" style="">
     <div id="advertisement-mosaic-frame-video"></div>
-    <img src="{$smarty.const.SITE_URL_ADMIN}/images/advertisement/videoAds.png" width="240" height="401" usemap="#mapVideo" />
+    <img src="{$params.IMAGE_DIR}/advertisement/videoAds.png" width="240" height="401" usemap="#mapVideo" />
 </div>
 
 <map name="mapVideo">
