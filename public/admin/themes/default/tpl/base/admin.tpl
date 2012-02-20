@@ -48,7 +48,6 @@
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js"}
         {script_tag src="/modernizr/modernizr-2.5.0.min.js"}
-        {script_tag src="/fabtabulous.js"}
         {script_tag src="/control.maxlength.js"}
         {script_tag src="/utils.js"}
         {script_tag src="/utils_header.js"}

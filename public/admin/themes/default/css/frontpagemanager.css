@@ -96,7 +96,7 @@ div#content-provider .ui-tabs-panel .content-provider-block > div {
 }
 #content-provider .ui-tabs .ui-tabs-panel {
     padding:3px !important;
-    margin-top: 26px;
+    margin-top: 29px;
     border:0 none;
     border-top: 1px solid #ccc;
 }
@@ -141,24 +141,27 @@ div.content-provider-block {
 
 
 div#content-provider .ui-widget-header {
-    background:none !important;
     border:0 none;
 }
-dic#content-provider .ui-tabs {
+#content-provider .ui-tabs {
     background:none;
     padding:0;
 }
 #content-provider.ui-widget-content {
     background:none;
-    max-height:300px;
 }
 
 #content-provider .ui-tabs-panel {
     background:White;
+    max-height:500px;
 }
 #content-provider .ui-tabs-nav {
-    padding:0 !important;
-    margin:0 3px;
+    padding:3px 0 0 0 !important;
+    background:#F9F9F9 !important;
+}
+
+#content-provider .ui-tabs-nav * {
+    outline:none;
 }
 
 div#content-provider input[type="checkbox"],
@@ -248,8 +251,7 @@ div#content-provider span.type {
     padding:0;
 }
 #content-provider .ui-tabs-selected,
-#content-provider .ui-state-active,
-div#content-provider #toggler:hover {
+#content-provider .ui-state-active {
     background: White !important;
     color:Black !important;
     border-bottom: 1px solid White;
@@ -274,6 +276,8 @@ div#content-provider #toggler{
     font-weight: normal;
     padding-left: 6px;
     padding-right: 6px;
+    padding-top:4px;
+    padding-bottom:6px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-width: 1px;
@@ -292,6 +296,9 @@ div#content-provider #toggler{
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eAeAeA', endColorstr='#D2D2D2'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#eAeAeA), to(#D2D2D2)); /* for webkit browsers */
     background: -moz-linear-gradient(top,  #eAeAeA,  #D2D2D2); /* for firefox 3.6+ */
+}
+.ui-tabs-nav li:first-child{
+    margin-left:10px;
 }
 /* ----------------------------------------------------------------------------------------------------------------*/
 /* ---------->>> thickbox settings <<<-----------------------------------------------------------------------------*/

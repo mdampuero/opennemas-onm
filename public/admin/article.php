@@ -1636,6 +1636,88 @@ if (isset($_REQUEST['action']) ) {
             Application::forward('index.php?go=' . urlencode($uri));
         } break;
 
+        case 'content-provider-suggested':
+
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+
+            if ($category == 'home') { $category = 0; }
+
+            $cm = new  ContentManager();
+
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if (count($contentElementsInFrontpage) > 0) {
+                $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+            }
+
+            list($widgets, $pager) = $cm->find_pages(
+                'video',
+                'contents.available=1', 'ORDER BY created DESC', $page, 9
+            );
+
+            // var_dump($widgets, $pager);die();
+
+            $videos = $cm->find(
+                'video',
+                'contents.available = 1 ' . $sqlExcludedOpinions,
+                ' ORDER BY created DESC LIMIT 0,10'
+            );
+
+            $tpl->assign(array(
+                'videos' => $videos,
+                'pager'   => $pager,
+            ));
+
+            $tpl->display('video/content-provider.tpl');
+
+            break;
+
+        case 'content-provider-category':
+
+            $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+            $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+
+            if ($category == 'home') { $category = 0; }
+
+            $cm = new  ContentManager();
+
+            // Get contents for this home
+            $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+            // Fetching opinions
+            $sqlExcludedOpinions = '';
+            if (count($contentElementsInFrontpage) > 0) {
+                $contentsExcluded = implode(', ', $contentElementsInFrontpage);
+                $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+            }
+
+            list($widgets, $pager) = $cm->find_pages(
+                'video',
+                'contents.available=1', 'ORDER BY created DESC', $page, 9
+            );
+
+            // var_dump($widgets, $pager);die();
+
+            $videos = $cm->find(
+                'video',
+                'contents.available = 1 ' . $sqlExcludedOpinions,
+                ' ORDER BY created DESC LIMIT 0,10'
+            );
+
+            $tpl->assign(array(
+                'videos' => $videos,
+                'pager'   => $pager,
+            ));
+
+            $tpl->display('video/content-provider.tpl');
+
+            break;
+
         default: {
             Application::forward($_SERVER['SCRIPT_NAME'].'?action=list&category='.$_REQUEST['category'].'&page='.$_REQUEST['page']);
         } break;

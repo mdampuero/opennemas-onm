@@ -1,62 +1,3 @@
-// jQuery FrontpageManager plugin
-// A plugin for jQuery for managing ONM LayoutManager
-// version 1.0, May 07th, 2011
-// by Fran Diéguez
-
-(function($) {
-
-    $.fn.frontpageManager = function(method) {
-
-        var methods = {
-
-            init : function(options) {
-                this.frontpageManager.settings = $.extend({}, this.frontpageManager.defaults, options);
-                return this.each(function() {
-                    var $element = $(this), // reference to the jQuery version of the current DOM element
-                         element = this;      // reference to the actual DOM element
-
-                    // console.log($.fn.frontpageManager.settings);
-                    // code goes here
-                    // console.log(this.frontpageManager.settings.foo);
-                });
-
-            },
-
-            // a public method. for demonstration purposes only - remove it!
-            foo_public_method: function() {
-                // code goes here
-            }
-
-        };
-
-        var helpers = {
-            foo_private_method: function() {
-                // code goes here
-            }
-        };
-
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if (typeof method === 'object' || !method) {
-            return methods.init.apply(this, arguments);
-        } else {
-            $.error( 'Method "' +  method + '" does not exist in frontpageManager plugin!');
-        }
-
-    };
-
-    $.fn.frontpageManager.defaults = {
-        placeholder_element_class: 'placeholder-element',
-
-    };
-
-    $.fn.frontpageManager.settings = {};
-
-})(jQuery);
-
-
-
-
 jQuery(document).ready(function($){
 
     makeContentProviderAndPlaceholdersSortable = function () {
@@ -113,8 +54,6 @@ jQuery(document).ready(function($){
 
         });
 
-        console.log(els);
-
         jQuery.post("frontpagemanager.php?action=save_positions&category=" + category,
                 { 'contents_positions': els }
         ).success(function(data) {
@@ -126,20 +65,17 @@ jQuery(document).ready(function($){
         return false;
     });
 
-    $(function() {
-        $( "#dialog" ).dialog();
-    });
-
-
-    jQuery('.selectButton, .edit-button, .settings-button, .home-button, .delete-button').click(function (){
+    jQuery('.selectButton, .settings-button, .home-button, .delete-button').click(function (){
         alert('Not implemented yet.');
         return false;
     });
 
-    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false });
+    $( "#content-provider").dialog({ minWidth: 600, autoOpen: false, maxHeight: 500 });
+
     $('#button_addnewcontents').on('click', function() {
         $( "#content-provider").dialog('open');
     });
+
     $( "#content-provider .content-provider-block-wrapper").tabs({
         ajaxOptions: {
             error: function( xhr, status, index, anchor ) {

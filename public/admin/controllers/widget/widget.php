@@ -118,25 +118,35 @@ switch($action) {
     case 'content-provider':
 
         $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+        $page     = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_STRING,   array('options' => array( 'default' => 'home')));
+
         if ($category == 'home') { $category = 0; }
-                
+
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
 
         // Fetching opinions
         $sqlExcludedOpinions = '';
-        if(count($contentElementsInFrontpage) > 0) {
+        if (count($contentElementsInFrontpage) > 0) {
             $contentsExcluded = implode(', ', $contentElementsInFrontpage);
             $sqlExcludedOpinions = ' AND `pk_widget` NOT IN ('.$contentsExcluded.')';
         }
+
+        list($widgets, $pager) = $cm->find_pages(
+            'Widget',
+            'contents.available=1', 'ORDER BY created DESC', $page, 9
+        );
+        // var_dump($widgets, $pager);die();
+
         $widgets = $cm->find(
             'Widget',
             'contents.available = 1 ' . $sqlExcludedOpinions,
-            ' ORDER BY created DESC LIMIT 0,16'
+            ' ORDER BY created DESC LIMIT 0,10'
         );
 
         $tpl->assign(array(
-            'widgets' => $widgets, 
+            'widgets' => $widgets,
+            'pager'   => $pager,
         ));
 
         $tpl->display('widget/content-provider.tpl');

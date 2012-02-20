@@ -13,7 +13,7 @@
         <li>
             <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/opinion/opinion.php?action=read&id={$content->id}&category={$smarty.request.category}" class="action-button edit-button"></a>
         </li>
-        
-    </ul>   
+
+    </ul>
     <div class="selectButton"></div>
 </div>

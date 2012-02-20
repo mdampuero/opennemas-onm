@@ -1,5 +1,6 @@
 <div id="widgets_available" class="content-provider-block">
+    {$pager|var_dump}
     {foreach from=$widgets item=content name=widget_loop}
-        {include file="frontpagemanager/content-types/widget.tpl"}       
+        {include file="widget/content-provider/widget.tpl"}
     {/foreach}
 </div>

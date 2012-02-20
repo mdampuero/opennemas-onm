@@ -8,26 +8,6 @@
 
 {/block}
 
-{block name="footer-js" append}
-    {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
-    <script defer="defer">
-        jQuery(document).ready(function($) {
-           jQuery('#frontpagemanager').frontpageManager();
-        });
-
-
-        // Make sortable elements
-
-        // Check when some element is dragged to show the warnings-validation hit
-        // remembering to save positions
-        //
-
-        // Add the tabs for content-providers
-
-    // ]]>
-    </script>
-{/block}
-
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
@@ -99,11 +79,11 @@
                 <ul>
                     {if $category neq 'home'}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
                     </li>
                     {else}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/article/article.php?action=suggested-content-provider&amp;category={$category}">{t}Suggested articles{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=suggested-content-provider&amp;category={$category}">{t}Suggested articles{/t}</a>
                     </li>
                     {/if}
                     <li>
@@ -112,17 +92,8 @@
                     <li>
                         <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/opinion/opinion.php?action=content-provider&amp;category={$category}">{t}Opinions{/t}</a>
                     </li>
-
                     <li>
-                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/album/album.php?action=content-provider&amp;category={$category}">{t}Albums{/t}</a>
-                    </li>
-
-                    <li>
-                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/image/image.php?action=content-provider&amp;category={$category}">{t}Images{/t}</a>
-                    </li>
-
-                    <li>
-                        <a href="#{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/image/image.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/controllers/video/video.php?action=content-provider&amp;category={$category}">{t}Videos{/t}</a>
                     </li>
                 </ul>
             </div>

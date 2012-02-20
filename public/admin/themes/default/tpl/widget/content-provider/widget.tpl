@@ -18,14 +18,14 @@
         <li>
             <a title="{t}Suggest to home{/t}" href="#" class="action-button home-button"></a>
         </li>
-        
+
         <li>
             <a title="{t}Settings{/t}" href="#" class="action-button settings-button"></a>
         </li>
         <li>
             <a title="{t}Arquive this widget{/t}" href="/admin/controllers/widget/widget.php?action=delete&id={$content->id}" class="action-button delete-button"></a>
         </li>
-        
-    </ul>   
+
+    </ul>
     <div class="selectButton"></div>
-</div>    
+</div>

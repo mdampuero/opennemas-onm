@@ -74,7 +74,7 @@ switch ($action) {
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        // Populate more data for each content 
+        // Populate more data for each content
         foreach ($contentElementsInFrontpage as &$content){
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->publisher      = $aut->get_user_name($content->fk_publisher);
@@ -82,6 +82,8 @@ switch ($action) {
             $content->ratings        = $rating->get_value($content->id);
             $content->comments       = $comment->count_public_comments($content->id);
         }
+        // var_dump($contentElementsInFrontpage);die();
+
 
         $lm  = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
@@ -90,47 +92,7 @@ switch ($action) {
             'contents' => $contentElementsInFrontpage
         ));
 
-        $contentsExcludedForProposed = array();
-        foreach($contentElementsInFrontpage as &$content) {
-            $contentsExcludedForProposed[] = $content->id;
-        }
-
-        // Fetch suggested Articles for homepage
-        $suggestedArticles = $cm->getSuggestedContentsForHomePage();
-        $tpl->assign('suggestedArticles', $suggestedArticles);
-
-        // Fetching opinions
-        $sqlExcludedOpinions = '';
-        if(count($contentsExcludedForProposed) > 0) {
-            $opinionsExcluded = implode(', ', $contentsExcludedForProposed);
-            $sqlExcludedOpinions = ' AND `pk_opinion` NOT IN ('.$opinionsExcluded.')';
-        }
-        $opinions = $cm->find(
-            'Opinion',
-            'contents.available = 1 ' . $sqlExcludedOpinions,
-            ' ORDER BY created DESC LIMIT 0,16'
-        );
-        foreach($opinions as &$opinion) {
-            $opinion->comments = $comment->count_public_comments($opinion->id);
-            $opinion->author   = new Author($opinion->fk_author);
-            $opinion->ratings  = $rating->get_value($opinion->id);
-        }
-
-        // Computing and fetching widgets
-        $sqlExcludedWidgets = '';
-        if (count($contentsExcludedForProposed) > 0) {
-            $widgets_excluded = implode(', ', $contentsExcludedForProposed);
-            $sqlExcludedWidgets = ' AND `pk_widget` NOT IN ('.$widgets_excluded.')';
-        }
-        $widgets = $cm->find(
-            'Widget',
-            'fk_content_type=12 AND `available`=1 ' . $sqlExcludedWidgets,
-            'ORDER BY created DESC '
-        );
-
         $tpl->assign(array(
-            'widgets'            => $widgets,
-            'opinions'           => $opinions,
             'category'           => $category,
             'category_id'        => $categoryID,
             'frontpage_articles' => $contentElementsInFrontpage,
@@ -138,6 +100,7 @@ switch ($action) {
         ));
         $_SESSION['desde'] = 'list';
         $_SESSION['_from'] = $category;
+
 
         $tpl->display('frontpagemanager/list.tpl');
 
@@ -149,7 +112,7 @@ switch ($action) {
 
         // Setup view
         $tpl = new TemplateCacheManager(TEMPLATE_USER_PATH);
-        
+
         // Get the form-encoded places from request
         if (isset($_POST['contents_positions'])) {
             $contentsPositions = $_POST['contents_positions'];
@@ -159,16 +122,15 @@ switch ($action) {
         $categoryID = filter_input(INPUT_GET, 'category', FILTER_VALIDATE_INT);
         $validReceivedData = is_array($contentsPositions) && !empty($contentsPositions) && isset($categoryID);
 
-
         $savedProperly = false;
         if ($validReceivedData) {
-            
+
             $contents = array();
             // Iterate over each element and populate its element to save.
             foreach ($contentsPositions as $params) {
 
                 if (
-                    !isset($categoryID) || !isset($params['placeholder']) 
+                    !isset($categoryID) || !isset($params['placeholder'])
                     || !isset($params['position']) || !isset($params['content_type'])
                     || strpos('placeholder', $params['placeholder'])
                 ) {
@@ -181,7 +143,7 @@ switch ($action) {
                     'position' => $params['position'],
                     'content_type' => $params['content_type'],
                 );
-                
+
             }
 
             // Save contents
