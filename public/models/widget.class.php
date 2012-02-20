@@ -78,7 +78,7 @@ class Widget extends Content
         if ($data['renderlet'] != 'html' && $data['renderlet'] != 'smarty') {
             $data['content'] = strip_tags($data['content']);
         }
-        
+
         // Sort values
         $values = array($this->id, $data['content'], $data['renderlet']);
 
@@ -232,12 +232,12 @@ class Widget extends Content
         }
         return true;
     }
-    
+
     public static function getAllInteligentWidgets()
     {
         $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
         $allWidgets = array();
-        
+
         if(is_dir($path)){
             $objects = scandir($path);
             foreach ($objects as $object) {
@@ -248,7 +248,7 @@ class Widget extends Content
                         foreach ($objectWords as $word) {
                             $name .= ucfirst($word);
                         }
-                        
+
                         $allWidgets[] .=  $name;
                     }
                 }
@@ -256,8 +256,8 @@ class Widget extends Content
         }
         return $allWidgets;
     }
-    
-    
+
+
     /**
      * Delete
      *
@@ -352,7 +352,7 @@ class Widget extends Content
         try {
             $class = new $className;
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
             return "Widget {$this->content} not available";
         }
         return $class->render();

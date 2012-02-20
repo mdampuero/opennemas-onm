@@ -115,7 +115,7 @@ $tpl->assign(array(
     'category'=>$category ,
     'actual_category'=>$actual_category ,
     'category_real_name', $ccm->get_title($category_name)
-    ) );
+));
 
 
 $actual_category_id=$ccm->get_id($actual_category);

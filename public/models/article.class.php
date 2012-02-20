@@ -42,9 +42,9 @@ class Article extends Content
 
     /**
      * Initializes the Article object from an ID
-     * 
+     *
      * @param int $id the id of the article we want to initialize
-     * 
+     *
      * @return void
      **/
     public function __construct($id=null)
@@ -62,14 +62,14 @@ class Article extends Content
     /**
      * Magic method for populate properties on the fly
      *
-     * @return mixed 
-     * @author 
+     * @return mixed
+     * @author
      **/
     public function __get($name)
     {
         switch ($name) {
             case 'uri':
-                
+
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
@@ -104,7 +104,7 @@ class Article extends Content
      * Creates one article from an array of properties
      *
      * @param mixed $data array of properties for the article
-     * 
+     *
      * @return null if the article was not created
      * @return int  the id of the article
      **/
@@ -176,8 +176,8 @@ class Article extends Content
      *
      * @param string $data   list of related content IDs
      * @param int    $id     the id of the content we want to relate other contents
-     * @param string $method the method to bind related contents 
-     * 
+     * @param string $method the method to bind related contents
+     *
      * @return void
      **/
     public function saveRelated($data, $id, $method)
@@ -201,7 +201,7 @@ class Article extends Content
      * Reads the data for one article given one ID
      *
      * @param int $id the id to get its information
-     * 
+     *
      * @return void
      **/
     public function read($id)
@@ -237,7 +237,7 @@ class Article extends Content
      * Updates the information for one article given an array for the new data
      *
      * @return void
-     * @author 
+     * @author
      **/
     public function update($data)
     {
@@ -352,7 +352,7 @@ class Article extends Content
      * Deletes permanently one article given one  id
      *
      * @param int $id the id of the article we want to delete
-     * 
+     *
      * @return void
      **/
     public function remove($id)
@@ -382,7 +382,7 @@ class Article extends Content
      *
      * @param string $articlePK the id of the article
      * @param string $catName   the name of the article category
-     * 
+     *
      * @return string The new permalink
      */
     public function rebuildPermalink($articlePK, $catName=null)
@@ -404,7 +404,7 @@ class Article extends Content
         return $permalink;
     }
 
-    
+
     public function createClone($content)
     {
         $id = null;
@@ -816,5 +816,27 @@ class Article extends Content
     }
 
     /* }}} methods clone */
+
+    /**
+     * Renders the article given a set of parameters
+     *
+     * @return string the final html for the article
+     **/
+    public function render($params, $tpl = null)
+    {
+        if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        }
+
+        $tpl->assign('item',$this);
+        $tpl->assign('cssclass', 'article');
+
+        try {
+            $html = $tpl->fetch($params['tpl']);
+        } catch (\Exception $e) {
+            $html = 'Article not available';
+        }
+        return $html;
+    }
 
 }

@@ -2,7 +2,7 @@
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.article_loop.index}">
         <div class="title">
-            <span class="type">Article</span>
+            <span class="type">{t}Article{/t}</span>
             {$content->title}
         </div>
     </div>

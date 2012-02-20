@@ -8,6 +8,10 @@
 
 {/block}
 
+{block name="footer-js" append}
+    {script_tag src="/jquery-onm/jquery.frontpagemanager.js"}
+{/block}
+
 {block name="content"}
 <form action="#" method="post" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar">
@@ -79,11 +83,11 @@
                 <ul>
                     {if $category neq 'home'}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=other-contents-in-category-provider">{t}Other articles in this category{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-category">{t}Other articles in this category{/t}</a>
                     </li>
                     {else}
                     <li>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=suggested-content-provider&amp;category={$category}">{t}Suggested articles{/t}</a>
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.ADMIN_DIR}/article.php?action=content-provider-suggested&amp;category={$category}">{t}Suggested articles{/t}</a>
                     </li>
                     {/if}
                     <li>

@@ -2,7 +2,7 @@
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$smarty.foreach.widget_loop.index}">
         <div class="title">
-            <span class="type">Widget</span>
+            <span class="type">{t}Widget{/t}</span>
             {$content->title}
         </div>
     </div>
@@ -12,7 +12,7 @@
         </li>
         {if ($widgets[d]->renderlet != 'intelligentwidget')}
         <li>
-            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/widget/widget.php?action=edit&id={$content->id}&category={$smarty.request.category}" class="action-button edit-button"></a>
+            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/widget/widget.php?action=edit&amp;id={$content->id}&amp;category={$smarty.request.category}" class="action-button edit-button"></a>
         </li>
         {/if}
         <li>
@@ -23,7 +23,7 @@
             <a title="{t}Settings{/t}" href="#" class="action-button settings-button"></a>
         </li>
         <li>
-            <a title="{t}Arquive this widget{/t}" href="/admin/controllers/widget/widget.php?action=delete&id={$content->id}" class="action-button delete-button"></a>
+            <a title="{t}Arquive this widget{/t}" href="/admin/controllers/widget/widget.php?action=delete&amp;id={$content->id}" class="action-button delete-button"></a>
         </li>
 
     </ul>

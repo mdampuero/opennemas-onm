@@ -1652,28 +1652,24 @@ if (isset($_REQUEST['action']) ) {
             $sqlExcludedOpinions = '';
             if (count($contentElementsInFrontpage) > 0) {
                 $contentsExcluded = implode(', ', $contentElementsInFrontpage);
-                $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+                $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
             }
 
-            list($widgets, $pager) = $cm->find_pages(
-                'video',
+            list($articles, $pager) = $cm->find_pages(
+                'Article',
                 'contents.available=1', 'ORDER BY created DESC', $page, 9
             );
-
-            // var_dump($widgets, $pager);die();
-
-            $videos = $cm->find(
-                'video',
-                'contents.available = 1 ' . $sqlExcludedOpinions,
-                ' ORDER BY created DESC LIMIT 0,10'
+            $articles = $cm->find(
+                'Article',
+                'contents.available=1', 'ORDER BY created DESC LIMIT 0,10'
             );
 
             $tpl->assign(array(
-                'videos' => $videos,
+                'articles' => $articles,
                 'pager'   => $pager,
             ));
 
-            $tpl->display('video/content-provider.tpl');
+            $tpl->display('article/content-provider-suggested.tpl');
 
             break;
 
@@ -1693,28 +1689,19 @@ if (isset($_REQUEST['action']) ) {
             $sqlExcludedOpinions = '';
             if (count($contentElementsInFrontpage) > 0) {
                 $contentsExcluded = implode(', ', $contentElementsInFrontpage);
-                $sqlExcludedOpinions = ' AND `pk_video` NOT IN ('.$contentsExcluded.')';
+                $sqlExcludedOpinions = ' AND `pk_article` NOT IN ('.$contentsExcluded.')';
             }
 
-            list($widgets, $pager) = $cm->find_pages(
-                'video',
-                'contents.available=1', 'ORDER BY created DESC', $page, 9
-            );
-
-            // var_dump($widgets, $pager);die();
-
-            $videos = $cm->find(
-                'video',
-                'contents.available = 1 ' . $sqlExcludedOpinions,
-                ' ORDER BY created DESC LIMIT 0,10'
+            $articles = $cm->find(
+                'Article',
+                'contents.available=1', 'ORDER BY created DESC LIMIT 0,10'
             );
 
             $tpl->assign(array(
-                'videos' => $videos,
-                'pager'   => $pager,
+                'articles' => $articles,
             ));
 
-            $tpl->display('video/content-provider.tpl');
+            $tpl->display('article/content-provider-category.tpl');
 
             break;
 

@@ -8,10 +8,10 @@
     </div>
     <ul class="action-buttons">
         <li>
-            <a href="/admin/controllers/opinion/opinion.php?action=delete&id={$content->id}" title="Eliminar" class="action-button delete-button"></a>
+            <a href="/admin/controllers/opinion/opinion.php?action=delete&amp;id={$content->id}" title="Eliminar" class="action-button delete-button"></a>
         </li>
         <li>
-            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/opinion/opinion.php?action=read&id={$content->id}&category={$smarty.request.category}" class="action-button edit-button"></a>
+            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/opinion/opinion.php?action=read&amp;id={$content->id}&amp;category={$smarty.request.category}" class="action-button edit-button"></a>
         </li>
 
     </ul>
