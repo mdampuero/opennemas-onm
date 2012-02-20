@@ -63,27 +63,13 @@ switch ($action) {
             $tpl->assign('category', $_REQUEST['category']);
         }
 
-        $cm      = new ContentManager();
-        $rating  = new Rating();
-        $comment = new Comment();
-        $aut     = new User();
+        $cm = new ContentManager();
 
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
 
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
-
-        // Populate more data for each content
-        foreach ($contentElementsInFrontpage as &$content){
-            $content->category_name  = $content->loadCategoryName($content->id);
-            $content->publisher      = $aut->get_user_name($content->fk_publisher);
-            $content->last_editor    = $aut->get_user_name($content->fk_user_last_editor);
-            $content->ratings        = $rating->get_value($content->id);
-            $content->comments       = $comment->count_public_comments($content->id);
-        }
-        // var_dump($contentElementsInFrontpage);die();
-
 
         $lm  = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/default.xml"
@@ -100,7 +86,6 @@ switch ($action) {
         ));
         $_SESSION['desde'] = 'list';
         $_SESSION['_from'] = $category;
-
 
         $tpl->display('frontpagemanager/list.tpl');
 

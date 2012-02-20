@@ -33,7 +33,7 @@ if (
     $section = (!empty($subcategory_name))? $subcategory_name: $category_name;
     $section = (is_null($section))? 'home': $section;
 
-    $tpl->loadConfigOrDefault('template.conf', $section); // $category_name is a string
+    $tpl->loadConfigOrDefault('template.conf', $section);
     unset($section);
 
     // If no home category name
@@ -81,90 +81,44 @@ if (
 
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
 
-    $articles_home = array();
-    foreach ($contentsInHomepage as $content) {
-        if(isset($content->home_placeholder)
-           && !empty($content->home_placeholder)
-           && ($content->home_placeholder != '')
-           )
-        {
-            $articles_home[] = $content;
-        }
-    }
+
     // Filter articles if some of them has time scheduling and sort them by position
-    $articles_home = $cm->getInTime($articles_home);
-    $articles_home = $cm->sortArrayofObjectsByProperty($articles_home, 'position');
+    $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+    $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
     /***** GET ALL FRONTPAGE'S IMAGES *******/
-    $imagenes = array();
-    foreach ($articles_home as $i => $art) {
-        if (isset($art->img1)) {
-            $imagenes[] = $art->img1;
+    $imageIdsList = array();
+    foreach ($contentsInHomepage as $content) {
+        if (isset($content->img1)) {
+            $imageIdsList []= $content->img1;
         }
     }
 
-    if (count($imagenes)>0) {
-        $imagenes = $cm->find('Photo', 'pk_content IN ('. implode(',', $imagenes) .')');
+    if (count($imageIdsList) > 0) {
+        $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+    } else {
+        $imageList = array();
     }
 
     $column = array();
-    $relia  = new Related_content();
 
-    $c = 0;
-    $aux = 0;
-    //Flag para saber si hay una noticia destacada
-    while (isset($articles_home[$aux]) && $articles_home[$aux]->title != "") {
-        $column[$c] = $articles_home[$aux];
-        $column[$c]->category_name = $column[$c]->loadCategoryName($articles_home[$aux]->id);
-        $column[$c]->category_title = $column[$c]->loadCategoryTitle($articles_home[$aux]->id);
-        /*****  GET IMAGE DATA *****/
-        if (isset($column[$c]->img1)) {
-            // Buscar la imagen
-            if (!empty($imagenes)) {
-                foreach ($imagenes as $img) {
-                    if ($img->pk_content == $column[$c]->img1) {
-                        $column[$c]->img1_path = $img->path_file.$img->name;
-                        $column[$c]->img1 = $img;
-                        break;
-                    }
-                }
-            }
-        }
+    // Overloading information for contents
+    foreach ($contentsInHomepage as &$content) {
 
-        /***** GET OBJECT VIDEO *****/
-        if (empty($column[$c]->img1) and isset($column[$c]->fk_video) and (!empty($column[$c]->fk_video))) {
-            $video=$column[$c]->fk_video;
-            if (isset($video)) {
-               $video1= new Video($video);
-               $column[$c]->obj_video= $video1;
-            }
-        }
+        // Load category related information
+        $content->category_name  = $content->loadCategoryName($content->id);
+        $content->category_title = $content->loadCategoryTitle($content->id);
 
-        /***** COLUMN1 RELATED NEWS  ****/
-        $relations = $relia->get_relations($articles_home[$aux]->id);
-
-        $relats = array();
-        foreach ($relations as $i => $id_rel) { //Se recorre el array para sacar todos los campos.
-
-            $obj = new Content($id_rel);
-            // Filter by scheduled {{{
-            if ($obj->isInTime() && $obj->available==1 && $obj->in_litter==0) {
-                $obj->category_name = $ccm->get_name($obj->category);
-                $relats[] = $obj;
-            }
-            // }}}
-        }
-        $column[$c]->related_contents = $relats;
-
-
-
-        $c++; $aux ++;
+        // Load attached and related contents from array
+        $content->loadFrontpageImageFromHydratedArray($imageList)
+                ->loadAttachedVideo()
+                ->loadRelatedContents();
     }
 
-    $tpl->assign('column', $column);
+    $tpl->assign('column', $contentsInHomepage);
 
     // Fetch information for Static Pages
-     //TODO: Move to a widget. Used in all templates
+    //TODO: Move to a widget. Used in all templates
     require_once "widget_static_pages.php";
 
 } // $tpl->is_cached('index.tpl')

@@ -11,7 +11,7 @@
             <a href="" title="Eliminar"><img height=16px src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
         </li>
         <li>
-            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/article/article.php?action=edit&amp;id={$content->id}&amp;category={$smarty.request.category}" class="action-button edit-button"></a>
+            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/article.php?action=read&amp;id={$content->id}&amp;category={$smarty.request.category}" class="action-button edit-button"></a>
         </li>
         <li>
             <a title="{t}Suggest to home{/t}" href="#" class="action-button home-button"></a>

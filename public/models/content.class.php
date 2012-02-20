@@ -114,6 +114,36 @@ class Content
 
                 break;
 
+            case 'category_name':
+
+                $this->category_name = $this->loadCategoryName($this->id);
+                return $this->category_name;
+                break;
+
+            case 'publisher':
+                $user  = new User();
+                $this->publisher = $user->get_user_name($this->fk_publisher);
+                return $this->publisher;
+                break;
+
+            case 'last_editor':
+                $user  = new User();
+                $this->last_editor = $user->get_user_name($this->fk_user_last_editor);
+                return $this->last_editor;
+                break;
+
+            case 'ratings':
+                $rating = new Rating();
+                $this->ratings = $rating->get_value($this->id);
+                return $this->ratings;
+                break;
+
+            case 'comments':
+                $comment = new Comment();
+                $this->comments = $comment->count_public_comments($this->id);
+                return $this->comments;
+                break;
+
             default:
                 break;
         }
@@ -1598,5 +1628,82 @@ class Content
         }
 
         return $contentsUrns;
+    }
+
+    /**
+     * Returns true if a match time contraints, is available and is not in trash
+     *
+     * @return boolean true if is ready
+     **/
+    public function isReadyForPublish()
+    {
+        return ($this->isInTime() && $this->available==1 && $this->in_litter==0);
+    }
+
+
+    /**
+     * Loads all the related contents for this content
+     *
+     **/
+    public function loadRelatedContents()
+    {
+
+        $relationsHandler  = new Related_content();
+        $this->related_contents = array();
+        $relations = $relationsHandler->get_relations($this->id);
+
+        if (count($relations) > 0) {
+            foreach ($relations as $i => $relatedContentId) {
+                $content = new Content($relatedContentId);
+
+                // Only include content is is in time and available.
+                if ($content->isReadyForPublish()) {
+                    $content->category_name = $ccm->get_name($content->category);
+                    $this->related_contents []= $content;
+                }
+            }
+        }
+        return $this;
+    }
+
+
+    /**
+     * Loads all the attached images for this content given an array of images
+     *
+     * @return Content the object with the images loaded
+     **/
+    public function loadFrontpageImageFromHydratedArray($images)
+    {
+        if (isset($this->img1)) {
+            // Buscar la imagen
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    if ($image->pk_content == $this->img1) {
+                        $this->img1_path = $image->path_file.$image->name;
+                        $this->img1 = $image;
+                        break;
+                    }
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Loads the attached video's information for the content. If force param is true
+     * don't take care of attached images.
+     *
+     * @return Content the object with the video information loaded
+     * @author
+     **/
+    public function loadAttachedVideo($force = false)
+    {
+        if (
+            ($force || empty($content->img1))
+            && !empty($content->fk_video)
+        ) {
+           $content->obj_video = new Video($content->fk_video);;
+        }
+        return $this;
     }
 }
