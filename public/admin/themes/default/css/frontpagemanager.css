@@ -188,24 +188,27 @@ div#content-provider .ui-widget-header {
 }
 
 div#content-provider input[type="checkbox"],
-div#content-provider ul.action-buttons {
+div#content-provider div.content-action-buttons {
     display:none;
 }
-div.content ul.action-buttons{
+div.content .content-action-buttons{
     display:none;
-    background:white;
     position:absolute;
     top:5px;
-    right:35px;
-    text-align:right;
-    padding:2px 8px;
-    width:auto;
-    max-height:18px;
+    right:5px;
+    max-height:18px !important;
 }
-#frontpagemanager div.content div:hover ul.action-buttons {
+#frontpagemanager div.content div:hover .content-action-buttons {
     display:block;
 }
-#frontpagemanager div.content >div {
+#frontpagemanager div.content .btn-group .btn {
+    margin-left: 0;
+    padding: 0 6px;
+    font-size: 0.9em;
+    color:Black;
+}
+
+#frontpagemanager div.content > div {
     position:relative;
 }
 div.content div.description div {

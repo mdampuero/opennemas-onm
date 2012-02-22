@@ -1,7 +1,14 @@
 <?php
-
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ **/
 // Start up and setup the app
-require_once('../bootstrap.php');
+require_once '../bootstrap.php';
 
 // Redirect Mobile browsers to mobile site unless a cookie exists.
 $app->mobileRouter();
@@ -77,10 +84,9 @@ if (
 
     require_once "index_sections.php";
 
-    $cm = new ContentManager();
+    $cm = new ContentManager;
 
     $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
 
     // Filter articles if some of them has time scheduling and sort them by position
     $contentsInHomepage = $cm->getInTime($contentsInHomepage);
@@ -101,7 +107,6 @@ if (
     }
 
     $column = array();
-
     // Overloading information for contents
     foreach ($contentsInHomepage as &$content) {
 
@@ -114,13 +119,12 @@ if (
                 ->loadAttachedVideo()
                 ->loadRelatedContents();
     }
-
     $tpl->assign('column', $contentsInHomepage);
 
     // Fetch information for Static Pages
     //TODO: Move to a widget. Used in all templates
     require_once "widget_static_pages.php";
 
-} // $tpl->is_cached('index.tpl')
 
+} // $tpl->is_cached('index.tpl')
 $tpl->display('frontpage/frontpage.tpl', $cacheID);

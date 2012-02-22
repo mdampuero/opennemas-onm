@@ -6,26 +6,31 @@
             {$content->title}
         </div>
     </div>
-    <ul class="action-buttons">
-        <li>
-            <a href="" title="Eliminar"><img height=16px src="{$params.IMAGE_DIR}trash.png" border="0" /></a>
-        </li>
-        {if ($widgets[d]->renderlet != 'intelligentwidget')}
-        <li>
-            <a title="{t}Edit{/t} '{$content->title}'" href="/admin/controllers/widget/widget.php?action=edit&amp;id={$content->id}&amp;category={$smarty.request.category}" class="action-button edit-button"></a>
-        </li>
-        {/if}
-        <li>
-            <a title="{t}Suggest to home{/t}" href="#" class="action-button home-button"></a>
-        </li>
-
-        <li>
-            <a title="{t}Settings{/t}" href="#" class="action-button settings-button"></a>
-        </li>
-        <li>
-            <a title="{t}Arquive this widget{/t}" href="/admin/controllers/widget/widget.php?action=delete&amp;id={$content->id}" class="action-button delete-button"></a>
-        </li>
-
-    </ul>
-    <div class="selectButton"></div>
+    <div class="content-action-buttons btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            {t}Actions{/t}
+        <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" title="{t}Delete{/t}"  class="delete">{t}Delete{/t}</a>
+            </li>
+            <li>
+                <a title="{t 1=$content->title}Edit '%1'{/t}" href="/admin/controllers/widget/widget.php?action=read&amp;id={$content->id}">
+                    {t}Edit{/t}
+                </a>
+            </li>
+            <li>
+                <a title="{t}Suggest to home{/t}" href="#">
+                    {t}Suggest to home{/t}
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a title="{t}Settings{/t}" href="#">
+                    {t}Settings{/t}
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

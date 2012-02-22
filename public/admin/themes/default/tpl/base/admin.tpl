@@ -40,6 +40,7 @@
         <script type="text/javascript">
         jQuery.noConflict();
         </script>
+        {script_tag src="/bootstrap/bootstrap.js"}
         {script_tag src="/jquery/bootstrap-modal.js"}
         {block name="prototype"}{/block}
     {/block}

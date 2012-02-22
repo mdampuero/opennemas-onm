@@ -25,12 +25,24 @@ jQuery(document).ready(function($){
     makeContentProviderAndPlaceholdersSortable();
 
     // Toggle content-provider-element checkbox if all the content-provider-elemnt is clicked
-    jQuery('div.placeholder div.content-provider-element').click(function() {
+    $('div.placeholder').on('click', 'div.content-provider-element .description', function() {
        checkbox = $(this).find('input[type="checkbox"]');
        checkbox.attr(
            'checked',
            !checkbox.is(':checked')
        );
+    });
+
+
+    $('div.placeholder').on('click', 'div.content-provider-element a.delete', function(e) {
+        e.preventDefault();
+        var parent = $(this).closest('.content-provider-element');
+        parent.animate({'backgroundColor':'#fb6c6c'},300).animate({'opacity': 0, 'height': 0 }, 300, function() {
+            parent.remove();
+        });
+    });
+    $('div.placeholder').on('mouseleave', 'div.content-provider-element', function(e) {
+        $(this).find('.content-action-buttons').removeClass('open');
     });
 
 
@@ -62,11 +74,6 @@ jQuery(document).ready(function($){
             jQuery('#warnings-validation').html("<div class='error'>"+data.responseText+"</div>");
         });
 
-        return false;
-    });
-
-    jQuery('.selectButton, .settings-button, .home-button, .delete-button').click(function (){
-        alert('Not implemented yet.');
         return false;
     });
 

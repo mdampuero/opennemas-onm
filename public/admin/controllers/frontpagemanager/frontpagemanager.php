@@ -68,6 +68,7 @@ switch ($action) {
         // Get contents for this home
         $contentElementsInFrontpage  = $cm->getContentsForHomepageOfCategory($categoryID);
 
+
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
